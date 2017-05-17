@@ -55,14 +55,11 @@
     - [ ] Ant
     - [ ] `startcmd`
     - [ ] oXygen, other editor, CMS, etc.
-* Transformation type _(output format)_:
-    - [ ] eclipsehelp
-    - [ ] html5
-    - [ ] htmlhelp
-    - [ ] javahelp
-    - [ ] pdf
-    - [ ] tocjs
-    - [ ] troff
-    - [ ] xhtml
+* Transformation type _(HTML5, PDF, custom, etc.)_: 
+
+<!-- 
+Before submitting, check the Preview tab above to verify the XML markup appears
+correctly and remember you can edit the description later to add information.
+-->
 
 [CONTRIBUTING]: https://github.com/dita-ot/dita-ot/blob/develop/.github/CONTRIBUTING.md
