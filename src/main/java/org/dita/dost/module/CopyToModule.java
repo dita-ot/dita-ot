@@ -233,6 +233,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
 
         CopyToFilter(final File workdir, final File path2project, final URI src, final URI dst) {
             super();
+            assert workdir != null;
             this.workdir = workdir;
             this.path2project = path2project;
             this.src = src;
@@ -263,26 +264,24 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             String d = data;
             switch (target) {
                 case PI_WORKDIR_TARGET:
-                    if (workdir != null) {
-                        try {
-                            if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
-                                d = workdir.getCanonicalPath();
-                            } else {
-                                d = UNIX_SEPARATOR + workdir.getCanonicalPath();
-                            }
-                        } catch (final IOException e) {
-                            throw new RuntimeException("Failed to get canonical path for working directory: " + e.getMessage(), e);
+                    try {
+                        if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
+                            d = workdir.getCanonicalPath();
+                        } else {
+                            d = UNIX_SEPARATOR + workdir.getCanonicalPath();
                         }
+                    } catch (final IOException e) {
+                        throw new RuntimeException("Failed to get canonical path for working directory: " + e.getMessage(), e);
                     }
                     break;
                 case PI_WORKDIR_TARGET_URI:
-                    if (workdir != null) {
-                        d = workdir.toURI().toString();
-                    }
+                    d = workdir.toURI().toString();
                     break;
                 case PI_PATH2PROJ_TARGET:
                     if (path2project != null) {
                         d = path2project.getPath();
+                    } else {
+                        d = "";
                     }
                     break;
                 case PI_PATH2PROJ_TARGET_URI:
@@ -291,6 +290,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                         if (!d.endsWith(URI_SEPARATOR)) {
                             d = d + URI_SEPARATOR;
                         }
+                    } else {
+                        d = "";
                     }
                     break;
             }
