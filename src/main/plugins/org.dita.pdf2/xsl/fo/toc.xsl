@@ -129,6 +129,8 @@ See the accompanying LICENSE file for applicable license.
         </xsl:call-template>
     </xsl:template>
     
+    <xsl:template match="*[contains(@class, ' bookmap/appendices ')]" mode="tocPrefix"/>
+    
     <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="tocPrefix">
         <xsl:call-template name="getVariable">
             <xsl:with-param name="id" select="'Table of Contents Appendix'"/>
