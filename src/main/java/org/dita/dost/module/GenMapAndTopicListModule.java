@@ -460,7 +460,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
 
     /**
-     * Process results from parsing a single topic
+     * Process results from parsing a single topic or map
      *
      * @param currentFile absolute URI processes files
      */
@@ -684,6 +684,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         // Remove pure conref targets from fullTopicSet
         fullTopicSet.removeAll(pureConrefTargets);
+        // Treat pure conref targets same as resource-only
+        resourceOnlySet.addAll(pureConrefTargets);
     }
 
     /**
@@ -718,6 +720,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         job.setProperty("uplevels", getLevelsPath(rootTemp));
 
         resourceOnlySet.addAll(listFilter.getResourceOnlySet());
+        
+        if (job.getOnlyTopicInMap()) {
+            resourceOnlySet.addAll(listFilter.getNonTopicrefReferenceSet());
+        }
 
         for (final URI file: outDitaFilesSet) {
             getOrCreateFileInfo(fileinfos, file).isOutDita = true;

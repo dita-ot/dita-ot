@@ -90,6 +90,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Set<URI> resourceOnlySet = new HashSet<>(32);
     /** Topics with processing role of "normal" */
     private final Set<URI> normalProcessingRoleSet = new HashSet<>(32);
+    /** Topics referenced from something other than <topicref> */
+    private final Set<URI> nonTopicrefReferenceSet = new HashSet<>(32);
     /** Subject scheme relative file paths. */
     private final Set<URI> schemeRefSet = new HashSet<>(32);
     /** Relationship graph between subject schema. Keys are subject scheme map paths and values
@@ -145,6 +147,18 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     public Set<URI> getResourceOnlySet() {
         final Set<URI> res = new HashSet<>(resourceOnlySet);
         res.removeAll(normalProcessingRoleSet);
+        return res;
+    }
+    
+    /**
+     * List of files referenced by something other than topicref
+     * 
+     * @return the resource-only set
+     */
+    public Set<URI> getNonTopicrefReferenceSet() {
+        final Set<URI> res = new HashSet<>(nonTopicrefReferenceSet);
+        res.removeAll(normalProcessingRoleSet);
+        res.removeAll(resourceOnlySet);
         return res;
     }
 
@@ -361,7 +375,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         processRoleStack.clear();
         isRootElement = true;
         rootClass = null;
-        // Don't clean resourceOnlySet or normalProcessingRoleSet
+        // Don't clean resourceOnlySet, normalProcessingRoleSet, or nonTopicrefReferenceSet
     }
 
     @Override
@@ -387,24 +401,27 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
         processRoleStack.push(processingRole);
 
+        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : null;
+
         final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
+            if (!(MAP_TOPICREF.matches(cls))) {
+                nonTopicrefReferenceSet.add(stripFragment(currentDir.resolve(href)));
+            } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                 resourceOnlySet.add(stripFragment(currentDir.resolve(href)));
             } else {
                 normalProcessingRoleSet.add(stripFragment(currentDir.resolve(href)));
             }
         }
-
-        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
-        if (cls.isValid()) {
+        
+        if (cls != null && cls.isValid()) {
             classes.addFirst(cls);
         } else {
             classes.addFirst(null);
         }
 
-        if (!cls.isValid() && !ELEMENT_NAME_DITA.equals(localName)) {
+        if (!(cls != null && cls.isValid()) && !ELEMENT_NAME_DITA.equals(localName)) {
             if (nonDitaContext(classes)) {
                 // Normal case for bad class: in non DITA context, no message
             } else if (atts.getValue(ATTRIBUTE_NAME_CLASS) == null) { // Missing @class

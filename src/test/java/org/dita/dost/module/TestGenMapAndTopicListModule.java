@@ -274,21 +274,21 @@ public class TestGenMapAndTopicListModule {
         final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
 
         assertEquals(new HashSet(Arrays.asList(
+                "link-from-normal-ALSORESOURCEONLY.dita",
                 "conref-from-resource-only-ALSORESOURCEONLY.dita",
                 "resourceonly.dita",
+                "conref-from-normal.dita",
+                "conref-from-resource-only.dita",
+                "link-from-resource-only-ALSORESOURCEONLY.dita",
                 "conref-from-normal-ALSORESOURCEONLY.dita")),
                 job.getFileInfo().stream()
                         .filter(f -> f.isResourceOnly)
                         .map(fi -> fi.uri.toString())
                         .collect(Collectors.toSet()));
         assertEquals(new HashSet(Arrays.asList(
-                "link-from-normal-ALSORESOURCEONLY.dita",
                 "main.ditamap",
                 "link-from-normal.dita",
                 "link-from-resource-only.dita",
-                "conref-from-normal.dita",
-                "conref-from-resource-only.dita",
-                "link-from-resource-only-ALSORESOURCEONLY.dita",
                 "normal.dita")),
                 job.getFileInfo().stream()
                         .filter(f -> !f.isResourceOnly)
@@ -306,6 +306,8 @@ public class TestGenMapAndTopicListModule {
         assertEquals(new HashSet(Arrays.asList(
                 "conref-from-resource-only-ALSORESOURCEONLY.dita",
                 "resourceonly.dita",
+                "conref-from-normal.dita",
+                "conref-from-resource-only.dita",
                 "conref-from-normal-ALSORESOURCEONLY.dita")),
                 job.getFileInfo().stream()
                         .filter(f -> f.isResourceOnly)
@@ -316,8 +318,6 @@ public class TestGenMapAndTopicListModule {
                 "link.ditamap",
                 "link-from-normal.dita",
                 "link-from-resource-only.dita",
-                "conref-from-normal.dita",
-                "conref-from-resource-only.dita",
                 "link-from-resource-only-ALSORESOURCEONLY.dita",
                 "normal.dita")),
                 job.getFileInfo().stream()
