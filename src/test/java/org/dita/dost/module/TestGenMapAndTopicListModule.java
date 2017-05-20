@@ -20,6 +20,7 @@ import org.junit.Test;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
@@ -33,29 +34,13 @@ public class TestGenMapAndTopicListModule {
     private static final File expDir = new File(resourceDir, "exp");
     
     private static File tempDir;
-    private static File tempDirParallel;
-    private static File tempDirAbove;
 
     @BeforeClass
     public static void setUp() throws IOException, DITAOTException {
         tempDir = TestUtils.createTempDir(TestGenMapAndTopicListModule.class);
-        
-        tempDirParallel = new File(tempDir, "parallel");
-        tempDirParallel.mkdirs();
-        final File inputDirParallel = new File("maps");
-        final File inputMapParallel = new File(inputDirParallel, "root-map-01.ditamap");
-        final File outDirParallel = new File(tempDirParallel, "out");
-        generate(inputDirParallel, inputMapParallel, outDirParallel, tempDirParallel);
-        
-        tempDirAbove = new File(tempDir, "above");
-        tempDirAbove.mkdirs();
-        final File inputDirAbove = new File(".");
-        final File inputMapAbove = new File(inputDirAbove, "root-map-02.ditamap");
-        final File outDirAbove = new File(tempDirAbove, "out");
-        generate(inputDirAbove, inputMapAbove, outDirAbove, tempDirAbove);
     }
 
-    private static void generate(final File inputDir, final File inputMap, final File outDir, final File tempDir) throws DITAOTException, IOException {
+    private static Job generate(final File inputDir, final File inputMap, final File outDir, final File tempDir) throws DITAOTException, IOException {
         final PipelineHashIO pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_INPUTMAP, inputMap.getPath());
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_BASEDIR, srcDir.getAbsolutePath());
@@ -76,12 +61,22 @@ public class TestGenMapAndTopicListModule {
 
         final AbstractFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
-        facade.setJob(new Job(tempDir));
+        final Job job = new Job(tempDir);
+        facade.setJob(job);
         facade.execute("GenMapAndTopicList", pipelineInput);
+
+        return job;
     }
         
     @Test
     public void testFileContentParallel() throws Exception{
+        final File tempDirParallel = new File(tempDir, "parallel");
+        tempDirParallel.mkdirs();
+        final File inputDirParallel = new File("maps");
+        final File inputMapParallel = new File(inputDirParallel, "root-map-01.ditamap");
+        final File outDirParallel = new File(tempDirParallel, "out");
+        generate(inputDirParallel, inputMapParallel, outDirParallel, tempDirParallel);
+
         final File e = new File(expDir, "parallel");
         
         assertEquals(new HashSet<String>(Arrays.asList(
@@ -181,6 +176,13 @@ public class TestGenMapAndTopicListModule {
 
     @Test
     public void testFileContentAbove() throws Exception{
+        final File tempDirAbove = new File(tempDir, "above");
+        tempDirAbove.mkdirs();
+        final File inputDirAbove = new File(".");
+        final File inputMapAbove = new File(inputDirAbove, "root-map-02.ditamap");
+        final File outDirAbove = new File(tempDirAbove, "out");
+        generate(inputDirAbove, inputMapAbove, outDirAbove, tempDirAbove);
+
         final File e = new File(expDir, "above");
                 
         assertEquals(new HashSet<String>(Arrays.asList(
@@ -267,22 +269,39 @@ public class TestGenMapAndTopicListModule {
                 null,
                 new URI("topics/xreffin-topic-1-copy.xml"));
     }
-        
-    private Properties readProperties(final File f)
-            throws IOException, FileNotFoundException {
-        final Properties p = new Properties();
-        InputStream in = null;
-        try {
-            in = new FileInputStream(f);
-            p.load(in);
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-        }
-        return p;
+
+    @Test
+    public void testConref() throws Exception{
+        final File tempDirConref = new File(tempDir, "conref");
+        tempDirConref.mkdirs();
+        final File inputDirParallel = new File("conref");
+        final File inputMapParallel = new File(inputDirParallel, "main.ditamap");
+        final File outDirParallel = new File(tempDirConref, "out");
+        final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDirConref);
+
+        assertEquals(new HashSet(Arrays.asList(
+                "conref-from-resource-only-ALSORESOURCEONLY.dita",
+                "resourceonly.dita",
+                "conref-from-normal-ALSORESOURCEONLY.dita")),
+                job.getFileInfo().stream()
+                        .filter(f -> f.isResourceOnly)
+                        .map(fi -> fi.uri.toString())
+                        .collect(Collectors.toSet()));
+        assertEquals(new HashSet(Arrays.asList(
+                "link-from-normal-ALSORESOURCEONLY.dita",
+                "main.ditamap",
+                "link-from-normal.dita",
+                "link-from-resource-only.dita",
+                "conref-from-normal.dita",
+                "conref-from-resource-only.dita",
+                "link-from-resource-only-ALSORESOURCEONLY.dita",
+                "normal.dita")),
+                job.getFileInfo().stream()
+                        .filter(f -> !f.isResourceOnly)
+                        .map(fi -> fi.uri.toString())
+                        .collect(Collectors.toSet()));
     }
-    
+
     private Set<String> readLines(final File f) throws IOException {
         final Set<String> lines = new HashSet<String>();
         BufferedReader in = null;
@@ -299,38 +318,10 @@ public class TestGenMapAndTopicListModule {
         }
         return lines;
     }
-
-//    @Test
-//    public void testUpdateUplevels() throws NoSuchMethodException, SecurityException, SAXException, ParserConfigurationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
-//        final Method updateUplevels = GenMapAndTopicListModule.class.getDeclaredMethod("updateUplevels", File.class);
-//        updateUplevels.setAccessible(true);
-//        final Field uplevels = GenMapAndTopicListModule.class.getDeclaredField("uplevels");
-//        uplevels.setAccessible(true);
-//        {
-//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-//            updateUplevels.invoke(m, new File("foo" + File.separator + "bar" + File.separator + "foo"));
-//            assertEquals(0, uplevels.getInt(m));
-//        }
-//        {
-//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-//            updateUplevels.invoke(m, new File(".." + File.separator + "foo" + File.separator + "bar"));
-//            assertEquals(1, uplevels.getInt(m));
-//        }
-//        {
-//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-//            updateUplevels.invoke(m, new File(".." + File.separator + ".." + File.separator + "foo"));
-//            assertEquals(2, uplevels.getInt(m));
-//        }
-//        {
-//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-//            updateUplevels.invoke(m, new File(".." + File.separator + "foo" + File.separator + ".." + File.separator + "bar"));
-//            assertEquals(1, uplevels.getInt(m));
-//        }
-//    }
     
     @AfterClass
     public static void tearDown() throws IOException {
-        TestUtils.forceDelete(tempDir);
+//        TestUtils.forceDelete(tempDir);
     }
 
 }
