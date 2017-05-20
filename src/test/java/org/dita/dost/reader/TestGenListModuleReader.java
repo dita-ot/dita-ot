@@ -7,7 +7,6 @@
  */
 package org.dita.dost.reader;
 
-
 import org.apache.commons.io.FileUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.MessageUtils;
@@ -27,7 +26,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.dita.dost.util.Constants.FEATURE_VALIDATION;
 import static org.dita.dost.util.Constants.FEATURE_VALIDATION_SCHEMA;
@@ -128,6 +130,75 @@ public class TestGenListModuleReader {
         assertTrue(reader.getOutFilesSet().isEmpty());
 
         assertTrue(reader.getResourceOnlySet().isEmpty());
+
+        assertTrue(reader.getCoderefTargets().isEmpty());
+
+        assertFalse(reader.isDitaTopic());
+        assertTrue(reader.isDitaMap());
+        assertFalse(reader.hasCodeRef());
+        assertFalse(reader.hasConaction());
+        assertFalse(reader.hasConRef());
+        assertTrue(reader.hasHref());
+        assertFalse(reader.hasKeyRef());
+    }
+
+    @Test
+    public void testConrefParse() throws Exception {
+        final File conrefDir = new File(srcDir, "conref");
+        final URI conrefDirUri = conrefDir.toURI();
+        final File rootFile = new File(conrefDir, "main.ditamap");
+        run(rootFile);
+
+        assertTrue(reader.getConrefTargets().isEmpty());
+
+        assertEquals(Stream.of(
+                "resourceonly.dita",
+                "link-from-resource-only-ALSORESOURCEONLY.dita",
+                "link-from-normal-ALSORESOURCEONLY.dita",
+                "normal.dita",
+                "conref-from-normal-ALSORESOURCEONLY.dita",
+                "conref-from-resource-only-ALSORESOURCEONLY.dita")
+                        .map(conrefDirUri::resolve)
+                        .collect(Collectors.toSet()),
+                reader.getHrefTargets());
+
+        assertEquals(Stream.of(
+                "resourceonly.dita",
+                "link-from-resource-only-ALSORESOURCEONLY.dita",
+                "link-from-normal-ALSORESOURCEONLY.dita",
+                "normal.dita",
+                "conref-from-normal-ALSORESOURCEONLY.dita",
+                "conref-from-resource-only-ALSORESOURCEONLY.dita")
+                        .map(conrefDirUri::resolve)
+                        .collect(Collectors.toSet()),
+                reader.getNonConrefCopytoTargets());
+
+        assertEquals(Stream.of(
+                "resourceonly.dita",
+                "link-from-resource-only-ALSORESOURCEONLY.dita",
+                "link-from-normal-ALSORESOURCEONLY.dita",
+                "normal.dita",
+                "conref-from-normal-ALSORESOURCEONLY.dita",
+                "conref-from-resource-only-ALSORESOURCEONLY.dita")
+                        .map(f -> new Reference(conrefDirUri.resolve(f)))
+                        .collect(Collectors.toSet()),
+                reader.getNonCopytoResult());
+
+        assertEquals(Collections.emptySet(),
+                reader.getOutDitaFilesSet());
+
+        assertEquals(Collections.emptySet(),
+                reader.getOutFilesSet());
+
+        assertEquals(Stream.of(
+                "resourceonly.dita",
+                "link-from-resource-only-ALSORESOURCEONLY.dita",
+                "link-from-normal-ALSORESOURCEONLY.dita",
+                "conref-from-normal-ALSORESOURCEONLY.dita",
+                "conref-from-resource-only-ALSORESOURCEONLY.dita")
+                        .map(conrefDirUri::resolve)
+                        .collect(Collectors.toSet()),
+                reader.getResourceOnlySet());
 
         assertTrue(reader.getCoderefTargets().isEmpty());
 
