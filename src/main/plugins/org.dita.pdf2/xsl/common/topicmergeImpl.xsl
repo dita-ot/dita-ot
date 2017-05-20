@@ -136,6 +136,15 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
     </xsl:template>
     
+    <xsl:template match="dita/*[contains(@class,' topic/topic ')]" mode="resolve-root-dita">
+      <xsl:param name="ditaDocs" as="element()+"/>
+      <xsl:copy>
+        <xsl:apply-templates select="parent::dita/@*,@*|node()" mode="resolve-root-dita">
+          <xsl:with-param name="ditaDocs" select="$ditaDocs" as="element()+"/>
+        </xsl:apply-templates>
+      </xsl:copy>
+    </xsl:template>
+    
     <xsl:template match="@*|node()" mode="resolve-root-dita">
       <xsl:param name="ditaDocs" as="element()+"/>
       <xsl:copy>
