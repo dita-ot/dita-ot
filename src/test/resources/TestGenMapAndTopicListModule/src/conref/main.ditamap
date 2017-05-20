@@ -1,0 +1,15 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
+  <title class="- topic/title ">Resource only testing</title>
+  <topicref class="- map/topicref " href="normal.dita"/>
+  <topicref class="- map/topicref " href="resourceonly.dita" processing-role="resource-only"/>
+  <topicref class="- map/topicref " href="conref-from-normal-ALSORESOURCEONLY.dita"
+    processing-role="resource-only"/>
+  <topicref class="- map/topicref " href="conref-from-resource-only-ALSORESOURCEONLY.dita"
+    processing-role="resource-only"/>
+  <topicref class="- map/topicref " href="link-from-normal-ALSORESOURCEONLY.dita"
+    processing-role="resource-only"/>
+  <topicref class="- map/topicref " href="link-from-resource-only-ALSORESOURCEONLY.dita"
+    processing-role="resource-only"/>
+</map>
