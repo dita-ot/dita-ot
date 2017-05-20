@@ -13,8 +13,8 @@ import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Job;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
@@ -33,10 +33,10 @@ public class TestGenMapAndTopicListModule {
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     
-    private static File tempDir;
+    private File tempDir;
 
-    @BeforeClass
-    public static void setUp() throws IOException, DITAOTException {
+    @Before
+    public void setUp() throws IOException, DITAOTException {
         tempDir = TestUtils.createTempDir(TestGenMapAndTopicListModule.class);
     }
 
@@ -70,12 +70,10 @@ public class TestGenMapAndTopicListModule {
         
     @Test
     public void testFileContentParallel() throws Exception{
-        final File tempDirParallel = new File(tempDir, "parallel");
-        tempDirParallel.mkdirs();
         final File inputDirParallel = new File("maps");
         final File inputMapParallel = new File(inputDirParallel, "root-map-01.ditamap");
-        final File outDirParallel = new File(tempDirParallel, "out");
-        generate(inputDirParallel, inputMapParallel, outDirParallel, tempDirParallel);
+        final File outDirParallel = new File(tempDir, "out");
+        generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
 
         final File e = new File(expDir, "parallel");
         
@@ -146,7 +144,7 @@ public class TestGenMapAndTopicListModule {
                     "maps/root-map-01.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
         
-        final Job job = new Job(tempDirParallel);
+        final Job job = new Job(tempDir);
         assertEquals(".." + File.separator, job.getProperty("uplevels"));
 
         assertEquals(5, job.getFileInfo().size());
@@ -176,12 +174,10 @@ public class TestGenMapAndTopicListModule {
 
     @Test
     public void testFileContentAbove() throws Exception{
-        final File tempDirAbove = new File(tempDir, "above");
-        tempDirAbove.mkdirs();
         final File inputDirAbove = new File(".");
         final File inputMapAbove = new File(inputDirAbove, "root-map-02.ditamap");
-        final File outDirAbove = new File(tempDirAbove, "out");
-        generate(inputDirAbove, inputMapAbove, outDirAbove, tempDirAbove);
+        final File outDirAbove = new File(tempDir, "out");
+        generate(inputDirAbove, inputMapAbove, outDirAbove, tempDir);
 
         final File e = new File(expDir, "above");
                 
@@ -249,7 +245,7 @@ public class TestGenMapAndTopicListModule {
                     "root-map-02.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
                 
-        final Job job = new Job(tempDirAbove);
+        final Job job = new Job(tempDir);
         assertEquals("", job.getProperty("uplevels"));
 
         assertEquals(5, job.getFileInfo().size());
@@ -272,12 +268,10 @@ public class TestGenMapAndTopicListModule {
 
     @Test
     public void testConref() throws Exception{
-        final File tempDirConref = new File(tempDir, "conref");
-        tempDirConref.mkdirs();
         final File inputDirParallel = new File("conref");
         final File inputMapParallel = new File(inputDirParallel, "main.ditamap");
-        final File outDirParallel = new File(tempDirConref, "out");
-        final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDirConref);
+        final File outDirParallel = new File(tempDir, "out");
+        final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
 
         assertEquals(new HashSet(Arrays.asList(
                 "conref-from-resource-only-ALSORESOURCEONLY.dita",
@@ -290,6 +284,36 @@ public class TestGenMapAndTopicListModule {
         assertEquals(new HashSet(Arrays.asList(
                 "link-from-normal-ALSORESOURCEONLY.dita",
                 "main.ditamap",
+                "link-from-normal.dita",
+                "link-from-resource-only.dita",
+                "conref-from-normal.dita",
+                "conref-from-resource-only.dita",
+                "link-from-resource-only-ALSORESOURCEONLY.dita",
+                "normal.dita")),
+                job.getFileInfo().stream()
+                        .filter(f -> !f.isResourceOnly)
+                        .map(fi -> fi.uri.toString())
+                        .collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testConrefLink() throws Exception{
+        final File inputDirParallel = new File("conref");
+        final File inputMapParallel = new File(inputDirParallel, "link.ditamap");
+        final File outDirParallel = new File(tempDir, "out");
+        final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
+
+        assertEquals(new HashSet(Arrays.asList(
+                "conref-from-resource-only-ALSORESOURCEONLY.dita",
+                "resourceonly.dita",
+                "conref-from-normal-ALSORESOURCEONLY.dita")),
+                job.getFileInfo().stream()
+                        .filter(f -> f.isResourceOnly)
+                        .map(fi -> fi.uri.toString())
+                        .collect(Collectors.toSet()));
+        assertEquals(new HashSet(Arrays.asList(
+                "link-from-normal-ALSORESOURCEONLY.dita",
+                "link.ditamap",
                 "link-from-normal.dita",
                 "link-from-resource-only.dita",
                 "conref-from-normal.dita",
@@ -319,9 +343,9 @@ public class TestGenMapAndTopicListModule {
         return lines;
     }
     
-    @AfterClass
-    public static void tearDown() throws IOException {
-//        TestUtils.forceDelete(tempDir);
+    @After
+    public void tearDown() throws IOException {
+        TestUtils.forceDelete(tempDir);
     }
 
 }
