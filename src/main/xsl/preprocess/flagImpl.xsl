@@ -59,7 +59,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <xsl:variable name="FILTERDOC" select="document($FILTERFILEURL,/)" as="document-node()"/>
 
-  <xsl:variable name="GLOBAL-DOMAINS">
+  <xsl:variable name="GLOBAL-DOMAINS" as="xs:string">
     <xsl:choose>
       <xsl:when test="/dita">
         <xsl:value-of select="normalize-space(/dita/*[1]/@domains)"/>
@@ -92,42 +92,42 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:param>
     <xsl:choose>
       <xsl:when test="exists($flagrules/*)">
-        <xsl:variable name="conflictexist">
+        <xsl:variable name="conflictexist" as="xs:boolean">
          <xsl:call-template name="conflict-check">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
+           <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
          </xsl:call-template>
         </xsl:variable>
         <xsl:copy>
           <xsl:apply-templates select="@*"/>
           <ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop ">
             <xsl:apply-templates select="." mode="gen-style">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
               <xsl:with-param name="conflictexist" select="$conflictexist"/>
             </xsl:apply-templates>
-            <xsl:if test="$conflictexist='true' and $FILTERDOC/val/style-conflict">
+            <xsl:if test="$conflictexist and $FILTERDOC/val/style-conflict">
               <xsl:copy-of select="$FILTERDOC/val/style-conflict"/>
             </xsl:if>
             <xsl:apply-templates select="." mode="dita-start-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="flagrules"  as="element()*" select="$flagrules"/>
             </xsl:apply-templates>
             <xsl:apply-templates select="." mode="dita-start-revflag">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="flagrules"  as="element()*" select="$flagrules"/>
             </xsl:apply-templates>
           </ditaval-startprop>
-          <xsl:apply-templates select="*|processing-instruction()|comment()|text()"/>
+          <xsl:apply-templates select="node()"/>
           <ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
             <xsl:apply-templates select="." mode="dita-end-revflag">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
             </xsl:apply-templates>
             <xsl:apply-templates select="." mode="dita-end-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
             </xsl:apply-templates>
           </ditaval-endprop>
         </xsl:copy>
       </xsl:when>
       <xsl:otherwise>
         <xsl:copy>
-          <xsl:apply-templates select="@*|*|processing-instruction()|comment()|text()"/>
+          <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
       </xsl:otherwise>
     </xsl:choose>
@@ -135,8 +135,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <xsl:template match="@*|processing-instruction()|comment()|text()">
     <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates select="*|processing-instruction()|comment()|text()"/>
+      <xsl:apply-templates select="@* | node()"/>
     </xsl:copy>
   </xsl:template>
 
@@ -193,7 +192,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:if test="@rev and not($FILTERFILEURL='')">
     <xsl:call-template name="start-mark-rev">
      <xsl:with-param name="revvalue" select="@rev"/>
-     <xsl:with-param name="flagrules" select="$flagrules"/>
+      <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
     </xsl:call-template>
    </xsl:if>
   </xsl:template>
@@ -206,15 +205,15 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:if test="@rev and not($FILTERFILEURL='')">
     <xsl:call-template name="end-mark-rev">
      <xsl:with-param name="revvalue" select="@rev"/>
-     <xsl:with-param name="flagrules" select="$flagrules"/>
+      <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
     </xsl:call-template>
    </xsl:if>
   </xsl:template>
 
   <!-- This revision is active for this element -->
   <xsl:template match="revprop" mode="start-revflagit">
-    <xsl:param name="lang"/>
-    <xsl:param name="biditest"/>
+    <xsl:param name="lang" as="xs:string"/>
+    <xsl:param name="biditest" as="xs:string"/>
    <xsl:copy>
      <xsl:copy-of select="@*"/>
      <xsl:choose>
@@ -244,8 +243,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
 
   <xsl:template match="revprop" mode="end-revflagit">
-    <xsl:param name="lang"/>
-    <xsl:param name="biditest"/>
+    <xsl:param name="lang" as="xs:string"/>
+    <xsl:param name="biditest" as="xs:string"/>
     <xsl:copy>
       <xsl:copy-of select="@*"/>
       <xsl:choose>
@@ -278,8 +277,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
        Commented out section shows how to insert a default start flag of "delta.gif"
        by creating the proper ditaval syntax -->
   <xsl:template name="default-rev-start">
-    <xsl:param name="lang"/>
-    <xsl:param name="biditest"/>
+    <xsl:param name="lang" as="xs:string"/>
+    <xsl:param name="biditest" as="xs:string"/>
     <!--
     <xsl:param name="startRevImage">
       <xsl:choose>
@@ -297,8 +296,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
   <!-- output the DEFAULT ending revision graphic & ALT text -->
   <xsl:template name="default-rev-end">
-    <xsl:param name="lang"/>
-    <xsl:param name="biditest"/>
+    <xsl:param name="lang" as="xs:string"/>
+    <xsl:param name="biditest" as="xs:string"/>
     <!--
     <xsl:param name="endRevImage">
       <xsl:choose>
@@ -318,10 +317,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   <xsl:template match="@imageref" mode="adjust-imageref">
     <xsl:if test="string-length($PATH2PROJ) > 0 and
                   not(contains(.,'://'))">
-      <xsl:attribute name="imageref">
-        <xsl:value-of select="$PATH2PROJ"/>
-        <xsl:value-of select="."/>
-      </xsl:attribute>
+      <xsl:attribute name="imageref" select="concat($PATH2PROJ,.)"/>
     </xsl:if>
   </xsl:template>
   
@@ -625,27 +621,27 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     
     <xsl:for-each select="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
            <!-- get the val -->
-           <xsl:variable name="val">
+           <xsl:variable name="val" as="xs:string">
                     <xsl:apply-templates select="." mode="getVal"/>
            </xsl:variable>
            <!-- get the backcolor -->
-           <xsl:variable name="backcolor">
+           <xsl:variable name="backcolor" as="xs:string">
                      <xsl:apply-templates select="." mode="getBgcolor"/>
            </xsl:variable>
            <!-- get the color -->
-           <xsl:variable name="color">
+           <xsl:variable name="color" as="xs:string">
                   <xsl:apply-templates select="." mode="getColor"/>
            </xsl:variable>
            <!-- get the style -->
-           <xsl:variable name="style">
+           <xsl:variable name="style" as="xs:string">
             <xsl:apply-templates select="." mode="getStyle"/>
            </xsl:variable>
            <!-- get child node -->
-           <xsl:variable name="childnode">
+           <xsl:variable name="childnode" as="node()*">
                    <xsl:apply-templates select="." mode="getChildNode"/>
            </xsl:variable>
            <!-- get the location of schemekeydef.xml -->
-           <xsl:variable name="KEYDEF-FILE" select="concat($WORKDIR,$PATH2PROJ,'schemekeydef.xml')"/>
+           <xsl:variable name="KEYDEF-FILE" select="concat($WORKDIR,$PATH2PROJ,'schemekeydef.xml')" as="xs:string"/>
           <!--keydef.xml contains the val  -->
           <xsl:if test="(document($KEYDEF-FILE, /)//*[@keys=$val])">
             <!-- copy needed elements -->
@@ -679,57 +675,43 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  
  <!-- copy needed elements -->
  <xsl:template match="*" mode="copy-element">
-     <xsl:param name="att"/>
-     <xsl:param name="bgcolor"/>
-     <xsl:param name="fcolor"/>
-     <xsl:param name="style"/>
-     <xsl:param name="value"/>
-     <xsl:param name="flag"/>
-     <xsl:param name="cvffilename" select="@source"/>
-     <xsl:param name="childnodes"/>
+     <xsl:param name="att" as="xs:string"/>
+     <xsl:param name="bgcolor" as="xs:string"/>
+     <xsl:param name="fcolor" as="xs:string"/>
+     <xsl:param name="style" as="xs:string"/>
+     <xsl:param name="value" as="xs:string"/>
+     <xsl:param name="flag" as="xs:string"/>
+     <xsl:param name="cvffilename" select="@source" as="xs:string?"/>
+     <xsl:param name="childnodes" as="node()*"/>
     <!--get the location of subject_scheme.dictionary-->
-    <xsl:variable name="INITIAL-PROPERTIES-FILE" select="concat($WORKDIR , $PATH2PROJ , 'subject_scheme.dictionary')"/>
-    <xsl:variable name="PROPERTIES-FILE" select="$INITIAL-PROPERTIES-FILE"/>
+    <xsl:variable name="INITIAL-PROPERTIES-FILE" select="concat($WORKDIR , $PATH2PROJ , 'subject_scheme.dictionary')" as="xs:string"/>
+    <xsl:variable name="PROPERTIES-FILE" select="$INITIAL-PROPERTIES-FILE" as="xs:string"/>
   <!-- get the scheme list -->
   <!-- check CURRENT File -->
-  <xsl:variable name="editedFileName">
+  <xsl:variable name="editedFileName" as="xs:string">
       <xsl:call-template name="checkFile">
        <xsl:with-param name="in" select="$CURRENTFILE"/>
       </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="schemeList">
+  <xsl:variable name="schemeList" as="xs:string*">
      <xsl:apply-templates select="document($PROPERTIES-FILE,/)//*[@key=$editedFileName]" mode="check"/>
   </xsl:variable>
   <!-- scheme list contains the scheme file -->
     <xsl:if test="contains($schemeList, $cvffilename)">
           <!-- get the path of scheme file -->
-          <xsl:variable name="submfile">
-              <xsl:value-of select="$cvffilename"/><xsl:text>.subm</xsl:text>
-          </xsl:variable>
+          <xsl:variable name="submfile" as="xs:string" select="concat($cvffilename, '.subm')"/>
           <xsl:variable name="cvffilepath" select="concat($WORKDIR,$PATH2PROJ,$submfile)" as="xs:string"/>
      <xsl:if test="document($cvffilepath,/)//*[@keys=$value]//*[@keys=$flag]">
          <!-- copy the child node for flag and just copy the first element whose keys=$flag-->
       <!--xsl:for-each select="document($cvffilepath,/)//*[@keys=$value]/*"-->
       <xsl:for-each select="document($cvffilepath,/)//*[@keys=$value]//*[@keys=$flag][1]">
             <xsl:element name="prop">
-             <xsl:attribute name="att">
-              <xsl:value-of select="$att"/>
-             </xsl:attribute>
-             <xsl:attribute name="val">
-              <xsl:value-of select="@keys"/>
-             </xsl:attribute>
-             <xsl:attribute name="action">
-              <xsl:value-of select="'flag'"/>
-             </xsl:attribute>
-             <xsl:attribute name="backcolor">
-              <xsl:value-of select="$bgcolor"/>
-             </xsl:attribute>
-             <xsl:attribute name="color">
-              <xsl:value-of select="$fcolor"/>
-             </xsl:attribute>
-             <xsl:attribute name="style">
-              <xsl:value-of select="$style"/>
-             </xsl:attribute>
+             <xsl:attribute name="att" select="$att"/>
+             <xsl:attribute name="val" select="@keys"/>
+             <xsl:attribute name="action" select="'flag'"/>
+             <xsl:attribute name="backcolor" select="$bgcolor"/>
+             <xsl:attribute name="color" select="$fcolor"/>
+             <xsl:attribute name="style" select="$style"/>
              <xsl:copy-of select="$childnodes"/>
             </xsl:element>
            </xsl:for-each>
@@ -803,15 +785,15 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
- <xsl:param name="revvalue"/>
+  <xsl:param name="revvalue"  as="xs:string"/>
  <xsl:variable name="revtest" as="xs:integer">
   <xsl:call-template name="find-active-rev-flag">
-   <xsl:with-param name="allrevs" select="$revvalue"/>
+      <xsl:with-param name="allrevs" as="xs:string" select="$revvalue"/>
   </xsl:call-template>
  </xsl:variable>
   <xsl:if test="$revtest=1">
    <xsl:call-template name="start-revision-flag">
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
+    <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/> 
    </xsl:call-template>
   </xsl:if>
 </xsl:template>
@@ -821,7 +803,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
- <xsl:param name="revvalue"/>
+ <xsl:param name="revvalue" as="xs:string?"/>
  <xsl:variable name="revtest" as="xs:integer">
   <xsl:call-template name="find-active-rev-flag">
    <xsl:with-param name="allrevs" select="$revvalue"/>
@@ -829,7 +811,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  </xsl:variable>
   <xsl:if test="$revtest=1">
    <xsl:call-template name="end-revision-flag">
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
+     <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/> 
    </xsl:call-template>
   </xsl:if>
 </xsl:template>
@@ -841,7 +823,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:call-template name="getrules"/>
  </xsl:param>
   <xsl:call-template name="start-revflagit">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
+    <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -892,7 +874,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:call-template name="getrules"/>
  </xsl:param>
   <xsl:call-template name="end-revflagit">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
+    <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -1008,8 +990,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
  
  <xsl:template match="prop|revprop" mode="conflict-check" as="xs:boolean">
-  <xsl:param name="color"/>
-  <xsl:param name="backcolor"/>
+  <xsl:param name="color" as="xs:string?"/>
+  <xsl:param name="backcolor" as="xs:string?"/>
   
   <xsl:choose>   
    <xsl:when test="(@color and @color!='' and $color!='' and $color!=@color)or(@backcolor and @backcolor!='' and $backcolor!='' and $backcolor!=@backcolor)">
@@ -1037,7 +1019,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:param>
     <xsl:param name="conflictexist" as="xs:boolean">
      <xsl:call-template name="conflict-check">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
+       <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
       </xsl:call-template>
     </xsl:param>
 
@@ -1109,7 +1091,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
  
  <xsl:template match="*" mode="ditamsg:cannot-flag-inline-element">
-   <xsl:param name="attr-name"/>
+   <xsl:param name="attr-name" as="xs:string"/>
    <xsl:call-template name="output-message">
      <xsl:with-param name="id" select="'DOTX042I'"/>
      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$attr-name"/></xsl:with-param>
