@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptySet;
 import static org.dita.dost.util.Constants.FEATURE_VALIDATION;
 import static org.dita.dost.util.Constants.FEATURE_VALIDATION_SCHEMA;
 import static org.junit.Assert.*;
@@ -93,6 +94,9 @@ public class TestGenListModuleReader {
                 srcDirUri.resolve("topics/target-topic-a.xml"))),
                 reader.getOutFilesSet());
 
+        assertEquals(emptySet(),
+                reader.getNonTopicrefReferenceSet());
+
         assertTrue(reader.getResourceOnlySet().isEmpty());
 
         assertTrue(reader.getCoderefTargets().isEmpty());
@@ -132,6 +136,9 @@ public class TestGenListModuleReader {
         assertTrue(reader.getResourceOnlySet().isEmpty());
 
         assertTrue(reader.getCoderefTargets().isEmpty());
+
+        assertEquals(emptySet(),
+                reader.getNonTopicrefReferenceSet());
 
         assertFalse(reader.isDitaTopic());
         assertTrue(reader.isDitaMap());
@@ -184,10 +191,10 @@ public class TestGenListModuleReader {
                         .collect(Collectors.toSet()),
                 reader.getNonCopytoResult());
 
-        assertEquals(Collections.emptySet(),
+        assertEquals(emptySet(),
                 reader.getOutDitaFilesSet());
 
-        assertEquals(Collections.emptySet(),
+        assertEquals(emptySet(),
                 reader.getOutFilesSet());
 
         assertEquals(Stream.of(
@@ -201,6 +208,9 @@ public class TestGenListModuleReader {
                 reader.getResourceOnlySet());
 
         assertTrue(reader.getCoderefTargets().isEmpty());
+
+        assertEquals(emptySet(),
+                reader.getNonTopicrefReferenceSet());
 
         assertFalse(reader.isDitaTopic());
         assertTrue(reader.isDitaMap());
