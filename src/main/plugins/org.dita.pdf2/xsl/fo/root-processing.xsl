@@ -64,8 +64,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="productName">
         <xsl:variable name="mapProdname" select="(/*/opentopic:map//*[contains(@class, ' topic/prodname ')])[1]" as="element()?"/>
         <xsl:choose>
-            <xsl:when test="$mapProdname">
-                <xsl:value-of select="$mapProdname"/>
+            <xsl:when test="exists($mapProdname)">
+                <xsl:apply-templates select="$mapProdname" mode="set-product-name"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="getVariable">
@@ -85,7 +85,11 @@ See the accompanying LICENSE file for applicable license.
         </xsl:for-each>
     </xsl:variable>
 
-  <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]" as="element()*"/>
+    <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]" as="element()*"/>
+
+    <xsl:template match="*[contains(@class, ' topic/prodname ')]" mode="set-product-name">
+      <xsl:apply-templates select="." mode="dita-ot:text-only"/>
+    </xsl:template>
 
     <xsl:template name="validateTopicRefs">
         <xsl:apply-templates select="//opentopic:map" mode="topicref-validation"/>
