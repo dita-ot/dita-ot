@@ -137,6 +137,9 @@ See the accompanying LICENSE file for applicable license.
   <xsl:attribute-set name="page-sequence.lof" use-attribute-sets="page-sequence.toc">
   </xsl:attribute-set>
   
+  <xsl:attribute-set name="page-sequence.loc" use-attribute-sets="page-sequence.toc">
+  </xsl:attribute-set>
+
   <xsl:attribute-set name="page-sequence.body" use-attribute-sets="__force__page__count">
   </xsl:attribute-set>
   

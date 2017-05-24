@@ -356,6 +356,39 @@ See the accompanying LICENSE file for applicable license.
     <variable id="List of Tables">Tabellenverzeichnis</variable>
     <variable id="List of Figures">Abbildungsverzeichnis</variable>
 
+  <!-- The heading string to put at the top of the List of Changes -->
+  <variable id="List of Changes">Änderungshistorie</variable>
+
+  <!-- The heading string to put in front of the Change Person -->
+  <variable id="Change Person">Person</variable>
+
+  <!-- The heading string to put in front of the Change Organization -->
+  <variable id="Change Organization">Organisation</variable>
+
+  <!-- The heading string to put in front of the Change Revision ID -->
+  <variable id="Change Revision ID">ID der Änderung</variable>
+
+  <!-- The heading string to put in front of the Change Request -->
+  <variable id="Change Request">Änderungsanforderung</variable>
+
+  <!-- The heading string to put in front of the Change Started -->
+  <variable id="Change Started">Begonnen am</variable>
+
+  <!-- The heading string to put in front of the Change Completed -->
+  <variable id="Change Completed">Abgeschlossen am</variable>
+
+  <!-- The heading string to put in front of the Change Summary -->
+  <variable id="Change Summary">Zusammenfassung</variable>
+
+  <!-- The heading string to put in front of the Book Release -->
+  <variable id="Book Release">Dokumentversion</variable>
+
+  <!-- The heading string to put in front of the Book Release Date -->
+  <variable id="Book Release Date">Veröffentlichungsdatum</variable>
+
+  <!-- Date format string -->
+  <variable id="#date-format">[D].[M].[Y]</variable>
+
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">„</variable>
   <variable id="#quote-end">“</variable>

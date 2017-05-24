@@ -99,6 +99,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:import href="glossary.xsl"/>
     <xsl:import href="../../cfg/fo/attrs/lot-lof-attr.xsl"/>
     <xsl:import href="lot-lof.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/loc-attr.xsl"/>
+    <xsl:import href="loc.xsl"/>
 
     <xsl:import href="../../cfg/fo/attrs/learning-elements-attr.xsl"/>
     <xsl:import href="learning-elements.xsl"/>

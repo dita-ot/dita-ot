@@ -384,6 +384,36 @@ See the accompanying LICENSE file for applicable license.
      <!-- The heading string to put at the top of the List of Figures -->
      <variable id="List of Figures">Figurer</variable>
 
+  <!-- The heading string to put at the top of the List of Changes -->
+  <variable id="List of Changes"></variable>
+
+  <!-- The heading string to put in front of the Change Organization -->
+  <variable id="Change Organization">Change Organization</variable>
+
+  <!-- The heading string to put in front of the Change Revision ID -->
+  <variable id="Change Revision ID">Change Revision ID</variable>
+
+  <!-- The heading string to put in front of the Change Request -->
+  <variable id="Change Request">Change Request</variable>
+
+  <!-- The heading string to put in front of the Change Started -->
+  <variable id="Change Started">Change Started</variable>
+
+  <!-- The heading string to put in front of the Change Completed -->
+  <variable id="Change Completed">Change Completed</variable>
+
+  <!-- The heading string to put in front of the Change Summary -->
+  <variable id="Change Summary">Change Summary</variable>
+
+  <!-- The heading string to put in front of the Book Release -->
+  <variable id="Book Release">Book Release</variable>
+
+  <!-- The heading string to put in front of the Book Release Date -->
+  <variable id="Book Release Date">Book Release Date</variable>
+
+  <!-- Date format string -->
+  <variable id="#date-format">[D].[M].[Y]</variable>
+
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>
   <variable id="#quote-end">”</variable>

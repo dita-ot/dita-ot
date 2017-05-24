@@ -237,11 +237,17 @@ See the accompanying LICENSE file for applicable license.
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:tablelist>
     </xsl:template>
-  
+
     <xsl:template match="*[contains(@class,' bookmap/figurelist ')][not(@href)]" priority="2" mode="build-tree">
         <ot-placeholder:figurelist id="{generate-id()}">
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:figurelist>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class,' bookmap/booklist ') and @type='change-historylist'][not(@href)]" priority="2" mode="build-tree">
+        <ot-placeholder:changelist id="{generate-id()}">
+            <xsl:apply-templates mode="build-tree"/>
+        </ot-placeholder:changelist>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' map/topicref ') and @print='no']" priority="6"/>
@@ -379,6 +385,7 @@ See the accompanying LICENSE file for applicable license.
                        or contains($class,' bookmap/amendments ')
                        or contains($class,' bookmap/bookabstract ')
                        or contains($class,' bookmap/booklist ')
+                       or contains($class,' bookmap/changelist ')
                        or contains($class,' bookmap/colophon ')
                        or contains($class,' bookmap/dedication ')
                        or contains($class,' bookmap/tablelist ')
