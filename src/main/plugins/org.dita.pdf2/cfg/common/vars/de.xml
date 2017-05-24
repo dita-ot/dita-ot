@@ -356,6 +356,6 @@ See the accompanying LICENSE file for applicable license.
     <variable id="List of Tables">Tabellenverzeichnis</variable>
     <variable id="List of Figures">Abbildungsverzeichnis</variable>
 
-  <variable id="#quote-start">„</variable>
-  <variable id="#quote-end">“</variable>
+  <variable id="#quote-start"><variable id="OpenQuote"/></variable>
+  <variable id="#quote-end"><variable id="CloseQuote"/></variable>
 </vars>
