@@ -385,6 +385,6 @@ See the accompanying LICENSE file for applicable license.
      <!-- The heading string to put at the top of the List of Figures -->
      <variable id="List of Figures">Фигури</variable>
 
-  <variable id="#quote-start">“</variable>
-  <variable id="#quote-end">”</variable>
+  <variable id="#quote-start"><variable id="OpenQuote"/></variable>
+  <variable id="#quote-end"><variable id="CloseQuote"/></variable>
 </vars>
