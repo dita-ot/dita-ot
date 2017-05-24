@@ -351,7 +351,6 @@ See the accompanying LICENSE file for applicable license.
     <variable id="List of Tables">表格清单</variable>
     <variable id="List of Figures">插图清单</variable>
 
-  <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>
   <variable id="#quote-end">”</variable>
 </vars>

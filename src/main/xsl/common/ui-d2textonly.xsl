@@ -14,7 +14,9 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' ui-d/uicontrol ')]" mode="dita-ot:text-only">
     <xsl:if test="parent::*[contains(@class,' ui-d/menucascade ')] and preceding-sibling::*[contains(@class, ' ui-d/uicontrol ')]">
-      <xsl:text> > </xsl:text>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'#menucascade-separator'"/>
+      </xsl:call-template>
     </xsl:if>
     <xsl:apply-templates select="*|text()" mode="dita-ot:text-only"/>
   </xsl:template>

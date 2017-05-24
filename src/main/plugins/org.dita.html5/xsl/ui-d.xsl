@@ -26,7 +26,19 @@ See the accompanying LICENSE file for applicable license.
   <xsl:if test="ancestor::*[contains(@class,' ui-d/menucascade ')]">
    <xsl:variable name="uicontrolcount"><xsl:number count="*[contains(@class,' ui-d/uicontrol ')]"/></xsl:variable>
     <xsl:if test="$uicontrolcount&gt;'1'">
-      <xsl:text> > </xsl:text>
+      <xsl:variable name="a11y.text" as="text()?">
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'a11y.and-then'"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <abbr>
+        <xsl:if test="exists($a11y.text)">
+          <xsl:attribute name="title" select="$a11y.text"/>          
+        </xsl:if>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'#menucascade-separator'"/>
+        </xsl:call-template>
+      </abbr>
     </xsl:if>
   </xsl:if>
    <span class="uicontrol">
