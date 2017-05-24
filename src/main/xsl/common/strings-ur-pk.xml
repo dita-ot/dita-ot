@@ -72,8 +72,8 @@ See the accompanying LICENSE file for applicable license.
 <str name="Copyright">حقوق</str>
 
 <!-- Symbols -->
-<str name="OpenQuote">"</str>
-<str name="CloseQuote">"</str>
+<str name="OpenQuote">“</str>
+<str name="CloseQuote">”</str>
 <str name="ColonSymbol">:</str>
 <str name="#menucascade-separator"> &gt; </str>
 <str name="a11y.and-then"></str>
