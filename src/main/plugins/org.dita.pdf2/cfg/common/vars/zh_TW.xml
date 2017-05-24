@@ -368,7 +368,6 @@ See the accompanying LICENSE file for applicable license.
      <!-- The heading string to put at the top of the List of Figures -->
      <variable id="List of Figures">圖</variable>
 
-  <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>
   <variable id="#quote-end">”</variable>
 </vars>
