@@ -451,6 +451,17 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .input(Paths.get("conrefbreaksxref.dita"))
                 .test();
     }
+    
+    @Test
+    public void testconrefmissingfile() throws Throwable {
+        builder().name("conrefmissingfile")
+                .transtype(preprocess)
+                .input(Paths.get("badconref.dita"))
+                .put("validate", "false")
+                .warnCount(1)
+                .errorCount(3)
+                .test();
+    }
 
     @Test
     public void testcontrolValueFile1() throws Throwable {
