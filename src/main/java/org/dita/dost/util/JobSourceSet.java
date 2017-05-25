@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 /**
  * Resource collection that finds matching resources from job configuration.
@@ -45,9 +46,9 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         if (res == null) {
             final Job job = getJob();
             res = new ArrayList<>();
-            for (final Job.FileInfo f : job.getFileInfo(new Job.FileInfo.Filter<Job.FileInfo>() {
+            for (final Job.FileInfo f : job.getFileInfo(new Predicate<Job.FileInfo>() {
                 @Override
-                public boolean accept(final Job.FileInfo f) {
+                public boolean test(final Job.FileInfo f) {
                     return (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
                             (hasConref == null || f.hasConref == hasConref) &&
                             (isResourceOnly == null || f.isResourceOnly == isResourceOnly);

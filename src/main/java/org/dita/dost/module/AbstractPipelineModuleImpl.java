@@ -13,7 +13,8 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.Job.FileInfo.Filter;
+
+import java.util.function.Predicate;
 
 /**
  * Abstract class for modules.
@@ -22,7 +23,7 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
 
     protected DITAOTLogger logger;
     protected Job job;
-    Filter<FileInfo> fileInfoFilter;
+    Predicate<FileInfo> fileInfoFilter;
 
     @Override
     public void setLogger(final DITAOTLogger logger) {
@@ -37,7 +38,7 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
     abstract public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException;
 
     @Override
-    public void setFileInfoFilter(Filter<FileInfo> fileInfoFilter) {
+    public void setFileInfoFilter(Predicate<FileInfo> fileInfoFilter) {
         this.fileInfoFilter = fileInfoFilter;
     }
 }

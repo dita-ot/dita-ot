@@ -25,7 +25,6 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.AbstractXMLFilter;
 
 import java.io.BufferedReader;
@@ -34,6 +33,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.Collection;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -237,15 +237,15 @@ public final class ExtensibleAntInvoker extends Task {
         }
     }
 
-    private static Filter<FileInfo> combine(final Collection<FileInfoFilter> filters) {
-        final List<Filter<FileInfo>> res = filters.stream()
+    private static Predicate<FileInfo> combine(final Collection<FileInfoFilter> filters) {
+        final List<Predicate<FileInfo>> res = filters.stream()
                 .map(FileInfoFilter::toFilter)
                 .collect(Collectors.toList());
-        return new Filter<FileInfo>() {
+        return new Predicate<FileInfo>() {
             @Override
-            public boolean accept(FileInfo f) {
-                for (final Filter<FileInfo> filter : res) {
-                    if (filter.accept(f)) {
+            public boolean test(FileInfo f) {
+                for (final Predicate<FileInfo> filter : res) {
+                    if (filter.test(f)) {
                         return true;
                     }
                 }
@@ -457,10 +457,10 @@ public final class ExtensibleAntInvoker extends Task {
             this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
         }
 
-        public Filter<FileInfo> toFilter() {
-            return new Filter<FileInfo>() {
+        public Predicate<FileInfo> toFilter() {
+            return new Predicate<FileInfo>() {
                 @Override
-                public boolean accept(FileInfo f) {
+                public boolean test(FileInfo f) {
                     return (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
                             (hasConref == null || f.hasConref == hasConref) &&
                             (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
@@ -505,7 +505,7 @@ public final class ExtensibleAntInvoker extends Task {
                     final List<FileInfoFilter> predicates = new ArrayList<>(f.fileInfoFilters);
                     predicates.addAll(getFormat());
                     assert !predicates.isEmpty();
-                    Filter<FileInfo> fs = combine(predicates);
+                    Predicate<FileInfo> fs = combine(predicates);
                     res.add(new FilterPair(fc, fs));
                 }
             }

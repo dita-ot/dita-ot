@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.dita.dost.log.DITAOTLogger;
@@ -36,7 +37,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.ConkeyrefFilter;
 import org.dita.dost.writer.KeyrefPaser;
 
@@ -87,9 +87,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (fileInfoFilter == null) {
-            fileInfoFilter = new Filter<FileInfo>() {
+            fileInfoFilter = new Predicate<FileInfo>() {
                 @Override
-                public boolean accept(FileInfo f) {
+                public boolean test(FileInfo f) {
                     return f.format == null || f.format.equals(ATTR_FORMAT_VALUE_DITA) || f.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
                 }
             };
@@ -172,7 +172,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         final List<ResolveTask> deduped = removeDuplicateResolveTargets(res);
         if (fileInfoFilter != null) {
             return adjustResourceRenames(deduped.stream()
-                    .filter(rs -> fileInfoFilter.accept(rs.in))
+                    .filter(rs -> fileInfoFilter.test(rs.in))
                     .collect(Collectors.toList()));
         } else {
             return adjustResourceRenames(deduped);

@@ -28,12 +28,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Predicate;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.dita.dost.util.Job.FileInfo.Filter;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -490,10 +490,10 @@ public final class Job {
      * @param filter filter file info object must pass
      * @return collection of file info objects that pass the filter, may be empty
      */
-    public Collection<FileInfo> getFileInfo(final Filter filter) {
+    public Collection<FileInfo> getFileInfo(final Predicate<FileInfo> filter) {
         final Collection<FileInfo> ret = new ArrayList<>();
         for (final FileInfo f: files.values()) {
-            if (filter.accept(f)) {
+            if (filter.test(f)) {
                 ret.add(f);
             }
         }
@@ -686,12 +686,6 @@ public final class Job {
             return result1;
         }
 
-        public interface Filter<T> {
-            
-            boolean accept(T f);
-            
-        }
-        
         public static class Builder {
             
             private URI src;

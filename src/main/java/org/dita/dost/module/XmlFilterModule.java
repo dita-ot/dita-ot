@@ -12,7 +12,6 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.XMLFilter;
@@ -21,6 +20,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Map processes topics through XML filters. Filters are reused and should reset internal state on
@@ -73,7 +73,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
         assert fileToParse.isAbsolute();
         final List<XMLFilter> res = new ArrayList<>();
         for (final FilterPair p: pipe) {
-            if (p.predicate.accept(fi)) {
+            if (p.predicate.test(fi)) {
                 final AbstractXMLFilter f = p.filter;
                 logger.debug("Configure filter " + f.getClass().getCanonicalName());
                 f.setCurrentFile(fileToParse);
@@ -90,9 +90,9 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
      */
     public static class FilterPair {
         public final AbstractXMLFilter filter;
-        public final Filter<FileInfo> predicate;
+        public final Predicate<FileInfo> predicate;
 
-        public FilterPair(final AbstractXMLFilter filter, final Filter<FileInfo> fileInfoFilter) {
+        public FilterPair(final AbstractXMLFilter filter, final Predicate<FileInfo> fileInfoFilter) {
             this.filter = filter;
             this.predicate = fileInfoFilter;
         }

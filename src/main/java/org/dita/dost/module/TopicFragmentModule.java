@@ -13,7 +13,6 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.CoderefResolver;
 import org.dita.dost.writer.NormalizeTableFilter;
@@ -24,6 +23,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_PROCESSING_MODE;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
@@ -58,9 +58,9 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
         processingMode = mode != null ? Configuration.Mode.valueOf(mode.toUpperCase()) : Configuration.Mode.LAX;
         resolveCoderef = !Boolean.parseBoolean(input.getAttribute(SKIP_CODEREF));
 
-        final Collection<FileInfo> fis = job.getFileInfo(new Filter<FileInfo>() {
+        final Collection<FileInfo> fis = job.getFileInfo(new Predicate<FileInfo>() {
             @Override
-            public boolean accept(final FileInfo f) {
+            public boolean test(final FileInfo f) {
                 return ATTR_FORMAT_VALUE_DITA.equals(f.format);
             }
         });

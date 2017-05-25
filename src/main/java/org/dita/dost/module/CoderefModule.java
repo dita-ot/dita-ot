@@ -10,11 +10,12 @@ package org.dita.dost.module;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.function.Predicate;
+
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.CoderefResolver;
 /**
  * Coderef Module class.
@@ -40,9 +41,9 @@ final class CoderefModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
-        final Collection<FileInfo> fis = job.getFileInfo(new Filter<FileInfo>() {
+        final Collection<FileInfo> fis = job.getFileInfo(new Predicate<FileInfo>() {
             @Override
-            public boolean accept(final FileInfo f) {
+            public boolean test(final FileInfo f) {
                 return f.hasCoderef;
             }
         });

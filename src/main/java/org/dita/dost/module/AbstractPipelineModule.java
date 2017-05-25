@@ -14,7 +14,8 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.Job.FileInfo.Filter;
+
+import java.util.function.Predicate;
 
 /**
  * Abstract class for Modules which contains the method that every module class
@@ -45,6 +46,6 @@ public interface AbstractPipelineModule {
 
     void setJob(Job job);
 
-    void setFileInfoFilter(Filter<FileInfo> fileInfoFilter);
+    void setFileInfoFilter(Predicate<FileInfo> fileInfoFilter);
 
 }
