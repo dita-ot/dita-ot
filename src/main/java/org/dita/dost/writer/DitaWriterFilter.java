@@ -11,12 +11,8 @@ package org.dita.dost.writer;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.Job;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -32,6 +28,7 @@ import java.util.Map;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.XMLUtils.nonDitaContext;
 import static org.dita.dost.reader.GenListModuleReader.*;
 
@@ -115,11 +112,11 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         classes.clear();
 
         // XXX May be require fixup
-        final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
+        final File path2Project = DebugAndFilterModule.getPathtoProject(FileUtils.getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
                 toFile(currentFile),
                 toFile(job.getInputFile()),
                 job);
-        final File path2rootmap = new File(getRelativeUnixPath(toFile(currentFile).getAbsolutePath(), toFile(job.getInputFile()).getAbsolutePath())).getParentFile();
+        final File path2rootmap = toFile(getRelativePath(currentFile, job.getInputFile())).getParentFile();
         getContentHandler().startDocument();
         if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
             getContentHandler().processingInstruction(PI_WORKDIR_TARGET, outputFile.getParentFile().getAbsolutePath());

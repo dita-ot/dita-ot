@@ -30,7 +30,6 @@ import java.net.URI;
 import java.util.*;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.getRelativeUnixPath;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.Generate;
 import static org.dita.dost.util.URLUtils.*;
