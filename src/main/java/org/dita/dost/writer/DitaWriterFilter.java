@@ -11,12 +11,8 @@ package org.dita.dost.writer;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.Job;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -32,6 +28,7 @@ import java.util.Map;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.XMLUtils.nonDitaContext;
 import static org.dita.dost.reader.GenListModuleReader.*;
 
@@ -41,16 +38,19 @@ import static org.dita.dost.reader.GenListModuleReader.*;
  * 
  * <p>The following processing instructions are added before the root element:</p>
  * <dl>
- *   <dt>{@link Constants#PI_WORKDIR_TARGET}<dt>
+ *   <dt>{@link Constants#PI_WORKDIR_TARGET}</dt>
  *   <dd>Absolute system path of the file parent directory. On Windows, a {@code /}
  *     is added to beginning of the path.</dd>
- *   <dt>{@link Constants#PI_WORKDIR_TARGET_URI}<dt>
+ *   <dt>{@link Constants#PI_WORKDIR_TARGET_URI}</dt>
  *   <dd>Absolute URI of the file parent directory.</dd>
- *   <dt>{@link Constants#PI_PATH2PROJ_TARGET}<dt>
+ *   <dt>{@link Constants#PI_PATH2PROJ_TARGET}</dt>
  *   <dd>Relative system path to the output directory, with a trailing directory separator.
  *     When the source file is in the project root directory, processing instruction has no value.</dd>
- *   <dt>{@link Constants#PI_PATH2PROJ_TARGET_URI}<dt>
+ *   <dt>{@link Constants#PI_PATH2PROJ_TARGET_URI}</dt>
  *   <dd>Relative URI to the output directory, with a trailing path separator.
+ *     When the source file is in the project root directory, processing instruction has value {@code ./}.</dd>
+ *   <dt>{@link Constants#PI_PATH2ROOTMAP_TARGET_URI}</dt>
+ *   <dd>Relative URI to the root map directory, with a trailing path separator.
  *     When the source file is in the project root directory, processing instruction has value {@code ./}.</dd>
  * </dl>
  *
@@ -112,10 +112,11 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         classes.clear();
 
         // XXX May be require fixup
-        final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
+        final File path2Project = DebugAndFilterModule.getPathtoProject(FileUtils.getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
                 toFile(currentFile),
                 toFile(job.getInputFile()),
                 job);
+        final File path2rootmap = toFile(getRelativePath(currentFile, job.getInputFile())).getParentFile();
         getContentHandler().startDocument();
         if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
             getContentHandler().processingInstruction(PI_WORKDIR_TARGET, outputFile.getParentFile().getAbsolutePath());
@@ -131,6 +132,11 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         } else {
             getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, "");
             getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, "." + URI_SEPARATOR);
+        }
+        if (path2rootmap != null) {
+            getContentHandler().processingInstruction(PI_PATH2ROOTMAP_TARGET_URI, toURI(path2rootmap).toString() + URI_SEPARATOR);
+        } else {
+            getContentHandler().processingInstruction(PI_PATH2ROOTMAP_TARGET_URI, "." + URI_SEPARATOR);
         }
         getContentHandler().ignorableWhitespace(new char[]{'\n'}, 0, 1);
     }
