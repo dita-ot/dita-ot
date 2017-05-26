@@ -983,6 +983,7 @@ public final class Constants {
     @Deprecated
     public static final String PI_PATH2PROJ_TARGET = "path2project";
     public static final String PI_PATH2PROJ_TARGET_URI = "path2project-uri";
+    public static final String PI_PATH2ROOTMAP_TARGET_URI = "path2rootmap-uri";
     /** Deprecated since 2.3 */
     @Deprecated
     public static final String PI_WORKDIR_TARGET = "workdir";

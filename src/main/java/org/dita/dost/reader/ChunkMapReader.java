@@ -83,6 +83,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     private ProcessingInstruction workdirUrl = null;
     private ProcessingInstruction path2proj = null;
     private ProcessingInstruction path2projUrl = null;
+    private ProcessingInstruction path2rootmapUrl = null;
 
     private final ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
 
@@ -271,6 +272,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
                     path2proj = pi;
                 } else if (pi.getNodeName().equals(PI_PATH2PROJ_TARGET_URI)) {
                     path2projUrl = pi;
+                } else if (pi.getNodeName().equals(PI_PATH2ROOTMAP_TARGET_URI)) {
+                    path2rootmapUrl = pi;
                 }
             }
         }
@@ -308,6 +311,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
         if (path2projUrl != null) {
             doc.appendChild(doc.importNode(path2projUrl, true));
+        }
+        if (path2rootmapUrl != null) {
+            doc.appendChild(doc.importNode(path2rootmapUrl, true));
         }
         doc.appendChild(doc.importNode(root, true));
         return doc;
