@@ -179,6 +179,7 @@ See the accompanying LICENSE file for applicable license.
   <macrodef name="html5.topics">
     <element name="params" optional="true" implicit="true"/>
     <sequential>
+      <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
       <pipeline message="Convert DITA topic to HTML5" taskname="xslt">
       <xslt basedir="${dita.temp.dir}"
             destdir="${dita.output.dir}"
