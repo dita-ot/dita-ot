@@ -33,7 +33,7 @@ See the accompanying LICENSE file for applicable license.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 
-    <xsl:attribute-set name="msgph" use-attribute-sets="base-font">
+    <xsl:attribute-set name="msgph">
         <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
@@ -43,7 +43,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute-set name="msgnum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="cmdname" use-attribute-sets="base-font">
+    <xsl:attribute-set name="cmdname">
         <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
@@ -51,15 +51,15 @@ See the accompanying LICENSE file for applicable license.
         <xsl:attribute name="font-style">italic</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="filepath" use-attribute-sets="base-font">
+    <xsl:attribute-set name="filepath">
         <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="userinput" use-attribute-sets="base-font">
+    <xsl:attribute-set name="userinput">
         <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="systemoutput" use-attribute-sets="base-font">
+    <xsl:attribute-set name="systemoutput">
         <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 

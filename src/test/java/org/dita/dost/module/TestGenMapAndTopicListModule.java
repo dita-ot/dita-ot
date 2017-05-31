@@ -13,13 +13,14 @@ import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Job;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
@@ -32,30 +33,14 @@ public class TestGenMapAndTopicListModule {
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     
-    private static File tempDir;
-    private static File tempDirParallel;
-    private static File tempDirAbove;
+    private File tempDir;
 
-    @BeforeClass
-    public static void setUp() throws IOException, DITAOTException {
+    @Before
+    public void setUp() throws IOException, DITAOTException {
         tempDir = TestUtils.createTempDir(TestGenMapAndTopicListModule.class);
-        
-        tempDirParallel = new File(tempDir, "parallel");
-        tempDirParallel.mkdirs();
-        final File inputDirParallel = new File("maps");
-        final File inputMapParallel = new File(inputDirParallel, "root-map-01.ditamap");
-        final File outDirParallel = new File(tempDirParallel, "out");
-        generate(inputDirParallel, inputMapParallel, outDirParallel, tempDirParallel);
-        
-        tempDirAbove = new File(tempDir, "above");
-        tempDirAbove.mkdirs();
-        final File inputDirAbove = new File(".");
-        final File inputMapAbove = new File(inputDirAbove, "root-map-02.ditamap");
-        final File outDirAbove = new File(tempDirAbove, "out");
-        generate(inputDirAbove, inputMapAbove, outDirAbove, tempDirAbove);
     }
 
-    private static void generate(final File inputDir, final File inputMap, final File outDir, final File tempDir) throws DITAOTException, IOException {
+    private static Job generate(final File inputDir, final File inputMap, final File outDir, final File tempDir) throws DITAOTException, IOException {
         final PipelineHashIO pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_INPUTMAP, inputMap.getPath());
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_BASEDIR, srcDir.getAbsolutePath());
@@ -76,12 +61,20 @@ public class TestGenMapAndTopicListModule {
 
         final AbstractFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
-        facade.setJob(new Job(tempDir));
+        final Job job = new Job(tempDir);
+        facade.setJob(job);
         facade.execute("GenMapAndTopicList", pipelineInput);
+
+        return job;
     }
         
     @Test
     public void testFileContentParallel() throws Exception{
+        final File inputDirParallel = new File("maps");
+        final File inputMapParallel = new File(inputDirParallel, "root-map-01.ditamap");
+        final File outDirParallel = new File(tempDir, "out");
+        generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
+
         final File e = new File(expDir, "parallel");
         
         assertEquals(new HashSet<String>(Arrays.asList(
@@ -151,7 +144,7 @@ public class TestGenMapAndTopicListModule {
                     "maps/root-map-01.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
         
-        final Job job = new Job(tempDirParallel);
+        final Job job = new Job(tempDir);
         assertEquals(".." + File.separator, job.getProperty("uplevels"));
 
         assertEquals(5, job.getFileInfo().size());
@@ -181,6 +174,11 @@ public class TestGenMapAndTopicListModule {
 
     @Test
     public void testFileContentAbove() throws Exception{
+        final File inputDirAbove = new File(".");
+        final File inputMapAbove = new File(inputDirAbove, "root-map-02.ditamap");
+        final File outDirAbove = new File(tempDir, "out");
+        generate(inputDirAbove, inputMapAbove, outDirAbove, tempDir);
+
         final File e = new File(expDir, "above");
                 
         assertEquals(new HashSet<String>(Arrays.asList(
@@ -247,7 +245,7 @@ public class TestGenMapAndTopicListModule {
                     "root-map-02.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
                 
-        final Job job = new Job(tempDirAbove);
+        final Job job = new Job(tempDir);
         assertEquals("", job.getProperty("uplevels"));
 
         assertEquals(5, job.getFileInfo().size());
@@ -267,22 +265,67 @@ public class TestGenMapAndTopicListModule {
                 null,
                 new URI("topics/xreffin-topic-1-copy.xml"));
     }
-        
-    private Properties readProperties(final File f)
-            throws IOException, FileNotFoundException {
-        final Properties p = new Properties();
-        InputStream in = null;
-        try {
-            in = new FileInputStream(f);
-            p.load(in);
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-        }
-        return p;
+
+    @Test
+    public void testConref() throws Exception{
+        final File inputDirParallel = new File("conref");
+        final File inputMapParallel = new File(inputDirParallel, "main.ditamap");
+        final File outDirParallel = new File(tempDir, "out");
+        final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
+
+        assertEquals(new HashSet(Arrays.asList(
+                "link-from-normal-ALSORESOURCEONLY.dita",
+                "conref-from-resource-only-ALSORESOURCEONLY.dita",
+                "resourceonly.dita",
+                "conref-from-normal.dita",
+                "conref-from-resource-only.dita",
+                "link-from-resource-only-ALSORESOURCEONLY.dita",
+                "conref-from-normal-ALSORESOURCEONLY.dita")),
+                job.getFileInfo().stream()
+                        .filter(f -> f.isResourceOnly)
+                        .map(fi -> fi.uri.toString())
+                        .collect(Collectors.toSet()));
+        assertEquals(new HashSet(Arrays.asList(
+                "main.ditamap",
+                "link-from-normal.dita",
+                "link-from-resource-only.dita",
+                "normal.dita")),
+                job.getFileInfo().stream()
+                        .filter(f -> !f.isResourceOnly)
+                        .map(fi -> fi.uri.toString())
+                        .collect(Collectors.toSet()));
     }
-    
+
+    @Test
+    public void testConrefLink() throws Exception{
+        final File inputDirParallel = new File("conref");
+        final File inputMapParallel = new File(inputDirParallel, "link.ditamap");
+        final File outDirParallel = new File(tempDir, "out");
+        final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
+
+        assertEquals(new HashSet(Arrays.asList(
+                "conref-from-resource-only-ALSORESOURCEONLY.dita",
+                "resourceonly.dita",
+                "conref-from-normal.dita",
+                "conref-from-resource-only.dita",
+                "conref-from-normal-ALSORESOURCEONLY.dita")),
+                job.getFileInfo().stream()
+                        .filter(f -> f.isResourceOnly)
+                        .map(fi -> fi.uri.toString())
+                        .collect(Collectors.toSet()));
+        assertEquals(new HashSet(Arrays.asList(
+                "link-from-normal-ALSORESOURCEONLY.dita",
+                "link.ditamap",
+                "link-from-normal.dita",
+                "link-from-resource-only.dita",
+                "link-from-resource-only-ALSORESOURCEONLY.dita",
+                "normal.dita")),
+                job.getFileInfo().stream()
+                        .filter(f -> !f.isResourceOnly)
+                        .map(fi -> fi.uri.toString())
+                        .collect(Collectors.toSet()));
+    }
+
     private Set<String> readLines(final File f) throws IOException {
         final Set<String> lines = new HashSet<String>();
         BufferedReader in = null;
@@ -299,37 +342,9 @@ public class TestGenMapAndTopicListModule {
         }
         return lines;
     }
-
-//    @Test
-//    public void testUpdateUplevels() throws NoSuchMethodException, SecurityException, SAXException, ParserConfigurationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
-//        final Method updateUplevels = GenMapAndTopicListModule.class.getDeclaredMethod("updateUplevels", File.class);
-//        updateUplevels.setAccessible(true);
-//        final Field uplevels = GenMapAndTopicListModule.class.getDeclaredField("uplevels");
-//        uplevels.setAccessible(true);
-//        {
-//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-//            updateUplevels.invoke(m, new File("foo" + File.separator + "bar" + File.separator + "foo"));
-//            assertEquals(0, uplevels.getInt(m));
-//        }
-//        {
-//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-//            updateUplevels.invoke(m, new File(".." + File.separator + "foo" + File.separator + "bar"));
-//            assertEquals(1, uplevels.getInt(m));
-//        }
-//        {
-//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-//            updateUplevels.invoke(m, new File(".." + File.separator + ".." + File.separator + "foo"));
-//            assertEquals(2, uplevels.getInt(m));
-//        }
-//        {
-//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-//            updateUplevels.invoke(m, new File(".." + File.separator + "foo" + File.separator + ".." + File.separator + "bar"));
-//            assertEquals(1, uplevels.getInt(m));
-//        }
-//    }
     
-    @AfterClass
-    public static void tearDown() throws IOException {
+    @After
+    public void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
 

@@ -47,7 +47,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:value-of select="concat($msgcat, $msgnum, $msgsev)"/>
     </xsl:param>
     
-    <xsl:variable name="msgcontent">
+    <xsl:variable name="msgcontent" as="xs:string*">
       <xsl:choose>
         <xsl:when test="$msg != '***'">
           <xsl:value-of select="$msg"/>
@@ -77,21 +77,21 @@ See the accompanying LICENSE file for applicable license.
         <xsl:text>: </xsl:text>
       </xsl:if>
     </xsl:variable>
-    <xsl:variable name="m">
+    <xsl:variable name="m" as="xs:string*">
       <xsl:if test="normalize-space($debugloc)">
         <xsl:value-of select="$debugloc"/>
       </xsl:if>
-      <xsl:value-of select="$msgcontent"/>
+      <xsl:sequence select="$msgcontent"/>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$msgsev = 'F'">
         <xsl:message terminate="yes">
-          <xsl:value-of select="$m"/>
+          <xsl:value-of select="$m" separator=""/>
         </xsl:message>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>
-          <xsl:value-of select="$m"/>
+          <xsl:value-of select="$m" separator=""/>
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
@@ -122,12 +122,14 @@ See the accompanying LICENSE file for applicable license.
     <xsl:choose>
       <xsl:when test="contains($params, ';')">
         <xsl:variable name="param" select="substring-before($params, ';')"/>
-        <xsl:variable name="newString">
-          <xsl:call-template name="replace">
-            <xsl:with-param name="text" select="$string"/>
-            <xsl:with-param name="from" select="substring-before($param, '=')"/>
-            <xsl:with-param name="to" select="substring-after($param, '=')"/>            
-          </xsl:call-template>          
+        <xsl:variable name="newString" as="xs:string">
+          <xsl:value-of>
+            <xsl:call-template name="replace">
+              <xsl:with-param name="text" select="$string"/>
+              <xsl:with-param name="from" select="substring-before($param, '=')"/>
+              <xsl:with-param name="to" select="substring-after($param, '=')"/>            
+            </xsl:call-template>
+          </xsl:value-of>
         </xsl:variable>
         <xsl:call-template name="replaceParams">
           <xsl:with-param name="string" select="$newString"/>

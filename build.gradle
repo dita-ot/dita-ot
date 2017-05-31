@@ -9,7 +9,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'org.dita-ot'
-version = '2.4.6'
+version = '2.5'
 
 description = """DITA Open Toolkit"""
 
@@ -28,10 +28,12 @@ dependencies {
     compile group: 'net.sourceforge.saxon', name: 'saxon', version:'9.1.0.8', classifier:'dom'
     compile group: 'net.sourceforge.saxon', name: 'saxon', version:'9.1.0.8'
     compile group: 'com.ibm.icu', name: 'icu4j', version:'57.1'
-    compile group: 'org.apache.ant', name: 'ant', version:'1.9.7'
-    compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.9.7'
+    compile group: 'org.apache.ant', name: 'ant', version:'1.10.1'
+    compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.1'
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
-    runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.9.7'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.23'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.1'
+    runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.1'
     testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'xmlunit', name: 'xmlunit', version:'1.6'
@@ -40,7 +42,7 @@ dependencies {
 jar.archiveName = "${project.name}.jar"
 
 test {
-    exclude '**/IntegrationTest.class'
+    exclude '**/IntegrationTest*.class'
 }
 
 // Integration test
@@ -61,7 +63,7 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
     minHeapSize = "128m"
     maxHeapSize = "1024m"
     systemProperties = integrationTestSystemProperties
-    include '**/IntegrationTest.class'
+    include '**/IntegrationTest*.class'
 }
 
 // Install
@@ -99,10 +101,12 @@ task cleanDistTemp(type: Delete) {
     delete distTempDir
 }
 
-task initDist(dependsOn: [jar, cleanDistTemp]) << {
-    distTempDir.mkdirs()
-    println "distVersion: ${distVersion}"
-    println "distFileName: ${distFileName}"
+task initDist(dependsOn: [jar, cleanDistTemp]) {
+    doLast {
+        distTempDir.mkdirs()
+        println "distVersion: ${distVersion}"
+        println "distFileName: ${distFileName}"
+    }
 }
 
 task copyDistTemp(type: Copy, dependsOn: initDist) {
@@ -164,10 +168,12 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task updateConfiguration() << {
-    if (project.hasProperty('commit') && !commit.empty) {
-        ant.propertyfile(file: "${distTempDir}/lib/configuration.properties") {
-            entry(key: "otversion", operation: "=", value: "${distVersion}")
+task updateConfiguration() {
+    doLast {
+        if (project.hasProperty('commit') && !commit.empty) {
+            ant.propertyfile(file: "${distTempDir}/lib/configuration.properties") {
+                entry(key: "otversion", operation: "=", value: "${distVersion}")
+            }
         }
     }
 }
@@ -196,7 +202,18 @@ task cleanGenerateDocs(type: Delete) {
 }
 cleanGenerateDocs.mustRunAfter generateDocs
 
-task distZip(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs]) {
+task generateJavadocs(type: Javadoc) {
+    classpath = sourceSets.main.compileClasspath
+    source = sourceSets.main.allJava
+    include "**/org/dita/dost/*.*"
+    include "**/org/dita/dost/exception/DITAOTException.*"
+    include "**/org/dita/dost/util/Configuration.*"
+    options.addStringOption("public")
+    title = "${project.description} ${project.version}"
+    destinationDir = file("${distTempDir}/doc/api")
+}
+
+task dist(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs, generateJavadocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
@@ -217,32 +234,6 @@ task distZip(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs]) {
         }
     }
     archiveName "dita-ot-${distFileName}.zip"
-}
-task distTarGz(type: Tar, dependsOn: [jar, generateDocs]) {
-    compression = Compression.GZIP
-    into("dita-ot-${distVersion}") {
-        from (distTempDir ) {
-            exclude "bin/dita"
-            exclude "bin/dita.bat"
-            // legacy build scripts
-            exclude "startcmd.*"
-            exclude "bin/ant"
-            exclude "bin/ant.*"
-        }
-        from (distTempDir) {
-            fileMode = 0755
-            include "bin/dita"
-            include "bin/dita.bat"
-            // legacy build scripts
-            include "startcmd.*"
-            include "bin/ant"
-            include "bin/ant.*"
-        }
-    }
-    archiveName "dita-ot-${distFileName}.tar.gz"
-}
-task dist(dependsOn: [distZip]) << {
-    // NOOP
 }
 
 test {

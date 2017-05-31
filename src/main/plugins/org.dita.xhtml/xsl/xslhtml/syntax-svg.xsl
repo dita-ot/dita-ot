@@ -21,15 +21,15 @@ See the accompanying LICENSE file for applicable license.
 
 <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]" priority="500">
       <svg width="200" height="100">
-	<xsl:apply-templates/>
+  <xsl:apply-templates/>
       </svg>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/fragment ')]" priority="2">
-	<div>
-	<a><xsl:attribute name="name"><xsl:value-of select="title"/></xsl:attribute> </a>
-	<xsl:apply-templates/>
-	</div>
+  <div>
+  <a><xsl:attribute name="name"><xsl:value-of select="title"/></xsl:attribute> </a>
+  <xsl:apply-templates/>
+  </div>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/synblk ')]" priority="2">
@@ -43,15 +43,15 @@ See the accompanying LICENSE file for applicable license.
 <!-- titles for logical containers -->
 
 <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
-	<text style="font-size: 16; font-family: Arial; font-weight: bold; stroke:none; fill:blue;">
-	<xsl:value-of select="."/>
-	</text>
+  <text style="font-size: 16; font-family: Arial; font-weight: bold; stroke:none; fill:blue;">
+  <xsl:value-of select="."/>
+  </text>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' topic/title ')]" priority="2">
-	<text style="font-size: 12; font-family: Arial; font-weight: bold; stroke:none; fill:blue;">
-	<xsl:value-of select="."/>
-	</text>
+  <text style="font-size: 12; font-family: Arial; font-weight: bold; stroke:none; fill:blue;">
+  <xsl:value-of select="."/>
+  </text>
 </xsl:template>
 
 

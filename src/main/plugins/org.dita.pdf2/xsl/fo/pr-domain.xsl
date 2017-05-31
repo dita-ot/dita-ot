@@ -348,67 +348,12 @@ See the accompanying LICENSE file for applicable license.
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/*[contains(@class,' pr-d/groupcomp ')]">
-        <fo:inline>
-          <xsl:call-template name="commonattributes"/>
-        </fo:inline>
-        <xsl:call-template name="makeGroup"/>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class,' pr-d/groupchoice ')]/*[contains(@class,' pr-d/groupchoice ')]">
+    <xsl:template match="*[contains(@class,' pr-d/groupcomp ') or contains(@class,' pr-d/groupchoice ') or contains(@class,' pr-d/groupseq ')]/
+        *[contains(@class,' pr-d/groupcomp ') or contains(@class,' pr-d/groupchoice ') or contains(@class,' pr-d/groupseq ')]">
         <fo:inline>
             <xsl:call-template name="commonattributes"/>
+            <xsl:call-template name="makeGroup"/>
         </fo:inline>
-        <xsl:call-template name="makeGroup"/>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' pr-d/groupseq ')]">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
-        <xsl:call-template name="makeGroup"/>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class,' pr-d/groupchoice ')]/*[contains(@class,' pr-d/groupcomp ')]">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
-        <xsl:call-template name="makeGroup"/>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class,' pr-d/groupchoice ')]/*[contains(@class,' pr-d/groupseq ')]">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
-        <xsl:call-template name="makeGroup"/>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/*[contains(@class,' pr-d/groupchoice ')]">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
-        <xsl:call-template name="makeGroup"/>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/*[contains(@class,' pr-d/groupseq ')]">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
-        <xsl:call-template name="makeGroup"/>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' pr-d/groupchoice ')]">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
-        <xsl:call-template name="makeGroup"/>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' pr-d/groupcomp ')]">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
-        <xsl:call-template name="makeGroup"/>
     </xsl:template>
 
     <xsl:template name="makeGroup">

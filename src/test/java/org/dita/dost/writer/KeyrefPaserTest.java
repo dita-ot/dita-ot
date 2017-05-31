@@ -15,6 +15,8 @@ import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +66,8 @@ public class KeyrefPaserTest {
         tempDirSubDir.mkdirs();
         TestUtils.normalize(new File(srcDir, "a.xml"), new File(tempDir, "a.xml"));
         TestUtils.normalize(new File(srcDir, "b.ditamap"), new File(tempDir, "b.ditamap"));
-        TestUtils.normalize(new File(srcDir, "subdir/c.ditamap"), new File(tempDir, "subdir/c.ditamap"));
+        TestUtils.normalize(new File(srcDir, "subdir" + File.separator + "c.ditamap"), new File(tempDir, "subdir" + File.separator + "c.ditamap"));
+        TestUtils.normalize(new File(srcDir, "id.xml"), new File(tempDir, "id.xml"));
         resolver = CatalogUtils.getCatalogResolver();
 
         TestUtils.resetXMLUnit();
@@ -74,7 +77,7 @@ public class KeyrefPaserTest {
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreComments(true);
 
-        keyDefinition = readKeyMap(new File(srcDir, "keys.ditamap"));
+        keyDefinition = readKeyMap(Paths.get("keys.ditamap"));
     }
 
     @Test
@@ -88,6 +91,19 @@ public class KeyrefPaserTest {
 
         assertXMLEqual(new InputSource(new File(expDir, "a.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "a.xml").toURI().toString()));
+    }
+
+    @Test
+    public void testFragment() throws Exception {
+        final KeyrefPaser parser = new KeyrefPaser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir));
+        parser.setKeyDefinition(keyDefinition);
+        parser.setCurrentFile(new File(tempDir, "id.xml").toURI());
+        parser.write(new File(tempDir, "id.xml"));
+
+        assertXMLEqual(new InputSource(new File(expDir, "id.xml").toURI().toString()),
+                new InputSource(new File(tempDir, "id.xml").toURI().toString()));
     }
 
     @Test
@@ -108,12 +124,12 @@ public class KeyrefPaserTest {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(tempDir));
-        parser.setKeyDefinition(readKeyMap(new File(srcDir, "subdir/c.ditamap")));
-        parser.setCurrentFile(new File(tempDir, "subdir/c.ditamap").toURI());
-        parser.write(new File(tempDir, "subdir/c.ditamap"));
+        parser.setKeyDefinition(readKeyMap(Paths.get("subdir", "c.ditamap")));
+        parser.setCurrentFile(new File(tempDir, "subdir"+ File.separator +"c.ditamap").toURI());
+        parser.write(new File(tempDir, "subdir"+ File.separator +"c.ditamap"));
 
-        assertXMLEqual(new InputSource(new File(expDir, "subdir/c.ditamap").toURI().toString()),
-                new InputSource(new File(tempDir, "subdir/c.ditamap").toURI().toString()));
+        assertXMLEqual(new InputSource(new File(expDir, "subdir"+ File.separator +"c.ditamap").toURI().toString()),
+                new InputSource(new File(tempDir, "subdir"+ File.separator +"c.ditamap").toURI().toString()));
     }
 
     @Test
@@ -159,9 +175,10 @@ public class KeyrefPaserTest {
         TestUtils.forceDelete(tempDir);
     }
 
-    private static KeyScope readKeyMap(File keyMapFile) throws Exception {
+    private static KeyScope readKeyMap(final Path map) throws Exception {
+        final URI keyMapFile = srcDir.toPath().resolve(map).toUri();
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        final InputSource inputSource = new InputSource(keyMapFile.toURI().toString());
+        final InputSource inputSource = new InputSource(keyMapFile.toString());
         final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
         documentBuilder.setEntityResolver(resolver);
         final Document document = documentBuilder.parse(inputSource);
@@ -174,7 +191,8 @@ public class KeyrefPaserTest {
             final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
             doc.appendChild(doc.importNode(elem, true));
             keys.put(elem.getAttribute("keys"), elem);
-            final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")), null, null, null, elem);
+            final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")),
+                    null, null, tempDir.toPath().resolve(map).toUri(), elem);
             keymap.put(keyDef.keys, keyDef);
         }
         return new KeyScope(keymap);

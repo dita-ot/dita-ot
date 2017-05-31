@@ -90,7 +90,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:attribute name="link_to">
     <xsl:choose>
       <xsl:when test="contains($fix-anchorref,'.ditamap')">
-	      <!-- xsl:value-of select="$work.dir"/><xsl:text>/</xsl:text><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/ -->
+        <!-- xsl:value-of select="$work.dir"/><xsl:text>/</xsl:text><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/ -->
               <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/>
       </xsl:when>
       <xsl:when test="contains($fix-anchorref,'.xml')"><xsl:value-of select="$work.dir"/><xsl:value-of select="$fix-anchorref"/></xsl:when>
@@ -172,7 +172,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' map/anchor ')]">
-	<anchor id="{@id}"/>
+  <anchor id="{@id}"/>
 </xsl:template>
 
 <!-- If the topicref is a "topicgroup", or some other topicref that does not point
@@ -187,7 +187,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates/>
     </xsl:when>
     <xsl:otherwise>
-	  <topic>
+    <topic>
         <xsl:attribute name="label">
           <xsl:choose>
             <xsl:when test="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]">
@@ -195,7 +195,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:when>
             <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle">
               <xsl:value-of select="@navtitle"/>
-            </xsl:when>			  
+            </xsl:when>
             <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
               <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
             </xsl:when>
@@ -221,7 +221,7 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:value-of select="@href"/>
                   <xsl:call-template name="output-message">
                        <xsl:with-param name="id" select="'DOTX005E'"/>
-                		   <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
+                       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
                   </xsl:call-template>
                 </xsl:otherwise>
               </xsl:choose>
@@ -257,16 +257,16 @@ See the accompanying LICENSE file for applicable license.
                        </xsl:otherwise>
                      </xsl:choose>
                   </xsl:attribute>
-		</xsl:if>
-		<xsl:apply-templates/>
-	</topic>
+    </xsl:if>
+    <xsl:apply-templates/>
+  </topic>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
 <!--makes sure that any literal text in topicmeta does not get output as literal text in the output TOC file, which should only have text in attributes, as pulled in by the topicref template-->
 <!--xsl:template match="text()">
-	<xsl:apply-templates/>
+  <xsl:apply-templates/>
 </xsl:template-->
   
 <xsl:template match="text()"/>

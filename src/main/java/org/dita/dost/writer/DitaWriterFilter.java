@@ -9,11 +9,10 @@
 package org.dita.dost.writer;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.Job;
+import org.dita.dost.module.GenMapAndTopicListModule;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -21,12 +20,16 @@ import org.dita.dost.module.DebugAndFilterModule;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.URLUtils.getRelativePath;
+import static org.dita.dost.util.XMLUtils.nonDitaContext;
 import static org.dita.dost.reader.GenListModuleReader.*;
 
 
@@ -35,16 +38,19 @@ import static org.dita.dost.reader.GenListModuleReader.*;
  * 
  * <p>The following processing instructions are added before the root element:</p>
  * <dl>
- *   <dt>{@link Constants#PI_WORKDIR_TARGET}<dt>
+ *   <dt>{@link Constants#PI_WORKDIR_TARGET}</dt>
  *   <dd>Absolute system path of the file parent directory. On Windows, a {@code /}
  *     is added to beginning of the path.</dd>
- *   <dt>{@link Constants#PI_WORKDIR_TARGET_URI}<dt>
+ *   <dt>{@link Constants#PI_WORKDIR_TARGET_URI}</dt>
  *   <dd>Absolute URI of the file parent directory.</dd>
- *   <dt>{@link Constants#PI_PATH2PROJ_TARGET}<dt>
+ *   <dt>{@link Constants#PI_PATH2PROJ_TARGET}</dt>
  *   <dd>Relative system path to the output directory, with a trailing directory separator.
  *     When the source file is in the project root directory, processing instruction has no value.</dd>
- *   <dt>{@link Constants#PI_PATH2PROJ_TARGET_URI}<dt>
+ *   <dt>{@link Constants#PI_PATH2PROJ_TARGET_URI}</dt>
  *   <dd>Relative URI to the output directory, with a trailing path separator.
+ *     When the source file is in the project root directory, processing instruction has value {@code ./}.</dd>
+ *   <dt>{@link Constants#PI_PATH2ROOTMAP_TARGET_URI}</dt>
+ *   <dd>Relative URI to the root map directory, with a trailing path separator.
  *     When the source file is in the project root directory, processing instruction has value {@code ./}.</dd>
  * </dl>
  *
@@ -56,11 +62,20 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     private Map<String, Map<String, String>> defaultValueMap;
     /** Absolute path to current destination file. */
     private File outputFile;
-    /** Foreign/unknown nesting level. */
-    private int foreignLevel;
+    /** DITA class values for open elements **/
+    private final Deque<DitaClass> classes = new LinkedList<>();
     /** File infos by src. */
     private Map<URI, FileInfo> fileInfoMap;
+//    /** File infos by src. */
+//    private Map<URI, FileInfo> fileInfoMap;
+    private TempFileNameScheme tempFileNameScheme;
 
+    public DitaWriterFilter() {
+    }
+
+    public void setTempFileNameScheme(TempFileNameScheme tempFileNameScheme) {
+        this.tempFileNameScheme = tempFileNameScheme;
+    }
 
     /**
      * Set default value map.
@@ -77,10 +92,10 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
-        fileInfoMap = new HashMap<>();
-        for (final FileInfo f: job.getFileInfo()) {
-            fileInfoMap.put(f.result, f);
-        }
+//        fileInfoMap = new HashMap<>();
+//        for (final FileInfo f: job.getFileInfo()) {
+//            fileInfoMap.put(f.result, f);
+//        }
     }
 
     // ContentHandler methods
@@ -88,18 +103,20 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
-        if (foreignLevel > 0) {
-            foreignLevel--;
-        }
+        classes.pop();
         getContentHandler().endElement(uri, localName, qName);
     }
 
     @Override
     public void startDocument() throws SAXException {
-        final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(toFile(job.getInputDir().resolve("dummy")), toFile(currentFile)),
+        classes.clear();
+
+        // XXX May be require fixup
+        final File path2Project = DebugAndFilterModule.getPathtoProject(FileUtils.getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
                 toFile(currentFile),
                 toFile(job.getInputFile()),
                 job);
+        final File path2rootmap = toFile(getRelativePath(currentFile, job.getInputFile())).getParentFile();
         getContentHandler().startDocument();
         if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
             getContentHandler().processingInstruction(PI_WORKDIR_TARGET, outputFile.getParentFile().getAbsolutePath());
@@ -116,24 +133,22 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, "");
             getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, "." + URI_SEPARATOR);
         }
+        if (path2rootmap != null) {
+            getContentHandler().processingInstruction(PI_PATH2ROOTMAP_TARGET_URI, toURI(path2rootmap).toString() + URI_SEPARATOR);
+        } else {
+            getContentHandler().processingInstruction(PI_PATH2ROOTMAP_TARGET_URI, "." + URI_SEPARATOR);
+        }
         getContentHandler().ignorableWhitespace(new char[]{'\n'}, 0, 1);
     }
 
     @Override
     public void startElement(final String uri, final String localName, final String qName,
                              final Attributes atts) throws SAXException {
-        if (foreignLevel > 0) {
-            foreignLevel++;
-        } else if (foreignLevel == 0) {
-            final String attrValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-            if (attrValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
-            }
-            if (attrValue != null &&
-                    (TOPIC_FOREIGN.matches(attrValue) ||
-                            TOPIC_UNKNOWN.matches(attrValue))) {
-                foreignLevel = 1;
-            }
+        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
+        if (cls.isValid()) {
+            classes.addFirst(cls);
+        }else {
+            classes.addFirst(null);
         }
 
         final AttributesImpl res = new AttributesImpl();
@@ -213,12 +228,17 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             }
             if (attValue.toString().length() != 0) {
                 final URI current = currentFile.resolve(attValue);
-                final FileInfo f = fileInfoMap.get(current);
+                final FileInfo f = job.getFileInfo(current);
                 if (f != null) {
-                    final FileInfo cfi = fileInfoMap.get(currentFile);
+                    final FileInfo cfi = job.getFileInfo(currentFile);
                     final URI currrentFileTemp = job.tempDirURI.resolve(cfi.uri);
                     final URI targetTemp = job.tempDirURI.resolve(f.uri);
                     attValue = getRelativePath(currrentFileTemp, targetTemp);
+                } else if (tempFileNameScheme != null) {
+                    final URI currrentFileTemp = job.tempDirURI.resolve(tempFileNameScheme.generateTempFileName(currentFile));
+                    final URI targetTemp = job.tempDirURI.resolve(tempFileNameScheme.generateTempFileName(current));
+                    final URI relativePath = getRelativePath(currrentFileTemp, targetTemp);
+                    attValue = relativePath;
                 } else {
                     attValue = getRelativePath(currentFile, current);
                 }

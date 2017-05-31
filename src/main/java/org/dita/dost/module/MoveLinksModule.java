@@ -12,6 +12,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DitaLinksWriter;
 import org.w3c.dom.Document;
@@ -19,7 +20,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -32,6 +32,7 @@ import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**
  * MoveLinksModule implements move links step in preprocess. It reads the map links
@@ -48,7 +49,11 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        final File inputFile = new File(job.tempDir, input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
+        final FileInfo fi = job.getFileInfo(job.getInputMap());
+        if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+            return null;
+        }
+        final File inputFile = new File(job.tempDirURI.resolve(fi.uri));
         final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
 
         Document doc;
@@ -57,7 +62,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             doc = XMLUtils.getDocumentBuilder().newDocument();
             final TransformerFactory transformerFactory = TransformerFactory.newInstance();
             transformerFactory.setURIResolver(CatalogUtils.getCatalogResolver());
-            final Transformer transformer = transformerFactory.newTransformer(new StreamSource(styleFile));
+            final Transformer transformer = withLogger(transformerFactory.newTransformer(new StreamSource(styleFile)), logger);
             transformer.setURIResolver(CatalogUtils.getCatalogResolver());
             if (input.getAttribute("include.rellinks") != null) {
                 transformer.setParameter("include.rellinks", input.getAttribute("include.rellinks"));

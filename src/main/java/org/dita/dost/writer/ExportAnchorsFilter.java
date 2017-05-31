@@ -43,14 +43,14 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     private boolean shouldAppendEndTag = false;
     private DitaClass rootClass;
     
-	/**
-	 * Create new export antchors filter.
-	 */
-	public ExportAnchorsFilter() {
-	    super();
-	}
-	
-	/**
+    /**
+     * Create new export antchors filter.
+     */
+    public ExportAnchorsFilter() {
+        super();
+    }
+
+    /**
      * Set processing input file absolute path.
      * 
      * @param inputFile absolute path to root file
@@ -79,7 +79,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     public List<ExportAnchor> getExportAnchors() {
         return exportAnchors;
     }
-	
+
     /**
      * @return the pluginMap
      */
@@ -87,7 +87,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         return pluginMap;
     }
     
-	// SAX methods
+    // SAX methods
 
     @Override
     public void startDocument() throws SAXException {
@@ -96,10 +96,10 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         getContentHandler().startDocument();
     }
 
-	@Override
-	public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
-			throws SAXException {
-	    final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+    @Override
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+            throws SAXException {
+        final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
         stack.addFirst(classValue);
         if (classValue != null) {
             if (rootClass == null) {
@@ -152,11 +152,11 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
                 }
             }
         }
-	    
-	    getContentHandler().startElement(uri, localName, qName, atts);
-	}
-	
-	/**
+
+        getContentHandler().startElement(uri, localName, qName, atts);
+    }
+
+    /**
      * Parse the href attribute for needed information.
      * 
      * @param atts attributes to process
@@ -196,8 +196,8 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     }
 
     @Override
-	public void endElement(final String uri, final String localName, final String qName)
-			throws SAXException {
+    public void endElement(final String uri, final String localName, final String qName)
+            throws SAXException {
         final String classValue = stack.removeFirst();
         if (classValue != null) {
             if ((MAP_TOPICMETA.matches(classValue) || TOPIC_PROLOG.matches(classValue))
@@ -210,9 +210,9 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
             }
         }
 
-	    getContentHandler().endElement(uri, localName, qName);
-	}
-	
+        getContentHandler().endElement(uri, localName, qName);
+    }
+
     /**
      * Clean up.
      */

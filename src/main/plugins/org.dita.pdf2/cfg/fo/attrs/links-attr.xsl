@@ -41,6 +41,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
   </xsl:attribute-set>
 
+  <xsl:attribute-set name="linklist.title" use-attribute-sets="common.title">
+    <xsl:attribute name="font-weight">bold</xsl:attribute>
+  </xsl:attribute-set>
+
     <xsl:attribute-set name="linkpool">
     </xsl:attribute-set>
 
@@ -93,6 +97,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:attribute-set name="related-links.ol.li__content" use-attribute-sets="ol.li__content">
   </xsl:attribute-set>
 
+  <!-- FIXME: is this obsolete? -->
     <xsl:attribute-set name="related-links.title">
     <xsl:attribute name="font-weight">bold</xsl:attribute>
   </xsl:attribute-set>
@@ -109,8 +114,8 @@ See the accompanying LICENSE file for applicable license.
         <!--<xsl:attribute name="margin-left">8pt</xsl:attribute>-->
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="link__shortdesc" use-attribute-sets="base-font">
-        <xsl:attribute name="margin-left">15pt</xsl:attribute>
+    <xsl:attribute-set name="link__shortdesc">
+        <xsl:attribute name="start-indent">15pt</xsl:attribute>
         <xsl:attribute name="space-after">5pt</xsl:attribute>
     </xsl:attribute-set>
 

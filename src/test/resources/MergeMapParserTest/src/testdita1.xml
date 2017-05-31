@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dita>
+<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  class="- topic/topic concept/concept "
+  domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+  id="topic1" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
+  <title class="- topic/title ">Concept</title>
+</concept>
+<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+class="- topic/topic concept/concept "
+domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+id="topic2" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
+<title class="- topic/title ">Concept 2</title>
+</concept>
+</dita>

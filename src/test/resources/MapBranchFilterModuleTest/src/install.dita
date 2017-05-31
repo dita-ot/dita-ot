@@ -1,0 +1,19 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  id="install" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Install</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">All platforms, all audience</p>
+    <p class="- topic/p " platform="linux">Linux, all audience</p>
+    <p class="- topic/p " platform="mac">OS X, all audience</p>
+    <p class="- topic/p " platform="win">Windows, all audience</p>
+    <p audience="novice" class="- topic/p ">All platforms, novice</p>
+    <p audience="novice" class="- topic/p " platform="linux">Linux, novice</p>
+    <p audience="novice" class="- topic/p " platform="mac">OS X, novice</p>
+    <p audience="novice" class="- topic/p " platform="win">Windows, novice</p>
+    <p audience="advanced" class="- topic/p ">All platforms, advanced</p>
+    <p audience="advanced" class="- topic/p " platform="linux">Linux, advanced</p>
+    <p audience="advanced" class="- topic/p " platform="mac">OS X, advanced</p>
+    <p audience="advanced" class="- topic/p " platform="win">Windows, advanced</p>
+  </body>
+</topic>

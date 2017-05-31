@@ -12,14 +12,13 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.log.MessageBean.*;
 
 /**
- * LogUtils : To anylyse the information from dita & xslt ,supply
+ * LogUtils : To anylyse the information from dita &amp; xslt ,supply
  * fatal , error , warn , info to the DITAOTBuildLogger,
  * which to complement the ant's shortage.
  * 
- * Only intended to be used with {@link org.dita.dost.log.DITAOTBuildLogger}.
+ * Only intended to be used with org.dita.dost.log.DITAOTBuildLogger.
  * 
  * @author wxzhang
- * @see org.dita.dost.log.DITAOTBuildLogger
  * @deprecated since 2.3
  */
 @Deprecated

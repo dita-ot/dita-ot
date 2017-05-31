@@ -107,12 +107,12 @@ public final class DITAOTCopy extends Task {
                     final File srcFile = new File(inc);
                     File destFile = null;
                     for (final String rel: relativePaths.split(COMMA)) {
-					    final File temp = new File(destDir, rel);
-						if (temp.getName().equalsIgnoreCase(srcFile.getName())) {
-							destFile = temp;
-							break;
-						}
-					}
+                        final File temp = new File(destDir, rel);
+                        if (temp.getName().equalsIgnoreCase(srcFile.getName())) {
+                            destFile = temp;
+                            break;
+                        }
+                    }
                     if (srcFile.exists() && destFile != null) {                      
                         fileUtils.copyFile(srcFile, destFile);
                     }

@@ -22,20 +22,21 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
 
     protected DITAOTLogger logger;
     protected Job job;
-    protected Filter<FileInfo> fileInfoFilter;
+    Filter<FileInfo> fileInfoFilter;
 
     @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-    
+
     @Override
     public void setJob(final Job job) {
         this.job = job;
     }
-    
+
     abstract public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException;
 
+    @Override
     public void setFileInfoFilter(Filter<FileInfo> fileInfoFilter) {
         this.fileInfoFilter = fileInfoFilter;
     }

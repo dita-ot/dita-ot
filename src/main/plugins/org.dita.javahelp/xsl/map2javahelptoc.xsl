@@ -45,7 +45,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:param name="title"/>
   <xsl:choose>
   <xsl:when test="(@toc and translate(@toc, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='no')
-  					or (@processing-role='resource-only')">
+            or (@processing-role='resource-only')">
     <!-- <xsl:variable name="results">  -->
     <!-- Process children nodes. -->
 <!--     <xsl:apply-templates select="$subtopicNodes"/> -->

@@ -64,8 +64,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="productName">
         <xsl:variable name="mapProdname" select="(/*/opentopic:map//*[contains(@class, ' topic/prodname ')])[1]" as="element()?"/>
         <xsl:choose>
-            <xsl:when test="$mapProdname">
-                <xsl:value-of select="$mapProdname"/>
+            <xsl:when test="exists($mapProdname)">
+                <xsl:apply-templates select="$mapProdname" mode="set-product-name"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="getVariable">
@@ -85,7 +85,11 @@ See the accompanying LICENSE file for applicable license.
         </xsl:for-each>
     </xsl:variable>
 
-  <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]" as="element()*"/>
+    <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]" as="element()*"/>
+
+    <xsl:template match="*[contains(@class, ' topic/prodname ')]" mode="set-product-name">
+      <xsl:apply-templates select="." mode="dita-ot:text-only"/>
+    </xsl:template>
 
     <xsl:template name="validateTopicRefs">
         <xsl:apply-templates select="//opentopic:map" mode="topicref-validation"/>
@@ -223,9 +227,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:call-template name="insertBodyStaticContents"/>
           <fo:flow flow-name="xsl-region-body">
             <xsl:for-each select="opentopic:map/*[contains(@class, ' map/topicref ')]">
-              <xsl:for-each select="key('topic-id', @id)">
-                <xsl:apply-templates select="." mode="processTopic"/>
-              </xsl:for-each>
+              <xsl:apply-templates select="." mode="generatePageSequenceFromTopicref"/>
             </xsl:for-each>
           </fo:flow>
         </fo:page-sequence>
@@ -238,6 +240,20 @@ See the accompanying LICENSE file for applicable license.
       </xsl:otherwise>
     </xsl:choose>
     <xsl:call-template name="createBackCover"/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' map/topicref ')]" mode="generatePageSequenceFromTopicref">
+    <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
+    <xsl:choose>
+      <xsl:when test="empty($referencedTopic)">
+        <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="generatePageSequenceFromTopicref"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="$referencedTopic">
+          <xsl:apply-templates select="." mode="processTopic"/>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' bookmap/bookmap ')]" mode="generatePageSequences" priority="10">
@@ -265,17 +281,21 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*" mode="generatePageSequences"/>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generatePageSequences" priority="0">
+    <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
     <xsl:choose>
+      <xsl:when test="empty($referencedTopic)">
+        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="generatePageSequences"/>
+      </xsl:when>
       <xsl:when test="ancestor::*[contains(@class,' bookmap/frontmatter ')]">
         <!-- TODO: To fit the pattern, this should be in its own match template. But a general match for frontmatter/*
              conflicts with priority of existing rules (e.g., preface); changing priorities would
              break customizations. --> 
-        <xsl:for-each select="key('topic-id', @id)">
+        <xsl:for-each select="$referencedTopic">
           <xsl:call-template name="processFrontMatterTopic"/>
         </xsl:for-each>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:for-each select="key('topic-id', @id)">
+        <xsl:for-each select="$referencedTopic">
           <xsl:call-template name="processTopicSimple"/>
         </xsl:for-each>
       </xsl:otherwise>
@@ -287,26 +307,59 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*" mode="generatePageSequences"/>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' bookmap/chapter ')]" mode="generatePageSequences">
-    <xsl:for-each select="key('topic-id', @id)">
-      <xsl:call-template name="processTopicChapter"/>
-    </xsl:for-each>
+    <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
+    <xsl:choose>
+      <xsl:when test="empty($referencedTopic)">
+        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="generatePageSequences"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="$referencedTopic">
+          <xsl:call-template name="processTopicChapter"/>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="generatePageSequences">
-    <xsl:for-each select="key('topic-id', @id)">
-      <xsl:call-template name="processTopicAppendix"/>
-    </xsl:for-each>
+    <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
+    <xsl:choose>
+      <xsl:when test="empty($referencedTopic)">
+        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="generatePageSequences"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="$referencedTopic">
+          <xsl:call-template name="processTopicAppendix"/>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' bookmap/preface ')]" mode="generatePageSequences">
-    <xsl:for-each select="key('topic-id', @id)">
-      <xsl:call-template name="processTopicPreface"/>
-    </xsl:for-each>
+    <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
+    <xsl:choose>
+      <xsl:when test="empty($referencedTopic)">
+        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="generatePageSequences"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="$referencedTopic">
+            <xsl:call-template name="processTopicPreface"/>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' bookmap/appendices ')]" mode="generatePageSequences">
-    <xsl:for-each select="key('topic-id', @id)">
-      <xsl:call-template name="processTopicAppendices"/>
-    </xsl:for-each>
+    <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
+    <xsl:choose>
+      <xsl:when test="empty($referencedTopic)">
+        <xsl:apply-templates select="*[contains(@class, ' bookmap/appendix ')]" mode="generatePageSequences"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="$referencedTopic">
+            <xsl:call-template name="processTopicAppendices"/>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="generatePageSequences">
+    <!-- Merge process generates placeholder for <part> with no title, no topic -->
     <xsl:for-each select="key('topic-id', @id)">
       <xsl:call-template name="processTopicPart"/>
     </xsl:for-each>

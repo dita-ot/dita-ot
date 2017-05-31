@@ -132,7 +132,7 @@ See the accompanying LICENSE file for applicable license.
   
   <message id="DOTJ030I" type="INFO">
     <reason>No 'class' attribute for was found for element '&lt;%1&gt;'.</reason>
-    <response>This generally indicates that your DTD or Schema was not developed properly according to the DITA specification.</response>
+    <response>The element will be processed as an unknown or non-DITA element.</response>
   </message> 
   
   <message id="DOTJ031I" type="INFO">
@@ -227,8 +227,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
   
   <message id="DOTJ049W" type="WARN">
-  	<reason>The attribute value %1="%3" on element "%2" does not comply with the specified subject scheme.</reason>
-  	<response>According to the subject scheme map, the following values are valid for the %1 attribute: %4</response>
+    <reason>The attribute value %1="%3" on element "%2" does not comply with the specified subject scheme.</reason>
+    <response>According to the subject scheme map, the following values are valid for the %1 attribute: %4</response>
   </message>
   
   <message id="DOTJ050W" type="WARN">
@@ -330,6 +330,16 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ069E" type="ERROR">
     <reason>Circular key definition %1.</reason>
+    <response></response>
+  </message>
+
+  <message id="DOTJ070I" type="INFO">
+    <reason>Invalid 'class' attribute '%1' for was found for element '&lt;%2&gt;'.</reason>
+    <response>The element will be processed as an unknown or non-DITA element.</response>
+  </message>
+
+  <message id="DOTJ071E" type="ERROR">
+    <reason>Cannot find the specified DITAVAL '%1'.</reason>
     <response></response>
   </message>
 
@@ -698,7 +708,12 @@ See the accompanying LICENSE file for applicable license.
     <reason>Ignoring navtitle within topicgroup.</reason>
     <response/>
   </message>
-  
+
+  <message id="DOTX073I" type="INFO">
+    <reason>Removing broken link to "%1".</reason>
+    <response/>
+  </message>
+
   <!-- End of XSL Messages --> 
       
   <!-- Add any messages defined by plugins. -->

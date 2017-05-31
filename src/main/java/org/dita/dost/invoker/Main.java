@@ -74,6 +74,8 @@ import static org.dita.dost.util.XMLUtils.toList;
  */
 public class Main extends org.apache.tools.ant.Main implements AntMain {
 
+    private boolean useColor;
+
     private static abstract class Argument {
         final String property;
 
@@ -133,6 +135,19 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
+    private static class AbsoluteFileListArgument extends Argument {
+        AbsoluteFileListArgument(final String property) {
+            super(property);
+        }
+
+        @Override
+        String getValue(final String value) {
+            return Arrays.stream(value.split(File.pathSeparator))
+                    .map(oneFile -> new File(oneFile).getAbsolutePath())
+                    .collect(Collectors.joining(File.pathSeparator));
+        }
+    }
+
     private static class FileOrUriArgument extends Argument {
         FileOrUriArgument(final String property) {
             super(property);
@@ -172,7 +187,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ARGUMENTS.put("--input", new FileOrUriArgument("args.input"));
         ARGUMENTS.put("-o", new AbsoluteFileArgument("output.dir"));
         ARGUMENTS.put("--output", new AbsoluteFileArgument("output.dir"));
-        ARGUMENTS.put("--filter", new AbsoluteFileArgument("args.filter"));
+        ARGUMENTS.put("--filter", new AbsoluteFileListArgument("args.filter"));
         ARGUMENTS.put("-t", new AbsoluteFileArgument(ANT_TEMP_DIR));
         ARGUMENTS.put("--temp", new AbsoluteFileArgument(ANT_TEMP_DIR));
         addSingleHyphenOptions(ARGUMENTS);
@@ -388,10 +403,20 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * @param t Throwable to print the message of. Must not be <code>null</code>
      *            .
      */
-    private static void printMessage(final Throwable t) {
+    private void printMessage(final Throwable t) {
         final String message = t.getMessage();
         if (message != null && !message.trim().isEmpty()) {
-            System.err.println("Error: " + message);
+            printErrorMessage("Error: " + message);
+        }
+    }
+
+    private void printErrorMessage(final String msg) {
+        if (useColor) {
+            System.err.print(DefaultLogger.ANSI_RED);
+            System.err.print("Error: " + msg);
+            System.err.println(DefaultLogger.ANSI_RESET);
+        } else {
+            System.err.println("Error: " + msg);
         }
     }
 
@@ -537,6 +562,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         boolean justPrintUsage = false;
         boolean justPrintVersion = false;
         boolean justPrintDiagnostics = false;
+        useColor = getUseColor();
 
         final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
         while (!args.isEmpty()) {
@@ -608,7 +634,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             } else if (arg.startsWith("-") || arg.startsWith("/")) {
                 // we don't have any more args to recognize!
                 final String msg = "Error: Unknown argument: " + arg;
-                System.err.println(msg);
+                printErrorMessage(msg);
                 printUsage();
                 throw new BuildException("");
             } else {
@@ -650,13 +676,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         } else {
             if (!definedProps.containsKey("transtype")) {
-                System.err.println("Error: Transformation type not defined");
+                printErrorMessage("Error: Transformation type not defined");
                 printUsage();
                 throw new BuildException("");
                 //justPrintUsage = true;
             }
             if (!definedProps.containsKey("args.input")) {
-                System.err.println("Error: Input file not defined");
+                printErrorMessage("Error: Input file not defined");
                 printUsage();
                 throw new BuildException("");
                 //justPrintUsage = true;
@@ -740,6 +766,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         readyToRun = true;
     }
 
+    private boolean getUseColor() {
+        final String os = System.getProperty("os.name");
+        if (os != null && os.startsWith("Windows")) {
+            return false;
+        }
+        return Boolean.parseBoolean(Configuration.configuration.getOrDefault("cli.color", "true"));
+    }
+
     private PrintStream handleArgLogFile(Deque<String> args) {
         PrintStream logTo;
         final String value = args.pop();
@@ -747,6 +781,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             final File logFile = new File(value);
             logTo = new PrintStream(new FileOutputStream(logFile));
             isLogFileUsed = true;
+            useColor = false;
         } catch (final IOException ioe) {
             final String msg = "Cannot write on the specified log file. "
                     + "Make sure the path exists and you have write " + "permissions.";
@@ -1145,10 +1180,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 } catch (final Throwable t) {
                     // yes, I know it is bad style to catch Throwable,
                     // but if we don't, we lose valuable information
-                    System.err.println("Caught an exception while logging the" + " end of the build.  Exception was:");
+                    printErrorMessage("Caught an exception while logging the" + " end of the build.  Exception was:");
                     t.printStackTrace();
                     if (error != null) {
-                        System.err.println("There has been an error prior to" + " that:");
+                        printErrorMessage("There has been an error prior to" + " that:");
                         error.printStackTrace();
                     }
                     throw new BuildException(t);
@@ -1219,12 +1254,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 logger = (BuildLogger) ClasspathUtils.newInstance(loggerClassname, Main.class.getClassLoader(),
                         BuildLogger.class);
             } catch (final BuildException e) {
-                System.err.println("The specified logger class " + loggerClassname + " could not be used because "
+                printErrorMessage("The specified logger class " + loggerClassname + " could not be used because "
                         + e.getMessage());
                 throw new RuntimeException();
             }
         } else {
             logger = new DefaultLogger();
+            ((DefaultLogger) logger).useColor(useColor);
         }
 
         logger.setMessageOutputLevel(msgOutputLevel);
@@ -1242,7 +1278,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final StringBuilder msg = new StringBuilder();
         msg.append("Usage: dita -i <file> -f <name> [options]\n");
         msg.append("   or: dita --propertyfile=<file> [options]\n");
-        msg.append("   or: dita --install [<file>]\n");
+        msg.append("   or: dita --install [=<file>]\n");
         msg.append("   or: dita --uninstall <id>\n");
         msg.append("   or: dita --help\n");
         msg.append("   or: dita --version\n");
@@ -1263,7 +1299,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("                         diagnose or report problems." +
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
-        msg.append("  --filter=<file>             filter and flagging file\n");
+        msg.append("  --filter=<files>            filter and flagging files\n");
         msg.append("  -t, --temp=<dir>            temporary directory\n");
         msg.append("  -v, --verbose               verbose logging\n");
         msg.append("  -d, --debug                 print debugging information\n");

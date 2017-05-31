@@ -9,5 +9,6 @@
            dita-ot:image-height="95" dita-ot:image-width="135" dita-ot:horizontal-dpi="100"  dita-ot:vertical-dpi="100"/>
     <image class="- topic/image " href="img.gif" placement="inline"
            dita-ot:image-height="95" dita-ot:image-width="135"/>
+    <image class="- topic/image " href="img.tiff" placement="inline"/>
   </body>
 </topic>

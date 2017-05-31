@@ -13,6 +13,8 @@ import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Job.FileInfo.Filter;
 
 /**
  * Dummy pipeline module for testing.
@@ -36,6 +38,11 @@ public class DummyPipelineModule implements AbstractPipelineModule {
 
     @Override
     public void setJob(final Job job) {
+        // Noop
+    }
+
+    @Override
+    public void setFileInfoFilter(Filter<FileInfo> fileInfoFilter) {
         // Noop
     }
 

@@ -10,6 +10,8 @@ package org.dita.dost.util;
 import static javax.xml.XMLConstants.*;
 import static org.junit.Assert.*;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
@@ -161,6 +163,48 @@ public class XMLUtilsTest {
         final String expected = "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
         result = XMLUtils.escapeXML(input, 0, input.length);
         assertEquals(expected, result);
+    }
+    
+    @Test
+    public void testNonDitaContext() {
+    	/* Queue assumes the following values:
+    	 * <topic class="- topic/topic ">...
+    	 *  <body class="- topic/body ">
+    	 *   <foreign class="- topic/foreign ">
+    	 *    <NONDITA class="nondita">
+    	 *      <moreNonDita/>
+    	 *    </NONDITA>
+    	 *    <ditaInForeign class="- topic/xref foreign-d/ditaInForeign ">
+    	 *      <ph class="- topic/ph "/>
+    	 *    <unknown class="- topic/unknown ">
+    	 *     <moreNonDita><more/></moreNonDita>
+    	 *    </unknown></ditaInForeign></foreign></body></topic>
+    	 */
+    	Deque<DitaClass> classes = new LinkedList<>();
+    	classes.addFirst(new DitaClass("- topic/topic "));
+    	assertFalse(XMLUtils.nonDitaContext(classes));
+    	classes.addFirst(new DitaClass("- topic/body "));
+    	assertFalse(XMLUtils.nonDitaContext(classes));
+    	classes.addFirst(new DitaClass("- topic/foreign "));
+    	assertFalse(XMLUtils.nonDitaContext(classes));
+    	classes.addFirst(new DitaClass("nondita"));
+    	assertTrue(XMLUtils.nonDitaContext(classes));
+    	classes.addFirst(new DitaClass(""));
+    	assertTrue(XMLUtils.nonDitaContext(classes));
+    	classes.pop();
+    	classes.pop();
+    	classes.addFirst(new DitaClass("+ topic/xref foreign-d/ditaInForeign "));
+    	assertTrue(XMLUtils.nonDitaContext(classes));
+    	classes.addFirst(new DitaClass("+ topic/ph "));
+    	assertFalse(XMLUtils.nonDitaContext(classes));
+    	classes.pop();
+    	classes.pop();
+    	classes.addFirst(new DitaClass("- topic/unknown "));
+    	assertTrue(XMLUtils.nonDitaContext(classes));
+    	classes.addFirst(null);
+    	assertTrue(XMLUtils.nonDitaContext(classes));
+    	classes.addFirst(null);
+    	assertTrue(XMLUtils.nonDitaContext(classes));
     }
 
 }

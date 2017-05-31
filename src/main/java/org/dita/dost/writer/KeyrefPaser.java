@@ -390,13 +390,15 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         if (href != null && !href.toString().isEmpty()) {
                             if (TOPIC_IMAGE.matches(currentElement.type)) {
                                 valid = true;
-                                final URI relativeTarget = URLUtils.getRelativePath(currentFile, job.tempDirURI.resolve(href));
+                                final URI target = keyDef.source.resolve(href);
+                                final URI relativeTarget = URLUtils.getRelativePath(currentFile, target);
                                 final URI targetOutput = normalizeHrefValue(relativeTarget, elementId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
                             } else if (isLocalDita(elem) && keyDef.source != null) {
-                                final File topicFile = toFile(currentFile.resolve(stripFragment(keyDef.source.resolve(href))));
                                 valid = true;
-                                final URI relativeTarget = URLUtils.getRelativePath(currentFile, topicFile.toURI());
+                                final URI target = keyDef.source.resolve(href);
+                                final URI topicFile = currentFile.resolve(stripFragment(target));
+                                final URI relativeTarget = setFragment(URLUtils.getRelativePath(currentFile, topicFile), target.getFragment());
                                 String topicId = null;
                                 if (relativeTarget.getFragment() == null && !"".equals(elementId)) {
                                     topicId = getFirstTopicId(topicFile);
@@ -580,10 +582,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /**
      * Get first topic id
      */
-    private String getFirstTopicId(final File topicFile) {
-        final File path = topicFile.getParentFile();
-        final URI name = toURI(topicFile.getName());
-        return MergeUtils.getFirstTopicId(name, path, false);
+    private String getFirstTopicId(final URI topicFile) {
+        return MergeUtils.getFirstTopicId(topicFile, false);
     }
     
     /**

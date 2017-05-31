@@ -16,6 +16,7 @@ import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.module.AbstractPipelineModule;
+import org.dita.dost.module.ModuleFactory;
 import org.dita.dost.module.XmlFilterModule;
 import org.dita.dost.module.XmlFilterModule.FilterPair;
 import org.dita.dost.module.XsltModule;
@@ -45,6 +46,7 @@ import static org.dita.dost.util.Constants.*;
  */
 public final class ExtensibleAntInvoker extends Task {
     
+    private final ModuleFactory factory = ModuleFactory.instance();
     /** Pipeline. */
     private final PipelineFacade pipeline;
     /** Pipeline attributes and parameters */
@@ -200,7 +202,9 @@ public final class ExtensibleAntInvoker extends Task {
                 } else if (m instanceof SaxPipe) {
                     final SaxPipe fm = (SaxPipe) m;
                     final XmlFilterModule module = new XmlFilterModule();
-                    module.setFileInfoFilter(combine(fm.getFormat()));
+                    final List<FileInfoFilter> predicates = new ArrayList<>(fm.getFormat());
+                    predicates.addAll(m.fileInfoFilters);
+                    module.setFileInfoFilter(combine(predicates));
                     try {
                         module.setProcessingPipe(fm.getFilters());
                     } catch (final InstantiationException | IllegalAccessException e) {
@@ -218,8 +222,12 @@ public final class ExtensibleAntInvoker extends Task {
                             pipelineInput.setAttribute(p.getName(), p.getValue());
                         }
                     }
+                    final AbstractPipelineModule module = factory.createModule(m.getImplementation());
+                    if (!m.fileInfoFilters.isEmpty()) {
+                        module.setFileInfoFilter(combine(m.fileInfoFilters));
+                    }
                     start = System.currentTimeMillis();
-                    pipeline.execute(m.getImplementation(), pipelineInput);
+                    pipeline.execute(module, pipelineInput);
                     end = System.currentTimeMillis();
                 }
                 logger.debug("Module processing took " + (end - start) + " ms");
@@ -271,8 +279,8 @@ public final class ExtensibleAntInvoker extends Task {
     }
     
     private Set<File> readListFile(final List<IncludesFile> includes, final DITAOTAntLogger logger) {
-    	final Set<File> inc = new HashSet<>();
-    	for (final IncludesFile i: includes) {
+        final Set<File> inc = new HashSet<>();
+        for (final IncludesFile i: includes) {
             if (!isValid(getProject(), i.ifProperty, null)) {
                 continue;
             }
@@ -292,7 +300,7 @@ public final class ExtensibleAntInvoker extends Task {
                 }
             }
         }
-    	return inc;
+        return inc;
     }
     
     public static boolean isValid(final Project project, final String ifProperty, final String unlessProperty) {
@@ -309,7 +317,8 @@ public final class ExtensibleAntInvoker extends Task {
        
         public final List<Param> params = new ArrayList<>();
         private Class<? extends AbstractPipelineModule> cls;
-        
+        public final Collection<FileInfoFilter> fileInfoFilters = new ArrayList<>();
+
         public void setClass(final Class<? extends AbstractPipelineModule> cls) {
             this.cls = cls;
         }
@@ -317,7 +326,11 @@ public final class ExtensibleAntInvoker extends Task {
         public void addConfiguredParam(final Param p) {
             params.add(p);
         }
-        
+
+        public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
+            fileInfoFilters.add(fileInfoFilter);
+        }
+
         public Class<? extends AbstractPipelineModule> getImplementation() {
             return cls;
         }
@@ -334,7 +347,6 @@ public final class ExtensibleAntInvoker extends Task {
         private File destDir;
         private File in;
         private File out;
-        private final Collection<FileInfoFilter> fileInfoFilters = new ArrayList<>();
         private final List<IncludesFile> includes = new ArrayList<>();
         private final List<IncludesFile> excludes = new ArrayList<>();
         private Mapper mapper;
@@ -361,23 +373,23 @@ public final class ExtensibleAntInvoker extends Task {
         }
         
         public void setClasspathref(final String classpath) {
-        	// Ignore classpathref attribute
+            // Ignore classpathref attribute
         }
         
         public void setExtension(final String extension) {
-        	// Ignore extension attribute
+            // Ignore extension attribute
         }
         
         public void setReloadstylesheet(final boolean reloadstylesheet) {
-        	this.reloadstylesheet = reloadstylesheet;
+            this.reloadstylesheet = reloadstylesheet;
         }
         
         public void setIn(final File in) {
-        	this.in = in;
+            this.in = in;
         }
         
         public void setOut(final File out) {
-        	this.out = out;
+            this.out = out;
         }
         
         public void setIncludesfile(final File includesfile) {
@@ -405,11 +417,11 @@ public final class ExtensibleAntInvoker extends Task {
         }
         
         public void addConfiguredMapper(final Mapper mapper) {
-            this.mapper = mapper;
-        }
-
-        public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
-            fileInfoFilters.add(fileInfoFilter);
+            if (this.mapper != null) {
+                throw new BuildException("Cannot define more than one mapper");
+            } else {
+                this.mapper = mapper;
+            }
         }
 
         public void addConfiguredIncludesFile(final IncludesFile includesFile) {
@@ -449,7 +461,7 @@ public final class ExtensibleAntInvoker extends Task {
             return new Filter<FileInfo>() {
                 @Override
                 public boolean accept(FileInfo f) {
-                    return (format == null || format.equals(f.format)) &&
+                    return (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
                             (hasConref == null || f.hasConref == hasConref) &&
                             (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
                 }

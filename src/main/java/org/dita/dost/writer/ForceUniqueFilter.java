@@ -64,16 +64,18 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
                 topicrefCount.put(file, count);
                 if (count > 1) { // not only reference to this topic
                     final FileInfo srcFi = job.getFileInfo(currentFile.resolve(stripFragment(source)));
-                    final FileInfo dstFi = generateCopyToTarget(srcFi, count);
-                    copyToMap.put(dstFi, srcFi);
+                    if (srcFi != null) {
+                        final FileInfo dstFi = generateCopyToTarget(srcFi, count);
+                        copyToMap.put(dstFi, srcFi);
 
-                    final URI dstTempAbs = job.tempDirURI.resolve(dstFi.uri);
-                    final URI targetRel = getRelativePath(currentFile, dstTempAbs);
-                    final URI target = setFragment(targetRel, href.getFragment());
+                        final URI dstTempAbs = job.tempDirURI.resolve(dstFi.uri);
+                        final URI targetRel = getRelativePath(currentFile, dstTempAbs);
+                        final URI target = setFragment(targetRel, href.getFragment());
 
-                    final AttributesImpl buf = new AttributesImpl(atts);
-                    XMLUtils.addOrSetAttribute(buf, ATTRIBUTE_NAME_COPY_TO, target.toString());
-                    res = buf;
+                        final AttributesImpl buf = new AttributesImpl(atts);
+                        XMLUtils.addOrSetAttribute(buf, ATTRIBUTE_NAME_COPY_TO, target.toString());
+                        res = buf;
+                    }
                 }
             }
         }

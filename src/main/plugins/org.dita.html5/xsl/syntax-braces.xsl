@@ -12,16 +12,16 @@ See the accompanying LICENSE file for applicable license.
   <!-- Logical containers -->
   
   <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]">
-  	<div style="display: block; border: 1 black solid; padding: 2pt; color: maroon; margin-bottom: 6pt;">
-  	<xsl:apply-templates mode="process-syntaxdiagram"/>
-  	</div>
+    <div style="display: block; border: 1 black solid; padding: 2pt; color: maroon; margin-bottom: 6pt;">
+    <xsl:apply-templates mode="process-syntaxdiagram"/>
+    </div>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/fragment ')]" mode="process-syntaxdiagram">
-  	<div>
-  	<a><xsl:attribute name="name"><xsl:value-of select="*[contains(@class,' topic/title ')]"/></xsl:attribute> </a>
-  	<xsl:apply-templates mode="process-syntaxdiagram"/>
-  	</div>
+    <div>
+    <a><xsl:attribute name="name"><xsl:value-of select="*[contains(@class,' topic/title ')]"/></xsl:attribute> </a>
+    <xsl:apply-templates mode="process-syntaxdiagram"/>
+    </div>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/synblk ')]" mode="process-syntaxdiagram">
@@ -35,23 +35,23 @@ See the accompanying LICENSE file for applicable license.
   <!-- titles for logical containers -->
   
   <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]" mode="process-syntaxdiagram">
-  	<h3>
-  	<xsl:value-of select="."/>
-  	</h3>
+    <h3>
+    <xsl:value-of select="."/>
+    </h3>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' topic/title ')]" mode="process-syntaxdiagram">
-  	<h4><xsl:apply-templates mode="process-syntaxdiagram"/></h4>
+    <h4><xsl:apply-templates mode="process-syntaxdiagram"/></h4>
   </xsl:template>
   
   
   <!-- This should test to see if there's a fragment with matching title 
   and if so, produce an associative link. -->
   <xsl:template match="*[contains(@class,' pr-d/fragref ')]" mode="process-syntaxdiagram">
-  	<kbd>
+    <kbd>
         <a><xsl:attribute name="href">#<xsl:value-of select="."/></xsl:attribute>
-  	&lt;<xsl:value-of select="."/>&gt;</a>
-  	</kbd>
+    &lt;<xsl:value-of select="."/>&gt;</a>
+    </kbd>
   </xsl:template>
   
   
@@ -71,9 +71,9 @@ See the accompanying LICENSE file for applicable license.
   <!-- fragment block and title (echo same for syntaxdiagram?) -->
   
   <xsl:template match="*[contains(@class,' pr-d/fragment ')]/groupcomp|*[contains(@class,' pr-d/fragment ')]/groupchoice|*[contains(@class,' pr-d/fragment ')]/groupseq" mode="process-syntaxdiagram">
-  	<blockquote>
-  	<xsl:call-template name="dogroup"/>
-  	</blockquote>
+    <blockquote>
+    <xsl:call-template name="dogroup"/>
+    </blockquote>
   </xsl:template>
   
   
@@ -84,7 +84,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- set up group containers (similar to same area management as for syntaxdiagram, synblk,  and fragment) -->
   
   <xsl:template match="syntaxdiagram/*[contains(@class,' pr-d/groupcomp ')]|syntaxdiagram/*[contains(@class,' pr-d/groupseq ')]|syntaxdiagram/*[contains(@class,' pr-d/groupchoice ')]" mode="process-syntaxdiagram">
-  	<xsl:call-template name="dogroup"/>
+    <xsl:call-template name="dogroup"/>
   </xsl:template>
   
   
@@ -95,38 +95,38 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- okay, here we have to work each permutation because figgroup/figroup fallback is too general -->
   <xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/*[contains(@class,' pr-d/groupcomp ')]" mode="process-syntaxdiagram">
-  	<xsl:call-template name="dogroup"/>
+    <xsl:call-template name="dogroup"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/groupchoice ')]/*[contains(@class,' pr-d/groupchoice ')]" mode="process-syntaxdiagram">
-  	<xsl:call-template name="dogroup"/>
+    <xsl:call-template name="dogroup"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' pr-d/groupseq ')]" mode="process-syntaxdiagram">
-  	<xsl:call-template name="dogroup"/>
+    <xsl:call-template name="dogroup"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/groupchoice ')]/*[contains(@class,' pr-d/groupcomp ')]" mode="process-syntaxdiagram">
-  	<xsl:call-template name="dogroup"/>
+    <xsl:call-template name="dogroup"/>
   </xsl:template>
   <xsl:template match="*[contains(@class,' pr-d/groupchoice ')]/*[contains(@class,' pr-d/groupseq ')]" mode="process-syntaxdiagram">
-  	<xsl:call-template name="dogroup"/>
+    <xsl:call-template name="dogroup"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/*[contains(@class,' pr-d/groupchoice ')]" mode="process-syntaxdiagram">
-  	<xsl:call-template name="dogroup"/>
+    <xsl:call-template name="dogroup"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/*[contains(@class,' pr-d/groupseq ')]" mode="process-syntaxdiagram">
-  	<xsl:call-template name="dogroup"/>
+    <xsl:call-template name="dogroup"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' pr-d/groupchoice ')]" mode="process-syntaxdiagram">
-  	<xsl:call-template name="dogroup"/>
+    <xsl:call-template name="dogroup"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' pr-d/groupcomp ')]" mode="process-syntaxdiagram">
-  	<xsl:call-template name="dogroup"/>
+    <xsl:call-template name="dogroup"/>
   </xsl:template>
   
   
@@ -134,12 +134,12 @@ See the accompanying LICENSE file for applicable license.
       <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]">
         <xsl:if test="count(preceding-sibling::*)!=0"> |</xsl:if>
       </xsl:if>
-  	<xsl:if test="@importance='optional'"> [</xsl:if>
-  	<xsl:if test="contains(@class,' pr-d/groupchoice ')"> {</xsl:if>
-  	  <xsl:text> </xsl:text><xsl:apply-templates mode="process-syntaxdiagram"/><xsl:text> </xsl:text>
+    <xsl:if test="@importance='optional'"> [</xsl:if>
+    <xsl:if test="contains(@class,' pr-d/groupchoice ')"> {</xsl:if>
+      <xsl:text> </xsl:text><xsl:apply-templates mode="process-syntaxdiagram"/><xsl:text> </xsl:text>
   <!-- repid processed here before -->
-  	<xsl:if test="contains(@class,' pr-d/groupchoice ')">} </xsl:if>
-  	<xsl:if test="@importance='optional'">] </xsl:if>
+    <xsl:if test="contains(@class,' pr-d/groupchoice ')">} </xsl:if>
+    <xsl:if test="@importance='optional'">] </xsl:if>
   </xsl:template>
   
   

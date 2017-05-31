@@ -45,6 +45,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     private final MergeUtils util;
     private DITAOTLogger logger;
     private File output;
+    private final String GENERATED_DITA_ELEMENT_ID = "GENERATED-DITA-ID";
     
     /**
      * Default Constructor.
@@ -93,10 +94,6 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-        // Skip redundant <dita> tags.
-        if (ELEMENT_NAME_DITA.equals(qName)) {
-            return;
-        }
         getContentHandler().endElement(uri, localName, qName);
     }
 
@@ -152,7 +149,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
             if (util.findId(absolutePath)) {
                 retAttValue = toURI(SHARP + util.getIdValue(absolutePath));
             } else {
-                final String fileId = MergeUtils.getFirstTopicId(absolutePath, dirPath, false);
+                final String fileId = MergeUtils.getFirstTopicId(absolutePath, false);
                 final URI key = setFragment(absolutePath, fileId);
                 if (util.findId(key)) {
                     util.addId(absolutePath, util.getIdValue(key));
@@ -202,15 +199,16 @@ public final class MergeTopicParser extends XMLFilterImpl {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
             throws SAXException {
-        // Skip redundant <dita> tags.
-        if (ELEMENT_NAME_DITA.equals(qName)) {
-            rootLang = attributes.getValue(XML_NS_URI, "lang");
-            return;
-        }
         final AttributesImpl atts = new AttributesImpl(attributes);
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
-        if (TOPIC_TOPIC.matches(classValue)) {
+        if (ELEMENT_NAME_DITA.equals(qName)) {
+            rootLang = attributes.getValue(XML_NS_URI, "lang");
+            if (atts.getValue(ATTRIBUTE_NAME_ID) == null) {
+            	XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_ID, GENERATED_DITA_ELEMENT_ID);
+            }
+        }
+        if (TOPIC_TOPIC.matches(classValue) || ELEMENT_NAME_DITA.equals(qName)) {
             handleID(atts);
             if (firstTopicId == null) {
                 firstTopicId = atts.getValue(ATTRIBUTE_NAME_ID);

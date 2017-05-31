@@ -23,6 +23,7 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -37,6 +38,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static javax.xml.XMLConstants.XML_NS_PREFIX;
@@ -48,6 +50,7 @@ import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.XMLUtils.toList;
 
 /**
  * Integrator is the main class to control and excute the integration of the
@@ -68,6 +71,7 @@ public final class Integrator {
     private static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
     /** Feature name for print transformation types. */
     private static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
+    private static final String FEAT_TRANSTYPES = "dita.conductor.transtype.check";
     private static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
     private static final String ELEM_PLUGINS = "plugins";
 
@@ -84,6 +88,7 @@ public final class Integrator {
 
     public static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
     public static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-]+)?)?)?");
+    public static final String CONF_PARSER_FORMAT = "parser.";
 
     /** Plugin table which contains detected plugins. */
     private final Map<String, Features> pluginTable;
@@ -114,7 +119,7 @@ public final class Integrator {
         featureTable = new Hashtable<>(16);
         extensionPoints = new HashSet<>();
         try {
-            reader = XMLUtils.getXMLReader();
+            reader = XMLReaderFactory.createXMLReader();
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -257,6 +262,14 @@ public final class Integrator {
         configuration.put(CONF_SUPPORTED_HTML_EXTENSIONS, readExtensions(FEAT_HTML_EXTENSIONS));
         configuration.put(CONF_SUPPORTED_RESOURCE_EXTENSIONS, readExtensions(FEAT_RESOURCE_EXTENSIONS));
 
+        // transtypes
+        final String transtypes = featureTable.entrySet().stream()
+                .filter(e -> e.getKey().equals(FEAT_TRANSTYPES))
+                .flatMap(e -> e.getValue().stream())
+                .distinct()
+                .collect(Collectors.joining(CONF_LIST_SEPARATOR));
+        configuration.put(CONF_TRANSTYPES, transtypes);
+
         // print transtypes
         final Set<String> printTranstypes = new HashSet<>();
         if (featureTable.containsKey(FEAT_PRINT_TRANSTYPES)) {
@@ -361,14 +374,20 @@ public final class Integrator {
 
     private Map<String, String> getParserConfiguration() {
         final Map<String, String> res = new HashMap<>();
-        final NodeList features = pluginsDoc.getElementsByTagName(FEATURE_ELEM);
-        for (int i = 0; i < features.getLength(); i++) {
-            final Element feature = (Element) features.item(i);
+        final List<Element> features = toList(pluginsDoc.getElementsByTagName(FEATURE_ELEM));
+        for (final Element feature : features) {
             if (feature.getAttribute(FEATURE_ID_ATTR).equals("dita.parser")) {
-                final NodeList parsers = feature.getElementsByTagName("parser");
-                for (int j = 0; j < parsers.getLength(); j++) {
-                    final Element parser = (Element) parsers.item(j);
-                    res.put("parser." + parser.getAttribute("format"), parser.getAttribute("class"));
+                final List<Element> parsers = toList(feature.getElementsByTagName("parser"));
+                for (final Element parser : parsers) {
+                    final String format = parser.getAttribute("format");
+                    res.put(CONF_PARSER_FORMAT + format, parser.getAttribute("class"));
+                    final List<Element> fs = toList(parser.getElementsByTagName("feature"));
+                    final List<String> fsv = fs.stream()
+                            .map(f -> f.getAttribute("name") + "=" + f.getAttribute("value"))
+                            .collect(Collectors.toList());
+                    if (!fsv.isEmpty()) {
+                        res.put(CONF_PARSER_FORMAT + format + ".features", fsv.stream().collect(Collectors.joining(PARAM_VALUE_SEPARATOR)));
+                    }
                 }
             }
         }
@@ -588,8 +607,8 @@ public final class Integrator {
                     value.addAll(currentFeature.getValue());
                     featureTable.put(currentFeature.getKey(), value);
                 } else {
-                	//Make shallow clone to avoid making modifications directly to list inside the current feature.
-                	List<String> currentFeatureValue = currentFeature.getValue();
+                    //Make shallow clone to avoid making modifications directly to list inside the current feature.
+                    List<String> currentFeatureValue = currentFeature.getValue();
                     featureTable.put(currentFeature.getKey(), currentFeatureValue != null ? new ArrayList<>(currentFeatureValue) : null);
                 }
             }

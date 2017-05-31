@@ -25,6 +25,7 @@ import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -33,7 +34,7 @@ import org.xml.sax.SAXException;
  * 
  * <p>
  * <strong>Not thread-safe</strong>. Instances can be reused by calling
- * {@link #reset()} between calls to {@link #parse(File)}.
+ * {@link #reset()} between calls to {@link org.xml.sax.XMLReader#parse(InputSource)}.
  * </p>
  */
 public final class KeydefFilter extends AbstractXMLFilter {

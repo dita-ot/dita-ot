@@ -29,7 +29,7 @@ See the accompanying LICENSE file for applicable license.
             <isset property="output.file" />
         </not>
     </condition>
-    <property name="output.file" value="${output.dir}${file.separator}toctree.js"/>
+    <property name="output.file" value="${dita.output.dir}${file.separator}toctree.js"/>
     <property name="out.ext" value=".html"/>
   </target>
 
@@ -61,7 +61,7 @@ See the accompanying LICENSE file for applicable license.
       <antcall target="tocjsDefaultXhtmlOutput"/>
       <antcall target="tocjsDefaultFrameset"/>
       <!-- Copy default JS and related files -->
-      <copy todir="${output.dir}"><fileset
+    <copy todir="${dita.output.dir}"><fileset
           dir="${dita.plugin.com.sophos.tocjs.dir}${file.separator}basefiles"><include name="**/*"/></fileset></copy>
   </target>
 
@@ -76,12 +76,12 @@ See the accompanying LICENSE file for applicable license.
   <target name="tocjsDefaultFrameset" if="dita.plugin.com.sophos.tocjs.copydefaults">
       <!-- Create the default frameset itself -->
       <xslt
-		basedir="${dita.temp.dir}"
-		destdir="${output.dir}"
+    basedir="${dita.temp.dir}"
+    destdir="${dita.output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
         extension="${out.ext}"
-		style="${dita.plugin.com.sophos.tocjs.dir}${file.separator}xsl${file.separator}frameset.xsl">
-  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+    style="${dita.plugin.com.sophos.tocjs.dir}${file.separator}xsl${file.separator}frameset.xsl">
+        <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="CSSPATH" expression="${CSSPATH}" if="csspath"/>
         <xmlcatalog refid="dita.catalog"/>

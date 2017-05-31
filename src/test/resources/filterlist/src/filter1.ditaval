@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<val>
+    <prop action="include" att="otherprops" val="maininclude" />
+    <prop action="exclude" att="otherprops" val="mainexclude" />
+    <prop action="flag" att="otherprops" val="mainflag" >
+        <startflag imageref="delta.gif">
+            <alt-text>This is an image in main dir:</alt-text>
+        </startflag>
+    </prop>
+</val>

@@ -91,15 +91,8 @@ public final class CoderefResolver extends AbstractXMLFilter {
             try{
                 final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
                 if (hrefValue != null){
-                    File codeFile = toFile(stripFragment(currentFile.resolve(hrefValue))).getAbsoluteFile();
-                    if (!codeFile.exists()) {
-                        final URI rel = job.tempDirURI.relativize(codeFile.toURI());
-                        final Job.FileInfo fi = job.getFileInfo(rel);
-                        if (fi != null && "file".equals(fi.src.getScheme())) {
-                            codeFile = new File(fi.src);
-                        }
-                    }
-                    if (codeFile.exists()){
+                    final File codeFile = getFile(hrefValue);
+                    if (codeFile != null && codeFile.exists()){
                         logger.debug("Resolve coderef " + codeFile);
                         final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT));
                         final Range range = getRange(hrefValue);
@@ -121,6 +114,20 @@ public final class CoderefResolver extends AbstractXMLFilter {
         } else {
             super.startElement(uri, localName, name, atts);
         }
+    }
+
+    private File getFile(URI hrefValue) {
+        File tempFile = toFile(stripFragment(currentFile.resolve(hrefValue))).getAbsoluteFile();
+        final URI rel = job.tempDirURI.relativize(tempFile.toURI());
+        final Job.FileInfo fi = job.getFileInfo(rel);
+
+        if (tempFile.exists() && fi != null && PR_D_CODEREF.localName.equals(fi.format)) {
+            return tempFile;
+        }
+        if (fi != null && "file".equals(fi.src.getScheme())) {
+            return new File(fi.src);
+        }
+        return null;
     }
 
     @Override

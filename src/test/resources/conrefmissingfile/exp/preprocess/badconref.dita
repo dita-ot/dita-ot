@@ -1,0 +1,8 @@
+<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic concept/concept "
+domains="(topic)"
+id="badconref" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
+<title class="- topic/title ">Test conref to missing file</title>
+<conbody class="- topic/body concept/conbody ">
+<p class="- topic/p ">The following paragraph has conref to a missing file.</p>
+
+</conbody></concept>

@@ -76,7 +76,8 @@ See the accompanying LICENSE file for applicable license.
       <val desc="Parent links are not included.">noparent</val>
       <val desc="Parent, child, next, and previous links are not included.">nofamily</val>
     </param>
-    <param name="args.debug" desc="Specifies whether debugging information is included in the log." type="enum">
+    <!-- Deprecated since 2.5 -->
+    <param name="args.debug" desc="Specifies whether debugging information is included in the log." type="enum" deprecated="true">
       <val>yes</val>
       <val default="true">no</val>
     </param>
@@ -96,7 +97,8 @@ See the accompanying LICENSE file for applicable license.
     </param>
     <param name="args.input" desc="Specifies the master file for your documentation project." type="file" required="true"/>
     <param name="args.input.dir" desc="Specifies the base directory for your documentation project." type="dir"/>
-    <param name="args.logdir" desc="Specifies the location where the DITA-OT places log files for your project." type="dir"/>
+    <!-- Deprecated since 2.5 -->
+    <param name="args.logdir" desc="Specifies the location where the DITA-OT places log files for your project." type="dir" deprecated="true"/>
     <param name="args.tablelink.style" desc="Specifies how cross references to tables are styled." type="enum">
       <val>NUMBER</val>
       <val>TITLE</val>
@@ -151,6 +153,10 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">false</val>
     </param>
     <param name="default.language" desc="Specifies the default language for source documents." type="string"/>
+    <param name="remove-broken-links" desc="Remove broken related links." type="enum">
+      <val>true</val>
+      <val default="true">false</val>
+    </param>
   </transtype>
   <feature extension="dita.image.extensions" value=".gif"/>
   <feature extension="dita.image.extensions" value=".eps"/>
@@ -171,6 +177,7 @@ See the accompanying LICENSE file for applicable license.
   <template file="../../catalog-dita_template.xml"/>
   <template file="../../build_template.xml"/>
   <template file="build_preprocess_template.xml"/>
+  <template file="build_preprocess2_template.xml"/>
   <template file="../../resources/messages_template.xml"/>
   <template file="../../xsl/common/allstrings_template.xml"/>
   <template file="../../xsl/common/strings_template.xml"/>

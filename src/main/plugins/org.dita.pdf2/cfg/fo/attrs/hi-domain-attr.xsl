@@ -45,7 +45,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:attribute name="text-decoration">underline</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="tt" use-attribute-sets="base-font">
+    <xsl:attribute-set name="tt">
         <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 

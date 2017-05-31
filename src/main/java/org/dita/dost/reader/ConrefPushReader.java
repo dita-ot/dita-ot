@@ -51,34 +51,34 @@ public final class ConrefPushReader extends AbstractXMLReader {
     private final XMLReader reader;
 
     /**keep the file path of current file under parse
-	filePath is useful to get the absolute path of the target file.*/
+    filePath is useful to get the absolute path of the target file.*/
     private File fileDir = null;
 
     /**keep the file name of  current file under parse */
     private File parsefilename = null;
     /**pushcontent is used to store the content copied to target
-	 in pushcontent href will be resolved if it is relative path
-	 if @conref is in pushconref the target name should be recorded so that it
-	 could be added to conreflist for conref resolution.*/
+     in pushcontent href will be resolved if it is relative path
+     if @conref is in pushconref the target name should be recorded so that it
+     could be added to conreflist for conref resolution.*/
     private XMLStreamWriter pushcontentWriter;
     /** Common document for all push content document fragments. */
     private DocumentFragment pushcontentDocumentFragment;
 
     /**boolean start is used to control whether sax parser can start to
-	 record push content into String pushcontent.*/
+     record push content into String pushcontent.*/
     private boolean start = false;
     /**level is used to record the level number to the root element in pushcontent
-	 In endElement(...) we can turn start off to terminate adding content to pushcontent
-	 if level is zero. That means we reach the end tag of the starting element.*/
+     In endElement(...) we can turn start off to terminate adding content to pushcontent
+     if level is zero. That means we reach the end tag of the starting element.*/
     private int level = 0;
 
     /**target is used to record the target of the conref push
-	 if we reach pushafter action but there is no target recorded before, we need
-	 to report error.*/
+     if we reach pushafter action but there is no target recorded before, we need
+     to report error.*/
     private URI target = null;
 
     /**pushType is used to record the current type of push
-	 it is used in endElement(....) to tell whether it is pushafter or replace.*/
+     it is used in endElement(....) to tell whether it is pushafter or replace.*/
     private String pushType = null;
         
     /**
@@ -87,7 +87,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
      * @return unmodifiable push table
      */
     public Map<File, Hashtable<MoveKey, DocumentFragment>> getPushMap() {
-    	return Collections.unmodifiableMap(pushtable);
+        return Collections.unmodifiableMap(pushtable);
     }
     
     @Override

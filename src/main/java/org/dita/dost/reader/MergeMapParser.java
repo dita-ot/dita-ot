@@ -211,8 +211,10 @@ public final class MergeMapParser extends XMLFilterImpl {
                         if (f.exists()) {
                             topicParser.parse(toFile(p).getPath(), dirPath);
                             final String fileId = topicParser.getFirstTopicId();
-                            util.addId(absTarget, fileId);
-                            if (attValue.getFragment() != null) {
+                            if (util.getIdValue(absTarget) == null) {
+                                util.addId(absTarget, fileId);
+                            }
+                            if (attValue.getFragment() != null && util.getIdValue(stripFragment(absTarget)) == null) {
                                 util.addId(stripFragment(absTarget), fileId);
                             }
                             final URI firstTopicId = toURI(SHARP + fileId);

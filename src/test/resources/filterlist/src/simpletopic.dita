@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic-1">
+  <title>Topic title</title>
+  <body>
+      <p otherprops="maininclude">This is "include" in the main dir ditaval</p>
+      <p otherprops="mainflag">This is "flag" in the main dir ditaval</p>
+      <p otherprops="mainexclude">This is "exclude" in the main dir ditaval</p>
+      <p otherprops="subinclude">This is "include" in the second ditaval</p>
+      <p otherprops="subflag">This is "flag" in the second ditaval</p>
+      <p otherprops="subexclude">This is "exclude" in the second ditaval</p>
+  </body>
+</topic>

@@ -76,28 +76,28 @@ public final class MessageUtils {
      *
      */
     void loadDefaultMessages() {
-		InputStream msg = null;
-		try {
-		    if (new File(RESOURCE).exists()) {
-		    	msg = new FileInputStream(new File(RESOURCE));
-		    } else {
-		    	msg = this.getClass().getClassLoader().getResourceAsStream(CLASSPATH_RESOURCE);
-			}
-		    if (msg == null) {
+        InputStream msg = null;
+        try {
+            if (new File(RESOURCE).exists()) {
+                msg = new FileInputStream(new File(RESOURCE));
+            } else {
+                msg = this.getClass().getClassLoader().getResourceAsStream(CLASSPATH_RESOURCE);
+            }
+            if (msg == null) {
                 throw new RuntimeException("Message configuration file not found");
             }
-		    loadMessages(msg);
-		} catch (final Exception e) {
-		    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
-		} finally {
-			if (msg != null) {
-		        try {
-		            msg.close();
-		        } catch (final IOException e) {
-		            // NOOP
-		        }
-			}
-		}
+            loadMessages(msg);
+        } catch (final Exception e) {
+            throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
+        } finally {
+            if (msg != null) {
+                try {
+                    msg.close();
+                } catch (final IOException e) {
+                    // NOOP
+                }
+            }
+        }
     }
 
     /**
@@ -105,36 +105,36 @@ public final class MessageUtils {
      * @param in message file input stream
      */
     void loadMessages(final InputStream in) throws Exception {
-    	synchronized (hashTable) {
-    		hashTable.clear();
-	        try {
-	            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
-	            final Document doc = builder.parse(in);
-	
-	            final Element messages = doc.getDocumentElement();
-	            final NodeList messageList = messages.getElementsByTagName(ELEMENT_MESSAGE);
-	
-	            final int messageListLength = messageList.getLength();
-	            for (int i = 0; i < messageListLength; i++) {
-	                final Element message = (Element) messageList.item(i);
-	                final Node reason = message.getElementsByTagName(ELEMENT_REASON).item(0);
-	                final Node response = message.getElementsByTagName(ELEMENT_RESPONSE)
-	                        .item(0);
-	
-	                final NamedNodeMap attrs = message.getAttributes();
-	
-	                final MessageBean messageBean = new MessageBean(
-	                        attrs.getNamedItem(ATTRIBUTE_ID).getNodeValue(),
-	                        attrs.getNamedItem(ATTRIBUTE_TYPE).getNodeValue(),
-	                        reason.getFirstChild().getNodeValue(),
-	                        response.getFirstChild() != null ? response.getFirstChild().getNodeValue() : null);
-	
-	                hashTable.put(messageBean.getId(), messageBean);
-	            }
-	        } catch (final Exception e) {
-	            throw new Exception("Failed to read messages configuration file: " + e.getMessage(), e);
-	        }
-    	}
+        synchronized (hashTable) {
+            hashTable.clear();
+            try {
+                final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
+                final Document doc = builder.parse(in);
+
+                final Element messages = doc.getDocumentElement();
+                final NodeList messageList = messages.getElementsByTagName(ELEMENT_MESSAGE);
+
+                final int messageListLength = messageList.getLength();
+                for (int i = 0; i < messageListLength; i++) {
+                    final Element message = (Element) messageList.item(i);
+                    final Node reason = message.getElementsByTagName(ELEMENT_REASON).item(0);
+                    final Node response = message.getElementsByTagName(ELEMENT_RESPONSE)
+                            .item(0);
+
+                    final NamedNodeMap attrs = message.getAttributes();
+
+                    final MessageBean messageBean = new MessageBean(
+                            attrs.getNamedItem(ATTRIBUTE_ID).getNodeValue(),
+                            attrs.getNamedItem(ATTRIBUTE_TYPE).getNodeValue(),
+                            reason.getFirstChild().getNodeValue(),
+                            response.getFirstChild() != null ? response.getFirstChild().getNodeValue() : null);
+
+                    hashTable.put(messageBean.getId(), messageBean);
+                }
+            } catch (final Exception e) {
+                throw new Exception("Failed to read messages configuration file: " + e.getMessage(), e);
+            }
+        }
     }
 
     /**
@@ -146,7 +146,7 @@ public final class MessageUtils {
      */
     private MessageBean getMessage(final String id) {
         if (hashTable.isEmpty()) {
-        	throw new IllegalStateException("Messages have not been loaded");
+            throw new IllegalStateException("Messages have not been loaded");
         }
 
         final MessageBean hashMessage = hashTable.get(id);

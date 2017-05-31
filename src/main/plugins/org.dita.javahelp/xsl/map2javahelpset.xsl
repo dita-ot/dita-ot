@@ -42,23 +42,23 @@ See the accompanying LICENSE file for applicable license.
       </title>
       <maps>
         <homeID>
-			<xsl:variable name="filePath">
-				<xsl:choose>
-					<xsl:when
-						test="contains($outputdir, ':\') or contains($outputdir, ':/')">
-						<xsl:value-of select="concat('file:/', $outputdir)" />
-					</xsl:when>
-					<xsl:when test="starts-with($outputdir, '/')">
-						<xsl:value-of select="concat('file://', $outputdir)" />
-					</xsl:when>
-					<xsl:when test="starts-with($basedir,'/')">
-						<xsl:value-of select="concat('file://', $basedir, '/', $outputdir)" />
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="concat('file:/', $basedir, '/', $outputdir)" />
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
+      <xsl:variable name="filePath">
+        <xsl:choose>
+          <xsl:when
+            test="contains($outputdir, ':\') or contains($outputdir, ':/')">
+            <xsl:value-of select="concat('file:/', $outputdir)" />
+          </xsl:when>
+          <xsl:when test="starts-with($outputdir, '/')">
+            <xsl:value-of select="concat('file://', $outputdir)" />
+          </xsl:when>
+          <xsl:when test="starts-with($basedir,'/')">
+            <xsl:value-of select="concat('file://', $basedir, '/', $outputdir)" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat('file:/', $basedir, '/', $outputdir)" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
             <!--xsl:variable name="homeId" select="document(concat($filePath ,'/', $javahelpmap, '.jhm'), /)"-->
             <xsl:variable name="homeId">
               <xsl:value-of select="document(concat($filePath ,'/', $javahelpmap, '.jhm'))/map/mapID[1]/@target" />
@@ -72,7 +72,7 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:value-of select="$homeId"/>
               </xsl:otherwise>
             </xsl:choose>
-		</homeID>
+    </homeID>
         <mapref>
           <xsl:attribute name="location">
             <xsl:value-of select="$javahelpmap"/><xsl:text>.jhm</xsl:text>

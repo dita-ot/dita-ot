@@ -74,11 +74,13 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:attribute-set name="table__container">
     <xsl:attribute name="reference-orientation" select="if (@orient eq 'land') then 90 else 0"/>
+    <xsl:attribute name="start-indent">from-parent(start-indent)</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="table" use-attribute-sets="base-font">
     <!--It is a table container -->
     <xsl:attribute name="space-after">10pt</xsl:attribute>
+    <xsl:attribute name="start-indent">0pt</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="table.tgroup">

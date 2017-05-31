@@ -179,7 +179,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
      <xsl:attribute-set name="__toc__mini__summary" use-attribute-sets="common.border__left">
-         <xsl:attribute name="padding-left">10pt</xsl:attribute>
+         <xsl:attribute name="padding-start">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__topic__content__booklist" use-attribute-sets="__toc__topic__content">

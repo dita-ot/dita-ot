@@ -469,4 +469,7 @@
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="scope-local" href="a.xml"/>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="scope-peer" href="b.xml" scope="peer"/>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="scope-external" href="http://www.example.com/" format="html" scope="external"/>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="root" href="a.xml"/>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="root-with-id" href="a.xml#a"/>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="nested-with-id" href="a.xml#nolink"/>
 </map>

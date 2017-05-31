@@ -74,7 +74,7 @@ public class KeyrefModuleTest {
 
     @Test
     public void testAdjustResourceRenames() {
-        final KeyScope scope = new KeyScope("scope",
+        final KeyScope scope = new KeyScope("scope", "scope",
                 ImmutableMap.<String, KeyDef>builder()
                         .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
                         .build(),
@@ -86,7 +86,7 @@ public class KeyrefModuleTest {
                         new Builder().uri(create("target-1.dita")).build()));
         final List<ResolveTask> act = module.adjustResourceRenames(src);
 
-        final KeyScope exp = new KeyScope("scope",
+        final KeyScope exp = new KeyScope("scope", "scope",
                 ImmutableMap.<String, KeyDef>builder()
                         .put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
                         .build(),
@@ -97,7 +97,7 @@ public class KeyrefModuleTest {
 
     @Test
     public void testRewriteScopeTargets() {
-        final KeyScope src = new KeyScope("scope",
+        final KeyScope src = new KeyScope("scope", "scope",
                 ImmutableMap.<String, KeyDef>builder()
                         .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
                         .put("element", new KeyDef("element", create("target.dita#target/element"), null, null, null, null))
@@ -108,7 +108,7 @@ public class KeyrefModuleTest {
                 .build();
         final KeyScope act = module.rewriteScopeTargets(src, rewrites);
 
-        final KeyScope exp = new KeyScope("scope",
+        final KeyScope exp = new KeyScope("scope", "scope",
                 ImmutableMap.<String, KeyDef>builder()
                         .put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
                         .put("element", new KeyDef("element", create("target-1.dita#target/element"), null, null, null, null))
@@ -123,12 +123,12 @@ public class KeyrefModuleTest {
         final DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         final Document act = b.parse(new File(baseDir, "src" + File.separator + "test.ditamap"));
         final KeyScope keyScope =
-                new KeyScope(null,
+                new KeyScope("#róot", null,
                             ImmutableMap.of(
                                     "VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null),
                                     "A.VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null)),
                             singletonList(
-                                new KeyScope("A",
+                                new KeyScope("A", "A",
                                             ImmutableMap.of(
                                                     "VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null),
                                                     "A.VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null)),

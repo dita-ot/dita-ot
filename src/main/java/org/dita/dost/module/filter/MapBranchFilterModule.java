@@ -1,0 +1,493 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2016 Jarno Elovirta
+ *
+ *  See the accompanying LICENSE file for applicable license.
+ */
+
+package org.dita.dost.module.filter;
+
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.AbstractPipelineModuleImpl;
+import org.dita.dost.module.BranchFilterModule.Branch;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.*;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+
+import static org.dita.dost.util.Configuration.configuration;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.StringUtils.getExtProps;
+import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.*;
+
+/**
+ * Branch filter module for map processing.
+ *
+ * <p>Branch filtering is done with the following steps:</p>
+ * <ol>
+ *   <li>Split braches so that each branch will only contain a single ditavalref</li>
+ *   <li>Generate copy-to attribute for each brach generated topicref</li>
+ *   <li>Filter map based on branch filters</li>
+ *   <li>Rewrite duplicate generated copy-to targets</li>
+ * </ol>
+ *
+ * @since 2.5
+ */
+public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
+
+    private static final String BRANCH_COPY_TO = "filter-copy-to";
+
+    private final DocumentBuilder builder;
+    private final DitaValReader ditaValReader;
+    private TempFileNameScheme tempFileNameScheme;
+    private final Map<URI, FilterUtils> filterCache = new HashMap<>();
+    /** Current map being processed, relative to temporary directory */
+    private URI map;
+    /** Absolute URI to map being processed. */
+    protected URI currentFile;
+
+    public MapBranchFilterModule() {
+        builder = XMLUtils.getDocumentBuilder();
+        ditaValReader = new DitaValReader();
+        ditaValReader.initXMLReader(true);
+    }
+    
+    @Override
+    public void setLogger(final DITAOTLogger logger) {
+        super.setLogger(logger);
+        ditaValReader.setLogger(logger);
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        try {
+            final String cls = Optional
+                    .ofNullable(job.getProperty("temp-file-name-scheme"))
+                    .orElse(configuration.get("temp-file-name-scheme"));
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(cls).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        tempFileNameScheme.setBaseDir(job.getInputDir());
+    }
+
+    @Override
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
+        final FileInfo fi = job.getFileInfo(job.getInputMap());
+        if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+            return null;
+        }
+        processMap(fi);
+
+        try {
+            job.write();
+        } catch (final IOException e) {
+            throw new DITAOTException("Failed to serialize job configuration: " + e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Process map for branch replication.
+     */
+    protected void processMap(final FileInfo fi) {
+        this.map = fi.uri;
+        currentFile = job.tempDirURI.resolve(map);
+
+        logger.info("Processing " + currentFile);
+        final Document doc;
+        try {
+            logger.debug("Reading " + currentFile);
+            doc = builder.parse(new InputSource(currentFile.toString()));
+        } catch (final SAXException | IOException e) {
+            logger.error("Failed to parse " + currentFile, e);
+            return;
+        }
+
+        logger.debug("Split branches and generate copy-to");
+        splitBranches(doc.getDocumentElement(), Branch.EMPTY);
+        logger.debug("Filter map");
+        filterBranches(doc.getDocumentElement());
+        logger.debug("Rewrite duplicate topic references");
+        rewriteDuplicates(doc.getDocumentElement());
+
+        logger.debug("Writing " + currentFile);
+        Result result = null;
+        try {
+            Transformer serializer = TransformerFactory.newInstance().newTransformer();
+            result = new StreamResult(currentFile.toString());
+            serializer.transform(new DOMSource(doc), result);
+        } catch (final TransformerConfigurationException | TransformerFactoryConfigurationError e) {
+            throw new RuntimeException(e);
+        } catch (final TransformerException e) {
+            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
+        } finally {
+            try {
+                close(result);
+            } catch (final IOException e) {
+                logger.error("Failed to close result stream for " + map.toString() + ": " + e.getMessage(), e);
+            }
+        }
+    }
+
+    /** Rewrite href or copy-to if duplicates exist. */
+    private void rewriteDuplicates(final Element root) {
+        // collect href and copy-to
+        final Map<URI, Map<Set<URI>, List<Attr>>> refs = new HashMap<>();
+        for (final Element e: getTopicrefs(root)) {
+            Attr attr = e.getAttributeNode(BRANCH_COPY_TO);
+            if (attr == null) {
+                attr = e.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+                if (attr == null) {
+                    attr = e.getAttributeNode(ATTRIBUTE_NAME_HREF);
+                }
+            }
+            if (attr != null) {
+                final URI h = stripFragment(map.resolve(attr.getValue()));
+                Map<Set<URI>, List<Attr>> attrsMap = refs.get(h);
+                if (attrsMap == null) {
+                    attrsMap = new HashMap<>();
+                    refs.put(h, attrsMap);
+                }
+                final Set<URI> currentFilter = getBranchFilters(e);
+                List<Attr> attrs = attrsMap.get(currentFilter);
+                if (attrs == null) {
+                    attrs = new ArrayList<>();
+                    attrsMap.put(currentFilter, attrs);
+                }
+                attrs.add(attr);
+            }
+        }
+        // check and rewrite
+        for (final Map.Entry<URI, Map<Set<URI>, List<Attr>>> ref: refs.entrySet()) {
+            final Map<Set<URI>, List<Attr>> attrsMaps = ref.getValue();
+            if (attrsMaps.size() > 1) {
+                if (attrsMaps.containsKey(Collections.EMPTY_LIST)) {
+                    attrsMaps.remove(Collections.EMPTY_LIST);
+                } else {
+                    Set<URI> first = attrsMaps.keySet().iterator().next();
+                    attrsMaps.remove(first);
+                }
+                int i = 1;
+                for (final Map.Entry<Set<URI>, List<Attr>> attrsMap: attrsMaps.entrySet()) {
+                    final String suffix = "-" + i;
+                    final List<Attr> attrs = attrsMap.getValue();
+                    for (final Attr attr: attrs) {
+                        final String gen = addSuffix(attr.getValue(), suffix);
+                        logger.info(MessageUtils.getInstance().getMessage("DOTJ065I", attr.getValue(), gen)
+                                .setLocation(attr.getOwnerElement()).toString());
+                        if (attr.getName().equals(BRANCH_COPY_TO)) {
+                            attr.setValue(gen);
+                        } else {
+                            attr.getOwnerElement().setAttribute(BRANCH_COPY_TO, gen);
+                        }
+
+                        final URI dstUri = map.resolve(gen);
+                        if (dstUri != null) {
+                            final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(attr.getValue()));
+                            if (hrefFileInfo != null) {
+                                final URI newResult = addSuffix(hrefFileInfo.result, suffix);
+                                final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
+                                        .uri(dstUri)
+                                        .result(newResult);
+                                if (hrefFileInfo.format == null) {
+                                    dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
+                                }
+                                final FileInfo dstFileInfo = dstBuilder.build();
+                                job.add(dstFileInfo);
+                            }
+                        }
+                    }
+                    i++;
+                }
+            }
+        }
+    }
+
+    private Set<URI> getBranchFilters(final Element e) {
+        final Set<URI> res = new HashSet<>();
+        Element current = e;
+        while (current != null) {
+            final List<Element> ditavalref = getChildElements(current, DITAVAREF_D_DITAVALREF);
+            if (!ditavalref.isEmpty()) {
+                res.add(toURI(ditavalref.get(0).getAttribute(ATTRIBUTE_NAME_HREF)));
+            }
+            final Node parent = current.getParentNode();
+            if (parent != null && parent.getNodeType() == Node.ELEMENT_NODE) {
+                current = (Element) parent;
+            } else {
+                break;
+            }
+        }
+        return res;
+    }
+
+    /** Add suffix to file name */
+    private static String addSuffix(final String href, final String suffix) {
+        final int idx = href.lastIndexOf(".");
+        return idx != -1
+                ? (href.substring(0, idx) + suffix + href.substring(idx))
+                : (href + suffix);
+    }
+
+    /** Add suffix to file name */
+    private static URI addSuffix(final URI href, final String suffix) {
+        return URI.create(addSuffix(href.toString(), suffix));
+    }
+
+    /** Get all topicrefs */
+    private List<Element> getTopicrefs(final Element root) {
+        final List<Element> res = new ArrayList<>();
+        final NodeList all = root.getElementsByTagName("*");
+        for (int i = 0; i < all.getLength(); i++) {
+            final Element elem = (Element) all.item(i);
+            if (MAP_TOPICREF.matches(elem)
+                    && isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT))
+                    && !elem.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
+                res.add(elem);
+            }
+        }
+        return res;
+    }
+
+    private boolean isDitaFormat(final Attr formatAttr) {
+        return formatAttr == null ||
+                ATTR_FORMAT_VALUE_DITA.equals(formatAttr.getNodeValue()) ||
+                ATTR_FORMAT_VALUE_DITAMAP.equals(formatAttr.getNodeValue());
+    }
+
+    /** Filter map and remove excluded content. */
+    private void filterBranches(final Element root) {
+        final String[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
+        filterBranches(root, Collections.<FilterUtils>emptyList(), props);
+    }
+
+    private void filterBranches(final Element elem, final List<FilterUtils> filters, final String[][] props) {
+        final List<FilterUtils> fs = combineFilterUtils(elem, filters);
+
+        boolean exclude = false;
+        for (final FilterUtils f: fs) {
+            exclude = exclude(elem, f, props);
+            if (exclude) {
+                break;
+            }
+        }
+
+        if (exclude) {
+            elem.getParentNode().removeChild(elem);
+        } else {
+            for (final Element child : getChildElements(elem)) {
+                filterBranches(child, fs, props);
+            }
+        }
+    }
+
+    private List<FilterUtils> combineFilterUtils(final Element topicref, final List<FilterUtils> filters) {
+        final List<Element> ditavalRefs = getChildElements(topicref, DITAVAREF_D_DITAVALREF);
+        assert ditavalRefs.size() <= 1;
+        if (!ditavalRefs.isEmpty()) {
+            List<FilterUtils> fs = new ArrayList<>(filters);
+            final FilterUtils f = getFilterUtils(ditavalRefs.get(0));
+            if (f != null) {
+                fs = new ArrayList<>(fs);
+                fs.add(f);
+            }
+            return fs;
+        } else {
+            return filters;
+        }
+    }
+
+    /** Test if element should be excluded based on fiter. */
+    private boolean exclude(final Element element, final FilterUtils filterUtils, final String[][] props) {
+        final AttributesBuilder buf = new AttributesBuilder();
+        final NamedNodeMap attrs = element.getAttributes();
+        for (int i = 0; i < attrs.getLength() ; i++) {
+            final Node attr = attrs.item(i);
+            if (attr.getNodeType() == Node.ATTRIBUTE_NODE) {
+                buf.add((Attr) attr);
+            }
+        }
+        return filterUtils.needExclude(buf.build(), props);
+    }
+
+    /**
+     * Read and cache filter.
+     **/
+    private FilterUtils getFilterUtils(final Element ditavalRef) {
+        final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
+        final URI tmp = currentFile.resolve(href);
+        final FileInfo fi = job.getFileInfo(tmp);
+        final URI ditaval = fi.src;
+        FilterUtils f = filterCache.get(ditaval);
+        if (f == null) {
+            ditaValReader.filterReset();
+            ditaValReader.read(ditaval);
+            Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
+            f = new FilterUtils(filterMap);
+            f.setLogger(logger);
+            filterCache.put(ditaval, f);
+        }
+        return f;
+    }
+
+    /**
+     * Duplicate branches so that each {@code ditavalref} will in a separate branch.
+     */
+    void splitBranches(final Element elem, final Branch filter) {
+        final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
+        if (ditavalRefs.size() > 0) {
+            // remove ditavalrefs
+            for (final Element branch: ditavalRefs) {
+                elem.removeChild(branch);
+            }
+            // create additional branches after current element
+            final List<Element> branches = new ArrayList<>(ditavalRefs.size());
+            branches.add(elem);
+            final Node next = elem.getNextSibling();
+            for (int i = 1; i < ditavalRefs.size(); i++) {
+                final Element clone = (Element) elem.cloneNode(true);
+                if (next != null) {
+                    elem.getParentNode().insertBefore(clone, next);
+                } else {
+                    elem.getParentNode().appendChild(clone);
+                }
+                branches.add(clone);
+            }
+            // insert ditavalrefs
+            for (int i = 0; i < branches.size(); i++) {
+                final Element branch = branches.get(i);
+                final Element ditavalref = ditavalRefs.get(i);
+                branch.insertBefore(ditavalref, branch.getFirstChild());
+                final Branch currentFilter = filter.merge(ditavalref);
+                processAttributes(branch, currentFilter);
+                final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, Optional.empty(), Optional.empty());
+                // process children of all branches
+                for (final Element child: getChildElements(branch, MAP_TOPICREF)) {
+                    if (DITAVAREF_D_DITAVALREF.matches(child)) {
+                        continue;
+                    }
+                    splitBranches(child, childFilter);
+                }
+            }
+        } else {
+            processAttributes(elem, filter);
+            for (final Element child: getChildElements(elem, MAP_TOPICREF)) {
+                splitBranches(child, filter);
+            }
+        }
+    }
+
+    private void processAttributes(final Element elem, final Branch filter) {
+        if (filter.resourcePrefix.isPresent() || filter.resourceSuffix.isPresent()) {
+            final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
+            final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
+            final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
+            if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
+                final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
+
+                final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
+
+                final URI dstSource;
+                try {
+                    dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
+                } catch (NullPointerException e) {
+                    throw e;
+                }
+                final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
+                final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
+                        .result(dstSource)
+                        .uri(dstTemp);
+                if (dstBuilder.build().format == null) {
+                    dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
+                }
+                if (hrefFileInfo.src == null && href != null) {
+                    if (copyToFileInfo != null) {
+                        dstBuilder.src(copyToFileInfo.src);
+                    }
+                }
+                final FileInfo dstFileInfo = dstBuilder
+                        .build();
+
+                elem.setAttribute(BRANCH_COPY_TO, dstTemp.toString());
+                if (!copyTo.isEmpty()) {
+                    elem.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
+                }
+
+                job.add(dstFileInfo);
+            }
+        }
+
+        if (filter.keyscopePrefix.isPresent() || filter.keyscopeSuffix.isPresent()) {
+            final StringBuilder buf = new StringBuilder();
+            final String keyscope = elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE);
+            if (!keyscope.isEmpty()) {
+                for (final String key : keyscope.trim().split("\\s+")) {
+                    if (filter.keyscopePrefix.isPresent()) {
+                        buf.append(filter.keyscopePrefix.get());
+                    }
+                    buf.append(key);
+                    if (filter.keyscopeSuffix.isPresent()) {
+                        buf.append(filter.keyscopeSuffix.get());
+                    }
+                    buf.append(' ');
+                }
+            } else {
+                if (filter.keyscopePrefix.isPresent()) {
+                    buf.append(filter.keyscopePrefix.get());
+                }
+                if (filter.keyscopeSuffix.isPresent()) {
+                    buf.append(filter.keyscopeSuffix.get());
+                }
+            }
+            elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
+        }
+    }
+    
+    static URI generateCopyTo(final URI href, final Branch filter) {
+        final StringBuilder buf = new StringBuilder(href.toString());
+        final Optional<String> suffix = filter.resourceSuffix;
+        if (suffix.isPresent()) {
+            final int sep = buf.lastIndexOf(URI_SEPARATOR);
+            final int i = buf.lastIndexOf(".");
+            if (i != -1 && (sep == -1 || i > sep)) {
+                buf.insert(i, suffix.get());
+            } else {
+                buf.append(suffix.get());
+            }
+        }
+        final Optional<String> prefix = filter.resourcePrefix;
+        if (prefix.isPresent()) {
+            final int i = buf.lastIndexOf(URI_SEPARATOR);
+            if (i != -1) {
+                buf.insert(i + 1, prefix.get());
+            } else {
+                buf.insert(0, prefix.get());
+            }
+        }
+        return toURI(buf.toString());
+    }
+    
+}

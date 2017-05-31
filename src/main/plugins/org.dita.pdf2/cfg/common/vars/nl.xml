@@ -30,7 +30,19 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Index odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
   <variable id="Index even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
   <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
+    <variable id="Ordered List Number 1"><param ref-name="number"/>. </variable>
+    <variable id="Ordered List Number 2"><param ref-name="number"/>. </variable>
+    <variable id="Ordered List Number 3"><param ref-name="number"/>. </variable>
+    <variable id="Ordered List Number 4"><param ref-name="number"/>. </variable>
+    <variable id="Ordered List Format 1">1</variable>
+    <variable id="Ordered List Format 2">a</variable>
+    <variable id="Ordered List Format 3">1</variable>
+    <variable id="Ordered List Format 4">a</variable>
   <variable id="Unordered List bullet">•</variable>
+    <variable id="Unordered List bullet 1">•</variable>
+    <variable id="Unordered List bullet 2">•</variable>
+    <variable id="Unordered List bullet 3">•</variable>
+    <variable id="Unordered List bullet 4">•</variable>
   <variable id="Table of Contents">Inhoudsopgave</variable>
   
   <variable id="Index Continued String">Vervolg</variable>
@@ -144,6 +156,10 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Task Result"></variable>
   <variable id="Task Example"></variable>
   <variable id="Task Postreq"></variable>
+    <variable id="Step Number"><param ref-name="number"/>. </variable>
+    <variable id="Step Format">1</variable>
+    <variable id="Substep Number"><param ref-name="number"/>) </variable>
+    <variable id="Substep Format">a</variable>
 
   <!--Glossary Variables-->
   <!-- The footer that appears on the odd-numbered glossary pages. -->
@@ -161,7 +177,6 @@ See the accompanying LICENSE file for applicable license.
   <!-- The heading string to put at the top of the List of Figures -->
   <variable id="List of Figures">Figuren</variable>
 
-  <variable id="#menucascade-separator"> &gt; </variable>
-  <variable id="#quote-start">“</variable>
-  <variable id="#quote-end">”</variable>
+  <variable id="#quote-start"><variable id="OpenQuote"/></variable>
+  <variable id="#quote-end"><variable id="CloseQuote"/></variable>
 </vars>

@@ -14,6 +14,7 @@ src/main/doc
 src/main/lib/org.dita.dost.platform/plugin.properties
 src/main/plugins/org.dita.base/build.xml
 src/main/plugins/org.dita.base/build_preprocess.xml
+src/main/plugins/org.dita.base/build_preprocess2.xml
 src/main/plugins/org.dita.base/catalog-dita.xml
 src/main/plugins/org.dita.eclipsehelp/build_dita2eclipsehelp.xml
 src/main/plugins/org.dita.eclipsehelp/xsl/map2eclipse.xsl

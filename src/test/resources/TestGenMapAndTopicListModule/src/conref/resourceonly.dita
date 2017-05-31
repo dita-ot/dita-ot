@@ -1,0 +1,17 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  id="topic_xyb_nl4_xz" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Resource only topic</title>
+  <shortdesc class="- topic/shortdesc ">nobody links here, but uses
+    processing-role="resource-only"</shortdesc>
+  <body class="- topic/body ">
+    <p class="- topic/p ">Topic paragraph</p>
+    <p class="- topic/p " conref="conref-from-resource-only.dita#c/d"/>
+    <p class="- topic/p " conref="conref-from-resource-only-ALSORESOURCEONLY.dita#c/d"/>
+  </body>
+  <related-links class="- topic/related-links ">
+    <link class="- topic/link " href="link-from-resource-only.dita#topic_fnd_3l4_xz"/>
+    <link class="- topic/link "
+      href="link-from-resource-only-ALSORESOURCEONLY.dita#topic_fnd_3l4_xz"/>
+  </related-links>
+</topic>

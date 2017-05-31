@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/topic.dtd">
+<topic id="topic1" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>The correct values of platform</title>
+    <body>
+        <p>
+            <note platform="linux">platform value is linux</note>
+            <note platform="mswin">platform value is mswin</note>
+            <note platform="zos">platform value is zos</note>
+        </p>
+    </body>
+    
+</topic>
+

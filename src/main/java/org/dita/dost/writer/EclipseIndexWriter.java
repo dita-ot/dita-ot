@@ -97,17 +97,17 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         } finally {
             if (serializer != null) {
                 try {
-                	serializer.close();
+                    serializer.close();
                 } catch (final XMLStreamException e) {
                     logger.error(e.getMessage(), e) ;
-				}
+                }
             }
             if (out != null) {
                 try {
-                	out.close();
+                    out.close();
                 } catch (final IOException e) {
                     logger.error(e.getMessage(), e) ;
-				}
+                }
             }
         }
     }
@@ -218,9 +218,10 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                                 foundIndexTerm = true;
                                 if (termClone.getTargetList().size() > 0) {
                                     serializer.writeStartElement("topic");
-                                    serializer.writeAttribute("href", replaceExtName(termClone.getTargetList().get(0).getTargetURI()));
-                                    if (targetName.trim().length() > 0) {
-                                        serializer.writeAttribute("title", termClone.getTargetList().get(0).getTargetName());
+                                    final IndexTermTarget indexTermTarget = termClone.getTargetList().get(0);
+                                    serializer.writeAttribute("href", replaceExtName(indexTermTarget.getTargetURI()));
+                                    if (indexTermTarget.getTargetName() != null && !indexTermTarget.getTargetName().trim().isEmpty()) {
+                                        serializer.writeAttribute("title", indexTermTarget.getTargetName());
                                     }
                                     serializer.writeEndElement(); // topic
                                 }

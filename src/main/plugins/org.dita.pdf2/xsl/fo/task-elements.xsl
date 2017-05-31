@@ -206,80 +206,62 @@ See the accompanying LICENSE file for applicable license.
         </fo:block>
     </xsl:template>
 
-    <!--Steps-->
-    <xsl:template match="*[contains(@class, ' task/steps ')]">
-        <xsl:choose>
-            <xsl:when test="$GENERATE-TASK-LABELS='YES'">
-              <fo:block>
-                  <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
-                      <xsl:with-param name="use-label">
-                        <xsl:apply-templates select="." mode="dita2xslfo:retrieve-task-heading">
-                          <xsl:with-param name="pdf2-string">Task Steps</xsl:with-param>
-                          <xsl:with-param name="common-string">task_procedure</xsl:with-param>
-                        </xsl:apply-templates>
-                      </xsl:with-param>
-                  </xsl:apply-templates>
-                  <fo:list-block xsl:use-attribute-sets="steps">
-                      <xsl:call-template name="commonattributes"/>
-                      <xsl:apply-templates/>
-                  </fo:list-block>
-              </fo:block>
-            </xsl:when>
-            <xsl:otherwise>
-                <fo:list-block xsl:use-attribute-sets="steps">
-                    <xsl:call-template name="commonattributes"/>
-                    <xsl:apply-templates/>
-                </fo:list-block>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-  <xsl:template match="*[contains(@class, ' task/steps-unordered ')]">
-    <xsl:choose>
-      <xsl:when test="$GENERATE-TASK-LABELS='YES'">
-        <fo:block>
-          <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
-            <xsl:with-param name="use-label">
-              <!--<xsl:call-template name="getVariable">
-                <xsl:with-param name="id" select="'#steps-unordered-label'"/>
-              </xsl:call-template>-->
-              <xsl:apply-templates select="." mode="dita2xslfo:retrieve-task-heading">
-                <xsl:with-param name="pdf2-string">#steps-unordered-label</xsl:with-param>
-                <xsl:with-param name="common-string">task_procedure_unordered</xsl:with-param>
-              </xsl:apply-templates>
-            </xsl:with-param>
-          </xsl:apply-templates>
-          <fo:list-block xsl:use-attribute-sets="steps-unordered">
+    <xsl:template match="*[contains(@class, ' task/steps ')]" name="steps">
+      <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+          <xsl:with-param name="use-label">
+            <xsl:apply-templates select="." mode="dita2xslfo:retrieve-task-heading">
+              <xsl:with-param name="pdf2-string">Task Steps</xsl:with-param>
+              <xsl:with-param name="common-string">task_procedure</xsl:with-param>
+            </xsl:apply-templates>
+          </xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:choose>
+        <xsl:when test="count(*[contains(@class, ' task/step ')]) eq 1">
+          <fo:block>
+            <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates mode="onestep"/>
+          </fo:block>
+        </xsl:when>
+        <xsl:otherwise>
+          <fo:list-block xsl:use-attribute-sets="steps">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
           </fo:list-block>
-        </fo:block>
-      </xsl:when>
-      <xsl:otherwise>
-        <fo:list-block xsl:use-attribute-sets="steps-unordered">
-          <xsl:call-template name="commonattributes"/>
-          <xsl:apply-templates/>
-        </fo:list-block>
-      </xsl:otherwise>
-    </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' task/steps-unordered ')]" name="steps-unordered">
+    <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+      <xsl:with-param name="use-label">
+        <xsl:apply-templates select="." mode="dita2xslfo:retrieve-task-heading">
+          <xsl:with-param name="pdf2-string">#steps-unordered-label</xsl:with-param>
+          <xsl:with-param name="common-string">task_procedure_unordered</xsl:with-param>
+        </xsl:apply-templates>
+      </xsl:with-param>
+    </xsl:apply-templates>
+    <fo:list-block xsl:use-attribute-sets="steps-unordered">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:list-block>
   </xsl:template>
 
-
     <xsl:template match="*[contains(@class, ' task/steps ')]/*[contains(@class, ' task/step ')]">
-        <!-- Switch to variable for the count rather than xsl:number, so that step specializations are also counted -->
-        <xsl:variable name="actual-step-count" select="number(count(preceding-sibling::*[contains(@class, ' task/step ')])+1)"/>
+        <xsl:variable name="format">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Step Format'"/>
+          </xsl:call-template>
+        </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="steps.step">
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="steps.step__label">
                 <fo:block xsl:use-attribute-sets="steps.step__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
                     <xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
                         <xsl:call-template name="getVariable">
-                            <xsl:with-param name="id" select="'Ordered List Number'"/>
-                            <xsl:with-param name="params">
+                            <xsl:with-param name="id" select="'Step Number'"/>
+                            <xsl:with-param name="params" as="element()*">
                                 <number>
-                                    <xsl:value-of select="$actual-step-count"/>
+                                    <xsl:number format="{$format}" count="*[contains(@class, ' task/step ')]"/>
                                 </number>
                             </xsl:with-param>
                         </xsl:call-template>
@@ -298,11 +280,9 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/steps-unordered ')]/*[contains(@class, ' task/step ')]">
         <fo:list-item xsl:use-attribute-sets="steps-unordered.step">
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="steps-unordered.step__label">
                 <fo:block xsl:use-attribute-sets="steps-unordered.step__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
                     <xsl:call-template name="getVariable">
                         <xsl:with-param name="id" select="'Unordered List bullet'"/>
                     </xsl:call-template>
@@ -318,13 +298,19 @@ See the accompanying LICENSE file for applicable license.
         </fo:list-item>
     </xsl:template>
 
+  <xsl:template match="*[contains(@class, ' task/step ')]" mode="onestep">
+    <fo:block xsl:use-attribute-sets="steps.step__content--onestep">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  <xsl:template match="node()" mode="onestep" priority="-10"/>
+
     <xsl:template match="*[contains(@class, ' task/stepsection ')]">
         <fo:list-item xsl:use-attribute-sets="stepsection">
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="stepsection__label">
               <fo:block xsl:use-attribute-sets="stepsection__label__content">
-                  <fo:inline>
-                      <xsl:call-template name="commonattributes"/>
-                  </fo:inline>
               </fo:block>
             </fo:list-item-label>
 
@@ -346,13 +332,23 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/substeps ')]/*[contains(@class, ' task/substep ')]">
+        <xsl:variable name="format">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Substep Format'"/>
+          </xsl:call-template>
+        </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="substeps.substep">
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="substeps.substep__label">
                 <fo:block xsl:use-attribute-sets="substeps.substep__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
-                    <xsl:number format="a) "/>
+                    <xsl:call-template name="getVariable">
+                      <xsl:with-param name="id" select="'Substep Number'"/>
+                      <xsl:with-param name="params" as="element()*">
+                        <number>
+                          <xsl:number format="{$format}"/>
+                        </number>
+                      </xsl:with-param>
+                    </xsl:call-template>
                 </fo:block>
             </fo:list-item-label>
             <fo:list-item-body xsl:use-attribute-sets="substeps.substep__body">
@@ -373,11 +369,9 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/choice ')]">
         <fo:list-item xsl:use-attribute-sets="choices.choice">
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="choices.choice__label">
                 <fo:block xsl:use-attribute-sets="choices.choice__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
                     <xsl:call-template name="getVariable">
                         <xsl:with-param name="id" select="'Unordered List bullet'"/>
                     </xsl:call-template>

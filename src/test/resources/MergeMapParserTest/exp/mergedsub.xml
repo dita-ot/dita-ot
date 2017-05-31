@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wrapper>
+  <map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+       domains="(map mapgroup-d)"
+       ditaarch:DITAArchVersion="1.3">
+    <topicref class="- map/topicref " ohref="test.xml#concept" href="#unique_2" first_topic_id="#unique_1"/>
+  </map>
+  <concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+           class="- topic/topic concept/concept "
+           domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+           oid="topic" id="unique_1" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
+    <title class="- topic/title ">Concept</title>
+    <concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+             class="- topic/topic concept/concept "
+             domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+             oid="concept" id="unique_2" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
+      <title class="- topic/title ">Concept 2</title>
+    </concept>
+  </concept>
+</wrapper>

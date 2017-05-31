@@ -65,8 +65,10 @@
 <str name="Copyright">Hak Cipta</str>
 
 <!-- Symbols -->
-<str name="OpenQuote">"</str>
-<str name="CloseQuote">"</str>
+<str name="OpenQuote">“</str>
+<str name="CloseQuote">”</str>
 <str name="ColonSymbol">:</str>
+<str name="#menucascade-separator"> &gt; </str>
+<str name="a11y.and-then"></str>
 
 </strings>

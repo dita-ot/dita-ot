@@ -12,15 +12,19 @@ import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.reader.ChunkMapReader.*;
+import static org.dita.dost.util.XMLUtils.nonDitaContext;
 
 import java.net.URI;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.function.Predicate;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
@@ -72,8 +76,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Map<URI, URI> copytoMap = new HashMap<>(16);
     /** Flag for conrefpush */
     private boolean hasconaction = false;
-    /** foreign/unknown nesting level */
-    private int foreignLevel = 0;
+    /** DITA class values for open elements **/
+    private final Deque<DitaClass> classes = new LinkedList<>();
     /** Flag used to mark if current file is still valid after filtering */
     private boolean isValidInput = false;
     /** Set of outer dita files */
@@ -86,6 +90,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Set<URI> resourceOnlySet = new HashSet<>(32);
     /** Topics with processing role of "normal" */
     private final Set<URI> normalProcessingRoleSet = new HashSet<>(32);
+    /** Topics referenced from something other than <topicref> */
+    private final Set<URI> nonTopicrefReferenceSet = new HashSet<>(32);
     /** Subject scheme relative file paths. */
     private final Set<URI> schemeRefSet = new HashSet<>(32);
     /** Relationship graph between subject schema. Keys are subject scheme map paths and values
@@ -95,6 +101,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private URI primaryDitamap;
     private boolean isRootElement = true;
     private DitaClass rootClass = null;
+    private Predicate<String> formatFilter;
 
     /**
      * Set output utilities.
@@ -140,6 +147,18 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     public Set<URI> getResourceOnlySet() {
         final Set<URI> res = new HashSet<>(resourceOnlySet);
         res.removeAll(normalProcessingRoleSet);
+        return res;
+    }
+    
+    /**
+     * List of files referenced by something other than topicref
+     * 
+     * @return the resource-only set
+     */
+    public Set<URI> getNonTopicrefReferenceSet() {
+        final Set<URI> res = new HashSet<>(nonTopicrefReferenceSet);
+        res.removeAll(normalProcessingRoleSet);
+        res.removeAll(resourceOnlySet);
         return res;
     }
 
@@ -341,7 +360,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         hasHref = false;
         hasCodeRef = false;
         currentDir = null;
-        foreignLevel = 0;
+        classes.clear();
         isValidInput = false;
         hasconaction = false;
         coderefTargetSet.clear();
@@ -356,7 +375,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         processRoleStack.clear();
         isRootElement = true;
         rootClass = null;
-        // Don't clean resourceOnlySet or normalProcessingRoleSet
+        // Don't clean resourceOnlySet, normalProcessingRoleSet, or nonTopicrefReferenceSet
     }
 
     @Override
@@ -382,54 +401,62 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
         processRoleStack.push(processingRole);
 
+        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : null;
+
         final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
+            if (!(MAP_TOPICREF.matches(cls))) {
+                nonTopicrefReferenceSet.add(stripFragment(currentDir.resolve(href)));
+            } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                 resourceOnlySet.add(stripFragment(currentDir.resolve(href)));
             } else {
                 normalProcessingRoleSet.add(stripFragment(currentDir.resolve(href)));
             }
         }
-
-        final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-
-        if (foreignLevel > 0) {
-            foreignLevel++;
-            return;
-        } else if (TOPIC_FOREIGN.matches(classValue) || TOPIC_UNKNOWN.matches(classValue)) {
-            foreignLevel++;
-        }
-
-        if (classValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
-            logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).setLocation(atts).toString());
-        }
-
-        if (TOPIC_TOPIC.matches(classValue) || MAP_MAP.matches(classValue)) {
-            final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
-            if (domains == null) {
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).setLocation(atts).toString());
-            }
-        }
-
-        if ((MAP_MAP.matches(classValue)) || (TOPIC_TITLE.matches(classValue))) {
-            isValidInput = true;
-        }
-
-        parseConrefAttr(atts);
-        if (PR_D_CODEREF.matches(classValue)) {
-            parseCoderef(atts);
-        } else if (TOPIC_OBJECT.matches(classValue)) {
-            parseObject(atts);
-        } else if (MAP_TOPICREF.matches(classValue)) {
-            parseAttribute(atts, ATTRIBUTE_NAME_HREF);
-            parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
+        
+        if (cls != null && cls.isValid()) {
+            classes.addFirst(cls);
         } else {
-            parseAttribute(atts, ATTRIBUTE_NAME_HREF);
+            classes.addFirst(null);
         }
-        parseConactionAttr(atts);
-        parseConkeyrefAttr(atts);
-        parseKeyrefAttr(atts);
+
+        if (!(cls != null && cls.isValid()) && !ELEMENT_NAME_DITA.equals(localName)) {
+            if (nonDitaContext(classes)) {
+                // Normal case for bad class: in non DITA context, no message
+            } else if (atts.getValue(ATTRIBUTE_NAME_CLASS) == null) { // Missing @class
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).setLocation(atts).toString());
+            } else { // Invalid DITA @class
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ070I", atts.getValue(ATTRIBUTE_NAME_CLASS), localName).setLocation(atts).toString());
+            }
+        } else {
+
+            if (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls)) {
+                final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
+                if (domains == null) {
+                    logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).setLocation(atts).toString());
+                }
+            }
+
+            if ((MAP_MAP.matches(cls)) || (TOPIC_TITLE.matches(cls))) {
+                isValidInput = true;
+            }
+
+            parseConrefAttr(atts);
+            if (PR_D_CODEREF.matches(cls)) {
+                parseCoderef(atts);
+            } else if (TOPIC_OBJECT.matches(cls)) {
+                parseObject(atts);
+            } else if (MAP_TOPICREF.matches(cls)) {
+                parseAttribute(atts, ATTRIBUTE_NAME_HREF);
+                parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
+            } else {
+                parseAttribute(atts, ATTRIBUTE_NAME_HREF);
+            }
+            parseConactionAttr(atts);
+            parseConkeyrefAttr(atts);
+            parseKeyrefAttr(atts);
+        }
 
         getContentHandler().startElement(uri, localName, qName, atts);
     }
@@ -510,11 +537,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         // @processing-role
         processRoleStack.pop();
-
-        if (foreignLevel > 0) {
-            foreignLevel--;
-            return;
-        }
+        classes.pop();
 
         getContentHandler().endElement(uri, localName, qName);
     }
@@ -569,7 +592,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
         }
 
-        if (isFormatDita(attrFormat)) {
+        if (isFormatDita(attrFormat)) { // && formatFilter.test(attrFormat)
             if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
                 if (followLinks()) {
                     hrefTargets.add(filename);
@@ -721,6 +744,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 addToOutFilesSet(filename);
             }
         }
+    }
+
+    public void setFormatFilter(Predicate<String> formatFilter) {
+        this.formatFilter = formatFilter;
     }
 
     /**

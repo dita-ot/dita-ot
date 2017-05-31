@@ -123,6 +123,9 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:attribute-set name="steps.step__content" use-attribute-sets="ol.li__content">
     </xsl:attribute-set>
+  
+  <xsl:attribute-set name="steps.step__content--onestep" use-attribute-sets="common.block">
+  </xsl:attribute-set>
 
     <!-- Stepsection (new in DITA 1.2) -->
     <xsl:attribute-set name="stepsection" use-attribute-sets="ul.li">

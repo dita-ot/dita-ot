@@ -9,6 +9,7 @@
 package org.dita.dost.module;
 
 import static java.util.stream.Collectors.toMap;
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.URLUtils.*;
@@ -21,6 +22,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.TopicFragmentFilter;
@@ -55,6 +57,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
     private TopicFragmentFilter topicFragmentFilter;
+    private XMLUtils xmlUtils = new XMLUtils();
 
     @Override
     public void setJob(final Job job) {
@@ -67,6 +70,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
+    @Override
+    public void setLogger(final DITAOTLogger logger) {
+        super.setLogger(logger);
+        xmlUtils.setLogger(logger);
+    }
+
     /**
      * Entry point of KeyrefModule.
      * 
@@ -77,13 +86,26 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
-        final Collection<FileInfo> fis = new HashSet(job.getFileInfo(new Filter<FileInfo>() {
-            @Override
-            public boolean accept(final FileInfo f) {
-                return f.hasKeyref;
-            }
-        }));
+        if (fileInfoFilter == null) {
+            fileInfoFilter = new Filter<FileInfo>() {
+                @Override
+                public boolean accept(FileInfo f) {
+                    return f.format == null || f.format.equals(ATTR_FORMAT_VALUE_DITA) || f.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
+                }
+            };
+        }
+        final Collection<FileInfo> fis = job.getFileInfo(fileInfoFilter).stream()
+                .filter(f -> f.hasKeyref)
+                .collect(Collectors.toSet());
         if (!fis.isEmpty()) {
+            try {
+                final String cls = Optional
+                        .ofNullable(job.getProperty("temp-file-name-scheme"))
+                        .orElse(configuration.get("temp-file-name-scheme"));
+                tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) getClass().forName(cls).newInstance();
+            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             tempFileNameScheme.setBaseDir(job.getInputDir());
             initFilters();
 
@@ -146,8 +168,15 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 res.add(processTopic(f, rootScope, f.isResourceOnly));
             }
         }
+
         final List<ResolveTask> deduped = removeDuplicateResolveTargets(res);
-        return adjustResourceRenames(deduped);
+        if (fileInfoFilter != null) {
+            return adjustResourceRenames(deduped.stream()
+                    .filter(rs -> fileInfoFilter.accept(rs.in))
+                    .collect(Collectors.toList()));
+        } else {
+            return adjustResourceRenames(deduped);
+        }
     }
 
     /** Remove duplicate sources within the same scope */
@@ -198,9 +227,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element);
             newKeys.put(key.getKey(), newKey);
         }
-        return new KeyScope(scope.name,
+        return new KeyScope(scope.id, scope.name,
                 newKeys,
-                scope.childScopes.values().stream()
+                scope.childScopes.stream()
                         .map(c -> rewriteScopeTargets(c, rewrites))
                         .collect(Collectors.toList()));
     }
@@ -334,12 +363,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             if (r.out != null) {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
                         " to " + job.tempDirURI.resolve(r.out.uri));
-                XMLUtils.transform(new File(job.tempDir, r.in.file.getPath()),
+                xmlUtils.transform(new File(job.tempDir, r.in.file.getPath()),
                                    new File(job.tempDir, r.out.file.getPath()),
                                    filters);
             } else {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
-                XMLUtils.transform(new File(job.tempDir, r.in.file.getPath()), filters);
+                xmlUtils.transform(new File(job.tempDir, r.in.file.getPath()), filters);
             }
             // validate resource-only list
             normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());

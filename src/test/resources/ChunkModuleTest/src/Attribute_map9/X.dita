@@ -14,7 +14,7 @@
       top-level topics within the book. </p>
     <p class="- topic/p " product="p1" rev="rev1">For more detailed information about the proposal,
       see the detailed posting on the DITA forum at <xref
-        href="news://news.software.ibm.com:119/c11fd3$85qq$2@news.boulder.ibm.com" format="news"
+        href="news://news.software.ibm.com:119/c11fd3$85qq$2@news.boulder.ibm.com" format="news" scope="external"
         class="- topic/xref "
         >news://news.software.ibm.com:119/c11fd3$85qq$2@news.boulder.ibm.com</xref>.</p>
     <note class="- topic/note ">This demonstration has the following limitations:<ul
@@ -29,7 +29,7 @@
         <li class="- topic/li ">The book list component of the proposal hasn't been implemented yet.
           Possible designs for a glossary list have been discussed extensively on the DITA forum
           (resulting in the proposal posted as <xref
-            href="news://news.software.ibm.com:119/3FA29F54.83AFB251@ca.ibm.com" format="news"
+            href="news://news.software.ibm.com:119/3FA29F54.83AFB251@ca.ibm.com" format="news" scope="external"
             class="- topic/xref "
             >news://news.software.ibm.com:119/blfg38$5k0q$1@news.boulder.ibm.com</xref>).</li>
         <li class="- topic/li ">The book style component of the proposal is much more experimental

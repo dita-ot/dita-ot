@@ -298,10 +298,10 @@ public final class Job {
      * @throws IOException if writing configuration files failed
      */
     public void write() throws IOException {
-    	OutputStream outStream = null;
+        OutputStream outStream = null;
         XMLStreamWriter out = null;
         try {
-        	outStream = new FileOutputStream(jobFile);
+            outStream = new FileOutputStream(jobFile);
             out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream, "UTF-8");
             out.writeStartDocument();
             out.writeStartElement(ELEMENT_JOB);
@@ -352,7 +352,7 @@ public final class Job {
                     out.writeAttribute(ATTRIBUTE_RESULT, i.result.toString());
                 }
                 if (i.format != null) {
-                	out.writeAttribute(ATTRIBUTE_FORMAT, i.format);
+                    out.writeAttribute(ATTRIBUTE_FORMAT, i.format);
                 }
                 try {
                     for (Map.Entry<String, Field> e: attrToFieldMap.entrySet()) {
@@ -547,9 +547,9 @@ public final class Job {
      * @param fs file info objects
      */
     public void addAll(final Collection<FileInfo> fs) {
-    	for (final FileInfo f: fs) {
-    		add(f);
-    	}
+        for (final FileInfo f: fs) {
+            add(f);
+        }
     }
         
     /**
@@ -566,8 +566,8 @@ public final class Job {
         /** Absolute result URI. */
         public URI result;
         /** File format. */
-    	public String format;
-    	/** File has a conref. */
+        public String format;
+        /** File has a conref. */
         public boolean hasConref;
         /** File is part of chunk. */
         public boolean isChunked;

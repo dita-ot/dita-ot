@@ -1,184 +1,214 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2016 Jarno Elovirta
+ *
+ *  See the accompanying LICENSE file for applicable license.
+ */
+
 package org.dita.dost;
 
-import com.google.common.collect.ImmutableMap;
-import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
-import org.apache.tools.ant.*;
-import org.custommonkey.xmlunit.XMLUnit;
-import org.junit.After;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.custommonkey.xmlunit.XMLAssert.assertEquals;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertArrayEquals;
+import static java.util.Arrays.asList;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
-public final class IntegrationTest {
+public class IntegrationTest extends AbstractIntegrationTest {
 
-    private static final String TEMP_DIR = "temp_dir";
-    private static final String BASEDIR = "basedir";
-    private static final String DITA_DIR = "dita_dir";
-    private static final String LOG_LEVEL = "log_level";
-    private static final String TEST = "test";
-
-    private static final String SRC_DIR = "src";
-    private static final String EXP_DIR = "exp";
-
-    private static final Collection<String> canCompare = Arrays.asList("html5", "xhtml", "eclipsehelp", "htmlhelp", "preprocess", "pdf");
-    private static final File ditaDir = new File(System.getProperty(DITA_DIR) != null
-            ? System.getProperty(DITA_DIR)
-            : "src" + File.separator + "main");
-    private static final File baseDir = new File(System.getProperty(BASEDIR) != null
-            ? System.getProperty(BASEDIR)
-            : "src" + File.separator + "test");
-    private static final File baseTempDir = new File(System.getProperty(TEMP_DIR) != null
-            ? System.getProperty(TEMP_DIR)
-            : "build" + File.separator + "tmp" + File.separator + "integrationTest");
-    private static final File resourceDir = new File(baseDir, "resources");
-    private static DocumentBuilder db;
-    private static HtmlDocumentBuilder htmlb;
-    private static int level;
-
-    private enum Transtype {
-        PREPROCESS, XHTML;
-
-        @Override
-        public String toString() {
-            return this.name().toLowerCase();
-        }
-    }
-
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        db = dbf.newDocumentBuilder();
-        htmlb = new HtmlDocumentBuilder();
-        final String l = System.getProperty(LOG_LEVEL);
-        level = l != null ? Integer.parseInt(l) : -2;
-    }
-
-    @After
-    public void cleanUp() {
-        // remove temp & output
-    }
+    Transtype xhtml = XHTML;
+    Transtype preprocess = PREPROCESS;
 
     @Test
     public void test03() throws Throwable {
-        test("03");
+        builder().name("03")
+                .transtype(xhtml)
+                .input(Paths.get("03.ditamap"))
+                .test();
     }
 
     @Test
     public void test1_5_2_M4_BUG3052904() throws Throwable {
-        test("1.5.2_M4_BUG3052904");
+        builder().name("1.5.2_M4_BUG3052904")
+                .transtype(xhtml)
+                .input(Paths.get("keyref-test-01.ditamap"))
+                .test();
     }
 
     @Test
     public void test1_5_2_M4_BUG3052913() throws Throwable {
-        test("1.5.2_M4_BUG3052913");
+        builder().name("1.5.2_M4_BUG3052913")
+                .transtype(xhtml)
+                .input(Paths.get("keyref-test-01.ditamap"))
+                .test();
     }
 
     @Test
     public void test1_5_2_M4_BUG3056939() throws Throwable {
-        test("1.5.2_M4_BUG3056939");
+        builder().name("1.5.2_M4_BUG3056939")
+                .transtype(xhtml)
+                .input(Paths.get("test-conref-xref-keyref-bug.ditamap"))
+                .test();
     }
 
     @Test
     public void test1_5_2_M5_BUG3059256() throws Throwable {
-        test("1.5.2_M5_BUG3059256");
+        builder().name("1.5.2_M5_BUG3059256")
+                .transtype(xhtml)
+                .input(Paths.get("test.ditamap"))
+                .test();
     }
 
     @Test
     public void test1_5_3_M2_BUG3157890() throws Throwable {
-        test("1.5.3_M2_BUG3157890");
+        builder().name("1.5.3_M2_BUG3157890")
+                .transtype(xhtml)
+                .input(Paths.get("test.ditamap"))
+                .test();
     }
 
     @Test
     public void test1_5_3_M2_BUG3164866() throws Throwable {
-        test("1.5.3_M2_BUG3164866");
+        builder().name("1.5.3_M2_BUG3164866")
+                .transtype(xhtml)
+                .input(Paths.get("testpng.ditamap"))
+                .put("onlytopic.in.map", "true")
+                .test();
     }
 
     @Test
     public void test1_5_3_M3_BUG3178361() throws Throwable {
-        test("1.5.3_M3_BUG3178361");
+        builder().name("1.5.3_M3_BUG3178361")
+                .transtype(xhtml)
+                .input(Paths.get("test.ditamap"))
+                .test();
     }
 
     @Test
     public void test1_5_3_M3_BUG3191701() throws Throwable {
-        test("1.5.3_M3_BUG3191701");
+        builder().name("1.5.3_M3_BUG3191701")
+                .transtype(xhtml)
+                .input(Paths.get("test.ditamap"))
+                .test();
     }
 
     @Test
     public void test1_5_3_M3_BUG3191704() throws Throwable {
-        test("1.5.3_M3_BUG3191704");
+        builder().name("1.5.3_M3_BUG3191704")
+                .transtype(xhtml)
+                .input(Paths.get("test.ditamap"))
+                .test();
     }
 
     @Test
-    public void test22() throws Throwable {
-        test("22");
+    public void test22_TC1() throws Throwable {
+        builder().name("22_TC1")
+                .transtype(preprocess)
+                .input(Paths.get("TC1.ditamap"))
+                .warnCount(3)
+                .test();
+    }
+
+    @Test
+    public void test22_TC2() throws Throwable {
+        builder().name("22_TC2")
+                .transtype(preprocess)
+                .input(Paths.get("TC2.ditamap"))
+                .warnCount(2)
+                .test();
+    }
+
+    @Test
+    public void test22_TC3() throws Throwable {
+        builder().name("22_TC3")
+                .transtype(preprocess)
+                .input(Paths.get("TC3.ditamap"))
+                .warnCount(3)
+                .test();
+    }
+
+    @Test
+    public void test22_TC3_process2() throws Throwable {
+        builder().name("22_TC3")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("TC3.ditamap"))
+                .warnCount(2)
+                .test();
+    }
+
+    @Test
+    public void test22_TC4() throws Throwable {
+        builder().name("22_TC4")
+                .transtype(preprocess)
+                .input(Paths.get("TC4.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void test22_TC6() throws Throwable {
+        builder().name("22_TC6")
+                .transtype(preprocess)
+                .input(Paths.get("TC6.ditamap"))
+                .warnCount(4)
+                .test();
     }
 
     @Test
     public void test2374525() throws Throwable {
-        test("2374525");
+        builder().name("2374525")
+                .transtype(preprocess)
+                .input(Paths.get("test.dita"))
+                .test();
     }
 
     @Test
     public void test3178361() throws Throwable {
-        test("3178361", Transtype.PREPROCESS,
-                Paths.get("conref-push-test.ditamap"),
-                ImmutableMap.<String, Object>builder()
-                        .put("dita.ext", ".dita")
-                        .build());
+        builder().name("3178361")
+                .transtype(preprocess)
+                .input(Paths.get("conref-push-test.ditamap"))
+                .put("dita.ext", ".dita")
+                .test();
     }
 
     @Test
     public void test3189883() throws Throwable {
-        test("3189883", Transtype.PREPROCESS,
-                Paths.get("main.ditamap"),
-                ImmutableMap.<String, Object>builder()
-                        .put("validate", "false")
-                        .build(), 1, 0);
+        builder().name("3189883")
+                .transtype(preprocess)
+                .input(Paths.get("main.ditamap"))
+                .put("validate", "false")
+                .warnCount(1)
+                .test();
     }
 
     @Test
     public void test3191704() throws Throwable {
-        test("3191704", Transtype.PREPROCESS,
-                Paths.get("jandrew-test.ditamap"),
-                ImmutableMap.<String, Object>builder()
-                        .put("dita.ext", ".dita")
-                        .build());
+        builder().name("3191704")
+                .transtype(preprocess)
+                .input(Paths.get("jandrew-test.ditamap"))
+                .put("dita.ext", ".dita")
+                .test();
     }
 
     @Test
     public void test3344142() throws Throwable {
-        test("3344142", Transtype.PREPROCESS,
-                Paths.get("push.ditamap"),
-                ImmutableMap.<String, Object>builder()
-                        .put("dita.ext", ".dita")
-                        .build(), 2, 0);
+        builder().name("3344142")
+                .transtype(preprocess)
+                .input(Paths.get("push.ditamap"))
+                .put("dita.ext", ".dita")
+                .warnCount(2)
+                .test();
     }
 
     @Test
     public void test3470331() throws Throwable {
-        test("3470331", Transtype.PREPROCESS,
-                Paths.get("bookmap.ditamap"), emptyMap());
+        builder().name("3470331")
+                .transtype(preprocess)
+                .input(Paths.get("bookmap.ditamap"))
+                .test();
     }
 
     @Test
@@ -188,641 +218,582 @@ public final class IntegrationTest {
 
     @Test
     public void testSF1333481() throws Throwable {
-        test("SF1333481", Transtype.PREPROCESS,
-                Paths.get("main.ditamap"), emptyMap());
-//        test("SF1333481", Transtype.XHTML,
-//                Paths.get("subdir", "mapref1.ditamap"), emptyMap());
+        builder().name("SF1333481")
+                .transtype(preprocess)
+                .input(Paths.get("main.ditamap"))
+                .test();
     }
 
     @Test
-    public void testbookmap2() throws Throwable {
-        test("bookmap(2)");
+    public void testBookmap1() throws Throwable {
+        builder().name("bookmap1")
+                .transtype(xhtml)
+                .input(Paths.get("bookmap(2)_testdata1.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testBookmap2() throws Throwable {
+        builder().name("bookmap2")
+                .transtype(xhtml)
+                .input(Paths.get("bookmap(2)_testdata2.ditamap"))
+                .errorCount(1)
+                .test();
+    }
+
+    @Test
+    public void testBookmap3() throws Throwable {
+        builder().name("bookmap3")
+                .transtype(xhtml)
+                .input(Paths.get("bookmap(2)_testdata3.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testBookmap4() throws Throwable {
+        builder().name("bookmap4")
+                .transtype(xhtml)
+                .input(Paths.get("bookmap(2)_testdata4.ditamap"))
+                .errorCount(1)
+                .test();
+    }
+
+    @Test
+    public void testBookmap5() throws Throwable {
+        builder().name("bookmap5")
+                .transtype(xhtml)
+                .input(Paths.get("bookmap(2)_testdata5.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testBookmap6() throws Throwable {
+        builder().name("bookmap6")
+                .transtype(xhtml)
+                .input(Paths.get("bookmap(2)_testdata6.ditamap"))
+                .errorCount(1)
+                .test();
+    }
+
+    @Test
+    public void testBookmap7() throws Throwable {
+        builder().name("bookmap7")
+                .transtype(xhtml)
+                .input(Paths.get("bookmap(2)_testdata7.ditamap"))
+                .test();
     }
 
     @Test
     public void testcoderef_source() throws Throwable {
-        test("coderef_source", Transtype.PREPROCESS,
-                Paths.get("mp.ditamap"),
-                ImmutableMap.<String, Object>builder()
-                        .put("transtype", "preprocess").put("dita.ext", ".dita").put("validate", "false")
-                        .build(), 1, 0);
+        builder().name("coderef_source")
+                .transtype(preprocess)
+                .input(Paths.get("mp.ditamap"))
+                .put("transtype", "preprocess")
+                .put("dita.ext", ".dita")
+                .put("validate", "false")
+                .warnCount(1)
+                .test();
     }
 
     @Test
     public void testconref() throws Throwable {
-        test("conref", Transtype.PREPROCESS, Paths.get("lang-common1.dita"),
-                ImmutableMap.<String, Object>builder()
-                        .put("validate", "false")
-                        .build(), 1, 0);
+        builder().name("conref")
+                .transtype(preprocess)
+                .input(Paths.get("lang-common1.dita"))
+                .put("validate", "false")
+                .warnCount(1)
+                .test();
     }
 
     @Test
-    public void testconref_push() throws Throwable {
-        test("conref_push");
+    public void testpushAfter_between_Specialization() throws Throwable {
+        builder().name("pushAfter_between_Specialization")
+                .transtype(preprocess)
+                .input(Paths.get("pushAfter.ditamap"))
+//                        .put("validate", "false")
+                .test();
+    }
+
+    @Test
+    public void testpushAfter_with_crossRef() throws Throwable {
+        builder().name("pushAfter_with_crossRef")
+                .transtype(preprocess)
+                .input(Paths.get("pushAfter.ditamap"))
+//                        .put("validate", "false")
+                .test();
+    }
+
+    @Test
+    public void testpushAfter_with_InvalidTarget() throws Throwable {
+        builder().name("pushAfter_with_InvalidTarget")
+                .transtype(preprocess)
+                .input(Paths.get("pushAfter.ditamap"))
+//                        .put("validate", "false")
+                .warnCount(1)
+                .test();
+    }
+
+    @Test
+    public void testpushAfter_without_conref() throws Throwable {
+        builder().name("pushAfter_without_conref")
+                .transtype(preprocess)
+                .input(Paths.get("pushAfter.ditamap"))
+//                        .put("validate", "false")
+                .test();
+    }
+
+    @Test
+    public void testsimple_pushAfter() throws Throwable {
+        builder().name("simple_pushAfter")
+                .transtype(preprocess)
+                .input(Paths.get("pushAfter.ditamap"))
+//                        .put("validate", "false")
+                .test();
+    }
+
+    @Test
+    public void testpushBefore_between_Specialization() throws Throwable {
+        builder().name("pushBefore_between_Specialization")
+                .transtype(preprocess)
+                .input(Paths.get("pushBefore.ditamap"))
+//                        .put("validate", "false")
+                .test();
+    }
+
+    @Test
+    public void testpushBefore_with_crossRef() throws Throwable {
+        builder().name("pushBefore_with_crossRef")
+                .transtype(preprocess)
+                .input(Paths.get("pushBefore.ditamap"))
+//                        .put("validate", "false")
+                .warnCount(1)
+                .test();
+    }
+
+    @Test
+    public void testpushBefore_with_InvalidTarget() throws Throwable {
+        builder().name("pushBefore_with_InvalidTarget")
+                .transtype(preprocess)
+                .input(Paths.get("pushBefore.ditamap"))
+//                        .put("validate", "false")
+                .warnCount(1)
+                .test();
+    }
+
+    @Test
+    public void testpushBefore_without_conref() throws Throwable {
+        builder().name("pushBefore_without_conref")
+                .transtype(preprocess)
+                .input(Paths.get("pushBefore.ditamap"))
+//                        .put("validate", "false")
+                .test();
+    }
+
+    @Test
+    public void testsimple_pushBefore() throws Throwable {
+        builder().name("simple_pushBefore")
+                .transtype(preprocess)
+                .input(Paths.get("pushBefore.ditamap"))
+//                        .put("validate", "false")
+                .test();
+    }
+
+    @Test
+    public void testpushReplace_between_Specialization() throws Throwable {
+        builder().name("pushReplace_between_Specialization")
+                .transtype(preprocess)
+                .input(Paths.get("pushReplace.ditamap"))
+//                        .put("validate", "false")
+                .test();
+    }
+
+    @Test
+    public void testpushReplace_with_crossRef() throws Throwable {
+        builder().name("pushReplace_with_crossRef")
+                .transtype(preprocess)
+                .input(Paths.get("pushReplace.ditamap"))
+//                        .put("validate", "false")
+                .test();
+    }
+
+    @Test
+    public void testpushReplace_with_InvalidTarget() throws Throwable {
+        builder().name("pushReplace_with_InvalidTarget")
+                .transtype(preprocess)
+                .input(Paths.get("pushReplace.ditamap"))
+//                        .put("validate", "false")
+                .warnCount(1).errorCount(4)
+                .test();
+    }
+
+    @Test
+    public void testpushReplace_without_conref() throws Throwable {
+        builder().name("pushReplace_without_conref")
+                .transtype(preprocess)
+                .input(Paths.get("pushReplace.ditamap"))
+//                        .put("validate", "false")
+                .test();
+    }
+
+    @Test
+    public void testsimple_pushReplace() throws Throwable {
+        builder().name("simple_pushReplace")
+                .transtype(preprocess)
+                .input(Paths.get("pushReplace.ditamap"))
+//                        .put("validate", "false")
+                .test();
     }
 
     @Test
     public void testconrefbreaksxref() throws Throwable {
-        test("conrefbreaksxref");
+        builder().name("conrefbreaksxref")
+                .transtype(preprocess)
+                .input(Paths.get("conrefbreaksxref.dita"))
+                .test();
+    }
+    
+    @Test
+    public void testconrefmissingfile() throws Throwable {
+        builder().name("conrefmissingfile")
+                .transtype(preprocess)
+                .input(Paths.get("badconref.dita"))
+                .put("validate", "false")
+                .warnCount(1)
+                .errorCount(3)
+                .test();
     }
 
     @Test
-    public void testcontrol_value_file() throws Throwable {
-        test("control_value_file");
+    public void testcontrolValueFile1() throws Throwable {
+        builder().name("map13_filter1")
+                .transtype(preprocess)
+                .input(Paths.get("map13.ditamap"))
+                .put("args.filter", Paths.get("filter1.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile2() throws Throwable {
+        builder().name("map13_filter2")
+                .transtype(preprocess)
+                .input(Paths.get("map13.ditamap"))
+                .put("args.filter", Paths.get("filter2.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile3() throws Throwable {
+        builder().name("map13_filter3")
+                .transtype(preprocess)
+                .input(Paths.get("map13.ditamap"))
+                .put("args.filter", Paths.get("filter3.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile4() throws Throwable {
+        builder().name("map31_filter_multi")
+                .transtype(preprocess)
+                .input(Paths.get("map31.ditamap"))
+                .put("args.filter", Paths.get("filter_multi.ditaval"))
+                .warnCount(1)
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile5() throws Throwable {
+        builder().name("map32_filter_multi")
+                .transtype(preprocess)
+                .input(Paths.get("map32.ditamap"))
+                .put("args.filter", Paths.get("filter_multi.ditaval"))
+                .warnCount(1)
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile6() throws Throwable {
+        builder().name("map33_filter2")
+                .transtype(preprocess)
+                .input(Paths.get("map33.ditamap"))
+                .put("args.filter", Paths.get("filter2.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile7() throws Throwable {
+        builder().name("map33_filter3")
+                .transtype(preprocess)
+                .input(Paths.get("map33.ditamap"))
+                .put("args.filter", Paths.get("filter3.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile8() throws Throwable {
+        builder().name("map13_flag")
+                .transtype(xhtml)
+                .input(Paths.get("map13.ditamap"))
+                .put("args.filter", Paths.get("flag.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile9() throws Throwable {
+        builder().name("map13_flag2")
+                .transtype(xhtml)
+                .input(Paths.get("map13.ditamap"))
+                .put("args.filter", Paths.get("flag2.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile10() throws Throwable {
+        builder().name("map33_flag")
+                .transtype(xhtml)
+                .input(Paths.get("map33.ditamap"))
+                .put("args.filter", Paths.get("flag.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile11() throws Throwable {
+        builder().name("map33_flag2")
+                .transtype(xhtml)
+                .input(Paths.get("map33.ditamap"))
+                .put("args.filter", Paths.get("flag2.ditaval"))
+                .test();
     }
 
     @Test
     public void testexportanchors() throws Throwable {
-        test("exportanchors", Transtype.PREPROCESS,
-                Paths.get("test.ditamap"),
-                ImmutableMap.<String, Object>builder()
-                        .put("transtype", "eclipsehelp")
-                        .build());
+        builder().name("exportanchors")
+                .transtype(preprocess)
+                .input(Paths.get("test.ditamap"))
+                .put("transtype", "eclipsehelp")
+                .test();
     }
 
     @Test
     public void testimage_scale() throws Throwable {
-        test("image-scale");
+        builder().name("image-scale")
+                .transtype(xhtml)
+                .input(Paths.get("test.dita"))
+                .test();
     }
 
     @Test
-    public void testindex_see() throws Throwable {
-        test("index-see");
+    public void testindex_seeEclipseHelp() throws Throwable {
+        builder().name("index-see")
+                .transtype(ECLIPSEHELP)
+                .input(Paths.get("bookmap.ditamap"))
+                .warnCount(3)
+                .test();
+    }
+
+    @Test
+    public void testindex_seeHtmlhelp() throws Throwable {
+        builder().name("index-see")
+                .transtype(HTMLHELP)
+                .input(Paths.get("bookmap.ditamap"))
+                .test();
     }
 
     @Test
     public void testkeyref() throws Throwable {
-        test("keyref", Transtype.PREPROCESS,
-                Paths.get("test.ditamap"), emptyMap());
+        builder().name("keyref")
+                .transtype(preprocess)
+                .input(Paths.get("test.ditamap"))
+                .test();
     }
 
     @Test
     public void testkeyref_All_tags() throws Throwable {
-        test("keyref_All_tags");
+        builder().name("keyref_All_tags")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author1.ditamap"))
+                .warnCount(1)
+                .test();
     }
 
     @Test
     public void testkeyref_Keyword_links() throws Throwable {
-        test("keyref_Keyword_links");
+        builder().name("keyref_Keyword_links")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author1.ditamap"))
+                .test();
     }
 
     @Test
-    public void testkeyref_Redirect_conref() throws Throwable {
-        test("keyref_Redirect_conref");
+    public void testkeyref_Redirect_conref_1() throws Throwable {
+        builder().name("keyref_Redirect_conref_1")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author1.ditamap"))
+                .test();
     }
 
     @Test
-    public void testkeyref_Redirect_link_or_xref() throws Throwable {
-        test("keyref_Redirect_link_or_xref");
+    public void testkeyref_Redirect_conref_2() throws Throwable {
+        builder().name("keyref_Redirect_conref_2")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author2.ditamap"))
+                .test();
     }
 
     @Test
-    public void testkeyref_Splitting_combining_targets() throws Throwable {
-        test("keyref_Splitting_combining_targets");
+    public void testkeyref_Redirect_link_or_xref_1() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_1")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author1.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_link_or_xref_2() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_2")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author2.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_link_or_xref_3() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_3")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author3.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_link_or_xref_4() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_4")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author4.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_link_or_xref_5() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_5")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author5.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_link_or_xref_6() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_6")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author6.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Splitting_combining_targets1() throws Throwable {
+        builder().name("keyref_Splitting_combining_targets_1")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author1.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Splitting_combining_targets2() throws Throwable {
+        builder().name("keyref_Splitting_combining_targets_2")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author2.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Splitting_combining_targets3() throws Throwable {
+        builder().name("keyref_Splitting_combining_targets_3")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author3.ditamap"))
+                .test();
     }
 
     @Test
     public void testkeyref_Swap_out_variable_content() throws Throwable {
-        test("keyref_Swap_out_variable_content");
+        builder().name("keyref_Swap_out_variable_content")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author1.ditamap"))
+                .test();
     }
 
     @Test
     public void testkeyref_modify() throws Throwable {
-        test("keyref_modify");
+        builder().name("keyref_modify")
+                .transtype(xhtml)
+                .input(Paths.get("mp_author1.ditamap"))
+                .warnCount(1)
+                .test();
     }
 
     @Test
     public void testlang() throws Throwable {
-        test("lang");
+        builder().name("lang")
+                .transtype(xhtml)
+                .input(Paths.get("lang.ditamap"))
+                .put("validate", "false")
+                .warnCount(1)
+                .test();
     }
 
     @Test
     public void testmapref() throws Throwable {
-        test("mapref", Transtype.PREPROCESS,
-                Paths.get("test.ditamap"),
-                ImmutableMap.<String, Object>builder()
-                        .put("generate-debug-attributes", "false")
-                        .build());
+        builder().name("mapref")
+                .transtype(preprocess)
+                .input(Paths.get("test.ditamap"))
+                .put("generate-debug-attributes", "false")
+                .test();
     }
 
     @Test
     public void testsubjectschema_case() throws Throwable {
-        test("subjectschema_case", Transtype.XHTML,
-                Paths.get("simplemap.ditamap"),
-                ImmutableMap.<String, Object>builder()
-                        .put("args.filter", Paths.get("filter.ditaval"))
-                        .put("clean.temp", "no")
-                        .build());
+        builder().name("subjectschema_case")
+                .transtype(xhtml)
+                .input(Paths.get("simplemap.ditamap"))
+                .put("args.filter", Paths.get("filter.ditaval"))
+                .put("clean.temp", "no")
+                .test();
     }
 
     @Test
-    public void testuplevels() throws Throwable {
-        test("uplevels");
+    public void testfilterlist() throws Throwable {
+        final Path testDir = Paths.get("src", "test", "resources", "filterlist", "src");
+        final String filters = asList(
+                Paths.get("filter1.ditaval"),
+                Paths.get("subdir", "filter2.ditaval"),
+                Paths.get("missing.ditaval"))
+                .stream()
+                .map(path -> testDir.resolve(path).toAbsolutePath().toString())
+                .collect(Collectors.joining(File.pathSeparator));
+        builder().name("filterlist")
+                .transtype(xhtml)
+                .input(Paths.get("simplemap.ditamap"))
+                .put("args.filter", filters)
+                .put("clean.temp", "no")
+                .errorCount(1)
+                .test();
     }
 
-    private void test(final String name, final Transtype transtype, final Path input, final Map<String, Object> args) throws Throwable {
-        test(name, transtype, input, args, 0, 0);
+    @Test
+    public void testuplevels1() throws Throwable {
+        builder().name("uplevels1")
+                .transtype(xhtml)
+                .input(Paths.get("maps/above.ditamap"))
+                .put("generate.copy.outer", "1")
+                .put("outer.control", "quiet")
+                .test();
     }
 
-    private void test(final String name, final Transtype transtype, final Path input, final Map<String, Object> args,
-                      final int warnCount, final int errorCount) throws Throwable {
-        final File testDir = Paths.get("src", "test", "resources", name).toFile();
-        final File srcDir = new File(testDir, SRC_DIR);
-        final File expDir = new File(testDir, EXP_DIR);
-        final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
-        final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
-
-        final ImmutableMap.Builder<String, String> builder = ImmutableMap.<String, String>builder();
-        args.forEach((k, v) -> {
-            if (v instanceof Path) {
-                builder.put(k, new File(srcDir, v.toString()).getAbsolutePath());
-            } else if (v instanceof String) {
-                builder.put(k, v.toString());
-            } else {
-                throw new IllegalArgumentException();
-            }
-        });
-        builder.put("args.input", new File(srcDir, input.toFile().toString()).getAbsolutePath());
-        final Map<String, String> params = builder.build();
-
-        List<TestListener.Message> log = null;
-        try {
-            log = runOt(testDir, transtype, tempDir, outDir, params);
-            assertEquals("Warn message count does not match expected",
-                    warnCount,
-                    countMessages(log, Project.MSG_WARN));
-            assertEquals("Error message count does not match expected",
-                    errorCount,
-                    countMessages(log, Project.MSG_ERR));
-            final File actDir = transtype == Transtype.PREPROCESS ? tempDir : outDir;
-            compare(expDir, actDir);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final Throwable e) {
-            if (log != null && level >= 0) {
-                outputLog(log);
-            }
-            throw new Throwable("Case " + testDir.getName() + " failed: " + e.getMessage(), e);
-        }
-    }
-
-    private void test(final String name) throws Throwable {
-        final File testDir = Paths.get("src", "test", "resources", name).toFile();
-
-        final File expDir = new File(testDir, EXP_DIR);
-        final File actDir = new File(baseTempDir, testDir.getName() + File.separator + "testresult");
-        List<TestListener.Message> log = null;
-        try {
-            log = run(testDir, expDir.list(), actDir);
-            compare(expDir, actDir);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final Throwable e) {
-            if (log != null && level >= 0) {
-                outputLog(log);
-            }
-            throw new Throwable("Case " + testDir.getName() + " failed: " + e.getMessage(), e);
-        }
-    }
-
-    private void outputLog(List<TestListener.Message> log) {
-        System.err.println("Log start");
-        for (final TestListener.Message m : log) {
-            if (m.level <= level) {
-                switch (m.level) {
-                    case -1:
-                        break;
-                    case Project.MSG_ERR:
-                        System.err.print("ERROR: ");
-                        break;
-                    case Project.MSG_WARN:
-                        System.err.print("WARN:  ");
-                        break;
-                    case Project.MSG_INFO:
-                        System.err.print("INFO:  ");
-                        break;
-                    case Project.MSG_VERBOSE:
-                        System.err.print("VERBO: ");
-                        break;
-                    case Project.MSG_DEBUG:
-                        System.err.print("DEBUG: ");
-                        break;
-                }
-                System.err.println(m.message);
-            }
-        }
-        System.err.println("Log end");
-    }
-
-    private int countMessages(final List<TestListener.Message> messages, final int level) {
-        int count = 0;
-        for (final TestListener.Message m : messages) {
-            if (m.level == level) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Run test conversion
-     *
-     * @param d          test source directory
-     * @param transtypes list of transtypes to test
-     * @return list of log messages
-     * @throws Exception if conversion failed
-     */
-    private List<TestListener.Message> run(final File d, final String[] transtypes, final File resDir) throws Exception {
-        if (transtypes.length == 0) {
-            return emptyList();
-        }
-
-        final File tempDir = new File(baseTempDir, d.getName() + File.separator + "temp");
-        deleteDirectory(resDir);
-        deleteDirectory(tempDir);
-
-        final TestListener listener = new TestListener(System.out, System.err);
-        final PrintStream savedErr = System.err;
-        final PrintStream savedOut = System.out;
-        try {
-            final File buildFile = new File(d, "build.xml");
-            final Project project = new Project();
-            project.addBuildListener(listener);
-            System.setOut(new PrintStream(new DemuxOutputStream(project, false)));
-            System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
-            project.fireBuildStarted();
-            project.init();
-            for (final String transtype : transtypes) {
-                if (canCompare.contains(transtype)) {
-                    project.setUserProperty("run." + transtype, "true");
-                    if (transtype.equals("pdf") || transtype.equals("pdf2")) {
-                        project.setUserProperty("pdf.formatter", "fop");
-                        project.setUserProperty("fop.formatter.output-format", "text/plain");
-                    }
-                }
-            }
-            project.setUserProperty("generate-debug-attributes", "false");
-            project.setUserProperty("preprocess.copy-generated-files.skip", "true");
-            project.setUserProperty("ant.file", buildFile.getAbsolutePath());
-            project.setUserProperty("ant.file.type", "file");
-            project.setUserProperty("dita.dir", ditaDir.getAbsolutePath());
-            project.setUserProperty("result.dir", resDir.getAbsolutePath());
-            project.setUserProperty("temp.dir", tempDir.getAbsolutePath());
-            project.setKeepGoingMode(false);
-            ProjectHelper.configureProject(project, buildFile);
-            final Vector<String> targets = new Vector<>();
-            targets.addElement(project.getDefaultTarget());
-            project.executeTargets(targets);
-
-            assertEquals("Warn message count does not match expected",
-                    getMessageCount(project, "warn"),
-                    countMessages(listener.messages, Project.MSG_WARN));
-            assertEquals("Error message count does not match expected",
-                    getMessageCount(project, "error"),
-                    countMessages(listener.messages, Project.MSG_ERR));
-        } finally {
-            System.setOut(savedOut);
-            System.setErr(savedErr);
-            return listener.messages;
-        }
-    }
-
-    /**
-     * Run test conversion
-     *
-     * @param srcDir    test source directory
-     * @param transtype transtype to test
-     * @return list of log messages
-     * @throws Exception if conversion failed
-     */
-    private List<TestListener.Message> runOt(final File srcDir, final Transtype transtype, final File tempBaseDir, final File resBaseDir,
-                                             final Map<String, String> args) throws Exception {
-        final File tempDir = new File(tempBaseDir, transtype.toString());
-        final File resDir = new File(resBaseDir, transtype.toString());
-        deleteDirectory(resDir);
-        deleteDirectory(tempDir);
-
-        final TestListener listener = new TestListener(System.out, System.err);
-        final PrintStream savedErr = System.err;
-        final PrintStream savedOut = System.out;
-        try {
-            final File buildFile = new File(ditaDir, "build.xml");
-            final Project project = new Project();
-            project.addBuildListener(listener);
-            System.setOut(new PrintStream(new DemuxOutputStream(project, false)));
-            System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
-            project.fireBuildStarted();
-            project.init();
-            project.setUserProperty("transtype", transtype == Transtype.PREPROCESS ? Transtype.XHTML.toString() : transtype.toString());
-            if (transtype.equals("pdf") || transtype.equals("pdf2")) {
-                project.setUserProperty("pdf.formatter", "fop");
-                project.setUserProperty("fop.formatter.output-format", "text/plain");
-            }
-            project.setUserProperty("generate-debug-attributes", "false");
-            project.setUserProperty("preprocess.copy-generated-files.skip", "true");
-            project.setUserProperty("ant.file", buildFile.getAbsolutePath());
-            project.setUserProperty("ant.file.type", "file");
-            project.setUserProperty("dita.dir", ditaDir.getAbsolutePath());
-            project.setUserProperty("output.dir", resDir.getAbsolutePath());
-            project.setUserProperty("dita.temp.dir", tempDir.getAbsolutePath());
-            args.entrySet().forEach(e -> project.setUserProperty(e.getKey(), e.getValue()));
-
-            project.setKeepGoingMode(false);
-            ProjectHelper.configureProject(project, buildFile);
-            final Vector<String> targets = new Vector<>();
-            switch (transtype) {
-                case PREPROCESS:
-                    targets.addElement("build-init");
-                    targets.addElement("preprocess");
-                    break;
-                default:
-                    targets.addElement(project.getDefaultTarget());
-            }
-            project.executeTargets(targets);
-
-            return listener.messages;
-        } finally {
-            System.setOut(savedOut);
-            System.setErr(savedErr);
-        }
-    }
-
-    private int getMessageCount(final Project project, final String type) {
-        int errorCount = 0;
-        if (isWindows() && project.getProperty("exp.message-count." + type + ".windows") != null) {
-            errorCount = Integer.parseInt(project.getProperty("exp.message-count." + type + ".windows"));
-        } else if (project.getProperty("exp.message-count." + type) != null) {
-            errorCount = Integer.parseInt(project.getProperty("exp.message-count." + type));
-        }
-        return errorCount;
-    }
-
-    private static boolean isWindows() {
-        final String osName = System.getProperty("os.name");
-        return osName.startsWith("Windows");
-    }
-
-    private void compare(final File exp, final File act) throws Throwable {
-        for (final File e : exp.listFiles()) {
-            final File a = new File(act, e.getName());
-            if (a.exists()) {
-                if (e.isDirectory()) {
-                    compare(e, a);
-                } else {
-                    final String name = e.getName();
-                    try {
-                        if (name.endsWith(".html") || name.endsWith(".htm") || name.endsWith(".xhtml")
-                                || name.endsWith(".hhk")) {
-                            TestUtils.resetXMLUnit();
-                            XMLUnit.setNormalizeWhitespace(true);
-                            XMLUnit.setIgnoreWhitespace(true);
-                            XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
-                            XMLUnit.setIgnoreComments(true);
-                            assertXMLEqual(parseHtml(e), parseHtml(a));
-                        } else if (name.endsWith(".xml") || name.endsWith(".dita") || name.endsWith(".ditamap")) {
-                            TestUtils.resetXMLUnit();
-                            XMLUnit.setNormalizeWhitespace(true);
-                            XMLUnit.setIgnoreWhitespace(true);
-                            XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
-                            XMLUnit.setIgnoreComments(true);
-                            assertXMLEqual(parseXml(e), parseXml(a));
-                        } else if (name.endsWith(".txt")) {
-                            //assertEquals(readTextFile(e), readTextFile(a));
-                            assertArrayEquals(readTextFile(e), readTextFile(a));
-                        }
-                    } catch (final RuntimeException ex) {
-                        throw ex;
-                    } catch (final Throwable ex) {
-                        throw new Throwable("Failed comparing " + e.getAbsolutePath() + " and " + a.getAbsolutePath() + ": " + ex.getMessage(), ex);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Read text file into a string.
-     *
-     * @param f file to read
-     * @return file contents
-     * @throws IOException if reading file failed
-     */
-    private String[] readTextFile(final File f) throws IOException {
-        final List<String> buf = new ArrayList<>();
-        try (final BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"))) {
-            String l;
-            while ((l = r.readLine()) != null) {
-                buf.add(l);
-            }
-        } catch (final IOException e) {
-            throw new IOException("Unable to read " + f.getAbsolutePath() + ": " + e.getMessage());
-        }
-        return buf.toArray(new String[buf.size()]);
-    }
-
-    private static final Map<String, Pattern> htmlIdPattern = new HashMap<>();
-    private static final Map<String, Pattern> ditaIdPattern = new HashMap<>();
-
-    static {
-        final String SAXON_ID = "d\\d+e\\d+";
-        htmlIdPattern.put("id", Pattern.compile("(.*__)" + SAXON_ID + "|" + SAXON_ID + "(.*)"));
-        htmlIdPattern.put("href", Pattern.compile("#.+?/" + SAXON_ID + "|#(.+?__)?" + SAXON_ID + "(.*)"));
-        htmlIdPattern.put("headers", Pattern.compile(SAXON_ID + "(.*)"));
-
-        ditaIdPattern.put("id", htmlIdPattern.get("id"));
-        ditaIdPattern.put("href", Pattern.compile("#.+?/" + SAXON_ID + "|#(.+?__)?" + SAXON_ID + "(.*)"));
-    }
-
-    private Document parseHtml(final File f) throws SAXException, IOException {
-        Document d = htmlb.parse(f);
-        d = removeCopyright(d);
-        return rewriteIds(d, htmlIdPattern);
-    }
-
-    private Document parseXml(final File f) throws SAXException, IOException {
-        final Document d = db.parse(f);
-        final NodeList elems = d.getElementsByTagName("*");
-        for (int i = 0; i < elems.getLength(); i++) {
-            final Element e = (Element) elems.item(i);
-            // remove debug attributes
-            e.removeAttribute(ATTRIBUTE_NAME_XTRF);
-            e.removeAttribute(ATTRIBUTE_NAME_XTRC);
-            // remove DITA version and domains attributes
-            e.removeAttributeNS(DITA_NAMESPACE, ATTRIBUTE_NAME_DITAARCHVERSION);
-            e.removeAttribute(ATTRIBUTE_NAME_DOMAINS);
-            // remove workdir processing instructions
-            removeWorkdirProcessingInstruction(e);
-        }
-        // rewrite IDs
-        return rewriteIds(d, ditaIdPattern);
-    }
-
-    private void removeWorkdirProcessingInstruction(final Element e) {
-        Node n = e.getFirstChild();
-        while (n != null) {
-            final Node next = n.getNextSibling();
-            if (n.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE &&
-                    (n.getNodeName().equals(PI_WORKDIR_TARGET) || n.getNodeName().equals(PI_WORKDIR_TARGET_URI))) {
-                e.removeChild(n);
-            }
-            n = next;
-        }
-    }
-
-    private Document removeCopyright(final Document doc) {
-        final NodeList ns = doc.getElementsByTagName("meta");
-        for (int i = 0; i < ns.getLength(); i++) {
-            final Element e = (Element) ns.item(i);
-            final String name = e.getAttribute("name");
-            if (name.equals("copyright") || name.equals("DC.rights.owner")) {
-                e.removeAttribute("content");
-            }
-        }
-        return doc;
-    }
-
-    private Document rewriteIds(final Document doc, final Map<String, Pattern> patterns) {
-        final Map<String, String> idMap = new HashMap<>();
-        AtomicInteger counter = new AtomicInteger();
-        final NodeList ns = doc.getElementsByTagName("*");
-        for (int i = 0; i < ns.getLength(); i++) {
-            final Element e = (Element) ns.item(i);
-            for (Map.Entry<String, Pattern> p : patterns.entrySet()) {
-                final Attr id = e.getAttributeNode(p.getKey());
-                if (id != null) {
-                    if (p.getKey().equals("headers")) {// split value
-                        final List<String> res = new ArrayList<>();
-                        for (final String v : id.getValue().trim().split("\\s+")) {
-                            rewriteId(v, idMap, counter, p.getValue());
-                            if (idMap.containsKey(v)) {
-                                res.add(idMap.get(v));
-                            } else {
-                                res.add(v);
-                            }
-                        }
-                        id.setNodeValue(res.stream().collect(Collectors.joining(" ")));
-
-                    } else {
-                        final String v = id.getValue();
-                        rewriteId(v, idMap, counter, p.getValue());
-                        if (idMap.containsKey(v)) {
-                            id.setNodeValue(idMap.get(v));
-                        }
-                    }
-                }
-            }
-        }
-        return doc;
-    }
-
-    /**
-     * @param id      old ID value
-     * @param idMap   ID map
-     * @param counter counter
-     * @param pattern pattern to test
-     */
-    private void rewriteId(final String id, final Map<String, String> idMap, final AtomicInteger counter, final Pattern pattern) {
-        final Matcher m = pattern.matcher(id);
-        if (m.matches()) {
-            if (!idMap.containsKey(id)) {
-                final int i = counter.addAndGet(1);
-                idMap.put(id, "gen-id-" + Integer.toString(i));
-            }
-        }
-    }
-
-
-    static class TestListener implements BuildListener {
-
-        private final Pattern fatalPattern = Pattern.compile("\\[\\w+F\\]\\[FATAL\\]");
-        private final Pattern errorPattern = Pattern.compile("\\[\\w+E\\]\\[ERROR\\]");
-        private final Pattern warnPattern = Pattern.compile("\\[\\w+W\\]\\[WARN\\]");
-        private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]\\[INFO\\]");
-        private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]\\[DEBUG\\]");
-
-        public final List<Message> messages = new ArrayList<>();
-        final PrintStream out;
-        final PrintStream err;
-
-        public TestListener(final PrintStream out, final PrintStream err) {
-            this.out = out;
-            this.err = err;
-        }
-
-        //@Override
-        public void buildStarted(BuildEvent event) {
-            messages.add(new Message(-1, "build started: " + event.getMessage()));
-        }
-
-        //@Override
-        public void buildFinished(BuildEvent event) {
-            messages.add(new Message(-1, "build finished: " + event.getMessage()));
-        }
-
-        //@Override
-        public void targetStarted(BuildEvent event) {
-            messages.add(new Message(-1, event.getTarget().getName() + ":"));
-        }
-
-        //@Override
-        public void targetFinished(BuildEvent event) {
-            messages.add(new Message(-1, "target finished: " + event.getTarget().getName()));
-        }
-
-        //@Override
-        public void taskStarted(BuildEvent event) {
-            messages.add(new Message(Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
-        }
-
-        //@Override
-        public void taskFinished(BuildEvent event) {
-            messages.add(new Message(Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
-        }
-
-        //@Override
-        public void messageLogged(BuildEvent event) {
-            final String message = event.getMessage();
-            int level;
-            if (fatalPattern.matcher(message).find()) {
-                level = Project.MSG_ERR;
-            } else if (errorPattern.matcher(message).find()) {
-                level = Project.MSG_ERR;
-            } else if (warnPattern.matcher(message).find()) {
-                level = Project.MSG_WARN;
-            } else if (infoPattern.matcher(message).find()) {
-                level = Project.MSG_INFO;
-            } else if (debugPattern.matcher(message).find()) {
-                level = Project.MSG_DEBUG;
-            } else {
-                level = event.getPriority();
-            }
-
-            switch (level) {
-                case Project.MSG_DEBUG:
-                case Project.MSG_VERBOSE:
-                    break;
-                case Project.MSG_INFO:
-                    // out.println(event.getMessage());
-                    break;
-                default:
-                    err.println(message);
-            }
-
-            messages.add(new Message(level, message));
-        }
-
-        static class Message {
-
-            public final int level;
-            public final String message;
-
-            public Message(final int level, final String message) {
-                this.level = level;
-                this.message = message;
-            }
-
-        }
-
+    @Test
+    public void testuplevels3() throws Throwable {
+        builder().name("uplevels3")
+                .transtype(xhtml)
+                .input(Paths.get("maps/above.ditamap"))
+                .put("generate.copy.outer", "3")
+                .put("outer.control", "quiet")
+                .test();
     }
 
 }

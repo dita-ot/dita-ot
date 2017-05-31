@@ -9,6 +9,7 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.withLogger;
 import static org.dita.dost.writer.ImageMetadataFilter.*;
 import static javax.xml.XMLConstants.*;
 
@@ -59,7 +60,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        final File ditaInput = new File(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
+        final File ditaInput = new File(job.tempDirURI.resolve(job.getInputMap()));
         if (!ditaInput.exists()){
             logger.error(MessageUtils.getInstance().getMessage("DOTJ025E").toString());
             return null;
@@ -97,7 +98,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
                 final TransformerFactory factory = TransformerFactory.newInstance();
                 factory.setURIResolver(CatalogUtils.getCatalogResolver());
                 final StreamSource styleSource = new StreamSource(style);
-                final Transformer transformer = factory.newTransformer(styleSource);
+                final Transformer transformer = withLogger(factory.newTransformer(styleSource), logger);
                 final StreamSource source = new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray()));
                 final StreamResult result = new StreamResult(output);
                 transformer.transform(source, result);

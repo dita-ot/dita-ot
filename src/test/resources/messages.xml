@@ -407,8 +407,8 @@
     <reason>Chunk attribute uses both "to-content" and "by-topic" that conflict with each other.</reason>
     <response>Ignoring "by-topic" token.</response>
   </message>
-  
-  <message id="DOTJ065E" type="ERROR">
+
+  <message id="DOTJ065I" type="INFO">
     <reason>Branch filter generated topic %1 used more than once.</reason>
     <response>Renaming %1 to %2.</response>
   </message>
@@ -425,6 +425,16 @@
 
   <message id="DOTJ069E" type="ERROR">
     <reason>Circular key definition %1.</reason>
+    <response></response>
+  </message>
+
+  <message id="DOTJ070I" type="INFO">
+    <reason>Invalid 'class' attribute '%1' for was found for element '&lt;%2&gt;'.</reason>
+    <response>The element will be processed as an unknown or non-DITA element.</response>
+  </message>
+
+  <message id="DOTJ071E" type="ERROR">
+    <reason>Cannot find the specified DITAVAL '%1'.</reason>
     <response></response>
   </message>
 

@@ -123,7 +123,7 @@ See the accompanying LICENSE file for applicable license.
           description="Read image metadata">
     <pipeline message="Read image metadata." taskname="image-metadata" tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.ImageMetadataModule">
-        <param name="outputdir" location="${output.dir}"/>
+        <param name="outputdir" location="${dita.output.dir}"/>
       </module>
     </pipeline>
   </target>
@@ -138,14 +138,15 @@ See the accompanying LICENSE file for applicable license.
   <macrodef name="topics.html">
     <element name="params" optional="true" implicit="true"/>
     <sequential>
+      <pipeline>
       <xslt basedir="${dita.temp.dir}"
-        destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
+        destdir="${dita.output.dir}"
         reloadstylesheet="${dita.xhtml.reloadstylesheet}"
         classpathref="dost.class.path"
         extension="${out.ext}" style="${args.xsl}"
         filenameparameter="FILENAME"
         filedirparameter="FILEDIR">
-        <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+        <ditaFileset format="dita" processingRole="normal"/>
         <param name="TRANSTYPE" expression="${transtype}" />
         <param name="FILTERFILE" expression="${dita.input.valfile.url}"
           if="dita.input.valfile" />
@@ -166,12 +167,13 @@ See the accompanying LICENSE file for applicable license.
         <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
         <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
         <param name="BASEDIR" expression="${basedir}"/>
-        <param name="OUTPUTDIR" expression="${output.dir}"/>
+        <param name="OUTPUTDIR" expression="${dita.output.dir}"/>
         <param name="DBG" expression="${args.debug}" if="args.debug"/>
         <param name="defaultLanguage" expression="${default.language}"/>
         <params/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
+      </pipeline>
     </sequential>
   </macrodef>
   

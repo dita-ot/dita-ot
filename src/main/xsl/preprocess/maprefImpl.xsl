@@ -167,6 +167,7 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:value-of select="normalize-space($keyscope)"/>
                 </xsl:attribute>
               </xsl:if>
+              <xsl:apply-templates select="$target/@chunk"/>
               <xsl:apply-templates select="@* except (@class, @href, @dita-ot:orig-href, @format, @dita-ot:orig-format, @keys, @keyscope, @type)"/>
               <xsl:apply-templates select="*[contains(@class, ' ditavalref-d/ditavalref ')]"/>
               <xsl:apply-templates select="$contents">

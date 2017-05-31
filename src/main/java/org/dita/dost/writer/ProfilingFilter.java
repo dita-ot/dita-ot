@@ -8,14 +8,18 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.nonDitaContext;
 
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -23,167 +27,161 @@ import java.util.Map;
  */
 public final class ProfilingFilter extends AbstractXMLFilter {
 
-	/** when exclude is true the tag will be excluded. */
-	private boolean exclude;
-	/** foreign/unknown nesting level */
-	private int foreignLevel;
-	/** level is used to count the element level in the filtering */
-	private int level;
-	/** Contains the attribution specialization paths for {@code props} attribute */
-	private String[][] props;
-	/** Filter utils */
-	private FilterUtils filterUtils;
-	/** Flag that an element has been written */
-	private boolean elementOutput;
+    /** when exclude is true the tag will be excluded. */
+    private boolean exclude;
+    /** DITA class values for open elements **/
+    private final Deque<DitaClass> classes = new LinkedList<>();
+    /** level is used to count the element level in the filtering */
+    private int level;
+    /** Contains the attribution specialization paths for {@code props} attribute */
+    private String[][] props;
+    /** Filter utils */
+    private FilterUtils filterUtils;
+    /** Flag that an element has been written */
+    private boolean elementOutput;
     /** Namespace prefixes for current element. */
     private final Map<String, String> prefixes = new HashMap<>();
     /** Flag that last element was excluded. */
     private boolean lastElementExcluded = false;
 
-	/**
-	 * Create new profiling filter.
-	 */
-	public ProfilingFilter() {
-		super();
-	}
+    /**
+     * Create new profiling filter.
+     */
+    public ProfilingFilter() {
+        super();
+    }
 
-	/**
-	 * Set content filter.
-	 * 
-	 * @param filterUtils filter utils
-	 */
-	public void setFilterUtils(final FilterUtils filterUtils) {
-		this.filterUtils = filterUtils;
-	}
-	
-	/**
-	 * Get flag whether elements were output.
-	 */
-	public boolean hasElementOutput() {
-	    return elementOutput;
-	}
+    /**
+     * Set content filter.
+     *
+     * @param filterUtils filter utils
+     */
+    public void setFilterUtils(final FilterUtils filterUtils) {
+        this.filterUtils = filterUtils;
+    }
 
-	// SAX methods
+    /**
+     * Get flag whether elements were output.
+     */
+    public boolean hasElementOutput() {
+        return elementOutput;
+    }
 
-	@Override
-	public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
-			throws SAXException {
-		if (foreignLevel > 0) {
-			foreignLevel++;
-		} else if (foreignLevel == 0) {
-			final String classAttr = atts.getValue(ATTRIBUTE_NAME_CLASS);
-			if (classAttr == null && !ELEMENT_NAME_DITA.equals(localName)) {
-				logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
-			}
-			if (classAttr != null && (TOPIC_TOPIC.matches(classAttr) || MAP_MAP.matches(classAttr))) {
-				final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
-				if (domains == null) {
-					logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
-				} else {
-					props = StringUtils.getExtProps(domains);
-				}
-			}
-			if (classAttr != null && (TOPIC_FOREIGN.matches(classAttr) || TOPIC_UNKNOWN.matches(classAttr))) {
-				foreignLevel = 1;
-			}
-		}
+    // SAX methods
 
-		if (exclude) {
-			// If it is the start of a child of an excluded tag, level increase
-			level++;
-		} else { // exclude shows whether it's excluded by filtering
-			if (foreignLevel <= 1 && filterUtils.needExclude(atts, props)) {
-				exclude = true;
-				level = 0;
-			} else {
-			    elementOutput = true;
+    @Override
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+            throws SAXException {
+        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
+        if (cls.isValid()) {
+            classes.addFirst(cls);
+        } else {
+            classes.addFirst(null);
+        }
+
+        if (cls.isValid() && (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls))) {
+            final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
+            if (domains == null) {
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
+            } else {
+                props = StringUtils.getExtProps(domains);
+            }
+        }
+
+        if (exclude) {
+            // If it is the start of a child of an excluded tag, level increase
+            level++;
+        } else { // exclude shows whether it's excluded by filtering
+            if (cls.isValid() && filterUtils.needExclude(atts, props)) {
+                exclude = true;
+                level = 0;
+            } else {
+                elementOutput = true;
                 for (final Map.Entry<String, String> prefix: prefixes.entrySet()) {
                     getContentHandler().startPrefixMapping(prefix.getKey(), prefix.getValue());
                 }
                 prefixes.clear();
-				getContentHandler().startElement(uri, localName, qName, atts);
-			}
-		}
-	}
+                getContentHandler().startElement(uri, localName, qName, atts);
+            }
+        }
+    }
 
-	@Override
-	public void endElement(final String uri, final String localName, final String qName)
-			throws SAXException {
-		if (foreignLevel > 0) {
-			foreignLevel--;
-		}
+    @Override
+    public void endElement(final String uri, final String localName, final String qName)
+            throws SAXException {
+        classes.pop();
         lastElementExcluded = exclude;
-		if (exclude) {
-			if (level > 0) {
-				// If it is the end of a child of an excluded tag, level
-				// decrease
-				level--;
-			} else {
-				exclude = false;
-			}
-		} else { // exclude shows whether it's excluded by filtering
-			getContentHandler().endElement(uri, localName, qName);
-		}
+        if (exclude) {
+            if (level > 0) {
+                // If it is the end of a child of an excluded tag, level
+                // decrease
+                level--;
+            } else {
+                exclude = false;
+            }
+        } else { // exclude shows whether it's excluded by filtering
+            getContentHandler().endElement(uri, localName, qName);
+        }
 
-	}
+    }
 
     @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
         if (!exclude) {
-        	getContentHandler().characters(ch, start, length);
+            getContentHandler().characters(ch, start, length);
         }
     }
 
-	@Override
-	public void endDocument() throws SAXException {
-		if (!exclude) {
-        	getContentHandler().endDocument();
+    @Override
+    public void endDocument() throws SAXException {
+        if (!exclude) {
+            getContentHandler().endDocument();
         }
-	}
+    }
 
-	@Override
-	public void endPrefixMapping(final String prefix) throws SAXException {
-		if (!lastElementExcluded) {
-			getContentHandler().endPrefixMapping(prefix);
-		}
-	}
-
-	@Override
-	public void ignorableWhitespace(final char[] ch, final int start, final int length)
-			throws SAXException {
-		if (!exclude) {
-        	getContentHandler().characters(ch, start, length);
+    @Override
+    public void endPrefixMapping(final String prefix) throws SAXException {
+        if (!lastElementExcluded) {
+            getContentHandler().endPrefixMapping(prefix);
         }
-	}
+    }
 
-	@Override
-	public void processingInstruction(final String target, final String data)
-			throws SAXException {
-		if (!exclude) {
-        	getContentHandler().processingInstruction(target, data);
+    @Override
+    public void ignorableWhitespace(final char[] ch, final int start, final int length)
+            throws SAXException {
+        if (!exclude) {
+            getContentHandler().characters(ch, start, length);
         }
-	}
+    }
 
-	@Override
-	public void skippedEntity(final String name) throws SAXException {
-		if (!exclude) {
-        	getContentHandler().skippedEntity(name);
+    @Override
+    public void processingInstruction(final String target, final String data)
+            throws SAXException {
+        if (!exclude) {
+            getContentHandler().processingInstruction(target, data);
         }
-	}
+    }
 
-	@Override
-	public void startDocument() throws SAXException {
-		exclude = false;
-		foreignLevel = 0;
-		level = 0;
-		props = null;
+    @Override
+    public void skippedEntity(final String name) throws SAXException {
+        if (!exclude) {
+            getContentHandler().skippedEntity(name);
+        }
+    }
+
+    @Override
+    public void startDocument() throws SAXException {
+        exclude = false;
+        classes.clear();
+        level = 0;
+        props = null;
         getContentHandler().startDocument();
     }
 
-	@Override
-	public void startPrefixMapping(final String prefix, final String uri) throws SAXException {
+    @Override
+    public void startPrefixMapping(final String prefix, final String uri) throws SAXException {
         prefixes.put(prefix, uri);
-	}
-	
+    }
+
 }

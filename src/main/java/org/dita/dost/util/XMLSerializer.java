@@ -179,7 +179,6 @@ public class XMLSerializer {
      * 
      * @param prefix namespace prefix
      * @param uri namespace URI
-     * @throws SAXException if processing the event failed
      * @throws IllegalStateException if start element is not open
      * @throws IllegalArgumentException if prefix is already bound
      */
@@ -203,7 +202,6 @@ public class XMLSerializer {
      * 
      * @param qName attribute name
      * @param value attribute value
-     * @throws SAXException if processing the event failed
      * @throws IllegalStateException if start element is not open
      */
     public void writeAttribute(final String qName, final String value) {
@@ -216,7 +214,6 @@ public class XMLSerializer {
      * @param uri namespace URI
      * @param qName attribute name
      * @param value attribute value
-     * @throws SAXException if processing the event failed
      * @throws IllegalStateException if start element is not open
      */
     public void writeAttribute(final String uri, final String qName, final String value) {
