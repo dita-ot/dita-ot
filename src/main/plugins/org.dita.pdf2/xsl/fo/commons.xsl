@@ -95,15 +95,6 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="maxCharsInShortDesc" as="xs:integer">
         <xsl:call-template name="getMaxCharsForShortdescKeep"/>
     </xsl:variable>
-
-    <xsl:template match="*[@conref]" priority="99">
-        <fo:block xsl:use-attribute-sets="__unresolved__conref">
-            <xsl:apply-templates select="." mode="insertReferenceTitle">
-                <xsl:with-param name="href" select="@conref"/>
-                <xsl:with-param name="titlePrefix" select="'Content-Reference'"/>
-            </xsl:apply-templates>
-        </fo:block>
-    </xsl:template>
  
     <xsl:template name="startPageNumbering" as="attribute()*">
         <!--BS: uncomment if you need reset page numbering at first chapter-->

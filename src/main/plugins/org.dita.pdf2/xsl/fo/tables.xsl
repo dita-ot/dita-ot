@@ -26,6 +26,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="table.colsep-default" select="'0'"/>
 
     <!--Definition list-->
+    <xsl:template match="*[contains(@class,' topic/dl ')][empty(*[contains(@class,' topic/dlentry ')])]" priority="10"/>
+    
     <xsl:template match="*[contains(@class, ' topic/dl ')]">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:table xsl:use-attribute-sets="dl">
@@ -46,6 +48,9 @@ See the accompanying LICENSE file for applicable license.
         </fo:table>
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
+    
+    <xsl:template match="*[contains(@class,' topic/dlhead ')]
+        [empty(*[contains(@class,' topic/dthd ')] | *[contains(@class,' topic/ddhd ')])]" priority="10"/>
 
     <xsl:template match="*[contains(@class, ' topic/dl ')]/*[contains(@class, ' topic/dlhead ')]">
         <fo:table-header xsl:use-attribute-sets="dl.dlhead">
@@ -81,9 +86,11 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="commonattributes"/>
             <fo:table-cell xsl:use-attribute-sets="dlentry.dt">
                 <xsl:apply-templates select="*[contains(@class, ' topic/dt ')]"/>
+                <xsl:if test="empty(*[contains(@class, ' topic/dt ')])"><fo:block/></xsl:if>
             </fo:table-cell>
             <fo:table-cell xsl:use-attribute-sets="dlentry.dd">
                 <xsl:apply-templates select="*[contains(@class, ' topic/dd ')]"/>
+                <xsl:if test="empty(*[contains(@class, ' topic/dd ')])"><fo:block/></xsl:if>
             </fo:table-cell>
         </fo:table-row>
     </xsl:template>
@@ -873,7 +880,9 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
   
-    <xsl:template match="*[contains(@class, ' topic/simpletable ')][empty(*)]" priority="10"/>
+    <xsl:template match="*[contains(@class,' topic/simpletable ')]
+        [empty(*[contains(@class,' topic/strow ')]/*[contains(@class,' topic/stentry ')])]" priority="10"/>
+    <xsl:template match="*[contains(@class,' topic/strow ') or contains(@class,' topic/sthead ')][empty(*[contains(@class,' topic/stentry ')])]" priority="10"/>
 
     <xsl:template name="createSimpleTableColumns">
         <xsl:param name="theColumnWidthes" as="xs:string"/>

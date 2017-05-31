@@ -324,6 +324,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <!--Substeps-->
+    <xsl:template match="*[contains(@class, ' task/substeps ')][empty(*[contains(@class,' task/substep ')])]" priority="10"/>
+  
     <xsl:template match="*[contains(@class, ' task/substeps ')]">
         <fo:list-block xsl:use-attribute-sets="substeps">
             <xsl:call-template name="commonattributes"/>
@@ -360,6 +362,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <!--Choices-->
+    <xsl:template match="*[contains(@class, ' task/choices ')][empty(*[contains(@class,' task/choice ')])]" priority="10"/>
     <xsl:template match="*[contains(@class, ' task/choices ')]">
         <fo:list-block xsl:use-attribute-sets="choices">
             <xsl:call-template name="commonattributes"/>
@@ -386,7 +389,10 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
   <!-- Choice tables -->
-
+  <xsl:template match="*[contains(@class, ' task/choicetable ')]
+    [empty(*[contains(@class,' task/chrow ')]/*[contains(@class,' task/choption ') or contains(@class,' task/chdesc ')])]" priority="10"/>
+  <xsl:template match="*[contains(@class, ' task/chrow ')]
+    [empty(*[contains(@class,' task/choption ') or contains(@class,' task/chdesc ')])]" priority="10"/>
   <xsl:template match="*[contains(@class, ' task/choicetable ')]">
     <fo:table xsl:use-attribute-sets="choicetable">
       <xsl:call-template name="commonattributes"/>
@@ -411,20 +417,8 @@ See the accompanying LICENSE file for applicable license.
         <xsl:otherwise>
           <fo:table-header xsl:use-attribute-sets="chhead">
             <fo:table-row xsl:use-attribute-sets="chhead__row">
-              <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd">
-                <fo:block xsl:use-attribute-sets="chhead.choptionhd__content">
-                  <xsl:call-template name="getVariable">
-                    <xsl:with-param name="id" select="'Option'"/>
-                  </xsl:call-template>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd">
-                <fo:block xsl:use-attribute-sets="chhead.chdeschd__content">
-                  <xsl:call-template name="getVariable">
-                    <xsl:with-param name="id" select="'Description'"/>
-                  </xsl:call-template>
-                </fo:block>
-              </fo:table-cell>
+              <xsl:apply-templates select="." mode="emptyChoptionHd"/>
+              <xsl:apply-templates select="." mode="emptyDescHd"/>
             </fo:table-row>
           </fo:table-header>
         </xsl:otherwise>
@@ -436,12 +430,38 @@ See the accompanying LICENSE file for applicable license.
 
     </fo:table>
   </xsl:template>
+  
+  <xsl:template match="*" mode="emptyChoptionHd">
+    <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd">
+      <fo:block xsl:use-attribute-sets="chhead.choptionhd__content">
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Option'"/>
+        </xsl:call-template>
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
+  
+  <xsl:template match="*" mode="emptyChdescHd">
+    <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd">
+      <fo:block xsl:use-attribute-sets="chhead.chdeschd__content">
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Description'"/>
+        </xsl:call-template>
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
 
   <xsl:template match="*[contains(@class, ' task/chhead ')]">
     <fo:table-header xsl:use-attribute-sets="chhead">
       <xsl:call-template name="commonattributes"/>
       <fo:table-row xsl:use-attribute-sets="chhead__row">
+        <xsl:if test="empty(*[contains(@class,' task/choptionhd ')])">
+          <xsl:apply-templates select="." mode="emptyChoptionHd"/>
+        </xsl:if>
         <xsl:apply-templates/>
+        <xsl:if test="empty(*[contains(@class,' task/chdeschd ')])">
+          <xsl:apply-templates select="." mode="emptyDescHd"/>
+        </xsl:if>
       </fo:table-row>
     </fo:table-header>
   </xsl:template>
