@@ -4,7 +4,7 @@ jdk:
 - oraclejdk8
 env:
   global:
-    - JAVA_OPTS="-Xmx1024M"
+  - JAVA_OPTS="-Xmx1024M"
 before_script:
 - git submodule update --init --recursive
 - "./gradlew"
@@ -15,24 +15,34 @@ notifications:
   slack:
     secure: IAA4d9O2Dw1hkpY9cwxJz++VMjkgbV3EuaS09DGFujvHl2eQtpKTloE0/CDF+NZA4tcbH1dNqsGw3ETLmrqA581CLpmiiq3LG02cDMoSXZeOKB/9vo6tvLFg0UMawzo+FomJS/hvCmS5KirrFqZQKE5g6SCC05UBM5nwI5d0vOw=
 deploy:
-  - provider: s3
-    access_key_id: AKIAJUF6ATK6SJEUR4XA
-    secret_access_key:
-      secure: "H1+xHIRiO67xYudQmcvqD58w9ux79fLwKrOh0nCCi2N8fKyeT43L1/r4/F6oVSKoeT9MVgu0bj3XsmErqOw03h47wYvPKGcGDjY4KHj/Ptr9MRTkVkJ43yvVzWvnZWpsl4KlBsUHJGm5Tkb38aQOH9DbOgUiRSwcOused0GoBhQ="
-    region: eu-west-1
-    bucket: dita-ot
-    skip_cleanup: true
-    local-dir: build/distributions
-    acl: public_read
-    on:
-      repo: dita-ot/dita-ot
-      branch: develop
-  - provider: releases
-    api_key:
-      secure: d2vveLfRh+KvjkuJtahHB4buR7qpUXZ7ccrmgwALVboh7BhMgZgdX/puHiEzsiS4CX0xNcV2PpdF6VBGsbMg8TAFn5ap5he7y5MnC5Rt9iaJQtMKuoV3GQ1IoZZOUCRswgpjyLOSxuP3HDgyNn44i9eYT5I9N0wkxQzaleho8Og=
-    skip_cleanup: true
-    file_glob: true
-    file: "build/distributions/dita-ot-*.zip"
-    on:
-      tags: true
-      repo: dita-ot/dita-ot
+- provider: s3
+  access_key_id: AKIAJUF6ATK6SJEUR4XA
+  secret_access_key:
+    secure: H1+xHIRiO67xYudQmcvqD58w9ux79fLwKrOh0nCCi2N8fKyeT43L1/r4/F6oVSKoeT9MVgu0bj3XsmErqOw03h47wYvPKGcGDjY4KHj/Ptr9MRTkVkJ43yvVzWvnZWpsl4KlBsUHJGm5Tkb38aQOH9DbOgUiRSwcOused0GoBhQ=
+  region: eu-west-1
+  bucket: dita-ot
+  skip_cleanup: true
+  local-dir: build/distributions
+  acl: public_read
+  on:
+    repo: dita-ot/dita-ot
+    branch: develop
+- provider: releases
+  api_key:
+    secure: d2vveLfRh+KvjkuJtahHB4buR7qpUXZ7ccrmgwALVboh7BhMgZgdX/puHiEzsiS4CX0xNcV2PpdF6VBGsbMg8TAFn5ap5he7y5MnC5Rt9iaJQtMKuoV3GQ1IoZZOUCRswgpjyLOSxuP3HDgyNn44i9eYT5I9N0wkxQzaleho8Og=
+  skip_cleanup: true
+  file_glob: true
+  file: build/distributions/dita-ot-*.zip
+  on:
+    tags: true
+    repo: dita-ot/dita-ot
+- provider: script
+  script: "./gradlew uploadArchives"
+  on:
+    tags: true
+    repo: dita-ot/dita-ot
+before_install:
+- openssl aes-256-cbc -K $encrypted_9d373418652a_key -iv $encrypted_9d373418652a_iv
+  -in gradle.properties.enc -out gradle.properties -d
+- openssl aes-256-cbc -K $encrypted_1b8d0aeee504_key -iv $encrypted_1b8d0aeee504_iv
+  -in .travis/24AC15F2.gpg.enc -out .travis/24AC15F2.gpg -d

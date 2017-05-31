@@ -7,8 +7,10 @@
  */
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'signing'
 
 group = 'org.dita-ot'
+archivesBaseName = 'dost'
 version = '2.5'
 
 description = """DITA Open Toolkit"""
@@ -40,6 +42,20 @@ dependencies {
 }
 
 jar.archiveName = "${project.name}.jar"
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
 
 test {
     exclude '**/IntegrationTest*.class'
@@ -243,4 +259,59 @@ test {
         'src/test/xsl/plugins/org.dita.html5/xsl/functions.xspec',
         'src/test/xsl/preprocess/maplinkImpl.xspec'
     )
+}
+
+// Repository deployment
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'DITA Open Toolkit'
+                packaging 'jar'
+                description 'DITA-OT base library'
+                url 'http://www.dita-ot.org/'
+
+                scm {
+                    connection 'scm:git:https://github.com/dita-ot/dita-ot.git'
+                    developerConnection 'scm:git:git@github.com:dita-ot/dita-ot.git'
+                    url 'https://github.com/dita-ot/dita-ot/'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'robander'
+                        name 'Robert D Anderson'
+                        email 'robander@us.ibm.com'
+                    }
+                    developer {
+                        id 'jelovirt'
+                        name 'Jarno Elovirta'
+                        email 'jarno@elovirta.com'
+                    }
+                }
+            }
+        }
+    }
 }
