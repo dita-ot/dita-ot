@@ -594,6 +594,11 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- =========== SINGLE PART LISTS =========== -->
   
+  <!-- Ignore empty lists with all content filtered out -->
+  <xsl:template match="*[contains(@class, ' topic/ol ')][empty(*[contains(@class,' topic/li ')])]" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/ul ')][empty(*[contains(@class,' topic/li ')])]" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/sl ')][empty(*[contains(@class,' topic/sli ')])]" priority="10"/>
+  
   <!-- Unordered List -->
   <!-- handle all levels thru browser processing -->
   <xsl:template match="*[contains(@class, ' topic/ul ')]" name="topic.ul">
@@ -711,6 +716,8 @@ See the accompanying LICENSE file for applicable license.
   <!-- =========== DEFINITION LIST =========== -->
   
   <!-- DL -->
+  <xsl:template match="*[contains(@class,' topic/dl ')][empty(*[contains(@class,' topic/dlentry ')])]" priority="10"/>
+  
   <xsl:template match="*[contains(@class, ' topic/dl ')]" name="topic.dl">
     <xsl:call-template name="setaname"/>
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>

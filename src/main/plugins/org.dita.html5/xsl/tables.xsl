@@ -471,6 +471,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="setid"/>
     <xsl:apply-templates select="." mode="css-class"/>
   </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/table ')]
+    [empty(*[contains(@class,' topic/tgroup ')]/*[contains(@class,' topic/tbody ')]/*[contains(@class,' topic/row ')])]" priority="10"/>
+  <xsl:template match="*[contains(@class,' topic/tgroup ')]
+    [empty(*[contains(@class,' topic/tbody ')]/*[contains(@class,' topic/row ')])]" priority="10"/>
 
   <xsl:template match="*[contains(@class,' topic/table ')]" name="topic.table">
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>

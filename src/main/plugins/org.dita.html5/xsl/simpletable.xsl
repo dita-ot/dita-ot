@@ -156,6 +156,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="suffix" as="xs:string"/>
     <xsl:sequence select="string-join((generate-id($el), $suffix), '-')"/>
   </xsl:function>
+  
+  <xsl:template match="*[contains(@class,' topic/simpletable ')]
+    [empty(*[contains(@class,' topic/strow ')]/*[contains(@class,' topic/stentry ')])]" priority="10"/>
+  <xsl:template match="*[contains(@class,' topic/strow ') or contains(@class,' topic/sthead ')][empty(*[contains(@class,' topic/stentry ')])]" priority="10"/>
 
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]" name="topic.simpletable">
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
