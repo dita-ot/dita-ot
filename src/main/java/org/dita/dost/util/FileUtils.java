@@ -12,7 +12,6 @@ import static org.apache.commons.io.FilenameUtils.*;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
@@ -185,7 +184,7 @@ public final class FileUtils {
      * @return relative path
      */
     public static File getRelativePath(final File basePath, final File refPath) {
-        return new File(getRelativePath(basePath.getPath(), refPath.getPath(), File.separator));
+        return basePath.toPath().getParent().relativize(refPath.toPath()).toFile();
     }
     
     /**
