@@ -28,6 +28,7 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**
@@ -303,6 +304,9 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, UNIX_SEPARATOR + new File(workDir).getAbsolutePath());
                 }
                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toString());
+                
+                final File path2rootmap = toFile(getRelativePath(outputFileName, job.getInputMap())).getParentFile();
+                writeProcessingInstruction(ditaFileOutput, PI_PATH2ROOTMAP_TARGET_URI, path2rootmap == null ? "./" : toURI(path2rootmap).toString());
 
                 if (conflictTable.get(outputFileName) != null) {
                     final String relativePath = getRelativeUnixPath(new File(currentFile.resolve(".")) + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,

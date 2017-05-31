@@ -203,7 +203,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             return;
         }
         final File path2project = getPathtoProject(copytoTargetFilename, target, inputMapInTemp, job);
-        XMLFilter filter = new CopyToFilter(workdir, path2project, src, target);
+        final File path2rootmap = getPathtoRootmap(target, inputMapInTemp);
+        XMLFilter filter = new CopyToFilter(workdir, path2project, path2rootmap, src, target);
 
         logger.info("Processing " + src + " to " + target);
         try {
@@ -222,20 +223,23 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
      * <li>{@link Constants#PI_WORKDIR_TARGET_URI PI_WORKDIR_TARGET_URI}</li>
      * <li>{@link Constants#PI_PATH2PROJ_TARGET PI_PATH2PROJ_TARGET}</li>
      * <li>{@link Constants#PI_PATH2PROJ_TARGET_URI PI_PATH2PROJ_TARGET_URI}</li>
+     * <li>{@link Constants#PI_PATH2ROOTMAP_TARGET_URI PI_PATH2ROOTMAP_TARGET_URI}</li>
      * </ul>
      */
     private static final class CopyToFilter extends XMLFilterImpl {
 
         private final File workdir;
         private final File path2project;
+        private final File path2rootmap;
         private final URI src;
         private final URI dst;
 
-        CopyToFilter(final File workdir, final File path2project, final URI src, final URI dst) {
+        CopyToFilter(final File workdir, final File path2project, final File path2rootmap, final URI src, final URI dst) {
             super();
             assert workdir != null;
             this.workdir = workdir;
             this.path2project = path2project;
+            this.path2rootmap = path2rootmap;
             this.src = src;
             this.dst = dst;
         }
@@ -294,6 +298,16 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                         d = "";
                     }
                     break;
+                case PI_PATH2ROOTMAP_TARGET_URI:
+                    if (path2rootmap != null) {
+                        d = toURI(path2rootmap).toString();
+                        if (!d.endsWith(URI_SEPARATOR)) {
+                            d = d + URI_SEPARATOR;
+                        }
+                    } else {
+                        d = "";
+                    }
+                    break;
             }
             getContentHandler().processingInstruction(target, d);
         }
@@ -322,6 +336,19 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         } else {
             return toFile(URLUtils.getRelativePath(filename));
         }
+    }
+    
+    /**
+     * Get path to root map
+     *
+     * @param traceFilename absolute input file
+     * @param inputMap      absolute path to start file
+     * @return path to base directory, {@code null} if not available
+     */
+    public static File getPathtoRootmap(final URI traceFilename, final URI inputMap) {
+        assert traceFilename.isAbsolute();
+        assert inputMap.isAbsolute();
+        return toFile(getRelativePath(traceFilename, inputMap)).getParentFile();
     }
 
     /**

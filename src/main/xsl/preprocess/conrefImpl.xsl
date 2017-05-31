@@ -274,6 +274,9 @@ See the accompanying LICENSE file for applicable license.
               </xsl:choose>
             </xsl:variable>
             <xsl:choose>
+              <xsl:when test="empty($target-doc)">
+                <xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/>
+              </xsl:when>
               <xsl:when test="conref:isValid($domains)">
                 <xsl:for-each select="$target-doc">
                   <xsl:variable name="target" as="element()*">
