@@ -36,6 +36,11 @@ deploy:
   on:
     tags: true
     repo: dita-ot/dita-ot
+- provider: script
+  script: "./gradlew uploadArchives"
+  on:
+    tags: true
+    repo: dita-ot/dita-ot
 before_install:
 - openssl aes-256-cbc -K $encrypted_9d373418652a_key -iv $encrypted_9d373418652a_iv
   -in gradle.properties.enc -out gradle.properties -d
