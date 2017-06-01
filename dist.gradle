@@ -1,0 +1,67 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2017 Jarno Elovirta
+ *
+ *  See the accompanying LICENSE file for applicable license.
+ */
+apply from: 'build.gradle'
+apply plugin: 'signing'
+
+// Repository deployment
+
+signing {
+    sign configurations.archives
+}
+task dummy() << {
+    println("ossrhUsername: ${ossrhUsername}")
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'DITA Open Toolkit'
+                packaging 'jar'
+                description 'DITA-OT base library'
+                url 'http://www.dita-ot.org/'
+
+                scm {
+                    connection 'scm:git:https://github.com/dita-ot/dita-ot.git'
+                    developerConnection 'scm:git:git@github.com:dita-ot/dita-ot.git'
+                    url 'https://github.com/dita-ot/dita-ot/'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'robander'
+                        name 'Robert D Anderson'
+                        email 'robander@us.ibm.com'
+                    }
+                    developer {
+                        id 'jelovirt'
+                        name 'Jarno Elovirta'
+                        email 'jarno@elovirta.com'
+                    }
+                }
+            }
+        }
+    }
+}
