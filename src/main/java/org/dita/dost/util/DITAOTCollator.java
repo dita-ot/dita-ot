@@ -40,11 +40,7 @@ public final class DITAOTCollator implements Comparator {
             throw new NullPointerException("Locale may not be null");
         }
         DITAOTCollator instance = null;
-        instance = cache.get(locale);
-        if (instance == null) {
-            instance = new DITAOTCollator(locale);
-            cache.put(locale, instance);
-        }
+        instance = cache.computeIfAbsent(locale, DITAOTCollator::new);
         return instance;
     }
 

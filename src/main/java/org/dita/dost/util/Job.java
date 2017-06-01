@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -491,13 +492,9 @@ public final class Job {
      * @return collection of file info objects that pass the filter, may be empty
      */
     public Collection<FileInfo> getFileInfo(final Predicate<FileInfo> filter) {
-        final Collection<FileInfo> ret = new ArrayList<>();
-        for (final FileInfo f: files.values()) {
-            if (filter.test(f)) {
-                ret.add(f);
-            }
-        }
-        return ret;
+        return files.values().stream()
+                .filter(filter)
+                .collect(Collectors.toList());
     }
 
     /**

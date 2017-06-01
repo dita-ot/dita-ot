@@ -168,10 +168,10 @@ public final class Integrator {
             properties.putAll(Configuration.configuration);
         }
         if (!properties.containsKey(CONF_PLUGIN_DIRS)) {
-            properties.setProperty(CONF_PLUGIN_DIRS, configuration.containsKey(CONF_PLUGIN_DIRS) ? configuration.get(CONF_PLUGIN_DIRS) : "plugins;demo");
+            properties.setProperty(CONF_PLUGIN_DIRS, configuration.getOrDefault(CONF_PLUGIN_DIRS, "plugins;demo"));
         }
         if (!properties.containsKey(CONF_PLUGIN_IGNORES)) {
-            properties.setProperty(CONF_PLUGIN_IGNORES, configuration.containsKey(CONF_PLUGIN_IGNORES) ? configuration.get(CONF_PLUGIN_IGNORES) : "");
+            properties.setProperty(CONF_PLUGIN_IGNORES, configuration.getOrDefault(CONF_PLUGIN_IGNORES, ""));
         }
 
         // Get the list of plugin directories from the properties.
@@ -334,39 +334,26 @@ public final class Integrator {
     }
 
     private Collection<File> getLibJars() {
-        final String[] libJars = new File(ditaDir, LIB_DIR).list(new FilenameFilter() {
-            @Override
-            public boolean accept(final File dir, final String name) {
-                return name.endsWith(".jar");
-            }
-        });
+        final String[] libJars = new File(ditaDir, LIB_DIR).list((dir, name) -> name.endsWith(".jar"));
         final List<File> res = new ArrayList<>(libJars.length);
         for (String l: libJars) {
             res.add(new File(LIB_DIR + File.separator + l));
         }
-        Collections.sort(res, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
-            }
-        });
+        res.sort((o1, o2) -> o1.getAbsolutePath().compareTo(o2.getAbsolutePath()));
         return res;
     }
 
     private Iterable<String> orderPlugins(final Set<String> ids) {
         final List<String> res = new ArrayList<>(ids);
-        Collections.sort(res, new Comparator<String>() {
-            @Override
-            public int compare(final String s1, final String s2) {
-                final int score1 = pluginOrder.containsKey(s1) ? pluginOrder.get(s1) : 0;
-                final int score2 = pluginOrder.containsKey(s2) ? pluginOrder.get(s2) : 0;
-                if (score1 < score2) {
-                    return 1;
-                } else if (score1 > score2) {
-                    return -1;
-                } else {
-                    return s1.compareTo(s2);
-                }
+        res.sort((s1, s2) -> {
+            final int score1 = pluginOrder.getOrDefault(s1, 0);
+            final int score2 = pluginOrder.getOrDefault(s2, 0);
+            if (score1 < score2) {
+                return 1;
+            } else if (score1 > score2) {
+                return -1;
+            } else {
+                return s1.compareTo(s2);
             }
         });
         return res;

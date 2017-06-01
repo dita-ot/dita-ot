@@ -533,11 +533,7 @@ public class AbstractIntegrationTest {
                         final List<String> res = new ArrayList<>();
                         for (final String v : id.getValue().trim().split("\\s+")) {
                             rewriteId(v, idMap, counter, p.getValue());
-                            if (idMap.containsKey(v)) {
-                                res.add(idMap.get(v));
-                            } else {
-                                res.add(v);
-                            }
+                            res.add(idMap.getOrDefault(v, v));
                         }
                         id.setNodeValue(res.stream().collect(Collectors.joining(" ")));
 

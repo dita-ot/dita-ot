@@ -61,9 +61,7 @@ public final class NormalizeFilter extends AbstractXMLFilter {
         if (MAP_MAP.matches(cls)) {
             if (res.getIndex(ATTRIBUTE_NAME_CASCADE) == -1) {
                 XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CASCADE,
-                        configuration.containsKey("default.cascade")
-                        ? configuration.get("default.cascade")
-                        : ATTRIBUTE_CASCADE_VALUE_MERGE); 
+                        configuration.getOrDefault("default.cascade", ATTRIBUTE_CASCADE_VALUE_MERGE));
             }
         }
 

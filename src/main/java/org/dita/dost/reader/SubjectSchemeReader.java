@@ -212,11 +212,7 @@ public class SubjectSchemeReader {
                                     elementName = node.getAttribute(ATTRIBUTE_NAME_NAME);
                                 } else if (SUBJECTSCHEME_ATTRIBUTEDEF.matches(attrValue)) {
                                     attributeName = node.getAttribute(ATTRIBUTE_NAME_NAME);
-                                    Map<String, Set<Element>> S = bindingMap.get(attributeName);
-                                    if (S == null) {
-                                        S = new HashMap<>();
-                                        bindingMap.put(attributeName, S);
-                                    }
+                                    Map<String, Set<Element>> S = bindingMap.computeIfAbsent(attributeName, k -> new HashMap<>());
                                 } else if (SUBJECTSCHEME_DEFAULTSUBJECT.matches(attrValue)) {
                                     // Put default values.
                                     final String keyValue = node.getAttribute(ATTRIBUTE_NAME_KEYREF);

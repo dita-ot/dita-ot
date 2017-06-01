@@ -58,12 +58,7 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
         processingMode = mode != null ? Configuration.Mode.valueOf(mode.toUpperCase()) : Configuration.Mode.LAX;
         resolveCoderef = !Boolean.parseBoolean(input.getAttribute(SKIP_CODEREF));
 
-        final Collection<FileInfo> fis = job.getFileInfo(new Predicate<FileInfo>() {
-            @Override
-            public boolean test(final FileInfo f) {
-                return ATTR_FORMAT_VALUE_DITA.equals(f.format);
-            }
-        });
+        final Collection<FileInfo> fis = job.getFileInfo(f -> ATTR_FORMAT_VALUE_DITA.equals(f.format));
         for (final FileInfo f: fis) {
             final URI file = job.tempDirURI.resolve(f.uri);
             logger.info("Processing " + file);

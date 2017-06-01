@@ -87,12 +87,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (fileInfoFilter == null) {
-            fileInfoFilter = new Predicate<FileInfo>() {
-                @Override
-                public boolean test(FileInfo f) {
-                    return f.format == null || f.format.equals(ATTR_FORMAT_VALUE_DITA) || f.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
-                }
-            };
+            fileInfoFilter = f -> f.format == null || f.format.equals(ATTR_FORMAT_VALUE_DITA) || f.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
         }
         final Collection<FileInfo> fis = job.getFileInfo(fileInfoFilter).stream()
                 .filter(f -> f.hasKeyref)

@@ -731,11 +731,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         for (final URI file: fullTopicSet) {
             final FileInfo ff = getOrCreateFileInfo(fileinfos, file);
             if (ff.format == null) {
-                if (sourceFormat.containsKey(ff.src)) {
-                    ff.format = sourceFormat.get(ff.src);
-                } else {
-                    ff.format = ATTR_FORMAT_VALUE_DITA;
-                }
+                ff.format = sourceFormat.getOrDefault(ff.src, ATTR_FORMAT_VALUE_DITA);
             }
         }
         for (final URI file: fullMapSet) {

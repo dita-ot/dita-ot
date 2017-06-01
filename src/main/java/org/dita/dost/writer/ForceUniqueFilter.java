@@ -59,7 +59,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
                     (format == null || format.equals(ATTR_FORMAT_VALUE_DITA)) &&
                     (processingRole == null || processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_NORMAL))) {
                 final URI file = stripFragment(source);
-                Integer count = topicrefCount.containsKey(file) ? topicrefCount.get(file) : 0;
+                Integer count = topicrefCount.getOrDefault(file, 0);
                 count++;
                 topicrefCount.put(file, count);
                 if (count > 1) { // not only reference to this topic

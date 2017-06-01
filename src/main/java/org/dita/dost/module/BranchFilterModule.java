@@ -170,17 +170,9 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             }
             if (attr != null) {
                 final URI h = stripFragment(map.resolve(attr.getValue()));
-                Map<Set<URI>, List<Attr>> attrsMap = refs.get(h);
-                if (attrsMap == null) {
-                    attrsMap = new HashMap<>();
-                    refs.put(h, attrsMap);
-                }
+                Map<Set<URI>, List<Attr>> attrsMap = refs.computeIfAbsent(h, k -> new HashMap<>());
                 final Set<URI> currentFilter = getBranchFilters(e);
-                List<Attr> attrs = attrsMap.get(currentFilter);
-                if (attrs == null) {
-                    attrs = new ArrayList<>();
-                    attrsMap.put(currentFilter, attrs);
-                }
+                List<Attr> attrs = attrsMap.computeIfAbsent(currentFilter, k -> new ArrayList<>());
                 attrs.add(attr);
             }
         }

@@ -25,7 +25,7 @@ final class CheckTranstypeAction extends ImportAction {
      */
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
-        final String property = paramTable.containsKey("property") ? paramTable.get("property") : "transtype";
+        final String property = paramTable.getOrDefault("property", "transtype");
         for (final String value: valueSet) {
             buf.startElement(NULL_NS_URI, "not", "not", new AttributesBuilder().build());
             buf.startElement(NULL_NS_URI, "equals", "equals", new AttributesBuilder()

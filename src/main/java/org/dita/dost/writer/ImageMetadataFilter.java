@@ -115,11 +115,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             if (href != null) {
                 final URI imgInput = getImageFile(href);
                 if (imgInput != null) {
-                    Attributes m = cache.get(imgInput);
-                    if (m == null) {
-                        m = readMetadata(imgInput);
-                        cache.put(imgInput, m);
-                    }
+                    Attributes m = cache.computeIfAbsent(imgInput, this::readMetadata);
                     a.addAll(m);
                 } else {
                     logger.error("Image file " + href + " not found");

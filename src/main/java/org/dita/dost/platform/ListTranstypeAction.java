@@ -29,7 +29,7 @@ final class ListTranstypeAction extends ImportAction {
      */
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
-        final String separator = paramTable.containsKey("separator") ? paramTable.get("separator") : "|";
+        final String separator = paramTable.getOrDefault("separator", "|");
         final List<String> v = new ArrayList<>(valueSet);
         Collections.sort(v);
         final StringBuilder retBuf = new StringBuilder();

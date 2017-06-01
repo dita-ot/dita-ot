@@ -46,14 +46,9 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         if (res == null) {
             final Job job = getJob();
             res = new ArrayList<>();
-            for (final Job.FileInfo f : job.getFileInfo(new Predicate<Job.FileInfo>() {
-                @Override
-                public boolean test(final Job.FileInfo f) {
-                    return (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
-                            (hasConref == null || f.hasConref == hasConref) &&
-                            (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
-                }
-            })) {
+            for (final Job.FileInfo f : job.getFileInfo(f -> (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
+                    (hasConref == null || f.hasConref == hasConref) &&
+                    (isResourceOnly == null || f.isResourceOnly == isResourceOnly))) {
                 log("Scanning for " + f.file.getPath(), Project.MSG_VERBOSE);
                 final File tempFile = new File(job.tempDir, f.file.getPath());
                 if (tempFile.exists()) {

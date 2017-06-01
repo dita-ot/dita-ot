@@ -508,14 +508,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (SUBJECTSCHEME_SUBJECTSCHEME.matches(classValue)) {
             // Make it easy to do the BFS later.
             final URI key = ROOT_URI;
-            final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<URI>();
+            final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<>();
             children.add(currentFile);
             schemeRelationGraph.put(key, children);
             schemeRefSet.add(currentFile);
         } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
             if (href != null) {
                 final URI key = currentFile;
-                final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<URI>();
+                final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<>();
                 final URI child = currentFile.resolve(href);
                 children.add(child);
                 schemeRelationGraph.put(key, children);

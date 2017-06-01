@@ -132,9 +132,7 @@ public final class ExtensibleAntInvoker extends Task {
         if (modules.isEmpty()) {
             throw new BuildException("Module must be specified");
         }
-        if (attrs.get(ANT_INVOKER_PARAM_BASEDIR) == null) {
-            attrs.put(ANT_INVOKER_PARAM_BASEDIR, getProject().getBaseDir().getAbsolutePath());
-        }
+        attrs.computeIfAbsent(ANT_INVOKER_PARAM_BASEDIR, k -> getProject().getBaseDir().getAbsolutePath());
         for (final Param p : pipelineParams) {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
@@ -241,16 +239,13 @@ public final class ExtensibleAntInvoker extends Task {
         final List<Predicate<FileInfo>> res = filters.stream()
                 .map(FileInfoFilter::toFilter)
                 .collect(Collectors.toList());
-        return new Predicate<FileInfo>() {
-            @Override
-            public boolean test(FileInfo f) {
-                for (final Predicate<FileInfo> filter : res) {
-                    if (filter.test(f)) {
-                        return true;
-                    }
+        return f -> {
+            for (final Predicate<FileInfo> filter : res) {
+                if (filter.test(f)) {
+                    return true;
                 }
-                return false;
             }
+            return false;
         };
     }
 
@@ -458,14 +453,9 @@ public final class ExtensibleAntInvoker extends Task {
         }
 
         public Predicate<FileInfo> toFilter() {
-            return new Predicate<FileInfo>() {
-                @Override
-                public boolean test(FileInfo f) {
-                    return (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
-                            (hasConref == null || f.hasConref == hasConref) &&
-                            (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
-                }
-            };
+            return f -> (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
+                    (hasConref == null || f.hasConref == hasConref) &&
+                    (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
         }
     }
 

@@ -54,6 +54,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.util.Configuration;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -235,7 +236,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             return new FileArgument(name);
         } else if (type.equals("enum")) {
             final Set<String> vals = getChildElements(param).stream()
-                    .map(val -> getText(val))
+                    .map(XMLUtils::getText)
                     .collect(Collectors.toSet());
             return new EnumArgument(name, vals);
         } else {
