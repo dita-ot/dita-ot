@@ -69,7 +69,7 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
     /** Number of cols in tgroup */
     private int cols;
     private int depth;
-    private Map<String, String> ns = new HashMap<>();
+    private final Map<String, String> ns = new HashMap<>();
 
     public NormalizeTableFilter() {
         super();

@@ -7,8 +7,6 @@
  */
 package org.dita.dost.platform;
 
-import java.io.IOException;
-
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.ContentHandler;

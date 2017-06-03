@@ -56,8 +56,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
         final URI base = getBaseDir();
         job.setProperty(INPUT_DIR_URI, base.toString());
-        final Collection<FileInfo> fis = job.getFileInfo().stream()
-                .collect(Collectors.toList());
+        final Collection<FileInfo> fis = new ArrayList<>(job.getFileInfo());
         final Collection<FileInfo> res = new ArrayList<>(fis.size());
         for (final FileInfo fi : fis) {
             try {
@@ -96,8 +95,8 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        fis.stream().forEach(fi -> job.remove(fi));
-        res.stream().forEach(fi -> job.add(fi));
+        fis.forEach(fi -> job.remove(fi));
+        res.forEach(fi -> job.add(fi));
 
         try {
             job.write();
@@ -211,10 +210,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                 return true;
             }
             final URI data = toURI(atts.getValue(ATTRIBUTE_NAME_DATA));
-            if (data != null && !data.isAbsolute()) {
-                return true;
-            }
-            return false;
+            return data != null && !data.isAbsolute();
         }
 
         private URI getHref(final URI href) {

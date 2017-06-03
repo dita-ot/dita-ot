@@ -90,7 +90,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -147,7 +147,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         return buildOutputDocument(root);
     }
 
-    private Set<URI> chunkTopicSet = new HashSet<>();
+    private final Set<URI> chunkTopicSet = new HashSet<>();
 
     /**
      * @return absolute temporary files

@@ -64,7 +64,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
             if (format.equals(e.getKey())) {
                 try {
                     // XMLReaderFactory.createXMLReader cannot be used
-                    final XMLReader r = (XMLReader) this.getClass().forName(e.getValue()).newInstance();
+                    final XMLReader r = (XMLReader) Class.forName(e.getValue()).newInstance();
                     final Map<String, Boolean> features = parserFeatures.getOrDefault(e.getKey(), EMPTY_MAP);
                     for (final Map.Entry<String, Boolean> feature : features.entrySet()) {
                         try {

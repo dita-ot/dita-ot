@@ -89,7 +89,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

@@ -109,7 +109,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Absolute path to input file. */
     URI rootFile;
     /** Subject scheme key map. Key is key value, value is key definition. */
-    private Map<String, KeyDef> schemekeydefMap = new HashMap<>();
+    private final Map<String, KeyDef> schemekeydefMap = new HashMap<>();
     /** Subject scheme absolute file paths. */
     private final Set<URI> schemeSet = new HashSet<>(128);
     /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
@@ -1108,7 +1108,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         for (final Map.Entry<String, String> e: parserMap.entrySet()) {
             if (format != null && format.equals(e.getKey())) {
                 try {
-                    return (XMLReader) this.getClass().forName(e.getValue()).newInstance();
+                    return (XMLReader) Class.forName(e.getValue()).newInstance();
                 } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
                     throw new SAXException(ex);
                 }
@@ -1117,12 +1117,12 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         return reader;
     }
 
-    void init() throws IOException, DITAOTException, SAXException {
+    void init() throws SAXException {
         try {
             final String cls = Optional
                     .ofNullable(job.getProperty("temp-file-name-scheme"))
                     .orElse(configuration.get("temp-file-name-scheme"));
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(cls).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(cls).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

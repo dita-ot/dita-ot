@@ -85,7 +85,7 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
             final String cls = Optional
                     .ofNullable(job.getProperty("temp-file-name-scheme"))
                     .orElse(configuration.get("temp-file-name-scheme"));
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(cls).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(cls).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -403,11 +403,7 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
                 final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
 
                 final URI dstSource;
-                try {
-                    dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
-                } catch (NullPointerException e) {
-                    throw e;
-                }
+                dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
                 final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
                 final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
                         .result(dstSource)

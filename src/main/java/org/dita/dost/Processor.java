@@ -25,8 +25,8 @@ import java.util.Vector;
  */
 public final class Processor {
 
-    private File ditaDir;
-    private Map<String, String> args;
+    private final File ditaDir;
+    private final Map<String, String> args;
     private Logger logger;
     private boolean cleanOnFailure = true;
     private boolean createDebugLog = true;

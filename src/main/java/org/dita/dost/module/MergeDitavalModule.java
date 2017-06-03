@@ -54,7 +54,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
     private static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
 
     /** Absolute paths for filter files. */
-    private List<File> ditavalFiles = new LinkedList<>();
+    private final List<File> ditavalFiles = new LinkedList<>();
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {

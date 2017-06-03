@@ -56,13 +56,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
     private TopicFragmentFilter topicFragmentFilter;
-    private XMLUtils xmlUtils = new XMLUtils();
+    private final XMLUtils xmlUtils = new XMLUtils();
 
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -96,7 +96,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 final String cls = Optional
                         .ofNullable(job.getProperty("temp-file-name-scheme"))
                         .orElse(configuration.get("temp-file-name-scheme"));
-                tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) getClass().forName(cls).newInstance();
+                tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) Class.forName(cls).newInstance();
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

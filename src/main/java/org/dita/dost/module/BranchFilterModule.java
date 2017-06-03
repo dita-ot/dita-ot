@@ -87,7 +87,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -563,11 +563,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                 final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
 
                 final URI dstSource;
-                try {
-                    dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
-                } catch (NullPointerException e) {
-                    throw e;
-                }
+                dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
                 final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
                 final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
                         .result(dstSource)

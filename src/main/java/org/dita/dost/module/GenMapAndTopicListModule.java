@@ -166,7 +166,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private boolean setSystemid = true;
     /** Formats for source topics */
     // XXX This is a hack to retain format. A better solution would be to keep the format with the source URI
-    private Map<URI, String> sourceFormat = new HashMap<>();
+    private final Map<URI, String> sourceFormat = new HashMap<>();
 
     /**
      * Create a new instance and do the initialization.
@@ -692,7 +692,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      */
     private void outputResult() throws DITAOTException {
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
