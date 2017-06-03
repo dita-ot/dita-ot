@@ -13,9 +13,7 @@ import static java.util.Arrays.*;
 import java.io.*;
 import java.util.*;
 
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLFilterImpl;

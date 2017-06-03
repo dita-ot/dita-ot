@@ -23,8 +23,6 @@ final class ImportXSLAction extends ImportAction {
 
     /**
      * get result.
-     * @return result
-     * @throws IOException 
      */
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {

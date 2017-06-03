@@ -402,9 +402,6 @@ public final class IndexTermReader extends AbstractXMLReader {
 
     /**
      * Note: <index-see-also> should be handled before <index-see>.
-     * 
-     * @param localName
-     * @param classAttr
      */
     private void handleSpecialization(final String localName, final String classAttr) {
         if (classAttr == null) {
@@ -470,7 +467,6 @@ public final class IndexTermReader extends AbstractXMLReader {
 
     /**
      * Update the target name of each IndexTerm, recursively.
-     * @param indexterm
      */
     private void updateIndexTermTargetName(final IndexTerm indexterm){
         final int targetSize = indexterm.getTargetList().size();
@@ -500,8 +496,6 @@ public final class IndexTermReader extends AbstractXMLReader {
      * Trim whitespace from start of the string. If last character of termName and
      * first character of temp is a space character, remove leading string from temp 
      * 
-     * @param temp
-     * @param termName
      * @return trimmed temp value
      */
     private static String trimSpaceAtStart(final String temp, final String termName) {

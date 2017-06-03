@@ -21,7 +21,6 @@ final class CheckTranstypeAction extends ImportAction {
 
     /**
      * Get result.
-     * @return result
      */
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {

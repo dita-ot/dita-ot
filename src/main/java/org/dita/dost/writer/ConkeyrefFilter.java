@@ -10,12 +10,8 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
-import java.io.File;
 import java.net.URI;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.*;

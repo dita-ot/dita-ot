@@ -190,7 +190,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
      * @param src                  source URI in temporary directory
      * @param target               target URI in temporary directory
      * @param copytoTargetFilename target URI relative to temporary directory
-     * @param inputMapInTemp
+     * @param inputMapInTemp       input map URI in temporary directory
      */
     private void copyFileWithPIReplaced(final URI src, final URI target, final URI copytoTargetFilename, final URI inputMapInTemp) {
         assert src.isAbsolute();

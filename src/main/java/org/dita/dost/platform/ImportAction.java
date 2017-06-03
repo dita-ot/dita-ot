@@ -48,7 +48,6 @@ abstract class ImportAction implements IAction {
     
     /**
      * get result.
-     * @return result
      */
     @Override
     public abstract void getResult(ContentHandler output) throws SAXException;

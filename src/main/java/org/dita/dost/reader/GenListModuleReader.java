@@ -11,7 +11,6 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.XMLUtils.nonDitaContext;
 
 import java.net.URI;

@@ -8,8 +8,6 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
@@ -21,15 +19,12 @@ import org.dita.dost.module.DebugAndFilterModule;
 import java.io.File;
 import java.net.URI;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.URLUtils.getRelativePath;
-import static org.dita.dost.util.XMLUtils.nonDitaContext;
 import static org.dita.dost.reader.GenListModuleReader.*;
 
 
@@ -163,7 +158,6 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
      * @param qName element name
      * @param atts input attributes
      * @param res attributes to write to
-     * @throws java.io.IOException if writing to output failed
      */
     private void processAttributes(final String qName, final Attributes atts, final AttributesImpl res) {
         final int attsLen = atts.getLength();

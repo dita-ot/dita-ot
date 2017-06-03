@@ -10,7 +10,6 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.URLUtils.*;
 
-import java.io.File;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

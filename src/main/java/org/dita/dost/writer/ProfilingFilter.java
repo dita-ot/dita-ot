@@ -8,7 +8,6 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.nonDitaContext;
 
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.DitaClass;

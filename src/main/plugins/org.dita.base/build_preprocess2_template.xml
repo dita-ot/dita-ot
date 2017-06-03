@@ -89,6 +89,9 @@ See the accompanying LICENSE file for applicable license.
     </echoxml>
     <property name="map.filter-on-parse" value="false"/>
     <property name="topic.filter-on-parse" value="true"/>
+    <condition property="preprocess.map-profile.skip">
+      <istrue value="${map.filter-on-parse}"/>
+    </condition>
   </target>
   
   <target name="map-reader"
@@ -223,6 +226,98 @@ See the accompanying LICENSE file for applicable license.
       <istrue value="${map.filter-on-parse}"/>
     </condition>
   </target>
+  
+  <!-- ===================== -->
+  <!--
+  <target name="map"
+    description="Generate lists, debug, and filter input map files">
+    <condition property="dita.preprocess.reloadstylesheet.mapref" value="${dita.preprocess.reloadstylesheet}">
+      <not><isset property="dita.preprocess.reloadstylesheet.mapref"/></not>
+    </condition>
+    <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
+    <condition property="dita.preprocess.reloadstylesheet.conref" value="${dita.preprocess.reloadstylesheet}">
+      <not><isset property="dita.preprocess.reloadstylesheet.conref"/></not>
+    </condition>
+    <makeurl property="exportfile.url" file="${dita.temp.dir}/export.xml" validate="false"/>
+    <pipeline message="Generate list." taskname="map-reader"
+      inputmap="${args.input}">
+      <module class="org.dita.dost.module.reader.MapReaderModule">
+        <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
+        <param name="ditadir" location="${dita.dir}"/>
+        <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
+        <param name="validate" value="${validate}"/>
+        <param name="generatecopyouter" value="${generate.copy.outer}"/>
+        <param name="outercontrol" value="${outer.control}"/>
+        <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
+        <param name="outputdir" location="${dita.output.dir}"/>
+        <param name="transtype" value="${transtype}"/>
+        <param name="gramcache" value="${args.grammar.cache}"/>
+        <param name="setsystemid" value="${args.xml.systemid.set}"/>
+        <param name="profiling.enable" value="${map.filter-on-parse}" unless="map.filter-on-parse"/>
+        <param name="generate-debug-attributes" value="${generate-debug-attributes}" if="generate-debug-attributes"/>
+        <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
+      </module>
+      <xslt basedir="${dita.temp.dir}"
+        reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
+        filenameparameter="file-being-processed"
+        unless:set="preprocess.mapref.skip">
+        <!- - TODO only merge start map - ->
+        <ditafileset format="ditamap"/>
+        <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+      <module class="org.dita.dost.module.filter.MapBranchFilterModule"
+        unless:set="preprocess.branch-filter.skip"/>
+      <module class="org.dita.dost.module.KeyrefModule"
+        unless:set="preprocess.keyref.skip">
+        <ditaFileset format="ditamap"/>
+        <param name="transtype" value="${transtype}"/>
+      </module>
+      <xslt basedir="${dita.temp.dir}"
+        reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
+        filenameparameter="file-being-processed"
+        unless:set="preprocess.keyref.skip">
+        <!- - TODO only merge start map - ->
+        <ditaFileset format="ditamap"/>
+        <param name="child-topicref-warning" expression="false"/>
+        <param name="keep-submap-href" expression="false"/>
+        <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+      <module class="org.dita.dost.module.ConrefPushModule"
+        unless:set="preprocess.conrefpush.skip">
+        <ditaFileset format="ditamap"/>
+      </module>
+      <xslt basedir="${dita.temp.dir}"
+        reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl"
+        filenameparameter="file-being-processed"
+        unless:set="preprocess.conref.skip">
+        <ditaFileset format="ditamap" conref="true"/>
+        <param name="EXPORTFILE" expression="${exportfile.url}"/>
+        <param name="TRANSTYPE" expression="${transtype}"/>
+        <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+      <module class="org.dita.dost.module.FilterModule"
+        unless:set="preprocess.map-profile.skip">
+        <ditaFileset format="ditamap"/>
+        <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
+        <param name="transtype" value="${transtype}"/>
+      </module>
+    </pipeline>
+    <!- - TODO replace with direct resource collection availability test - ->
+    <job-helper file="fullditamap.list" property="fullditamaplist"/>
+    <property name="fullditamapfile" value="fullditamap.list"/>
+    <condition property="noMap">
+      <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
+    </condition>
+    <delete file="${dita.temp.dir}/${fullditamapfile}"/>
+  </target>
+  -->
+  <!-- ===================== -->
   
   <target name="topic-reader"
     dita:depends="{depend.preprocess.gen-list.pre},{depend.preprocess.debug-filter.pre}"

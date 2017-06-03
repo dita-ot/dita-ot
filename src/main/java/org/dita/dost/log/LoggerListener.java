@@ -12,11 +12,11 @@ import java.util.regex.Pattern;
  */
 public final class LoggerListener implements BuildListener {
 
-    private static final Pattern FATAL_PATTERN = Pattern.compile("\\[\\w+F\\]\\[FATAL\\]");
-    private static final Pattern ERROR_PATTERN = Pattern.compile("\\[\\w+E\\]\\[ERROR\\]");
-    private static final Pattern WARN_PATTERN = Pattern.compile("\\[\\w+W\\]\\[WARN\\]");
-    private static final Pattern INFO_PATTERN = Pattern.compile("\\[\\w+I\\]\\[INFO\\]");
-    private static final Pattern DEBUG_PATTERN = Pattern.compile("\\[\\w+D\\]\\[DEBUG\\]");
+    private static final Pattern FATAL_PATTERN = Pattern.compile("\\[\\w+F]\\[FATAL]");
+    private static final Pattern ERROR_PATTERN = Pattern.compile("\\[\\w+E]\\[ERROR]");
+    private static final Pattern WARN_PATTERN = Pattern.compile("\\[\\w+W]\\[WARN]");
+    private static final Pattern INFO_PATTERN = Pattern.compile("\\[\\w+I]\\[INFO]");
+    private static final Pattern DEBUG_PATTERN = Pattern.compile("\\[\\w+D]\\[DEBUG]");
 
     private final Logger logger;
 

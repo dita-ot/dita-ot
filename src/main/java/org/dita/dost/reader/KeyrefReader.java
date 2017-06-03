@@ -19,7 +19,6 @@ import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Job;
@@ -115,7 +114,7 @@ public final class KeyrefReader implements AbstractReader {
         if (scopes.size() == 1 && scopes.get(0).name == null) {
             return scopes.get(0);
         } else {
-            return new KeyScope("#root", null, Collections.<String, KeyDef>emptyMap(), scopes);
+            return new KeyScope("#root", null, Collections.emptyMap(), scopes);
         }
     }
     private List<KeyScope> readScopes(final Element root) {
@@ -251,7 +250,7 @@ public final class KeyrefReader implements AbstractReader {
 
     /** Inherit parent keys to child key scopes. */
     private KeyScope inheritParentKeys(final KeyScope rootScope) {
-        return inheritParentKeys(rootScope, Collections.<String, KeyDef>emptyMap());
+        return inheritParentKeys(rootScope, Collections.emptyMap());
     }
     private KeyScope inheritParentKeys(final KeyScope current, final Map<String, KeyDef> parent) {
         if (parent.keySet().isEmpty() && current.childScopes.isEmpty()) {

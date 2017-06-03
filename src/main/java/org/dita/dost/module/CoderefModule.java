@@ -10,7 +10,6 @@ package org.dita.dost.module;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.function.Predicate;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;

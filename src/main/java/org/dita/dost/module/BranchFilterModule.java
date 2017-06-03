@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
-import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.URLUtils.*;
@@ -133,9 +132,9 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         logger.debug("Rewrite duplicate topic references");
         rewriteDuplicates(doc.getDocumentElement());
         logger.debug("Filter topics and generate copies");
-        generateCopies(doc.getDocumentElement(), Collections.<FilterUtils>emptyList());
+        generateCopies(doc.getDocumentElement(), Collections.emptyList());
         logger.debug("Filter existing topics");
-        filterTopics(doc.getDocumentElement(), Collections.<FilterUtils>emptyList());
+        filterTopics(doc.getDocumentElement(), Collections.emptyList());
 
         logger.debug("Writing " + currentFile);
         Result result = null;
@@ -277,7 +276,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     /** Filter map and remove excluded content. */
     private void filterBranches(final Element root) {
         final String[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
-        filterBranches(root, Collections.<FilterUtils>emptyList(), props);
+        filterBranches(root, Collections.emptyList(), props);
     }
 
     private void filterBranches(final Element elem, final List<FilterUtils> filters, final String[][] props) {
@@ -537,31 +536,19 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         }
         private Optional<String> getPrefix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_RESOURCEPREFIX);
-            if (v.isPresent()) {
-                return Optional.of(oldValue.orElse("") + v.get());
-            }
-            return oldValue;
+            return v.map(s -> Optional.of(oldValue.orElse("") + s)).orElse(oldValue);
         }
         private Optional<String> getSuffix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_RESOURCESUFFIX);
-            if (v.isPresent()) {
-                return Optional.of(v.get() + oldValue.orElse(""));
-            }
-            return oldValue;
+            return v.map(s -> Optional.of(s + oldValue.orElse(""))).orElse(oldValue);
         }
         private Optional<String> getKeyscopePrefix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPEPREFIX);
-            if (v.isPresent()) {
-                return Optional.of(oldValue.orElse("") + v.get());
-            }
-            return oldValue;
+            return v.map(s -> Optional.of(oldValue.orElse("") + s)).orElse(oldValue);
         }
         private Optional<String> getKeyscopeSuffix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPESUFFIX);
-            if (v.isPresent()) {
-                return Optional.of(v.get() + oldValue.orElse(""));
-            }
-            return oldValue;
+            return v.map(s -> Optional.of(s + oldValue.orElse(""))).orElse(oldValue);
         }
     }
 
@@ -634,24 +621,24 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     static URI generateCopyTo(final URI href, final Branch filter) {
         final StringBuilder buf = new StringBuilder(href.toString());
         final Optional<String> suffix = filter.resourceSuffix;
-        if (suffix.isPresent()) {
+        suffix.ifPresent(s -> {
             final int sep = buf.lastIndexOf(URI_SEPARATOR);
             final int i = buf.lastIndexOf(".");
             if (i != -1 && (sep == -1 || i > sep)) {
-                buf.insert(i, suffix.get());
+                buf.insert(i, s);
             } else {
-                buf.append(suffix.get());
+                buf.append(s);
             }
-        }
+        });
         final Optional<String> prefix = filter.resourcePrefix;
-        if (prefix.isPresent()) {
+        prefix.ifPresent(s -> {
             final int i = buf.lastIndexOf(URI_SEPARATOR);
             if (i != -1) {
-                buf.insert(i + 1, prefix.get());
+                buf.insert(i + 1, s);
             } else {
-                buf.insert(0, prefix.get());
+                buf.insert(0, s);
             }
-        }
+        });
         return toURI(buf.toString());
     }
     

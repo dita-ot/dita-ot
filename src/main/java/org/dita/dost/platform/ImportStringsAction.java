@@ -22,7 +22,6 @@ final class ImportStringsAction extends ImportAction {
 
     /**
      * get result.
-     * @return result
      */
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {

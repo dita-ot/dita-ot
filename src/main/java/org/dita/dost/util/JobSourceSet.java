@@ -8,7 +8,6 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
-import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 import static org.dita.dost.util.URLUtils.*;
 
 import org.apache.tools.ant.Project;
@@ -25,7 +24,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 /**
  * Resource collection that finds matching resources from job configuration.

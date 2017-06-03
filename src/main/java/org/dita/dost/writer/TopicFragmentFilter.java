@@ -18,7 +18,6 @@ import org.dita.dost.util.DitaClass;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
  * Resolves same topic fragment identifies in topics.

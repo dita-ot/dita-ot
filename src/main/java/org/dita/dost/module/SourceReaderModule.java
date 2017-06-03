@@ -8,7 +8,6 @@
 package org.dita.dost.module;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.XMLUtils;

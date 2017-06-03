@@ -18,7 +18,6 @@ import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -339,7 +338,7 @@ public final class Integrator {
         for (String l: libJars) {
             res.add(new File(LIB_DIR + File.separator + l));
         }
-        res.sort((o1, o2) -> o1.getAbsolutePath().compareTo(o2.getAbsolutePath()));
+        res.sort(Comparator.comparing(File::getAbsolutePath));
         return res;
     }
 

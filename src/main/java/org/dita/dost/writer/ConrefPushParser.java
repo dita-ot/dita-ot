@@ -326,7 +326,6 @@ public final class ConrefPushParser extends AbstractXMLFilter {
      * 
      * @param type pushtype
      * @param elem element
-     * @return string
      */
     private void replaceSubElementName(final String type, final Element elem) {
         final DitaClass classValue = DitaClass.getInstance(elem);

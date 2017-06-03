@@ -194,8 +194,6 @@ public final class FilterUtils {
     /**
      * Check the given extended attribute in propList to see if it was excluded.
      * 
-     * @param propList
-     * @param attValue
      * @return {@code true} if should be excluded, otherwise {@code false}
      */
     private boolean extCheckExclude(final String[] propList, final List<String> attValue) {

@@ -56,7 +56,6 @@ public final class DITAOTCollator implements Comparator {
 
     /**
      * Constructor specifying Locale.
-     * @param locale
      */
     private DITAOTCollator(final Locale locale) {
         init(locale);
@@ -77,7 +76,6 @@ public final class DITAOTCollator implements Comparator {
 
     /**
      * Initialization.
-     * @param locale
      */
     private void init(final Locale locale) {
         Class<?> c = null;

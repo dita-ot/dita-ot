@@ -32,7 +32,7 @@ public class KeyScope {
     }
 
     public KeyScope(final Map<String, KeyDef> keyDefinition) {
-        this(null, null, keyDefinition, Collections.<KeyScope>emptyList());
+        this(null, null, keyDefinition, Collections.emptyList());
     }
 
     public KeyDef get(final String key) {

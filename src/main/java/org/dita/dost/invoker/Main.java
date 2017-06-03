@@ -30,7 +30,6 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.BuildListener;
@@ -65,7 +64,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.Constants.PLUGIN_CONF;
 import static org.dita.dost.util.XMLUtils.getChildElements;
-import static org.dita.dost.util.XMLUtils.getText;
 import static org.dita.dost.util.XMLUtils.toList;
 
 /**

@@ -81,7 +81,6 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
      * 
      * @param term term to serialize
      * @param serializer XML output to write to
-     * @throws SAXException
      */
     private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer) throws SAXException {
         List<IndexTermTarget> targets = term.getTargetList();

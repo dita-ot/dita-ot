@@ -1,10 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2009 Really Strategies, Inc.
+ *
  * See the accompanying LICENSE file for applicable license.
- */
-
-/**
- * Copyright (c) 2009 Really Strategies, Inc.
  */
 package org.dita.dost.reader;
 

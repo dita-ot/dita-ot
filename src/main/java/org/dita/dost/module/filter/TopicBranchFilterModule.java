@@ -10,12 +10,10 @@ package org.dita.dost.module.filter;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
@@ -35,7 +33,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
-import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -124,9 +121,9 @@ public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
         }
 
         logger.debug("Filter topics and generate copies");
-        generateCopies(doc.getDocumentElement(), Collections.<FilterUtils>emptyList());
+        generateCopies(doc.getDocumentElement(), Collections.emptyList());
         logger.debug("Filter existing topics");
-        filterTopics(doc.getDocumentElement(), Collections.<FilterUtils>emptyList());
+        filterTopics(doc.getDocumentElement(), Collections.emptyList());
 
         logger.debug("Writing " + currentFile);
         Result result = null;

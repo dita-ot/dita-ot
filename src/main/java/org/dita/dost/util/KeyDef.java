@@ -8,14 +8,12 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -24,10 +22,6 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Element;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Key definition.

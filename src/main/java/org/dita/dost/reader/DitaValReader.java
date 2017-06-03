@@ -13,7 +13,6 @@ import static org.dita.dost.util.FilterUtils.DEFAULT;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -253,8 +252,6 @@ public final class DitaValReader extends AbstractXMLReader {
     
     /**
      * Insert action into filetermap if key not present in the map
-     * @param action
-     * @param key
      */
     private void insertAction(final Action action, final FilterKey key) {
         if (filterMap.get(key) == null) {

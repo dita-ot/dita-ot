@@ -40,7 +40,6 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableSet;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
-import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getFragment;
 import static org.dita.dost.util.FileUtils.replaceExtension;
@@ -375,8 +374,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * Create new map and refer to it with navref.
-     *
-     * @param topicref
      */
     private void processNavitation(final Element topicref) {
         // create new map's root element

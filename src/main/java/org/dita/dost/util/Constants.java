@@ -4,7 +4,6 @@
  * Copyright 2005, 2006 IBM Corporation
  *
  * See the accompanying LICENSE file for applicable license.
-
  */
 package org.dita.dost.util;
 
@@ -822,9 +821,8 @@ public final class Constants {
     /**OS relevant constants(windows).*/
     public static final String OS_NAME_WINDOWS = "windows";
 
-    /**
-     * Misc string constants used in this toolkit.
-     */
+    //Misc string constants used in this toolkit.
+
     /**STRING_EMPTY.*/
     public static final String STRING_EMPTY = "";
     /**LEFT_BRACKET.*/

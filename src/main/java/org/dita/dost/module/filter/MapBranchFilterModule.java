@@ -273,7 +273,7 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
     /** Filter map and remove excluded content. */
     private void filterBranches(final Element root) {
         final String[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
-        filterBranches(root, Collections.<FilterUtils>emptyList(), props);
+        filterBranches(root, Collections.emptyList(), props);
     }
 
     private void filterBranches(final Element elem, final List<FilterUtils> filters, final String[][] props) {
@@ -461,24 +461,24 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
     static URI generateCopyTo(final URI href, final Branch filter) {
         final StringBuilder buf = new StringBuilder(href.toString());
         final Optional<String> suffix = filter.resourceSuffix;
-        if (suffix.isPresent()) {
+        suffix.ifPresent(s -> {
             final int sep = buf.lastIndexOf(URI_SEPARATOR);
             final int i = buf.lastIndexOf(".");
             if (i != -1 && (sep == -1 || i > sep)) {
-                buf.insert(i, suffix.get());
+                buf.insert(i, s);
             } else {
-                buf.append(suffix.get());
+                buf.append(s);
             }
-        }
+        });
         final Optional<String> prefix = filter.resourcePrefix;
-        if (prefix.isPresent()) {
+        prefix.ifPresent(s -> {
             final int i = buf.lastIndexOf(URI_SEPARATOR);
             if (i != -1) {
-                buf.insert(i + 1, prefix.get());
+                buf.insert(i + 1, s);
             } else {
-                buf.insert(0, prefix.get());
+                buf.insert(0, s);
             }
-        }
+        });
         return toURI(buf.toString());
     }
     

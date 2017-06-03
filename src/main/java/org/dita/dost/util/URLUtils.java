@@ -700,7 +700,7 @@ public final class URLUtils {
     /**
      * Set the element ID from the path
      *
-     * @param relativePath
+     * @param relativePath path
      * @param id element ID
      * @return element ID, may be {@code null}
      */
@@ -718,7 +718,7 @@ public final class URLUtils {
     /**
      * Retrieve the element ID from the path
      *
-     * @param relativePath
+     * @param relativePath path
      * @return element ID, may be {@code null}
      */
     public static String getElementID(final String relativePath) {
@@ -735,7 +735,7 @@ public final class URLUtils {
     /**
      * Retrieve the topic ID from the path
      *
-     * @param relativePath
+     * @param relativePath path
      * @return topic ID, may be {@code null}
      */
     public static String getTopicID(final URI relativePath) {
