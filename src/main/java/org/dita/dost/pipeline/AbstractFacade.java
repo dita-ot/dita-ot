@@ -20,34 +20,10 @@ import org.dita.dost.util.Job;
  * the job configuration before finishing execution.
  * 
  * @author Lian, Li
- * 
+ * @deprecated Run module directly instead
  */
+@Deprecated
 public interface AbstractFacade {
-
-    /**
-     * Excute the specified Java Module.
-     * 
-     * @param pipelineModule pipelineModule name
-     * @param input input
-     * @return AbstractPipelineOutput
-     * @throws DITAOTException DITAOTException
-     * @deprecated use {@link #execute(Class, AbstractPipelineInput)} instead. Deprecated since 2.3
-     */
-    @Deprecated
-    AbstractPipelineOutput execute(String pipelineModule,
-            AbstractPipelineInput input) throws DITAOTException;
-
-    /**
-     * Excute the specified Java Module.
-     * 
-     * @param pipelineModule pipeline module class 
-     * @param input input
-     * @return AbstractPipelineOutput
-     * @throws DITAOTException DITAOTException
-     * @since 1.6
-     */
-    AbstractPipelineOutput execute(Class<? extends AbstractPipelineModule> pipelineModule,
-            AbstractPipelineInput input) throws DITAOTException;
     
     /**
      * Excute the specified Java Module.

@@ -63,7 +63,7 @@ public class TestGenMapAndTopicListModule {
         facade.setLogger(new TestUtils.TestLogger());
         final Job job = new Job(tempDir);
         facade.setJob(job);
-        facade.execute("GenMapAndTopicList", pipelineInput);
+        facade.execute(new GenMapAndTopicListModule(), pipelineInput);
 
         return job;
     }

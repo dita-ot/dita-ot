@@ -170,11 +170,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     /**
      * Create a new instance and do the initialization.
-     * 
-     * @throws ParserConfigurationException never throw such exception
-     * @throws SAXException never throw such exception
      */
-    public GenMapAndTopicListModule() throws SAXException, ParserConfigurationException {
+    public GenMapAndTopicListModule() {
         fullTopicSet = new HashSet<>(128);
         fullMapSet = new HashSet<>(128);
         hrefTopicSet = new HashSet<>(128);

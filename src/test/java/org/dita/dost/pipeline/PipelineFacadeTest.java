@@ -24,7 +24,7 @@ public class PipelineFacadeTest {
     public void testExecute() throws DITAOTException {
         final AbstractPipelineInput i = new PipelineHashIO();
         final AbstractFacade p = new PipelineFacade();
-        final AbstractPipelineOutput act = p.execute("DummyPipeline", i);
+        final AbstractPipelineOutput act = p.execute(new DummyPipelineModule(), i);
         assertSame(DummyPipelineModule.exp, act);
     }
 
