@@ -614,6 +614,12 @@ public final class ExtensibleAntInvoker extends Task {
 
     }
 
+    /**
+     * Add if and unless attributes to element. Use https://ant.apache.org/manual/ifunless.html instead.
+     *
+     * @deprecated since 3.0
+     */
+    @Deprecated
     public static abstract class ConfElem {
 
         String ifProperty;

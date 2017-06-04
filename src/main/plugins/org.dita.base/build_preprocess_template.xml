@@ -6,7 +6,10 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<project xmlns:dita="http://dita-ot.sourceforge.net" name="ditaot-preprocess" xmlns:if="ant:if">
+<project xmlns:dita="http://dita-ot.sourceforge.net"
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
+         name="ditaot-preprocess">
 
   <!-- Set to "true" if you get out-of-memory errors during preprocess
        while processing very large (thousands of files) document sets. -->
@@ -90,7 +93,7 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Generate list." taskname="gen-list"
       inputmap="${args.input}">
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
-        <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
+        <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
@@ -100,9 +103,9 @@ See the accompanying LICENSE file for applicable license.
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
-        <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
-        <param name="generate-debug-attributes" value="${generate-debug-attributes}" if="generate-debug-attributes"/>
-        <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
+        <param name="profiling.enable" value="${filter-on-parse}" unless:set="filter-on-parse"/>
+        <param name="generate-debug-attributes" value="${generate-debug-attributes}" if:set="generate-debug-attributes"/>
+        <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
       </module>
     </pipeline>
   </target>
@@ -123,9 +126,9 @@ See the accompanying LICENSE file for applicable license.
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
-        <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
-        <param name="generate-debug-attributes" value="${generate-debug-attributes}" if="generate-debug-attributes"/>
-        <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
+        <param name="profiling.enable" value="${filter-on-parse}" unless:set="filter-on-parse"/>
+        <param name="generate-debug-attributes" value="${generate-debug-attributes}" if:set="generate-debug-attributes"/>
+        <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
       </module>
     </pipeline>
     <!-- generate list files -->
@@ -188,8 +191,8 @@ See the accompanying LICENSE file for applicable license.
         <ditaFileset format="dita"/>
         <ditaFileset format="ditamap"/>
         <!--param name="ditadir" location="${dita.dir}"/-->
-        <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
-        <!--param name="inputdir" location="${args.input.dir}" if="args.input.dir"/-->
+        <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
+        <!--param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/-->
         <!--param name="outputdir" location="${dita.output.dir}"/-->
         <!--param name="setsystemid" value="${args.xml.systemid.set}"/-->
         <param name="transtype" value="${transtype}"/>
@@ -250,7 +253,7 @@ See the accompanying LICENSE file for applicable license.
       inputmap="${user.input.file}">
       <module class="org.dita.dost.module.MoveMetaModule">
         <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl"/>
-        <param name="conserve-memory" expression="${conserve-memory}" if="conserve-memory"/>
+        <param name="conserve-memory" expression="${conserve-memory}" if:set="conserve-memory"/>
         <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
@@ -294,9 +297,9 @@ See the accompanying LICENSE file for applicable license.
           <param name="attributes" value="href"/>
         </filter>
         <filter class="org.dita.dost.writer.NormalizeTableFilter">
-          <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
+          <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
         </filter>
-        <filter class="org.dita.dost.writer.CoderefResolver" unless="preprocess.coderef.skip"/>
+        <filter class="org.dita.dost.writer.CoderefResolver" unless:set="preprocess.coderef.skip"/>
       </sax>
     </pipeline>
   </target>
@@ -368,7 +371,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="copy-to">
     <pipeline message="Resolve copy-to." taskname="copy-to">
       <module class="org.dita.dost.module.CopyToModule">
-        <param name="force-unique" value="${force-unique}" if="force-unique"/>
+        <param name="force-unique" value="${force-unique}" if:set="force-unique"/>
       </module>
     </pipeline>
   </target>
@@ -402,7 +405,7 @@ See the accompanying LICENSE file for applicable license.
       inputmap="${user.input.file}">
       <module class="org.dita.dost.module.ChunkModule">
         <param name="transtype" value="${transtype}"/>
-        <param name="root-chunk-override" value="${root-chunk-override}" if="root-chunk-override"/>
+        <param name="root-chunk-override" value="${root-chunk-override}" if:set="root-chunk-override"/>
       </module>
     </pipeline>
     
@@ -437,7 +440,7 @@ See the accompanying LICENSE file for applicable license.
               inputmap="${user.input.file}">
       <module class="org.dita.dost.module.MoveLinksModule">
         <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl"/>
-        <param name="include.rellinks" expression="${include.rellinks}" if="include.rellinks"/>
+        <param name="include.rellinks" expression="${include.rellinks}" if:set="include.rellinks"/>
         <!--dita:extension id="dita.preprocess.maplink.param" behavior="org.dita.dost.platform.InsertAction"/-->
       </module>
     </pipeline>
@@ -464,12 +467,12 @@ See the accompanying LICENSE file for applicable license.
         reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
         style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
         <ditaFileset format="dita"/>
-        <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
-        <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
-        <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
+        <param name="TABLELINK" expression="${args.tablelink.style}" if:set="args.tablelink.style" />
+        <param name="FIGURELINK" expression="${args.figurelink.style}" if:set="args.figurelink.style" />
+        <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if:set="onlytopic.in.map"/>
         <!-- Deprecated since 2.5 -->
         <param name="defaultLanguage" expression="${default.language}"/>
-        <param name="remove-broken-links" expression="${remove-broken-links}" if="remove-broken-links"/>
+        <param name="remove-broken-links" expression="${remove-broken-links}" if:set="remove-broken-links"/>
         <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
@@ -500,11 +503,11 @@ See the accompanying LICENSE file for applicable license.
         <ditaFileset format="dita" processingRole="normal"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"/>
-        <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
+        <param name="DRAFT" expression="${args.draft}" if:set="args.draft"/>
         <param name="BASEDIR" expression="${basedir}"/>
         <param name="OUTPUTDIR" expression="${dita.output.dir}"/>
         <!-- Deprecated since 2.4 -->
-        <param name="DBG" expression="${args.debug}" if="args.debug"/>
+        <param name="DBG" expression="${args.debug}" if:set="args.debug"/>
         <param name="defaultLanguage" expression="${default.language}"/>
         <dita:extension id="dita.preprocess.flag-module.param" behavior="org.dita.dost.platform.InsertAction"/>
         <xmlcatalog refid="dita.catalog"/>
