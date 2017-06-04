@@ -10,7 +10,7 @@ package org.dita.dost.module;
 
 import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.getRelativeUnixPath;
+import static org.dita.dost.util.FileUtils.getRelativePath;
 import static org.dita.dost.util.FileUtils.resolve;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.Configuration.*;
@@ -519,7 +519,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             if (isOutFile(traceFilename, inputMap)) {
                 return toFile(getRelativePathFromOut(traceFilename.getAbsoluteFile(), job));
             } else {
-                return new File(getRelativeUnixPath(traceFilename.getAbsolutePath(), inputMap.getAbsolutePath())).getParentFile();
+                return getRelativePath(traceFilename.getAbsoluteFile(), inputMap.getAbsoluteFile()).getParentFile();
             }
         } else {
             return FileUtils.getRelativePath(filename);
@@ -531,7 +531,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
      * @return relative system path to out which ends in {@link java.io.File#separator File.separator}
      */
     private static String getRelativePathFromOut(final File overflowingFile, final Job job) {
-        final URI relativePath = getRelativePath(job.getInputFile(), overflowingFile.toURI());
+        final URI relativePath = URLUtils.getRelativePath(job.getInputFile(), overflowingFile.toURI());
         final File outputDir = job.getOutputDir().getAbsoluteFile();
         final File outputPathName = new File(outputDir, "index.html");
         final File finalOutFilePathName = resolve(outputDir, relativePath.getPath());

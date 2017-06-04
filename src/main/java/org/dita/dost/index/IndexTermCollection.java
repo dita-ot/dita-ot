@@ -62,28 +62,6 @@ public final class IndexTermCollection {
     }
 
     /**
-     * The only interface to access IndexTermCollection instance.
-     * @return Singleton IndexTermCollection instance
-     * @deprecated create new instance instead. Since 2.3
-     */
-    @Deprecated
-    public static synchronized IndexTermCollection getInstantce(){
-        if(collection == null){
-            collection = new IndexTermCollection();
-        }
-        return collection;
-    }
-
-    /**
-     * The interface to clear the result in IndexTermCollection instance.
-     * @deprecated create new instance instead. Since 2.3
-     */
-    @Deprecated
-    public void clear(){
-        termList.clear();
-    }
-
-    /**
      * Get the index type.
      * 
      * @return index type

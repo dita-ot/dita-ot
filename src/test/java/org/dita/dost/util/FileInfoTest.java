@@ -21,22 +21,8 @@ import org.junit.Test;
 public final class FileInfoTest {
 
     @Test
-    public void testFileConstructor() throws URISyntaxException {
-        final FileInfo f = new FileInfo(new File("foo" + File.separator + "bar"));
-        assertEquals(new File("foo" + File.separator + "bar"), f.file);
-        assertEquals(new URI("foo" + URI_SEPARATOR + "bar"), f.uri);
-    }
-
-    @Test
     public void testURIConstructor() throws URISyntaxException {
         final FileInfo f = new FileInfo(new URI("foo" + URI_SEPARATOR + "bar"));
-        assertEquals(new File("foo" + File.separator + "bar"), f.file);
-        assertEquals(new URI("foo" + URI_SEPARATOR + "bar"), f.uri);
-    }
-
-    @Test
-    public void testIllegalFileConstructor() throws URISyntaxException {
-        final FileInfo f = new FileInfo(new File("foo" + URI_SEPARATOR + "bar"));
         assertEquals(new File("foo" + File.separator + "bar"), f.file);
         assertEquals(new URI("foo" + URI_SEPARATOR + "bar"), f.uri);
     }

@@ -603,15 +603,7 @@ public final class Job {
             this.file = toFile(uri);
             this.result = src;
         }
-        @Deprecated
-        FileInfo(final File file) {
-            if (file == null) throw new IllegalArgumentException(new NullPointerException());
-            this.src = null;
-            this.uri =  toURI(file);
-            this.file = file;
-            this.result = src;
-        }
-        
+
         @Override
         public String toString() {
             return "FileInfo{" +

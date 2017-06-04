@@ -71,18 +71,6 @@ public class TestFileUtils {
     }
     
     @Test
-    public void testGetRelativePathFromMapFileString() {
-        assertEquals("../a.dita",FileUtils.getRelativeUnixPath(new File("c:/map/map.ditamap"), "c:/a.dita"));
-        assertEquals("../a.dita",FileUtils.getRelativeUnixPath(new File("c:\\map\\map.ditamap"), "c:\\a.dita"));
-        assertEquals("d:/a.dita",FileUtils.getRelativeUnixPath(new File("c:/map.ditamap"), "d:/a.dita"));
-        assertEquals("d:\\a.dita",FileUtils.getRelativeUnixPath(new File("c:\\map.ditamap"), "d:\\a.dita"));
-        assertEquals("a.dita", FileUtils.getRelativeUnixPath(new File("c:/map1/map2/map.ditamap"), "c:/map1/map2/a.dita"));
-        assertEquals("a.dita", FileUtils.getRelativeUnixPath(new File("c:\\map1\\map2\\map.ditamap"), "c:\\map1\\map2\\a.dita"));
-        assertEquals("../topic/a.dita",FileUtils.getRelativeUnixPath(new File("c:/map1/map.ditamap"), "c:/topic/a.dita"));
-        assertEquals("../topic/a.dita",FileUtils.getRelativeUnixPath(new File("c:\\map1\\map.ditamap"), "c:\\topic\\a.dita"));
-    }
-    
-    @Test
     public void testGetRelativePathFromMapFileFile() {
         if (File.separator.equals(SEPARATOR_WINDOWS)) {
             assertEquals(new File("../a.dita"), FileUtils.getRelativePath(new File("c:\\map\\map.ditamap"), new File("c:\\a.dita")));

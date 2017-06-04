@@ -163,18 +163,6 @@ public final class FileUtils {
      * 
      * @param basePath base path
      * @param refPath reference path
-     * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
-     */
-    @Deprecated
-    public static String getRelativeUnixPath(final File basePath, final String refPath) {
-        return getRelativePath(basePath.getPath(), refPath, UNIX_SEPARATOR);
-    }
-    
-    /**
-     * Resolves a path reference against a base path.
-     * 
-     * @param basePath base path
-     * @param refPath reference path
      * @return relative path
      */
     public static File getRelativePath(final File basePath, final File refPath) {

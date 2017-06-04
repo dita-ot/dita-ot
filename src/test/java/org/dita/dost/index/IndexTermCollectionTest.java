@@ -32,29 +32,11 @@ public class IndexTermCollectionTest {
     @Before
     public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(getClass());
-        final IndexTermCollection i = IndexTermCollection.getInstantce();
-        i.clear();
-    }
-
-    @Test
-    public void testGetInstantce() {
-        assertSame(IndexTermCollection.getInstantce(),
-                IndexTermCollection.getInstantce());
-    }
-
-    @Test
-    public void testClear() {
-        final IndexTermCollection i = IndexTermCollection.getInstantce();
-        assertEquals(0, i.getTermList().size());
-        i.addTerm(new IndexTerm());
-        assertEquals(1, i.getTermList().size());
-        i.clear();
-        assertEquals(0, i.getTermList().size());
     }
 
     @Test
     public void testGetIndexType() {
-        final IndexTermCollection i = IndexTermCollection.getInstantce();
+        final IndexTermCollection i = new IndexTermCollection();
         assertNull(i.getIndexType());
         i.setIndexType("");
         assertEquals("", i.getIndexType());
@@ -64,14 +46,14 @@ public class IndexTermCollectionTest {
 
     @Test
     public void testSetIndexType() {
-        final IndexTermCollection i = IndexTermCollection.getInstantce();
+        final IndexTermCollection i = new IndexTermCollection();
         i.setIndexType(null);
         i.setIndexType("");
     }
 
     @Test
     public void testGetIndexClass() {
-        final IndexTermCollection i = IndexTermCollection.getInstantce();
+        final IndexTermCollection i = new IndexTermCollection();
         i.setIndexClass(null);
         assertNull(i.getIndexClass());
         i.setIndexClass("");
@@ -82,14 +64,14 @@ public class IndexTermCollectionTest {
 
     @Test
     public void testSetIndexClass() {
-        final IndexTermCollection i = IndexTermCollection.getInstantce();
+        final IndexTermCollection i = new IndexTermCollection();
         i.setIndexClass(null);
         i.setIndexClass("");
     }
 
     @Test
     public void testAddTerm() {
-        final IndexTermCollection i = IndexTermCollection.getInstantce();
+        final IndexTermCollection i = new IndexTermCollection();
         assertEquals(0, i.getTermList().size());
         i.addTerm(new IndexTerm());
         i.addTerm(new IndexTerm());
@@ -103,8 +85,7 @@ public class IndexTermCollectionTest {
 
     @Test
     public void testGetTermList() {
-        final IndexTermCollection i = IndexTermCollection.getInstantce();
-        i.clear();
+        final IndexTermCollection i = new IndexTermCollection();
         assertEquals(Collections.emptyList(), i.getTermList());
         final IndexTerm first = new IndexTerm();
         first.setTermName("first");
@@ -120,8 +101,7 @@ public class IndexTermCollectionTest {
 
     @Test
     public void testSort() {
-        final IndexTermCollection i = IndexTermCollection.getInstantce();
-        i.clear();
+        final IndexTermCollection i = new IndexTermCollection();
         final IndexTerm first = new IndexTerm();
         first.setTermName("first");
         first.setTermKey("first");
@@ -137,8 +117,7 @@ public class IndexTermCollectionTest {
 
     @Test
     public void testOutputTerms() throws DITAOTException {
-        final IndexTermCollection i = IndexTermCollection.getInstantce();
-        i.clear();
+        final IndexTermCollection i = new IndexTermCollection();
         i.setIndexClass(EclipseIndexWriter.class.getCanonicalName());
         i.setOutputFileRoot(new File(tempDir, "foo").getAbsolutePath());
         final IndexTerm first = new IndexTerm();

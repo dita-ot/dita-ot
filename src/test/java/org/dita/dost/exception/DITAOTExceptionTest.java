@@ -44,28 +44,4 @@ public class DITAOTExceptionTest {
         new DITAOTException(new MessageBean(null, null, null, null), new RuntimeException(), "test");
     }
 
-    @Test
-    public void testGetMessageBean() {
-        final MessageBean m = new MessageBean(null, null, null, null);
-        final DITAOTException e = new DITAOTException(m, null, "test");
-        assertSame(m, e.getMessageBean());
-    }
-
-    @Test
-    public void testAlreadyCaptured() {
-        final DITAOTException e = new DITAOTException();
-        assertEquals(e.alreadyCaptured(), false);
-        e.setCaptured(true);
-        assertEquals(e.alreadyCaptured(), true);
-    }
-
-    @Test
-    public void testSetCaptured() {
-        final DITAOTException e = new DITAOTException();
-        e.setCaptured(false);
-        assertEquals(e.alreadyCaptured(), false);
-        e.setCaptured(true);
-        assertEquals(e.alreadyCaptured(), true);
-    }
-
 }
