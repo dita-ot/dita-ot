@@ -7,7 +7,7 @@
 
  */
 package org.dita.dost.log;
-import org.dita.dost.util.LogUtils;
+
 /**
  * Logger to standard output and error.
  * 
@@ -49,7 +49,6 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
      */
     @Override
     public void warn(final String msg) {
-        LogUtils.increaseNumOfWarnings();
         System.out.println(msg);
     }
 
@@ -60,7 +59,6 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
      */
     @Override
     public void error(final String msg) {
-        LogUtils.increaseNumOfErrors();
         System.err.println(msg);
     }
 
