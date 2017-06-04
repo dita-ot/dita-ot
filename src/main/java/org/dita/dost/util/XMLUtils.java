@@ -773,7 +773,7 @@ public final class XMLUtils {
 
         @Override
         public Source resolve(final String href, final String base) throws TransformerException {
-            Configuration.logger.info("XSLT parse: " + href);
+            System.out.println("XSLT parse: " + href);
             return r.resolve(href, base);
         }
     }
@@ -849,13 +849,13 @@ public final class XMLUtils {
 
         @Override
         public void parse(InputSource input) throws IOException, SAXException {
-            Configuration.logger.info("SAX parse: " + (input.getSystemId() != null ? input.getSystemId() : input.toString()));
+            System.out.println("SAX parse: " + (input.getSystemId() != null ? input.getSystemId() : input.toString()));
             r.parse(input);
         }
 
         @Override
         public void parse(String systemId) throws IOException, SAXException {
-            Configuration.logger.info("SAX parse: " + systemId);
+            System.out.println("SAX parse: " + systemId);
             r.parse(systemId);
         }
     }
@@ -871,7 +871,7 @@ public final class XMLUtils {
 
         @Override
         public Document parse(InputSource is) throws SAXException, IOException {
-            Configuration.logger.info("DOM parse: " + (is.getSystemId() != null ? is.getSystemId() : is.toString()));
+            System.out.println("DOM parse: " + (is.getSystemId() != null ? is.getSystemId() : is.toString()));
             return b.parse(is);
         }
 

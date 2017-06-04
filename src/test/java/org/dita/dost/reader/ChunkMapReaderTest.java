@@ -9,7 +9,7 @@ package org.dita.dost.reader;
 
 import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
-import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.Before;
@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
 import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -99,7 +100,8 @@ public class ChunkMapReaderTest {
         final Job job = createJob("map.ditamap", "1.dita", "2.dita", "3.dita");
 
         final ChunkMapReader mapReader = new ChunkMapReader();
-        mapReader.setLogger(new DITAOTJavaLogger());
+        final CachingLogger logger = new CachingLogger();
+        mapReader.setLogger(logger);
         mapReader.setJob(job);
 
         mapReader.read(new File(tempDir, "map.ditamap"));
@@ -117,6 +119,7 @@ public class ChunkMapReaderTest {
 
         assertEquals(Collections.emptyMap(),
                 mapReader.getConflicTable());
+        assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
     }
 
     @Test
@@ -124,7 +127,8 @@ public class ChunkMapReaderTest {
         final Job job = createJob("conflict.ditamap", "2.dita", "Chunk0.dita");
 
         final ChunkMapReader mapReader = new ChunkMapReader();
-        mapReader.setLogger(new DITAOTJavaLogger());
+        final CachingLogger logger = new CachingLogger();
+        mapReader.setLogger(logger);
         mapReader.setJob(job);
 
         mapReader.read(new File(tempDir, "conflict.ditamap"));
@@ -143,6 +147,7 @@ public class ChunkMapReaderTest {
                         .put(prefixTemp("Chunk2.dita"), prefixTemp("Chunk1.dita"))
                         .build(),
                 mapReader.getConflicTable());
+        assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
     }
 
     private Job createJob(final String map, final String... topics) throws IOException {

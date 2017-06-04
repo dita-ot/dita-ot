@@ -9,7 +9,7 @@ package org.dita.dost.module;
 
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
-import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.Before;
@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import static junit.framework.Assert.assertEquals;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
 import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.assertNotNull;
 
@@ -101,7 +102,8 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         final BranchFilterModule m = new BranchFilterModule();
         final Job job = getJob();
         m.setJob(job);
-        m.setLogger(new DITAOTJavaLogger());
+        final CachingLogger logger = new CachingLogger();
+        m.setLogger(logger);
         
         m.processMap(URI.create("input.ditamap"));
         assertXMLEqual(new InputSource(new File(expDir, "input.ditamap").toURI().toString()),
@@ -140,6 +142,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
                 .collect(Collectors.toList());
         Collections.sort(filesAct);
         assertEquals(filesExp, filesAct);
+        assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
     }
 
     private static final Optional<String> ABSENT_STRING = Optional.empty();
@@ -171,7 +174,8 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
         job.addAll(getDuplicateTopicFileInfos());
         m.setJob(job);
-        m.setLogger(new DITAOTJavaLogger());
+        final CachingLogger logger = new CachingLogger();
+        m.setLogger(logger);
 
         m.processMap(URI.create("test.ditamap"));
 
@@ -184,6 +188,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
                 .build());
 
         assertEquals(exp, new HashSet<>(job.getFileInfo()));
+        assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
     }
 
     private Set<Job.FileInfo> getDuplicateTopicFileInfos() {

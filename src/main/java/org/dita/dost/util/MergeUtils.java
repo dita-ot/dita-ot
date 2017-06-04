@@ -14,7 +14,6 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 
 import org.xml.sax.XMLReader;
@@ -30,6 +29,7 @@ public final class MergeUtils {
     private int index;
     /** Set of visited topic files. */
     private final Set<URI> visitSet;
+    private DITAOTLogger logger;
 
     /**
      * Default Constructor
@@ -39,6 +39,10 @@ public final class MergeUtils {
         idMap = new ConcurrentHashMap<>();
         visitSet = Collections.synchronizedSet(new HashSet<URI>(256));
         index = 0;
+    }
+
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
     }
 
     /**
@@ -128,9 +132,8 @@ public final class MergeUtils {
      * @param useCatalog whether use catalog file for validation
      * @return topic id
      */
-    public static String getFirstTopicId(final URI file, final boolean useCatalog){
+    public String getFirstTopicId(final URI file, final boolean useCatalog) {
         assert file.isAbsolute();
-        final DITAOTLogger logger = new DITAOTJavaLogger();
         final StringBuilder firstTopicId = new StringBuilder();
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
         try {

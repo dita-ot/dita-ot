@@ -15,10 +15,6 @@ import java.io.File;
 import java.net.URI;
 import java.util.*;
 
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.DITAOTLogger;
-
-
 /**
  * Static file utilities.
  * 
@@ -32,8 +28,6 @@ public final class FileUtils {
     private FileUtils(){
     }
 
-    private static final DITAOTLogger logger = new DITAOTJavaLogger();
-
     /**
      * Supported image extensions. File extensions contain a leading dot.
      */
@@ -45,7 +39,7 @@ public final class FileUtils {
         if (imageExtensions != null && imageExtensions.length()>0) {
             Collections.addAll(sie, imageExtensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.error("Failed to read supported image extensions from configuration, using defaults.");
+            System.err.println("Failed to read supported image extensions from configuration, using defaults.");
             sie.add(FILE_EXTENSION_JPG);
             sie.add(FILE_EXTENSION_GIF);
             sie.add(FILE_EXTENSION_EPS);
@@ -69,7 +63,7 @@ public final class FileUtils {
         if (extensions != null && extensions.length()>0) {
             Collections.addAll(she, extensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.error("Failed to read supported HTML extensions from configuration, using defaults.");
+            System.err.println("Failed to read supported HTML extensions from configuration, using defaults.");
             she.add(FILE_EXTENSION_HTML);
             she.add(FILE_EXTENSION_HTM);
         }
@@ -87,7 +81,7 @@ public final class FileUtils {
         if (extensions != null && extensions.length()>0) {
             Collections.addAll(sre, extensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.error("Failed to read supported resource file extensions from configuration, using defaults.");
+            System.err.println("Failed to read supported resource file extensions from configuration, using defaults.");
             sre.add(FILE_EXTENSION_SWF);
             sre.add(FILE_EXTENSION_PDF);
         }

@@ -18,6 +18,7 @@ import java.net.URI;
 import java.util.*;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.*;
@@ -162,6 +163,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     /** Set of link targets which are not resource-only */
     private Set<URI> normalProcessingRoleTargets;
+    private MergeUtils mergeUtils;
     
     /**
      * Constructor.
@@ -173,6 +175,13 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         empty = true;
         elemName = new ArrayDeque<>();
         hasSubElem = new ArrayDeque<>();
+        mergeUtils = new MergeUtils();
+    }
+
+    @Override
+    public void setLogger(final DITAOTLogger logger) {
+        super.setLogger(logger);
+        mergeUtils.setLogger(logger);
     }
     
     public void setKeyDefinition(final KeyScope definitionMap) {
@@ -583,7 +592,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * Get first topic id
      */
     private String getFirstTopicId(final URI topicFile) {
-        return MergeUtils.getFirstTopicId(topicFile, false);
+        return mergeUtils.getFirstTopicId(topicFile, false);
     }
     
     /**

@@ -69,6 +69,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
             throw new IllegalStateException("Logger not set");
         }
         indexTermCollection = new IndexTermCollection();
+        indexTermCollection.setLogger(logger);
         try {
             parseAndValidateInput(input);
             extractIndexTerm();

@@ -41,7 +41,7 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
     }
 
     @Override
-    public final void setLogger(final DITAOTLogger logger) {
+    public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
         xmlUtils.setLogger(logger);
     }
