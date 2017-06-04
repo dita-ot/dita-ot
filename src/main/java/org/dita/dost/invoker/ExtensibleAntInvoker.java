@@ -20,7 +20,6 @@ import org.dita.dost.module.ModuleFactory;
 import org.dita.dost.module.XmlFilterModule;
 import org.dita.dost.module.XmlFilterModule.FilterPair;
 import org.dita.dost.module.XsltModule;
-import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
@@ -46,8 +45,6 @@ import static org.dita.dost.util.Constants.*;
 public final class ExtensibleAntInvoker extends Task {
     
     private final ModuleFactory factory = ModuleFactory.instance();
-    /** Pipeline. */
-    private final PipelineFacade pipeline;
     /** Pipeline attributes and parameters */
     private final Map<String, String> attrs = new HashMap<>();
     /** Nested params. */
@@ -62,7 +59,6 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public ExtensibleAntInvoker() {
         super();
-        pipeline = new PipelineFacade();
         pipelineParams = new ArrayList<>();
         modules = new ArrayList<>();
     }
@@ -153,8 +149,7 @@ public final class ExtensibleAntInvoker extends Task {
         long start, end;
         final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
         logger.setTask(this);
-        pipeline.setLogger(logger);
-        pipeline.setJob(getJob(tempDir, getProject()));
+        final Job job = getJob(tempDir, getProject());
         try {
             for (final Module m: modules) {
                 final PipelineHashIO pipelineInput = new PipelineHashIO();
@@ -163,38 +158,40 @@ public final class ExtensibleAntInvoker extends Task {
                 }
                 if (m instanceof Xslt) {
                     final Xslt xm = (Xslt) m;
-                    final XsltModule x = new XsltModule();
-                    x.setStyle(xm.style);
+                    final XsltModule module = new XsltModule();
+                    module.setStyle(xm.style);
                     if (xm.in != null) {
-                        x.setSource(xm.in);
-                        x.setResult(xm.out);
+                        module.setSource(xm.in);
+                        module.setResult(xm.out);
                     } else if (!xm.fileInfoFilters.isEmpty()) {
-                        x.setFileInfoFilter(combine(xm.fileInfoFilters));
-                        x.setDestinationDir(xm.destDir != null ? xm.destDir : tempDir);
+                        module.setFileInfoFilter(combine(xm.fileInfoFilters));
+                        module.setDestinationDir(xm.destDir != null ? xm.destDir : tempDir);
                     } else {
                         final Set<File> inc = readListFile(xm.includes, logger);
                         inc.removeAll(readListFile(xm.excludes, logger));
-                        x.setIncludes(inc);
-                        x.setDestinationDir(xm.destDir != null ? xm.destDir : xm.baseDir);
-                        x.setSorceDir(xm.baseDir);
+                        module.setIncludes(inc);
+                        module.setDestinationDir(xm.destDir != null ? xm.destDir : xm.baseDir);
+                        module.setSorceDir(xm.baseDir);
                     }
-                    x.setFilenameParam(xm.filenameparameter);
-                    x.setFiledirParam(xm.filedirparameter);
-                    x.setReloadstylesheet(xm.reloadstylesheet);
-                    x.setXMLCatalog(xm.xmlcatalog);
+                    module.setFilenameParam(xm.filenameparameter);
+                    module.setFiledirParam(xm.filedirparameter);
+                    module.setReloadstylesheet(xm.reloadstylesheet);
+                    module.setXMLCatalog(xm.xmlcatalog);
                     if (xm.mapper != null) {
-                        x.setMapper(xm.mapper.getImplementation());
+                        module.setMapper(xm.mapper.getImplementation());
                     }
                     for (final Param p : m.params) {
                         if (!p.isValid()) {
                             throw new BuildException("Incomplete parameter");
                         }
                         if (isValid(getProject(), p.getIf(), p.getUnless())) {
-                            x.setParam(p.getName(), p.getValue());
+                            module.setParam(p.getName(), p.getValue());
                         }
                     }
                     start = System.currentTimeMillis();
-                    pipeline.execute(x, pipelineInput);
+                    module.setLogger(logger);
+                    module.setJob(job);
+                    module.execute(pipelineInput);
                     end = System.currentTimeMillis();
                 } else if (m instanceof SaxPipe) {
                     final SaxPipe fm = (SaxPipe) m;
@@ -208,7 +205,9 @@ public final class ExtensibleAntInvoker extends Task {
                         throw new BuildException(e);
                     }
                     start = System.currentTimeMillis();
-                    pipeline.execute(module, pipelineInput);
+                    module.setLogger(logger);
+                    module.setJob(job);
+                    module.execute(pipelineInput);
                     end = System.currentTimeMillis();
                 } else {
                     for (final Param p : m.params) {
@@ -224,7 +223,9 @@ public final class ExtensibleAntInvoker extends Task {
                         module.setFileInfoFilter(combine(m.fileInfoFilters));
                     }
                     start = System.currentTimeMillis();
-                    pipeline.execute(module, pipelineInput);
+                    module.setLogger(logger);
+                    module.setJob(job);
+                    module.execute(pipelineInput);
                     end = System.currentTimeMillis();
                 }
                 logger.debug("Module processing took " + (end - start) + " ms");

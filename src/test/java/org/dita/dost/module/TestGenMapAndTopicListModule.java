@@ -9,8 +9,6 @@ package org.dita.dost.module;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.pipeline.AbstractFacade;
-import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Job;
 import org.junit.After;
@@ -59,11 +57,11 @@ public class TestGenMapAndTopicListModule {
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_MAPLINKS, new File(tempDir, "maplinks.unordered").getPath());
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "no");
 
-        final AbstractFacade facade = new PipelineFacade();
-        facade.setLogger(new TestUtils.TestLogger());
+        final GenMapAndTopicListModule module = new GenMapAndTopicListModule();
+        module.setLogger(new TestUtils.TestLogger());
         final Job job = new Job(tempDir);
-        facade.setJob(job);
-        facade.execute(new GenMapAndTopicListModule(), pipelineInput);
+        module.setJob(job);
+        module.execute(pipelineInput);
 
         return job;
     }

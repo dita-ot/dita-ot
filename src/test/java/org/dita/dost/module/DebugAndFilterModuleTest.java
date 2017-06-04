@@ -35,8 +35,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.pipeline.AbstractFacade;
-import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
@@ -95,10 +93,10 @@ public class DebugAndFilterModuleTest {
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "xhtml");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR, Boolean.TRUE.toString());
 
-        final AbstractFacade facade = new PipelineFacade();
-        facade.setLogger(new TestUtils.TestLogger());
-        facade.setJob(job);
-        facade.execute(new DebugAndFilterModule(), pipelineInput);
+        final DebugAndFilterModule module = new DebugAndFilterModule();
+        module.setLogger(new TestUtils.TestLogger());
+        module.setJob(job);
+        module.execute(pipelineInput);
     }
 
     @Test
