@@ -57,6 +57,12 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' reference/properties ')]
+    [empty(*[contains(@class,' reference/property ')]/
+           *[contains(@class,' reference/proptype ') or contains(@class,' reference/propvalue ') or contains(@class,' reference/propdesc ')])]" priority="10"/>
+  <xsl:template match="*[contains(@class, ' reference/property ')]
+    [empty(*[contains(@class,' reference/proptype ') or contains(@class,' reference/propvalue ') or contains(@class,' reference/propdesc ')])]" priority="10"/>
 
   <xsl:template match="*[contains(@class, ' reference/properties ')]">
     <fo:table xsl:use-attribute-sets="properties">

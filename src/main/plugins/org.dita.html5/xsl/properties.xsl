@@ -21,6 +21,9 @@ See the accompanying LICENSE file for applicable license.
       <propdesc class="- topic/stentry reference/propdesc "/>
     </property>
   </xsl:variable>
+  
+  <xsl:template match="*[contains(@class, ' reference/property ')]
+    [empty(*[contains(@class,' reference/proptype ') or contains(@class,' reference/propvalue ') or contains(@class,' reference/propdesc ')])]" priority="10"/>
 
   <xsl:template match="*[contains(@class, ' reference/property ')]">
     <xsl:variable name="property" select="." as="element()"/>

@@ -314,6 +314,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
   
   <!-- nested steps - 1 level of nesting only -->
+  <xsl:template match="*[contains(@class, ' task/substeps ')][empty(*[contains(@class,' task/substep ')])]" priority="10"/>
+  
   <xsl:template match="*[contains(@class,' task/substeps ')]" name="topic.task.substeps">
    <!-- If there's a block element somewhere in the step list, expand the whole list -->
     <xsl:variable name="sub_step_expand"> <!-- set & save sub_step_expand=yes/no for expanding/compacting list items -->
@@ -352,6 +354,8 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <!-- choices contain choice items -->
+  <xsl:template match="*[contains(@class, ' task/choices ')][empty(*[contains(@class,' task/choice ')])]" priority="10"/>
+  
   <xsl:template match="*[contains(@class,' task/choices ')]" name="topic.task.choices">
     <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:call-template name="setaname"/>
