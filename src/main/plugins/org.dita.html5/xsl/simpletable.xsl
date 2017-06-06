@@ -164,6 +164,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]" name="topic.simpletable">
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
 
+    <xsl:call-template name="spec-title"/>
     <table>
       <xsl:apply-templates select="." mode="table:common"/>
       <xsl:call-template name="dita2html:simpletable-cols"/>
@@ -220,7 +221,14 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/stentry ')]" mode="simpletable:entry">
     <xsl:apply-templates select="." mode="table:common"/>
     <xsl:apply-templates select="." mode="headers"/>
-    <xsl:apply-templates/>
+    <xsl:choose>
+      <xsl:when test="*|text()|processing-instruction()">
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:when test="@specentry">
+        <xsl:apply-templates select="@specentry"/>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="*[simpletable:is-head-entry(.)]" mode="headers">
