@@ -38,7 +38,7 @@
 ## Checklist
 <!-- Verify the following points and put an `[x]` in the boxes that apply: -->
 
-- [ ] The Gradle builds run successfully (`./gradlew` and `./gradlew dist`).
+- [ ] Builds & tests completed successfully (`./gradlew test integrationTest`).
 - [ ] My code follows the code style of this project.
     -  <https://github.com/dita-ot/dita-ot/wiki/Java-Coding-Conventions>
     -  <https://github.com/dita-ot/dita-ot/wiki/XSLT-Coding-Conventions>
