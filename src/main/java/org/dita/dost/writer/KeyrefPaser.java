@@ -291,7 +291,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
                                 if (linktext.getLength() > 0) {
                                     domToSax((Element) linktext.item(0), true);
-                                } else if (fallbackToNavtitle(elem)) {
+                                } else if (fallbackToNavtitleOrHref(elem)) {
                                     final NodeList navtitleElement = elem.getElementsByTagName(TOPIC_NAVTITLE.localName);
                                     if (navtitleElement.getLength() > 0) {
                                         final AttributesImpl atts = new AttributesImpl();
@@ -308,10 +308,20 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                             final char[] ch = navtitle.toCharArray();
                                             getContentHandler().characters(ch, 0, ch.length);
                                             getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
+                                        } else {
+                                            final String hrefAtt = elem.getAttribute(ATTRIBUTE_NAME_HREF);
+                                            if (!hrefAtt.trim().isEmpty()) {
+                                                final AttributesImpl atts = new AttributesImpl();
+                                                XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_LINKTEXT.toString());
+                                                getContentHandler().startElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName, atts);
+                                                final char[] ch = hrefAtt.toCharArray();
+                                                getContentHandler().characters(ch, 0, ch.length);
+                                                getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
+                                            }
                                         }
                                     }
                                 }
-                            } else if (fallbackToNavtitle(elem)) {
+                            } else if (fallbackToNavtitleOrHref(elem)) {
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
                                 if (linktext.getLength() > 0) {
                                     domToSax((Element) linktext.item(0), false);
@@ -324,6 +334,12 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                         if (!navtitle.trim().isEmpty()) {
                                             final char[] ch = navtitle.toCharArray();
                                             getContentHandler().characters(ch, 0, ch.length);
+                                        } else {
+                                            final String hrefAtt = elem.getAttribute(ATTRIBUTE_NAME_HREF);
+                                            if (!hrefAtt.trim().isEmpty()) {
+                                                final char[] ch = hrefAtt.toCharArray();
+                                                getContentHandler().characters(ch, 0, ch.length);
+                                            }
                                         }
                                     }
                                 }
@@ -541,7 +557,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * @param elem Key definition element
      * @return
      */
-    private boolean fallbackToNavtitle(final Element elem) {
+    private boolean fallbackToNavtitleOrHref(final Element elem) {
         final String hrefValue = elem.getAttribute(ATTRIBUTE_NAME_HREF);
         final String locktitleValue = elem.getAttribute(ATTRIBUTE_NAME_LOCKTITLE);
         return ((ATTRIBUTE_NAME_LOCKTITLE_VALUE_YES.equals(locktitleValue)) ||
