@@ -23,9 +23,9 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import net.sf.saxon.Controller;
-import net.sf.saxon.event.MessageWarner;
-import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.jaxp.TransformerImpl;
+import net.sf.saxon.serialize.MessageWarner;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.LoggingErrorListener;
@@ -70,15 +70,9 @@ public final class XMLUtils {
 
     public static Transformer withLogger(final Transformer transformer, final DITAOTLogger logger) {
         transformer.setErrorListener(new LoggingErrorListener(logger));
-        if (transformer instanceof Controller) {
-            final MessageWarner mw = new MessageWarner();
-            // XXX https://sourceforge.net/p/saxon/discussion/94027/thread/adad0e12/
-            try {
-                mw.setWriter(new StringWriter());
-            } catch (final XPathException e) {
-                throw new RuntimeException(e);
-            }
-            ((Controller) transformer).setMessageEmitter(mw);
+        if (transformer instanceof TransformerImpl) {
+            final Receiver mw = new MessageWarner();
+            ((TransformerImpl) transformer).getUnderlyingController().setMessageEmitter(mw);
         }
         return transformer;
     }

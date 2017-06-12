@@ -87,12 +87,14 @@ public class ForceUniqueFilterTest {
         final DOMResult dst = new DOMResult();
         TransformerFactory.newInstance().newTransformer().transform(new SAXSource(f, new InputSource(new File(srcDir, "test.ditamap").toURI().toString())), dst);
 
-        final Document exp = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new File(expDir, "test.ditamap").toURI().toString()));
+        final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setNamespaceAware(true);
+        builderFactory.setIgnoringComments(true);
+        final Document exp = builderFactory.newDocumentBuilder().parse(new InputSource(new File(expDir, "test.ditamap").toURI().toString()));
         final Diff d = DiffBuilder
                 .compare(exp)
                 .withTest(dst.getNode())
                 .ignoreWhitespace()
-                .ignoreComments()
                 .build();
         assertFalse(d.hasDifferences());
 

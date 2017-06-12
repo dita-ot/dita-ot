@@ -49,7 +49,10 @@
   <stylesheet version="2.0">
     <xsl:apply-templates select="." mode="x:copy-namespaces" />
   	<import href="{$stylesheet-uri}" />
-  	<import href="{resolve-uri('generate-tests-utils.xsl', static-base-uri())}"/>
+    <!-- DITA-OT change starts: Saxon 9.8 handles this differently than 9.1 -->
+  	<!--import href="{resolve-uri('generate-tests-utils.xsl', static-base-uri())}"/-->
+    <import href="classpath:///XSpec/generate-tests-utils.xsl"/>
+    <!-- DITA-OT change ends -->
     <!-- This namespace alias is used for when the testing process needs to test
          the generation of XSLT! -->
     <namespace-alias stylesheet-prefix="__x" result-prefix="xsl" />
