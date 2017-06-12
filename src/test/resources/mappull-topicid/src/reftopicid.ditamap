@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" domains="(map)" class="- map/map " cascade="merge">
+  <title class="- topic/title ">Test ref to a topic ID with matching element ID</title>
+  <topicref href="tables.dita#table" class="- map/topicref "/>
+</map>
+
