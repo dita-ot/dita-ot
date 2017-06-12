@@ -7,7 +7,7 @@
  */
 package org.dita.dost.reader;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.ByteArrayInputStream;
@@ -15,7 +15,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Before;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
@@ -31,7 +30,6 @@ public class MergeMapParserTest {
 
     @Before
     public void setUp() {
-        XMLUnit.setIgnoreWhitespace(true);
     }
 
     @Test

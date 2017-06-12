@@ -7,7 +7,6 @@
  */
 package org.dita.dost.writer;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +19,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,6 +27,8 @@ import org.xml.sax.SAXException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
+
+import static org.dita.dost.TestUtils.assertXMLEqual;
 
 public class TestCHMIndexWriter {
 
@@ -39,14 +39,14 @@ public class TestCHMIndexWriter {
     @BeforeClass
     public static void setUp() throws IOException, DITAOTException {
         tempDir = TestUtils.createTempDir(TestCHMIndexWriter.class);
-        TestUtils.resetXMLUnit();
+//        TestUtils.resetXMLUnit();
         final DocumentBuilderFactory factory = new HTMLDocumentBuilderFactory();
-        XMLUnit.setControlDocumentBuilderFactory(factory);
-        XMLUnit.setTestDocumentBuilderFactory(factory);
-        XMLUnit.setControlEntityResolver(null);
-        XMLUnit.setTestEntityResolver(null);
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
+//        XMLUnit.setControlDocumentBuilderFactory(factory);
+//        XMLUnit.setTestDocumentBuilderFactory(factory);
+//        XMLUnit.setControlEntityResolver(null);
+//        XMLUnit.setTestEntityResolver(null);
+//        XMLUnit.setIgnoreWhitespace(true);
+//        XMLUnit.setIgnoreComments(true);
     }
 
     @Test

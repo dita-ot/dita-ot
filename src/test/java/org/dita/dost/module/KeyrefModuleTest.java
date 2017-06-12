@@ -30,11 +30,11 @@ import java.net.URI;
 import java.util.*;
 
 import static java.util.Collections.EMPTY_LIST;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
 import static java.net.URI.create;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.createTempDir;
 import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;

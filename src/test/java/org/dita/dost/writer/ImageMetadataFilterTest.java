@@ -8,7 +8,7 @@
 package org.dita.dost.writer;
 
 import static org.apache.commons.io.FileUtils.*;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -52,8 +51,6 @@ public class ImageMetadataFilterTest {
         filter.setJob(job);
         filter.write(f.getAbsoluteFile());
 
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
         assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
         assertEquals(Arrays.asList("img.png", "img.gif", "img.jpg", "img.tiff").stream()
@@ -61,7 +58,7 @@ public class ImageMetadataFilterTest {
                         .collect(Collectors.toSet()),
                 new HashSet(filter.getImages()));
     }
-    
+
     @Test
     public void testUplevelsWrite() throws DITAOTException, SAXException, IOException {
         final File f = new File(tempDir, "sub" + File.separator + "test.dita");
@@ -75,8 +72,6 @@ public class ImageMetadataFilterTest {
         filter.setJob(job);
         filter.write(f.getAbsoluteFile());
 
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
         assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
         assertEquals(Arrays.asList("img.png", "img.gif", "img.jpg", "img.tiff").stream()

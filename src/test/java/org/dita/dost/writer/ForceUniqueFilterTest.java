@@ -8,7 +8,6 @@
 package org.dita.dost.writer;
 
 import com.google.common.collect.ImmutableMap;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
@@ -19,6 +18,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
@@ -29,9 +30,9 @@ import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class ForceUniqueFilterTest {
 
@@ -73,10 +74,6 @@ public class ForceUniqueFilterTest {
                 .build());
         tempFileNameScheme = new GenMapAndTopicListModule.DefaultTempFileScheme();
         tempFileNameScheme.setBaseDir(srcDir.toURI());
-
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
     }
 
     @Test
@@ -91,7 +88,13 @@ public class ForceUniqueFilterTest {
         TransformerFactory.newInstance().newTransformer().transform(new SAXSource(f, new InputSource(new File(srcDir, "test.ditamap").toURI().toString())), dst);
 
         final Document exp = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new File(expDir, "test.ditamap").toURI().toString()));
-        assertXMLEqual(exp, (Document) dst.getNode());
+        final Diff d = DiffBuilder
+                .compare(exp)
+                .withTest(dst.getNode())
+                .ignoreWhitespace()
+                .ignoreComments()
+                .build();
+        assertFalse(d.hasDifferences());
 
         assertEquals(new HashMap<FileInfo, FileInfo>(ImmutableMap.of(
                 createFileInfo("test.dita", "test_3.dita"),

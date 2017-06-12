@@ -7,7 +7,6 @@
  */
 package org.dita.dost.reader;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
@@ -26,7 +25,7 @@ import java.io.StringReader;
 import java.util.*;
 
 import static junit.framework.Assert.assertEquals;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.XMLUtils.close;
 import static org.junit.Assert.assertNull;
 
@@ -61,8 +60,6 @@ public class TestKeyrefReader {
         exp.put("top", "<topicref keys='top' class='- map/topicref ' navtitle='top'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>top keyword</keyword></keywords></topicmeta><topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref></topicref>");
         exp.put("nested", "<topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref>");
 
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
         assertEquals(exp.keySet(), act.keySet());
         for (Map.Entry<String, String> e : exp.entrySet()) {
             final Document ev = keyDefToDoc(e.getValue());
@@ -84,8 +81,6 @@ public class TestKeyrefReader {
         exp.put("toner-handling", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-handling\" href=\"toner-type-b-handling.dita\"/>");
         exp.put("toner-disposal", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-disposal\" href=\"toner-type-c-disposal.dita\"/>");
 
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
         assertEquals(exp.keySet(), act.keySet());
         for (Map.Entry<String, String> e : exp.entrySet()) {
             final Document ev = keyDefToDoc(e.getValue());
