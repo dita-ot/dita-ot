@@ -13,8 +13,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-import org.xmlunit.builder.DiffBuilder;
-import org.xmlunit.diff.Diff;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,13 +20,9 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
 
-import static org.junit.Assert.assertFalse;
-
+import static org.dita.dost.TestUtils.assertXMLEqual;
 
 public class NormalizeTableFilterTest {
 
@@ -53,29 +47,10 @@ public class NormalizeTableFilterTest {
 		f.setParent(XMLUtils.getXMLReader());
 		f.setLogger(new TestUtils.TestLogger());
 		final SAXSource s = new SAXSource(f, new InputSource(src));
-		if (false) { // XXX: comparing resulting DOM document will fail even thought the XML content is identical
-			final Document act = db.newDocument();
-			t.transform(s, new DOMResult(act));
-			final Diff d = DiffBuilder
-					.compare(db.parse(expStream))
-					.withTest(act)
-					.ignoreWhitespace()
-					.ignoreComments()
-					.build();
-			assertFalse(d.hasDifferences());
-		} else {
-			final StringWriter w = new StringWriter();
-			t.transform(s, new StreamResult(w));
 
-
-			final Diff d = DiffBuilder
-					.compare(new InputSource(new StringReader(w.toString())))
-					.withTest(new InputSource(expStream))
-					.ignoreWhitespace()
-					.ignoreComments()
-					.build();
-			assertFalse(d.hasDifferences());
-		}
+		final Document act = db.newDocument();
+		t.transform(s, new DOMResult(act));
+		assertXMLEqual(db.parse(expStream), act);
 	}
 
 }

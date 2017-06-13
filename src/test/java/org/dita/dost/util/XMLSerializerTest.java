@@ -14,11 +14,13 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.sax.TransformerHandler;
 
 
 import org.dita.dost.TestUtils;
-import org.dita.dost.util.XMLSerializer;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -148,11 +150,17 @@ public class XMLSerializerTest {
         serializer.writeEndDocument();
         serializer.close();
 
-        assertXMLEqual(new InputSource(new StringReader("<root>" +
+        final DocumentBuilder builder;
+        try {
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        assertXMLEqual(builder.parse(new InputSource(new StringReader("<root>" +
                 "<att att='value'/>" +
                 "<att xmlns:ns1='uri1' xmlns:ns2='uri2' xmlns:ns3='uri1' ns1:att='value' ns2:att='value' ns3:att='value'/>" +
-                "</root>")),
-                new InputSource(new StringReader(buf.toString())));
+                "</root>"))),
+                builder.parse(new InputSource(new StringReader(buf.toString()))));
     }
 
     @Test

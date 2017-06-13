@@ -7,25 +7,24 @@
  */
 package org.dita.dost.writer;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
+import org.dita.dost.TestUtils;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.index.IndexTerm;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.index.IndexTerm;
 
-import static org.dita.dost.TestUtils.assertXMLEqual;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.dita.dost.TestUtils.assertHtmlEqual;
 
 public class TestJavaHelpIndexWriter {
 
@@ -65,7 +64,7 @@ public class TestJavaHelpIndexWriter {
         manager.setPreferPublic(true);
         manager.setCatalogFiles(new File(etcDir, "catalog.xml").toURI().toString());
         final EntityResolver resolver = new CatalogResolver(manager);
-        assertXMLEqual(new InputSource(new File(expDir, "comparejavahelpindexwriteroutput.xml").toURI().toString()),
+        assertHtmlEqual(new InputSource(new File(expDir, "comparejavahelpindexwriteroutput.xml").toURI().toString()),
                 new InputSource(outFile.toURI().toString()));
     }
 
