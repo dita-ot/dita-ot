@@ -845,8 +845,7 @@ See the accompanying LICENSE file for applicable license.
 <!-- list item section is like li/lq but without presentation (indent) -->
 <xsl:template match="*[contains(@class, ' topic/itemgroup ')]" name="topic.itemgroup">
   <!-- insert a space before all but the first itemgroups in a LI -->
-  <xsl:variable name="itemgroupcount"><xsl:number count="*[contains(@class, ' topic/itemgroup ')]"/></xsl:variable>
-  <xsl:if test="$itemgroupcount > 1">
+  <xsl:if test="exists(preceding-sibling::*[contains(@class, ' topic/itemgroup ')])">
     <xsl:text> </xsl:text>
   </xsl:if>
   <!-- DITA-OT 1.6 and earlier created a span/font tag when active revs; otherwise, no wrapper.
