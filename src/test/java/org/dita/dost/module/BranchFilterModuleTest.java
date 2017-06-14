@@ -7,7 +7,6 @@
  */
 package org.dita.dost.module;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.util.Job;
@@ -24,8 +23,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static junit.framework.Assert.assertEquals;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.assertNotNull;
 
@@ -39,10 +38,6 @@ public class BranchFilterModuleTest extends BranchFilterModule {
     public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(getClass());
         TestUtils.copy(new File(resourceDir, "src"), tempDir);
-        
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
     }
 
     private Job getJob() throws IOException {

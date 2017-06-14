@@ -8,7 +8,6 @@
 package org.dita.dost.writer;
 
 import com.google.common.io.Files;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Job;
@@ -27,7 +26,7 @@ import java.util.stream.Stream;
 
 import static java.net.URI.create;
 import static org.apache.commons.io.FileUtils.copyFile;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 import static org.dita.dost.util.Constants.PR_D_CODEREF;
 
@@ -73,8 +72,6 @@ public class CoderefResolverTest {
         filter.setJob(job);
         filter.write(f.getAbsoluteFile());
 
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(false);
         assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
     }

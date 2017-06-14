@@ -7,7 +7,6 @@
  */
 package org.dita.dost.writer;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.XMLUtils;
 import org.junit.BeforeClass;
@@ -21,21 +20,14 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 
 public class NormalizeTableFilterTest {
 
 	@BeforeClass
     public static void setUp() {
-		TestUtils.resetXMLUnit();
-		XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
-		//XMLUnit.setIgnoreAttributeOrder(true);
 	}
 	
 	@Test
@@ -55,15 +47,10 @@ public class NormalizeTableFilterTest {
 		f.setParent(XMLUtils.getXMLReader());
 		f.setLogger(new TestUtils.TestLogger());
 		final SAXSource s = new SAXSource(f, new InputSource(src));
-		if (false) { // XXX: comparing resulting DOM document will fail even thought the XML content is identical
-			final Document act = db.newDocument();
-			t.transform(s, new DOMResult(act));
-			assertXMLEqual(db.parse(expStream), act);
-		} else {
-			final StringWriter w = new StringWriter();
-			t.transform(s, new StreamResult(w));
-			assertXMLEqual(new InputSource(expStream), new InputSource(new StringReader(w.toString())));
-		}
+
+		final Document act = db.newDocument();
+		t.transform(s, new DOMResult(act));
+		assertXMLEqual(db.parse(expStream), act);
 	}
 
 }

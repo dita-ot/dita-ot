@@ -7,7 +7,7 @@
  */
 package org.dita.dost.writer;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,7 +33,6 @@ public class TestEclipseIndexWriter {
     @BeforeClass
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestEclipseIndexWriter.class);
-        TestUtils.resetXMLUnit();
     }
 
     @Test
@@ -57,7 +55,6 @@ public class TestEclipseIndexWriter {
         final File outFile = new File(tempDir, "index.xml");
         indexWriter.write(outFile.getAbsoluteFile());
 
-        XMLUnit.setIgnoreWhitespace(true);
         assertXMLEqual(new InputSource(new File(expDir, "index.xml").toURI().toString()),
                 new InputSource(outFile.toURI().toString()));
     }

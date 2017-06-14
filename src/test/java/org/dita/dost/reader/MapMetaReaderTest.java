@@ -7,7 +7,7 @@
  */
 package org.dita.dost.reader;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
@@ -29,7 +29,6 @@ import org.apache.xml.resolver.tools.CatalogResolver;
 
 import org.xml.sax.SAXException;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.CatalogUtils;
@@ -67,11 +66,6 @@ public class MapMetaReaderTest {
     public void testRead() throws DITAOTException, SAXException, IOException, ParserConfigurationException{
         final DocumentBuilder db = XMLUtils.getDocumentBuilder();
         db.setEntityResolver(CatalogUtils.getCatalogResolver());
-
-        XMLUnit.setNormalizeWhitespace(true);
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
-        XMLUnit.setIgnoreComments(true);
 
         assertXMLEqual(db.parse(new File(expDir, "test.ditamap")),
                 db.parse(new File(tempDir, "test.ditamap")));

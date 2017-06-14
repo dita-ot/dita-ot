@@ -7,7 +7,7 @@
  */
 package org.dita.dost.platform;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.GEN_CONF_PROPERTIES;
 import static org.junit.Assert.*;
 
@@ -18,8 +18,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
-
-import org.custommonkey.xmlunit.XMLUnit;
 
 import org.xml.sax.InputSource;
 
@@ -90,11 +88,6 @@ public class IntegratorTest {
         expProperties.remove("supported_image_extensions");
         actProperties.remove("supported_image_extensions");
         assertEquals(expProperties, actProperties);
-        TestUtils.resetXMLUnit();
-        XMLUnit.setNormalizeWhitespace(true);
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
-        XMLUnit.setIgnoreComments(true);
         assertXMLEqual(new InputSource(new File(expDir, "build.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "build.xml").toURI().toString()));
         assertXMLEqual(new InputSource(new File(expDir, "catalog.xml").toURI().toString()),

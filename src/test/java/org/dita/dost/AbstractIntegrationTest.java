@@ -11,7 +11,6 @@ package org.dita.dost;
 import com.google.common.collect.ImmutableMap;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.apache.tools.ant.*;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.w3c.dom.*;
@@ -31,7 +30,7 @@ import java.util.stream.Collectors;
 import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertEquals;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.assertArrayEquals;
 
@@ -425,18 +424,8 @@ public class AbstractIntegrationTest {
                     try {
                         if (name.endsWith(".html") || name.endsWith(".htm") || name.endsWith(".xhtml")
                                 || name.endsWith(".hhk")) {
-                            TestUtils.resetXMLUnit();
-                            XMLUnit.setNormalizeWhitespace(true);
-                            XMLUnit.setIgnoreWhitespace(true);
-                            XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
-                            XMLUnit.setIgnoreComments(true);
                             assertXMLEqual(parseHtml(e), parseHtml(a));
                         } else if (name.endsWith(".xml") || name.endsWith(".dita") || name.endsWith(".ditamap")) {
-                            TestUtils.resetXMLUnit();
-                            XMLUnit.setNormalizeWhitespace(true);
-                            XMLUnit.setIgnoreWhitespace(true);
-                            XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
-                            XMLUnit.setIgnoreComments(true);
                             assertXMLEqual(parseXml(e), parseXml(a));
                         } else if (name.endsWith(".txt")) {
                             //assertEquals(readTextFile(e), readTextFile(a));

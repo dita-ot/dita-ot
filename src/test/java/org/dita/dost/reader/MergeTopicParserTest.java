@@ -8,8 +8,8 @@
 package org.dita.dost.reader;
 
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.junit.Assert.*;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,7 +25,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.junit.BeforeClass;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.MergeUtils;
 import org.junit.Test;
@@ -45,10 +44,6 @@ public class MergeTopicParserTest {
             throw new RuntimeException("SAX transformation factory not supported");
         }
         stf = (SAXTransformerFactory) tf;
-        
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
     }
 
     @Test

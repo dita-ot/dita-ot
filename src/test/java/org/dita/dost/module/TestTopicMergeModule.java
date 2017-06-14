@@ -7,7 +7,7 @@
  */
 package org.dita.dost.module;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
 import static org.junit.Assert.assertEquals;
 
@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.TopicMergeModule;
@@ -44,9 +43,6 @@ public class TestTopicMergeModule {
 
     @Before
     public void setUp() throws IOException {
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
-        
         tempDir = TestUtils.createTempDir(getClass());
 
         //		facade = new PipelineFacade();

@@ -7,7 +7,7 @@
  */
 package org.dita.dost.writer;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.junit.Assert.*;
 
@@ -23,7 +23,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -43,9 +42,6 @@ public class TopicFragmentFilterTest {
     @Before
     public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(TopicFragmentFilterTest.class);
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
     }
 
     @After

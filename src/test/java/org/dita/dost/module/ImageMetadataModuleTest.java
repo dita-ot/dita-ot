@@ -7,7 +7,6 @@
  */
 package org.dita.dost.module;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
 import static java.net.URI.create;
 import static java.util.Arrays.asList;
 import static org.apache.commons.io.FileUtils.copyFile;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR;
 import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.junit.Assert.assertEquals;
@@ -71,8 +70,6 @@ public class ImageMetadataModuleTest {
         input.setAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR, new File(tempDir, "out").getAbsolutePath());
         filter.execute(input);
 
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
         assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
         assertEquals("image", job.getFileInfo(create("img.png")).format);

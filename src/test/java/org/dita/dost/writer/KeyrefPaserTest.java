@@ -7,7 +7,7 @@
  */
 package org.dita.dost.writer;
 
-import static org.custommonkey.xmlunit.XMLAssert.*;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,6 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 
 import org.apache.xml.resolver.tools.CatalogResolver;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
@@ -69,13 +68,6 @@ public class KeyrefPaserTest {
         TestUtils.normalize(new File(srcDir, "subdir" + File.separator + "c.ditamap"), new File(tempDir, "subdir" + File.separator + "c.ditamap"));
         TestUtils.normalize(new File(srcDir, "id.xml"), new File(tempDir, "id.xml"));
         resolver = CatalogUtils.getCatalogResolver();
-
-        TestUtils.resetXMLUnit();
-        XMLUnit.setControlEntityResolver(resolver);
-        XMLUnit.setTestEntityResolver(resolver);
-        XMLUnit.setURIResolver(resolver);
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
 
         keyDefinition = readKeyMap(Paths.get("keys.ditamap"));
     }

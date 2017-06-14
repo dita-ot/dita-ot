@@ -15,15 +15,20 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.AfterClass;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.ConrefPushReader;
 import org.dita.dost.reader.ConrefPushReader.MoveKey;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.TestUtils.buildControlDocument;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -60,17 +65,27 @@ public class TestConrefPushReader {
             // pushSet has only one entry, so there is no need to iterate it.
             final Hashtable<MoveKey, DocumentFragment> table = it.next().getValue();
             assertTrue(table.containsKey(new MoveKey("#X/A", "pushbefore")));
-            XMLUnit.compareXML(
-                    table.get(new MoveKey("#X/A", "pushbefore")).getOwnerDocument(),
-                    XMLUnit.buildControlDocument("<step class=\"- topic/li task/step \"><cmd class=\"- topic/ph task/cmd \">before</cmd></step>"));
+            assertXMLEqual(
+                    toDocument(table.get(new MoveKey("#X/A", "pushbefore"))),
+                    buildControlDocument("<step class=\"- topic/li task/step \"><cmd class=\"- topic/ph task/cmd \">before</cmd></step>"));
             assertTrue(table.containsKey(new MoveKey("#X/B", "pushafter")));
-            XMLUnit.compareXML(
-                    table.get(new MoveKey("#X/B", "pushafter")).getOwnerDocument(),
-                    XMLUnit.buildControlDocument("<step class=\"- topic/li task/step \"><cmd class=\"- topic/ph task/cmd \">after</cmd></step>"));
+            assertXMLEqual(
+                    toDocument(table.get(new MoveKey("#X/B", "pushafter"))),
+                    buildControlDocument("<step class=\"- topic/li task/step \"><cmd class=\"- topic/ph task/cmd \">after</cmd></step>"));
             assertTrue(table.containsKey(new MoveKey("#X/C", "pushreplace")));
-            XMLUnit.compareXML(
-                    table.get(new MoveKey("#X/C", "pushreplace")).getOwnerDocument(),
-                    XMLUnit.buildControlDocument("<step class=\"- topic/li task/step \" id=\"C\"><cmd class=\"- topic/ph task/cmd \">replace</cmd></step>"));
+            assertXMLEqual(
+                    toDocument(table.get(new MoveKey("#X/C", "pushreplace"))),
+                    buildControlDocument("<step class=\"- topic/li task/step \" id=\"C\"><cmd class=\"- topic/ph task/cmd \">replace</cmd></step>"));
+        }
+    }
+
+    private Document toDocument(final DocumentFragment fragment) {
+        try {
+            final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            doc.appendChild(doc.adoptNode(fragment));
+            return doc;
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
         }
     }
 

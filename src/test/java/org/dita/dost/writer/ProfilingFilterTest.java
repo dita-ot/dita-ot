@@ -7,8 +7,6 @@
  */
 package org.dita.dost.writer;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-
 import java.io.File;
 import java.io.InputStream;
 import java.util.Collections;
@@ -20,7 +18,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.FilterUtils;
@@ -30,13 +27,12 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import static org.dita.dost.TestUtils.assertXMLEqual;
+
 public class ProfilingFilterTest {
 
 	@BeforeClass
     public static void setUp() {
-		TestUtils.resetXMLUnit();
-		XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
 	}
 	
 	@Test

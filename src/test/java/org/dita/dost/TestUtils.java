@@ -8,37 +8,35 @@
 package org.dita.dost;
 
 import static org.apache.commons.io.FileUtils.*;
+import static org.junit.Assert.assertFalse;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.CharArrayWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Writer;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
-import org.custommonkey.xmlunit.XMLUnit;
-
+import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.CatalogUtils;
 
+import org.dita.dost.writer.TestCHMIndexWriter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -46,6 +44,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 /**
  * Test utilities.
@@ -283,15 +283,78 @@ public class TestUtils {
         }
     }
 
-    /**
-     * Reset XMLUnit configuration.
-     */
-    public static void resetXMLUnit() {
-        final DocumentBuilderFactory b = DocumentBuilderFactory.newInstance();
-        XMLUnit.setControlDocumentBuilderFactory(b);
-        XMLUnit.setTestDocumentBuilderFactory(b);
-        XMLUnit.setControlEntityResolver(null);
-        XMLUnit.setTestEntityResolver(null);
+    public static void assertXMLEqual(Document exp, Document act) {
+        final Diff d = DiffBuilder
+                .compare(exp)
+                .withTest(act)
+                .ignoreWhitespace()
+                .ignoreComments()
+                .normalizeWhitespace()
+                .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
+                .build();
+        if (d.hasDifferences()) {
+            throw new AssertionError(d.toString());
+        }
+    }
+
+    public static void assertXMLEqual(InputSource exp, InputSource act) {
+        final Diff d = DiffBuilder
+                .compare(new SAXSource(exp))
+                .withTest(new SAXSource(act))
+                .ignoreWhitespace()
+                .ignoreComments()
+                .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
+                .build();
+        if (d.hasDifferences()) {
+            throw new AssertionError(d.toString());
+        }
+    }
+
+    public static void assertHtmlEqual(InputSource exp, InputSource act) {
+        final Diff d = DiffBuilder
+                .compare(new SAXSource(exp))
+                .withDocumentBuilderFactory(new HTMLDocumentBuilderFactory())
+                .withTest(new SAXSource(act))
+                .ignoreWhitespace()
+                .ignoreComments()
+                .normalizeWhitespace()
+                .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
+                .build();
+        if (d.hasDifferences()) {
+            throw new AssertionError(d.toString());
+        }
+    }
+
+    private static class HTMLDocumentBuilderFactory extends DocumentBuilderFactory {
+        @Override
+        public Object getAttribute(final String arg0) throws IllegalArgumentException {
+            throw new UnsupportedOperationException();
+        }
+        @Override
+        public boolean getFeature(final String arg0) throws ParserConfigurationException {
+            throw new UnsupportedOperationException();
+        }
+        @Override
+        public DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
+            return new HtmlDocumentBuilder();
+        }
+        @Override
+        public void setAttribute(final String arg0, final Object arg1) throws IllegalArgumentException {
+            throw new UnsupportedOperationException();
+        }
+        @Override
+        public void setFeature(final String arg0, final boolean arg1) throws ParserConfigurationException {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    public static Document buildControlDocument(String content) {
+        try {
+            return DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                    .parse(new ByteArrayInputStream(content.getBytes("UTF-8")));
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
