@@ -267,12 +267,12 @@ to accept the default.</echo>
       defaultvalue="out"/>
     <echo>
 Please enter the type of output to generate.
-Options include: eclipse, tocjs, htmlhelp, javahelp, pdf, or web
+Options include: eclipse, tocjs, htmlhelp, pdf, or web
 Use lowercase letters.
     </echo>
     <input message="The output type: "
       addproperty="prompt.output.type"
-      validargs="eclipse,tocjs,htmlhelp,javahelp,pdf,web,docbook"
+      validargs="eclipse,tocjs,htmlhelp,pdf,web,docbook"
       defaultvalue="web"/>
     <condition property="isEclipseOutput">
       <equals arg1="${prompt.output.type}" arg2="eclipse"/>
@@ -282,9 +282,6 @@ Use lowercase letters.
     </condition>
     <condition property="isHtmlHelpOutput">
       <equals arg1="${prompt.output.type}" arg2="htmlhelp"/>
-    </condition>
-    <condition property="isJavaHelpOutput">
-      <equals arg1="${prompt.output.type}" arg2="javahelp"/>
     </condition>
     <condition property="isPDFOutput">
       <equals arg1="${prompt.output.type}" arg2="pdf"/>
@@ -328,7 +325,7 @@ Before rebuilding, please delete the output or the directory.</echo>
   </target>
 
   <target name="prompt.output"
-    depends="prompt.output.eclipse, prompt.output.tocjs, prompt.output.javahelp, prompt.output.htmlhelp, prompt.output.pdf, prompt.output.web, prompt.output.docbook"/>
+    depends="prompt.output.eclipse, prompt.output.tocjs, prompt.output.htmlhelp, prompt.output.pdf, prompt.output.web, prompt.output.docbook"/>
 
   <target name="prompt.output.web" depends="prompt.output.init"
     if="isWebOutput">
@@ -370,18 +367,6 @@ Before rebuilding, please delete the output or the directory.</echo>
       <param name="output.dir"     value="${prompt.output.directory}"/>
       <param name="dita.temp.dir" value="temp"/>
       <param name="transtype" value="tocjs"/>
-    </antcall>
-  </target>
-
-  <target name="prompt.output.javahelp" depends="prompt.output.init"
-    if="isJavaHelpOutput">
-    <antcall target="dita2javahelp">
-      <param name="args.input"      value="${prompt.ditamap.filename}"/>
-      <param name="output.dir"     value="${prompt.output.directory}"/>
-      <param name="args.javahelp.toc" value="toc"/>
-      <param name="args.javahelp.map" value="map"/>
-      <param name="dita.temp.dir" value="temp"/>
-      <param name="transtype" value="javahelp"/>
     </antcall>
   </target>
 

@@ -718,8 +718,6 @@ public final class Constants {
     /** Windows path separator. */
     public static final String WINDOWS_SEPARATOR = "\\";
 
-    /** Constants for index type(javahelp).*/
-    public static final String INDEX_TYPE_JAVAHELP = "javahelp";
     /** Constants for index type(htmlhelp).*/
     public static final String INDEX_TYPE_HTMLHELP = "htmlhelp";
     /** Constants for index type(eclipsehelp).*/
@@ -731,8 +729,6 @@ public final class Constants {
     public static final String TRANS_TYPE_XHTML = "xhtml";
     /** Constants for transform type(eclipsehelp).*/
     public static final String TRANS_TYPE_ECLIPSEHELP = "eclipsehelp";
-    /** Constants for transform type(javahelp).*/
-    public static final String TRANS_TYPE_JAVAHELP = "javahelp";
     /** Constants for transform type(htmlhelp).*/
     public static final String TRANS_TYPE_HTMLHELP = "htmlhelp";
     /** Constants for transform type(eclipsecontent).*/

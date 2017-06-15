@@ -24,7 +24,6 @@ import org.dita.dost.writer.AbstractWriter;
 import org.dita.dost.writer.CHMIndexWriter;
 import org.dita.dost.writer.EclipseIndexWriter;
 import org.dita.dost.writer.IDitaTranstypeIndexWriter;
-import org.dita.dost.writer.JavaHelpIndexWriter;
 
 /**
  * This class is a collection of index term.
@@ -197,10 +196,6 @@ public final class IndexTermCollection {
             if (INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
                 abstractWriter = new CHMIndexWriter();
                 buff.append(".hhk");
-            } else if (INDEX_TYPE_JAVAHELP
-                    .equalsIgnoreCase(indexType)) {
-                abstractWriter = new JavaHelpIndexWriter();
-                buff.append("_index.xml");
             } else if (INDEX_TYPE_ECLIPSEHELP
                     .equalsIgnoreCase(indexType)) {
                 abstractWriter = new EclipseIndexWriter();

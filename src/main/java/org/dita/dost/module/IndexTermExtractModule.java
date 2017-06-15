@@ -41,7 +41,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Wu, Zhi Qiang
  */
-final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
+public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
     /** The input map */
     private File inputMap = null;
 
