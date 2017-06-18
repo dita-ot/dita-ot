@@ -22,7 +22,6 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.writer.AbstractExtendDitaWriter;
 import org.dita.dost.writer.AbstractWriter;
 import org.dita.dost.writer.CHMIndexWriter;
-import org.dita.dost.writer.EclipseIndexWriter;
 import org.dita.dost.writer.IDitaTranstypeIndexWriter;
 
 /**
@@ -196,16 +195,6 @@ public final class IndexTermCollection {
             if (INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
                 abstractWriter = new CHMIndexWriter();
                 buff.append(".hhk");
-            } else if (INDEX_TYPE_ECLIPSEHELP
-                    .equalsIgnoreCase(indexType)) {
-                abstractWriter = new EclipseIndexWriter();
-                // We need to get rid of the ditamap or topic name in the URL
-                // so we can create index.xml file for Eclipse plug-ins.
-                final File indexDir = new File(buff.toString()).getParentFile();
-                ((EclipseIndexWriter) abstractWriter).setFilePath(indexDir
-                        .getAbsolutePath());
-                buff = new StringBuilder(new File(indexDir, "index.xml")
-                .getAbsolutePath());
             }
         }
 

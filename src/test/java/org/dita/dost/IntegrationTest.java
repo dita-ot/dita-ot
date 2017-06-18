@@ -581,15 +581,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .test();
     }
 
-    @Test
-    public void testindex_seeEclipseHelp() throws Throwable {
-        builder().name("index-see")
-                .transtype(ECLIPSEHELP)
-                .input(Paths.get("bookmap.ditamap"))
-                .warnCount(3)
-                .test();
-    }
-
+    // TODO Should be a IndexTermExtractModule unit test
     @Test
     public void testindex_seeHtmlhelp() throws Throwable {
         builder().name("index-see")

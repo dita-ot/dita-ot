@@ -93,7 +93,7 @@ task copyInstall(type: Copy) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":html5:compileSass"]) {
+task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":eclipsehelp:copyInstall", ":html5:compileSass"]) {
     description "Build archives and install all plugins with dependencies"
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/lib", "${projectDir}/src/main/resources")
@@ -194,7 +194,7 @@ task updateConfiguration() {
 }
 updateConfiguration.mustRunAfter copyDistTemp
 
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", updateConfiguration]) {
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", updateConfiguration]) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
     workingDir distTempDir

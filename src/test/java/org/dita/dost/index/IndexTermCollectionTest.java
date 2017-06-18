@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.writer.EclipseIndexWriter;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 
+import org.dita.dost.writer.HTMLIndexWriter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -118,7 +118,7 @@ public class IndexTermCollectionTest {
     @Test
     public void testOutputTerms() throws DITAOTException {
         final IndexTermCollection i = new IndexTermCollection();
-        i.setIndexClass(EclipseIndexWriter.class.getCanonicalName());
+        i.setIndexClass(HTMLIndexWriter.class.getCanonicalName());
         i.setOutputFileRoot(new File(tempDir, "foo").getAbsolutePath());
         final IndexTerm first = new IndexTerm();
         first.setTermName("first");
