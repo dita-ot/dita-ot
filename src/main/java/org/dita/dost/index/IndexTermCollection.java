@@ -21,7 +21,6 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.writer.AbstractExtendDitaWriter;
 import org.dita.dost.writer.AbstractWriter;
-import org.dita.dost.writer.CHMIndexWriter;
 import org.dita.dost.writer.IDitaTranstypeIndexWriter;
 
 /**
@@ -188,14 +187,8 @@ public final class IndexTermCollection {
             }
 
 
-        }
-        //Fallback to the old way of doing things.
-        else {
-
-            if (INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
-                abstractWriter = new CHMIndexWriter();
-                buff.append(".hhk");
-            }
+        } else {
+            throw new IllegalArgumentException("Index writer class not defined");
         }
 
         //Even if there is no term in the list create an empty index file

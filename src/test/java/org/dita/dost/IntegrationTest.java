@@ -8,6 +8,7 @@
 
 package org.dita.dost;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -564,7 +565,9 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .test();
     }
 
+    // TODO Move the Eclipse Help plugin
     @Test
+    @Ignore
     public void testexportanchors() throws Throwable {
         builder().name("exportanchors")
                 .transtype(preprocess)
@@ -578,15 +581,6 @@ public class IntegrationTest extends AbstractIntegrationTest {
         builder().name("image-scale")
                 .transtype(xhtml)
                 .input(Paths.get("test.dita"))
-                .test();
-    }
-
-    // TODO Should be a IndexTermExtractModule unit test
-    @Test
-    public void testindex_seeHtmlhelp() throws Throwable {
-        builder().name("index-see")
-                .transtype(HTMLHELP)
-                .input(Paths.get("bookmap.ditamap"))
                 .test();
     }
 
