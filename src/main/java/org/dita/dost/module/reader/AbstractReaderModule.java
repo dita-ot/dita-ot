@@ -18,15 +18,11 @@ import org.dita.dost.reader.*;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.DitaWriterFilter;
 import org.dita.dost.writer.ExportAnchorsFilter;
-import org.dita.dost.writer.ExportAnchorsFilter.ExportAnchor;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Result;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -42,7 +38,8 @@ import static java.util.Collections.emptyMap;
 import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Job.*;
+import static org.dita.dost.util.Job.FileInfo;
+import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.close;
 
@@ -143,9 +140,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     DitaWriterFilter ditaWriterFilter;
     TopicFragmentFilter topicFragmentFilter;
 
-    public AbstractReaderModule() {
-    }
-
     public abstract void readStartFile() throws DITAOTException;
 
     /**
@@ -164,8 +158,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             filterUtils = parseFilterFile();
         }
 
-        exportAnchorsFilter = new ExportAnchorsFilter();
-        exportAnchorsFilter.setInputFile(rootFile);
+        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+            exportAnchorsFilter = new ExportAnchorsFilter();
+            exportAnchorsFilter.setInputFile(rootFile);
+        }
 
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
@@ -807,7 +803,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
         }
 
-        writeExportAnchors();
+        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+            final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
+            delayConrefUtils.setLogger(logger);
+            delayConrefUtils.setJob(job);
+            delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap());
+            delayConrefUtils.writeExportAnchors(exportAnchorsFilter, tempFileNameScheme);
+        }
 
 //        KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), addFilePrefix(schemekeydefMap.values()));
     }
@@ -867,61 +869,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         final FileInfo i = b.build();
         fileInfos.put(i.src, i);
         return i;
-    }
-
-    private void writeExportAnchors() throws DITAOTException {
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            // Output plugin id
-            final File pluginIdFile = new File(job.tempDir, FILE_NAME_PLUGIN_XML);
-            final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
-            delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap(), pluginIdFile);
-            XMLStreamWriter export = null;
-            try (OutputStream exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML))) {
-                export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
-                export.writeStartDocument();
-                export.writeStartElement("stub");
-                for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
-                    export.writeStartElement("file");
-                    export.writeAttribute("name", tempFileNameScheme.generateTempFileName(toFile(e.file).toURI()).toString());
-                    for (final String t: sort(e.topicids)) {
-                        export.writeStartElement("topicid");
-                        export.writeAttribute("name", t);
-                        export.writeEndElement();
-                    }
-                    for (final String i: sort(e.ids)) {
-                        export.writeStartElement("id");
-                        export.writeAttribute("name", i);
-                        export.writeEndElement();
-                    }
-                    for (final String k: sort(e.keys)) {
-                        export.writeStartElement("keyref");
-                        export.writeAttribute("name", k);
-                        export.writeEndElement();
-                    }
-                    export.writeEndElement();
-                }
-                export.writeEndElement();
-                export.writeEndDocument();
-            } catch (final IOException e) {
-                throw new DITAOTException("Failed to write export anchor file: " + e.getMessage(), e);
-            } catch (final XMLStreamException e) {
-                throw new DITAOTException("Failed to serialize export anchor file: " + e.getMessage(), e);
-            } finally {
-                if (export != null) {
-                    try {
-                        export.close();
-                    } catch (final XMLStreamException e) {
-                        logger.error("Failed to close export anchor file: " + e.getMessage(), e);
-                    }
-                }
-            }
-        }
-    }
-
-    private List<String> sort(final Set<String> set) {
-        final List<String> sorted = new ArrayList<>(set);
-        Collections.sort(sorted);
-        return sorted;
     }
 
     /**
