@@ -1,0 +1,77 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic)"
+  id="fall" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Test keyref fallback against DITA 1.3</title>
+  <body class="- topic/body ">
+    <section class="- topic/section ">
+      <title class="- topic/title ">When no other match, every element should use link text</title>
+      <p class="- topic/p ">cite, keyword, xref using key with plain-text linktext (cite, keyword fixed in 2.5.1):</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="linktext"/></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="linktext"/></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="linktext"/></li>
+      </ul>
+      <p class="- topic/p ">cite, keyword, xref using key that has keyword subelement (fixed all in 2.5.1):</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="linktext_sub"/></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="linktext_sub"/></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="linktext_sub"/></li>
+      </ul>
+    </section>
+    <section class="- topic/section ">
+      <title class="- topic/title ">Else when no other match, use navtitle element, then attribute</title>
+      <p class="- topic/p ">cite, keyword, xref using key with navtitle element (all fixed in 2.5.1):</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="navtitle_el"/></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="navtitle_el"/></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="navtitle_el"/></li>
+      </ul>
+      <p class="- topic/p ">cite, keyword, xref using key with navtitle attribute (cite, keyword fixed in 2.5.1):</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="navtitle_att"/></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="navtitle_att"/></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="navtitle_att"/></li>
+      </ul>
+    </section>
+    <section class="- topic/section ">
+      <title class="- topic/title ">Else when no other match, use href if not local DITA</title>
+      <p class="- topic/p ">cite, keyword, xref ignore navtitle for local DITA:</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="ignore_navtitle"/></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="ignore_navtitle"/></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="ignore_navtitle"/></li>
+      </ul>
+      <p class="- topic/p ">cite, keyword, xref use navtitle for local DITA when locked:</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="lock_navtitle"/></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="lock_navtitle"/></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="lock_navtitle"/></li>
+      </ul>
+      <p class="- topic/p ">cite, keyword, xref use navtitle for non-DITA:</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="nondita_use_navtitle"/></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="nondita_use_navtitle"/></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="nondita_use_navtitle"/></li>
+      </ul>
+    </section>
+    <section class="- topic/section ">
+      <title class="- topic/title ">Else when non-DITA, and no other text found, and uses href, use href</title>
+      <p class="- topic/p ">cite, keyword, xref use href for non-DITA with no other option:</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="nondita_use_href"/></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="nondita_use_href"/></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="nondita_use_href"/></li>
+      </ul>
+    </section>
+  </body>
+  <related-links class="- topic/related-links ">
+    <link class="- topic/link " keyref="linktext"/>
+    <link class="- topic/link " keyref="linktext_sub"/>
+    <link class="- topic/link " keyref="navtitle_att"/>
+    <link class="- topic/link " keyref="navtitle_el"/>
+    <link class="- topic/link " keyref="ignore_navtitle"/>
+    <link class="- topic/link " keyref="lock_navtitle"/>
+    <link class="- topic/link " keyref="nondita_use_navtitle"/>
+    <link class="- topic/link " keyref="nondita_use_href"/>
+  </related-links>
+</topic>
