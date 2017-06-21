@@ -4,7 +4,8 @@ jdk:
 - oraclejdk8
 env:
   global:
-  - JAVA_OPTS="-Xmx1024M"
+  - JAVA_OPTS="-Xmx2024M"
+  - GRADLE_OPTS="-Xmx2048M"
 before_script:
 - git submodule update --init --recursive
 - "./gradlew"
