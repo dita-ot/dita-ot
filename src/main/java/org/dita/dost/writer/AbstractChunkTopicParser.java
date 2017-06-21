@@ -31,7 +31,6 @@ import java.util.*;
 import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.isAbsolutePath;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 import static org.dita.dost.writer.ImageMetadataFilter.DITA_OT_NS;
@@ -412,13 +411,13 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     /**
      * Get the first topic id from the given dita file.
      *
-     * @param absolutePathToFile The absolute path to a dita file.
+     * @param ditaTopicFile a dita file.
      * @return The first topic id from the given dita file if success, otherwise
      * {@code null} string is returned.
      */
-    String getFirstTopicId(final String absolutePathToFile) {
-        assert new File(absolutePathToFile).isAbsolute();
-        if (!isAbsolutePath(absolutePathToFile)) {
+    String getFirstTopicId(final File ditaTopicFile) {
+        assert ditaTopicFile.isAbsolute();
+        if (!ditaTopicFile.isAbsolute()) {
             return null;
         }
         final StringBuilder firstTopicId = new StringBuilder();
@@ -426,7 +425,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         try {
             final XMLReader reader = getXMLReader();
             reader.setContentHandler(parser);
-            reader.parse(new File(absolutePathToFile).toURI().toString());
+            reader.parse(ditaTopicFile.toURI().toString());
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {

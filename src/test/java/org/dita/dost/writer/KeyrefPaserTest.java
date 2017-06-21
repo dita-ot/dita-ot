@@ -67,6 +67,7 @@ public class KeyrefPaserTest {
         TestUtils.normalize(new File(srcDir, "b.ditamap"), new File(tempDir, "b.ditamap"));
         TestUtils.normalize(new File(srcDir, "subdir" + File.separator + "c.ditamap"), new File(tempDir, "subdir" + File.separator + "c.ditamap"));
         TestUtils.normalize(new File(srcDir, "id.xml"), new File(tempDir, "id.xml"));
+        TestUtils.normalize(new File(srcDir, "fallback.xml"), new File(tempDir, "fallback.xml"));
         resolver = CatalogUtils.getCatalogResolver();
 
         keyDefinition = readKeyMap(Paths.get("keys.ditamap"));
@@ -96,6 +97,19 @@ public class KeyrefPaserTest {
 
         assertXMLEqual(new InputSource(new File(expDir, "id.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "id.xml").toURI().toString()));
+    }
+    
+    @Test
+    public void testFallback() throws Exception {
+        final KeyrefPaser parser = new KeyrefPaser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir));
+        parser.setKeyDefinition(keyDefinition);
+        parser.setCurrentFile(new File(tempDir, "fallback.xml").toURI());
+        parser.write(new File(tempDir, "fallback.xml"));
+
+        assertXMLEqual(new InputSource(new File(expDir, "fallback.xml").toURI().toString()),
+                new InputSource(new File(tempDir, "fallback.xml").toURI().toString()));
     }
 
     @Test

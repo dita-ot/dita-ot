@@ -781,5 +781,15 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .put("outer.control", "quiet")
                 .test();
     }
+    
+    @Test
+    public void testmappull_topicid() throws Throwable {
+        builder().name("mappull-topicid")
+                .transtype(preprocess)
+                .input(Paths.get("reftopicid.ditamap"))
+                .put("validate", "false")
+                .warnCount(1)
+                .test();
+    }
 
 }

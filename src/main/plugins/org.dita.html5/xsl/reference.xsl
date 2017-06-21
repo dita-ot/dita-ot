@@ -13,6 +13,10 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot dita2html related-links">
+  
+  <xsl:template match="*[contains(@class, ' reference/properties ')]
+    [empty(*[contains(@class,' reference/property ')]/
+    *[contains(@class,' reference/proptype ') or contains(@class,' reference/propvalue ') or contains(@class,' reference/propdesc ')])]" priority="10"/>
 
   <xsl:template match="*[contains(@class,' reference/properties ')]" name="reference.properties">
     <xsl:call-template name="spec-title"/>

@@ -1,0 +1,77 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic)"
+  id="fall" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Test keyref fallback against DITA 1.3</title>
+  <body class="- topic/body ">
+    <section class="- topic/section ">
+      <title class="- topic/title ">When no other match, every element should use link text</title>
+      <p class="- topic/p ">cite, keyword, xref using key with plain-text linktext (cite, keyword fixed in 2.5.1):</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="linktext">Everything should use linktext fallback</foo></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="linktext">Everything should use linktext fallback</foo></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="linktext">Everything should use linktext fallback</foo></li>
+      </ul>
+      <p class="- topic/p ">cite, keyword, xref using key that has keyword subelement (fixed all in 2.5.1):</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="linktext_sub">Use all linktext; BROKEN if only keyword appears</foo></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="linktext_sub">Use all linktext; BROKEN if only keyword appears</foo></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="linktext_sub">Use all linktext; BROKEN if only keyword appears</foo></li>
+      </ul>
+    </section>
+    <section class="- topic/section ">
+      <title class="- topic/title ">Else when no other match, use navtitle element, then attribute</title>
+      <p class="- topic/p ">cite, keyword, xref using key with navtitle element (all fixed in 2.5.1):</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="navtitle_el">Test navtitle element fallback</foo></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="navtitle_el">Test navtitle element fallback</foo></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="navtitle_el">Test navtitle element fallback</foo></li>
+      </ul>
+      <p class="- topic/p ">cite, keyword, xref using key with navtitle attribute (cite, keyword fixed in 2.5.1):</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="navtitle_att">Test navtitle attribute fallback</foo></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="navtitle_att">Test navtitle attribute fallback</foo></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="navtitle_att">Test navtitle attribute fallback</foo></li>
+      </ul>
+    </section>
+    <section class="- topic/section ">
+      <title class="- topic/title ">Else when no other match, use href if not local DITA</title>
+      <p class="- topic/p ">cite, keyword, xref ignore navtitle for local DITA:</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite "  href="localdita1.dita" keyref="ignore_navtitle"/></li>
+        <li class="- topic/li "><foo class="- topic/keyword "  href="localdita1.dita" keyref="ignore_navtitle"/></li>
+        <li class="- topic/li "><foo class="- topic/xref "  href="localdita1.dita" keyref="ignore_navtitle"/></li>
+      </ul>
+      <p class="- topic/p ">cite, keyword, xref use navtitle for local DITA when locked:</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " href="localdita2.dita" keyref="lock_navtitle" locktitle="yes">Lock navtitle, should be used</foo></li>
+        <li class="- topic/li "><foo class="- topic/keyword " href="localdita2.dita" keyref="lock_navtitle" locktitle="yes">Lock navtitle, should be used</foo></li>
+        <li class="- topic/li "><foo class="- topic/xref " href="localdita2.dita" keyref="lock_navtitle" locktitle="yes">Lock navtitle, should be used</foo></li>
+      </ul>
+      <p class="- topic/p ">cite, keyword, xref use navtitle for non-DITA:</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="nondita_use_navtitle" href="http://dita-ot.org" scope="external" format="html">Non-DITA, navtitle should be used</foo></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="nondita_use_navtitle" href="http://dita-ot.org" scope="external" format="html">Non-DITA, navtitle should be used</foo></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="nondita_use_navtitle" href="http://dita-ot.org" scope="external" format="html">Non-DITA, navtitle should be used</foo></li>
+      </ul>
+    </section>
+    <section class="- topic/section ">
+      <title class="- topic/title ">Else when non-DITA, and no other text found, and uses href, use href</title>
+      <p class="- topic/p ">cite, keyword, xref use href for non-DITA with no other option:</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li "><foo class="- topic/cite " keyref="nondita_use_href" href="http://www.dita-ot.org/2.5/" scope="external" format="html">http://www.dita-ot.org/2.5/</foo></li>
+        <li class="- topic/li "><foo class="- topic/keyword " keyref="nondita_use_href" href="http://www.dita-ot.org/2.5/" scope="external" format="html">http://www.dita-ot.org/2.5/</foo></li>
+        <li class="- topic/li "><foo class="- topic/xref " keyref="nondita_use_href" href="http://www.dita-ot.org/2.5/" scope="external" format="html">http://www.dita-ot.org/2.5/</foo></li>
+      </ul>
+    </section>
+  </body>
+  <related-links class="- topic/related-links ">
+    <link class="- topic/link " keyref="linktext"><linktext class="- topic/linktext ">Everything should use linktext fallback</linktext></link>
+    <link class="- topic/link " keyref="linktext_sub"><linktext class="- topic/linktext ">Use all linktext; <keyword class="- topic/keyword ">BROKEN</keyword> if only keyword appears</linktext></link>
+    <link class="- topic/link " keyref="navtitle_att"><linktext class="- topic/linktext ">Test navtitle attribute fallback</linktext></link>
+    <link class="- topic/link " keyref="navtitle_el"><linktext class="- topic/linktext ">Test navtitle element fallback</linktext></link>
+    <link class="- topic/link " keyref="ignore_navtitle" href="localdita1.dita"/>
+    <link class="- topic/link " keyref="lock_navtitle" href="localdita2.dita" locktitle="yes"><linktext class="- topic/linktext ">Lock navtitle, should be used</linktext></link>
+    <link class="- topic/link " keyref="nondita_use_navtitle" href="http://dita-ot.org" scope="external" format="html"><linktext class="- topic/linktext ">Non-DITA, navtitle should be used</linktext></link>
+    <link class="- topic/link " keyref="nondita_use_href" href="http://www.dita-ot.org/2.5/" scope="external" format="html"><linktext class="- topic/linktext ">http://www.dita-ot.org/2.5/</linktext></link>
+  </related-links>
+</topic>
