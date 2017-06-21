@@ -5,6 +5,7 @@ jdk:
 env:
   global:
   - JAVA_OPTS="-Xmx2048M"
+  - GRADLE_OPTS="-Xmx2048M"
 before_script:
 - git submodule update --init --recursive
 - "./gradlew"
