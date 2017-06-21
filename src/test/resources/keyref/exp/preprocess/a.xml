@@ -36,17 +36,17 @@
     <linklist class="- topic/linklist ">
       <link keyref="scope-local" class="- topic/link " href="a.xml" type="topic"><?ditaot gentext?><linktext class="- topic/linktext ">a</linktext></link>
       <link keyref="scope-peer" class="- topic/link " href="b.xml" scope="peer"><?ditaot usertext?><linktext class="- topic/linktext ">b</linktext></link>
-      <link keyref="scope-external" class="- topic/link " href="http://www.example.com/" format="html" scope="external"/>
+      <link keyref="scope-external" class="- topic/link " href="http://www.example.com/" format="html" scope="external"><?ditaot usertext?><linktext class="- topic/linktext ">http://www.example.com/</linktext></link>
     </linklist>
     <linklist class="- topic/linklist ">
       <link keyref="scope-local" href="a.xml" class="- topic/link " type="topic"><?ditaot gentext?><linktext class="- topic/linktext ">a</linktext></link>
       <link keyref="scope-peer" href="b.xml" class="- topic/link " scope="peer"><?ditaot usertext?><linktext class="- topic/linktext ">b</linktext></link>
-      <link keyref="scope-external" href="http://www.example.com/" class="- topic/link " format="html" scope="external"/>
+      <link keyref="scope-external" href="http://www.example.com/" class="- topic/link " format="html" scope="external"><?ditaot usertext?><linktext class="- topic/linktext ">http://www.example.com/</linktext></link>
     </linklist>
     <linklist class="- topic/linklist ">
       <link keyref="scope-local" href="a.xml" class="- topic/link " type="topic"><?ditaot gentext?><linktext class="- topic/linktext ">a</linktext></link>
       <link keyref="scope-peer" href="b.xml" scope="peer" class="- topic/link "><?ditaot usertext?><linktext class="- topic/linktext ">b</linktext></link>
-      <link keyref="scope-external" href="http://www.example.com/" scope="external" format="html" class="- topic/link "/>
+      <link keyref="scope-external" href="http://www.example.com/" scope="external" format="html" class="- topic/link "><?ditaot usertext?><linktext class="- topic/linktext ">http://www.example.com/</linktext></link>
     </linklist>
   </related-links>
 </topic>

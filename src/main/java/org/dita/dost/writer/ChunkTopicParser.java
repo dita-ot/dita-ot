@@ -128,7 +128,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                                 outputFileName = currentFile.resolve(hrefValue.getFragment() + FILE_EXTENSION_DITA);
                             } else {
                                 // Find the first topic id in target file if any.
-                                final String firstTopic = getFirstTopicId(currentFile.resolve(hrefValue).getPath());
+                                final String firstTopic = getFirstTopicId(new File(stripFragment(currentFile.resolve(hrefValue))));
                                 if (firstTopic != null) {
                                     outputFileName = currentFile.resolve(firstTopic + FILE_EXTENSION_DITA);
                                 } else {
@@ -166,7 +166,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 if (path.getFragment() != null) {
                     newpath = setFragment(outputFileName, path.getFragment());
                 } else {
-                    final String firstTopicID = getFirstTopicId(new File(path).getAbsolutePath());
+                    final String firstTopicID = getFirstTopicId(new File(path));
                     if (firstTopicID != null) {
                         newpath = setFragment(outputFileName, firstTopicID);
                     } else {

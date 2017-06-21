@@ -63,6 +63,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
     </xsl:choose>
   </xsl:function>
+  
+  <xsl:key name="topic-by-id" match="*[contains(@class,' topic/topic ')]" use="@id"/>
 
   <!-- Find the relative path to another topic or map -->
   <xsl:template name="find-relative-path">
@@ -499,7 +501,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
           <!--finding type based on name of the target element in a particular topic in another file-->
           <xsl:when test="$topicpos='otherfile'">
-            <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
+            <xsl:variable name="target" select="key('topic-by-id', $topicid, $doc)[1]" as="element()?"/>
             <xsl:choose>
               <xsl:when test="$target[contains(@class, $classval)]">
                 <xsl:attribute name="type">
@@ -534,7 +536,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!-- Type is set locally for a dita topic; warn if it is not correct. -->
       <xsl:when test="$scope!='external' and $scope!='peer' and ($format='#none#' or $format='dita')">
-        <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
+        <xsl:variable name="target" select="key('topic-by-id', $topicid, $doc)[1]" as="element()?"/>
         <xsl:if test="$topicid!='#none#' and not($target[contains(@class, ' topic/topic ')])">
           <!-- topicid does not point to a valid topic -->
           <xsl:call-template name="output-message">
@@ -633,7 +635,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:when test="@href=''"/>
       <!--grabbing text from a particular topic in another file-->
       <xsl:when test="$topicpos='otherfile'">
-        <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
+        <xsl:variable name="target" select="key('topic-by-id', $topicid, $doc)[1]" as="element()?"/>
         <xsl:choose>
           <xsl:when
             test="$target[contains(@class, $classval)]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
@@ -886,7 +888,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
             <!--grabbing text from a particular topic in another file-->
             <xsl:when test="$topicpos='otherfile'">
-              <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
+              <xsl:variable name="target" select="key('topic-by-id', $topicid, $doc)[1]" as="element()?"/>
               <xsl:choose>
                 <xsl:when test="$target[contains(@class, $classval)]/*[contains(@class, ' topic/title ')]">
                   <xsl:variable name="grabbed-value" as="xs:string">
@@ -994,7 +996,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!--try retrieving from a particular topic in another file-->
       <xsl:when test="$topicpos='otherfile'">
-        <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
+        <xsl:variable name="target" select="key('topic-by-id', $topicid, $doc)[1]" as="element()?"/>
         <xsl:if
             test="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/shortdesc ')]|
                   ($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">

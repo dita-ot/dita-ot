@@ -618,11 +618,15 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_MAPREF = "mapref";
     /**navtitle attribute.*/
     public static final String ATTRIBUTE_NAME_NAVTITLE = "navtitle";
+    /**locktitle attribute.*/
+    public static final String ATTRIBUTE_NAME_LOCKTITLE = "locktitle";
+    /**locktitle="yes" value.*/
+    public static final String ATTRIBUTE_NAME_LOCKTITLE_VALUE_YES = "yes";
     /**format attribute.*/
     public static final String ATTRIBUTE_NAME_FORMAT = "format";
     /**charset attribute.*/
     public static final String ATTRIBUTE_NAME_CHARSET = "charset";
-    /**charset attribute.*/
+    /**lang attribute.*/
     public static final String ATTRIBUTE_NAME_LANG = "lang";
     /**att attribute.*/
     public static final String ATTRIBUTE_NAME_ATT = "att";

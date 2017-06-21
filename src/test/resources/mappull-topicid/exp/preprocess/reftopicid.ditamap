@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?workdir /C:\Users\IBM_ADMIN\github\robander\dita-ot\src\main\temp?>
+<?workdir-uri file:/C:/Users/IBM_ADMIN/github/robander/dita-ot/src/main/temp/?>
+<?path2project?>
+<?path2project-uri ./?>
+<?path2rootmap-uri ./?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="merge" class="- map/map " domains="(map)">
+  <title class="- topic/title ">Test ref to a topic ID with matching element ID</title>
+  <topicref class="- map/topicref " href="tables.dita#table" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Use the topic ID in the topic</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Use the topic ID in the topic</linktext></topicmeta></topicref>
+</map>

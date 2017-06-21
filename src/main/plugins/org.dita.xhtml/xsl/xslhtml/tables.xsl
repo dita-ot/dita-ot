@@ -27,6 +27,11 @@ See the accompanying LICENSE file for applicable license.
   <!-- Override this to use a local convention for setting table's @summary attribute,
        until OASIS provides a standard mechanism for setting. -->
 </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/table ')]
+    [empty(*[contains(@class,' topic/tgroup ')]/*[contains(@class,' topic/tbody ')]/*[contains(@class,' topic/row ')])]" priority="10"/>
+  <xsl:template match="*[contains(@class,' topic/tgroup ')]
+    [empty(*[contains(@class,' topic/tbody ')]/*[contains(@class,' topic/row ')])]" priority="10"/>
 
 <xsl:template match="*[contains(@class, ' topic/table ')]" name="topic.table">
   <xsl:value-of select="$newline"/>
@@ -681,6 +686,11 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <!-- =========== SimpleTable - SEMANTIC TABLE =========== -->
+  
+  <xsl:template match="*[contains(@class,' topic/simpletable ')]
+    [empty(*[contains(@class,' topic/strow ')]/*[contains(@class,' topic/stentry ')])]" priority="10"/>
+  <xsl:template match="*[contains(@class,' topic/strow ') or contains(@class,' topic/sthead ')][empty(*[contains(@class,' topic/stentry ')])]" priority="10"/>
+  
 
 <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="generate-table-summary-attribute">
   <!-- Override this to use a local convention for setting table's @summary attribute,

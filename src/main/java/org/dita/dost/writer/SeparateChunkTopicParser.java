@@ -110,7 +110,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     startFromFirstTopic = false;
                     selectMethod = CHUNK_SELECT_BRANCH;
                 } else if (chunkValue.contains(CHUNK_SELECT_DOCUMENT)) {
-                    firstTopicID = getFirstTopicId(currentFile.resolve(parseFilePath).getPath());
+                    firstTopicID = getFirstTopicId(new File(stripFragment(currentFile.resolve(parseFilePath))));
 
                     topicDoc = getTopicDoc(currentFile.resolve(parseFilePath));
 
@@ -130,7 +130,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     selectMethod = CHUNK_SELECT_TOPIC;
                 }
             } else {
-                firstTopicID = getFirstTopicId(currentFile.resolve(parseFilePath).getPath());
+                firstTopicID = getFirstTopicId(new File(stripFragment(currentFile.resolve(parseFilePath))));
 
                 topicDoc = getTopicDoc(currentFile.resolve(parseFilePath));
 
