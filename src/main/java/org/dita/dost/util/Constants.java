@@ -953,6 +953,8 @@ public final class Constants {
     /**pluginId.xml to store the plugin id.*/
     public static final String FILE_NAME_PLUGIN_XML = "pluginId.xml";
 
+    /** Application configuration filename. */
+    public static final String APP_CONF_PROPERTIES = "application.properties";
     /** Configuration filename. */
     public static final String CONF_PROPERTIES = "configuration.properties";
     /** Generated configuration filename. */

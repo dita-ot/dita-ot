@@ -41,6 +41,18 @@ public final class Configuration {
     static {
         final Map<String, String> c = new HashMap<>();
         
+        final Properties applicationProperties = new Properties();
+        try (InputStream applicationInputStream = Configuration.class.getClassLoader().getResourceAsStream(APP_CONF_PROPERTIES)) {
+            if (applicationInputStream != null) {
+                applicationProperties.load(applicationInputStream);
+                for (final Map.Entry<Object, Object> e: applicationProperties.entrySet()) {
+                    c.put(e.getKey().toString(), e.getValue().toString());
+                }
+            }
+        } catch (final IOException e) {
+            System.err.println(e.getMessage());
+        }
+
         final Properties pluginProperties = new Properties();
         InputStream plugingConfigurationInputStream = null;
         try {

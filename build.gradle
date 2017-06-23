@@ -5,6 +5,8 @@
  *
  * See the accompanying LICENSE file for applicable license.
  */
+import org.apache.tools.ant.filters.ReplaceTokens
+
 apply plugin: 'java'
 apply plugin: 'maven'
 
@@ -41,6 +43,13 @@ dependencies {
 }
 
 jar.archiveName = "${project.name}.jar"
+
+processResources {
+    filter ReplaceTokens, tokens: [
+            'version': project.version,
+            'release': "${project.version.split('\\.').toList().subList(0, 2).join('.').toString()}".toString()
+    ]
+}
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
