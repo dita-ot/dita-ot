@@ -221,10 +221,16 @@ task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
     args "-Ddita.home=" + distTempDir
     args "dist"
 }
+generateDocs.onlyIf { skipDocs() }
 task cleanGenerateDocs(type: Delete) {
     delete "${distTempDir}/docsrc/temp"
 }
 cleanGenerateDocs.mustRunAfter generateDocs
+cleanGenerateDocs.onlyIf { skipDocs() }
+
+def skipDocs() {
+    !(project.hasProperty('skipGenerateDocs') && Boolean.parseBoolean(project.property('skipGenerateDocs')))
+}
 
 task generateJavadocs(type: Javadoc) {
     classpath = sourceSets.main.compileClasspath
@@ -236,8 +242,9 @@ task generateJavadocs(type: Javadoc) {
     title = "${project.description} ${project.version}"
     destinationDir = file("${distTempDir}/doc/api")
 }
+generateJavadocs.onlyIf { skipDocs() }
 
-task dist(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+task dist(type: Zip, dependsOn: [jar, integrateDistTemp, generateDocs, cleanGenerateDocs, generateJavadocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
