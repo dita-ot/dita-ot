@@ -12,11 +12,6 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 exclude-result-prefixes="dita-ot ditamsg">
 
-<!-- Include error message template -->
-<xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
-<xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
-<xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-
 <!-- *************************** Command line parameters *********************** -->
 <xsl:param name="contenttarget" select="'contentwin'"/>
 <xsl:param name="CSS"/>
