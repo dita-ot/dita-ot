@@ -26,6 +26,3 @@
     -  <https://github.com/dita-ot/dita-ot/wiki/Java-Coding-Conventions>
     -  <https://github.com/dita-ot/dita-ot/wiki/XSLT-Coding-Conventions>
 - I have updated the unit tests to reflect the changes in my code.
-- I will update the documentation accordingly or create a new [docs][] issue.
-
-[docs]: https://github.com/dita-ot/docs/issues/new
