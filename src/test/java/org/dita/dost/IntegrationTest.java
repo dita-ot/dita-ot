@@ -459,8 +459,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(preprocess)
                 .input(Paths.get("badconref.dita"))
                 .put("validate", "false")
-                .warnCount(1)
-                .errorCount(3)
+                .warnCount(2)
+                .errorCount(2)
                 .test();
     }
 

@@ -11,7 +11,9 @@ import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.CatalogUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -38,6 +40,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.apache.commons.io.FileUtils.copyFile;
+import static org.xmlunit.util.IterableNodeList.asList;
 
 /**
  * Test utilities.
@@ -47,7 +50,13 @@ import static org.apache.commons.io.FileUtils.copyFile;
 public class TestUtils {
 
     public static final File testStub = new File("src" + File.separator + "test" + File.separator + "resources");
-    
+
+    private static final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+    static {
+        builderFactory.setNamespaceAware(true);
+        builderFactory.setIgnoringComments(true);
+    }
+
     /**
      * Get test resource directory
      * 
@@ -277,43 +286,82 @@ public class TestUtils {
 
     public static void assertXMLEqual(Document exp, Document act) {
         final Diff d = DiffBuilder
-                .compare(exp)
-                .withTest(act)
+                .compare(ignoreComments(exp))
+                .withTest(ignoreComments(act))
                 .ignoreWhitespace()
-                .ignoreComments()
                 .normalizeWhitespace()
                 .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
                 .build();
         if (d.hasDifferences()) {
             throw new AssertionError(d.toString());
+        }
+    }
+
+    private static Document ignoreComments(Document src) {
+        try {
+            final Document res = builderFactory.newDocumentBuilder().newDocument();
+            for (final Node child : asList(src.getChildNodes())) {
+                if (child.getNodeType() != Node.COMMENT_NODE) {
+                    res.appendChild(res.importNode(child, true));
+                }
+            }
+            stripComments(res.getDocumentElement());
+            return res;
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void stripComments(Element elem) {
+        if (elem == null) {
+            return;
+        }
+        final NodeList childNodes = elem.getChildNodes();
+        final List<Node> nodes = asList(childNodes);
+        for (final Node child : nodes) {
+            switch (child.getNodeType()) {
+                case Node.COMMENT_NODE:
+                    child.getParentNode().removeChild(child);
+                    break;
+                case Node.ELEMENT_NODE:
+                    stripComments((Element) child);
+                    break;
+            }
         }
     }
 
     public static void assertXMLEqual(InputSource exp, InputSource act) {
-        final Diff d = DiffBuilder
-                .compare(new SAXSource(exp))
-                .withTest(new SAXSource(act))
-                .ignoreWhitespace()
-                .ignoreComments()
-                .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
-                .build();
-        if (d.hasDifferences()) {
-            throw new AssertionError(d.toString());
+        try {
+            final Diff d;
+                d = DiffBuilder
+                        .compare(ignoreComments(builderFactory.newDocumentBuilder().parse(exp)))
+                        .withTest(ignoreComments(builderFactory.newDocumentBuilder().parse(act)))
+                        .ignoreWhitespace()
+                        .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
+                        .build();
+            if (d.hasDifferences()) {
+                throw new AssertionError(d.toString());
+            }
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public static void assertHtmlEqual(InputSource exp, InputSource act) {
-        final Diff d = DiffBuilder
-                .compare(new SAXSource(exp))
-                .withDocumentBuilderFactory(new HTMLDocumentBuilderFactory())
-                .withTest(new SAXSource(act))
-                .ignoreWhitespace()
-                .ignoreComments()
-                .normalizeWhitespace()
-                .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
-                .build();
-        if (d.hasDifferences()) {
-            throw new AssertionError(d.toString());
+        final DocumentBuilderFactory builderFactory = new HTMLDocumentBuilderFactory();
+        try {
+            final Diff d = DiffBuilder
+                    .compare(ignoreComments(builderFactory.newDocumentBuilder().parse(exp)))
+                    .withTest(ignoreComments(builderFactory.newDocumentBuilder().parse(act)))
+                    .ignoreWhitespace()
+                    .normalizeWhitespace()
+                    .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
+                    .build();
+            if (d.hasDifferences()) {
+                throw new AssertionError(d.toString());
+            }
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
         }
     }
 

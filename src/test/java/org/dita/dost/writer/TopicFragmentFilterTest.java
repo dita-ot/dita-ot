@@ -56,8 +56,11 @@ public class TopicFragmentFilterTest {
                 
         final DOMResult dst = new DOMResult();
         TransformerFactory.newInstance().newTransformer().transform(new SAXSource(f, new InputSource(new File(srcDir, "topic.dita").toURI().toString())), dst);
-        
-        final Document exp = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new File(expDir, "topic.dita").toURI().toString()));
+
+        final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setNamespaceAware(true);
+        builderFactory.setIgnoringComments(true);
+        final Document exp = builderFactory.newDocumentBuilder().parse(new File(expDir, "topic.dita"));
         assertXMLEqual(exp, (Document) dst.getNode());
     }
 

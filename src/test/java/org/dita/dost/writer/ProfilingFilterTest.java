@@ -60,10 +60,14 @@ public class ProfilingFilterTest {
 		final SAXSource s = new SAXSource(f, new InputSource(src));
 		final DOMResult d = new DOMResult();
 		t.transform(s, d);
-		
-		final DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		final InputStream exp = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/exp/" + expFile);
-		assertXMLEqual(db.parse(exp), (Document) d.getNode());
+
+		final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+		builderFactory.setNamespaceAware(true);
+		builderFactory.setIgnoringComments(true);
+		final DocumentBuilder db = builderFactory.newDocumentBuilder();
+		try (final InputStream exp = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/exp/" + expFile)) {
+			assertXMLEqual(db.parse(exp), (Document) d.getNode());
+		}
 	}
 
 

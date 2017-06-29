@@ -144,7 +144,7 @@ public class XMLSerializerTest {
         serializer.writeStartElement("att");
         serializer.writeAttribute("uri1", "ns1:att", "value");
         serializer.writeAttribute("uri2", "ns2:att", "value");
-        serializer.writeAttribute("uri1", "ns3:att", "value");
+        serializer.writeAttribute("uri3", "ns3:att", "value");
         serializer.writeEndElement();
 
         serializer.writeEndDocument();
@@ -152,13 +152,16 @@ public class XMLSerializerTest {
 
         final DocumentBuilder builder;
         try {
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            builderFactory.setNamespaceAware(true);
+            builderFactory.setIgnoringComments(true);
+            builder = builderFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
         assertXMLEqual(builder.parse(new InputSource(new StringReader("<root>" +
                 "<att att='value'/>" +
-                "<att xmlns:ns1='uri1' xmlns:ns2='uri2' xmlns:ns3='uri1' ns1:att='value' ns2:att='value' ns3:att='value'/>" +
+                "<att xmlns:ns1='uri1' xmlns:ns2='uri2' xmlns:ns3='uri3' ns1:att='value' ns2:att='value' ns3:att='value'/>" +
                 "</root>"))),
                 builder.parse(new InputSource(new StringReader(buf.toString()))));
     }
