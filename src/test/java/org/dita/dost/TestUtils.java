@@ -10,6 +10,7 @@ package org.dita.dost;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.CatalogUtils;
+import org.slf4j.helpers.MarkerIgnoringBase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -35,6 +36,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -400,7 +402,7 @@ public class TestUtils {
     /**
      * DITA-OT logger that will throw an assertion error for error messages.
      */
-    public static class TestLogger implements DITAOTLogger {
+    public static class TestLogger extends MarkerIgnoringBase implements DITAOTLogger {
 
         private boolean failOnError;
         
@@ -416,8 +418,50 @@ public class TestUtils {
             //System.out.println(msg);
         }
 
+        @Override
+        public void info(String format, Object arg) {
+        }
+
+        @Override
+        public void info(String format, Object arg1, Object arg2) {
+        }
+
+        @Override
+        public void info(String format, Object... arguments) {
+        }
+
+        @Override
+        public void info(String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isWarnEnabled() {
+            return true;
+        }
+
         public void warn(final String msg) {
             //System.err.println(msg);
+        }
+
+        @Override
+        public void warn(String format, Object arg) {
+        }
+
+        @Override
+        public void warn(String format, Object... arguments) {
+        }
+
+        @Override
+        public void warn(String format, Object arg1, Object arg2) {
+        }
+
+        @Override
+        public void warn(String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isErrorEnabled() {
+            return true;
         }
 
         public void error(final String msg) {
@@ -426,15 +470,87 @@ public class TestUtils {
             }
         }
 
+        @Override
+        public void error(String format, Object arg) {
+            if (failOnError) {
+                throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arg));
+            }
+        }
+
+        @Override
+        public void error(String format, Object arg1, Object arg2) {
+            if (failOnError) {
+                throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arg1, arg2));
+            }
+        }
+
+        @Override
+        public void error(String format, Object... arguments) {
+            if (failOnError) {
+                throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arguments));
+            }
+        }
+
         public void error(final String msg, final Throwable t) {
             if (failOnError) {
                 t.printStackTrace();
-                throw new AssertionError("Error message was thrown: " + msg);
+                throw new AssertionError("Error message was thrown: " + msg, t);
             }
+        }
+
+        @Override
+        public boolean isTraceEnabled() {
+            return false;
+        }
+
+        @Override
+        public void trace(String msg) {
+        }
+
+        @Override
+        public void trace(String format, Object arg) {
+        }
+
+        @Override
+        public void trace(String format, Object arg1, Object arg2) {
+        }
+
+        @Override
+        public void trace(String format, Object... arguments) {
+        }
+
+        @Override
+        public void trace(String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isDebugEnabled() {
+            return true;
         }
 
         public void debug(final String msg) {
             //System.out.println(msg);
+        }
+
+        @Override
+        public void debug(String format, Object arg) {
+        }
+
+        @Override
+        public void debug(String format, Object arg1, Object arg2) {
+        }
+
+        @Override
+        public void debug(String format, Object... arguments) {
+        }
+
+        @Override
+        public void debug(String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isInfoEnabled() {
+            return true;
         }
 
     }
@@ -442,7 +558,7 @@ public class TestUtils {
     /**
      * DITA-OT logger that will cache messages.
      */
-    public static final class CachingLogger implements DITAOTLogger {
+    public static final class CachingLogger extends MarkerIgnoringBase implements DITAOTLogger {
 
         final boolean strict;
 
@@ -460,8 +576,58 @@ public class TestUtils {
             buf.add(new Message(Message.Level.INFO, msg, null));
         }
 
+        @Override
+        public void info(String format, Object arg) {
+            buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arg), null));
+        }
+
+        @Override
+        public void info(String format, Object arg1, Object arg2) {
+            buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arg1, arg2), null));
+        }
+
+        @Override
+        public void info(String format, Object... arguments) {
+            buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arguments), null));
+        }
+
+        @Override
+        public void info(String msg, Throwable t) {
+            buf.add(new Message(Message.Level.INFO, msg, t));
+        }
+
+        @Override
+        public boolean isWarnEnabled() {
+            return true;
+        }
+
         public void warn(final String msg) {
             buf.add(new Message(Message.Level.WARN, msg, null));
+        }
+
+        @Override
+        public void warn(String format, Object arg) {
+            buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arg), null));
+        }
+
+        @Override
+        public void warn(String format, Object... arguments) {
+            buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arguments), null));
+        }
+
+        @Override
+        public void warn(String format, Object arg1, Object arg2) {
+            buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arg1, arg2), null));
+        }
+
+        @Override
+        public void warn(String msg, Throwable t) {
+            buf.add(new Message(Message.Level.WARN, msg, t));
+        }
+
+        @Override
+        public boolean isErrorEnabled() {
+            return true;
         }
 
         public void error(final String msg) {
@@ -472,6 +638,33 @@ public class TestUtils {
             }
         }
         
+        @Override
+        public void error(String format, Object arg) {
+            if (strict) {
+                throw new RuntimeException();
+            } else {
+                buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arg), null));
+            }
+        }
+
+        @Override
+        public void error(String format, Object arg1, Object arg2) {
+            if (strict) {
+                throw new RuntimeException();
+            } else {
+                buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arg1, arg2), null));
+            }
+        }
+
+        @Override
+        public void error(String format, Object... arguments) {
+            if (strict) {
+                throw new RuntimeException();
+            } else {
+                buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arguments), null));
+            }
+        }
+
         public void error(final String msg, final Throwable t) {
             if (strict) {
                 throw new RuntimeException(t);
@@ -480,18 +673,65 @@ public class TestUtils {
             }
         }
 
-        public void logFatal(final String msg) {
-            buf.add(new Message(Message.Level.FATAL, msg, null));
+        @Override
+        public boolean isTraceEnabled() {
+            return false;
+        }
+
+        @Override
+        public void trace(String msg) {
+        }
+
+        @Override
+        public void trace(String format, Object arg) {
+        }
+
+        @Override
+        public void trace(String format, Object arg1, Object arg2) {
+        }
+
+        @Override
+        public void trace(String format, Object... arguments) {
+        }
+
+        @Override
+        public void trace(String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isDebugEnabled() {
+            return false;
         }
 
         public void debug(final String msg) {
             buf.add(new Message(Message.Level.DEBUG, msg, null));
         }
 
-        public void logException(final Throwable t) {
-            buf.add(new Message(Message.Level.ERROR, t.getMessage(), t));
+        @Override
+        public void debug(String format, Object arg) {
+            buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arg), null));
         }
         
+        @Override
+        public void debug(String format, Object arg1, Object arg2) {
+            buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arg1, arg2), null));
+        }
+
+        @Override
+        public void debug(String format, Object... arguments) {
+            buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arguments), null));
+        }
+
+        @Override
+        public void debug(String msg, Throwable t) {
+            buf.add(new Message(Message.Level.DEBUG, msg, t));
+        }
+
+        @Override
+        public boolean isInfoEnabled() {
+            return true;
+        }
+
         public static final class Message {
             public enum Level { DEBUG, INFO, WARN, ERROR, FATAL }
             public final Level level;
