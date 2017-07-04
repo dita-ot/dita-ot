@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
+import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -44,6 +45,8 @@ public final class MessageUtils {
     private static final String RESOURCE = RESOURCES_DIR + "/" + CLASSPATH_RESOURCE;
 
     // Variables
+
+    public static final ResourceBundle msgs = ResourceBundle.getBundle("messages");
 
     private final Hashtable<String, MessageBean> hashTable = new Hashtable<>();
     private static MessageUtils utils;

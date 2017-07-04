@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
@@ -38,6 +39,18 @@ public class IntegratorTest {
     public void setUp() throws IOException, DITAOTException {
         tempDir = TestUtils.createTempDir(getClass());
         TestUtils.copy(new File(resourceDir, "src"), tempDir);
+    }
+
+    @Test
+    public void testConvertMessage() {
+        assertEquals("The index term ''{1}'' uses both an index-see element and {0} element. Convert the index-see element to ''index-see-also''.",
+                Integrator.convertMessage("The index term '%2' uses both an index-see element and %1 element. Convert the index-see element to 'index-see-also'."));
+        assertEquals("{0} foo {1} bar {2}",
+                Integrator.convertMessage("%1 foo %2 bar %3"));
+        assertEquals("'{0}",
+                Integrator.convertMessage("{0}"));
+        assertEquals("foo bar baz",
+                Integrator.convertMessage("  foo  bar\nbaz  "));
     }
 
     @Test

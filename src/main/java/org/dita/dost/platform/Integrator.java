@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dita.dost.log.DITAOTLogger;
@@ -24,18 +25,25 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import javax.xml.XMLConstants;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -320,6 +328,13 @@ public final class Integrator {
             }
         }
 
+        // Write messages properties
+        final Properties messages = readMessageBundle();
+        final File messagesFile = ditaDir.toPath().resolve(RESOURCES_DIR).resolve("messages_en_US.properties").toFile();
+        try (final OutputStream messagesOut = new FileOutputStream(messagesFile)) {
+            messages.store(messagesOut, null);
+        }
+
         final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS) ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS))) : Collections.EMPTY_SET;
         writeEnvShell(jars);
         writeEnvBatch(jars);
@@ -330,6 +345,57 @@ public final class Integrator {
                 .build();
         writeStartcmdShell(libJars);
         writeStartcmdBatch(libJars);
+    }
+
+    private Properties readMessageBundle() throws IOException, XMLStreamException {
+        final Properties messages = new Properties();
+        final File messagesXmlFile = ditaDir.toPath().resolve(RESOURCES_DIR).resolve("messages.xml").toFile();
+        try (final InputStream in = new FileInputStream(messagesXmlFile)) {
+            final XMLStreamReader src = XMLInputFactory.newFactory().createXMLStreamReader(new StreamSource(in));
+            String id = null;
+            final StringBuilder buf = new StringBuilder();
+            while (src.hasNext()) {
+                final int type = src.next();
+                switch (type) {
+                    case  XMLEvent.START_ELEMENT:
+                        if (src.getLocalName().equals("message")) {
+                            id = src.getAttributeValue(XMLConstants.NULL_NS_URI, "id");
+                        } else if (id != null) {
+                            buf.append(src.getElementText()).append(' ');
+                        }
+                        break;
+                    case  XMLEvent.END_ELEMENT:
+                        if (src.getLocalName().equals("message")) {
+                            messages.put(id, convertMessage(buf.toString()));
+                            id = null;
+                            buf.delete(0, buf.length());
+                        }
+                        break;
+                }
+            }
+            src.close();
+        }
+        return messages;
+    }
+
+    @VisibleForTesting
+    static String convertMessage(final String src) {
+        final String res = src
+                .replaceAll("[\\s\\n]+", " ")
+                .replace("'", "''")
+                .replace("{", "'{")
+                .trim();
+        final StringBuilder buf = new StringBuilder();
+        final Matcher m = Pattern.compile("%(\\d)").matcher(res);
+        int offset = 0;
+        while (m.find()) {
+            final int index = Integer.parseInt(m.group(1));
+            buf.append(res.substring(offset, m.start()));
+            buf.append("{").append(index - 1).append("}");
+            offset = m.end();
+        }
+        buf.append(res.substring(offset));
+        return buf.toString();
     }
 
     private Collection<File> getLibJars() {

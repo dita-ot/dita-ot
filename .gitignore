@@ -123,3 +123,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 src/main/plugins/org.dita.pdf2.fop/lib
+src/main/resources/messages_en_US.properties
