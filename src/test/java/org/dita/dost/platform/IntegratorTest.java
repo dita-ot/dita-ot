@@ -8,14 +8,12 @@
 package org.dita.dost.platform;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.Constants.GEN_CONF_PROPERTIES;
 import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;

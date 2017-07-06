@@ -7,9 +7,6 @@
  */
 package org.dita.dost.exception;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
 import org.dita.dost.log.MessageBean;
 import org.junit.Test;
 
@@ -41,7 +38,7 @@ public class DITAOTExceptionTest {
     @Test
     public void testDITAOTExceptionMessageBeanThrowableString() {
         new DITAOTException(null, null, null);
-        new DITAOTException(new MessageBean(null, null, null, null), new RuntimeException(), "test");
+        new DITAOTException(new MessageBean(null, (MessageBean.Type) null, null, null), new RuntimeException(), "test");
     }
 
 }

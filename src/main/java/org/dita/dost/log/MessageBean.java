@@ -26,19 +26,20 @@ import org.xml.sax.Attributes;
  * @author Wu, Zhi Qiang
  */
 public final class MessageBean {
-    
-    public static final String FATAL = "FATAL";
-    public static final String ERROR = "ERROR";
-    public static final String WARN = "WARN";
-    public static final String INFO = "INFO";
-    public static final String DEBUG = "DEBUG";
-    
-    private final String id;
 
-    private final String type;
+    public enum Type {
+        FATAL, ERROR, WARN, INFO, DEBUG;
+    }
 
-    private final String reason;
+    public static final String FATAL = Type.FATAL.name();
+    public static final String ERROR = Type.ERROR.name();
+    public static final String WARN = Type.WARN.name();
+    public static final String INFO = Type.INFO.name();
+    public static final String DEBUG = Type.DEBUG.name();
 
+    public final String id;
+    public final Type type;
+    public final String reason;
     private final String response;
     private URI srcFile;
     private int srcLine = -1;
@@ -50,8 +51,24 @@ public final class MessageBean {
      * @param mbType type
      * @param mbReason reason
      * @param mbResponse response
+     * @deprecated since 3.0
      */
+    @Deprecated
     public MessageBean(final String mbId, final String mbType, final String mbReason, final String mbResponse) {
+        id = mbId;
+        type = Type.valueOf(mbType);
+        reason = mbReason;
+        response = mbResponse;
+    }
+
+    /**
+     * Constructor with params to init.
+     * @param mbId id
+     * @param mbType type
+     * @param mbReason reason
+     * @param mbResponse response
+     */
+    public MessageBean(final String mbId, final Type mbType, final String mbReason, final String mbResponse) {
         id = mbId;
         type = mbType;
         reason = mbReason;
@@ -64,13 +81,15 @@ public final class MessageBean {
      * @param message message
      */
     public MessageBean(final MessageBean message) {
-        this(message.getId(), message.getType(), message.getReason(), message.getResponse());
+        this(message.id, message.type, message.reason, message.response);
     }
 
     /**
      * Getter function of id.
      * @return Returns the id.
+     * @deprecated since 3.0
      */
+    @Deprecated
     public String getId() {
         return id;
     }
@@ -78,7 +97,9 @@ public final class MessageBean {
     /**
      * Getter function of reason.
      * @return Returns the reason
+     * @deprecated since 3.0
      */
+    @Deprecated
     public String getReason() {
         return reason;
     }
@@ -86,7 +107,9 @@ public final class MessageBean {
     /**
      * Getter function of response.
      * @return Returns the response, {@code null} if not defined
+     * @deprecated since 3.0
      */
+    @Deprecated
     public String getResponse() {
         return response;
     }
@@ -94,9 +117,11 @@ public final class MessageBean {
     /**
      * Getter function of type.
      * @return Returns the type.
+     * @deprecated since 3.0
      */
+    @Deprecated
     public String getType() {
-        return type;
+        return type != null ? type.name() : null;
     }
     
     /**

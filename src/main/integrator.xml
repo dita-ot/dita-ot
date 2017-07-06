@@ -45,6 +45,7 @@ See the accompanying LICENSE file for applicable license.
     <jar destfile="${basedir}/lib/dost-configuration.jar">
       <fileset dir="${basedir}/resources">
         <include name="messages.xml"/>
+        <include name="messages*.properties"/>
         <include name="plugins.xml"/>
       </fileset>
       <fileset dir="${basedir}/lib">

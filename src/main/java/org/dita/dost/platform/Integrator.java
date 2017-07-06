@@ -350,30 +350,32 @@ public final class Integrator {
     private Properties readMessageBundle() throws IOException, XMLStreamException {
         final Properties messages = new Properties();
         final File messagesXmlFile = ditaDir.toPath().resolve(RESOURCES_DIR).resolve("messages.xml").toFile();
-        try (final InputStream in = new FileInputStream(messagesXmlFile)) {
-            final XMLStreamReader src = XMLInputFactory.newFactory().createXMLStreamReader(new StreamSource(in));
-            String id = null;
-            final StringBuilder buf = new StringBuilder();
-            while (src.hasNext()) {
-                final int type = src.next();
-                switch (type) {
-                    case  XMLEvent.START_ELEMENT:
-                        if (src.getLocalName().equals("message")) {
-                            id = src.getAttributeValue(XMLConstants.NULL_NS_URI, "id");
-                        } else if (id != null) {
-                            buf.append(src.getElementText()).append(' ');
-                        }
-                        break;
-                    case  XMLEvent.END_ELEMENT:
-                        if (src.getLocalName().equals("message")) {
-                            messages.put(id, convertMessage(buf.toString()));
-                            id = null;
-                            buf.delete(0, buf.length());
-                        }
-                        break;
+        if (messagesXmlFile.exists()) {
+            try (final InputStream in = new FileInputStream(messagesXmlFile)) {
+                final XMLStreamReader src = XMLInputFactory.newFactory().createXMLStreamReader(new StreamSource(in));
+                String id = null;
+                final StringBuilder buf = new StringBuilder();
+                while (src.hasNext()) {
+                    final int type = src.next();
+                    switch (type) {
+                        case  XMLEvent.START_ELEMENT:
+                            if (src.getLocalName().equals("message")) {
+                                id = src.getAttributeValue(XMLConstants.NULL_NS_URI, "id");
+                            } else if (id != null) {
+                                buf.append(src.getElementText()).append(' ');
+                            }
+                            break;
+                        case  XMLEvent.END_ELEMENT:
+                            if (src.getLocalName().equals("message")) {
+                                messages.put(id, convertMessage(buf.toString()));
+                                id = null;
+                                buf.delete(0, buf.length());
+                            }
+                            break;
+                    }
                 }
+                src.close();
             }
-            src.close();
         }
         return messages;
     }
