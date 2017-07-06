@@ -54,7 +54,15 @@ See the accompanying LICENSE file for applicable license.
     
     <basename property="dita.input.filename" file="${args.input}" />
     <basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".ditamap" />
-    <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix=".dita" />
+    <condition property="dita.topic.filename.extension" value=".xml">
+      <matches pattern="\.xml$" string="${dita.input.filename}"/>
+    </condition>
+    <condition property="dita.topic.filename.extension" value=".dita">
+      <matches pattern="\.dita$" string="${dita.input.filename}"/>
+    </condition>
+    <property name="dita.topic.filename.extension" value="."/>
+    <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix="${dita.topic.filename.extension}"/>
+    
     
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input}</echo>
