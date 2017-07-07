@@ -154,7 +154,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:function name="simpletable:generate-headers" as="xs:string">
     <xsl:param name="el" as="element()"/>
     <xsl:param name="suffix" as="xs:string"/>
-    <xsl:sequence select="string-join((generate-id($el), $suffix), '-')"/>
+    <xsl:sequence select="string-join((dita-ot:generate-html-id($el), $suffix), '-')"/>
   </xsl:function>
   
   <xsl:template match="*[contains(@class,' topic/simpletable ')]
