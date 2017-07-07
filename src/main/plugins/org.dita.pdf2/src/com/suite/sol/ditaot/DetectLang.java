@@ -111,15 +111,15 @@ public class DetectLang extends Task {
             if(classAttr != null && langAttr != null) {
                 if ((classAttr.indexOf(" map/map ") > -1) ||
                         (classAttr.indexOf(" topic/topic ") > -1)) {
-                    final String partProcessedString = langAttr.replace('-','_')
-                            .toLowerCase();
-                    int length;
-                    if ((length = partProcessedString.length()) > 4) {
-                        processedString
-                        = partProcessedString.substring(0, length - 2)
-                        + partProcessedString.substring(length - 2, length).toUpperCase();
-                    }
-                    else {
+                    final String partProcessedString = langAttr.replace('-','_');
+                    int length = partProcessedString.length();
+                    if (length == 5) {
+                        processedString = partProcessedString.substring(0, length - 2).toLowerCase()
+                                + partProcessedString.substring(length - 2).toUpperCase();
+                    } else if (length > 5) {
+                        processedString = partProcessedString.substring(0, 2).toLowerCase()
+                                + partProcessedString.substring(2);
+                    } else {
                         processedString = partProcessedString;
                     }
 
