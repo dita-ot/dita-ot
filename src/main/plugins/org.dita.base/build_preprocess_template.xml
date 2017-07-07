@@ -53,8 +53,14 @@ See the accompanying LICENSE file for applicable license.
     </dita-ot-fail>
     
     <basename property="dita.input.filename" file="${args.input}" />
-    <basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".ditamap" />
-    <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix=".dita" />
+    <pathconvert property="dita.map.filename.root">
+      <path path="${dita.input.filename}"/>
+      <chainedmapper>
+        <mapper type="flatten"/>
+        <mapper type="regexp" from="^(.+)(\..+?)$$" to="\1"/>
+      </chainedmapper>
+    </pathconvert>
+    <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>
     
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input}</echo>
