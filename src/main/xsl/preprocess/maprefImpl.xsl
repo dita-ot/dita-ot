@@ -399,16 +399,18 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' topic/title ')]" mode="preserve-submap-title-and-topicmeta">
-    <dita-ot:submap-title class="+ topic/foreign ditaot-d/submap-title ">
-      <xsl:apply-templates select="@*" mode="preserve-submap-attributes"/>
-      <xsl:apply-templates select="*|processing-instruction()|text()"/>
-    </dita-ot:submap-title>
+    <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
+      <submap-title class="+ topic/navtitle ditaot-d/submap-title ">
+        <xsl:apply-templates select="@*" mode="preserve-submap-attributes"/>
+        <xsl:apply-templates select="*|processing-instruction()|text()"/>
+      </submap-title>
+    </submap-topicmeta>
   </xsl:template>
   <xsl:template match="*[contains(@class,' map/topicmeta ')]" mode="preserve-submap-title-and-topicmeta">
-    <dita-ot:submap-topicmeta class="+ topic/foreign ditaot-d/submap-topicmeta ">
+    <submap-topicmeta-container class="+ topic/foreign ditaot-d/submap-topicmeta-container ">
       <xsl:apply-templates select="@*" mode="preserve-submap-attributes"/>
       <xsl:apply-templates select="*|processing-instruction()|text()"/>
-    </dita-ot:submap-topicmeta>
+    </submap-topicmeta-container>
   </xsl:template>
 
   <xsl:template match="@* | node()" mode="reltable-copy">
