@@ -1,4 +1,4 @@
-# DITA Open Toolkit [![Build Status][1]](http://travis-ci.org/dita-ot/dita-ot)
+# DITA Open Toolkit [![Build Status][1]](http://travis-ci.org/dita-ot/dita-ot) [![Slack][7]](http://slack.dita-ot.org/)
 
 The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.org][2] for documentation, information about releases, and download packages.
 
@@ -60,3 +60,4 @@ The DITA Open Toolkit is licensed for use under the [Apache License 2.0][6].
 [4]: http://www.dita-ot.org/dev/user-guide/build-using-dita-command.html
 [5]: http://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI
 [6]: http://www.apache.org/licenses/LICENSE-2.0
+[7]: http://slack.dita-ot.org/badge.svg
