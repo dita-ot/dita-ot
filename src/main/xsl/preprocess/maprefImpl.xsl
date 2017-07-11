@@ -128,9 +128,8 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-            <xsl:variable name="targetTitleAndTopicmeta" as="element()*">
-              <xsl:sequence select="$file/*/*[contains(@class,' topic/title ') or contains(@class,' map/topicmeta ')]"/>
-            </xsl:variable>
+            <xsl:variable name="targetTitleAndTopicmeta" as="element()*"
+              select="$file/*/*[contains(@class,' topic/title ') or contains(@class,' map/topicmeta ')]"/>
             <xsl:variable name="contents" as="node()*">
               <xsl:choose>
                 <xsl:when test="not(contains($href,'://') or empty($element-id) or $file/*[contains(@class,' map/map ')][@id = $element-id])">
