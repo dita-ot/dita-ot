@@ -282,11 +282,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 .map(Boolean::parseBoolean)
                 .orElse(true);
         if (profilingEnabled) {
-            ditavalFile = toFile(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
-            if (ditavalFile != null && !ditavalFile.isAbsolute()) {
-                // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
-                ditavalFile = new File(basedir, ditavalFile.getPath()).getAbsoluteFile();
-            }
+            ditavalFile = Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))
+                    .filter(f -> f.exists())
+                    .orElse(null);
         }
     }
 

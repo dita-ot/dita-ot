@@ -10,20 +10,31 @@ package org.dita.dost.module.reader;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
+import org.dita.dost.reader.SubjectSchemeReader;
+import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
+import javax.security.auth.Subject;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +44,8 @@ import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.ancestors;
+import static org.dita.dost.util.XMLUtils.toList;
 
 /**
  * Module for reading and serializing topics into temporary directory.
@@ -66,6 +79,41 @@ public final class TopicReaderModule extends AbstractReaderModule {
         }
 
         return null;
+    }
+
+    @Override
+    void init() throws SAXException {
+        super.init();
+
+        if (filterUtils != null) {
+            final Document doc = getMapDocument();
+            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+            subjectSchemeReader.setLogger(logger);
+            logger.debug("Loading subject schemes");
+            final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
+            subjectSchemes.stream()
+                    .filter(e -> SUBJECTSCHEME_ENUMERATIONDEF.matches(e))
+                    .forEach(enumerationDef -> {
+                        final Element schemeRoot = ancestors(enumerationDef)
+                                .filter(e -> SUBMAP.matches(e))
+                                .findFirst()
+                                .orElse(doc.getDocumentElement());
+                        subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
+                    });
+            final SubjectScheme subjectScheme = subjectSchemeReader.getSubjectSchemeMap();
+            filterUtils = filterUtils.refine(subjectScheme);
+        }
+    }
+
+    private Document getMapDocument() throws SAXException {
+        final FileInfo fi = job.getFileInfo(job.getInputMap());
+        final URI currentFile = job.tempDirURI.resolve(fi.uri);
+        try {
+            logger.debug("Reading " + currentFile);
+            return XMLUtils.getDocumentBuilder().parse(new InputSource(currentFile.toString()));
+        } catch (final SAXException | IOException e) {
+            throw new SAXException("Failed to parse " + currentFile, e);
+        }
     }
 
     @Override

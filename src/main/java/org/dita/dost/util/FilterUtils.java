@@ -14,9 +14,11 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
+import org.dita.dost.module.filter.SubjectScheme;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -49,7 +51,9 @@ public final class FilterUtils {
     public static final FilterKey DEFAULT = new FilterKey(DEFAULT_ACTION, null);
 
     private DITAOTLogger logger;
+    /** Actions for filter keys. */
     private final Map<FilterKey, Action> filterMap;
+    /** Set of filter keys for which an error has already been thrown. */
     private final Set<FilterKey> notMappingRules = new HashSet<>();
     private boolean logMissingAction;
 
@@ -93,8 +97,7 @@ public final class FilterUtils {
      *
      * @param atts attributes
      * @param extProps {@code props} attribute specializations
-     * @return true if any one of attributes 'audience', 'platform', 'product',
-     *         'otherprops', 'props', or 'print' was excluded.
+     * @return {@code true} if any profiling attribute was excluded, otherwise {@code false}
      */
     public boolean needExclude(final Attributes atts, final String[][] extProps) {
         if (filterMap.isEmpty()) {
@@ -138,8 +141,9 @@ public final class FilterUtils {
     }
 
     private final Pattern groupPattern = Pattern.compile("(\\w+)\\((.+?)\\)");
-    
-    public Map<String, List<String>> getGroups(final String value) {
+
+    @VisibleForTesting
+    Map<String, List<String>> getGroups(final String value) {
         final Map<String, List<String>> res = new HashMap<>();
         
         final StringBuilder buf = new StringBuilder();
@@ -371,7 +375,17 @@ public final class FilterUtils {
      * @param bindingMap subject scheme bindings
      * @return new filter with subject scheme information
      */
-    public FilterUtils refine(final Map<String, Map<String, Set<Element>>> bindingMap) {
+    public FilterUtils refine(final SubjectScheme bindingMap) {
+        return refine(bindingMap.subjectSchemeMap);
+    }
+
+    /**
+     * Refine filter with subject scheme.
+     *
+     * @param bindingMap subject scheme bindings, {@code Map<AttName, Map<ElemName, Set<Element>>>}
+     * @return new filter with subject scheme information
+     */
+    private FilterUtils refine(final Map<String, Map<String, Set<Element>>> bindingMap) {
         if (bindingMap != null && !bindingMap.isEmpty()) {
             final Map<FilterKey, Action> buf = new HashMap<>(filterMap);
             for (final Map.Entry<FilterKey, Action> e: filterMap.entrySet()) {

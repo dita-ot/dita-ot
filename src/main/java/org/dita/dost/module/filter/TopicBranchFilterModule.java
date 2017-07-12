@@ -9,10 +9,8 @@ package org.dita.dost.module.filter;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.AbstractPipelineModuleImpl;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -35,9 +33,7 @@ import java.util.*;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toFile;
-import static org.dita.dost.util.URLUtils.toURI;
-import static org.dita.dost.util.XMLUtils.close;
-import static org.dita.dost.util.XMLUtils.getChildElements;
+import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * Branch filter module for topics.
@@ -50,25 +46,20 @@ import static org.dita.dost.util.XMLUtils.getChildElements;
  *
  * @since 2.5
  */
-public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
+public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
     private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
     private final XMLUtils xmlUtils = new XMLUtils();
     private final DocumentBuilder builder;
-    private final DitaValReader ditaValReader;
 //    private final TempFileNameScheme tempFileNameScheme;
-    private final Map<URI, FilterUtils> filterCache = new HashMap<>();
     /** Current map being processed, relative to temporary directory */
     private URI map;
-    /** Absolute URI to map being processed. */
-    protected URI currentFile;
 
     public TopicBranchFilterModule() {
+        super();
         builder = XMLUtils.getDocumentBuilder();
-        ditaValReader = new DitaValReader();
-        ditaValReader.initXMLReader(true);
 //        try {
 //            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
 //        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -79,7 +70,6 @@ public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
     @Override
     public void setLogger(final DITAOTLogger logger) {
         super.setLogger(logger);
-        ditaValReader.setLogger(logger);
         xmlUtils.setLogger(logger);
     }
 
@@ -120,10 +110,11 @@ public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
             return;
         }
 
+        final SubjectScheme subjectSchemeMap = getSubjectScheme(doc.getDocumentElement());
         logger.debug("Filter topics and generate copies");
-        generateCopies(doc.getDocumentElement(), Collections.emptyList());
+        generateCopies(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
         logger.debug("Filter existing topics");
-        filterTopics(doc.getDocumentElement(), Collections.emptyList());
+        filterTopics(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
 
         logger.debug("Writing " + currentFile);
         Result result = null;
@@ -144,25 +135,10 @@ public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    private List<FilterUtils> combineFilterUtils(final Element topicref, final List<FilterUtils> filters) {
-        final List<Element> ditavalRefs = getChildElements(topicref, DITAVAREF_D_DITAVALREF);
-        assert ditavalRefs.size() <= 1;
-        if (!ditavalRefs.isEmpty()) {
-            List<FilterUtils> fs = new ArrayList<>(filters);
-            final FilterUtils f = getFilterUtils(ditavalRefs.get(0));
-            if (f != null) {
-                fs = new ArrayList<>(fs);
-                fs.add(f);
-            }
-            return fs;
-        } else {
-            return filters;
-        }
-    }
-
     /** Copy and filter topics for branches. These topics have a new name and will be added to job configuration. */
-    private void generateCopies(final Element topicref, final List<FilterUtils> filters) {
-        final List<FilterUtils> fs = combineFilterUtils(topicref, filters);
+    private void generateCopies(final Element topicref, final List<FilterUtils> filters,
+                                final SubjectScheme subjectSchemeMap) {
+        final List<FilterUtils> fs = combineFilterUtils(topicref, filters, subjectSchemeMap);
 
         final String copyTo = topicref.getAttribute(BRANCH_COPY_TO);
         if (!copyTo.isEmpty()) {
@@ -208,13 +184,14 @@ public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
             if (DITAVAREF_D_DITAVALREF.matches(child)) {
                 continue;
             }
-            generateCopies(child, fs);
+            generateCopies(child, fs, subjectSchemeMap);
         }
     }
 
     /** Modify and filter topics for branches. These files use an existing file name. */
-    private void filterTopics(final Element topicref, final List<FilterUtils> filters) {
-        final List<FilterUtils> fs = combineFilterUtils(topicref, filters);
+    private void filterTopics(final Element topicref, final List<FilterUtils> filters,
+                              final SubjectScheme subjectSchemeMap) {
+        final List<FilterUtils> fs = combineFilterUtils(topicref, filters, subjectSchemeMap);
 
         final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
         final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
@@ -248,28 +225,8 @@ public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
             if (DITAVAREF_D_DITAVALREF.matches(child)) {
                 continue;
             }
-            filterTopics(child, fs);
+            filterTopics(child, fs, subjectSchemeMap);
         }
-    }
-
-    /**
-     * Read and cache filter.
-     **/
-    private FilterUtils getFilterUtils(final Element ditavalRef) {
-        final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
-        final URI tmp = currentFile.resolve(href);
-        final FileInfo fi = job.getFileInfo(tmp);
-        final URI ditaval = fi.src;
-        FilterUtils f = filterCache.get(ditaval);
-        if (f == null) {
-            ditaValReader.filterReset();
-            ditaValReader.read(ditaval);
-            Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
-            f = new FilterUtils(filterMap);
-            f.setLogger(logger);
-            filterCache.put(ditaval, f);
-        }
-        return f;
     }
 
 }

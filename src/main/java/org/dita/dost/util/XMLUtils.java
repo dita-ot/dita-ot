@@ -14,6 +14,7 @@ import static org.dita.dost.util.Constants.*;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -98,7 +99,26 @@ public final class XMLUtils {
     }
 
     /**
-     * List chilid elements by DITA class.
+     * Get first child element by DITA class.
+     *
+     * @param elem root element
+     * @param cls DITA class to match element
+     * @return matching element
+     */
+    public static Optional<Element> getChildElement(final Element elem, final DitaClass cls) {
+        final NodeList children = elem.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (cls.matches(child)) {
+                return Optional.of((Element) child);
+            }
+        }
+        return Optional.empty();
+    }
+
+
+    /**
+     * List child elements by DITA class.
      *
      * @param elem root element
      * @param cls DITA class to match elements
@@ -937,5 +957,20 @@ public final class XMLUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * Stream of element ancestor elements.
+     * @param element start element
+     * @return stream of ancestor elements
+     */
+    public static Stream<Element> ancestors(final Element element) {
+        final Stream.Builder<Element> builder = Stream.builder();
+        for (Node current = element.getParentNode(); current != null; current = current.getParentNode()) {
+            if (current.getNodeType() == Node.ELEMENT_NODE) {
+                builder.accept((Element) current);
+            }
+        }
+        return builder.build();
     }
 }

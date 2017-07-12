@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.tools.ant.util.FileUtils;
@@ -39,7 +40,9 @@ final class FilterModule extends AbstractPipelineModuleImpl {
             throw new IllegalStateException("Logger not set");
         }
         final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-        final File ditavalFile = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null ? new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL)) : null;
+        final File ditavalFile = Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))
+                .filter(f -> f.exists())
+                .orElse(null);
 
         final DitaValReader ditaValReader = new DitaValReader();
         ditaValReader.setLogger(logger);

@@ -643,9 +643,9 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
            <!-- get the location of schemekeydef.xml -->
            <xsl:variable name="KEYDEF-FILE" select="concat($WORKDIR,$PATH2PROJ,'schemekeydef.xml')" as="xs:string"/>
           <!--keydef.xml contains the val  -->
-          <xsl:if test="(document($KEYDEF-FILE, /)//*[@keys=$val])">
+          <xsl:if test="doc-available(resolve-uri($KEYDEF-FILE, base-uri(/))) and exists(document($KEYDEF-FILE, /)//*[@keys=$val])">
             <!-- copy needed elements -->
-              <xsl:apply-templates select="(document($KEYDEF-FILE, /)//*[@keys=$val])" mode="copy-element">
+              <xsl:apply-templates select="document($KEYDEF-FILE, /)//*[@keys=$val]" mode="copy-element">
                  <xsl:with-param name="att" select="$flag-att"/>
                  <xsl:with-param name="bgcolor" select="$backcolor"/>
                  <xsl:with-param name="fcolor" select="$color"/>

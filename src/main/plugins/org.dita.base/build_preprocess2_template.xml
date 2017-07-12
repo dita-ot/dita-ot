@@ -16,6 +16,7 @@ See the accompanying LICENSE file for applicable license.
     description="Preprocess"
     dita:depends="{depend.preprocess.pre},
                   preprocess2.init,
+                  ditaval-merge,
                   
                   map-reader,
                   map-mapref,
@@ -104,7 +105,7 @@ See the accompanying LICENSE file for applicable license.
       <module class="org.dita.dost.module.reader.MapReaderModule">
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
-        <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
+        <!--<param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>-->
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
@@ -332,7 +333,7 @@ See the accompanying LICENSE file for applicable license.
       <module class="org.dita.dost.module.reader.TopicReaderModule">
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
-        <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
+        <!--<param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>-->
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>

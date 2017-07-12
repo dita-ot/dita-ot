@@ -433,6 +433,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         FilterUtils f = filterCache.get(ditaval);
         if (f == null) {
             ditaValReader.filterReset();
+            logger.info("Reading " + ditaval);
             ditaValReader.read(ditaval);
             Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
             f = new FilterUtils(filterMap);

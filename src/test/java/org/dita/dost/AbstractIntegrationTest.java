@@ -59,8 +59,12 @@ public class AbstractIntegrationTest {
     }
 
     public AbstractIntegrationTest transtype(Transtype transtype) {
-        this.transtype = transtype;
+        this.transtype = getTranstype(transtype);
         return this;
+    }
+
+    Transtype getTranstype(Transtype transtype) {
+        return transtype;
     }
 
     public AbstractIntegrationTest targets(String... targets) {

@@ -9,14 +9,11 @@
 package org.dita.dost.module.filter;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.AbstractPipelineModuleImpl;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -29,6 +26,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -53,29 +51,20 @@ import static org.dita.dost.util.XMLUtils.*;
  *
  * @since 2.5
  */
-public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
+public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
     private final DocumentBuilder builder;
-    private final DitaValReader ditaValReader;
     private TempFileNameScheme tempFileNameScheme;
-    private final Map<URI, FilterUtils> filterCache = new HashMap<>();
     /** Current map being processed, relative to temporary directory */
     private URI map;
-    /** Absolute URI to map being processed. */
-    protected URI currentFile;
+    /** Absolute path for filter file. */
+    private URI ditavalFile;
 
     public MapBranchFilterModule() {
+        super();
         builder = XMLUtils.getDocumentBuilder();
-        ditaValReader = new DitaValReader();
-        ditaValReader.initXMLReader(true);
-    }
-    
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        ditaValReader.setLogger(logger);
     }
 
     @Override
@@ -115,6 +104,10 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
     protected void processMap(final FileInfo fi) {
         this.map = fi.uri;
         currentFile = job.tempDirURI.resolve(map);
+        ditavalFile = Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))
+                .filter(File::exists)
+                .map(f -> f.toURI())
+                .orElse(null);
 
         logger.info("Processing " + currentFile);
         final Document doc;
@@ -273,11 +266,22 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
     /** Filter map and remove excluded content. */
     private void filterBranches(final Element root) {
         final String[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
-        filterBranches(root, Collections.emptyList(), props);
+        final SubjectScheme subjectSchemeMap = getSubjectScheme(root);
+        final List<FilterUtils> baseFilter = getBaseFilter(subjectSchemeMap);
+        filterBranches(root, baseFilter, props, subjectSchemeMap);
     }
 
-    private void filterBranches(final Element elem, final List<FilterUtils> filters, final String[][] props) {
-        final List<FilterUtils> fs = combineFilterUtils(elem, filters);
+    private List<FilterUtils> getBaseFilter(final SubjectScheme subjectSchemeMap) {
+        if (ditavalFile != null && !subjectSchemeMap.isEmpty()) {
+            final FilterUtils f = getFilterUtils(ditavalFile).refine(subjectSchemeMap);
+            return Collections.singletonList(f);
+        }
+        return Collections.emptyList();
+    }
+
+    private void filterBranches(final Element elem, final List<FilterUtils> filters, final String[][] props,
+                                final SubjectScheme subjectSchemeMap) {
+        final List<FilterUtils> fs = combineFilterUtils(elem, filters, subjectSchemeMap);
 
         boolean exclude = false;
         for (final FilterUtils f: fs) {
@@ -291,24 +295,8 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
             elem.getParentNode().removeChild(elem);
         } else {
             for (final Element child : getChildElements(elem)) {
-                filterBranches(child, fs, props);
+                filterBranches(child, fs, props, subjectSchemeMap);
             }
-        }
-    }
-
-    private List<FilterUtils> combineFilterUtils(final Element topicref, final List<FilterUtils> filters) {
-        final List<Element> ditavalRefs = getChildElements(topicref, DITAVAREF_D_DITAVALREF);
-        assert ditavalRefs.size() <= 1;
-        if (!ditavalRefs.isEmpty()) {
-            List<FilterUtils> fs = new ArrayList<>(filters);
-            final FilterUtils f = getFilterUtils(ditavalRefs.get(0));
-            if (f != null) {
-                fs = new ArrayList<>(fs);
-                fs.add(f);
-            }
-            return fs;
-        } else {
-            return filters;
         }
     }
 
@@ -323,26 +311,6 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
             }
         }
         return filterUtils.needExclude(buf.build(), props);
-    }
-
-    /**
-     * Read and cache filter.
-     **/
-    private FilterUtils getFilterUtils(final Element ditavalRef) {
-        final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
-        final URI tmp = currentFile.resolve(href);
-        final FileInfo fi = job.getFileInfo(tmp);
-        final URI ditaval = fi.src;
-        FilterUtils f = filterCache.get(ditaval);
-        if (f == null) {
-            ditaValReader.filterReset();
-            ditaValReader.read(ditaval);
-            Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
-            f = new FilterUtils(filterMap);
-            f.setLogger(logger);
-            filterCache.put(ditaval, f);
-        }
-        return f;
     }
 
     /**
