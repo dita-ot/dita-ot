@@ -293,6 +293,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         if (exclude) {
             elem.getParentNode().removeChild(elem);
         } else {
+            // TODO check whether to flag
             for (final Element child : getChildElements(elem)) {
                 filterBranches(child, fs, props);
             }

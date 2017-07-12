@@ -95,6 +95,9 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                 exclude = true;
                 level = 0;
             } else {
+                if (cls.isValid()) {
+                    // TODO check whether to flag
+                }
                 elementOutput = true;
                 for (final Map.Entry<String, String> prefix: prefixes.entrySet()) {
                     getContentHandler().startPrefixMapping(prefix.getKey(), prefix.getValue());
