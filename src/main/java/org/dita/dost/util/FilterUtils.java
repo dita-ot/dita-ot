@@ -10,6 +10,7 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.net.URI;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,10 +32,6 @@ public final class FilterUtils {
 
     /** Subject scheme file extension */
     public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
-
-    public enum Action {
-        INCLUDE, EXCLUDE, PASSTHROUGH, FLAG
-    }
 
     private static final String[] PROFILE_ATTRIBUTES = {
         ATTRIBUTE_NAME_AUDIENCE,
@@ -227,7 +224,7 @@ public final class FilterUtils {
                     // check Specified DefaultAction mapping this attribute's name
                     final Action defaultAction = filterMap.get(new FilterKey(attName, null));
                     if (defaultAction != null) {
-                        if (Action.EXCLUDE == defaultAction) {
+                        if (defaultAction instanceof Exclude) {
                             hasExcludeAction = true;
                         } else {
                             return false;
@@ -241,7 +238,7 @@ public final class FilterUtils {
                             hasNullAction = true;
                         }
                     }
-                } else if (Action.EXCLUDE == filterAction) {
+                } else if (filterAction instanceof Exclude) {
                     hasExcludeAction = true;
                     if (hasNullAction) {
                         if (checkExcludeOfGlobalDefaultAction()) {
@@ -277,7 +274,7 @@ public final class FilterUtils {
         if (defaultAction == null) {
             return false;
         } else {
-            return Action.EXCLUDE == defaultAction;
+            return defaultAction instanceof Exclude;
         }
     }
 
@@ -489,6 +486,52 @@ public final class FilterUtils {
                     }
                 }
             }
+        }
+    }
+
+
+    public interface Action {
+        Action INCLUDE = new Include();
+        Action EXCLUDE = new Exclude();
+        Action PASSTHROUGH = new Passthrough();
+    }
+
+    public static class Include implements Action {
+        @Override
+        public String toString() {
+            return "include";
+        }
+    }
+
+    public static class Exclude implements Action {
+        @Override
+        public String toString() {
+            return "exclude";
+        }
+    }
+
+    public static class Passthrough implements Action {
+        @Override
+        public String toString() {
+            return "passthrough";
+        }
+    }
+
+    public static class Flag implements Action {
+
+        public final String color;
+        public final String backcolor;
+        public final String[] style;
+
+        public Flag(String color, String backcolor, String style) {
+            this.color = color;
+            this.backcolor = backcolor;
+            this.style = style != null ? style.split("\\s+") : null;
+        }
+
+        @Override
+        public String toString() {
+            return "flag";
         }
     }
 

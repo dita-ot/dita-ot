@@ -7,17 +7,17 @@
  */
 package org.dita.dost.reader;
 
-import static org.junit.Assert.assertEquals;
+import org.dita.dost.TestUtils;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.FilterUtils.Action;
+import org.dita.dost.util.FilterUtils.FilterKey;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.Map;
 
-import org.junit.Test;
-
-import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.util.FilterUtils.Action;
-import org.dita.dost.util.FilterUtils.FilterKey;
+import static org.junit.Assert.assertTrue;
 
 
 public class TestDitaValReader {
@@ -30,16 +30,16 @@ public class TestDitaValReader {
         DitaValReader reader = new DitaValReader();
         reader.read(ditavalFile.getAbsoluteFile());
         final Map<FilterKey, Action> map = reader.getFilterMap();
-        assertEquals(Action.INCLUDE, map.get(new FilterKey("audience", "Cindy")));
-        assertEquals(Action.FLAG, map.get(new FilterKey("produt", "p1")));
-        assertEquals(Action.EXCLUDE, map.get(new FilterKey("product", "ABase_ph")));
-        assertEquals(Action.INCLUDE, map.get(new FilterKey("product", "AExtra_ph")));
-        assertEquals(Action.EXCLUDE, map.get(new FilterKey("product", "Another_ph")));
-        assertEquals(Action.FLAG, map.get(new FilterKey("platform", "Windows")));
-        assertEquals(Action.FLAG, map.get(new FilterKey("platform", "Linux")));
-        assertEquals(Action.EXCLUDE, map.get(new FilterKey("keyword", "key1")));
-        assertEquals(Action.FLAG, map.get(new FilterKey("keyword", "key2")));
-        assertEquals(Action.INCLUDE, map.get(new FilterKey("keyword", "key3")));
+        assertTrue(map.get(new FilterKey("audience", "Cindy")) instanceof FilterUtils.Include);
+        assertTrue(map.get(new FilterKey("produt", "p1")) instanceof FilterUtils.Flag);
+        assertTrue(map.get(new FilterKey("product", "ABase_ph")) instanceof FilterUtils.Exclude);
+        assertTrue(map.get(new FilterKey("product", "AExtra_ph")) instanceof FilterUtils.Include);
+        assertTrue(map.get(new FilterKey("product", "Another_ph")) instanceof FilterUtils.Exclude);
+        assertTrue(map.get(new FilterKey("platform", "Windows")) instanceof FilterUtils.Flag);
+        assertTrue(map.get(new FilterKey("platform", "Linux")) instanceof FilterUtils.Flag);
+        assertTrue(map.get(new FilterKey("keyword", "key1")) instanceof FilterUtils.Exclude);
+        assertTrue(map.get(new FilterKey("keyword", "key2")) instanceof FilterUtils.Flag);
+        assertTrue(map.get(new FilterKey("keyword", "key3")) instanceof FilterUtils.Include);
     }
 
 }

@@ -20,6 +20,7 @@ import java.util.*;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.XMLUtils;
@@ -124,7 +125,25 @@ public final class DitaValReader extends AbstractXMLReader {
             final String attAction = atts.getValue(ELEMENT_NAME_ACTION);
             //first to check if the att attribute and val attribute are null
             //which is a default action for elements without mapping with the other filter val
-            final Action action = attAction != null ? Action.valueOf(attAction.toUpperCase()) : null;
+            Action action = null;
+            switch (attAction) {
+                case "include":
+                    action = Action.INCLUDE;
+                    break;
+                case "exclude":
+                    action = Action.EXCLUDE;
+                    break;
+                case "passthrough":
+                    action = Action.PASSTHROUGH;
+                    break;
+                case "flag":
+                    action = new FilterUtils.Flag(atts.getValue(ATTRIBUTE_NAME_COLOR),
+                            atts.getValue(ATTRIBUTE_NAME_BACKCOLOR),
+                            atts.getValue(ATTRIBUTE_NAME_STYLE));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid action: " + attAction);
+            }
             if (action != null) {
                 final String attName = atts.getValue(ATTRIBUTE_NAME_ATT);
                 final String attValue = atts.getValue(ATTRIBUTE_NAME_VAL);

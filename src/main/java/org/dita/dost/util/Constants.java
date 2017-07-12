@@ -709,6 +709,9 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_COLS = "cols";
     public static final String ATTRIBUTE_NAME_VALUE = "value";
     public static final String ATTRIBUTE_NAME_VALUETYPE = "valuetype";
+    public static final String ATTRIBUTE_NAME_COLOR = "color";
+    public static final String ATTRIBUTE_NAME_BACKCOLOR = "backcolor";
+    public static final String ATTRIBUTE_NAME_STYLE = "style";
 
     public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 
