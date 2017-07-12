@@ -284,7 +284,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
         boolean exclude = false;
         for (final FilterUtils f: fs) {
-            exclude = exclude(elem, f, props);
+            exclude = f.needExclude(elem, props);
             if (exclude) {
                 break;
             }
@@ -313,19 +313,6 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         } else {
             return filters;
         }
-    }
-
-    /** Test if element should be excluded based on fiter. */
-    private boolean exclude(final Element element, final FilterUtils filterUtils, final String[][] props) {
-        final AttributesBuilder buf = new AttributesBuilder();
-        final NamedNodeMap attrs = element.getAttributes();
-        for (int i = 0; i < attrs.getLength() ; i++) {
-            final Node attr = attrs.item(i);
-            if (attr.getNodeType() == Node.ATTRIBUTE_NODE) {
-                buf.add((Attr) attr);
-            }
-        }
-        return filterUtils.needExclude(buf.build(), props);
     }
 
     /** Copy and filter topics for branches. These topics have a new name and will be added to job configuration. */

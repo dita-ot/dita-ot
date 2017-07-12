@@ -19,9 +19,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
 import org.dita.dost.module.filter.SubjectScheme;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.Attributes;
 
 /**
@@ -90,6 +88,21 @@ public final class FilterUtils {
     @Override
     public String toString() {
         return filterMap.toString();
+    }
+
+    /**
+     * Test if element should be excluded based on filter.
+     */
+    public boolean needExclude(final Element element, final String[][] props) {
+        final XMLUtils.AttributesBuilder buf = new XMLUtils.AttributesBuilder();
+        final NamedNodeMap attrs = element.getAttributes();
+        for (int i = 0; i < attrs.getLength() ; i++) {
+            final Node attr = attrs.item(i);
+            if (attr.getNodeType() == Node.ATTRIBUTE_NODE) {
+                buf.add((Attr) attr);
+            }
+        }
+        return needExclude(buf.build(), props);
     }
 
     /**
