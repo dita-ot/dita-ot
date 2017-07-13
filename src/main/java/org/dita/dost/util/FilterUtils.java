@@ -215,10 +215,10 @@ public final class FilterUtils {
      */
     private boolean extCheckExclude(final String[] propList, final List<String> attValue) {
         for (int propListIndex = propList.length - 1; propListIndex >= 0; propListIndex--) {
-            boolean hasNullAction = false;
-            boolean hasExcludeAction = false;
             final String attName = propList[propListIndex];
             checkRuleMapping(attName, attValue);
+            boolean hasNullAction = false;
+            boolean hasExcludeAction = false;
             for (final String attSubValue: attValue) {
                 final FilterKey filterKey = new FilterKey(attName, attSubValue);
                 final Action filterAction = filterMap.get(filterKey);
@@ -227,17 +227,10 @@ public final class FilterUtils {
                     // check Specified DefaultAction mapping this attribute's name
                     final Action defaultAction = filterMap.get(new FilterKey(attName, null));
                     if (defaultAction != null) {
-                        if (Action.EXCLUDE != defaultAction) {
-                            return false;
-                        } else {
+                        if (Action.EXCLUDE == defaultAction) {
                             hasExcludeAction = true;
-                            if (hasNullAction) {
-                                if (checkExcludeOfGlobalDefaultAction()) {
-                                    hasNullAction = false;
-                                } else {
-                                    return false;
-                                }
-                            }
+                        } else {
+                            return false;
                         }
                     } else {
                         if (hasExcludeAction) {
