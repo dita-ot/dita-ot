@@ -233,6 +233,11 @@ public class FilterUtilsTest {
             exp.put("group", Arrays.asList("a", "b", "c"));
             assertEquals(exp, f.getGroups("group(a b) group(c)"));
         }
+        {
+            final Map<String, List<String>> exp = new HashMap<String, List<String>>();
+            exp.put("group2", Arrays.asList("a"));
+            assertEquals(exp, f.getGroups("group1() group2(a)"));
+        }
     }
     
     private Attributes attr(final String name, final String value) {
