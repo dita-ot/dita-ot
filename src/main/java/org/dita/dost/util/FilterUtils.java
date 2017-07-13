@@ -214,9 +214,6 @@ public final class FilterUtils {
      * @return {@code true} if should be excluded, otherwise {@code false}
      */
     private boolean extCheckExclude(final String[] propList, final List<String> attValue) {
-        if (attValue == null || attValue.isEmpty() || propList.length == 0 || attValue.contains("(")) {
-            return false;
-        }
         for (int propListIndex = propList.length - 1; propListIndex >= 0; propListIndex--) {
             boolean hasNullAction = false;
             boolean hasExcludeAction = false;
