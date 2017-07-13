@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<plugin>
-   <extension point="org.eclipse.help.toc">
-      <toc file="root-map-01.xml" primary="true"/>
-   </extension>
-   <extension point="org.eclipse.help.index">
-      <index file="index.xml"/>
-   </extension>
-</plugin>

@@ -1,5 +1,0 @@
-<val>
-    <style-conflict foreground-conflict-color="white" background-conflict-color="black"></style-conflict>
-    <prop att="product" val="b" action="flag" color="red"></prop>
-    <prop att="platform" val="linux" action="flag" color="green"></prop>
-</val>
