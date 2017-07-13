@@ -277,8 +277,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
        Commented out section shows how to insert a default start flag of "delta.gif"
        by creating the proper ditaval syntax -->
   <xsl:template name="default-rev-start">
-    <xsl:param name="lang" as="xs:string"/>
-    <xsl:param name="biditest" as="xs:string"/>
+    <xsl:param name="lang" as="xs:string?"/>
+    <xsl:param name="biditest" as="xs:string?"/>
     <!--
     <xsl:param name="startRevImage">
       <xsl:choose>
@@ -296,8 +296,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
   <!-- output the DEFAULT ending revision graphic & ALT text -->
   <xsl:template name="default-rev-end">
-    <xsl:param name="lang" as="xs:string"/>
-    <xsl:param name="biditest" as="xs:string"/>
+    <xsl:param name="lang" as="xs:string?"/>
+    <xsl:param name="biditest" as="xs:string?"/>
     <!--
     <xsl:param name="endRevImage">
       <xsl:choose>
