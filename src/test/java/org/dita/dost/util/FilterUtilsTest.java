@@ -7,6 +7,8 @@
  */
 package org.dita.dost.util;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
@@ -15,10 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 
+import org.dita.dost.util.FilterUtils.Flag;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -142,6 +146,49 @@ public class FilterUtilsTest {
         assertFalse(f.needExclude(attr("otherprops", "os(amiga unix windows)"), new String[0][0]));
         assertFalse(f.needExclude(attr("otherprops", "os(amiga windows)"), new String[0][0]));
         assertTrue(f.needExclude(attr("otherprops", "os(windows)"), new String[0][0]));
+    }
+
+    @Test
+    public void testgetFlagsDefaultFlag() {
+        final Flag flag = new Flag("red", null, null);
+        final FilterUtils f = new FilterUtils(false,
+                ImmutableMap.<FilterKey, Action>builder()
+                        .put(new FilterKey("platform", null), flag)
+                        .build());
+        f.setLogger(new TestUtils.TestLogger());
+
+        assertEquals(
+                emptyList(),
+                f.getFlags(new AttributesImpl(), new String[0][0]));
+        assertEquals(
+                singletonList(flag),
+                f.getFlags(attr("platform", "amiga unix windows"), new String[0][0]));
+    }
+
+    @Test
+    public void testGetFlags() {
+        final Flag flag = new Flag("red", null, null);
+        final FilterUtils f = new FilterUtils(false,
+                ImmutableMap.<FilterKey, Action>builder()
+                        .put(new FilterKey("platform", "unix"), flag)
+                        .put(new FilterKey("platform", "osx"), flag)
+                        .put(new FilterKey("platform", "linux"), flag)
+                        .put(new FilterKey("audience", "expert"), flag)
+                        .build());
+        f.setLogger(new TestUtils.TestLogger());
+
+        assertEquals(
+                singletonList(flag),
+                f.getFlags(attr("platform", "amiga unix windows"), new String[0][0]));
+        assertEquals(
+                singletonList(flag),
+                f.getFlags(attr("platform", "amiga unix"), new String[0][0]));
+        assertEquals(
+                emptyList(),
+                f.getFlags(attr("platform", "amiga"), new String[0][0]));
+        assertEquals(
+                emptyList(),
+                f.getFlags(attr("platform", "windows"), new String[0][0]));
     }
 
     // DITA 1.3

@@ -8,9 +8,9 @@
  */
 package org.dita.dost.util;
 
+import static java.util.Collections.emptyList;
 import static org.dita.dost.util.Constants.*;
 
-import java.net.URI;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -85,6 +85,66 @@ public final class FilterUtils {
     @Override
     public String toString() {
         return filterMap.toString();
+    }
+
+    public List<Flag> getFlags(final Attributes atts, final String[][] extProps) {
+        if (filterMap.isEmpty()) {
+            return emptyList();
+        }
+
+        final List<Flag> res = new ArrayList<>();
+        for (final String attr: PROFILE_ATTRIBUTES) {
+            final String value = atts.getValue(attr);
+            if (value != null) {
+                final Map<String, List<String>> groups = getGroups(value);
+                for (Map.Entry<String, List<String>> group: groups.entrySet()) {
+                    final String[] propList =
+                            group.getKey() != null
+                                    ? new String[]{attr, group.getKey()}
+                                    : new String[]{attr};
+                    res.addAll(extCheckFlag(propList, group.getValue()));
+                }
+            }
+        }
+
+//        if (extProps != null && extProps.length != 0) {
+//            for (final String[] propList: extProps) {
+//                int propListIndex = propList.length - 1;
+//                final String propName = propList[propListIndex];
+//                String propValue = atts.getValue(propName);
+//
+//                while ((propValue == null || propValue.trim().isEmpty()) && propListIndex > 0) {
+//                    propListIndex--;
+//                    propValue = getLabelValue(propName, atts.getValue(propList[propListIndex]));
+//                }
+//                if (propValue != null && extCheckExclude(propList, Arrays.asList(propValue.split("\\s+")))) {
+////                    return true;
+//                }
+//            }
+//        }
+        return res;
+    }
+
+    /**
+     * @param propList attribute group names, from most common to most specific
+     * @param attValue attribute group values
+     */
+    @VisibleForTesting
+    List<Flag> extCheckFlag(final String[] propList, final List<String> attValue) {
+        final List<Flag> res = new ArrayList<>();
+        for (final String attName : Arrays.asList(propList)) {
+            for (final String attSubValue : attValue) {
+                Action filterAction = filterMap.get(new FilterKey(attName, attSubValue));
+                if (filterAction == null) {
+                    filterAction = filterMap.get(new FilterKey(attName, null));
+                }
+                if (filterAction instanceof Flag) {
+                    res.add((Flag) filterAction);
+                }
+            }
+        }
+
+        return res;
     }
 
     /**
