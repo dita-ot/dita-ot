@@ -7,6 +7,7 @@
  */
 package org.dita.dost.util;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
@@ -307,4 +308,31 @@ public class FilterUtilsTest {
         return res;
     }
     
+    @Test
+    public void testGetFlagLabel() {
+        final Flag flagRed = new Flag("red", null, null);
+        final Flag flagBlue = new Flag("blue", null, null);
+        final FilterUtils f = new FilterUtils(false,
+                ImmutableMap.<FilterKey, Action>builder()
+                        .put(new FilterKey("os", "amiga"), flagRed)
+                        .put(new FilterKey("os", null), flagBlue)
+                        .build());
+        f.setLogger(new TestUtils.TestLogger());
+
+        assertEquals(
+                asList(flagRed, flagBlue, flagBlue),
+                f.getFlags(attr("props", "os(amiga unix windows)"), new String[][] {{"props", "os"}}));
+        assertEquals(
+                asList(flagRed, flagBlue),
+                f.getFlags(attr("props", "os(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
+        assertEquals(
+                emptyList(),
+                f.getFlags(attr("props", "gui(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
+        assertEquals(
+                singletonList(flagBlue),
+                f.getFlags(attr("props", "os(windows)"), new String[][] {{"props", "os"}}));
+        assertEquals(
+                singletonList(flagBlue),
+                f.getFlags(attr("props", "   os(   windows   )   "), new String[][] {{"props", "os"}}));
+    }
 }

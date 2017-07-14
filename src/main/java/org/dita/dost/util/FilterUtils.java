@@ -595,6 +595,26 @@ public final class FilterUtils {
         @Override
         public String toString() {
             return "flag";
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Flag flag = (Flag) o;
+
+            if (color != null ? !color.equals(flag.color) : flag.color != null) return false;
+            if (backcolor != null ? !backcolor.equals(flag.backcolor) : flag.backcolor != null) return false;
+            // Probably incorrect - comparing Object[] arrays with Arrays.equals
+            return Arrays.equals(style, flag.style);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = color != null ? color.hashCode() : 0;
+            result = 31 * result + (backcolor != null ? backcolor.hashCode() : 0);
+            result = 31 * result + Arrays.hashCode(style);
+            return result;
         }
     }
 
