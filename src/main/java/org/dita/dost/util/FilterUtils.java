@@ -211,14 +211,17 @@ public final class FilterUtils {
     
     /**
      * Check the given extended attribute in propList to see if it was excluded.
-     * 
+     *
+     * @param propList attribute group names, from most common to most specific
+     * @param attValue attribute group values
      * @return {@code true} if should be excluded, otherwise {@code false}
      */
-    private boolean extCheckExclude(final String[] propList, final List<String> attValue) {
+    @VisibleForTesting
+    boolean extCheckExclude(final String[] propList, final List<String> attValue) {
         for (int propListIndex = propList.length - 1; propListIndex >= 0; propListIndex--) {
             final String attName = propList[propListIndex];
             checkRuleMapping(attName, attValue);
-            boolean hasNullAction = false;
+            boolean hasNonExcludeAction = false;
             boolean hasExcludeAction = false;
             for (final String attSubValue: attValue) {
                 final FilterKey filterKey = new FilterKey(attName, attSubValue);
@@ -235,18 +238,18 @@ public final class FilterUtils {
                         }
                     } else {
                         if (hasExcludeAction) {
-                            if (!checkExcludeOfGlobalDefaultAction()) {
+                            if (!isDefaultExclude()) {
                                 return false;
                             }
                         } else {
-                            hasNullAction = true;
+                            hasNonExcludeAction = true;
                         }
                     }
                 } else if (filterAction instanceof Exclude) {
                     hasExcludeAction = true;
-                    if (hasNullAction) {
-                        if (checkExcludeOfGlobalDefaultAction()) {
-                            hasNullAction = false;
+                    if (hasNonExcludeAction) {
+                        if (isDefaultExclude()) {
+                            hasNonExcludeAction = false;
                         } else {
                             return false;
                         }
@@ -256,15 +259,15 @@ public final class FilterUtils {
                 }
             }
 
-            if (hasNullAction) {
-                // if there is exclude action but not all value should be excluded
+            // if there is exclude action but not all value should be excluded
+            if (hasNonExcludeAction) {
                 // under the condition of default action also not exist or not excluded
                 if (0 == propListIndex) {
                     // the ancient parent on the top level
-                    return checkExcludeOfGlobalDefaultAction();
+                    return isDefaultExclude();
                 }
+            // if all of the value should be excluded
             } else if (hasExcludeAction) {
-                // if all of the value should be excluded
                 return true;
             }
             // If no action for this extended prop has been found, we need to check the parent prop action
@@ -273,13 +276,9 @@ public final class FilterUtils {
         return false;
     }
 
-    private boolean checkExcludeOfGlobalDefaultAction() {
+    private boolean isDefaultExclude() {
         final Action defaultAction = filterMap.get(DEFAULT);
-        if (defaultAction == null) {
-            return false;
-        } else {
-            return defaultAction instanceof Exclude;
-        }
+        return defaultAction != null && defaultAction instanceof Exclude;
     }
 
     /**
