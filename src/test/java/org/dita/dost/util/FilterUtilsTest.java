@@ -145,6 +145,20 @@ public class FilterUtilsTest {
     }
 
     // DITA 1.3
+
+    @Test
+    public void testExtCheckExclude() {
+        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
+        fm.put(new FilterKey("os", null), Action.EXCLUDE);
+        fm.put(new FilterKey("platform", null), Action.EXCLUDE);
+        final FilterUtils f = new FilterUtils(false, fm);
+        f.setLogger(new TestUtils.TestLogger());
+
+        assertFalse(f.extCheckExclude(new String[] {"platform", "os"}, Arrays.asList("amiga", "unix", "windows")));
+        assertTrue(f.extCheckExclude(new String[] {"platform", "os"}, Arrays.asList("osx")));
+        assertFalse(f.extCheckExclude(new String[] {"platform", "os"}, Arrays.asList( "unix", "amiga", "windows")));
+    }
     
     @Test
     public void testNeedExcludeGroup() {
