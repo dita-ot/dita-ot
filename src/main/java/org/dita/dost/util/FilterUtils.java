@@ -119,14 +119,12 @@ public final class FilterUtils {
             if (value != null) {
                 final Map<String, List<String>> groups = getGroups(value);
                 for (Map.Entry<String, List<String>> group: groups.entrySet()) {
-                    if (group.getKey() != null) {
-                        if (extCheckExclude(new String[] { attr, group.getKey() }, group.getValue())) {
-                            return true;
-                        }
-                    } else {
-                        if (extCheckExclude(new String[] { attr }, group.getValue())) {
-                            return true;
-                        }
+                    final String[] propList =
+                            group.getKey() != null
+                                    ? new String[]{attr, group.getKey()}
+                                    : new String[]{attr};
+                    if (extCheckExclude(propList, group.getValue())) {
+                        return true;
                     }
                 }
             }
@@ -152,6 +150,12 @@ public final class FilterUtils {
 
     private final Pattern groupPattern = Pattern.compile("(\\w+)\\((.*?)\\)");
 
+    /**
+     * Parse groups
+     *
+     * @param value profiling attribute value
+     * @return map of groups names to group values, ungrouped values have {@code null} name
+     */
     @VisibleForTesting
     Map<String, List<String>> getGroups(final String value) {
         final Map<String, List<String>> res = new HashMap<>();
