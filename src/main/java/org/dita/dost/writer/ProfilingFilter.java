@@ -7,19 +7,22 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.*;
-
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Profiling filter strips out the content that is not necessary in the output.
@@ -42,6 +45,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     private final Map<String, String> prefixes = new HashMap<>();
     /** Flag that last element was excluded. */
     private boolean lastElementExcluded = false;
+    private Deque<List<Flag>> flagStack = new LinkedList<>();
 
     /**
      * Create new profiling filter.
@@ -71,6 +75,8 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
+        List<Flag> flags = null;
+
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
         if (cls.isValid()) {
             classes.addFirst(cls);
@@ -95,22 +101,73 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                 exclude = true;
                 level = 0;
             } else {
-                if (cls.isValid()) {
-                    // TODO check whether to flag
-                }
                 elementOutput = true;
                 for (final Map.Entry<String, String> prefix: prefixes.entrySet()) {
                     getContentHandler().startPrefixMapping(prefix.getKey(), prefix.getValue());
                 }
                 prefixes.clear();
                 getContentHandler().startElement(uri, localName, qName, atts);
+                if (cls.isValid()) {
+                    flags = filterUtils.getFlags(atts, props);
+                    for (final Flag flag: flags) {
+                        writeStartFlag(flag);
+                    }
+
+                }
             }
         }
+
+        flagStack.push(flags);
+    }
+
+    private void writeStartFlag(final Flag flag) throws SAXException {
+        final StringBuilder outputclass = new StringBuilder();
+        if (flag.color != null) {
+            outputclass.append("color:").append(flag.color).append(";");
+        }
+        if (flag.backcolor != null) {
+            outputclass.append("background-color:").append(flag.backcolor).append(";");
+        }
+        if (flag.style != null) {
+            for (final String style : flag.style) {
+                outputclass.append("text-decoration:").append(style).append(";");
+            }
+        }
+
+        getContentHandler().startElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop",
+                new AttributesBuilder()
+                        .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-startprop ")
+                        .add(ATTRIBUTE_NAME_OUTPUTCLASS, outputclass.toString())
+                        .build());
+        writeProp(flag);
+        getContentHandler().endElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop");
+    }
+
+    private void writeProp(Flag flag) throws SAXException {
+        final AttributesBuilder propAtts = new AttributesBuilder().add("action", "flag");
+        if (flag.color != null) {
+            propAtts.add("color", flag.color);
+        }
+        if (flag.backcolor != null) {
+            propAtts.add("backcolor", flag.backcolor);
+        }
+        if (flag.style != null) {
+            propAtts.add("style", Stream.of(flag.style).collect(Collectors.joining(" ")));
+        }
+        getContentHandler().startElement(NULL_NS_URI, "prop", "prop", propAtts.build());
+        getContentHandler().endElement(NULL_NS_URI, "prop", "prop");
     }
 
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
+        final List<Flag> flags = flagStack.pop();
+        if (flags != null) {
+            for (final Flag flag : flags) {
+                writeEndFlag(flag);
+            }
+        }
+
         classes.pop();
         lastElementExcluded = exclude;
         if (exclude) {
@@ -125,6 +182,15 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             getContentHandler().endElement(uri, localName, qName);
         }
 
+    }
+
+    private void writeEndFlag(final Flag flag) throws SAXException {
+        getContentHandler().startElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop",
+                new AttributesBuilder()
+                        .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-endprop ")
+                        .build());
+        writeProp(flag);
+        getContentHandler().endElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop");
     }
 
     @Override
