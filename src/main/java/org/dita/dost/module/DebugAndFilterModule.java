@@ -211,7 +211,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
             filterReader.setJob(job);
-            filterReader.initXMLReader(setSystemId);
             Map<FilterKey, Action> filterMap;
             if (ditavalFile != null && ditavalFile.exists()) {
                 filterReader.read(ditavalFile.getAbsoluteFile());

@@ -632,7 +632,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         if (ditavalFile.exists()) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
-            ditaValReader.initXMLReader(setSystemid);
 
             ditaValReader.read(ditavalFile.getAbsoluteFile());
             // Store filter map for later use

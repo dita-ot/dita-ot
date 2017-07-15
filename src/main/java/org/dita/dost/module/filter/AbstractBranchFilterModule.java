@@ -41,7 +41,6 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
 
     AbstractBranchFilterModule() {
         ditaValReader = new DitaValReader();
-        ditaValReader.initXMLReader(true);
         subjectSchemeReader = new SubjectSchemeReader();
     }
 

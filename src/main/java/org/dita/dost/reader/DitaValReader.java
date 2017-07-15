@@ -8,29 +8,33 @@
  */
 package org.dita.dost.reader;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FilterUtils.DEFAULT;
-import static org.dita.dost.util.URLUtils.*;
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.FilterUtils.Action;
+import org.dita.dost.util.FilterUtils.FilterKey;
+import org.dita.dost.util.FilterUtils.Flag;
+import org.dita.dost.util.FilterUtils.Flag.FlagImage;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.URLUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.FilterUtils.Action;
-import org.dita.dost.util.FilterUtils.FilterKey;
-import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FilterUtils.DEFAULT;
+import static org.dita.dost.util.URLUtils.getRelativePath;
+import static org.dita.dost.util.XMLUtils.*;
 
 
 /**
@@ -39,10 +43,13 @@ import org.xml.sax.XMLReader;
  * 
  * @author Zhang, Yuan Peng
  */
-public final class DitaValReader extends AbstractXMLReader {
+public final class DitaValReader implements AbstractReader {
+
+    protected DITAOTLogger logger;
+    protected Job job;
     private final Map<FilterKey, Action> filterMap;
 
-    private XMLReader reader;
+    private final DocumentBuilder builder;
     /** List of absolute flagging image paths. */
     private final List<URI> imageList;
 
@@ -52,9 +59,6 @@ public final class DitaValReader extends AbstractXMLReader {
     /** List of relative flagging image paths. */
     private final List<URI> relFlagImageList;
 
-    private boolean setSystemid = true;
-
-    
     /**
      * Default constructor of DitaValReader class.
      */
@@ -65,12 +69,20 @@ public final class DitaValReader extends AbstractXMLReader {
         relFlagImageList= new ArrayList<>(256);
 
         try {
-            reader = XMLUtils.getXMLReader();
-            reader.setContentHandler(this);
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e) ;
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (final ParserConfigurationException e) {
+            throw new RuntimeException(e);
         }
+    }
 
+    @Override
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        this.job = job;
     }
 
     /**
@@ -79,11 +91,6 @@ public final class DitaValReader extends AbstractXMLReader {
      */
     public void setSubjectScheme(final Map<String, Map<String, Set<Element>>> bindingMap) {
         this.bindingMap = bindingMap;
-    }
-    
-    public void initXMLReader(final boolean arg_setSystemid) {
-        setSystemid = arg_setSystemid;
-        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
     }
 
     /** Use {@link #read(URI)} instead. */
@@ -98,18 +105,17 @@ public final class DitaValReader extends AbstractXMLReader {
         assert input.isAbsolute();
         ditaVal = input;
 
+        final Document doc;
+        builder.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal.toString(), logger));
         try {
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal.toString(), logger));
-            final InputSource is = new InputSource(input.toString());
-            if (setSystemid) {
-                is.setSystemId(input.toString());
-            }
-            reader.parse(is);
-        } catch (final IOException | SAXException e) {
+            doc = builder.parse(input.toString());
+        } catch (SAXException | IOException e) {
             logger.error("Failed to read DITAVAL file: " + e.getMessage(), e);
             return;
         }
 
+        readDocument(doc);
+        
         if (bindingMap != null && !bindingMap.isEmpty()) {
             final Map<FilterKey, Action> buf = new HashMap<>(filterMap);
             for (final Map.Entry<FilterKey, Action> e: buf.entrySet()) {
@@ -118,66 +124,89 @@ public final class DitaValReader extends AbstractXMLReader {
         }
     }
 
-    @Override
-    public void startElement(final String uri, final String localName, final String qName,
-            final Attributes atts) throws SAXException {
-        if (ELEMENT_NAME_PROP.equals(qName) || ELEMENT_NAME_REVPROP.equals(qName)) {
-            final String attAction = atts.getValue(ELEMENT_NAME_ACTION);
-            //first to check if the att attribute and val attribute are null
-            //which is a default action for elements without mapping with the other filter val
-            Action action = null;
-            switch (attAction) {
-                case "include":
-                    action = Action.INCLUDE;
-                    break;
-                case "exclude":
-                    action = Action.EXCLUDE;
-                    break;
-                case "passthrough":
-                    action = Action.PASSTHROUGH;
-                    break;
-                case "flag":
-                    action = new FilterUtils.Flag(atts.getValue(ATTRIBUTE_NAME_COLOR),
-                            atts.getValue(ATTRIBUTE_NAME_BACKCOLOR),
-                            atts.getValue(ATTRIBUTE_NAME_STYLE),
-                            atts.getValue(ATTRIBUTE_NAME_CHANGEBAR), null, null);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid action: " + attAction);
-            }
-            if (action != null) {
-                final String attName = atts.getValue(ATTRIBUTE_NAME_ATT);
-                final String attValue = atts.getValue(ATTRIBUTE_NAME_VAL);
-                final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;
-                insertAction(action, key);
-            }
+    private void readDocument(final Document doc) {
+        final Element root = doc.getDocumentElement();
+        final List<Element> props = toList(root.getElementsByTagName("prop"));
+        for (final Element prop : props) {
+            readProp(prop);
         }
-
-        /*
-         * Parse image files for flagging
-         */
-        URI flagImage = null;
-        if(atts.getValue(ATTRIBUTE_NAME_IMG)!=null){
-            flagImage = toURI(atts.getValue(ATTRIBUTE_NAME_IMG));
-        }else if(atts.getValue(ATTRIBUTE_NAME_IMAGEREF)!=null){
-            flagImage = toURI(atts.getValue(ATTRIBUTE_NAME_IMAGEREF));
-        }
-        if (flagImage != null) {
-            final URI f = flagImage;
-            if (f.isAbsolute()) {
-                imageList.add(f);
-                relFlagImageList.add(getRelativePath(ditaVal, f));
-            } else if (atts.getValue(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI) != null) {
-                final URI imageuri = URI.create(atts.getValue(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI));
-                imageList.add(imageuri);
-                relFlagImageList.add(f);
-            } else {
-                imageList.add(ditaVal.resolve(f));
-                relFlagImageList.add(f);
-            }
+        final List<Element> revprops = toList(root.getElementsByTagName("revprop"));
+        for (final Element revprop : revprops) {
+            readProp(revprop);
         }
     }
-    
+
+    public void readProp(final Element elem)  {
+        final String attAction = elem.getAttribute(ELEMENT_NAME_ACTION);
+        Action action;
+        switch (attAction) {
+            case "include":
+                action = Action.INCLUDE;
+                break;
+            case "exclude":
+                action = Action.EXCLUDE;
+                break;
+            case "passthrough":
+                action = Action.PASSTHROUGH;
+                break;
+            case "flag":
+                action = readFlag(elem);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid action: " + attAction);
+        }
+        if (action != null) {
+            final String attName = elem.getAttribute(ATTRIBUTE_NAME_ATT);
+            final String attValue = elem.getAttribute(ATTRIBUTE_NAME_VAL);
+            final FilterKey key = !attName.isEmpty() ? new FilterKey(attName, attValue) : DEFAULT;
+            insertAction(action, key);
+        }
+    }
+
+    private Flag readFlag(Element elem) {
+        return new Flag(
+                getValue(elem, ATTRIBUTE_NAME_COLOR),
+                getValue(elem, ATTRIBUTE_NAME_BACKCOLOR),
+                getValue(elem, ATTRIBUTE_NAME_STYLE),
+                getValue(elem, ATTRIBUTE_NAME_CHANGEBAR),
+                readFlagImage(elem, "startflag"),
+                readFlagImage(elem, "endflag"));
+    }
+
+    private FlagImage readFlagImage(final Element elem, final String name) {
+        final NodeList children = elem.getElementsByTagName(name);
+        if (children.getLength() != 0) {
+            final Element img = (Element) children.item(0);
+            URI absolute = null;
+            if (!img.getAttribute(ATTRIBUTE_NAME_IMAGEREF).isEmpty()) {
+                absolute = URLUtils.toURI(img.getAttribute(ATTRIBUTE_NAME_IMAGEREF));
+                URI relative;
+                if (absolute.isAbsolute()) {
+                    relative = getRelativePath(ditaVal, absolute);
+                } else if (!img.getAttributeNS(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI).isEmpty()) {
+                    absolute = URI.create(img.getAttributeNS(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI));
+                    relative = absolute;
+                } else {
+                    absolute = ditaVal.resolve(absolute);
+                    relative = absolute;
+                }
+                imageList.add(absolute);
+                relFlagImageList.add(relative);
+            }
+
+            String altText = null;
+            final NodeList alts = img.getElementsByTagName("alt-text");
+            if (alts.getLength() != 0) {
+                altText = getText(alts.item(0));
+            }
+
+            if (absolute != null || altText != null) {
+                return new FlagImage(absolute, altText);
+            }
+        }
+        return null;
+    }
+
     /**
      * Refine action key with information from subject schemes.
      */

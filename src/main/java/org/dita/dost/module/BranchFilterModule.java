@@ -72,7 +72,6 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     public BranchFilterModule() {
         builder = XMLUtils.getDocumentBuilder();
         ditaValReader = new DitaValReader();
-        ditaValReader.initXMLReader(true);
         xmlUtils = new XMLUtils();
     }
     

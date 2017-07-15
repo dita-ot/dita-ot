@@ -28,7 +28,7 @@ public class TestDitaValReader {
     public void testRead() throws DITAOTException{
         final File ditavalFile = new File(resourceDir, "src" + File.separator + "DITAVAL_1.ditaval");
         DitaValReader reader = new DitaValReader();
-        reader.read(ditavalFile.getAbsoluteFile());
+        reader.read(ditavalFile.toURI());
         final Map<FilterKey, Action> map = reader.getFilterMap();
         assertTrue(map.get(new FilterKey("audience", "Cindy")) instanceof FilterUtils.Include);
         assertTrue(map.get(new FilterKey("produt", "p1")) instanceof FilterUtils.Flag);

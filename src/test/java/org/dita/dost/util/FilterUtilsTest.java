@@ -162,7 +162,7 @@ public class FilterUtilsTest {
                 emptyList(),
                 f.getFlags(new AttributesImpl(), new String[0][0]));
         assertEquals(
-                singletonList(flag),
+                asList(flag, flag, flag),
                 f.getFlags(attr("platform", "amiga unix windows"), new String[0][0]));
     }
 
