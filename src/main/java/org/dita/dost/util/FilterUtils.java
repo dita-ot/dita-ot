@@ -585,16 +585,24 @@ public final class FilterUtils {
         public final String color;
         public final String backcolor;
         public final String[] style;
+        public final String changebar;
 
-        public Flag(String color, String backcolor, String style) {
+        public Flag(String color, String backcolor, String style, String changebar) {
             this.color = color;
             this.backcolor = backcolor;
             this.style = style != null ? style.split("\\s+") : null;
+            this.changebar = changebar;
         }
 
         @Override
         public String toString() {
-            return "flag";
+            return "Flag{" +
+                    "color='" + color + '\'' +
+                    ", backcolor='" + backcolor + '\'' +
+                    ", style=" + Arrays.toString(style) +
+                    ", changebar='" + changebar + '\'' +
+                    '}';
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -606,7 +614,8 @@ public final class FilterUtils {
             if (color != null ? !color.equals(flag.color) : flag.color != null) return false;
             if (backcolor != null ? !backcolor.equals(flag.backcolor) : flag.backcolor != null) return false;
             // Probably incorrect - comparing Object[] arrays with Arrays.equals
-            return Arrays.equals(style, flag.style);
+            if (!Arrays.equals(style, flag.style)) return false;
+            return changebar != null ? changebar.equals(flag.changebar) : flag.changebar == null;
         }
 
         @Override
@@ -614,6 +623,7 @@ public final class FilterUtils {
             int result = color != null ? color.hashCode() : 0;
             result = 31 * result + (backcolor != null ? backcolor.hashCode() : 0);
             result = 31 * result + Arrays.hashCode(style);
+            result = 31 * result + (changebar != null ? changebar.hashCode() : 0);
             return result;
         }
     }

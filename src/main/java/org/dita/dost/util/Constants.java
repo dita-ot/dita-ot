@@ -602,6 +602,7 @@ public final class Constants {
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
     /**prop element.*/
     public static final String ELEMENT_NAME_PROP = "prop";
+    public static final String ELEMENT_NAME_REVPROP = "revprop";
     /**map element.*/
     public static final String ELEMENT_NAME_ACTION = "action";
     /**action element.*/
@@ -713,6 +714,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_COLOR = "color";
     public static final String ATTRIBUTE_NAME_BACKCOLOR = "backcolor";
     public static final String ATTRIBUTE_NAME_STYLE = "style";
+    public static final String ATTRIBUTE_NAME_CHANGEBAR = "changebar";
 
     public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 

@@ -121,7 +121,7 @@ public final class DitaValReader extends AbstractXMLReader {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
-        if (ELEMENT_NAME_PROP.equals(qName)) {
+        if (ELEMENT_NAME_PROP.equals(qName) || ELEMENT_NAME_REVPROP.equals(qName)) {
             final String attAction = atts.getValue(ELEMENT_NAME_ACTION);
             //first to check if the att attribute and val attribute are null
             //which is a default action for elements without mapping with the other filter val
@@ -139,7 +139,8 @@ public final class DitaValReader extends AbstractXMLReader {
                 case "flag":
                     action = new FilterUtils.Flag(atts.getValue(ATTRIBUTE_NAME_COLOR),
                             atts.getValue(ATTRIBUTE_NAME_BACKCOLOR),
-                            atts.getValue(ATTRIBUTE_NAME_STYLE));
+                            atts.getValue(ATTRIBUTE_NAME_STYLE),
+                            atts.getValue(ATTRIBUTE_NAME_CHANGEBAR));
                     break;
                 default:
                     throw new IllegalArgumentException("Invalid action: " + attAction);
