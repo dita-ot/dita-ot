@@ -151,7 +151,7 @@ public class FilterUtilsTest {
 
     @Test
     public void testgetFlagsDefaultFlag() {
-        final Flag flag = new Flag("red", null, null);
+        final Flag flag = new Flag("red", null, null, null, null, null);
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey("platform", null), flag)
@@ -168,7 +168,7 @@ public class FilterUtilsTest {
 
     @Test
     public void testGetFlags() {
-        final Flag flag = new Flag("red", null, null);
+        final Flag flag = new Flag("red", null, null, null, null, null);
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey("platform", "unix"), flag)
@@ -310,8 +310,8 @@ public class FilterUtilsTest {
     
     @Test
     public void testGetFlagLabel() {
-        final Flag flagRed = new Flag("red", null, null);
-        final Flag flagBlue = new Flag("blue", null, null);
+        final Flag flagRed = new Flag("red", null, null, null, null, null);
+        final Flag flagBlue = new Flag("blue", null, null, null, null, null);
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey("os", "amiga"), flagRed)

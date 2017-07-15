@@ -140,7 +140,7 @@ public final class DitaValReader extends AbstractXMLReader {
                     action = new FilterUtils.Flag(atts.getValue(ATTRIBUTE_NAME_COLOR),
                             atts.getValue(ATTRIBUTE_NAME_BACKCOLOR),
                             atts.getValue(ATTRIBUTE_NAME_STYLE),
-                            atts.getValue(ATTRIBUTE_NAME_CHANGEBAR));
+                            atts.getValue(ATTRIBUTE_NAME_CHANGEBAR), null, null);
                     break;
                 default:
                     throw new IllegalArgumentException("Invalid action: " + attAction);

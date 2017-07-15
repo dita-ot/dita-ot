@@ -11,6 +11,7 @@ package org.dita.dost.util;
 import static java.util.Collections.emptyList;
 import static org.dita.dost.util.Constants.*;
 
+import java.net.URI;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -586,12 +587,17 @@ public final class FilterUtils {
         public final String backcolor;
         public final String[] style;
         public final String changebar;
+        public final FlagImage startflag;
+        public final FlagImage endflag;
 
-        public Flag(String color, String backcolor, String style, String changebar) {
+        public Flag(String color, String backcolor, String style, String changebar,
+                    FlagImage startflag, FlagImage endflag) {
             this.color = color;
             this.backcolor = backcolor;
             this.style = style != null ? style.split("\\s+") : null;
             this.changebar = changebar;
+            this.startflag = startflag;
+            this.endflag = endflag;
         }
 
         @Override
@@ -601,6 +607,8 @@ public final class FilterUtils {
                     ", backcolor='" + backcolor + '\'' +
                     ", style=" + Arrays.toString(style) +
                     ", changebar='" + changebar + '\'' +
+                    ", startflag=" + startflag +
+                    ", endflag=" + endflag +
                     '}';
         }
 
@@ -615,7 +623,9 @@ public final class FilterUtils {
             if (backcolor != null ? !backcolor.equals(flag.backcolor) : flag.backcolor != null) return false;
             // Probably incorrect - comparing Object[] arrays with Arrays.equals
             if (!Arrays.equals(style, flag.style)) return false;
-            return changebar != null ? changebar.equals(flag.changebar) : flag.changebar == null;
+            if (changebar != null ? !changebar.equals(flag.changebar) : flag.changebar != null) return false;
+            if (startflag != null ? !startflag.equals(flag.startflag) : flag.startflag != null) return false;
+            return endflag != null ? endflag.equals(flag.endflag) : flag.endflag == null;
         }
 
         @Override
@@ -624,7 +634,45 @@ public final class FilterUtils {
             result = 31 * result + (backcolor != null ? backcolor.hashCode() : 0);
             result = 31 * result + Arrays.hashCode(style);
             result = 31 * result + (changebar != null ? changebar.hashCode() : 0);
+            result = 31 * result + (startflag != null ? startflag.hashCode() : 0);
+            result = 31 * result + (endflag != null ? endflag.hashCode() : 0);
             return result;
+        }
+
+        public static class FlagImage {
+            public final URI href;
+            public final String alt;
+
+            public FlagImage(URI href, String alt) {
+                this.href = href;
+                this.alt = alt;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+
+                FlagImage flagImage = (FlagImage) o;
+
+                if (href != null ? !href.equals(flagImage.href) : flagImage.href != null) return false;
+                return alt != null ? alt.equals(flagImage.alt) : flagImage.alt == null;
+            }
+
+            @Override
+            public int hashCode() {
+                int result = href != null ? href.hashCode() : 0;
+                result = 31 * result + (alt != null ? alt.hashCode() : 0);
+                return result;
+            }
+
+            @Override
+            public String toString() {
+                return "FlagImage{" +
+                        "href=" + href +
+                        ", alt='" + alt + '\'' +
+                        '}';
+            }
         }
     }
 
