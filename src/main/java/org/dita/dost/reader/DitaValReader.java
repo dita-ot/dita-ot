@@ -156,9 +156,9 @@ public final class DitaValReader implements AbstractReader {
                 throw new IllegalArgumentException("Invalid action: " + attAction);
         }
         if (action != null) {
-            final String attName = elem.getAttribute(ATTRIBUTE_NAME_ATT);
-            final String attValue = elem.getAttribute(ATTRIBUTE_NAME_VAL);
-            final FilterKey key = !attName.isEmpty() ? new FilterKey(attName, attValue) : DEFAULT;
+            final String attName = getValue(elem, ATTRIBUTE_NAME_ATT);
+            final String attValue = getValue(elem, ATTRIBUTE_NAME_VAL);
+            final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;
             insertAction(action, key);
         }
     }

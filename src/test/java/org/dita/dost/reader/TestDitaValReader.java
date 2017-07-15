@@ -40,6 +40,7 @@ public class TestDitaValReader {
         assertTrue(map.get(new FilterKey("keyword", "key1")) instanceof FilterUtils.Exclude);
         assertTrue(map.get(new FilterKey("keyword", "key2")) instanceof FilterUtils.Flag);
         assertTrue(map.get(new FilterKey("keyword", "key3")) instanceof FilterUtils.Include);
+        assertTrue(map.get(new FilterKey("props", null)) instanceof FilterUtils.Include);
     }
 
 }
