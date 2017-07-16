@@ -136,11 +136,13 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             }
         }
 
+        final AttributesBuilder atts = new AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-startprop ");
+        if (outputclass.length() != 0) {
+            atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputclass.toString());
+        }
         getContentHandler().startElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop",
-                new AttributesBuilder()
-                        .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-startprop ")
-                        .add(ATTRIBUTE_NAME_OUTPUTCLASS, outputclass.toString())
-                        .build());
+                atts.build());
         writeProp(flag, true);
         getContentHandler().endElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop");
     }
