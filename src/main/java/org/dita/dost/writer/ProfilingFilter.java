@@ -11,12 +11,14 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
+import org.dita.dost.util.FilterUtils.Flag.FlagImage;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -139,11 +141,11 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                         .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-startprop ")
                         .add(ATTRIBUTE_NAME_OUTPUTCLASS, outputclass.toString())
                         .build());
-        writeProp(flag);
+        writeProp(flag, true);
         getContentHandler().endElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop");
     }
 
-    private void writeProp(Flag flag) throws SAXException {
+    private void writeProp(Flag flag, final boolean isStart) throws SAXException {
         final AttributesBuilder propAtts = new AttributesBuilder().add("action", "flag");
         if (flag.color != null) {
             propAtts.add("color", flag.color);
@@ -155,7 +157,30 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             propAtts.add("style", Stream.of(flag.style).collect(Collectors.joining(" ")));
         }
         getContentHandler().startElement(NULL_NS_URI, "prop", "prop", propAtts.build());
+        if (isStart && flag.startflag != null) {
+            writeFlag(flag.startflag, "startflag");
+        }
+        if (!isStart && flag.endflag != null) {
+            writeFlag(flag.endflag, "endflag");
+        }
         getContentHandler().endElement(NULL_NS_URI, "prop", "prop");
+    }
+
+    private void writeFlag(final FlagImage startflag, final String tag) throws SAXException {
+        final AttributesBuilder propAtts = new AttributesBuilder().add("action", "flag");
+        final URI abs = startflag.href;
+        propAtts.add("http://dita-ot.sourceforge.net/ns/201007/dita-ot", "imagerefuri", "dita-ot:imagerefuri", "CDATA", abs.toString());
+        final URI rel = abs.resolve(".").relativize(abs);
+        propAtts.add("http://dita-ot.sourceforge.net/ns/201007/dita-ot", "original-imageref", "dita-ot:original-imageref", "CDATA", rel.toString());
+        propAtts.add("imageref", rel.toString());
+        getContentHandler().startElement(NULL_NS_URI, tag, tag, propAtts.build());
+        if (startflag.alt != null) {
+            getContentHandler().startElement(NULL_NS_URI, "alt-text", "alt-text", XMLUtils.EMPTY_ATTRIBUTES);
+            final char[] chars = startflag.alt.toCharArray();
+            getContentHandler().characters(chars, 0, chars.length);
+            getContentHandler().endElement(NULL_NS_URI, "alt-text", "alt-text");
+        }
+        getContentHandler().endElement(NULL_NS_URI, tag, tag);
     }
 
     @Override
@@ -189,7 +214,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                 new AttributesBuilder()
                         .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-endprop ")
                         .build());
-        writeProp(flag);
+        writeProp(flag, false);
         getContentHandler().endElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop");
     }
 

@@ -52,6 +52,8 @@ public final class XMLUtils {
     private DITAOTLogger logger;
     private final TransformerFactory transformerFactory;
 
+    public static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl();
+
     public XMLUtils() {
         transformerFactory = TransformerFactory.newInstance();
     }
