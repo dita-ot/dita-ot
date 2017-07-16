@@ -69,7 +69,9 @@ public final class DitaValReader implements AbstractReader {
         relFlagImageList= new ArrayList<>(256);
 
         try {
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            builderFactory.setNamespaceAware(true);
+            builder = builderFactory.newDocumentBuilder();
         } catch (final ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
@@ -187,8 +189,8 @@ public final class DitaValReader implements AbstractReader {
                     absolute = URI.create(img.getAttributeNS(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI));
                     relative = absolute;
                 } else {
-                    absolute = ditaVal.resolve(absolute);
                     relative = absolute;
+                    absolute = ditaVal.resolve(absolute);
                 }
                 imageList.add(absolute);
                 relFlagImageList.add(relative);
