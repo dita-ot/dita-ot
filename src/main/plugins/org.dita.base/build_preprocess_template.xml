@@ -527,6 +527,7 @@ See the accompanying LICENSE file for applicable license.
               </not>
           </or>
       </condition>
+    <property name="preprocess.flagging.skip" value="true"/>
   </target>
   
   <!-- Clean maps from processing time  -->

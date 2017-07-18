@@ -547,6 +547,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="preprocess.flagging.skip">
       <not><isset property="args.filter"/></not>
     </condition>
+    <property name="preprocess.flagging.skip" value="true"/>
   </target>
   
   <target name="map-clean-map" 
