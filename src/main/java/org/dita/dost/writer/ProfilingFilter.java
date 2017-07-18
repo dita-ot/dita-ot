@@ -171,10 +171,12 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     private void writeFlag(final FlagImage startflag, final String tag) throws SAXException {
         final AttributesBuilder propAtts = new AttributesBuilder().add("action", "flag");
         final URI abs = startflag.href;
-        propAtts.add("http://dita-ot.sourceforge.net/ns/201007/dita-ot", "imagerefuri", "dita-ot:imagerefuri", "CDATA", abs.toString());
-        final URI rel = abs.resolve(".").relativize(abs);
-        propAtts.add("http://dita-ot.sourceforge.net/ns/201007/dita-ot", "original-imageref", "dita-ot:original-imageref", "CDATA", rel.toString());
-        propAtts.add("imageref", rel.toString());
+        if (abs != null) {
+            propAtts.add("http://dita-ot.sourceforge.net/ns/201007/dita-ot", "imagerefuri", "dita-ot:imagerefuri", "CDATA", abs.toString());
+            final URI rel = abs.resolve(".").relativize(abs);
+            propAtts.add("http://dita-ot.sourceforge.net/ns/201007/dita-ot", "original-imageref", "dita-ot:original-imageref", "CDATA", rel.toString());
+            propAtts.add("imageref", rel.toString());
+        }
         getContentHandler().startElement(NULL_NS_URI, tag, tag, propAtts.build());
         if (startflag.alt != null) {
             getContentHandler().startElement(NULL_NS_URI, "alt-text", "alt-text", XMLUtils.EMPTY_ATTRIBUTES);
