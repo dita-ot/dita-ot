@@ -132,7 +132,21 @@ public final class ProfilingFilter extends AbstractXMLFilter {
         }
         if (flag.style != null) {
             for (final String style : flag.style) {
-                outputclass.append("text-decoration:").append(style).append(";");
+                switch (style) {
+                    case "italics":
+                        outputclass.append("font-style:italic;");
+                        break;
+                    case "bold":
+                        outputclass.append("font-weight:bold;");
+                        break;
+                    case "underline":
+                    case "double-underline":
+                        outputclass.append("text-decoration:").append(style).append(";");
+                        break;
+                    case "overline":
+                        outputclass.append("text-decoration:overline;");
+                        break;
+                }
             }
         }
 
