@@ -9,12 +9,15 @@
 package org.dita.dost.util;
 
 import static java.util.Collections.emptyList;
+import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
 import java.net.URI;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
 import org.dita.dost.log.DITAOTLogger;
@@ -23,6 +26,8 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.filter.SubjectScheme;
 import org.w3c.dom.*;
 import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * Utility class used for flagging and filtering.
@@ -124,6 +129,18 @@ public final class FilterUtils {
 //            }
 //        }
         return res;
+    }
+
+    public List<Flag> getFlags(final Element element, final String[][] props) {
+        final XMLUtils.AttributesBuilder buf = new XMLUtils.AttributesBuilder();
+        final NamedNodeMap attrs = element.getAttributes();
+        for (int i = 0; i < attrs.getLength() ; i++) {
+            final Node attr = attrs.item(i);
+            if (attr.getNodeType() == Node.ATTRIBUTE_NODE) {
+                buf.add((Attr) attr);
+            }
+        }
+        return getFlags(buf.build(), props);
     }
 
     /**
@@ -674,6 +691,94 @@ public final class FilterUtils {
                         '}';
             }
         }
+    }
+
+    public static void writeStartFlag(final ContentHandler contentHandler, final Flag flag) throws SAXException {
+        final StringBuilder outputclass = new StringBuilder();
+        if (flag.color != null) {
+            outputclass.append("color:").append(flag.color).append(";");
+        }
+        if (flag.backcolor != null) {
+            outputclass.append("background-color:").append(flag.backcolor).append(";");
+        }
+        if (flag.style != null) {
+            for (final String style : flag.style) {
+                switch (style) {
+                    case "italics":
+                        outputclass.append("font-style:italic;");
+                        break;
+                    case "bold":
+                        outputclass.append("font-weight:bold;");
+                        break;
+                    case "underline":
+                    case "double-underline":
+                        outputclass.append("text-decoration:").append(style).append(";");
+                        break;
+                    case "overline":
+                        outputclass.append("text-decoration:overline;");
+                        break;
+                }
+            }
+        }
+
+        final XMLUtils.AttributesBuilder atts = new XMLUtils.AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-startprop ");
+        if (outputclass.length() != 0) {
+            atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputclass.toString());
+        }
+        contentHandler.startElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop",
+                atts.build());
+        writeProp(contentHandler, flag, true);
+        contentHandler.endElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop");
+    }
+
+    public static void writeEndFlag(final ContentHandler contentHandler, final Flag flag) throws SAXException {
+        contentHandler.startElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop",
+                new XMLUtils.AttributesBuilder()
+                        .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-endprop ")
+                        .build());
+        writeProp(contentHandler, flag, false);
+        contentHandler.endElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop");
+    }
+
+    private static void writeProp(final ContentHandler contentHandler, Flag flag, final boolean isStart) throws SAXException {
+        final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
+        if (flag.color != null) {
+            propAtts.add("color", flag.color);
+        }
+        if (flag.backcolor != null) {
+            propAtts.add("backcolor", flag.backcolor);
+        }
+        if (flag.style != null) {
+            propAtts.add("style", Stream.of(flag.style).collect(Collectors.joining(" ")));
+        }
+        contentHandler.startElement(NULL_NS_URI, "prop", "prop", propAtts.build());
+        if (isStart && flag.startflag != null) {
+            writeFlag(contentHandler, flag.startflag, "startflag");
+        }
+        if (!isStart && flag.endflag != null) {
+            writeFlag(contentHandler, flag.endflag, "endflag");
+        }
+        contentHandler.endElement(NULL_NS_URI, "prop", "prop");
+    }
+
+    private static void writeFlag(final ContentHandler contentHandler, final Flag.FlagImage startflag, final String tag) throws SAXException {
+        final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
+        final URI abs = startflag.href;
+        if (abs != null) {
+            propAtts.add("http://dita-ot.sourceforge.net/ns/201007/dita-ot", "imagerefuri", "dita-ot:imagerefuri", "CDATA", abs.toString());
+            final URI rel = abs.resolve(".").relativize(abs);
+            propAtts.add("http://dita-ot.sourceforge.net/ns/201007/dita-ot", "original-imageref", "dita-ot:original-imageref", "CDATA", rel.toString());
+            propAtts.add("imageref", rel.toString());
+        }
+        contentHandler.startElement(NULL_NS_URI, tag, tag, propAtts.build());
+        if (startflag.alt != null) {
+            contentHandler.startElement(NULL_NS_URI, "alt-text", "alt-text", XMLUtils.EMPTY_ATTRIBUTES);
+            final char[] chars = startflag.alt.toCharArray();
+            contentHandler.characters(chars, 0, chars.length);
+            contentHandler.endElement(NULL_NS_URI, "alt-text", "alt-text");
+        }
+        contentHandler.endElement(NULL_NS_URI, tag, tag);
     }
 
 }
