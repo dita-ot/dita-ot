@@ -15,28 +15,32 @@ import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import org.xml.sax.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.close;
+import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
  * Branch filter module for map processing.
@@ -294,11 +298,117 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         if (exclude) {
             elem.getParentNode().removeChild(elem);
         } else {
-            // TODO check whether to flag
-            for (final Element child : getChildElements(elem)) {
+            final List<Element> childElements = getChildElements(elem);
+            for (final FilterUtils f: fs) {
+                for (Flag flag : f.getFlags(elem, props)) {
+                    final Element startElement = (Element) elem.getOwnerDocument().importNode(writeStartFlag(flag), true);
+                    final Node firstChild = elem.getFirstChild();
+                    if (firstChild != null) {
+                        elem.insertBefore(startElement, firstChild);
+                    } else {
+                        elem.appendChild(startElement);
+                    }
+                    final Element endElement = (Element) elem.getOwnerDocument().importNode(writeEndFlag(flag), true);
+                    elem.appendChild(endElement);
+                }
+            }
+            for (final Element child : childElements) {
                 filterBranches(child, fs, props, subjectSchemeMap);
             }
         }
+    }
+
+    private Element writeStartFlag(final Flag flag) {
+        return writeToElement((ContentHandler contentHandler) -> {
+            try {
+                FilterUtils.writeStartFlag(contentHandler, flag);
+            } catch (SAXException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private Element writeEndFlag(final Flag flag) {
+        return writeToElement((ContentHandler contentHandler) -> {
+            try {
+                FilterUtils.writeEndFlag(contentHandler, flag);
+            } catch (SAXException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private Element writeToElement(final Consumer<ContentHandler> writer) {
+        final TransformerFactory factory = TransformerFactory.newInstance();
+        final Transformer transformer;
+        try {
+            transformer = factory.newTransformer();
+        } catch (TransformerConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        final SAXSource xmlSource = new SAXSource(new XMLReader() {
+            @Override
+            public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
+                return false;
+            }
+            @Override
+            public void setFeature(String name, boolean value) throws SAXNotRecognizedException, SAXNotSupportedException {
+            }
+            @Override
+            public Object getProperty(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
+                return null;
+            }
+            @Override
+            public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
+            }
+            @Override
+            public void setEntityResolver(EntityResolver resolver) {
+            }
+            @Override
+            public EntityResolver getEntityResolver() {
+                return null;
+            }
+            @Override
+            public void setDTDHandler(DTDHandler handler) {
+            }
+            @Override
+            public DTDHandler getDTDHandler() {
+                return null;
+            }
+            private ContentHandler contentHandler;
+            @Override
+            public void setContentHandler(ContentHandler handler) {
+                this.contentHandler = handler;
+            }
+            @Override
+            public ContentHandler getContentHandler() {
+                return contentHandler;
+            }
+            @Override
+            public void setErrorHandler(ErrorHandler handler) {
+            }
+            @Override
+            public ErrorHandler getErrorHandler() {
+                return null;
+            }
+            @Override
+            public void parse(InputSource input) throws IOException, SAXException {
+                parse((String) null);
+            }
+            @Override
+            public void parse(String input) throws IOException, SAXException {
+                getContentHandler().startDocument();
+                writer.accept(getContentHandler());
+                getContentHandler().endDocument();
+            }
+        }, null);
+        final DOMResult outputTarget = new DOMResult();
+        try {
+            transformer.transform(xmlSource, outputTarget);
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+        return ((Document) outputTarget.getNode()).getDocumentElement();
     }
 
     /**
