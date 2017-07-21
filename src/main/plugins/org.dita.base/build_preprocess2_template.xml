@@ -39,7 +39,6 @@ See the accompanying LICENSE file for applicable license.
                   topic-move-meta-entries,
                   topic-maplink,
                   topic-topicpull,
-                  topic-flag-module,
                   
                   clean-preprocess,
                   copy-files2,
@@ -63,7 +62,6 @@ See the accompanying LICENSE file for applicable license.
 
                   topic-move-meta-entries,
                   topic-topicpull,
-                  topic-flag-module,
 
                   clean-preprocess,
                   copy-files,
@@ -513,41 +511,6 @@ See the accompanying LICENSE file for applicable license.
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
-  </target>
-
-  <target name="topic-flag-module" 
-    dita:depends="{depend.preprocess.flag-module.pre},topic-flag-module-check"
-      dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-      description="Add flagging information to topics" 
-      unless="preprocess.flagging.skip">
-    <makeurl file="${args.filter}" property="dita.input.filterfile.url" validate="no"/>
-    <condition property="dita.preprocess.reloadstylesheet.flag-module" value="${dita.preprocess.reloadstylesheet}">
-      <not><isset property="dita.preprocess.reloadstylesheet.flag-module"/></not>
-    </condition>
-    <pipeline message="Add flagging information to topics" taskname="preprocess_flag">
-      <xslt basedir="${dita.temp.dir}" 
-          reloadstylesheet="${dita.preprocess.reloadstylesheet.flag-module}" 
-          style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/flag.xsl"
-          filenameparameter="FILENAME" 
-          filedirparameter="FILEDIR">
-        <ditaFileset format="dita" processingRole="normal"/>
-        <param name="TRANSTYPE" expression="${transtype}"/>
-        <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"/>
-        <param name="DRAFT" expression="${args.draft}" if:set="args.draft"/>
-        <param name="BASEDIR" expression="${basedir}"/>
-        <param name="OUTPUTDIR" expression="${dita.output.dir}"/>
-        <param name="defaultLanguage" expression="${default.language}"/>
-        <dita:extension id="dita.preprocess.flag-module.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
-      </xslt>
-    </pipeline>
-  </target>
-
-  <target name="topic-flag-module-check">
-    <condition property="preprocess.flagging.skip">
-      <not><isset property="args.filter"/></not>
-    </condition>
-    <property name="preprocess.flagging.skip" value="true"/>
   </target>
   
   <target name="map-clean-map" 
