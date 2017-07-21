@@ -1,6 +1,6 @@
 # DITA Open Toolkit [![Build Status][1]](http://travis-ci.org/dita-ot/dita-ot) [![Slack][7]](http://slack.dita-ot.org/)
 
-The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source tool that provides processing for OASIS DITA content. 
+The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for XML content authored in the _Darwin Information Typing Architecture_. 
 
 See [dita-ot.org][2] for documentation, information about releases, and download packages. 
 
