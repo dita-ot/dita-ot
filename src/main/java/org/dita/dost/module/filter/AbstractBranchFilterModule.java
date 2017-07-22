@@ -105,7 +105,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         ditaValReader.filterReset();
         ditaValReader.read(ditaval);
         Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
-        final FilterUtils f = new FilterUtils(filterMap);
+        final FilterUtils f = new FilterUtils(filterMap, ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         f.setLogger(logger);
         return f;
     }

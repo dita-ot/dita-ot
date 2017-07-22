@@ -627,21 +627,18 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      * @return configured filter utility
      */
     private FilterUtils parseFilterFile() {
-        Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
+        final FilterUtils filterUtils;
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
-
-            ditaValReader.read(ditavalFile.getAbsoluteFile());
-            // Store filter map for later use
-            filterMap = ditaValReader.getFilterMap();
-            // Store flagging image used for image copying
+            ditaValReader.read(ditavalFile.toURI());
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
+            filterUtils = new FilterUtils(printTranstype.contains(transtype), ditaValReader.getFilterMap(),
+                    ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         } else {
-            filterMap = emptyMap();
+            filterUtils = new FilterUtils(printTranstype.contains(transtype), emptyMap(), null, null);
         }
-        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
         filterUtils.setLogger(logger);
         return filterUtils;
     }

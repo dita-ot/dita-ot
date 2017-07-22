@@ -53,7 +53,8 @@ final class FilterModule extends AbstractPipelineModuleImpl {
         } else {
             filterMap = Collections.EMPTY_MAP;
         }
-        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
+        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap,
+                ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         filterUtils.setLogger(logger);
 
         final ProfilingFilter writer = new ProfilingFilter();

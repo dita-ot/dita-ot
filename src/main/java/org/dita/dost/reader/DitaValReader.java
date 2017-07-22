@@ -48,6 +48,8 @@ public final class DitaValReader implements AbstractReader {
     protected DITAOTLogger logger;
     protected Job job;
     private final Map<FilterKey, Action> filterMap;
+    private String foregroundConflictColor;
+    private String backgroundConflictColor;
 
     private final DocumentBuilder builder;
     /** List of absolute flagging image paths. */
@@ -136,6 +138,10 @@ public final class DitaValReader implements AbstractReader {
         for (final Element revprop : revprops) {
             readProp(revprop);
         }
+        final List<Element> styleConflicts = toList(root.getElementsByTagName("style-conflict"));
+        for (final Element styleConflict : styleConflicts) {
+            readStyleConflict(styleConflict);
+        }
     }
 
     public void readProp(final Element elem)  {
@@ -166,10 +172,11 @@ public final class DitaValReader implements AbstractReader {
     }
 
     private Flag readFlag(Element elem) {
+        final String style = getValue(elem, ATTRIBUTE_NAME_STYLE);
         return new Flag(
                 getValue(elem, ATTRIBUTE_NAME_COLOR),
                 getValue(elem, ATTRIBUTE_NAME_BACKCOLOR),
-                getValue(elem, ATTRIBUTE_NAME_STYLE),
+                style != null ? style.trim().split("\\s+") : null,
                 getValue(elem, ATTRIBUTE_NAME_CHANGEBAR),
                 readFlagImage(elem, "startflag"),
                 readFlagImage(elem, "endflag"));
@@ -207,6 +214,11 @@ public final class DitaValReader implements AbstractReader {
             }
         }
         return null;
+    }
+
+    private void readStyleConflict(final Element elem) {
+        foregroundConflictColor = getValue(elem, "foreground-conflict-color");
+        backgroundConflictColor = getValue(elem, "background-conflict-color");
     }
 
     /**
@@ -347,4 +359,11 @@ public final class DitaValReader implements AbstractReader {
         return relFlagImageList;
     }
 
+    public String getForegroundConflictColor() {
+        return foregroundConflictColor;
+    }
+
+    public String getBackgroundConflictColor() {
+        return backgroundConflictColor;
+    }
 }

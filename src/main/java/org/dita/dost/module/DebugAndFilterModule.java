@@ -211,14 +211,13 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
             filterReader.setJob(job);
-            Map<FilterKey, Action> filterMap;
             if (ditavalFile != null && ditavalFile.exists()) {
                 filterReader.read(ditavalFile.getAbsoluteFile());
-                filterMap = filterReader.getFilterMap();
+                baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterReader.getFilterMap(),
+                        filterReader.getForegroundConflictColor(), filterReader.getBackgroundConflictColor());
             } else {
-                filterMap = Collections.EMPTY_MAP;
+                baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), Collections.EMPTY_MAP, null, null);
             }
-            baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
             baseFilterUtils.setLogger(logger);
         }
 

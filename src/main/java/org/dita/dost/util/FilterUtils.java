@@ -57,10 +57,15 @@ public final class FilterUtils {
     /** Set of filter keys for which an error has already been thrown. */
     private final Set<FilterKey> notMappingRules = new HashSet<>();
     private boolean logMissingAction;
+    private String foregroundConflictColor;
+    private String backgroundConflictColor;
 
-    public FilterUtils(final Map<FilterKey, Action> filterMap) {
+    public FilterUtils(final Map<FilterKey, Action> filterMap, String foregroundConflictColor,
+                       String backgroundConflictColor) {
         this.logMissingAction = !filterMap.isEmpty();
         this.filterMap = new HashMap<>(filterMap);
+        this.foregroundConflictColor = foregroundConflictColor;
+        this.backgroundConflictColor = backgroundConflictColor;
     }
 
     /**
@@ -68,7 +73,8 @@ public final class FilterUtils {
      * 
      * @param isPrintType transformation output is print-oriented
      */
-    public FilterUtils(final boolean isPrintType, final Map<FilterKey, Action> filterMap) {
+    public FilterUtils(final boolean isPrintType, final Map<FilterKey, Action> filterMap,
+                       String foregroundConflictColor, String backgroundConflictColor) {
         final Map<FilterKey, Action> dfm = new HashMap<>();
         dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_YES), Action.INCLUDE);
         if (isPrintType) {
@@ -82,6 +88,8 @@ public final class FilterUtils {
         dfm.putAll(filterMap);
         this.logMissingAction = !filterMap.isEmpty();
         this.filterMap = dfm;
+        this.foregroundConflictColor = foregroundConflictColor;
+        this.backgroundConflictColor = backgroundConflictColor;
     }
 
     public void setLogger(final DITAOTLogger logger) {
@@ -112,23 +120,53 @@ public final class FilterUtils {
                 }
             }
         }
+        if (res.isEmpty()) {
+            if (extProps != null && extProps.length != 0) {
+                for (final String[] propList : extProps) {
+                    int propListIndex = propList.length - 1;
+                    final String propName = propList[propListIndex];
+                    String propValue = atts.getValue(propName);
 
-//        if (extProps != null && extProps.length != 0) {
-//            for (final String[] propList: extProps) {
-//                int propListIndex = propList.length - 1;
-//                final String propName = propList[propListIndex];
-//                String propValue = atts.getValue(propName);
-//
-//                while ((propValue == null || propValue.trim().isEmpty()) && propListIndex > 0) {
-//                    propListIndex--;
-//                    propValue = getLabelValue(propName, atts.getValue(propList[propListIndex]));
-//                }
-//                if (propValue != null && extCheckExclude(propList, Arrays.asList(propValue.split("\\s+")))) {
-////                    return true;
-//                }
-//            }
-//        }
-        return res;
+                    while ((propValue == null || propValue.trim().isEmpty()) && propListIndex > 0) {
+                        propListIndex--;
+                        propValue = getLabelValue(propName, atts.getValue(propList[propListIndex]));
+                    }
+                    if (propValue != null) {
+                        res.addAll(extCheckFlag(propList, Arrays.asList(propValue.split("\\s+"))));
+                    }
+                }
+            }
+        }
+
+        return checkConflict(res);
+    }
+
+    private List<Flag> checkConflict(List<Flag> res) {
+        if (foregroundConflictColor == null && backgroundConflictColor == null) {
+            return res;
+        }
+        final Set<String> color = new HashSet<>();
+        final Set<String> backcolor = new HashSet<>();
+        for (Flag f : res) {
+            if (f.color != null) {
+                color.add(f.color);
+            }
+            if (f.backcolor != null) {
+                backcolor.add(f.backcolor);
+            }
+        }
+        final boolean conflictColor = color.size() > 1;
+        final boolean conflictBackcolor = backcolor.size() > 1;
+        if ((conflictColor && foregroundConflictColor != null)
+                || (conflictBackcolor && backgroundConflictColor != null)) {
+            return res.stream()
+                    .map(f -> new Flag(conflictColor ? foregroundConflictColor : f.color,
+                            conflictBackcolor ? backgroundConflictColor : f.backcolor,
+                            f.style, f.changebar, f.startflag, f.endflag))
+                    .collect(Collectors.toList());
+        } else {
+            return res;
+        }
     }
 
     public List<Flag> getFlags(final Element element, final String[][] props) {
@@ -472,7 +510,7 @@ public final class FilterUtils {
             for (final Map.Entry<FilterKey, Action> e: filterMap.entrySet()) {
                 refineAction(e.getValue(), e.getKey(), bindingMap, buf);
             }
-            final FilterUtils filterUtils = new FilterUtils(buf);
+            final FilterUtils filterUtils = new FilterUtils(buf, foregroundConflictColor, backgroundConflictColor);
             filterUtils.setLogger(logger);
             filterUtils.logMissingAction = logMissingAction;
             return filterUtils;
@@ -607,11 +645,11 @@ public final class FilterUtils {
         public final FlagImage startflag;
         public final FlagImage endflag;
 
-        public Flag(String color, String backcolor, String style, String changebar,
+        public Flag(String color, String backcolor, String[] style, String changebar,
                     FlagImage startflag, FlagImage endflag) {
             this.color = color;
             this.backcolor = backcolor;
-            this.style = style != null ? style.split("\\s+") : null;
+            this.style = style;
             this.changebar = changebar;
             this.startflag = startflag;
             this.endflag = endflag;
