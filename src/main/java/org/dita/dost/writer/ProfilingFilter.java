@@ -107,7 +107,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                     for (final Flag flag: flags) {
                         FilterUtils.writeStartFlag(getContentHandler(), flag);
                     }
-
                 }
             }
         }

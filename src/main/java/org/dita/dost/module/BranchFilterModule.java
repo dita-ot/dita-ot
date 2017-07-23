@@ -16,6 +16,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -292,8 +293,21 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         if (exclude) {
             elem.getParentNode().removeChild(elem);
         } else {
-            // TODO check whether to flag
-            for (final Element child : getChildElements(elem)) {
+            final List<Element> childElements = getChildElements(elem);
+            for (final FilterUtils f: fs) {
+                for (Flag flag : f.getFlags(elem, props)) {
+                    final Element startElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeStartFlag(flag), true);
+                    final Node firstChild = elem.getFirstChild();
+                    if (firstChild != null) {
+                        elem.insertBefore(startElement, firstChild);
+                    } else {
+                        elem.appendChild(startElement);
+                    }
+                    final Element endElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeEndFlag(flag), true);
+                    elem.appendChild(endElement);
+                }
+            }
+            for (final Element child : childElements) {
                 filterBranches(child, fs, props);
             }
         }

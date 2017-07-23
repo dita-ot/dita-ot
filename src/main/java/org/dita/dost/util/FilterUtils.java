@@ -12,8 +12,10 @@ import static java.util.Collections.emptyList;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -25,9 +27,14 @@ import org.dita.dost.log.MessageUtils;
 
 import org.dita.dost.module.filter.SubjectScheme;
 import org.w3c.dom.*;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
+import org.xml.sax.*;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.SAXSource;
 
 /**
  * Utility class used for flagging and filtering.
@@ -817,6 +824,100 @@ public final class FilterUtils {
             contentHandler.endElement(NULL_NS_URI, "alt-text", "alt-text");
         }
         contentHandler.endElement(NULL_NS_URI, tag, tag);
+    }
+
+
+    public static Element writeStartFlag(final Flag flag) {
+        return writeToElement((ContentHandler contentHandler) -> {
+            try {
+                FilterUtils.writeStartFlag(contentHandler, flag);
+            } catch (SAXException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public static Element writeEndFlag(final Flag flag) {
+        return writeToElement((ContentHandler contentHandler) -> {
+            try {
+                FilterUtils.writeEndFlag(contentHandler, flag);
+            } catch (SAXException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private static Element writeToElement(final Consumer<ContentHandler> writer) {
+        final TransformerFactory factory = TransformerFactory.newInstance();
+        final Transformer transformer;
+        try {
+            transformer = factory.newTransformer();
+        } catch (TransformerConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        final SAXSource xmlSource = new SAXSource(new XMLReader() {
+            @Override
+            public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
+                return false;
+            }
+            @Override
+            public void setFeature(String name, boolean value) throws SAXNotRecognizedException, SAXNotSupportedException {
+            }
+            @Override
+            public Object getProperty(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
+                return null;
+            }
+            @Override
+            public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
+            }
+            @Override
+            public void setEntityResolver(EntityResolver resolver) {
+            }
+            @Override
+            public EntityResolver getEntityResolver() {
+                return null;
+            }
+            @Override
+            public void setDTDHandler(DTDHandler handler) {
+            }
+            @Override
+            public DTDHandler getDTDHandler() {
+                return null;
+            }
+            private ContentHandler contentHandler;
+            @Override
+            public void setContentHandler(ContentHandler handler) {
+                this.contentHandler = handler;
+            }
+            @Override
+            public ContentHandler getContentHandler() {
+                return contentHandler;
+            }
+            @Override
+            public void setErrorHandler(ErrorHandler handler) {
+            }
+            @Override
+            public ErrorHandler getErrorHandler() {
+                return null;
+            }
+            @Override
+            public void parse(InputSource input) throws IOException, SAXException {
+                parse((String) null);
+            }
+            @Override
+            public void parse(String input) throws IOException, SAXException {
+                getContentHandler().startDocument();
+                writer.accept(getContentHandler());
+                getContentHandler().endDocument();
+            }
+        }, null);
+        final DOMResult outputTarget = new DOMResult();
+        try {
+            transformer.transform(xmlSource, outputTarget);
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+        return ((Document) outputTarget.getNode()).getDocumentElement();
     }
 
 }
