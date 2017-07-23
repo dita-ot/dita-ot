@@ -9,6 +9,7 @@
 package org.dita.dost.util;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
@@ -73,6 +74,15 @@ public final class FilterUtils {
         this.filterMap = new HashMap<>(filterMap);
         this.foregroundConflictColor = foregroundConflictColor;
         this.backgroundConflictColor = backgroundConflictColor;
+    }
+
+    /**
+     * Conveninence constructur that only handles print filtering.
+     *
+     * @param isPrintType transformation output is print-oriented
+     */
+    public FilterUtils(final boolean isPrintType) {
+        this(isPrintType, emptyMap(), null, null);
     }
 
     /**

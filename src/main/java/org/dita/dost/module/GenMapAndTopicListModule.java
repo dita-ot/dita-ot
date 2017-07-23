@@ -638,8 +638,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             filterUtils = new FilterUtils(printTranstype.contains(transtype), ditaValReader.getFilterMap(),
                     ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         } else {
-            filterUtils = new FilterUtils(printTranstype.contains(transtype), Collections.emptyMap(),
-                    null, null);
+            filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
         filterUtils.setLogger(logger);
         return filterUtils;

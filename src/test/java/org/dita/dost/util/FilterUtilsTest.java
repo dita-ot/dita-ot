@@ -258,7 +258,7 @@ public class FilterUtilsTest {
     
     @Test
     public void testGetUngroupedValue() {
-        final FilterUtils f = new FilterUtils(false, Collections.EMPTY_MAP, null, null);
+        final FilterUtils f = new FilterUtils(false);
         
         {
             final Map<String, List<String>> exp = new HashMap<String, List<String>>();

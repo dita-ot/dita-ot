@@ -37,7 +37,7 @@ public class ProfilingFilterTest {
 	
 	@Test
 	public void testNoFilter() throws Exception {
-		test(new FilterUtils(false, Collections.EMPTY_MAP, null, null), "topic.dita", "topic.dita");
+		test(new FilterUtils(false), "topic.dita", "topic.dita");
 	}
 
 	@Test
@@ -48,8 +48,8 @@ public class ProfilingFilterTest {
 		filterUtils.setLogger(new TestUtils.TestLogger());
         test(filterUtils, "topic.dita", "topic1.dita");
 
-        test(new FilterUtils(false, Collections.EMPTY_MAP, null,null), "map.ditamap", "map_xhtml.ditamap");
-        test(new FilterUtils(true, Collections.EMPTY_MAP, null, null), "map.ditamap", "map_pdf.ditamap");
+        test(new FilterUtils(false), "map.ditamap", "map_xhtml.ditamap");
+        test(new FilterUtils(true), "map.ditamap", "map_pdf.ditamap");
 	}
 	
 	private void test(final FilterUtils filterUtils, final String srcFile, final String expFile) throws Exception {

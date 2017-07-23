@@ -637,7 +637,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             filterUtils = new FilterUtils(printTranstype.contains(transtype), ditaValReader.getFilterMap(),
                     ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         } else {
-            filterUtils = new FilterUtils(printTranstype.contains(transtype), emptyMap(), null, null);
+            filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
         filterUtils.setLogger(logger);
         return filterUtils;

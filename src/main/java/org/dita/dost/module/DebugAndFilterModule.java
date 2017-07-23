@@ -216,7 +216,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
                 baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterReader.getFilterMap(),
                         filterReader.getForegroundConflictColor(), filterReader.getBackgroundConflictColor());
             } else {
-                baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), Collections.EMPTY_MAP, null, null);
+                baseFilterUtils = new FilterUtils(printTranstype.contains(transtype));
             }
             baseFilterUtils.setLogger(logger);
         }
