@@ -31,7 +31,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
@@ -276,7 +278,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     private List<FilterUtils> getBaseFilter(final SubjectScheme subjectSchemeMap) {
         if (ditavalFile != null && !subjectSchemeMap.isEmpty()) {
             final FilterUtils f = getFilterUtils(ditavalFile).refine(subjectSchemeMap);
-            return Collections.singletonList(f);
+            return singletonList(f);
         }
         return Collections.emptyList();
     }
@@ -297,18 +299,17 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
             elem.getParentNode().removeChild(elem);
         } else {
             final List<Element> childElements = getChildElements(elem);
-            for (final FilterUtils f: fs) {
-                for (Flag flag : f.getFlags(elem, props)) {
-                    final Element startElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeStartFlag(flag), true);
-                    final Node firstChild = elem.getFirstChild();
-                    if (firstChild != null) {
-                        elem.insertBefore(startElement, firstChild);
-                    } else {
-                        elem.appendChild(startElement);
-                    }
-                    final Element endElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeEndFlag(flag), true);
-                    elem.appendChild(endElement);
+            final Set<Flag> flags = fs.stream().flatMap(f -> f.getFlags(elem, props).stream()).collect(Collectors.toSet());
+            for (Flag flag : flags) {
+                final Element startElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeStartFlag(flag), true);
+                final Node firstChild = elem.getFirstChild();
+                if (firstChild != null) {
+                    elem.insertBefore(startElement, firstChild);
+                } else {
+                    elem.appendChild(startElement);
                 }
+                final Element endElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeEndFlag(flag), true);
+                elem.appendChild(endElement);
             }
             for (final Element child : childElements) {
                 filterBranches(child, fs, props, subjectSchemeMap);

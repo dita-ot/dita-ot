@@ -10,6 +10,7 @@ package org.dita.dost.util;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
@@ -118,12 +119,12 @@ public final class FilterUtils {
         return filterMap.toString();
     }
 
-    public List<Flag> getFlags(final Attributes atts, final String[][] extProps) {
+    public Set<Flag> getFlags(final Attributes atts, final String[][] extProps) {
         if (filterMap.isEmpty()) {
-            return emptyList();
+            return emptySet();
         }
 
-        final List<Flag> res = new ArrayList<>();
+        final Set<Flag> res = new HashSet<>();
         for (final String attr: PROFILE_ATTRIBUTES) {
             final String value = atts.getValue(attr);
             if (value != null) {
@@ -158,7 +159,7 @@ public final class FilterUtils {
         return checkConflict(res);
     }
 
-    private List<Flag> checkConflict(List<Flag> res) {
+    private Set<Flag> checkConflict(Set<Flag> res) {
         if (foregroundConflictColor == null && backgroundConflictColor == null) {
             return res;
         }
@@ -180,13 +181,13 @@ public final class FilterUtils {
                     .map(f -> new Flag(conflictColor ? foregroundConflictColor : f.color,
                             conflictBackcolor ? backgroundConflictColor : f.backcolor,
                             f.style, f.changebar, f.startflag, f.endflag))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
         } else {
             return res;
         }
     }
 
-    public List<Flag> getFlags(final Element element, final String[][] props) {
+    public Set<Flag> getFlags(final Element element, final String[][] props) {
         final XMLUtils.AttributesBuilder buf = new XMLUtils.AttributesBuilder();
         final NamedNodeMap attrs = element.getAttributes();
         for (int i = 0; i < attrs.getLength() ; i++) {

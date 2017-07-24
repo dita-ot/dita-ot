@@ -16,6 +16,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.*;
 
@@ -33,14 +34,14 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     /** Contains the attribution specialization paths for {@code props} attribute */
     private String[][] props;
     /** Filter utils */
-    private FilterUtils filterUtils;
+    private List<FilterUtils> filterUtils;
     /** Flag that an element has been written */
     private boolean elementOutput;
     /** Namespace prefixes for current element. */
     private final Map<String, String> prefixes = new HashMap<>();
     /** Flag that last element was excluded. */
     private boolean lastElementExcluded = false;
-    private Deque<List<Flag>> flagStack = new LinkedList<>();
+    private Deque<Set<Flag>> flagStack = new LinkedList<>();
 
     /**
      * Create new profiling filter.
@@ -55,6 +56,15 @@ public final class ProfilingFilter extends AbstractXMLFilter {
      * @param filterUtils filter utils
      */
     public void setFilterUtils(final FilterUtils filterUtils) {
+        this.filterUtils = Collections.singletonList(filterUtils);
+    }
+
+    /**
+     * Set content filter.
+     *
+     * @param filterUtils filter utils
+     */
+    public void setFilterUtils(final List<FilterUtils> filterUtils) {
         this.filterUtils = filterUtils;
     }
 
@@ -70,7 +80,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
-        List<Flag> flags = null;
+        Set<Flag> flags = null;
 
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
         if (cls.isValid()) {
@@ -92,7 +102,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             // If it is the start of a child of an excluded tag, level increase
             level++;
         } else { // exclude shows whether it's excluded by filtering
-            if (cls.isValid() && filterUtils.needExclude(atts, props)) {
+            if (cls.isValid() && filterUtils.stream().filter(f -> f.needExclude(atts, props)).findFirst().isPresent()) {
                 exclude = true;
                 level = 0;
             } else {
@@ -103,7 +113,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                 prefixes.clear();
                 getContentHandler().startElement(uri, localName, qName, atts);
                 if (cls.isValid()) {
-                    flags = filterUtils.getFlags(atts, props);
+                    flags = filterUtils.stream().flatMap(f -> f.getFlags(atts, props).stream()).collect(Collectors.toSet());
                     for (final Flag flag: flags) {
                         FilterUtils.writeStartFlag(getContentHandler(), flag);
                     }
@@ -117,7 +127,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
-        final List<Flag> flags = flagStack.pop();
+        final Set<Flag> flags = flagStack.pop();
         if (flags != null) {
             for (final Flag flag : flags) {
                 FilterUtils.writeEndFlag(getContentHandler(), flag);

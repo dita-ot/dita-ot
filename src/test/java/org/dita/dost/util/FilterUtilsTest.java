@@ -8,15 +8,10 @@
 package org.dita.dost.util;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
@@ -159,10 +154,10 @@ public class FilterUtilsTest {
         f.setLogger(new TestUtils.TestLogger());
 
         assertEquals(
-                emptyList(),
+                emptySet(),
                 f.getFlags(new AttributesImpl(), new String[0][0]));
         assertEquals(
-                asList(flag, flag, flag),
+                singleton(flag),
                 f.getFlags(attr("platform", "amiga unix windows"), new String[0][0]));
     }
 
@@ -179,16 +174,16 @@ public class FilterUtilsTest {
         f.setLogger(new TestUtils.TestLogger());
 
         assertEquals(
-                singletonList(flag),
+                singleton(flag),
                 f.getFlags(attr("platform", "amiga unix windows"), new String[0][0]));
         assertEquals(
-                singletonList(flag),
+                singleton(flag),
                 f.getFlags(attr("platform", "amiga unix"), new String[0][0]));
         assertEquals(
-                emptyList(),
+                emptySet(),
                 f.getFlags(attr("platform", "amiga"), new String[0][0]));
         assertEquals(
-                emptyList(),
+                emptySet(),
                 f.getFlags(attr("platform", "windows"), new String[0][0]));
     }
 
@@ -320,19 +315,19 @@ public class FilterUtilsTest {
         f.setLogger(new TestUtils.TestLogger());
 
         assertEquals(
-                asList(flagRed, flagBlue, flagBlue),
+                new HashSet(asList(flagRed, flagBlue)),
                 f.getFlags(attr("props", "os(amiga unix windows)"), new String[][] {{"props", "os"}}));
         assertEquals(
-                asList(flagRed, flagBlue),
+                new HashSet(asList(flagRed, flagBlue)),
                 f.getFlags(attr("props", "os(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
         assertEquals(
-                asList(flagRed, flagBlue),
+                new HashSet(asList(flagRed, flagBlue)),
                 f.getFlags(attr("props", "gui(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
         assertEquals(
-                singletonList(flagBlue),
+                singleton(flagBlue),
                 f.getFlags(attr("props", "os(windows)"), new String[][] {{"props", "os"}}));
         assertEquals(
-                singletonList(flagBlue),
+                singleton(flagBlue),
                 f.getFlags(attr("props", "   os(   windows   )   "), new String[][] {{"props", "os"}}));
     }
 
@@ -349,19 +344,19 @@ public class FilterUtilsTest {
 
         final Flag flagYellow = new Flag("yellow", null, null, null, null, null);
         assertEquals(
-                asList(flagYellow, flagYellow, flagYellow),
+                singleton(flagYellow),
                 f.getFlags(attr("props", "os(amiga unix windows)"), new String[][] {{"props", "os"}}));
         assertEquals(
-                asList(flagYellow, flagYellow),
+                singleton(flagYellow),
                 f.getFlags(attr("props", "os(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
         assertEquals(
-                asList(flagYellow, flagYellow),
+                singleton(flagYellow),
                 f.getFlags(attr("props", "gui(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
         assertEquals(
-                singletonList(flagBlue),
+                singleton(flagBlue),
                 f.getFlags(attr("props", "os(windows)"), new String[][] {{"props", "os"}}));
         assertEquals(
-                singletonList(flagBlue),
+                singleton(flagBlue),
                 f.getFlags(attr("props", "   os(   windows   )   "), new String[][] {{"props", "os"}}));
     }
 }

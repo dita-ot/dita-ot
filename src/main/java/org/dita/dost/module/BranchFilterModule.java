@@ -34,7 +34,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.URLUtils.*;
@@ -294,18 +296,17 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             elem.getParentNode().removeChild(elem);
         } else {
             final List<Element> childElements = getChildElements(elem);
-            for (final FilterUtils f: fs) {
-                for (Flag flag : f.getFlags(elem, props)) {
-                    final Element startElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeStartFlag(flag), true);
-                    final Node firstChild = elem.getFirstChild();
-                    if (firstChild != null) {
-                        elem.insertBefore(startElement, firstChild);
-                    } else {
-                        elem.appendChild(startElement);
-                    }
-                    final Element endElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeEndFlag(flag), true);
-                    elem.appendChild(endElement);
+            final Set<Flag> flags = fs.stream().flatMap(f -> f.getFlags(elem, props).stream()).collect(Collectors.toSet());
+            for (Flag flag : flags) {
+                final Element startElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeStartFlag(flag), true);
+                final Node firstChild = elem.getFirstChild();
+                if (firstChild != null) {
+                    elem.insertBefore(startElement, firstChild);
+                } else {
+                    elem.appendChild(startElement);
                 }
+                final Element endElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeEndFlag(flag), true);
+                elem.appendChild(endElement);
             }
             for (final Element child : childElements) {
                 filterBranches(child, fs, props);
@@ -347,15 +348,12 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 //                 TODO: Maybe Job should be updated earlier?
 //                job.add(fi);
                 logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
-                final List<XMLFilter> pipe = new ArrayList<>();
-                // TODO: replace multiple profiling filters with a merged filter utils
-                for (final FilterUtils f : fs) {
-                    final ProfilingFilter writer = new ProfilingFilter();
-                    writer.setLogger(logger);
-                    writer.setJob(job);
-                    writer.setFilterUtils(f);
-                    pipe.add(writer);
-                }
+                final ProfilingFilter writer = new ProfilingFilter();
+                writer.setLogger(logger);
+                writer.setJob(job);
+                writer.setFilterUtils(fs);
+                final List<XMLFilter> pipe = singletonList(writer);
+
                 final File dstDirUri = new File(dstAbsUri.resolve("."));
                 if (!dstDirUri.exists() && !dstDirUri.mkdirs()) {
                     logger.error("Failed to create directory " + dstDirUri);
@@ -392,15 +390,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                 && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))
                 && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(topicref.getAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE))
                 && isDitaFormat(topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT))) {
-            final List<XMLFilter> pipe = new ArrayList<>();
-            // TODO: replace multiple profiling filters with a merged filter utils
-            for (final FilterUtils f : fs) {
-                final ProfilingFilter writer = new ProfilingFilter();
-                writer.setLogger(logger);
-                writer.setJob(job);
-                writer.setFilterUtils(f);
-                pipe.add(writer);
-            }
+            final ProfilingFilter writer = new ProfilingFilter();
+            writer.setLogger(logger);
+            writer.setJob(job);
+            writer.setFilterUtils(fs);
+            final List<XMLFilter> pipe = singletonList(writer);
 
             final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
             logger.info("Filtering " + srcAbsUri);
