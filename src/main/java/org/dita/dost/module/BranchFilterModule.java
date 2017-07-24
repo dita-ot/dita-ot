@@ -71,6 +71,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     private URI map;
     /** Absolute URI to map being processed. */
     protected URI currentFile;
+    private Set<URI> filtered = new HashSet<>();
 
     public BranchFilterModule() {
         builder = XMLUtils.getDocumentBuilder();
@@ -385,7 +386,9 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
         final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
         final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
+        final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
         if (!fs.isEmpty() && skipFilter == null
+                && !filtered.contains(srcAbsUri)
                 && !href.isEmpty()
                 && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))
                 && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(topicref.getAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE))
@@ -396,7 +399,6 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             writer.setFilterUtils(fs);
             final List<XMLFilter> pipe = singletonList(writer);
 
-            final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
             logger.info("Filtering " + srcAbsUri);
             try {
                 xmlUtils.transform(toFile(srcAbsUri),
@@ -404,6 +406,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }
+            filtered.add(srcAbsUri);
         }
         if (skipFilter != null) {
             topicref.removeAttributeNode(skipFilter);

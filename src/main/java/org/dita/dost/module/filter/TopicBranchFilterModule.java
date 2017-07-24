@@ -57,6 +57,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 //    private final TempFileNameScheme tempFileNameScheme;
     /** Current map being processed, relative to temporary directory */
     private URI map;
+    private Set<URI> filtered = new HashSet<>();
 
     public TopicBranchFilterModule() {
         super();
@@ -193,8 +194,9 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
         final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
         final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
-        // FIXME: don't refilter duplicate src files. Flags are repeated and redundant processing.
+        final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
         if (!fs.isEmpty() && skipFilter == null
+                && !filtered.contains(srcAbsUri)
                 && !href.isEmpty()
                 && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))) {
             final ProfilingFilter writer = new ProfilingFilter();
@@ -203,7 +205,6 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
             writer.setFilterUtils(fs);
             final List<XMLFilter> pipe = singletonList(writer);
 
-            final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
             logger.info("Filtering " + srcAbsUri);
             try {
                 xmlUtils.transform(toFile(srcAbsUri),
@@ -211,6 +212,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }
+            filtered.add(srcAbsUri);
         }
         if (skipFilter != null) {
             topicref.removeAttributeNode(skipFilter);
