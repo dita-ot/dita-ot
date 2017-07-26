@@ -54,7 +54,6 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
     private final XMLUtils xmlUtils = new XMLUtils();
     private final DocumentBuilder builder;
-//    private final TempFileNameScheme tempFileNameScheme;
     /** Current map being processed, relative to temporary directory */
     private URI map;
     private Set<URI> filtered = new HashSet<>();
@@ -62,11 +61,6 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     public TopicBranchFilterModule() {
         super();
         builder = XMLUtils.getDocumentBuilder();
-//        try {
-//            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
-//        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
     }
     
     @Override
@@ -75,15 +69,11 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         xmlUtils.setLogger(logger);
     }
 
-//    @Override
-//    public void setJob(final Job job) {
-//        super.setJob(job);
-//        tempFileNameScheme.setBaseDir(job.getInputDir());
-//    }
-
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         processMap(job.getInputMap());
+
+        addFlagImagesSetToProperties(job, relFlagImagesSet);
 
         try {
             job.write();

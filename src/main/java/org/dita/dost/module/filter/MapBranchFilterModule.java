@@ -11,12 +11,10 @@ package org.dita.dost.module.filter;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.BranchFilterModule.Branch;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
@@ -34,7 +32,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
-import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.URLUtils.stripFragment;
@@ -60,7 +57,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
     private final DocumentBuilder builder;
-    private TempFileNameScheme tempFileNameScheme;
+
     /** Current map being processed, relative to temporary directory */
     private URI map;
     /** Absolute path for filter file. */
@@ -69,20 +66,6 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     public MapBranchFilterModule() {
         super();
         builder = XMLUtils.getDocumentBuilder();
-    }
-
-    @Override
-    public void setJob(final Job job) {
-        super.setJob(job);
-        try {
-            final String cls = Optional
-                    .ofNullable(job.getProperty("temp-file-name-scheme"))
-                    .orElse(configuration.get("temp-file-name-scheme"));
-            tempFileNameScheme = (TempFileNameScheme) Class.forName(cls).newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
     @Override

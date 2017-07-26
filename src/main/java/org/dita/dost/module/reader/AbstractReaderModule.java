@@ -933,12 +933,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         prop.setProperty(fileKey, Constants.REL_FLAGIMAGE_LIST.substring(0, Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
         final File list = new File(job.tempDir, prop.getProperty(fileKey));
         try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)))) {
-            final Iterator<URI> it = newSet.iterator();
-            while (it.hasNext()) {
-                bufferedWriter.write(it.next().getPath());
-                if (it.hasNext()) {
-                    bufferedWriter.write("\n");
-                }
+            for (URI aNewSet : newSet) {
+                bufferedWriter.write(aNewSet.getPath());
+                bufferedWriter.write('\n');
             }
             bufferedWriter.flush();
         } catch (final IOException e) {
