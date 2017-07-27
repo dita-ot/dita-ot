@@ -10,7 +10,6 @@ package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.withLogger;
-import static org.dita.dost.writer.ImageMetadataFilter.*;
 import static javax.xml.XMLConstants.*;
 
 import java.io.BufferedOutputStream;
@@ -79,7 +78,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         try {
             midBuffer.write(XML_HEAD.getBytes(UTF8));
             midBuffer.write(("<dita-merge " + ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION + "='" + DITA_NAMESPACE + "' "
-                    + XMLNS_ATTRIBUTE + ":" + DITA_OT_PREFIX + "='" + DITA_OT_NS + "'>").getBytes(UTF8));
+                    + XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX + "='" + DITA_OT_NS + "'>").getBytes(UTF8));
             mapParser.setOutputStream(midBuffer);
             mapParser.read(ditaInput, job.tempDir);
             midBuffer.write("</dita-merge>".getBytes(UTF8));

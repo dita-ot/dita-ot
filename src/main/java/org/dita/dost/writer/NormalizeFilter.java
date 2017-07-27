@@ -18,8 +18,6 @@ import java.util.LinkedList;
 
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.writer.ImageMetadataFilter.DITA_OT_NS;
-import static org.dita.dost.writer.ImageMetadataFilter.DITA_OT_PREFIX;
 
 /**
  * Normalize content.
@@ -52,7 +50,7 @@ public final class NormalizeFilter extends AbstractXMLFilter {
             throws SAXException {
         depth++;
         if (depth == 1) {
-            super.startPrefixMapping(DITA_OT_PREFIX, DITA_OT_NS);
+            super.startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
         }
 
         final AttributesImpl res = new AttributesImpl(atts);
@@ -73,7 +71,7 @@ public final class NormalizeFilter extends AbstractXMLFilter {
         getContentHandler().endElement(uri, localName, qName);
 
         if (depth == 1) {
-            super.endPrefixMapping(DITA_OT_PREFIX);
+            super.endPrefixMapping(DITA_OT_NS_PREFIX);
         }
         depth--;
     }

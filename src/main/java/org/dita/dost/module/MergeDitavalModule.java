@@ -46,13 +46,6 @@ import org.xml.sax.*;
  */
 public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
 
-    public static final String ELEMENT_STUB = "stub";
-    public static final String ATTRIBUTE_IMAGEREF = "imageref";
-    public static final String ATTRIBUTE_IMG = "img";
-
-    private static final String DITA_OT_NS_PREFIX = "dita-ot";
-    private static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
-
     /** Absolute paths for filter files. */
     private final List<File> ditavalFiles = new LinkedList<>();
 
@@ -115,7 +108,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
             export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
             export.writeStartDocument();
             export.writeStartElement("val");
-            export.writeNamespace(DITA_OT_NS_PREFIX, DITA_OT_NS);
+            export.writeNamespace(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE);
             for (File curDitaVal : ditavalFiles) {
                 final Document doc = ditavalbuilder.parse(curDitaVal);
                 final Element ditavalRoot = doc.getDocumentElement();
@@ -159,9 +152,9 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
                                 atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF).getNodeValue() :    // DITA 1.1 and later: use @imageref on <startflag>, <endflag>
                                 atts.getNamedItem(ATTRIBUTE_NAME_IMG).getNodeValue();          // Pre-DITA 1.1: use @img on <prop>
                         if (toURI(imagerefAtt).isAbsolute()) {
-                            export.writeAttribute(DITA_OT_NS_PREFIX, DITA_OT_NS, ATTRIBUTE_NAME_IMAGEREF_URI, imagerefAtt);
+                            export.writeAttribute(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI, imagerefAtt);
                         } else {
-                            export.writeAttribute(DITA_OT_NS_PREFIX, DITA_OT_NS, ATTRIBUTE_NAME_IMAGEREF_URI, ditavalDirectory.resolve(imagerefAtt).toString());
+                            export.writeAttribute(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI, ditavalDirectory.resolve(imagerefAtt).toString());
                         }
                     }
                     for (int j = 0; j < atts.getLength(); j++) {

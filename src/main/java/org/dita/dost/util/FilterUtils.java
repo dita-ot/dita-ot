@@ -822,10 +822,10 @@ public final class FilterUtils {
         final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
         final URI abs = startflag.href;
         if (abs != null) {
-            propAtts.add("http://dita-ot.sourceforge.net/ns/201007/dita-ot", "imagerefuri", "dita-ot:imagerefuri", "CDATA", abs.toString());
+            propAtts.add(DITA_OT_NS, ATTRIBUTE_NAME_IMAGEREF_URI, "dita-ot:" + ATTRIBUTE_NAME_IMAGEREF_URI, "CDATA", abs.toString());
             final URI rel = abs.resolve(".").relativize(abs);
-            propAtts.add("http://dita-ot.sourceforge.net/ns/201007/dita-ot", "original-imageref", "dita-ot:original-imageref", "CDATA", rel.toString());
-            propAtts.add("imageref", rel.toString());
+            propAtts.add(DITA_OT_NS, "original-" + ATTRIBUTE_NAME_IMAGEREF, "dita-ot:original-" + ATTRIBUTE_NAME_IMAGEREF, "CDATA", rel.toString());
+            propAtts.add(ATTRIBUTE_NAME_IMAGEREF, rel.toString());
         }
         contentHandler.startElement(NULL_NS_URI, tag, tag, propAtts.build());
         if (startflag.alt != null) {
