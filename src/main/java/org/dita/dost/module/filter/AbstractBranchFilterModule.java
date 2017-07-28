@@ -60,6 +60,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
             throw new RuntimeException(e);
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
+        ditaValReader.setJob(job);
     }
 
     @Override

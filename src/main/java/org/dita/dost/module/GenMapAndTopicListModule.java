@@ -632,6 +632,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         if (ditavalFile.exists()) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
+            ditaValReader.setJob(job);
             ditaValReader.read(ditavalFile.toURI());
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());

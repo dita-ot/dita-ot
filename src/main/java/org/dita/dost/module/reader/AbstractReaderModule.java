@@ -631,6 +631,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
+            ditaValReader.setJob(job);
             ditaValReader.read(ditavalFile.toURI());
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());

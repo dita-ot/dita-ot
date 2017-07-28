@@ -89,6 +89,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
+        ditaValReader.setJob(job);
         try {
             tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {

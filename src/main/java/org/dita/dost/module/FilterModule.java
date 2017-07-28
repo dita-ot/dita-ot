@@ -46,6 +46,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
 
         final DitaValReader ditaValReader = new DitaValReader();
         ditaValReader.setLogger(logger);
+        ditaValReader.setJob(job);
         final FilterUtils filterUtils;
         if (ditavalFile != null) {
             ditaValReader.read(ditavalFile.toURI());
