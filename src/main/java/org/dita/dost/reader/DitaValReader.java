@@ -11,6 +11,8 @@ package org.dita.dost.reader;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.GenMapAndTopicListModule;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.FilterUtils.Flag;
@@ -51,6 +53,7 @@ public final class DitaValReader implements AbstractReader {
     private String foregroundConflictColor;
     private String backgroundConflictColor;
 
+    private TempFileNameScheme tempFileNameScheme;
     private final DocumentBuilder builder;
     /** List of absolute flagging image paths. */
     private final List<URI> imageList;
@@ -87,6 +90,7 @@ public final class DitaValReader implements AbstractReader {
     @Override
     public void setJob(final Job job) {
         this.job = job;
+        tempFileNameScheme = job.getTempFileNameScheme();
     }
 
     /**
@@ -201,6 +205,15 @@ public final class DitaValReader implements AbstractReader {
                 }
                 imageList.add(absolute);
                 relFlagImageList.add(relative);
+
+                if (job.getFileInfo(absolute) == null) {
+                    final URI dstTemp = tempFileNameScheme.generateTempFileName(absolute);
+                    final Job.FileInfo.Builder fi = new Job.FileInfo.Builder()
+                            .src(absolute)
+                            .uri(dstTemp)
+                            .format("flag");
+                    job.add(fi.build());
+                }
             }
 
             String altText = null;
