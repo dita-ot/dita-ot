@@ -115,7 +115,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                 if (cls.isValid()) {
                     flags = filterUtils.stream().flatMap(f -> f.getFlags(atts, props).stream()).collect(Collectors.toSet());
                     for (final Flag flag: flags) {
-                        FilterUtils.writeStartFlag(getContentHandler(), flag);
+                        flag.writeStartFlag(getContentHandler());
                     }
                 }
             }
@@ -130,7 +130,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
         final Set<Flag> flags = flagStack.pop();
         if (flags != null) {
             for (final Flag flag : flags) {
-                FilterUtils.writeEndFlag(getContentHandler(), flag);
+                flag.writeEndFlag(getContentHandler());
             }
         }
 

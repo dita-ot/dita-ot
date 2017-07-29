@@ -673,6 +673,168 @@ public final class FilterUtils {
             this.endflag = endflag;
         }
 
+        public void writeStartFlag(final ContentHandler contentHandler) throws SAXException {
+            final StringBuilder outputclass = new StringBuilder();
+            if (color != null) {
+                outputclass.append("color:").append(color).append(";");
+            }
+            if (backcolor != null) {
+                outputclass.append("background-color:").append(backcolor).append(";");
+            }
+            if (style != null) {
+                for (final String style : style) {
+                    switch (style) {
+                        case "italics":
+                            outputclass.append("font-style:italic;");
+                            break;
+                        case "bold":
+                            outputclass.append("font-weight:bold;");
+                            break;
+                        case "underline":
+                        case "double-underline":
+                            outputclass.append("text-decoration:").append(style).append(";");
+                            break;
+                        case "overline":
+                            outputclass.append("text-decoration:overline;");
+                            break;
+                    }
+                }
+            }
+
+            final XMLUtils.AttributesBuilder atts = new XMLUtils.AttributesBuilder()
+                    .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-startprop ");
+            if (outputclass.length() != 0) {
+                atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputclass.toString());
+            }
+            contentHandler.startElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop",
+                    atts.build());
+            writeProp(contentHandler, true);
+            contentHandler.endElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop");
+        }
+
+        public void writeEndFlag(final ContentHandler contentHandler) throws SAXException {
+            contentHandler.startElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop",
+                    new XMLUtils.AttributesBuilder()
+                            .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-endprop ")
+                            .build());
+            writeProp(contentHandler, false);
+            contentHandler.endElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop");
+        }
+
+        private void writeProp(final ContentHandler contentHandler, final boolean isStart) throws SAXException {
+            final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
+            if (color != null) {
+                propAtts.add("color", color);
+            }
+            if (backcolor != null) {
+                propAtts.add("backcolor", backcolor);
+            }
+            if (style != null) {
+                propAtts.add("style", Stream.of(style).collect(Collectors.joining(" ")));
+            }
+            contentHandler.startElement(NULL_NS_URI, "prop", "prop", propAtts.build());
+            if (isStart && startflag != null) {
+                startflag.writeFlag(contentHandler, "startflag");
+            }
+            if (!isStart && endflag != null) {
+                endflag.writeFlag(contentHandler, "endflag");
+            }
+            contentHandler.endElement(NULL_NS_URI, "prop", "prop");
+        }
+
+        public Element writeStartFlag() {
+            return writeToElement((ContentHandler contentHandler) -> {
+                try {
+                    writeStartFlag(contentHandler);
+                } catch (SAXException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        public Element writeEndFlag() {
+            return writeToElement((ContentHandler contentHandler) -> {
+                try {
+                    writeEndFlag(contentHandler);
+                } catch (SAXException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        private static Element writeToElement(final Consumer<ContentHandler> writer) {
+            final TransformerFactory factory = TransformerFactory.newInstance();
+            final Transformer transformer;
+            try {
+                transformer = factory.newTransformer();
+            } catch (TransformerConfigurationException e) {
+                throw new RuntimeException(e);
+            }
+            final SAXSource xmlSource = new SAXSource(new XMLReader() {
+                @Override
+                public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
+                    return false;
+                }
+                @Override
+                public void setFeature(String name, boolean value) throws SAXNotRecognizedException, SAXNotSupportedException {
+                }
+                @Override
+                public Object getProperty(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
+                    return null;
+                }
+                @Override
+                public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
+                }
+                @Override
+                public void setEntityResolver(EntityResolver resolver) {
+                }
+                @Override
+                public EntityResolver getEntityResolver() {
+                    return null;
+                }
+                @Override
+                public void setDTDHandler(DTDHandler handler) {
+                }
+                @Override
+                public DTDHandler getDTDHandler() {
+                    return null;
+                }
+                private ContentHandler contentHandler;
+                @Override
+                public void setContentHandler(ContentHandler handler) {
+                    this.contentHandler = handler;
+                }
+                @Override
+                public ContentHandler getContentHandler() {
+                    return contentHandler;
+                }
+                @Override
+                public void setErrorHandler(ErrorHandler handler) {
+                }
+                @Override
+                public ErrorHandler getErrorHandler() {
+                    return null;
+                }
+                @Override
+                public void parse(InputSource input) throws IOException, SAXException {
+                    parse((String) null);
+                }
+                @Override
+                public void parse(String input) throws IOException, SAXException {
+                    getContentHandler().startDocument();
+                    writer.accept(getContentHandler());
+                    getContentHandler().endDocument();
+                }
+            }, null);
+            final DOMResult outputTarget = new DOMResult();
+            try {
+                transformer.transform(xmlSource, outputTarget);
+            } catch (TransformerException e) {
+                throw new RuntimeException(e);
+            }
+            return ((Document) outputTarget.getNode()).getDocumentElement();
+        }
+
         @Override
         public String toString() {
             return "Flag{" +
@@ -721,6 +883,25 @@ public final class FilterUtils {
                 this.alt = alt;
             }
 
+            private void writeFlag(final ContentHandler contentHandler, final String tag) throws SAXException {
+                final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
+                final URI abs = href;
+                if (abs != null) {
+                    propAtts.add(DITA_OT_NS, ATTRIBUTE_NAME_IMAGEREF_URI, "dita-ot:" + ATTRIBUTE_NAME_IMAGEREF_URI, "CDATA", abs.toString());
+                    final URI rel = abs.resolve(".").relativize(abs);
+                    propAtts.add(DITA_OT_NS, "original-" + ATTRIBUTE_NAME_IMAGEREF, "dita-ot:original-" + ATTRIBUTE_NAME_IMAGEREF, "CDATA", rel.toString());
+                    propAtts.add(ATTRIBUTE_NAME_IMAGEREF, rel.toString());
+                }
+                contentHandler.startElement(NULL_NS_URI, tag, tag, propAtts.build());
+                if (alt != null) {
+                    contentHandler.startElement(NULL_NS_URI, "alt-text", "alt-text", XMLUtils.EMPTY_ATTRIBUTES);
+                    final char[] chars = alt.toCharArray();
+                    contentHandler.characters(chars, 0, chars.length);
+                    contentHandler.endElement(NULL_NS_URI, "alt-text", "alt-text");
+                }
+                contentHandler.endElement(NULL_NS_URI, tag, tag);
+            }
+
             @Override
             public boolean equals(Object o) {
                 if (this == o) return true;
@@ -747,188 +928,6 @@ public final class FilterUtils {
                         '}';
             }
         }
-    }
-
-    public static void writeStartFlag(final ContentHandler contentHandler, final Flag flag) throws SAXException {
-        final StringBuilder outputclass = new StringBuilder();
-        if (flag.color != null) {
-            outputclass.append("color:").append(flag.color).append(";");
-        }
-        if (flag.backcolor != null) {
-            outputclass.append("background-color:").append(flag.backcolor).append(";");
-        }
-        if (flag.style != null) {
-            for (final String style : flag.style) {
-                switch (style) {
-                    case "italics":
-                        outputclass.append("font-style:italic;");
-                        break;
-                    case "bold":
-                        outputclass.append("font-weight:bold;");
-                        break;
-                    case "underline":
-                    case "double-underline":
-                        outputclass.append("text-decoration:").append(style).append(";");
-                        break;
-                    case "overline":
-                        outputclass.append("text-decoration:overline;");
-                        break;
-                }
-            }
-        }
-
-        final XMLUtils.AttributesBuilder atts = new XMLUtils.AttributesBuilder()
-                .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-startprop ");
-        if (outputclass.length() != 0) {
-            atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputclass.toString());
-        }
-        contentHandler.startElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop",
-                atts.build());
-        writeProp(contentHandler, flag, true);
-        contentHandler.endElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop");
-    }
-
-    public static void writeEndFlag(final ContentHandler contentHandler, final Flag flag) throws SAXException {
-        contentHandler.startElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop",
-                new XMLUtils.AttributesBuilder()
-                        .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-endprop ")
-                        .build());
-        writeProp(contentHandler, flag, false);
-        contentHandler.endElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop");
-    }
-
-    private static void writeProp(final ContentHandler contentHandler, Flag flag, final boolean isStart) throws SAXException {
-        final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
-        if (flag.color != null) {
-            propAtts.add("color", flag.color);
-        }
-        if (flag.backcolor != null) {
-            propAtts.add("backcolor", flag.backcolor);
-        }
-        if (flag.style != null) {
-            propAtts.add("style", Stream.of(flag.style).collect(Collectors.joining(" ")));
-        }
-        contentHandler.startElement(NULL_NS_URI, "prop", "prop", propAtts.build());
-        if (isStart && flag.startflag != null) {
-            writeFlag(contentHandler, flag.startflag, "startflag");
-        }
-        if (!isStart && flag.endflag != null) {
-            writeFlag(contentHandler, flag.endflag, "endflag");
-        }
-        contentHandler.endElement(NULL_NS_URI, "prop", "prop");
-    }
-
-    private static void writeFlag(final ContentHandler contentHandler, final Flag.FlagImage startflag, final String tag) throws SAXException {
-        final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
-        final URI abs = startflag.href;
-        if (abs != null) {
-            propAtts.add(DITA_OT_NS, ATTRIBUTE_NAME_IMAGEREF_URI, "dita-ot:" + ATTRIBUTE_NAME_IMAGEREF_URI, "CDATA", abs.toString());
-            final URI rel = abs.resolve(".").relativize(abs);
-            propAtts.add(DITA_OT_NS, "original-" + ATTRIBUTE_NAME_IMAGEREF, "dita-ot:original-" + ATTRIBUTE_NAME_IMAGEREF, "CDATA", rel.toString());
-            propAtts.add(ATTRIBUTE_NAME_IMAGEREF, rel.toString());
-        }
-        contentHandler.startElement(NULL_NS_URI, tag, tag, propAtts.build());
-        if (startflag.alt != null) {
-            contentHandler.startElement(NULL_NS_URI, "alt-text", "alt-text", XMLUtils.EMPTY_ATTRIBUTES);
-            final char[] chars = startflag.alt.toCharArray();
-            contentHandler.characters(chars, 0, chars.length);
-            contentHandler.endElement(NULL_NS_URI, "alt-text", "alt-text");
-        }
-        contentHandler.endElement(NULL_NS_URI, tag, tag);
-    }
-
-
-    public static Element writeStartFlag(final Flag flag) {
-        return writeToElement((ContentHandler contentHandler) -> {
-            try {
-                FilterUtils.writeStartFlag(contentHandler, flag);
-            } catch (SAXException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    public static Element writeEndFlag(final Flag flag) {
-        return writeToElement((ContentHandler contentHandler) -> {
-            try {
-                FilterUtils.writeEndFlag(contentHandler, flag);
-            } catch (SAXException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    private static Element writeToElement(final Consumer<ContentHandler> writer) {
-        final TransformerFactory factory = TransformerFactory.newInstance();
-        final Transformer transformer;
-        try {
-            transformer = factory.newTransformer();
-        } catch (TransformerConfigurationException e) {
-            throw new RuntimeException(e);
-        }
-        final SAXSource xmlSource = new SAXSource(new XMLReader() {
-            @Override
-            public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
-                return false;
-            }
-            @Override
-            public void setFeature(String name, boolean value) throws SAXNotRecognizedException, SAXNotSupportedException {
-            }
-            @Override
-            public Object getProperty(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
-                return null;
-            }
-            @Override
-            public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
-            }
-            @Override
-            public void setEntityResolver(EntityResolver resolver) {
-            }
-            @Override
-            public EntityResolver getEntityResolver() {
-                return null;
-            }
-            @Override
-            public void setDTDHandler(DTDHandler handler) {
-            }
-            @Override
-            public DTDHandler getDTDHandler() {
-                return null;
-            }
-            private ContentHandler contentHandler;
-            @Override
-            public void setContentHandler(ContentHandler handler) {
-                this.contentHandler = handler;
-            }
-            @Override
-            public ContentHandler getContentHandler() {
-                return contentHandler;
-            }
-            @Override
-            public void setErrorHandler(ErrorHandler handler) {
-            }
-            @Override
-            public ErrorHandler getErrorHandler() {
-                return null;
-            }
-            @Override
-            public void parse(InputSource input) throws IOException, SAXException {
-                parse((String) null);
-            }
-            @Override
-            public void parse(String input) throws IOException, SAXException {
-                getContentHandler().startDocument();
-                writer.accept(getContentHandler());
-                getContentHandler().endDocument();
-            }
-        }, null);
-        final DOMResult outputTarget = new DOMResult();
-        try {
-            transformer.transform(xmlSource, outputTarget);
-        } catch (TransformerException e) {
-            throw new RuntimeException(e);
-        }
-        return ((Document) outputTarget.getNode()).getDocumentElement();
     }
 
 }

@@ -284,14 +284,14 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
             final List<Element> childElements = getChildElements(elem);
             final Set<Flag> flags = fs.stream().flatMap(f -> f.getFlags(elem, props).stream()).collect(Collectors.toSet());
             for (Flag flag : flags) {
-                final Element startElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeStartFlag(flag), true);
+                final Element startElement = (Element) elem.getOwnerDocument().importNode(flag.writeStartFlag(), true);
                 final Node firstChild = elem.getFirstChild();
                 if (firstChild != null) {
                     elem.insertBefore(startElement, firstChild);
                 } else {
                     elem.appendChild(startElement);
                 }
-                final Element endElement = (Element) elem.getOwnerDocument().importNode(FilterUtils.writeEndFlag(flag), true);
+                final Element endElement = (Element) elem.getOwnerDocument().importNode(flag.writeEndFlag(), true);
                 elem.appendChild(endElement);
             }
             for (final Element child : childElements) {
