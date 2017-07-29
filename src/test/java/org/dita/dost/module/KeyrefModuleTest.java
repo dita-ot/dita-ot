@@ -123,7 +123,7 @@ public class KeyrefModuleTest {
         final DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         final Document act = b.parse(new File(baseDir, "src" + File.separator + "test.ditamap"));
         final KeyScope keyScope =
-                new KeyScope("#róot", null,
+                new KeyScope("#root", null,
                             ImmutableMap.of(
                                     "VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null),
                                     "A.VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null)),
