@@ -674,12 +674,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
         final File relativeRootFile = toFile(rootTemp);
 
-        if (baseInputDir.getScheme().equals("file")) {
-            job.setProperty(INPUT_DIR, new File(baseInputDir).getAbsolutePath());
-        }
         job.setInputDir(baseInputDir);
-        job.setProperty(INPUT_DITAMAP, relativeRootFile.toString());
-        job.setProperty(INPUT_DITAMAP_URI, rootTemp.toString());
+        job.setInputMap(rootTemp);
 
         job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
         final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);

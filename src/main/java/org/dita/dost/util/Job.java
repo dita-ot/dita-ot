@@ -451,6 +451,18 @@ public final class Job {
     }
 
     /**
+     * set input file
+     *
+     * @param map input file path relative to input directory
+     */
+    public void setInputMap(final URI map) {
+        assert !map.isAbsolute();
+        setProperty(INPUT_DITAMAP_URI, map.toString());
+        // Deprecated since 2.2
+        setProperty(INPUT_DITAMAP, toFile(map).getPath());
+    }
+
+    /**
      * Get input directory.
      * 
      * @return absolute input directory path
@@ -466,6 +478,10 @@ public final class Job {
     public void setInputDir(final URI dir) {
         assert dir.isAbsolute();
         setProperty(INPUT_DIR_URI, dir.toString());
+        // Deprecated since 2.2
+        if (dir.getScheme().equals("file")) {
+            setProperty(INPUT_DIR, new File(dir).getAbsolutePath());
+        }
     }
 
     /**

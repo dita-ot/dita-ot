@@ -84,8 +84,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
                         // start map
                         if (fi.src.equals(job.getInputFile())) {
-                            job.setProperty(INPUT_DITAMAP_URI, rel.toString());
-                            job.setProperty(INPUT_DITAMAP, toFile(rel).getPath());
+                            job.setInputMap(rel);
                         }
                     }
                 }

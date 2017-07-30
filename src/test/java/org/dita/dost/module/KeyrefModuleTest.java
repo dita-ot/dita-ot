@@ -52,7 +52,7 @@ public class KeyrefModuleTest {
         module = new KeyrefModule();
         final Job job = new Job(tempDir);
         job.setInputDir(new File(baseDir, "xsrc").toURI());
-        job.setProperty(INPUT_DITAMAP_URI, URI.create("test.ditamap").toString());
+        job.setInputMap(URI.create("test.ditamap"));
         job.add(new Job.FileInfo.Builder()
                 .uri(URI.create("topic.dita"))
                 .src(new File(baseDir, "xsrc" + File.separator + "topic.dita").toURI())

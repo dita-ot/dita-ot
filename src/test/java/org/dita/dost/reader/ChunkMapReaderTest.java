@@ -49,7 +49,7 @@ public class ChunkMapReaderTest {
     public void testRead() throws IOException {
         final Job job = new Job(tempDir);
         job.setInputDir(srcDir.toURI());
-        job.setProperty(INPUT_DITAMAP_URI, URI.create("maps/gen.ditamap").toString());
+        job.setInputMap(URI.create("maps/gen.ditamap"));
 
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(new TestUtils.TestLogger());
@@ -152,7 +152,7 @@ public class ChunkMapReaderTest {
     private Job createJob(final String map, final String... topics) throws IOException {
         final Job job = new Job(tempDir);
         job.setInputDir(srcDir.toURI());
-        job.setProperty(INPUT_DITAMAP_URI, URI.create(map).toString());
+        job.setInputMap(URI.create(map));
 
         TestUtils.copy(new File(srcDir, map), new File(tempDir, map));
         job.add(new Job.FileInfo.Builder()

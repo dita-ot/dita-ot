@@ -14,6 +14,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URI;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
@@ -81,7 +82,7 @@ public class TestTopicMergeModule {
         final TopicMergeModule topicmergemodule = new TopicMergeModule();
         topicmergemodule.setLogger(new TestUtils.TestLogger());
         final Job job = new Job(temporaryDir);
-        job.setProperty(INPUT_DITAMAP_URI, "test.ditamap");
+        job.setInputMap(URI.create("test.ditamap"));
         topicmergemodule.setJob(job);
         topicmergemodule.execute(pipelineInput);
         
