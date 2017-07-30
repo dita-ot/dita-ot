@@ -270,13 +270,12 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         } else {
             rootFile = basedir.toURI().resolve(ditaInput);
         }
-        assert rootFile.isAbsolute();
         job.setInputFile(rootFile);
 
         if (baseInputDir == null) {
             baseInputDir = rootFile.resolve(".");
         }
-        assert baseInputDir.isAbsolute();
+        job.setInputDir(baseInputDir);
 
         profilingEnabled = Optional.ofNullable(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED))
                 .map(Boolean::parseBoolean)
@@ -674,7 +673,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
         final File relativeRootFile = toFile(rootTemp);
 
-        job.setInputDir(baseInputDir);
         job.setInputMap(rootTemp);
 
         job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);

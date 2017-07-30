@@ -908,7 +908,7 @@ public final class FilterUtils {
                 final URI abs = href;
                 if (abs != null) {
                     propAtts.add(DITA_OT_NS, ATTRIBUTE_NAME_IMAGEREF_URI, "dita-ot:" + ATTRIBUTE_NAME_IMAGEREF_URI, "CDATA", abs.toString());
-                    final URI rel = abs.resolve(".").relativize(abs);
+                    final URI rel = abs;
                     propAtts.add(DITA_OT_NS, "original-" + ATTRIBUTE_NAME_IMAGEREF, "dita-ot:original-" + ATTRIBUTE_NAME_IMAGEREF, "CDATA", rel.toString());
                     propAtts.add(ATTRIBUTE_NAME_IMAGEREF, rel.toString());
                 }
