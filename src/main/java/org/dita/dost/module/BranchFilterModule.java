@@ -16,6 +16,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -33,7 +34,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.URLUtils.*;
@@ -68,11 +71,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     private URI map;
     /** Absolute URI to map being processed. */
     protected URI currentFile;
+    private Set<URI> filtered = new HashSet<>();
 
     public BranchFilterModule() {
         builder = XMLUtils.getDocumentBuilder();
         ditaValReader = new DitaValReader();
-        ditaValReader.initXMLReader(true);
         xmlUtils = new XMLUtils();
     }
     
@@ -86,6 +89,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
+        ditaValReader.setJob(job);
         try {
             tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -293,7 +297,23 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         if (exclude) {
             elem.getParentNode().removeChild(elem);
         } else {
-            for (final Element child : getChildElements(elem)) {
+            final List<Element> childElements = getChildElements(elem);
+            final Set<Flag> flags = fs.stream()
+                    .flatMap(f -> f.getFlags(elem, props).stream())
+                    .map(f -> f.adjustPath(currentFile, job))
+                    .collect(Collectors.toSet());
+            for (Flag flag : flags) {
+                final Element startElement = (Element) elem.getOwnerDocument().importNode(flag.getStartFlag(), true);
+                final Node firstChild = elem.getFirstChild();
+                if (firstChild != null) {
+                    elem.insertBefore(startElement, firstChild);
+                } else {
+                    elem.appendChild(startElement);
+                }
+                final Element endElement = (Element) elem.getOwnerDocument().importNode(flag.getEndFlag(), true);
+                elem.appendChild(endElement);
+            }
+            for (final Element child : childElements) {
                 filterBranches(child, fs, props);
             }
         }
@@ -333,15 +353,13 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 //                 TODO: Maybe Job should be updated earlier?
 //                job.add(fi);
                 logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
-                final List<XMLFilter> pipe = new ArrayList<>();
-                // TODO: replace multiple profiling filters with a merged filter utils
-                for (final FilterUtils f : fs) {
-                    final ProfilingFilter writer = new ProfilingFilter();
-                    writer.setLogger(logger);
-                    writer.setJob(job);
-                    writer.setFilterUtils(f);
-                    pipe.add(writer);
-                }
+                final ProfilingFilter writer = new ProfilingFilter();
+                writer.setLogger(logger);
+                writer.setJob(job);
+                writer.setFilterUtils(fs);
+                writer.setCurrentFile(dstAbsUri);
+                final List<XMLFilter> pipe = singletonList(writer);
+
                 final File dstDirUri = new File(dstAbsUri.resolve("."));
                 if (!dstDirUri.exists() && !dstDirUri.mkdirs()) {
                     logger.error("Failed to create directory " + dstDirUri);
@@ -373,29 +391,27 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
         final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
         final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
+        final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
         if (!fs.isEmpty() && skipFilter == null
+                && !filtered.contains(srcAbsUri)
                 && !href.isEmpty()
                 && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))
                 && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(topicref.getAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE))
                 && isDitaFormat(topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT))) {
-            final List<XMLFilter> pipe = new ArrayList<>();
-            // TODO: replace multiple profiling filters with a merged filter utils
-            for (final FilterUtils f : fs) {
-                final ProfilingFilter writer = new ProfilingFilter();
-                writer.setLogger(logger);
-                writer.setJob(job);
-                writer.setFilterUtils(f);
-                pipe.add(writer);
-            }
+            final ProfilingFilter writer = new ProfilingFilter();
+            writer.setLogger(logger);
+            writer.setJob(job);
+            writer.setFilterUtils(fs);
+            writer.setCurrentFile(srcAbsUri);
+            final List<XMLFilter> pipe = singletonList(writer);
 
-            final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
             logger.info("Filtering " + srcAbsUri);
             try {
-                xmlUtils.transform(toFile(srcAbsUri),
-                        pipe);
+                xmlUtils.transform(srcAbsUri, pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }
+            filtered.add(srcAbsUri);
         }
         if (skipFilter != null) {
             topicref.removeAttributeNode(skipFilter);
@@ -423,7 +439,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             logger.info("Reading " + ditaval);
             ditaValReader.read(ditaval);
             Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
-            f = new FilterUtils(filterMap);
+            f = new FilterUtils(filterMap, ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
             f.setLogger(logger);
             filterCache.put(ditaval, f);
         }

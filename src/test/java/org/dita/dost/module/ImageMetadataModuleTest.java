@@ -22,7 +22,6 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import static java.net.URI.create;
@@ -30,7 +29,6 @@ import static java.util.Arrays.asList;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR;
-import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.junit.Assert.assertEquals;
 
 public class ImageMetadataModuleTest {
@@ -52,7 +50,7 @@ public class ImageMetadataModuleTest {
 
         final Job job = new Job(tempDir);
         job.setProperty("uplevels", "");
-        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
+        job.setInputDir(srcDir.toURI());
         job.addAll(asList("img.tiff", "img.png", "img.gif", "img.jpg").stream()
                 .map(p -> new Builder()
                         .uri(create(p)).src(new File(srcDir, p).toURI()).format("html")

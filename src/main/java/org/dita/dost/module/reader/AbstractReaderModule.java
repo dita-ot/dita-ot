@@ -270,13 +270,12 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         } else {
             rootFile = basedir.toURI().resolve(ditaInput);
         }
-        assert rootFile.isAbsolute();
         job.setInputFile(rootFile);
 
         if (baseInputDir == null) {
             baseInputDir = rootFile.resolve(".");
         }
-        assert baseInputDir.isAbsolute();
+        job.setInputDir(baseInputDir);
 
         profilingEnabled = Optional.ofNullable(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED))
                 .map(Boolean::parseBoolean)
@@ -627,22 +626,19 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      * @return configured filter utility
      */
     private FilterUtils parseFilterFile() {
-        Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
+        final FilterUtils filterUtils;
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
-            ditaValReader.initXMLReader(setSystemid);
-
-            ditaValReader.read(ditavalFile.getAbsoluteFile());
-            // Store filter map for later use
-            filterMap = ditaValReader.getFilterMap();
-            // Store flagging image used for image copying
+            ditaValReader.setJob(job);
+            ditaValReader.read(ditavalFile.toURI());
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
+            filterUtils = new FilterUtils(printTranstype.contains(transtype), ditaValReader.getFilterMap(),
+                    ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         } else {
-            filterMap = emptyMap();
+            filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
-        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
         filterUtils.setLogger(logger);
         return filterUtils;
     }
@@ -677,12 +673,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
         final File relativeRootFile = toFile(rootTemp);
 
-        if (baseInputDir.getScheme().equals("file")) {
-            job.setProperty(INPUT_DIR, new File(baseInputDir).getAbsolutePath());
-        }
-        job.setProperty(INPUT_DIR_URI, baseInputDir.toString());
-        job.setProperty(INPUT_DITAMAP, relativeRootFile.toString());
-        job.setProperty(INPUT_DITAMAP_URI, rootTemp.toString());
+        job.setInputMap(rootTemp);
 
         job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
         final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);
@@ -937,12 +928,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         prop.setProperty(fileKey, Constants.REL_FLAGIMAGE_LIST.substring(0, Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
         final File list = new File(job.tempDir, prop.getProperty(fileKey));
         try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)))) {
-            final Iterator<URI> it = newSet.iterator();
-            while (it.hasNext()) {
-                bufferedWriter.write(it.next().getPath());
-                if (it.hasNext()) {
-                    bufferedWriter.write("\n");
-                }
+            for (URI aNewSet : newSet) {
+                bufferedWriter.write(aNewSet.getPath());
+                bufferedWriter.write('\n');
             }
             bufferedWriter.flush();
         } catch (final IOException e) {

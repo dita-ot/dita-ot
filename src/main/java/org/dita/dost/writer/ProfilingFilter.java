@@ -7,19 +7,18 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.*;
-
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Profiling filter strips out the content that is not necessary in the output.
@@ -35,19 +34,31 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     /** Contains the attribution specialization paths for {@code props} attribute */
     private String[][] props;
     /** Filter utils */
-    private FilterUtils filterUtils;
+    private List<FilterUtils> filterUtils;
     /** Flag that an element has been written */
     private boolean elementOutput;
     /** Namespace prefixes for current element. */
     private final Map<String, String> prefixes = new HashMap<>();
     /** Flag that last element was excluded. */
     private boolean lastElementExcluded = false;
+    private Deque<Set<Flag>> flagStack = new LinkedList<>();
+    private final boolean doFlag;
 
     /**
      * Create new profiling filter.
      */
     public ProfilingFilter() {
+        this(true);
+    }
+
+    /**
+     * Create new profiling filter.
+     *
+     * @param doFlag is flagging enabled
+     */
+    public ProfilingFilter(final boolean doFlag) {
         super();
+        this.doFlag = doFlag;
     }
 
     /**
@@ -56,6 +67,15 @@ public final class ProfilingFilter extends AbstractXMLFilter {
      * @param filterUtils filter utils
      */
     public void setFilterUtils(final FilterUtils filterUtils) {
+        this.filterUtils = Collections.singletonList(filterUtils);
+    }
+
+    /**
+     * Set content filter.
+     *
+     * @param filterUtils filter utils
+     */
+    public void setFilterUtils(final List<FilterUtils> filterUtils) {
         this.filterUtils = filterUtils;
     }
 
@@ -71,6 +91,8 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
+        Set<Flag> flags = null;
+
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
         if (cls.isValid()) {
             classes.addFirst(cls);
@@ -91,7 +113,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             // If it is the start of a child of an excluded tag, level increase
             level++;
         } else { // exclude shows whether it's excluded by filtering
-            if (cls.isValid() && filterUtils.needExclude(atts, props)) {
+            if (cls.isValid() && filterUtils.stream().filter(f -> f.needExclude(atts, props)).findFirst().isPresent()) {
                 exclude = true;
                 level = 0;
             } else {
@@ -101,13 +123,35 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                 }
                 prefixes.clear();
                 getContentHandler().startElement(uri, localName, qName, atts);
+                if (doFlag && cls.isValid()) {
+                    flags = filterUtils.stream()
+                            .flatMap(f -> f.getFlags(atts, props).stream())
+                            .map(f -> f.adjustPath(currentFile, job))
+                            .collect(Collectors.toSet());
+                    for (final Flag flag: flags) {
+                        flag.writeStartFlag(getContentHandler());
+                    }
+                }
             }
+        }
+
+        if (doFlag) {
+            flagStack.push(flags);
         }
     }
 
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
+        if (doFlag) {
+            final Set<Flag> flags = flagStack.pop();
+            if (flags != null) {
+                for (final Flag flag : flags) {
+                    flag.writeEndFlag(getContentHandler());
+                }
+            }
+        }
+
         classes.pop();
         lastElementExcluded = exclude;
         if (exclude) {

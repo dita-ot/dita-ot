@@ -22,6 +22,7 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 import static java.net.URI.create;
 import static org.apache.commons.io.FileUtils.copyFile;
@@ -49,12 +50,12 @@ public class IndexTermExtractModuleTest {
 
         final Job job = new Job(tempDir);
         job.setProperty("uplevels", "");
-        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
+        job.setInputDir(srcDir.toURI());
         job.add(new Builder()
                 .uri(create("bookmap.ditamap")).format("ditamap")
                 .src(new File(srcDir, "bookmap.ditamap").toURI())
                 .build());
-        job.setProperty(INPUT_DITAMAP_URI, "bookmap.ditamap");
+        job.setInputMap(URI.create("bookmap.ditamap"));
         job.setInputFile(new File(srcDir, "bookmap.ditamap").toURI());
         job.add(new Builder()
                 .uri(create("index-see_testdata1.dita")).format("dita")

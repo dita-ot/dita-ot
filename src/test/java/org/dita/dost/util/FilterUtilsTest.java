@@ -7,18 +7,18 @@
  */
 package org.dita.dost.util;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.*;
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 
+import org.dita.dost.util.FilterUtils.Flag;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -28,7 +28,7 @@ public class FilterUtilsTest {
 
     private static final Map<FilterKey, Action> filterMap;
     static {
-        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        final Map<FilterKey, Action> fm = new HashMap<>();
         fm.put(new FilterKey("platform", "unix"), Action.INCLUDE);
         fm.put(new FilterKey("platform", "osx"), Action.INCLUDE);
         fm.put(new FilterKey("platform", "linux"), Action.INCLUDE);
@@ -40,16 +40,16 @@ public class FilterUtilsTest {
 
     @Test
     public void testNeedExcludeNoAttribute() {
-        final FilterUtils f = new FilterUtils(false, filterMap);
+        final FilterUtils f = new FilterUtils(false, filterMap, null, null);
 
         assertFalse(f.needExclude(new AttributesImpl(), new String[0][0]));
     }
 
     @Test
     public void testNeedExcludeDefaultExclude() {
-        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>(filterMap);
+        final Map<FilterKey, Action> fm = new HashMap<>(filterMap);
         fm.put(new FilterKey("platform", null), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(false, fm);
+        final FilterUtils f = new FilterUtils(false, fm, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(new AttributesImpl(), new String[0][0]));
@@ -60,9 +60,9 @@ public class FilterUtilsTest {
 
     @Test
     public void testNeedExcludeDefaultInclude() {
-        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>(filterMap);
+        final Map<FilterKey, Action> fm = new HashMap<>(filterMap);
         fm.put(new FilterKey("platform", null), Action.INCLUDE);
-        final FilterUtils f = new FilterUtils(false, fm);
+        final FilterUtils f = new FilterUtils(false, fm, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("platform", "amiga unix windows"), new String[0][0]));
@@ -72,7 +72,7 @@ public class FilterUtilsTest {
 
     @Test
     public void testNeedExclude() {
-        final FilterUtils f = new FilterUtils(false, filterMap);
+        final FilterUtils f = new FilterUtils(false, filterMap, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("platform", "amiga unix windows"), new String[0][0]));
@@ -82,7 +82,7 @@ public class FilterUtilsTest {
 
     @Test
     public void testNeedExcludeMultipleAttributes() {
-        final FilterUtils f = new FilterUtils(false, filterMap);
+        final FilterUtils f = new FilterUtils(false, filterMap, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
         final AttributesImpl amigaUnix = new AttributesImpl();
@@ -103,10 +103,10 @@ public class FilterUtilsTest {
 
     @Test
     public void testNeedExcludeDomainAttribute() {
-        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        final Map<FilterKey, Action> fm = new HashMap<>();
         fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
         fm.put(new FilterKey("os", null), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(false, fm);
+        final FilterUtils f = new FilterUtils(false, fm, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("os", "amiga unix windows"), new String[][] {{"props", "os"}}));
@@ -118,10 +118,10 @@ public class FilterUtilsTest {
     
     @Test
     public void testNeedExcludeLabel() {
-        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        final Map<FilterKey, Action> fm = new HashMap<>();
         fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
         fm.put(new FilterKey("os", null), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(false, fm);
+        final FilterUtils f = new FilterUtils(false, fm, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("props", "os(amiga unix windows)"), new String[][] {{"props", "os"}}));
@@ -133,10 +133,10 @@ public class FilterUtilsTest {
     
     @Test
     public void testNeedExcludeOtherpropsLabel() {
-        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        final Map<FilterKey, Action> fm = new HashMap<>();
         fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
         fm.put(new FilterKey("os", null), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(false, fm);
+        final FilterUtils f = new FilterUtils(false, fm, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("otherprops", "os(amiga unix windows)"), new String[0][0]));
@@ -144,15 +144,72 @@ public class FilterUtilsTest {
         assertTrue(f.needExclude(attr("otherprops", "os(windows)"), new String[0][0]));
     }
 
-    // DITA 1.3
-    
     @Test
-    public void testNeedExcludeGroup() {
-        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+    public void testgetFlagsDefaultFlag() {
+        final Flag flag = new Flag("red", null, null, null, null, null);
+        final FilterUtils f = new FilterUtils(false,
+                ImmutableMap.<FilterKey, Action>builder()
+                        .put(new FilterKey("platform", null), flag)
+                        .build(), null, null);
+        f.setLogger(new TestUtils.TestLogger());
+
+        assertEquals(
+                emptySet(),
+                f.getFlags(new AttributesImpl(), new String[0][0]));
+        assertEquals(
+                singleton(flag),
+                f.getFlags(attr("platform", "amiga unix windows"), new String[0][0]));
+    }
+
+    @Test
+    public void testGetFlags() {
+        final Flag flag = new Flag("red", null, null, null, null, null);
+        final FilterUtils f = new FilterUtils(false,
+                ImmutableMap.<FilterKey, Action>builder()
+                        .put(new FilterKey("platform", "unix"), flag)
+                        .put(new FilterKey("platform", "osx"), flag)
+                        .put(new FilterKey("platform", "linux"), flag)
+                        .put(new FilterKey("audience", "expert"), flag)
+                        .build(), null, null);
+        f.setLogger(new TestUtils.TestLogger());
+
+        assertEquals(
+                singleton(flag),
+                f.getFlags(attr("platform", "amiga unix windows"), new String[0][0]));
+        assertEquals(
+                singleton(flag),
+                f.getFlags(attr("platform", "amiga unix"), new String[0][0]));
+        assertEquals(
+                emptySet(),
+                f.getFlags(attr("platform", "amiga"), new String[0][0]));
+        assertEquals(
+                emptySet(),
+                f.getFlags(attr("platform", "windows"), new String[0][0]));
+    }
+
+    // DITA 1.3
+
+    @Test
+    public void testExtCheckExclude() {
+        final Map<FilterKey, Action> fm = new HashMap<>();
         fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
         fm.put(new FilterKey("os", null), Action.EXCLUDE);
         fm.put(new FilterKey("platform", null), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(false, fm);
+        final FilterUtils f = new FilterUtils(false, fm, null, null);
+        f.setLogger(new TestUtils.TestLogger());
+
+        assertFalse(f.extCheckExclude(new String[] {"platform", "os"}, Arrays.asList("amiga", "unix", "windows")));
+        assertTrue(f.extCheckExclude(new String[] {"platform", "os"}, Arrays.asList("osx")));
+        assertFalse(f.extCheckExclude(new String[] {"platform", "os"}, Arrays.asList( "unix", "amiga", "windows")));
+    }
+    
+    @Test
+    public void testNeedExcludeGroup() {
+        final Map<FilterKey, Action> fm = new HashMap<>();
+        fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
+        fm.put(new FilterKey("os", null), Action.EXCLUDE);
+        fm.put(new FilterKey("platform", null), Action.EXCLUDE);
+        final FilterUtils f = new FilterUtils(false, fm, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("platform", "os(amiga unix windows)"), new String[0][0]));
@@ -165,12 +222,12 @@ public class FilterUtilsTest {
 
     @Test
     public void testNeedExcludeGroupMultiple() {
-        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        final Map<FilterKey, Action> fm = new HashMap<>();
         fm.put(new FilterKey("os", "amiga"), Action.EXCLUDE);
         fm.put(new FilterKey("os", "windows"), Action.EXCLUDE);
         fm.put(new FilterKey("os", null), Action.INCLUDE);
         fm.put(new FilterKey("platform", null), Action.INCLUDE);
-        final FilterUtils f = new FilterUtils(false, fm);
+        final FilterUtils f = new FilterUtils(false, fm, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("platform", "os(amiga unix windows) database(mongo)"), new String[0][0]));
@@ -182,11 +239,11 @@ public class FilterUtilsTest {
     
     @Test
     public void testNeedExcludeMixedGroups() {
-        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        final Map<FilterKey, Action> fm = new HashMap<>();
         fm.put(new FilterKey("platform", "unix"), Action.EXCLUDE);
         fm.put(new FilterKey("platform", "windows"), Action.EXCLUDE);
         fm.put(new FilterKey("platform", null), Action.INCLUDE);
-        final FilterUtils f = new FilterUtils(false, fm);
+        final FilterUtils f = new FilterUtils(false, fm, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("platform", "windows database(mongodb couchbase) unix osx"), new String[0][0]));
@@ -196,7 +253,7 @@ public class FilterUtilsTest {
     
     @Test
     public void testGetUngroupedValue() {
-        final FilterUtils f = new FilterUtils(false, Collections.EMPTY_MAP);
+        final FilterUtils f = new FilterUtils(false);
         
         {
             final Map<String, List<String>> exp = new HashMap<String, List<String>>();
@@ -246,4 +303,60 @@ public class FilterUtilsTest {
         return res;
     }
     
+    @Test
+    public void testGetFlagLabel() {
+        final Flag flagRed = new Flag("red", null, null, null, null, null);
+        final Flag flagBlue = new Flag("blue", null, null, null, null, null);
+        final FilterUtils f = new FilterUtils(false,
+                ImmutableMap.<FilterKey, Action>builder()
+                        .put(new FilterKey("os", "amiga"), flagRed)
+                        .put(new FilterKey("os", null), flagBlue)
+                        .build(), null, null);
+        f.setLogger(new TestUtils.TestLogger());
+
+        assertEquals(
+                new HashSet(asList(flagRed, flagBlue)),
+                f.getFlags(attr("props", "os(amiga unix windows)"), new String[][] {{"props", "os"}}));
+        assertEquals(
+                new HashSet(asList(flagRed, flagBlue)),
+                f.getFlags(attr("props", "os(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
+        assertEquals(
+                new HashSet(asList(flagRed, flagBlue)),
+                f.getFlags(attr("props", "gui(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
+        assertEquals(
+                singleton(flagBlue),
+                f.getFlags(attr("props", "os(windows)"), new String[][] {{"props", "os"}}));
+        assertEquals(
+                singleton(flagBlue),
+                f.getFlags(attr("props", "   os(   windows   )   "), new String[][] {{"props", "os"}}));
+    }
+
+    @Test
+    public void testConflict() {
+        final Flag flagRed = new Flag("red", null, null, null, null, null);
+        final Flag flagBlue = new Flag("blue", null, null, null, null, null);
+        final FilterUtils f = new FilterUtils(false,
+                ImmutableMap.<FilterKey, Action>builder()
+                        .put(new FilterKey("os", "amiga"), flagRed)
+                        .put(new FilterKey("os", null), flagBlue)
+                        .build(), "yellow", "green");
+        f.setLogger(new TestUtils.TestLogger());
+
+        final Flag flagYellow = new Flag("yellow", null, null, null, null, null);
+        assertEquals(
+                singleton(flagYellow),
+                f.getFlags(attr("props", "os(amiga unix windows)"), new String[][] {{"props", "os"}}));
+        assertEquals(
+                singleton(flagYellow),
+                f.getFlags(attr("props", "os(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
+        assertEquals(
+                singleton(flagYellow),
+                f.getFlags(attr("props", "gui(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
+        assertEquals(
+                singleton(flagBlue),
+                f.getFlags(attr("props", "os(windows)"), new String[][] {{"props", "os"}}));
+        assertEquals(
+                singleton(flagBlue),
+                f.getFlags(attr("props", "   os(   windows   )   "), new String[][] {{"props", "os"}}));
+    }
 }

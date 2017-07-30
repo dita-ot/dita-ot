@@ -42,7 +42,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
 
     private Job getJob() throws IOException {
         final Job job = new Job(tempDir);
-        job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
+        job.setInputDir(tempDir.toURI());
         job.add(new Job.FileInfo.Builder()
                 .src(new File(tempDir, "input.ditamap").toURI())
                 .result(new File(tempDir, "input.ditamap").toURI())
@@ -166,7 +166,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
     public void testDuplicateTopic() throws IOException, SAXException {
         final BranchFilterModule m = new BranchFilterModule();
         final Job job = new Job(tempDir);
-        job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
+        job.setInputDir(tempDir.toURI());
         job.addAll(getDuplicateTopicFileInfos());
         m.setJob(job);
         final CachingLogger logger = new CachingLogger();

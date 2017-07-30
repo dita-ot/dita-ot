@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
-import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertEquals;
@@ -49,8 +48,8 @@ public class ChunkMapReaderTest {
     @Test
     public void testRead() throws IOException {
         final Job job = new Job(tempDir);
-        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
-        job.setProperty(INPUT_DITAMAP_URI, URI.create("maps/gen.ditamap").toString());
+        job.setInputDir(srcDir.toURI());
+        job.setInputMap(URI.create("maps/gen.ditamap"));
 
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(new TestUtils.TestLogger());
@@ -152,8 +151,8 @@ public class ChunkMapReaderTest {
 
     private Job createJob(final String map, final String... topics) throws IOException {
         final Job job = new Job(tempDir);
-        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
-        job.setProperty(INPUT_DITAMAP_URI, URI.create(map).toString());
+        job.setInputDir(srcDir.toURI());
+        job.setInputMap(URI.create(map));
 
         TestUtils.copy(new File(srcDir, map), new File(tempDir, map));
         job.add(new Job.FileInfo.Builder()

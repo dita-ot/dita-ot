@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.XMLUtils.*;
@@ -53,18 +54,13 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
     private final XMLUtils xmlUtils = new XMLUtils();
     private final DocumentBuilder builder;
-//    private final TempFileNameScheme tempFileNameScheme;
     /** Current map being processed, relative to temporary directory */
     private URI map;
+    private Set<URI> filtered = new HashSet<>();
 
     public TopicBranchFilterModule() {
         super();
         builder = XMLUtils.getDocumentBuilder();
-//        try {
-//            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
-//        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
     }
     
     @Override
@@ -73,15 +69,11 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         xmlUtils.setLogger(logger);
     }
 
-//    @Override
-//    public void setJob(final Job job) {
-//        super.setJob(job);
-//        tempFileNameScheme.setBaseDir(job.getInputDir());
-//    }
-
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         processMap(job.getInputMap());
+
+        addFlagImagesSetToProperties(job, relFlagImagesSet);
 
         try {
             job.write();
@@ -154,15 +146,13 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 //                 TODO: Maybe Job should be updated earlier?
 //                job.add(fi);
                 logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
-                final List<XMLFilter> pipe = new ArrayList<>();
-                // TODO: replace multiple profiling filters with a merged filter utils
-                for (final FilterUtils f : fs) {
-                    final ProfilingFilter writer = new ProfilingFilter();
-                    writer.setLogger(logger);
-                    writer.setJob(job);
-                    writer.setFilterUtils(f);
-                    pipe.add(writer);
-                }
+                final ProfilingFilter writer = new ProfilingFilter();
+                writer.setLogger(logger);
+                writer.setJob(job);
+                writer.setFilterUtils(fs);
+                writer.setCurrentFile(dstAbsUri);
+                final List<XMLFilter> pipe = singletonList(writer);
+
                 final File dstDirUri = new File(dstAbsUri.resolve("."));
                 if (!dstDirUri.exists() && !dstDirUri.mkdirs()) {
                     logger.error("Failed to create directory " + dstDirUri);
@@ -195,27 +185,25 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
         final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
         final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
+        final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
         if (!fs.isEmpty() && skipFilter == null
+                && !filtered.contains(srcAbsUri)
                 && !href.isEmpty()
                 && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))) {
-            final List<XMLFilter> pipe = new ArrayList<>();
-            // TODO: replace multiple profiling filters with a merged filter utils
-            for (final FilterUtils f : fs) {
-                final ProfilingFilter writer = new ProfilingFilter();
-                writer.setLogger(logger);
-                writer.setJob(job);
-                writer.setFilterUtils(f);
-                pipe.add(writer);
-            }
+            final ProfilingFilter writer = new ProfilingFilter();
+            writer.setLogger(logger);
+            writer.setJob(job);
+            writer.setFilterUtils(fs);
+            writer.setCurrentFile(srcAbsUri);
+            final List<XMLFilter> pipe = singletonList(writer);
 
-            final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
             logger.info("Filtering " + srcAbsUri);
             try {
-                xmlUtils.transform(toFile(srcAbsUri),
-                        pipe);
+                xmlUtils.transform(srcAbsUri, pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }
+            filtered.add(srcAbsUri);
         }
         if (skipFilter != null) {
             topicref.removeAttributeNode(skipFilter);

@@ -602,6 +602,7 @@ public final class Constants {
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
     /**prop element.*/
     public static final String ELEMENT_NAME_PROP = "prop";
+    public static final String ELEMENT_NAME_REVPROP = "revprop";
     /**map element.*/
     public static final String ELEMENT_NAME_ACTION = "action";
     /**action element.*/
@@ -657,6 +658,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_PRODUCT = "product";
     /**otherprops attribute.*/
     public static final String ATTRIBUTE_NAME_OTHERPROPS = "otherprops";
+    public static final String ATTRIBUTE_NAME_OUTPUTCLASS = "outputclass";
     /**scope attribute.*/
     public static final String ATTRIBUTE_NAME_SCOPE = "scope";
     /**type attribute.*/
@@ -709,6 +711,10 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_COLS = "cols";
     public static final String ATTRIBUTE_NAME_VALUE = "value";
     public static final String ATTRIBUTE_NAME_VALUETYPE = "valuetype";
+    public static final String ATTRIBUTE_NAME_COLOR = "color";
+    public static final String ATTRIBUTE_NAME_BACKCOLOR = "backcolor";
+    public static final String ATTRIBUTE_NAME_STYLE = "style";
+    public static final String ATTRIBUTE_NAME_CHANGEBAR = "changebar";
 
     public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 
@@ -905,9 +911,12 @@ public final class Constants {
     /**ATTRIBUTE_PREFIX_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_PREFIX_DITAARCHVERSION = "ditaarch";
     /**ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION.*/
-    public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = XMLNS_ATTRIBUTE + ":ditaarch";
+    public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = XMLNS_ATTRIBUTE + ":" + ATTRIBUTE_PREFIX_DITAARCHVERSION;
     public static final String DITA_NAMESPACE = "http://dita.oasis-open.org/architecture/2005/";
+    public static final String DITA_OT_NS_PREFIX = "dita-ot";
     public static final String DITA_OT_NAMESPACE = "http://dita-ot.sourceforge.net";
+    public static final String DITA_OT_NS = "http://dita-ot.sourceforge.net/ns/201007/dita-ot";
+
 
     /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE.*/
     public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE = " subjectScheme/";

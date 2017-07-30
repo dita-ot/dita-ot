@@ -49,9 +49,6 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private static final String ATTR_IMAGE_HEIGHT = "image-height";
     private static final String ATTR_IMAGE_WIDTH = "image-width";
     private static final float MM_TO_INCH = 25.4f;
-    public static final String DITA_OT_PREFIX = "dita-ot";
-    public static final String DITA_OT_NS = "http://dita-ot.sourceforge.net/ns/201007/dita-ot";
-
     public static final Attributes EMPTY_ATTR = new AttributesImpl();
     
     // Variables ---------------------------------------------------------------
@@ -122,7 +119,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
                 }
             }
             depth = 1;
-            super.startPrefixMapping(DITA_OT_PREFIX , DITA_OT_NS);
+            super.startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
             super.startElement(uri, localName, name, a.build());
         } else {
             if (depth > 0) {
@@ -137,7 +134,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         super.endElement(uri, localName, name);
         if (depth > 0) {
             if (depth == 1) {
-                super.endPrefixMapping(DITA_OT_PREFIX );
+                super.endPrefixMapping(DITA_OT_NS_PREFIX);
             }
             depth--;
         }
@@ -154,16 +151,16 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         public Attributes getAttributes() {
             final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder();
             if (width != null) {
-                a.add(DITA_OT_NS, ATTR_IMAGE_WIDTH, DITA_OT_PREFIX + ":" + ATTR_IMAGE_WIDTH, "CDATA", width);
+                a.add(DITA_OT_NS, ATTR_IMAGE_WIDTH, DITA_OT_NS_PREFIX + ":" + ATTR_IMAGE_WIDTH, "CDATA", width);
             }
             if (height != null) {
-                a.add(DITA_OT_NS, ATTR_IMAGE_HEIGHT, DITA_OT_PREFIX + ":" + ATTR_IMAGE_HEIGHT, "CDATA", height);
+                a.add(DITA_OT_NS, ATTR_IMAGE_HEIGHT, DITA_OT_NS_PREFIX + ":" + ATTR_IMAGE_HEIGHT, "CDATA", height);
             }
             if (horizontalDpi != null) {
-                a.add(DITA_OT_NS, ATTR_HORIZONTAL_DPI, DITA_OT_PREFIX + ":" + ATTR_HORIZONTAL_DPI, "CDATA", horizontalDpi);
+                a.add(DITA_OT_NS, ATTR_HORIZONTAL_DPI, DITA_OT_NS_PREFIX + ":" + ATTR_HORIZONTAL_DPI, "CDATA", horizontalDpi);
             }
             if (verticalDpi != null) {
-                a.add(DITA_OT_NS, ATTR_VERTICAL_DPI, DITA_OT_PREFIX + ":" + ATTR_VERTICAL_DPI, "CDATA", verticalDpi);
+                a.add(DITA_OT_NS, ATTR_VERTICAL_DPI, DITA_OT_NS_PREFIX + ":" + ATTR_VERTICAL_DPI, "CDATA", verticalDpi);
             }
             return a.build();
         }

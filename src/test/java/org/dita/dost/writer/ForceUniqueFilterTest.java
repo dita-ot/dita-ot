@@ -30,7 +30,6 @@ import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
 
-import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -46,7 +45,7 @@ public class ForceUniqueFilterTest {
     @Before
     public void setUp() throws Exception {
         job = new Job(srcDir);
-        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
+        job.setInputDir(srcDir.toURI());
         job.add(new Builder()
                 .src(srcDir.toURI().resolve("test.ditamap"))
                 .uri(URI.create("test.ditamap"))

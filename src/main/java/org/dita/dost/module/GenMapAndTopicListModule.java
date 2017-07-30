@@ -333,10 +333,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
 
         if (filterUtils != null) {
-            final ProfilingFilter profilingFilter = new ProfilingFilter();
+            final ProfilingFilter profilingFilter = new ProfilingFilter(false);
             profilingFilter.setLogger(logger);
             profilingFilter.setJob(job);
             profilingFilter.setFilterUtils(filterUtils);
+            profilingFilter.setCurrentFile(fileToParse);
             pipe.add(profilingFilter);
         }
         
@@ -628,22 +629,19 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      * @return configured filter utility
      */
     private FilterUtils parseFilterFile() {
-        Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
+        final FilterUtils filterUtils;
         if (ditavalFile.exists()) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
-            ditaValReader.initXMLReader(setSystemid);
-
-            ditaValReader.read(ditavalFile.getAbsoluteFile());
-            // Store filter map for later use
-            filterMap = ditaValReader.getFilterMap();
-            // Store flagging image used for image copying
+            ditaValReader.setJob(job);
+            ditaValReader.read(ditavalFile.toURI());
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
+            filterUtils = new FilterUtils(printTranstype.contains(transtype), ditaValReader.getFilterMap(),
+                    ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         } else {
-            filterMap = Collections.emptyMap();
+            filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
-        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
         filterUtils.setLogger(logger);
         return filterUtils;
     }
@@ -684,12 +682,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
         final File relativeRootFile = toFile(rootTemp);
 
-        if (baseInputDir.getScheme().equals("file")) {
-            job.setProperty(INPUT_DIR, new File(baseInputDir).getAbsolutePath());
-        }
-        job.setProperty(INPUT_DIR_URI, baseInputDir.toString());
-        job.setProperty(INPUT_DITAMAP, relativeRootFile.toString());
-        job.setProperty(INPUT_DITAMAP_URI, rootTemp.toString());
+        job.setInputDir(baseInputDir);
+        job.setInputMap(rootTemp);
 
         job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
         final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);

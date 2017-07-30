@@ -27,16 +27,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
-
-import static java.util.Collections.EMPTY_LIST;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static java.net.URI.create;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.createTempDir;
-import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
 import static org.junit.Assert.assertEquals;
 
@@ -53,8 +51,8 @@ public class KeyrefModuleTest {
 
         module = new KeyrefModule();
         final Job job = new Job(tempDir);
-        job.setProperty(INPUT_DIR_URI, new File(baseDir, "xsrc").toURI().toString());
-        job.setProperty(INPUT_DITAMAP_URI, URI.create("test.ditamap").toString());
+        job.setInputDir(new File(baseDir, "xsrc").toURI());
+        job.setInputMap(URI.create("test.ditamap"));
         job.add(new Job.FileInfo.Builder()
                 .uri(URI.create("topic.dita"))
                 .src(new File(baseDir, "xsrc" + File.separator + "topic.dita").toURI())
@@ -123,7 +121,7 @@ public class KeyrefModuleTest {
         final DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         final Document act = b.parse(new File(baseDir, "src" + File.separator + "test.ditamap"));
         final KeyScope keyScope =
-                new KeyScope("#róot", null,
+                new KeyScope("#root", null,
                             ImmutableMap.of(
                                     "VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null),
                                     "A.VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null)),

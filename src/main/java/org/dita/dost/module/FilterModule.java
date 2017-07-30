@@ -46,15 +46,15 @@ final class FilterModule extends AbstractPipelineModuleImpl {
 
         final DitaValReader ditaValReader = new DitaValReader();
         ditaValReader.setLogger(logger);
-        ditaValReader.initXMLReader(true);
-        Map<FilterKey, Action> filterMap;
+        ditaValReader.setJob(job);
+        final FilterUtils filterUtils;
         if (ditavalFile != null) {
-            ditaValReader.read(ditavalFile.getAbsoluteFile());
-            filterMap = ditaValReader.getFilterMap();
+            ditaValReader.read(ditavalFile.toURI());
+            filterUtils = new FilterUtils(printTranstype.contains(transtype), ditaValReader.getFilterMap(),
+                    ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         } else {
-            filterMap = Collections.EMPTY_MAP;
+            filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
-        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
         filterUtils.setLogger(logger);
 
         final ProfilingFilter writer = new ProfilingFilter();
@@ -88,6 +88,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
             }
 
             writer.setFilterUtils(filterUtils.refine(subjectSchemeReader.getSubjectSchemeMap()));
+            writer.setCurrentFile(file.toURI());
 
             try {
                 writer.write(file.getAbsoluteFile());
