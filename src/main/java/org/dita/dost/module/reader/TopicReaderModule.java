@@ -195,6 +195,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             profilingFilter.setLogger(logger);
             profilingFilter.setJob(job);
             profilingFilter.setFilterUtils(filterUtils);
+            profilingFilter.setCurrentFile(fileToParse);
             pipe.add(profilingFilter);
         }
 

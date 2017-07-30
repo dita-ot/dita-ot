@@ -88,6 +88,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
             }
 
             writer.setFilterUtils(filterUtils.refine(subjectSchemeReader.getSubjectSchemeMap()));
+            writer.setCurrentFile(file.toURI());
 
             try {
                 writer.write(file.getAbsoluteFile());

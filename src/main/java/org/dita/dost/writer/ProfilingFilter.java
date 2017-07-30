@@ -42,12 +42,23 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     /** Flag that last element was excluded. */
     private boolean lastElementExcluded = false;
     private Deque<Set<Flag>> flagStack = new LinkedList<>();
+    private final boolean doFlag;
 
     /**
      * Create new profiling filter.
      */
     public ProfilingFilter() {
+        this(true);
+    }
+
+    /**
+     * Create new profiling filter.
+     *
+     * @param doFlag is flagging enabled
+     */
+    public ProfilingFilter(final boolean doFlag) {
         super();
+        this.doFlag = doFlag;
     }
 
     /**
@@ -112,8 +123,11 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                 }
                 prefixes.clear();
                 getContentHandler().startElement(uri, localName, qName, atts);
-                if (cls.isValid()) {
-                    flags = filterUtils.stream().flatMap(f -> f.getFlags(atts, props).stream()).collect(Collectors.toSet());
+                if (doFlag && cls.isValid()) {
+                    flags = filterUtils.stream()
+                            .flatMap(f -> f.getFlags(atts, props).stream())
+                            .map(f -> f.adjustPath(currentFile, job))
+                            .collect(Collectors.toSet());
                     for (final Flag flag: flags) {
                         flag.writeStartFlag(getContentHandler());
                     }
@@ -121,16 +135,20 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             }
         }
 
-        flagStack.push(flags);
+        if (doFlag) {
+            flagStack.push(flags);
+        }
     }
 
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
-        final Set<Flag> flags = flagStack.pop();
-        if (flags != null) {
-            for (final Flag flag : flags) {
-                flag.writeEndFlag(getContentHandler());
+        if (doFlag) {
+            final Set<Flag> flags = flagStack.pop();
+            if (flags != null) {
+                for (final Flag flag : flags) {
+                    flag.writeEndFlag(getContentHandler());
+                }
             }
         }
 

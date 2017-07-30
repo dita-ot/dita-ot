@@ -90,7 +90,10 @@ public final class DitaValReader implements AbstractReader {
     @Override
     public void setJob(final Job job) {
         this.job = job;
-        tempFileNameScheme = job.getTempFileNameScheme();
+        // XXX: This is a hack to disable temp filename generation, because in gen-list the base input dir is unknown.
+        if (job.getInputDir() != null) {
+            tempFileNameScheme = job.getTempFileNameScheme();
+        }
     }
 
     /**
@@ -206,7 +209,7 @@ public final class DitaValReader implements AbstractReader {
                 imageList.add(absolute);
                 relFlagImageList.add(relative);
 
-                if (job.getFileInfo(absolute) == null) {
+                if (tempFileNameScheme != null && job.getFileInfo(absolute) == null) {
                     final URI dstTemp = tempFileNameScheme.generateTempFileName(absolute);
                     final Job.FileInfo.Builder fi = new Job.FileInfo.Builder()
                             .src(absolute)

@@ -333,10 +333,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
 
         if (filterUtils != null) {
-            final ProfilingFilter profilingFilter = new ProfilingFilter();
+            final ProfilingFilter profilingFilter = new ProfilingFilter(false);
             profilingFilter.setLogger(logger);
             profilingFilter.setJob(job);
             profilingFilter.setFilterUtils(filterUtils);
+            profilingFilter.setCurrentFile(fileToParse);
             pipe.add(profilingFilter);
         }
         

@@ -194,10 +194,18 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
             if (hasLocalDitaLink(atts)) {
                 final AttributesImpl resAtts = new AttributesImpl(atts);
-                final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-                final URI resHref = getHref(href);
-                addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, resHref.toString());
-                res = resAtts;
+                int i = atts.getIndex(ATTRIBUTE_NAME_IMAGEREF);
+                if (i == -1) {
+                    i = atts.getIndex(ATTRIBUTE_NAME_HREF);
+                }
+                if (i == -1) {
+                    i = atts.getIndex(ATTRIBUTE_NAME_DATA);
+                }
+                if (i != -1) {
+                    final URI resHref = getHref(toURI(atts.getValue(i)));
+                    addOrSetAttribute(resAtts, atts.getQName(i), resHref.toString());
+                    res = resAtts;
+                }
             }
 
             getContentHandler().startElement(uri, localName, qName, res);
@@ -210,7 +218,14 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                 return true;
             }
             final URI data = toURI(atts.getValue(ATTRIBUTE_NAME_DATA));
-            return data != null && !data.isAbsolute();
+            if (data != null && !data.isAbsolute()) {
+                return true;
+            }
+            final URI imageref = toURI(atts.getValue(ATTRIBUTE_NAME_IMAGEREF));
+            if (imageref != null && !imageref.isAbsolute()) {
+                return true;
+            }
+            return false;
         }
 
         private URI getHref(final URI href) {

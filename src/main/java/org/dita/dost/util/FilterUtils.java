@@ -673,6 +673,26 @@ public final class FilterUtils {
             this.endflag = endflag;
         }
 
+        public Flag adjustPath(final URI currentFile, final Job job) {
+            return new Flag(color, backcolor, style, changebar,
+                    adjustPath(startflag, currentFile, job),
+                    adjustPath(endflag, currentFile, job));
+        }
+
+        private FlagImage adjustPath(final FlagImage img, final URI currentFile, final Job job) {
+            final URI rel;
+            final Job.FileInfo flagFi = job.getFileInfo(img.href);
+            if (flagFi != null) {
+                final Job.FileInfo current = job.getFileInfo(currentFile);
+                final URI flag = job.tempDirURI.resolve(flagFi.uri);
+                final URI curr = job.tempDirURI.resolve(current.uri);
+                rel = URLUtils.getRelativePath(curr, flag);
+            } else {
+                rel = img.href;
+            }
+            return new FlagImage(rel, img.alt);
+        }
+
         public void writeStartFlag(final ContentHandler contentHandler) throws SAXException {
             final StringBuilder outputclass = new StringBuilder();
             if (color != null) {
@@ -742,7 +762,7 @@ public final class FilterUtils {
             contentHandler.endElement(NULL_NS_URI, "prop", "prop");
         }
 
-        public Element writeStartFlag() {
+        public Element getStartFlag() {
             return writeToElement((ContentHandler contentHandler) -> {
                 try {
                     writeStartFlag(contentHandler);
@@ -752,7 +772,7 @@ public final class FilterUtils {
             });
         }
 
-        public Element writeEndFlag() {
+        public Element getEndFlag() {
             return writeToElement((ContentHandler contentHandler) -> {
                 try {
                     writeEndFlag(contentHandler);
