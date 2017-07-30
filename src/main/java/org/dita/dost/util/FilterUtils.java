@@ -680,6 +680,9 @@ public final class FilterUtils {
         }
 
         private FlagImage adjustPath(final FlagImage img, final URI currentFile, final Job job) {
+            if (img == null) {
+                return img;
+            }
             final URI rel;
             final Job.FileInfo flagFi = job.getFileInfo(img.href);
             if (flagFi != null) {
