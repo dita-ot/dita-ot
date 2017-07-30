@@ -357,6 +357,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                 writer.setLogger(logger);
                 writer.setJob(job);
                 writer.setFilterUtils(fs);
+                writer.setCurrentFile(dstAbsUri);
                 final List<XMLFilter> pipe = singletonList(writer);
 
                 final File dstDirUri = new File(dstAbsUri.resolve("."));
@@ -401,12 +402,12 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             writer.setLogger(logger);
             writer.setJob(job);
             writer.setFilterUtils(fs);
+            writer.setCurrentFile(srcAbsUri);
             final List<XMLFilter> pipe = singletonList(writer);
 
             logger.info("Filtering " + srcAbsUri);
             try {
-                xmlUtils.transform(toFile(srcAbsUri),
-                        pipe);
+                xmlUtils.transform(srcAbsUri, pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }
