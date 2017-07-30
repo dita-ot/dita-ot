@@ -70,7 +70,7 @@ public class DebugAndFilterModuleTest {
         job.setGeneratecopyouter(NOT_GENERATEOUTTER);
         job.setOutputDir(outDir);
         job.setProperty(INPUT_DIR, inputDir.getAbsolutePath());
-        job.setProperty(INPUT_DIR_URI, inputDir.getAbsoluteFile().toURI().toString());
+        job.setInputDir(inputDir.getAbsoluteFile().toURI());
         job.write();
 
         final PipelineHashIO pipelineInput = new PipelineHashIO();

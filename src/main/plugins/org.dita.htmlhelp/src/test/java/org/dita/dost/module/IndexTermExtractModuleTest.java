@@ -49,7 +49,7 @@ public class IndexTermExtractModuleTest {
 
         final Job job = new Job(tempDir);
         job.setProperty("uplevels", "");
-        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
+        job.setInputDir(srcDir.toURI());
         job.add(new Builder()
                 .uri(create("bookmap.ditamap")).format("ditamap")
                 .src(new File(srcDir, "bookmap.ditamap").toURI())

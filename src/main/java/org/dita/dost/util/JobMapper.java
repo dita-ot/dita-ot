@@ -16,7 +16,6 @@ import java.io.File;
 import java.net.URI;
 
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
-import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.URLUtils.toURI;
 
@@ -58,7 +57,7 @@ public class JobMapper implements FileNameMapper {
         if (fi.result == null) {
             res = sourceFileName;
         } else {
-            final URI base = toURI(job.getProperty(INPUT_DIR_URI));
+            final URI base = job.getInputDir();
             final URI rel = base.relativize(fi.result);
             res = toFile(rel).getPath();
         }

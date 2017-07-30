@@ -677,7 +677,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         if (baseInputDir.getScheme().equals("file")) {
             job.setProperty(INPUT_DIR, new File(baseInputDir).getAbsolutePath());
         }
-        job.setProperty(INPUT_DIR_URI, baseInputDir.toString());
+        job.setInputDir(baseInputDir);
         job.setProperty(INPUT_DITAMAP, relativeRootFile.toString());
         job.setProperty(INPUT_DITAMAP_URI, rootTemp.toString());
 

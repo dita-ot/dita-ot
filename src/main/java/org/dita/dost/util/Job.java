@@ -453,10 +453,19 @@ public final class Job {
     /**
      * Get input directory.
      * 
-     * @return absolute input directory path 
+     * @return absolute input directory path
      */
     public URI getInputDir() {
         return toURI(getProperty(INPUT_DIR_URI));
+    }
+
+    /**
+     * Set input directory
+     * @param dir absolute input directory path
+     */
+    public void setInputDir(final URI dir) {
+        assert dir.isAbsolute();
+        setProperty(INPUT_DIR_URI, dir.toString());
     }
 
     /**

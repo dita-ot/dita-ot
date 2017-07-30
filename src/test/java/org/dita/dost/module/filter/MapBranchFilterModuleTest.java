@@ -48,7 +48,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
     private Job getJob() throws IOException {
         final Job job = new Job(tempDir);
-        job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
+        job.setInputDir(tempDir.toURI());
         job.add(new FileInfo.Builder()
                 .src(new File(tempDir, "input.ditamap").toURI())
                 .uri(URI.create("input.ditamap"))
@@ -191,7 +191,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
     public void testDuplicateTopic() throws IOException, SAXException {
         final MapBranchFilterModule m = new MapBranchFilterModule();
         final Job job = new Job(tempDir);
-        job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
+        job.setInputDir(tempDir.toURI());
         job.addAll(getDuplicateTopicFileInfos());
         m.setJob(job);
         final CachingLogger logger = new CachingLogger();
