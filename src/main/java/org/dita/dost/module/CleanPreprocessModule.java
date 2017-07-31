@@ -13,14 +13,11 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
-import org.dita.dost.writer.AbstractXMLFilter;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+import org.dita.dost.writer.LinkFilter;
+import org.dita.dost.writer.MapCleanFilter;
 import org.xml.sax.XMLFilter;
-import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +26,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
 import org.dita.dost.util.XMLUtils;
 
@@ -179,166 +175,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         }
 
         return res;
-    }
-
-    private class LinkFilter extends AbstractXMLFilter {
-
-        private URI destFile;
-        private URI base;
-
-        @Override
-        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
-                throws SAXException {
-            Attributes res = atts;
-
-            if (hasLocalDitaLink(atts)) {
-                final AttributesImpl resAtts = new AttributesImpl(atts);
-                int i = atts.getIndex(ATTRIBUTE_NAME_IMAGEREF);
-                if (i == -1) {
-                    i = atts.getIndex(ATTRIBUTE_NAME_HREF);
-                }
-                if (i == -1) {
-                    i = atts.getIndex(ATTRIBUTE_NAME_DATA);
-                }
-                if (i != -1) {
-                    final URI resHref = getHref(toURI(atts.getValue(i)));
-                    addOrSetAttribute(resAtts, atts.getQName(i), resHref.toString());
-                    res = resAtts;
-                }
-            }
-
-            getContentHandler().startElement(uri, localName, qName, res);
-        }
-
-        private boolean hasLocalDitaLink(final Attributes atts) {
-            final boolean hasHref = atts.getIndex(ATTRIBUTE_NAME_HREF) != -1;
-            final boolean notExternal = !ATTR_SCOPE_VALUE_EXTERNAL.equals(atts.getValue(ATTRIBUTE_NAME_SCOPE));
-            if (hasHref && notExternal) {
-                return true;
-            }
-            final URI data = toURI(atts.getValue(ATTRIBUTE_NAME_DATA));
-            if (data != null && !data.isAbsolute()) {
-                return true;
-            }
-            final URI imageref = toURI(atts.getValue(ATTRIBUTE_NAME_IMAGEREF));
-            if (imageref != null && !imageref.isAbsolute()) {
-                return true;
-            }
-            return false;
-        }
-
-        private URI getHref(final URI href) {
-            if (href.getFragment() != null && (href.getPath() == null || href.getPath().equals(""))) {
-                return href;
-            }
-            final URI targetAbs = stripFragment(currentFile.resolve(href));
-            final FileInfo targetFileInfo = job.getFileInfo(targetAbs);
-            if (targetFileInfo != null) {
-                final URI rel = base.relativize(targetFileInfo.result);
-                final URI targetDestFile = job.tempDirURI.resolve(rel);
-                final URI relTarget = URLUtils.getRelativePath(destFile, targetDestFile);
-                return setFragment(relTarget, href.getFragment());
-            } else {
-                return href;
-            }
-        }
-
-        public void setDestFile(final URI destFile) {
-            this.destFile = destFile;
-        }
-
-        @Override
-        public void setJob(final Job job) {
-            super.setJob(job);
-            base = job.getInputDir();
-        }
-    }
-
-    private enum Keep {
-        RETAIN, DISCARD, DISCARD_BRANCH
-    }
-
-    private class MapCleanFilter extends AbstractXMLFilter {
-
-        private final Deque<Keep> stack = new ArrayDeque<>();
-
-        @Override
-        public void startDocument() throws SAXException {
-            stack.clear();
-            getContentHandler().startDocument();
-        }
-
-        @Override
-        public void endDocument() throws SAXException {
-            assert stack.isEmpty();
-            getContentHandler().endDocument();
-        }
-
-        @Override
-        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
-                throws SAXException {
-            final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
-            if (!stack.isEmpty() && stack.element() == Keep.DISCARD_BRANCH) {
-                stack.addFirst(Keep.DISCARD_BRANCH);
-            } else if (SUBMAP.matches(cls)) {
-                stack.addFirst(Keep.DISCARD);
-            } else if (MAPGROUP_D_KEYDEF.matches(cls)) {
-                stack.addFirst(Keep.DISCARD_BRANCH);
-            } else {
-                stack.addFirst(Keep.RETAIN);
-            }
-
-            if (stack.isEmpty() || stack.peekFirst() == Keep.RETAIN) {
-                getContentHandler().startElement(uri, localName, qName, atts);
-            }
-        }
-
-        @Override
-        public void endElement(final String uri, final String localName, final String qName)
-                throws SAXException {
-            if (stack.removeFirst() == Keep.RETAIN) {
-                getContentHandler().endElement(uri, localName, qName);
-            }
-        }
-
-        @Override
-        public void characters(char ch[], int start, int length)
-                throws SAXException {
-            if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
-                getContentHandler().characters(ch, start, length);
-            }
-        }
-
-        @Override
-        public void ignorableWhitespace(char ch[], int start, int length)
-                throws SAXException {
-            if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
-                getContentHandler().ignorableWhitespace(ch, start, length);
-            }
-        }
-
-        @Override
-        public void processingInstruction(String target, String data)
-                throws SAXException {
-            if (stack.isEmpty() || stack.peekFirst() != Keep.DISCARD_BRANCH) {
-                getContentHandler().processingInstruction(target, data);
-            }
-        }
-
-        @Override
-        public void skippedEntity(String name)
-                throws SAXException {
-            if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
-                getContentHandler().skippedEntity(name);
-            }
-        }
-
-//    <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle ')]">
-//      <xsl:call-template name="output-message">
-//        <xsl:with-param name="id" select="'DOTX072I'"/>
-//      </xsl:call-template>
-//    </xsl:template>
-
     }
 
 }
