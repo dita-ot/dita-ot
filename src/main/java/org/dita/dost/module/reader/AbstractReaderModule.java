@@ -65,11 +65,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Set of topic files containing coderef */
     private final Set<URI> coderefSet = new HashSet<>(128);
     /** Set of all images */
-    private final Set<Reference> formatSet = new HashSet<>();
+    final Set<Reference> formatSet = new HashSet<>();
     /** Set of all images used for flagging */
     private final Set<URI> flagImageSet = new LinkedHashSet<>(128);
     /** Set of all HTML and other non-DITA or non-image files */
-    private final Set<URI> htmlSet = new HashSet<>(128);
+    final Set<URI> htmlSet = new HashSet<>(128);
     /** Set of all the href targets */
     private final Set<URI> hrefTargetSet = new HashSet<>(128);
     /** Set of all the conref targets */
@@ -536,13 +536,15 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      *
      * @param file file system path with optional format
      */
-    private void categorizeReferenceFile(final Reference file) {
+    abstract void categorizeReferenceFile(final Reference file);/* {
         // avoid files referred by coderef being added into wait list
         if (listFilter.getCoderefTargets().contains(file.filename)) {
             return;
         }
         if (formatFilter.test(file.format)) {
-            if (isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
+            if (isFormatDita(file.format)) {
+                addToWaitList(file);
+            } else if (ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
                 addToWaitList(file);
             } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
                 formatSet.add(file);
@@ -555,7 +557,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 htmlSet.add(file.filename);
             }
         }
-    }
+    }*/
 
 //    /**
 //     * Update uplevels if needed. If the parameter contains a {@link Constants#STICK STICK}, it and

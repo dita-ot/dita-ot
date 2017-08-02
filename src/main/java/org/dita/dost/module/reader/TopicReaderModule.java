@@ -10,6 +10,7 @@ package org.dita.dost.module.reader;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -41,7 +42,9 @@ import java.util.List;
 import java.util.Objects;
 
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.exists;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.ancestors;
@@ -227,4 +230,27 @@ public final class TopicReaderModule extends AbstractReaderModule {
         return pipe;
     }
 
+    @Override
+    void categorizeReferenceFile(final Reference file) {
+        // avoid files referred by coderef being added into wait list
+        if (listFilter.getCoderefTargets().contains(file.filename)) {
+            return;
+        }
+        if (formatFilter.test(file.format)) {
+            if (isFormatDita(file.format) && !job.getOnlyTopicInMap()) {
+                addToWaitList(file);
+//            } else if (ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
+//                addToWaitList(file);
+            } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
+                formatSet.add(file);
+                if (!exists(file.filename)) {
+                    logger.warn(MessageUtils.getInstance().getMessage("DOTX008W", file.filename.toString()).toString());
+                }
+//            } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
+//                formatSet.add(file);
+            } else {
+                htmlSet.add(file.filename);
+            }
+        }
+    }
 }
