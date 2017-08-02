@@ -7,4 +7,14 @@
             <alt-text>This is an image in main dir:</alt-text>
         </startflag>
     </prop>
+    <revprop action="flag" val="default"/>
+    <revprop action="flag" val="revcolor" color="red"/>
+    <revprop action="flag" val="revimage">
+        <startflag imageref="delta.gif">
+            <alt-text>Start revision:</alt-text>
+        </startflag>
+        <endflag imageref="delta.gif">
+            <alt-text>:End revision</alt-text>
+        </endflag>
+    </revprop>
 </val>
