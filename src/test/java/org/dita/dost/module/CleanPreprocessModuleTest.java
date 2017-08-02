@@ -62,4 +62,20 @@ public class CleanPreprocessModuleTest {
         assertEquals(create("file:/foo/bar/"), module.getBaseDir());
     }
 
+    @Test
+    public void getBaseDirSupdir() throws Exception {
+        final Job job = new Job(new File("").getAbsoluteFile());
+        job.setInputDir(URI.create("file:/foo/bar/maps/"));
+        job.add(new Builder()
+                .uri(create("maps/map.ditamap"))
+                .result(create("file:/foo/bar/maps/map.ditamap"))
+                .build());
+        job.add(new Builder()
+                .uri(create("topics/topic.dita"))
+                .result(create("file:/foo/bar/topic.dita"))
+                .build());
+        module.setJob(job);
+        assertEquals(create("file:/foo/bar/"), module.getBaseDir());
+    }
+
 }

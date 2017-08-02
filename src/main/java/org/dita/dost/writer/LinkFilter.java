@@ -77,7 +77,7 @@ public class LinkFilter extends AbstractXMLFilter {
         final URI targetAbs = stripFragment(currentFile.resolve(href));
         final Job.FileInfo targetFileInfo = job.getFileInfo(targetAbs);
         if (targetFileInfo != null) {
-            final URI rel = base.relativize(targetFileInfo.result);
+            final URI rel = URLUtils.getRelativePath(base, targetFileInfo.result);
             final URI targetDestFile = job.tempDirURI.resolve(rel);
             final URI relTarget = URLUtils.getRelativePath(destFile, targetDestFile);
             return setFragment(relTarget, href.getFragment());

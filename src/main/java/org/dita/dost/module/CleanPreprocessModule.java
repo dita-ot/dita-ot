@@ -8,6 +8,7 @@
 
 package org.dita.dost.module;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.io.FileUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -103,6 +104,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     }
 
     /** Get common base directory for all files */
+    @VisibleForTesting
     URI getBaseDir() {
         URI baseDir = job.getInputDir();
 
@@ -115,6 +117,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         return baseDir;
     }
 
+    @VisibleForTesting
     URI getCommonBase(final URI left, final URI right) {
         assert left.isAbsolute();
         assert right.isAbsolute();
