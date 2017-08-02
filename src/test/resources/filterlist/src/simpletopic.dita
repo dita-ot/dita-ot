@@ -9,5 +9,8 @@
       <p otherprops="subinclude">This is "include" in the second ditaval</p>
       <p otherprops="subflag">This is "flag" in the second ditaval</p>
       <p otherprops="subexclude">This is "exclude" in the second ditaval</p>
+      <p rev="default">This is the default revision</p>
+      <p rev="revcolor">This is a colorful revision</p>
+      <p rev="revimage">This is revised with images</p>
   </body>
 </topic>
