@@ -44,6 +44,9 @@ See the accompanying LICENSE file for applicable license.
                   copy-files2,
 
                   {depend.preprocess.post}">
+    <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
+    <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
+    <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
     <!-- Deprecated since 2.4 -->
     <property name="user.input.file.listfile" value="usr.input.file.list"/>
   </target>

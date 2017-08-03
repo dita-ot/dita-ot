@@ -682,7 +682,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         writeListFile(inputfile, relativeRootFile.toString());
 
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
-        job.setProperty("uplevels", getLevelsPath(rootTemp));
+//        job.setProperty("uplevels", getLevelsPath(rootTemp));
 
         resourceOnlySet.addAll(listFilter.getResourceOnlySet());
 

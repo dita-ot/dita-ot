@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
@@ -52,6 +53,8 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         init();
 
         final URI base = getBaseDir();
+        final String uplevels = getUplevels(base);
+        job.setProperty("uplevels", uplevels);
         job.setInputDir(base);
         final Collection<FileInfo> fis = new ArrayList<>(job.getFileInfo());
         final Collection<FileInfo> res = new ArrayList<>(fis.size());
@@ -101,6 +104,15 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         }
 
         return null;
+    }
+
+    String getUplevels(final URI base) {
+        final URI rel = base.relativize(job.getInputFile());
+        final int count = rel.toString().split("/").length - 1;
+        return IntStream.range(0, count).boxed()
+                .map(i -> "../")
+                .collect(Collectors.joining(""));
+
     }
 
     /** Get common base directory for all files */
