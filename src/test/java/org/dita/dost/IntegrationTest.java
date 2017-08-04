@@ -54,16 +54,16 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test1_5_2_M5_BUG3059256() throws Throwable {
-        builder().name("1.5.2_M5_BUG3059256")
+    public void testlink_xref_extensiontest() throws Throwable {
+        builder().name("link_xref_extensiontest")
                 .transtype(XHTML)
                 .input(Paths.get("test.ditamap"))
                 .test();
     }
 
     @Test
-    public void test1_5_3_M2_BUG3157890() throws Throwable {
-        builder().name("1.5.3_M2_BUG3157890")
+    public void testtitle_includes_markup() throws Throwable {
+        builder().name("title_includes_markup")
                 .transtype(XHTML)
                 .input(Paths.get("test.ditamap"))
                 .test();
