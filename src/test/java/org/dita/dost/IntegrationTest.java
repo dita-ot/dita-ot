@@ -38,8 +38,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test1_5_2_M4_BUG3052913() throws Throwable {
-        builder().name("1.5.2_M4_BUG3052913")
+    public void testkeyref_to_keyref() throws Throwable {
+        builder().name("keyref_to_keyref")
                 .transtype(XHTML)
                 .input(Paths.get("keyref-test-01.ditamap"))
                 .test();

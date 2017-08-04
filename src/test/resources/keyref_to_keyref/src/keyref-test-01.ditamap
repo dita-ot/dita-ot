@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map title="Keyref to keyref to key">
+<!--Based on Sourceforge bug 3052913.-->
+<keydef keys="topic-01" href="topic-01.xml"/>
+<keydef keys="topic-03-intermediate-key" href="topic-03.xml"/>
+<keydef keys="topic-03" keyref="topic-03-intermediate-key"/>
+<topicref keyref="topic-01"/>
+<!-- This topicref was not reflected in the output. It should be. -->
+<topicref keyref="topic-03"/>
+</map>
