@@ -146,8 +146,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test3178361() throws Throwable {
-        builder().name("3178361")
+    public void testconkeyref_push() throws Throwable {
+        builder().name("conkeyref_push")
                 .transtype(PREPROCESS)
                 .input(Paths.get("conref-push-test.ditamap"))
                 .put("dita.ext", ".dita")
