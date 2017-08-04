@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
+<!--From Sourceforge bug 3056939-->
   <topicmeta>
     <navtitle>Test of conref with xref</navtitle>
   </topicmeta>

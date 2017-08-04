@@ -22,8 +22,8 @@ import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 public class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
-    public void test03() throws Throwable {
-        builder().name("03")
+    public void testlink_parentchild() throws Throwable {
+        builder().name("link_parentchild")
                 .transtype(XHTML)
                 .input(Paths.get("03.ditamap"))
                 .test();
@@ -46,8 +46,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test1_5_2_M4_BUG3056939() throws Throwable {
-        builder().name("1.5.2_M4_BUG3056939")
+    public void testconref_with_xref() throws Throwable {
+        builder().name("conref_with_xref")
                 .transtype(XHTML)
                 .input(Paths.get("test-conref-xref-keyref-bug.ditamap"))
                 .test();
