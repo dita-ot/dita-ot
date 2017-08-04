@@ -70,17 +70,16 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test1_5_3_M2_BUG3164866() throws Throwable {
-        builder().name("1.5.3_M2_BUG3164866")
+    public void testimage_extension_mixedcase() throws Throwable {
+        builder().name("image_extension_mixedcase")
                 .transtype(XHTML)
                 .input(Paths.get("testpng.ditamap"))
-                .put("onlytopic.in.map", "true")
                 .test();
     }
 
     @Test
-    public void test1_5_3_M3_BUG3178361() throws Throwable {
-        builder().name("1.5.3_M3_BUG3178361")
+    public void testcascade_processingrole() throws Throwable {
+        builder().name("cascade_processingrole")
                 .transtype(XHTML)
                 .input(Paths.get("test.ditamap"))
                 .test();
