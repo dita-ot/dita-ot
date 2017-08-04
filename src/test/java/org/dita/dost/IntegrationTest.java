@@ -30,8 +30,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test1_5_2_M4_BUG3052904() throws Throwable {
-        builder().name("1.5.2_M4_BUG3052904")
+    public void testkeyref_dupkey() throws Throwable {
+        builder().name("keyref_dupkey")
                 .transtype(XHTML)
                 .input(Paths.get("keyref-test-01.ditamap"))
                 .test();
