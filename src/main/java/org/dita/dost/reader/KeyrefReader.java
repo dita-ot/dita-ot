@@ -39,7 +39,7 @@ public final class KeyrefReader implements AbstractReader {
             ATTRIBUTE_NAME_PLATFORM,
             ATTRIBUTE_NAME_PRODUCT,
             ATTRIBUTE_NAME_OTHERPROPS,
-            "rev",
+            ATTRIBUTE_NAME_REV,
             ATTRIBUTE_NAME_PROPS,
             "linking",
             ATTRIBUTE_NAME_TOC,

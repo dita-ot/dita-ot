@@ -57,6 +57,17 @@ public final class FilterUtils {
         ATTRIBUTE_NAME_PRINT,
         ATTRIBUTE_NAME_DELIVERYTARGET
     };
+
+    private static final String[] FLAG_ATTRIBUTES = {
+            ATTRIBUTE_NAME_AUDIENCE,
+            ATTRIBUTE_NAME_PLATFORM,
+            ATTRIBUTE_NAME_PRODUCT,
+            ATTRIBUTE_NAME_OTHERPROPS,
+            ATTRIBUTE_NAME_PROPS,
+            ATTRIBUTE_NAME_PRINT,
+            ATTRIBUTE_NAME_DELIVERYTARGET,
+            ATTRIBUTE_NAME_REV
+    };
     
     public static final FilterKey DEFAULT = new FilterKey(DEFAULT_ACTION, null);
 
@@ -125,7 +136,7 @@ public final class FilterUtils {
         }
 
         final Set<Flag> res = new HashSet<>();
-        for (final String attr: PROFILE_ATTRIBUTES) {
+        for (final String attr: FLAG_ATTRIBUTES) {
             final String value = atts.getValue(attr);
             if (value != null) {
                 final Map<String, List<String>> groups = getGroups(value);

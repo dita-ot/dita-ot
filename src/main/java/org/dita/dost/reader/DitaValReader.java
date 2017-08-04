@@ -137,11 +137,11 @@ public final class DitaValReader implements AbstractReader {
 
     private void readDocument(final Document doc) {
         final Element root = doc.getDocumentElement();
-        final List<Element> props = toList(root.getElementsByTagName("prop"));
+        final List<Element> props = toList(root.getElementsByTagName(ELEMENT_NAME_PROP));
         for (final Element prop : props) {
             readProp(prop);
         }
-        final List<Element> revprops = toList(root.getElementsByTagName("revprop"));
+        final List<Element> revprops = toList(root.getElementsByTagName(ELEMENT_NAME_REVPROP));
         for (final Element revprop : revprops) {
             readProp(revprop);
         }
@@ -171,7 +171,7 @@ public final class DitaValReader implements AbstractReader {
                 throw new IllegalArgumentException("Invalid action: " + attAction);
         }
         if (action != null) {
-            final String attName = getValue(elem, ATTRIBUTE_NAME_ATT);
+            final String attName = elem.getTagName().equals(ELEMENT_NAME_REVPROP) ? ATTRIBUTE_NAME_REV : getValue(elem, ATTRIBUTE_NAME_ATT);
             final String attValue = getValue(elem, ATTRIBUTE_NAME_VAL);
             final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;
             insertAction(action, key);

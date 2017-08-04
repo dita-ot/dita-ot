@@ -660,6 +660,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_OTHERPROPS = "otherprops";
     public static final String ATTRIBUTE_NAME_OUTPUTCLASS = "outputclass";
     /**scope attribute.*/
+    public static final String ATTRIBUTE_NAME_REV = "rev";
     public static final String ATTRIBUTE_NAME_SCOPE = "scope";
     /**type attribute.*/
     public static final String ATTRIBUTE_NAME_TYPE = "type";
