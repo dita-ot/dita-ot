@@ -10,6 +10,7 @@ package org.dita.dost.writer;
 
 import com.google.common.annotations.VisibleForTesting;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -18,13 +19,14 @@ import org.xml.sax.helpers.AttributesImpl;
 import java.net.URI;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.setFragment;
-import static org.dita.dost.util.URLUtils.stripFragment;
-import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
 
 public class LinkFilter extends AbstractXMLFilter {
 
+    /**
+     * Destination temporary file
+     */
     private URI destFile;
     private URI base;
 
@@ -70,23 +72,23 @@ public class LinkFilter extends AbstractXMLFilter {
     }
 
     @VisibleForTesting
-    URI getHref(final URI href) {
-        if (href.getFragment() != null && (href.getPath() == null || href.getPath().equals(""))) {
-            return href;
+    URI getHref(final URI target) {
+        if (target.getFragment() != null && (target.getPath() == null || target.getPath().equals(""))) {
+            return target;
         }
-        final URI targetAbs = stripFragment(currentFile.resolve(href));
-        final Job.FileInfo targetFileInfo = job.getFileInfo(targetAbs);
-        if (targetFileInfo != null) {
-            final URI rel = URLUtils.getRelativePath(base, targetFileInfo.result);
-            final URI targetDestFile = job.tempDirURI.resolve(rel);
-            final URI relTarget = URLUtils.getRelativePath(destFile, targetDestFile);
-            return setFragment(relTarget, href.getFragment());
+        final URI targetAbs = stripFragment(currentFile.resolve(target));
+        final FileInfo targetFileInfo = job.getFileInfo(targetAbs);
+        final FileInfo sourceFileInfo = job.getFileInfo(currentFile);
+        if (targetFileInfo != null && sourceFileInfo != null) {
+            final URI relTarget = URLUtils.getRelativePath(sourceFileInfo.result, targetFileInfo.result);
+            return setFragment(relTarget, target.getFragment());
         } else {
-            return href;
+            return target;
         }
     }
 
     public void setDestFile(final URI destFile) {
+        assert destFile.isAbsolute();
         this.destFile = destFile;
     }
 
