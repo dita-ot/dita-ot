@@ -4,7 +4,7 @@
 <!--This file contains NO testing-purpose content-->
 
 <map>
-  <title>BUG 3191701</title>
+  <title>Testing conref push-replace</title>
   <topicref  href="jandrew-test.dita"/>
   <topicref  href="jandrew-test-one-file.dita"/>
   <topicref  href="jandrew-test-push-target.xml"/>

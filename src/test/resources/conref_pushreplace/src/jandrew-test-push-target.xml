@@ -6,8 +6,10 @@
 <topic id="topic">
   <title>Push Target</title>
   <body>
-    <p>The next paragraph is the target of a conref pushreplace:</p>
+    <p>The next 2 paragraphs are the target of a conref pushreplace:</p>
     <p id="p1">This is source as authored (before push)</p>
+    <p id="
+p2">This is source as authored (before push), with space in ID</p>
     <p>After the push target.</p>
   </body>
 </topic>

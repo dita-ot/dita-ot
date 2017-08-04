@@ -86,16 +86,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test1_5_3_M3_BUG3191701() throws Throwable {
-        builder().name("1.5.3_M3_BUG3191701")
-                .transtype(XHTML)
-                .input(Paths.get("test.ditamap"))
-                .test();
-    }
-
-    @Test
-    public void test1_5_3_M3_BUG3191704() throws Throwable {
-        builder().name("1.5.3_M3_BUG3191704")
+    public void testconref_pushreplace() throws Throwable {
+        builder().name("conref_pushreplace")
                 .transtype(XHTML)
                 .input(Paths.get("test.ditamap"))
                 .test();
