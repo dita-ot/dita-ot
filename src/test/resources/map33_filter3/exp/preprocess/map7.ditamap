@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map33_filter3/temp/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map33_filter3/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA 1.2 Map//EN?><?doctype-system file:/C:/SAXONIBMJDK/dtd/technicalContent/dtd/map.dtd?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         " class="- map/map " cascade="nomerge">
+    <title class="- topic/title ">map1:correct values of platform</title>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " toc="no" processing-role="resource-only" keys="os" navtitle="Operetion System">
+        <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="linux" navtitle="Linux"/>
+        <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="mswin" navtitle="Microsoft Windows"/>
+        <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="zos" navtitle="z/OS"/>
+    </subjectdef><enumerationdef class="- map/topicref subjectScheme/enumerationdef " toc="no" processing-role="resource-only">
+        <attributedef name="platform" translate="no" class="- topic/data subjectScheme/attributedef "/>
+        <subjectdef class="- map/topicref subjectScheme/subjectdef " keyref="os"/>
+    </enumerationdef>
+    <topicref href="topic1.dita" class="- map/topicref "/>
+
+</map>
