@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<concept id="main-2" xml:lang="en-us">
+<title>Second topic in the main map</title>
+<shortdesc>This is a peer of the first topic. It has children.</shortdesc>
+<conbody></conbody>
+</concept>

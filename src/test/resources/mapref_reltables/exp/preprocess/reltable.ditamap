@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/SF1333481/temp/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/SF1333481/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA Map//EN?><?doctype-system ..\dtd\map.dtd?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" title="Reltable for mapref test" ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " class="- map/map " cascade="nomerge">
+<reltable toc="no" class="- map/reltable ">
+<relrow class="- map/relrow ">
+<relcell type="concept" toc="no" class="- map/relcell ">
+<topicref href="main-1.dita" class="- map/topicref "/>
+<topicref href="main-2.dita" class="- map/topicref "/>
+<topicref href="main-3.dita" class="- map/topicref "/>
+<topicref href="main-4.dita" class="- map/topicref "/>
+<topicref href="main-5.dita" class="- map/topicref "/>
+<topicref href="main-6.dita" class="- map/topicref "/>
+</relcell>
+<relcell type="task" toc="no" class="- map/relcell ">
+<topicref href="mapref2-1.dita" class="- map/topicref "/>
+<topicref href="mapref2-2.dita" class="- map/topicref "/>
+<topicref href="mapref2-3.dita" class="- map/topicref "/>
+<topicref href="mapref2-4.dita" class="- map/topicref "/>
+<topicref href="mapref2-5.dita" class="- map/topicref "/>
+</relcell>
+<relcell type="reference" toc="no" class="- map/relcell ">
+<topicref href="subdir/mapref1-1.dita" class="- map/topicref "/>
+<topicref href="subdir/mapref1-2.dita" class="- map/topicref "/>
+<topicref href="subdir/mapref1-3.dita" class="- map/topicref "/>
+<topicref href="subdir/mapref1-4.dita" class="- map/topicref "/>
+<topicref href="subdir/mapref1-5.dita" class="- map/topicref "/>
+</relcell>
+</relrow>
+</reltable>
+</map>

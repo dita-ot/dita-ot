@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "..\dtd\map.dtd">
+<map title="Mapref testing!!!!!">
+<topicref href="main-1.dita"></topicref>
+<topicref format="ditamap" href="subdir/mapref1.ditamap" linking="none">
+</topicref>
+<topicref href="main-2.dita">
+<topicref href="main-3.dita">
+<topicref href="main-4.dita"></topicref>
+<topicref format="ditamap" href="mapref2.ditamap" linking="none"></topicref>
+<topicref href="main-5.dita"></topicref>
+</topicref>
+</topicref>
+<topicref href="main-6.dita"></topicref>
+<topicref format="ditamap" href="reltable.ditamap"></topicref>
+<reltable>
+<relrow>
+<relcell>
+<topicref href="main-1.dita"></topicref>
+<topicref href="main-2.dita"></topicref>
+<topicref href="main-3.dita"></topicref>
+<topicref href="main-4.dita"></topicref>
+<topicref href="main-5.dita"></topicref>
+<topicref href="main-6.dita"></topicref>
+</relcell>
+<relcell format="html" scope="external">
+<!-- FIXME: Should be enough to inherit format and scope -->
+<topicref href="http://www.ibm.com" navtitle="ibm: From the main map" format="html" scope="external">
+</topicref>
+</relcell>
+</relrow>
+</reltable>
+</map>

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="mapref1-1" xml:lang="en-us">
+<title>First in mapref1</title>
+<shortdesc>first topic in the first map that gets pulled in</shortdesc>
+<refbody></refbody>
+</reference>

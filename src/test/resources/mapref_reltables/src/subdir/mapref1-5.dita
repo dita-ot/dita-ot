@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="mapref1-5" xml:lang="en-us">
+<title>End of first mapref, 3rd top-level</title>
+<shortdesc>5th topic from first mapref, comes at the end</shortdesc>
+<refbody></refbody>
+</reference>

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<concept id="main-1" xml:lang="en-us">
+<title>First topic referenced from the main map</title>
+<shortdesc>This is referenced from the main map. That's it.</shortdesc>
+<conbody></conbody>
+</concept>

@@ -175,8 +175,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test3470331() throws Throwable {
-        builder().name("3470331")
+    public void testmapref_topicrefID() throws Throwable {
+        builder().name("mapref_topicrefID")
                 .transtype(PREPROCESS)
                 .input(Paths.get("bookmap.ditamap"))
                 .test();
@@ -188,8 +188,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testSF1333481() throws Throwable {
-        builder().name("SF1333481")
+    public void testmapref_reltables() throws Throwable {
+        builder().name("mapref_reltables")
                 .transtype(PREPROCESS)
                 .input(Paths.get("main.ditamap"))
                 .test();

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="mapref1-3" xml:lang="en-us">
+<title>Nested topic from first mapref</title>
+<shortdesc>third topic in the first mapref, nested under second</shortdesc>
+<refbody></refbody>
+</reference>
