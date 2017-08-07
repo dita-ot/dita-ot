@@ -94,8 +94,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test22_TC1() throws Throwable {
-        builder().name("22_TC1")
+    public void testcopyto_extensions_metadata() throws Throwable {
+        builder().name("copyto_extensions_metadata")
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC1.ditamap"))
                 .warnCount(3)
@@ -103,8 +103,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test22_TC2() throws Throwable {
-        builder().name("22_TC2")
+    public void testcopyto() throws Throwable {
+        builder().name("copyto")
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC2.ditamap"))
                 .warnCount(2)
@@ -112,8 +112,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test22_TC3() throws Throwable {
-        builder().name("22_TC3")
+    public void testcopyto_sametarget() throws Throwable {
+        builder().name("copyto_sametarget")
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC3.ditamap"))
                 .warnCount(3)
@@ -121,16 +121,16 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test22_TC4() throws Throwable {
-        builder().name("22_TC4")
+    public void testcopyto_circulartarget() throws Throwable {
+        builder().name("copyto_circulartarget")
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC4.ditamap"))
                 .test();
     }
 
     @Test
-    public void test22_TC6() throws Throwable {
-        builder().name("22_TC6")
+    public void testcopyto_sametarget2() throws Throwable {
+        builder().name("copyto_sametarget2")
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC6.ditamap"))
                 .warnCount(4)
