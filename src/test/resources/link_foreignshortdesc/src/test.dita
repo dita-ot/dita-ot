@@ -1,6 +1,6 @@
-<topic id="topic" class="- topic/topic ">
+<topic id="topic" class="- topic/topic " domains="(topic math-d)">
  <title class="- topic/title ">Topic title</title>
- <shortdesc class="- topic/shortdesc ">testAn equation: <equation class="+ topic/fig math-d/equation ">
+ <shortdesc class="- topic/shortdesc ">test foreign content in shortdesc: <equation class="+ topic/foreign math-d/equation ">
   <math type="presentation">
    <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML"
     display="block">

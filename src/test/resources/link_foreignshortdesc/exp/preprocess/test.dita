@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/3189883/temp/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/3189883/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="topic" class="- topic/topic ">
+<?xml version="1.0" encoding="utf-8"?><?workdir /C:\Users\IBM_ADMIN\github\robander\dita-ot\build\tmp\integrationTest\3189883\temp\preprocess?><?workdir-uri file:/C:/Users/IBM_ADMIN/github/robander/dita-ot/build/tmp/integrationTest/3189883/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="topic" class="- topic/topic " domains="(topic math-d)">
  <title class="- topic/title ">Topic title</title>
- <shortdesc class="- topic/shortdesc ">testAn equation: <equation class="+ topic/fig math-d/equation ">
+ <shortdesc class="- topic/shortdesc ">test foreign content in shortdesc: <equation class="+ topic/foreign math-d/equation ">
   <math type="presentation">
    <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
     <mml:semantics>

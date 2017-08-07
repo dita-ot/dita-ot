@@ -155,8 +155,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test3189883() throws Throwable {
-        builder().name("3189883")
+    public void testlink_foreignshortdesc() throws Throwable {
+        builder().name("link_foreignshortdesc")
                 .transtype(PREPROCESS)
                 .input(Paths.get("main.ditamap"))
                 .put("validate", "false")
