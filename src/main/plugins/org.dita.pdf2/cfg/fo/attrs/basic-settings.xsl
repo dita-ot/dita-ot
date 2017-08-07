@@ -17,6 +17,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:param name="artLabel" select="'no'"/>
   <xsl:param name="output.dir.url"/>
   <xsl:param name="work.dir.url"/>
+  <!-- Deprecated since 3.0 -->
   <xsl:param name="input.dir.url"/>
   <xsl:param name="pdfFormatter" select="'fop'"/>
   <xsl:param name="antArgsGenerateTaskLabels"/>

@@ -1161,6 +1161,9 @@ See the accompanying LICENSE file for applicable license.
         </fo:inline>
     </xsl:template>
 
+  <xsl:variable name="job" select="document(resolve-uri('.job.xml', $work.dir.url))" as="document-node()?"/>
+  <xsl:key name="jobFile" match="file" use="@uri"/>
+
     <xsl:template match="*[contains(@class,' topic/image ')]">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <xsl:choose>
@@ -1170,7 +1173,19 @@ See the accompanying LICENSE file for applicable license.
                         <xsl:call-template name="commonattributes"/>
                         <xsl:apply-templates select="." mode="placeImage">
                             <xsl:with-param name="imageAlign" select="@align"/>
-                            <xsl:with-param name="href" select="if (@scope = 'external' or opentopic-func:isAbsolute(@href)) then @href else concat($input.dir.url, @href)"/>
+                          <xsl:with-param name="href">
+                            <xsl:choose>
+                              <xsl:when test="@scope = 'external' or opentopic-func:isAbsolute(@href)">
+                                <xsl:value-of select="@href"/>
+                              </xsl:when>
+                              <xsl:when test="exists(key('jobFile', @href, $job))">
+                                <xsl:value-of select="key('jobFile', @href, $job)/@src"/>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <xsl:value-of select="concat($input.dir.url, @href)"/>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                          </xsl:with-param>
                             <xsl:with-param name="height" select="@height"/>
                             <xsl:with-param name="width" select="@width"/>
                         </xsl:apply-templates>
@@ -1186,7 +1201,19 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:call-template name="commonattributes"/>
                     <xsl:apply-templates select="." mode="placeImage">
                         <xsl:with-param name="imageAlign" select="@align"/>
-                        <xsl:with-param name="href" select="if (@scope = 'external' or opentopic-func:isAbsolute(@href)) then @href else concat($input.dir.url, @href)"/>
+                      <xsl:with-param name="href">
+                        <xsl:choose>
+                          <xsl:when test="@scope = 'external' or opentopic-func:isAbsolute(@href)">
+                            <xsl:value-of select="@href"/>
+                          </xsl:when>
+                          <xsl:when test="exists(key('jobFile', @href, $job))">
+                            <xsl:value-of select="key('jobFile', @href, $job)/@src"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="concat($input.dir.url, @href)"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:with-param>
                         <xsl:with-param name="height" select="@height"/>
                         <xsl:with-param name="width" select="@width"/>
                     </xsl:apply-templates>
