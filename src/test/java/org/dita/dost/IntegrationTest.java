@@ -138,8 +138,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test2374525() throws Throwable {
-        builder().name("2374525")
+    public void testtable_colwidth() throws Throwable {
+        builder().name("table_colwidth")
                 .transtype(PREPROCESS)
                 .input(Paths.get("test.dita"))
                 .test();
