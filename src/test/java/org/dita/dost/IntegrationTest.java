@@ -165,17 +165,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test3191704() throws Throwable {
-        builder().name("3191704")
-                .transtype(PREPROCESS)
-                .input(Paths.get("jandrew-test.ditamap"))
-                .put("dita.ext", ".dita")
-                .test();
-    }
-
-    @Test
-    public void test3344142() throws Throwable {
-        builder().name("3344142")
+    public void testconref_push() throws Throwable {
+        builder().name("conref_push")
                 .transtype(PREPROCESS)
                 .input(Paths.get("push.ditamap"))
                 .put("dita.ext", ".dita")
