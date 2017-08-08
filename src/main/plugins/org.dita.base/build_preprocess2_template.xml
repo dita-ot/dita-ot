@@ -46,6 +46,9 @@ See the accompanying LICENSE file for applicable license.
                   {depend.preprocess.post}">
     <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
+    <condition property="uplevels" value="">
+      <not><isset property="uplevels"/></not>
+    </condition>
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
     <!-- Deprecated since 2.4 -->
     <property name="user.input.file.listfile" value="usr.input.file.list"/>
@@ -80,6 +83,16 @@ See the accompanying LICENSE file for applicable license.
         <not><isset property="args.input"/></not>
       </condition>
     </dita-ot-fail>
+    
+    <basename property="dita.input.filename" file="${args.input}" />    
+    <pathconvert property="dita.map.filename.root">
+      <path path="${dita.input.filename}"/>
+      <chainedmapper>
+        <mapper type="flatten"/>
+        <mapper type="regexp" from="^(.+)(\..+?)$$" to="\1"/>
+      </chainedmapper>
+    </pathconvert>
+    <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>    
     
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input}</echo>
