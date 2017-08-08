@@ -472,7 +472,7 @@ public final class ExtensibleAntInvoker extends Task {
         // Ant setters
 
         public void setFormat(final String format) {
-            this.format = asList(format);
+            this.format = Collections.singletonList(format);
         }
 
         public void addConfiguredFilter(final XmlFilter filter) {

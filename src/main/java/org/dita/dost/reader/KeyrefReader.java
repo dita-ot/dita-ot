@@ -124,7 +124,7 @@ public final class KeyrefReader implements AbstractReader {
         readChildScopes(root, childScopes);
         final String keyscope = root.getAttribute(ATTRIBUTE_NAME_KEYSCOPE).trim();
         if (keyscope.isEmpty()) {
-            return asList(new KeyScope("#root", null, keyDefs, childScopes));
+            return Collections.singletonList(new KeyScope("#root", null, keyDefs, childScopes));
         } else {
             final List<KeyScope> res = new ArrayList<>();
             for (final String scope: keyscope.split("\\s+")) {
@@ -272,7 +272,7 @@ public final class KeyrefReader implements AbstractReader {
     private KeyScope resolveIntermediate(final KeyScope scope) {
         final Map<String, KeyDef> keys = new HashMap<>(scope.keyDefinition);
         for (final Map.Entry<String, KeyDef> e: scope.keyDefinition.entrySet()) {
-            final KeyDef res = resolveIntermediate(scope, e.getValue(), Arrays.asList(e.getValue()));
+            final KeyDef res = resolveIntermediate(scope, e.getValue(), Collections.singletonList(e.getValue()));
             keys.put(e.getKey(), res);
         }
         final List<KeyScope> children = new ArrayList<>();

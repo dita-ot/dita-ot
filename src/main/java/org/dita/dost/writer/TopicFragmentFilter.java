@@ -33,7 +33,7 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
 
     public TopicFragmentFilter() {
         super();
-        this.attrNames = Arrays.asList(ATTRIBUTE_NAME_HREF);
+        this.attrNames = Collections.singletonList(ATTRIBUTE_NAME_HREF);
     }
 
     public TopicFragmentFilter(final String... attrNames) {

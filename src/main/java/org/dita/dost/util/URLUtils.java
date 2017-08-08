@@ -690,9 +690,9 @@ public final class URLUtils {
         final int idx = u.lastIndexOf(".");
         final URI res;
         if (idx != -1) {
-            res = toURI(u.toString().substring(0, idx) + suffix + u.toString().substring(idx));
+            res = toURI(u.substring(0, idx) + suffix + u.substring(idx));
         } else {
-            res = toURI(u.toString() + suffix);
+            res = toURI(u + suffix);
         }
         return setFragment(res, fragment);
     }
