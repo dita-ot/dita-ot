@@ -391,22 +391,14 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
             final String keyscope = elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE);
             if (!keyscope.isEmpty()) {
                 for (final String key : keyscope.trim().split("\\s+")) {
-                    if (filter.keyscopePrefix.isPresent()) {
-                        buf.append(filter.keyscopePrefix.get());
-                    }
+                    filter.keyscopePrefix.ifPresent(s -> buf.append(s));
                     buf.append(key);
-                    if (filter.keyscopeSuffix.isPresent()) {
-                        buf.append(filter.keyscopeSuffix.get());
-                    }
+                    filter.keyscopeSuffix.ifPresent(s -> buf.append(s));
                     buf.append(' ');
                 }
             } else {
-                if (filter.keyscopePrefix.isPresent()) {
-                    buf.append(filter.keyscopePrefix.get());
-                }
-                if (filter.keyscopeSuffix.isPresent()) {
-                    buf.append(filter.keyscopeSuffix.get());
-                }
+                filter.keyscopePrefix.ifPresent(s -> buf.append(s));
+                filter.keyscopeSuffix.ifPresent(s -> buf.append(s));
             }
             elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
         }
