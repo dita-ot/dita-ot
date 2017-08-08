@@ -140,8 +140,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             validateMap = subjectSchemeReader.getValidValuesMap();
             defaultValueMap = subjectSchemeReader.getDefaultValueMap();
         } else {
-            validateMap = Collections.EMPTY_MAP;
-            defaultValueMap = Collections.EMPTY_MAP;
+            validateMap = Collections.emptyMap();
+            defaultValueMap = Collections.emptyMap();
         }
         if (profilingEnabled) {
             filterUtils = baseFilterUtils.refine(subjectSchemeReader.getSubjectSchemeMap());

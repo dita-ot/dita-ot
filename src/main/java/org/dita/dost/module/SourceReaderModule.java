@@ -20,7 +20,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import java.io.File;
 import java.util.Map;
 
-import static java.util.Collections.EMPTY_MAP;
+import static java.util.Collections.emptyMap;
 import static org.dita.dost.util.Configuration.parserFeatures;
 import static org.dita.dost.util.Configuration.parserMap;
 import static org.dita.dost.util.Constants.*;
@@ -65,7 +65,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
                 try {
                     // XMLReaderFactory.createXMLReader cannot be used
                     final XMLReader r = (XMLReader) Class.forName(e.getValue()).newInstance();
-                    final Map<String, Boolean> features = parserFeatures.getOrDefault(e.getKey(), EMPTY_MAP);
+                    final Map<String, Boolean> features = parserFeatures.getOrDefault(e.getKey(), emptyMap());
                     for (final Map.Entry<String, Boolean> feature : features.entrySet()) {
                         try {
                             r.setFeature(feature.getKey(), feature.getValue());
@@ -90,7 +90,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
     void initXmlReader() throws SAXException {
         if (parserMap.containsKey(ATTR_FORMAT_VALUE_DITA)) {
             reader = XMLReaderFactory.createXMLReader(parserMap.get(ATTR_FORMAT_VALUE_DITA));
-            final Map<String, Boolean> features = parserFeatures.getOrDefault(ATTR_FORMAT_VALUE_DITA, EMPTY_MAP);
+            final Map<String, Boolean> features = parserFeatures.getOrDefault(ATTR_FORMAT_VALUE_DITA, emptyMap());
             for (final Map.Entry<String, Boolean> feature : features.entrySet()) {
                 try {
                     reader.setFeature(feature.getKey(), feature.getValue());

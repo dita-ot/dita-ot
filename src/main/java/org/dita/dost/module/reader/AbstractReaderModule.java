@@ -319,8 +319,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
             return;
         }
-        validateMap = Collections.EMPTY_MAP;
-        defaultValueMap = Collections.EMPTY_MAP;
+        validateMap = Collections.emptyMap();
+        defaultValueMap = Collections.emptyMap();
         logger.info("Processing " + currentFile + " to " + outputFile.toURI());
         final String[] params = { currentFile.toString() };
 
@@ -1080,7 +1080,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 //                filterReader.read(ditavalFile.getAbsoluteFile());
 //                filterMap = filterReader.getFilterMap();
 //            } else {
-//                filterMap = Collections.EMPTY_MAP;
+//                filterMap = Collections.emptyMap();
 //            }
 //            baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
 //            baseFilterUtils.setLogger(logger);

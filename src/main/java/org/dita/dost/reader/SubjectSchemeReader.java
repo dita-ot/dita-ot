@@ -107,7 +107,7 @@ public class SubjectSchemeReader {
     public static Map<URI, Set<URI>> readMapFromXML(final File inputFile) throws IOException {
         final Map<URI, Set<URI>> graph = new HashMap<>();
         if (!inputFile.exists()) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         final Properties prop = new Properties();
         FileInputStream in = null;
