@@ -532,8 +532,9 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         }
         private Optional<String> get(final Element ditavalref, final DitaClass cls) {
             for (final Element ditavalmeta: getChildElements(ditavalref, DITAVAREF_D_DITAVALMETA)) {
-                for (final Element resoucePrefix: getChildElements(ditavalmeta, cls)) {
-                    return Optional.of(getStringValue(resoucePrefix));
+                final Optional<Element> childElements = getChildElement(ditavalmeta, cls);
+                if (childElements.isPresent()) {
+                    return Optional.of(getStringValue(childElements.get()));
                 }
             }
             return Optional.empty();
