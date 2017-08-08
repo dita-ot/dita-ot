@@ -63,7 +63,7 @@ public final class DITAOTEchoTask extends Echo {
     @Override
     public void execute() throws BuildException {
         logger = new DITAOTAntLogger(getProject());
-        final MessageBean msgBean = MessageUtils.getInstance().getMessage(id, readParamValues());
+        final MessageBean msgBean = MessageUtils.getMessage(id, readParamValues());
         if (msgBean != null) {
             final String type = msgBean.getType();
             if(ERROR.equals(type)){

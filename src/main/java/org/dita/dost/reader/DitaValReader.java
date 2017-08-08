@@ -336,7 +336,7 @@ public final class DitaValReader implements AbstractReader {
         if (filterMap.get(key) == null) {
             filterMap.put(key, action);
         } else {
-            logger.error(MessageUtils.getInstance().getMessage("DOTJ007E", key.toString()).toString());
+            logger.error(MessageUtils.getMessage("DOTJ007E", key.toString()).toString());
         }
     }
 

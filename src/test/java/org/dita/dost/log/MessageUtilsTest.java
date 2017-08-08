@@ -29,7 +29,7 @@ public class MessageUtilsTest {
         InputStream in = null;
 		try {
 		    in = new FileInputStream(new File(f.getAbsolutePath()));
-		    MessageUtils.getInstance().loadMessages(in);
+		    new MessageUtils().loadMessages(in);
 		} catch (final FileNotFoundException e) {
 		    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
 		} catch (final Exception e) {

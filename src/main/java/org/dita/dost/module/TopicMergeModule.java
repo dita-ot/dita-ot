@@ -61,7 +61,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         }
         final File ditaInput = new File(job.tempDirURI.resolve(job.getInputMap()));
         if (!ditaInput.exists()){
-            logger.error(MessageUtils.getInstance().getMessage("DOTJ025E").toString());
+            logger.error(MessageUtils.getMessage("DOTJ025E").toString());
             return null;
         }
         final File style = input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE) != null

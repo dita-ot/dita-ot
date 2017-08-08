@@ -103,7 +103,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
         if (cls.isValid() && (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls))) {
             final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains == null) {
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
+                logger.info(MessageUtils.getMessage("DOTJ029I", localName).toString());
             } else {
                 props = StringUtils.getExtProps(domains);
             }

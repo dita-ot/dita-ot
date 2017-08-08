@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -59,7 +60,8 @@ public final class MessageUtils {
     /**
      * Default construtor
      */
-    private MessageUtils(){
+    @VisibleForTesting
+    MessageUtils(){
     }
 
     /**

@@ -28,7 +28,6 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public final class ValidationFilter extends AbstractXMLFilter {
 
-    private final MessageUtils messageUtils = MessageUtils.getInstance();
     private final Set<String> topicIds = new HashSet<>();
     private Map<String, Map<String, Set<String>>> validateMap = null;
     private Locator locator;
@@ -110,9 +109,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
             final int i = lang.indexOf('_');
             if (i != -1) {
                 if (processingMode == Mode.STRICT) {
-                    throw new SAXException(messageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
+                    throw new SAXException(MessageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
                 }
-                logger.error(messageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
+                logger.error(MessageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
                 if (processingMode == Mode.LAX) {
                     if (res == null) {
                         res = new AttributesImpl(atts);
@@ -137,17 +136,17 @@ public final class ValidationFilter extends AbstractXMLFilter {
             if (id == null) {
                 switch (processingMode) {
                 case STRICT:
-                    throw new SAXException(messageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
+                    throw new SAXException(MessageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
                 case LAX:
                     if (res == null) {
                         res = new AttributesImpl(atts);
                     }
                     final String gen = "gen_" + UUID.randomUUID().toString();
                     XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_ID, gen);
-                    logger.error(messageUtils.getMessage("DOTJ066E", localName, gen).setLocation(locator).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ066E", localName, gen).setLocation(locator).toString());
                     break;
                 case SKIP:
-                    logger.error(messageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
                     break;
                 }
             }
@@ -159,9 +158,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
             if (id != null) {
                 if (topicIds.contains(id)) {
                     if (processingMode == Mode.STRICT) {
-                        throw new SAXException(messageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());
+                        throw new SAXException(MessageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());
                     } else {
-                        logger.warn(messageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());
+                        logger.warn(MessageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());
                     }
                 }
                 topicIds.add(id);
@@ -184,9 +183,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
             } catch (final URISyntaxException e) {
                 switch (processingMode) {
                 case STRICT:
-                    throw new RuntimeException(messageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ": " + e.getMessage(), e);
+                    throw new RuntimeException(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ": " + e.getMessage(), e);
                 case SKIP:
-                    logger.error(messageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
+                    logger.error(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
                     break;
                 case LAX:
                     try {
@@ -195,9 +194,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
                             res = new AttributesImpl(atts);
                         }
                         res.setValue(res.getIndex(ATTRIBUTE_NAME_HREF), u);
-                        logger.error(messageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using '" + u + "'.");
+                        logger.error(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using '" + u + "'.");
                     } catch (final URISyntaxException e1) {
-                        logger.error(messageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
+                        logger.error(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
                     }
                     break;
                 }
@@ -229,7 +228,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     final String[] keylist = attrValue.trim().split("\\s+");
                     for (final String s : keylist) {
                         if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
-                            logger.warn(messageUtils.getMessage("DOTJ049W", attrName, qName, attrValue, StringUtils.join(valueSet, COMMA)).toString());
+                            logger.warn(MessageUtils.getMessage("DOTJ049W", attrName, qName, attrValue, StringUtils.join(valueSet, COMMA)).toString());
                         }
                     }
                 }
@@ -245,7 +244,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
         if (keys != null) {
             for (final String key : keys.split(" ")) {
                 if (!isValidKeyName(key)) {
-                    logger.error(messageUtils.getMessage("DOTJ055E", key).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ055E", key).toString());
                 }
             }
         }
@@ -259,7 +258,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
         if (keys != null) {
             for (final String key : keys.trim().split("\\s+")) {
                 if (!isValidKeyName(key)) {
-                    logger.error(messageUtils.getMessage("DOTJ059E", key).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ059E", key).toString());
                 }
             }
         }
@@ -320,7 +319,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     if (atts.getValue(spec[i]) != null) {
                         for (int j = i - 1; j > -1; j--) {
                             if (atts.getValue(spec[j]) != null) {
-                                logger.error(messageUtils.getMessage("DOTJ058E", spec[j], spec[i]).toString());
+                                logger.error(MessageUtils.getMessage("DOTJ058E", spec[j], spec[i]).toString());
                             }
                         } 
                     }
@@ -352,12 +351,12 @@ public final class ValidationFilter extends AbstractXMLFilter {
                 if (fi != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
                     switch (processingMode) {
                         case STRICT:
-                            throw new RuntimeException(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                            throw new RuntimeException(MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
                         case SKIP:
-                                logger.error(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                                logger.error(MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
                             break;
                         case LAX:
-                                logger.error(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                                logger.error(MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
                             if (res == null) {
                                 res = new AttributesImpl(atts);
                             }

@@ -103,7 +103,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                             logger.error("Failed to process code reference " + codeFile, e);
                         }
                     } else {
-                        logger.warn(MessageUtils.getInstance().getMessage("DOTJ051E", hrefValue.toString()).setLocation(atts).toString());
+                        logger.warn(MessageUtils.getMessage("DOTJ051E", hrefValue.toString()).setLocation(atts).toString());
                     }
                 } else {
                     //logger.logDebug("Code reference target not defined");
@@ -315,7 +315,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                 try {
                     c = Charset.forName(tokens[2].trim());
                 } catch (final RuntimeException e) {
-                    logger.error(MessageUtils.getInstance().getMessage("DOTJ052E", tokens[2].trim()).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ052E", tokens[2].trim()).toString());
                 }
             }
         }

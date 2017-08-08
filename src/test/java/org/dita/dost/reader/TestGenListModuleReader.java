@@ -249,7 +249,7 @@ public class TestGenListModuleReader {
                 // Not Xerces, ignore exception
             }
         } else {
-            final String msg = MessageUtils.getInstance().getMessage("DOTJ037W").toString();
+            final String msg = MessageUtils.getMessage("DOTJ037W").toString();
         }
         CatalogUtils.setDitaDir(ditaDir);
         parser.setEntityResolver(CatalogUtils.getCatalogResolver());

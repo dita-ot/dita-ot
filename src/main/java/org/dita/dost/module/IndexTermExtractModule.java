@@ -169,7 +169,7 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                 } catch (final Exception e) {
                     final StringBuilder buff = new StringBuilder();
                     String msg = null;
-                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", target.toString()).toString();
+                    msg = MessageUtils.getMessage("DOTJ013E", target.toString()).toString();
                     logger.error(buff.append(msg).append(e.getMessage()).toString());
                 }
             }
@@ -199,7 +199,7 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                     throw e;
                 } catch (final Exception e) {
                     String msg = null;
-                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", ditamap.toString()).toString();
+                    msg = MessageUtils.getMessage("DOTJ013E", ditamap.toString()).toString();
                     logger.error(msg, e);
                 }
             }

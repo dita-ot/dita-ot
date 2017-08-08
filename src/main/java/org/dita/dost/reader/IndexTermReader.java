@@ -188,7 +188,7 @@ public final class IndexTermReader extends AbstractXMLReader {
                     return;
                 } else{
                     term.setTermName("***");
-                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ014W").toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ014W").toString());
                 }
             }
 

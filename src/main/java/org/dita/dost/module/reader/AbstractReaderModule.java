@@ -199,7 +199,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 // Not Xerces, ignore exception
             }
         } else {
-            logger.warn(MessageUtils.getInstance().getMessage("DOTJ037W").toString());
+            logger.warn(MessageUtils.getMessage("DOTJ037W").toString());
         }
         if (gramcache) {
             final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
@@ -366,7 +366,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 processParseResult(currentFile);
                 categorizeCurrentFile(ref);
             } else if (!currentFile.equals(rootFile)) {
-                logger.warn(MessageUtils.getInstance().getMessage("DOTJ021W", params).toString());
+                logger.warn(MessageUtils.getMessage("DOTJ021W", params).toString());
                 failureList.add(currentFile);
             }
         } catch (final RuntimeException e) {
@@ -377,29 +377,29 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 throw (DITAOTException) inner;
             }
             if (currentFile.equals(rootFile)) {
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage(), sax);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage(), sax);
             } else if (processingMode == Mode.STRICT) {
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
             } else {
-                logger.error(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
+                logger.error(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
             }
             failureList.add(currentFile);
         } catch (final FileNotFoundException e) {
             if (currentFile.equals(rootFile)) {
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTA069F", params).toString(), e);
+                throw new DITAOTException(MessageUtils.getMessage("DOTA069F", params).toString(), e);
             } else if (processingMode == Mode.STRICT) {
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTX008E", params).toString() + ": " + e.getMessage(), e);
+                throw new DITAOTException(MessageUtils.getMessage("DOTX008E", params).toString() + ": " + e.getMessage(), e);
             } else {
-                logger.error(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
+                logger.error(MessageUtils.getMessage("DOTX008E", params).toString());
             }
             failureList.add(currentFile);
         } catch (final Exception e) {
             if (currentFile.equals(rootFile)) {
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(),  e);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(),  e);
             } else if (processingMode == Mode.STRICT) {
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
             } else {
-                logger.error(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
+                logger.error(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
             }
             failureList.add(currentFile);
         } finally {
@@ -415,10 +415,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         if (!listFilter.isValidInput() && currentFile.equals(rootFile)) {
             if (validate) {
                 // stop the build if all content in the input file was filtered out.
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ022F", params).toString());
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ022F", params).toString());
             } else {
                 // stop the build if the content of the file is not valid.
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ034F", params).toString());
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ034F", params).toString());
             }
         }
 
@@ -549,7 +549,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
                 formatSet.add(file);
                 if (!exists(file.filename)) {
-                    logger.warn(MessageUtils.getInstance().getMessage("DOTX008W", file.filename.toString()).toString());
+                    logger.warn(MessageUtils.getMessage("DOTX008W", file.filename.toString()).toString());
                 }
             } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
                 formatSet.add(file);

@@ -88,7 +88,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
                     ditavalFiles.add(new File(usingDitavalInput));
                 } else {
                     logger.error(
-                            MessageUtils.getInstance().getMessage("DOTJ071E", usingDitavalInput.toString()).toString());
+                            MessageUtils.getMessage("DOTJ071E", usingDitavalInput.toString()).toString());
                 }
             }
         }

@@ -247,7 +247,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                 }
             }//end for
             if (!foundIndexTerm && foundIndexsee && indexSeeRefTerm != null && !indexSeeRefTerm.equals("***")){
-                logger.warn(MessageUtils.getInstance().getMessage("DOTJ050W", indexSeeRefTerm.trim()).toString());
+                logger.warn(MessageUtils.getMessage("DOTJ050W", indexSeeRefTerm.trim()).toString());
             }
         }
 

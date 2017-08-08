@@ -440,7 +440,7 @@ public final class FilterUtils {
             final Action filterAction = filterMap.get(filterKey);
             if (filterAction == null && logMissingAction) {
                 if (!alreadyShowed(filterKey)) {
-                    logger.info(MessageUtils.getInstance().getMessage("DOTJ031I", filterKey.toString()).toString());
+                    logger.info(MessageUtils.getMessage("DOTJ031I", filterKey.toString()).toString());
                 }
             }
         }

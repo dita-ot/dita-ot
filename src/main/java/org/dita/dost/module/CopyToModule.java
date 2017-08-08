@@ -165,7 +165,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             final URI targetFile = job.tempDirURI.resolve(copytoTarget);
 
             if (new File(targetFile).exists()) {
-                logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
+                logger.warn(MessageUtils.getMessage("DOTX064W", copytoTarget.getPath()).toString());
             } else {
                 final URI inputMapInTemp = job.tempDirURI.resolve(job.getInputMap());
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);

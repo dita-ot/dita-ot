@@ -74,7 +74,7 @@ public final class DITAOTFailTask extends Exit {
             throw new BuildException("id attribute must be specified");
         }
         
-        final MessageBean msgBean = MessageUtils.getInstance().getMessage(id, readParamValues());
+        final MessageBean msgBean = MessageUtils.getMessage(id, readParamValues());
         final DITAOTLogger logger = new DITAOTAntLogger(getProject());
         if (msgBean != null) {
             final String type = msgBean.getType();

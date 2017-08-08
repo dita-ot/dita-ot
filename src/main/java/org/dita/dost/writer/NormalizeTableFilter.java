@@ -153,9 +153,9 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
                 cols = Integer.parseInt(c);
             } catch (final NumberFormatException e) {
                 if (processingMode == Configuration.Mode.STRICT) {
-                    throw new SAXException(MessageUtils.getInstance().getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
+                    throw new SAXException(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
                 } else {
-                    logger.error(MessageUtils.getInstance().getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
                 }
                 cols = -1;
             }

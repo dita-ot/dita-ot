@@ -316,7 +316,7 @@ public final class KeyrefReader implements AbstractReader {
             sb.append(keyDef.keys).append(" -> ");
         }
         sb.append(circularityTracker.get(0).keys);
-        final MessageBean ex = MessageUtils.getInstance()
+        final MessageBean ex = MessageUtils
                 .getMessage("DOTJ069E", sb.toString())
                 .setLocation(circularityTracker.get(0).element);
         logger.error(ex.toString(), ex.toException());

@@ -168,7 +168,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
                     final List<Attr> attrs = attrsMap.getValue();
                     for (final Attr attr: attrs) {
                         final String gen = addSuffix(attr.getValue(), suffix);
-                        logger.info(MessageUtils.getInstance().getMessage("DOTJ065I", attr.getValue(), gen)
+                        logger.info(MessageUtils.getMessage("DOTJ065I", attr.getValue(), gen)
                                 .setLocation(attr.getOwnerElement()).toString());
                         if (attr.getName().equals(BRANCH_COPY_TO)) {
                             attr.setValue(gen);

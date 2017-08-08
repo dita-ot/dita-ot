@@ -706,7 +706,7 @@ public final class Integrator {
             }
             if (!anyPluginFound && requirement.getRequired()) {
                 // not contain any plugin required by current plugin
-                final String msg = MessageUtils.getInstance().getMessage("DOTJ020W", requirement.toString(), currentPlugin).toString();
+                final String msg = MessageUtils.getMessage("DOTJ020W", requirement.toString(), currentPlugin).toString();
                 throw new RuntimeException(msg);
             }
         }

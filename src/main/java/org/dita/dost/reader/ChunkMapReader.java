@@ -338,7 +338,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         } else if (chunk.contains(CHUNK_TO_CONTENT)) {
             if (href != null || copyTo != null || topicref.hasChildNodes()) {
                 if (chunk.contains(CHUNK_BY_TOPIC)) {
-                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ064W").setLocation(topicref).toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ064W").setLocation(topicref).toString());
                 }
                 if (href == null) {
                     generateStumpTopic(topicref);

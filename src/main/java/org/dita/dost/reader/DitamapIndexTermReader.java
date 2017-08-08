@@ -135,7 +135,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                     return;
                 }else{
                     indexTerm.setTermName("***");
-                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ014W").toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ014W").toString());
                 }
             }
 
