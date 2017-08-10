@@ -141,6 +141,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="output" location="${htmlhelp.hhk.output.dir}/${dita.map.filename.root}.hhk"/>
         <param name="targetext" value="${out.ext}"/>
         <param name="indextype" value="htmlhelp"/>
+        <param name="indexclass" value="org.dita.dost.writer.CHMIndexWriter"/>
         <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
         <param name="defaultLanguage" expression="${default.language}"/>
       </module>
