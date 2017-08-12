@@ -38,6 +38,8 @@ import org.dita.dost.util.XMLUtils;
  */
 public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
+    private static final String PARAM_USE_RESULT_FILENAME = "use-result-filename";
+
     private final LinkFilter filter = new LinkFilter();
     private final MapCleanFilter mapFilter = new MapCleanFilter();
     private final XMLUtils xmlUtils = new XMLUtils();
@@ -50,52 +52,59 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        init();
+        final boolean useResultFilename = Optional.ofNullable(input.getAttribute(PARAM_USE_RESULT_FILENAME))
+                .map(Boolean::parseBoolean)
+                .orElse(true);
 
         final URI base = getBaseDir();
         final String uplevels = getUplevels(base);
         job.setProperty("uplevels", uplevels);
         job.setInputDir(base);
-        final Collection<FileInfo> fis = new ArrayList<>(job.getFileInfo());
-        final Collection<FileInfo> res = new ArrayList<>(fis.size());
-        for (final FileInfo fi : fis) {
-            try {
-                final FileInfo.Builder builder = new FileInfo.Builder(fi);
-                final URI rel = base.relativize(fi.result);
-                builder.uri(rel);
-                if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
-                    logger.debug("Skip format " + fi.format);
-                } else {
-                    final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
-                    if (srcFile.exists()) {
-                        final File destFile = new File(job.tempDirURI.resolve(rel));
-                        final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
-                        if (!processingPipe.isEmpty()) {
-                            logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
-                            xmlUtils.transform(srcFile.toURI(), destFile.toURI(), processingPipe);
-                            if (!srcFile.equals(destFile)) {
-                                logger.debug("Deleting " + srcFile.toURI());
-                                FileUtils.deleteQuietly(srcFile);
-                            }
-                        } else if (!srcFile.equals(destFile)) {
-                            logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
-                            FileUtils.moveFile(srcFile, destFile);
-                        }
 
-                        // start map
-                        if (fi.src.equals(job.getInputFile())) {
-                            job.setInputMap(rel);
+        if (useResultFilename) {
+            init();
+            final Collection<FileInfo> fis = new ArrayList<>(job.getFileInfo());
+            final Collection<FileInfo> res = new ArrayList<>(fis.size());
+            for (final FileInfo fi : fis) {
+                try {
+                    final FileInfo.Builder builder = new FileInfo.Builder(fi);
+                    final URI rel = base.relativize(fi.result);
+                    builder.uri(rel);
+                    if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
+                        logger.debug("Skip format " + fi.format);
+                    } else {
+                        final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
+                        if (srcFile.exists()) {
+                            final File destFile = new File(job.tempDirURI.resolve(rel));
+                            final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
+                            if (!processingPipe.isEmpty()) {
+                                logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
+                                xmlUtils.transform(srcFile.toURI(), destFile.toURI(), processingPipe);
+                                if (!srcFile.equals(destFile)) {
+                                    logger.debug("Deleting " + srcFile.toURI());
+                                    FileUtils.deleteQuietly(srcFile);
+                                }
+                            } else if (!srcFile.equals(destFile)) {
+                                logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
+                                FileUtils.moveFile(srcFile, destFile);
+                            }
                         }
                     }
+                    res.add(builder.build());
+                } catch (final IOException e) {
+                    logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
                 }
-                res.add(builder.build());
-            } catch (final IOException e) {
-                logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
             }
+
+            fis.forEach(fi -> job.remove(fi));
+            res.forEach(fi -> job.add(fi));
         }
 
-        fis.forEach(fi -> job.remove(fi));
-        res.forEach(fi -> job.add(fi));
+        // start map
+        final FileInfo start = job.getFileInfo(job.getInputFile());
+        if (start != null) {
+            job.setInputMap(start.uri);
+        }
 
         try {
             job.write();

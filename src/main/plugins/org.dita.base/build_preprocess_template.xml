@@ -515,7 +515,9 @@ See the accompanying LICENSE file for applicable license.
   <target name="clean-preprocess"
           unless="preprocess.clean-preprocess.skip"
           description="Clean preprocess">
+    <property name="clean-preprocess.use-result-filename" value="true"/>
     <pipeline message="Clean preprocess" taskname="clean-preprocess">
+      <param name="use-result-filename" value="${clean-preprocess.use-result-filename}" if:set="clean-preprocess.use-result-filename"/>
       <module class="org.dita.dost.module.CleanPreprocessModule"/>
     </pipeline>
     <job-helper file="canditopics.list" property="canditopicslist"/>
@@ -538,6 +540,7 @@ See the accompanying LICENSE file for applicable license.
     <job-helper file="subtargets.list" property="subtargetslist"/>
     <job-helper file="user.input.file.list" property="user.input.file"/>
     <job-helper file="usr.input.file.list" property="user.input.file"/>
+    <job-property dir="${dita.temp.dir}"/>
   </target>
   
   <!-- copy-files
