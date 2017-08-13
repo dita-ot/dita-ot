@@ -180,6 +180,9 @@ public final class ExtensibleAntInvoker extends Task {
                     if (xm.mapper != null) {
                         module.setMapper(xm.mapper.getImplementation());
                     }
+                    if (xm.extension != null) {
+                        module.setExtension(xm.extension);
+                    }
                     for (final Param p : m.params) {
                         if (!p.isValid()) {
                             throw new BuildException("Incomplete parameter");
@@ -345,6 +348,7 @@ public final class ExtensibleAntInvoker extends Task {
         private final List<IncludesFile> includes = new ArrayList<>();
         private final List<IncludesFile> excludes = new ArrayList<>();
         private Mapper mapper;
+        private String extension;
         private String filenameparameter;
         private String filedirparameter;
         private XMLCatalog xmlcatalog;
@@ -372,7 +376,7 @@ public final class ExtensibleAntInvoker extends Task {
         }
         
         public void setExtension(final String extension) {
-            // Ignore extension attribute
+            this.extension = extension;
         }
         
         public void setReloadstylesheet(final boolean reloadstylesheet) {
