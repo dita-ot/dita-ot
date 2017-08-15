@@ -54,6 +54,8 @@ See the accompanying LICENSE file for applicable license.
   <typedef name="dita-fileset" classname="org.dita.dost.ant.types.JobSourceSet">
     <classpath refid="dost.class.path" />
   </typedef>
+  
+  <typedef name="job-mapper" classname="org.dita.dost.ant.types.JobMapper"/>
 
   <macrodef name="job-helper" >
     <attribute name="file"/>
