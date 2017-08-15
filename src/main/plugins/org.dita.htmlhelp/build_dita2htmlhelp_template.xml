@@ -24,6 +24,7 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="dita2htmlhelp.init">
     <property name="html-version" value="html"/>
+    <property name="temp.output.dir.name" value="temp_chm_dir"/>
     <property name="clean-preprocess.use-result-filename" value="false"/>
     <property name="preprocess.copy-image.skip" value="true"/>
   </target>
@@ -149,17 +150,14 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="compile.HTML.Help" if="HTMLHelpCompiler" description="Compile HTMLHelp output">
-    <condition property="compile.dir" value="${dita.output.dir}">
-      <isset property="inner.transform"/>
-    </condition>
-    <condition property="compile.dir" value="${dita.map.output.dir}">
-      <isset property="old.transform"/>
-    </condition>
     <exec executable="${HTMLHelpCompiler}"
           failonerror="${failonerror}"
           failifexecutionfails="${failonerror}">
-      <arg value="${compile.dir}${file.separator}${args.output.base}.hhp"/>
+      <arg file="${dita.output.dir}/${args.output.base}.hhp"/>
     </exec>
+    <copy todir="${output.dir}">
+      <fileset dir="${dita.output.dir}" includes="*.chm"/>
+    </copy>
   </target>
 
 </project>
