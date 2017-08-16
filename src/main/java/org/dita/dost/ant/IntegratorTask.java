@@ -4,9 +4,8 @@
  * Copyright 2005, 2006 IBM Corporation
  *
  * See the accompanying LICENSE file for applicable license.
-
  */
-package org.dita.dost.platform;
+package org.dita.dost.ant;
 
 import java.io.File;
 
@@ -14,6 +13,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.platform.Integrator;
 
 /**
  * Task run by ant scripts, invoking Task.

@@ -4,9 +4,8 @@
  * Copyright 2004, 2008 IBM Corporation
  *
  * See the accompanying LICENSE file for applicable license.
-
  */
-package org.dita.dost.invoker;
+package org.dita.dost.ant;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;

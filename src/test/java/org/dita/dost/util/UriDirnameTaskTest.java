@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.tools.ant.Project;
+import org.dita.dost.ant.UriDirnameTask;
 import org.junit.Before;
 import org.junit.Test;
 

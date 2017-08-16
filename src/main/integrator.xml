@@ -35,7 +35,7 @@ See the accompanying LICENSE file for applicable license.
     <pathelement location="${dita.dir}/lib/commons-io-2.4.jar"/>
   </path>
   
-  <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
+  <taskdef name="integrate" classname="org.dita.dost.ant.IntegratorTask">
     <classpath refid="dost.class.path"/>
   </taskdef>
   

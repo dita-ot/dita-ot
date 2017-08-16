@@ -163,10 +163,10 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="dita.htmlhelp.convertlang">
-    <taskdef name="check-lang" classname="org.dita.dost.util.CheckLang">
+    <taskdef name="check-lang" classname="org.dita.dost.ant.CheckLang">
       <classpath refid="dost.class.path"/>
     </taskdef>
-    <taskdef name="convert-lang" classname="org.dita.dost.util.ConvertLang">
+    <taskdef name="convert-lang" classname="org.dita.dost.ant.ConvertLang">
       <classpath refid="dost.class.path"/>
     </taskdef>
     <check-lang message="Check Language"

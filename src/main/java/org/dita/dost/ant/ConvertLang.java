@@ -4,9 +4,8 @@
  * Copyright 2010 IBM Corporation
  *
  * See the accompanying LICENSE file for applicable license.
-
  */
-package org.dita.dost.util;
+package org.dita.dost.ant;
 
 import static org.dita.dost.util.Constants.*;
 import static org.apache.commons.io.FileUtils.*;
@@ -34,6 +33,8 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

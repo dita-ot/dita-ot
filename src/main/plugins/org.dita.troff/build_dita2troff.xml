@@ -47,7 +47,7 @@ See the accompanying LICENSE file for applicable license.
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
       <param name="defaultLanguage" expression="${default.language}"/>
-      <mapper classname="org.dita.dost.util.JobMapper" to="${out.ext}"/>
+      <mapper classname="org.dita.dost.ant.types.JobMapper" to="${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -63,7 +63,7 @@ See the accompanying LICENSE file for applicable license.
       style="${troff.step2.xsl}">
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
-      <mapper classname="org.dita.dost.util.JobMapper" to="${out.ext}"/>
+      <mapper classname="org.dita.dost.ant.types.JobMapper" to="${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>

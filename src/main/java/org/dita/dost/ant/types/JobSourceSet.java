@@ -5,7 +5,7 @@
  *
  * See the accompanying LICENSE file for applicable license.
  */
-package org.dita.dost.util;
+package org.dita.dost.ant.types;
 
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.URLUtils.*;
@@ -16,7 +16,10 @@ import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.URLResource;
-import org.dita.dost.invoker.ExtensibleAntInvoker;
+import org.dita.dost.ant.ExtensibleAntInvoker;
+import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
 
 import java.io.File;
 import java.net.MalformedURLException;

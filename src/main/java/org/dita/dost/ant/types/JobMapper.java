@@ -5,12 +5,13 @@
  *
  * See the accompanying LICENSE file for applicable license.
  */
-package org.dita.dost.util;
+package org.dita.dost.ant.types;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.util.*;
-import org.dita.dost.invoker.ExtensibleAntInvoker;
+import org.dita.dost.ant.ExtensibleAntInvoker;
+import org.dita.dost.util.Job;
 
 import java.io.File;
 import java.net.URI;

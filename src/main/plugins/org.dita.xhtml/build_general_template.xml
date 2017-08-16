@@ -176,7 +176,7 @@ See the accompanying LICENSE file for applicable license.
     <topics.html>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction"/>
       <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <mapper classname="org.dita.dost.util.JobMapper" to="${out.ext}"/>
+      <mapper classname="org.dita.dost.ant.types.JobMapper" to="${out.ext}"/>
     </topics.html>
   </target>
   
@@ -187,7 +187,7 @@ See the accompanying LICENSE file for applicable license.
     <topics.html>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction"/>
       <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <mapper classname="org.dita.dost.util.JobMapper" to="${out.ext}"/>
+      <mapper classname="org.dita.dost.ant.types.JobMapper" to="${out.ext}"/>
     </topics.html>
   </target>
   

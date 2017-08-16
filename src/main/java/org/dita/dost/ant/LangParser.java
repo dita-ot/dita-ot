@@ -4,9 +4,8 @@
  * Copyright 2010 IBM Corporation
  *
  * See the accompanying LICENSE file for applicable license.
-
  */
-package org.dita.dost.util;
+package org.dita.dost.ant;
 
 import static org.dita.dost.util.Constants.*;
 

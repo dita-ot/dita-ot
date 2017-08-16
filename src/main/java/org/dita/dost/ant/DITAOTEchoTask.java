@@ -4,19 +4,20 @@
  * Copyright 2005 IBM Corporation
  *
  * See the accompanying LICENSE file for applicable license.
-
  */
-package org.dita.dost.log;
+package org.dita.dost.ant;
 
-import static org.dita.dost.invoker.ExtensibleAntInvoker.isValid;
+import static org.dita.dost.ant.ExtensibleAntInvoker.isValid;
 import static org.dita.dost.log.MessageBean.*;
 
 import java.util.ArrayList;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Echo;
-import org.dita.dost.invoker.ExtensibleAntInvoker.Param;
+import org.dita.dost.ant.ExtensibleAntInvoker.Param;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.log.MessageBean;
+import org.dita.dost.log.MessageUtils;
 
 /**
  * Ant echo task for custom error message.

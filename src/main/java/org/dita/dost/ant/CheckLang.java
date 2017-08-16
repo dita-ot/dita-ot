@@ -4,11 +4,10 @@
  * Copyright 2010 IBM Corporation
  *
  * See the accompanying LICENSE file for applicable license.
-
  */
-package org.dita.dost.util;
+package org.dita.dost.ant;
 
-import static org.dita.dost.invoker.ExtensibleAntInvoker.getJob;
+import static org.dita.dost.ant.ExtensibleAntInvoker.getJob;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
@@ -20,7 +19,9 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.StringUtils;
 
 /**
  * This class is for get the first xml:lang value set in ditamap/topic files

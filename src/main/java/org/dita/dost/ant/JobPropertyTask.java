@@ -4,11 +4,10 @@
  * Copyright 2007 IBM Corporation
  *
  * See the accompanying LICENSE file for applicable license.
-
  */
-package org.dita.dost.platform;
+package org.dita.dost.ant;
 
-import static org.dita.dost.invoker.ExtensibleAntInvoker.getJob;
+import static org.dita.dost.ant.ExtensibleAntInvoker.getJob;
 
 import java.io.File;
 import java.util.Map;

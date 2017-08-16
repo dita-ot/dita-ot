@@ -133,7 +133,7 @@ See the accompanying LICENSE file for applicable license.
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
             <param name="defaultLanguage" expression="${default.language}"/>
             <dita:extension behavior="org.dita.dost.platform.InsertAction" id="dita.conductor.eclipse.toc.param"/>
-            <mapper classname="org.dita.dost.util.JobMapper" to=".xml"/>
+            <mapper classname="org.dita.dost.ant.types.JobMapper" to=".xml"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
