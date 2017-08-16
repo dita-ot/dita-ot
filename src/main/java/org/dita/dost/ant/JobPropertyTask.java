@@ -1,7 +1,7 @@
 /*
  * This file is part of the DITA Open Toolkit project.
  *
- * Copyright 2007 IBM Corporation
+ * Copyright 2013 Jarno Elovirta
  *
  * See the accompanying LICENSE file for applicable license.
  */
