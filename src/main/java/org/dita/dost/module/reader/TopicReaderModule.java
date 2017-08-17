@@ -51,7 +51,7 @@ import static org.dita.dost.util.XMLUtils.ancestors;
 import static org.dita.dost.util.XMLUtils.toList;
 
 /**
- * Module for reading and serializing topics into temporary directory.
+ * ModuleElem for reading and serializing topics into temporary directory.
  *
  * @since 2.5
  */

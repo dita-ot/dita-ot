@@ -42,14 +42,15 @@ import static org.dita.dost.util.Constants.*;
  * @author Deborah Pickett
  */
 public final class ExtensibleAntInvoker extends Task {
-    
+
+    private DITAOTAntLogger logger;
     private final ModuleFactory factory = ModuleFactory.instance();
     /** Pipeline attributes and parameters */
     private final Map<String, String> attrs = new HashMap<>();
     /** Nested params. */
-    private final ArrayList<Param> pipelineParams;
+    private final ArrayList<ParamElem> pipelineParams;
     /** Nested modules. */
-    private final ArrayList<Module> modules;
+    private final ArrayList<ModuleElem> modules;
     /** Temporary directory. */
     private File tempDir;
 
@@ -60,6 +61,7 @@ public final class ExtensibleAntInvoker extends Task {
         super();
         pipelineParams = new ArrayList<>();
         modules = new ArrayList<>();
+
     }
 
     /**
@@ -92,8 +94,8 @@ public final class ExtensibleAntInvoker extends Task {
      * the "if" attribute is set and refers to a unset property.
      * @return parameter
      */
-    public Param createParam() {
-        final Param p = new Param();
+    public ParamElem createParam() {
+        final ParamElem p = new ParamElem();
         pipelineParams.add(p);
         return p;
     }
@@ -103,15 +105,15 @@ public final class ExtensibleAntInvoker extends Task {
      * 
      * @since 1.6
      */
-    public void addConfiguredModule(final Module m) {
+    public void addConfiguredModule(final ModuleElem m) {
         modules.add(m);
     }
     
-    public void addConfiguredXslt(final Xslt xslt) {
+    public void addConfiguredXslt(final XsltElem xslt) {
         modules.add(xslt);
     }
 
-    public void addConfiguredSax(final SaxPipe filters) {
+    public void addConfiguredSax(final SaxPipeElem filters) {
         filters.setProject(getProject());
         modules.add(filters);
     }
@@ -124,10 +126,10 @@ public final class ExtensibleAntInvoker extends Task {
             }
         }
         if (modules.isEmpty()) {
-            throw new BuildException("Module must be specified");
+            throw new BuildException("ModuleElem must be specified");
         }
         attrs.computeIfAbsent(ANT_INVOKER_PARAM_BASEDIR, k -> getProject().getBaseDir().getAbsolutePath());
-        for (final Param p : pipelineParams) {
+        for (final ParamElem p : pipelineParams) {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }
@@ -135,6 +137,8 @@ public final class ExtensibleAntInvoker extends Task {
                 attrs.put(p.getName(), p.getValue());
             }
         }
+        logger = new DITAOTAntLogger(getProject());
+        logger.setTask(this);
     }
 
     /**
@@ -145,101 +149,95 @@ public final class ExtensibleAntInvoker extends Task {
     public void execute() throws BuildException {
         initialize();
         
-        long start, end;
-        final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
-        logger.setTask(this);
         final Job job = getJob(tempDir, getProject());
         try {
-            for (final Module m: modules) {
+            for (final ModuleElem m: modules) {
                 final PipelineHashIO pipelineInput = new PipelineHashIO();
                 for (final Map.Entry<String, String> e: attrs.entrySet()) {
                     pipelineInput.setAttribute(e.getKey(), e.getValue());
                 }
-                if (m instanceof Xslt) {
-                    final Xslt xm = (Xslt) m;
-                    final XsltModule module = new XsltModule();
-                    module.setStyle(xm.style);
-                    if (xm.in != null) {
-                        module.setSource(xm.in);
-                        module.setResult(xm.out);
-                    } else if (!xm.fileInfoFilters.isEmpty()) {
-                        module.setFileInfoFilter(combine(xm.fileInfoFilters));
-                        module.setDestinationDir(xm.destDir != null ? xm.destDir : tempDir);
-                    } else {
-                        final Set<File> inc = readListFile(xm.includes, logger);
-                        inc.removeAll(readListFile(xm.excludes, logger));
-                        module.setIncludes(inc);
-                        module.setDestinationDir(xm.destDir != null ? xm.destDir : xm.baseDir);
-                        module.setSorceDir(xm.baseDir);
-                    }
-                    module.setFilenameParam(xm.filenameparameter);
-                    module.setFiledirParam(xm.filedirparameter);
-                    module.setReloadstylesheet(xm.reloadstylesheet);
-                    module.setXMLCatalog(xm.xmlcatalog);
-                    if (xm.mapper != null) {
-                        module.setMapper(xm.mapper.getImplementation());
-                    }
-                    if (xm.extension != null) {
-                        module.setExtension(xm.extension);
-                    }
-                    for (final Param p : m.params) {
-                        if (!p.isValid()) {
-                            throw new BuildException("Incomplete parameter");
-                        }
-                        if (isValid(getProject(), p.getIf(), p.getUnless())) {
-                            module.setParam(p.getName(), p.getValue());
-                        }
-                    }
-                    start = System.currentTimeMillis();
-                    module.setLogger(logger);
-                    module.setJob(job);
-                    module.execute(pipelineInput);
-                    end = System.currentTimeMillis();
-                } else if (m instanceof SaxPipe) {
-                    final SaxPipe fm = (SaxPipe) m;
-                    final XmlFilterModule module = new XmlFilterModule();
-                    final List<FileInfoFilter> predicates = new ArrayList<>(fm.getFormat());
-                    predicates.addAll(m.fileInfoFilters);
-                    module.setFileInfoFilter(combine(predicates));
-                    try {
-                        module.setProcessingPipe(fm.getFilters());
-                    } catch (final InstantiationException | IllegalAccessException e) {
-                        throw new BuildException(e);
-                    }
-                    start = System.currentTimeMillis();
-                    module.setLogger(logger);
-                    module.setJob(job);
-                    module.execute(pipelineInput);
-                    end = System.currentTimeMillis();
-                } else {
-                    for (final Param p : m.params) {
-                        if (!p.isValid()) {
-                            throw new BuildException("Incomplete parameter");
-                        }
-                        if (isValid(getProject(), p.getIf(), p.getUnless())) {
-                            pipelineInput.setAttribute(p.getName(), p.getValue());
-                        }
-                    }
-                    final AbstractPipelineModule module = factory.createModule(m.getImplementation());
-                    if (!m.fileInfoFilters.isEmpty()) {
-                        module.setFileInfoFilter(combine(m.fileInfoFilters));
-                    }
-                    start = System.currentTimeMillis();
-                    module.setLogger(logger);
-                    module.setJob(job);
-                    module.execute(pipelineInput);
-                    end = System.currentTimeMillis();
-                }
-                logger.debug("Module processing took " + (end - start) + " ms");
+                AbstractPipelineModule mod = getPipelineModule(m, pipelineInput);
+                long start = System.currentTimeMillis();
+                mod.setLogger(logger);
+                mod.setJob(job);
+                mod.execute(pipelineInput);
+                long end = System.currentTimeMillis();
+                logger.debug("{1} processing took {2} ms", mod.getClass().getSimpleName(), Long.valueOf(end - start));
             }
         } catch (final DITAOTException e) {
             throw new BuildException("Failed to run pipeline: " + e.getMessage(), e);
         }
     }
 
-    private static Predicate<FileInfo> combine(final Collection<FileInfoFilter> filters) {
+    private AbstractPipelineModule getPipelineModule(final ModuleElem m, final PipelineHashIO pipelineInput) throws DITAOTException {
+        if (m instanceof XsltElem) {
+            final XsltElem xm = (XsltElem) m;
+            final XsltModule module = new XsltModule();
+            module.setStyle(xm.style);
+            if (xm.in != null) {
+                module.setSource(xm.in);
+                module.setResult(xm.out);
+            } else if (!xm.fileInfoFilters.isEmpty()) {
+                module.setFileInfoFilter(combine(xm.fileInfoFilters));
+                module.setDestinationDir(xm.destDir != null ? xm.destDir : tempDir);
+            } else {
+                final Set<File> inc = readListFile(xm.includes, logger);
+                inc.removeAll(readListFile(xm.excludes, logger));
+                module.setIncludes(inc);
+                module.setDestinationDir(xm.destDir != null ? xm.destDir : xm.baseDir);
+                module.setSorceDir(xm.baseDir);
+            }
+            module.setFilenameParam(xm.filenameparameter);
+            module.setFiledirParam(xm.filedirparameter);
+            module.setReloadstylesheet(xm.reloadstylesheet);
+            module.setXMLCatalog(xm.xmlcatalog);
+            if (xm.mapper != null) {
+                module.setMapper(xm.mapper.getImplementation());
+            }
+            if (xm.extension != null) {
+                module.setExtension(xm.extension);
+            }
+            for (final ParamElem p : m.params) {
+                if (!p.isValid()) {
+                    throw new BuildException("Incomplete parameter");
+                }
+                if (isValid(getProject(), p.getIf(), p.getUnless())) {
+                    module.setParam(p.getName(), p.getValue());
+                }
+            }
+            return module;
+        } else if (m instanceof SaxPipeElem) {
+            final SaxPipeElem fm = (SaxPipeElem) m;
+            final XmlFilterModule module = new XmlFilterModule();
+            final List<FileInfoFilterElem> predicates = new ArrayList<>(fm.getFormat());
+            predicates.addAll(m.fileInfoFilters);
+            module.setFileInfoFilter(combine(predicates));
+            try {
+                module.setProcessingPipe(fm.getFilters());
+            } catch (final InstantiationException | IllegalAccessException e) {
+                throw new BuildException(e);
+            }
+            return module;
+        } else {
+            for (final ParamElem p : m.params) {
+                if (!p.isValid()) {
+                    throw new BuildException("Incomplete parameter");
+                }
+                if (isValid(getProject(), p.getIf(), p.getUnless())) {
+                    pipelineInput.setAttribute(p.getName(), p.getValue());
+                }
+            }
+            final AbstractPipelineModule module = factory.createModule(m.getImplementation());
+            if (!m.fileInfoFilters.isEmpty()) {
+                module.setFileInfoFilter(combine(m.fileInfoFilters));
+            }
+            return module;
+        }
+    }
+
+    private static Predicate<FileInfo> combine(final Collection<FileInfoFilterElem> filters) {
         final List<Predicate<FileInfo>> res = filters.stream()
-                .map(FileInfoFilter::toFilter)
+                .map(FileInfoFilterElem::toFilter)
                 .collect(Collectors.toList());
         return f -> {
             for (final Predicate<FileInfo> filter : res) {
@@ -275,9 +273,9 @@ public final class ExtensibleAntInvoker extends Task {
         return job;
     }
     
-    private Set<File> readListFile(final List<IncludesFile> includes, final DITAOTAntLogger logger) {
+    private Set<File> readListFile(final List<IncludesFileElem> includes, final DITAOTAntLogger logger) {
         final Set<File> inc = new HashSet<>();
-        for (final IncludesFile i: includes) {
+        for (final IncludesFileElem i: includes) {
             if (!isValid(getProject(), i.ifProperty, null)) {
                 continue;
             }
@@ -310,21 +308,21 @@ public final class ExtensibleAntInvoker extends Task {
      * 
      * @since 1.6
      */
-    public static class Module {
+    public static class ModuleElem {
        
-        public final List<Param> params = new ArrayList<>();
+        public final List<ParamElem> params = new ArrayList<>();
         private Class<? extends AbstractPipelineModule> cls;
-        public final Collection<FileInfoFilter> fileInfoFilters = new ArrayList<>();
+        public final Collection<FileInfoFilterElem> fileInfoFilters = new ArrayList<>();
 
         public void setClass(final Class<? extends AbstractPipelineModule> cls) {
             this.cls = cls;
         }
         
-        public void addConfiguredParam(final Param p) {
+        public void addConfiguredParam(final ParamElem p) {
             params.add(p);
         }
 
-        public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
+        public void addConfiguredDitaFileset(final FileInfoFilterElem fileInfoFilter) {
             fileInfoFilters.add(fileInfoFilter);
         }
 
@@ -337,15 +335,15 @@ public final class ExtensibleAntInvoker extends Task {
      * Nested pipeline XSLT element configuration.
      * @author jelovirt
      */
-    public static class Xslt extends Module {
+    public static class XsltElem extends ModuleElem {
         
         private File style;
         private File baseDir;
         private File destDir;
         private File in;
         private File out;
-        private final List<IncludesFile> includes = new ArrayList<>();
-        private final List<IncludesFile> excludes = new ArrayList<>();
+        private final List<IncludesFileElem> includes = new ArrayList<>();
+        private final List<IncludesFileElem> excludes = new ArrayList<>();
         private Mapper mapper;
         private String extension;
         private String filenameparameter;
@@ -391,13 +389,13 @@ public final class ExtensibleAntInvoker extends Task {
         }
         
         public void setIncludesfile(final File includesfile) {
-              final IncludesFile i = new IncludesFile();
+              final IncludesFileElem i = new IncludesFileElem();
               i.setName(includesfile);
               includes.add(i);
         }
         
         public void setExcludesfile(final File excludesfile) {
-            final IncludesFile i = new IncludesFile();
+            final IncludesFileElem i = new IncludesFileElem();
             i.setName(excludesfile);
             excludes.add(i);
         }
@@ -422,23 +420,23 @@ public final class ExtensibleAntInvoker extends Task {
             }
         }
 
-        public void addConfiguredIncludesFile(final IncludesFile includesFile) {
+        public void addConfiguredIncludesFile(final IncludesFileElem includesFile) {
             includes.add(includesFile);
         }
         
-        public void addConfiguredExcludesFile(final IncludesFile excludesFile) {
+        public void addConfiguredExcludesFile(final IncludesFileElem excludesFile) {
             excludes.add(excludesFile);
         }
     }
 
-    public static class IncludesFile extends ConfElem {
+    public static class IncludesFileElem extends ConfElem {
         private File file;
         public void setName(final File file) {
             this.file = file;
         }
     }
 
-    public static class FileInfoFilter {
+    public static class FileInfoFilterElem extends ConfElem {
         private String format;
         private Boolean hasConref;
         private Boolean isResourceOnly;
@@ -466,9 +464,9 @@ public final class ExtensibleAntInvoker extends Task {
      * Nested pipeline SAX filter pipe element configuration.
      * @author jelovirt
      */
-    public static class SaxPipe extends Module {
+    public static class SaxPipeElem extends ModuleElem {
 
-        private final List<XmlFilter> filters = new ArrayList<>();
+        private final List<XmlFilterElem> filters = new ArrayList<>();
         private Project project;
         private List<String> format;
 
@@ -478,16 +476,16 @@ public final class ExtensibleAntInvoker extends Task {
             this.format = Collections.singletonList(format);
         }
 
-        public void addConfiguredFilter(final XmlFilter filter) {
+        public void addConfiguredFilter(final XmlFilterElem filter) {
             filters.add(filter);
         }
 
         public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
             final List<FilterPair> res = new ArrayList<>(filters.size());
-            for (final XmlFilter f: filters) {
+            for (final XmlFilterElem f: filters) {
                 if (isValid(getProject(), f.getIf(), f.getUnless())) {
                     final AbstractXMLFilter fc = f.getImplementation().newInstance();
-                    for (final Param p : f.params) {
+                    for (final ParamElem p : f.params) {
                         if (!p.isValid()) {
                             throw new BuildException("Incomplete parameter");
                         }
@@ -495,7 +493,7 @@ public final class ExtensibleAntInvoker extends Task {
                             fc.setParam(p.getName(), p.getValue());
                         }
                     }
-                    final List<FileInfoFilter> predicates = new ArrayList<>(f.fileInfoFilters);
+                    final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
                     predicates.addAll(getFormat());
                     assert !predicates.isEmpty();
                     Predicate<FileInfo> fs = combine(predicates);
@@ -505,10 +503,10 @@ public final class ExtensibleAntInvoker extends Task {
             return res;
         }
 
-        public List<FileInfoFilter> getFormat() {
+        public List<FileInfoFilterElem> getFormat() {
             return (format != null ? format : asList(ATTR_FORMAT_VALUE_DITA, ATTR_FORMAT_VALUE_DITAMAP)).stream()
                     .map(f -> {
-                        final FileInfoFilter ff = new FileInfoFilter();
+                        final FileInfoFilterElem ff = new FileInfoFilterElem();
                         ff.setFormat(f);
                         return ff;
                     })
@@ -526,21 +524,21 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     /** Nested pipeline SAX filter element configuration. */
-    public static class XmlFilter extends ConfElem {
+    public static class XmlFilterElem extends ConfElem {
 
-        public final List<FileInfoFilter> fileInfoFilters = new ArrayList<>();
-        public final List<Param> params = new ArrayList<>();
+        public final List<FileInfoFilterElem> fileInfoFilters = new ArrayList<>();
+        public final List<ParamElem> params = new ArrayList<>();
         private Class<? extends AbstractXMLFilter> cls;
 
         public void setClass(final Class<? extends AbstractXMLFilter> cls) {
             this.cls = cls;
         }
 
-        public void addConfiguredParam(final Param p) {
+        public void addConfiguredParam(final ParamElem p) {
             params.add(p);
         }
 
-        public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
+        public void addConfiguredDitaFileset(final FileInfoFilterElem fileInfoFilter) {
             fileInfoFilters.add(fileInfoFilter);
         }
 
@@ -554,7 +552,7 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     /** Nested parameters. */
-    public static class Param extends ConfElem {
+    public static class ParamElem extends ConfElem {
 
         private String name;
         private String value;

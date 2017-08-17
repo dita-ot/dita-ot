@@ -42,7 +42,7 @@ public final class ModuleFactory {
     }
     
     /**
-     * Create the Module class instance according to moduleName.
+     * Create the ModuleElem class instance according to moduleName.
      * 
      * @param moduleClass module class
      * @return AbstractPipelineModule

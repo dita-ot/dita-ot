@@ -32,7 +32,7 @@ public final class DitaClass {
     private static final Pattern VALID_DITA_CLASS = Pattern.compile("(\\+|-)\\s+(topic|map)/\\S+\\s+" +
                                                          "([\\S[^/]]+/\\S+\\s+)*");
 
-    /** Module/type pair for the most specialized type, with a single preceding and following space character. */
+    /** ModuleElem/type pair for the most specialized type, with a single preceding and following space character. */
     public final String matcher;
     /** Type name, i.e. local element name. */
     public final String localName;

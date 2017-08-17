@@ -17,7 +17,7 @@ import org.apache.tools.ant.taskdefs.condition.ConditionBase;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Exit;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.ant.ExtensibleAntInvoker.Param;
+import org.dita.dost.ant.ExtensibleAntInvoker.ParamElem;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
@@ -30,7 +30,7 @@ public final class DITAOTFailTask extends Exit {
     private String id = null;
 
     /** Nested params. */
-    private final ArrayList<Param> params = new ArrayList<>();
+    private final ArrayList<ParamElem> params = new ArrayList<>();
 
     /**
      * Default Construtor.
@@ -53,8 +53,8 @@ public final class DITAOTFailTask extends Exit {
      * the "if" attribute is set and refers to a unset property.
      * @return parameter
      */
-    public Param createParam() {
-        final Param p = new Param();
+    public ParamElem createParam() {
+        final ParamElem p = new ParamElem();
         params.add(p);
         return p;
     }
@@ -109,7 +109,7 @@ public final class DITAOTFailTask extends Exit {
      */
     private String[] readParamValues() throws BuildException {
         final ArrayList<String> prop = new ArrayList<>();
-        for (final Param p : params) {
+        for (final ParamElem p : params) {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }

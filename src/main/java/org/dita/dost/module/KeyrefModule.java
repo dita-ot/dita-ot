@@ -44,7 +44,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 /**
- * Keyref Module.
+ * Keyref ModuleElem.
  *
  */
 final class KeyrefModule extends AbstractPipelineModuleImpl {

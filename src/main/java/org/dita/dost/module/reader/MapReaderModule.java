@@ -30,7 +30,7 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.exists;
 
 /**
- * Module for reading and serializing topics into temporary directory.
+ * ModuleElem for reading and serializing topics into temporary directory.
  *
  * @since 2.5
  */

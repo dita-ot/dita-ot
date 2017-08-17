@@ -35,7 +35,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
     }
 
     /**
-     * Entry point of image metadata Module.
+     * Entry point of image metadata ModuleElem.
      * @param input Input parameters and resources.
      * @return null
      * @throws DITAOTException exception
