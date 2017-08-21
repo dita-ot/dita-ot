@@ -21,6 +21,7 @@ See the accompanying LICENSE file for applicable license.
   <extension-point id="dita.transtype.print" name="Print transtype"/>
   <extension-point id="dita.conductor.target" name="Ant conductor"/>
   <extension-point id="dita.conductor.target.relative" name="Ant conductor"/>
+  <extension-point id="ant.import" name="Ant import"/>
   <extension-point id="dita.specialization.catalog" name="XML catalog"/>
   <extension-point id="dita.specialization.catalog.relative" name="XML catalog"/>
   <extension-point id="dita.xsl.strings" name="Generated text"/>
