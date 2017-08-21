@@ -28,7 +28,7 @@ See the accompanying LICENSE file for applicable license.
     </param>
   </transtype>
   <require plugin="org.dita.xhtml"/>
-  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <feature extension="ant.import" file="build_dita2eclipsehelp.xml"/>
   <template file="build_dita2eclipsehelp_template.xml"/>
   <template file="xsl/map2eclipse_template.xsl"/>
   <template file="xsl/map2plugin_template.xsl"/>

@@ -15,7 +15,7 @@ See the accompanying LICENSE file for applicable license.
     <param name="args.htmlhelp.includefile" desc="Specifies the name of a file that you want included in the HTML Help." type="file"/>
   </transtype>
   <require plugin="org.dita.xhtml"/>
-  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <feature extension="ant.import" file="build_dita2htmlhelp.xml"/>
   <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
   <template file="xsl/map2hhc_template.xsl"/>
   <template file="xsl/map2hhp_template.xsl"/>

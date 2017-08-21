@@ -7,5 +7,5 @@ See the accompanying LICENSE file for applicable license.
 -->
 <plugin id="com.sophos.tocjs">
   <transtype name="tocjs" extends="html5" desc="TocJS"/>
-  <feature extension="dita.conductor.target" file="integrator.xml"/>
+  <feature extension="ant.import" file="integrator.xml"/>
 </plugin>

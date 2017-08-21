@@ -23,7 +23,7 @@ See the accompanying LICENSE file for applicable license.
     <param name="axf.opt" desc="Specifies the user configuration file for Antenna House Formatter." type="file"/>
     <param name="axf.cmd" desc="Specifies the path to the Antenna House Formatter executable." type="file"/>
   </transtype>
-  <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
+  <feature extension="ant.import" file="build_axf.xml"/>
   <feature extension="dita.conductor.pdf2.formatter.check" value="ah"/>
   <template file="xsl/fo/topic2fo_shell_axf_template.xsl"/>
 </plugin>

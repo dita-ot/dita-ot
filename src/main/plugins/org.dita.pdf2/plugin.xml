@@ -53,7 +53,7 @@ See the accompanying LICENSE file for applicable license.
   <transtype name="pdf2" extends="pdf" desc="PDF2"/>
   <feature extension="dita.transtype.print" value="pdf"/>
   <feature extension="dita.transtype.print" value="pdf2"/>
-  <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
+  <feature extension="ant.import" file="build.xml"/>
   <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
   <feature extension="dita.conductor.pdf2.formatter.check" value="ah"/>
   <feature extension="dita.xsl.strings" file="cfg/common/vars/strings.xml"/>
