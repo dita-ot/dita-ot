@@ -19,7 +19,7 @@ See the accompanying LICENSE file for applicable license.
     <param name="custom.xep.config" desc="Specifies the user configuration file for RenderX." type="file"/>
     <param name="maxJavaMemory" desc="Specifies the amount of memory allocated to the RenderX process."/>
   </transtype>
-  <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
+  <feature extension="ant.import" file="build_xep.xml"/>
   <feature extension="dita.conductor.pdf2.formatter.check" value="xep"/>
   <template file="xsl/fo/topic2fo_shell_xep_template.xsl"/>
 </plugin>

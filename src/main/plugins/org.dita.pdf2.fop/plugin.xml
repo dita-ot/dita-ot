@@ -39,6 +39,6 @@ See the accompanying LICENSE file for applicable license.
     <param name="args.fo.userconfig" desc="Specifies the user configuration file for FOP." type="file"/>
   </transtype>
   <feature extension="dita.conductor.pdf2.formatter.check" value="fop"/>
-  <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
+  <feature extension="ant.import" file="build_fop.xml"/>
   <template file="xsl/fo/topic2fo_shell_fop_template.xsl"/>
 </plugin>
