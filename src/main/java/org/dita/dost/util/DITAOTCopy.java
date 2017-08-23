@@ -88,8 +88,8 @@ public final class DITAOTCopy extends Task {
         if (destDir == null) {
             throw new BuildException("Destination directory not defined");
         }
-        if (!destDir.exists()) {
-            throw new BuildException("Destination directory " + destDir + " does not exists");
+        if (!destDir.exists() && !destDir.mkdirs()) {
+            throw new BuildException(new IOException("Destination directory " + destDir + " cannot be created"));
         }
         try {
             final FileUtils fileUtils = FileUtils.newFileUtils();
