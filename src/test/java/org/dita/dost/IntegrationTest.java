@@ -22,7 +22,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
 
     Transtype xhtml = XHTML;
     Transtype preprocess = PREPROCESS;
-
+    
     @Test
     public void test03() throws Throwable {
         builder().name("03")
@@ -803,6 +803,24 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .input(Paths.get("reftopicid.ditamap"))
                 .put("validate", "false")
                 .warnCount(1)
+                .test();
+    }
+    
+    @Test
+    public void testonlytopic_in_map() throws Throwable {
+        builder().name("onlytopic.in.map")
+                .transtype(xhtml)
+                .input(Paths.get("input.ditamap"))
+                .put("onlytopic.in.map", "true")
+                .test();
+    }
+    
+    @Test
+    public void testonlytopic_in_map_false() throws Throwable {
+        builder().name("onlytopic.in.map.false")
+                .transtype(xhtml)
+                .input(Paths.get("input.ditamap"))
+                .put("onlytopic.in.map", "false")
                 .test();
     }
 
