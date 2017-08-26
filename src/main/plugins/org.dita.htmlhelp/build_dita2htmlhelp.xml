@@ -54,6 +54,7 @@ See the accompanying LICENSE file for applicable license.
         <isset property="out.ext"/>
       </not>
     </condition>
+    <property name="args.output.base" value="${dita.map.filename.root}"/>
   </target>
 
   <target name="dita.map.htmlhelp.hhp" depends="dita.map.htmlhelp.init"
@@ -73,7 +74,7 @@ See the accompanying LICENSE file for applicable license.
       <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
-      <mergemapper to="${dita.map.filename.root}.hhp"/>
+      <mergemapper to="${args.output.base}.hhp"/>
     </xslt>
   </target>
 
@@ -88,9 +89,9 @@ See the accompanying LICENSE file for applicable license.
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
       <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
-      <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
+      <param name="HHCNAME" expression="${args.output.base}.hhc"/>
       <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
-      <mapper type="glob" from="${user.input.file}" to="${dita.map.filename.root}.hhp"/>
+      <mapper type="glob" from="${user.input.file}" to="${args.output.base}.hhp"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -110,7 +111,7 @@ See the accompanying LICENSE file for applicable license.
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
-      <mergemapper to="${dita.map.filename.root}.hhc"/>
+      <mergemapper to="${args.output.base}.hhc"/>
     </xslt>
   </target>
 
@@ -125,7 +126,7 @@ See the accompanying LICENSE file for applicable license.
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
       <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
-      <mapper type="glob" from="${user.input.file}" to="${dita.map.filename.root}.hhc"/>
+      <mapper type="glob" from="${user.input.file}" to="${args.output.base}.hhc"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -138,7 +139,7 @@ See the accompanying LICENSE file for applicable license.
     </condition>
     <pipeline message="Extract index term." tempdir="${dita.temp.dir}" inputmap="${user.input.file}">
       <module class="org.dita.dost.module.IndexTermExtractModule">
-        <param name="output" location="${htmlhelp.hhk.output.dir}/${dita.map.filename.root}.hhk"/>
+        <param name="output" location="${htmlhelp.hhk.output.dir}/${args.output.base}.hhk"/>
         <param name="targetext" value="${out.ext}"/>
         <param name="indextype" value="htmlhelp"/>
         <param name="indexclass" value="org.dita.dost.writer.CHMIndexWriter"/>
@@ -154,7 +155,7 @@ See the accompanying LICENSE file for applicable license.
     <dita-ot-echo id="DOTX070W"><param name="1" value="dita.out.map.htmlhelp.hhk"/></dita-ot-echo>
     <pipeline message="Extract index term." tempdir="${dita.temp.dir}" inputmap="${user.input.file}">
       <module class="org.dita.dost.module.IndexTermExtractModule">
-        <param name="output" location="${dita.output.dir}/${dita.map.filename.root}.hhk"/>
+        <param name="output" location="${dita.output.dir}/${args.output.base}.hhk"/>
         <param name="targetext" value="${out.ext}"/>
         <param name="indextype" value="htmlhelp"/>
         <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
@@ -190,7 +191,7 @@ See the accompanying LICENSE file for applicable license.
     <exec executable="${HTMLHelpCompiler}"
           failonerror="${failonerror}"
           failifexecutionfails="${failonerror}">
-      <arg value="${compile.dir}${file.separator}${dita.map.filename.root}.hhp"/>
+      <arg value="${compile.dir}${file.separator}${args.output.base}.hhp"/>
     </exec>
   </target>
 

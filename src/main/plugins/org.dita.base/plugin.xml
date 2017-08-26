@@ -97,6 +97,7 @@ See the accompanying LICENSE file for applicable license.
     <param name="args.input.dir" desc="Specifies the base directory for your documentation project." type="dir"/>
     <!-- Deprecated since 2.5 -->
     <param name="args.logdir" desc="Specifies the location where the DITA-OT places log files for your project." type="dir" deprecated="true"/>
+    <param name="args.output.base" desc="Specifies the name of the output file without file extension." type="string"/>
     <param name="args.tablelink.style" desc="Specifies how cross references to tables are styled." type="enum">
       <val>NUMBER</val>
       <val>TITLE</val>
