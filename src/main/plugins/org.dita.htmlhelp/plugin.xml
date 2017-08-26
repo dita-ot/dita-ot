@@ -16,6 +16,7 @@ See the accompanying LICENSE file for applicable license.
   </transtype>
   <require plugin="org.dita.xhtml"/>
   <feature extension="ant.import" file="build_dita2htmlhelp.xml"/>
+  <feature extension="dita.conductor.lib.import" file="lib/htmlhelp.jar"/>
   <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
   <template file="xsl/map2hhc_template.xsl"/>
   <template file="xsl/map2hhp_template.xsl"/>
