@@ -471,6 +471,9 @@ See the accompanying LICENSE file for applicable license.
   </target>
   
   <target name="build.eclipse.jar">
+    <condition property="args.eclipsehelp.jar.name" value="${args.output.base}.jar">
+      <isset property="args.output.base"/>
+    </condition>
     <jar destfile="${output.dir}/${args.eclipsehelp.jar.name}" basedir="${dita.output.dir}" if:set="args.eclipsehelp.jar.name">
       <include name="**/*"/>
     </jar>
