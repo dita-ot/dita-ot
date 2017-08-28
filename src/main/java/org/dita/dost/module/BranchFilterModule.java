@@ -435,6 +435,9 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
      * Read and cache filter.
      **/
     private FilterUtils getFilterUtils(final Element ditavalRef) {
+        if (ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF).isEmpty()) {
+            return null;
+        }
         final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
         final URI tmp = currentFile.resolve(href);
         final FileInfo fi = job.getFileInfo(tmp);
