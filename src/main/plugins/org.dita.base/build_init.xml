@@ -22,39 +22,13 @@ See the accompanying LICENSE file for applicable license.
   <!-- Deprecated -->
   <path id="dost.jar.path" refid="dost.class.path"/>
 
-  <taskdef name="pipeline"
-    classname="org.dita.dost.ant.ExtensibleAntInvoker">
-    <classpath refid="dost.class.path" />
-  </taskdef>
-
-  <taskdef name="dita-ot-echo"
-    classname="org.dita.dost.ant.DITAOTEchoTask">
-    <classpath refid="dost.class.path" />
-  </taskdef>
-
-  <taskdef name="dita-ot-fail"
-    classname="org.dita.dost.ant.DITAOTFailTask">
-    <classpath refid="dost.class.path" />
-  </taskdef>
-
-  <taskdef name="dita-ot-copy"
-    classname="org.dita.dost.ant.DITAOTCopy">
-    <classpath refid="dost.class.path" />
-  </taskdef>
-
-  <taskdef name="job-property" classname="org.dita.dost.ant.JobPropertyTask">
-    <classpath refid="dost.class.path"/>
-  </taskdef>
-
-  <typedef name="isabsolute"
-    classname="org.dita.dost.ant.IsAbsolute">
-    <classpath refid="dost.class.path" />
-  </typedef>
-  
-  <typedef name="dita-fileset" classname="org.dita.dost.ant.types.JobSourceSet">
-    <classpath refid="dost.class.path" />
-  </typedef>
-  
+  <taskdef name="pipeline" classname="org.dita.dost.ant.ExtensibleAntInvoker"/>
+  <taskdef name="dita-ot-echo" classname="org.dita.dost.ant.DITAOTEchoTask"/>
+  <taskdef name="dita-ot-fail" classname="org.dita.dost.ant.DITAOTFailTask"/>
+  <taskdef name="dita-ot-copy" classname="org.dita.dost.ant.DITAOTCopy"/>
+  <taskdef name="job-property" classname="org.dita.dost.ant.JobPropertyTask"/>
+  <typedef name="isabsolute" classname="org.dita.dost.ant.IsAbsolute"/>
+  <typedef name="dita-fileset" classname="org.dita.dost.ant.types.JobSourceSet"/>
   <typedef name="job-mapper" classname="org.dita.dost.ant.types.JobMapper"/>
 
   <macrodef name="job-helper" >
