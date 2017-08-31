@@ -405,7 +405,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
+        if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope) && !ATTR_SCOPE_VALUE_PEER.equals(scope)) {
             if (!(MAP_TOPICREF.matches(cls))) {
                 nonTopicrefReferenceSet.add(stripFragment(currentDir.resolve(href)));
             } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
