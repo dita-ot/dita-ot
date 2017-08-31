@@ -761,5 +761,23 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(1)
                 .test();
     }
+    
+    @Test
+    public void testonlytopic_in_map() throws Throwable {
+        builder().name("onlytopic.in.map")
+                .transtype(XHTML)
+                .input(Paths.get("input.ditamap"))
+                .put("onlytopic.in.map", "true")
+                .test();
+    }
+    
+    @Test
+    public void testonlytopic_in_map_false() throws Throwable {
+        builder().name("onlytopic.in.map.false")
+                .transtype(XHTML)
+                .input(Paths.get("input.ditamap"))
+                .put("onlytopic.in.map", "false")
+                .test();
+    }
 
 }
