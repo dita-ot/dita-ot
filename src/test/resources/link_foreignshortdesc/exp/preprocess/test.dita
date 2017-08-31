@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?><?workdir /C:\Users\IBM_ADMIN\github\robander\dita-ot\build\tmp\integrationTest\3189883\temp\preprocess?><?workdir-uri file:/C:/Users/IBM_ADMIN/github/robander/dita-ot/build/tmp/integrationTest/3189883/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="topic" class="- topic/topic " domains="(topic math-d)">
+ <title class="- topic/title ">Topic title</title>
+ <shortdesc class="- topic/shortdesc ">test foreign content in shortdesc: <equation class="+ topic/foreign math-d/equation ">
+  <math type="presentation">
+   <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+    <mml:semantics>
+     <mml:mrow>
+      <mml:mrow>
+       <mml:mi mathvariant="bold">a</mml:mi>
+       <mml:mo>=</mml:mo>
+       <mml:mfrac>
+        <mml:mrow>
+         <mml:mi mathvariant="bold">F</mml:mi>
+        </mml:mrow>
+        <mml:mi>m</mml:mi>
+       </mml:mfrac>
+       <mml:mo>=</mml:mo>
+       <mml:mfrac>
+        <mml:mrow>
+         <mml:mi>q</mml:mi>
+         <mml:mo>[</mml:mo>
+         <mml:mi mathvariant="bold">E</mml:mi>
+         <mml:mo>+</mml:mo>
+         <mml:mfenced>
+          <mml:mrow>
+           <mml:mi mathvariant="bold">v</mml:mi>
+           <mml:mi>X</mml:mi>
+           <mml:mi mathvariant="bold">B</mml:mi>
+          </mml:mrow>
+         </mml:mfenced>
+         <mml:mo>]</mml:mo>
+        </mml:mrow>
+        <mml:mi>m</mml:mi>
+       </mml:mfrac>
+      </mml:mrow>
+     </mml:mrow>
+    </mml:semantics>
+   </mml:math>
+  </math>
+ </equation>
+ </shortdesc>
+ <body class="- topic/body ">
+  <p class="- topic/p ">Para</p>
+ </body>
+<related-links class="- topic/related-links "><linkpool class="- topic/linkpool "><linkpool class="- topic/linkpool " collection-type="sequence"><link class="- topic/link " format="dita" href="test1.dita" mapclass="- map/topicref " role="child" scope="local" type="topic"><?ditaot usertext?><linktext class="- topic/linktext "><?ditaot gentext?>Topic title</linktext></link><link class="- topic/link " format="dita" href="test2.dita" mapclass="- map/topicref " role="child" scope="local" type="topic"><?ditaot usertext?><linktext class="- topic/linktext "><?ditaot gentext?>Topic title</linktext></link></linkpool></linkpool></related-links></topic>

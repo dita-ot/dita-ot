@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+
+<!--This file contains NO testing-purpose content-->
+
+<topic id="topic">
+  <title>Push Target</title>
+  <body>
+    <p>The next 2 paragraphs are the target of a conref pushreplace:</p>
+    <p id="p1">This is source as authored (before push)</p>
+    <p id="
+p2">This is source as authored (before push), with space in ID</p>
+    <p>After the push target.</p>
+  </body>
+</topic>

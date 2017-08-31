@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?NLS TYPE="org.eclipse.help.toc"?>
-<toc label="Root Map 01" topic="topics/xreffing-topic-1.html">
-   <topic label="XReffing Topic 1" href="topics/xreffing-topic-1.html"/>
-   <topic label="Target Topic A" href="topics/target-topic-a.html"/>
-   <topic label="Target Topic C" href="topics/target-topic-c.html"/>
-</toc>

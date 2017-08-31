@@ -1,8 +1,0 @@
-Bundle-Version: 1.0
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Localization: plugin
-Bundle-Name: %name
-Bundle-Vendor: %providerName
-Eclipse-LazyStart: true
-Bundle-SymbolicName: org.sample.help.doc; singleton:=true

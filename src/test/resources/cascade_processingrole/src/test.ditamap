@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map   title="Test cascade of resource only processing role">
+  
+  <topicgroup    processing-role="resource-only">
+       <topicref      href="topic1.dita"/>
+  </topicgroup>
+  
+  <topicgroup>
+     <!--Define the key here-->
+     <topicref       href="topic2.dita"      keys="key1"/>
+  </topicgroup>
+</map>

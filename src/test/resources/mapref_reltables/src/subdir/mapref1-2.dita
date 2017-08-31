@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="mapref1-2" xml:lang="en-us">
+<title>Second topic in first mapref</title>
+<shortdesc>second topic in the first mapref that gets pulled in. Top-level
+in this map.</shortdesc>
+<refbody></refbody>
+</reference>

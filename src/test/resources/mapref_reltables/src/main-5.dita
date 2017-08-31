@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<concept id="main-5" xml:lang="en-us">
+<title>Fifth item in main map - after mapref</title>
+<shortdesc>This item comes after the mapref. It is a child of the third item.
+It is a peer of the fourth item.</shortdesc>
+<conbody></conbody>
+</concept>
