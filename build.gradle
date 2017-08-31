@@ -10,7 +10,7 @@ apply plugin: 'maven'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
-version = '2.5.2'
+version = '2.5.3'
 
 description = """DITA Open Toolkit"""
 
