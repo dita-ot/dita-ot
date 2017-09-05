@@ -1453,7 +1453,10 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="@id"/>
       <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')] |
                                    *[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="flag-attributes"/>
+      <xsl:apply-templates select="@outputclass"/>
     </xsl:template>
+  
+  <xsl:template match="@outputclass"/>
 
     <!-- Get ID for an element, generate ID if not explicitly set. -->
     <xsl:template name="get-id">
