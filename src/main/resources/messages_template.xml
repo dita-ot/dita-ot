@@ -343,6 +343,16 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <message id="DOTJ072E" type="ERROR">
+    <reason>Email link without correct 'format' attribute.</reason>
+    <response>Using 'format' attribute value 'email'.</response>
+  </message>
+
+  <message id="DOTJ073E" type="ERROR">
+    <reason>Email link without correct 'scope' attribute.</reason>
+    <response>Using 'scope' attribute value 'external'.</response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

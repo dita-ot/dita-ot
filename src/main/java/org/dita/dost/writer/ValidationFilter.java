@@ -11,6 +11,7 @@ import static javax.xml.XMLConstants.*;
 import static org.dita.dost.util.Configuration.Mode;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -142,7 +143,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                         res = new AttributesImpl(atts);
                     }
                     final String gen = "gen_" + UUID.randomUUID().toString();
-                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_ID, gen);
+                    addOrSetAttribute(res, ATTRIBUTE_NAME_ID, gen);
                     logger.error(MessageUtils.getMessage("DOTJ066E", localName, gen).setLocation(locator).toString());
                     break;
                 case SKIP:
@@ -178,8 +179,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
         AttributesImpl res = modified;
         final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
         if (href != null) {
+            URI uri = null;
             try {
-                new URI(href);
+                uri = new URI(href);
             } catch (final URISyntaxException e) {
                 switch (processingMode) {
                 case STRICT:
@@ -189,16 +191,34 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     break;
                 case LAX:
                     try {
-                        final String u = new URI(URLUtils.clean(href.trim())).toASCIIString();
+                        uri = new URI(URLUtils.clean(href.trim()));
                         if (res == null) {
                             res = new AttributesImpl(atts);
                         }
-                        res.setValue(res.getIndex(ATTRIBUTE_NAME_HREF), u);
-                        logger.error(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using '" + u + "'.");
+                        res.setValue(res.getIndex(ATTRIBUTE_NAME_HREF), uri.toASCIIString());
+                        logger.error(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using '" + uri.toASCIIString() + "'.");
                     } catch (final URISyntaxException e1) {
                         logger.error(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
                     }
                     break;
+                }
+            }
+            if (uri != null && uri.getScheme() != null && uri.getScheme().equals("mailto")) {
+                final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+                if (!(format == null || format.equals(ATTR_FORMAT_VALUE_DITA) || format.equals(ATTR_FORMAT_VALUE_DITAMAP))) {
+                    if (res == null) {
+                        res = new AttributesImpl(atts);
+                    }
+                    addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, "email");
+                    logger.error(MessageUtils.getMessage("DOTJ072E").setLocation(locator).toString());
+                }
+                final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+                if (scope == null || !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
+                    if (res == null) {
+                        res = new AttributesImpl(atts);
+                    }
+                    addOrSetAttribute(res, ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL);
+                    logger.error(MessageUtils.getMessage("DOTJ073E").setLocation(locator).toString());
                 }
             }
         }
@@ -360,7 +380,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                             if (res == null) {
                                 res = new AttributesImpl(atts);
                             }
-                            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, fi.format);
+                            addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, fi.format);
                             break;
                     }
                 }
