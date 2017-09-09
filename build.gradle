@@ -210,6 +210,21 @@ task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTe
     args file("${distTempDir}/integrator.xml")
 }
 
+task integrateDistPlugins() {
+    dependsOn ['integrateDistMarkdown']
+}
+integrateDistPlugins.mustRunAfter integrateDistTemp
+
+task integrateDistMarkdown(type: JavaExec) {
+    main = "org.apache.tools.ant.launch.Launcher"
+    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+    workingDir distTempDir
+    args "-f"
+    args file("${distTempDir}/integrator.xml")
+    args "install"
+    args "-Dplugin.file=https://github.com/jelovirt/dita-ot-markdown/releases/download/1.3.0/com.elovirta.dita.markdown_1.3.0.zip"
+}
+
 task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
@@ -243,7 +258,7 @@ task generateJavadocs(type: Javadoc) {
 }
 generateJavadocs.onlyIf { skipDocs() }
 
-task dist(type: Zip, dependsOn: [jar, integrateDistTemp, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, generateDocs, cleanGenerateDocs, generateJavadocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
