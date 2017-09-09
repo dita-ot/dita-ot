@@ -8,6 +8,7 @@
 package org.dita.dost.writer;
 
 import static javax.xml.XMLConstants.*;
+import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Configuration.Mode;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -18,6 +19,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.util.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
@@ -205,7 +207,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             }
             if (uri != null && uri.getScheme() != null && uri.getScheme().equals("mailto")) {
                 final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-                if (!(format == null || format.equals(ATTR_FORMAT_VALUE_DITA) || format.equals(ATTR_FORMAT_VALUE_DITAMAP))) {
+                if (isFormatDita(format)) {
                     if (res == null) {
                         res = new AttributesImpl(atts);
                     }

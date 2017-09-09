@@ -585,14 +585,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
             hasHref = true;
             // Collect non-conref and non-copyto targets
-            if ((followLinks()
-                        || (TOPIC_IMAGE.matches(attrClass) || DITAVAREF_D_DITAVALREF.matches(attrClass)))) {
+            if ((followLinks() && canFollow(attrValue))
+                    || TOPIC_IMAGE.matches(attrClass)
+                    || DITAVAREF_D_DITAVALREF.matches(attrClass)) {
                 nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
             }
         }
 
         if (isFormatDita(attrFormat)) { // && formatFilter.test(attrFormat)
-            if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
+            if (ATTRIBUTE_NAME_HREF.equals(attrName) && canFollow(attrValue)) {
                 if (followLinks()) {
                     hrefTargets.add(filename);
                     toOutFile(filename, atts);
@@ -617,6 +618,16 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 }
             }
         }
+    }
+
+    /**
+     * Make educated guess in advance whether URI can be resolved to a file.
+     */
+    public static boolean canFollow(URI href) {
+        if (href != null && href.getScheme() != null && href.getScheme().equals("mailto")) {
+            return false;
+        }
+        return true;
     }
 
     private String getFormat(Attributes atts) {
@@ -712,7 +723,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * @return {@code true} if path walks up, otherwise {@code false}
      */
     private boolean isOutFile(final URI toCheckPath) {
-        return !toCheckPath.getPath().startsWith(rootDir.getPath());
+        final String path = toCheckPath.getPath();
+        return !(path != null && path.startsWith(rootDir.getPath()));
     }
 
     /**

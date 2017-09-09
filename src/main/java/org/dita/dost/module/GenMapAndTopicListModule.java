@@ -546,7 +546,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         if (listFilter.getCoderefTargets().contains(file.filename)) {
             return;
         }
-        if (isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
+        if ((isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format))) {
             addToWaitList(file);
         } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
             formatSet.add(file);
