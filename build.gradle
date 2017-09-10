@@ -214,6 +214,7 @@ task integrateDistPlugins() {
     dependsOn 'integrateDistMarkdown'
     dependsOn 'integrateDistNormalize'
     dependsOn 'integrateDistTroff'
+    dependsOn 'integrateDistTocjs'
 }
 integrateDistPlugins.mustRunAfter integrateDistTemp
 
@@ -245,6 +246,16 @@ task integrateDistTroff(type: JavaExec) {
     args file("${distTempDir}/integrator.xml")
     args "install"
     args "-Dplugin.file=https://github.com/dita-ot/org.dita.troff/archive/2.5.zip"
+}
+
+task integrateDistTocjs(type: JavaExec) {
+    main = "org.apache.tools.ant.launch.Launcher"
+    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+    workingDir distTempDir
+    args "-f"
+    args file("${distTempDir}/integrator.xml")
+    args "install"
+    args "-Dplugin.file=https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip"
 }
 
 task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
