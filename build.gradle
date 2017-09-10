@@ -213,6 +213,7 @@ task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTe
 task integrateDistPlugins() {
     dependsOn 'integrateDistMarkdown'
     dependsOn 'integrateDistNormalize'
+    dependsOn 'integrateDistTroff'
 }
 integrateDistPlugins.mustRunAfter integrateDistTemp
 
@@ -234,6 +235,16 @@ task integrateDistNormalize(type: JavaExec) {
     args file("${distTempDir}/integrator.xml")
     args "install"
     args "-Dplugin.file=https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip"
+}
+
+task integrateDistTroff(type: JavaExec) {
+    main = "org.apache.tools.ant.launch.Launcher"
+    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+    workingDir distTempDir
+    args "-f"
+    args file("${distTempDir}/integrator.xml")
+    args "install"
+    args "-Dplugin.file=https://github.com/dita-ot/org.dita.troff/archive/2.5.zip"
 }
 
 task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
