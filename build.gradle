@@ -210,6 +210,11 @@ task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTe
     args file("${distTempDir}/integrator.xml")
 }
 
+createPluginTask(distTempDir, "Markdown", "https://github.com/jelovirt/dita-ot-markdown/releases/download/1.3.0/com.elovirta.dita.markdown_1.3.0.zip")
+createPluginTask(distTempDir, "Normalize", "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip")
+createPluginTask(distTempDir, "Troff", "https://github.com/dita-ot/org.dita.troff/archive/2.5.zip")
+createPluginTask(distTempDir, "Tocjs", "https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip")
+
 task integrateDistPlugins() {
     dependsOn 'integrateDistMarkdown'
     dependsOn 'integrateDistNormalize'
@@ -218,44 +223,16 @@ task integrateDistPlugins() {
 }
 integrateDistPlugins.mustRunAfter integrateDistTemp
 
-task integrateDistMarkdown(type: JavaExec) {
-    main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
-    workingDir distTempDir
-    args "-f"
-    args file("${distTempDir}/integrator.xml")
-    args "install"
-    args "-Dplugin.file=https://github.com/jelovirt/dita-ot-markdown/releases/download/1.3.0/com.elovirta.dita.markdown_1.3.0.zip"
-}
-
-task integrateDistNormalize(type: JavaExec) {
-    main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
-    workingDir distTempDir
-    args "-f"
-    args file("${distTempDir}/integrator.xml")
-    args "install"
-    args "-Dplugin.file=https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip"
-}
-
-task integrateDistTroff(type: JavaExec) {
-    main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
-    workingDir distTempDir
-    args "-f"
-    args file("${distTempDir}/integrator.xml")
-    args "install"
-    args "-Dplugin.file=https://github.com/dita-ot/org.dita.troff/archive/2.5.zip"
-}
-
-task integrateDistTocjs(type: JavaExec) {
-    main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
-    workingDir distTempDir
-    args "-f"
-    args file("${distTempDir}/integrator.xml")
-    args "install"
-    args "-Dplugin.file=https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip"
+def createPluginTask(def distTempDir, def name, def url) {
+    return tasks.create("integrateDist${name}", JavaExec) {
+        main = "org.apache.tools.ant.launch.Launcher"
+        classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+        workingDir distTempDir
+        args "-f"
+        args file("${distTempDir}/integrator.xml")
+        args "install"
+        args "-Dplugin.file=${url}"
+    }
 }
 
 task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
