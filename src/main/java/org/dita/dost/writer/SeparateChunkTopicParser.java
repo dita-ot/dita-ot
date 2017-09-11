@@ -75,6 +75,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         this.currentFile = currentFile;
         final URI hrefValue = toURI(getValue(rootTopicref, ATTRIBUTE_NAME_HREF));
         final URI copytoValue = toURI(getValue(rootTopicref, ATTRIBUTE_NAME_COPY_TO));
+        final URI resolveBase;
         final String scopeValue = getCascadeValue(rootTopicref, ATTRIBUTE_NAME_SCOPE);
         // Chimera path, has fragment
         URI parseFilePath;
@@ -96,6 +97,9 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
             // if the path to target file make sense
             currentParsingFile = currentFile.resolve(parseFilePath);
             URI outputFileName;
+
+            resolveBase = copytoValue == null ? currentParsingFile : currentFile;
+
             /*
              * FIXME: we have code flaws here, references in ditamap need to
              * be updated to new created file.
@@ -135,10 +139,10 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 topicDoc = getTopicDoc(currentFile.resolve(parseFilePath));
 
                 if (firstTopicID != null) {
-                    outputFileName = resolve(currentFile, firstTopicID + FILE_EXTENSION_DITA);
+                    outputFileName = resolve(resolveBase, firstTopicID + FILE_EXTENSION_DITA);
                     targetTopicId = firstTopicID;
                 } else {
-                    outputFileName = resolve(currentParsingFile, null);
+                    outputFileName = resolve(resolveBase, null);
                     dotchunk = true;
                     targetTopicId = null;
                 }
@@ -146,12 +150,12 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
             }
             if (copytoValue != null) {
                 // use @copy-to value as the new file name
-                outputFileName = resolve(currentFile, copytoValue.toString());
+                outputFileName = resolve(resolveBase, copytoValue.toString());
             }
 
             if (new File(outputFileName).exists()) {
                 final URI t = outputFileName;
-                outputFileName = resolve(currentFile, generateFilename());
+                outputFileName = resolve(resolveBase, generateFilename());
                 conflictTable.put(outputFileName, t);
                 dotchunk = false;
             }
