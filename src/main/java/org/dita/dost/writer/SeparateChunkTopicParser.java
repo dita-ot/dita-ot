@@ -98,11 +98,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
             currentParsingFile = currentFile.resolve(parseFilePath);
             URI outputFileName;
 
-            if (copytoValue != null) {
-                resolveBase = currentFile;
-            } else {
-                resolveBase = currentParsingFile;
-            }
+            resolveBase = copytoValue == null ? currentParsingFile : currentFile;
 
             /*
              * FIXME: we have code flaws here, references in ditamap need to
