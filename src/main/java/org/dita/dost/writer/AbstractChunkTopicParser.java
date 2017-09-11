@@ -243,7 +243,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         final FileInfo cfi = job.getFileInfo(currentFile);
         URI result = cfi.result.resolve(id + FILE_EXTENSION_DITA);
         URI temp = tempFileNameScheme.generateTempFileName(result);
-        if (id == null || new File(currentFile.resolve(temp)).exists()) { //job.getFileInfo(result) != null
+        if (id == null || new File(currentParsingFile.resolve(temp)).exists()) { //job.getFileInfo(result) != null
             final URI t = temp;
 
             result = cfi.result.resolve(generateFilename());
@@ -257,9 +257,9 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                     .build();
             job.add(fi);
 
-            conflictTable.put(currentFile.resolve(temp), currentFile.resolve(t));
+            conflictTable.put(currentParsingFile.resolve(temp), currentParsingFile.resolve(t));
         }
-        return currentFile.resolve(temp);
+        return currentParsingFile.resolve(temp);
     }
 
     Attributes processAttributes(final Attributes atts) {
