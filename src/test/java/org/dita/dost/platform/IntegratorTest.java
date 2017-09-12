@@ -92,7 +92,7 @@ public class IntegratorTest {
         final Properties expProperties = getProperties(new File(expDir, "lib" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));
         expProperties.setProperty("plugin.base.dir", new File("plugins" + File.separator + "base").getPath());
         expProperties.setProperty("plugin.dummy.dir", new File("plugins" + File.separator + "dummy").getPath());
-        final Properties actProperties = getProperties(new File(tempDir, "lib" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));
+        final Properties actProperties = getProperties(new File(tempDir, "config" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));
         // supported_image_extensions needs to be tested separately
         assertEquals(new HashSet(Arrays.asList(expProperties.getProperty("supported_image_extensions").split(";"))),
                      new HashSet(Arrays.asList(expProperties.getProperty("supported_image_extensions").split(";"))));

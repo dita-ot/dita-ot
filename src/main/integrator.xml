@@ -43,14 +43,13 @@ See the accompanying LICENSE file for applicable license.
     <integrate ditadir="${dita.dir}" />
     <!-- place property files into a JAR so Ant will find them -->
     <jar destfile="${basedir}/lib/dost-configuration.jar">
-      <fileset dir="${basedir}/resources">
+      <fileset dir="${basedir}/config">
         <include name="messages.xml"/>
-        <include name="messages*.properties"/>
+        <include name="messages_*.properties"/>
         <include name="plugins.xml"/>
-      </fileset>
-      <fileset dir="${basedir}/lib">
+        <include name="log4j.properties"/>
         <include name="configuration.properties"/>
-        <!--include name="CatalogManager.properties"/-->
+        <include name="CatalogManager.properties"/>
         <include name="org.dita.dost.platform/plugin.properties"/>
       </fileset>
     </jar>

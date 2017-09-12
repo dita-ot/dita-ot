@@ -83,6 +83,7 @@ public final class Integrator {
     private static final String ELEM_PLUGINS = "plugins";
 
     private static final String LIB_DIR = "lib";
+    private static final String CONFIG_DIR = "config";
 
     public static final String FEAT_VALUE_SEPARATOR = ",";
     private static final String PARAM_VALUE_SEPARATOR = ";";
@@ -309,7 +310,7 @@ public final class Integrator {
         
         OutputStream out = null;
         try {
-            final File outFile = new File(ditaDir, LIB_DIR + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
+            final File outFile = new File(ditaDir, CONFIG_DIR + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
             if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
                 throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
             }
@@ -330,7 +331,7 @@ public final class Integrator {
 
         // Write messages properties
         final Properties messages = readMessageBundle();
-        final File messagesFile = ditaDir.toPath().resolve(RESOURCES_DIR).resolve("messages_en_US.properties").toFile();
+        final File messagesFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages_en_US.properties").toFile();
         try (final OutputStream messagesOut = new FileOutputStream(messagesFile)) {
             messages.store(messagesOut, null);
         }
@@ -349,7 +350,7 @@ public final class Integrator {
 
     private Properties readMessageBundle() throws IOException, XMLStreamException {
         final Properties messages = new Properties();
-        final File messagesXmlFile = ditaDir.toPath().resolve(RESOURCES_DIR).resolve("messages.xml").toFile();
+        final File messagesXmlFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages.xml").toFile();
         if (messagesXmlFile.exists()) {
             try (final InputStream in = new FileInputStream(messagesXmlFile)) {
                 final XMLStreamReader src = XMLInputFactory.newFactory().createXMLStreamReader(new StreamSource(in));
@@ -460,7 +461,7 @@ public final class Integrator {
     private void writeEnvShell(final Collection<File> jars) {
         Writer out = null;
         try {
-            final File outFile = new File(ditaDir, "resources" + File.separator + "env.sh");
+            final File outFile = new File(ditaDir, CONFIG_DIR + File.separator + "env.sh");
             if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
                 throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
             }
@@ -491,7 +492,7 @@ public final class Integrator {
     private void writeEnvBatch(final Collection<File> jars) {
         Writer out = null;
         try {
-            final File outFile = new File(ditaDir, "resources" + File.separator + "env.bat");
+            final File outFile = new File(ditaDir, CONFIG_DIR + File.separator + "env.bat");
             if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
                 throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
             }
@@ -720,7 +721,7 @@ public final class Integrator {
         final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
         pluginsDoc.appendChild(root);
         if (!descSet.isEmpty()) {
-            final URI b = new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml").toURI();
+            final URI b = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml").toURI();
             for (final File descFile : descSet) {
                 logger.debug("Read plug-in configuration " + descFile.getPath());
                 final Element plugin = parseDesc(descFile);
@@ -734,7 +735,7 @@ public final class Integrator {
     }
 
     private void writePlugins() throws TransformerException {
-        final File plugins = new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml");
+        final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml");
         logger.debug("Writing " + plugins);
         try {
             final Transformer serializer = TransformerFactory.newInstance().newTransformer();

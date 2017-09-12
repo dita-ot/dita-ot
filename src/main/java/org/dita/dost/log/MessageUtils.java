@@ -15,7 +15,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -23,7 +22,6 @@ import java.util.ResourceBundle;
 import javax.xml.parsers.DocumentBuilder;
 
 import com.google.common.annotations.VisibleForTesting;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,7 +44,7 @@ public final class MessageUtils {
     private static final String ATTRIBUTE_ID = "id";
     private static final String ATTRIBUTE_TYPE = "type";
     private static final String CLASSPATH_RESOURCE = "messages.xml";
-    private static final String RESOURCE = RESOURCES_DIR + "/" + CLASSPATH_RESOURCE;
+    private static final String RESOURCE = "config" + File.separator + CLASSPATH_RESOURCE;
 
     // Variables
 

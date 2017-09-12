@@ -104,7 +104,7 @@ task copyInstall(type: Copy) {
 task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":eclipsehelp:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
     description "Build archives and install all plugins with dependencies"
     main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/lib", "${projectDir}/src/main/resources")
+    classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/config")
     workingDir file("${projectDir}/src/main")
     args "-f"
     args file("${projectDir}/src/main/integrator.xml")
@@ -170,7 +170,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "docsrc/**"
         include "dtd/**"
         //include "lib/**/*.properties"
-        include "lib/configuration.properties"
+        exclude "lib/configuration.properties"
         exclude "plugins/org.dita-ot.html/**"
         exclude "plugins/org.dita.html5/.sass-cache"
         exclude "plugins/org.dita.html5/build"
@@ -185,8 +185,8 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "plugins/org.dita.pdf2.xep/src"
         exclude "temp"
         include "plugins/**"
-        exclude "resources/org"
-        include "resources/**"
+        include "config/**"
+        exclude "resources/**"
         include "xsl/**"
         // legacy build scripts
         include "startcmd.*"
@@ -210,7 +210,7 @@ updateConfiguration.mustRunAfter copyDistTemp
 
 task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp", updateConfiguration]) {
     main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir
     args "-f"
     args file("${distTempDir}/integrator.xml")
@@ -220,7 +220,7 @@ task integrateDistPlugins() {
     dependsOn bundled.collect{ name, url ->
         return tasks.create("integrateDist${name}", JavaExec) {
             main = "org.apache.tools.ant.launch.Launcher"
-            classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+            classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
             workingDir distTempDir
             args "-f"
             args file("${distTempDir}/integrator.xml")
@@ -233,7 +233,7 @@ integrateDistPlugins.mustRunAfter integrateDistTemp
 
 task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
     main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir
     args "-f"
     args file("${distTempDir}/docsrc/build.xml")

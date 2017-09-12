@@ -53,7 +53,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:value-of select="$msg"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:variable name="msgdoc" select="document('plugin:org.dita.base:resources/messages.xml')"/>
+          <xsl:variable name="msgdoc" select="document('plugin:org.dita.base:config/messages.xml')"/>
           <xsl:apply-templates select="$msgdoc/messages/message[@id = $id]" mode="get-message-content">    
             <xsl:with-param name="params" select="$msgparams"/>    
           </xsl:apply-templates>
