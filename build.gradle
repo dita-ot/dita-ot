@@ -241,7 +241,9 @@ task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
     args "-Ddita.home=" + distTempDir
     args "dist"
 }
+generateDocs.mustRunAfter integrateDistPlugins
 generateDocs.onlyIf { skipDocs() }
+
 task cleanGenerateDocs(type: Delete) {
     delete "${distTempDir}/docsrc/temp"
 }
