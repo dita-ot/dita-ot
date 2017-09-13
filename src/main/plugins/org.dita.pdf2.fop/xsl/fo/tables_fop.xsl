@@ -9,8 +9,9 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   version="2.0"
-  exclude-result-prefixes="xs">
+  exclude-result-prefixes="xs dita-ot">
 
     <xsl:template match="*[contains(@class, ' topic/dt ')]">
         <fo:block xsl:use-attribute-sets="dlentry.dt__content">
@@ -29,5 +30,19 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="@id" mode="dlentry-id-for-fop">
         <fo:inline id="{.}"/>
     </xsl:template>
+
+  <xsl:template match="*[contains(@class,' topic/entry ')]">
+    <xsl:choose>
+      <xsl:when test="dita-ot:get-entry-end-position(.) gt number(ancestor::*[contains(@class,' topic/tgroup ')][1]/@cols)">
+        <!-- FOP crashes if an entry extends beyond the table width -->
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="id" select="'PDFX012E'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>
