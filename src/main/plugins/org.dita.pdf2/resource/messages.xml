@@ -89,4 +89,8 @@ See the accompanying LICENSE file for applicable license.
     <reason>The index term '%2' uses both an index-see element and %1 element.</reason>
     <response>Convert the index-see element to index-see-also.</response>
   </message>
+  <message id="PDFX012E" type="ERROR">
+    <reason>Found a table row with more entries than allowed.</reason>
+    <response/>
+  </message>
 </messages>  

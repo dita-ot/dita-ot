@@ -216,6 +216,19 @@ See the accompanying LICENSE file for applicable license.
                                                     '+-0123456789.'))"/>
   </xsl:function>
   
+  <xsl:function name="dita-ot:get-entry-end-position" as="xs:integer">
+    <xsl:param name="thisentry" as="element()"/>
+    <xsl:choose>
+      <xsl:when test="$thisentry/@dita-ot:x and $thisentry/@dita-ot:morecols">
+        <xsl:sequence select="xs:integer($thisentry/@dita-ot:x) + xs:integer($thisentry/@dita-ot:morecols)"/>
+      </xsl:when>
+      <xsl:when test="$thisentry/@dita-ot:x">
+        <xsl:sequence select="xs:integer($thisentry/@dita-ot:x)"/>
+      </xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+  
   <xsl:function name="dita-ot:get-unit">
     <xsl:param name="width" as="xs:string"/>
     <xsl:value-of select="normalize-space(translate($width,
@@ -399,7 +412,16 @@ See the accompanying LICENSE file for applicable license.
         </fo:table-row>
     </xsl:template>
 
+    <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="validate-entry-position">
+        <xsl:if test="dita-ot:get-entry-end-position(.) gt number(ancestor::*[contains(@class,' topic/tgroup ')][1]/@cols)">
+            <xsl:call-template name="output-message">
+                <xsl:with-param name="id" select="'PDFX012E'"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
+        <xsl:apply-templates select="." mode="validate-entry-position"/>
         <fo:table-cell xsl:use-attribute-sets="thead.row.entry">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="applySpansAttrs"/>
@@ -414,6 +436,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
+        <xsl:apply-templates select="." mode="validate-entry-position"/>
         <xsl:choose>
             <xsl:when test="ancestor::*[contains(@class, ' topic/table ')][1]/@rowheader = 'firstcol'
                         and empty(preceding-sibling::*[contains(@class, ' topic/entry ')])">
