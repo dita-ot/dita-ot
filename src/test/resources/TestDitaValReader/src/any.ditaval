@@ -1,0 +1,7 @@
+<val xmlns:cms="http://www.cms.com/">
+  <prop att="platform" val="windows" action="exclude"/>
+  <prop att="xml:lang" val="fr" action="exclude"/>
+  <prop att="cms:confidentiality" val="confidential" action="exclude"/>
+  <prop att="rev" val="10" action="exclude"/>
+  <prop action="include"/>
+</val>

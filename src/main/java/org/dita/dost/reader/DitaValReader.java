@@ -25,6 +25,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,6 +35,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import static javax.xml.XMLConstants.XML_NS_PREFIX;
+import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FilterUtils.DEFAULT;
 import static org.dita.dost.util.URLUtils.getRelativePath;
@@ -177,7 +180,22 @@ public final class DitaValReader implements AbstractReader {
                 attName = QName.valueOf(ATTRIBUTE_NAME_REV);
             } else {
                 final String attValue = getValue(elem, ATTRIBUTE_NAME_ATT);
-                attName = attValue == null ? null : QName.valueOf(attValue);
+                if (attValue != null) {
+                    if (attValue.contains(":")) {
+                        final String[] parts = attValue.split(":");
+                        final String uri;
+                        if (parts[0].equals(XML_NS_PREFIX)) {
+                            uri = XML_NS_URI;
+                        } else {
+                            uri = elem.lookupNamespaceURI(parts[0]);
+                        }
+                        attName = new QName(uri, parts[1], parts[0]);
+                    } else {
+                        attName = QName.valueOf(attValue);
+                    }
+                } else {
+                    attName = null;
+                }
             }
             final String attValue = getValue(elem, ATTRIBUTE_NAME_VAL);
             final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;

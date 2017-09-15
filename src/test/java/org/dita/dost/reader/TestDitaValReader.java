@@ -18,6 +18,7 @@ import javax.xml.namespace.QName;
 import java.io.File;
 import java.util.Map;
 
+import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.junit.Assert.assertTrue;
 
 
@@ -28,6 +29,7 @@ public class TestDitaValReader {
     private static final QName AUDIENCE = QName.valueOf("audience");
     private static final QName PROPS = QName.valueOf("props");
     private static final QName KEYWORD = QName.valueOf("keyword");
+    private static final QName REV = QName.valueOf("rev");
 
     private final File resourceDir = TestUtils.getResourceDir(TestDitaValReader.class);
 
@@ -48,6 +50,20 @@ public class TestDitaValReader {
         assertTrue(map.get(new FilterKey(KEYWORD, "key2")) instanceof FilterUtils.Flag);
         assertTrue(map.get(new FilterKey(KEYWORD, "key3")) instanceof FilterUtils.Include);
         assertTrue(map.get(new FilterKey(PROPS, null)) instanceof FilterUtils.Include);
+    }
+
+    @Test
+    public void testAnyAttribute() throws DITAOTException{
+        final File ditavalFile = new File(resourceDir, "src" + File.separator + "any.ditaval");
+        DitaValReader reader = new DitaValReader();
+        reader.read(ditavalFile.toURI());
+        final Map<FilterKey, Action> map = reader.getFilterMap();
+        assertTrue(map.get(new FilterKey(PLATFORM, "windows")) instanceof FilterUtils.Exclude);
+        assertTrue(map.get(new FilterKey(new QName(XML_NS_URI, "lang", "xml"), "fr"))
+                instanceof FilterUtils.Exclude);
+        assertTrue(map.get(new FilterKey(new QName("http://www.cms.com/", "confidentiality"), "confidential"))
+                instanceof FilterUtils.Exclude);
+        assertTrue(map.get(new FilterKey(REV, "10")) instanceof FilterUtils.Exclude);
     }
 
 }
