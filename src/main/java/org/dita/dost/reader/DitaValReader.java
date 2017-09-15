@@ -8,11 +8,13 @@
  */
 package org.dita.dost.reader;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.FilterUtils.Flag;
@@ -51,6 +53,7 @@ import static org.dita.dost.util.XMLUtils.*;
  */
 public final class DitaValReader implements AbstractReader {
 
+    private boolean anyAttribute;
     protected DITAOTLogger logger;
     protected Job job;
     private final Map<FilterKey, Action> filterMap;
@@ -84,6 +87,13 @@ public final class DitaValReader implements AbstractReader {
         } catch (final ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
+        this.anyAttribute = Boolean.parseBoolean(Configuration.configuration.getOrDefault("filter-any-attribute", "false"));
+    }
+
+    @VisibleForTesting
+    DitaValReader(boolean anyAttribute) {
+        this();
+        this.anyAttribute = anyAttribute;
     }
 
     @Override
@@ -196,6 +206,10 @@ public final class DitaValReader implements AbstractReader {
                 } else {
                     attName = null;
                 }
+            }
+            if (!anyAttribute && attName != null && attName.equals(QName.valueOf(ATTRIBUTE_NAME_REV))) {
+                logger.warn(MessageUtils.getMessage("DOTJ074W").toString());
+                return;
             }
             final String attValue = getValue(elem, ATTRIBUTE_NAME_VAL);
             final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;

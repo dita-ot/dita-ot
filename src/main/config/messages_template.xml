@@ -353,6 +353,11 @@ See the accompanying LICENSE file for applicable license.
     <response>Using 'scope' attribute value 'external'.</response>
   </message>
 
+  <message id="DOTJ074W" type="WARN">
+    <reason>Rev attribute cannot be used with prop filter.</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

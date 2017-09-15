@@ -73,7 +73,7 @@ public final class FilterUtils {
 
     public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
-    private final boolean anyAttribute;
+    private boolean anyAttribute;
     private DITAOTLogger logger;
     /** Actions for filter keys. */
     private final Map<FilterKey, Action> filterMap;
@@ -89,7 +89,7 @@ public final class FilterUtils {
         this.filterMap = new HashMap<>(filterMap);
         this.foregroundConflictColor = foregroundConflictColor;
         this.backgroundConflictColor = backgroundConflictColor;
-        this.anyAttribute = Boolean.parseBoolean(Configuration.configuration.getOrDefault("filter-any-attribute", "true"));
+        this.anyAttribute = Boolean.parseBoolean(Configuration.configuration.getOrDefault("filter-any-attribute", "false"));
     }
 
     /**
@@ -123,7 +123,14 @@ public final class FilterUtils {
         this.filterMap = dfm;
         this.foregroundConflictColor = foregroundConflictColor;
         this.backgroundConflictColor = backgroundConflictColor;
-        this.anyAttribute = Boolean.parseBoolean(Configuration.configuration.getOrDefault("filter-any-attribute", "true"));
+        this.anyAttribute = Boolean.parseBoolean(Configuration.configuration.getOrDefault("filter-any-attribute", "false"));
+    }
+
+    @VisibleForTesting
+    public FilterUtils(boolean isPrintType, Map<FilterKey, Action> filterMap,
+                       String foregroundConflictColor, String backgroundConflictColor, boolean anyAttribute) {
+        this(isPrintType, filterMap, foregroundConflictColor, backgroundConflictColor);
+        this.anyAttribute = anyAttribute;
     }
 
     public void setLogger(final DITAOTLogger logger) {
