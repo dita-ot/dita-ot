@@ -72,6 +72,7 @@ public class FilterUtilsTest {
         final Map<FilterKey, Action> fm = new HashMap<>();
         fm.put(new FilterKey(QName.valueOf(ATTRIBUTE_NAME_REV), null), Action.EXCLUDE);
         fm.put(new FilterKey(new QName(XML_NS_URI, "lang", "xml"), "fr"), Action.EXCLUDE);
+        fm.put(new FilterKey(new QName("http://www.cms.com/", "confidentiality"), "confidential"), Action.EXCLUDE);
         final FilterUtils f = new FilterUtils(false, fm, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
@@ -80,6 +81,8 @@ public class FilterUtilsTest {
         assertTrue(f.needExclude(new AttributesBuilder().add(ATTRIBUTE_NAME_REV, "1").build(), new QName[0][0]));
         assertFalse(f.needExclude(new AttributesBuilder().add(XML_NS_URI, "lang", "en").build(), new QName[0][0]));
         assertTrue(f.needExclude(new AttributesBuilder().add(XML_NS_URI, "lang", "fr").build(), new QName[0][0]));
+        assertTrue(f.needExclude(new AttributesBuilder().add("http://www.cms.com/", "confidentiality", "confidential").build(), new QName[0][0]));
+        assertFalse(f.needExclude(new AttributesBuilder().add("http://www.cms.com/", "confidentiality", "public").build(), new QName[0][0]));
     }
 
     @Test
