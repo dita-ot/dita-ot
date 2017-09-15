@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableSet;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
@@ -49,7 +50,7 @@ public final class FilterUtils {
     /** Subject scheme file extension */
     public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
 
-    private static final QName[] PROFILE_ATTRIBUTES = {
+    private static final Set<QName> PROFILE_ATTRIBUTES = ImmutableSet.of(
         QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
         QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
         QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
@@ -57,9 +58,9 @@ public final class FilterUtils {
         QName.valueOf(ATTRIBUTE_NAME_PROPS),
         QName.valueOf(ATTRIBUTE_NAME_PRINT),
         QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET)
-    };
+    );
 
-    private static final QName[] FLAG_ATTRIBUTES = {
+    private static final Set<QName> FLAG_ATTRIBUTES = ImmutableSet.of(
             QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
             QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
             QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
@@ -68,10 +69,11 @@ public final class FilterUtils {
             QName.valueOf(ATTRIBUTE_NAME_PRINT),
             QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET),
             QName.valueOf(ATTRIBUTE_NAME_REV)
-    };
+    );
 
     public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
+    private final boolean anyAttribute;
     private DITAOTLogger logger;
     /** Actions for filter keys. */
     private final Map<FilterKey, Action> filterMap;
@@ -87,6 +89,7 @@ public final class FilterUtils {
         this.filterMap = new HashMap<>(filterMap);
         this.foregroundConflictColor = foregroundConflictColor;
         this.backgroundConflictColor = backgroundConflictColor;
+        this.anyAttribute = Boolean.parseBoolean(Configuration.configuration.getOrDefault("filter-any-attribute", "true"));
     }
 
     /**
@@ -120,6 +123,7 @@ public final class FilterUtils {
         this.filterMap = dfm;
         this.foregroundConflictColor = foregroundConflictColor;
         this.backgroundConflictColor = backgroundConflictColor;
+        this.anyAttribute = Boolean.parseBoolean(Configuration.configuration.getOrDefault("filter-any-attribute", "true"));
     }
 
     public void setLogger(final DITAOTLogger logger) {
@@ -137,8 +141,13 @@ public final class FilterUtils {
         }
 
         final Set<Flag> res = new HashSet<>();
-        for (final QName attr: FLAG_ATTRIBUTES) {
-            final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
+        final int length = atts.getLength();
+        for (int i = 0; i < length; i++) {
+            final QName attr = new QName(atts.getURI(i), atts.getLocalName(i));
+            if (!anyAttribute && !FLAG_ATTRIBUTES.contains(attr)) {
+                continue;
+            }
+            final String value = atts.getValue(i);
             if (value != null) {
                 final Map<QName, List<String>> groups = getGroups(value);
                 for (Map.Entry<QName, List<String>> group: groups.entrySet()) {
@@ -261,8 +270,13 @@ public final class FilterUtils {
             return false;
         }
 
-        for (final QName attr: PROFILE_ATTRIBUTES) {
-            final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
+        final int length = atts.getLength();
+        for (int i = 0; i < length; i++) {
+            final QName attr = new QName(atts.getURI(i), atts.getLocalName(i));
+            if (!anyAttribute && !PROFILE_ATTRIBUTES.contains(attr)) {
+                continue;
+            }
+            final String value = atts.getValue(i);
             if (value != null) {
                 final Map<QName, List<String>> groups = getGroups(value);
                 for (Map.Entry<QName, List<String>> group: groups.entrySet()) {
