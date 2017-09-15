@@ -16,6 +16,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Stream;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -306,6 +307,17 @@ public final class XMLUtils {
         } else {
             atts.addAttribute(uri, localName, qName, type, value);
         }
+    }
+
+    /**
+     * Add or set attribute. Convenience method for {@link #addOrSetAttribute(AttributesImpl, String, String, String, String, String)}.
+     *
+     * @param atts attributes
+     * @param name name
+     * @param value attribute value
+     */
+    public static void addOrSetAttribute(final AttributesImpl atts, final QName name, final String value) {
+        addOrSetAttribute(atts, name.getNamespaceURI(), name.getLocalPart(), name.toString(), "CDATA", value);
     }
 
     /**

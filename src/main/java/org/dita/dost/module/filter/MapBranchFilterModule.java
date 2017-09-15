@@ -21,6 +21,7 @@ import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
@@ -252,7 +253,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     /** Filter map and remove excluded content. */
     private void filterBranches(final Element root) {
-        final String[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
+        final QName[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
         final SubjectScheme subjectSchemeMap = getSubjectScheme(root);
         final List<FilterUtils> baseFilter = getBaseFilter(subjectSchemeMap);
         filterBranches(root, baseFilter, props, subjectSchemeMap);
@@ -266,7 +267,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         return Collections.emptyList();
     }
 
-    private void filterBranches(final Element elem, final List<FilterUtils> filters, final String[][] props,
+    private void filterBranches(final Element elem, final List<FilterUtils> filters, final QName[][] props,
                                 final SubjectScheme subjectSchemeMap) {
         final List<FilterUtils> fs = combineFilterUtils(elem, filters, subjectSchemeMap);
 

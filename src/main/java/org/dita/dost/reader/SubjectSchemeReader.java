@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.dita.dost.log.DITAOTLogger;
@@ -36,9 +37,9 @@ public class SubjectSchemeReader {
     
     private DITAOTLogger logger;
     private Job job;
-    private final Map<String, Map<String, Set<Element>>> bindingMap;
-    private final Map<String, Map<String, Set<String>>> validValuesMap;
-    private final Map<String, Map<String, String>> defaultValueMap;
+    private final Map<QName, Map<String, Set<Element>>> bindingMap;
+    private final Map<QName, Map<String, Set<String>>> validValuesMap;
+    private final Map<QName, Map<String, String>> defaultValueMap;
 
     public SubjectSchemeReader() {
         validValuesMap = new HashMap<>();
@@ -63,7 +64,7 @@ public class SubjectSchemeReader {
      * 
      * @return valid attribute values or empty map
      */
-    public Map<String, Map<String, Set<String>>> getValidValuesMap() {
+    public Map<QName, Map<String, Set<String>>> getValidValuesMap() {
         return validValuesMap;
     }
 
@@ -75,7 +76,7 @@ public class SubjectSchemeReader {
      * 
      * @return default values or empty map
      */
-    public Map<String, Map<String, String>> getDefaultValueMap() {
+    public Map<QName, Map<String, String>> getDefaultValueMap() {
         return defaultValueMap;
     }
     
@@ -217,13 +218,14 @@ public class SubjectSchemeReader {
     public void processEnumerationDef(final Element schemeRoot, final Element enumerationDef) {
         final List<Element> enumChildren = XMLUtils.getChildElements(enumerationDef);
         String elementName = "*";
-        String attributeName = null;
+        QName attributeName = null;
         for (Element child : enumChildren) {
             final String attrValue = child.getAttribute(ATTRIBUTE_NAME_CLASS);
             if (SUBJECTSCHEME_ELEMENTDEF.matches(attrValue)) {
                 elementName = child.getAttribute(ATTRIBUTE_NAME_NAME);
             } else if (SUBJECTSCHEME_ATTRIBUTEDEF.matches(attrValue)) {
-                attributeName = child.getAttribute(ATTRIBUTE_NAME_NAME);
+                final String name = child.getAttribute(ATTRIBUTE_NAME_NAME);
+                attributeName = name != null ? QName.valueOf(name) : null;
                 Map<String, Set<Element>> S = bindingMap.computeIfAbsent(attributeName, k -> new HashMap<>());
             } else if (SUBJECTSCHEME_DEFAULTSUBJECT.matches(attrValue)) {
                 // Put default values.
@@ -302,7 +304,7 @@ public class SubjectSchemeReader {
      * @param attName attribute name
      * @param category enumeration category name
      */
-    private void putValuePairsIntoMap(final Element subtree, final String elementName, final String attName, final String category) {
+    private void putValuePairsIntoMap(final Element subtree, final String elementName, final QName attName, final String category) {
         if (subtree == null || attName == null) {
             return;
         }

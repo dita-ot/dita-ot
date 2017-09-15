@@ -31,6 +31,7 @@ import org.dita.dost.module.filter.SubjectScheme;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
+import javax.xml.namespace.QName;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -48,28 +49,28 @@ public final class FilterUtils {
     /** Subject scheme file extension */
     public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
 
-    private static final String[] PROFILE_ATTRIBUTES = {
-        ATTRIBUTE_NAME_AUDIENCE,
-        ATTRIBUTE_NAME_PLATFORM,
-        ATTRIBUTE_NAME_PRODUCT,
-        ATTRIBUTE_NAME_OTHERPROPS,
-        ATTRIBUTE_NAME_PROPS,
-        ATTRIBUTE_NAME_PRINT,
-        ATTRIBUTE_NAME_DELIVERYTARGET
+    private static final QName[] PROFILE_ATTRIBUTES = {
+        QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
+        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
+        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
+        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
+        QName.valueOf(ATTRIBUTE_NAME_PROPS),
+        QName.valueOf(ATTRIBUTE_NAME_PRINT),
+        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET)
     };
 
-    private static final String[] FLAG_ATTRIBUTES = {
-            ATTRIBUTE_NAME_AUDIENCE,
-            ATTRIBUTE_NAME_PLATFORM,
-            ATTRIBUTE_NAME_PRODUCT,
-            ATTRIBUTE_NAME_OTHERPROPS,
-            ATTRIBUTE_NAME_PROPS,
-            ATTRIBUTE_NAME_PRINT,
-            ATTRIBUTE_NAME_DELIVERYTARGET,
-            ATTRIBUTE_NAME_REV
+    private static final QName[] FLAG_ATTRIBUTES = {
+            QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
+            QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
+            QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
+            QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
+            QName.valueOf(ATTRIBUTE_NAME_PROPS),
+            QName.valueOf(ATTRIBUTE_NAME_PRINT),
+            QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET),
+            QName.valueOf(ATTRIBUTE_NAME_REV)
     };
-    
-    public static final FilterKey DEFAULT = new FilterKey(DEFAULT_ACTION, null);
+
+    public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
     private DITAOTLogger logger;
     /** Actions for filter keys. */
@@ -105,15 +106,15 @@ public final class FilterUtils {
     public FilterUtils(final boolean isPrintType, final Map<FilterKey, Action> filterMap,
                        String foregroundConflictColor, String backgroundConflictColor) {
         final Map<FilterKey, Action> dfm = new HashMap<>();
-        dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_YES), Action.INCLUDE);
+        dfm.put(new FilterKey(QName.valueOf(ATTRIBUTE_NAME_PRINT), ATTR_PRINT_VALUE_YES), Action.INCLUDE);
         if (isPrintType) {
-            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_PRINT_ONLY), Action.INCLUDE);
-            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_NO), Action.EXCLUDE);
+            dfm.put(new FilterKey(QName.valueOf(ATTRIBUTE_NAME_PRINT), ATTR_PRINT_VALUE_PRINT_ONLY), Action.INCLUDE);
+            dfm.put(new FilterKey(QName.valueOf(ATTRIBUTE_NAME_PRINT), ATTR_PRINT_VALUE_NO), Action.EXCLUDE);
         } else {
-            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_PRINT_ONLY), Action.EXCLUDE);
-            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_NO), Action.INCLUDE);            
+            dfm.put(new FilterKey(QName.valueOf(ATTRIBUTE_NAME_PRINT), ATTR_PRINT_VALUE_PRINT_ONLY), Action.EXCLUDE);
+            dfm.put(new FilterKey(QName.valueOf(ATTRIBUTE_NAME_PRINT), ATTR_PRINT_VALUE_NO), Action.INCLUDE);
         }
-        dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, null), Action.INCLUDE);
+        dfm.put(new FilterKey(QName.valueOf(ATTRIBUTE_NAME_PRINT), null), Action.INCLUDE);
         dfm.putAll(filterMap);
         this.logMissingAction = !filterMap.isEmpty();
         this.filterMap = dfm;
@@ -130,35 +131,36 @@ public final class FilterUtils {
         return filterMap.toString();
     }
 
-    public Set<Flag> getFlags(final Attributes atts, final String[][] extProps) {
+    public Set<Flag> getFlags(final Attributes atts, final QName[][] extProps) {
         if (filterMap.isEmpty()) {
             return emptySet();
         }
 
         final Set<Flag> res = new HashSet<>();
-        for (final String attr: FLAG_ATTRIBUTES) {
-            final String value = atts.getValue(attr);
+        for (final QName attr: FLAG_ATTRIBUTES) {
+            final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
             if (value != null) {
-                final Map<String, List<String>> groups = getGroups(value);
-                for (Map.Entry<String, List<String>> group: groups.entrySet()) {
-                    final String[] propList =
+                final Map<QName, List<String>> groups = getGroups(value);
+                for (Map.Entry<QName, List<String>> group: groups.entrySet()) {
+                    final QName[] propList =
                             group.getKey() != null
-                                    ? new String[]{attr, group.getKey()}
-                                    : new String[]{attr};
+                                    ? new QName[]{attr, group.getKey()}
+                                    : new QName[]{attr};
                     res.addAll(extCheckFlag(propList, group.getValue()));
                 }
             }
         }
         if (res.isEmpty()) {
             if (extProps != null && extProps.length != 0) {
-                for (final String[] propList : extProps) {
+                for (final QName[] propList : extProps) {
                     int propListIndex = propList.length - 1;
-                    final String propName = propList[propListIndex];
-                    String propValue = atts.getValue(propName);
+                    final QName propName = propList[propListIndex];
+                    String propValue = atts.getValue(propName.getNamespaceURI(), propName.getLocalPart());
 
                     while ((propValue == null || propValue.trim().isEmpty()) && propListIndex > 0) {
                         propListIndex--;
-                        propValue = getLabelValue(propName, atts.getValue(propList[propListIndex]));
+                        final QName current = propList[propListIndex];
+                        propValue = getLabelValue(propName, atts.getValue(current.getNamespaceURI(), current.getLocalPart()));
                     }
                     if (propValue != null) {
                         res.addAll(extCheckFlag(propList, Arrays.asList(propValue.split("\\s+"))));
@@ -198,7 +200,7 @@ public final class FilterUtils {
         }
     }
 
-    public Set<Flag> getFlags(final Element element, final String[][] props) {
+    public Set<Flag> getFlags(final Element element, final QName[][] props) {
         final XMLUtils.AttributesBuilder buf = new XMLUtils.AttributesBuilder();
         final NamedNodeMap attrs = element.getAttributes();
         for (int i = 0; i < attrs.getLength() ; i++) {
@@ -215,9 +217,9 @@ public final class FilterUtils {
      * @param attValue attribute group values
      */
     @VisibleForTesting
-    List<Flag> extCheckFlag(final String[] propList, final List<String> attValue) {
+    List<Flag> extCheckFlag(final QName[] propList, final List<String> attValue) {
         final List<Flag> res = new ArrayList<>();
-        for (final String attName : Arrays.asList(propList)) {
+        for (final QName attName : Arrays.asList(propList)) {
             for (final String attSubValue : attValue) {
                 Action filterAction = filterMap.get(new FilterKey(attName, attSubValue));
                 if (filterAction == null) {
@@ -235,7 +237,7 @@ public final class FilterUtils {
     /**
      * Test if element should be excluded based on filter.
      */
-    public boolean needExclude(final Element element, final String[][] props) {
+    public boolean needExclude(final Element element, final QName[][] props) {
         final XMLUtils.AttributesBuilder buf = new XMLUtils.AttributesBuilder();
         final NamedNodeMap attrs = element.getAttributes();
         for (int i = 0; i < attrs.getLength() ; i++) {
@@ -254,20 +256,20 @@ public final class FilterUtils {
      * @param extProps {@code props} attribute specializations
      * @return {@code true} if any profiling attribute was excluded, otherwise {@code false}
      */
-    public boolean needExclude(final Attributes atts, final String[][] extProps) {
+    public boolean needExclude(final Attributes atts, final QName[][] extProps) {
         if (filterMap.isEmpty()) {
             return false;
         }
 
-        for (final String attr: PROFILE_ATTRIBUTES) {
-            final String value = atts.getValue(attr);
+        for (final QName attr: PROFILE_ATTRIBUTES) {
+            final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
             if (value != null) {
-                final Map<String, List<String>> groups = getGroups(value);
-                for (Map.Entry<String, List<String>> group: groups.entrySet()) {
-                    final String[] propList =
+                final Map<QName, List<String>> groups = getGroups(value);
+                for (Map.Entry<QName, List<String>> group: groups.entrySet()) {
+                    final QName[] propList =
                             group.getKey() != null
-                                    ? new String[]{attr, group.getKey()}
-                                    : new String[]{attr};
+                                    ? new QName[]{attr, group.getKey()}
+                                    : new QName[]{attr};
                     if (extCheckExclude(propList, group.getValue())) {
                         return true;
                     }
@@ -276,14 +278,15 @@ public final class FilterUtils {
         }
 
         if (extProps != null && extProps.length != 0) {
-            for (final String[] propList: extProps) {
+            for (final QName[] propList: extProps) {
                 int propListIndex = propList.length - 1;
-                final String propName = propList[propListIndex];
-                String propValue = atts.getValue(propName);
+                final QName propName = propList[propListIndex];
+                String propValue = atts.getValue(propName.getNamespaceURI(), propName.getLocalPart());
 
                 while ((propValue == null || propValue.trim().isEmpty()) && propListIndex > 0) {
                     propListIndex--;
-                    propValue = getLabelValue(propName, atts.getValue(propList[propListIndex]));
+                    final QName current = propList[propListIndex];
+                    propValue = getLabelValue(propName, atts.getValue(current.getNamespaceURI(), current.getLocalPart()));
                 }
                 if (propValue != null && extCheckExclude(propList, Arrays.asList(propValue.split("\\s+")))) {
                     return true;
@@ -302,8 +305,8 @@ public final class FilterUtils {
      * @return map of groups names to group values, ungrouped values have {@code null} name
      */
     @VisibleForTesting
-    Map<String, List<String>> getGroups(final String value) {
-        final Map<String, List<String>> res = new HashMap<>();
+    Map<QName, List<String>> getGroups(final String value) {
+        final Map<QName, List<String>> res = new HashMap<>();
         
         final StringBuilder buf = new StringBuilder();
         int previousEnd = 0;
@@ -312,7 +315,7 @@ public final class FilterUtils {
             buf.append(value.subSequence(previousEnd, m.start()));
             final String v = m.group(2);
             if (!v.trim().isEmpty()) {
-                final String k = m.group(1);
+                final QName k = QName.valueOf(m.group(1));
                 if (res.containsKey(k)) {
                     final List<String> l = new ArrayList<>(res.get(k));
                     l.addAll(Arrays.asList(v.trim().split("\\s+")));
@@ -337,14 +340,14 @@ public final class FilterUtils {
      * @param attrPropsValue attribute value
      * @return props value, {@code null} if not available
      */
-    private String getLabelValue(final String propName, final String attrPropsValue) {
+    private String getLabelValue(final QName propName, final String attrPropsValue) {
         if (attrPropsValue != null) {
             int propStart = -1;
             if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.indexOf(" " + propName + "(", 0) != -1) {
                 propStart = attrPropsValue.indexOf(propName + "(");
             }
             if (propStart != -1) {
-                propStart = propStart + propName.length() + 1;
+                propStart = propStart + propName.toString().length() + 1;
             }
             final int propEnd = attrPropsValue.indexOf(")", propStart);
             if (propStart != -1 && propEnd != -1) {
@@ -362,9 +365,9 @@ public final class FilterUtils {
      * @return {@code true} if should be excluded, otherwise {@code false}
      */
     @VisibleForTesting
-    boolean extCheckExclude(final String[] propList, final List<String> attValue) {
+    boolean extCheckExclude(final QName[] propList, final List<String> attValue) {
         for (int propListIndex = propList.length - 1; propListIndex >= 0; propListIndex--) {
-            final String attName = propList[propListIndex];
+            final QName attName = propList[propListIndex];
             checkRuleMapping(attName, attValue);
             boolean hasNonExcludeAction = false;
             boolean hasExcludeAction = false;
@@ -431,7 +434,7 @@ public final class FilterUtils {
      * @param attName attribute name
      * @param attValue attribute value
      */
-    private void checkRuleMapping(final String attName, final List<String> attValue) {
+    private void checkRuleMapping(final QName attName, final List<String> attValue) {
         if (attValue == null || attValue.isEmpty()) {
             return;
         }
@@ -461,11 +464,11 @@ public final class FilterUtils {
      */
     public static class FilterKey {
         /** Attribute name */
-        public final String attribute;
+        public final QName attribute;
         /** Attribute value, may be {@code null} */
         public final String value;
 
-        public FilterKey(final String attribute, final String value) {
+        public FilterKey(final QName attribute, final String value) {
             if (attribute == null) {
                 throw new IllegalArgumentException("Attribute may not be null");
             }
@@ -475,7 +478,7 @@ public final class FilterUtils {
 
         @Override
         public String toString() {
-            return value != null ? attribute + EQUAL + value : attribute;
+            return value != null ? attribute.toString() + EQUAL + value : attribute.toString();
         }
 
         @Override
@@ -533,7 +536,7 @@ public final class FilterUtils {
      * @param bindingMap subject scheme bindings, {@code Map<AttName, Map<ElemName, Set<Element>>>}
      * @return new filter with subject scheme information
      */
-    private FilterUtils refine(final Map<String, Map<String, Set<Element>>> bindingMap) {
+    private FilterUtils refine(final Map<QName, Map<String, Set<Element>>> bindingMap) {
         if (bindingMap != null && !bindingMap.isEmpty()) {
             final Map<FilterKey, Action> buf = new HashMap<>(filterMap);
             for (final Map.Entry<FilterKey, Action> e: filterMap.entrySet()) {
@@ -550,7 +553,7 @@ public final class FilterUtils {
     /**
      * Refine action key with information from subject schemes.
      */
-    private void refineAction(final Action action, final FilterKey key, final Map<String, Map<String, Set<Element>>> bindingMap,
+    private void refineAction(final Action action, final FilterKey key, final Map<QName, Map<String, Set<Element>>> bindingMap,
                               final Map<FilterKey, Action> destFilterMap) {
         if (key.value != null) {
             final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
@@ -602,7 +605,7 @@ public final class FilterUtils {
      * @param attName attribute name
      * @param action action to insert
      */
-    private void insertAction(final Element subTree, final String attName, final Action action, final Map<FilterKey, Action> destFilterMap) {
+    private void insertAction(final Element subTree, final QName attName, final Action action, final Map<FilterKey, Action> destFilterMap) {
         if (subTree == null || action == null) {
             return;
         }

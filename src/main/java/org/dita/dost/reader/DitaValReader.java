@@ -25,6 +25,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -60,7 +61,7 @@ public final class DitaValReader implements AbstractReader {
 
     private URI ditaVal = null;
 
-    private Map<String, Map<String, Set<Element>>> bindingMap;
+    private Map<QName, Map<String, Set<Element>>> bindingMap;
     /** List of relative flagging image paths. */
     private final List<URI> relFlagImageList;
 
@@ -100,7 +101,7 @@ public final class DitaValReader implements AbstractReader {
      * Set the map of subject scheme definitions. The contents of the map is in pseudo-code
      * {@code Map<AttName, Map<ElemName, Set<Element>>>}. For default element mapping, the value is {@code *}.
      */
-    public void setSubjectScheme(final Map<String, Map<String, Set<Element>>> bindingMap) {
+    public void setSubjectScheme(final Map<QName, Map<String, Set<Element>>> bindingMap) {
         this.bindingMap = bindingMap;
     }
 
@@ -171,7 +172,13 @@ public final class DitaValReader implements AbstractReader {
                 throw new IllegalArgumentException("Invalid action: " + attAction);
         }
         if (action != null) {
-            final String attName = elem.getTagName().equals(ELEMENT_NAME_REVPROP) ? ATTRIBUTE_NAME_REV : getValue(elem, ATTRIBUTE_NAME_ATT);
+            final QName attName;
+            if (elem.getTagName().equals(ELEMENT_NAME_REVPROP)) {
+                attName = QName.valueOf(ATTRIBUTE_NAME_REV);
+            } else {
+                final String attValue = getValue(elem, ATTRIBUTE_NAME_ATT);
+                attName = attValue == null ? null : QName.valueOf(attValue);
+            }
             final String attValue = getValue(elem, ATTRIBUTE_NAME_VAL);
             final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;
             insertAction(action, key);
@@ -263,7 +270,7 @@ public final class DitaValReader implements AbstractReader {
      * @param attName attribute name
      * @param action action to insert
      */
-    private void insertAction(final Element subTree, final String attName, final Action action) {
+    private void insertAction(final Element subTree, final QName attName, final Action action) {
         if (subTree == null || action == null) {
             return;
         }

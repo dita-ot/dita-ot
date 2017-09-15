@@ -7,24 +7,26 @@
  */
 package org.dita.dost.writer;
 
-import static javax.xml.XMLConstants.*;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.URLUtils;
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+
+import javax.xml.namespace.QName;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
+
+import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Configuration.Mode;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.reader.GenListModuleReader;
-import org.dita.dost.util.*;
-import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Validation and optional error recovery filter.
@@ -32,10 +34,10 @@ import org.xml.sax.helpers.AttributesImpl;
 public final class ValidationFilter extends AbstractXMLFilter {
 
     private final Set<String> topicIds = new HashSet<>();
-    private Map<String, Map<String, Set<String>>> validateMap = null;
+    private Map<QName, Map<String, Set<String>>> validateMap = null;
     private Locator locator;
     /** Deque of domains attibute values */
-    private final Deque<String[][]> domains = new LinkedList<>();
+    private final Deque<QName[][]> domains = new LinkedList<>();
     private Mode processingMode;
 
     /**
@@ -52,7 +54,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
      * {@code Map<AttName, Map<ElemName, <Set<Value>>>}.
      * For default element mapping, the value is {@code *}.
      */
-    public void setValidateMap(final Map<String, Map<String, Set<String>>> validateMap) {
+    public void setValidateMap(final Map<QName, Map<String, Set<String>>> validateMap) {
         this.validateMap = validateMap;
     }
 
@@ -238,7 +240,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             return;
         }
         for (int i = 0; i < atts.getLength(); i++) {
-            final String attrName = atts.getQName(i);
+            final QName attrName = new QName(atts.getURI(i), atts.getLocalName(i));
             final Map<String, Set<String>> valueMap = validateMap.get(attrName);
             if (valueMap != null) {
                 Set<String> valueSet = valueMap.get(qName);
@@ -250,7 +252,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     final String[] keylist = attrValue.trim().split("\\s+");
                     for (final String s : keylist) {
                         if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
-                            logger.warn(MessageUtils.getMessage("DOTJ049W", attrName, qName, attrValue, StringUtils.join(valueSet, COMMA)).toString());
+                            logger.warn(MessageUtils.getMessage("DOTJ049W",
+                                    attrName.toString(), qName.toString(), attrValue, StringUtils.join(valueSet, COMMA)).toString());
                         }
                     }
                 }
@@ -334,14 +337,15 @@ public final class ValidationFilter extends AbstractXMLFilter {
      * @see <a href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/attributegeneralize.html">DITA 1.2 specification</a>
      */
     private void validateAttributeGeneralization(final Attributes atts) {
-        final String[][] d = domains.peekFirst();
+        final QName[][] d = domains.peekFirst();
         if (d != null) {
-            for (final String[] spec: d) {
+            for (final QName[] spec: d) {
                 for (int i = spec.length - 1; i > -1; i--) {
-                    if (atts.getValue(spec[i]) != null) {
+                    if (atts.getValue(spec[i].getNamespaceURI(), spec[i].getLocalPart()) != null) {
                         for (int j = i - 1; j > -1; j--) {
-                            if (atts.getValue(spec[j]) != null) {
-                                logger.error(MessageUtils.getMessage("DOTJ058E", spec[j], spec[i]).toString());
+                            if (atts.getValue(spec[j].getNamespaceURI(), spec[j].getLocalPart()) != null) {
+                                logger.error(MessageUtils.getMessage("DOTJ058E",
+                                        spec[j].toString(), spec[i].toString()).toString());
                             }
                         } 
                     }

@@ -23,6 +23,7 @@ import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
+import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -34,8 +35,8 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.emptyMap;
-import static org.dita.dost.reader.GenListModuleReader.*;
+import static org.dita.dost.reader.GenListModuleReader.ROOT_URI;
+import static org.dita.dost.reader.GenListModuleReader.Reference;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
@@ -128,8 +129,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     FilterUtils filterUtils;
     /** Absolute path to current destination file. */
     File outputFile;
-    Map<String, Map<String, Set<String>>> validateMap;
-    Map<String, Map<String, String>> defaultValueMap;
+    Map<QName, Map<String, Set<String>>> validateMap;
+    Map<QName, Map<String, String>> defaultValueMap;
     /** XMLReader instance for parsing dita file */
     private XMLReader reader;
     /** Absolute path to current source file. */

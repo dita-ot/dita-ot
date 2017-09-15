@@ -10,6 +10,7 @@ package org.dita.dost.module.filter;
 
 import org.w3c.dom.Element;
 
+import javax.xml.namespace.QName;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,9 +20,9 @@ import java.util.Set;
 public class SubjectScheme {
 
     /** Subject scheme bindings, {@code Map<AttName, Map<ElemName, Set<Element>>>} */
-    public final Map<String, Map<String, Set<Element>>> subjectSchemeMap;
+    public final Map<QName, Map<String, Set<Element>>> subjectSchemeMap;
 
-    public SubjectScheme(final Map<String, Map<String, Set<Element>>> subjectSchemeMap) {
+    public SubjectScheme(final Map<QName, Map<String, Set<Element>>> subjectSchemeMap) {
         this.subjectSchemeMap = subjectSchemeMap;
     }
 

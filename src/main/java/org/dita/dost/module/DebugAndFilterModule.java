@@ -22,6 +22,7 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -70,8 +71,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     private FilterUtils filterUtils;
     /** Absolute path to current destination file. */
     private File outputFile;
-    private Map<String, Map<String, Set<String>>> validateMap;
-    private Map<String, Map<String, String>> defaultValueMap;
+    private Map<QName, Map<String, Set<String>>> validateMap;
+    private Map<QName, Map<String, String>> defaultValueMap;
     /** Absolute path to current source file. */
     private URI currentFile;
     private Map<URI, Set<URI>> dic;

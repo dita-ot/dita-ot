@@ -15,6 +15,7 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import javax.xml.namespace.QName;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     /** level is used to count the element level in the filtering */
     private int level;
     /** Contains the attribution specialization paths for {@code props} attribute */
-    private String[][] props;
+    private QName[][] props;
     /** Filter utils */
     private List<FilterUtils> filterUtils;
     /** Flag that an element has been written */

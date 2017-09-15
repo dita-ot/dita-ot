@@ -16,6 +16,8 @@ import java.util.Locale;
 
 import org.junit.Test;
 
+import javax.xml.namespace.QName;
+
 public class TestStringUtils {
 
     @Test
@@ -42,13 +44,14 @@ public class TestStringUtils {
 
     @Test
     public void testGetExtProps() {
-        assertArrayEquals(new String[][] {{"props", "foo"}, {"props", "bar"}},
+        final QName props = QName.valueOf("props");
+        assertArrayEquals(new QName[][] {{props, QName.valueOf("foo")}, {props, QName.valueOf("bar")}},
                           StringUtils.getExtProps("a(props foo) a(props bar)"));
-        assertArrayEquals(new String[][] {{"props", "bar"}, {"props", "qux"}},
+        assertArrayEquals(new QName[][] {{props, QName.valueOf("bar")}, {props, QName.valueOf("qux")}},
                           StringUtils.getExtProps("(topic foo) a(props bar) (topic baz) a(props qux)"));
-        assertArrayEquals(new String[][] {{"props", "foo"}},
+        assertArrayEquals(new QName[][] {{props, QName.valueOf("foo")}},
                           StringUtils.getExtProps("  a(props   foo  )   "));
-        assertArrayEquals(new String[0][0],
+        assertArrayEquals(new QName[0][0],
                           StringUtils.getExtProps("(topic task)"));
     }
 

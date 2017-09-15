@@ -194,17 +194,19 @@ public class ValidationFilterTest {
         f.setLogger(l);
         
         f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
-            .add(XML_NS_URI, ATTRIBUTE_NAME_DOMAINS, "a(props person jobrole)")
+            .add(ATTRIBUTE_NAME_DOMAINS, "a(props person jobrole)")
+            .build());
+		assertEquals(0, l.getMessages().size());
+        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
+            .add("person", "jobrole(programmer)")
+            .add("jobrole", "admin")
+            .build());
+		assertEquals(1, l.getMessages().size());
+        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
+            .add("jobrole", "admin")
             .build());
         f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
-            .add(XML_NS_URI, "person", "jobrole(programmer)")
-            .add(XML_NS_URI, "jobrole", "admin")
-            .build());
-        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
-            .add(XML_NS_URI, "jobrole", "admin")
-            .build());
-        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
-            .add(XML_NS_URI, "person", "jobrole(programmer)")
+            .add("person", "jobrole(programmer)")
             .build());
         
         assertEquals(1, l.getMessages().size());

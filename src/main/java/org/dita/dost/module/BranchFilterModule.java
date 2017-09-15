@@ -26,6 +26,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
@@ -279,11 +280,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     /** Filter map and remove excluded content. */
     private void filterBranches(final Element root) {
-        final String[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
+        final QName[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
         filterBranches(root, Collections.emptyList(), props);
     }
 
-    private void filterBranches(final Element elem, final List<FilterUtils> filters, final String[][] props) {
+    private void filterBranches(final Element elem, final List<FilterUtils> filters, final QName[][] props) {
         final List<FilterUtils> fs = combineFilterUtils(elem, filters);
 
         boolean exclude = false;
