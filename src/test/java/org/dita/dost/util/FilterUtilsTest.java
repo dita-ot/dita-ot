@@ -9,6 +9,8 @@ package org.dita.dost.util;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -19,6 +21,7 @@ import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 
 import org.dita.dost.util.FilterUtils.Flag;
+import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -62,6 +65,21 @@ public class FilterUtilsTest {
         assertFalse(f.needExclude(attr(PLATFORM, "amiga unix windows"), new QName[0][0]));
         assertTrue(f.needExclude(attr(PLATFORM, "amiga windows"), new QName[0][0]));
         assertTrue(f.needExclude(attr(PLATFORM, "windows"), new QName[0][0]));
+    }
+
+    @Test
+    public void testFilterAnyAttribute() {
+        final Map<FilterKey, Action> fm = new HashMap<>();
+        fm.put(new FilterKey(QName.valueOf(ATTRIBUTE_NAME_REV), null), Action.EXCLUDE);
+        fm.put(new FilterKey(new QName(XML_NS_URI, "lang", "xml"), "fr"), Action.EXCLUDE);
+        final FilterUtils f = new FilterUtils(false, fm, null, null);
+        f.setLogger(new TestUtils.TestLogger());
+
+        assertFalse(f.needExclude(new AttributesImpl(), new QName[0][0]));
+        assertFalse(f.needExclude(new AttributesBuilder().add(ATTRIBUTE_NAME_PLATFORM, "unix").build(), new QName[0][0]));
+        assertTrue(f.needExclude(new AttributesBuilder().add(ATTRIBUTE_NAME_REV, "1").build(), new QName[0][0]));
+        assertFalse(f.needExclude(new AttributesBuilder().add(XML_NS_URI, "lang", "en").build(), new QName[0][0]));
+        assertTrue(f.needExclude(new AttributesBuilder().add(XML_NS_URI, "lang", "fr").build(), new QName[0][0]));
     }
 
     @Test
