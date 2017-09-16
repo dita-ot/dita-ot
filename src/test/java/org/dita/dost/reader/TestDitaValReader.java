@@ -8,6 +8,7 @@
 package org.dita.dost.reader;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.FilterUtils;
@@ -21,9 +22,11 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.emptySet;
 import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestDitaValReader {
 
@@ -33,6 +36,9 @@ public class TestDitaValReader {
     private static final QName PROPS = QName.valueOf("props");
     private static final QName KEYWORD = QName.valueOf("keyword");
     private static final QName REV = QName.valueOf("rev");
+    private static final QName LANG = new QName(XML_NS_URI, "lang", "xml");
+    private static final QName CONFIDENTIALITY = new QName("http://www.cms.com/", "confidentiality");
+
 
     private final File resourceDir = TestUtils.getResourceDir(TestDitaValReader.class);
 
@@ -63,10 +69,11 @@ public class TestDitaValReader {
         reader.setLogger(logger);
         reader.read(ditavalFile.toURI());
         final Map<FilterKey, Action> act = reader.getFilterMap();
+
         final Map<FilterKey, Action> exp = ImmutableMap.of(
                 new FilterKey(PLATFORM, "windows"), Action.EXCLUDE,
-                new FilterKey(new QName(XML_NS_URI, "lang", "xml"), "fr"), Action.EXCLUDE,
-                new FilterKey(new QName("http://www.cms.com/", "confidentiality"), "confidential"), Action.EXCLUDE,
+                new FilterKey(LANG, "fr"), Action.EXCLUDE,
+                new FilterKey(CONFIDENTIALITY, "confidential"), Action.EXCLUDE,
                 new FilterKey(QName.valueOf("default"), null), Action.INCLUDE
         );
         assertEquals(exp, act);
@@ -76,13 +83,15 @@ public class TestDitaValReader {
     @Test
     public void testAnyAttribute() throws DITAOTException{
         final File ditavalFile = new File(resourceDir, "src" + File.separator + "any.ditaval");
-        DitaValReader reader = new DitaValReader(true);
+        DitaValReader reader = new DitaValReader(ImmutableSet.of(LANG, CONFIDENTIALITY, REV), emptySet());
+        TestUtils.CachingLogger logger = new TestUtils.CachingLogger();
+        reader.setLogger(logger);
         reader.read(ditavalFile.toURI());
         final Map<FilterKey, Action> act = reader.getFilterMap();
         final Map<FilterKey, Action> exp = ImmutableMap.of(
                 new FilterKey(PLATFORM, "windows"), Action.EXCLUDE,
-                new FilterKey(new QName(XML_NS_URI, "lang", "xml"), "fr"), Action.EXCLUDE,
-                new FilterKey(new QName("http://www.cms.com/", "confidentiality"), "confidential"), Action.EXCLUDE,
+                new FilterKey(LANG, "fr"), Action.EXCLUDE,
+                new FilterKey(CONFIDENTIALITY, "confidential"), Action.EXCLUDE,
                 new FilterKey(REV, "10"), Action.EXCLUDE,
                 new FilterKey(QName.valueOf("default"), null), Action.INCLUDE
         );

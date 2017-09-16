@@ -9,10 +9,10 @@
 package org.dita.dost.reader;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Sets;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FilterUtils.Action;
@@ -27,7 +27,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -36,6 +35,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static javax.xml.XMLConstants.XML_NS_PREFIX;
 import static javax.xml.XMLConstants.XML_NS_URI;
@@ -43,7 +44,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FilterUtils.DEFAULT;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.XMLUtils.*;
-
 
 /**
  * DitaValReader reads and parses the information from ditaval file which
@@ -53,7 +53,10 @@ import static org.dita.dost.util.XMLUtils.*;
  */
 public final class DitaValReader implements AbstractReader {
 
-    private boolean anyAttribute;
+    private static final QName REV = QName.valueOf(ATTRIBUTE_NAME_REV);
+
+    private Set<QName> filterAttributes;
+    private Set<QName> flagAttributes;
     protected DITAOTLogger logger;
     protected Job job;
     private final Map<FilterKey, Action> filterMap;
@@ -87,13 +90,21 @@ public final class DitaValReader implements AbstractReader {
         } catch (final ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
-        this.anyAttribute = Boolean.parseBoolean(Configuration.configuration.getOrDefault("filter-any-attribute", "false"));
+        filterAttributes = Stream.of(Configuration.configuration.getOrDefault("filter-attributes", "")
+                .trim().split("\\s*,\\s*"))
+                .map(QName::valueOf)
+                .collect(Collectors.toSet());
+        flagAttributes = Stream.of(Configuration.configuration.getOrDefault("flag-attributes", "")
+                .trim().split("\\s*,\\s*"))
+                .map(QName::valueOf)
+                .collect(Collectors.toSet());
     }
 
     @VisibleForTesting
-    DitaValReader(boolean anyAttribute) {
+    DitaValReader(Set<QName> filterAttributes, Set<QName> flagAttributes) {
         this();
-        this.anyAttribute = anyAttribute;
+        this.filterAttributes = Sets.union(this.filterAttributes, filterAttributes);
+        this.flagAttributes = Sets.union(this.flagAttributes, flagAttributes);
     }
 
     @Override
@@ -187,7 +198,7 @@ public final class DitaValReader implements AbstractReader {
         if (action != null) {
             final QName attName;
             if (elem.getTagName().equals(ELEMENT_NAME_REVPROP)) {
-                attName = QName.valueOf(ATTRIBUTE_NAME_REV);
+                attName = REV;
             } else {
                 final String attValue = getValue(elem, ATTRIBUTE_NAME_ATT);
                 if (attValue != null) {
@@ -207,7 +218,8 @@ public final class DitaValReader implements AbstractReader {
                     attName = null;
                 }
             }
-            if (!anyAttribute && attName != null && attName.equals(QName.valueOf(ATTRIBUTE_NAME_REV))) {
+            if (attName != null && attName.equals(REV)
+                    && !filterAttributes.isEmpty() && !filterAttributes.contains(REV)) {
                 logger.warn(MessageUtils.getMessage("DOTJ074W").toString());
                 return;
             }
