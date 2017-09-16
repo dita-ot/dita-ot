@@ -317,7 +317,7 @@ public final class XMLUtils {
      * @param value attribute value
      */
     public static void addOrSetAttribute(final AttributesImpl atts, final QName name, final String value) {
-        addOrSetAttribute(atts, name.getNamespaceURI(), name.getLocalPart(), name.toString(), "CDATA", value);
+        addOrSetAttribute(atts, name.getNamespaceURI(), name.getLocalPart(), name.getPrefix()  + ":" + name.getLocalPart(), "CDATA", value);
     }
 
     /**
@@ -753,6 +753,17 @@ public final class XMLUtils {
          */
         public AttributesBuilder add(final String uri, final String localName, final String value) {
             return add(uri, localName, localName, "CDATA", value);
+        }
+
+        /**
+         * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
+         *
+         * @param name name
+         * @param value attribute value
+         * @return this builder
+         */
+        public AttributesBuilder add(final QName name, final String value) {
+            return add(name.getNamespaceURI(), name.getLocalPart(), name.getPrefix()  + ":" + name.getLocalPart(), "CDATA", value);
         }
         
         /**

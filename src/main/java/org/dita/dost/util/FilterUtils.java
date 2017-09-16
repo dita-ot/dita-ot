@@ -8,7 +8,6 @@
  */
 package org.dita.dost.util;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
 import static javax.xml.XMLConstants.NULL_NS_URI;
@@ -25,6 +24,7 @@ import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
@@ -42,38 +42,15 @@ import javax.xml.transform.sax.SAXSource;
 
 /**
  * Utility class used for flagging and filtering.
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class FilterUtils {
 
     /** Subject scheme file extension */
     public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
-
-    private static final Set<QName> PROFILE_ATTRIBUTES = ImmutableSet.of(
-        QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
-        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
-        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
-        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PRINT),
-        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET)
-    );
-
-    private static final Set<QName> FLAG_ATTRIBUTES = ImmutableSet.of(
-            QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
-            QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
-            QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
-            QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
-            QName.valueOf(ATTRIBUTE_NAME_PROPS),
-            QName.valueOf(ATTRIBUTE_NAME_PRINT),
-            QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET),
-            QName.valueOf(ATTRIBUTE_NAME_REV)
-    );
-
     public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
-    private boolean anyAttribute;
     private DITAOTLogger logger;
     /** Actions for filter keys. */
     private final Map<FilterKey, Action> filterMap;
@@ -82,6 +59,8 @@ public final class FilterUtils {
     private boolean logMissingAction;
     private String foregroundConflictColor;
     private String backgroundConflictColor;
+    private Set<QName> filterAttributes;
+    private Set<QName> flagAttributes;
 
     public FilterUtils(final Map<FilterKey, Action> filterMap, String foregroundConflictColor,
                        String backgroundConflictColor) {
@@ -89,7 +68,8 @@ public final class FilterUtils {
         this.filterMap = new HashMap<>(filterMap);
         this.foregroundConflictColor = foregroundConflictColor;
         this.backgroundConflictColor = backgroundConflictColor;
-        this.anyAttribute = Boolean.parseBoolean(Configuration.configuration.getOrDefault("filter-any-attribute", "false"));
+        filterAttributes = getProfileAttributes(Configuration.configuration.get("filter-attributes"));
+        flagAttributes = getFlaggingAttributes(Configuration.configuration.get("flag-attributes"));
     }
 
     /**
@@ -103,7 +83,7 @@ public final class FilterUtils {
 
     /**
      * Construct filter utility.
-     * 
+     *
      * @param isPrintType transformation output is print-oriented
      */
     public FilterUtils(final boolean isPrintType, final Map<FilterKey, Action> filterMap,
@@ -123,14 +103,17 @@ public final class FilterUtils {
         this.filterMap = dfm;
         this.foregroundConflictColor = foregroundConflictColor;
         this.backgroundConflictColor = backgroundConflictColor;
-        this.anyAttribute = Boolean.parseBoolean(Configuration.configuration.getOrDefault("filter-any-attribute", "false"));
+        filterAttributes = getProfileAttributes(Configuration.configuration.get("filter-attributes"));
+        flagAttributes = getFlaggingAttributes(Configuration.configuration.get("flag-attributes"));
     }
 
     @VisibleForTesting
     public FilterUtils(boolean isPrintType, Map<FilterKey, Action> filterMap,
-                       String foregroundConflictColor, String backgroundConflictColor, boolean anyAttribute) {
+                       String foregroundConflictColor, String backgroundConflictColor,
+                       Set<QName> filterAttributes, Set<QName> flagAttributes) {
         this(isPrintType, filterMap, foregroundConflictColor, backgroundConflictColor);
-        this.anyAttribute = anyAttribute;
+        this.filterAttributes = Sets.union(this.filterAttributes, filterAttributes);
+        this.flagAttributes = Sets.union(this.flagAttributes, flagAttributes);
     }
 
     public void setLogger(final DITAOTLogger logger) {
@@ -142,19 +125,50 @@ public final class FilterUtils {
         return filterMap.toString();
     }
 
+    private static Set<QName> getProfileAttributes(final String conf) {
+        final ImmutableSet.Builder<QName> res = ImmutableSet.<QName>builder()
+                .add(QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
+                        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
+                        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
+                        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
+                        QName.valueOf(ATTRIBUTE_NAME_PROPS),
+                        QName.valueOf(ATTRIBUTE_NAME_PRINT),
+                        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET));
+        if (conf != null) {
+            Stream.of(conf.trim().split("\\s*,\\s*"))
+                    .map(QName::valueOf)
+                    .forEach(res::add);
+        }
+        return res.build();
+    }
+
+    private static Set<QName> getFlaggingAttributes(final String conf) {
+        final ImmutableSet.Builder<QName> res = ImmutableSet.<QName>builder()
+                .add(QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
+                        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
+                        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
+                        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
+                        QName.valueOf(ATTRIBUTE_NAME_PROPS),
+                        QName.valueOf(ATTRIBUTE_NAME_PRINT),
+                        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET),
+                        QName.valueOf(ATTRIBUTE_NAME_REV)
+        );
+        if (conf != null) {
+            Stream.of(conf.trim().split("\\s*,\\s*"))
+                    .map(QName::valueOf)
+                    .forEach(res::add);
+        }
+        return res.build();
+    }
+
     public Set<Flag> getFlags(final Attributes atts, final QName[][] extProps) {
         if (filterMap.isEmpty()) {
             return emptySet();
         }
 
         final Set<Flag> res = new HashSet<>();
-        final int length = atts.getLength();
-        for (int i = 0; i < length; i++) {
-            final QName attr = new QName(atts.getURI(i), atts.getLocalName(i));
-            if (!anyAttribute && !FLAG_ATTRIBUTES.contains(attr)) {
-                continue;
-            }
-            final String value = atts.getValue(i);
+        for (final QName attr: flagAttributes) {
+            final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
             if (value != null) {
                 final Map<QName, List<String>> groups = getGroups(value);
                 for (Map.Entry<QName, List<String>> group: groups.entrySet()) {
@@ -277,13 +291,8 @@ public final class FilterUtils {
             return false;
         }
 
-        final int length = atts.getLength();
-        for (int i = 0; i < length; i++) {
-            final QName attr = new QName(atts.getURI(i), atts.getLocalName(i));
-            if (!anyAttribute && !PROFILE_ATTRIBUTES.contains(attr)) {
-                continue;
-            }
-            final String value = atts.getValue(i);
+        for (final QName attr: filterAttributes) {
+            final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
             if (value != null) {
                 final Map<QName, List<String>> groups = getGroups(value);
                 for (Map.Entry<QName, List<String>> group: groups.entrySet()) {
@@ -328,7 +337,7 @@ public final class FilterUtils {
     @VisibleForTesting
     Map<QName, List<String>> getGroups(final String value) {
         final Map<QName, List<String>> res = new HashMap<>();
-        
+
         final StringBuilder buf = new StringBuilder();
         int previousEnd = 0;
         final Matcher m = groupPattern.matcher(value);
@@ -356,7 +365,7 @@ public final class FilterUtils {
 
     /**
      * Get labelled props value.
-     * 
+     *
      * @param propName attribute name
      * @param attrPropsValue attribute value
      * @return props value, {@code null} if not available
@@ -377,7 +386,7 @@ public final class FilterUtils {
         }
         return null;
     }
-    
+
     /**
      * Check the given extended attribute in propList to see if it was excluded.
      *
@@ -480,7 +489,7 @@ public final class FilterUtils {
 
     /**
      * Filter key object.
-     * 
+     *
      * @since 1.6
      */
     public static class FilterKey {
