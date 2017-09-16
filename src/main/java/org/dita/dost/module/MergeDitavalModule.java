@@ -136,16 +136,25 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
 
     }
 
-    /**
-     * TODO: This should be generalized to be a DOM to XML stream utility function and moved to XMLUtils.
-     */
     private void writeConditions(XMLStreamWriter export, NodeList conditionElements, URI ditavalDirectory) {
         try {
             for (int i = 0; i < conditionElements.getLength(); i++) {
-                switch (conditionElements.item(i).getNodeType()) {
+                final Node node = conditionElements.item(i);
+                switch (node.getNodeType()) {
                 case Node.ELEMENT_NODE:
-                    export.writeStartElement(conditionElements.item(i).getNodeName());
-                    final NamedNodeMap atts = conditionElements.item(i).getAttributes();
+                    final Element elem = (Element) node;
+                    export.writeStartElement(node.getNodeName());
+                    final NamedNodeMap atts = node.getAttributes();
+                    for (int j = 0; j < atts.getLength(); j++) {
+                        final String value = atts.item(j).getNodeValue().trim();
+                        if (value.indexOf(':') != -1) {
+                            final String prefix = value.substring(0, value.indexOf(':'));
+                            final String ns = elem.lookupNamespaceURI(prefix);
+                            if (ns != null) {
+                                export.writeNamespace(prefix, ns);
+                            }
+                        }
+                    }
                     if (atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ||
                             atts.getNamedItem(ATTRIBUTE_NAME_IMG) != null ) {
                         final String imagerefAtt = atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ? 
@@ -160,11 +169,11 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
                     for (int j = 0; j < atts.getLength(); j++) {
                         export.writeAttribute(atts.item(j).getNodeName(), atts.item(j).getNodeValue());
                     }
-                    writeConditions(export, conditionElements.item(i).getChildNodes(), ditavalDirectory);
+                    writeConditions(export, node.getChildNodes(), ditavalDirectory);
                     export.writeEndElement();
                     break;
                 case Node.TEXT_NODE:
-                    export.writeCharacters(conditionElements.item(i).getNodeValue());
+                    export.writeCharacters(node.getNodeValue());
                     break;
                 }
             }
