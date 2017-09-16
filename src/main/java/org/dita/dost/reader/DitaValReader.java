@@ -217,11 +217,11 @@ public final class DitaValReader implements AbstractReader {
                 } else {
                     attName = null;
                 }
-            }
-            if (attName != null && attName.equals(REV)
-                    && !filterAttributes.isEmpty() && !filterAttributes.contains(REV)) {
-                logger.warn(MessageUtils.getMessage("DOTJ074W").toString());
-                return;
+                if (attName != null && attName.equals(REV)
+                        && !filterAttributes.isEmpty() && !filterAttributes.contains(REV)) {
+                    logger.warn(MessageUtils.getMessage("DOTJ074W").toString());
+                    return;
+                }
             }
             final String attValue = getValue(elem, ATTRIBUTE_NAME_VAL);
             final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;
