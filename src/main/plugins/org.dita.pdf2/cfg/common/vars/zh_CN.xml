@@ -189,12 +189,6 @@ See the accompanying LICENSE file for applicable license.
          text in case target cannot be resolved. -->
     <variable id="Content-Reference">Unresolved content reference to:</variable>
 
-    <!-- UNUSED: Default title text for referenced section title. Used to generate 
-         reference text in case reference has no explicit content and
-         referenced section has no title. -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Untitled section">Untitled section.</variable>
-
     <!-- TODO: Default title text for referenced list item. Used to generate
          reference text in case reference has no explicit content and 
          reference target is a list item. -->
@@ -211,7 +205,6 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- TODO: Text to use for a generated label of search title. Renders 
          as part of <searchtitle> element. -->
-    <!-- Deprecated since 2.3 -->
     <variable id="Search title">Search title</variable>
 
     <!-- Text to use for chapter titles.-->
@@ -270,62 +263,6 @@ See the accompanying LICENSE file for applicable license.
     <!-- Image path to use for a note of "other" type. -->
     <variable id="other Note Image Path"></variable>
 
-    <!--
-       Strings used in the online-help publishing.
-    -->
-
-    <!-- The title of the "contents" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Contents button title">Contents</variable>
-
-    <!-- The title of the "index" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Index button title">索引</variable>
-
-    <!-- The title of the "search" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search button title">Search</variable>
-
-    <!-- The title of the "back" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Back button title">Back</variable>
-
-    <!-- The title of the "forward" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Forward button title">Forward</variable>
-
-    <!-- The title of the "main page" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Main page button title">Main Page</variable>
-
-    <!-- The title of the "previous page" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Previous page button title">Previous Page</variable>
-
-    <!-- The title of the "next page" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Next page button title">Next Page</variable>
-
-    <!-- The "online help" document title prefix in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Online help prefix">Online Help</variable>
-
-    <!-- The search by index field title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search index field title">Search for the keyword:</variable>
-
-    <!-- The search by index button title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search index button title">View</variable>
-
-    <!-- The search by text field title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search text field title">Search help for:</variable>
-
-    <!-- The search by text button title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search text button title">Search</variable>
-    
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">可选：</variable>
     <variable id="Required Step">必需：</variable>

@@ -186,12 +186,6 @@ See the accompanying LICENSE file for applicable license.
          text in case target cannot be resolved. -->
     <variable id="Content-Reference">Riferimento di contenuto a: </variable>
 
-    <!-- Default title text for referenced section title. Used to generate 
-         reference text in case reference has no explicit content and
-         referenced section has no title. -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Untitled section">Sezione senza titolo.</variable>
-
     <!-- Default title text for referenced list item. Used to generate
          reference text in case reference has no explicit content and 
          reference target is a list item. -->
@@ -208,7 +202,6 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- Text to use for a generated label of search title. Renders 
          as part of <searchtitle> element. -->
-    <!-- Deprecated since 2.3 -->
     <variable id="Search title">Titolo di ricerca</variable>
 
     <!-- Text to use for chapter titles.-->
@@ -267,62 +260,6 @@ See the accompanying LICENSE file for applicable license.
     <!-- Image path to use for a note of "other" type. -->
     <variable id="other Note Image Path"></variable>
 
-    <!--
-       Strings used in the online-help publishing.
-    -->
-
-    <!-- The title of the "contents" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Contents button title">Sommario</variable>
-
-    <!-- The title of the "index" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Index button title">Indice</variable>
-
-    <!-- The title of the "search" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search button title">Ricerca</variable>
-
-    <!-- The title of the "back" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Back button title">Indietro</variable>
-
-    <!-- The title of the "forward" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Forward button title">Avanti</variable>
-
-    <!-- The title of the "main page" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Main page button title">Pagina Principale</variable>
-
-    <!-- The title of the "previous page" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Previous page button title">Pagina Precedente</variable>
-
-    <!-- The title of the "next page" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Next page button title">Pagina Seguente</variable>
-
-    <!-- The "online help" document title prefix in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Online help prefix">Aiuto In linea</variable>
-
-    <!-- The search by index field title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search index field title">Ricerca della parola chiave:</variable>
-
-    <!-- The search by index button title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search index button title">Osservi</variable>
-
-    <!-- The search by text field title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search text field title">Aiuto di ricerca per:</variable>
-
-    <!-- The search by text button title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search text button title">Ricerca</variable>
-    
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">Opzionale:</variable>
     <variable id="Optional Step">Richiesto:</variable>

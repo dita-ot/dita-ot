@@ -173,12 +173,6 @@ See the accompanying LICENSE file for applicable license.
          text in case target cannot be resolved. -->
     <variable id="Content-Reference">Unresolved content reference to:</variable>
 
-    <!-- UNUSED: Default title text for referenced section title. Used to generate 
-         reference text in case reference has no explicit content and
-         referenced section has no title. -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Untitled section">Untitled section.</variable>
-
     <!-- TODO: Default title text for referenced list item. Used to generate
          reference text in case reference has no explicit content and 
          reference target is a list item. -->
@@ -195,7 +189,6 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- TODO: Text to use for a generated label of search title. Renders 
          as part of <searchtitle> element. -->
-    <!-- Deprecated since 2.3 -->
     <variable id="Search title">Search title</variable>
 
     <!-- Text to use for chapter titles.-->
@@ -259,91 +252,6 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- UNUSED: The title of the links to Related references -->
     <variable id="Related references"></variable>
-
-    <!--
-       UNUSED IN PDF2: Strings for online-help publishing.
-    -->
-
-    <!-- The title of the "contents" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Contents button title"></variable>
-
-    <!-- The title of the "index" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Index button title"></variable>
-
-    <!-- The separator of multiple index entries in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Index multiple entries separator">, </variable>
-
-    <!-- The title of the "search" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search button title"></variable>
-
-    <!-- The title of the "back" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Back button title"></variable>
-
-    <!-- The title of the "forward" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Forward button title"></variable>
-
-    <!-- The title of the "main page" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Main page button title"></variable>
-
-    <!-- The title of the "previous page" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Previous page button title"></variable>
-
-    <!-- The title of the "next page" button in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Next page button title"></variable>
-
-    <!-- The "online help" document title prefix in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Online help prefix"></variable>
-
-    <!-- The search by index field title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search index field title"></variable>
-
-    <!-- The search by index button title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search index button title"></variable>
-
-    <!-- The search by text field title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search text field title"></variable>
-
-    <!-- The search by text button title in online-help output -->
-    <!-- Deprecated since 2.3 -->
-    <variable id="Search text button title"></variable>
-
-  <!-- Deprecated since 2.3 -->
-  <variable id="Online Help Search Method Field"></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Online Help Search Method Or"></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Online Help Search Method And"></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Search Highlight Switch"></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Search index next button title"></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Search Whole Words Switch"></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Search Case Sensitive Switch"></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Search Stopped Message"></variable>
-  <!--This one is a java script expression. So if the order of message should be another don't forget to add '+'
-  and quotes to the string expressions.-->
-  <!-- Deprecated since 2.3 -->
-  <variable id="Search Excluded Stop Words Message"></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Search Search in Progress Message"></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Search Search Give No Results Message"></variable>
 
     <!-- UPDATE: Label for a step with importance="optional"-->
     <variable id="Optional Step">ทางเลือก:</variable>

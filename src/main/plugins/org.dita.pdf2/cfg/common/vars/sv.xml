@@ -66,8 +66,6 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Related Links"><!--TODO:Related Links--></variable>
   <variable id="Cross-Reference"><!--TODO:Cross-Reference to:--></variable>
   <variable id="Content-Reference"><!--TODO:Content-Reference to:--></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Untitled section"><!--TODO:Untitled section.--></variable>
   <variable id="List item"><!--TODO:List item.--></variable>
   <variable id="Foot note"><!--TODO:Footnote.--></variable>
   <variable id="Navigation title"><!--TODO:Navigation title--></variable>
@@ -95,8 +93,6 @@ See the accompanying LICENSE file for applicable license.
 
   <variable id="Related references">Närliggande referens</variable>
   
-  <!-- Deprecated since 2.3 -->
-  <variable id="Index multiple entries separator">, </variable>
   <variable id="Optional Step">Valfritt:</variable>
   <variable id="Required Step">Krävs:</variable>
   <!--Labels for task sections, now reused from common-->
