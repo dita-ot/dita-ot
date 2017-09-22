@@ -7,43 +7,9 @@ Copyright 2013 Saso Kuncic
 See the accompanying LICENSE file for applicable license.
 -->
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
-  <variable id="Product Name"/>
-  <variable id="Body odd footer"/>
-  <variable id="Body even footer"/>
-  <variable id="Body first footer"/>
-  <variable id="Body first header"/>
-  <variable id="Body odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Body even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
-  <variable id="Preface odd footer"/>
-  <variable id="Preface even footer"/>
-  <variable id="Preface first footer"/>
   <variable id="Preface odd header"><param ref-name="prodname"/> | Uvod | <param ref-name="pagenum"/></variable>
   <variable id="Preface even header"><param ref-name="pagenum"/> | Uvod | <param ref-name="prodname"/></variable>
-  <variable id="Preface first header"/>
-  <variable id="Toc odd footer"/>
-  <variable id="Toc even footer"/>
-  <variable id="Toc odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Toc even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
-  <variable id="Index odd footer"/>
-  <variable id="Index even footer"/>
-  <variable id="Index odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Index even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
-  <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 1"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 2"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 3"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 4"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Format 1">1</variable>
-    <variable id="Ordered List Format 2">a</variable>
-    <variable id="Ordered List Format 3">1</variable>
-    <variable id="Ordered List Format 4">a</variable>
-  <variable id="Unordered List bullet">•</variable>
-    <variable id="Unordered List bullet 1">•</variable>
-    <variable id="Unordered List bullet 2">•</variable>
-    <variable id="Unordered List bullet 3">•</variable>
-    <variable id="Unordered List bullet 4">•</variable>
   <variable id="Table of Contents">Kazalo</variable>
-  
   <variable id="Index Continued String">Se nadaljuje</variable>
   <variable id="Index See String">, Gl. </variable>
   <variable id="Index See Also String">Gl.tudi </variable>
@@ -51,14 +17,10 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Table of Contents Appendix">Kazalo dodatka <param ref-name="number"/>: </variable>
   <variable id="Table of Contents Part">Kazalo dela <param ref-name="number"/>: </variable>
   <variable id="Table of Contents Preface">Kazalo predgovora: </variable>
-  <variable id="Table of Contents Notices"/>
   <variable id="Preface title">Predgovor</variable>
   <variable id="Notices title">Opozorilo</variable>
   <variable id="Mini Toc">Teme: </variable>
-  <variable id="#note-separator">: </variable>
-  
   <variable id="Notice">Objava</variable>
-
   <variable id="Figure.title">Slika <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Figure Number">Slika <param ref-name="number"/></variable>
   <variable id="Table.title">Tabela <param ref-name="number"/>: <param ref-name="title"/></variable>
@@ -77,23 +39,8 @@ See the accompanying LICENSE file for applicable license.
   <variable id="On the page"> na strani <param ref-name="pagenum"/></variable>
   <variable id="Page"> stran <param ref-name="pagenum"/></variable>
   <variable id="This link">ta povezava</variable>
-  <variable id="note Note Image Path"></variable>
-  <variable id="notice Note Image Path"></variable>
-  <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="fastpath Note Image Path"></variable>
-  <variable id="important Note Image Path"></variable>
-  <variable id="remember Note Image Path"></variable>
-  <variable id="restriction Note Image Path"></variable>
-  <variable id="tip Note Image Path"></variable>
-  <variable id="other Note Image Path"></variable>
-
   <variable id="Child topics">Podrejen</variable>
-
   <variable id="Related references">Sorodne reference</variable>
-  
   <variable id="Optional Step">Izbiren:</variable>
   <variable id="Required Step">Zahtevano:</variable>
   <!-- Prereq was "Predzahteva", changing to common string, currently "Preden začnete" -->
@@ -107,18 +54,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Task Example"></variable>
   <!-- Postreq was "Kaj storiti zatem", changing to common string, currently "Kako naprej?" -->
   <variable id="Task Postreq"></variable>
-    <variable id="Step Number"><param ref-name="number"/>. </variable>
-    <variable id="Step Format">1</variable>
-    <variable id="Substep Number"><param ref-name="number"/>) </variable>
-    <variable id="Substep Format">a</variable>
-  <variable id="Glossary odd footer"/>
-  <variable id="Glossary even footer"/>
-  <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Glossary even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
   <variable id="Glossary">Besednjak</variable>
   <variable id="List of Tables">Seznam tabel</variable>
   <variable id="List of Figures">Seznam slik</variable>
-
-  <variable id="#quote-start"><variable id="OpenQuote"/></variable>
-  <variable id="#quote-end"><variable id="CloseQuote"/></variable>
 </vars>

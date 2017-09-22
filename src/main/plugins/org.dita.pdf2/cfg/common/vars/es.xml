@@ -40,96 +40,11 @@ See the accompanying LICENSE file for applicable license.
       
     -->
 
-    <!-- 
-       Strings used in the headers and footers of pages.
-    -->
-
-    <!-- Product name to be placed inside headers etc. -->
-    <variable id="Product Name"/>
-
-    <!-- The footer that appears on odd-numbered pages. -->
-    <variable id="Body odd footer"/>
-
-    <!-- The footer that appears on even-numbered pages. -->
-    <variable id="Body even footer"/>
-
-    <!-- The footer that appears on the first page of a chapter. -->
-    <variable id="Body first footer"/>
-
-    <!-- The header that appears on the first page of a chapter. -->
-    <variable id="Body first header"/>
-
-    <!-- The header that appears on odd-numbered pages. -->
-    <variable id="Body odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-
-    <!-- The header that appears on even-numbered pages. -->
-    <variable id="Body even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
-
-    <!-- The footer that appears on Preface odd-numbered pages. -->
-    <variable id="Preface odd footer"/>
-
-    <!-- The footer that appears on Preface even-numbered pages. -->
-    <variable id="Preface even footer"/>
-
-    <!-- The footer that appears on the first page of a Preface -->
-    <variable id="Preface first footer"/>
-
     <!-- The header that appears on Preface odd-numbered pages. -->
     <variable id="Preface odd header"><param ref-name="prodname"/> | Prefacio | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on Preface even-numbered pages. -->
     <variable id="Preface even header"><param ref-name="pagenum"/> | Prefacio | <param ref-name="prodname"/></variable>
-
-    <!-- The header that appears on Preface first page. -->
-    <variable id="Preface first header"/>
-
-    <!-- The footer that appears on the odd-numbered table of contents
-         pages. --> 
-    <variable id="Toc odd footer"/>
-
-    <!-- The footer that appears on the even-numbered table of contents
-         pages. --> 
-    <variable id="Toc even footer"/>
-
-    <!-- The header that appears on the odd-numbered table of contents
-         pages. --> 
-    <!-- Contenido -->
-    <variable id="Toc odd header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-
-    <!-- The header that appears on the odd-numbered table of contents
-         pages. --> 
-    <variable id="Toc even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-
-    <!-- The footer that appears on the odd-numbered index pages. -->
-    <variable id="Index odd footer"/>
-
-    <!-- The footer that appears on the even-numbered index pages. -->
-    <variable id="Index even footer"/>
-
-    <!-- The header that appears on the odd-numbered index pages. -->
-    <variable id="Index odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-
-    <!-- The header that appears on the even-numbered index pages. -->
-    <variable id="Index even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
-
-    <!-- The formatting used to display ordered lists (e.g., "1., 2." or 
-         "1), 2)" -->
-    <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 1"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 2"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 3"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 4"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Format 1">1</variable>
-    <variable id="Ordered List Format 2">a</variable>
-    <variable id="Ordered List Format 3">1</variable>
-    <variable id="Ordered List Format 4">a</variable>
-
-    <!-- The unordered list bullet   -->
-    <variable id="Unordered List bullet">•</variable>
-    <variable id="Unordered List bullet 1">•</variable>
-    <variable id="Unordered List bullet 2">•</variable>
-    <variable id="Unordered List bullet 3">•</variable>
-    <variable id="Unordered List bullet 4">•</variable>
 
     <!-- The heading string to put at the top of the Table of Contents -->
     <variable id="Table of Contents">Contents</variable>
@@ -150,16 +65,11 @@ See the accompanying LICENSE file for applicable license.
     <!-- The string used to label a preface within the table of contents. -->
     <variable id="Table of Contents Preface">Prefacio </variable>
 
-    <!-- The string used to label Notices within the table of contents. -->
-    <variable id="Table of Contents Notices"/>
-
     <variable id="Preface title">Prefacio</variable>
 
     <!-- The heading to put at the top of a chapter when creating a
          chapter-level "mini-TOC" -->
     <variable id="Mini Toc">Temas: </variable>
-
-    <variable id="#note-separator">: </variable>
 
     <!-- Text to use for 'Notice' label generated from <note> element. -->
     <variable id="Notice"><!--TODO:Notice--></variable>
@@ -228,38 +138,6 @@ See the accompanying LICENSE file for applicable license.
          in chm/html, when referenced element has no title. -->
     <variable id="This link">este acoplamiento</variable>
 
-    <!-- Image path to use for a note of "note" type. -->
-    <variable id="note Note Image Path"></variable>
-    <!-- Image path to use for a note of "notice" type. -->
-    <variable id="notice Note Image Path"></variable>
-    <!-- Image path to use for a note of "attention" type. -->
-    <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-
-    <!-- Image path to use for a note of "caution" type. -->
-    <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-
-    <!-- Image path to use for a note of "danger" type. -->
-    <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-    <!-- Image path to use for a note of "warning" type. -->
-    <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-    <!-- Image path to use for a note of "fastpath" type. -->
-    <variable id="fastpath Note Image Path"></variable>
-
-    <!-- Image path to use for a note of "important" type. -->
-    <variable id="important Note Image Path"></variable>
-
-    <!-- Image path to use for a note of "remember" type. -->
-    <variable id="remember Note Image Path"></variable>
-
-    <!-- Image path to use for a note of "restriction" type. -->
-    <variable id="restriction Note Image Path"></variable>
-
-    <!-- Image path to use for a note of "tip" type. -->
-    <variable id="tip Note Image Path"></variable>
-
-    <!-- Image path to use for a note of "other" type. -->
-    <variable id="other Note Image Path"></variable>
-
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">Opcional:</variable>
     <variable id="Required Step">Necesario:</variable>
@@ -272,18 +150,9 @@ See the accompanying LICENSE file for applicable license.
     <variable id="Task Result"></variable>
     <variable id="Task Example"></variable>
     <variable id="Task Postreq"></variable>
-    <variable id="Step Number"><param ref-name="number"/>. </variable>
-    <variable id="Step Format">1</variable>
-    <variable id="Substep Number"><param ref-name="number"/>) </variable>
-    <variable id="Substep Format">a</variable>
-    <variable id="Glossary odd footer"/>
-    <variable id="Glossary even footer"/>
-    <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-    <variable id="Glossary even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
+    
     <variable id="Glossary">Glosario</variable>
     <variable id="List of Tables">Lista de tablas</variable>
     <variable id="List of Figures">Lista de figuras</variable>
 
-  <variable id="#quote-start"><variable id="OpenQuote"/></variable>
-  <variable id="#quote-end"><variable id="CloseQuote"/></variable>
 </vars>
