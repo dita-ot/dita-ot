@@ -31,6 +31,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="List item"><!--TODO:List item.--></variable>
   <variable id="Foot note"><!--TODO:Footnote.--></variable>
   <variable id="Navigation title"><!--TODO:Navigation title--></variable>
+  <variable id="Search title"><!--TODO:Search title--></variable>
   <variable id="Chapter with number">Kapitel <param ref-name="number"/></variable>
   <variable id="Appendix with number">Appendix <param ref-name="number"/></variable>
   <variable id="Part with number">Del <param ref-name="number"/></variable>

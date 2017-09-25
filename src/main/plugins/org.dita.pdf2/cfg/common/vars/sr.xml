@@ -139,6 +139,15 @@ See the accompanying LICENSE file for applicable license.
     <!-- Label for a step with importance="optional"-->
     <variable id="Optional Step">Необавезно:</variable>
     <variable id="Required Step">Неопходно:</variable>
+     
+     <!--Labels for task sections, now reused from common but support legacy variable names-->
+     <variable id="Task Prereq"></variable>
+     <variable id="Task Context"></variable>
+     <variable id="Task Steps"></variable>
+     <variable id="#steps-unordered-label"></variable>
+     <variable id="Task Result"></variable>
+     <variable id="Task Example"></variable>
+     <variable id="Task Postreq"></variable>
 
     <!-- The heading string to put at the top of the Glossary -->
      <variable id="Glossary">Појмовник</variable>

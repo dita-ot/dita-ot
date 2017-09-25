@@ -66,6 +66,7 @@ See the accompanying LICENSE file for applicable license.
     <variable id="Table of Contents Preface">Introduzione </variable>
 
     <variable id="Preface title">Introduzione</variable>
+    <variable id="Notices title"/>
 
     <!-- The heading to put at the top of a chapter when creating a
          chapter-level "mini-TOC" -->
@@ -140,7 +141,7 @@ See the accompanying LICENSE file for applicable license.
 
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">Opzionale:</variable>
-    <variable id="Optional Step">Richiesto:</variable>
+    <variable id="Required Step">Richiesto:</variable>
 
     <!--Labels for task sections, now reused from common-->
     <variable id="Task Prereq"></variable>

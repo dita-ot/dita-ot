@@ -69,6 +69,7 @@ This file is part of the DITA Open Toolkit project.
 <str name="task_postreq">Điều cần làm tiếp theo</str>
 <str name="task_prereq">Trước khi bạn bắt đầu</str>
 <str name="task_procedure">Quy trình</str>
+<str name="task_procedure_unordered">Quy trình</str>
 <str name="task_results">Kết quả</str>
 
 <str name="Copyright">Bản quyền</str>

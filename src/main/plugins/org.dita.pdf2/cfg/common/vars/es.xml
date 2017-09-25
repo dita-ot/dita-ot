@@ -66,7 +66,8 @@ See the accompanying LICENSE file for applicable license.
     <variable id="Table of Contents Preface">Prefacio </variable>
 
     <variable id="Preface title">Prefacio</variable>
-
+    <variable id="Notices title"/>
+     
     <!-- The heading to put at the top of a chapter when creating a
          chapter-level "mini-TOC" -->
     <variable id="Mini Toc">Temas: </variable>
