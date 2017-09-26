@@ -57,5 +57,6 @@ See the accompanying LICENSE file for applicable license.
   <str name="task_procedure_unordered">程序</str>
   <str name="task_results">結果</str>
   <str name="Copyright">Copyright</str>
+  <str name="ColonSymbol">：</str>
   <str name="a11y.and-then"></str>
 </strings>
