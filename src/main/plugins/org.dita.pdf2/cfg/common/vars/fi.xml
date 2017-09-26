@@ -26,8 +26,8 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Table.title">Taulu <param ref-name="number"/>. <param ref-name="title"/></variable>
   <variable id="Table Number">Taulu <param ref-name="number"/></variable>
   <variable id="Related Links"><!--TODO:Related Links--></variable>
-  <variable id="Cross-Reference"><!--TODO:Cross-Reference to:--></variable>
-  <variable id="Content-Reference"><!--TODO:Content-Reference to:--></variable>
+  <variable id="Cross-Reference"/><!--UNUSED-->
+  <variable id="Content-Reference"/><!--UNUSED-->
   <variable id="List item"><!--TODO:List item.--></variable>
   <variable id="Foot note"><!--TODO:Footnote.--></variable>
   <variable id="Navigation title"><!--TODO:Navigation title--></variable>
@@ -38,9 +38,9 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Required-Cleanup"><!--TODO:[Required-Cleanup]--></variable>
   <variable id="On the page"/>
   <variable id="Page"> sivu <param ref-name="pagenum"/></variable>
-  <variable id="This link"><!--TODO:this link--></variable>
-  <variable id="Child topics"><!--TODO:Child Topics--></variable>
-  <variable id="Related references">Aiheeseen liittyviä tietolähteitä</variable>  
+  <variable id="This link"/><!--UNUSED-->
+  <variable id="Child topics"/><!--UNUSED-->
+  <variable id="Related references">Aiheeseen liittyviä tietolähteitä</variable><!--UNUSED-->
   <variable id="Optional Step">Valinnainen:</variable>
   <variable id="Required Step">Pakollinen:</variable>
   <!--Labels for task sections, now reused from common-->

@@ -26,8 +26,8 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Table.title">Tabel <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Table Number">Tabel <param ref-name="number"/></variable>
   <variable id="Related Links">Verwante onderwerpen</variable>
-  <variable id="Cross-Reference">Verwijzing naar:</variable>
-  <variable id="Content-Reference">Verwijzing naar:</variable>
+  <variable id="Cross-Reference">Verwijzing naar:</variable><!--UNUSED-->
+  <variable id="Content-Reference">Verwijzing naar:</variable><!--UNUSED-->
   <variable id="List item">Lijst onderdeel.</variable>
   <variable id="Foot note">Voetnoot.</variable>
   <variable id="Navigation title">Navigatietitel</variable>
@@ -38,12 +38,11 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Required-Cleanup">[Controle nodig]</variable>
   <variable id="On the page"> op pagina <param ref-name="pagenum"/></variable>
   <variable id="Page"> pagina <param ref-name="pagenum"/></variable>
-  <variable id="This link">deze verwijzing</variable>
-  <variable id="Child topics">Onderliggende onderwerpen</variable>
-  <variable id="Related references">Verwante verwijzingen</variable>
+  <variable id="This link">deze verwijzing</variable><!--UNUSED-->
+  <variable id="Child topics">Onderliggende onderwerpen</variable><!--UNUSED-->
+  <variable id="Related references">Verwante verwijzingen</variable><!--UNUSED-->
   <variable id="Optional Step">Optioneel:</variable>
   <variable id="Required Step">Vereist:</variable>
-  <!-- Task strings now reused from common -->
   <variable id="Task Prereq"></variable>
   <variable id="Task Context"></variable>
   <variable id="Task Steps"></variable>
@@ -51,10 +50,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Task Result"></variable>
   <variable id="Task Example"></variable>
   <variable id="Task Postreq"></variable>
-  <!-- The heading string to put at the top of the Glossary -->
   <variable id="Glossary">Verklarende woordenlijst</variable>
-  <!-- The heading string to put at the top of the List of Tables -->
   <variable id="List of Tables">Tabellen</variable>
-  <!-- The heading string to put at the top of the List of Figures -->
   <variable id="List of Figures">Figuren</variable>
 </vars>

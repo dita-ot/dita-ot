@@ -26,8 +26,8 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Table.title">Tabela <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Table Number">Tabela <param ref-name="number"/></variable>
   <variable id="Related Links">Sorodne povezave</variable>
-  <variable id="Cross-Reference">Križni sklic na:</variable>
-  <variable id="Content-Reference">Navzkrižni sklic na:</variable>
+  <variable id="Cross-Reference">Križni sklic na:</variable><!--UNUSED-->
+  <variable id="Content-Reference">Navzkrižni sklic na:</variable><!--UNUSED-->
   <variable id="List item">Točka seznama.</variable>
   <variable id="Foot note">Opomba v nogi.</variable>
   <variable id="Navigation title">Poimenovanje krmarjenja</variable>
@@ -38,21 +38,17 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Required-Cleanup">[Zahtevano čiščenje]</variable>
   <variable id="On the page"> na strani <param ref-name="pagenum"/></variable>
   <variable id="Page"> stran <param ref-name="pagenum"/></variable>
-  <variable id="This link">ta povezava</variable>
-  <variable id="Child topics">Podrejen</variable>
-  <variable id="Related references">Sorodne reference</variable>
+  <variable id="This link">ta povezava</variable><!--UNUSED-->
+  <variable id="Child topics">Podrejen</variable><!--UNUSED-->
+  <variable id="Related references">Sorodne reference</variable><!--UNUSED-->
   <variable id="Optional Step">Izbiren:</variable>
   <variable id="Required Step">Zahtevano:</variable>
-  <!-- Prereq was "Predzahteva", changing to common string, currently "Preden začnete" -->
   <variable id="Task Prereq"></variable>
-  <!-- Context was "O tem opravilu", changing to common string, currently "O tej nalogi" -->
   <variable id="Task Context"></variable>
   <variable id="Task Steps"></variable>
   <variable id="#steps-unordered-label"></variable>
   <variable id="Task Result"></variable>
-  <!-- Example was "Primer", changing to common string, currently "Zgled" -->
   <variable id="Task Example"></variable>
-  <!-- Postreq was "Kaj storiti zatem", changing to common string, currently "Kako naprej?" -->
   <variable id="Task Postreq"></variable>
   <variable id="Glossary">Besednjak</variable>
   <variable id="List of Tables">Seznam tabel</variable>

@@ -30,145 +30,51 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
 -->
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
-
-    <!-- 
-
-      This file controls strings that appear in the published output.  
-      There is one version of this file per language.  To add support 
-      for a new language, simply create a copy of this file and name 
-      it using the <locale ISO code>.xml format.
-      
-    -->
-
-    <!-- The header that appears on Preface odd-numbered pages. -->
-    <variable id="Preface odd header"><param ref-name="prodname"/> | はじめに | <param ref-name="pagenum"/></variable>
-
-    <!-- The header that appears on Preface even-numbered pages. -->
-    <variable id="Preface even header"><param ref-name="pagenum"/> | はじめに | <param ref-name="prodname"/></variable>
-
-    <!-- The heading string to put at the top of the Table of Contents -->
-    <variable id="Table of Contents">目次</variable>
-
-    <variable id="Index Continued String">続く</variable>
-
-    <!--string before see element-->
-    <variable id="Index See String">次を参照 :  </variable>
-
-    <!--string before see also element-->
-    <variable id="Index See Also String">次も参照 :  </variable>
-
-    <!-- The string used to label a chapter within the table of contents. -->
-    <variable id="Table of Contents Chapter">第 <param ref-name="number"/> 章 : </variable>
-
-    <!-- The string used to label an appendix within the table of contents. -->
-    <variable id="Table of Contents Appendix">付録 <param ref-name="number"/> : </variable>
-
-    <!-- The string used to label a part within the table of contents. -->
-    <variable id="Table of Contents Part">第 <param ref-name="number"/> 部 : </variable>
-
-    <!-- The string used to label a preface within the table of contents. -->
-    <variable id="Table of Contents Preface">序文 : </variable>
-
-    <!-- The string used to label a preface in body text. -->
-    <variable id="Preface title">序文</variable>
-
-    <!-- The string used to label an notices in body text. -->
-    <variable id="Notices title">特記事項</variable>
-
-    <!-- The heading to put at the top of a chapter when creating a
-         chapter-level "mini-TOC" -->
-    <variable id="Mini Toc">トピック : </variable>
-
-    <variable id="#note-separator"> : </variable>
-
-    <!-- Text to use for 'Notice' label generated from <note> element. -->
-    <variable id="Notice"><!--TODO:Notice--></variable>
-
-    <!-- Text to use for figure titles. Renders as part of <fig>/<title>
-          elements. -->
-    <variable id="Figure.title">図 <param ref-name="number"/> : <param ref-name="title"/></variable>
-    <variable id="Figure Number">図 <param ref-name="number"/></variable>
-
-    <!-- Text to use for table titles. Renders as part of <table>/<title> 
-         elements. -->
-    <variable id="Table.title">表 <param ref-name="number"/> : <param ref-name="title"/></variable>
-    <variable id="Table Number">表 <param ref-name="number"/></variable>
-
-    <!-- Text to use for related links label.
-         Renders as part of <related-links> element. -->
-    <variable id="Related Links">関連リンク</variable>
-
-    <!-- Default cross-reference text prefix. Used to generate reference 
-         text in case it's not specified in source. -->
-    <variable id="Cross-Reference">相互参照 : </variable>
-
-    <!-- Prefix for unresolved content reference. Used to generate reference 
-         text in case target cannot be resolved. -->
-    <variable id="Content-Reference">コンテンツ参照 : </variable>
-
-    <!-- Default title text for referenced list item. Used to generate
-         reference text in case reference has no explicit content and 
-         reference target is a list item. -->
-    <variable id="List item">リスト項目</variable>
-
-    <!-- Default title text for referenced footnote. Used to generate 
-         reference text in case reference has no explicit content and 
-         reference target is a footnote. -->
-    <variable id="Foot note">脚注</variable>
-
-    <!-- Text to use for a generated label of navigation title. Renders
-         as part of <navtitle> element. -->
-    <variable id="Navigation title">ナビゲーション タイトル</variable>
-
-    <!-- Text to use for a generated label of search title. Renders 
-         as part of <searchtitle> element. -->
-    <variable id="Search title">検索タイトル</variable>
-
-    <!-- Text to use for chapter titles.-->
-    <variable id="Chapter with number">第 <param ref-name="number"/> 章</variable>
-
-    <!-- Text to use for appendix titles.-->
-    <variable id="Appendix with number">付録 <param ref-name="number"/></variable>
-
-    <!-- Text to use for part titles.-->
-    <variable id="Part with number">第 <param ref-name="number"/> 部</variable>
-
-    <!-- Text to use for a label generated from <required-cleanup> element. -->
-    <variable id="Required-Cleanup">[クリーンアップが必要]</variable>
-
-    <!-- Template for generated page number of a reference 
-         in printed manual. -->
-    <variable id="On the page">（<param ref-name="pagenum"/>ページ）</variable>
-
-    <!-- Template for generated page number of a reference
-         in printed manual, when referenced element has no title. -->
-    <variable id="Page"> <param ref-name="pagenum"/> ページ</variable>
-
-    <!-- Template for generated page number of a reference
-         in chm/html, when referenced element has no title. -->
-    <variable id="This link">リンク</variable>
-
-    <!-- The title of the links to child topics -->
-    <variable id="Child topics">下位のトピック</variable>
-
-    <!-- The title of the links to Related references -->
-    <variable id="Related references">関連参照</variable>
-
-    <!--Label for a step with importance="optional"-->
-    <variable id="Optional Step">オプション:</variable>
-    <variable id="Required Step">必須:</variable>
-
-    <!--Labels for task sections, now reused from common-->
-    <variable id="Task Prereq"></variable>
-    <variable id="Task Context"></variable>
-    <variable id="Task Steps"></variable>
-    <variable id="#steps-unordered-label"></variable>
-    <variable id="Task Result"></variable>
-    <variable id="Task Example"></variable>
-    <variable id="Task Postreq"></variable>
-    
-    <variable id="Glossary">用語集</variable>
-    <variable id="List of Tables">表の一覧</variable>
-    <variable id="List of Figures">図の一覧</variable>
-
+  <variable id="Preface odd header"><param ref-name="prodname"/> | はじめに | <param ref-name="pagenum"/></variable>
+  <variable id="Preface even header"><param ref-name="pagenum"/> | はじめに | <param ref-name="prodname"/></variable>
+  <variable id="Table of Contents">目次</variable>
+  <variable id="Index Continued String">続く</variable>
+  <variable id="Index See String">次を参照 :  </variable>
+  <variable id="Index See Also String">次も参照 :  </variable>
+  <variable id="Table of Contents Chapter">第 <param ref-name="number"/> 章 : </variable>
+  <variable id="Table of Contents Appendix">付録 <param ref-name="number"/> : </variable>
+  <variable id="Table of Contents Part">第 <param ref-name="number"/> 部 : </variable>
+  <variable id="Table of Contents Preface">序文 : </variable>
+  <variable id="Preface title">序文</variable>
+  <variable id="Notices title">特記事項</variable>
+  <variable id="Mini Toc">トピック : </variable>
+  <variable id="#note-separator"> : </variable>
+  <variable id="Notice"><!--TODO:Notice--></variable>
+  <variable id="Figure.title">図 <param ref-name="number"/> : <param ref-name="title"/></variable>
+  <variable id="Figure Number">図 <param ref-name="number"/></variable>
+  <variable id="Table.title">表 <param ref-name="number"/> : <param ref-name="title"/></variable>
+  <variable id="Table Number">表 <param ref-name="number"/></variable>
+  <variable id="Related Links">関連リンク</variable>
+  <variable id="Cross-Reference">相互参照 : </variable><!--UNUSED-->
+  <variable id="Content-Reference">コンテンツ参照 : </variable><!--UNUSED-->
+  <variable id="List item">リスト項目</variable>
+  <variable id="Foot note">脚注</variable>
+  <variable id="Navigation title">ナビゲーション タイトル</variable>
+  <variable id="Search title">検索タイトル</variable>
+  <variable id="Chapter with number">第 <param ref-name="number"/> 章</variable>
+  <variable id="Appendix with number">付録 <param ref-name="number"/></variable>
+  <variable id="Part with number">第 <param ref-name="number"/> 部</variable>
+  <variable id="Required-Cleanup">[クリーンアップが必要]</variable>
+  <variable id="On the page">（<param ref-name="pagenum"/>ページ）</variable>
+  <variable id="Page"> <param ref-name="pagenum"/> ページ</variable>
+  <variable id="This link">リンク</variable><!--UNUSED-->
+  <variable id="Child topics">下位のトピック</variable><!--UNUSED-->
+  <variable id="Related references">関連参照</variable><!--UNUSED-->
+  <variable id="Optional Step">オプション:</variable>
+  <variable id="Required Step">必須:</variable>
+  <variable id="Task Prereq"></variable>
+  <variable id="Task Context"></variable>
+  <variable id="Task Steps"></variable>
+  <variable id="#steps-unordered-label"></variable>
+  <variable id="Task Result"></variable>
+  <variable id="Task Example"></variable>
+  <variable id="Task Postreq"></variable>
+  <variable id="Glossary">用語集</variable>
+  <variable id="List of Tables">表の一覧</variable>
+  <variable id="List of Figures">図の一覧</variable>
 </vars>

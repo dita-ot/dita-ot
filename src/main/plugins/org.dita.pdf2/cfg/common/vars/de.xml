@@ -30,138 +30,50 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
 -->
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
-
-    <!-- 
-
-      This file controls strings that appear in the published output.  
-      There is one version of this file per language.  To add support 
-      for a new language, simply create a copy of this file and name 
-      it using the <locale ISO code>.xml format.
-      
-    -->
-
-    <!-- The header that appears on Preface odd-numbered pages. -->
-    <variable id="Preface odd header"><param ref-name="pagenum"/> | Einleitung | <param ref-name="pagenum"/></variable>
-
-    <!-- The header that appears on Preface even-numbered pages. -->
-    <variable id="Preface even header"><param ref-name="pagenum"/> | Einleitung | <param ref-name="pagenum"/></variable>
-
-    <!-- The heading string to put at the top of the Table of Contents -->
-    <variable id="Table of Contents">Inhalt</variable>
-
-    <variable id="Index Continued String">Fortsetzung</variable>
-    <variable id="Index See String">, Siehe </variable>
-    <variable id="Index See Also String">Siehe auch </variable>
-
-    <!-- The string used to label a chapter within the table of contents. -->
-    <variable id="Table of Contents Chapter">Kapitel <param ref-name="number"/>: </variable>
-
-    <!-- The string used to label an appendix within the table of contents. -->
-    <variable id="Table of Contents Appendix">Anhang <param ref-name="number"/>: </variable>
-
-    <!-- The string used to label a part within the table of contents. -->
-    <variable id="Table of Contents Part">Teil <param ref-name="number"/>: </variable>
-
-    <!-- The string used to label a preface within the table of contents. -->
-    <variable id="Table of Contents Preface">Einleitung </variable>
-
-    <variable id="Preface title">Einleitung</variable>
-    
-    <!-- The string used to label an notices in body text. -->
-    <variable id="Notices title"/>
-    
-    <!-- The heading to put at the top of a chapter when creating a
-         chapter-level "mini-TOC" -->
-    <variable id="Mini Toc">Themen: </variable>
-
-    <!-- Text to use for 'Notice' label generated from <note> element. -->
-    <variable id="Notice"><!--TODO:Notice--></variable>
-
-    <!-- Text to use for figure titles. Renders as part of <fig>/<title>
-          elements. -->
-    <variable id="Figure.title">Abbildung  <param ref-name="number"/>: <param ref-name="title"/></variable>
-    <variable id="Figure Number">Abbildung  <param ref-name="number"/></variable>
-
-    <!-- Text to use for table titles. Renders as part of <table>/<title> 
-         elements. -->
-    <variable id="Table.title">Tabelle <param ref-name="number"/>: <param ref-name="title"/></variable>
-    <variable id="Table Number">Tabelle <param ref-name="number"/></variable>
-
-    <!-- Text to use for related links label.
-         Renders as part of <related-links> element. -->
-    <variable id="Related Links">Verwandte Links</variable>
-
-    <!-- Default cross-reference text prefix. Used to generate reference 
-         text in case it's not specified in source. -->
-    <variable id="Cross-Reference">Querverweis auf: </variable>
-
-    <!-- Prefix for unresolved content reference. Used to generate reference 
-         text in case target cannot be resolved. -->
-    <variable id="Content-Reference">Inhaltsverweis auf: </variable>
-
-    <!-- Default title text for referenced list item. Used to generate
-         reference text in case reference has no explicit content and 
-         reference target is a list item. -->
-    <variable id="List item">Listenelement.</variable>
-
-    <!-- Default title text for referenced footnote. Used to generate 
-         reference text in case reference has no explicit content and 
-         reference target is a footnote. -->
-    <variable id="Foot note">Fußnote.</variable>
-
-    <!-- Text to use for a generated label of navigation title. Renders
-         as part of <navtitle> element. -->
-    <variable id="Navigation title">Navigationstitel</variable>
-
-    <!-- Text to use for a generated label of search title. Renders 
-         as part of <searchtitle> element. -->
-    <variable id="Search title">Suchtitel</variable>
-
-    <!-- Text to use for chapter titles.-->
-    <variable id="Chapter with number">Kapitel  <param ref-name="number"/></variable>
-
-    <!-- Text to use for appendix titles.-->
-    <variable id="Appendix with number">Anhang  <param ref-name="number"/></variable>
-
-    <!-- Text to use for part titles.-->
-    <variable id="Part with number">Teil <param ref-name="number"/></variable>
-
-    <!-- Text to use for a label generated from <required-cleanup> element. -->
-    <variable id="Required-Cleanup">[Erforderliche Bereinigung]</variable>
-
-    <!-- Template for generated page number of a reference 
-         in printed manual. -->
-    <variable id="On the page"> auf Seite <param ref-name="pagenum"/></variable>
-
-    <!-- Template for generated page number of a reference
-         in printed manual, when referenced element has no title. -->
-    <variable id="Page"> Seite <param ref-name="pagenum"/></variable>
-
-    <!-- Template for generated page number of a reference
-         in chm/html, when referenced element has no title. -->
-    <variable id="This link">diese Verbindung</variable>
-
-    <!-- The title of the links to child topics -->
-    <variable id="Child topics"/>
-
-    <!-- The title of the links to Related references -->
-    <variable id="Related references"/>
-
-    <!--Label for a step with importance="optional"-->
-    <variable id="Optional Step">Optional:</variable>
-    <variable id="Required Step">Erforderlich:</variable>
-
-    <!--Labels for task sections, now reused from common-->
-    <variable id="Task Prereq"></variable>
-    <variable id="Task Context"></variable>
-    <variable id="Task Steps"></variable>
-    <variable id="#steps-unordered-label"></variable>
-    <variable id="Task Result"></variable>
-    <variable id="Task Example"></variable>
-    <variable id="Task Postreq"></variable>
-    
-    <variable id="Glossary">Glossar</variable>
-    <variable id="List of Tables">Tabellenverzeichnis</variable>
-    <variable id="List of Figures">Abbildungsverzeichnis</variable>
-
+  <variable id="Preface odd header"><param ref-name="pagenum"/> | Einleitung | <param ref-name="pagenum"/></variable>
+  <variable id="Preface even header"><param ref-name="pagenum"/> | Einleitung | <param ref-name="pagenum"/></variable>
+  <variable id="Table of Contents">Inhalt</variable>
+  <variable id="Index Continued String">Fortsetzung</variable>
+  <variable id="Index See String">, Siehe </variable>
+  <variable id="Index See Also String">Siehe auch </variable>
+  <variable id="Table of Contents Chapter">Kapitel <param ref-name="number"/>: </variable>
+  <variable id="Table of Contents Appendix">Anhang <param ref-name="number"/>: </variable>
+  <variable id="Table of Contents Part">Teil <param ref-name="number"/>: </variable>
+  <variable id="Table of Contents Preface">Einleitung </variable>
+  <variable id="Preface title">Einleitung</variable>
+  <variable id="Notices title"><!--TODO:Notices title--></variable>
+  <variable id="Mini Toc">Themen: </variable>
+  <variable id="Notice"><!--TODO:Notice--></variable>
+  <variable id="Figure.title">Abbildung  <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Figure Number">Abbildung  <param ref-name="number"/></variable>
+  <variable id="Table.title">Tabelle <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Table Number">Tabelle <param ref-name="number"/></variable>
+  <variable id="Related Links">Verwandte Links</variable>
+  <variable id="Cross-Reference">Querverweis auf: </variable><!--UNUSED-->
+  <variable id="Content-Reference">Inhaltsverweis auf: </variable><!--UNUSED-->
+  <variable id="List item">Listenelement.</variable>
+  <variable id="Foot note">Fußnote.</variable>
+  <variable id="Navigation title">Navigationstitel</variable>
+  <variable id="Search title">Suchtitel</variable>
+  <variable id="Chapter with number">Kapitel  <param ref-name="number"/></variable>
+  <variable id="Appendix with number">Anhang  <param ref-name="number"/></variable>
+  <variable id="Part with number">Teil <param ref-name="number"/></variable>
+  <variable id="Required-Cleanup">[Erforderliche Bereinigung]</variable>
+  <variable id="On the page"> auf Seite <param ref-name="pagenum"/></variable>
+  <variable id="Page"> Seite <param ref-name="pagenum"/></variable>
+  <variable id="This link">diese Verbindung</variable><!--UNUSED-->
+  <variable id="Child topics"/><!--UNUSED-->
+  <variable id="Related references"/><!--UNUSED-->
+  <variable id="Optional Step">Optional:</variable>
+  <variable id="Required Step">Erforderlich:</variable>
+  <variable id="Task Prereq"></variable>
+  <variable id="Task Context"></variable>
+  <variable id="Task Steps"></variable>
+  <variable id="#steps-unordered-label"></variable>
+  <variable id="Task Result"></variable>
+  <variable id="Task Example"></variable>
+  <variable id="Task Postreq"></variable>
+  <variable id="Glossary">Glossar</variable>
+  <variable id="List of Tables">Tabellenverzeichnis</variable>
+  <variable id="List of Figures">Abbildungsverzeichnis</variable>
 </vars>

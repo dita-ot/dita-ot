@@ -30,137 +30,48 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
 -->
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
-
-    <!-- 
-
-      This file controls strings that appear in the published output.  
-      There is one version of this file per language.  To add support 
-      for a new language, simply create a copy of this file and name 
-      it using the <locale ISO code>.xml format.
-      
-    -->
-
-    <!-- 
-       Strings used in the headers and footers of pages.
-    -->
-
-    <!-- The header that appears on Preface odd-numbered pages. -->
-    <variable id="Preface odd header"><param ref-name="prodname"/> | 序言 | <param ref-name="pagenum"/></variable>
-
-    <!-- The header that appears on Preface even-numbered pages. -->
-    <variable id="Preface even header"><param ref-name="pagenum"/> | 序言 | <param ref-name="prodname"/></variable>
-
-    <!-- The heading string to put at the top of the Table of Contents -->
-    <variable id="Table of Contents">内容</variable>
-
-    <variable id="Index Continued String">继续</variable>
-    <variable id="Index See String">，见</variable>
-    <variable id="Index See Also String">参见</variable>
-
-    <!-- The string used to label a chapter within the table of contents. -->
-    <variable id="Table of Contents Chapter">第 <param ref-name="number"/> 章 </variable>
-
-    <!-- The string used to label an appendix within the table of contents. -->
-    <variable id="Table of Contents Appendix">附录 <param ref-name="number"/>: </variable>
-
-    <!-- The string used to label a part within the table of contents. -->
-    <variable id="Table of Contents Part">第 <param ref-name="number"/> 部分 </variable>
-
-    <!-- The string used to label a preface within the table of contents. -->
-    <variable id="Table of Contents Preface">序言 </variable>
-    <variable id="Preface title">序言</variable>
-
-    <!-- TODO: The string used to label notices in body text. -->
-    <variable id="Notices title">Notice</variable>
-
-    <!-- TODO: The heading to put at the top of a chapter when creating a
-         chapter-level "mini-TOC". Using general "Contents", 
-         may want to replace with translation of "Topics". -->
-    <variable id="Mini Toc">内容: </variable>
-
-    <!-- TODO: Text to use for 'Notice' label generated from <note> element. -->
-    <variable id="Notice"><!--TODO:Notice--></variable>
-
-    <!-- Text to use for figure titles. Renders as part of <fig>/<title>
-          elements. -->
-    <variable id="Figure.title">图 <param ref-name="number"/>: <param ref-name="title"/></variable>
-    <variable id="Figure Number">图 <param ref-name="number"/></variable>
-
-    <!-- Text to use for table titles. Renders as part of <table>/<title> 
-         elements. -->
-    <variable id="Table.title">表 <param ref-name="number"/>: <param ref-name="title"/></variable>
-    <variable id="Table Number">表 <param ref-name="number"/></variable>
-
-    <!-- Text to use for related links label.
-         Currently using alternate translation of "Related information"
-         Renders as part of <related-links> element. -->
-    <variable id="Related Links">相关信息</variable>
-
-    <!-- UNUSED: Default cross-reference text prefix. Used to generate reference 
-         text in case it's not specified in source. -->
-    <variable id="Cross-Reference">Cross-Reference to:</variable>
-
-    <!-- Prefix for unresolved content reference. Used to generate reference 
-         text in case target cannot be resolved. -->
-    <variable id="Content-Reference">Unresolved content reference to:</variable>
-
-    <!-- TODO: Default title text for referenced list item. Used to generate
-         reference text in case reference has no explicit content and 
-         reference target is a list item. -->
-    <variable id="List item">List item.</variable>
-
-    <!-- TODO: Default title text for referenced footnote. Used to generate 
-         reference text in case reference has no explicit content and 
-         reference target is a footnote. Referenced in code but appears to be unused. -->
-    <variable id="Foot note">Footnote.</variable>
-
-    <!-- TODO: Text to use for a generated label of navigation title. Renders
-         as part of <navtitle> element. -->
-    <variable id="Navigation title">Navigation title</variable>
-
-    <!-- TODO: Text to use for a generated label of search title. Renders 
-         as part of <searchtitle> element. -->
-    <variable id="Search title">Search title</variable>
-
-    <!-- Text to use for chapter titles.-->
-    <variable id="Chapter with number">第 <param ref-name="number"/> 章</variable>
-
-    <!-- Text to use for appendix titles.-->
-    <variable id="Appendix with number">附录 <param ref-name="number"/></variable>
-
-    <!-- Text to use for part titles.-->
-    <variable id="Part with number">第 <param ref-name="number"/> 部分</variable>
-
-    <!-- Text to use for a label generated from <required-cleanup> element. -->
-    <variable id="Required-Cleanup">[需要修正]</variable>
-
-    <!-- Template for generated page number of a reference 
-         in printed manual. -->
-    <variable id="On the page"> on page <param ref-name="pagenum"/></variable>
-
-    <!-- Template for generated page number of a reference
-         in printed manual, when referenced element has no title. -->
-    <variable id="Page"> page <param ref-name="pagenum"/></variable>
-
-    <!-- UNUSED: Template for generated page number of a reference
-         in chm/html, when referenced element has no title. -->
-    <variable id="This link"></variable>
-
-    <!--Label for a step with importance="optional"-->
-    <variable id="Optional Step">可选：</variable>
-    <variable id="Required Step">必需：</variable>
-
-    <!--Labels for task sections, now reused from common-->
-    <variable id="Task Prereq"></variable>
-    <variable id="Task Context"></variable>
-    <variable id="Task Steps"></variable>
-    <variable id="#steps-unordered-label"></variable>
-    <variable id="Task Result"></variable>
-    <variable id="Task Example"></variable>
-    <variable id="Task Postreq"></variable>
-    
-     <variable id="Glossary">术语表</variable>
-    <variable id="List of Tables">表格清单</variable>
-    <variable id="List of Figures">插图清单</variable>
-
+  <variable id="Preface odd header"><param ref-name="prodname"/> | 序言 | <param ref-name="pagenum"/></variable>
+  <variable id="Preface even header"><param ref-name="pagenum"/> | 序言 | <param ref-name="prodname"/></variable>
+  <variable id="Table of Contents">内容</variable>
+  <variable id="Index Continued String">继续</variable>
+  <variable id="Index See String">，见</variable>
+  <variable id="Index See Also String">参见</variable>
+  <variable id="Table of Contents Chapter">第 <param ref-name="number"/> 章 </variable>
+  <variable id="Table of Contents Appendix">附录 <param ref-name="number"/>: </variable>
+  <variable id="Table of Contents Part">第 <param ref-name="number"/> 部分 </variable>
+  <variable id="Table of Contents Preface">序言 </variable>
+  <variable id="Preface title">序言</variable>
+  <variable id="Notices title">Notice</variable><!--TODO:Notices title-->
+  <variable id="Mini Toc">内容: </variable><!-- TODO: replace translation "Contents" with "Topics"-->
+  <variable id="Notice"><!--TODO:Notice--></variable>
+  <variable id="Figure.title">图 <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Figure Number">图 <param ref-name="number"/></variable>
+  <variable id="Table.title">表 <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Table Number">表 <param ref-name="number"/></variable>
+  <variable id="Related Links">相关信息</variable>
+  <variable id="Cross-Reference">Cross-Reference to:</variable><!--UNUSED-->
+  <variable id="Content-Reference">Unresolved content reference to:</variable><!--UNUSED-->
+  <variable id="List item">List item.</variable><!--TODO:List item-->
+  <variable id="Foot note">Footnote.</variable><!--TODO:Footnote-->
+  <variable id="Navigation title">Navigation title</variable><!--TODO:Navigation title-->
+  <variable id="Search title">Search title</variable><!--TODO:Search title-->
+  <variable id="Chapter with number">第 <param ref-name="number"/> 章</variable>
+  <variable id="Appendix with number">附录 <param ref-name="number"/></variable>
+  <variable id="Part with number">第 <param ref-name="number"/> 部分</variable>
+  <variable id="Required-Cleanup">[需要修正]</variable>
+  <variable id="On the page"> on page <param ref-name="pagenum"/></variable>
+  <variable id="Page"> page <param ref-name="pagenum"/></variable>
+  <variable id="This link"></variable><!--UNUSED-->
+  <variable id="Optional Step">可选：</variable>
+  <variable id="Required Step">必需：</variable>
+  <variable id="Task Prereq"></variable>
+  <variable id="Task Context"></variable>
+  <variable id="Task Steps"></variable>
+  <variable id="#steps-unordered-label"></variable>
+  <variable id="Task Result"></variable>
+  <variable id="Task Example"></variable>
+  <variable id="Task Postreq"></variable>
+  <variable id="Glossary">术语表</variable>
+  <variable id="List of Tables">表格清单</variable>
+  <variable id="List of Figures">插图清单</variable>
 </vars>
