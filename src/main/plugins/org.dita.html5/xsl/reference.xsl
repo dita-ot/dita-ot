@@ -215,64 +215,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
     </xsl:attribute>
   </xsl:template>
-  
-  <!-- Process a standard row in the properties table. Apply-templates on the entries one at a time;
-       if one is missing which should be present, create an empty cell. -->
-  <xsl:template match="*[contains(@class,' reference/property ')]" name="topic.reference.property">
-    <xsl:param name="hasType" as="xs:boolean"/>
-    <xsl:param name="hasValue" as="xs:boolean"/>
-    <xsl:param name="hasDesc" as="xs:boolean"/>
-    <tr>
-     <xsl:call-template name="setid"/>
-     <xsl:call-template name="commonattributes"/>
-       <!-- For each of the 3 entry types:
-            - If it is in this row, apply
-            - Otherwise, if it is in the table at all, create empty entry -->
-       <xsl:choose>      <!-- Process or create proptype -->
-         <xsl:when test="*[contains(@class,' reference/proptype ')]">
-           <xsl:apply-templates select="*[contains(@class,' reference/proptype ')]"/>
-         </xsl:when>
-         <xsl:when test="$hasType">
-           <td>    <!-- Create an empty cell. Add accessiblity attribute. -->
-             <xsl:call-template name="addPropertiesHeadersAttribute">
-               <xsl:with-param name="classVal"> reference/proptypehd </xsl:with-param>
-               <xsl:with-param name="elementType">type</xsl:with-param>
-             </xsl:call-template>
-             <xsl:text>&#xA0;</xsl:text>
-           </td>
-         </xsl:when>
-       </xsl:choose>
-       <xsl:choose>      <!-- Process or create propvalue -->
-         <xsl:when test="*[contains(@class,' reference/propvalue ')]">
-           <xsl:apply-templates select="*[contains(@class,' reference/propvalue ')]"/>
-         </xsl:when>
-         <xsl:when test="$hasValue">
-           <td>    <!-- Create an empty cell. Add accessiblity attribute. -->
-             <xsl:call-template name="addPropertiesHeadersAttribute">
-               <xsl:with-param name="classVal"> reference/propvaluehd </xsl:with-param>
-               <xsl:with-param name="elementType">value</xsl:with-param>
-             </xsl:call-template>
-             <xsl:text>&#xA0;</xsl:text>
-           </td>
-         </xsl:when>
-       </xsl:choose>
-       <xsl:choose>      <!-- Process or create propdesc -->
-         <xsl:when test="*[contains(@class,' reference/propdesc ')]">
-           <xsl:apply-templates select="*[contains(@class,' reference/propdesc ')]"/>
-         </xsl:when>
-         <xsl:when test="$hasDesc">
-           <td>    <!-- Create an empty cell. Add accessiblity attribute. -->
-             <xsl:call-template name="addPropertiesHeadersAttribute">
-               <xsl:with-param name="classVal"> reference/propdeschd </xsl:with-param>
-               <xsl:with-param name="elementType">desc</xsl:with-param>
-             </xsl:call-template>
-             <xsl:text>&#xA0;</xsl:text>
-           </td>
-         </xsl:when>
-       </xsl:choose>
-    </tr>
-  </xsl:template>
-  
+    
   <xsl:template match="*[contains(@class,' reference/proptype ')]" name="topic.reference.proptype">
     <xsl:apply-templates select="." mode="propertiesEntry">
       <xsl:with-param name="elementType">type</xsl:with-param>
