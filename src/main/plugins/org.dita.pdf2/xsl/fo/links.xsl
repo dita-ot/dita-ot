@@ -520,8 +520,11 @@ See the accompanying LICENSE file for applicable license.
                       <xsl:with-param name="element" select="$element"/>
                     </xsl:call-template>
                   </xsl:when>
-                  <xsl:otherwise>
+                  <xsl:when test="*[contains(@class, ' topic/linktext ')]">
                     <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="@href"/>
                   </xsl:otherwise>
                 </xsl:choose>
             </fo:basic-link>
