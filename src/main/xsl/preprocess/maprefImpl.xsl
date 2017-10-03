@@ -30,17 +30,51 @@ See the accompanying LICENSE file for applicable license.
   <xsl:key name="reltable" match="//*[contains(@class, ' map/topicref ')]" use="@dita-ot:orig-format"/>
 
   <xsl:template match="@* | node()">
+    <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()"/>
+      <xsl:apply-templates select="@* | node()">
+        <xsl:with-param name="relative-path" select="$relative-path"/>
+      </xsl:apply-templates>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="@conref">
+    <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
+    <xsl:attribute name="conref">
+      <xsl:choose>
+        <xsl:when test="$relative-path = ('#none#', '') or starts-with(.,'#')">
+          <xsl:sequence select="."/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+  </xsl:template>
+  
+  <xsl:template match="*[not(contains(@class,' map/topicref '))]/@href">
+    <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
+    <xsl:attribute name="href">
+      <xsl:choose>
+        <xsl:when test="not(contains(.,'://') or ../@scope = 'external' or $relative-path = ('#none#', ''))">
+          <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:sequence select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']
                         [empty(@href(: | @dita-ot:orig-href:)) or
                          (:@processing-role = 'resource-only' or:)
                          @scope = ('peer', 'external')]" priority="15">
+    <xsl:param name="relative-path" select="'#none#'" as="xs:string"/>
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()"/>
+      <xsl:apply-templates select="@* | node()">
+        <xsl:with-param name="relative-path" select="$relative-path"/>
+      </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
 
@@ -142,8 +176,12 @@ See the accompanying LICENSE file for applicable license.
             <!-- retain key definition as a separate element -->
             <xsl:if test="@keys">
               <keydef class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef " processing-role="resource-only">
-                <xsl:apply-templates select="@* except (@class | @processing-role)"/>
-                <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]"/>
+                <xsl:apply-templates select="@* except (@class | @processing-role)">
+                  <xsl:with-param name="relative-path" select="$relative-path"/>
+                </xsl:apply-templates>
+                <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]">
+                  <xsl:with-param name="relative-path" select="$relative-path"/>
+                </xsl:apply-templates>
               </keydef>
             </xsl:if>
             <!-- href and format need to be retained for keyref processing but must be put to an internal namespace to prevent other modules to interact with this element -->
@@ -390,8 +428,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <xsl:template match="@* | node()" mode="reltable-copy">
+    <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="reltable-copy"/>
+      <xsl:apply-templates select="@* | node()" mode="reltable-copy">
+        <xsl:with-param name="relative-path" select="$relative-path"/>
+      </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
 
@@ -400,6 +441,20 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute name="{name()}">
       <xsl:choose>
         <xsl:when test="not(contains(.,'://') or ../@scope = 'external' or $relative-path = ('#none#', ''))">
+          <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template match="@conref" mode="reltable-copy">
+    <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
+    <xsl:attribute name="conref">
+      <xsl:choose>
+        <xsl:when test="not($relative-path = ('#none#', ''))">
           <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
         </xsl:when>
         <xsl:otherwise>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+ <title>Submap</title>
+<topicref href="subdirtopic.dita">
+<topicmeta>
+<linktext>Pull prod name to link text: <ph conref="../library.dita#library/prodname"/>
+</linktext>
+<shortdesc>Also link to myself because why not: <xref href="subdirtopic.dita"/></shortdesc>
+</topicmeta>
+</topicref>
+</map>
