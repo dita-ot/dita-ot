@@ -351,7 +351,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
             processChildTopicref(topicref);
             processNavitation(topicref);
         } else if (chunkByToken.equals(CHUNK_BY_TOPIC)) {
-            processSeparateChunk(topicref);
+            if (href != null) {
+                processSeparateChunk(topicref);
+            }
             processChildTopicref(topicref);
         } else { // chunkByToken.equals(CHUNK_BY_DOCUMENT)
             URI currentPath = null;
