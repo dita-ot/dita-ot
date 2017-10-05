@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+ <title>map in sub sub dir</title>
+<topicref href="subsubdirtopic.dita">
+<topicmeta>
+<linktext>Pull prod name to link text: <ph conref="../../library.dita#library/prodname"/>
+</linktext>
+<shortdesc>Also link to myself because why not: <xref href="subsubdirtopic.dita"/></shortdesc>
+</topicmeta>
+</topicref>
+<reltable>
+<relrow>
+<relcell>
+<topicref href="subsubdirtopic.dita">
+<topicmeta>
+<linktext>Pull prod name to link text: <ph conref="../../library.dita#library/prodname"/>
+</linktext>
+<shortdesc>Also link to myself because why not: <xref href="subsubdirtopic.dita"/></shortdesc>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+</reltable>
+</map>

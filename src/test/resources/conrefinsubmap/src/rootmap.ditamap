@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en-us" domains="(map mapgroup-d)"><title>Pull product name to root map title: <ph conref="library.dita#library/prodname"/></title>
+<topicref href="library.dita"/>
+<mapref href="subdir/submap.ditamap"/>
+</map>

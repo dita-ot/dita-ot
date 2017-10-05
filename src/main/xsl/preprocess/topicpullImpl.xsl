@@ -593,9 +593,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:when>
       <xsl:otherwise>
         <!-- Scope must be peer or external or format is not dita, use any local text. -->
-        <xsl:variable name="format" as="xs:string"
+        <xsl:variable name="format" as="xs:string?"
           select="dita-ot:get-link-format(.)"/>
-        <xsl:variable name="scope" as="xs:string"
+        <xsl:variable name="scope" as="xs:string?"
           select="dita-ot:get-link-scope(., 'local')"/>
         <xsl:choose>
           <xsl:when test="contains(@class,' topic/link ') and *[not(contains(@class, ' topic/desc '))]">
