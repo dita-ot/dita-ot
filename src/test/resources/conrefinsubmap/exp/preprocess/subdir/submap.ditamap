@@ -7,4 +7,46 @@
 <shortdesc class="- map/shortdesc ">Also link to myself because why not: <xref href="subdirtopic.dita" class="- topic/xref "/></shortdesc>
 </topicmeta>
 </topicref>
-</map>
+<topicref href="subsubdir/subsubdirtopic.dita" class="- map/topicref ">
+<topicmeta class="- map/topicmeta ">
+<linktext class="- map/linktext ">Pull prod name to link text: <ph class="- topic/ph ">REUSED PRODNAME</ph>
+</linktext>
+<shortdesc class="- map/shortdesc ">Also link to myself because why not: <xref href="subsubdir/subsubdirtopic.dita" class="- topic/xref "/></shortdesc>
+</topicmeta>
+</topicref>
+<topichead class="+ map/topicref mapgroup-d/topichead " id="head">
+<topicmeta class="- map/topicmeta ">
+<navtitle class="- topic/navtitle ">Testing a topichead@</navtitle>
+</topicmeta>
+</topichead>
+<topichead class="+ map/topicref mapgroup-d/topichead ">
+<topicmeta class="- map/topicmeta ">
+<navtitle class="- topic/navtitle ">Testing a topichead@</navtitle>
+</topicmeta>
+</topichead>
+<reltable toc="no" class="- map/reltable ">
+<relrow class="- map/relrow ">
+<relcell toc="no" class="- map/relcell ">
+<topicref href="subdirtopic.dita" class="- map/topicref ">
+<topicmeta class="- map/topicmeta ">
+<linktext class="- map/linktext ">Pull prod name to link text: <ph class="- topic/ph ">REUSED PRODNAME</ph>
+</linktext>
+<shortdesc class="- map/shortdesc ">Also link to myself because why not: <xref href="subdirtopic.dita" class="- topic/xref "/></shortdesc>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+</reltable>
+<reltable toc="no" class="- map/reltable ">
+<relrow class="- map/relrow ">
+<relcell toc="no" class="- map/relcell ">
+<topicref href="subsubdir/subsubdirtopic.dita" class="- map/topicref ">
+<topicmeta class="- map/topicmeta ">
+<linktext class="- map/linktext ">Pull prod name to link text: <ph class="- topic/ph ">REUSED PRODNAME</ph>
+</linktext>
+<shortdesc class="- map/shortdesc ">Also link to myself because why not: <xref href="subsubdir/subsubdirtopic.dita" class="- topic/xref "/></shortdesc>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+</reltable></map>

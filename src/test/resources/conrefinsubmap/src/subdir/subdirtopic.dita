@@ -3,6 +3,6 @@
 <topic id="subdirtopic">
   <title>Topic in the subdir</title>
   <body>
-    <p>Pull phrase into topic: <ph conref="../library.dita#library/prodname"/></p>
+    <p>hey! Pull into topic: <ph conref="../library.dita#library/prodname"/></p>
   </body>
 </topic>
