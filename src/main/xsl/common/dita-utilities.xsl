@@ -94,7 +94,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="l" select="($ancestorlang, $defaultlang)[1]" as="xs:string?"/>
     <xsl:choose>
       <xsl:when test="exists($l)">
-        <xsl:variable name="stringfile" select="$stringFiles[@xml:lang = $l]/@filename" as="xs:string*"/>
+        <xsl:variable name="stringfile" select="$stringFiles[lower-case(@xml:lang) = lower-case($l)]/@filename" as="xs:string*"/>
         <xsl:variable name="str" as="element()*">
           <xsl:for-each select="$stringfile">
             <xsl:sequence select="document(., $stringFiles[1])/*/*[@name = $id or @id = $id]"/><!-- strings/str/@name opentopic-vars:vars/opentopic-vars:variable/@id -->

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /C:\Users\IBM_ADMIN\github\robander\dita-ot\build\tmp\integrationTest\conrefinsubmap\temp\preprocess\subdir\subsubdir?><?workdir-uri file:/C:/Users/IBM_ADMIN/github/robander/dita-ot/build/tmp/integrationTest/conrefinsubmap/temp/preprocess/subdir/subsubdir/?><?path2project ..\..\?><?path2project-uri ../../?><?path2rootmap-uri ../../?><?doctype-public -//OASIS//DTD DITA Map//EN?><?doctype-system map.dtd?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " class="- map/map " cascade="nomerge">
+ <title class="- topic/title ">map in sub sub dir</title>
+<topicref href="subsubdirtopic.dita" class="- map/topicref ">
+<topicmeta class="- map/topicmeta ">
+<linktext class="- map/linktext ">Pull prod name to link text: <ph class="- topic/ph ">REUSED PRODNAME</ph>
+</linktext>
+<shortdesc class="- map/shortdesc ">Also link to myself because why not: <xref href="subsubdirtopic.dita" class="- topic/xref "/></shortdesc>
+</topicmeta>
+</topicref>
+<reltable toc="no" class="- map/reltable ">
+<relrow class="- map/relrow ">
+<relcell toc="no" class="- map/relcell ">
+<topicref href="subsubdirtopic.dita" class="- map/topicref ">
+<topicmeta class="- map/topicmeta ">
+<linktext class="- map/linktext ">Pull prod name to link text: <ph class="- topic/ph ">REUSED PRODNAME</ph>
+</linktext>
+<shortdesc class="- map/shortdesc ">Also link to myself because why not: <xref href="subsubdirtopic.dita" class="- topic/xref "/></shortdesc>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+</reltable>
+</map>

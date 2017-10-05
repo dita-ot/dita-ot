@@ -4,6 +4,7 @@
 <title>Title</title>
 <body>
 <ul>
+<li><xref href="#Id1">Link to this topic</xref></li>
 <li><xref href="localditaxref.dita"/></li>
 <li><xref href="peerditaxref.dita" scope="peer">Peer topic, do not get it</xref></li>
 <li><xref href="externalditaxref.dita" scope="external">External topic, do not get it</xref></li>
