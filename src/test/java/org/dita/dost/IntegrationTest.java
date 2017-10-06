@@ -426,7 +426,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
     @Test
     public void testconrefinsubmap() throws Throwable {
         builder().name("conrefinsubmap")
-                .transtype(preprocess)
+                .transtype(PREPROCESS)
                 .input(Paths.get("rootmap.ditamap"))
                 .test();
     }
