@@ -11,6 +11,7 @@ before_script:
 - "./gradlew"
 script:
 - "./gradlew check integrationTest --info --stacktrace --no-daemon"
+after_success:
 - "./gradlew dist --stacktrace --no-daemon -Pcommit=${TRAVIS_COMMIT} -Ptag=${TRAVIS_TAG} -PskipGenerateDocs=${SKIP_GENERATE_DOCS}"
 notifications:
   slack:
