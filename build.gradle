@@ -232,16 +232,11 @@ task integrateDistPlugins() {
 }
 integrateDistPlugins.mustRunAfter integrateDistTemp
 
-def pluginJars(distTempDir) {
-    return files(Paths.get("${distTempDir}", "config", "env.sh").toFile()
-            .readLines()
-            .findAll { it.startsWith("CLASSPATH") }
-            .collect { "${distTempDir}" + it.substring(it.indexOf("DITA_HOME") + 9, it.length() - 1) })
-}
-
 task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
     main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config") + pluginJars(distTempDir)
+    classpath = sourceSets.main.runtimeClasspath +
+            files("${distTempDir}", "${projectDir}/src/main/config") +
+            files(file("${projectDir}/src/main/plugins/org.dita.pdf2.fop/lib").listFiles())
     workingDir distTempDir
     args "-f"
     args file("${distTempDir}/docsrc/build.xml")
