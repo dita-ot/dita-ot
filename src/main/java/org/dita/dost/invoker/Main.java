@@ -30,6 +30,7 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.BuildListener;
@@ -202,6 +203,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     private static Map<String, Argument> PLUGIN_ARGUMENTS;
 
+    // Lazy load parameters
     private synchronized Map<String, Argument> getPluginArguments() {
         if (PLUGIN_ARGUMENTS == null) {
             final List<Element> params = toList(getPluginConfiguration().getElementsByTagName("param"));
@@ -250,12 +252,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
-    private static final Map<String, String> RESERVED_PROPERTIES = new HashMap<>();
-    static {
-        for (final Map.Entry<String, Argument> a: ARGUMENTS.entrySet()) {
-            RESERVED_PROPERTIES.put(a.getValue().property, a.getKey());
-        }
-    }
+    private static final Map<String, String> RESERVED_PROPERTIES = ImmutableMap.of(
+            "transtype", "-f",
+            "args.input", "-i",
+            "output.dir", "-o",
+            "args.filter", "--filter",
+            ANT_TEMP_DIR, "-t"
+    );
 
     @Deprecated
     private static final Map<String, Argument> LEGACY_ARGUMENTS = new HashMap<>();
