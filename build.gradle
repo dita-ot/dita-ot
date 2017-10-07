@@ -236,7 +236,9 @@ task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath +
             files("${distTempDir}", "${projectDir}/src/main/config") +
-            files(file("${projectDir}/src/main/plugins/org.dita.pdf2.fop/lib").listFiles())
+            (file("${projectDir}/src/main/plugins/org.dita.pdf2.fop/lib").exists()
+                ? files(file("${projectDir}/src/main/plugins/org.dita.pdf2.fop/lib").listFiles())
+                : files())
     workingDir distTempDir
     args "-f"
     args file("${distTempDir}/docsrc/build.xml")
