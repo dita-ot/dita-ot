@@ -8,7 +8,6 @@
  */
 package org.dita.dost.util;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
 import static javax.xml.XMLConstants.NULL_NS_URI;
@@ -24,6 +23,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
@@ -41,35 +42,13 @@ import javax.xml.transform.sax.SAXSource;
 
 /**
  * Utility class used for flagging and filtering.
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class FilterUtils {
 
     /** Subject scheme file extension */
     public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
-
-    private static final QName[] PROFILE_ATTRIBUTES = {
-        QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
-        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
-        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
-        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PRINT),
-        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET)
-    };
-
-    private static final QName[] FLAG_ATTRIBUTES = {
-            QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
-            QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
-            QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
-            QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
-            QName.valueOf(ATTRIBUTE_NAME_PROPS),
-            QName.valueOf(ATTRIBUTE_NAME_PRINT),
-            QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET),
-            QName.valueOf(ATTRIBUTE_NAME_REV)
-    };
-
     public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
     private DITAOTLogger logger;
@@ -80,6 +59,8 @@ public final class FilterUtils {
     private boolean logMissingAction;
     private String foregroundConflictColor;
     private String backgroundConflictColor;
+    private Set<QName> filterAttributes;
+    private Set<QName> flagAttributes;
 
     public FilterUtils(final Map<FilterKey, Action> filterMap, String foregroundConflictColor,
                        String backgroundConflictColor) {
@@ -87,6 +68,8 @@ public final class FilterUtils {
         this.filterMap = new HashMap<>(filterMap);
         this.foregroundConflictColor = foregroundConflictColor;
         this.backgroundConflictColor = backgroundConflictColor;
+        filterAttributes = getProfileAttributes(Configuration.configuration.get("filter-attributes"));
+        flagAttributes = getFlaggingAttributes(Configuration.configuration.get("flag-attributes"));
     }
 
     /**
@@ -100,7 +83,7 @@ public final class FilterUtils {
 
     /**
      * Construct filter utility.
-     * 
+     *
      * @param isPrintType transformation output is print-oriented
      */
     public FilterUtils(final boolean isPrintType, final Map<FilterKey, Action> filterMap,
@@ -120,6 +103,17 @@ public final class FilterUtils {
         this.filterMap = dfm;
         this.foregroundConflictColor = foregroundConflictColor;
         this.backgroundConflictColor = backgroundConflictColor;
+        filterAttributes = getProfileAttributes(Configuration.configuration.get("filter-attributes"));
+        flagAttributes = getFlaggingAttributes(Configuration.configuration.get("flag-attributes"));
+    }
+
+    @VisibleForTesting
+    public FilterUtils(boolean isPrintType, Map<FilterKey, Action> filterMap,
+                       String foregroundConflictColor, String backgroundConflictColor,
+                       Set<QName> filterAttributes, Set<QName> flagAttributes) {
+        this(isPrintType, filterMap, foregroundConflictColor, backgroundConflictColor);
+        this.filterAttributes = Sets.union(this.filterAttributes, filterAttributes);
+        this.flagAttributes = Sets.union(this.flagAttributes, flagAttributes);
     }
 
     public void setLogger(final DITAOTLogger logger) {
@@ -131,13 +125,49 @@ public final class FilterUtils {
         return filterMap.toString();
     }
 
+    private static Set<QName> getProfileAttributes(final String conf) {
+        final ImmutableSet.Builder<QName> res = ImmutableSet.<QName>builder()
+                .add(QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
+                        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
+                        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
+                        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
+                        QName.valueOf(ATTRIBUTE_NAME_PROPS),
+                        QName.valueOf(ATTRIBUTE_NAME_PRINT),
+                        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET));
+        if (conf != null) {
+            Stream.of(conf.trim().split("\\s*,\\s*"))
+                    .map(QName::valueOf)
+                    .forEach(res::add);
+        }
+        return res.build();
+    }
+
+    private static Set<QName> getFlaggingAttributes(final String conf) {
+        final ImmutableSet.Builder<QName> res = ImmutableSet.<QName>builder()
+                .add(QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
+                        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
+                        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
+                        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
+                        QName.valueOf(ATTRIBUTE_NAME_PROPS),
+                        QName.valueOf(ATTRIBUTE_NAME_PRINT),
+                        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET),
+                        QName.valueOf(ATTRIBUTE_NAME_REV)
+        );
+        if (conf != null) {
+            Stream.of(conf.trim().split("\\s*,\\s*"))
+                    .map(QName::valueOf)
+                    .forEach(res::add);
+        }
+        return res.build();
+    }
+
     public Set<Flag> getFlags(final Attributes atts, final QName[][] extProps) {
         if (filterMap.isEmpty()) {
             return emptySet();
         }
 
         final Set<Flag> res = new HashSet<>();
-        for (final QName attr: FLAG_ATTRIBUTES) {
+        for (final QName attr: flagAttributes) {
             final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
             if (value != null) {
                 final Map<QName, List<String>> groups = getGroups(value);
@@ -261,7 +291,7 @@ public final class FilterUtils {
             return false;
         }
 
-        for (final QName attr: PROFILE_ATTRIBUTES) {
+        for (final QName attr: filterAttributes) {
             final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
             if (value != null) {
                 final Map<QName, List<String>> groups = getGroups(value);
@@ -307,7 +337,7 @@ public final class FilterUtils {
     @VisibleForTesting
     Map<QName, List<String>> getGroups(final String value) {
         final Map<QName, List<String>> res = new HashMap<>();
-        
+
         final StringBuilder buf = new StringBuilder();
         int previousEnd = 0;
         final Matcher m = groupPattern.matcher(value);
@@ -335,7 +365,7 @@ public final class FilterUtils {
 
     /**
      * Get labelled props value.
-     * 
+     *
      * @param propName attribute name
      * @param attrPropsValue attribute value
      * @return props value, {@code null} if not available
@@ -356,7 +386,7 @@ public final class FilterUtils {
         }
         return null;
     }
-    
+
     /**
      * Check the given extended attribute in propList to see if it was excluded.
      *
@@ -459,7 +489,7 @@ public final class FilterUtils {
 
     /**
      * Filter key object.
-     * 
+     *
      * @since 1.6
      */
     public static class FilterKey {

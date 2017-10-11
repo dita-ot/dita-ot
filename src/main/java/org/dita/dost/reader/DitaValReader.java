@@ -8,11 +8,13 @@
  */
 package org.dita.dost.reader;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Sets;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.FilterUtils.Flag;
@@ -33,12 +35,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static javax.xml.XMLConstants.XML_NS_PREFIX;
+import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FilterUtils.DEFAULT;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.XMLUtils.*;
-
 
 /**
  * DitaValReader reads and parses the information from ditaval file which
@@ -48,6 +53,10 @@ import static org.dita.dost.util.XMLUtils.*;
  */
 public final class DitaValReader implements AbstractReader {
 
+    private static final QName REV = QName.valueOf(ATTRIBUTE_NAME_REV);
+
+    private Set<QName> filterAttributes;
+    private Set<QName> flagAttributes;
     protected DITAOTLogger logger;
     protected Job job;
     private final Map<FilterKey, Action> filterMap;
@@ -81,6 +90,21 @@ public final class DitaValReader implements AbstractReader {
         } catch (final ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
+        filterAttributes = Stream.of(Configuration.configuration.getOrDefault("filter-attributes", "")
+                .trim().split("\\s*,\\s*"))
+                .map(QName::valueOf)
+                .collect(Collectors.toSet());
+        flagAttributes = Stream.of(Configuration.configuration.getOrDefault("flag-attributes", "")
+                .trim().split("\\s*,\\s*"))
+                .map(QName::valueOf)
+                .collect(Collectors.toSet());
+    }
+
+    @VisibleForTesting
+    DitaValReader(Set<QName> filterAttributes, Set<QName> flagAttributes) {
+        this();
+        this.filterAttributes = Sets.union(this.filterAttributes, filterAttributes);
+        this.flagAttributes = Sets.union(this.flagAttributes, flagAttributes);
     }
 
     @Override
@@ -174,10 +198,30 @@ public final class DitaValReader implements AbstractReader {
         if (action != null) {
             final QName attName;
             if (elem.getTagName().equals(ELEMENT_NAME_REVPROP)) {
-                attName = QName.valueOf(ATTRIBUTE_NAME_REV);
+                attName = REV;
             } else {
                 final String attValue = getValue(elem, ATTRIBUTE_NAME_ATT);
-                attName = attValue == null ? null : QName.valueOf(attValue);
+                if (attValue != null) {
+                    if (attValue.contains(":")) {
+                        final String[] parts = attValue.split(":");
+                        final String uri;
+                        if (parts[0].equals(XML_NS_PREFIX)) {
+                            uri = XML_NS_URI;
+                        } else {
+                            uri = elem.lookupNamespaceURI(parts[0]);
+                        }
+                        attName = new QName(uri, parts[1], parts[0]);
+                    } else {
+                        attName = QName.valueOf(attValue);
+                    }
+                } else {
+                    attName = null;
+                }
+                if (attName != null && attName.equals(REV)
+                        && !filterAttributes.isEmpty() && !filterAttributes.contains(REV)) {
+                    logger.warn(MessageUtils.getMessage("DOTJ074W").toString());
+                    return;
+                }
             }
             final String attValue = getValue(elem, ATTRIBUTE_NAME_VAL);
             final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;
