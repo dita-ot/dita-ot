@@ -28,6 +28,9 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- the dita to xhtml converter for task documents -->
 <xsl:import href="xslhtml/taskdisplay.xsl"/>
+  
+  <!-- the dita to xhtml converter for troubleshooting documents -->
+  <xsl:import href="xslhtml/troubleshootingdisplay.xsl"/>
 
 <!-- the dita to xhtml converter for reference documents -->
 <xsl:import href="xslhtml/refdisplay.xsl"/>
