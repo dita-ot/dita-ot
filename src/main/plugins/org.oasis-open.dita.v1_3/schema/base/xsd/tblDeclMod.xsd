@@ -350,7 +350,7 @@
       </xs:attribute>
       <xs:attribute name="char" type="xs:string"/>
       <xs:attribute name="charoff" type="xs:NMTOKEN"/>
-      <xs:attribute name="rowheader" default="headers">
+      <xs:attribute name="rowheader">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="firstcol"/>
