@@ -62,7 +62,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
 
-  <xsl:variable name="stringFiles" select="document($variableFiles.url)/langlist/lang" as="element(lang)*"/>
+  <xsl:variable name="variableFiles" select="document($variableFiles.url)/langlist/lang" as="element(lang)*"/>
   
   <!-- Deprecated. Use getVariable template instead. -->
   <xsl:template name="getString">
@@ -94,15 +94,15 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="l" select="($ancestorlang, $defaultlang)[1]" as="xs:string?"/>
     <xsl:choose>
       <xsl:when test="exists($l)">
-        <xsl:variable name="stringfile" select="$stringFiles[lower-case(@xml:lang) = lower-case($l)]/@filename" as="xs:string*"/>
-        <xsl:variable name="str" as="element()*">
-          <xsl:for-each select="$stringfile">
-            <xsl:sequence select="document(., $stringFiles[1])/*/*[@name = $id or @id = $id]"/><!-- strings/str/@name opentopic-vars:vars/opentopic-vars:variable/@id -->
+        <xsl:variable name="variablefile" select="$variableFiles[lower-case(@xml:lang) = lower-case($l)]/@filename" as="xs:string*"/>
+        <xsl:variable name="variable" as="element()*">
+          <xsl:for-each select="$variablefile">
+            <xsl:sequence select="document(., $variableFiles[1])/*/*[@name = $id or @id = $id]"/><!-- strings/str/@name opentopic-vars:vars/opentopic-vars:variable/@id -->
           </xsl:for-each>
         </xsl:variable>
         <xsl:choose>
-          <xsl:when test="exists($str)">
-            <xsl:apply-templates select="$str[last()]" mode="processVariableBody">
+          <xsl:when test="exists($variable)">
+            <xsl:apply-templates select="$variable[last()]" mode="processVariableBody">
               <xsl:with-param name="params" select="$params"/>
             </xsl:apply-templates>
             <xsl:if test="empty($ancestorlang)">
@@ -124,11 +124,26 @@ See the accompanying LICENSE file for applicable license.
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$id"/>
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="id" select="'DOTX052W'"/>
-          <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/></xsl:with-param>
-        </xsl:call-template>
+        <xsl:variable name="variablefile" select="$variableFiles[@xml:lang='']/@filename" as="xs:string*"/>
+        <xsl:variable name="variable" as="element()*">
+          <xsl:for-each select="$variablefile">
+            <xsl:sequence select="document(., $variableFiles[1])/*/*[@name = $id or @id = $id]"/>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="exists($variable)">
+            <xsl:apply-templates select="$variable[last()]" mode="processVariableBody">
+              <xsl:with-param name="params" select="$params"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$id"/>
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="id" select="'DOTX052W'"/>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/></xsl:with-param>
+            </xsl:call-template>            
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
