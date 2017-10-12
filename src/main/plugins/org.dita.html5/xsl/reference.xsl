@@ -85,14 +85,14 @@ See the accompanying LICENSE file for applicable license.
       <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
       <prophead class="- topic/sthead reference/prophead ">
         <xsl:if test="$hasType">
-         <proptypehd class="- topic/stentry reference/proptypehd " id="{generate-id()}-type">
+         <proptypehd class="- topic/stentry reference/proptypehd ">
            <xsl:call-template name="getVariable">
              <xsl:with-param name="id" select="'Type'"/>
            </xsl:call-template>
          </proptypehd>
         </xsl:if>
         <xsl:if test="$hasValue">
-          <propvaluehd class="- topic/stentry reference/propvaluehd " id="{generate-id()}-value">
+          <propvaluehd class="- topic/stentry reference/propvaluehd ">
            <xsl:call-template name="getVariable">
              <xsl:with-param name="id" select="'Value'"/>
            </xsl:call-template>
@@ -107,7 +107,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template name="gen-propdeschd">
     <xsl:variable name="properties" select="ancestor-or-self::*[contains(@class,' reference/properties ')][1]"/>
-    <propdeschd class="- topic/stentry reference/propdeschd " id="{generate-id($properties)}-desc">
+    <propdeschd class="- topic/stentry reference/propdeschd ">
       <xsl:call-template name="getVariable">
         <xsl:with-param name="id" select="'Description'"/>
       </xsl:call-template>
@@ -134,14 +134,13 @@ See the accompanying LICENSE file for applicable license.
            <xsl:apply-templates select="*[contains(@class,' reference/proptypehd ')]"/>
          </xsl:when>
          <xsl:when test="$hasType">
-           <th>
+           <th scope="col">
              <xsl:call-template name="style">
                <xsl:with-param name="contents">
                  <xsl:text>vertical-align:bottom;</xsl:text>
                  <xsl:call-template name="th-align"/>
                </xsl:with-param>
              </xsl:call-template>           
-             <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-type</xsl:attribute>
              <xsl:call-template name="getVariable">
                <xsl:with-param name="id" select="'Type'"/>
              </xsl:call-template>
@@ -153,14 +152,13 @@ See the accompanying LICENSE file for applicable license.
            <xsl:apply-templates select="*[contains(@class,' reference/propvaluehd ')]"/>
          </xsl:when>
          <xsl:when test="$hasValue">
-           <th>
+           <th scope="col">
              <xsl:call-template name="style">
                <xsl:with-param name="contents">
                  <xsl:text>vertical-align:bottom;</xsl:text>
                  <xsl:call-template name="th-align"/>
                </xsl:with-param>
              </xsl:call-template>
-             <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-value</xsl:attribute>
              <xsl:call-template name="getVariable">
                <xsl:with-param name="id" select="'Value'"/>
              </xsl:call-template>
@@ -175,14 +173,13 @@ See the accompanying LICENSE file for applicable license.
            <xsl:variable name="propdeschd" as="element()">
              <xsl:call-template name="gen-propdeschd"/>
            </xsl:variable>
-           <th>
+           <th scope="col">
              <xsl:call-template name="style">
                <xsl:with-param name="contents">
                  <xsl:text>vertical-align:bottom;</xsl:text>
                  <xsl:call-template name="th-align"/>
                </xsl:with-param>
              </xsl:call-template>           
-             <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-desc</xsl:attribute>
              <xsl:call-template name="getVariable">
                <xsl:with-param name="id" select="'Description'"/>
              </xsl:call-template>
@@ -256,15 +253,14 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
     </xsl:variable>
     <xsl:element name="{$element-name}">
+      <xsl:call-template name="setid"/>
+      <xsl:if test="$element-name='th'">
+        <xsl:attribute name="scope" select="'row'"/>
+      </xsl:if>
       <xsl:call-template name="style">
         <xsl:with-param name="contents">
-          <xsl:text>vertical-align:top;</xsl:text>     
+          <xsl:text>vertical-align:top;</xsl:text>
         </xsl:with-param>
-      </xsl:call-template>
-      <xsl:call-template name="output-stentry-id"/>
-      <xsl:call-template name="addPropertiesHeadersAttribute">
-        <xsl:with-param name="classVal"> reference/prop<xsl:value-of select="$elementType"/>hd<xsl:text> </xsl:text></xsl:with-param>
-        <xsl:with-param name="elementType" select="$elementType"/>
       </xsl:call-template>
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
