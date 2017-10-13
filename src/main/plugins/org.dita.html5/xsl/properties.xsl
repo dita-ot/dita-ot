@@ -54,17 +54,14 @@ See the accompanying LICENSE file for applicable license.
   ">
     <prophead class="- topic/sthead reference/prophead ">
       <proptypehd class="- topic/stentry task/proptypehd ">
-        <xsl:attribute name="id" select="simpletable:generate-headers(., 'type')"/>
         <xsl:sequence select="dita-ot:get-variable(., 'Type')"/>
       </proptypehd>
 
       <propvaluehd class="- topic/stentry task/propvaluehd ">
-        <xsl:attribute name="id" select="simpletable:generate-headers(., 'value')"/>
         <xsl:sequence select="dita-ot:get-variable(., 'Value')"/>
       </propvaluehd>
 
       <propdeschd class="- topic/stentry task/propdeschd ">
-        <xsl:attribute name="id" select="simpletable:generate-headers(., 'desc')"/>
         <xsl:sequence select="dita-ot:get-variable(., 'Description')"/>
       </propdeschd>
     </prophead>
