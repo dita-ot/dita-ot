@@ -136,6 +136,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
     private List<Reference> getStartDocuments() throws DITAOTException {
         final List<Reference> res = new ArrayList<>();
         final FileInfo startFileInfo = job.getFileInfo(job.getInputFile());
+        assert startFileInfo.src != null;
         final URI tmp = job.tempDirURI.resolve(startFileInfo.uri);
         final Source source = new StreamSource(tmp.toString());
         logger.info("Reading " + tmp);
@@ -147,8 +148,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
                     case START_ELEMENT:
                         final URI href = getHref(in);
                         if (href != null) {
-                            final URI targetTmp = tmp.resolve(href);
-                            final FileInfo fi = job.getFileInfo(targetTmp);
+                            final URI targetSrc = startFileInfo.src.resolve(href);
+                            final FileInfo fi = job.getFileInfo(targetSrc);
                             assert fi != null;
                             assert fi.src != null;
                             final String format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
