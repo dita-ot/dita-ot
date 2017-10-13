@@ -99,14 +99,9 @@ See the accompanying LICENSE file for applicable license.
       <xsl:variable name="keycolhead">
         <xsl:if test="$keycol and $thiscolnum != number($keycol)">
           <xsl:variable name="col" select="../*[number($keycol)]"/>
-          <xsl:choose>
-            <xsl:when test="$col/@id">
-              <xsl:value-of select="$col/@id"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="generate-id($col)"/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:if test="$col/@id">
+            <xsl:value-of select="$col/@id"/>
+          </xsl:if>
         </xsl:if>
       </xsl:variable>
       
