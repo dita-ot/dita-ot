@@ -215,11 +215,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' task/stepsection ')]">
-    <p>
+    <div>
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="setid"/>
       <xsl:apply-templates/>
-    </p>
+    </div>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' task/steps-unordered ')]" name="topic.task.steps-unordered">
