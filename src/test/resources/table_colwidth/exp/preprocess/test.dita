@@ -13,8 +13,8 @@
     </table>
     <table class="- topic/table ">
       <tgroup class="- topic/tgroup " cols="2">
-        <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth="1*" rowheader="headers"/>
-        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="3*" rowheader="headers"/>
+        <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth="1*"/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="3*"/>
         <tbody class="- topic/tbody ">
           <row class="- topic/row ">
             <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">1</entry>
@@ -25,8 +25,8 @@
     </table>
     <table class="- topic/table ">
       <tgroup class="- topic/tgroup " cols="2">
-        <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth="1cm" rowheader="headers"/>
-        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="3cm" rowheader="headers"/>
+        <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth="1cm"/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="3cm"/>
         <tbody class="- topic/tbody ">
           <row class="- topic/row ">
             <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">1</entry>

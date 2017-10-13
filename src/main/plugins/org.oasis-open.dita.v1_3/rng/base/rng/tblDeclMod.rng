@@ -439,8 +439,7 @@ For <entry>, add:
       </attribute>
     </optional>
     <optional>
-      <attribute name="rowheader" dita:since="1.3"
-        a:defaultValue="headers">
+      <attribute name="rowheader" dita:since="1.3">
         <choice>
           <value>firstcol</value>
           <value dita:since="1.3">headers</value>

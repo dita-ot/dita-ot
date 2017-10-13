@@ -322,7 +322,7 @@
                            headers |
                            norowheader |
                            -dita-use-conref-target)
-                                    'headers'
+                                    #IMPLIED
                %tbl.colspec.att;
                %dita.colspec.attributes;"
 >
