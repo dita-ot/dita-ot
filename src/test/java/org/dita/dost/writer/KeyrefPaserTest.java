@@ -201,7 +201,7 @@ public class KeyrefPaserTest {
                     null, null, tempDir.toPath().resolve(map).toUri(), elem);
             keymap.put(keyDef.keys, keyDef);
         }
-        return new KeyScope(keymap);
+        return new KeyScope(null, null, keymap, Collections.emptyList());
     }
-    
+
 }

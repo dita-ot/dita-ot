@@ -31,10 +31,6 @@ public class KeyScope {
         this.childScopes = unmodifiableList(new ArrayList<>(childScopes));
     }
 
-    public KeyScope(final Map<String, KeyDef> keyDefinition) {
-        this(null, null, keyDefinition, Collections.emptyList());
-    }
-
     public KeyDef get(final String key) {
         return keyDefinition.get(key);
     }
