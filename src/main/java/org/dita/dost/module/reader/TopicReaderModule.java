@@ -90,26 +90,31 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
         if (filterUtils != null) {
             final Document doc = getMapDocument();
-            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
-            subjectSchemeReader.setLogger(logger);
-            logger.debug("Loading subject schemes");
-            final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
-            subjectSchemes.stream()
-                    .filter(e -> SUBJECTSCHEME_ENUMERATIONDEF.matches(e))
-                    .forEach(enumerationDef -> {
-                        final Element schemeRoot = ancestors(enumerationDef)
-                                .filter(e -> SUBMAP.matches(e))
-                                .findFirst()
-                                .orElse(doc.getDocumentElement());
-                        subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
-                    });
-            final SubjectScheme subjectScheme = subjectSchemeReader.getSubjectSchemeMap();
-            filterUtils = filterUtils.refine(subjectScheme);
+            if (doc != null) {
+                final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+                subjectSchemeReader.setLogger(logger);
+                logger.debug("Loading subject schemes");
+                final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
+                subjectSchemes.stream()
+                        .filter(e -> SUBJECTSCHEME_ENUMERATIONDEF.matches(e))
+                        .forEach(enumerationDef -> {
+                            final Element schemeRoot = ancestors(enumerationDef)
+                                    .filter(e -> SUBMAP.matches(e))
+                                    .findFirst()
+                                    .orElse(doc.getDocumentElement());
+                            subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
+                        });
+                final SubjectScheme subjectScheme = subjectSchemeReader.getSubjectSchemeMap();
+                filterUtils = filterUtils.refine(subjectScheme);
+            }
         }
     }
 
     private Document getMapDocument() throws SAXException {
         final FileInfo fi = job.getFileInfo(job.getInputMap());
+        if (fi == null) {
+            return null;
+        }
         final URI currentFile = job.tempDirURI.resolve(fi.uri);
         try {
             logger.debug("Reading " + currentFile);
@@ -121,15 +126,19 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
     @Override
     public void readStartFile() throws DITAOTException {
-        final FileInfo fi = job.getFileInfo(job.getInputFile());
-        if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
-            getStartDocuments().forEach(this::addToWaitList);
+        FileInfo fi = job.getFileInfo(job.getInputFile());
+        if (fi == null) {
+            addToWaitList(new Reference(job.getInputFile()));
         } else {
-            if (fi.format == null) {
-                fi.format = ATTR_FORMAT_VALUE_DITA;
-                job.add(fi);
+            if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+                getStartDocuments().forEach(this::addToWaitList);
+            } else {
+                if (fi.format == null) {
+                    fi.format = ATTR_FORMAT_VALUE_DITA;
+                    job.add(fi);
+                }
+                addToWaitList(new Reference(job.getInputFile(), fi.format));
             }
-            addToWaitList(new Reference(job.getInputFile(), fi.format));
         }
     }
 

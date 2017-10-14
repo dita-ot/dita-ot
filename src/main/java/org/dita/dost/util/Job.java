@@ -896,7 +896,10 @@ public final class Job {
      * @return absolute output dir
      */
     public File getOutputDir(){
-        return new File(prop.get(PROPERTY_OUTPUT_DIR).toString());
+        if (prop.containsKey(PROPERTY_OUTPUT_DIR)) {
+            return new File(prop.get(PROPERTY_OUTPUT_DIR).toString());
+        }
+        return null;
     }
 
     /**
@@ -912,7 +915,10 @@ public final class Job {
      * @return absolute input file path
      */
     public URI getInputFile() {
-        return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
+        if (prop.containsKey(PROPERTY_INPUT_MAP_URI)) {
+            return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
+        }
+        return null;
     }
 
     /**
