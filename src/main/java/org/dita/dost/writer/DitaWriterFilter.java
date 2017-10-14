@@ -166,14 +166,14 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             final QName attQName = new QName(atts.getURI(i), atts.getLocalName(i));
             final String origValue = atts.getValue(i);
             String attValue = origValue;
-            if (ATTRIBUTE_NAME_CONREF.equals(attQName)) {
+            if (ATTRIBUTE_NAME_CONREF.equals(attQName.getLocalPart())) {
                 attValue = replaceHREF(QName.valueOf(ATTRIBUTE_NAME_CONREF), atts).toString();
-            } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
+            } else if(ATTRIBUTE_NAME_HREF.equals(attQName.getLocalPart()) || ATTRIBUTE_NAME_COPY_TO.equals(attQName.getLocalPart())){
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
                         atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)){
                     attValue = replaceHREF(attQName, atts).toString();
                 }
-            } else if(ATTRIBUTE_NAME_FORMAT.equals(attQName)) {
+            } else if(ATTRIBUTE_NAME_FORMAT.equals(attQName.getLocalPart())) {
                 final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
                 // verify format is correct
                 if (isFormatDita(format)) {
