@@ -136,7 +136,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
      */
     private void findTargets(final IndexTerm term) {
         final List<IndexTerm> subTerms = term.getSubTerms();
-        List<IndexTermTarget> subTargets = null;
+        List<IndexTermTarget> subTargets;
         if (subTerms != null && ! subTerms.isEmpty()){
             for (final IndexTerm subTerm : subTerms) {
                 subTargets = subTerm.getTargetList();

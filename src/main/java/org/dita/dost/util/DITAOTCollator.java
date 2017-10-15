@@ -39,7 +39,7 @@ public final class DITAOTCollator implements Comparator {
         if (locale == null) {
             throw new NullPointerException("Locale may not be null");
         }
-        DITAOTCollator instance = null;
+        DITAOTCollator instance;
         instance = cache.computeIfAbsent(locale, DITAOTCollator::new);
         return instance;
     }
@@ -78,7 +78,7 @@ public final class DITAOTCollator implements Comparator {
      * Initialization.
      */
     private void init(final Locale locale) {
-        Class<?> c = null;
+        Class<?> c;
 
         try {
             c = Class.forName("com.ibm.icu.text.Collator");

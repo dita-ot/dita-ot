@@ -279,8 +279,8 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     @Override
     public void write(final File outputFilename) {
         String filename = outputFilename.getAbsolutePath();
-        String file = null;
-        String topic = null;
+        String file;
+        String topic;
         File inputFile = null;
         File outputFile = null;
 

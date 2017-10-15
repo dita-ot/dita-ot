@@ -177,8 +177,8 @@ public final class KeydefFilter extends AbstractXMLFilter {
      * Update keysDefMap for multi-level keys
      */
     private void checkMultiLevelKeys(final Map<String, KeyDef> keysDefMap, final Map<String, String> keysRefMap) {
-        String key = null;
-        KeyDef value = null;
+        String key;
+        KeyDef value;
         // tempMap storing values to avoid ConcurrentModificationException
         final Map<String, KeyDef> tempMap = new HashMap<>();
         for (Entry<String, KeyDef> entry : keysDefMap.entrySet()) {

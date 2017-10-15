@@ -81,7 +81,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
         } else {
             domains.addFirst(domains.peekFirst());
         }
-        AttributesImpl modified = null;
+        AttributesImpl modified;
         modified = validateLang(atts, null);
         modified = validateId(localName, atts, modified);
         modified = validateHref(atts, modified);

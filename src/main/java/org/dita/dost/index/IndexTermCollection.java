@@ -160,7 +160,7 @@ public final class IndexTermCollection {
 
         if (indexClass != null && indexClass.length() > 0) {
             //Instantiate the class value
-            Class<?> anIndexClass = null;
+            Class<?> anIndexClass;
             try {
                 anIndexClass = Class.forName( indexClass );
                 abstractWriter = (AbstractWriter) anIndexClass.newInstance();

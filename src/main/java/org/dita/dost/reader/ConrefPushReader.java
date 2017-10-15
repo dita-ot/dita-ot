@@ -280,7 +280,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     //if there is no '#' in target string, report error
                     logger.error(MessageUtils.getMessage("DOTJ041E", target.toString()).toString());
                 } else {
-                    String id = "";
+                    String id;
                     //has element id
                     if (fragment.contains(SLASH)) {
                         id = fragment.substring(fragment.lastIndexOf(SLASH) + 1);
@@ -332,7 +332,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             target = toURI(parsefilename.getPath() + target);
         }
         final File key = toFile(FileUtils.resolve(fileDir, target));
-        Hashtable<MoveKey, DocumentFragment> table = null;
+        Hashtable<MoveKey, DocumentFragment> table;
         if (pushtable.containsKey(key)) {
             //if there is something else push to the same file
             table = pushtable.get(key);

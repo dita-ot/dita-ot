@@ -131,7 +131,7 @@ public final class DITAOTCopy extends Task {
             BufferedReader r = null;
             try {
                 r = new BufferedReader(new FileReader(includesFile));
-                String line = null;
+                String line;
                 while ((line = r.readLine()) != null) {
                     if (!line.trim().isEmpty()) {
                         res.add(line.trim());

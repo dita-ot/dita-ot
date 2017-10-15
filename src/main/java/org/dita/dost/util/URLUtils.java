@@ -99,7 +99,7 @@ public final class URLUtils {
         }
         final StringBuilder sbuf = new StringBuilder();
         final int l = s.length();
-        int ch = -1;
+        int ch;
         int b = 0, sumb = 0;
         boolean applyUTF8dec = false;
 
@@ -442,7 +442,7 @@ public final class URLUtils {
         if (filename == null) {
             return null;
         }
-        String f = filename;
+        String f;
         try {
             f = URLDecoder.decode(filename, UTF8);
         } catch (final UnsupportedEncodingException e) {

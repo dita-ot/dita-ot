@@ -947,7 +947,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final int posEq = name.indexOf("=");
         if (posEq > 0) {
             value = name.substring(posEq + 1);
-            name = name.substring(0, posEq);
         } else {
             value = args.pop();
         }

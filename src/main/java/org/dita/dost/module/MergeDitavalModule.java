@@ -76,7 +76,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
             for (final String oneDitavalFile : allDitavalFiles) {
                 logger.debug("Evaluating ditaval: " + oneDitavalFile);
                 final URI ditavalInput = toURI(oneDitavalFile);
-                URI usingDitavalInput = null;
+                URI usingDitavalInput;
                 if (ditavalInput.isAbsolute()) {
                     usingDitavalInput = ditavalInput;
                 } else if (ditavalInput.getPath() != null && ditavalInput.getPath().startsWith(URI_SEPARATOR)) {

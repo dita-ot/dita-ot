@@ -42,7 +42,7 @@ public final class StringUtils {
     @SuppressWarnings("rawtypes")
     public static String join(final Collection coll, final String delim) {
         final StringBuilder buff = new StringBuilder(256);
-        Iterator iter = null;
+        Iterator iter;
 
         if ((coll == null) || coll.isEmpty()) {
             return "";
@@ -99,7 +99,7 @@ public final class StringUtils {
             final String pattern, final String replacement) {
         final StringBuilder result = new StringBuilder();
         int startIndex = 0;
-        int newIndex = 0;
+        int newIndex;
 
         while ((newIndex = input.indexOf(pattern, startIndex)) >= 0) {
             result.append(input.substring(startIndex, newIndex));
@@ -201,7 +201,7 @@ public final class StringUtils {
         Locale aLocale = null;
         String country = null;
         String language = null;
-        String variant = null;
+        String variant;
 
         //Tokenize the string using "-" as the token string as per IETF RFC4646 (superceeds RFC3066).
 
@@ -256,7 +256,6 @@ public final class StringUtils {
             if (subtag2.length() <= 3){
                 country = subtag2.toUpperCase();
             }else if (subtag2.length() > 3 && subtag2.length() <= 8){
-                variant = subtag2;
             }else if (subtag2.length() > 8){
                 //return an error!
             }

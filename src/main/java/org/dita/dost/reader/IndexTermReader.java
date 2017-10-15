@@ -261,7 +261,7 @@ public final class IndexTermReader extends AbstractXMLReader {
      */
     private IndexTermTarget genTarget() {
         final IndexTermTarget target = new IndexTermTarget();
-        String fragment = null;
+        String fragment;
 
         if(topicIdStack.peek() == null){
             fragment = null;
@@ -348,7 +348,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         // is in the list.
         if (indexSeeAlsoSpecList.contains(localName)) {
             final IndexTerm indexTerm = new IndexTerm();
-            IndexTerm parentTerm = null;
+            IndexTerm parentTerm;
             if(!termStack.isEmpty()){
                 parentTerm = termStack.peek();
                 if(parentTerm.hasSubTerms()){
@@ -365,7 +365,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         // in the list.
         if (indexSeeSpecList.contains(localName)) {
             final IndexTerm indexTerm = new IndexTerm();
-            IndexTerm parentTerm = null;
+            IndexTerm parentTerm;
 
             indexTerm.setTermPrefix(IndexTerm_Prefix_See);
 
@@ -388,7 +388,7 @@ public final class IndexTermReader extends AbstractXMLReader {
             indexTerm.setStartAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
             indexTerm.setEndAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
 
-            IndexTerm parentTerm = null;
+            IndexTerm parentTerm;
             if(!termStack.isEmpty()){
                 parentTerm = termStack.peek();
                 if(parentTerm.hasSubTerms()){

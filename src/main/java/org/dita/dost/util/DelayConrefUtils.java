@@ -252,7 +252,7 @@ public final class DelayConrefUtils {
             entry.appendChild(doc.createTextNode(prop.getProperty(key)));
         }
         final TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer t = null;
+        Transformer t;
         try {
             t = withLogger(tf.newTransformer(), logger);
             t.setOutputProperty(OutputKeys.INDENT, "yes");

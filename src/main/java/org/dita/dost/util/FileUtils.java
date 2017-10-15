@@ -202,7 +202,7 @@ public final class FileUtils {
                 && topicTokenizer.countTokens() > 1) {
             final String mapToken = mapTokenizer.nextToken();
             final String topicToken = topicTokenizer.nextToken();
-            boolean equals = false;
+            boolean equals;
             if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)){
                 //if OS is Windows, we need to ignore case when comparing path names.
                 equals = mapToken.equalsIgnoreCase(topicToken);
@@ -510,7 +510,7 @@ public final class FileUtils {
             pathnameEndIndex = aURLString.lastIndexOf(UNIX_SEPARATOR);
         }
 
-        String schemaLocation = null;
+        String schemaLocation;
         if (aURLString.contains(SHARP)) {
             schemaLocation = aURLString.substring(0, pathnameEndIndex);
         } else {
