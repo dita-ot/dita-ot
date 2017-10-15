@@ -8,26 +8,12 @@
  */
 package org.dita.dost.log;
 
-import static org.dita.dost.util.Constants.*;
+import com.google.common.annotations.VisibleForTesting;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
-import javax.xml.parsers.DocumentBuilder;
-
-import com.google.common.annotations.VisibleForTesting;
-import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * This class is used to get message info from message file.
@@ -50,9 +36,6 @@ public final class MessageUtils {
 
     public static final ResourceBundle msgs = ResourceBundle.getBundle("messages", new Locale("en", "US"), MessageUtils.class.getClassLoader());
 
-    private final Hashtable<String, MessageBean> hashTable = new Hashtable<>();
-    private static MessageUtils utils;
-
     // Constructors
 
     /**
@@ -62,92 +45,6 @@ public final class MessageUtils {
     MessageUtils(){
     }
 
-    /**
-     * Get singleton instance.
-     * 
-     * @return MessageUtils singleton instance
-     * @deprecated since 3.0
-     */
-    @Deprecated
-    public static synchronized MessageUtils getInstance(){
-        if(utils == null){
-            utils = new MessageUtils();
-            utils.loadDefaultMessages();
-        }
-        return utils;
-    }
-
-    // Methods
-
-    /**
-     * Just bypass to invoke member function loadDefMsg().
-     * @deprecated since 3.0
-     */
-    @Deprecated
-    void loadDefaultMessages() {
-        InputStream msg = null;
-        try {
-            if (new File(RESOURCE).exists()) {
-                msg = new FileInputStream(new File(RESOURCE));
-            } else {
-                msg = this.getClass().getClassLoader().getResourceAsStream(CLASSPATH_RESOURCE);
-            }
-            if (msg == null) {
-                throw new RuntimeException("Message configuration file not found");
-            }
-            loadMessages(msg);
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
-        } finally {
-            if (msg != null) {
-                try {
-                    msg.close();
-                } catch (final IOException e) {
-                    // NOOP
-                }
-            }
-        }
-    }
-
-    /**
-     * Load message from message file.
-     * @param in message file input stream
-     * @deprecated since 3.0
-     */
-    @Deprecated
-    void loadMessages(final InputStream in) throws Exception {
-        synchronized (hashTable) {
-            hashTable.clear();
-            try {
-                final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
-                final Document doc = builder.parse(in);
-
-                final Element messages = doc.getDocumentElement();
-                final NodeList messageList = messages.getElementsByTagName(ELEMENT_MESSAGE);
-
-                final int messageListLength = messageList.getLength();
-                for (int i = 0; i < messageListLength; i++) {
-                    final Element message = (Element) messageList.item(i);
-                    final Node reason = message.getElementsByTagName(ELEMENT_REASON).item(0);
-                    final Node response = message.getElementsByTagName(ELEMENT_RESPONSE)
-                            .item(0);
-
-                    final NamedNodeMap attrs = message.getAttributes();
-
-                    final MessageBean messageBean = new MessageBean(
-                            attrs.getNamedItem(ATTRIBUTE_ID).getNodeValue(),
-                            attrs.getNamedItem(ATTRIBUTE_TYPE).getNodeValue(),
-                            reason.getFirstChild().getNodeValue(),
-                            response.getFirstChild() != null ? response.getFirstChild().getNodeValue() : null);
-
-                    hashTable.put(messageBean.getId(), messageBean);
-                }
-            } catch (final Exception e) {
-                throw new Exception("Failed to read messages configuration file: " + e.getMessage(), e);
-            }
-        }
-    }
-    
     /**
      * Get the message respond to the given id with all of the parameters
      * are replaced by those in the given 'prop', if no message found,

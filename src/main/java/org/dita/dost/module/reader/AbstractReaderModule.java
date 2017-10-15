@@ -106,8 +106,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     private TempFileNameScheme tempFileNameScheme;
     /** Absolute path to input file. */
     URI rootFile;
-    /** Subject scheme key map. Key is key value, value is key definition. */
-    private final Map<String, KeyDef> schemekeydefMap = new HashMap<>();
     /** Subject scheme absolute file paths. */
     private final Set<URI> schemeSet = new HashSet<>(128);
     /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
@@ -448,16 +446,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         }
         schemeSet.addAll(listFilter.getSchemeRefSet());
-
-        // collect key definitions
-        for (final Map.Entry<String, KeyDef> e: keydefFilter.getKeysDMap().entrySet()) {
-            // key and value.keys will differ when keydef is a redirect to another keydef
-            final String key = e.getKey();
-            final KeyDef value = e.getValue();
-            if (schemeSet.contains(currentFile)) {
-                schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, value.format, currentFile, null));
-            }
-        }
 
         hrefTargetSet.addAll(listFilter.getHrefTargets());
         conrefTargetSet.addAll(listFilter.getConrefTargets());

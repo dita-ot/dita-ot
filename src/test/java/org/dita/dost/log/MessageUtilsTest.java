@@ -24,28 +24,6 @@ public class MessageUtilsTest {
     private static final File resourceDir = TestUtils.getResourceDir(MessageUtilsTest.class);
 
     @Test
-    public void testLoadMessages() {
-        final File f = new File(resourceDir, "messages.xml");
-        InputStream in = null;
-		try {
-		    in = new FileInputStream(new File(f.getAbsolutePath()));
-		    new MessageUtils().loadMessages(in);
-		} catch (final FileNotFoundException e) {
-		    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
-		} catch (final Exception e) {
-		    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
-		} finally {
-		    if (in != null) {
-		        try {
-		            in.close();
-		        } catch (final IOException e) {
-		            // NOOP
-		        }
-		    }
-		}
-    }
-
-    @Test
     public void testGetMessageString() {
         final MessageBean exp = new MessageBean("XXX123F", "FATAL", "Fatal reason.","Fatal response.");
         assertEquals(exp.toString(), MessageUtils.getMessage("XXX123F").toString());

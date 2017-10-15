@@ -26,19 +26,11 @@ import org.xml.sax.SAXException;
  */
 final class InsertDependsAction implements IAction {
 
-    /** Action parameters. */
-    private final Hashtable<String,String> paramTable;
     /** Action value. */
     private List<String> value;
     /** Plug-in features. */
     private Map<String, Features> featureTable = null;
-    /**
-     * Constructor.
-     */
-    public InsertDependsAction() {
-        paramTable = new Hashtable<>();
-    }
-    
+
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
         throw new UnsupportedOperationException();        
@@ -80,7 +72,6 @@ final class InsertDependsAction implements IAction {
     }
     @Override
     public void addParam(final String name, final String value) {
-        paramTable.put(name, value);
     }
     /**
      * Set the feature table.

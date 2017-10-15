@@ -30,8 +30,6 @@ public final class NormalizeFilter extends AbstractXMLFilter {
 
     private Configuration.Mode processingMode;
 
-    /** DITA class stack */
-    private final Deque<String> classStack = new LinkedList<>();
     private int depth;
 
     public NormalizeFilter() {
@@ -55,7 +53,6 @@ public final class NormalizeFilter extends AbstractXMLFilter {
 
         final AttributesImpl res = new AttributesImpl(atts);
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        classStack.addFirst(cls);
         if (MAP_MAP.matches(cls)) {
             if (res.getIndex(ATTRIBUTE_NAME_CASCADE) == -1) {
                 XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CASCADE,

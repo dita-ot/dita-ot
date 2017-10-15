@@ -28,8 +28,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 
     /** when exclude is true the tag will be excluded. */
     private boolean exclude;
-    /** DITA class values for open elements **/
-    private final Deque<DitaClass> classes = new LinkedList<>();
     /** level is used to count the element level in the filtering */
     private int level;
     /** Contains the attribution specialization paths for {@code props} attribute */
@@ -95,11 +93,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
         Set<Flag> flags = null;
 
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
-        if (cls.isValid()) {
-            classes.addFirst(cls);
-        } else {
-            classes.addFirst(null);
-        }
 
         if (cls.isValid() && (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls))) {
             final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
@@ -153,7 +146,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             }
         }
 
-        classes.pop();
         lastElementExcluded = exclude;
         if (exclude) {
             if (level > 0) {
@@ -217,7 +209,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     @Override
     public void startDocument() throws SAXException {
         exclude = false;
-        classes.clear();
         level = 0;
         props = null;
         getContentHandler().startDocument();
