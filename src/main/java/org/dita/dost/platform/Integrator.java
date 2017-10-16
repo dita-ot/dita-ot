@@ -453,7 +453,11 @@ public final class Integrator {
         final Collection<File> res = new ArrayList<>(src.size());
         final File base = new File(ditaDir, "dummy");
         for (final String lib: src) {
-            res.add(FileUtils.getRelativePath(base, toFile(lib)));
+            final File libFile = toFile(lib);
+            if (!libFile.exists()) {
+                throw new IllegalArgumentException("Library file not found: " + libFile.getAbsolutePath());
+            }
+            res.add(FileUtils.getRelativePath(base, libFile));
         }
         return res;
     }
