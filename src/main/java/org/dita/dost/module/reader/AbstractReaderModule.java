@@ -8,6 +8,7 @@
 
 package org.dita.dost.module.reader;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
@@ -409,6 +410,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                     logger.error(e.getMessage(), e) ;
                 }
             }
+            if (failureList.contains(currentFile)) {
+                FileUtils.deleteQuietly(outputFile);
+            }
         }
 
         if (!listFilter.isValidInput() && currentFile.equals(rootFile)) {
@@ -503,7 +507,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 final URI f = currentFile.normalize();
                 if (!fileinfos.containsKey(f)) {
                     final FileInfo i = new FileInfo.Builder()
-                            //.uri(tempFileNameScheme.generateTempFileName(currentFile))
+                            .uri(tempFileNameScheme.generateTempFileName(currentFile))
                             .src(currentFile)
                             .format(ref.format)
                             .build();
