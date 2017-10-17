@@ -157,8 +157,10 @@ public final class TopicReaderModule extends AbstractReaderModule {
                     case START_ELEMENT:
                         final URI href = getHref(in);
                         if (href != null) {
-                            final URI targetSrc = startFileInfo.src.resolve(href);
-                            final FileInfo fi = job.getFileInfo(targetSrc);
+                            FileInfo fi = job.getFileInfo(startFileInfo.src.resolve(href));
+                            if (fi == null) {
+                                fi = job.getFileInfo(tmp.resolve(href));
+                            }
                             assert fi != null;
                             assert fi.src != null;
                             final String format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
