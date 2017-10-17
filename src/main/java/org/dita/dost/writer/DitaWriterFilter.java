@@ -54,6 +54,8 @@ import static org.dita.dost.reader.GenListModuleReader.*;
  */
 public final class DitaWriterFilter extends AbstractXMLFilter {
 
+    public static final String ATTRIBUTE_NAME_ORIG_FORMAT = "orig-" + ATTRIBUTE_NAME_FORMAT;
+
     /** Default value map. */
     private Map<QName, Map<String, String>> defaultValueMap;
     /** Absolute path to current destination file. */
@@ -166,6 +168,9 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
                 // verify format is correct
                 if (isFormatDita(format)) {
                     attValue = ATTR_FORMAT_VALUE_DITA;
+                    if (!format.equals(ATTR_FORMAT_VALUE_DITA)) {
+                        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT, DITA_OT_NS_PREFIX + ":" + ATTRIBUTE_NAME_ORIG_FORMAT, "CDATA", format);
+                    }
                 }
             } else {
                 attValue = getAttributeValue(qName, attQName, attValue);

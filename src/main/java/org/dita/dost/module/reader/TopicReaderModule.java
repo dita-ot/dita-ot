@@ -49,6 +49,7 @@ import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.ancestors;
 import static org.dita.dost.util.XMLUtils.toList;
+import static org.dita.dost.writer.DitaWriterFilter.ATTRIBUTE_NAME_ORIG_FORMAT;
 
 /**
  * ModuleElem for reading and serializing topics into temporary directory.
@@ -163,7 +164,10 @@ public final class TopicReaderModule extends AbstractReaderModule {
                             }
                             assert fi != null;
                             assert fi.src != null;
-                            final String format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
+                            String format = in.getAttributeValue(DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT);
+                            if (format == null) {
+                                format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
+                            }
                             res.add(new Reference(fi.src, format));
                         }
                         break;
