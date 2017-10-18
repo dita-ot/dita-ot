@@ -173,6 +173,16 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         return rootClass == null || TOPIC_TOPIC.matches(rootClass);
     }
 
+    private String currentFileFormat() {
+        if (rootClass == null ||  TOPIC_TOPIC.matches(rootClass)) {
+            return ATTR_FORMAT_VALUE_DITA;
+        } else if (MAP_MAP.matches(rootClass)) {
+            return ATTR_FORMAT_VALUE_DITAMAP;
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Is the currently processed file a DITA map.
      *
@@ -248,7 +258,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         nonCopytoSet.addAll(nonConrefCopytoTargets);
         for (final URI f : conrefTargets) {
-            nonCopytoSet.add(new Reference(stripFragment(f)));
+            nonCopytoSet.add(new Reference(stripFragment(f), currentFileFormat()));
         }
         for (final URI f : copytoMap.values()) {
             nonCopytoSet.add(new Reference(stripFragment(f)));
