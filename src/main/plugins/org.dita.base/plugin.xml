@@ -186,5 +186,6 @@ See the accompanying LICENSE file for applicable license.
   <template file="../../xsl/preprocess/mapref_template.xsl"/>
   <template file="../../xsl/preprocess/mappull_template.xsl"/>
   <template file="../../xsl/preprocess/conref_template.xsl"/>
+  <template file="../../xsl/preprocess/map-conref_template.xsl"/>
   <template file="../../xsl/preprocess/topicpull_template.xsl"/>
 </plugin>

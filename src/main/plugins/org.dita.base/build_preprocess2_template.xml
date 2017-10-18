@@ -219,7 +219,7 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref in input files" taskname="conref">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/map-conref.xsl" filenameparameter="file-being-processed">
         <ditaFileset format="ditamap" conref="true"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
@@ -303,6 +303,7 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
         <ditaFileset format="dita"/>
+        <ditaFileset format="ditamap"/>
       </module>
     </pipeline>
   </target>
@@ -319,6 +320,7 @@ See the accompanying LICENSE file for applicable license.
             reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
         <ditaFileset conref="true" format="dita"/>
+        <ditaFileset conref="true" format="ditamap"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
