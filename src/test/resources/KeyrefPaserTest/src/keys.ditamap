@@ -308,6 +308,11 @@
         </keywords>
       </topicmeta>
     </keydef>
+    <keydef class="+ map/topicref mapgroup-d/keydef " href="b.gif" keys="image_link_common" processing-role="resource-only">
+      <topicmeta class="- map/topicmeta ">
+        <linktext class="- map/linktext ">Normal practice: use linktext for alt text</linktext>
+      </topicmeta>
+    </keydef>
     <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="link_link" processing-role="resource-only">
       <topicmeta class="- map/topicmeta ">
         <linktext class="- map/linktext ">link linktext</linktext>

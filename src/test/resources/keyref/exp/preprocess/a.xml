@@ -8,7 +8,7 @@
     <data-about keyref="data-about" class="- topic/data-about " href="b.xml" scope="peer"><data class="- topic/data ">data-about data-about</data></data-about>
   </prolog>
   <body class="- topic/body ">
-    <image keyref="image" alt="Alt attribute." placement="inline" class="- topic/image " href="delta.gif" format="gif"/>
+    <image keyref="image" alt="Alt attribute." placement="inline" class="- topic/image " href="delta.gif" format="gif"><alt class="- topic/alt "><keyword class="- topic/keyword ">image keyword</keyword></alt></image>
     <image keyref="image" placement="inline" class="- topic/image " href="delta.gif" format="gif"><alt class="- topic/alt ">Alt element.</alt></image>
     <p class="- topic/p ">
       <xref keyref="xref" class="- topic/xref " href="b.xml" scope="peer"><?ditaot usertext?><keyword class="- topic/keyword ">xref keyword</keyword></xref>

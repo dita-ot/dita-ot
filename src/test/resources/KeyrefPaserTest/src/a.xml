@@ -93,6 +93,7 @@
     </prolog>
     <body class="- topic/body ">
       <image class="- topic/image " href="dead" keyref="image_link" placement="inline" scope="external"/>
+      <image class="- topic/image " href="dead" keyref="image_link_common" placement="inline" scope="external"/>
       <p class="- topic/p ">
         <xref class="- topic/xref " format="dead" href="dead" keyref="xref_link" scope="external" type="dead"/>
         <cite class="- topic/cite " keyref="cite_link"/>
