@@ -6,15 +6,16 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<project name="dita2htmlhelp">
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2htmlhelp">
 
   <target name="dita2htmlhelp" unless="noMap"
           depends="dita2htmlhelp.init,
                    build-init,
                    use-init.envhhcdir,
                    use-init.hhcdir,
-                   preprocess,
-                   xhtml.topics,
+                   preprocess2,
+                   htmlhelp.topics,
+                   htmlhelp.copy-image,
                    copy-css">
     <antcall target="dita.map.htmlhelp"/>
     <antcall target="dita.htmlhelp.convertlang"/>
@@ -23,6 +24,9 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="dita2htmlhelp.init">
     <property name="html-version" value="html"/>
+    <property name="temp.output.dir.name" value="temp_chm_dir"/>
+    <property name="clean-preprocess.use-result-filename" value="false"/>
+    <property name="preprocess.copy-image.skip" value="true"/>
   </target>
 
   <target name="use-init.envhhcdir" if="env.HHCDIR">
@@ -40,6 +44,22 @@ See the accompanying LICENSE file for applicable license.
     <available file="${hhc.dir}/hhc.exe"
                property="HTMLHelpCompiler"
                value="${hhc.dir}${file.separator}hhc.exe"/>
+  </target>
+  
+  <target name="htmlhelp.copy-image" description="Copy image files">
+    <copy todir="${dita.output.dir}" failonerror="false">
+      <dita-fileset format="image"/>
+      <job-mapper type="temp"/>
+    </copy>
+  </target>
+
+  <target name="htmlhelp.topics"
+          depends="xhtml.init,
+                   xhtml.image-metadata">
+    <topics.html>
+      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction"/>
+      <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction"/>
+    </topics.html>
   </target>
 
   <target name="dita.map.htmlhelp"
@@ -78,24 +98,6 @@ See the accompanying LICENSE file for applicable license.
     </xslt>
   </target>
 
-  <!-- Deprecated since 2.1 -->
-  <target name="dita.out.map.htmlhelp.hhp" depends="dita.map.htmlhelp.init" if="inner.transform"
-          description="Build HTMLHelp HHP file">
-    <dita-ot-echo id="DOTX070W"><param name="1" value="dita.out.map.htmlhelp.hhp"/></dita-ot-echo>
-    <xslt basedir="${dita.temp.dir}"
-          destdir="${dita.output.dir}"
-          includesfile="${dita.temp.dir}/${user.input.file.listfile}"
-          classpathref="dost.class.path"
-          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
-      <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
-      <param name="HHCNAME" expression="${args.output.base}.hhc"/>
-      <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
-      <mapper type="glob" from="${user.input.file}" to="${args.output.base}.hhp"/>
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-  </target>
-
   <target name="dita.map.htmlhelp.hhc" depends="dita.map.htmlhelp.init"
           description="Build HTMLHelp HHC file">
     <local name="htmlhelp.hhc.output.dir"/>
@@ -112,22 +114,6 @@ See the accompanying LICENSE file for applicable license.
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
       <mergemapper to="${args.output.base}.hhc"/>
-    </xslt>
-  </target>
-
-  <!-- Deprecated since 2.1 -->
-  <target name="dita.out.map.htmlhelp.hhc" depends="dita.map.htmlhelp.init" if="inner.transform"
-          description="Build HTMLHelp HHC file">
-    <dita-ot-echo id="DOTX070W"><param name="1" value="dita.out.map.htmlhelp.hhc"/></dita-ot-echo>
-    <xslt basedir="${dita.temp.dir}"
-          destdir="${dita.output.dir}"
-          includesfile="${dita.temp.dir}/${user.input.file.listfile}"
-          classpathref="dost.class.path"
-          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
-      <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
-      <mapper type="glob" from="${user.input.file}" to="${args.output.base}.hhc"/>
-      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 
@@ -149,20 +135,6 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <!-- Deprecated since 2.1 -->
-  <target name="dita.out.map.htmlhelp.hhk" depends="dita.map.htmlhelp.init" if="inner.transform"
-          description="Build HTMLHelp HHK file">
-    <dita-ot-echo id="DOTX070W"><param name="1" value="dita.out.map.htmlhelp.hhk"/></dita-ot-echo>
-    <pipeline message="Extract index term." tempdir="${dita.temp.dir}" inputmap="${user.input.file}">
-      <module class="org.dita.dost.module.IndexTermExtractModule">
-        <param name="output" location="${dita.output.dir}/${args.output.base}.hhk"/>
-        <param name="targetext" value="${out.ext}"/>
-        <param name="indextype" value="htmlhelp"/>
-        <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
-      </module>
-    </pipeline>
-  </target>
-
   <target name="dita.htmlhelp.convertlang">
     <taskdef name="check-lang" classname="org.dita.dost.ant.CheckLang"/>
     <taskdef name="convert-lang" classname="org.dita.dost.ant.ConvertLang"/>
@@ -178,17 +150,14 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="compile.HTML.Help" if="HTMLHelpCompiler" description="Compile HTMLHelp output">
-    <condition property="compile.dir" value="${dita.output.dir}">
-      <isset property="inner.transform"/>
-    </condition>
-    <condition property="compile.dir" value="${dita.map.output.dir}">
-      <isset property="old.transform"/>
-    </condition>
     <exec executable="${HTMLHelpCompiler}"
           failonerror="${failonerror}"
           failifexecutionfails="${failonerror}">
-      <arg value="${compile.dir}${file.separator}${args.output.base}.hhp"/>
+      <arg file="${dita.output.dir}/${args.output.base}.hhp"/>
     </exec>
+    <copy todir="${output.dir}">
+      <fileset dir="${dita.output.dir}" includes="*.chm"/>
+    </copy>
   </target>
 
 </project>
