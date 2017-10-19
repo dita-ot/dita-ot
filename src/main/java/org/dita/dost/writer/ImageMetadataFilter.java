@@ -16,10 +16,7 @@ import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
 
 import javax.imageio.ImageIO;
@@ -94,7 +91,11 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         svgMetadataReader.setJob(job);
         currentFile = filename.toURI();
         logger.info("Processing " + filename.getAbsolutePath());
-        super.write(filename);
+        try {
+            super.write(filename);
+        } catch (DITAOTException e) {
+            logger.error("Failed to read image metadata: " + e.getMessage(), e);
+        }
     } 
     
     public Collection<URI> getImages() {
