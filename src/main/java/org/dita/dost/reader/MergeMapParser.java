@@ -259,7 +259,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                                 topicParser.parse(element, dirPath);
                             } else {
                                 final String fileName = file.getAbsolutePath();
-                                logger.error(MessageUtils.getMessage("DOTX008E", fileName).toString());
+                                logger.debug(MessageUtils.getMessage("DOTX008E", fileName).toString());
                             }
                         }
                     }
