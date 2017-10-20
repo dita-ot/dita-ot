@@ -21,6 +21,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DebugFilter;
+import org.dita.dost.writer.NormalizeFilter;
 import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
 import org.w3c.dom.Document;
@@ -225,6 +226,10 @@ public final class TopicReaderModule extends AbstractReaderModule {
         validationFilter.setJob(job);
         validationFilter.setProcessingMode(processingMode);
         pipe.add(validationFilter);
+
+        final NormalizeFilter normalizeFilter = new NormalizeFilter();
+        normalizeFilter.setLogger(logger);
+        pipe.add(normalizeFilter);
 
         pipe.add(topicFragmentFilter);
 
