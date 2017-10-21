@@ -39,6 +39,7 @@ See the accompanying LICENSE file for applicable license.
                   topic-maplink,
                   topic-topicpull,
                   
+                  map-clean-map,
                   clean-preprocess,
                   copy-files2,
                   {depend.preprocess.post}">
