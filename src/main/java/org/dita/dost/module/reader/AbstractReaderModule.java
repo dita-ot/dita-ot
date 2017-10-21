@@ -77,7 +77,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Set of all the conref targets */
     private Set<URI> conrefTargetSet = new HashSet<>(128);
     /** Set of all the non-conref targets */
-    private final Set<URI> nonConrefCopytoTargetSet = new HashSet<>(128);
+    final Set<URI> nonConrefCopytoTargetSet = new HashSet<>(128);
     /** Set of subsidiary files */
     private final Set<URI> coderefTargetSet = new HashSet<>(16);
     /** Set of absolute flag image files */

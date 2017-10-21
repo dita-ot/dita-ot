@@ -170,6 +170,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
                                 format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
                             }
                             res.add(new Reference(fi.src, format));
+                            nonConrefCopytoTargetSet.add(fi.src);
                         }
                         break;
                     default:
