@@ -261,15 +261,11 @@ public final class TopicReaderModule extends AbstractReaderModule {
         if (formatFilter.test(file.format)) {
             if (isFormatDita(file.format) && !job.getOnlyTopicInMap()) {
                 addToWaitList(file);
-//            } else if (ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
-//                addToWaitList(file);
             } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
                 formatSet.add(file);
                 if (!exists(file.filename)) {
                     logger.warn(MessageUtils.getMessage("DOTX008W", file.filename.toString()).toString());
                 }
-//            } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
-//                formatSet.add(file);
             } else {
                 htmlSet.add(file.filename);
             }

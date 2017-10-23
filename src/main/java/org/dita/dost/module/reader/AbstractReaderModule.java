@@ -8,6 +8,7 @@
 
 package org.dita.dost.module.reader;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.io.FileUtils;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
@@ -83,7 +84,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Set of absolute flag image files */
     private final Set<URI> relFlagImagesSet = new LinkedHashSet<>(128);
     /** List of files waiting for parsing. Values are absolute URI references. */
-    private final Queue<Reference> waitList = new LinkedList<>();
+    @VisibleForTesting
+    final Queue<Reference> waitList = new LinkedList<>();
     /** List of parsed files */
     final List<URI> doneList = new LinkedList<>();
     final List<URI> failureList = new LinkedList<>();
