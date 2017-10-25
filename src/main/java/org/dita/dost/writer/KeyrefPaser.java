@@ -624,7 +624,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /**
      * Return true when keyref text resolution should use navtitle as a final fallback.
      * @param elem Key definition element
-     * @return
      */
     private boolean fallbackToNavtitleOrHref(final Element elem) {
         final String hrefValue = elem.getAttribute(ATTRIBUTE_NAME_HREF);

@@ -41,7 +41,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
         }
         final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         final File ditavalFile = Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))
-                .filter(f -> f.exists())
+                .filter(File::exists)
                 .orElse(null);
 
         final DitaValReader ditaValReader = new DitaValReader();

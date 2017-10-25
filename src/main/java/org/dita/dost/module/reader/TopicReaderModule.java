@@ -98,10 +98,10 @@ public final class TopicReaderModule extends AbstractReaderModule {
                 logger.debug("Loading subject schemes");
                 final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
                 subjectSchemes.stream()
-                        .filter(e -> SUBJECTSCHEME_ENUMERATIONDEF.matches(e))
+                        .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
                         .forEach(enumerationDef -> {
                             final Element schemeRoot = ancestors(enumerationDef)
-                                    .filter(e -> SUBMAP.matches(e))
+                                    .filter(SUBMAP::matches)
                                     .findFirst()
                                     .orElse(doc.getDocumentElement());
                             subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);

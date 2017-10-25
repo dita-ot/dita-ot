@@ -275,7 +275,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 .orElse(true);
         if (profilingEnabled) {
             ditavalFile = Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))
-                    .filter(f -> f.exists())
+                    .filter(File::exists)
                     .orElse(null);
         }
     }
