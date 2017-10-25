@@ -167,44 +167,44 @@ public class XMLUtilsTest {
     
     @Test
     public void testNonDitaContext() {
-    	/* Queue assumes the following values:
-    	 * <topic class="- topic/topic ">...
-    	 *  <body class="- topic/body ">
-    	 *   <foreign class="- topic/foreign ">
-    	 *    <NONDITA class="nondita">
-    	 *      <moreNonDita/>
-    	 *    </NONDITA>
-    	 *    <ditaInForeign class="- topic/xref foreign-d/ditaInForeign ">
-    	 *      <ph class="- topic/ph "/>
-    	 *    <unknown class="- topic/unknown ">
-    	 *     <moreNonDita><more/></moreNonDita>
-    	 *    </unknown></ditaInForeign></foreign></body></topic>
-    	 */
-    	Deque<DitaClass> classes = new LinkedList<>();
-    	classes.addFirst(new DitaClass("- topic/topic "));
-    	assertFalse(XMLUtils.nonDitaContext(classes));
-    	classes.addFirst(new DitaClass("- topic/body "));
-    	assertFalse(XMLUtils.nonDitaContext(classes));
-    	classes.addFirst(new DitaClass("- topic/foreign "));
-    	assertFalse(XMLUtils.nonDitaContext(classes));
-    	classes.addFirst(new DitaClass("nondita"));
-    	assertTrue(XMLUtils.nonDitaContext(classes));
-    	classes.addFirst(new DitaClass(""));
-    	assertTrue(XMLUtils.nonDitaContext(classes));
-    	classes.pop();
-    	classes.pop();
-    	classes.addFirst(new DitaClass("+ topic/xref foreign-d/ditaInForeign "));
-    	assertTrue(XMLUtils.nonDitaContext(classes));
-    	classes.addFirst(new DitaClass("+ topic/ph "));
-    	assertFalse(XMLUtils.nonDitaContext(classes));
-    	classes.pop();
-    	classes.pop();
-    	classes.addFirst(new DitaClass("- topic/unknown "));
-    	assertTrue(XMLUtils.nonDitaContext(classes));
-    	classes.addFirst(null);
-    	assertTrue(XMLUtils.nonDitaContext(classes));
-    	classes.addFirst(null);
-    	assertTrue(XMLUtils.nonDitaContext(classes));
+        /* Queue assumes the following values:
+         * <topic class="- topic/topic ">...
+         *  <body class="- topic/body ">
+         *   <foreign class="- topic/foreign ">
+         *    <NONDITA class="nondita">
+         *      <moreNonDita/>
+         *    </NONDITA>
+         *    <ditaInForeign class="- topic/xref foreign-d/ditaInForeign ">
+         *      <ph class="- topic/ph "/>
+         *    <unknown class="- topic/unknown ">
+         *     <moreNonDita><more/></moreNonDita>
+         *    </unknown></ditaInForeign></foreign></body></topic>
+         */
+        Deque<DitaClass> classes = new LinkedList<>();
+        classes.addFirst(new DitaClass("- topic/topic "));
+        assertFalse(XMLUtils.nonDitaContext(classes));
+        classes.addFirst(new DitaClass("- topic/body "));
+        assertFalse(XMLUtils.nonDitaContext(classes));
+        classes.addFirst(new DitaClass("- topic/foreign "));
+        assertFalse(XMLUtils.nonDitaContext(classes));
+        classes.addFirst(new DitaClass("nondita"));
+        assertTrue(XMLUtils.nonDitaContext(classes));
+        classes.addFirst(new DitaClass(""));
+        assertTrue(XMLUtils.nonDitaContext(classes));
+        classes.pop();
+        classes.pop();
+        classes.addFirst(new DitaClass("+ topic/xref foreign-d/ditaInForeign "));
+        assertTrue(XMLUtils.nonDitaContext(classes));
+        classes.addFirst(new DitaClass("+ topic/ph "));
+        assertFalse(XMLUtils.nonDitaContext(classes));
+        classes.pop();
+        classes.pop();
+        classes.addFirst(new DitaClass("- topic/unknown "));
+        assertTrue(XMLUtils.nonDitaContext(classes));
+        classes.addFirst(null);
+        assertTrue(XMLUtils.nonDitaContext(classes));
+        classes.addFirst(null);
+        assertTrue(XMLUtils.nonDitaContext(classes));
     }
 
 }
