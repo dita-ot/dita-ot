@@ -80,15 +80,6 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         this.outputFile = outputFile;
     }
 
-    @Override
-    public void setJob(final Job job) {
-        super.setJob(job);
-//        fileInfoMap = new HashMap<>();
-//        for (final FileInfo f: job.getFileInfo()) {
-//            fileInfoMap.put(f.result, f);
-//        }
-    }
-
     // ContentHandler methods
 
     @Override

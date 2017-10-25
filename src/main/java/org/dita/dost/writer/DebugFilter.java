@@ -78,10 +78,4 @@ public final class DebugFilter extends AbstractXMLFilter {
         super.startElement(uri, localName, qName, res);
     }
 
-    @Override
-    public void endElement(final String uri, final String localName, final String qName)
-            throws SAXException {
-        super.endElement(uri, localName, qName);
-    }
-
 }
