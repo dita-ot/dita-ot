@@ -53,7 +53,6 @@ import static org.dita.dost.util.XMLUtils.close;
  */
 public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
-    public static final String ELEMENT_STUB = "stub";
     Predicate<String> formatFilter;
     /** FileInfos keyed by src. */
     private final Map<URI, FileInfo> fileinfos = new HashMap<>();
@@ -77,7 +76,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     private final Set<URI> hrefTargetSet = new HashSet<>(128);
     /** Set of all the conref targets */
     private Set<URI> conrefTargetSet = new HashSet<>(128);
-    /** Set of all the non-conref targets */
+    /** Set of all targets except conref and copy-to */
     final Set<URI> nonConrefCopytoTargetSet = new HashSet<>(128);
     /** Set of subsidiary files */
     private final Set<URI> coderefTargetSet = new HashSet<>(16);
@@ -99,8 +98,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     private final Set<URI> resourceOnlySet = new HashSet<>(128);
     /** Absolute basedir for processing */
     private URI baseInputDir;
-//    /** Number of directory levels base directory is adjusted. */
-//    private int uplevels = 0;
     GenListModuleReader listFilter;
     KeydefFilter keydefFilter;
     ExportAnchorsFilter exportAnchorsFilter;
@@ -114,13 +111,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
     private final Map<URI, Set<URI>> schemeDictionary = new HashMap<>();
     private final Map<URI, URI> copyTo = new HashMap<>();
-    private boolean setSystemid = true;
     Mode processingMode;
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     boolean genDebugInfo;
     /** use grammar pool cache */
     private boolean gramcache = true;
-    private boolean setSystemId;
     /** Profiling is enabled. */
     private boolean profilingEnabled;
     String transtype;
@@ -136,9 +131,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     private XMLReader reader;
     /** Absolute path to current source file. */
     URI currentFile;
-    private Map<URI, Set<URI>> dic;
-    private SubjectSchemeReader subjectSchemeReader;
-    private FilterUtils baseFilterUtils;
     DitaWriterFilter ditaWriterFilter;
     TopicFragmentFilter topicFragmentFilter;
 
@@ -226,7 +218,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
-        setSystemid = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
         processingMode = Optional.ofNullable(input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE))
                 .map(String::toUpperCase)
                 .map(Mode::valueOf)
@@ -439,17 +430,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      * @param currentFile absolute URI processes files
      */
     void processParseResult(final URI currentFile) {
-        // Category non-copyto result and update uplevels accordingly
+        // Category non-copyto result
         for (final Reference file: listFilter.getNonCopytoResult()) {
             categorizeReferenceFile(file);
-//            updateUplevels(file.filename);
         }
         for (final Map.Entry<URI, URI> e : listFilter.getCopytoMap().entrySet()) {
             final URI source = e.getValue();
             final URI target = e.getKey();
             copyTo.put(target, source);
-//            updateUplevels(target);
-
         }
         schemeSet.addAll(listFilter.getSchemeRefSet());
 
@@ -675,21 +663,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         for (final FileInfo fs: fileinfos.values()) {
             if (!failureList.contains(fs.src)) {
-//                if (job.getFileInfo(fs.uri) != null) {
-//                    logger.info("Already in job:" + fs.uri);
-//                }
-//                if (formatFilter.test(fs.format)) {
-                    final URI src = filteredCopyTo.get(fs.src);
-                    // correct copy-to
-                    if (src != null) {
-                        final FileInfo corr = new FileInfo.Builder(fs).src(src).build();
-                        job.add(corr);
-                    } else {
-                        job.add(fs);
-                    }
-//                } else {
-//                    logger.info("skip " + fs.src + " -> " + fs.uri);
-//                }
+                final URI src = filteredCopyTo.get(fs.src);
+                // correct copy-to
+                if (src != null) {
+                    final FileInfo corr = new FileInfo.Builder(fs).src(src).build();
+                    job.add(corr);
+                } else {
+                    job.add(fs);
+                }
             }
         }
         for (final URI target : filteredCopyTo.keySet()) {

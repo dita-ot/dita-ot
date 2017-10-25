@@ -8,23 +8,6 @@
  */
 package org.dita.dost.reader;
 
-import static org.dita.dost.util.Configuration.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.nonDitaContext;
-
-import java.net.URI;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-import java.util.function.Predicate;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
@@ -34,6 +17,15 @@ import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+
+import java.net.URI;
+import java.util.*;
+import java.util.function.Predicate;
+
+import static org.dita.dost.util.Configuration.ditaFormat;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.nonDitaContext;
 
 /**
  * Parse relevant DITA files and collect information.
@@ -59,7 +51,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private boolean hasKeyRef = false;
     /** Flag for whether parsing file contains coderef */
     private boolean hasCodeRef = false;
-    /** Set of all the non-conref and non-copyto targets refered in current parsing file */
+    /** Set of all targets referred in current parsing file except conref and copy-to */
     private final Set<Reference> nonConrefCopytoTargets = new LinkedHashSet<>(64);
     /** Set of conref targets refered in current parsing file */
     private final Set<URI> conrefTargets = new HashSet<>(32);
@@ -96,8 +88,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Relationship graph between subject schema. Keys are subject scheme map paths and values
      * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps. */
     private final Map<URI, Set<URI>> schemeRelationGraph = new LinkedHashMap<>();
-    /** Store the primary ditamap file name. */
-    private URI primaryDitamap;
     private boolean isRootElement = true;
     private DitaClass rootClass = null;
     private Predicate<String> formatFilter;
@@ -207,7 +197,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     public void setPrimaryDitamap(final URI primaryDitamap) {
         assert primaryDitamap.isAbsolute();
-        this.primaryDitamap = primaryDitamap;
         this.rootDir = primaryDitamap.resolve(".");
     }
 
