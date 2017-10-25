@@ -28,8 +28,10 @@ See the accompanying LICENSE file for applicable license.
   <taskdef name="dita-ot-copy" classname="org.dita.dost.ant.DITAOTCopy"/>
   <taskdef name="job-property" classname="org.dita.dost.ant.JobPropertyTask"/>
   <typedef name="isabsolute" classname="org.dita.dost.ant.IsAbsolute"/>
+  <!-- Deprecated since 3.0 -->
   <typedef name="dita-fileset" classname="org.dita.dost.ant.types.JobSourceSet"/>
-  <typedef name="job-mapper" classname="org.dita.dost.ant.types.JobMapper"/>
+  <typedef name="ditafileset" classname="org.dita.dost.ant.types.JobSourceSet"/>
+  <typedef name="jobmapper" classname="org.dita.dost.ant.types.JobMapper"/>
 
   <macrodef name="job-helper" >
     <attribute name="file"/>
