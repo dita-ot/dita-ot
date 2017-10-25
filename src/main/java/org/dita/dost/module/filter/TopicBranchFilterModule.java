@@ -33,7 +33,6 @@ import java.util.*;
 
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**
@@ -56,7 +55,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     private final DocumentBuilder builder;
     /** Current map being processed, relative to temporary directory */
     private URI map;
-    private Set<URI> filtered = new HashSet<>();
+    private final Set<URI> filtered = new HashSet<>();
 
     public TopicBranchFilterModule() {
         super();

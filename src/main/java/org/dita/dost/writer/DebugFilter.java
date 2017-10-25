@@ -9,9 +9,7 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import org.dita.dost.util.XMLUtils;

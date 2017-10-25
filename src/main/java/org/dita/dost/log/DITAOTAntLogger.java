@@ -10,7 +10,6 @@ package org.dita.dost.log;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Target;
 import org.apache.tools.ant.Task;
-import org.slf4j.Logger;
 import org.slf4j.helpers.MarkerIgnoringBase;
 
 import java.text.MessageFormat;

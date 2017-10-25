@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
+
 import org.dita.dost.util.XMLUtils;
 
 /**

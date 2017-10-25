@@ -14,7 +14,6 @@ import static org.dita.dost.util.FilterUtils.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;

@@ -521,27 +521,19 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private void processSeparateChunk(final Element topicref) {
-        try {
-            final SeparateChunkTopicParser chunkParser = new SeparateChunkTopicParser();
-            chunkParser.setLogger(logger);
-            chunkParser.setJob(job);
-            chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
-            chunkParser.write(currentFile);
-        } catch (final DITAOTException e) {
-            logger.error("Failed to process chunk: " + e.getMessage(), e);
-        }
+        final SeparateChunkTopicParser chunkParser = new SeparateChunkTopicParser();
+        chunkParser.setLogger(logger);
+        chunkParser.setJob(job);
+        chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
+        chunkParser.write(currentFile);
     }
 
     private void processCombineChunk(final Element topicref) {
-        try {
-            final ChunkTopicParser chunkParser = new ChunkTopicParser();
-            chunkParser.setLogger(logger);
-            chunkParser.setJob(job);
-            chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
-            chunkParser.write(currentFile);
-        } catch (final DITAOTException e) {
-            logger.error("Failed to process chunk: " + e.getMessage(), e);
-        }
+        final ChunkTopicParser chunkParser = new ChunkTopicParser();
+        chunkParser.setLogger(logger);
+        chunkParser.setJob(job);
+        chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
+        chunkParser.write(currentFile);
     }
 
     private void updateReltable(final Element elem) {

@@ -17,7 +17,6 @@ import org.dita.dost.util.Job;
 import java.io.File;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;

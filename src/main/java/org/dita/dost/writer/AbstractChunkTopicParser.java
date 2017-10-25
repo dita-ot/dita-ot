@@ -93,7 +93,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
-    abstract public void write(final URI filename) throws DITAOTException;
+    abstract public void write(final URI filename);
 
     @Override
     public void write(final File fileDir) throws DITAOTException {

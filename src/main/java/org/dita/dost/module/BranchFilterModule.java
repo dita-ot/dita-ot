@@ -72,7 +72,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     private URI map;
     /** Absolute URI to map being processed. */
     protected URI currentFile;
-    private Set<URI> filtered = new HashSet<>();
+    private final Set<URI> filtered = new HashSet<>();
 
     public BranchFilterModule() {
         builder = XMLUtils.getDocumentBuilder();

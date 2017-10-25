@@ -19,13 +19,10 @@ import org.dita.dost.module.DebugAndFilterModule;
 import javax.xml.namespace.QName;
 import java.io.File;
 import java.net.URI;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.reader.GenListModuleReader.*;
 
 

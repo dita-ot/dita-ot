@@ -54,7 +54,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     @Override
-    public void write(final URI currentFile) throws DITAOTException {
+    public void write(final URI currentFile) {
         this.currentFile = currentFile;
         try {
             output = new StringWriter();

@@ -13,9 +13,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import java.util.Deque;
-import java.util.LinkedList;
-
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 

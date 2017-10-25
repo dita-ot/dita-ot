@@ -40,7 +40,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     private final Map<String, String> prefixes = new HashMap<>();
     /** Flag that last element was excluded. */
     private boolean lastElementExcluded = false;
-    private Deque<Set<Flag>> flagStack = new LinkedList<>();
+    private final Deque<Set<Flag>> flagStack = new LinkedList<>();
     private final boolean doFlag;
 
     /**
@@ -107,7 +107,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             // If it is the start of a child of an excluded tag, level increase
             level++;
         } else { // exclude shows whether it's excluded by filtering
-            if (cls.isValid() && filterUtils.stream().filter(f -> f.needExclude(atts, props)).findFirst().isPresent()) {
+            if (cls.isValid() && filterUtils.stream().anyMatch(f -> f.needExclude(atts, props))) {
                 exclude = true;
                 level = 0;
             } else {

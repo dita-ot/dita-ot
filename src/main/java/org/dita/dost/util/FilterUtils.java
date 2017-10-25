@@ -57,8 +57,8 @@ public final class FilterUtils {
     /** Set of filter keys for which an error has already been thrown. */
     private final Set<FilterKey> notMappingRules = new HashSet<>();
     private boolean logMissingAction;
-    private String foregroundConflictColor;
-    private String backgroundConflictColor;
+    private final String foregroundConflictColor;
+    private final String backgroundConflictColor;
     private Set<QName> filterAttributes;
     private Set<QName> flagAttributes;
 
