@@ -729,20 +729,26 @@ public final class Constants {
     /** Windows path separator. */
     public static final String WINDOWS_SEPARATOR = "\\";
 
-    /** Constants for index type(htmlhelp).*/
+    /** Constants for index type(htmlhelp). Deprecated since 3.0 */
+    @Deprecated
     public static final String INDEX_TYPE_HTMLHELP = "htmlhelp";
     /** Constants for index type(eclipsehelp).*/
     public static final String INDEX_TYPE_ECLIPSEHELP = "eclipsehelp";
 
-    /** Constants for transform type(pdf).*/
+    /** Constants for transform type(pdf). Deprecated since 3.0 */
+    @Deprecated
     public static final String TRANS_TYPE_PDF = "pdf";
-    /** Constants for transform type(xhtml).*/
+    /** Constants for transform type(xhtml). Deprecated since 3.0 */
+    @Deprecated
     public static final String TRANS_TYPE_XHTML = "xhtml";
-    /** Constants for transform type(eclipsehelp).*/
+    /** Constants for transform type(eclipsehelp). Deprecated since 3.0 */
+    @Deprecated
     public static final String TRANS_TYPE_ECLIPSEHELP = "eclipsehelp";
-    /** Constants for transform type(htmlhelp).*/
+    /** Constants for transform type(htmlhelp). Deprecated since 3.0 */
+    @Deprecated
     public static final String TRANS_TYPE_HTMLHELP = "htmlhelp";
-    /** Constants for transform type(eclipsecontent).*/
+    /** Constants for transform type(eclipsecontent). Deprecated since 3.0 */
+    @Deprecated
     public static final String TRANS_TYPE_ECLIPSECONTENT = "eclipsecontent";
 
     /** Constant for generated property file name(catalog-dita.xml).*/
@@ -830,7 +836,8 @@ public final class Constants {
 
     //Misc string constants used in this toolkit.
 
-    /**STRING_EMPTY.*/
+    /**STRING_EMPTY. Deprecated since 3.0 */
+    @Deprecated
     public static final String STRING_EMPTY = "";
     /**LEFT_BRACKET.*/
     public static final String LEFT_BRACKET = "(";
@@ -838,7 +845,8 @@ public final class Constants {
     public static final String RIGHT_BRACKET = ")";
     /**SLASH.*/
     public static final String SLASH = "/";
-    /**BACK_SLASH.*/
+    /**BACK_SLASH. Deprecated since 3.0 */
+    @Deprecated
     public static final String BACK_SLASH = "\\";
     /**SHARP.*/
     public static final String SHARP = "#";
@@ -860,7 +868,8 @@ public final class Constants {
     public static final String COLON = ":";
     /**DOT.*/
     public static final String DOT= ".";
-    /**DOUBLE_BACK_SLASH.*/
+    /**DOUBLE_BACK_SLASH. Deprecated since 3.0 */
+    @Deprecated
     public static final String DOUBLE_BACK_SLASH = "\\\\";
     /**COLON_DOUBLE_SLASH.*/
     public static final String COLON_DOUBLE_SLASH = "://";
@@ -890,9 +899,11 @@ public final class Constants {
     public static final String FEATURE_VALIDATION = "http://xml.org/sax/features/validation";
     /**FEATURE_VALIDATION_SCHEMA.*/
     public static final String FEATURE_VALIDATION_SCHEMA = "http://apache.org/xml/features/validation/schema";
-    /**TEMP_DIR_DEFAULT.*/
+    /**TEMP_DIR_DEFAULT. Deprecated since 3.0 */
+    @Deprecated
     public static final String TEMP_DIR_DEFAULT = "temp";
-    /**FILTER_ACTION_EXCLUDE.*/
+    /**FILTER_ACTION_EXCLUDE. Deprecated since 3.0 */
+    @Deprecated
     public static final String FILTER_ACTION_EXCLUDE = "exclude";
     /**ATTR_SCOPE_VALUE_LOCAL.*/
     public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
@@ -919,7 +930,8 @@ public final class Constants {
     public static final String DITA_OT_NS = "http://dita-ot.sourceforge.net/ns/201007/dita-ot";
 
 
-    /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE.*/
+    /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE. Deprecated since 3.0 */
+    @Deprecated
     public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE = " subjectScheme/";
     /**ATTR_PROCESSING_ROLE_VALUE_NORMAL.*/
     public static final String ATTR_PROCESSING_ROLE_VALUE_NORMAL = "normal";
