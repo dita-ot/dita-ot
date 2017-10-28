@@ -133,17 +133,20 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
         final String copyTo = topicref.getAttribute(BRANCH_COPY_TO);
         if (!copyTo.isEmpty()) {
-            final URI dstUri = map.resolve(copyTo);
-            final URI dstAbsUri = job.tempDirURI.resolve(dstUri);
-            final FileInfo dstFileInfo = job.getFileInfo(dstAbsUri);
             final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
             final URI srcUri = map.resolve(href);
             final URI srcAbsUri = job.tempDirURI.resolve(srcUri);
             final FileInfo srcFileInfo = job.getFileInfo(srcUri);
             if (srcFileInfo != null) {
-//                final FileInfo fi = new FileInfo.Builder(srcFileInfo).uri(dstUri).build();
-//                 TODO: Maybe Job should be updated earlier?
-//                job.add(fi);
+                final URI dstUri = map.resolve(copyTo);
+                final URI dstAbsUri = job.tempDirURI.resolve(dstUri);
+                final FileInfo dstFileInfo = job.getFileInfo(dstAbsUri);
+                if (dstFileInfo != null) {
+                    final FileInfo updatedDstFileInfo = new FileInfo.Builder(dstFileInfo)
+                            .addContentFields(srcFileInfo)
+                            .build();
+                    job.add(updatedDstFileInfo);
+                }
                 logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
                 final ProfilingFilter writer = new ProfilingFilter();
                 writer.setLogger(logger);
