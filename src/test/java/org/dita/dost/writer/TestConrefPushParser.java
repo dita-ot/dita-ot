@@ -61,39 +61,39 @@ public class TestConrefPushParser {
         /*
          * the part of content of conrefpush_stub2.xml is
          * <ol>
-         * 	<li id="A">A</li>
-         * 	<li id="B">B</li>
-         * 	<li id="C">C</li>
+         *     <li id="A">A</li>
+         *     <li id="B">B</li>
+         *     <li id="C">C</li>
          * </ol>
          * 
          * the part of content of conrefpush_stup.xml is
          *  <steps>
-         * 	 <step conaction="pushbefore"><cmd>before</cmd></step>
+         *      <step conaction="pushbefore"><cmd>before</cmd></step>
          *   <step conref="conrefpush_stub2.xml#X/A" conaction="mark"/>
          *   <step conref="conrefpush_stub2.xml#X/B" conaction="mark"/>
-         *	 <step conaction="pushafter"><cmd>after</cmd></step>
-         *	 <step conref="conrefpush_stub2.xml#X/C" conaction="pushreplace"><cmd>replace</cmd></step>
-         *	</steps>
+         *     <step conaction="pushafter"><cmd>after</cmd></step>
+         *     <step conref="conrefpush_stub2.xml#X/C" conaction="pushreplace"><cmd>replace</cmd></step>
+         *    </steps>
          *
          * after conrefpush the part of conrefpush_stub2.xml should be like this
          * <ol class="- topic/ol ">
          *  <li class="- topic/li task/step ">
-         *  	<ph class="- topic/ph task/cmd ">
-         *  	before
-         *  	</ph>
+         *      <ph class="- topic/ph task/cmd ">
+         *      before
+         *      </ph>
          *  </li>
          *  <li id="A" class="- topic/li ">A</li>
-         *	<li id="B" class="- topic/li ">B</li>
-         *	<li class="- topic/li task/step ">
-         *		<ph class="- topic/ph task/cmd ">
-         *		after
-         *		</ph>
-         *	</li>
-         *	<li class="- topic/li task/step ">
-         *		<ph class="- topic/ph task/cmd ">
-         *		replace
-         *		</ph>
-         *	</li>
+         *    <li id="B" class="- topic/li ">B</li>
+         *    <li class="- topic/li task/step ">
+         *        <ph class="- topic/ph task/cmd ">
+         *        after
+         *        </ph>
+         *    </li>
+         *    <li class="- topic/li task/step ">
+         *        <ph class="- topic/ph task/cmd ">
+         *        replace
+         *        </ph>
+         *    </li>
          * </ol>
          */
         final ConrefPushParser parser = new ConrefPushParser();

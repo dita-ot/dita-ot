@@ -8,24 +8,6 @@
  */
 package org.dita.dost.reader;
 
-import static org.dita.dost.util.Configuration.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.reader.ChunkMapReader.*;
-import static org.dita.dost.util.XMLUtils.nonDitaContext;
-
-import java.net.URI;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-import java.util.function.Predicate;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
@@ -35,6 +17,15 @@ import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+
+import java.net.URI;
+import java.util.*;
+import java.util.function.Predicate;
+
+import static org.dita.dost.util.Configuration.ditaFormat;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.nonDitaContext;
 
 /**
  * Parse relevant DITA files and collect information.
@@ -60,7 +51,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private boolean hasKeyRef = false;
     /** Flag for whether parsing file contains coderef */
     private boolean hasCodeRef = false;
-    /** Set of all the non-conref and non-copyto targets refered in current parsing file */
+    /** Set of all targets referred in current parsing file except conref and copy-to */
     private final Set<Reference> nonConrefCopytoTargets = new LinkedHashSet<>(64);
     /** Set of conref targets refered in current parsing file */
     private final Set<URI> conrefTargets = new HashSet<>(32);
@@ -97,8 +88,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Relationship graph between subject schema. Keys are subject scheme map paths and values
      * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps. */
     private final Map<URI, Set<URI>> schemeRelationGraph = new LinkedHashMap<>();
-    /** Store the primary ditamap file name. */
-    private URI primaryDitamap;
     private boolean isRootElement = true;
     private DitaClass rootClass = null;
     private Predicate<String> formatFilter;
@@ -174,6 +163,16 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         return rootClass == null || TOPIC_TOPIC.matches(rootClass);
     }
 
+    private String currentFileFormat() {
+        if (rootClass == null ||  TOPIC_TOPIC.matches(rootClass)) {
+            return ATTR_FORMAT_VALUE_DITA;
+        } else if (MAP_MAP.matches(rootClass)) {
+            return ATTR_FORMAT_VALUE_DITAMAP;
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Is the currently processed file a DITA map.
      *
@@ -198,7 +197,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     public void setPrimaryDitamap(final URI primaryDitamap) {
         assert primaryDitamap.isAbsolute();
-        this.primaryDitamap = primaryDitamap;
         this.rootDir = primaryDitamap.resolve(".");
     }
 
@@ -249,7 +247,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         nonCopytoSet.addAll(nonConrefCopytoTargets);
         for (final URI f : conrefTargets) {
-            nonCopytoSet.add(new Reference(stripFragment(f)));
+            nonCopytoSet.add(new Reference(stripFragment(f), currentFileFormat()));
         }
         for (final URI f : copytoMap.values()) {
             nonCopytoSet.add(new Reference(stripFragment(f)));
@@ -426,16 +424,16 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (nonDitaContext(classes)) {
                 // Normal case for bad class: in non DITA context, no message
             } else if (atts.getValue(ATTRIBUTE_NAME_CLASS) == null) { // Missing @class
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).setLocation(atts).toString());
+                logger.info(MessageUtils.getMessage("DOTJ030I", localName).setLocation(atts).toString());
             } else { // Invalid DITA @class
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ070I", atts.getValue(ATTRIBUTE_NAME_CLASS), localName).setLocation(atts).toString());
+                logger.info(MessageUtils.getMessage("DOTJ070I", atts.getValue(ATTRIBUTE_NAME_CLASS), localName).setLocation(atts).toString());
             }
         } else {
 
             if (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls)) {
                 final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
                 if (domains == null) {
-                    logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).setLocation(atts).toString());
+                    logger.info(MessageUtils.getMessage("DOTJ029I", localName).setLocation(atts).toString());
                 }
             }
 
@@ -509,14 +507,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (SUBJECTSCHEME_SUBJECTSCHEME.matches(classValue)) {
             // Make it easy to do the BFS later.
             final URI key = ROOT_URI;
-            final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<URI>();
+            final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<>();
             children.add(currentFile);
             schemeRelationGraph.put(key, children);
             schemeRefSet.add(currentFile);
         } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
             if (href != null) {
                 final URI key = currentFile;
-                final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<URI>();
+                final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<>();
                 final URI child = currentFile.resolve(href);
                 children.add(child);
                 schemeRelationGraph.put(key, children);
@@ -587,14 +585,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
             hasHref = true;
             // Collect non-conref and non-copyto targets
-            if ((followLinks()
-                        || (TOPIC_IMAGE.matches(attrClass) || DITAVAREF_D_DITAVALREF.matches(attrClass)))) {
+            if ((followLinks() && canFollow(attrValue))
+                    || TOPIC_IMAGE.matches(attrClass)
+                    || DITAVAREF_D_DITAVALREF.matches(attrClass)) {
                 nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
             }
         }
 
         if (isFormatDita(attrFormat)) { // && formatFilter.test(attrFormat)
-            if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
+            if (ATTRIBUTE_NAME_HREF.equals(attrName) && canFollow(attrValue)) {
                 if (followLinks()) {
                     hrefTargets.add(filename);
                     toOutFile(filename, atts);
@@ -608,7 +607,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                         final URI value = stripFragment(currentDir.resolve(copyTo));
                         if (copytoMap.get(filename) != null) {
                             if (!value.equals(copytoMap.get(filename))) {
-                                logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", copyTo.toString(), filename.toString())
+                                logger.warn(MessageUtils.getMessage("DOTX065W", copyTo.toString(), filename.toString())
                                         .setLocation(atts).toString());
                             }
                             ignoredCopytoSourceSet.add(value);
@@ -619,6 +618,16 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 }
             }
         }
+    }
+
+    /**
+     * Make educated guess in advance whether URI can be resolved to a file.
+     */
+    public static boolean canFollow(URI href) {
+        if (href != null && href.getScheme() != null && href.getScheme().equals("mailto")) {
+            return false;
+        }
+        return true;
     }
 
     private String getFormat(Attributes atts) {
@@ -714,7 +723,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * @return {@code true} if path walks up, otherwise {@code false}
      */
     private boolean isOutFile(final URI toCheckPath) {
-        return !toCheckPath.getPath().startsWith(rootDir.getPath());
+        final String path = toCheckPath.getPath();
+        return !(path != null && path.startsWith(rootDir.getPath()));
     }
 
     /**
@@ -736,10 +746,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
             if (isOutFile(filename)) {
                 if (job.getOutterControl() == Job.OutterControl.FAIL) {
-                    final MessageBean msgBean = MessageUtils.getInstance().getMessage("DOTJ035F", prop).setLocation(atts);
+                    final MessageBean msgBean = MessageUtils.getMessage("DOTJ035F", prop).setLocation(atts);
                     throw new SAXParseException(null, null, new DITAOTException(msgBean, null, msgBean.toString()));
                 } else if (job.getOutterControl() == Job.OutterControl.WARN) {
-                    final MessageBean msgBean = MessageUtils.getInstance().getMessage("DOTJ036W", prop).setLocation(atts);
+                    final MessageBean msgBean = MessageUtils.getMessage("DOTJ036W", prop).setLocation(atts);
                     logger.warn(msgBean.toString());
                 }
                 addToOutFilesSet(filename);

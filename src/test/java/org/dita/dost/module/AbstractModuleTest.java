@@ -9,7 +9,6 @@ package org.dita.dost.module;
 
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.io.FilenameUtils;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
@@ -31,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 
 public abstract class AbstractModuleTest {
 
@@ -90,10 +89,6 @@ public abstract class AbstractModuleTest {
     public void setUp() throws Exception {
         tempBaseDir = TestUtils.createTempDir(getClass());
         TestUtils.copy(new File(resourceDir, "src"), tempBaseDir);
-
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
     }
 
     @After
@@ -141,8 +136,9 @@ public abstract class AbstractModuleTest {
             } else {
                 final Document expDoc = getDocument(exp);
                 final Document actDoc = getDocument(new File(actDir, exp.getName()));
-                assertXMLEqual("Comparing " + exp + " to " + new File(actDir, exp.getName()) + ":",
-                        expDoc, actDoc);
+//                assertXMLEqual("Comparing " + exp + " to " + new File(actDir, exp.getName()) + ":",
+//                        expDoc, actDoc);
+                assertXMLEqual(expDoc, actDoc);
             }
         }
     }

@@ -7,38 +7,14 @@
  */
 package org.dita.dost;
 
-import static org.apache.commons.io.FileUtils.*;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.CharArrayWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.custommonkey.xmlunit.XMLUnit;
-
+import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.CatalogUtils;
-
+import org.slf4j.helpers.MarkerIgnoringBase;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -46,6 +22,27 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.xmlunit.util.IterableNodeList.asList;
 
 /**
  * Test utilities.
@@ -55,7 +52,13 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class TestUtils {
 
     public static final File testStub = new File("src" + File.separator + "test" + File.separator + "resources");
-    
+
+    private static final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+    static {
+        builderFactory.setNamespaceAware(true);
+        builderFactory.setIgnoringComments(true);
+    }
+
     /**
      * Get test resource directory
      * 
@@ -283,21 +286,123 @@ public class TestUtils {
         }
     }
 
-    /**
-     * Reset XMLUnit configuration.
-     */
-    public static void resetXMLUnit() {
-        final DocumentBuilderFactory b = DocumentBuilderFactory.newInstance();
-        XMLUnit.setControlDocumentBuilderFactory(b);
-        XMLUnit.setTestDocumentBuilderFactory(b);
-        XMLUnit.setControlEntityResolver(null);
-        XMLUnit.setTestEntityResolver(null);
+    public static void assertXMLEqual(Document exp, Document act) {
+        final Diff d = DiffBuilder
+                .compare(ignoreComments(exp))
+                .withTest(ignoreComments(act))
+                .ignoreWhitespace()
+                .normalizeWhitespace()
+                .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
+                .build();
+        if (d.hasDifferences()) {
+            throw new AssertionError(d.toString());
+        }
+    }
+
+    private static Document ignoreComments(Document src) {
+        try {
+            final Document res = builderFactory.newDocumentBuilder().newDocument();
+            for (final Node child : asList(src.getChildNodes())) {
+                if (child.getNodeType() != Node.COMMENT_NODE) {
+                    res.appendChild(res.importNode(child, true));
+                }
+            }
+            stripComments(res.getDocumentElement());
+            return res;
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void stripComments(Element elem) {
+        if (elem == null) {
+            return;
+        }
+        final NodeList childNodes = elem.getChildNodes();
+        final List<Node> nodes = asList(childNodes);
+        for (final Node child : nodes) {
+            switch (child.getNodeType()) {
+                case Node.COMMENT_NODE:
+                    child.getParentNode().removeChild(child);
+                    break;
+                case Node.ELEMENT_NODE:
+                    stripComments((Element) child);
+                    break;
+            }
+        }
+    }
+
+    public static void assertXMLEqual(InputSource exp, InputSource act) {
+        try {
+            final Diff d;
+                d = DiffBuilder
+                        .compare(ignoreComments(builderFactory.newDocumentBuilder().parse(exp)))
+                        .withTest(ignoreComments(builderFactory.newDocumentBuilder().parse(act)))
+                        .ignoreWhitespace()
+                        .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
+                        .build();
+            if (d.hasDifferences()) {
+                throw new AssertionError(d.toString());
+            }
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void assertHtmlEqual(InputSource exp, InputSource act) {
+        final DocumentBuilderFactory builderFactory = new HTMLDocumentBuilderFactory();
+        try {
+            final Diff d = DiffBuilder
+                    .compare(ignoreComments(builderFactory.newDocumentBuilder().parse(exp)))
+                    .withTest(ignoreComments(builderFactory.newDocumentBuilder().parse(act)))
+                    .ignoreWhitespace()
+                    .normalizeWhitespace()
+                    .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
+                    .build();
+            if (d.hasDifferences()) {
+                throw new AssertionError(d.toString());
+            }
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static class HTMLDocumentBuilderFactory extends DocumentBuilderFactory {
+        @Override
+        public Object getAttribute(final String arg0) throws IllegalArgumentException {
+            throw new UnsupportedOperationException();
+        }
+        @Override
+        public boolean getFeature(final String arg0) throws ParserConfigurationException {
+            throw new UnsupportedOperationException();
+        }
+        @Override
+        public DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
+            return new HtmlDocumentBuilder();
+        }
+        @Override
+        public void setAttribute(final String arg0, final Object arg1) throws IllegalArgumentException {
+            throw new UnsupportedOperationException();
+        }
+        @Override
+        public void setFeature(final String arg0, final boolean arg1) throws ParserConfigurationException {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    public static Document buildControlDocument(String content) {
+        try {
+            return DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                    .parse(new ByteArrayInputStream(content.getBytes("UTF-8")));
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * DITA-OT logger that will throw an assertion error for error messages.
      */
-    public static class TestLogger implements DITAOTLogger {
+    public static class TestLogger extends MarkerIgnoringBase implements DITAOTLogger {
 
         private boolean failOnError;
         
@@ -313,8 +418,50 @@ public class TestUtils {
             //System.out.println(msg);
         }
 
+        @Override
+        public void info(String format, Object arg) {
+        }
+
+        @Override
+        public void info(String format, Object arg1, Object arg2) {
+        }
+
+        @Override
+        public void info(String format, Object... arguments) {
+        }
+
+        @Override
+        public void info(String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isWarnEnabled() {
+            return true;
+        }
+
         public void warn(final String msg) {
             //System.err.println(msg);
+        }
+
+        @Override
+        public void warn(String format, Object arg) {
+        }
+
+        @Override
+        public void warn(String format, Object... arguments) {
+        }
+
+        @Override
+        public void warn(String format, Object arg1, Object arg2) {
+        }
+
+        @Override
+        public void warn(String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isErrorEnabled() {
+            return true;
         }
 
         public void error(final String msg) {
@@ -323,15 +470,87 @@ public class TestUtils {
             }
         }
 
+        @Override
+        public void error(String format, Object arg) {
+            if (failOnError) {
+                throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arg));
+            }
+        }
+
+        @Override
+        public void error(String format, Object arg1, Object arg2) {
+            if (failOnError) {
+                throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arg1, arg2));
+            }
+        }
+
+        @Override
+        public void error(String format, Object... arguments) {
+            if (failOnError) {
+                throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arguments));
+            }
+        }
+
         public void error(final String msg, final Throwable t) {
             if (failOnError) {
                 t.printStackTrace();
-                throw new AssertionError("Error message was thrown: " + msg);
+                throw new AssertionError("Error message was thrown: " + msg, t);
             }
+        }
+
+        @Override
+        public boolean isTraceEnabled() {
+            return false;
+        }
+
+        @Override
+        public void trace(String msg) {
+        }
+
+        @Override
+        public void trace(String format, Object arg) {
+        }
+
+        @Override
+        public void trace(String format, Object arg1, Object arg2) {
+        }
+
+        @Override
+        public void trace(String format, Object... arguments) {
+        }
+
+        @Override
+        public void trace(String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isDebugEnabled() {
+            return true;
         }
 
         public void debug(final String msg) {
             //System.out.println(msg);
+        }
+
+        @Override
+        public void debug(String format, Object arg) {
+        }
+
+        @Override
+        public void debug(String format, Object arg1, Object arg2) {
+        }
+
+        @Override
+        public void debug(String format, Object... arguments) {
+        }
+
+        @Override
+        public void debug(String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isInfoEnabled() {
+            return true;
         }
 
     }
@@ -339,7 +558,7 @@ public class TestUtils {
     /**
      * DITA-OT logger that will cache messages.
      */
-    public static final class CachingLogger implements DITAOTLogger {
+    public static final class CachingLogger extends MarkerIgnoringBase implements DITAOTLogger {
 
         final boolean strict;
 
@@ -357,8 +576,58 @@ public class TestUtils {
             buf.add(new Message(Message.Level.INFO, msg, null));
         }
 
+        @Override
+        public void info(String format, Object arg) {
+            buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arg), null));
+        }
+
+        @Override
+        public void info(String format, Object arg1, Object arg2) {
+            buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arg1, arg2), null));
+        }
+
+        @Override
+        public void info(String format, Object... arguments) {
+            buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arguments), null));
+        }
+
+        @Override
+        public void info(String msg, Throwable t) {
+            buf.add(new Message(Message.Level.INFO, msg, t));
+        }
+
+        @Override
+        public boolean isWarnEnabled() {
+            return true;
+        }
+
         public void warn(final String msg) {
             buf.add(new Message(Message.Level.WARN, msg, null));
+        }
+
+        @Override
+        public void warn(String format, Object arg) {
+            buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arg), null));
+        }
+
+        @Override
+        public void warn(String format, Object... arguments) {
+            buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arguments), null));
+        }
+
+        @Override
+        public void warn(String format, Object arg1, Object arg2) {
+            buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arg1, arg2), null));
+        }
+
+        @Override
+        public void warn(String msg, Throwable t) {
+            buf.add(new Message(Message.Level.WARN, msg, t));
+        }
+
+        @Override
+        public boolean isErrorEnabled() {
+            return true;
         }
 
         public void error(final String msg) {
@@ -369,6 +638,33 @@ public class TestUtils {
             }
         }
         
+        @Override
+        public void error(String format, Object arg) {
+            if (strict) {
+                throw new RuntimeException();
+            } else {
+                buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arg), null));
+            }
+        }
+
+        @Override
+        public void error(String format, Object arg1, Object arg2) {
+            if (strict) {
+                throw new RuntimeException();
+            } else {
+                buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arg1, arg2), null));
+            }
+        }
+
+        @Override
+        public void error(String format, Object... arguments) {
+            if (strict) {
+                throw new RuntimeException();
+            } else {
+                buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arguments), null));
+            }
+        }
+
         public void error(final String msg, final Throwable t) {
             if (strict) {
                 throw new RuntimeException(t);
@@ -377,18 +673,65 @@ public class TestUtils {
             }
         }
 
-        public void logFatal(final String msg) {
-            buf.add(new Message(Message.Level.FATAL, msg, null));
+        @Override
+        public boolean isTraceEnabled() {
+            return false;
+        }
+
+        @Override
+        public void trace(String msg) {
+        }
+
+        @Override
+        public void trace(String format, Object arg) {
+        }
+
+        @Override
+        public void trace(String format, Object arg1, Object arg2) {
+        }
+
+        @Override
+        public void trace(String format, Object... arguments) {
+        }
+
+        @Override
+        public void trace(String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isDebugEnabled() {
+            return false;
         }
 
         public void debug(final String msg) {
             buf.add(new Message(Message.Level.DEBUG, msg, null));
         }
 
-        public void logException(final Throwable t) {
-            buf.add(new Message(Message.Level.ERROR, t.getMessage(), t));
+        @Override
+        public void debug(String format, Object arg) {
+            buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arg), null));
         }
         
+        @Override
+        public void debug(String format, Object arg1, Object arg2) {
+            buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arg1, arg2), null));
+        }
+
+        @Override
+        public void debug(String format, Object... arguments) {
+            buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arguments), null));
+        }
+
+        @Override
+        public void debug(String msg, Throwable t) {
+            buf.add(new Message(Message.Level.DEBUG, msg, t));
+        }
+
+        @Override
+        public boolean isInfoEnabled() {
+            return true;
+        }
+
         public static final class Message {
             public enum Level { DEBUG, INFO, WARN, ERROR, FATAL }
             public final Level level;
@@ -402,7 +745,7 @@ public class TestUtils {
         }
         
         public List<Message> getMessages() {
-        	return Collections.unmodifiableList(buf);
+            return Collections.unmodifiableList(buf);
         }
         
     }

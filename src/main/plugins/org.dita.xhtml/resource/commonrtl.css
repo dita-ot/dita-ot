@@ -77,6 +77,16 @@
   margin-top: 1em;
   margin-bottom: 1em;
 }
+ul.linklist {
+  margin-top: 0;
+  list-style-type: none;
+  padding-right: 0;
+}
+
+li.linklist {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .linklistwithchild {
   margin-top: 1em;
   margin-right: 1.5em;

@@ -159,7 +159,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                         }
                     }
                     pushcontentWriter = getXMLStreamWriter();
-                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ044W").setLocation(atts).toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ044W").setLocation(atts).toString());
                 }
                 start = true;
                 level = 1;
@@ -169,7 +169,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 start = true;
                 level = 1;
                 if (target == null) {
-                    logger.error(MessageUtils.getInstance().getMessage("DOTJ039E").setLocation(atts).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ039E").setLocation(atts).toString());
                 } else {
                     putElement(name, atts, true);
                     pushType = ATTR_CONACTION_VALUE_PUSHAFTER;
@@ -179,7 +179,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 level = 1;
                 target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
                 if (target == null) {
-                    logger.error(MessageUtils.getInstance().getMessage("DOTJ040E").setLocation(atts).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ040E").setLocation(atts).toString());
                 } else {
                     pushType = ATTR_CONACTION_VALUE_PUSHREPLACE;
                     putElement(name, atts, true);
@@ -188,7 +188,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             } else if (ATTR_CONACTION_VALUE_MARK.equals(conactValue)) {
                 target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
                 if (target == null) {
-                    logger.error(MessageUtils.getInstance().getMessage("DOTJ068E").setLocation(atts).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ068E").setLocation(atts).toString());
                 }
                 if (target != null &&
                         pushcontentDocumentFragment != null && pushcontentDocumentFragment.getChildNodes().getLength() > 0 &&
@@ -278,9 +278,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 final String fragment = target.getFragment();
                 if (fragment == null) {
                     //if there is no '#' in target string, report error
-                    logger.error(MessageUtils.getInstance().getMessage("DOTJ041E", target.toString()).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ041E", target.toString()).toString());
                 } else {
-                    String id = "";
+                    String id;
                     //has element id
                     if (fragment.contains(SLASH)) {
                         id = fragment.substring(fragment.lastIndexOf(SLASH) + 1);
@@ -323,7 +323,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
     private void addtoPushTable(URI target, final DocumentFragment pushcontent, final String type) {
         if (target.getFragment() == null) {
             //if there is no '#' in target string, report error
-            logger.error(MessageUtils.getInstance().getMessage("DOTJ041E", target.toString()).toString());
+            logger.error(MessageUtils.getMessage("DOTJ041E", target.toString()).toString());
             return;
         }
 
@@ -332,7 +332,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             target = toURI(parsefilename.getPath() + target);
         }
         final File key = toFile(FileUtils.resolve(fileDir, target));
-        Hashtable<MoveKey, DocumentFragment> table = null;
+        Hashtable<MoveKey, DocumentFragment> table;
         if (pushtable.containsKey(key)) {
             //if there is something else push to the same file
             table = pushtable.get(key);
@@ -349,7 +349,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             //append content if type is 'pushbefore' or 'pushafter'
             //report error if type is 'replace'
             if (ATTR_CONACTION_VALUE_PUSHREPLACE.equals(type)) {
-                logger.error(MessageUtils.getInstance().getMessage("DOTJ042E", target.toString()).toString());
+                logger.error(MessageUtils.getMessage("DOTJ042E", target.toString()).toString());
             } else {
                 table.put(moveKey, appendPushContent(pushcontent, table.get(moveKey)));
             }

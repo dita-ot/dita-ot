@@ -47,8 +47,7 @@ public class IndexTermReaderTest {
 
     @Test
     public void testExtractIndexTerm() throws SAXException {
-        final IndexTermCollection indexTermCollection = IndexTermCollection.getInstantce();
-        indexTermCollection.clear();
+        final IndexTermCollection indexTermCollection = new IndexTermCollection();
         final File target = new File(tempDir, "concept.html");
         final IndexTermReader handler = new IndexTermReader(indexTermCollection);
         handler.setTargetFile(target.getAbsolutePath());

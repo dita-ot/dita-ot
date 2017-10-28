@@ -1,7 +1,0 @@
-#Fri May 15 14:54:07 CST 2009
-dita.temp.dir=keyrefs/maps_above_topics/temp1
-args.input=keyrefs/maps_above_topics/root-map-01.ditamap
-transtype=eclipsehelp
-output.dir=keyrefs/maps_above_topics/out1
-dita.dir=C\:\\jia\\DITA-OT1.5
-basedir=C\:\\jia\\DITA-OT1.5

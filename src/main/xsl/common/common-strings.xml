@@ -6,7 +6,8 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<langlist>  
+<langlist>
+  <lang xml:lang="" filename="strings-common.xml"/>
   <lang xml:lang="ar"    filename="strings-ar-eg.xml"/>
   <lang xml:lang="ar-eg" filename="strings-ar-eg.xml"/>
   <lang xml:lang="be"    filename="strings-be-by.xml"/>

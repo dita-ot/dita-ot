@@ -29,8 +29,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:template match="*[contains(@class,' ui-d/uicontrol ')]" name="topic.ui-d.uicontrol">
 <!-- insert an arrow with leading/trailing spaces before all but the first uicontrol in a menucascade -->
 <xsl:if test="ancestor::*[contains(@class,' ui-d/menucascade ')]">
- <xsl:variable name="uicontrolcount"><xsl:number count="*[contains(@class,' ui-d/uicontrol ')]"/></xsl:variable>
-  <xsl:if test="$uicontrolcount&gt;'1'">
+  <xsl:if test="exists(preceding-sibling::*[contains(@class,' ui-d/uicontrol ')])">
     <xsl:variable name="a11y.text" as="text()?">
       <xsl:call-template name="getVariable">
         <xsl:with-param name="id" select="'a11y.and-then'"/>

@@ -9,6 +9,7 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.XMLUtils.withLogger;
 
 import java.io.File;
@@ -16,15 +17,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -32,8 +30,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.writer.ExportAnchorsFilter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -52,6 +53,7 @@ public final class DelayConrefUtils {
     private Document root = null;
 
     private DITAOTLogger logger;
+    private Job job;
 
     /**
      * Constructor.
@@ -64,6 +66,12 @@ public final class DelayConrefUtils {
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
+
+
+    public void setJob(final Job job) {
+        this.job = job;
+    }
+
 
     /**
      * Find whether an id is refer to a topic in a dita file.
@@ -214,9 +222,9 @@ public final class DelayConrefUtils {
     /**
      * Write map into xml file.
      * @param m map
-     * @param outputFile output xml file
      */
-    public void writeMapToXML(final Map<String, Set<String>> m, final File outputFile) {
+    public void writeMapToXML(final Map<String, Set<String>> m) {
+        final File outputFile = new File(job.tempDir, FILE_NAME_PLUGIN_XML);
         if (m == null) {
             return;
         }
@@ -243,7 +251,7 @@ public final class DelayConrefUtils {
             entry.appendChild(doc.createTextNode(prop.getProperty(key)));
         }
         final TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer t = null;
+        Transformer t;
         try {
             t = withLogger(tf.newTransformer(), logger);
             t.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -269,6 +277,57 @@ public final class DelayConrefUtils {
                 }
             }
         }
+    }
+
+    public void writeExportAnchors(final ExportAnchorsFilter exportAnchorsFilter,
+                                   final TempFileNameScheme tempFileNameScheme)
+            throws DITAOTException {
+        XMLStreamWriter export = null;
+        try (OutputStream exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML))) {
+            export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
+            export.writeStartDocument();
+            export.writeStartElement("stub");
+            for (final ExportAnchorsFilter.ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
+                export.writeStartElement("file");
+                export.writeAttribute("name", tempFileNameScheme.generateTempFileName(toFile(e.file).toURI()).toString());
+                for (final String t: sort(e.topicids)) {
+                    export.writeStartElement("topicid");
+                    export.writeAttribute("name", t);
+                    export.writeEndElement();
+                }
+                for (final String i: sort(e.ids)) {
+                    export.writeStartElement("id");
+                    export.writeAttribute("name", i);
+                    export.writeEndElement();
+                }
+                for (final String k: sort(e.keys)) {
+                    export.writeStartElement("keyref");
+                    export.writeAttribute("name", k);
+                    export.writeEndElement();
+                }
+                export.writeEndElement();
+            }
+            export.writeEndElement();
+            export.writeEndDocument();
+        } catch (final IOException e) {
+            throw new DITAOTException("Failed to write export anchor file: " + e.getMessage(), e);
+        } catch (final XMLStreamException e) {
+            throw new DITAOTException("Failed to serialize export anchor file: " + e.getMessage(), e);
+        } finally {
+            if (export != null) {
+                try {
+                    export.close();
+                } catch (final XMLStreamException e) {
+                    logger.error("Failed to close export anchor file: " + e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    private List<String> sort(final Set<String> set) {
+        final List<String> sorted = new ArrayList<>(set);
+        Collections.sort(sorted);
+        return sorted;
     }
 
 }

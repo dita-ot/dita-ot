@@ -73,7 +73,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
         String temp = new String(ch, start, length);
-        IndexTerm indexTerm = null;
+        IndexTerm indexTerm;
         //boolean withSpace = (ch[start] == '\n' || temp.startsWith(LINE_SEPARATOR));
         if (ch[start] == '\n' || temp.startsWith(LINE_SEPARATOR)) {
             temp = " " + temp.substring(1);
@@ -128,14 +128,14 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
         // in the list.
         if (indexTermSpecList.contains(localName) && needPushTerm()) {
             final IndexTerm indexTerm = (IndexTerm) elementStack.pop();
-            Object obj = null;
+            Object obj;
 
             if (indexTerm.getTermName() == null || indexTerm.getTermName().trim().equals("")) {
                 if(indexTerm.getEndAttribute() != null && !indexTerm.hasSubTerms()){
                     return;
                 }else{
                     indexTerm.setTermName("***");
-                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ014W").toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ014W").toString());
                 }
             }
 
@@ -175,7 +175,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
     private void genTargets(final IndexTerm indexTerm, final TopicrefElement obj) {
 
         final IndexTermTarget target = new IndexTermTarget();
-        String targetURI = null;
+        String targetURI;
 
         final String href = obj.getHref();
 
@@ -277,7 +277,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
         if (indexSeeAlsoSpecList.contains(localName)
                 && needPushTerm()) {
             final IndexTerm indexTerm = new IndexTerm();
-            IndexTerm parentTerm = null;
+            IndexTerm parentTerm;
             if(!elementStack.isEmpty()
                     && elementStack.peek() instanceof IndexTerm){
                 parentTerm = (IndexTerm)elementStack.peek();
@@ -296,7 +296,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
         if (indexSeeSpecList.contains(localName)
                 && needPushTerm()) {
             final IndexTerm indexTerm = new IndexTerm();
-            IndexTerm parentTerm = null;
+            IndexTerm parentTerm;
 
             indexTerm.setTermPrefix(IndexTerm_Prefix_See);
 
@@ -319,7 +319,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             final IndexTerm indexTerm = new IndexTerm();
             indexTerm.setStartAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
             indexTerm.setEndAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
-            IndexTerm parentTerm = null;
+            IndexTerm parentTerm;
             if(!elementStack.isEmpty()
                     && elementStack.peek() instanceof IndexTerm){
                 parentTerm = (IndexTerm)elementStack.peek();

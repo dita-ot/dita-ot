@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "..\dtd\task.dtd">
+<task id="mapref2-2" xml:lang="en-us">
+<title>Second in the task map</title>
+<shortdesc>second task in the task mapref thing</shortdesc>
+<taskbody></taskbody>
+</task>

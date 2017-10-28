@@ -49,7 +49,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -165,7 +165,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             final URI targetFile = job.tempDirURI.resolve(copytoTarget);
 
             if (new File(targetFile).exists()) {
-                logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
+                logger.warn(MessageUtils.getMessage("DOTX064W", copytoTarget.getPath()).toString());
             } else {
                 final URI inputMapInTemp = job.tempDirURI.resolve(job.getInputMap());
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
@@ -190,7 +190,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
      * @param src                  source URI in temporary directory
      * @param target               target URI in temporary directory
      * @param copytoTargetFilename target URI relative to temporary directory
-     * @param inputMapInTemp
+     * @param inputMapInTemp       input map URI in temporary directory
      */
     private void copyFileWithPIReplaced(final URI src, final URI target, final URI copytoTargetFilename, final URI inputMapInTemp) {
         assert src.isAbsolute();

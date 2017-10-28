@@ -36,7 +36,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.ConkeyrefFilter;
 import org.dita.dost.writer.KeyrefPaser;
 
@@ -45,7 +44,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 /**
- * Keyref Module.
+ * Keyref ModuleElem.
  *
  */
 final class KeyrefModule extends AbstractPipelineModuleImpl {
@@ -57,13 +56,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
     private TopicFragmentFilter topicFragmentFilter;
-    private XMLUtils xmlUtils = new XMLUtils();
+    private final XMLUtils xmlUtils = new XMLUtils();
 
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -87,12 +86,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (fileInfoFilter == null) {
-            fileInfoFilter = new Filter<FileInfo>() {
-                @Override
-                public boolean accept(FileInfo f) {
-                    return f.format == null || f.format.equals(ATTR_FORMAT_VALUE_DITA) || f.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
-                }
-            };
+            fileInfoFilter = f -> f.format == null || f.format.equals(ATTR_FORMAT_VALUE_DITA) || f.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
         }
         final Collection<FileInfo> fis = job.getFileInfo(fileInfoFilter).stream()
                 .filter(f -> f.hasKeyref)
@@ -102,7 +96,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 final String cls = Optional
                         .ofNullable(job.getProperty("temp-file-name-scheme"))
                         .orElse(configuration.get("temp-file-name-scheme"));
-                tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) getClass().forName(cls).newInstance();
+                tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) Class.forName(cls).newInstance();
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -172,7 +166,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         final List<ResolveTask> deduped = removeDuplicateResolveTargets(res);
         if (fileInfoFilter != null) {
             return adjustResourceRenames(deduped.stream()
-                    .filter(rs -> fileInfoFilter.accept(rs.in))
+                    .filter(rs -> fileInfoFilter.test(rs.in))
                     .collect(Collectors.toList()));
         } else {
             return adjustResourceRenames(deduped);

@@ -9,6 +9,9 @@ See the accompanying LICENSE file for applicable license.
 <project name="ditaot-init">
     
   <!-- Read configuration properties -->
+  <loadproperties>
+    <javaresource name="application.properties"/>
+  </loadproperties>
   <property file="${dita.dir}/lib/org.dita.dost.platform/plugin.properties"/>
   <property file="${dita.dir}/lib/configuration.properties"/>
   
@@ -19,38 +22,16 @@ See the accompanying LICENSE file for applicable license.
   <!-- Deprecated -->
   <path id="dost.jar.path" refid="dost.class.path"/>
 
-  <taskdef name="pipeline"
-    classname="org.dita.dost.invoker.ExtensibleAntInvoker">
-    <classpath refid="dost.class.path" />
-  </taskdef>
-
-  <taskdef name="dita-ot-echo"
-    classname="org.dita.dost.log.DITAOTEchoTask">
-    <classpath refid="dost.class.path" />
-  </taskdef>
-
-  <taskdef name="dita-ot-fail"
-    classname="org.dita.dost.log.DITAOTFailTask">
-    <classpath refid="dost.class.path" />
-  </taskdef>
-
-  <taskdef name="dita-ot-copy"
-    classname="org.dita.dost.util.DITAOTCopy">
-    <classpath refid="dost.class.path" />
-  </taskdef>
-
-  <taskdef name="job-property" classname="org.dita.dost.platform.JobPropertyTask">
-    <classpath refid="dost.class.path"/>
-  </taskdef>
-
-  <typedef name="isabsolute"
-    classname="org.dita.dost.util.IsAbsolute">
-    <classpath refid="dost.class.path" />
-  </typedef>
-  
-  <typedef name="dita-fileset" classname="org.dita.dost.util.JobSourceSet">
-    <classpath refid="dost.class.path" />
-  </typedef>
+  <taskdef name="pipeline" classname="org.dita.dost.ant.ExtensibleAntInvoker"/>
+  <taskdef name="dita-ot-echo" classname="org.dita.dost.ant.DITAOTEchoTask"/>
+  <taskdef name="dita-ot-fail" classname="org.dita.dost.ant.DITAOTFailTask"/>
+  <taskdef name="dita-ot-copy" classname="org.dita.dost.ant.DITAOTCopy"/>
+  <taskdef name="job-property" classname="org.dita.dost.ant.JobPropertyTask"/>
+  <typedef name="isabsolute" classname="org.dita.dost.ant.IsAbsolute"/>
+  <!-- Deprecated since 3.0 -->
+  <typedef name="dita-fileset" classname="org.dita.dost.ant.types.JobSourceSet"/>
+  <typedef name="ditafileset" classname="org.dita.dost.ant.types.JobSourceSet"/>
+  <typedef name="jobmapper" classname="org.dita.dost.ant.types.JobMapper"/>
 
   <macrodef name="job-helper" >
     <attribute name="file"/>

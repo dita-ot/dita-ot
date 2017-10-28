@@ -8,8 +8,6 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
@@ -18,18 +16,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.dita.dost.module.DebugAndFilterModule;
 
+import javax.xml.namespace.QName;
 import java.io.File;
 import java.net.URI;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.URLUtils.getRelativePath;
-import static org.dita.dost.util.XMLUtils.nonDitaContext;
 import static org.dita.dost.reader.GenListModuleReader.*;
 
 
@@ -58,16 +51,14 @@ import static org.dita.dost.reader.GenListModuleReader.*;
  */
 public final class DitaWriterFilter extends AbstractXMLFilter {
 
+    public static final String ATTRIBUTE_NAME_ORIG_FORMAT = "orig-" + ATTRIBUTE_NAME_FORMAT;
+
     /** Default value map. */
-    private Map<String, Map<String, String>> defaultValueMap;
+    private Map<QName, Map<String, String>> defaultValueMap;
     /** Absolute path to current destination file. */
     private File outputFile;
-    /** DITA class values for open elements **/
-    private final Deque<DitaClass> classes = new LinkedList<>();
     /** File infos by src. */
     private Map<URI, FileInfo> fileInfoMap;
-//    /** File infos by src. */
-//    private Map<URI, FileInfo> fileInfoMap;
     private TempFileNameScheme tempFileNameScheme;
 
     public DitaWriterFilter() {
@@ -81,7 +72,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
      * Set default value map.
      * @param defaultMap default value map
      */
-    public void setDefaultValueMap(final Map<String, Map<String, String>> defaultMap) {
+    public void setDefaultValueMap(final Map<QName, Map<String, String>> defaultMap) {
         defaultValueMap  = defaultMap;
     }
 
@@ -89,28 +80,16 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         this.outputFile = outputFile;
     }
 
-    @Override
-    public void setJob(final Job job) {
-        super.setJob(job);
-//        fileInfoMap = new HashMap<>();
-//        for (final FileInfo f: job.getFileInfo()) {
-//            fileInfoMap.put(f.result, f);
-//        }
-    }
-
     // ContentHandler methods
 
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
-        classes.pop();
         getContentHandler().endElement(uri, localName, qName);
     }
 
     @Override
     public void startDocument() throws SAXException {
-        classes.clear();
-
         // XXX May be require fixup
         final File path2Project = DebugAndFilterModule.getPathtoProject(FileUtils.getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
                 toFile(currentFile),
@@ -145,11 +124,6 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     public void startElement(final String uri, final String localName, final String qName,
                              final Attributes atts) throws SAXException {
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
-        if (cls.isValid()) {
-            classes.addFirst(cls);
-        }else {
-            classes.addFirst(null);
-        }
 
         final AttributesImpl res = new AttributesImpl();
         processAttributes(qName, atts, res);
@@ -163,31 +137,34 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
      * @param qName element name
      * @param atts input attributes
      * @param res attributes to write to
-     * @throws java.io.IOException if writing to output failed
      */
     private void processAttributes(final String qName, final Attributes atts, final AttributesImpl res) {
         final int attsLen = atts.getLength();
         for (int i = 0; i < attsLen; i++) {
-            final String attQName = atts.getQName(i);
+            final QName attQName = new QName(atts.getURI(i), atts.getLocalName(i));
             final String origValue = atts.getValue(i);
             String attValue = origValue;
-            if (ATTRIBUTE_NAME_CONREF.equals(attQName)) {
-                attValue = replaceHREF(ATTRIBUTE_NAME_CONREF, atts).toString();
-            } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
+            if (ATTRIBUTE_NAME_CONREF.equals(attQName.getLocalPart())) {
+                attValue = replaceHREF(QName.valueOf(ATTRIBUTE_NAME_CONREF), atts).toString();
+            } else if(ATTRIBUTE_NAME_HREF.equals(attQName.getLocalPart()) || ATTRIBUTE_NAME_COPY_TO.equals(attQName.getLocalPart())){
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
                         atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)){
                     attValue = replaceHREF(attQName, atts).toString();
                 }
-            } else if(ATTRIBUTE_NAME_FORMAT.equals(attQName)) {
+            } else if(ATTRIBUTE_NAME_FORMAT.equals(attQName.getLocalPart())) {
                 final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+                final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                 // verify format is correct
-                if (isFormatDita(format)) {
+                if (isFormatDita(format) && (scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
                     attValue = ATTR_FORMAT_VALUE_DITA;
+                    if (!format.equals(ATTR_FORMAT_VALUE_DITA)) {
+                        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT, DITA_OT_NS_PREFIX + ":" + ATTRIBUTE_NAME_ORIG_FORMAT, "CDATA", format);
+                    }
                 }
             } else {
                 attValue = getAttributeValue(qName, attQName, attValue);
             }
-            XMLUtils.addOrSetAttribute(res, atts.getURI(i), atts.getLocalName(i), attQName, atts.getType(i), attValue);
+            XMLUtils.addOrSetAttribute(res, atts.getURI(i), atts.getLocalName(i), atts.getQName(i), atts.getType(i), attValue);
         }
     }
 
@@ -199,7 +176,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
      * @param value attribute value
      * @return attribute value or default
      */
-    private String getAttributeValue(final String elemQName, final String attQName, final String value) {
+    private String getAttributeValue(final String elemQName, final QName attQName, final String value) {
         if (StringUtils.isEmptyString(value) && !defaultValueMap.isEmpty()) {
             final Map<String, String> defaultMap = defaultValueMap.get(attQName);
             if (defaultMap != null) {
@@ -219,8 +196,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
      * @param atts attributes
      * @return attribute value, may be {@code null}
      */
-    private URI replaceHREF(final String attName, final Attributes atts){
-        URI attValue = toURI(atts.getValue(attName));
+    private URI replaceHREF(final QName attName, final Attributes atts){
+        URI attValue = toURI(atts.getValue(attName.getNamespaceURI(), attName.getLocalPart()));
         if (attValue != null) {
             final String fragment = attValue.getFragment();
             if (fragment != null) {

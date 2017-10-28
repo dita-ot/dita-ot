@@ -14,11 +14,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.net.URI;
-import java.util.Collection;
 
 import static java.net.URI.create;
-import static org.dita.dost.util.Constants.INPUT_DIR_URI;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class CleanPreprocessModuleTest {
 
@@ -35,7 +33,7 @@ public class CleanPreprocessModuleTest {
     @Test
     public void getBaseDir() throws Exception {
         final Job job = new Job(new File("").getAbsoluteFile());
-        job.setProperty(INPUT_DIR_URI, "file:/foo/bar/");
+        job.setInputDir(URI.create("file:/foo/bar/"));
         job.add(new Builder()
                 .uri(create("map.ditamap"))
                 .result(create("file:/foo/bar/map.ditamap"))
@@ -51,7 +49,7 @@ public class CleanPreprocessModuleTest {
     @Test
     public void getBaseDirSubdir() throws Exception {
         final Job job = new Job(new File("").getAbsoluteFile());
-        job.setProperty(INPUT_DIR_URI, "file:/foo/bar/maps/");
+        job.setInputDir(URI.create("file:/foo/bar/maps/"));
         job.add(new Builder()
                 .uri(create("maps/map.ditamap"))
                 .result(create("file:/foo/bar/maps/map.ditamap"))
@@ -59,6 +57,22 @@ public class CleanPreprocessModuleTest {
         job.add(new Builder()
                 .uri(create("topics/topic.dita"))
                 .result(create("file:/foo/bar/topics/topic.dita"))
+                .build());
+        module.setJob(job);
+        assertEquals(create("file:/foo/bar/"), module.getBaseDir());
+    }
+
+    @Test
+    public void getBaseDirSupdir() throws Exception {
+        final Job job = new Job(new File("").getAbsoluteFile());
+        job.setInputDir(URI.create("file:/foo/bar/maps/"));
+        job.add(new Builder()
+                .uri(create("maps/map.ditamap"))
+                .result(create("file:/foo/bar/maps/map.ditamap"))
+                .build());
+        job.add(new Builder()
+                .uri(create("topics/topic.dita"))
+                .result(create("file:/foo/bar/topic.dita"))
                 .build());
         module.setJob(job);
         assertEquals(create("file:/foo/bar/"), module.getBaseDir());

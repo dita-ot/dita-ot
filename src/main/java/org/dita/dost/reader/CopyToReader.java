@@ -33,8 +33,6 @@ public final class CopyToReader extends AbstractXMLFilter {
 
     /** Map of copy-to target to source */
     private final Map<URI, URI> copyToMap = new HashMap<>(16);
-    /** DITA class values for open elements **/
-    private final Deque<DitaClass> classes = new LinkedList<>();
     /** chunk nesting level */
     private int chunkLevel = 0;
     /** Stack for @processing-role value */
@@ -64,7 +62,6 @@ public final class CopyToReader extends AbstractXMLFilter {
      * Reset the internal variables.
      */
     public void reset() {
-        classes.clear();
         chunkLevel = 0;
         copyToMap.clear();
         processRoleStack.clear();
@@ -89,11 +86,6 @@ public final class CopyToReader extends AbstractXMLFilter {
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
         
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
-        if (cls.isValid()) {
-            classes.addFirst(cls);
-        }else {
-            classes.addFirst(null);
-        }
 
         if (chunkLevel > 0) {
             chunkLevel++;
@@ -111,8 +103,7 @@ public final class CopyToReader extends AbstractXMLFilter {
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         processRoleStack.pop();
-        classes.pop();
-        
+
         if (chunkLevel > 0) {
             chunkLevel--;
         }
@@ -163,7 +154,7 @@ public final class CopyToReader extends AbstractXMLFilter {
                     final URI value = stripFragment(currentFile.resolve(source));
                     if (copyToMap.get(target) != null) {
                         if (!value.equals(copyToMap.get(target))) {
-                            logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", source.toString(), target.toString()).toString());
+                            logger.warn(MessageUtils.getMessage("DOTX065W", source.toString(), target.toString()).toString());
                         }
                     } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
                             CHUNK_TO_CONTENT))) {

@@ -7,8 +7,6 @@
  */
 package org.dita.dost.writer;
 
-import static java.util.Arrays.asList;
-
 import java.io.File;
 import java.net.URI;
 import java.util.Collections;
@@ -19,7 +17,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.xml.sax.XMLFilter;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
@@ -40,11 +37,11 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
     @Override
     public void write(final File filename) throws DITAOTException {
         assert filename.isAbsolute();
-        xmlUtils.transform(filename, Collections.singletonList((XMLFilter) this));
+        xmlUtils.transform(filename, Collections.singletonList(this));
     }
 
     @Override
-    public final void setLogger(final DITAOTLogger logger) {
+    public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
         xmlUtils.setLogger(logger);
     }

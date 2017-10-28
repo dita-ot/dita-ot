@@ -8,8 +8,8 @@
 package org.dita.dost.reader;
 
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.junit.Assert.*;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,15 +17,18 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
 import org.junit.BeforeClass;
+import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.MergeUtils;
 import org.junit.Test;
@@ -45,10 +48,6 @@ public class MergeTopicParserTest {
             throw new RuntimeException("SAX transformation factory not supported");
         }
         stf = (SAXTransformerFactory) tf;
-        
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
     }
 
     @Test
@@ -67,18 +66,21 @@ public class MergeTopicParserTest {
     }
 
     public void parse(MergeTopicParser parser, String file) throws Exception {
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setIgnoringComments(true);
+        final DocumentBuilder builder = factory.newDocumentBuilder();
+        final Document output = builder.newDocument();
         final TransformerHandler s = stf.newTransformerHandler();
         s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION , "yes");
-        s.setResult(new StreamResult(output));
+        s.setResult(new DOMResult(output));
         parser.setContentHandler(s);
         parser.setLogger(new TestUtils.TestLogger());
         parser.setOutput(new File(srcDir, file));
         s.startDocument();
         parser.parse(file, srcDir.getAbsoluteFile());
         s.endDocument();
-        assertXMLEqual(new InputSource(new File(expDir, file).toURI().toString()),
-                new InputSource(new ByteArrayInputStream(output.toByteArray())));
+        assertXMLEqual(builder.parse(new File(expDir, file)), output);
     }
 
     @Test

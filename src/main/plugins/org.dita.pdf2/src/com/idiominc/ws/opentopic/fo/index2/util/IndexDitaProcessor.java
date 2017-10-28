@@ -152,13 +152,13 @@ public final class IndexDitaProcessor {
 
         if (!childEntrys.isEmpty() && !seeEntry.isEmpty()) {
             for (final IndexEntry e: seeEntry) {
-                logger.warn(MessageUtils.getInstance().getMessage("DOTA067W", e.getFormattedString(), textValue).toString());
+                logger.warn(MessageUtils.getMessage("DOTA067W", e.getFormattedString(), textValue).toString());
             }
             seeEntry.clear();
         }
         if (!childEntrys.isEmpty() && !seeAlsoEntry.isEmpty()) {
             for (final IndexEntry e: seeAlsoEntry) {
-                logger.warn(MessageUtils.getInstance().getMessage("DOTA068W", e.getFormattedString(), textValue).toString());
+                logger.warn(MessageUtils.getMessage("DOTA068W", e.getFormattedString(), textValue).toString());
             }
             seeAlsoEntry.clear();
         }

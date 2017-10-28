@@ -206,7 +206,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * @param terms terms list
      */
     public void addSubTerms(final List<IndexTerm> terms) {
-        int subTermsNum = 0;
+        int subTermsNum;
         if (terms == null) {
             return;
         }
@@ -313,7 +313,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * @param targets list of targets
      */
     public void addTargets(final List<IndexTermTarget> targets) {
-        int targetNum = 0;
+        int targetNum;
 
         if (targets == null) {
             return;

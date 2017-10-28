@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dita.dost.log.DITAOTLogger;
@@ -18,25 +19,31 @@ import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import javax.xml.XMLConstants;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -76,6 +83,7 @@ public final class Integrator {
     private static final String ELEM_PLUGINS = "plugins";
 
     private static final String LIB_DIR = "lib";
+    private static final String CONFIG_DIR = "config";
 
     public static final String FEAT_VALUE_SEPARATOR = ",";
     private static final String PARAM_VALUE_SEPARATOR = ";";
@@ -168,10 +176,10 @@ public final class Integrator {
             properties.putAll(Configuration.configuration);
         }
         if (!properties.containsKey(CONF_PLUGIN_DIRS)) {
-            properties.setProperty(CONF_PLUGIN_DIRS, configuration.containsKey(CONF_PLUGIN_DIRS) ? configuration.get(CONF_PLUGIN_DIRS) : "plugins;demo");
+            properties.setProperty(CONF_PLUGIN_DIRS, configuration.getOrDefault(CONF_PLUGIN_DIRS, "plugins;demo"));
         }
         if (!properties.containsKey(CONF_PLUGIN_IGNORES)) {
-            properties.setProperty(CONF_PLUGIN_IGNORES, configuration.containsKey(CONF_PLUGIN_IGNORES) ? configuration.get(CONF_PLUGIN_IGNORES) : "");
+            properties.setProperty(CONF_PLUGIN_IGNORES, configuration.getOrDefault(CONF_PLUGIN_IGNORES, ""));
         }
 
         // Get the list of plugin directories from the properties.
@@ -302,7 +310,7 @@ public final class Integrator {
         
         OutputStream out = null;
         try {
-            final File outFile = new File(ditaDir, LIB_DIR + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
+            final File outFile = new File(ditaDir, CONFIG_DIR + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
             if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
                 throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
             }
@@ -321,6 +329,13 @@ public final class Integrator {
             }
         }
 
+        // Write messages properties
+        final Properties messages = readMessageBundle();
+        final File messagesFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages_en_US.properties").toFile();
+        try (final OutputStream messagesOut = new FileOutputStream(messagesFile)) {
+            messages.store(messagesOut, null);
+        }
+
         final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS) ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS))) : Collections.EMPTY_SET;
         writeEnvShell(jars);
         writeEnvBatch(jars);
@@ -333,40 +348,80 @@ public final class Integrator {
         writeStartcmdBatch(libJars);
     }
 
-    private Collection<File> getLibJars() {
-        final String[] libJars = new File(ditaDir, LIB_DIR).list(new FilenameFilter() {
-            @Override
-            public boolean accept(final File dir, final String name) {
-                return name.endsWith(".jar");
+    private Properties readMessageBundle() throws IOException, XMLStreamException {
+        final Properties messages = new Properties();
+        final File messagesXmlFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages.xml").toFile();
+        if (messagesXmlFile.exists()) {
+            try (final InputStream in = new FileInputStream(messagesXmlFile)) {
+                final XMLStreamReader src = XMLInputFactory.newFactory().createXMLStreamReader(new StreamSource(in));
+                String id = null;
+                final StringBuilder buf = new StringBuilder();
+                while (src.hasNext()) {
+                    final int type = src.next();
+                    switch (type) {
+                        case  XMLEvent.START_ELEMENT:
+                            if (src.getLocalName().equals("message")) {
+                                id = src.getAttributeValue(XMLConstants.NULL_NS_URI, "id");
+                            } else if (id != null) {
+                                buf.append(src.getElementText()).append(' ');
+                            }
+                            break;
+                        case  XMLEvent.END_ELEMENT:
+                            if (src.getLocalName().equals("message")) {
+                                messages.put(id, convertMessage(buf.toString()));
+                                id = null;
+                                buf.delete(0, buf.length());
+                            }
+                            break;
+                    }
+                }
+                src.close();
             }
-        });
+        }
+        return messages;
+    }
+
+    @VisibleForTesting
+    static String convertMessage(final String src) {
+        final String res = src
+                .replaceAll("[\\s\\n]+", " ")
+                .replace("'", "''")
+                .replace("{", "'{")
+                .trim();
+        final StringBuilder buf = new StringBuilder();
+        final Matcher m = Pattern.compile("%(\\d)").matcher(res);
+        int offset = 0;
+        while (m.find()) {
+            final int index = Integer.parseInt(m.group(1));
+            buf.append(res.substring(offset, m.start()));
+            buf.append("{").append(index - 1).append("}");
+            offset = m.end();
+        }
+        buf.append(res.substring(offset));
+        return buf.toString();
+    }
+
+    private Collection<File> getLibJars() {
+        final String[] libJars = new File(ditaDir, LIB_DIR).list((dir, name) -> name.endsWith(".jar"));
         final List<File> res = new ArrayList<>(libJars.length);
         for (String l: libJars) {
             res.add(new File(LIB_DIR + File.separator + l));
         }
-        Collections.sort(res, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
-            }
-        });
+        res.sort(Comparator.comparing(File::getAbsolutePath));
         return res;
     }
 
     private Iterable<String> orderPlugins(final Set<String> ids) {
         final List<String> res = new ArrayList<>(ids);
-        Collections.sort(res, new Comparator<String>() {
-            @Override
-            public int compare(final String s1, final String s2) {
-                final int score1 = pluginOrder.containsKey(s1) ? pluginOrder.get(s1) : 0;
-                final int score2 = pluginOrder.containsKey(s2) ? pluginOrder.get(s2) : 0;
-                if (score1 < score2) {
-                    return 1;
-                } else if (score1 > score2) {
-                    return -1;
-                } else {
-                    return s1.compareTo(s2);
-                }
+        res.sort((s1, s2) -> {
+            final int score1 = pluginOrder.getOrDefault(s1, 0);
+            final int score2 = pluginOrder.getOrDefault(s2, 0);
+            if (score1 < score2) {
+                return 1;
+            } else if (score1 > score2) {
+                return -1;
+            } else {
+                return s1.compareTo(s2);
             }
         });
         return res;
@@ -398,7 +453,11 @@ public final class Integrator {
         final Collection<File> res = new ArrayList<>(src.size());
         final File base = new File(ditaDir, "dummy");
         for (final String lib: src) {
-            res.add(FileUtils.getRelativePath(base, toFile(lib)));
+            final File libFile = toFile(lib);
+            if (!libFile.exists()) {
+                throw new IllegalArgumentException("Library file not found: " + libFile.getAbsolutePath());
+            }
+            res.add(FileUtils.getRelativePath(base, libFile));
         }
         return res;
     }
@@ -406,7 +465,7 @@ public final class Integrator {
     private void writeEnvShell(final Collection<File> jars) {
         Writer out = null;
         try {
-            final File outFile = new File(ditaDir, "resources" + File.separator + "env.sh");
+            final File outFile = new File(ditaDir, CONFIG_DIR + File.separator + "env.sh");
             if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
                 throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
             }
@@ -437,7 +496,7 @@ public final class Integrator {
     private void writeEnvBatch(final Collection<File> jars) {
         Writer out = null;
         try {
-            final File outFile = new File(ditaDir, "resources" + File.separator + "env.bat");
+            final File outFile = new File(ditaDir, CONFIG_DIR + File.separator + "env.bat");
             if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
                 throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
             }
@@ -652,7 +711,7 @@ public final class Integrator {
             }
             if (!anyPluginFound && requirement.getRequired()) {
                 // not contain any plugin required by current plugin
-                final String msg = MessageUtils.getInstance().getMessage("DOTJ020W", requirement.toString(), currentPlugin).toString();
+                final String msg = MessageUtils.getMessage("DOTJ020W", requirement.toString(), currentPlugin).toString();
                 throw new RuntimeException(msg);
             }
         }
@@ -666,7 +725,7 @@ public final class Integrator {
         final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
         pluginsDoc.appendChild(root);
         if (!descSet.isEmpty()) {
-            final URI b = new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml").toURI();
+            final URI b = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml").toURI();
             for (final File descFile : descSet) {
                 logger.debug("Read plug-in configuration " + descFile.getPath());
                 final Element plugin = parseDesc(descFile);
@@ -680,7 +739,7 @@ public final class Integrator {
     }
 
     private void writePlugins() throws TransformerException {
-        final File plugins = new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml");
+        final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml");
         logger.debug("Writing " + plugins);
         try {
             final Transformer serializer = TransformerFactory.newInstance().newTransformer();

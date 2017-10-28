@@ -10,7 +10,7 @@ package org.dita.dost.module;
 
 import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.getRelativeUnixPath;
+import static org.dita.dost.util.FileUtils.getRelativePath;
 import static org.dita.dost.util.FileUtils.resolve;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.Configuration.*;
@@ -22,6 +22,7 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -31,15 +32,12 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.xerces.xni.grammars.XMLGrammarPool;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.module.GenMapAndTopicListModule.*;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
-import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.*;
@@ -73,8 +71,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     private FilterUtils filterUtils;
     /** Absolute path to current destination file. */
     private File outputFile;
-    private Map<String, Map<String, Set<String>>> validateMap;
-    private Map<String, Map<String, String>> defaultValueMap;
+    private Map<QName, Map<String, Set<String>>> validateMap;
+    private Map<QName, Map<String, String>> defaultValueMap;
     /** Absolute path to current source file. */
     private URI currentFile;
     private Map<URI, Set<URI>> dic;
@@ -88,7 +86,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -143,8 +141,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             validateMap = subjectSchemeReader.getValidValuesMap();
             defaultValueMap = subjectSchemeReader.getDefaultValueMap();
         } else {
-            validateMap = Collections.EMPTY_MAP;
-            defaultValueMap = Collections.EMPTY_MAP;
+            validateMap = Collections.emptyMap();
+            defaultValueMap = Collections.emptyMap();
         }
         if (profilingEnabled) {
             filterUtils = baseFilterUtils.refine(subjectSchemeReader.getSubjectSchemeMap());
@@ -214,15 +212,13 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
             filterReader.setJob(job);
-            filterReader.initXMLReader(setSystemId);
-            Map<FilterKey, Action> filterMap;
             if (ditavalFile != null && ditavalFile.exists()) {
                 filterReader.read(ditavalFile.getAbsoluteFile());
-                filterMap = filterReader.getFilterMap();
+                baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterReader.getFilterMap(),
+                        filterReader.getForegroundConflictColor(), filterReader.getBackgroundConflictColor());
             } else {
-                filterMap = Collections.EMPTY_MAP;
+                baseFilterUtils = new FilterUtils(printTranstype.contains(transtype));
             }
-            baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
             baseFilterUtils.setLogger(logger);
         }
 
@@ -263,7 +259,9 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         if (filterUtils != null) {
             final ProfilingFilter profilingFilter = new ProfilingFilter();
             profilingFilter.setLogger(logger);
+            profilingFilter.setJob(job);
             profilingFilter.setFilterUtils(filterUtils);
+            profilingFilter.setCurrentFile(fileToParse);
             pipe.add(profilingFilter);
         }
 
@@ -522,7 +520,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             if (isOutFile(traceFilename, inputMap)) {
                 return toFile(getRelativePathFromOut(traceFilename.getAbsoluteFile(), job));
             } else {
-                return new File(getRelativeUnixPath(traceFilename.getAbsolutePath(), inputMap.getAbsolutePath())).getParentFile();
+                return getRelativePath(traceFilename.getAbsoluteFile(), inputMap.getAbsoluteFile()).getParentFile();
             }
         } else {
             return FileUtils.getRelativePath(filename);
@@ -534,7 +532,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
      * @return relative system path to out which ends in {@link java.io.File#separator File.separator}
      */
     private static String getRelativePathFromOut(final File overflowingFile, final Job job) {
-        final URI relativePath = getRelativePath(job.getInputFile(), overflowingFile.toURI());
+        final URI relativePath = URLUtils.getRelativePath(job.getInputFile(), overflowingFile.toURI());
         final File outputDir = job.getOutputDir().getAbsoluteFile();
         final File outputPathName = new File(outputDir, "index.html");
         final File finalOutFilePathName = resolve(outputDir, relativePath.getPath());

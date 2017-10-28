@@ -4,7 +4,6 @@
  * Copyright 2005, 2006 IBM Corporation
  *
  * See the accompanying LICENSE file for applicable license.
-
  */
 package org.dita.dost.util;
 
@@ -603,6 +602,7 @@ public final class Constants {
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
     /**prop element.*/
     public static final String ELEMENT_NAME_PROP = "prop";
+    public static final String ELEMENT_NAME_REVPROP = "revprop";
     /**map element.*/
     public static final String ELEMENT_NAME_ACTION = "action";
     /**action element.*/
@@ -658,7 +658,9 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_PRODUCT = "product";
     /**otherprops attribute.*/
     public static final String ATTRIBUTE_NAME_OTHERPROPS = "otherprops";
+    public static final String ATTRIBUTE_NAME_OUTPUTCLASS = "outputclass";
     /**scope attribute.*/
+    public static final String ATTRIBUTE_NAME_REV = "rev";
     public static final String ATTRIBUTE_NAME_SCOPE = "scope";
     /**type attribute.*/
     public static final String ATTRIBUTE_NAME_TYPE = "type";
@@ -710,6 +712,10 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_COLS = "cols";
     public static final String ATTRIBUTE_NAME_VALUE = "value";
     public static final String ATTRIBUTE_NAME_VALUETYPE = "valuetype";
+    public static final String ATTRIBUTE_NAME_COLOR = "color";
+    public static final String ATTRIBUTE_NAME_BACKCOLOR = "backcolor";
+    public static final String ATTRIBUTE_NAME_STYLE = "style";
+    public static final String ATTRIBUTE_NAME_CHANGEBAR = "changebar";
 
     public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 
@@ -723,24 +729,26 @@ public final class Constants {
     /** Windows path separator. */
     public static final String WINDOWS_SEPARATOR = "\\";
 
-    /** Constants for index type(javahelp).*/
-    public static final String INDEX_TYPE_JAVAHELP = "javahelp";
-    /** Constants for index type(htmlhelp).*/
+    /** Constants for index type(htmlhelp). Deprecated since 3.0 */
+    @Deprecated
     public static final String INDEX_TYPE_HTMLHELP = "htmlhelp";
     /** Constants for index type(eclipsehelp).*/
     public static final String INDEX_TYPE_ECLIPSEHELP = "eclipsehelp";
 
-    /** Constants for transform type(pdf).*/
+    /** Constants for transform type(pdf). Deprecated since 3.0 */
+    @Deprecated
     public static final String TRANS_TYPE_PDF = "pdf";
-    /** Constants for transform type(xhtml).*/
+    /** Constants for transform type(xhtml). Deprecated since 3.0 */
+    @Deprecated
     public static final String TRANS_TYPE_XHTML = "xhtml";
-    /** Constants for transform type(eclipsehelp).*/
+    /** Constants for transform type(eclipsehelp). Deprecated since 3.0 */
+    @Deprecated
     public static final String TRANS_TYPE_ECLIPSEHELP = "eclipsehelp";
-    /** Constants for transform type(javahelp).*/
-    public static final String TRANS_TYPE_JAVAHELP = "javahelp";
-    /** Constants for transform type(htmlhelp).*/
+    /** Constants for transform type(htmlhelp). Deprecated since 3.0 */
+    @Deprecated
     public static final String TRANS_TYPE_HTMLHELP = "htmlhelp";
-    /** Constants for transform type(eclipsecontent).*/
+    /** Constants for transform type(eclipsecontent). Deprecated since 3.0 */
+    @Deprecated
     public static final String TRANS_TYPE_ECLIPSECONTENT = "eclipsecontent";
 
     /** Constant for generated property file name(catalog-dita.xml).*/
@@ -826,10 +834,10 @@ public final class Constants {
     /**OS relevant constants(windows).*/
     public static final String OS_NAME_WINDOWS = "windows";
 
-    /**
-     * Misc string constants used in this toolkit.
-     */
-    /**STRING_EMPTY.*/
+    //Misc string constants used in this toolkit.
+
+    /**STRING_EMPTY. Deprecated since 3.0 */
+    @Deprecated
     public static final String STRING_EMPTY = "";
     /**LEFT_BRACKET.*/
     public static final String LEFT_BRACKET = "(";
@@ -837,7 +845,8 @@ public final class Constants {
     public static final String RIGHT_BRACKET = ")";
     /**SLASH.*/
     public static final String SLASH = "/";
-    /**BACK_SLASH.*/
+    /**BACK_SLASH. Deprecated since 3.0 */
+    @Deprecated
     public static final String BACK_SLASH = "\\";
     /**SHARP.*/
     public static final String SHARP = "#";
@@ -859,7 +868,8 @@ public final class Constants {
     public static final String COLON = ":";
     /**DOT.*/
     public static final String DOT= ".";
-    /**DOUBLE_BACK_SLASH.*/
+    /**DOUBLE_BACK_SLASH. Deprecated since 3.0 */
+    @Deprecated
     public static final String DOUBLE_BACK_SLASH = "\\\\";
     /**COLON_DOUBLE_SLASH.*/
     public static final String COLON_DOUBLE_SLASH = "://";
@@ -889,9 +899,11 @@ public final class Constants {
     public static final String FEATURE_VALIDATION = "http://xml.org/sax/features/validation";
     /**FEATURE_VALIDATION_SCHEMA.*/
     public static final String FEATURE_VALIDATION_SCHEMA = "http://apache.org/xml/features/validation/schema";
-    /**TEMP_DIR_DEFAULT.*/
+    /**TEMP_DIR_DEFAULT. Deprecated since 3.0 */
+    @Deprecated
     public static final String TEMP_DIR_DEFAULT = "temp";
-    /**FILTER_ACTION_EXCLUDE.*/
+    /**FILTER_ACTION_EXCLUDE. Deprecated since 3.0 */
+    @Deprecated
     public static final String FILTER_ACTION_EXCLUDE = "exclude";
     /**ATTR_SCOPE_VALUE_LOCAL.*/
     public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
@@ -911,11 +923,15 @@ public final class Constants {
     /**ATTRIBUTE_PREFIX_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_PREFIX_DITAARCHVERSION = "ditaarch";
     /**ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION.*/
-    public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = XMLNS_ATTRIBUTE + ":ditaarch";
+    public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = XMLNS_ATTRIBUTE + ":" + ATTRIBUTE_PREFIX_DITAARCHVERSION;
     public static final String DITA_NAMESPACE = "http://dita.oasis-open.org/architecture/2005/";
+    public static final String DITA_OT_NS_PREFIX = "dita-ot";
     public static final String DITA_OT_NAMESPACE = "http://dita-ot.sourceforge.net";
+    public static final String DITA_OT_NS = "http://dita-ot.sourceforge.net/ns/201007/dita-ot";
 
-    /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE.*/
+
+    /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE. Deprecated since 3.0 */
+    @Deprecated
     public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE = " subjectScheme/";
     /**ATTR_PROCESSING_ROLE_VALUE_NORMAL.*/
     public static final String ATTR_PROCESSING_ROLE_VALUE_NORMAL = "normal";
@@ -959,6 +975,8 @@ public final class Constants {
     /**pluginId.xml to store the plugin id.*/
     public static final String FILE_NAME_PLUGIN_XML = "pluginId.xml";
 
+    /** Application configuration filename. */
+    public static final String APP_CONF_PROPERTIES = "application.properties";
     /** Configuration filename. */
     public static final String CONF_PROPERTIES = "configuration.properties";
     /** Generated configuration filename. */

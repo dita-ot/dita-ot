@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "..\dtd\task.dtd">
+<task id="mapref2-3" xml:lang="en-us">
+<title>Nested item in the referenced taskmap</title>
+<shortdesc>This is nested in the taskmap, which is the second referenced map</shortdesc>
+<taskbody></taskbody>
+</task>

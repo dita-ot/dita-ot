@@ -269,7 +269,7 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:sequence select="root(.)"/>
                 </xsl:when>
                 <xsl:when test="$topicpos = ('otherfile', 'firstinfile')">
-                  <xsl:sequence select="document($file, /)"/>
+                  <xsl:sequence select="if (doc-available(resolve-uri($file, base-uri(/)))) then document($file, /) else ()"/>
                 </xsl:when>
               </xsl:choose>
             </xsl:variable>

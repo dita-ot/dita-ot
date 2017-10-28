@@ -28,11 +28,7 @@ public class KeyScope {
         this.id = id;
         this.name = name;
         this.keyDefinition = unmodifiableMap(keyDefinition);
-        this.childScopes = unmodifiableList(new ArrayList(childScopes));
-    }
-
-    public KeyScope(final Map<String, KeyDef> keyDefinition) {
-        this(null, null, keyDefinition, Collections.<KeyScope>emptyList());
+        this.childScopes = unmodifiableList(new ArrayList<>(childScopes));
     }
 
     public KeyDef get(final String key) {

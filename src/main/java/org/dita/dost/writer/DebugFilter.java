@@ -9,11 +9,7 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.io.File;
-import java.net.URI;
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import org.dita.dost.util.XMLUtils;
@@ -38,7 +34,6 @@ public final class DebugFilter extends AbstractXMLFilter {
 
     private Locator locator;
     private final Map<String, Integer> counterMap = new HashMap<>();
-    private final Deque<DitaClass> classes = new LinkedList<>();
 
     // Locator methods
     
@@ -51,7 +46,6 @@ public final class DebugFilter extends AbstractXMLFilter {
     // SAX methods
     @Override
     public void startDocument() throws SAXException {
-        classes.clear();
         getContentHandler().startDocument();
     }
 
@@ -59,7 +53,6 @@ public final class DebugFilter extends AbstractXMLFilter {
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : null;
-        classes.addFirst(cls);
 
         final AttributesImpl res = new AttributesImpl(atts);
         if (cls!=null && !ELEMENT_NAME_DITA.equals(localName)) {
@@ -83,13 +76,6 @@ public final class DebugFilter extends AbstractXMLFilter {
             XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRC, xtrc.toString());
         }
         super.startElement(uri, localName, qName, res);
-    }
-
-    @Override
-    public void endElement(final String uri, final String localName, final String qName)
-            throws SAXException {
-        classes.pop();
-        super.endElement(uri, localName, qName);
     }
 
 }

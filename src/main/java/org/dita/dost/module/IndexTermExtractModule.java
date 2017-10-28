@@ -41,7 +41,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Wu, Zhi Qiang
  */
-final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
+public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
     /** The input map */
     private File inputMap = null;
 
@@ -69,6 +69,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
             throw new IllegalStateException("Logger not set");
         }
         indexTermCollection = new IndexTermCollection();
+        indexTermCollection.setLogger(logger);
         try {
             parseAndValidateInput(input);
             extractIndexTerm();
@@ -128,7 +129,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
 
     private void extractIndexTerm() throws SAXException {
         FileInputStream inputStream = null;
-        XMLReader xmlReader = null;
+        XMLReader xmlReader;
         final IndexTermReader handler = new IndexTermReader(indexTermCollection);
         handler.setLogger(logger);
         final DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
@@ -167,8 +168,8 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                     throw e;
                 } catch (final Exception e) {
                     final StringBuilder buff = new StringBuilder();
-                    String msg = null;
-                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", target.toString()).toString();
+                    String msg;
+                    msg = MessageUtils.getMessage("DOTJ013E", target.toString()).toString();
                     logger.error(buff.append(msg).append(e.getMessage()).toString());
                 }
             }
@@ -197,8 +198,8 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                 } catch (final RuntimeException e) {
                     throw e;
                 } catch (final Exception e) {
-                    String msg = null;
-                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", ditamap.toString()).toString();
+                    String msg;
+                    msg = MessageUtils.getMessage("DOTJ013E", ditamap.toString()).toString();
                     logger.error(msg, e);
                 }
             }

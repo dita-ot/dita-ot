@@ -18,7 +18,6 @@ import java.net.URI;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractDomFilter;

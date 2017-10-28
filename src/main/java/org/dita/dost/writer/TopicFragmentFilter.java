@@ -18,7 +18,6 @@ import org.dita.dost.util.DitaClass;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
  * Resolves same topic fragment identifies in topics.
@@ -34,7 +33,7 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
 
     public TopicFragmentFilter() {
         super();
-        this.attrNames = Arrays.asList(ATTRIBUTE_NAME_HREF);
+        this.attrNames = Collections.singletonList(ATTRIBUTE_NAME_HREF);
     }
 
     public TopicFragmentFilter(final String... attrNames) {

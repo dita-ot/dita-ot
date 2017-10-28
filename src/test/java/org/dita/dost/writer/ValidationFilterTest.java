@@ -27,63 +27,63 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class ValidationFilterTest {
 
-	@Test
-	public void testXMLLang() throws SAXException {
-		final List<String> res = new ArrayList<String>();
-		final ValidationFilter f = new ValidationFilter();
+    @Test
+    public void testXMLLang() throws SAXException {
+        final List<String> res = new ArrayList<String>();
+        final ValidationFilter f = new ValidationFilter();
         f.setValidateMap(Collections.EMPTY_MAP);
         f.setProcessingMode(Configuration.Mode.LAX);
-		f.setContentHandler(new DefaultHandler() {
-			@Override
-			public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-				res.add(atts.getValue(XML_NS_URI, "lang"));
-			}
-		});
-		final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-		f.setLogger(l);
-		
-		f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
-			.add(XML_NS_URI, "lang", "en_us")
-			.build());
-		f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
-			.add(XML_NS_URI, "lang", "en-GB")
-			.build());
-		
-		assertEquals(1, l.getMessages().size());
-		assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
-		assertEquals("en-us", res.get(0));
-		assertEquals("en-GB", res.get(1));
-	}
+        f.setContentHandler(new DefaultHandler() {
+            @Override
+            public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+                res.add(atts.getValue(XML_NS_URI, "lang"));
+            }
+        });
+        final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
+        f.setLogger(l);
 
-	@Test
-	public void testHref() throws SAXException, URISyntaxException {
-		final List<String> res = new ArrayList<String>();
-		final ValidationFilter f = new ValidationFilter();
+        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
+            .add(XML_NS_URI, "lang", "en_us")
+            .build());
+        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
+            .add(XML_NS_URI, "lang", "en-GB")
+            .build());
+
+        assertEquals(1, l.getMessages().size());
+        assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
+        assertEquals("en-us", res.get(0));
+        assertEquals("en-GB", res.get(1));
+    }
+
+    @Test
+    public void testHref() throws SAXException, URISyntaxException {
+        final List<String> res = new ArrayList<String>();
+        final ValidationFilter f = new ValidationFilter();
         f.setValidateMap(Collections.EMPTY_MAP);
         f.setProcessingMode(Configuration.Mode.LAX);
-		f.setContentHandler(new DefaultHandler() {
-			@Override
-			public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-				res.add(atts.getValue(ATTRIBUTE_NAME_HREF));
-			}
-		});
-		final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-		f.setLogger(l);
-		
-		f.startElement(NULL_NS_URI, TOPIC_XREF.localName, TOPIC_XREF.localName, new AttributesBuilder()
-				.add(ATTRIBUTE_NAME_HREF, "http://example.com/foo\\bar baz:qux")
-				.build());
-		f.startElement(NULL_NS_URI, TOPIC_XREF.localName, TOPIC_XREF.localName, new AttributesBuilder()
-				.add(ATTRIBUTE_NAME_HREF, "http://example.com/valid/bar+baz:qux")
-				.build());
-		
-		assertEquals(1, l.getMessages().size());
-		assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
-		assertEquals("http://example.com/foo/bar%20baz:qux", res.get(0));
-		assertEquals("http://example.com/valid/bar+baz:qux", res.get(1));
-	}
-	
-	@Test
+        f.setContentHandler(new DefaultHandler() {
+            @Override
+            public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+                res.add(atts.getValue(ATTRIBUTE_NAME_HREF));
+            }
+        });
+        final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
+        f.setLogger(l);
+
+        f.startElement(NULL_NS_URI, TOPIC_XREF.localName, TOPIC_XREF.localName, new AttributesBuilder()
+                .add(ATTRIBUTE_NAME_HREF, "http://example.com/foo\\bar baz:qux")
+                .build());
+        f.startElement(NULL_NS_URI, TOPIC_XREF.localName, TOPIC_XREF.localName, new AttributesBuilder()
+                .add(ATTRIBUTE_NAME_HREF, "http://example.com/valid/bar+baz:qux")
+                .build());
+
+        assertEquals(1, l.getMessages().size());
+        assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
+        assertEquals("http://example.com/foo/bar%20baz:qux", res.get(0));
+        assertEquals("http://example.com/valid/bar+baz:qux", res.get(1));
+    }
+
+    @Test
     public void testId() throws SAXException, URISyntaxException {
         final ValidationFilter f = new ValidationFilter();
         f.setValidateMap(Collections.EMPTY_MAP);
@@ -120,8 +120,8 @@ public class ValidationFilterTest {
         assertEquals(1, l.getMessages().size());
         assertEquals(TestUtils.CachingLogger.Message.Level.WARN, l.getMessages().get(0).level);
     }
-	
-	@Test
+
+    @Test
     public void testKeys() throws SAXException, URISyntaxException {
         final ValidationFilter f = new ValidationFilter();
         f.setValidateMap(Collections.EMPTY_MAP);
@@ -152,38 +152,38 @@ public class ValidationFilterTest {
             assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level);            
         }
     }
-	
-	   @Test
-	    public void testKeyscope() throws SAXException, URISyntaxException {
-	        final ValidationFilter f = new ValidationFilter();
+
+       @Test
+        public void testKeyscope() throws SAXException, URISyntaxException {
+            final ValidationFilter f = new ValidationFilter();
             f.setValidateMap(Collections.EMPTY_MAP);
-	        f.setContentHandler(new DefaultHandler());
-	        final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-	        f.setLogger(l);
-	        
-	        f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
-	                .add(ATTRIBUTE_NAME_KEYSCOPE, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;=")
-	                .build());
-	        f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
-	                .add(ATTRIBUTE_NAME_KEYSCOPE, "foo bar baz")
-	                .build());
-	        f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
-	                .add(ATTRIBUTE_NAME_KEYSCOPE, " foo ")
-	                .build());
-	        assertEquals(0, l.getMessages().size());
-	        
-	        f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
-	                .add(ATTRIBUTE_NAME_KEYSCOPE, "foo/bar")
-	                .build());
-	        f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
-	                .add(ATTRIBUTE_NAME_KEYSCOPE, "foo\u00E4bar")
-	                .build());
-	        
-	        assertEquals(2, l.getMessages().size());
-	        for (final Message m: l.getMessages()) {
-	            assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level);            
-	        }
-	    }
+            f.setContentHandler(new DefaultHandler());
+            final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
+            f.setLogger(l);
+
+            f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+                    .add(ATTRIBUTE_NAME_KEYSCOPE, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;=")
+                    .build());
+            f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+                    .add(ATTRIBUTE_NAME_KEYSCOPE, "foo bar baz")
+                    .build());
+            f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+                    .add(ATTRIBUTE_NAME_KEYSCOPE, " foo ")
+                    .build());
+            assertEquals(0, l.getMessages().size());
+
+            f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+                    .add(ATTRIBUTE_NAME_KEYSCOPE, "foo/bar")
+                    .build());
+            f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+                    .add(ATTRIBUTE_NAME_KEYSCOPE, "foo\u00E4bar")
+                    .build());
+
+            assertEquals(2, l.getMessages().size());
+            for (final Message m: l.getMessages()) {
+                assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level);
+            }
+        }
 
     @Test
     public void testAttributeGeneralization() throws SAXException {
@@ -194,17 +194,19 @@ public class ValidationFilterTest {
         f.setLogger(l);
         
         f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
-            .add(XML_NS_URI, ATTRIBUTE_NAME_DOMAINS, "a(props person jobrole)")
+            .add(ATTRIBUTE_NAME_DOMAINS, "a(props person jobrole)")
+            .build());
+        assertEquals(0, l.getMessages().size());
+        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
+            .add("person", "jobrole(programmer)")
+            .add("jobrole", "admin")
+            .build());
+        assertEquals(1, l.getMessages().size());
+        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
+            .add("jobrole", "admin")
             .build());
         f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
-            .add(XML_NS_URI, "person", "jobrole(programmer)")
-            .add(XML_NS_URI, "jobrole", "admin")
-            .build());
-        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
-            .add(XML_NS_URI, "jobrole", "admin")
-            .build());
-        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
-            .add(XML_NS_URI, "person", "jobrole(programmer)")
+            .add("person", "jobrole(programmer)")
             .build());
         
         assertEquals(1, l.getMessages().size());

@@ -4,14 +4,15 @@ jdk:
 - oraclejdk8
 env:
   global:
-  - JAVA_OPTS="-Xmx2024M"
+  - JAVA_OPTS="-Xmx2048M"
   - GRADLE_OPTS="-Xmx2048M"
 before_script:
 - git submodule update --init --recursive
 - "./gradlew"
 script:
 - "./gradlew check integrationTest --info --stacktrace --no-daemon"
-- "./gradlew dist --info --stacktrace --no-daemon -Pcommit=${TRAVIS_COMMIT} -Ptag=${TRAVIS_TAG}"
+after_success:
+- "./gradlew dist --stacktrace --no-daemon -Pcommit=${TRAVIS_COMMIT} -Ptag=${TRAVIS_TAG} -PskipGenerateDocs=${SKIP_GENERATE_DOCS}"
 notifications:
   slack:
     secure: IAA4d9O2Dw1hkpY9cwxJz++VMjkgbV3EuaS09DGFujvHl2eQtpKTloE0/CDF+NZA4tcbH1dNqsGw3ETLmrqA581CLpmiiq3LG02cDMoSXZeOKB/9vo6tvLFg0UMawzo+FomJS/hvCmS5KirrFqZQKE5g6SCC05UBM5nwI5d0vOw=

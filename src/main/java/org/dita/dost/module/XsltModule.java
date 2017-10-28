@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**
@@ -59,7 +60,8 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     private boolean reloadstylesheet;
     private XMLCatalog xmlcatalog;
     private FileNameMapper mapper;
-    
+    private String extension;
+
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
         if (fileInfoFilter != null) {
             final Collection<Job.FileInfo> res = job.getFileInfo(fileInfoFilter);
@@ -113,6 +115,8 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                     throw new RuntimeException("XSLT module only support one to one output mapping");
                 }
                 out = new File(destDir, outs[0]);
+            } else if (extension != null) {
+                out = new File(replaceExtension(out.getAbsolutePath(), extension));
             }
             final boolean same = in.getAbsolutePath().equals(out.getAbsolutePath());
             final File tmp = same ? new File(out.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis())) : out; 
@@ -205,6 +209,10 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
     public void setMapper(final FileNameMapper mapper) {
         this.mapper = mapper;
+    }
+
+    public void setExtension(final String extension) {
+        this.extension = extension.startsWith(".") ? extension : ("." + extension);
     }
 
 }

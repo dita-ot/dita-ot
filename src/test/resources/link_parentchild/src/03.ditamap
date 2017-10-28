@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+
+<map id="UC03TC" title="Test generated parent/child link">
+<topicref href="t1.dita">
+<topicref href="t2.dita"/>
+</topicref>
+</map>

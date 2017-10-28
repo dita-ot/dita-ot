@@ -7,15 +7,15 @@
  */
 package org.dita.dost.module;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URI;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.TopicMergeModule;
@@ -35,7 +35,7 @@ public class TestTopicMergeModule {
 
     public TopicMergeModule module;
 
-    //	private AbstractFacade facade;
+    //    private AbstractFacade facade;
 
     private PipelineHashIO pipelineInput;
     final File ditalistfile = new File (resourceDir, "compare.xml");
@@ -44,12 +44,9 @@ public class TestTopicMergeModule {
 
     @Before
     public void setUp() throws IOException {
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
-        
         tempDir = TestUtils.createTempDir(getClass());
 
-        //		facade = new PipelineFacade();
+        //        facade = new PipelineFacade();
         pipelineInput = new PipelineHashIO();
         
         temporaryDir = new File(tempDir, "temp");
@@ -85,7 +82,7 @@ public class TestTopicMergeModule {
         final TopicMergeModule topicmergemodule = new TopicMergeModule();
         topicmergemodule.setLogger(new TestUtils.TestLogger());
         final Job job = new Job(temporaryDir);
-        job.setProperty(INPUT_DITAMAP_URI, "test.ditamap");
+        job.setInputMap(URI.create("test.ditamap"));
         topicmergemodule.setJob(job);
         topicmergemodule.execute(pipelineInput);
         

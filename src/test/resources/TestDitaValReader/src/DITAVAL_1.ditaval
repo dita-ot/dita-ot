@@ -25,4 +25,5 @@
     <startflag><alt-text>This is keyword2:</alt-text></startflag>
 </prop>
 <prop att="product" val="key3" action="include"/>
+<prop att="props" action="include"/>
 </val>

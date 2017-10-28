@@ -7,7 +7,6 @@
  */
 package org.dita.dost.util;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,17 +14,20 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.custommonkey.xmlunit.XMLUnit;
 
 import org.dita.dost.TestUtils;
-import org.dita.dost.util.XMLSerializer;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.SAXException;
 import org.junit.Test;
+
+import static org.dita.dost.TestUtils.assertXMLEqual;
 
 public class XMLSerializerTest {
 
@@ -75,9 +77,6 @@ public class XMLSerializerTest {
         serializer.writeEndDocument();
         serializer.close();
 
-        XMLUnit.setNormalizeWhitespace(false);
-        XMLUnit.setIgnoreWhitespace(false);
-        XMLUnit.setIgnoreDiffBetweenTextAndCDATA(false);
         assertXMLEqual(new InputSource(new File(expDir, "test.xml").toURI().toString()),
                 new InputSource(new StringReader(buf.toString())));
     }
@@ -145,19 +144,26 @@ public class XMLSerializerTest {
         serializer.writeStartElement("att");
         serializer.writeAttribute("uri1", "ns1:att", "value");
         serializer.writeAttribute("uri2", "ns2:att", "value");
-        serializer.writeAttribute("uri1", "ns3:att", "value");
+        serializer.writeAttribute("uri3", "ns3:att", "value");
         serializer.writeEndElement();
 
         serializer.writeEndDocument();
         serializer.close();
 
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
-        assertXMLEqual(new InputSource(new StringReader("<root>" +
+        final DocumentBuilder builder;
+        try {
+            final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            builderFactory.setNamespaceAware(true);
+            builderFactory.setIgnoringComments(true);
+            builder = builderFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        assertXMLEqual(builder.parse(new InputSource(new StringReader("<root>" +
                 "<att att='value'/>" +
-                "<att xmlns:ns1='uri1' xmlns:ns2='uri2' xmlns:ns3='uri1' ns1:att='value' ns2:att='value' ns3:att='value'/>" +
-                "</root>")),
-                new InputSource(new StringReader(buf.toString())));
+                "<att xmlns:ns1='uri1' xmlns:ns2='uri2' xmlns:ns3='uri3' ns1:att='value' ns2:att='value' ns3:att='value'/>" +
+                "</root>"))),
+                builder.parse(new InputSource(new StringReader(buf.toString()))));
     }
 
     @Test
@@ -200,8 +206,6 @@ public class XMLSerializerTest {
         serializer.writeEndDocument();
         serializer.close();
 
-        TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
         assertXMLEqual(new InputSource(new StringReader("<root>" +
                 "<ns1:same-uri xmlns:ns1='uri1'>" +
                 "<ns1:same-uri xmlns:ns1='uri1'>" +
@@ -244,9 +248,6 @@ public class XMLSerializerTest {
             in.close();
         }
 
-        XMLUnit.setNormalizeWhitespace(true);
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
         assertXMLEqual(new InputSource(new File(expDir, "test.xml").toURI().toString()),
                 new InputSource(new StringReader(buf.toString())));
     }

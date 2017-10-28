@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map32_filter_multi/temp/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map32_filter_multi/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA 1.2 Map//EN?><?doctype-system file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         " class="- map/map " cascade="nomerge">
+    <title class="- topic/title ">map13: A hierarchy of CVF(correct value of platform attribute)</title>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " toc="no" processing-role="resource-only" keys="os" navtitle="Operating system">
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="linux" navtitle="Linux">
+      <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="redhat" navtitle="RedHat Linux"/>
+      <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="suse" navtitle="SuSE Linux"/>
+    </subjectdef>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="mswin" navtitle="Windows"/>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="zos" navtitle="z/OS"/>
+    </subjectdef><enumerationdef class="- map/topicref subjectScheme/enumerationdef " toc="no" processing-role="resource-only">
+        <attributedef name="platform" translate="no" class="- topic/data subjectScheme/attributedef "/>
+        <subjectdef class="- map/topicref subjectScheme/subjectdef " keyref="os"/>
+        
+    </enumerationdef>
+    <topicref href="topic4.dita" class="- map/topicref "/>
+</map>

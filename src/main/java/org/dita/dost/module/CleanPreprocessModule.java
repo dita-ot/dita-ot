@@ -8,29 +8,27 @@
 
 package org.dita.dost.module;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.io.FileUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
-import org.dita.dost.writer.AbstractXMLFilter;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+import org.dita.dost.writer.LinkFilter;
+import org.dita.dost.writer.MapCleanFilter;
 import org.xml.sax.XMLFilter;
-import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
+
 import org.dita.dost.util.XMLUtils;
 
 /**
@@ -39,6 +37,8 @@ import org.dita.dost.util.XMLUtils;
  * @since 2.5
  */
 public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
+
+    private static final String PARAM_USE_RESULT_FILENAME = "use-result-filename";
 
     private final LinkFilter filter = new LinkFilter();
     private final MapCleanFilter mapFilter = new MapCleanFilter();
@@ -52,52 +52,59 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        init();
+        final boolean useResultFilename = Optional.ofNullable(input.getAttribute(PARAM_USE_RESULT_FILENAME))
+                .map(Boolean::parseBoolean)
+                .orElse(true);
 
         final URI base = getBaseDir();
-        job.setProperty(INPUT_DIR_URI, base.toString());
-        final Collection<FileInfo> fis = job.getFileInfo().stream()
-                .collect(Collectors.toList());
-        final Collection<FileInfo> res = new ArrayList<>(fis.size());
-        for (final FileInfo fi : fis) {
-            try {
-                final FileInfo.Builder builder = new FileInfo.Builder(fi);
-                final URI rel = base.relativize(fi.result);
-                builder.uri(rel);
-                if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
-                    logger.debug("Skip format " + fi.format);
-                } else {
-                    final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
-                    if (srcFile.exists()) {
-                        final File destFile = new File(job.tempDirURI.resolve(rel));
-                        final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
-                        if (!processingPipe.isEmpty()) {
-                            logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
-                            xmlUtils.transform(srcFile.toURI(), destFile.toURI(), processingPipe);
-                            if (!srcFile.equals(destFile)) {
-                                logger.debug("Deleting " + srcFile.toURI());
-                                FileUtils.deleteQuietly(srcFile);
-                            }
-                        } else if (!srcFile.equals(destFile)) {
-                            logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
-                            FileUtils.moveFile(srcFile, destFile);
-                        }
+        final String uplevels = getUplevels(base);
+        job.setProperty("uplevels", uplevels);
+        job.setInputDir(base);
 
-                        // start map
-                        if (fi.src.equals(job.getInputFile())) {
-                            job.setProperty(INPUT_DITAMAP_URI, rel.toString());
-                            job.setProperty(INPUT_DITAMAP, toFile(rel).getPath());
+        if (useResultFilename) {
+            init();
+            final Collection<FileInfo> fis = new ArrayList<>(job.getFileInfo());
+            final Collection<FileInfo> res = new ArrayList<>(fis.size());
+            for (final FileInfo fi : fis) {
+                try {
+                    final FileInfo.Builder builder = new FileInfo.Builder(fi);
+                    final URI rel = base.relativize(fi.result);
+                    builder.uri(rel);
+                    if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
+                        logger.debug("Skip format " + fi.format);
+                    } else {
+                        final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
+                        if (srcFile.exists()) {
+                            final File destFile = new File(job.tempDirURI.resolve(rel));
+                            final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
+                            if (!processingPipe.isEmpty()) {
+                                logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
+                                xmlUtils.transform(srcFile.toURI(), destFile.toURI(), processingPipe);
+                                if (!srcFile.equals(destFile)) {
+                                    logger.debug("Deleting " + srcFile.toURI());
+                                    FileUtils.deleteQuietly(srcFile);
+                                }
+                            } else if (!srcFile.equals(destFile)) {
+                                logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
+                                FileUtils.moveFile(srcFile, destFile);
+                            }
                         }
                     }
+                    res.add(builder.build());
+                } catch (final IOException e) {
+                    logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
                 }
-                res.add(builder.build());
-            } catch (final IOException e) {
-                logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
             }
+
+            fis.forEach(fi -> job.remove(fi));
+            res.forEach(fi -> job.add(fi));
         }
 
-        fis.stream().forEach(fi -> job.remove(fi));
-        res.stream().forEach(fi -> job.add(fi));
+        // start map
+        final FileInfo start = job.getFileInfo(job.getInputFile());
+        if (start != null) {
+            job.setInputMap(start.uri);
+        }
 
         try {
             job.write();
@@ -108,7 +115,17 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
+    String getUplevels(final URI base) {
+        final URI rel = base.relativize(job.getInputFile());
+        final int count = rel.toString().split("/").length - 1;
+        return IntStream.range(0, count).boxed()
+                .map(i -> "../")
+                .collect(Collectors.joining(""));
+
+    }
+
     /** Get common base directory for all files */
+    @VisibleForTesting
     URI getBaseDir() {
         URI baseDir = job.getInputDir();
 
@@ -121,6 +138,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         return baseDir;
     }
 
+    @VisibleForTesting
     URI getCommonBase(final URI left, final URI right) {
         assert left.isAbsolute();
         assert right.isAbsolute();
@@ -181,154 +199,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         }
 
         return res;
-    }
-
-    private class LinkFilter extends AbstractXMLFilter {
-
-        private URI destFile;
-        private URI base;
-
-        @Override
-        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
-                throws SAXException {
-            Attributes res = atts;
-
-            if (hasLocalDitaLink(atts)) {
-                final AttributesImpl resAtts = new AttributesImpl(atts);
-                final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-                final URI resHref = getHref(href);
-                addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, resHref.toString());
-                res = resAtts;
-            }
-
-            getContentHandler().startElement(uri, localName, qName, res);
-        }
-
-        private boolean hasLocalDitaLink(final Attributes atts) {
-            final boolean hasHref = atts.getIndex(ATTRIBUTE_NAME_HREF) != -1;
-            final boolean notExternal = !ATTR_SCOPE_VALUE_EXTERNAL.equals(atts.getValue(ATTRIBUTE_NAME_SCOPE));
-            if (hasHref && notExternal) {
-                return true;
-            }
-            final URI data = toURI(atts.getValue(ATTRIBUTE_NAME_DATA));
-            if (data != null && !data.isAbsolute()) {
-                return true;
-            }
-            return false;
-        }
-
-        private URI getHref(final URI href) {
-            if (href.getFragment() != null && (href.getPath() == null || href.getPath().equals(""))) {
-                return href;
-            }
-            final URI targetAbs = stripFragment(currentFile.resolve(href));
-            final FileInfo targetFileInfo = job.getFileInfo(targetAbs);
-            if (targetFileInfo != null) {
-                final URI rel = base.relativize(targetFileInfo.result);
-                final URI targetDestFile = job.tempDirURI.resolve(rel);
-                final URI relTarget = URLUtils.getRelativePath(destFile, targetDestFile);
-                return setFragment(relTarget, href.getFragment());
-            } else {
-                return href;
-            }
-        }
-
-        public void setDestFile(final URI destFile) {
-            this.destFile = destFile;
-        }
-
-        @Override
-        public void setJob(final Job job) {
-            super.setJob(job);
-            base = job.getInputDir();
-        }
-    }
-
-    private enum Keep {
-        RETAIN, DISCARD, DISCARD_BRANCH
-    }
-
-    private class MapCleanFilter extends AbstractXMLFilter {
-
-        private final Deque<Keep> stack = new ArrayDeque<>();
-
-        @Override
-        public void startDocument() throws SAXException {
-            stack.clear();
-            getContentHandler().startDocument();
-        }
-
-        @Override
-        public void endDocument() throws SAXException {
-            assert stack.isEmpty();
-            getContentHandler().endDocument();
-        }
-
-        @Override
-        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
-                throws SAXException {
-            final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
-            if (!stack.isEmpty() && stack.element() == Keep.DISCARD_BRANCH) {
-                stack.addFirst(Keep.DISCARD_BRANCH);
-            } else if (SUBMAP.matches(cls)) {
-                stack.addFirst(Keep.DISCARD);
-            } else if (MAPGROUP_D_KEYDEF.matches(cls)) {
-                stack.addFirst(Keep.DISCARD_BRANCH);
-            } else {
-                stack.addFirst(Keep.RETAIN);
-            }
-
-            if (stack.isEmpty() || stack.peekFirst() == Keep.RETAIN) {
-                getContentHandler().startElement(uri, localName, qName, atts);
-            }
-        }
-
-        @Override
-        public void endElement(final String uri, final String localName, final String qName)
-                throws SAXException {
-            if (stack.removeFirst() == Keep.RETAIN) {
-                getContentHandler().endElement(uri, localName, qName);
-            }
-        }
-
-        @Override
-        public void characters(char ch[], int start, int length)
-                throws SAXException {
-            if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
-                getContentHandler().characters(ch, start, length);
-            }
-        }
-
-        @Override
-        public void ignorableWhitespace(char ch[], int start, int length)
-                throws SAXException {
-            if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
-                getContentHandler().ignorableWhitespace(ch, start, length);
-            }
-        }
-
-        @Override
-        public void processingInstruction(String target, String data)
-                throws SAXException {
-            if (stack.isEmpty() || stack.peekFirst() != Keep.DISCARD_BRANCH) {
-                getContentHandler().processingInstruction(target, data);
-            }
-        }
-
-        @Override
-        public void skippedEntity(String name)
-                throws SAXException {
-            if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
-                getContentHandler().skippedEntity(name);
-            }
-        }
-
-//    <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle ')]">
-//      <xsl:call-template name="output-message">
-//        <xsl:with-param name="id" select="'DOTX072I'"/>
-//      </xsl:call-template>
-//    </xsl:template>
-
     }
 
 }

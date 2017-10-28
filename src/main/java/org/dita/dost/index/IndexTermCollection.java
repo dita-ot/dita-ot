@@ -17,15 +17,11 @@ import java.util.List;
 import java.util.Locale;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.writer.AbstractExtendDitaWriter;
 import org.dita.dost.writer.AbstractWriter;
-import org.dita.dost.writer.CHMIndexWriter;
-import org.dita.dost.writer.EclipseIndexWriter;
 import org.dita.dost.writer.IDitaTranstypeIndexWriter;
-import org.dita.dost.writer.JavaHelpIndexWriter;
 
 /**
  * This class is a collection of index term.
@@ -49,36 +45,17 @@ public final class IndexTermCollection {
     /** The output file name of index term without extension. */
     private String outputFileRoot = null;
     /** The logger. */
-    private final DITAOTLogger javaLogger;
+    private DITAOTLogger javaLogger;
 
     //RFE 2987769 Eclipse index-see
     /* Parameters passed in from ANT module */
     private PipelineHashIO pipelineHashIO = null;
 
     public IndexTermCollection() {
-        javaLogger = new DITAOTJavaLogger();
     }
 
-    /**
-     * The only interface to access IndexTermCollection instance.
-     * @return Singleton IndexTermCollection instance
-     * @deprecated create new instance instead. Since 2.3
-     */
-    @Deprecated
-    public static synchronized IndexTermCollection getInstantce(){
-        if(collection == null){
-            collection = new IndexTermCollection();
-        }
-        return collection;
-    }
-
-    /**
-     * The interface to clear the result in IndexTermCollection instance.
-     * @deprecated create new instance instead. Since 2.3
-     */
-    @Deprecated
-    public void clear(){
-        termList.clear();
+    public void setLogger(final DITAOTLogger logger) {
+        this.javaLogger = logger;
     }
 
     /**
@@ -183,7 +160,7 @@ public final class IndexTermCollection {
 
         if (indexClass != null && indexClass.length() > 0) {
             //Instantiate the class value
-            Class<?> anIndexClass = null;
+            Class<?> anIndexClass;
             try {
                 anIndexClass = Class.forName( indexClass );
                 abstractWriter = (AbstractWriter) anIndexClass.newInstance();
@@ -210,28 +187,8 @@ public final class IndexTermCollection {
             }
 
 
-        }
-        //Fallback to the old way of doing things.
-        else {
-
-            if (INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
-                abstractWriter = new CHMIndexWriter();
-                buff.append(".hhk");
-            } else if (INDEX_TYPE_JAVAHELP
-                    .equalsIgnoreCase(indexType)) {
-                abstractWriter = new JavaHelpIndexWriter();
-                buff.append("_index.xml");
-            } else if (INDEX_TYPE_ECLIPSEHELP
-                    .equalsIgnoreCase(indexType)) {
-                abstractWriter = new EclipseIndexWriter();
-                // We need to get rid of the ditamap or topic name in the URL
-                // so we can create index.xml file for Eclipse plug-ins.
-                final File indexDir = new File(buff.toString()).getParentFile();
-                ((EclipseIndexWriter) abstractWriter).setFilePath(indexDir
-                        .getAbsolutePath());
-                buff = new StringBuilder(new File(indexDir, "index.xml")
-                .getAbsolutePath());
-            }
+        } else {
+            throw new IllegalArgumentException("Index writer class not defined");
         }
 
         //Even if there is no term in the list create an empty index file

@@ -11,10 +11,6 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg" version="2.0"
                 exclude-result-prefixes="dita-ot ditamsg">
 
-  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
-  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
-  <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-
   <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 

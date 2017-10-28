@@ -21,6 +21,7 @@ See the accompanying LICENSE file for applicable license.
   <extension-point id="dita.transtype.print" name="Print transtype"/>
   <extension-point id="dita.conductor.target" name="Ant conductor"/>
   <extension-point id="dita.conductor.target.relative" name="Ant conductor"/>
+  <extension-point id="ant.import" name="Ant import"/>
   <extension-point id="dita.specialization.catalog" name="XML catalog"/>
   <extension-point id="dita.specialization.catalog.relative" name="XML catalog"/>
   <extension-point id="dita.xsl.strings" name="Generated text"/>
@@ -43,7 +44,6 @@ See the accompanying LICENSE file for applicable license.
   <extension-point id="depend.preprocess.chunk.pre" name="Chunking pre-target"/>
   <extension-point id="depend.preprocess.maplink.pre" name="Map link pre-target"/>
   <extension-point id="depend.preprocess.topicpull.pre" name="Topic pull pre-target"/>
-  <extension-point id="depend.preprocess.flag-module.pre" name="Flag module pre-target"/>
   <extension-point id="depend.preprocess.copy-files.pre" name="Copy files pre-target"/>
   <extension-point id="depend.preprocess.copy-image.pre" name="Copy images pre-target"/>
   <extension-point id="depend.preprocess.copy-html.pre" name="Copy HTML pre-target"/>
@@ -56,10 +56,8 @@ See the accompanying LICENSE file for applicable license.
   <extension-point id="dita.preprocess.mappull.param" name="Map pull  XSLT parameters"/>
   <!--extension-point id="dita.preprocess.maplink.param" name="Map link XSLT parameters"/-->
   <extension-point id="dita.preprocess.topicpull.param" name="Topic pull XSLT parameters"/>
-  <extension-point id="dita.preprocess.flag-module.param" name="Flag module XSLT parameters"/>
   <extension-point id="dita.xsl.conref" name="Content reference XSLT import"/>
   <extension-point id="dita.xsl.topicpull" name="Topic pull XSLT import"/>
-  <extension-point id="dita.xsl.flag-module" name="Flag module XSLT import"/>
   <extension-point id="dita.xsl.mapref" name="Map reference XSLT import"/>
   <extension-point id="dita.xsl.mappull" name="Map pull XSLT import"/>
   <extension-point id="dita.xsl.maplink" name="Map link XSLT import"/>
@@ -99,6 +97,7 @@ See the accompanying LICENSE file for applicable license.
     <param name="args.input.dir" desc="Specifies the base directory for your documentation project." type="dir"/>
     <!-- Deprecated since 2.5 -->
     <param name="args.logdir" desc="Specifies the location where the DITA-OT places log files for your project." type="dir" deprecated="true"/>
+    <param name="args.output.base" desc="Specifies the name of the output file without file extension." type="string"/>
     <param name="args.tablelink.style" desc="Specifies how cross references to tables are styled." type="enum">
       <val>NUMBER</val>
       <val>TITLE</val>
@@ -172,19 +171,21 @@ See the accompanying LICENSE file for applicable license.
   <feature extension="dita.resource.extensions" value=".pdf"/>
   <feature extension="dita.resource.extensions" value=".swf"/>
   <feature extension="dita.basedir-resource-directory" value="true"/>
-  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <feature extension="ant.import" file="build_init.xml"/>
+  <feature extension="ant.import" file="build_preprocess.xml"/>
+  <feature extension="ant.import" file="build_preprocess2.xml"/>
   <feature extension="dita.xsl.strings" file="../../xsl/common/common-strings.xml"/>
   <template file="../../catalog-dita_template.xml"/>
   <template file="../../build_template.xml"/>
   <template file="build_preprocess_template.xml"/>
   <template file="build_preprocess2_template.xml"/>
-  <template file="../../resources/messages_template.xml"/>
+  <template file="../../config/messages_template.xml"/>
   <template file="../../xsl/common/allstrings_template.xml"/>
   <template file="../../xsl/common/strings_template.xml"/>
   <template file="../../xsl/preprocess/maplink_template.xsl"/>
   <template file="../../xsl/preprocess/mapref_template.xsl"/>
   <template file="../../xsl/preprocess/mappull_template.xsl"/>
   <template file="../../xsl/preprocess/conref_template.xsl"/>
+  <template file="../../xsl/preprocess/map-conref_template.xsl"/>
   <template file="../../xsl/preprocess/topicpull_template.xsl"/>
-  <template file="../../xsl/preprocess/flag_template.xsl"/>
 </plugin>

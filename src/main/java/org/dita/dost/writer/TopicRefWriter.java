@@ -224,9 +224,6 @@ public final class TopicRefWriter extends AbstractXMLFilter {
 
     /**
      * Retrieve the element ID from the path. If there is no element ID, return topic ID.
-     *
-     * @param relativePath
-     * @return String
      */
     private String getElementID(final String relativePath) {
         final String fragment = getFragment(relativePath);

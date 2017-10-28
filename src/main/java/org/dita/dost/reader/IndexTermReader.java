@@ -188,7 +188,7 @@ public final class IndexTermReader extends AbstractXMLReader {
                     return;
                 } else{
                     term.setTermName("***");
-                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ014W").toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ014W").toString());
                 }
             }
 
@@ -261,7 +261,7 @@ public final class IndexTermReader extends AbstractXMLReader {
      */
     private IndexTermTarget genTarget() {
         final IndexTermTarget target = new IndexTermTarget();
-        String fragment = null;
+        String fragment;
 
         if(topicIdStack.peek() == null){
             fragment = null;
@@ -348,7 +348,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         // is in the list.
         if (indexSeeAlsoSpecList.contains(localName)) {
             final IndexTerm indexTerm = new IndexTerm();
-            IndexTerm parentTerm = null;
+            IndexTerm parentTerm;
             if(!termStack.isEmpty()){
                 parentTerm = termStack.peek();
                 if(parentTerm.hasSubTerms()){
@@ -365,7 +365,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         // in the list.
         if (indexSeeSpecList.contains(localName)) {
             final IndexTerm indexTerm = new IndexTerm();
-            IndexTerm parentTerm = null;
+            IndexTerm parentTerm;
 
             indexTerm.setTermPrefix(IndexTerm_Prefix_See);
 
@@ -388,7 +388,7 @@ public final class IndexTermReader extends AbstractXMLReader {
             indexTerm.setStartAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
             indexTerm.setEndAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
 
-            IndexTerm parentTerm = null;
+            IndexTerm parentTerm;
             if(!termStack.isEmpty()){
                 parentTerm = termStack.peek();
                 if(parentTerm.hasSubTerms()){
@@ -402,9 +402,6 @@ public final class IndexTermReader extends AbstractXMLReader {
 
     /**
      * Note: <index-see-also> should be handled before <index-see>.
-     * 
-     * @param localName
-     * @param classAttr
      */
     private void handleSpecialization(final String localName, final String classAttr) {
         if (classAttr == null) {
@@ -470,7 +467,6 @@ public final class IndexTermReader extends AbstractXMLReader {
 
     /**
      * Update the target name of each IndexTerm, recursively.
-     * @param indexterm
      */
     private void updateIndexTermTargetName(final IndexTerm indexterm){
         final int targetSize = indexterm.getTargetList().size();
@@ -500,8 +496,6 @@ public final class IndexTermReader extends AbstractXMLReader {
      * Trim whitespace from start of the string. If last character of termName and
      * first character of temp is a space character, remove leading string from temp 
      * 
-     * @param temp
-     * @param termName
      * @return trimmed temp value
      */
     private static String trimSpaceAtStart(final String temp, final String termName) {

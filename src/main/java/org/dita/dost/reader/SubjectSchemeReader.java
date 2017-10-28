@@ -15,9 +15,11 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
@@ -35,9 +37,9 @@ public class SubjectSchemeReader {
     
     private DITAOTLogger logger;
     private Job job;
-    private final Map<String, Map<String, Set<Element>>> bindingMap;
-    private final Map<String, Map<String, Set<String>>> validValuesMap;
-    private final Map<String, Map<String, String>> defaultValueMap;
+    private final Map<QName, Map<String, Set<Element>>> bindingMap;
+    private final Map<QName, Map<String, Set<String>>> validValuesMap;
+    private final Map<QName, Map<String, String>> defaultValueMap;
 
     public SubjectSchemeReader() {
         validValuesMap = new HashMap<>();
@@ -62,7 +64,7 @@ public class SubjectSchemeReader {
      * 
      * @return valid attribute values or empty map
      */
-    public Map<String, Map<String, Set<String>>> getValidValuesMap() {
+    public Map<QName, Map<String, Set<String>>> getValidValuesMap() {
         return validValuesMap;
     }
 
@@ -74,7 +76,7 @@ public class SubjectSchemeReader {
      * 
      * @return default values or empty map
      */
-    public Map<String, Map<String, String>> getDefaultValueMap() {
+    public Map<QName, Map<String, String>> getDefaultValueMap() {
         return defaultValueMap;
     }
     
@@ -86,8 +88,8 @@ public class SubjectSchemeReader {
      * 
      * @return subject scheme definitions
      */
-    public Map<String, Map<String, Set<Element>>> getSubjectSchemeMap() {
-        return bindingMap;
+    public SubjectScheme getSubjectSchemeMap() {
+        return new SubjectScheme(bindingMap);
     }
     
     public void setLogger(final DITAOTLogger logger) {
@@ -106,7 +108,7 @@ public class SubjectSchemeReader {
     public static Map<URI, Set<URI>> readMapFromXML(final File inputFile) throws IOException {
         final Map<URI, Set<URI>> graph = new HashMap<>();
         if (!inputFile.exists()) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         final Properties prop = new Properties();
         FileInputStream in = null;
@@ -195,76 +197,75 @@ public class SubjectSchemeReader {
             if (schemeRoot == null) {
                 return;
             }
-            final NodeList rootChildren = schemeRoot.getChildNodes();
-            for (int i = 0; i < rootChildren.getLength(); i++) {
-                if (rootChildren.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    Element node = (Element)rootChildren.item(i);
-                    String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-                    if (SUBJECTSCHEME_ENUMERATIONDEF.matches(attrValue)) {
-                        final NodeList enumChildren = node.getChildNodes();
-                        String elementName = "*";
-                        String attributeName = null;
-                        for (int j = 0; j < enumChildren.getLength(); j++) {
-                            if (enumChildren.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                                node = (Element)enumChildren.item(j);
-                                attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-                                if (SUBJECTSCHEME_ELEMENTDEF.matches(attrValue)) {
-                                    elementName = node.getAttribute(ATTRIBUTE_NAME_NAME);
-                                } else if (SUBJECTSCHEME_ATTRIBUTEDEF.matches(attrValue)) {
-                                    attributeName = node.getAttribute(ATTRIBUTE_NAME_NAME);
-                                    Map<String, Set<Element>> S = bindingMap.get(attributeName);
-                                    if (S == null) {
-                                        S = new HashMap<>();
-                                        bindingMap.put(attributeName, S);
-                                    }
-                                } else if (SUBJECTSCHEME_DEFAULTSUBJECT.matches(attrValue)) {
-                                    // Put default values.
-                                    final String keyValue = node.getAttribute(ATTRIBUTE_NAME_KEYREF);
-                                    if (keyValue != null) {
-                                        Map<String, String> S = defaultValueMap.get(attributeName);
-                                        if (S == null) {
-                                            S = new HashMap<>();
-                                        }
-                                        S.put(elementName, keyValue);
-                                        defaultValueMap.put(attributeName, S);
-                                    }
-                                } else if (SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
-                                    // Search for attributeName in schemeRoot
-                                    String keyValue = node.getAttribute(ATTRIBUTE_NAME_KEYREF);
-                                    if (StringUtils.isEmptyString(keyValue)) {
-                                        keyValue = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-                                    }
-                                    final Element subTree = searchForKey(schemeRoot, keyValue);
-                                    if (subTree != null) {
-                                        Map<String, Set<Element>> S = bindingMap.get(attributeName);
-                                        if (S == null) {
-                                            S = new HashMap<>();
-                                        }
-                                        Set<Element> A = S.get(elementName);
-                                        if (A == null) {
-                                            A = new HashSet<>();
-                                        }
-                                        if (!A.contains(subTree)) {
-                                            // Add sub-tree to valid values map
-                                            putValuePairsIntoMap(subTree, elementName, attributeName, keyValue);
-                                        }
-                                        A.add(subTree);
-                                        S.put(elementName, A);
-                                        bindingMap.put(attributeName, S);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            loadSubjectScheme(schemeRoot);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
     }
-    
+
+    public void loadSubjectScheme(final Element schemeRoot) {
+        final List<Element> rootChildren = XMLUtils.getChildElements(schemeRoot);
+        for (Element child : rootChildren) {
+            final String attrValue = child.getAttribute(ATTRIBUTE_NAME_CLASS);
+            if (SUBJECTSCHEME_ENUMERATIONDEF.matches(attrValue)) {
+                processEnumerationDef(schemeRoot, child);
+            }
+        }
+    }
+
+    public void processEnumerationDef(final Element schemeRoot, final Element enumerationDef) {
+        final List<Element> enumChildren = XMLUtils.getChildElements(enumerationDef);
+        String elementName = "*";
+        QName attributeName = null;
+        for (Element child : enumChildren) {
+            final String attrValue = child.getAttribute(ATTRIBUTE_NAME_CLASS);
+            if (SUBJECTSCHEME_ELEMENTDEF.matches(attrValue)) {
+                elementName = child.getAttribute(ATTRIBUTE_NAME_NAME);
+            } else if (SUBJECTSCHEME_ATTRIBUTEDEF.matches(attrValue)) {
+                final String name = child.getAttribute(ATTRIBUTE_NAME_NAME);
+                attributeName = name != null ? QName.valueOf(name) : null;
+                Map<String, Set<Element>> S = bindingMap.computeIfAbsent(attributeName, k -> new HashMap<>());
+            } else if (SUBJECTSCHEME_DEFAULTSUBJECT.matches(attrValue)) {
+                // Put default values.
+                final String keyValue = child.getAttribute(ATTRIBUTE_NAME_KEYREF);
+                if (keyValue != null) {
+                    Map<String, String> S = defaultValueMap.get(attributeName);
+                    if (S == null) {
+                        S = new HashMap<>();
+                    }
+                    S.put(elementName, keyValue);
+                    defaultValueMap.put(attributeName, S);
+                }
+            } else if (SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
+                // Search for attributeName in schemeRoot
+                String keyValue = child.getAttribute(ATTRIBUTE_NAME_KEYREF);
+                if (StringUtils.isEmptyString(keyValue)) {
+                    keyValue = child.getAttribute(ATTRIBUTE_NAME_KEYS);
+                }
+                final Element subTree = searchForKey(schemeRoot, keyValue);
+                if (subTree != null) {
+                    Map<String, Set<Element>> S = bindingMap.get(attributeName);
+                    if (S == null) {
+                        S = new HashMap<>();
+                    }
+                    Set<Element> A = S.get(elementName);
+                    if (A == null) {
+                        A = new HashSet<>();
+                    }
+                    if (!A.contains(subTree)) {
+                        // Add sub-tree to valid values map
+                        putValuePairsIntoMap(subTree, elementName, attributeName, keyValue);
+                    }
+                    A.add(subTree);
+                    S.put(elementName, A);
+                    bindingMap.put(attributeName, S);
+                }
+            }
+        }
+    }
+
     /**
      * Search subject scheme elements for a given key
      * @param root subject scheme element tree to search through
@@ -303,7 +304,7 @@ public class SubjectSchemeReader {
      * @param attName attribute name
      * @param category enumeration category name
      */
-    private void putValuePairsIntoMap(final Element subtree, final String elementName, final String attName, final String category) {
+    private void putValuePairsIntoMap(final Element subtree, final String elementName, final QName attName, final String category) {
         if (subtree == null || attName == null) {
             return;
         }

@@ -8,10 +8,14 @@
  */
 package org.dita.dost.util;
 
+import javax.xml.namespace.QName;
+
 import static java.util.Arrays.asList;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * String relevant utilities.
@@ -38,7 +42,7 @@ public final class StringUtils {
     @SuppressWarnings("rawtypes")
     public static String join(final Collection coll, final String delim) {
         final StringBuilder buff = new StringBuilder(256);
-        Iterator iter = null;
+        Iterator iter;
 
         if ((coll == null) || coll.isEmpty()) {
             return "";
@@ -95,7 +99,7 @@ public final class StringUtils {
             final String pattern, final String replacement) {
         final StringBuilder result = new StringBuilder();
         int startIndex = 0;
-        int newIndex = 0;
+        int newIndex;
 
         while ((newIndex = input.indexOf(pattern, startIndex)) >= 0) {
             result.append(input.substring(startIndex, newIndex));
@@ -114,22 +118,21 @@ public final class StringUtils {
      * @param domains input domain
      * @return list of {@code props} attribute specializations
      */
-    public static String[][] getExtProps(final String domains){
-        final List<String[]> propsBuffer = new ArrayList<>();
+    public static QName[][] getExtProps(final String domains){
+        // FIXME Dont' mix arrays and collections
+        final List<QName[]> propsBuffer = new ArrayList<>();
         int propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS);
         int propsEnd = domains.indexOf(")",propsStart);
         while (propsStart != -1 && propsEnd != -1){
-            final String propPath = domains.substring(propsStart+2,propsEnd).trim();
-            final StringTokenizer propPathTokenizer = new StringTokenizer(propPath, STRING_BLANK);
-            final List<String> propList = new ArrayList<>(128);
-            while(propPathTokenizer.hasMoreTokens()){
-                propList.add(propPathTokenizer.nextToken());
-            }
-            propsBuffer.add(propList.toArray(new String[propList.size()]));
+            final String propPath = domains.substring(propsStart + 2, propsEnd).trim();
+            final List<QName> propList = Stream.of(propPath.split("\\s+"))
+                    .map(QName::valueOf)
+                    .collect(Collectors.toList());
+            propsBuffer.add(propList.toArray(new QName[propList.size()]));
             propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS, propsEnd);
             propsEnd = domains.indexOf(")",propsStart);
         }
-        return propsBuffer.toArray(new String[propsBuffer.size()][]);
+        return propsBuffer.toArray(new QName[propsBuffer.size()][]);
     }
 
     /**
@@ -198,7 +201,7 @@ public final class StringUtils {
         Locale aLocale = null;
         String country = null;
         String language = null;
-        String variant = null;
+        String variant;
 
         //Tokenize the string using "-" as the token string as per IETF RFC4646 (superceeds RFC3066).
 
@@ -253,7 +256,6 @@ public final class StringUtils {
             if (subtag2.length() <= 3){
                 country = subtag2.toUpperCase();
             }else if (subtag2.length() > 3 && subtag2.length() <= 8){
-                variant = subtag2;
             }else if (subtag2.length() > 8){
                 //return an error!
             }

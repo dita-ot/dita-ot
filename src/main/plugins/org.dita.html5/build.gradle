@@ -7,7 +7,7 @@
  */
 buildscript {
     dependencies {
-        classpath 'com.cathive.sass:sass-java:4.0.0'
+        classpath 'io.bit3:jsass:5.5.3'
     }
 
     repositories {
@@ -20,10 +20,13 @@ apply plugin: 'java'
 File cssDir = file('css')
 File sassDir = file('sass')
 
+import io.bit3.jsass.CompilationException
+import io.bit3.jsass.Compiler
+import io.bit3.jsass.Options
+import io.bit3.jsass.OutputStyle
 
-import com.cathive.sass.SassCompilationException
-import com.cathive.sass.SassFileContext
-import com.cathive.sass.SassOutputStyle
+import java.nio.charset.Charset
+import java.nio.file.Files
 
 def sass(FileCollection files, File outputDir) {
     if (!outputDir.exists() && !outputDir.mkdir()) {
@@ -31,15 +34,18 @@ def sass(FileCollection files, File outputDir) {
     }
 
     files.each {
-        def ctx = SassFileContext.create(it.toPath())
-        def options = ctx.getOptions()
-        options.setOutputStyle(SassOutputStyle.EXPANDED)
+        def compiler = new Compiler()
+        def options = new Options()
+        options.setOutputStyle(OutputStyle.EXPANDED)
+
+        def basename = it.getName().substring(0, it.getName().lastIndexOf('.'))
+        def outputFile = new File(outputDir, basename + '.css')
 
         try {
-            def basename = it.getName().substring(0, it.getName().lastIndexOf('.'))
             logger.info("Compiling ${it}")
-            ctx.compile(new FileOutputStream(new File(outputDir, basename + '.css')))
-        } catch (SassCompilationException e) {
+            def output = compiler.compileFile(it.toURI(), outputFile.toURI(), options)
+            Files.write(outputFile.toPath(), output.getCss().getBytes(Charset.forName("UTF-8")))
+        } catch (CompilationException e) {
             logger.error(e.getMessage())
         } catch (IOException e) {
             logger.error("Compilation failed: ${e.getMessage()}")

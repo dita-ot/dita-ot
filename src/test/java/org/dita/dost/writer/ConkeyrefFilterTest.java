@@ -36,11 +36,15 @@ public class ConkeyrefFilterTest {
         res.put(keyDef.keys, keyDef);
         return res;
     }
+
+    private KeyScope createKeyScope(final Map<String, KeyDef> keyDefinition) {
+        return new KeyScope(null, null, keyDefinition, Collections.emptyList());
+    }
     
     @Test
     public void testKey() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(new KeyScope(toMap(new KeyDef("foo", toURI("library.dita"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, toURI("main.ditamap"), null))));
+        f.setKeyDefinitions(createKeyScope(toMap(new KeyDef("foo", toURI("library.dita"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, toURI("main.ditamap"), null))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -56,7 +60,7 @@ public class ConkeyrefFilterTest {
     @Test
     public void testKeyAndElement() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(new KeyScope(toMap(new KeyDef("foo", toURI("library.dita"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, toURI("main.ditamap"), null))));
+        f.setKeyDefinitions(createKeyScope(toMap(new KeyDef("foo", toURI("library.dita"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, toURI("main.ditamap"), null))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -73,7 +77,7 @@ public class ConkeyrefFilterTest {
     @Test
     public void testElementInTarget() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(new KeyScope(toMap(new KeyDef("foo", toURI("library.dita#baz"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, toURI("main.ditamap"), null))));
+        f.setKeyDefinitions(createKeyScope(toMap(new KeyDef("foo", toURI("library.dita#baz"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, toURI("main.ditamap"), null))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -90,7 +94,7 @@ public class ConkeyrefFilterTest {
     public void testRelativePaths() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
         f.setCurrentFile(new File("product/sub folder/this.dita").getAbsoluteFile().toURI());
-        f.setKeyDefinitions(new KeyScope(toMap(new KeyDef("foo", toURI("common/library.dita"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, toURI("main.ditamap"), null))));
+        f.setKeyDefinitions(createKeyScope(toMap(new KeyDef("foo", toURI("common/library.dita"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, toURI("main.ditamap"), null))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -106,7 +110,7 @@ public class ConkeyrefFilterTest {
     @Test
     public void testMissingKey() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(new KeyScope(Collections.<String, KeyDef> emptyMap()));
+        f.setKeyDefinitions(createKeyScope(Collections.emptyMap()));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {

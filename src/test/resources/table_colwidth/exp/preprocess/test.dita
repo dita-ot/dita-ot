@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/2374525/temp/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/2374525/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" class="- topic/topic " ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " id="id2374525">
+  <title class="- topic/title ">Topic title</title>
+  <body class="- topic/body ">
+    <table class="- topic/table ">
+      <tgroup class="- topic/tgroup " cols="2">
+        <colspec class="- topic/colspec " colname="col1" colnum="1"/><colspec class="- topic/colspec " colname="col2" colnum="2"/><tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="1">2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table class="- topic/table ">
+      <tgroup class="- topic/tgroup " cols="2">
+        <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth="1*"/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="3*"/>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="1">2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table class="- topic/table ">
+      <tgroup class="- topic/tgroup " cols="2">
+        <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth="1cm"/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="3cm"/>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="1">2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </body>
+</topic>

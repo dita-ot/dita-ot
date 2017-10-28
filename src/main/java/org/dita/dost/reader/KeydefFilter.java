@@ -11,7 +11,6 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +19,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
@@ -146,7 +144,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
                         keysDefMap.put(key, new KeyDef(key, null, null, null, null,null));
                     }
                 } else {
-                    logger.info(MessageUtils.getInstance().getMessage("DOTJ045I", key, target != null ? target.toString() : null).toString());
+                    logger.info(MessageUtils.getMessage("DOTJ045I", key, target != null ? target.toString() : null).toString());
                 }
             }
         }
@@ -179,8 +177,8 @@ public final class KeydefFilter extends AbstractXMLFilter {
      * Update keysDefMap for multi-level keys
      */
     private void checkMultiLevelKeys(final Map<String, KeyDef> keysDefMap, final Map<String, String> keysRefMap) {
-        String key = null;
-        KeyDef value = null;
+        String key;
+        KeyDef value;
         // tempMap storing values to avoid ConcurrentModificationException
         final Map<String, KeyDef> tempMap = new HashMap<>();
         for (Entry<String, KeyDef> entry : keysDefMap.entrySet()) {

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="mapref1-4" xml:lang="en-us">
+<title>Fourth in first mapref! Really deep!</title>
+<shortdesc>nested inside 3, which is inside 2, inside the first referenced
+map</shortdesc>
+<refbody></refbody>
+</reference>

@@ -14,7 +14,9 @@ import static org.dita.dost.util.Constants.*;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Stream;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -23,9 +25,9 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import net.sf.saxon.Controller;
-import net.sf.saxon.event.MessageWarner;
-import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.jaxp.TransformerImpl;
+import net.sf.saxon.serialize.MessageWarner;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.LoggingErrorListener;
@@ -51,6 +53,8 @@ public final class XMLUtils {
     private DITAOTLogger logger;
     private final TransformerFactory transformerFactory;
 
+    public static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl();
+
     public XMLUtils() {
         transformerFactory = TransformerFactory.newInstance();
     }
@@ -70,15 +74,9 @@ public final class XMLUtils {
 
     public static Transformer withLogger(final Transformer transformer, final DITAOTLogger logger) {
         transformer.setErrorListener(new LoggingErrorListener(logger));
-        if (transformer instanceof Controller) {
-            final MessageWarner mw = new MessageWarner();
-            // XXX https://sourceforge.net/p/saxon/discussion/94027/thread/adad0e12/
-            try {
-                mw.setWriter(new StringWriter());
-            } catch (final XPathException e) {
-                throw new RuntimeException(e);
-            }
-            ((Controller) transformer).setMessageEmitter(mw);
+        if (transformer instanceof TransformerImpl) {
+            final Receiver mw = new MessageWarner();
+            ((TransformerImpl) transformer).getUnderlyingController().setMessageEmitter(mw);
         }
         return transformer;
     }
@@ -104,7 +102,26 @@ public final class XMLUtils {
     }
 
     /**
-     * List chilid elements by DITA class.
+     * Get first child element by DITA class.
+     *
+     * @param elem root element
+     * @param cls DITA class to match element
+     * @return matching element
+     */
+    public static Optional<Element> getChildElement(final Element elem, final DitaClass cls) {
+        final NodeList children = elem.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (cls.matches(child)) {
+                return Optional.of((Element) child);
+            }
+        }
+        return Optional.empty();
+    }
+
+
+    /**
+     * List child elements by DITA class.
      *
      * @param elem root element
      * @param cls DITA class to match elements
@@ -290,6 +307,17 @@ public final class XMLUtils {
         } else {
             atts.addAttribute(uri, localName, qName, type, value);
         }
+    }
+
+    /**
+     * Add or set attribute. Convenience method for {@link #addOrSetAttribute(AttributesImpl, String, String, String, String, String)}.
+     *
+     * @param atts attributes
+     * @param name name
+     * @param value attribute value
+     */
+    public static void addOrSetAttribute(final AttributesImpl atts, final QName name, final String value) {
+        addOrSetAttribute(atts, name.getNamespaceURI(), name.getLocalPart(), name.getPrefix()  + ":" + name.getLocalPart(), "CDATA", value);
     }
 
     /**
@@ -726,6 +754,17 @@ public final class XMLUtils {
         public AttributesBuilder add(final String uri, final String localName, final String value) {
             return add(uri, localName, localName, "CDATA", value);
         }
+
+        /**
+         * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
+         *
+         * @param name name
+         * @param value attribute value
+         * @return this builder
+         */
+        public AttributesBuilder add(final QName name, final String value) {
+            return add(name.getNamespaceURI(), name.getLocalPart(), name.getPrefix()  + ":" + name.getLocalPart(), "CDATA", value);
+        }
         
         /**
          * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
@@ -773,7 +812,7 @@ public final class XMLUtils {
 
         @Override
         public Source resolve(final String href, final String base) throws TransformerException {
-            Configuration.logger.info("XSLT parse: " + href);
+            System.out.println("XSLT parse: " + href);
             return r.resolve(href, base);
         }
     }
@@ -849,13 +888,13 @@ public final class XMLUtils {
 
         @Override
         public void parse(InputSource input) throws IOException, SAXException {
-            Configuration.logger.info("SAX parse: " + (input.getSystemId() != null ? input.getSystemId() : input.toString()));
+            System.out.println("SAX parse: " + (input.getSystemId() != null ? input.getSystemId() : input.toString()));
             r.parse(input);
         }
 
         @Override
         public void parse(String systemId) throws IOException, SAXException {
-            Configuration.logger.info("SAX parse: " + systemId);
+            System.out.println("SAX parse: " + systemId);
             r.parse(systemId);
         }
     }
@@ -871,7 +910,7 @@ public final class XMLUtils {
 
         @Override
         public Document parse(InputSource is) throws SAXException, IOException {
-            Configuration.logger.info("DOM parse: " + (is.getSystemId() != null ? is.getSystemId() : is.toString()));
+            System.out.println("DOM parse: " + (is.getSystemId() != null ? is.getSystemId() : is.toString()));
             return b.parse(is);
         }
 
@@ -943,5 +982,20 @@ public final class XMLUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * Stream of element ancestor elements.
+     * @param element start element
+     * @return stream of ancestor elements
+     */
+    public static Stream<Element> ancestors(final Element element) {
+        final Stream.Builder<Element> builder = Stream.builder();
+        for (Node current = element.getParentNode(); current != null; current = current.getParentNode()) {
+            if (current.getNodeType() == Node.ELEMENT_NODE) {
+                builder.accept((Element) current);
+            }
+        }
+        return builder.build();
     }
 }

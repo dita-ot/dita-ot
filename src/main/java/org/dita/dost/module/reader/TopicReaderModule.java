@@ -11,40 +11,46 @@ package org.dita.dost.module.reader;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
-import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DebugFilter;
+import org.dita.dost.writer.NormalizeFilter;
 import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
-import org.xml.sax.SAXParseException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
-import org.xml.sax.XMLReader;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.Collections.emptyMap;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.exists;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
-import static org.dita.dost.util.XMLUtils.getXMLReader;
+import static org.dita.dost.util.XMLUtils.ancestors;
+import static org.dita.dost.util.XMLUtils.toList;
+import static org.dita.dost.writer.DitaWriterFilter.ATTRIBUTE_NAME_ORIG_FORMAT;
 
 /**
- * Module for reading and serializing topics into temporary directory.
+ * ModuleElem for reading and serializing topics into temporary directory.
  *
  * @since 2.5
  */
@@ -78,22 +84,67 @@ public final class TopicReaderModule extends AbstractReaderModule {
     }
 
     @Override
-    public void readStartFile() throws DITAOTException {
-        final FileInfo fi = job.getFileInfo(job.getInputFile());
-        if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
-            getStartDocuments().stream().forEach(this::addToWaitList);
-        } else {
-            if (fi.format == null) {
-                fi.format = ATTR_FORMAT_VALUE_DITA;
-                job.add(fi);
+    void init() throws SAXException {
+        super.init();
+
+        if (filterUtils != null) {
+            final Document doc = getMapDocument();
+            if (doc != null) {
+                final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+                subjectSchemeReader.setLogger(logger);
+                logger.debug("Loading subject schemes");
+                final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
+                subjectSchemes.stream()
+                        .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
+                        .forEach(enumerationDef -> {
+                            final Element schemeRoot = ancestors(enumerationDef)
+                                    .filter(SUBMAP::matches)
+                                    .findFirst()
+                                    .orElse(doc.getDocumentElement());
+                            subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
+                        });
+                final SubjectScheme subjectScheme = subjectSchemeReader.getSubjectSchemeMap();
+                filterUtils = filterUtils.refine(subjectScheme);
             }
-            addToWaitList(new Reference(job.getInputFile(), fi.format));
+        }
+    }
+
+    private Document getMapDocument() throws SAXException {
+        final FileInfo fi = job.getFileInfo(job.getInputMap());
+        if (fi == null) {
+            return null;
+        }
+        final URI currentFile = job.tempDirURI.resolve(fi.uri);
+        try {
+            logger.debug("Reading " + currentFile);
+            return XMLUtils.getDocumentBuilder().parse(new InputSource(currentFile.toString()));
+        } catch (final SAXException | IOException e) {
+            throw new SAXException("Failed to parse " + currentFile, e);
+        }
+    }
+
+    @Override
+    public void readStartFile() throws DITAOTException {
+        FileInfo fi = job.getFileInfo(job.getInputFile());
+        if (fi == null) {
+            addToWaitList(new Reference(job.getInputFile()));
+        } else {
+            if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+                getStartDocuments().forEach(this::addToWaitList);
+            } else {
+                if (fi.format == null) {
+                    fi.format = ATTR_FORMAT_VALUE_DITA;
+                    job.add(fi);
+                }
+                addToWaitList(new Reference(job.getInputFile(), fi.format));
+            }
         }
     }
 
     private List<Reference> getStartDocuments() throws DITAOTException {
         final List<Reference> res = new ArrayList<>();
         final FileInfo startFileInfo = job.getFileInfo(job.getInputFile());
+        assert startFileInfo.src != null;
         final URI tmp = job.tempDirURI.resolve(startFileInfo.uri);
         final Source source = new StreamSource(tmp.toString());
         logger.info("Reading " + tmp);
@@ -105,12 +156,18 @@ public final class TopicReaderModule extends AbstractReaderModule {
                     case START_ELEMENT:
                         final URI href = getHref(in);
                         if (href != null) {
-                            final URI targetTmp = tmp.resolve(href);
-                            final FileInfo fi = job.getFileInfo(targetTmp);
+                            FileInfo fi = job.getFileInfo(startFileInfo.src.resolve(href));
+                            if (fi == null) {
+                                fi = job.getFileInfo(tmp.resolve(href));
+                            }
                             assert fi != null;
                             assert fi.src != null;
-                            final String format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
+                            String format = in.getAttributeValue(DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT);
+                            if (format == null) {
+                                format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
+                            }
                             res.add(new Reference(fi.src, format));
+                            nonConrefCopytoTargetSet.add(fi.src);
                         }
                         break;
                     default:
@@ -156,6 +213,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             profilingFilter.setLogger(logger);
             profilingFilter.setJob(job);
             profilingFilter.setFilterUtils(filterUtils);
+            profilingFilter.setCurrentFile(fileToParse);
             pipe.add(profilingFilter);
         }
 
@@ -166,6 +224,10 @@ public final class TopicReaderModule extends AbstractReaderModule {
         validationFilter.setJob(job);
         validationFilter.setProcessingMode(processingMode);
         pipe.add(validationFilter);
+
+        final NormalizeFilter normalizeFilter = new NormalizeFilter();
+        normalizeFilter.setLogger(logger);
+        pipe.add(normalizeFilter);
 
         pipe.add(topicFragmentFilter);
 
@@ -187,4 +249,23 @@ public final class TopicReaderModule extends AbstractReaderModule {
         return pipe;
     }
 
+    @Override
+    void categorizeReferenceFile(final Reference file) {
+        // avoid files referred by coderef being added into wait list
+        if (listFilter.getCoderefTargets().contains(file.filename)) {
+            return;
+        }
+        if (formatFilter.test(file.format)) {
+            if (isFormatDita(file.format) && !job.getOnlyTopicInMap()) {
+                addToWaitList(file);
+            } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
+                formatSet.add(file);
+                if (!exists(file.filename)) {
+                    logger.warn(MessageUtils.getMessage("DOTX008W", file.filename.toString()).toString());
+                }
+            } else {
+                htmlSet.add(file.filename);
+            }
+        }
+    }
 }

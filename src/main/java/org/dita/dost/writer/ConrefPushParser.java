@@ -157,7 +157,7 @@ public final class ConrefPushParser extends AbstractXMLFilter {
         super.write(filename);
 
         for (final MoveKey key: movetable.keySet()) {
-            logger.warn(MessageUtils.getInstance().getMessage("DOTJ043W", key.idPath, filename.getPath()).toString());
+            logger.warn(MessageUtils.getMessage("DOTJ043W", key.idPath, filename.getPath()).toString());
         }
         if (hasConref || hasKeyref) {
             updateList(filename);
@@ -326,7 +326,6 @@ public final class ConrefPushParser extends AbstractXMLFilter {
      * 
      * @param type pushtype
      * @param elem element
-     * @return string
      */
     private void replaceSubElementName(final String type, final Element elem) {
         final DitaClass classValue = DitaClass.getInstance(elem);

@@ -10,6 +10,7 @@ package org.dita.dost.module.reader;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
@@ -25,9 +26,10 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.exists;
 
 /**
- * Module for reading and serializing topics into temporary directory.
+ * ModuleElem for reading and serializing topics into temporary directory.
  *
  * @since 2.5
  */
@@ -82,6 +84,7 @@ public final class MapReaderModule extends AbstractReaderModule {
             profilingFilter.setLogger(logger);
             profilingFilter.setJob(job);
             profilingFilter.setFilterUtils(filterUtils);
+            profilingFilter.setCurrentFile(fileToParse);
             pipe.add(profilingFilter);
         }
 
@@ -117,6 +120,31 @@ public final class MapReaderModule extends AbstractReaderModule {
         pipe.add(ditaWriterFilter);
 
         return pipe;
+    }
+
+    @Override
+    void categorizeReferenceFile(final Reference file) {
+//        // avoid files referred by coderef being added into wait list
+//        if (listFilter.getCoderefTargets().contains(file.filename)) {
+//            return;
+//        }
+        if (formatFilter.test(file.format)) {
+//            if (isFormatDita(file.format)) {
+//                addToWaitList(file);
+//            } else
+            if (ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
+                addToWaitList(file);
+            } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
+                formatSet.add(file);
+                if (!exists(file.filename)) {
+                    logger.warn(MessageUtils.getMessage("DOTX008W", file.filename.toString()).toString());
+                }
+            } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
+                formatSet.add(file);
+            } else {
+                htmlSet.add(file.filename);
+            }
+        }
     }
 
 }

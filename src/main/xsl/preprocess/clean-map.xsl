@@ -27,6 +27,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates/>
   </xsl:template>
   
+  <xsl:template match="*[contains(@class, ' ditaot-d/submap-title ')]"/>
+  <xsl:template match="*[contains(@class, ' ditaot-d/submap-topicmeta ')]"/>
+  <xsl:template match="*[contains(@class, ' ditaot-d/submap-topicmeta-container ')]"/>
+  
   <xsl:template match="*[contains(@class, ' ditaot-d/keydef ')]"/>
   
   <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle ')]">

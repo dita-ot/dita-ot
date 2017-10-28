@@ -348,8 +348,8 @@
   </message>-->
   
   <message id="DOTJ049W" type="WARN">
-  	<reason>The attribute value %1=&quot;%3&quot; on element &quot;%2&quot; does not comply with the specified subject scheme.</reason>
-  	<response>According to the subject scheme map, the following values are valid for the %1 attribute: %4</response>
+    <reason>The attribute value %1=&quot;%3&quot; on element &quot;%2&quot; does not comply with the specified subject scheme.</reason>
+    <response>According to the subject scheme map, the following values are valid for the %1 attribute: %4</response>
   </message>
   
   <message id="DOTJ050W" type="WARN">
@@ -359,8 +359,8 @@
   
   <!-- Long term, would like to split this into two messages. One for file not found, another for file outside the scope of the map. -->
   <message id="DOTJ051E" type="ERROR">
-  	<reason>Unable to load target for coderef &quot;%1&quot;.</reason>
-  	<response></response>
+    <reason>Unable to load target for coderef &quot;%1&quot;.</reason>
+    <response></response>
   </message>
   
   <message id="DOTJ052E" type="ERROR">
@@ -435,6 +435,11 @@
 
   <message id="DOTJ071E" type="ERROR">
     <reason>Cannot find the specified DITAVAL '%1'.</reason>
+    <response></response>
+  </message>
+
+  <message id="DOTJ074W" type="WARN">
+    <reason>Rev attribute cannot be used with prop filter.</reason>
     <response></response>
   </message>
 

@@ -64,7 +64,7 @@ See the accompanying LICENSE file for applicable license.
       <val desc="Full TOC">full</val>
     </param>
   </transtype>
-  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <feature extension="ant.import" file="build_dita2html5.xml"/>
   <feature extension="dita.conductor.html5.param" file="params.xml"/>
   <!--feature extension="dita.xsl.messages" file="resource/messages.xml"/-->
   <template file="build_dita2html5_template.xml"/>

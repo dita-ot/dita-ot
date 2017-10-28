@@ -226,7 +226,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId.toString());
                         } else {
                             final URI fileName = dirPath.toURI().resolve(attValue);
-                            logger.error(MessageUtils.getInstance().getMessage("DOTX008E", fileName.toString()).toString());
+                            logger.error(MessageUtils.getMessage("DOTX008E", fileName.toString()).toString());
                         }
                     }
                     }
@@ -259,7 +259,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                                 topicParser.parse(element, dirPath);
                             } else {
                                 final String fileName = file.getAbsolutePath();
-                                logger.error(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
+                                logger.debug(MessageUtils.getMessage("DOTX008E", fileName).toString());
                             }
                         }
                     }

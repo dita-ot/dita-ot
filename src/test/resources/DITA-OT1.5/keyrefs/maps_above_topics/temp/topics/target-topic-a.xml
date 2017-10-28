@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><?workdir /C:\jia\DITA-OT1.5\keyrefs\maps_above_topics\temp\topics?><?path2project ..\?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="topic-1" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic " xtrf="C:\jia\DITA-OT1.5\keyrefs\maps_above_topics\topics\target-topic-a.xml" xtrc="topic:1">
-  <title class="- topic/title " xtrf="C:\jia\DITA-OT1.5\keyrefs\maps_above_topics\topics\target-topic-a.xml" xtrc="title:1">Target Topic A</title>
-  <body class="- topic/body " xtrf="C:\jia\DITA-OT1.5\keyrefs\maps_above_topics\topics\target-topic-a.xml" xtrc="body:1">
-    <p class="- topic/p " xtrf="C:\jia\DITA-OT1.5\keyrefs\maps_above_topics\topics\target-topic-a.xml" xtrc="p:1">This is topic A.</p>
-  </body>
-</topic>

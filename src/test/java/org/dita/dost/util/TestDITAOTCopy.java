@@ -16,6 +16,7 @@ import org.apache.tools.ant.Project;
 
 import org.apache.tools.ant.BuildException;
 import org.dita.dost.TestUtils;
+import org.dita.dost.ant.DITAOTCopy;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

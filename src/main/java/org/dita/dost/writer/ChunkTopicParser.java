@@ -54,7 +54,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     @Override
-    public void write(final URI currentFile) throws DITAOTException {
+    public void write(final URI currentFile) {
         this.currentFile = currentFile;
         try {
             output = new StringWriter();
@@ -277,7 +277,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         final int end = parentResult.indexOf(">", insertpoint);
 
         if (insertpoint == -1 || end == -1) {
-            logger.error(MessageUtils.getInstance().getMessage("DOTJ033E", hrefValue.toString()).toString());
+            logger.error(MessageUtils.getMessage("DOTJ033E", hrefValue.toString()).toString());
         } else {
             if (ELEMENT_NAME_DITA.equals(parentResult.substring(insertpoint, end).trim())) {
                 insertpoint = parentResult.lastIndexOf("</", insertpoint - 1);

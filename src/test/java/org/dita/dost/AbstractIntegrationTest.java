@@ -9,9 +9,10 @@
 package org.dita.dost;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.apache.tools.ant.*;
-import org.custommonkey.xmlunit.XMLUnit;
+import org.dita.dost.util.FileUtils;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.w3c.dom.*;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertEquals;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.assertArrayEquals;
 
@@ -60,8 +61,12 @@ public class AbstractIntegrationTest {
     }
 
     public AbstractIntegrationTest transtype(Transtype transtype) {
-        this.transtype = transtype;
+        this.transtype = getTranstype(transtype);
         return this;
+    }
+
+    Transtype getTranstype(Transtype transtype) {
+        return transtype;
     }
 
     public AbstractIntegrationTest targets(String... targets) {
@@ -414,42 +419,51 @@ public class AbstractIntegrationTest {
         return errorCount;
     }
 
-    private void compare(final File exp, final File act) throws Throwable {
-        for (final File e : exp.listFiles()) {
-            final File a = new File(act, e.getName());
-            if (a.exists()) {
-                if (e.isDirectory()) {
-                    compare(e, a);
-                } else {
-                    final String name = e.getName();
-                    try {
-                        if (name.endsWith(".html") || name.endsWith(".htm") || name.endsWith(".xhtml")
-                                || name.endsWith(".hhk")) {
-                            TestUtils.resetXMLUnit();
-                            XMLUnit.setNormalizeWhitespace(true);
-                            XMLUnit.setIgnoreWhitespace(true);
-                            XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
-                            XMLUnit.setIgnoreComments(true);
-                            assertXMLEqual(parseHtml(e), parseHtml(a));
-                        } else if (name.endsWith(".xml") || name.endsWith(".dita") || name.endsWith(".ditamap")) {
-                            TestUtils.resetXMLUnit();
-                            XMLUnit.setNormalizeWhitespace(true);
-                            XMLUnit.setIgnoreWhitespace(true);
-                            XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
-                            XMLUnit.setIgnoreComments(true);
-                            assertXMLEqual(parseXml(e), parseXml(a));
-                        } else if (name.endsWith(".txt")) {
-                            //assertEquals(readTextFile(e), readTextFile(a));
-                            assertArrayEquals(readTextFile(e), readTextFile(a));
-                        }
-                    } catch (final RuntimeException ex) {
-                        throw ex;
-                    } catch (final Throwable ex) {
-                        throw new Throwable("Failed comparing " + e.getAbsolutePath() + " and " + a.getAbsolutePath() + ": " + ex.getMessage(), ex);
+    private void compare(final File expDir, final File actDir) throws Throwable {
+        final Collection<String> files = getFiles(expDir, actDir);
+        for (final String name : files) {
+            final File exp = new File(expDir, name);
+            final File act = new File(actDir, name);
+            if (exp.isDirectory()) {
+                compare(exp, act);
+            } else {
+                final String ext = FileUtils.getExtension(name);
+                try {
+                    if (ext == null) {
+                    } else if (ext.equals("html") || ext.equals("htm") || ext.equals("xhtml")
+                            || ext.equals("hhk")) {
+                        assertXMLEqual(parseHtml(exp), parseHtml(act));
+                    } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap")) {
+                        assertXMLEqual(parseXml(exp), parseXml(act));
+                    } else if (ext.equals("txt")) {
+                        assertArrayEquals(readTextFile(exp), readTextFile(act));
                     }
+                } catch (final RuntimeException ex) {
+                    throw ex;
+                } catch (final Throwable ex) {
+                    throw new Throwable("Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": " + ex.getMessage(), ex);
                 }
             }
         }
+    }
+
+    final Set<String> compareable = ImmutableSet.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "txt");
+    final Set<String> ignorable = ImmutableSet.of("schemekeydef.xml", "keydef.xml", "subrelation.xml", ".job.xml");
+
+    private Collection<String> getFiles(File expDir, File actDir) {
+        final FileFilter filter = f -> f.isDirectory()
+                || (compareable.contains(FileUtils.getExtension(f.getName()))
+                    && !ignorable.contains(f.getName()));
+        final Set<String> buf = new HashSet<>();
+        final File[] exp = expDir.listFiles(filter);
+        if (exp != null) {
+            buf.addAll(Arrays.asList(exp).stream().map(File::getName).collect(Collectors.toList()));
+        }
+        final File[] act = actDir.listFiles(filter);
+        if (act != null) {
+            buf.addAll(Arrays.asList(act).stream().map(File::getName).collect(Collectors.toList()));
+        }
+        return buf;
     }
 
     /**
@@ -533,11 +547,7 @@ public class AbstractIntegrationTest {
                         final List<String> res = new ArrayList<>();
                         for (final String v : id.getValue().trim().split("\\s+")) {
                             rewriteId(v, idMap, counter, p.getValue());
-                            if (idMap.containsKey(v)) {
-                                res.add(idMap.get(v));
-                            } else {
-                                res.add(v);
-                            }
+                            res.add(idMap.getOrDefault(v, v));
                         }
                         id.setNodeValue(res.stream().collect(Collectors.joining(" ")));
 

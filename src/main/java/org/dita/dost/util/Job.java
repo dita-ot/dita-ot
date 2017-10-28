@@ -11,6 +11,7 @@ import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
+import org.xml.sax.helpers.DefaultHandler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,26 +20,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.dita.dost.util.Job.FileInfo.Filter;
+import org.dita.dost.module.GenMapAndTopicListModule;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Definition of current job.
@@ -454,12 +451,37 @@ public final class Job {
     }
 
     /**
+     * set input file
+     *
+     * @param map input file path relative to input directory
+     */
+    public void setInputMap(final URI map) {
+        assert !map.isAbsolute();
+        setProperty(INPUT_DITAMAP_URI, map.toString());
+        // Deprecated since 2.2
+        setProperty(INPUT_DITAMAP, toFile(map).getPath());
+    }
+
+    /**
      * Get input directory.
      * 
-     * @return absolute input directory path 
+     * @return absolute input directory path
      */
     public URI getInputDir() {
         return toURI(getProperty(INPUT_DIR_URI));
+    }
+
+    /**
+     * Set input directory
+     * @param dir absolute input directory path
+     */
+    public void setInputDir(final URI dir) {
+        assert dir.isAbsolute();
+        setProperty(INPUT_DIR_URI, dir.toString());
+        // Deprecated since 2.2
+        if (dir.getScheme().equals("file")) {
+            setProperty(INPUT_DIR, new File(dir).getAbsolutePath());
+        }
     }
 
     /**
@@ -490,14 +512,10 @@ public final class Job {
      * @param filter filter file info object must pass
      * @return collection of file info objects that pass the filter, may be empty
      */
-    public Collection<FileInfo> getFileInfo(final Filter filter) {
-        final Collection<FileInfo> ret = new ArrayList<>();
-        for (final FileInfo f: files.values()) {
-            if (filter.accept(f)) {
-                ret.add(f);
-            }
-        }
-        return ret;
+    public Collection<FileInfo> getFileInfo(final Predicate<FileInfo> filter) {
+        return files.values().stream()
+                .filter(filter)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -606,15 +624,7 @@ public final class Job {
             this.file = toFile(uri);
             this.result = src;
         }
-        @Deprecated
-        FileInfo(final File file) {
-            if (file == null) throw new IllegalArgumentException(new NullPointerException());
-            this.src = null;
-            this.uri =  toURI(file);
-            this.file = file;
-            this.result = src;
-        }
-        
+
         @Override
         public String toString() {
             return "FileInfo{" +
@@ -686,12 +696,6 @@ public final class Job {
             return result1;
         }
 
-        public interface Filter<T> {
-            
-            boolean accept(T f);
-            
-        }
-        
         public static class Builder {
             
             private URI src;
@@ -754,6 +758,27 @@ public final class Job {
                 if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
                 if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
+                return this;
+            }
+
+            public Builder addContentFields(final FileInfo orig) {
+//                if (orig.src != null) src = orig.src;
+//                if (orig.uri != null) uri = orig.uri;
+//                if (orig.file != null) file = orig.file;
+//                if (orig.result != null) result = orig.result;
+                if (orig.format != null) format = orig.format;
+                if (orig.hasConref) hasConref = orig.hasConref;
+                if (orig.isChunked) isChunked = orig.isChunked;
+                if (orig.hasLink) hasLink = orig.hasLink;
+//                if (orig.isResourceOnly) isResourceOnly = orig.isResourceOnly;
+//                if (orig.isTarget) isTarget = orig.isTarget;
+                if (orig.isConrefPush) isConrefPush = orig.isConrefPush;
+                if (orig.hasKeyref) hasKeyref = orig.hasKeyref;
+                if (orig.hasCoderef) hasCoderef = orig.hasCoderef;
+//                if (orig.isSubjectScheme) isSubjectScheme = orig.isSubjectScheme;
+//                if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
+//                if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
+//                if (orig.isOutDita) isOutDita = orig.isOutDita;
                 return this;
             }
             
@@ -892,7 +917,10 @@ public final class Job {
      * @return absolute output dir
      */
     public File getOutputDir(){
-        return new File(prop.get(PROPERTY_OUTPUT_DIR).toString());
+        if (prop.containsKey(PROPERTY_OUTPUT_DIR)) {
+            return new File(prop.get(PROPERTY_OUTPUT_DIR).toString());
+        }
+        return null;
     }
 
     /**
@@ -908,7 +936,10 @@ public final class Job {
      * @return absolute input file path
      */
     public URI getInputFile() {
-        return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
+        if (prop.containsKey(PROPERTY_INPUT_MAP_URI)) {
+            return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
+        }
+        return null;
     }
 
     /**
@@ -924,5 +955,21 @@ public final class Job {
         }
     }
 
+    /**
+     * Get temporary file name generator.
+     */
+    public TempFileNameScheme getTempFileNameScheme() {
+        final TempFileNameScheme tempFileNameScheme;
+        try {
+            final String cls = Optional
+                    .ofNullable(getProperty("temp-file-name-scheme"))
+                    .orElse(configuration.get("temp-file-name-scheme"));
+            tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) Class.forName(cls).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        tempFileNameScheme.setBaseDir(getInputDir());
+        return tempFileNameScheme;
+    }
     
 }

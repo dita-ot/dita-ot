@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+
+<!--This file contains NO testing-purpose content-->
+
+<map>
+  <title>Testing conref push-replace</title>
+  <topicref  href="jandrew-test.dita"/>
+  <topicref  href="jandrew-test-one-file.dita"/>
+  <topicref  href="jandrew-test-push-target.xml"/>
+<topicref href="jandrew-test-push-target-ditaext.dita"/>
+</map>

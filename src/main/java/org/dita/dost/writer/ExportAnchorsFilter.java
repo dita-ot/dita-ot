@@ -26,7 +26,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
 
     /** Basedir of the current parsing file */
     private URI currentDir = null;
-    private Deque<String> stack = new LinkedList<>();
+    private final Deque<String> stack = new LinkedList<>();
     /** Flag to show whether a file has <exportanchors> tag */
     private boolean hasExport = false;
     private final List<ExportAnchor> exportAnchors = new ArrayList<>();

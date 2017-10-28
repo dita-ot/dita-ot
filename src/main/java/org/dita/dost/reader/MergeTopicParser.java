@@ -149,7 +149,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
             if (util.findId(absolutePath)) {
                 retAttValue = toURI(SHARP + util.getIdValue(absolutePath));
             } else {
-                final String fileId = MergeUtils.getFirstTopicId(absolutePath, false);
+                final String fileId = util.getFirstTopicId(absolutePath, false);
                 final URI key = setFragment(absolutePath, fileId);
                 if (util.findId(key)) {
                     util.addId(absolutePath, util.getIdValue(key));
@@ -205,7 +205,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         if (ELEMENT_NAME_DITA.equals(qName)) {
             rootLang = attributes.getValue(XML_NS_URI, "lang");
             if (atts.getValue(ATTRIBUTE_NAME_ID) == null) {
-            	XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_ID, GENERATED_DITA_ELEMENT_ID);
+                XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_ID, GENERATED_DITA_ELEMENT_ID);
             }
         }
         if (TOPIC_TOPIC.matches(classValue) || ELEMENT_NAME_DITA.equals(qName)) {

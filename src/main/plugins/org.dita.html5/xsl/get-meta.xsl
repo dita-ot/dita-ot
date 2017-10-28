@@ -271,7 +271,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' topic/copyryear ')]" mode="gen-metadata">
-    <xsl:param name="previous" select="/.."/>
+    <xsl:param name="previous" select="()"/>
     <xsl:param name="open-sequence" select="false()"/>
     <xsl:variable name="next" select="following-sibling::*[contains(@class,' topic/copyryear ')][1]"/>
     <xsl:variable name="begin-sequence" select="@year + 1 = number($next/@year)"/>

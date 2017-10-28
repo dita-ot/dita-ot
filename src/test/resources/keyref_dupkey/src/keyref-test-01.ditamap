@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map title="Ignore duplicate key">
+<!--Based on Sourceforge bug 3052904, fixed in 1.5.2M4-->
+<keydef keys="topic-01" href="topic-01.xml"/>
+<keydef keys="topic-01" linking="sourceonly"/>
+<topicref keyref="topic-01"/>
+</map>

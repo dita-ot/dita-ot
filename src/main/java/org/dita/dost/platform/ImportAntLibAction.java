@@ -23,8 +23,6 @@ final class ImportAntLibAction extends ImportAction {
 
     /**
      * get result.
-     * @return result
-     * @throws SAXException 
      */
     @Override
     public void getResult(final ContentHandler retBuf) throws SAXException {

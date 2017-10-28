@@ -12,13 +12,8 @@ import static org.apache.commons.io.FilenameUtils.*;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.util.*;
-
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.DITAOTLogger;
-
 
 /**
  * Static file utilities.
@@ -33,8 +28,6 @@ public final class FileUtils {
     private FileUtils(){
     }
 
-    private static final DITAOTLogger logger = new DITAOTJavaLogger();
-
     /**
      * Supported image extensions. File extensions contain a leading dot.
      */
@@ -46,7 +39,7 @@ public final class FileUtils {
         if (imageExtensions != null && imageExtensions.length()>0) {
             Collections.addAll(sie, imageExtensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.error("Failed to read supported image extensions from configuration, using defaults.");
+            System.err.println("Failed to read supported image extensions from configuration, using defaults.");
             sie.add(FILE_EXTENSION_JPG);
             sie.add(FILE_EXTENSION_GIF);
             sie.add(FILE_EXTENSION_EPS);
@@ -70,7 +63,7 @@ public final class FileUtils {
         if (extensions != null && extensions.length()>0) {
             Collections.addAll(she, extensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.error("Failed to read supported HTML extensions from configuration, using defaults.");
+            System.err.println("Failed to read supported HTML extensions from configuration, using defaults.");
             she.add(FILE_EXTENSION_HTML);
             she.add(FILE_EXTENSION_HTM);
         }
@@ -88,7 +81,7 @@ public final class FileUtils {
         if (extensions != null && extensions.length()>0) {
             Collections.addAll(sre, extensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.error("Failed to read supported resource file extensions from configuration, using defaults.");
+            System.err.println("Failed to read supported resource file extensions from configuration, using defaults.");
             sre.add(FILE_EXTENSION_SWF);
             sre.add(FILE_EXTENSION_PDF);
         }
@@ -170,22 +163,13 @@ public final class FileUtils {
      * 
      * @param basePath base path
      * @param refPath reference path
-     * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
-     */
-    @Deprecated
-    public static String getRelativeUnixPath(final File basePath, final String refPath) {
-        return getRelativePath(basePath.getPath(), refPath, UNIX_SEPARATOR);
-    }
-    
-    /**
-     * Resolves a path reference against a base path.
-     * 
-     * @param basePath base path
-     * @param refPath reference path
-     * @return relative path
+     * @return relative path, or refPath if different root means no relative path is possible
      */
     public static File getRelativePath(final File basePath, final File refPath) {
-        return new File(getRelativePath(basePath.getPath(), refPath.getPath(), File.separator));
+        if (!basePath.toPath().getRoot().equals(refPath.toPath().getRoot())) {
+            return refPath;
+        }
+        return basePath.toPath().getParent().relativize(refPath.toPath()).toFile();
     }
     
     /**
@@ -218,7 +202,7 @@ public final class FileUtils {
                 && topicTokenizer.countTokens() > 1) {
             final String mapToken = mapTokenizer.nextToken();
             final String topicToken = topicTokenizer.nextToken();
-            boolean equals = false;
+            boolean equals;
             if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)){
                 //if OS is Windows, we need to ignore case when comparing path names.
                 equals = mapToken.equalsIgnoreCase(topicToken);
@@ -526,7 +510,7 @@ public final class FileUtils {
             pathnameEndIndex = aURLString.lastIndexOf(UNIX_SEPARATOR);
         }
 
-        String schemaLocation = null;
+        String schemaLocation;
         if (aURLString.contains(SHARP)) {
             schemaLocation = aURLString.substring(0, pathnameEndIndex);
         } else {

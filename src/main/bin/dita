@@ -67,7 +67,7 @@ if [ -z "$DITA_HOME" -o ! -d "$DITA_HOME" ] ; then
 fi
 
 # Set environment variables
-. "$DITA_HOME/resources/env.sh"
+. "$DITA_HOME/config/env.sh"
 
 # Add build script to arguments
 ant_exec_args="$ant_exec_args \"-buildfile\" \"$DITA_HOME/build.xml\" \"-main\" \"org.dita.dost.invoker.Main\""
@@ -89,6 +89,7 @@ fi
 
 # set ANT_LIB location
 ANT_LIB="${DITA_HOME}/lib"
+ANT_CONFIG="${DITA_HOME}/config"
 
 if [ -z "$JAVACMD" ] ; then
   if [ -n "$JAVA_HOME"  ] ; then
@@ -117,9 +118,9 @@ fi
 
 # use launcher to determine classpaths
 if [ -z "$LOCALCLASSPATH" ] ; then
-  LOCALCLASSPATH=$ANT_LIB/ant-launcher.jar
+  LOCALCLASSPATH=$ANT_LIB/ant-launcher.jar:$ANT_CONFIG
 else
-  LOCALCLASSPATH=$ANT_LIB/ant-launcher.jar:$LOCALCLASSPATH
+  LOCALCLASSPATH=$ANT_LIB/ant-launcher.jar:$ANT_CONFIG:$LOCALCLASSPATH
 fi
 
 # For Cygwin, switch paths to appropriate format before running java

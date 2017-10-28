@@ -10,7 +10,6 @@ package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
-import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -31,12 +30,9 @@ import java.util.*;
 
 import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 import static org.dita.dost.reader.ChunkMapReader.*;
-import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
-import static org.dita.dost.writer.ImageMetadataFilter.DITA_OT_NS;
-import static org.dita.dost.writer.ImageMetadataFilter.DITA_OT_PREFIX;
 
 /**
  * ChunkTopicParser class, writing chunking content into relative topic files
@@ -90,14 +86,14 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
-    abstract public void write(final URI filename) throws DITAOTException;
+    abstract public void write(final URI filename);
 
     @Override
     public void write(final File fileDir) throws DITAOTException {
@@ -247,7 +243,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         final FileInfo cfi = job.getFileInfo(currentFile);
         URI result = cfi.result.resolve(id + FILE_EXTENSION_DITA);
         URI temp = tempFileNameScheme.generateTempFileName(result);
-        if (id == null || new File(currentFile.resolve(temp)).exists()) { //job.getFileInfo(result) != null
+        if (id == null || new File(currentParsingFile.resolve(temp)).exists()) { //job.getFileInfo(result) != null
             final URI t = temp;
 
             result = cfi.result.resolve(generateFilename());
@@ -261,9 +257,9 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                     .build();
             job.add(fi);
 
-            conflictTable.put(currentFile.resolve(temp), currentFile.resolve(t));
+            conflictTable.put(currentParsingFile.resolve(temp), currentParsingFile.resolve(t));
         }
-        return currentFile.resolve(temp);
+        return currentParsingFile.resolve(temp);
     }
 
     Attributes processAttributes(final Attributes atts) {
@@ -315,8 +311,8 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION) == null) {
             addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, DITA_NAMESPACE);
         }
-        if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(XMLNS_ATTRIBUTE + ":" + DITA_OT_PREFIX) == null) {
-            addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE + ":" + DITA_OT_PREFIX, DITA_OT_NS);
+        if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX) == null) {
+            addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX, DITA_OT_NS);
         }
         return resAtts;
     }

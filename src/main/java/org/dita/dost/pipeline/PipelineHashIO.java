@@ -52,7 +52,7 @@ AbstractPipelineOutput {
      */
     @Override
     public String getAttribute(final String name) {
-        String value = null;
+        String value;
         value = hash.get(name);
         return value;
     }

@@ -18,8 +18,6 @@ import java.util.*;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.writer.ImageMetadataFilter.DITA_OT_NS;
-import static org.dita.dost.writer.ImageMetadataFilter.DITA_OT_PREFIX;
 
 /**
  * Normalize table content.
@@ -69,7 +67,7 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
     /** Number of cols in tgroup */
     private int cols;
     private int depth;
-    private Map<String, String> ns = new HashMap<>();
+    private final Map<String, String> ns = new HashMap<>();
 
     public NormalizeTableFilter() {
         super();
@@ -125,8 +123,8 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
         depth++;
-        if (depth == 1 && !ns.containsKey(DITA_OT_PREFIX)) {
-            super.startPrefixMapping(DITA_OT_PREFIX, DITA_OT_NS);
+        if (depth == 1 && !ns.containsKey(DITA_OT_NS_PREFIX)) {
+            super.startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
         }
 
         final AttributesImpl res = new AttributesImpl(atts);
@@ -155,9 +153,9 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
                 cols = Integer.parseInt(c);
             } catch (final NumberFormatException e) {
                 if (processingMode == Configuration.Mode.STRICT) {
-                    throw new SAXException(MessageUtils.getInstance().getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
+                    throw new SAXException(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
                 } else {
-                    logger.error(MessageUtils.getInstance().getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
                 }
                 cols = -1;
             }
@@ -220,11 +218,11 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
                 }
                 if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null) {
                     XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(atts, columnNumber));
-                    XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_MORECOLS, DITA_OT_PREFIX + ":" + ATTR_MORECOLS, "CDATA", Integer.toString(getEndNumber(atts, columnNumber) - columnNumber));
+                    XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_MORECOLS, DITA_OT_NS_PREFIX + ":" + ATTR_MORECOLS, "CDATA", Integer.toString(getEndNumber(atts, columnNumber) - columnNumber));
                 }
                 // Add extensions
-                XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(columnNumber));
-                XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(rowNumber));
+                XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(columnNumber));
+                XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(rowNumber));
             }
             columnNumberEnd = getEndNumber(atts, columnNumber);
         }
@@ -291,7 +289,7 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
         }
         
         if (depth == 1) {
-            super.endPrefixMapping(DITA_OT_PREFIX);
+            super.endPrefixMapping(DITA_OT_NS_PREFIX);
         }
         depth--;
     }

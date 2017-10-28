@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<concept id="main-4" xml:lang="en-us">
+<title>Fourth in the main map. Deepest level of nesting. Peer of mapref.</title>
+<shortdesc>This is a child of the third item in the main map. It comes before
+a mapref.</shortdesc>
+<conbody></conbody>
+</concept>

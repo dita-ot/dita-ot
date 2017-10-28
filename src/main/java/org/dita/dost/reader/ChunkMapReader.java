@@ -40,7 +40,6 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableSet;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
-import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getFragment;
 import static org.dita.dost.util.FileUtils.replaceExtension;
@@ -91,7 +90,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -148,7 +147,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         return buildOutputDocument(root);
     }
 
-    private Set<URI> chunkTopicSet = new HashSet<>();
+    private final Set<URI> chunkTopicSet = new HashSet<>();
 
     /**
      * @return absolute temporary files
@@ -339,7 +338,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         } else if (chunk.contains(CHUNK_TO_CONTENT)) {
             if (href != null || copyTo != null || topicref.hasChildNodes()) {
                 if (chunk.contains(CHUNK_BY_TOPIC)) {
-                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ064W").setLocation(topicref).toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ064W").setLocation(topicref).toString());
                 }
                 if (href == null) {
                     generateStumpTopic(topicref);
@@ -377,8 +376,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * Create new map and refer to it with navref.
-     *
-     * @param topicref
      */
     private void processNavitation(final Element topicref) {
         // create new map's root element
@@ -524,27 +521,19 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private void processSeparateChunk(final Element topicref) {
-        try {
-            final SeparateChunkTopicParser chunkParser = new SeparateChunkTopicParser();
-            chunkParser.setLogger(logger);
-            chunkParser.setJob(job);
-            chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
-            chunkParser.write(currentFile);
-        } catch (final DITAOTException e) {
-            logger.error("Failed to process chunk: " + e.getMessage(), e);
-        }
+        final SeparateChunkTopicParser chunkParser = new SeparateChunkTopicParser();
+        chunkParser.setLogger(logger);
+        chunkParser.setJob(job);
+        chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
+        chunkParser.write(currentFile);
     }
 
     private void processCombineChunk(final Element topicref) {
-        try {
-            final ChunkTopicParser chunkParser = new ChunkTopicParser();
-            chunkParser.setLogger(logger);
-            chunkParser.setJob(job);
-            chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
-            chunkParser.write(currentFile);
-        } catch (final DITAOTException e) {
-            logger.error("Failed to process chunk: " + e.getMessage(), e);
-        }
+        final ChunkTopicParser chunkParser = new ChunkTopicParser();
+        chunkParser.setLogger(logger);
+        chunkParser.setJob(job);
+        chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
+        chunkParser.write(currentFile);
     }
 
     private void updateReltable(final Element elem) {

@@ -66,6 +66,7 @@ See the accompanying LICENSE file for applicable license.
        attribute on <simpletable>
        NOTE: It references simpletable with parent::*/parent::* in order to avoid problems
        with nested simpletables. -->
+  <!-- Deprecated in 3.0 in favor of HTML5 @scope attribute. -->
   <xsl:template name="output-stentry-id">
     <!-- Find the position in this row -->
     <xsl:variable name="thiscolnum"><xsl:number level="single" count="*[contains(@class, ' topic/stentry ')]"/></xsl:variable>
@@ -88,6 +89,7 @@ See the accompanying LICENSE file for applicable license.
        Note: This function is not called within sthead, so sthead never gets headers.
        NOTE: I reference simpletable with parent::*/parent::* in order to avoid problems
        with nested simpletables. -->
+  <!-- Deprecated in 3.0 in favor of HTML5 @scope attribute -->
   <xsl:template name="set.stentry.headers">
     <xsl:variable name="keycol" select="parent::*/parent::*/@keycol"/>
     <xsl:if test="$keycol | parent::*/parent::*/*[contains(@class, ' topic/sthead ')]">
@@ -232,11 +234,13 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <xsl:template match="*[simpletable:is-head-entry(.)]" mode="headers">
-    <xsl:attribute name="id" select="dita-ot:generate-html-id(.)"/>
+    <xsl:attribute name="scope" select="'col'"/>
   </xsl:template>
 
   <xsl:template match="*[simpletable:is-body-entry(.)]" mode="headers">
-    <xsl:call-template name="set.stentry.headers"/>
+    <xsl:if test="simpletable:is-keycol-entry(.)">
+      <xsl:attribute name="scope" select="'row'"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="generate-table-header" priority="10">

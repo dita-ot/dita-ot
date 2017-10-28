@@ -7,8 +7,6 @@
  */
 package org.dita.dost.platform;
 
-import java.io.IOException;
-
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.ContentHandler;
@@ -21,8 +19,6 @@ final class ImportCatalogActionRelative extends ImportAction {
 
     /**
      * get result.
-     * @return result
-     * @throws IOException 
      */
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {

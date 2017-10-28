@@ -1,0 +1,39 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2017 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
+ */
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'org.dita-ot.eclipsehelp'
+
+description = """DITA Open Toolkit Eclipse Help plug-in."""
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile rootProject
+    testCompile rootProject
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+    testCompile group: 'org.xmlunit', name: 'xmlunit-core', version: '2.3.0'
+    testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
+    testCompile rootProject.sourceSets.test.output
+}
+
+jar.archiveName = "${project.name}.jar"
+
+task copyInstall(type: Copy) {
+    from (configurations.runtime.allArtifacts.files)
+    destinationDir = file("lib")
+}
+
+task copyDistTemp(type: Copy) {
+    from (configurations.runtime.allArtifacts.files) {
+        into "plugins/org.dita.eclipsehelp/lib"
+    }
+    destinationDir = file("${rootProject.buildDir}/tmp/dist")
+}

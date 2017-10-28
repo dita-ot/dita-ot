@@ -99,7 +99,7 @@ public final class URLUtils {
         }
         final StringBuilder sbuf = new StringBuilder();
         final int l = s.length();
-        int ch = -1;
+        int ch;
         int b = 0, sumb = 0;
         boolean applyUTF8dec = false;
 
@@ -442,7 +442,7 @@ public final class URLUtils {
         if (filename == null) {
             return null;
         }
-        String f = filename;
+        String f;
         try {
             f = URLDecoder.decode(filename, UTF8);
         } catch (final UnsupportedEncodingException e) {
@@ -690,9 +690,9 @@ public final class URLUtils {
         final int idx = u.lastIndexOf(".");
         final URI res;
         if (idx != -1) {
-            res = toURI(u.toString().substring(0, idx) + suffix + u.toString().substring(idx));
+            res = toURI(u.substring(0, idx) + suffix + u.substring(idx));
         } else {
-            res = toURI(u.toString() + suffix);
+            res = toURI(u + suffix);
         }
         return setFragment(res, fragment);
     }
@@ -700,7 +700,7 @@ public final class URLUtils {
     /**
      * Set the element ID from the path
      *
-     * @param relativePath
+     * @param relativePath path
      * @param id element ID
      * @return element ID, may be {@code null}
      */
@@ -718,7 +718,7 @@ public final class URLUtils {
     /**
      * Retrieve the element ID from the path
      *
-     * @param relativePath
+     * @param relativePath path
      * @return element ID, may be {@code null}
      */
     public static String getElementID(final String relativePath) {
@@ -735,7 +735,7 @@ public final class URLUtils {
     /**
      * Retrieve the topic ID from the path
      *
-     * @param relativePath
+     * @param relativePath path
      * @return topic ID, may be {@code null}
      */
     public static String getTopicID(final URI relativePath) {

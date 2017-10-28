@@ -7,43 +7,9 @@ Copyright 2011 Jarno Elovirta
 See the accompanying LICENSE file for applicable license.
 -->
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
-  <variable id="Product Name"/>
-  <variable id="Body odd footer"/>
-  <variable id="Body even footer"/>
-  <variable id="Body first footer"/>
-  <variable id="Body first header"/>
-  <variable id="Body odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Body even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
-  <variable id="Preface odd footer"/>
-  <variable id="Preface even footer"/>
-  <variable id="Preface first footer"/>
   <variable id="Preface odd header"><param ref-name="prodname"/> | <variable id="Preface title"/> | <param ref-name="pagenum"/></variable>
   <variable id="Preface even header"><param ref-name="pagenum"/> | <variable id="Preface title"/> | <param ref-name="prodname"/></variable>
-  <variable id="Preface first header"/>
-  <variable id="Toc odd footer"/>
-  <variable id="Toc even footer"/>
-  <variable id="Toc odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Toc even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
-  <variable id="Index odd footer"/>
-  <variable id="Index even footer"/>
-  <variable id="Index odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Index even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
-  <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 1"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 2"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 3"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Number 4"><param ref-name="number"/>. </variable>
-    <variable id="Ordered List Format 1">1</variable>
-    <variable id="Ordered List Format 2">a</variable>
-    <variable id="Ordered List Format 3">1</variable>
-    <variable id="Ordered List Format 4">a</variable>
-  <variable id="Unordered List bullet">•</variable>
-    <variable id="Unordered List bullet 1">•</variable>
-    <variable id="Unordered List bullet 2">•</variable>
-    <variable id="Unordered List bullet 3">•</variable>
-    <variable id="Unordered List bullet 4">•</variable>
   <variable id="Table of Contents">Sisällys</variable>
-  
   <variable id="Index Continued String">jatkoa</variable>
   <variable id="Index See String">, Katso </variable>
   <variable id="Index See Also String">Katso myös </variable>
@@ -51,52 +17,30 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Table of Contents Appendix">Liite <param ref-name="number"/>. </variable>
   <variable id="Table of Contents Part">Osa <param ref-name="number"/>. </variable>
   <variable id="Table of Contents Preface">Esipuhe: </variable>
-  <variable id="Table of Contents Notices"/>
   <variable id="Preface title">Esipuhe</variable>
   <variable id="Notices title"><!--TODO:Notice--></variable>
-  <variable id="Mini Toc"><!--TODO:Topics: --></variable>
-  <variable id="#note-separator">: </variable>
-  
+  <variable id="Mini Toc"><!--TODO:Topics: --></variable>  
   <variable id="Notice"><!--TODO:Notice--></variable>
-
   <variable id="Figure.title">Kuva <param ref-name="number"/>. <param ref-name="title"/></variable>
   <variable id="Figure Number">Kuva <param ref-name="number"/></variable>
   <variable id="Table.title">Taulu <param ref-name="number"/>. <param ref-name="title"/></variable>
   <variable id="Table Number">Taulu <param ref-name="number"/></variable>
   <variable id="Related Links"><!--TODO:Related Links--></variable>
-  <variable id="Cross-Reference"><!--TODO:Cross-Reference to:--></variable>
-  <variable id="Content-Reference"><!--TODO:Content-Reference to:--></variable>
-  <!-- Deprecated since 2.3 -->
-  <variable id="Untitled section"><!--TODO:Untitled section.--></variable>
+  <variable id="Cross-Reference"/><!--UNUSED-->
+  <variable id="Content-Reference"/><!--UNUSED-->
   <variable id="List item"><!--TODO:List item.--></variable>
   <variable id="Foot note"><!--TODO:Footnote.--></variable>
   <variable id="Navigation title"><!--TODO:Navigation title--></variable>
+  <variable id="Search title"><!--TODO:Search title--></variable>
   <variable id="Chapter with number">Luku <param ref-name="number"/></variable>
   <variable id="Appendix with number">Liite <param ref-name="number"/></variable>
   <variable id="Part with number">Osa <param ref-name="number"/></variable>
   <variable id="Required-Cleanup"><!--TODO:[Required-Cleanup]--></variable>
   <variable id="On the page"/>
   <variable id="Page"> sivu <param ref-name="pagenum"/></variable>
-  <variable id="This link"><!--TODO:this link--></variable>
-  <variable id="note Note Image Path"></variable>
-  <variable id="notice Note Image Path"></variable>
-  <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="fastpath Note Image Path"></variable>
-  <variable id="important Note Image Path"></variable>
-  <variable id="remember Note Image Path"></variable>
-  <variable id="restriction Note Image Path"></variable>
-  <variable id="tip Note Image Path"></variable>
-  <variable id="other Note Image Path"></variable>
-
-  <variable id="Child topics"><!--TODO:Child Topics--></variable>
-
-  <variable id="Related references">Aiheeseen liittyviä tietolähteitä</variable>
-  
-  <!-- Deprecated since 2.3 -->
-  <variable id="Index multiple entries separator">, </variable>
+  <variable id="This link"/><!--UNUSED-->
+  <variable id="Child topics"/><!--UNUSED-->
+  <variable id="Related references">Aiheeseen liittyviä tietolähteitä</variable><!--UNUSED-->
   <variable id="Optional Step">Valinnainen:</variable>
   <variable id="Required Step">Pakollinen:</variable>
   <!--Labels for task sections, now reused from common-->
@@ -107,18 +51,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Task Result"></variable>
   <variable id="Task Example"></variable>
   <variable id="Task Postreq"></variable>
-    <variable id="Step Number"><param ref-name="number"/>. </variable>
-    <variable id="Step Format">1</variable>
-    <variable id="Substep Number"><param ref-name="number"/>) </variable>
-    <variable id="Substep Format">a</variable>
-  <variable id="Glossary odd footer"/>
-  <variable id="Glossary even footer"/>
-  <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Glossary even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
   <variable id="Glossary">Sanasto</variable>
   <variable id="List of Tables">Luettelo tauluista</variable>
   <variable id="List of Figures">Luettelo kuvista</variable>
-
-  <variable id="#quote-start"><variable id="OpenQuote"/></variable>
-  <variable id="#quote-end"><variable id="CloseQuote"/></variable>
 </vars>

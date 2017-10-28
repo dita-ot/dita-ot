@@ -428,14 +428,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <!--basic child processing-->
   <xsl:template match="*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')]" priority="2" name="topic.link_child">
-    <xsl:variable name="el-name">
-      <xsl:choose>
-        <xsl:when test="contains(../@class, ' topic/linklist ')">div</xsl:when>
-        <xsl:otherwise>li</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:element name="{$el-name}">
-      <xsl:attribute name="class">ulchildlink</xsl:attribute>
+    <li class="ulchildlink">
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class" select="'ulchildlink'"/>
       </xsl:call-template>
@@ -466,19 +459,12 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
       <br/>
       <!--add the description on the next line, like a summary-->
       <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
-    </xsl:element>
+    </li>
   </xsl:template>
 
   <!--ordered child processing-->
   <xsl:template match="*[@collection-type = 'sequence']/*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')]" priority="3" name="topic.link_orderedchild">
-    <xsl:variable name="el-name" as="xs:string">
-      <xsl:choose>
-        <xsl:when test="contains(../@class, ' topic/linklist ')">div</xsl:when>
-        <xsl:otherwise>li</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:element name="{$el-name}">
-      <xsl:attribute name="class">olchildlink</xsl:attribute>
+    <li class="olchildlink">
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class" select="'olchildlink'"/>
       </xsl:call-template>
@@ -507,7 +493,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
       <br/>
       <!--add the description on a new line, unlike an info, to avoid issues with punctuation (adding a period)-->
       <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
-    </xsl:element>
+    </li>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/link ')]" name="topic.link">
@@ -516,7 +502,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
       <xsl:choose>
         <!-- Linklist links put out <br/> in "processlinklist" -->
         <xsl:when test="ancestor::*[contains(@class, ' topic/linklist ')]">
-          <xsl:call-template name="makelink"/>
+          <li class="linklist"><xsl:call-template name="makelink"/></li>
         </xsl:when>
         <!-- Ancestor links go in the breadcrumb trail, and should not get a <br/> -->
         <xsl:when test="@role = 'ancestor'">
@@ -624,22 +610,24 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
     <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
-    <xsl:for-each select="*[contains(@class, ' topic/linklist ')] | *[contains(@class, ' topic/link ')]">
-      <xsl:choose>
-        <!-- for children, div wrapper is created in main template -->
-        <xsl:when test="contains(@class, ' topic/link ') and (@role = ('child', 'descendant'))">
-          <xsl:apply-templates select="."/>
-        </xsl:when>
-        <xsl:when test="contains(@class, ' topic/link ')">
-          <div>
-            <xsl:apply-templates select="."/>
-          </div>
-        </xsl:when>
-        <xsl:otherwise><!-- nested linklist -->
-          <xsl:apply-templates select="."/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:for-each>
+    <xsl:if test="exists(*[contains(@class, ' topic/linklist ')] | *[contains(@class, ' topic/link ')])">
+      <ul class="linklist">
+        <xsl:for-each select="*[contains(@class, ' topic/linklist ')] | *[contains(@class, ' topic/link ')]">
+          <xsl:choose>
+            <!-- for children, li wrapper is created in main template -->
+            <xsl:when test="contains(@class, ' topic/link ') and (@role = ('child', 'descendant'))">
+              <xsl:apply-templates select="."/>
+            </xsl:when>
+            <xsl:when test="contains(@class, ' topic/link ')">
+              <xsl:apply-templates select="."/>
+            </xsl:when>
+            <xsl:otherwise><!-- nested linklist -->
+              <li class="sublinklist"><xsl:apply-templates select="."/></li>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+        </ul>
+    </xsl:if>
     <xsl:apply-templates select="*[contains(@class, ' topic/linkinfo ')]"/>
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </xsl:template>

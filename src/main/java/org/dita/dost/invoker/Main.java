@@ -54,6 +54,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.util.Configuration;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -64,7 +65,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.Constants.PLUGIN_CONF;
 import static org.dita.dost.util.XMLUtils.getChildElements;
-import static org.dita.dost.util.XMLUtils.getText;
 import static org.dita.dost.util.XMLUtils.toList;
 
 /**
@@ -203,6 +203,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     private static Map<String, Argument> PLUGIN_ARGUMENTS;
 
+    // Lazy load parameters
     private synchronized Map<String, Argument> getPluginArguments() {
         if (PLUGIN_ARGUMENTS == null) {
             final List<Element> params = toList(getPluginConfiguration().getElementsByTagName("param"));
@@ -235,7 +236,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             return new FileArgument(name);
         } else if (type.equals("enum")) {
             final Set<String> vals = getChildElements(param).stream()
-                    .map(val -> getText(val))
+                    .map(XMLUtils::getText)
                     .collect(Collectors.toSet());
             return new EnumArgument(name, vals);
         } else {
@@ -251,12 +252,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
-    private static final Map<String, String> RESERVED_PROPERTIES = new HashMap<>();
-    static {
-        for (final Map.Entry<String, Argument> a: ARGUMENTS.entrySet()) {
-            RESERVED_PROPERTIES.put(a.getValue().property, a.getKey());
-        }
-    }
+    private static final Map<String, String> RESERVED_PROPERTIES = ImmutableMap.of(
+            "transtype", "-f",
+            "args.input", "-i",
+            "output.dir", "-o",
+            "args.filter", "--filter",
+            ANT_TEMP_DIR, "-t"
+    );
 
     @Deprecated
     private static final Map<String, Argument> LEGACY_ARGUMENTS = new HashMap<>();
@@ -945,7 +947,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final int posEq = name.indexOf("=");
         if (posEq > 0) {
             value = name.substring(posEq + 1);
-            name = name.substring(0, posEq);
         } else {
             value = args.pop();
         }
@@ -1514,7 +1515,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             spaces += spaces;
         }
         final StringBuilder msg = new StringBuilder();
-        msg.append(heading + lSep + lSep);
+        msg.append(heading).append(lSep).append(lSep);
         final int size = names.size();
         for (int i = 0; i < size; i++) {
             msg.append(" ");

@@ -96,13 +96,10 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
      * 
      * @param term term to serializer
      * @param serializer XML output to write to
-     * @throws SAXException
      */
     private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer) throws SAXException {
         List<IndexTermTarget> targets = term.getTargetList();
         final List<IndexTerm> subTerms = term.getSubTerms();
-        int targetNum = targets.size();
-        final int subTermNum = subTerms.size();
 
         serializer.writeStartElement("li");
 
@@ -111,10 +108,9 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
         if (targets.isEmpty()){
             findTargets(term);
             targets = term.getTargetList();
-            targetNum = targets.size();
         }
 
-        if(targetNum > 1) {
+        if(targets.isEmpty()) {
             serializer.writeCharacters(term.getTermFullName());
         } else {
             final IndexTermTarget target = targets.get(0);
@@ -123,7 +119,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
             serializer.writeCharacters(term.getTermFullName());
             serializer.writeEndElement(); // a
         }
-        if (subTermNum > 0) {
+        if (subTerms.size() > 0) {
             serializer.writeStartElement("ul");
             for (final IndexTerm subTerm : subTerms) {
                 outputIndexTerm(subTerm, serializer);
@@ -140,7 +136,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
      */
     private void findTargets(final IndexTerm term) {
         final List<IndexTerm> subTerms = term.getSubTerms();
-        List<IndexTermTarget> subTargets = null;
+        List<IndexTermTarget> subTargets;
         if (subTerms != null && ! subTerms.isEmpty()){
             for (final IndexTerm subTerm : subTerms) {
                 subTargets = subTerm.getTargetList();

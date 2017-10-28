@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?workdir /C:\DITA-OT1.5\SAXONIBMJDK\temp\12008\xhtml\case1?><?path2project ?><map class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                         " xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xtrc="map:1" xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap">
-  <title class="- topic/title " xtrc="title:1" xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap">this is a title</title>
-  <topicref class="- map/topicref " href="componentA/configA.xml#configA" keys="componentAconfig commonconfig" type="task" xtrc="topicref:1" xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">ABC</navtitle><linktext class="- map/linktext ">ABC</linktext><exportanchors class="+ topic/keywords delay-d/exportanchors " xtrc="exportanchors:1" xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap">
-        <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="commonconfig" xtrc="anchorkey:1" xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap"></anchorkey>
-        <anchorid class="+ topic/keyword delay-d/anchorid " id="step1" xtrc="anchorid:1" xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap"></anchorid>
-        <anchorid class="+ topic/keyword delay-d/anchorid " id="step2" xtrc="anchorid:2" xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap"></anchorid>
+<?workdir /C:\DITA-OT1.5\SAXONIBMJDK\temp\12008\xhtml\case1?><?path2project ?><map class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                         " xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <title class="- topic/title ">this is a title</title>
+  <topicref class="- map/topicref " href="componentA/configA.xml#configA" keys="componentAconfig commonconfig" type="task"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">ABC</navtitle><linktext class="- map/linktext ">ABC</linktext><exportanchors class="+ topic/keywords delay-d/exportanchors ">
+        <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="commonconfig"></anchorkey>
+        <anchorid class="+ topic/keyword delay-d/anchorid " id="step1"></anchorid>
+        <anchorid class="+ topic/keyword delay-d/anchorid " id="step2"></anchorid>
       </exportanchors></topicmeta></topicref>
   
-  <topicref class="- map/topicref " href="test1.xml" type="task" xtrc="topicref:2" xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">test 1 3</navtitle><linktext class="- map/linktext ">test 1 3</linktext></topicmeta></topicref>
+  <topicref class="- map/topicref " href="test1.xml" type="task"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">test 1 3</navtitle><linktext class="- map/linktext ">test 1 3</linktext></topicmeta></topicref>
 </map>

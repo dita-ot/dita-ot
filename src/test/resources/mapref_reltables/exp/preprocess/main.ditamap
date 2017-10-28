@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " title="Mapref testing!!!!!">
+  <topicref class="- map/topicref " href="main-1.dita" type="concept">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">First topic referenced from the main map</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">First topic referenced from the main map</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">This is referenced from the main map. That's it.</shortdesc>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="subdir/mapref1-1.dita" linking="none" type="reference">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">First in mapref1</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">First in mapref1</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">first topic in the first map that gets pulled in</shortdesc>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="subdir/mapref1-2.dita" linking="none" type="reference">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Second topic in first mapref</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Second topic in first mapref</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">second topic in the first mapref that gets pulled in. Top-level in this map.</shortdesc>
+    </topicmeta>
+    <topicref class="- map/topicref " href="subdir/mapref1-3.dita" linking="none" type="reference">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Nested topic from first mapref</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">Nested topic from first mapref</linktext>
+        <?ditaot genshortdesc?>
+        <shortdesc class="- map/shortdesc ">third topic in the first mapref, nested under second</shortdesc>
+      </topicmeta>
+      <topicref class="- map/topicref " href="subdir/mapref1-4.dita" linking="none" type="reference">
+        <topicmeta class="- map/topicmeta ">
+          <navtitle class="- topic/navtitle ">Fourth in first mapref! Really deep!</navtitle>
+          <?ditaot gentext?>
+          <linktext class="- map/linktext ">Fourth in first mapref! Really deep!</linktext>
+          <?ditaot genshortdesc?>
+          <shortdesc class="- map/shortdesc ">nested inside 3, which is inside 2, inside the first referenced map</shortdesc>
+        </topicmeta>
+      </topicref>
+    </topicref>
+  </topicref>
+  <topicref class="- map/topicref " href="subdir/mapref1-5.dita" linking="none" type="reference">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">End of first mapref, 3rd top-level</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">End of first mapref, 3rd top-level</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">5th topic from first mapref, comes at the end</shortdesc>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="main-2.dita" type="concept">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Second topic in the main map</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Second topic in the main map</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">This is a peer of the first topic. It has children.</shortdesc>
+    </topicmeta>
+    <topicref class="- map/topicref " href="main-3.dita" type="concept">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Third topic in the main map</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">Third topic in the main map</linktext>
+        <?ditaot genshortdesc?>
+        <shortdesc class="- map/shortdesc ">This is a child of the second map. It has children, and a mapref child.</shortdesc>
+      </topicmeta>
+      <topicref class="- map/topicref " href="main-4.dita" type="concept">
+        <topicmeta class="- map/topicmeta ">
+          <navtitle class="- topic/navtitle ">Fourth in the main map. Deepest level of nesting. Peer of mapref.</navtitle>
+          <?ditaot gentext?>
+          <linktext class="- map/linktext ">Fourth in the main map. Deepest level of nesting. Peer of mapref.</linktext>
+          <?ditaot genshortdesc?>
+          <shortdesc class="- map/shortdesc ">This is a child of the third item in the main map. It comes before a mapref.</shortdesc>
+        </topicmeta>
+      </topicref>
+      <topicref class="- map/topicref " href="mapref2-1.dita" linking="none" type="task">
+        <topicmeta class="- map/topicmeta ">
+          <navtitle class="- topic/navtitle ">Pull a task up deep in the hierarchy (1)</navtitle>
+          <?ditaot gentext?>
+          <linktext class="- map/linktext ">Pull a task up deep in the hierarchy (1)</linktext>
+          <?ditaot genshortdesc?>
+          <shortdesc class="- map/shortdesc ">First of the task map, pulled up down in the hierarchy</shortdesc>
+        </topicmeta>
+      </topicref>
+      <topicref class="- map/topicref " href="mapref2-2.dita" linking="none" type="task">
+        <topicmeta class="- map/topicmeta ">
+          <navtitle class="- topic/navtitle ">Second in the task map</navtitle>
+          <?ditaot gentext?>
+          <linktext class="- map/linktext ">Second in the task map</linktext>
+          <?ditaot genshortdesc?>
+          <shortdesc class="- map/shortdesc ">second task in the task mapref thing</shortdesc>
+        </topicmeta>
+        <topicref class="- map/topicref " href="mapref2-3.dita" linking="none" type="task">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Nested item in the referenced taskmap</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Nested item in the referenced taskmap</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This is nested in the taskmap, which is the second referenced map</shortdesc>
+          </topicmeta>
+          <topicref class="- map/topicref " href="mapref2-4.dita" linking="none" type="task">
+            <topicmeta class="- map/topicmeta ">
+              <navtitle class="- topic/navtitle ">Deep down in the task hierarchy</navtitle>
+              <?ditaot gentext?>
+              <linktext class="- map/linktext ">Deep down in the task hierarchy</linktext>
+              <?ditaot genshortdesc?>
+              <shortdesc class="- map/shortdesc ">nested down inside the task map</shortdesc>
+            </topicmeta>
+          </topicref>
+        </topicref>
+      </topicref>
+      <topicref class="- map/topicref " href="mapref2-5.dita" linking="none" type="task">
+        <topicmeta class="- map/topicmeta ">
+          <navtitle class="- topic/navtitle ">End of the task map</navtitle>
+          <?ditaot gentext?>
+          <linktext class="- map/linktext ">End of the task map</linktext>
+          <?ditaot genshortdesc?>
+          <shortdesc class="- map/shortdesc ">last item in the second task map</shortdesc>
+        </topicmeta>
+      </topicref>
+      <topicref class="- map/topicref " href="main-5.dita" type="concept">
+        <topicmeta class="- map/topicmeta ">
+          <navtitle class="- topic/navtitle ">Fifth item in main map - after mapref</navtitle>
+          <?ditaot gentext?>
+          <linktext class="- map/linktext ">Fifth item in main map - after mapref</linktext>
+          <?ditaot genshortdesc?>
+          <shortdesc class="- map/shortdesc ">This item comes after the mapref. It is a child of the third item. It is a peer of the fourth item.</shortdesc>
+        </topicmeta>
+      </topicref>
+    </topicref>
+  </topicref>
+  <topicref class="- map/topicref " href="main-6.dita" type="concept">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">End of the main map</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">End of the main map</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">Final concept in the main map</shortdesc>
+    </topicmeta>
+  </topicref>
+  <reltable class="- map/reltable " toc="no">
+    <relrow class="- map/relrow ">
+      <relcell class="- map/relcell " toc="no">
+        <topicref class="- map/topicref " href="main-1.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">First topic referenced from the main map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">First topic referenced from the main map</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This is referenced from the main map. That's it.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="main-2.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Second topic in the main map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Second topic in the main map</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This is a peer of the first topic. It has children.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="main-3.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Third topic in the main map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Third topic in the main map</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This is a child of the second map. It has children, and a mapref child.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="main-4.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Fourth in the main map. Deepest level of nesting. Peer of mapref.</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Fourth in the main map. Deepest level of nesting. Peer of mapref.</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This is a child of the third item in the main map. It comes before a mapref.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="main-5.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Fifth item in main map - after mapref</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Fifth item in main map - after mapref</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This item comes after the mapref. It is a child of the third item. It is a peer of the fourth item.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="main-6.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">End of the main map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">End of the main map</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">Final concept in the main map</shortdesc>
+          </topicmeta>
+        </topicref>
+      </relcell>
+      <relcell class="- map/relcell " format="html" scope="external" toc="no">
+        <topicref class="- map/topicref " format="html" href="http://www.ibm.com" navtitle="ibm: From the main map" scope="external" toc="no">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">ibm: From the main map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">ibm: From the main map</linktext>
+          </topicmeta>
+        </topicref>
+      </relcell>
+    </relrow>
+  </reltable>
+  <reltable class="- map/reltable " toc="no">
+    <relrow class="- map/relrow ">
+      <relcell class="- map/relcell " toc="no" type="concept">
+        <topicref class="- map/topicref " href="main-1.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">First topic referenced from the main map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">First topic referenced from the main map</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This is referenced from the main map. That's it.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="main-2.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Second topic in the main map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Second topic in the main map</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This is a peer of the first topic. It has children.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="main-3.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Third topic in the main map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Third topic in the main map</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This is a child of the second map. It has children, and a mapref child.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="main-4.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Fourth in the main map. Deepest level of nesting. Peer of mapref.</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Fourth in the main map. Deepest level of nesting. Peer of mapref.</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This is a child of the third item in the main map. It comes before a mapref.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="main-5.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Fifth item in main map - after mapref</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Fifth item in main map - after mapref</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This item comes after the mapref. It is a child of the third item. It is a peer of the fourth item.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="main-6.dita" toc="no" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">End of the main map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">End of the main map</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">Final concept in the main map</shortdesc>
+          </topicmeta>
+        </topicref>
+      </relcell>
+      <relcell class="- map/relcell " toc="no" type="task">
+        <topicref class="- map/topicref " href="mapref2-1.dita" toc="no" type="task">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Pull a task up deep in the hierarchy (1)</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Pull a task up deep in the hierarchy (1)</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">First of the task map, pulled up down in the hierarchy</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="mapref2-2.dita" toc="no" type="task">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Second in the task map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Second in the task map</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">second task in the task mapref thing</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="mapref2-3.dita" toc="no" type="task">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Nested item in the referenced taskmap</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Nested item in the referenced taskmap</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">This is nested in the taskmap, which is the second referenced map</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="mapref2-4.dita" toc="no" type="task">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Deep down in the task hierarchy</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Deep down in the task hierarchy</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">nested down inside the task map</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="mapref2-5.dita" toc="no" type="task">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">End of the task map</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">End of the task map</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">last item in the second task map</shortdesc>
+          </topicmeta>
+        </topicref>
+      </relcell>
+      <relcell class="- map/relcell " toc="no" type="reference">
+        <topicref class="- map/topicref " href="subdir/mapref1-1.dita" toc="no" type="reference">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">First in mapref1</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">First in mapref1</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">first topic in the first map that gets pulled in</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="subdir/mapref1-2.dita" toc="no" type="reference">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Second topic in first mapref</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Second topic in first mapref</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">second topic in the first mapref that gets pulled in. Top-level in this map.</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="subdir/mapref1-3.dita" toc="no" type="reference">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Nested topic from first mapref</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Nested topic from first mapref</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">third topic in the first mapref, nested under second</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="subdir/mapref1-4.dita" toc="no" type="reference">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Fourth in first mapref! Really deep!</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Fourth in first mapref! Really deep!</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">nested inside 3, which is inside 2, inside the first referenced map</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " href="subdir/mapref1-5.dita" toc="no" type="reference">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">End of first mapref, 3rd top-level</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">End of first mapref, 3rd top-level</linktext>
+            <?ditaot genshortdesc?>
+            <shortdesc class="- map/shortdesc ">5th topic from first mapref, comes at the end</shortdesc>
+          </topicmeta>
+        </topicref>
+      </relcell>
+    </relrow>
+  </reltable>
+</map>

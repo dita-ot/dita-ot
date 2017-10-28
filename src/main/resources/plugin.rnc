@@ -44,7 +44,7 @@ param.val |=
 param.val |=
   attribute type { "string" },
   val*
-param.val |= attribute type { "file" | "dir" }
+param.val |= attribute type { "file" | "dir" | "uri" }
 val =
   element val {
     attribute desc { text }?,

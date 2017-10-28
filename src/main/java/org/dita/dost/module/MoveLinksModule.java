@@ -121,16 +121,8 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
                 if (fragment == null) {
                     fragment = SHARP;
                 }
-                Map<String, Element> m = map.get(path);
-                if (m == null) {
-                    m = new HashMap<>();
-                    map.put(path, m);
-                }
-                Element stub = m.get(fragment);
-                if (stub == null) {
-                    stub = doc.createElement("stub");
-                    m.put(fragment, stub);
-                }
+                Map<String, Element> m = map.computeIfAbsent(path, k -> new HashMap<>());
+                Element stub = m.computeIfAbsent(fragment, k -> doc.createElement("stub"));
                 Node c = maplink.getFirstChild();
                 while (c != null) {
                     final Node nextSibling = c.getNextSibling();

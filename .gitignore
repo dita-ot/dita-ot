@@ -10,13 +10,19 @@ src/main/lib/*.jar
 # Generated resources
 src/main/build.xml
 src/main/catalog-dita.xml
+src/main/config/env.bat
+src/main/config/env.sh
+src/main/config/messages.xml
+src/main/config/messages_en_US.properties
+src/main/config/org.dita.dost.platform/plugin.properties
+src/main/config/plugins.xml
 src/main/doc
-src/main/lib/org.dita.dost.platform/plugin.properties
 src/main/plugins/org.dita.base/build.xml
 src/main/plugins/org.dita.base/build_preprocess.xml
 src/main/plugins/org.dita.base/build_preprocess2.xml
 src/main/plugins/org.dita.base/catalog-dita.xml
 src/main/plugins/org.dita.eclipsehelp/build_dita2eclipsehelp.xml
+src/main/plugins/org.dita.eclipsehelp/lib/eclipsehelp.jar
 src/main/plugins/org.dita.eclipsehelp/xsl/map2eclipse.xsl
 src/main/plugins/org.dita.eclipsehelp/xsl/map2plugin.xsl
 src/main/plugins/org.dita.html5/.sass-cache
@@ -26,10 +32,13 @@ src/main/plugins/org.dita.html5/css/commonrtl.css
 src/main/plugins/org.dita.html5/xsl/dita2html5Impl.xsl
 src/main/plugins/org.dita.html5/xsl/map2html5-coverImpl.xsl
 src/main/plugins/org.dita.html5/xsl/map2html5toc.xsl
+src/main/plugins/org.dita.htmlhelp/build_dita2htmlhelp.xml
+src/main/plugins/org.dita.htmlhelp/lib/htmlhelp.jar
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhp.xsl
 src/main/plugins/org.dita.pdf2.axf/lib/axf.jar
 src/main/plugins/org.dita.pdf2.axf/xsl/fo/topic2fo_shell_axf.xsl
+src/main/plugins/org.dita.pdf2.fop/lib
 src/main/plugins/org.dita.pdf2.fop/xsl/fo/topic2fo_shell_fop.xsl
 src/main/plugins/org.dita.pdf2.xep/lib/
 src/main/plugins/org.dita.pdf2.xep/xsl/fo/topic2fo_shell_xep.xsl
@@ -51,16 +60,13 @@ src/main/plugins/org.dita.xhtml/build_general.xml
 src/main/plugins/org.dita.xhtml/xsl/dita2html-base.xsl
 src/main/plugins/org.dita.xhtml/xsl/map2html-coverImpl.xsl
 src/main/plugins/org.dita.xhtml/xsl/map2htmltoc.xsl
-src/main/resources/env.bat
-src/main/resources/env.sh
-src/main/resources/messages.xml
-src/main/resources/plugins.xml
 src/main/startcmd.bat
 src/main/startcmd.sh
 src/main/xsl/common/allstrings.xml
 src/main/xsl/common/strings.xml
 src/main/xsl/preprocess/conref.xsl
 src/main/xsl/preprocess/flag.xsl
+src/main/xsl/preprocess/map-conref.xsl
 src/main/xsl/preprocess/maplink.xsl
 src/main/xsl/preprocess/mappull.xsl
 src/main/xsl/preprocess/mapref.xsl
@@ -120,4 +126,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-src/main/plugins/org.dita.pdf2.fop/lib

@@ -174,16 +174,10 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     // This entry does not have an anchor, we assume that this
                     // topic will
                     // be fully chunked. Thus it should not produce any output.
-                    final Iterator<URI> hrefit = hrefTopics.iterator();
-                    while (hrefit.hasNext()) {
-                        final URI ent = hrefit.next();
-                        if (job.tempDirURI.resolve(ent).equals(
-                                job.tempDirURI.resolve(s))) {
-                            // The entry in hrefTopics points to the same target
-                            // as entry in chunkTopics, it should be removed.
-                            hrefit.remove();
-                        }
-                    }
+                    // The entry in hrefTopics points to the same target
+                    // as entry in chunkTopics, it should be removed.
+                    hrefTopics.removeIf(ent -> job.tempDirURI.resolve(ent).equals(
+                            job.tempDirURI.resolve(s)));
                 } else if (hrefTopics.contains(s)) {
                     hrefTopics.remove(s);
                 }

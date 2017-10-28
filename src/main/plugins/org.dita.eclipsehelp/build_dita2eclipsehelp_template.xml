@@ -133,7 +133,7 @@ See the accompanying LICENSE file for applicable license.
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
             <param name="defaultLanguage" expression="${default.language}"/>
             <dita:extension behavior="org.dita.dost.platform.InsertAction" id="dita.conductor.eclipse.toc.param"/>
-            <mapper classname="org.dita.dost.util.JobMapper" to=".xml"/>
+            <mapper classname="org.dita.dost.ant.types.JobMapper" to=".xml"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
@@ -471,6 +471,9 @@ See the accompanying LICENSE file for applicable license.
   </target>
   
   <target name="build.eclipse.jar">
+    <condition property="args.eclipsehelp.jar.name" value="${args.output.base}.jar">
+      <isset property="args.output.base"/>
+    </condition>
     <jar destfile="${output.dir}/${args.eclipsehelp.jar.name}" basedir="${dita.output.dir}" if:set="args.eclipsehelp.jar.name">
       <include name="**/*"/>
     </jar>

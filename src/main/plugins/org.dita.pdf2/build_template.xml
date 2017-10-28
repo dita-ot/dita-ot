@@ -52,6 +52,7 @@ with those set forth herein.
     </dita-ot-fail>
     
     <property name="preprocess.copy-image.skip" value="true"/>
+    <property name="clean-preprocess.use-result-filename" value="false"/>
     
     <condition property="args.rellinks" value="nofamily">
       <not><isset property="args.rellinks"/></not>
@@ -59,7 +60,7 @@ with those set forth herein.
   </target>
 
   <target name="dita2pdf" depends="dita2pdf2"/>
-  <target name="dita2pdf2" depends="dita2pdf2.init, build-init, preprocess, map2pdf2, topic2pdf2"/>
+  <target name="dita2pdf2" depends="dita2pdf2.init, build-init, preprocess2, map2pdf2, topic2pdf2"/>
 
   <target name="transform.topic2pdf.init">
     <property name="pdf2.temp.dir" value="${dita.temp.dir}"/>
@@ -130,8 +131,10 @@ with those set forth herein.
                    transform.topic2pdf"/>
   <target name="preview.topic.pdf.init">
     <property name="inputFile" location="${dita.temp.dir}/${user.input.file}"/>
-    <!--property name="outputFile" location="${dita.map.output.dir}/${dita.topic.filename.root}.pdf"/-->
-    <property name="outputFile.base" value="${dita.topic.filename.root}"/>
+    <!-- Deprecated since 3.0. Use args.output.base instead -->
+    <condition property="outputFile.base" value="${args.output.base}" else="${dita.topic.filename.root}">
+      <isset property="args.output.base"/>
+    </condition>
     <property name="artworkPrefix" value="${artwork.dir}"/>
   </target>
 
@@ -154,8 +157,10 @@ with those set forth herein.
                    transform.topic2pdf"/>
   <target name="publish.map.pdf.init">
     <property name="inputFile" location="${dita.temp.dir}/${merged.file}"/>
-    <!--property name="outputFile" location="${dita.map.output.dir}/${dita.map.filename.root}.pdf"/-->
-    <property name="outputFile.base" value="${dita.map.filename.root}"/>
+    <!-- Deprecated since 3.0. Use args.output.base instead -->
+    <condition property="outputFile.base" value="${args.output.base}" else="${dita.map.filename.root}">
+      <isset property="args.output.base"/>
+    </condition>
     <property name="artworkPrefix" value="${artwork.dir}"/>
   </target>
 
@@ -292,7 +297,7 @@ with those set forth herein.
     <makeurl property="dita.map.output.dir.url" file="${pdf2.temp.dir}" validate="no"/>
     <makeurl property="work.dir.url" file="${dita.temp.dir}" validate="no"/>
     <makeurl property="customization.dir.url" file="${customization.dir}" validate="no"/>
-    <makeurl property="user.input.dir.url" file="${user.input.dir}"/>    
+    <makeurl property="user.input.dir.url" file="${user.input.dir}" validate="no"/>    
     <makeurl property="variable.file.url" file="${variable.file}" validate="no"/>
 
     <xslt style="${temp.transformation.file}"

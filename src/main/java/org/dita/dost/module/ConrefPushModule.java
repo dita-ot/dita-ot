@@ -20,7 +20,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ConrefPushReader;
 import org.dita.dost.reader.ConrefPushReader.MoveKey;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.ConrefPushParser;
 import org.w3c.dom.DocumentFragment;
 
