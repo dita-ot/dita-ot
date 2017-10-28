@@ -32,6 +32,7 @@ src/main/plugins/org.dita.html5/css/commonrtl.css
 src/main/plugins/org.dita.html5/xsl/dita2html5Impl.xsl
 src/main/plugins/org.dita.html5/xsl/map2html5-coverImpl.xsl
 src/main/plugins/org.dita.html5/xsl/map2html5toc.xsl
+src/main/plugins/org.dita.htmlhelp/build_dita2htmlhelp.xml
 src/main/plugins/org.dita.htmlhelp/lib/htmlhelp.jar
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhp.xsl
@@ -65,6 +66,7 @@ src/main/xsl/common/allstrings.xml
 src/main/xsl/common/strings.xml
 src/main/xsl/preprocess/conref.xsl
 src/main/xsl/preprocess/flag.xsl
+src/main/xsl/preprocess/map-conref.xsl
 src/main/xsl/preprocess/maplink.xsl
 src/main/xsl/preprocess/mappull.xsl
 src/main/xsl/preprocess/mapref.xsl
