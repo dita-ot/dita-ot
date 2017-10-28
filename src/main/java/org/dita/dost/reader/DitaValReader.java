@@ -406,12 +406,7 @@ public final class DitaValReader implements AbstractReader {
     public Map<FilterKey, Action> getFilterMap() {
         return Collections.unmodifiableMap(filterMap);
     }
-    
-    /**
-     * reset.
-     */
-    public void reset() {
-    }
+
     /**
      * reset filter map.
      */

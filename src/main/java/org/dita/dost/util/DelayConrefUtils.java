@@ -33,7 +33,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 
-import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.writer.ExportAnchorsFilter;
 import org.w3c.dom.Document;

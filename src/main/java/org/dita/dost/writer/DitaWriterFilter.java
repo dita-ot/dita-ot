@@ -19,13 +19,10 @@ import org.dita.dost.module.DebugAndFilterModule;
 import javax.xml.namespace.QName;
 import java.io.File;
 import java.net.URI;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.reader.GenListModuleReader.*;
 
 
@@ -81,15 +78,6 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
 
     public void setOutputFile(final File outputFile) {
         this.outputFile = outputFile;
-    }
-
-    @Override
-    public void setJob(final Job job) {
-        super.setJob(job);
-//        fileInfoMap = new HashMap<>();
-//        for (final FileInfo f: job.getFileInfo()) {
-//            fileInfoMap.put(f.result, f);
-//        }
     }
 
     // ContentHandler methods
@@ -165,8 +153,9 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
                 }
             } else if(ATTRIBUTE_NAME_FORMAT.equals(attQName.getLocalPart())) {
                 final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+                final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                 // verify format is correct
-                if (isFormatDita(format)) {
+                if (isFormatDita(format) && (scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
                     attValue = ATTR_FORMAT_VALUE_DITA;
                     if (!format.equals(ATTR_FORMAT_VALUE_DITA)) {
                         XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT, DITA_OT_NS_PREFIX + ":" + ATTRIBUTE_NAME_ORIG_FORMAT, "CDATA", format);

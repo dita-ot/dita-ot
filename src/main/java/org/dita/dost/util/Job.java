@@ -760,6 +760,27 @@ public final class Job {
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
                 return this;
             }
+
+            public Builder addContentFields(final FileInfo orig) {
+//                if (orig.src != null) src = orig.src;
+//                if (orig.uri != null) uri = orig.uri;
+//                if (orig.file != null) file = orig.file;
+//                if (orig.result != null) result = orig.result;
+                if (orig.format != null) format = orig.format;
+                if (orig.hasConref) hasConref = orig.hasConref;
+                if (orig.isChunked) isChunked = orig.isChunked;
+                if (orig.hasLink) hasLink = orig.hasLink;
+//                if (orig.isResourceOnly) isResourceOnly = orig.isResourceOnly;
+//                if (orig.isTarget) isTarget = orig.isTarget;
+                if (orig.isConrefPush) isConrefPush = orig.isConrefPush;
+                if (orig.hasKeyref) hasKeyref = orig.hasKeyref;
+                if (orig.hasCoderef) hasCoderef = orig.hasCoderef;
+//                if (orig.isSubjectScheme) isSubjectScheme = orig.isSubjectScheme;
+//                if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
+//                if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
+//                if (orig.isOutDita) isOutDita = orig.isOutDita;
+                return this;
+            }
             
             public Builder src(final URI src) { assert src.isAbsolute(); this.src = src; return this; }
             public Builder uri(final URI uri) { this.uri = uri; this.file = null; return this; }

@@ -78,10 +78,10 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         logger.debug("Loading subject schemes");
         final List<Element> subjectSchemes = toList(root.getElementsByTagName("*"));
         subjectSchemes.stream()
-                .filter(e -> SUBJECTSCHEME_ENUMERATIONDEF.matches(e))
+                .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
                 .forEach(enumerationDef -> {
                     final Element schemeRoot = ancestors(enumerationDef)
-                            .filter(e -> SUBMAP.matches(e))
+                            .filter(SUBMAP::matches)
                             .findFirst()
                             .orElse(root);
                     subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
@@ -176,7 +176,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         assert file.getFragment() == null;
         final URI f = file.normalize();
         return Optional.ofNullable(job.getFileInfo(f))
-                .map(fi -> new FileInfo.Builder(fi))
+                .map(FileInfo.Builder::new)
                 .orElse(new FileInfo.Builder().src(file))
                 .uri(tempFileNameScheme.generateTempFileName(file))
                 .build();

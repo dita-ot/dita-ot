@@ -559,7 +559,7 @@ See the accompanying LICENSE file for applicable license.
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
     <copy todir="${copy-image.todir}" failonerror="false">
-      <dita-fileset format="image" />
+      <ditafileset format="image" />
     </copy>
   </target>
   
@@ -572,7 +572,7 @@ See the accompanying LICENSE file for applicable license.
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
     <copy todir="${copy-html.todir}" failonerror="false">
-      <dita-fileset format="html" />
+      <ditafileset format="html" />
     </copy>
   </target>
   

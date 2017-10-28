@@ -72,7 +72,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     private URI map;
     /** Absolute URI to map being processed. */
     protected URI currentFile;
-    private Set<URI> filtered = new HashSet<>();
+    private final Set<URI> filtered = new HashSet<>();
 
     public BranchFilterModule() {
         builder = XMLUtils.getDocumentBuilder();
@@ -602,14 +602,14 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             final String keyscope = elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE);
             if (!keyscope.isEmpty()) {
                 for (final String key : keyscope.trim().split("\\s+")) {
-                    filter.keyscopePrefix.ifPresent(s -> buf.append(s));
+                    filter.keyscopePrefix.ifPresent(buf::append);
                     buf.append(key);
-                    filter.keyscopeSuffix.ifPresent(s -> buf.append(s));
+                    filter.keyscopeSuffix.ifPresent(buf::append);
                     buf.append(' ');
                 }
             } else {
-                filter.keyscopePrefix.ifPresent(s -> buf.append(s));
-                filter.keyscopeSuffix.ifPresent(s -> buf.append(s));
+                filter.keyscopePrefix.ifPresent(buf::append);
+                filter.keyscopeSuffix.ifPresent(buf::append);
             }
             elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
         }

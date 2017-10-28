@@ -39,6 +39,7 @@ See the accompanying LICENSE file for applicable license.
                   topic-maplink,
                   topic-topicpull,
                   
+                  map-clean-map,
                   clean-preprocess,
                   copy-files2,
                   {depend.preprocess.post}">
@@ -446,7 +447,7 @@ See the accompanying LICENSE file for applicable license.
           unless="preprocess.copy-image.skip"
           description="Copy image files">
     <copy todir="${dita.output.dir}" failonerror="false">
-      <dita-fileset format="image" />
+      <ditafileset format="image" />
     </copy>
   </target>
   

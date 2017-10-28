@@ -35,7 +35,7 @@ public class TestTopicMergeModule {
 
     public TopicMergeModule module;
 
-    //	private AbstractFacade facade;
+    //    private AbstractFacade facade;
 
     private PipelineHashIO pipelineInput;
     final File ditalistfile = new File (resourceDir, "compare.xml");
@@ -46,7 +46,7 @@ public class TestTopicMergeModule {
     public void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(getClass());
 
-        //		facade = new PipelineFacade();
+        //        facade = new PipelineFacade();
         pipelineInput = new PipelineHashIO();
         
         temporaryDir = new File(tempDir, "temp");

@@ -49,12 +49,12 @@ public class TestConrefPushReader {
         /*
          * the part of content of conrefpush_stup.xml is
          *  <steps>
-         * 	 <step conaction="pushbefore"><cmd>before</cmd></step>
+         *      <step conaction="pushbefore"><cmd>before</cmd></step>
          *   <step conref="conrefpush_stub2.xml#X/A" conaction="mark"/>
          *   <step conref="conrefpush_stub2.xml#X/B" conaction="mark"/>
-         *	 <step conaction="pushafter"><cmd>after</cmd></step>
-         *	 <step conref="conrefpush_stub2.xml#X/C" conaction="pushreplace"><cmd>replace</cmd></step>
-         *	</steps>
+         *     <step conaction="pushafter"><cmd>after</cmd></step>
+         *     <step conref="conrefpush_stub2.xml#X/C" conaction="pushreplace"><cmd>replace</cmd></step>
+         *    </steps>
          */
         final File filename = new File(srcDir, "conrefpush_stub.xml");
         final ConrefPushReader pushReader = new ConrefPushReader();

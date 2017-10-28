@@ -71,7 +71,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     @Override
-    public void write(final URI currentFile) throws DITAOTException {
+    public void write(final URI currentFile) {
         this.currentFile = currentFile;
         final URI hrefValue = toURI(getValue(rootTopicref, ATTRIBUTE_NAME_HREF));
         final URI copytoValue = toURI(getValue(rootTopicref, ATTRIBUTE_NAME_COPY_TO));

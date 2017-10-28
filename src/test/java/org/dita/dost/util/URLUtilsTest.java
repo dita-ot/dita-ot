@@ -30,7 +30,7 @@ public class URLUtilsTest {
 
     @Test
     public void testDecode() {
-    	assertEquals("foo bar.dita", URLUtils.decode("foo%20bar.dita"));
+        assertEquals("foo bar.dita", URLUtils.decode("foo%20bar.dita"));
         assertEquals("foo bar.dita", URLUtils.decode("foo+bar.dita"));
         
         assertEquals("f\u00f6\u00e5.dita", URLUtils.decode("f%C3%B6%C3%A5.dita"));

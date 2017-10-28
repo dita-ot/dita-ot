@@ -9,9 +9,7 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import org.dita.dost.util.XMLUtils;
@@ -78,12 +76,6 @@ public final class DebugFilter extends AbstractXMLFilter {
             XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRC, xtrc.toString());
         }
         super.startElement(uri, localName, qName, res);
-    }
-
-    @Override
-    public void endElement(final String uri, final String localName, final String qName)
-            throws SAXException {
-        super.endElement(uri, localName, qName);
     }
 
 }

@@ -94,7 +94,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         currentFile = job.tempDirURI.resolve(map);
         ditavalFile = Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))
                 .filter(File::exists)
-                .map(f -> f.toURI())
+                .map(File::toURI)
                 .orElse(null);
 
         logger.info("Processing " + currentFile);
@@ -392,14 +392,14 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
             final String keyscope = elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE);
             if (!keyscope.isEmpty()) {
                 for (final String key : keyscope.trim().split("\\s+")) {
-                    filter.keyscopePrefix.ifPresent(s -> buf.append(s));
+                    filter.keyscopePrefix.ifPresent(buf::append);
                     buf.append(key);
-                    filter.keyscopeSuffix.ifPresent(s -> buf.append(s));
+                    filter.keyscopeSuffix.ifPresent(buf::append);
                     buf.append(' ');
                 }
             } else {
-                filter.keyscopePrefix.ifPresent(s -> buf.append(s));
-                filter.keyscopeSuffix.ifPresent(s -> buf.append(s));
+                filter.keyscopePrefix.ifPresent(buf::append);
+                filter.keyscopeSuffix.ifPresent(buf::append);
             }
             elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
         }

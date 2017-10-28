@@ -16,11 +16,10 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.SubjectSchemeReader;
-import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DebugFilter;
+import org.dita.dost.writer.NormalizeFilter;
 import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
 import org.w3c.dom.Document;
@@ -29,7 +28,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
-import javax.security.auth.Subject;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -97,10 +95,10 @@ public final class TopicReaderModule extends AbstractReaderModule {
                 logger.debug("Loading subject schemes");
                 final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
                 subjectSchemes.stream()
-                        .filter(e -> SUBJECTSCHEME_ENUMERATIONDEF.matches(e))
+                        .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
                         .forEach(enumerationDef -> {
                             final Element schemeRoot = ancestors(enumerationDef)
-                                    .filter(e -> SUBMAP.matches(e))
+                                    .filter(SUBMAP::matches)
                                     .findFirst()
                                     .orElse(doc.getDocumentElement());
                             subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
@@ -169,6 +167,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
                                 format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
                             }
                             res.add(new Reference(fi.src, format));
+                            nonConrefCopytoTargetSet.add(fi.src);
                         }
                         break;
                     default:
@@ -226,6 +225,10 @@ public final class TopicReaderModule extends AbstractReaderModule {
         validationFilter.setProcessingMode(processingMode);
         pipe.add(validationFilter);
 
+        final NormalizeFilter normalizeFilter = new NormalizeFilter();
+        normalizeFilter.setLogger(logger);
+        pipe.add(normalizeFilter);
+
         pipe.add(topicFragmentFilter);
 
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
@@ -255,15 +258,11 @@ public final class TopicReaderModule extends AbstractReaderModule {
         if (formatFilter.test(file.format)) {
             if (isFormatDita(file.format) && !job.getOnlyTopicInMap()) {
                 addToWaitList(file);
-//            } else if (ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
-//                addToWaitList(file);
             } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
                 formatSet.add(file);
                 if (!exists(file.filename)) {
                     logger.warn(MessageUtils.getMessage("DOTX008W", file.filename.toString()).toString());
                 }
-//            } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
-//                formatSet.add(file);
             } else {
                 htmlSet.add(file.filename);
             }
