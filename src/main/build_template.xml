@@ -25,6 +25,8 @@ See the accompanying LICENSE file for applicable license.
     
   <path id="dost.class.path">
     <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction"/>
+    <pathelement location="${dita.dir}/lib/commons-io-2.5.jar"/>
+    <pathelement location="${dita.dir}/lib/commons-codec-1.10.jar"/>
     <pathelement location="${dita.dir}/lib/dost.jar"/>
     <pathelement location="${dita.dir}/lib/dost-configuration.jar"/>
   </path>
