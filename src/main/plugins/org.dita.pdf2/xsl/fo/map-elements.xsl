@@ -8,16 +8,24 @@ See the accompanying LICENSE file for applicable license.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:opentopic="http://www.idiominc.com/opentopic"
+  exclude-result-prefixes="opentopic"
   version="2.0">
 
   <xsl:template match="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' map/searchtitle ')]"/>
 
-  <xsl:template match="*[contains(@class, ' map/topicmeta ')]">
-    <!--
-    <fo:block xsl:use-attribute-sets="topicmeta">
+  <xsl:template match="opentopic:map/*[contains(@class, ' map/topicmeta ')]">
+    <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
+      <fo:block>
+        <xsl:apply-templates/>
+      </fo:block>
+    </fo:block-container>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' map/topicmeta ')][not(parent::opentopic:map)]">
+    <fo:block-container xsl:use-attribute-sets="topicmeta">
       <xsl:apply-templates/>
-    </fo:block>
-    -->
+    </fo:block-container>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' map/map ')]/*[contains(@class, ' map/reltable ')]">

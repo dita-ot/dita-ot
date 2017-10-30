@@ -37,12 +37,6 @@ See the accompanying LICENSE file for applicable license.
     exclude-result-prefixes="opentopic"
     version="2.0">
 
-    <xsl:template match="*[contains(@class, ' map/topicmeta ')]">
-        <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
-            <xsl:apply-templates/>
-        </fo:block-container>
-    </xsl:template>
-
     <xsl:template match="*[contains(@class, ' topic/author ')]">
         <fo:block xsl:use-attribute-sets="author" >
             <xsl:apply-templates/>
@@ -108,8 +102,9 @@ See the accompanying LICENSE file for applicable license.
     </fo:block>
     <!-- set the subtitle -->
     <xsl:apply-templates select="$map//*[contains(@class,' bookmap/booktitlealt ')]"/>
+
     <fo:block xsl:use-attribute-sets="__frontmatter__owner">
-      <xsl:apply-templates select="$map//*[contains(@class,' bookmap/bookmeta ')]"/>
+      <xsl:apply-templates select="$map/*[contains(@class,' map/topicmeta ')]"/>
     </fo:block>
   </xsl:template>
   
