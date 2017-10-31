@@ -18,26 +18,8 @@ See the accompanying LICENSE file for applicable license.
                   preprocess2.init,
                   ditaval-merge,
                   
-                  map-reader,
-                  map-mapref,
-                  map-branch-filter,
-                  map-keyref,
-                  map-conrefpush,
-                  map-conref,
-                  map-profile,
-    
-                  topic-reader,
-                  topic-branch-filter,
-                  topic-keyref,
-                  topic-copy-to,
-                  topic-conrefpush,
-                  topic-conref,
-                  topic-profile,
-                  topic-fragment,
-                  topic-chunk,
-                  topic-move-meta-entries,
-                  topic-maplink,
-                  topic-topicpull,
+                  preprocess2.maps,
+                  preprocess2.topics,
                   
                   map-clean-map,
                   clean-preprocess,
@@ -52,6 +34,29 @@ See the accompanying LICENSE file for applicable license.
     <!-- Deprecated since 2.4 -->
     <property name="user.input.file.listfile" value="usr.input.file.list"/>
   </target>
+
+  <target name="preprocess2.maps"
+          depends="map-reader,
+                  map-mapref,
+                  map-branch-filter,
+                  map-keyref,
+                  map-conrefpush,
+                  map-conref,
+                  map-profile"/>
+
+  <target name="preprocess2.topics"
+          depends="topic-reader,
+                  topic-branch-filter,
+                  topic-keyref,
+                  topic-copy-to,
+                  topic-conrefpush,
+                  topic-conref,
+                  topic-profile,
+                  topic-fragment,
+                  topic-chunk,
+                  topic-move-meta-entries,
+                  topic-maplink,
+                  topic-topicpull"/>
 
   <target name="preprocess2-topic"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
