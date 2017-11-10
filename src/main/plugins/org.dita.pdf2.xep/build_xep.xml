@@ -180,9 +180,7 @@ See the accompanying LICENSE file for applicable license.
       <pathelement location="${dita.plugin.org.dita.pdf2.xep.dir}/lib/xep.jar"/>
     </path>
 
-    <condition property="xep.failOnError" value="false">
-      <not><isset property="xep.failOnError"/></not>
-    </condition>
+    <condition property="xep.failOnError" value="true"/>
     
     <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${xsl.formatter.ext}">
       <not><isset property="outputFile"/></not>
