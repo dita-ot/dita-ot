@@ -18,8 +18,6 @@ See the accompanying LICENSE file for applicable license.
                    htmlhelp.copy-image,
                    copy-css">
     <antcall target="dita.map.htmlhelp"/>
-    <antcall target="dita.htmlhelp.convertlang"/>
-    <antcall target="compile.HTML.Help"/>
   </target>
 
   <target name="dita2htmlhelp.init">
@@ -65,7 +63,9 @@ See the accompanying LICENSE file for applicable license.
           depends="dita.map.htmlhelp.init,
                    dita.map.htmlhelp.hhp,
                    dita.map.htmlhelp.hhc,
-                   dita.map.htmlhelp.hhk"/> 
+                   dita.map.htmlhelp.hhk,
+                   dita.htmlhelp.convertlang,
+                   compile.HTML.Help"/> 
 
   <target name="dita.map.htmlhelp.init" description="Init properties for HTMLHelp">
     <condition property="out.ext" value=".html">
