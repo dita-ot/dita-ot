@@ -68,7 +68,7 @@ See the accompanying LICENSE file for applicable license.
             <fo:list-item-label xsl:use-attribute-sets="ul.li__label">
                 <fo:block xsl:use-attribute-sets="ul.li__label__content">
                     <xsl:call-template name="getVariable">
-                        <xsl:with-param name="id" select="concat('Unordered List bullet ', $depth)"/>
+                        <xsl:with-param name="id" select="concat('Unordered List bullet ', (($depth - 1) mod 4) + 1)"/>
                     </xsl:call-template>
                 </fo:block>
             </fo:list-item-label>
