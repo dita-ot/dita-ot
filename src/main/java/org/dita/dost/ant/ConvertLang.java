@@ -23,8 +23,10 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -56,6 +58,13 @@ public final class ConvertLang extends Task {
     private static final String tag1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     private static final String tag2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>[OPTIONS]";
     private static final String tag3 = "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;";
+    
+    private static final String CODEPAGE_ISO_8859_1 = "iso-8859-1";
+    private static final String CODEPAGE_ISO_8859_2 = "iso-8859-2";
+    private static final String CODEPAGE_ISO_8859_7 = "iso-8859-7";
+    private static final String CODEPAGE_1250 = "windows-1250";
+    private static final String CODEPAGE_1252 = "windows-1252";
+    private static final String CODEPAGE_1253 = "windows-1253";
 
     private String basedir;
 
@@ -70,6 +79,10 @@ public final class ConvertLang extends Task {
     private final Map<String, String>langMap = new HashMap<>();
     //entity map(e.g 38 = &amp;)
     private final Map<String, String>entityMap = new HashMap<>();
+    //Exceptions that should not generate entities
+    private Set<Integer> entityExceptionSet;
+    //Charset currently stored in exception list
+    private String exceptionCharset;
 
 
     private DITAOTLogger logger;
@@ -91,6 +104,8 @@ public final class ConvertLang extends Task {
         createLangMap();
         //initialize entity map
         createEntityMap();
+        //Initialize entitye exceptions
+        entityExceptionSet = new HashSet<>(128);
         //initialize charset map
         createCharsetMap();
         //change charset of html files
@@ -249,7 +264,9 @@ public final class ConvertLang extends Task {
                         final int remainIndex = value.indexOf(UTF8) + UTF8.length();
                         final String remainString = value.substring(remainIndex);
                         //change the charset
-                        final String newValue = subString + charsetMap.get(ATTRIBUTE_FORMAT_VALUE_HTML) + remainString;
+                        final String newValue = (FileUtils.isHHCFile(inputFile.getName()) || FileUtils.isHHKFile(inputFile.getName()) ?
+                                                 subString + charsetMap.get(ATTRIBUTE_FORMAT_VALUE_WINDOWS) + remainString :
+                                                 subString + charsetMap.get(ATTRIBUTE_FORMAT_VALUE_HTML) + remainString);
                         //write into the output file
                         writer.write(newValue);
                         //add line break
@@ -321,16 +338,16 @@ public final class ConvertLang extends Task {
                 }
             }
         }
-        //html/hhc/hhk file case
-        else if(FileUtils.isHTMLFile(inputFile.getName())||
-                FileUtils.isHHCFile(inputFile.getName())||
-                FileUtils.isHHKFile(inputFile.getName())){
+        //html file case
+        else if(FileUtils.isHTMLFile(inputFile.getName())){
             //do converting work
             convertEntityAndCharset(inputFile, ATTRIBUTE_FORMAT_VALUE_HTML);
 
         }
-        //hhp file case
-        else if(FileUtils.isHHPFile(inputFile.getName())){
+        //hhp/hhc/hhk file case
+        else if(FileUtils.isHHPFile(inputFile.getName()) ||
+                FileUtils.isHHCFile(inputFile.getName()) ||
+                FileUtils.isHHKFile(inputFile.getName())){
             //do converting work
             convertEntityAndCharset(inputFile, ATTRIBUTE_FORMAT_VALUE_WINDOWS);
             //update language setting of hhp file
@@ -415,6 +432,82 @@ public final class ConvertLang extends Task {
         }
 
     }
+    
+    private void updateExceptionCharacters(final String charset) {
+        if (exceptionCharset != null && exceptionCharset.equals(charset)) {
+            return;
+        }
+        exceptionCharset = charset;
+        if (!entityExceptionSet.isEmpty()) {
+            entityExceptionSet.clear();
+        }
+        if (charset.equals(CODEPAGE_ISO_8859_2) || charset.equals(CODEPAGE_1250) ||
+                charset.equals(CODEPAGE_ISO_8859_1) || charset.equals(CODEPAGE_1252)) {
+            entityExceptionSet.add(193); entityExceptionSet.add(225);//A-acute
+            entityExceptionSet.add(194); entityExceptionSet.add(226);//A-circumflex
+            entityExceptionSet.add(196); entityExceptionSet.add(228);//A-umlaut
+            entityExceptionSet.add(199); entityExceptionSet.add(231);//C-cedilla
+            entityExceptionSet.add(201); entityExceptionSet.add(233);//E-acute
+            entityExceptionSet.add(203); entityExceptionSet.add(235);//E-umlaut
+            entityExceptionSet.add(205); entityExceptionSet.add(237);//I-acute
+            entityExceptionSet.add(206); entityExceptionSet.add(238);//I-circumflex
+            entityExceptionSet.add(211); entityExceptionSet.add(243);//O-acute
+            entityExceptionSet.add(212); entityExceptionSet.add(244);//O-circumflex
+            entityExceptionSet.add(214); entityExceptionSet.add(246);//O-umlaut
+            entityExceptionSet.add(218); entityExceptionSet.add(250);//U-acute
+            entityExceptionSet.add(220); entityExceptionSet.add(252);//U-umlaut
+            entityExceptionSet.add(221); entityExceptionSet.add(253);//Y-acute
+            entityExceptionSet.add(223); //Szlig
+            entityExceptionSet.add(215); //&times;
+        }
+        if (charset.equals(CODEPAGE_ISO_8859_1) || charset.equals(CODEPAGE_1252)) {
+            entityExceptionSet.add(192); entityExceptionSet.add(224);//A-grave
+            entityExceptionSet.add(195); entityExceptionSet.add(227);//A-tilde
+            entityExceptionSet.add(197); entityExceptionSet.add(229);//A-ring
+            entityExceptionSet.add(198); entityExceptionSet.add(230);//AElig
+            entityExceptionSet.add(200); entityExceptionSet.add(232);//E-grave
+            entityExceptionSet.add(202); entityExceptionSet.add(234);//E-circumflex
+            entityExceptionSet.add(204); entityExceptionSet.add(236);//I-grave
+            entityExceptionSet.add(207); entityExceptionSet.add(239);//I-uml
+            entityExceptionSet.add(208); entityExceptionSet.add(240);//ETH
+            entityExceptionSet.add(209); entityExceptionSet.add(241);//N-tilde
+            entityExceptionSet.add(210); entityExceptionSet.add(242);//O-grave
+            entityExceptionSet.add(213); entityExceptionSet.add(245);//O-tilde
+            entityExceptionSet.add(216); entityExceptionSet.add(248);//O-slash
+            entityExceptionSet.add(217); entityExceptionSet.add(249);//U-grave
+            entityExceptionSet.add(219); entityExceptionSet.add(251);//O-circumflex
+            entityExceptionSet.add(222); entityExceptionSet.add(254);//Thorn
+            entityExceptionSet.add(255);//y-umlaut
+        } else if (charset.equals(CODEPAGE_ISO_8859_2) || charset.equals(CODEPAGE_1250)) {
+            entityExceptionSet.add(352); entityExceptionSet.add(353);//S-caron
+        } else if (charset.equals(CODEPAGE_ISO_8859_7) || charset.equals(CODEPAGE_1253)) {
+            entityExceptionSet.add(913); entityExceptionSet.add(945);//Alpha
+            entityExceptionSet.add(914); entityExceptionSet.add(946);
+            entityExceptionSet.add(915); entityExceptionSet.add(947);
+            entityExceptionSet.add(916); entityExceptionSet.add(948);
+            entityExceptionSet.add(917); entityExceptionSet.add(949);
+            entityExceptionSet.add(918); entityExceptionSet.add(950);
+            entityExceptionSet.add(919); entityExceptionSet.add(951);
+            entityExceptionSet.add(920); entityExceptionSet.add(952);
+            entityExceptionSet.add(921); entityExceptionSet.add(953);
+            entityExceptionSet.add(922); entityExceptionSet.add(954);
+            entityExceptionSet.add(923); entityExceptionSet.add(955);
+            entityExceptionSet.add(924); entityExceptionSet.add(956);
+            entityExceptionSet.add(925); entityExceptionSet.add(957);
+            entityExceptionSet.add(926); entityExceptionSet.add(958);
+            entityExceptionSet.add(927); entityExceptionSet.add(959);
+            entityExceptionSet.add(928); entityExceptionSet.add(960);
+            entityExceptionSet.add(929); entityExceptionSet.add(961);
+            entityExceptionSet.add(930); entityExceptionSet.add(962);
+            entityExceptionSet.add(931); entityExceptionSet.add(963);
+            entityExceptionSet.add(932); entityExceptionSet.add(964);
+            entityExceptionSet.add(933); entityExceptionSet.add(965);
+            entityExceptionSet.add(934); entityExceptionSet.add(966);
+            entityExceptionSet.add(935); entityExceptionSet.add(967);
+            entityExceptionSet.add(936); entityExceptionSet.add(968);
+            entityExceptionSet.add(937); entityExceptionSet.add(969);//Omega
+        }
+    }
 
     private void convertEntityAndCharset(final File inputFile, final String format) {
         final String fileName = inputFile.getAbsolutePath();
@@ -435,18 +528,20 @@ public final class ConvertLang extends Task {
             final OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, charset);
             //wrapped into writer
             writer = new BufferedWriter(streamWriter);
+            updateExceptionCharacters(charset);
 
             //read a character
             int charCode = reader.read();
             while(charCode != -1){
                 final String key = String.valueOf(charCode);
                 //Is an entity char
-                if(entityMap.containsKey(key)){
+                if (entityMap.containsKey(key) &&
+                        !entityExceptionSet.contains(charCode)) {
                     //get related entity
                     final String value = entityMap.get(key);
                     //write entity into output file
                     writer.write(value);
-                }else{
+                } else {
                     //normal process
                     writer.write(charCode);
                 }
