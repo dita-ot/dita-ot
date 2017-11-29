@@ -89,7 +89,7 @@ See the accompanying LICENSE file for applicable license.
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
       <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
-      <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
+      <param name="HHCNAME" expression="${args.output.base}.hhc"/>
       <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
