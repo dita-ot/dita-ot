@@ -39,6 +39,8 @@ import org.w3c.dom.NodeList;
  */
 public final class VariableFileTask extends Task {
 
+    public static final String COMMON_VARIABLE_FILENAME = "commonvariables.xml";
+    
     private List<FileSet> filesets = new ArrayList<FileSet>();
     private File file;
     
@@ -78,7 +80,11 @@ public final class VariableFileTask extends Task {
                 final Element lang = d.createElement("lang");
                 final String n = f.getName();
                 final int i = n.indexOf('.');
-                lang.setAttributeNS(XML_NS_URI, "xml:lang", n.substring(0, i).replace('_', '-'));
+                if (n.equals(COMMON_VARIABLE_FILENAME)) {
+                    lang.setAttributeNS(XML_NS_URI, "xml:lang", "");
+                } else {
+                    lang.setAttributeNS(XML_NS_URI, "xml:lang", n.substring(0, i).replace('_', '-'));
+                }
                 lang.setAttribute("filename", f.toURI().toString());
                 root.appendChild(lang);
             }
