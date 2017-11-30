@@ -102,6 +102,7 @@ public class TestMergeUtils {
         //assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
         assertEquals("task", mergeUtils.getFirstTopicId(srcDir.toURI().resolve("stub.xml"), false));
         assertEquals("task", mergeUtils.getFirstTopicId(srcDir.toURI().resolve("stub.xml"), true));
+        assertNull(mergeUtils.getFirstTopicId(srcDir.toURI().resolve("filedoesnotexist.xml"), false));
     }
 
 }

@@ -18,14 +18,11 @@ See the accompanying LICENSE file for applicable license.
                    htmlhelp.copy-image,
                    copy-css">
     <antcall target="dita.map.htmlhelp"/>
-    <antcall target="dita.htmlhelp.convertlang"/>
-    <antcall target="compile.HTML.Help"/>
   </target>
 
   <target name="dita2htmlhelp.init">
     <property name="html-version" value="html"/>
     <property name="temp.output.dir.name" value="temp_chm_dir"/>
-    <property name="clean-preprocess.use-result-filename" value="false"/>
     <property name="preprocess.copy-image.skip" value="true"/>
   </target>
 
@@ -66,7 +63,9 @@ See the accompanying LICENSE file for applicable license.
           depends="dita.map.htmlhelp.init,
                    dita.map.htmlhelp.hhp,
                    dita.map.htmlhelp.hhc,
-                   dita.map.htmlhelp.hhk"/> 
+                   dita.map.htmlhelp.hhk,
+                   dita.htmlhelp.convertlang,
+                   compile.HTML.Help"/> 
 
   <target name="dita.map.htmlhelp.init" description="Init properties for HTMLHelp">
     <condition property="out.ext" value=".html">
@@ -90,7 +89,7 @@ See the accompanying LICENSE file for applicable license.
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
       <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
-      <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
+      <param name="HHCNAME" expression="${args.output.base}.hhc"/>
       <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
