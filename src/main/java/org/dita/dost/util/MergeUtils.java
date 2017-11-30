@@ -10,6 +10,7 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.URLUtils.*;
 
+import java.io.File;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -134,6 +135,9 @@ public final class MergeUtils {
      */
     public String getFirstTopicId(final URI file, final boolean useCatalog) {
         assert file.isAbsolute();
+        if (!(new File(file).exists())) {
+            return null;
+        }
         final StringBuilder firstTopicId = new StringBuilder();
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
         try {
@@ -147,7 +151,6 @@ public final class MergeUtils {
             logger.error(e.getMessage(), e) ;
         }
         return firstTopicId.toString();
-
     }
 
 }
