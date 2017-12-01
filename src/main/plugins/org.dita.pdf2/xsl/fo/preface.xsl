@@ -55,27 +55,27 @@ See the accompanying LICENSE file for applicable license.
              </xsl:otherwise>
          </xsl:choose>
      </xsl:template>
-    <xsl:template match="*" mode="processTopicPrefaceInsideFlow">
-                 <fo:block xsl:use-attribute-sets="topic">
-                     <xsl:call-template name="commonattributes"/>
-                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
-                         <fo:marker marker-class-name="current-topic-number">
-                             <xsl:number format="1"/>
-                         </fo:marker>
-                         <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
-                     </xsl:if>
-                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
-                     <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
-                         <xsl:with-param name="type" select="'preface'"/>
-                     </xsl:apply-templates>
-                     <fo:block xsl:use-attribute-sets="topic.title">
-                         <xsl:call-template name="pullPrologIndexTerms"/>
-                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                             <xsl:apply-templates select="." mode="getTitle"/>
-                         </xsl:for-each>
-                     </fo:block>
-                     <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
-                 </fo:block>
-    </xsl:template>
+     <xsl:template match="*" mode="processTopicPrefaceInsideFlow">
+         <fo:block xsl:use-attribute-sets="topic">
+             <xsl:call-template name="commonattributes"/>
+             <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+                 <fo:marker marker-class-name="current-topic-number">
+                     <xsl:number format="1"/>
+                 </fo:marker>
+                 <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
+             </xsl:if>
+             <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
+             <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
+                 <xsl:with-param name="type" select="'preface'"/>
+             </xsl:apply-templates>
+             <fo:block xsl:use-attribute-sets="topic.title">
+                 <xsl:call-template name="pullPrologIndexTerms"/>
+                 <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
+                     <xsl:apply-templates select="." mode="getTitle"/>
+                 </xsl:for-each>
+             </fo:block>
+             <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
+         </fo:block>
+     </xsl:template>
 
 </xsl:stylesheet>
