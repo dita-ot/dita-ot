@@ -2,11 +2,11 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!-- Darwin Information Typing Architecture (DITA) Version 1.3     -->
+<!-- Darwin Information Typing Architecture (DITA) Version 1.3 Plus Errata 01     -->
 <!-- OASIS Standard                                           -->
-<!-- 17 December 2015                                           -->
-<!-- Copyright (c) OASIS Open 2015. All rights reserved.           -->
-<!-- Source: http://docs.oasis-open.org/dita/dita/v1.3/os/part0-overview/dita-v1.3-os-part0-overview.html                                -->
+<!-- 25 October 2016                                           -->
+<!-- Copyright (c) OASIS Open 2016. All rights reserved.           -->
+<!-- Source: http://docs.oasis-open.org/dita/dita/v1.3/errata01/os/complete/part0-overview/dita-v1.3-errata01-os-part0-overview-complete.html                                -->
 <!--                                                               -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA learningObjectMap                            -->
@@ -37,6 +37,11 @@
 <!-- ============================================================= -->
 <!--             DOMAIN CONSTRAINT INTEGRATION                     -->
 <!-- ============================================================= -->
+
+<!ENTITY % learningAggregationsTopicref-def
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.3 Learning Aggregations Topicref Constraint//EN"
+         "learningAggregationsTopicrefConstraint.mod"
+>%learningAggregationsTopicref-def;
 
 <!-- ============================================================= -->
 <!--             DOMAIN ENTITY DECLARATIONS                        -->
@@ -108,8 +113,10 @@
                         the name of the domain(s) in which the
                         extension was declared                     -->
 
-<!ENTITY % topicref     "topicref |
-                         %mapgroup-d-topicref; |
+<!-- NOTE: The learningAggregationsTopicref-c constraint also requires
+           omitting topicref from the %topicref group.
+  -->
+<!ENTITY % topicref     "%mapgroup-d-topicref; |
                          %ditavalref-d-topicref; |
                          %learningmap-d-topicref;
                         ">
@@ -171,11 +178,6 @@
 <!-- ============================================================= -->
 <!--                    CONTENT CONSTRAINT INTEGRATION             -->
 <!-- ============================================================= -->
-
-<!ENTITY % learningAggregationsTopicref-def
-  PUBLIC "-//OASIS//ELEMENTS DITA 1.3 Learning Aggregations Topicref Constraint//EN"
-         "learningAggregationsTopicrefConstraint.mod"
->%learningAggregationsTopicref-def;
 
 <!-- ============================================================= -->
 <!--                      MAP ELEMENT INTEGRATION                  -->

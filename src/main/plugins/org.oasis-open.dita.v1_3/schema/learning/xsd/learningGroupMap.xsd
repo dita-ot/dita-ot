@@ -35,7 +35,6 @@
 
    <!-- ================ GROUP DEFINITIONS ===================== -->
    <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.3"/>
-   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningGroupMapGrp.xsd:1.3"/>
 
    <!-- =================  MODULE INCLUDE DEFINITION  ================== -->
    <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.3"/>
@@ -46,16 +45,8 @@
    <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
    <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.3"/>
 
-   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:mapGrp.xsd:1.3">
-      <xs:group name="topicref">
-         <xs:choice>
-            <xs:group ref="topicref"/>
-            <xs:group ref="mapgroup-d-topicref"/>
-            <xs:group ref="ditavalref-d-topicref"/>
-            <xs:group ref="learningmap-d-topicref"/>
-         </xs:choice>
-      </xs:group>
-   </xs:redefine>
+   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningAggregationsTopicrefConstraintMod.xsd:1.3"/>
+
    <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.3">
       <xs:group name="data">
          <xs:choice>
@@ -108,7 +99,6 @@
       </xs:group>
    </xs:redefine>
 
-   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapGroupMod.xsd:1.3"/>
    <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningGroupMapMod.xsd:1.3"/>
    <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapMod.xsd:1.3"/>
 

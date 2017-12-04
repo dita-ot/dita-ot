@@ -99,11 +99,9 @@
     <div>
       <a:documentation>LONG NAME: DITAVAL Reference</a:documentation>
       <define name="ditavalref.content">
-        <zeroOrMore>
-          <choice>
-            <ref name="ditavalmeta"/>
-          </choice>
-        </zeroOrMore>
+        <optional>
+          <ref name="ditavalmeta"/>
+        </optional>
       </define>
       <define name="ditavalref.attributes">
         <optional>

@@ -10,11 +10,11 @@
 =============================================================
                    HEADER                                    
 =============================================================
-Darwin Information Typing Architecture (DITA) Version 1.3
+Darwin Information Typing Architecture (DITA) Version 1.3 Plus Errata 01
 OASIS Standard
-17 December 2015 
-Copyright (c) OASIS Open 2015. All rights reserved. 
-Source: http://docs.oasis-open.org/dita/dita/v1.3/os/part0-overview/dita-v1.3-os-part0-overview.html
+25 October 2016 
+Copyright (c) OASIS Open 2016. All rights reserved. 
+Source: http://docs.oasis-open.org/dita/dita/v1.3/errata01/os/complete/part0-overview/dita-v1.3-errata01-os-part0-overview-complete.html
 
 ============================================================
  MODULE:    DITA DITAVAL DTD                                 
@@ -34,7 +34,7 @@ PUBLIC "-//OASIS//DTD DITA DITAVAL//EN"
 
 The public ID above refers to the latest version of this DTD.
      To refer to this specific version, you may use this value:
-PUBLIC "-//OASIS//DTD DITA 1.2 DITAVAL//EN"                       
+PUBLIC "-//OASIS//DTD DITA 1.3 DITAVAL//EN"                       
 
 =============================================================
 SYSTEM:     Darwin Information Typing Architecture (DITA)    

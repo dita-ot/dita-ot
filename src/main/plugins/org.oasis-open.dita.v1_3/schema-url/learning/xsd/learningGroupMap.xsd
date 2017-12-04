@@ -35,7 +35,6 @@
 
    <!-- ================ GROUP DEFINITIONS ===================== -->
    <xs:include schemaLocation="../../base/xsd/tblDeclGrp.xsd"/>
-   <xs:include schemaLocation="./learningGroupMapGrp.xsd"/>
 
    <!-- =================  MODULE INCLUDE DEFINITION  ================== -->
    <xs:include schemaLocation="../../base/xsd/commonElementMod.xsd"/>
@@ -46,16 +45,8 @@
    <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
    <xs:include schemaLocation="../../base/xsd/metaDeclMod.xsd"/>
 
-  <xs:redefine schemaLocation="../../base/xsd/mapGrp.xsd">
-    <xs:group name="topicref">
-      <xs:choice>
-        <xs:group ref="topicref"/>
-        <xs:group ref="mapgroup-d-topicref"/>
-        <xs:group ref="ditavalref-d-topicref"/>
-        <xs:group ref="learningmap-d-topicref"/>
-      </xs:choice>
-    </xs:group>
-  </xs:redefine>
+   <xs:include schemaLocation="learningAggregationsTopicrefConstraintMod.xsd"/>
+
   <xs:redefine schemaLocation="../../base/xsd/commonElementGrp.xsd">
       <xs:group name="data">
          <xs:choice>
@@ -108,7 +99,6 @@
       </xs:group>
    </xs:redefine>
 
-   <xs:include schemaLocation="../../base/xsd/mapGroupMod.xsd"/>
    <xs:include schemaLocation="./learningGroupMapMod.xsd"/>
    <xs:include schemaLocation="../../base/xsd/mapMod.xsd"/>
 
