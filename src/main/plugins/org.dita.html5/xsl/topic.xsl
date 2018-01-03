@@ -13,8 +13,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:include href="get-meta.xsl"/>
   <xsl:include href="rel-links.xsl"/>
-  <xsl:include href="glossdisplay.xsl"/>
-  
+
   <!-- =========== DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS =========== -->
   
   <!-- /CSS = default CSS filename parameter ('')-->
