@@ -416,18 +416,22 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>  
   
   <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="grab-group-title" as="xs:string?">
-    <xsl:variable name="file-origin">
-      <xsl:call-template name="get-file-uri">
-        <xsl:with-param name="href" select="@href"/>
-        <xsl:with-param name="file-prefix" select="$file-prefix"/>
-      </xsl:call-template>
+    <xsl:variable name="file-origin" as="xs:string?">
+      <xsl:if test="not(empty(@href))">
+        <xsl:call-template name="get-file-uri">
+          <xsl:with-param name="href" select="@href"/>
+          <xsl:with-param name="file-prefix" select="$file-prefix"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:variable>
-    <xsl:variable name="file">
-      <xsl:call-template name="replace-blank">
-        <xsl:with-param name="file-origin">
-          <xsl:value-of select="$file-origin"/>
-        </xsl:with-param>
-      </xsl:call-template>
+    <xsl:variable name="file" as="xs:string?">
+      <xsl:if test="exists($file-origin)">
+        <xsl:call-template name="replace-blank">
+          <xsl:with-param name="file-origin">
+            <xsl:value-of select="$file-origin"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')][not(title = '')]">
@@ -439,7 +443,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="@navtitle and not(@navtitle = '')">
         <xsl:value-of select="@navtitle"/>
       </xsl:when>
-      <xsl:when test="document($file,/)//*[contains(@class, ' topic/title ')]">
+      <xsl:when test="exists($file) and document($file,/)//*[contains(@class, ' topic/title ')]">
         <xsl:value-of select="document($file,/)//*[contains(@class, ' topic/title ')][1]"/>
       </xsl:when>
     </xsl:choose>
