@@ -37,7 +37,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Important">Wichtig</str>
   <str name="Attention">Achtung</str>
   <str name="Caution">ACHTUNG</str>
-  <str name="Danger">VORSICHT</str>
+  <str name="Danger">GEFAHR</str>
   <str name="Remember">Hinweis</str>
   <str name="Restriction">Einschränkung</str>
   <str name="Warning">Warnung</str>
