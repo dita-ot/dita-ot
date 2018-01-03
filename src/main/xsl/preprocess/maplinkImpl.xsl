@@ -339,34 +339,45 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]" mode="grab-group-title"/>
     </xsl:variable>
     
-    <xsl:if test="$linklist and exists($group-title) and not($group-title = '')">
-      <xsl:if test="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]">
-          <xsl:with-param name="role">friend</xsl:with-param>
-        </xsl:apply-templates>
+    <xsl:for-each select="ancestor::*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position()!=$position]">
+      <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
+        <xsl:variable name="cellposition" as="xs:integer">
+          <xsl:apply-templates mode="get-position" select="."/>
+        </xsl:variable>
+        <xsl:variable name="cellgroup-title" as="xs:string?">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$cellposition]" mode="grab-group-title"/>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="$linklist and exists($cellgroup-title)">
+            <xsl:apply-templates mode="generate-ordered-links-2" select=".">
+              <xsl:with-param name="position" as="xs:integer" select="$cellposition"/>
+              <xsl:with-param name="group-title" as="xs:string?" select="$cellgroup-title"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:when test="not($linklist) and empty($cellgroup-title)">
+            <xsl:apply-templates mode="link" select="descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
+              <xsl:with-param name="role">friend</xsl:with-param>
+            </xsl:apply-templates>            
+          </xsl:when>
+        </xsl:choose>
       </xsl:if>
-      <xsl:if test="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]">
-          <xsl:with-param name="role">friend</xsl:with-param>
-        </xsl:apply-templates>
-      </xsl:if>
-      <xsl:if test="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">  
-        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]">
-          <xsl:with-param name="role">friend</xsl:with-param>
-        </xsl:apply-templates>
-      </xsl:if>  
+    </xsl:for-each>
+
+    <xsl:if test="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
+      <xsl:choose>
+        <xsl:when test="$linklist and exists($group-title)">
+          <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]">
+            <xsl:with-param name="role">friend</xsl:with-param>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="not($linklist) and empty($group-title)">
+          <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
+            <xsl:with-param name="role">friend</xsl:with-param>
+          </xsl:apply-templates>
+        </xsl:when>
+      </xsl:choose>
     </xsl:if>
-    <xsl:if test="not($linklist) and (empty($group-title) or $group-title = '')">
-      <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:with-param name="role">friend</xsl:with-param>
-      </xsl:apply-templates>
-      <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:with-param name="role">friend</xsl:with-param>
-      </xsl:apply-templates>
-      <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:with-param name="role">friend</xsl:with-param>
-      </xsl:apply-templates>
-    </xsl:if>
+
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' map/topicref ')]"
@@ -454,12 +465,12 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="link-to-other"/>
   
   <xsl:template mode="generate-ordered-links-2" match="*[contains(@class, ' map/relcell ')]">
-    <xsl:variable name="position" as="xs:integer">
+    <xsl:param name="position" as="xs:integer">
       <xsl:apply-templates mode="get-position" select="."/>
-    </xsl:variable>
-    <xsl:variable name="group-title">
+    </xsl:param>
+    <xsl:param name="group-title" as="xs:string?">
       <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position() = $position]" mode="grab-group-title"/>
-    </xsl:variable>
+    </xsl:param>
     <linklist class="- topic/linklist ">
       <xsl:copy-of select="@xtrf | @xtrc"/>
       <xsl:if test="/*[@id]">
