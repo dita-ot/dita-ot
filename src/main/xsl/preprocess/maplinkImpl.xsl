@@ -15,6 +15,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-utilities.xsl"/>
+  <xsl:import href="../common/dita-textonly.xsl"/>
   
   <xsl:output method="xml" encoding="utf-8" indent="no" />
   
@@ -434,17 +435,17 @@ See the accompanying LICENSE file for applicable license.
       </xsl:if>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')][not(title = '')]">
-        <xsl:value-of select="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')]"/>
+      <xsl:when test="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')]">
+        <xsl:apply-templates select="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
       </xsl:when>
       <xsl:when test="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:value-of select="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
+        <xsl:apply-templates select="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
       </xsl:when>
       <xsl:when test="@navtitle and not(@navtitle = '')">
         <xsl:value-of select="@navtitle"/>
       </xsl:when>
       <xsl:when test="exists($file) and document($file,/)//*[contains(@class, ' topic/title ')]">
-        <xsl:value-of select="document($file,/)//*[contains(@class, ' topic/title ')][1]"/>
+        <xsl:apply-templates select="document($file,/)//*[contains(@class, ' topic/title ')][1]" mode="text-only"/>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
