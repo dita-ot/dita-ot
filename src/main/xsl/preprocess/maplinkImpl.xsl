@@ -787,13 +787,12 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template name="get-file-uri">
     <xsl:param name="href" as="xs:string"/>
     <xsl:param name="file-prefix" as="xs:string"/>
-    <xsl:value-of select="$file-prefix"/>    
     <xsl:choose>
       <xsl:when test="contains($href,'#')">
-        <xsl:value-of select="substring-before($href,'#')"/>
+        <xsl:value-of select="concat($file-prefix,substring-before($href,'#'))"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$href"/>
+        <xsl:value-of select="concat($file-prefix,$href)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
