@@ -429,7 +429,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="grab-group-title" as="xs:string?">
     <xsl:variable name="file-origin" as="xs:string?">
-      <xsl:if test="not(empty(@href))">
+      <xsl:if test="not(empty(@href)) and (empty(@format) or @format='dita') and (empty(@scope) or @scope='local')">
         <xsl:call-template name="get-file-uri">
           <xsl:with-param name="href" select="@href"/>
           <xsl:with-param name="file-prefix" select="$file-prefix"/>
