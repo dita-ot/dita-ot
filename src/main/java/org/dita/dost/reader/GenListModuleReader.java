@@ -671,7 +671,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
     }
 
-    private final static String[] KEYREF_ATTRS = new String[] {
+    public final static String[] KEYREF_ATTRS = new String[] {
             ATTRIBUTE_NAME_KEYREF,
             ATTRIBUTE_NAME_CONKEYREF,
             ATTRIBUTE_NAME_ARCHIVEKEYREFS,
