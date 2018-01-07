@@ -160,15 +160,11 @@ See the accompanying LICENSE file for applicable license.
     </condition>
     <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
-      <xslt basedir="${dita.temp.dir}"
-        reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
-        filenameparameter="file-being-processed">
-        <!-- TODO only merge start map -->
+      <module class="org.dita.dost.module.MaprefModule">
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
         <ditafileset format="ditamap"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
-      </xslt>
+      </module>
     </pipeline>
   </target>
 
@@ -190,18 +186,11 @@ See the accompanying LICENSE file for applicable license.
       </module>
     </pipeline>
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
-      <xslt basedir="${dita.temp.dir}"
-        reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
-        filenameparameter="file-being-processed">
-        <!-- TODO only merge start map -->
-        <ditaFileset format="ditamap"/>
-        <!--param name="TRANSTYPE" expression="${transtype}" /-->
-        <param name="child-topicref-warning" expression="false"/>
-        <param name="keep-submap-href" expression="false"/>
+      <module class="org.dita.dost.module.MaprefModule">
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
+        <ditafileset format="ditamap"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
-      </xslt>
+      </module>
     </pipeline>
   </target>
   
