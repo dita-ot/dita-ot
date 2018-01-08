@@ -207,7 +207,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
   
   <message id="DOTJ045I" type="INFO">
-    <reason>The key "%1" is defined more than once in the same map file. The reference href="%2" is ignored.</reason>
+    <reason>The key "%1" is defined more than once in the same map file.</reason>
     <response></response>
   </message>
   
