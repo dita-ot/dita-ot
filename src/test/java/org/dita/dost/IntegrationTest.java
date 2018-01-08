@@ -60,6 +60,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .input(Paths.get("test.ditamap"))
                 .test();
     }
+    
+    @Test
+    public void testreltableHeaders() throws Throwable {
+        builder().name("reltableHeaders")
+                .transtype(PREPROCESS)
+                .input(Paths.get("reltableheader.ditamap"))
+                .test();
+    }
 
     @Test
     public void testtitle_includes_markup() throws Throwable {

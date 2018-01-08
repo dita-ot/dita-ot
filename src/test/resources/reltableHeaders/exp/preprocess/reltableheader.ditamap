@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /C:\Users\IBM_ADMIN\github\robander\dita-ot\build\tmp\integrationTest\reltableHeaders\temp\preprocess?><?workdir-uri file:/C:/Users/IBM_ADMIN/github/robander/dita-ot/build/tmp/integrationTest/reltableHeaders/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   ">
+  <title class="- topic/title ">Test reltable column headers</title>
+<topicref class="- map/topicref " href="maintopic.dita" type="concept"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">This is a concept topic</navtitle><?ditaot gentext?><linktext class="- map/linktext ">This is a concept topic</linktext><?ditaot genshortdesc?><shortdesc class="- map/shortdesc ">It is about some concept or another</shortdesc></topicmeta></topicref>
+<topicref class="- map/topicref " href="reftopic.dita" type="reference"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Reference topic</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Reference topic</linktext><?ditaot genshortdesc?><shortdesc class="- map/shortdesc ">Short reference description.</shortdesc></topicmeta></topicref>
+<topicref class="- map/topicref " href="tasktopic.dita" type="task"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Task appears under DITA-OT heading</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Task appears under DITA-OT heading</linktext><?ditaot genshortdesc?><shortdesc class="- map/shortdesc ">Sample task</shortdesc></topicmeta></topicref>
+<topicref class="- map/topicref " href="term1.dita" type="glossentry"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Term1 is a good term</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Term1 is a good term</linktext></topicmeta></topicref>
+<topicref class="- map/topicref " href="term2.dita" type="glossentry"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Term2 is also a good term</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Term2 is also a good term</linktext></topicmeta></topicref>
+<reltable class="- map/reltable " toc="no">
+<title class="- topic/title ">Test group title in one column, but not other</title>
+<relheader class="- map/relheader ">
+<relcolspec class="- map/relcolspec " toc="no"/>
+<relcolspec class="- map/relcolspec " toc="no">
+<topicref class="- map/topicref " toc="no"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Some good terms</navtitle></topicmeta></topicref>
+</relcolspec>
+</relheader>
+<relrow class="- map/relrow ">
+<relcell class="- map/relcell " toc="no">
+<topicref class="- map/topicref " href="maintopic.dita" toc="no" type="concept"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">This is a concept topic</navtitle><?ditaot gentext?><linktext class="- map/linktext ">This is a concept topic</linktext><?ditaot genshortdesc?><shortdesc class="- map/shortdesc ">It is about some concept or another</shortdesc></topicmeta></topicref>
+</relcell>
+<relcell class="- map/relcell " toc="no">
+<topicref class="- map/topicref " href="term1.dita" toc="no" type="glossentry"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Term1 is a good term</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Term1 is a good term</linktext></topicmeta></topicref>
+<topicref class="- map/topicref " href="term2.dita" toc="no" type="glossentry"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Term2 is also a good term</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Term2 is also a good term</linktext></topicmeta></topicref>
+</relcell>
+</relrow>
+</reltable>
+<reltable class="- map/reltable " toc="no">
+<title class="- topic/title ">Test group title in both columns</title>
+<relheader class="- map/relheader ">
+<relcolspec class="- map/relcolspec " toc="no">
+<title class="- topic/title ">Some good reference material</title>
+</relcolspec>
+<relcolspec class="- map/relcolspec " toc="no">
+<topicref class="- map/topicref " navtitle="Some really good terms" toc="no"/>
+</relcolspec>
+</relheader>
+<relrow class="- map/relrow ">
+<relcell class="- map/relcell " toc="no">
+<topicref class="- map/topicref " href="reftopic.dita" toc="no" type="reference"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Reference topic</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Reference topic</linktext><?ditaot genshortdesc?><shortdesc class="- map/shortdesc ">Short reference description.</shortdesc></topicmeta></topicref>
+</relcell>
+<relcell class="- map/relcell " toc="no">
+<topicref class="- map/topicref " href="term1.dita" toc="no" type="glossentry"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Term1 is a good term</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Term1 is a good term</linktext></topicmeta></topicref>
+<topicref class="- map/topicref " href="term2.dita" toc="no" type="glossentry"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Term2 is also a good term</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Term2 is also a good term</linktext></topicmeta></topicref>
+</relcell>
+</relrow>
+</reltable>
+<reltable class="- map/reltable " toc="no">
+<title class="- topic/title ">Test topic reference in each column (DITA, non-DITA)</title>
+<relheader class="- map/relheader ">
+<relcolspec class="- map/relcolspec " toc="no">
+<topicref class="- map/topicref " href="reftopic.dita" toc="no" type="reference"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Reference topic</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Reference topic</linktext><?ditaot genshortdesc?><shortdesc class="- map/shortdesc ">Short reference description.</shortdesc></topicmeta></topicref>
+</relcolspec>
+<relcolspec class="- map/relcolspec " toc="no">
+<topicref class="- map/topicref " format="html" scope="external" href="http://dita-ot.org" toc="no"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">http://dita-ot.org</navtitle><?ditaot gentext?><linktext class="- map/linktext ">http://dita-ot.org</linktext></topicmeta></topicref>
+</relcolspec>
+</relheader>
+<relrow class="- map/relrow ">
+<relcell class="- map/relcell " toc="no">
+<topicref class="- map/topicref " href="maintopic.dita" toc="no" type="concept"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">This is a concept topic</navtitle><?ditaot gentext?><linktext class="- map/linktext ">This is a concept topic</linktext><?ditaot genshortdesc?><shortdesc class="- map/shortdesc ">It is about some concept or another</shortdesc></topicmeta></topicref>
+</relcell>
+<relcell class="- map/relcell " toc="no">
+<topicref class="- map/topicref " href="tasktopic.dita" toc="no" type="task"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Task appears under DITA-OT heading</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Task appears under DITA-OT heading</linktext><?ditaot genshortdesc?><shortdesc class="- map/shortdesc ">Sample task</shortdesc></topicmeta></topicref>
+</relcell>
+</relrow>
+</reltable>
+</map>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE glossentry PUBLIC "-//OASIS//DTD DITA Glossary//EN" "glossary.dtd">
+<glossentry id="term1">
+    <glossterm>Term1 is a good term</glossterm>
+    <glossdef>This is the definition of the first term</glossdef>
+</glossentry>
