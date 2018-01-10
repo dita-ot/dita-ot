@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 import static javax.xml.XMLConstants.XML_NS_URI;
-import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Configuration.Mode;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -85,6 +84,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
         modified = validateLang(atts, null);
         modified = validateId(localName, atts, modified);
         modified = validateHref(atts, modified);
+        modified = validateScope(atts, modified);
         modified = processFormatDitamap(atts, modified);
         validateKeys(atts);
         validateKeyscope(atts);
@@ -207,22 +207,34 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     break;
                 }
             }
-            if (uri != null && uri.getScheme() != null && uri.getScheme().equals("mailto")) {
-                final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-                if (isFormatDita(format)) {
-                    if (res == null) {
-                        res = new AttributesImpl(atts);
-                    }
-                    addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, "email");
-                    logger.error(MessageUtils.getMessage("DOTJ072E").setLocation(locator).toString());
-                }
-                final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                if (scope == null || !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
-                    if (res == null) {
-                        res = new AttributesImpl(atts);
-                    }
-                    addOrSetAttribute(res, ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL);
-                    logger.error(MessageUtils.getMessage("DOTJ073E").setLocation(locator).toString());
+        }
+        return res;
+    }
+
+    /**
+     * Fix implicit {@code scope} attribute.
+     *
+     * @return modified attributes, {@code null} if there have been no changes
+     */
+    private AttributesImpl validateScope(final Attributes atts, final AttributesImpl modified) {
+        AttributesImpl res = modified;
+        final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+        if (scope == null && href != null && href.isAbsolute()) {
+            final boolean sameScheme = Objects.equals(currentFile.getScheme(), href.getScheme());
+            final boolean sameAuthority = Objects.equals(currentFile.getRawAuthority(), href.getRawAuthority());
+            if (!(sameScheme && sameAuthority)) {
+                switch (processingMode) {
+                    case LAX:
+                        if (res == null) {
+                            res = new AttributesImpl(atts);
+                        }
+                        addOrSetAttribute(res, ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL);
+                        logger.warn(MessageUtils.getMessage("DOTJ075W", href.toString()).setLocation(locator).toString());
+                        break;
+                    default:
+                        logger.warn(MessageUtils.getMessage("DOTJ076W", href.toString()).setLocation(locator) + ", using invalid value.");
+                        break;
                 }
             }
         }
