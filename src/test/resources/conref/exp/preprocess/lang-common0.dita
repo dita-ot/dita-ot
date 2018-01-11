@@ -79,12 +79,12 @@
           class="- topic/xref " type="table"><?ditaot gentext?>Table 1</xref>. Now do it again,
           <xref href="#topic/table" class="- topic/xref " type="table"><?ditaot usertext?>with link
           text</xref>.</p>
-      <p class="- topic/p ">Xref to an external website: <xref href="http://www.ibm.com"
-          format="html" class="- topic/xref "/>. Now do it again, <xref href="http://www.ibm.com"
+      <p class="- topic/p ">Xref to an external website: <xref scope="external" href="http://www.ibm.com"
+          format="html" class="- topic/xref "/>. Now do it again, <xref scope="external" href="http://www.ibm.com"
           format="html" class="- topic/xref "><?ditaot usertext?>with link text</xref>.</p>
       <p class="- topic/p ">Xref to an external website with an anchor: <xref
-          href="http://www.ibm.com/index.html#anchor" format="html" class="- topic/xref "/>. Now do
-        it again, <xref href="http://www.ibm.com/index.html#anchor" format="html"
+          scope="external" href="http://www.ibm.com/index.html#anchor" format="html" class="- topic/xref "/>. Now do
+        it again, <xref scope="external" href="http://www.ibm.com/index.html#anchor" format="html"
           class="- topic/xref "><?ditaot usertext?>with link text</xref>.</p>
       <fig id="fig" class="- topic/fig ">
         <title class="- topic/title ">figure title</title>

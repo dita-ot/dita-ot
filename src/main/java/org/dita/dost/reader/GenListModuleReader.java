@@ -567,8 +567,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         // external resource is filtered here.
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
-                // FIXME: testing for :// here is incorrect, rely on source scope instead
-                || attrValue.toString().contains(COLON_DOUBLE_SLASH) || attrValue.toString().startsWith(SHARP)) {
+                || attrValue.toString().startsWith(SHARP)) {
             return;
         }
 

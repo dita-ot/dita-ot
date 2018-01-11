@@ -79,11 +79,11 @@
           class="- topic/xref " href="#topic/d7e179" type="table"><?ditaot usertext?>with link
           text</xref>.</p>
       <p class="- topic/p ">Xref to an external website: <xref class="- topic/xref " format="html"
-          href="http://www.ibm.com"/>. Now do it again, <xref class="- topic/xref " format="html"
-          href="http://www.ibm.com"><?ditaot usertext?>with link text</xref>.</p>
+          scope="external" href="http://www.ibm.com"/>. Now do it again, <xref class="- topic/xref " format="html"
+          scope="external" href="http://www.ibm.com"><?ditaot usertext?>with link text</xref>.</p>
       <p class="- topic/p ">Xref to an external website with an anchor: <xref class="- topic/xref "
-          format="html" href="http://www.ibm.com/index.html#anchor"/>. Now do it again, <xref
-          class="- topic/xref " format="html" href="http://www.ibm.com/index.html#anchor"
+          format="html" scope="external" href="http://www.ibm.com/index.html#anchor"/>. Now do it again, <xref
+          class="- topic/xref " format="html" scope="external" href="http://www.ibm.com/index.html#anchor"
           ><?ditaot usertext?>with link text</xref>.</p>
       <fig class="- topic/fig " id="d7e168">
         <title class="- topic/title ">figure title</title>
