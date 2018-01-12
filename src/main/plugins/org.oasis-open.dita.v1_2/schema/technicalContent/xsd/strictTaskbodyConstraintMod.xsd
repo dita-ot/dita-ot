@@ -16,7 +16,7 @@
     </xs:documentation>
   </xs:annotation>
   
-  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:taskMod.xsd">
+  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.2">
 
     <xs:group name="taskPreStep" xmlns:xs="http://www.w3.org/2001/XMLSchema">  
       <xs:sequence>
