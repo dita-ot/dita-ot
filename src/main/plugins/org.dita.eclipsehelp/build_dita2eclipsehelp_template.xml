@@ -107,11 +107,10 @@ See the accompanying LICENSE file for applicable license.
         <xslt
               basedir="${dita.temp.dir}"
               destdir="${dita.output.dir}"
-              includesfile="${dita.temp.dir}/${fullditamapfile}"
               extension=".xml"
               classpathref="dost.class.path"
               style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
-          <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
+            <ditaFileset format="ditamap" processingRole="normal"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
             <param name="defaultLanguage" expression="${default.language}"/>
@@ -125,10 +124,9 @@ See the accompanying LICENSE file for applicable license.
         <xslt
             basedir="${dita.temp.dir}"
             destdir="${dita.output.dir}"
-            includesfile="${dita.temp.dir}/${fullditamapfile}"
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
-          <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
+            <ditaFileset format="ditamap" processingRole="normal"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
             <param name="defaultLanguage" expression="${default.language}"/>
