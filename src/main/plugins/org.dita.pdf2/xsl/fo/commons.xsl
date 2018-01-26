@@ -222,9 +222,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template name="processTopicChapter">
         <xsl:variable name="expectedChapterContext" as="xs:boolean">
             <xsl:choose>
-                <xsl:when test="empty(parent::*[contains(@class,' topic/topic ')])"><xsl:value-of select="true()"/></xsl:when>
+                <xsl:when test="empty(parent::*[contains(@class,' topic/topic ')])"><xsl:sequence select="true()"/></xsl:when>
                 <xsl:when test="count(ancestor::*[contains(@class,' topic/topic ')]) = 1 and 
-                    contains((key('map-id',parent::*/@id)[1])/@class,' bookmap/part ')"><xsl:value-of select="true()"/></xsl:when>
+                    contains((key('map-id',parent::*/@id)[1])/@class,' bookmap/part ')"><xsl:sequence select="true()"/></xsl:when>
                 <xsl:otherwise><xsl:sequence select="false()"/></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -361,7 +361,7 @@ See the accompanying LICENSE file for applicable license.
   <!--  Bookmap appendices processing  -->
   <xsl:template name="processTopicAppendices">
       <xsl:variable name="expectedAppsContext" as="xs:boolean" 
-          select="if (empty(parent::*[contains(@class,' topic/topic ')])) then (true()) else (false())"/>
+          select="empty(parent::*[contains(@class,' topic/topic ')])"/>
       <xsl:choose>
           <xsl:when test="$expectedAppsContext">
               <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.appendix">
@@ -437,7 +437,7 @@ See the accompanying LICENSE file for applicable license.
     <!--  Bookmap Part processing  -->
     <xsl:template name="processTopicPart">
         <xsl:variable name="expectedPartContext" as="xs:boolean" 
-            select="if (empty(parent::*[contains(@class,' topic/topic ')])) then (true()) else (false())"/>
+            select="empty(parent::*[contains(@class,' topic/topic ')])"/>
         <xsl:choose>
             <xsl:when test="$expectedPartContext">
                 <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.part">
@@ -572,7 +572,7 @@ See the accompanying LICENSE file for applicable license.
     <!-- Deprecated in 3.0: use mode="insertChapterFirstpageStaticContent" -->
     <xsl:template name="processFrontMatterTopic">
         <xsl:variable name="expectedFMContext" as="xs:boolean" 
-            select="if (empty(parent::*[contains(@class,' topic/topic ')])) then (true()) else (false())"/>
+            select="empty(parent::*[contains(@class,' topic/topic ')])"/>
         <xsl:choose>
             <xsl:when test="$expectedFMContext">
                 <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.frontmatter">

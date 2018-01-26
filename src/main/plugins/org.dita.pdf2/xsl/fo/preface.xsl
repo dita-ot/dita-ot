@@ -40,7 +40,7 @@ See the accompanying LICENSE file for applicable license.
 
      <xsl:template name="processTopicPreface">
          <xsl:variable name="expectedPrefaceContext" as="xs:boolean" 
-             select="if (empty(parent::*[contains(@class,' topic/topic ')])) then (true()) else (false())"/>
+             select="empty(parent::*[contains(@class,' topic/topic ')])"/>
          <xsl:choose>
              <xsl:when test="$expectedPrefaceContext">
                  <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.preface">
