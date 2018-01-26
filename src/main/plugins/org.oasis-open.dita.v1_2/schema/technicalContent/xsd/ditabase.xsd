@@ -179,7 +179,7 @@
 
   </xs:redefine>
   
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd"/>  
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd:1.2"/>  
 
   <xs:group name="ditabase-info-types">
     <xs:choice>
