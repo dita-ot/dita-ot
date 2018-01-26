@@ -43,7 +43,7 @@
 >
 <!--                    LONG NAME: DITAVAL Reference               -->
 <!ENTITY % ditavalref.content
-                       "(%ditavalmeta;)*"
+                       "(%ditavalmeta;)?"
 >
 <!ENTITY % ditavalref.attributes
               "navtitle

@@ -22,22 +22,24 @@
       </xs:appinfo>
    </xs:annotation>
 
-   <xs:redefine schemaLocation="../../base/xsd/mapMod.xsd">
-      <xs:group name="topicref">
-         <xs:sequence>
-            <xs:group ref="mapgroup-d-topicref"/>
-         </xs:sequence>
-      </xs:group>
-   </xs:redefine>
-   <xs:redefine schemaLocation="../../base/xsd/mapGroupMod.xsd">
-      <xs:group name="mapgroup-d-topicref">
-         <xs:sequence>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-               <xs:group ref="keydef"/>
-               <xs:group ref="mapref"/>
-               <xs:group ref="topicgroup"/>
-            </xs:choice>
-         </xs:sequence>
-      </xs:group>
-   </xs:redefine>
+  <xs:redefine schemaLocation="./learningGroupMapIntMod.xsd">
+    <xs:group name="topicref">
+      <xs:choice>
+        <xs:group ref="mapgroup-d-topicref"/>
+        <xs:group ref="ditavalref-d-topicref"/>
+        <xs:group ref="learningmap-d-topicref"/>
+      </xs:choice>
+    </xs:group>
+  </xs:redefine>
+
+  <xs:redefine schemaLocation="../../base/xsd/mapGroupMod.xsd">
+    <xs:group name="mapgroup-d-topicref">
+      <xs:choice>
+        <xs:element ref="keydef"/>
+        <xs:element ref="mapref"/>
+        <xs:element ref="topicgroup"/>
+      </xs:choice>
+    </xs:group>
+  </xs:redefine>  
+
 </xs:schema>
