@@ -180,15 +180,13 @@ See the accompanying LICENSE file for applicable license.
     <element name="params" optional="true" implicit="true"/>
     <sequential>
       <pipeline message="Convert DITA topic to HTML5" taskname="xslt">
-      <xslt basedir="${dita.temp.dir}"
-            destdir="${dita.output.dir}"
+      <xslt destdir="${dita.output.dir}"
             reloadstylesheet="${dita.html5.reloadstylesheet}"
-            classpathref="dost.class.path"
             extension="${out.ext}"
             style="${args.xsl}"
             filenameparameter="FILENAME"
             filedirparameter="FILEDIR">
-        <ditaFileset format="dita" processingRole="normal"/>
+        <ditafileset format="dita" processingRole="normal"/>
         <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile"/>
         <param name="CSS" expression="${args.css.file}" if="args.css.file"/>
         <param name="CSSPATH" expression="${user.csspath}" if="user.csspath"/>
@@ -222,11 +220,9 @@ See the accompanying LICENSE file for applicable license.
         <isset property="inner.transform"/>
       </condition>
       <pipeline message="Convert DITA map to HTML5" taskname="xslt">
-      <xslt basedir="${dita.temp.dir}"
-            destdir="${html5.toc.output.dir}"
-            includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
-            classpathref="dost.class.path"
+      <xslt destdir="${html5.toc.output.dir}"
             style="${args.html5.toc.xsl}">
+        <ditafileset input="true"/>
         <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="contenttarget" expression="${args.html5.contenttarget}" if="args.html5.contenttarget"/>
