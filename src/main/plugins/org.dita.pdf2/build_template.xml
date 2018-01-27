@@ -300,6 +300,7 @@ with those set forth herein.
     <makeurl property="user.input.dir.url" file="${user.input.dir}" validate="no"/>    
     <makeurl property="variable.file.url" file="${variable.file}" validate="no"/>
 
+    <pipeline>
     <xslt style="${temp.transformation.file}"
           in="${dita.temp.dir}/stage1.xml"
           out="${dita.temp.dir}/stage2.fo">
@@ -327,6 +328,7 @@ with those set forth herein.
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
     </xslt>
+    </pipeline>
   </target>
 
   <target name="transform.topic2fo.i18n"

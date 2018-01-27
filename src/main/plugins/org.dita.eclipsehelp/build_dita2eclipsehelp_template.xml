@@ -104,11 +104,9 @@ See the accompanying LICENSE file for applicable license.
     <target name="dita.map.eclipse.toc" unless="noMap"
             depends="dita.map.eclipse.plugin.init" if="old.transform"
             description="Build EclipseHelp TOC file">
-        <xslt
-              basedir="${dita.temp.dir}"
-              destdir="${dita.output.dir}"
+      <pipeline>
+        <xslt destdir="${dita.output.dir}"
               extension=".xml"
-              classpathref="dost.class.path"
               style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
             <ditaFileset format="ditamap" processingRole="normal"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
@@ -116,15 +114,15 @@ See the accompanying LICENSE file for applicable license.
             <param name="defaultLanguage" expression="${default.language}"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
+      </pipeline>
     </target>
     
     <target name="dita.out.map.eclipse.toc" unless="noMap"
         depends="dita.map.eclipse.plugin.init" if="inner.transform"
         description="Build EclipseHelp TOC file">
+      <pipeline>
         <xslt
-            basedir="${dita.temp.dir}"
             destdir="${dita.output.dir}"
-            classpathref="dost.class.path"
             style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
             <ditaFileset format="ditamap" processingRole="normal"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
@@ -134,6 +132,7 @@ See the accompanying LICENSE file for applicable license.
             <mapper classname="org.dita.dost.ant.types.JobMapper" to=".xml"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
+      </pipeline>
     </target>
     
     <target name="dita.map.eclipse.index" unless="noMap"
@@ -182,10 +181,10 @@ See the accompanying LICENSE file for applicable license.
             unless="noPlugin"
             depends="dita.map.eclipse.plugin.init" if="old.transform"
             description="Build Eclipsehelp plugin file">
+      <pipeline>
         <xslt
               in="${dita.temp.dir}/${user.input.file}"
               out="${dita.map.output.dir}/plugin.xml"
-              classpathref="dost.class.path"
               style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
             <param name="TOCROOT" expression="${dita.map.filename.root}" />
             <param name="version"
@@ -202,16 +201,17 @@ See the accompanying LICENSE file for applicable license.
                   expression="dita.eclipse.plugin"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
+      </pipeline>
     </target>
     
     <target name="dita.out.map.eclipse.plugin"
         unless="noPlugin"
         depends="dita.map.eclipse.plugin.init" if="inner.transform"
         description="Build Eclipsehelp plugin file">
+      <pipeline>  
         <xslt
             in="${dita.temp.dir}/${user.input.file}"
             out="${dita.output.dir}/plugin.xml"
-            classpathref="dost.class.path"
             style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
             <param name="TOCROOT" expression="${dita.map.filename.root}" />
             <param name="version"
@@ -228,6 +228,7 @@ See the accompanying LICENSE file for applicable license.
                   expression="dita.eclipse.plugin"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
+      </pipeline>
     </target>
   
   <!-- New support for creating Eclipse fragments based on the similar map used to create a plug-in -->
@@ -238,10 +239,10 @@ See the accompanying LICENSE file for applicable license.
     unless="noPlugin"
     depends="dita.map.eclipse.plugin.init" if="old.transform"
     description="Build Eclipsehelp manifest.mf file">
+    <pipeline>
     <xslt
       in="${dita.temp.dir}/${user.input.file}"
       out="${dita.map.output.dir}/META-INF/MANIFEST.MF"
-      classpathref="dost.class.path"
       style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <param name="version"
         expression="${args.eclipse.version}"
@@ -265,16 +266,17 @@ See the accompanying LICENSE file for applicable license.
         expression="dita.eclipse.manifest"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
+    </pipeline>
   </target>
   
   <target name="dita.out.map.eclipse.manifest.file"
     unless="noPlugin"
     depends="dita.map.eclipse.plugin.init" if="inner.transform"
     description="Build Eclipsehelp manifest.mf file">
+    <pipeline>
     <xslt
       in="${dita.temp.dir}/${user.input.file}"
       out="${dita.map.output.dir}/META-INF/MANIFEST.MF"
-      classpathref="dost.class.path"
       style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <param name="version"
         expression="${args.eclipse.version}"
@@ -298,6 +300,7 @@ See the accompanying LICENSE file for applicable license.
         expression="dita.eclipse.manifest"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
+    </pipeline>
   </target>
   
   
@@ -305,10 +308,10 @@ See the accompanying LICENSE file for applicable license.
     unless="noPlugin"
     depends="dita.map.eclipse.plugin.init" if="old.transform"
     description="Create eclipse plugin.properties file">
+    <pipeline>
     <xslt
       in="${dita.temp.dir}/${user.input.file}"
       out="${dita.output.dir}/plugin.properties"
-      classpathref="dost.class.path"
       style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <outputproperty value="text" name="method"/>
       <param name="dita.plugin.output" 
@@ -321,16 +324,17 @@ See the accompanying LICENSE file for applicable license.
           if="args.eclipse.provider" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
+    </pipeline>
   </target>
   
   <target name="dita.out.map.eclipse.plugin.properties"
     unless="noPlugin"
     depends="dita.map.eclipse.plugin.init" if="inner.transform"
     description="Create eclipse plugin.properties file">
+    <pipeline>
     <xslt
       in="${dita.temp.dir}/${user.input.file}"
       out="${dita.output.dir}/plugin.properties"
-      classpathref="dost.class.path"
       style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <outputproperty value="text" name="method"/>
       <param name="dita.plugin.output" expression="dita.eclipse.properties"/>
@@ -342,6 +346,7 @@ See the accompanying LICENSE file for applicable license.
           if="args.eclipse.provider" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
+    </pipeline>
   </target>
   
   <target name="dita.map.eclipse.fragment.language.init" if="eclipse.fragment.language"
