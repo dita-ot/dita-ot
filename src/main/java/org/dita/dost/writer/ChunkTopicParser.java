@@ -24,6 +24,7 @@ import java.net.URI;
 import java.util.*;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
+import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.StringUtils.split;
@@ -77,6 +78,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
         final String classValue = getValue(topicref, ATTRIBUTE_NAME_CLASS);
         final String processRoleValue = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
+        final String formatValue = getValue(topicref, ATTRIBUTE_NAME_FORMAT);
 
         URI outputFileName = outputFile;
         Writer tempWriter = null;
@@ -100,7 +102,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 parseFilePath = hrefValue;
             }
 
-            if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)) {
+            if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue) && isFormatDita(formatValue)) {
                 // now the path to target file make sense
                 if (chunkValue.contains(CHUNK_TO_CONTENT)) {
                     // if current element contains "to-content" in chunk attribute
