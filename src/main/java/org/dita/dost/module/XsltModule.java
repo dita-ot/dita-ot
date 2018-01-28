@@ -7,6 +7,7 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.FileUtils;
@@ -26,10 +27,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.XMLUtils.withLogger;
@@ -77,6 +75,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
         logger.info("Transforming into " + destDir.getAbsolutePath());
         final TransformerFactory tf = TransformerFactory.newInstance();
+        configureExtensions(tf);
         tf.setURIResolver(xmlcatalog);
         try {
             templates = tf.newTemplates(new StreamSource(style));
@@ -213,6 +212,32 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
     public void setExtension(final String extension) {
         this.extension = extension.startsWith(".") ? extension : ("." + extension);
+    }
+
+    private void configureExtensions (TransformerFactory tf) {
+        if (tf.getClass().isAssignableFrom(net.sf.saxon.TransformerFactoryImpl.class)) {
+            configureSaxonExtensions((net.sf.saxon.TransformerFactoryImpl) tf);
+        }
+    }
+
+    /**
+     * Registers Saxon full integrated function definitions.
+     * The intgrated function should be an instance of net.sf.saxon.lib.ExtensionFunctionDefinition abstract class.
+     * @see <a href="https://www.saxonica.com/html/documentation/extensibility/integratedfunctions/ext-full-J.html">Saxon
+     *      Java extension functions: full interface</a>
+     */
+    private void configureSaxonExtensions(net.sf.saxon.TransformerFactoryImpl tfi) {
+        final net.sf.saxon.Configuration conf = tfi.getConfiguration();
+        for (ExtensionFunctionDefinition def : ServiceLoader.load(ExtensionFunctionDefinition.class)) {
+            try {
+                conf.registerExtensionFunction(def.getClass().newInstance());
+            } catch (InstantiationException e) {
+                throw new RuntimeException("Failed to register " + def.getFunctionQName().getDisplayName()
+                        + ". Cannot create instance of " + def.getClass().getName() + ": " + e.getMessage(), e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }
