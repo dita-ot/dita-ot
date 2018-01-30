@@ -16,7 +16,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class NormalizeFilterTest {
 
@@ -33,6 +33,24 @@ public class NormalizeFilterTest {
         });
         f.startElement(NULL_NS_URI, MAP_MAP.localName, MAP_MAP.localName, new XMLUtils.AttributesBuilder()
                 .add(ATTRIBUTE_NAME_CLASS, MAP_MAP.toString()).build());
+    }
+
+    @Test
+    public void testDomains() throws Exception {
+        final NormalizeFilter f = new NormalizeFilter();
+        f.setLogger(new TestUtils.TestLogger());
+        f.setContentHandler(new DefaultHandler() {
+            @Override
+            public void startElement(String uri, String localName,
+                                     String qName, Attributes attributes) throws SAXException {
+                assertEquals("(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)",
+                        attributes.getValue(ATTRIBUTE_NAME_DOMAINS));
+            }
+        });
+        f.startElement(NULL_NS_URI, TOPIC_TOPIC.localName, TOPIC_TOPIC.localName, new XMLUtils.AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString())
+                .add(ATTRIBUTE_NAME_DOMAINS, "(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    ")
+                .build());
     }
 
     @Test
