@@ -27,7 +27,7 @@ public final class TopicIdParser implements ContentHandler {
      * Default Constructor.
      *
      */
-    public TopicIdParser(){
+    public TopicIdParser() {
         this(null);
     }
 
@@ -68,8 +68,8 @@ public final class TopicIdParser implements ContentHandler {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
-        if (isFirstId){
-            if (atts.getValue(ATTRIBUTE_NAME_ID)!=null){
+        if (isFirstId) {
+            if (atts.getValue(ATTRIBUTE_NAME_ID)!=null) {
                 isFirstId = false;
                 firstId.append(atts.getValue(ATTRIBUTE_NAME_ID));
             }

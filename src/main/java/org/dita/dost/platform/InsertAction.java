@@ -68,7 +68,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
     @Override
     public void getResult(final ContentHandler retBuf) throws SAXException {
         setContentHandler(retBuf);
-        try{
+        try {
             for (final String fileName: fileNameSet) {
                 currentFile = fileName;
                 reader.parse(currentFile);
@@ -91,7 +91,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
 
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
-        if (elemLevel != 0){
+        if (elemLevel != 0) {
             getContentHandler().startElement(uri, localName, qName, attributes);
         }
         elemLevel ++;

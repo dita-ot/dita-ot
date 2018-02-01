@@ -69,7 +69,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
                         target = setFragment(target, keyFragment + SLASH + id);
                     } else if (id != null) {
                         target = setFragment(target, id);
-                    } else if (keyFragment != null){
+                    } else if (keyFragment != null) {
                         target = setFragment(target, keyFragment);
                     }
                     XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target.toString());

@@ -584,7 +584,7 @@ public final class XMLUtils {
      * @param s value needed to be escaped
      * @return escaped value
      */
-    public static String escapeXML(final String s){
+    public static String escapeXML(final String s) {
         final char[] chars = s.toCharArray();
         return escapeXML(chars, 0, chars.length);
     }
@@ -597,7 +597,7 @@ public final class XMLUtils {
      * @param length arrays lenth
      * @return escaped value
      */
-    public static String escapeXML(final char[] chars, final int offset, final int length){
+    public static String escapeXML(final char[] chars, final int offset, final int length) {
         final StringBuilder escaped = new StringBuilder();
 
         final int end = offset + length;
@@ -658,7 +658,7 @@ public final class XMLUtils {
                 try {
                     Class.forName(SAX_DRIVER_CRIMSON_CLASS);
                     reader = XMLReaderFactory.createXMLReader(SAX_DRIVER_CRIMSON_CLASS);
-                } catch (final ClassNotFoundException exc){
+                } catch (final ClassNotFoundException exc) {
                     reader = XMLReaderFactory.createXMLReader();
                 }
             }

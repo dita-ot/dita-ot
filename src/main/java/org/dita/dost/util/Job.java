@@ -864,7 +864,7 @@ public final class Job {
      * @return String outercontrol behavior
      *
      */
-    public OutterControl getOutterControl(){
+    public OutterControl getOutterControl() {
         return OutterControl.valueOf(prop.get(PROPERTY_OUTER_CONTROL).toString());
     }
 
@@ -872,7 +872,7 @@ public final class Job {
      * Set the outercontrol.
      * @param control control
      */
-    public void setOutterControl(final String control){
+    public void setOutterControl(final String control) {
         prop.put(PROPERTY_OUTER_CONTROL, OutterControl.valueOf(control.toUpperCase()).toString());
     }
 
@@ -880,7 +880,7 @@ public final class Job {
      * Retrieve the flag of onlytopicinmap.
      * @return boolean if only topic in map
      */
-    public boolean getOnlyTopicInMap(){
+    public boolean getOnlyTopicInMap() {
         return Boolean.parseBoolean(prop.get(PROPERTY_ONLY_TOPIC_IN_MAP).toString());
     }
 
@@ -888,11 +888,11 @@ public final class Job {
      * Set the onlytopicinmap.
      * @param flag onlytopicinmap flag
      */
-    public void setOnlyTopicInMap(final boolean flag){
+    public void setOnlyTopicInMap(final boolean flag) {
         prop.put(PROPERTY_ONLY_TOPIC_IN_MAP, Boolean.toString(flag));
     }
 
-    public Generate getGeneratecopyouter(){
+    public Generate getGeneratecopyouter() {
         return Generate.valueOf(prop.get(PROPERTY_GENERATE_COPY_OUTER).toString());
     }
 
@@ -900,7 +900,7 @@ public final class Job {
      * Set the generatecopyouter.
      * @param flag generatecopyouter flag
      */
-    public void setGeneratecopyouter(final String flag){
+    public void setGeneratecopyouter(final String flag) {
         setGeneratecopyouter(Generate.get(Integer.parseInt(flag)));
     }
 
@@ -908,7 +908,7 @@ public final class Job {
      * Set the generatecopyouter.
      * @param flag generatecopyouter flag
      */
-    public void setGeneratecopyouter(final Generate flag){
+    public void setGeneratecopyouter(final Generate flag) {
         prop.put(PROPERTY_GENERATE_COPY_OUTER, flag.toString());
     }
 
@@ -916,7 +916,7 @@ public final class Job {
      * Get output dir.
      * @return absolute output dir
      */
-    public File getOutputDir(){
+    public File getOutputDir() {
         if (prop.containsKey(PROPERTY_OUTPUT_DIR)) {
             return new File(prop.get(PROPERTY_OUTPUT_DIR).toString());
         }
@@ -927,7 +927,7 @@ public final class Job {
      * Set output dir.
      * @param outputDir absolute output dir
      */
-    public void setOutputDir(final File outputDir){
+    public void setOutputDir(final File outputDir) {
         prop.put(PROPERTY_OUTPUT_DIR, outputDir.getAbsolutePath());
     }
 

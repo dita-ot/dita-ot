@@ -50,7 +50,7 @@ public final class DITAOTCollator implements Comparator {
     /**
      * Default Constructor
      */
-    private DITAOTCollator(){
+    private DITAOTCollator() {
         this(Locale.US);
     }
 

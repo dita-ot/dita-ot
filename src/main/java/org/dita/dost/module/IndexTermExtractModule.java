@@ -156,7 +156,7 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                 handler.setTargetFile(targetPathFromMapWithoutExt + targetExt);
 
                 try {
-                    /*if(!new File(job.tempDir, target).exists()){
+                    /*if(!new File(job.tempDir, target).exists()) {
                         logger.logWarn("Cannot find file "+ target);
                         continue;
                     }*/
@@ -188,7 +188,7 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
 
                 ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
                 try {
-                    /*if(!new File(job.tempDir, ditamap).exists()){
+                    /*if(!new File(job.tempDir, ditamap).exists()) {
                         logger.logWarn("Cannot find file "+ ditamap);
                         continue;
                     }*/

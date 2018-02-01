@@ -39,7 +39,7 @@ public final class DITAOTCopy extends Task {
      * Default Constructor.
      *
      */
-    public DITAOTCopy(){
+    public DITAOTCopy() {
     }
 
     /**

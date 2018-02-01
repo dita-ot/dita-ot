@@ -35,7 +35,7 @@ public final class DITAOTEchoTask extends Echo {
      * Default Construtor.
      *
      */
-    public DITAOTEchoTask(){
+    public DITAOTEchoTask() {
     }
     /**
      * Setter function for id.
@@ -67,13 +67,13 @@ public final class DITAOTEchoTask extends Echo {
         final MessageBean msgBean = MessageUtils.getMessage(id, readParamValues());
         if (msgBean != null) {
             final String type = msgBean.getType();
-            if(ERROR.equals(type)){
+            if (ERROR.equals(type)) {
                 logger.error(msgBean.toString());
-            } else if(WARN.equals(type)){
+            } else if (WARN.equals(type)) {
                 logger.warn(msgBean.toString());
-            } else if(INFO.equals(type)){
+            } else if (INFO.equals(type)) {
                 logger.info(msgBean.toString());
-            } else if(DEBUG.equals(type)){
+            } else if (DEBUG.equals(type)) {
                 logger.debug(msgBean.toString());
             }
         }

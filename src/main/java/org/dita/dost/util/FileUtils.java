@@ -25,7 +25,7 @@ public final class FileUtils {
     /**
      * Private default constructor to make class uninstantiable.
      */
-    private FileUtils(){
+    private FileUtils() {
     }
 
     /**
@@ -203,16 +203,16 @@ public final class FileUtils {
             final String mapToken = mapTokenizer.nextToken();
             final String topicToken = topicTokenizer.nextToken();
             boolean equals;
-            if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)){
+            if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
                 //if OS is Windows, we need to ignore case when comparing path names.
                 equals = mapToken.equalsIgnoreCase(topicToken);
-            }else{
+            } else {
                 equals = mapToken.equals(topicToken);
             }
 
             if (!equals) {
-                if(mapToken.endsWith(COLON) ||
-                        topicToken.endsWith(COLON)){
+                if (mapToken.endsWith(COLON) ||
+                        topicToken.endsWith(COLON)) {
                     //the two files are in different disks under Windows
                     return refPath;
                 }
@@ -279,10 +279,10 @@ public final class FileUtils {
     private static String getRelativePathForPath(final String relativePath, final String sep) {
         final StringTokenizer tokenizer = new StringTokenizer(relativePath.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR), UNIX_SEPARATOR);
         final StringBuilder buffer = new StringBuilder();
-        if (tokenizer.countTokens() == 1){
+        if (tokenizer.countTokens() == 1) {
             return null;
-        }else{
-            while(tokenizer.countTokens() > 1){
+        } else {
+            while(tokenizer.countTokens() > 1) {
                 tokenizer.nextToken();
                 buffer.append("..");
                 buffer.append(sep);
@@ -440,16 +440,16 @@ public final class FileUtils {
      * @param extName value used to replace with
      * @return replaced value
      */
-    public static String replaceExtension(final String attValue, final String extName){
+    public static String replaceExtension(final String attValue, final String extName) {
         String fileName;
         int fileExtIndex;
         int index;
 
         index = attValue.indexOf(SHARP);
 
-        if (attValue.startsWith(SHARP)){
+        if (attValue.startsWith(SHARP)) {
             return attValue;
-        } else if (index != -1){
+        } else if (index != -1) {
             fileName = attValue.substring(0,index);
             fileExtIndex = fileName.lastIndexOf(DOT);
             return (fileExtIndex != -1)
@@ -469,7 +469,7 @@ public final class FileUtils {
      * @param file filename, may contain a URL fragment
      * @return file extensions, {@code null} if no extension was found
      */
-    public static String getExtension(final String file){
+    public static String getExtension(final String file) {
         final int index = file.indexOf(SHARP);
 
         if (file.startsWith(SHARP)) {

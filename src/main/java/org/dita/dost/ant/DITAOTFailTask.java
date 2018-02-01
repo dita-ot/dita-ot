@@ -36,7 +36,7 @@ public final class DITAOTFailTask extends Exit {
      * Default Construtor.
      *
      */
-    public DITAOTFailTask(){
+    public DITAOTFailTask() {
     }
 
     /**
@@ -81,20 +81,20 @@ public final class DITAOTFailTask extends Exit {
         final DITAOTLogger logger = new DITAOTAntLogger(getProject());
         if (msgBean != null) {
             final String type = msgBean.getType();
-            if(FATAL.equals(type)){
+            if (FATAL.equals(type)) {
                 setMessage(msgBean.toString());
-                try{
+                try {
                     super.execute();
-                }catch(final BuildException ex){
+                } catch (final BuildException ex) {
                     throw new BuildException(msgBean.toString(),new DITAOTException(msgBean,ex,msgBean.toString()));
                 }
-            } else if(ERROR.equals(type)){
+            } else if (ERROR.equals(type)) {
                 logger.error(msgBean.toString());
-            } else if(WARN.equals(type)){
+            } else if (WARN.equals(type)) {
                 logger.warn(msgBean.toString());
-            } else if(INFO.equals(type)){
+            } else if (INFO.equals(type)) {
                 logger.info(msgBean.toString());
-            } else if(DEBUG.equals(type)){
+            } else if (DEBUG.equals(type)) {
                 logger.debug(msgBean.toString());
             }
         }

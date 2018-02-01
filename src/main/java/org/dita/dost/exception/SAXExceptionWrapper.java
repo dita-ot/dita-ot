@@ -105,7 +105,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
      * @return error message
      */
     @Override
-    public String getMessage(){
+    public String getMessage() {
 
         return sourceFile + " Line " + saxParseException.getLineNumber() + ":" + saxParseException.getMessage() + LINE_SEPARATOR;
     }

@@ -88,11 +88,11 @@ public final class CoderefResolver extends AbstractXMLFilter {
 
         if (PR_D_CODEREF.matches(atts)) {
             ignoreDepth++;
-            try{
+            try {
                 final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-                if (hrefValue != null){
+                if (hrefValue != null) {
                     final File codeFile = getFile(hrefValue);
-                    if (codeFile != null && codeFile.exists()){
+                    if (codeFile != null && codeFile.exists()) {
                         logger.debug("Resolve coderef " + codeFile);
                         final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT));
                         final Range range = getRange(hrefValue);

@@ -98,7 +98,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         start = false;
         pushcontentWriter = getXMLStreamWriter();
         pushType = null;
-        try{
+        try {
             reader.parse(filename.toURI().toString());
         } catch (final RuntimeException e) {
             throw e;
@@ -122,12 +122,12 @@ public final class ConrefPushReader extends AbstractXMLReader {
      */
     public ConrefPushReader() {
         pushtable = new Hashtable<>();
-        try{
+        try {
             reader = XMLUtils.getXMLReader();
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, false);
             reader.setFeature(FEATURE_NAMESPACE, true);
             reader.setContentHandler(this);
-        }catch (final Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
 

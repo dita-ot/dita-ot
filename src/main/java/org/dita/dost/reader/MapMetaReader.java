@@ -290,7 +290,7 @@ public final class MapMetaReader extends AbstractDomFilter {
 
     private void getMeta(final Element meta, final Map<String, Element> topicMetaTable) {
         final NodeList children = meta.getChildNodes();
-        for(int i = 0; i < children.getLength(); i++) {
+        for (int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 final Element elem = (Element) node;
@@ -359,7 +359,7 @@ public final class MapMetaReader extends AbstractDomFilter {
 
     private void handleGlobalMeta(final Element metadata) {
         final NodeList children = metadata.getChildNodes();
-        for(int i = 0; i < children.getLength(); i++) {
+        for (int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 final Element elem = (Element) node;

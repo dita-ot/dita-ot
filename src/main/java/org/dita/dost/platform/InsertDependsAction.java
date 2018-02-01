@@ -55,7 +55,7 @@ final class InsertDependsAction implements IAction {
                 result.add(token);
             }
         }
-        if (!result.isEmpty()){
+        if (!result.isEmpty()) {
             return StringUtils.join(result, ",");
         } else {
             return "";

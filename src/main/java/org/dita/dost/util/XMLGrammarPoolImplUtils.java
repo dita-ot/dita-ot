@@ -47,7 +47,7 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
     @Override
     public void putGrammar(Grammar grammar) {
      //Avoid caching any type of XSD grammar
-     if(grammar instanceof org.apache.xerces.impl.xs.SchemaGrammar){
+     if (grammar instanceof org.apache.xerces.impl.xs.SchemaGrammar) {
       return;
      }
      super.putGrammar(grammar);

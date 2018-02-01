@@ -38,7 +38,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
             final ConrefPushReader reader = new ConrefPushReader();
             reader.setLogger(logger);
             reader.setJob(job);
-            for(final FileInfo f: fis) {
+            for (final FileInfo f: fis) {
                 final File file = new File(job.tempDir, f.file.getPath());
                 logger.info("Reading  " + file.getAbsolutePath());
                 //FIXME: this reader calculate parent directory

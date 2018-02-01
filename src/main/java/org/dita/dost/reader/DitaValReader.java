@@ -417,7 +417,7 @@ public final class DitaValReader implements AbstractReader {
      * get image list relative to the .ditaval file.
      * @return image list
      */
-    public List<URI> getRelFlagImageList(){
+    public List<URI> getRelFlagImageList() {
         return relFlagImageList;
     }
 

@@ -105,12 +105,12 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
 
         //if term doesn't have target to link to, it won't appear in the index tab
         //we need to create links for such terms
-        if (targets.isEmpty()){
+        if (targets.isEmpty()) {
             findTargets(term);
             targets = term.getTargetList();
         }
 
-        if(targets.isEmpty()) {
+        if (targets.isEmpty()) {
             serializer.writeCharacters(term.getTermFullName());
         } else {
             final IndexTermTarget target = targets.get(0);
@@ -137,7 +137,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
     private void findTargets(final IndexTerm term) {
         final List<IndexTerm> subTerms = term.getSubTerms();
         List<IndexTermTarget> subTargets;
-        if (subTerms != null && ! subTerms.isEmpty()){
+        if (subTerms != null && ! subTerms.isEmpty()) {
             for (final IndexTerm subTerm : subTerms) {
                 subTargets = subTerm.getTargetList();
                 if (subTargets != null && !subTargets.isEmpty()) {

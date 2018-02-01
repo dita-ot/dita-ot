@@ -167,11 +167,11 @@ public final class IndexTermCollection {
                 final IDitaTranstypeIndexWriter indexWriter = (IDitaTranstypeIndexWriter) anIndexClass.newInstance();
 
                 //RFE 2987769 Eclipse index-see
-                try{
+                try {
 
                     ((AbstractExtendDitaWriter) abstractWriter).setPipelineHashIO(this.getPipelineHashIO());
 
-                }catch (final ClassCastException e){
+                } catch (final ClassCastException e) {
                     javaLogger.info(e.getMessage());
                     javaLogger.info(e.toString());
                     e.printStackTrace();

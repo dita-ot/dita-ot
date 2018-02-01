@@ -551,7 +551,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
      * @param inputMap absolute input map path
      * @return {@code true} if outside start directory, otherwise {@code false}
      */
-    private static boolean isOutFile(final File filePathName, final File inputMap){
+    private static boolean isOutFile(final File filePathName, final File inputMap) {
         final File relativePath = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
         return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
     }

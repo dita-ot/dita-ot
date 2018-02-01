@@ -40,7 +40,7 @@ final class InsertCatalogActionRelative extends InsertAction {
         final AttributesImpl attrBuf = new AttributesImpl();
 
         final int attLen = attributes.getLength();
-        for (int i = 0; i < attLen; i++){
+        for (int i = 0; i < attLen; i++) {
             String value;
             final File targetFile = new File(new File(currentFile).getParentFile(), attributes.getValue(i));
             final int index = attributes.getIndex("xml:base");
@@ -55,7 +55,7 @@ final class InsertCatalogActionRelative extends InsertAction {
                                     "rewriteURI".equals(localName)) && "rewritePrefix".equals(attributes.getQName(i)))
                                     && !attributes.getValue(i).contains(COLON)) {
                 // Rewrite URI to be local to its final resting place.
-                if (index == -1){
+                if (index == -1) {
                     //If there are no xml:base attributes, then we need to split
                     final String path = FileUtils.getFullPathNoEndSeparator(FileUtils.getRelativeUnixPath(
                             paramTable.get(FileGenerator.PARAM_TEMPLATE),
@@ -75,7 +75,7 @@ final class InsertCatalogActionRelative extends InsertAction {
                             attributes.getQName(i), attributes.getType(i), value);
                 }
             }
-            else if(i==index){
+            else if (i==index) {
                 //We've found xml:base.  Need to add parent plugin directory to the original value.
                 value = FileUtils.getFullPathNoEndSeparator(FileUtils.getRelativeUnixPath(
                         paramTable.get(FileGenerator.PARAM_TEMPLATE),

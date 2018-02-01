@@ -278,11 +278,11 @@ public final class URLUtils {
      * @return string -
      *                 URL
      */
-    public static String getURL(final String fileName){
+    public static String getURL(final String fileName) {
 
-        if(fileName.startsWith("file:/")){
+        if (fileName.startsWith("file:/")) {
             return fileName;
-        }else{
+        } else {
             final File file = new File(fileName);
             return file.toURI().toString();
         }
@@ -661,10 +661,10 @@ public final class URLUtils {
     public static URI getRelativePath(final URI relativePath) {
         final StringTokenizer tokenizer = new StringTokenizer(relativePath.toString(), URI_SEPARATOR);
         final StringBuilder buffer = new StringBuilder();
-        if (tokenizer.countTokens() == 1){
+        if (tokenizer.countTokens() == 1) {
             return null;
-        }else{
-            while(tokenizer.countTokens() > 1){
+        } else {
+            while(tokenizer.countTokens() > 1) {
                 tokenizer.nextToken();
                 buffer.append("..");
                 buffer.append(URI_SEPARATOR);

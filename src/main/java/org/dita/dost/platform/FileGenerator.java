@@ -123,7 +123,7 @@ final class FileGenerator extends XMLFilterImpl {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
         IAction action = null;
-        try{
+        try {
             if (DITA_OT_NS.equals(uri) && EXTENSION_ELEM.equals(localName)) {
                 // Element extension: <dita:extension id="extension-point" behavior="classname"/>
                 action = (IAction)Class.forName(attributes.getValue(BEHAVIOR_ATTR)).newInstance();
@@ -134,7 +134,7 @@ final class FileGenerator extends XMLFilterImpl {
                 }
                 final String extension = attributes.getValue(EXTENSION_ID_ATTR);
                 //action.addParam("extension", extension);
-                if(featureTable.containsKey(extension)){
+                if (featureTable.containsKey(extension)) {
                     action.setInput(featureTable.get(extension));
                 }
                 action.setFeatures(pluginTable);
@@ -142,7 +142,7 @@ final class FileGenerator extends XMLFilterImpl {
             } else {
                 final AttributesBuilder atts = new AttributesBuilder();
                 final int attLen = attributes.getLength();
-                for(int i = 0; i < attLen; i++){
+                for (int i = 0; i < attLen; i++) {
                     if (DITA_OT_NS.equals(attributes.getURI(i))) {
                         // Attribute extension: <element dita:extension="localname classname ..." dita:localname="...">
                         if (!(EXTENSION_ATTR.equals(attributes.getLocalName(i)))) {
@@ -172,7 +172,7 @@ final class FileGenerator extends XMLFilterImpl {
                 }
                 getContentHandler().startElement(uri, localName, qName, atts.build());
             }
-        } catch(final Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage(), e) ;
         }

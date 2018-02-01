@@ -42,7 +42,7 @@ public final class MessageUtils {
      * Default construtor
      */
     @VisibleForTesting
-    MessageUtils(){
+    MessageUtils() {
     }
 
     /**

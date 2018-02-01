@@ -70,7 +70,7 @@ public final class TopicrefElement {
      * Set navtitle attribute with the given value.
      * @param aNavtitle The navtitle to set.
      */
-    public void setNavTitle (final String aNavtitle){
+    public void setNavTitle (final String aNavtitle) {
         navtitle = aNavtitle;
     }
 
@@ -79,7 +79,7 @@ public final class TopicrefElement {
      *
      * @return Returns the navtitle.
      */
-    public String getNavTitle(){
+    public String getNavTitle() {
         return navtitle;
     }
 

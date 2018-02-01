@@ -25,7 +25,7 @@ public final class IsAbsolute implements Condition {
      * Default Constructor.
      *
      */
-    public IsAbsolute(){
+    public IsAbsolute() {
     }
 
     /**

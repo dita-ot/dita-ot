@@ -60,7 +60,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
             throw new IllegalStateException("Logger not set");
         }
         final File ditaInput = new File(job.tempDirURI.resolve(job.getInputMap()));
-        if (!ditaInput.exists()){
+        if (!ditaInput.exists()) {
             logger.error(MessageUtils.getMessage("DOTJ025E").toString());
             return null;
         }
