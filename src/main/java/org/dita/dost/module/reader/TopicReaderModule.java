@@ -268,7 +268,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
                     logger.warn(MessageUtils.getMessage("DOTX008W", file.filename.toString()).toString());
                 }
             } else {
-                htmlSet.add(file.filename);
+                htmlSet.put(file.format, file.filename);
             }
         }
     }
