@@ -35,10 +35,10 @@ public final class IndexTerm implements Comparable<IndexTerm> {
     private String termKey = null;
 
     /** The start attribute. */
-    private String start=null;
+    private String start = null;
 
     /** The end attribute. */
-    private String end=null;
+    private String end = null;
 
     /** The sub indexterms contained by this indexterm. */
     private List<IndexTerm> subTerms = null;
@@ -153,7 +153,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * @param start attribute
      */
     public void setStartAttribute(final String start) {
-        this.start=start;
+        this.start = start;
     }
 
     /**
@@ -162,7 +162,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      */
 
     public void setEndAttribute(final String end) {
-        this.end=end;
+        this.end = end;
     }
     /**
      * Add a sub term into the sub term list.
@@ -386,7 +386,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * Update the sub-term prefix from "See also" to "See" if there is only one sub-term.
      */
     public void updateSubTerm() {
-        if (subTerms.size()==1) {
+        if (subTerms.size() == 1) {
             // if there is only one subterm, it is necessary to update
             final IndexTerm term = subTerms.get(0); // get the only subterm
             if (term.getTermPrefix()!= null &&

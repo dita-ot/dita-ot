@@ -39,8 +39,8 @@ public final class CatalogUtils {
      * @param ditaDir ditaDir
      */
     public static synchronized void setDitaDir(final File ditaDir) {
-        catalogResolver=null;
-        CatalogUtils.ditaDir=ditaDir;
+        catalogResolver = null;
+        CatalogUtils.ditaDir = ditaDir;
     }
 
     /**

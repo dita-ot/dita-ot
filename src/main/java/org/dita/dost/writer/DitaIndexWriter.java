@@ -160,11 +160,9 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             if (!hasPrologTillNow) {
                 if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_BODY.matcher)) {
                     return false;
-                }
-                else if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_RELATED_LINKS.matcher)) {
+                } else if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_RELATED_LINKS.matcher)) {
                     return false;
-                }
-                else if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_TOPIC.matcher)) {
+                } else if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_TOPIC.matcher)) {
 
                     if (topicLevel > 0) {
                         topicLevel++;
@@ -238,7 +236,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                     hasWritten = true;
                 }
             }
-            if ( !startTopic && !ELEMENT_NAME_DITA.equals(qName)) {
+            if (!startTopic && !ELEMENT_NAME_DITA.equals(qName)) {
                 if (atts.getValue(ATTRIBUTE_NAME_ID) != null) {
                     topicIdList.add(atts.getValue(ATTRIBUTE_NAME_ID));
                 } else {
@@ -289,7 +287,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                 filename = filename.substring(0, filename.length()-1);
             }
 
-            if (filename.lastIndexOf(SHARP)!=-1) {
+            if (filename.lastIndexOf(SHARP) != -1) {
                 file = filename.substring(0, filename.lastIndexOf(SHARP));
                 topic = filename.substring(filename.lastIndexOf(SHARP)+1);
                 setMatch(topic);

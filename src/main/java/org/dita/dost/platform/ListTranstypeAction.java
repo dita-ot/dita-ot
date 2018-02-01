@@ -32,7 +32,7 @@ final class ListTranstypeAction extends ImportAction {
         final List<String> v = new ArrayList<>(valueSet);
         Collections.sort(v);
         final StringBuilder retBuf = new StringBuilder();
-        for (final Iterator<String> i = v.iterator(); i.hasNext(); ) {
+        for (final Iterator<String> i = v.iterator(); i.hasNext();) {
             retBuf.append(i.next());
             if (i.hasNext()) {
                 retBuf.append(separator);

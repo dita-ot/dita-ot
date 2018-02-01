@@ -67,23 +67,20 @@ final class InsertCatalogActionRelative extends InsertAction {
                             "xml:base", attributes.getType(i), path);
                     attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
                             attributes.getQName(i), attributes.getType(i), filename);
-                }
-                else {
+                } else {
                     //If there is an xml:base attribute, then we do nothing.
                     value = attributes.getValue(i);
                     attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
                             attributes.getQName(i), attributes.getType(i), value);
                 }
-            }
-            else if (i == index) {
+            } else if (i == index) {
                 //We've found xml:base.  Need to add parent plugin directory to the original value.
                 value = FileUtils.getFullPathNoEndSeparator(FileUtils.getRelativeUnixPath(
                         paramTable.get(FileGenerator.PARAM_TEMPLATE),
                         targetFile.toString())) + "/" + attributes.getValue(i);
                 attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
                         attributes.getQName(i), attributes.getType(i), value);
-            }
-            else {
+            } else {
                 value = attributes.getValue(i);
                 attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
                         attributes.getQName(i), attributes.getType(i), value);

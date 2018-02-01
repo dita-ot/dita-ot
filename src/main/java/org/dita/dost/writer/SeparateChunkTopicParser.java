@@ -310,8 +310,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
 
         if (xmlLang != null) {
             currentLang = xmlLang;
-        }
-        else if (!lang.isEmpty()) {
+        } else if (!lang.isEmpty()) {
             currentLang = lang.peek();
         } else {
             currentLang = null;

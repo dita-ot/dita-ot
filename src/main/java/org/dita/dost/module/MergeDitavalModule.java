@@ -156,7 +156,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
                         }
                     }
                     if (atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ||
-                            atts.getNamedItem(ATTRIBUTE_NAME_IMG) != null ) {
+                            atts.getNamedItem(ATTRIBUTE_NAME_IMG) != null) {
                         final String imagerefAtt = atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ?
                                 atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF).getNodeValue() :    // DITA 1.1 and later: use @imageref on <startflag>, <endflag>
                                 atts.getNamedItem(ATTRIBUTE_NAME_IMG).getNodeValue();          // Pre-DITA 1.1: use @img on <prop>

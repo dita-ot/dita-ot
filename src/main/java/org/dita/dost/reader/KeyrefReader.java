@@ -160,8 +160,7 @@ public final class KeyrefReader implements AbstractReader {
             if (child.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
                 final List<KeyScope> childScope = readScopes(child);
                 childScopes.addAll(childScope);
-            }
-            else {
+            } else {
                 readChildScopes(child, childScopes);
             }
         }

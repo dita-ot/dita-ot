@@ -472,13 +472,13 @@ public final class IndexTermReader extends AbstractXMLReader {
         final int targetSize = indexterm.getTargetList().size();
         final int subtermSize = indexterm.getSubTerms().size();
 
-        for (int i=0; i<targetSize; i++) {
+        for (int i = 0; i<targetSize; i++) {
             final IndexTermTarget target = indexterm.getTargetList().get(i);
             final String uri = target.getTargetURI();
             final int indexOfSharp = uri.lastIndexOf(SHARP);
             final String fragment = (indexOfSharp == -1 || uri.endsWith(SHARP))?
                     null:
-                        uri.substring(indexOfSharp+1);
+                        uri.substring(indexOfSharp + 1);
             if (fragment != null && titleMap.containsKey(fragment)) {
                 target.setTargetName(titleMap.get(fragment));
             } else {
@@ -486,7 +486,7 @@ public final class IndexTermReader extends AbstractXMLReader {
             }
         }
 
-        for (int i=0; i<subtermSize; i++) {
+        for (int i = 0; i<subtermSize; i++) {
             final IndexTerm subterm = indexterm.getSubTerms().get(i);
             updateIndexTermTargetName(subterm);
         }

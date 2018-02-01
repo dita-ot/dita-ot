@@ -218,7 +218,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         final NodeList children = pushcontent.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
-            switch(child.getNodeType()) {
+            switch (child.getNodeType()) {
             case Node.ELEMENT_NODE:
                 final Element e = (Element) child;
                 replaceLinkAttributes(e);

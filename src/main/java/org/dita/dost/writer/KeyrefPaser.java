@@ -264,7 +264,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 .filter(item -> TOPIC_KEYWORDS.matches(item.getParentNode()))
                                 .collect(Collectors.toList());
                         // XXX: No need to look for term as content model for keywords doesn't allow it
-//                        if (nodeList.getLength() == 0 ) {
+//                        if (nodeList.getLength() == 0) {
 //                            nodeList = elem.getElementsByTagName(TOPIC_TERM.localName);
 //                        }
                         if (!keywordsInKeywords.isEmpty()) {
@@ -614,7 +614,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     // Private methods ---------------------------------------------------------
 
-    private boolean isLocalDita(final Element elem ) {
+    private boolean isLocalDita(final Element elem) {
         final String scopeValue = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
         final String formatValue = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
         return ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)) &&

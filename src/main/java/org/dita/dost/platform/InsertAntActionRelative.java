@@ -53,8 +53,7 @@ final class InsertAntActionRelative extends InsertAction {
                 value = FileUtils.getRelativeUnixPath(
                         paramTable.get(FileGenerator.PARAM_TEMPLATE),
                         targetFile.toString());
-            }
-            else {
+            } else {
                 value = attributes.getValue(i);
             }
             attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),

@@ -80,7 +80,7 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
     }
 
     private boolean isLocalDitaReference(final Attributes atts, final String attr) {
-        switch(attr) {
+        switch (attr) {
             case ATTRIBUTE_NAME_CONREF:
             case ATTRIBUTE_NAME_CONREFEND:
                 return true;

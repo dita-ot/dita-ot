@@ -365,8 +365,7 @@ public final class URLUtils {
                 buffer.append(gAfterEscaping1[ch]);
                 buffer.append(gAfterEscaping2[ch]);
                 // Record the fact that it's escaped
-            }
-            else {
+            } else {
                 buffer.append((char)ch);
             }
         }
@@ -392,13 +391,11 @@ public final class URLUtils {
                     buffer.append('%');
                     buffer.append(gHexChs[ch >> 4]);
                     buffer.append(gHexChs[ch & 0xf]);
-                }
-                else if (gNeedEscaping[b]) {
+                } else if (gNeedEscaping[b]) {
                     buffer.append('%');
                     buffer.append(gAfterEscaping1[b]);
                     buffer.append(gAfterEscaping2[b]);
-                }
-                else {
+                } else {
                     buffer.append((char)b);
                 }
             }

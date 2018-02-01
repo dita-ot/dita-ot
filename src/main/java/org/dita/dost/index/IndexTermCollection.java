@@ -134,7 +134,7 @@ public final class IndexTermCollection {
      */
     public void sort() {
         if (IndexTerm.getTermLocale() == null ||
-                IndexTerm.getTermLocale().getLanguage().trim().length()==0) {
+                IndexTerm.getTermLocale().getLanguage().trim().length() == 0) {
             IndexTerm.setTermLocale(new Locale(LANGUAGE_EN,
                     COUNTRY_US));
         }

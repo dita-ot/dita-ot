@@ -69,7 +69,7 @@ public final class TopicIdParser implements ContentHandler {
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
         if (isFirstId) {
-            if (atts.getValue(ATTRIBUTE_NAME_ID)!=null) {
+            if (atts.getValue(ATTRIBUTE_NAME_ID) != null) {
                 isFirstId = false;
                 firstId.append(atts.getValue(ATTRIBUTE_NAME_ID));
             }

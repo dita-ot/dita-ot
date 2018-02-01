@@ -473,7 +473,7 @@ public final class ConrefPushParser extends AbstractXMLFilter {
     }
 
     private void writeNode(final Node node) throws SAXException {
-        switch(node.getNodeType()) {
+        switch (node.getNodeType()) {
         case Node.DOCUMENT_FRAGMENT_NODE: {
             final NodeList children = node.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {

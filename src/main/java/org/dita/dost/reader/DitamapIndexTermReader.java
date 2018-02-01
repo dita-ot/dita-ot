@@ -86,9 +86,9 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
         final StringBuilder sb = new StringBuilder();
         for (final char c : chars) {
             //when a whitespace is met
-            if (c==' ') {
+            if (c == ' ') {
                 //this is the first whitespace
-                if (flag!=' ') {
+                if (flag != ' ') {
                     //put it in the result string
                     sb.append(c);
                     //store the space in the flag
@@ -146,7 +146,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             obj = elementStack.peek();
 
             if (obj instanceof TopicrefElement) {
-                if (((TopicrefElement)obj).getHref()!=null) {
+                if (((TopicrefElement)obj).getHref() != null) {
                     genTargets(indexTerm, (TopicrefElement)obj);
                     //IndexTermCollection.getInstantce().addTerm(indexTerm);
                     result.addTerm(indexTerm);
