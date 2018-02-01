@@ -356,6 +356,10 @@ public final class URLUtils {
         int i = 0;
         for (; i < len; i++) {
             ch = path.charAt(i);
+            if (ch == '%' && !isPercentEncoded(path.subSequence(i, ((i + 2) < len) ? (i + 3) : len))) {
+                buffer.append('%').append('2').append('5');
+                continue;
+            }
             // If it's not an ASCII character, break here, and use UTF-8 encoding
             if (ch >= 128 && ascii) {
                 break;
@@ -401,6 +405,23 @@ public final class URLUtils {
             }
         }
         return buffer.toString();
+    }
+
+    private static boolean isPercentEncoded(final CharSequence seq) {
+        if (seq.length() < 3) {
+            return false;
+        }
+        final char c1 = seq.charAt(1);
+        if (!(c1 >= '0' && c1 <= '7')) {
+            return false;
+        }
+        final char c2 = seq.charAt(1);
+        if (!(c2 >= '0' && c2 <= '9'
+                || c2 >= 'a' && c2 <= 'f'
+                || c2 >= 'A' && c2 <= 'F')) {
+            return false;
+        }
+        return true;
     }
 
     /**
