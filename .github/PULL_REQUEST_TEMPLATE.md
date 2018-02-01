@@ -20,6 +20,8 @@
 ## Checklist
 <!-- Verify the following points before submitting the pull request. -->
 
+- I have signed-off my commits per http://www.dita-ot.org/DCO.
+- Builds & tests completed successfully (`./gradlew test integrationTest`).
 - My code follows the code style of this project.
     -  <https://github.com/dita-ot/dita-ot/wiki/Java-Coding-Conventions>
     -  <https://github.com/dita-ot/dita-ot/wiki/XSLT-Coding-Conventions>
