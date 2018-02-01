@@ -290,7 +290,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             }
 
             if (filename.lastIndexOf(SHARP)!=-1) {
-                file = filename.substring(0,filename.lastIndexOf(SHARP));
+                file = filename.substring(0, filename.lastIndexOf(SHARP));
                 topic = filename.substring(filename.lastIndexOf(SHARP)+1);
                 setMatch(topic);
                 startTopic = false;

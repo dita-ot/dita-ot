@@ -32,7 +32,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
     private final XMLReader reader;
     private DITAOTLogger logger;
     private final Set<String> fileNameSet;
-    final Hashtable<String,String> paramTable;
+    final Hashtable<String, String> paramTable;
     private int elemLevel = 0;
     /** Current processing file. */
     String currentFile;

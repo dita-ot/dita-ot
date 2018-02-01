@@ -32,9 +32,9 @@ final class Features {
     private final File pluginDir;
     private final File ditaDir;
     private final Map<String, ExtensionPoint> extensionPoints;
-    private final Hashtable<String,List<String>> featureTable;
+    private final Hashtable<String, List<String>> featureTable;
     private final List<PluginRequirement> requireList;
-    private final Hashtable<String,String> metaTable;
+    private final Hashtable<String, String> metaTable;
     private final List<String> templateList;
 
     /**
@@ -45,7 +45,7 @@ final class Features {
     public Features(final File pluginDir, final File ditaDir) {
         this.pluginDir = pluginDir;
         this.ditaDir = ditaDir;
-        extensionPoints= new HashMap<>();
+        extensionPoints = new HashMap<>();
         featureTable = new Hashtable<>(16);
         requireList = new ArrayList<>(8);
         metaTable = new Hashtable<>(16);

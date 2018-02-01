@@ -86,7 +86,7 @@ public final class DITAOTFailTask extends Exit {
                 try {
                     super.execute();
                 } catch (final BuildException ex) {
-                    throw new BuildException(msgBean.toString(),new DITAOTException(msgBean,ex,msgBean.toString()));
+                    throw new BuildException(msgBean.toString(),new DITAOTException(msgBean, ex, msgBean.toString()));
                 }
             } else if (ERROR.equals(type)) {
                 logger.error(msgBean.toString());

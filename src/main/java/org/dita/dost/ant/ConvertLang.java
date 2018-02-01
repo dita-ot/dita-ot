@@ -167,7 +167,7 @@ public final class ConvertLang extends Task {
             final Element root = doc.getDocumentElement();
             final NodeList childNodes = root.getChildNodes();
             //search the node with langcode
-            for (int i = 0; i< childNodes.getLength(); i++) {
+            for (int i = 0; i < childNodes.getLength(); i++) {
                 final Node node = childNodes.item(i);
                 //only for element node
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -180,7 +180,7 @@ public final class ConvertLang extends Task {
                         //charsetMap = new HashMap<String, String>();
                         //iterate child nodes skip the 1st one
                         final NodeList subChild = e.getChildNodes();
-                        for (int j = 0; j< subChild.getLength(); j++) {
+                        for (int j = 0; j < subChild.getLength(); j++) {
                             final Node subNode = subChild.item(j);
                             if (subNode.getNodeType() == Node.ELEMENT_NODE) {
                                 final Element elem = (Element)subNode;
@@ -211,7 +211,7 @@ public final class ConvertLang extends Task {
         }
     }
 
-    private String replaceXmlTag(final String source,final String tag) {
+    private String replaceXmlTag(final String source, final String tag) {
         final int startPos = source.indexOf(tag);
         final int endPos = startPos + tag.length();
         return source.substring(0, startPos) + source.substring(endPos);
@@ -273,11 +273,11 @@ public final class ConvertLang extends Task {
                         writer.write(LINE_SEPARATOR);
                     } else {
                         if (value.contains(tag1)) {
-                            value = replaceXmlTag(value,tag1);
+                            value = replaceXmlTag(value, tag1);
                         } else if (value.contains(tag2)) {
-                            value = replaceXmlTag(value,tag2);
+                            value = replaceXmlTag(value, tag2);
                         } else if (value.contains(tag3)) {
-                            value = replaceXmlTag(value,tag3);
+                            value = replaceXmlTag(value, tag3);
                         }
 
                         //other values
@@ -374,11 +374,11 @@ public final class ConvertLang extends Task {
                 String value = reader.readLine();
                 while(value != null) {
                     if (value.contains(tag1)) {
-                        value = replaceXmlTag(value,tag1);
+                        value = replaceXmlTag(value, tag1);
                     } else if (value.contains(tag2)) {
-                        value = replaceXmlTag(value,tag2);
+                        value = replaceXmlTag(value, tag2);
                     } else if (value.contains(tag3)) {
-                        value = replaceXmlTag(value,tag3);
+                        value = replaceXmlTag(value, tag3);
                     }
 
                     //meta tag contains charset found

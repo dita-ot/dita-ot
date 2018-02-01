@@ -450,7 +450,7 @@ public final class FileUtils {
         if (attValue.startsWith(SHARP)) {
             return attValue;
         } else if (index != -1) {
-            fileName = attValue.substring(0,index);
+            fileName = attValue.substring(0, index);
             fileExtIndex = fileName.lastIndexOf(DOT);
             return (fileExtIndex != -1)
                     ? fileName.substring(0, fileExtIndex) + extName + attValue.substring(index)

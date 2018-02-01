@@ -68,7 +68,7 @@ public final class URLUtils {
     /**
      * Decodes a application/x-www-form-urlencoded string using UTF-8 encoding scheme.
      *
-     * Convenience method for {@link java.net.URLDecoder#decode(String,String) URLDecoder}:
+     * Convenience method for {@link java.net.URLDecoder#decode(String, String) URLDecoder}:
      * use UTF-8 and do not throw {@link java.io.UnsupportedEncodingException UnsupportedEncodingException}.
      *
      * @param s the string to decode

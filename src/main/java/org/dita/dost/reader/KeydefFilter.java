@@ -141,7 +141,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
                     } else {
                         // target is null or empty, it is useful in the future
                         // when consider the content of key definition
-                        keysDefMap.put(key, new KeyDef(key, null, null, null, null,null));
+                        keysDefMap.put(key, new KeyDef(key, null, null, null, null, null));
                     }
                 } else {
                     logger.info(MessageUtils.getMessage("DOTJ045I", key, target != null ? target.toString() : null).toString());

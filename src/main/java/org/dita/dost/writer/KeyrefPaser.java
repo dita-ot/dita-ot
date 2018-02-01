@@ -219,7 +219,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (keyrefLevel != 0 && (length == 0 || new String(ch,start,length).trim().isEmpty())) {
+        if (keyrefLevel != 0 && (length == 0 || new String(ch, start, length).trim().isEmpty())) {
             if (!hasChecked) {
                 empty = true;
             }

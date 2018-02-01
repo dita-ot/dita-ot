@@ -55,7 +55,7 @@ public final class DebugFilter extends AbstractXMLFilter {
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : null;
 
         final AttributesImpl res = new AttributesImpl(atts);
-        if (cls!=null && !ELEMENT_NAME_DITA.equals(localName)) {
+        if (cls != null && !ELEMENT_NAME_DITA.equals(localName)) {
             XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRF, currentFile.toString());
 
             Integer nextValue;

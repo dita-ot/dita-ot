@@ -105,7 +105,7 @@ public final class DelayConrefUtils {
                     }
                 }
                 final String classValue = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
-                if (classValue!=null && TOPIC_TOPIC.matches(classValue)) {
+                if (classValue != null && TOPIC_TOPIC.matches(classValue)) {
                     //topic id found
                     if (pe.getAttribute(ATTRIBUTE_NAME_ID).equals(id)) {
                         return true;
@@ -135,14 +135,14 @@ public final class DelayConrefUtils {
         boolean keyrefExported = false;
         try {
             //load export.xml only once
-            if (root==null) {
+            if (root == null) {
                 final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
                 builder.setEntityResolver(CatalogUtils.getCatalogResolver());
                 root = builder.parse(new InputSource(new FileInputStream(exportFile)));
             }
             //get file node which contains the export node
             final Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
-            if (fileNode!=null) {
+            if (fileNode != null) {
                 //iterate the child nodes
                 final NodeList pList = fileNode.getChildNodes();
                 for (int j = 0; j < pList.getLength(); j++) {

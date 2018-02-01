@@ -61,7 +61,7 @@ final class FileGenerator extends XMLFilterImpl {
      * Constructor init featureTable.
      * @param featureTbl featureTbl
      */
-    public FileGenerator(final Hashtable<String, List<String>> featureTbl, final Map<String,Features> pluginTable) {
+    public FileGenerator(final Hashtable<String, List<String>> featureTbl, final Map<String, Features> pluginTable) {
         featureTable = featureTbl;
         this.pluginTable = pluginTable;
         templateFile = null;

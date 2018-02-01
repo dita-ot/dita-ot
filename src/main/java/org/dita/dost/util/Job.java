@@ -97,7 +97,7 @@ public final class Job {
     public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
     /** Map of serialization attributes to file info boolean fields. */
-    private static final Map<String, Field> attrToFieldMap= new HashMap<>();
+    private static final Map<String, Field> attrToFieldMap = new HashMap<>();
     static {
         try {
             attrToFieldMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));

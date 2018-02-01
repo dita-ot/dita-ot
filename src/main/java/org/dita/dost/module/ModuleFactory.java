@@ -57,7 +57,7 @@ public final class ModuleFactory {
             final MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", moduleClass.getName());
             final String msg = msgBean.toString();
 
-            throw new DITAOTException(msgBean,e,msg);
+            throw new DITAOTException(msgBean, e,msg);
         }
     }
 }

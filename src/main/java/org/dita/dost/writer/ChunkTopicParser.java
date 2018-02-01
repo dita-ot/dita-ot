@@ -189,7 +189,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 if (s != null) {
                     selectMethod = s;
                     // if the current topic href referred to a entire
-                    // topic file,it will be handled in "document" level.
+                    // topic file, it will be handled in "document" level.
                     if (targetTopicId == null) {
                         selectMethod = CHUNK_SELECT_DOCUMENT;
                     }

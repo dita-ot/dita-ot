@@ -308,8 +308,8 @@ public final class IndexTermReader extends AbstractXMLReader {
 
         handleSpecialization(localName, classAttr);
         parseTopic(localName, attributes.getValue(ATTRIBUTE_NAME_ID));
-        //change parseIndexTerm(localName) to parseIndexTerm(localName,attributes)
-        parseIndexTerm(localName,attributes);
+        //change parseIndexTerm(localName) to parseIndexTerm(localName, attributes)
+        parseIndexTerm(localName, attributes);
         parseIndexSee(localName);
         parseIndexSeeAlso(localName);
 

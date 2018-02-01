@@ -81,7 +81,7 @@ public final class DitaValReader implements AbstractReader {
         super();
         filterMap = new HashMap<>();
         imageList = new ArrayList<>(256);
-        relFlagImageList= new ArrayList<>(256);
+        relFlagImageList = new ArrayList<>(256);
 
         try {
             final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
