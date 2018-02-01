@@ -37,7 +37,7 @@ public final class IsAbsolute implements Condition {
     }
 
     /**
-     * 
+     *
      * @see org.apache.tools.ant.taskdefs.condition.Condition#eval()
      */
     @Override

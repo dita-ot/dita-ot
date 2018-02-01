@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
- * 
+ *
  * Delay conref feature related utility functions.
  * @author william
  *

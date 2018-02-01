@@ -45,11 +45,11 @@ import org.xml.sax.XMLReader;
  * to process the topic file. Instances are reusable but not thread-safe.
  */
 public final class MergeMapParser extends XMLFilterImpl {
-    
+
     private static final String ATTRIBUTE_NAME_FIRST_TOPIC_ID = "first_topic_id";
     public static final String ATTRIBUTE_NAME_OHREF = "ohref";
     public static final String ATTRIBUTE_NAME_OID = "oid";
-    
+
     private final XMLReader reader;
     private final MergeTopicParser topicParser;
     private final MergeUtils util;
@@ -77,7 +77,7 @@ public final class MergeMapParser extends XMLFilterImpl {
             reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            
+
             final TransformerFactory tf = TransformerFactory.newInstance();
             if (!tf.getFeature(SAXTransformerFactory.FEATURE)) {
                 throw new RuntimeException("SAX transformation factory not supported");
@@ -93,28 +93,28 @@ public final class MergeMapParser extends XMLFilterImpl {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
     }
-    
+
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
         topicParser.setLogger(logger);
     }
-    
+
     public final void setJob(final Job job) {
         this.job = job;
     }
 
     /**
      * Set merge output file
-     * 
+     *
      * @param outputFile merge output file
      */
     public void setOutput(final File outputFile) {
         topicParser.setOutput(outputFile);
     }
-    
+
     /**
      * Set output.
-     * 
+     *
      * @param output output stream
      */
     public void setOutputStream(final OutputStream output) {
@@ -123,7 +123,7 @@ public final class MergeMapParser extends XMLFilterImpl {
 
     /**
      * Read map.
-     * 
+     *
      * @param filename map file path
      * @param tmpDir temporary directory path, may be {@code null}
      */
@@ -235,7 +235,7 @@ public final class MergeMapParser extends XMLFilterImpl {
         }
         getContentHandler().startElement(uri, localName, qName, atts != null ? atts : attributes);
     }
-    
+
     @Override
     public void endDocument() throws SAXException {
         // read href dita topic list
@@ -270,8 +270,8 @@ public final class MergeMapParser extends XMLFilterImpl {
         }catch (final Exception e){
             logger.error(e.getMessage(), e) ;
         }
-        
+
         getContentHandler().endDocument();
     }
-    
+
 }

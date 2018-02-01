@@ -46,10 +46,10 @@ public final class MergeTopicParser extends XMLFilterImpl {
     private DITAOTLogger logger;
     private File output;
     private final String GENERATED_DITA_ELEMENT_ID = "GENERATED-DITA-ID";
-    
+
     /**
      * Default Constructor.
-     * 
+     *
      * @param util merge utility
      */
     public MergeTopicParser(final MergeUtils util) {
@@ -71,7 +71,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     /**
      * Set merge output file
-     * 
+     *
      * @param output merge output file
      */
     public void setOutput(File output) {
@@ -80,7 +80,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     /**
      * Get ID of the first topic
-     * 
+     *
      * @return id attribute value of the first topic
      */
     public String getFirstTopicId() {
@@ -117,7 +117,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     /**
      * Rewrite local DITA href value.
-     * 
+     *
      * @param href href attribute value
      * @return rewritten href value
      */
@@ -171,7 +171,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     /**
      * Parse the file to update id.
-     * 
+     *
      * @param filename relative topic system path, may contain a fragment part
      * @param dir topic directory system path
      */
@@ -221,7 +221,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     /**
      * Rewrite href attribute.
-     * 
+     *
      * @param classValue element class value
      * @param atts attributes
      */
@@ -250,7 +250,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     /**
      * Rewrite local non-DITA href value.
-     * 
+     *
      * @param attValue href attribute value
      * @return rewritten href value
      */

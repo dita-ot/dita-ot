@@ -43,7 +43,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
 
     /**
      * Set up class.
-     * 
+     *
      * @param conflictTable conflictTable
      */
     public void setup(final Map<URI, URI> conflictTable) {
@@ -110,7 +110,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
 
     /**
      * Check whether the attributes contains references
-     * 
+     *
      * @param atts element attributes
      * @return {@code true} if local DITA reference, otherwise {@code false}
      */

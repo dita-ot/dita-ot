@@ -36,7 +36,7 @@ final class FileGenerator extends XMLFilterImpl {
     private static final String EXTENSION_ELEM = "extension";
     private static final String EXTENSION_ATTR = "extension";
     private static final String BEHAVIOR_ATTR = "behavior";
-    
+
     public static final String PARAM_LOCALNAME = "localname";
     public static final String PARAM_TEMPLATE = "template";
 

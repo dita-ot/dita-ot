@@ -61,7 +61,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         super();
         builder = XMLUtils.getDocumentBuilder();
     }
-    
+
     @Override
     public void setLogger(final DITAOTLogger logger) {
         super.setLogger(logger);

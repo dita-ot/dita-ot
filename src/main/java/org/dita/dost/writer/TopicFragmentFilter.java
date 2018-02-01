@@ -28,7 +28,7 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
 
     private final Deque<DitaClass> classes = new LinkedList<>();
     private final Deque<String> topics = new ArrayDeque<>();
-    
+
     List<String> attrNames;
 
     public TopicFragmentFilter() {
@@ -78,7 +78,7 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
         }
         super.startElement(uri, localName, qName, res);
     }
-    
+
     private boolean isLocalDitaReference(final Attributes atts, final String attr) {
         switch(attr) {
             case ATTRIBUTE_NAME_CONREF:
@@ -101,5 +101,5 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
         }
         super.endElement(uri, localName, qName);
     }
-    
+
 }

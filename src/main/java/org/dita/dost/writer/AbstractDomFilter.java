@@ -88,7 +88,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
 
     /**
      * Modify document.
-     * 
+     *
      * @param doc document to modify
      * @return modified document, may be argument document; if {@code null}, document is not serialized
      */

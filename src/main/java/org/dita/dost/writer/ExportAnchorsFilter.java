@@ -42,7 +42,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     /** For topic/dita files whether a </file> tag should be added */
     private boolean shouldAppendEndTag = false;
     private DitaClass rootClass;
-    
+
     /**
      * Create new export antchors filter.
      */
@@ -52,17 +52,17 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
 
     /**
      * Set processing input file absolute path.
-     * 
+     *
      * @param inputFile absolute path to root file
      */
     public void setInputFile(final URI inputFile) {
         assert inputFile.isAbsolute();
         this.rootFilePath = inputFile;
     }
-    
+
     /**
      * Set current file absolute path
-     * 
+     *
      * @param currentFile absolute path to current file
      */
     public void setCurrentFile(final URI currentFile) {
@@ -73,7 +73,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
 
     /**
      * Get export anchors.
-     * 
+     *
      * @return list of export anchors
      */
     public List<ExportAnchor> getExportAnchors() {
@@ -86,7 +86,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     public Map<String, Set<String>> getPluginMap() {
         return pluginMap;
     }
-    
+
     // SAX methods
 
     @Override
@@ -158,7 +158,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
 
     /**
      * Parse the href attribute for needed information.
-     * 
+     *
      * @param atts attributes to process
      */
     private void parseAttribute(final Attributes atts) {
@@ -183,7 +183,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
                 if (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA) || attrFormat.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
                     topicId = topicHref + QUESTION;
                 }
-            }   
+            }
         } else {
             topicHref = null;
             topicId = null;
@@ -223,7 +223,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
             currentExportAnchor = null;
             shouldAppendEndTag = false;
         }
-        
+
         getContentHandler().endDocument();
     }
 
@@ -237,5 +237,5 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
             this.file = file;
         }
     }
-    
+
 }

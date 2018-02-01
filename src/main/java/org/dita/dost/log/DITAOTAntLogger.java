@@ -16,7 +16,7 @@ import java.text.MessageFormat;
 
 /**
  * Logger proxy to Ant logger.
- * 
+ *
  * @author Jarno Elovirta
  */
 public final class DITAOTAntLogger extends MarkerIgnoringBase implements DITAOTLogger {
@@ -137,7 +137,7 @@ public final class DITAOTAntLogger extends MarkerIgnoringBase implements DITAOTL
     public void error(final String msg, final Throwable t) {
         log(msg, t, Project.MSG_ERR);
     }
-    
+
     @Override
     public boolean isTraceEnabled() {
         return false;

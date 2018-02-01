@@ -45,7 +45,7 @@ abstract class ImportAction implements IAction {
     public String getResult() {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * get result.
      */

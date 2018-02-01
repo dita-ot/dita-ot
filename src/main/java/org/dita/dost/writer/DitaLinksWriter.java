@@ -34,7 +34,7 @@ import static org.dita.dost.util.XMLUtils.getChildElements;
  * Read DITA topic file and insert map links information into it.
  */
 public final class DitaLinksWriter extends AbstractXMLFilter {
-    
+
     private String curMatchTopic;
     private boolean firstTopic;
 
@@ -66,10 +66,10 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
         super.setJob(job);
         baseURI = job.tempDir.toURI().resolve(job.getInputMap());
     }
-    
+
     /**
      * Set relates links
-     * 
+     *
      * @param indexEntries map of related links. Keys are topic IDs and
      * {@link org.dita.dost.util.Constants#SHARP #} is used to denote root element
      */

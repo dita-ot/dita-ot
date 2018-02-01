@@ -25,9 +25,9 @@ import org.dita.dost.util.StringUtils;
 
 /**
  * This class is for get the first xml:lang value set in ditamap/topic files
- * 
+ *
  * @version 1.0 2010-09-30
- * 
+ *
  * @author Zhang Di Hua
  */
 public final class CheckLang extends Task {

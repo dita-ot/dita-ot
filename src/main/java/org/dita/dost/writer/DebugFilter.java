@@ -21,7 +21,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Add debug attributes.
- * 
+ *
  * <p>The following attributes are added to elements:</p>
  * <dl>
  *   <dt>{@link org.dita.dost.util.Constants#ATTRIBUTE_NAME_XTRF xtrf}</dt>
@@ -36,7 +36,7 @@ public final class DebugFilter extends AbstractXMLFilter {
     private final Map<String, Integer> counterMap = new HashMap<>();
 
     // Locator methods
-    
+
     @Override
     public void setDocumentLocator(final Locator locator) {
         this.locator = locator;
@@ -67,7 +67,7 @@ public final class DebugFilter extends AbstractXMLFilter {
             }
             counterMap.put(qName, nextValue);
             final StringBuilder xtrc = new StringBuilder(qName).append(COLON).append(nextValue.toString());
-            if (locator != null) {                                
+            if (locator != null) {
                 xtrc.append(';')
                     .append(Integer.toString(locator.getLineNumber()))
                     .append(COLON)

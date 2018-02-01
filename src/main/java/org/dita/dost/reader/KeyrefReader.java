@@ -66,7 +66,7 @@ public final class KeyrefReader implements AbstractReader {
     public KeyrefReader() {
         builder = XMLUtils.getDocumentBuilder();
     }
-    
+
     @Override
     public void read(final File filename) {
         throw new UnsupportedOperationException();
@@ -84,7 +84,7 @@ public final class KeyrefReader implements AbstractReader {
 
     /**
      * Get key definitions for root scope. Each key definition Element has a distinct Document.
-     * 
+     *
      * @return root key scope
      */
     public KeyScope getKeyDefinition() {
@@ -93,7 +93,7 @@ public final class KeyrefReader implements AbstractReader {
 
     /**
      * Read key definitions
-     * 
+     *
      * @param filename absolute URI to DITA map with key definitions
      * @param doc key definition DITA map
      */

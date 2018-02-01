@@ -28,7 +28,7 @@ import static org.dita.dost.reader.GenListModuleReader.*;
 
 /**
  * Insert document PIs and normalize attributes.
- * 
+ *
  * <p>The following processing instructions are added before the root element:</p>
  * <dl>
  *   <dt>{@link Constants#PI_WORKDIR_TARGET}</dt>

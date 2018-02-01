@@ -42,7 +42,7 @@ import org.apache.tools.ant.util.FileUtils;
 /**
  * Writes build events to a PrintStream. Currently, it only writes which targets
  * are being executed, and any messages that get logged.
- * 
+ *
  */
 class DefaultLogger implements BuildLogger {
 
@@ -58,7 +58,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Size of left-hand column for right-justified task name.
-     * 
+     *
      * @see #messageLogged(BuildEvent)
      */
     private static final int LEFT_COLUMN_SIZE = 12;
@@ -95,7 +95,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Sets the highest level of message this logger should respond to.
-     * 
+     *
      * Only messages with a message level lower than or equal to the given level
      * should be written to the log.
      * <p>
@@ -105,7 +105,7 @@ class DefaultLogger implements BuildLogger {
      * <code>MSG_VERBOSE</code>, <code>MSG_DEBUG</code>.
      * <p>
      * The default message level for DefaultLogger is Project.MSG_ERR.
-     * 
+     *
      * @param level the logging level for the logger.
      */
     @Override
@@ -115,7 +115,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Sets the output stream to which this logger is to send its output.
-     * 
+     *
      * @param output The output stream for the logger. Must not be
      *            <code>null</code>.
      */
@@ -126,7 +126,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Sets the output stream to which this logger is to send error messages.
-     * 
+     *
      * @param err The error stream for the logger. Must not be <code>null</code>
      *            .
      */
@@ -137,7 +137,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Sets this logger to produce emacs (and other editor) friendly output.
-     * 
+     *
      * @param emacsMode <code>true</code> if output is to be unadorned so that
      *            emacs and other editors can parse files names, etc.
      */
@@ -152,7 +152,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Responds to a build being started by just remembering the current time.
-     * 
+     *
      * @param event Ignored.
      */
     @Override
@@ -173,7 +173,7 @@ class DefaultLogger implements BuildLogger {
     /**
      * Prints whether the build succeeded or failed, any errors the occurred
      * during the build, and how long the build took.
-     * 
+     *
      * @param event An event with any relevant extra information. Must not be
      *            <code>null</code>.
      */
@@ -207,7 +207,7 @@ class DefaultLogger implements BuildLogger {
     /**
      * This is an override point: the message that indicates whether a build
      * failed. Subclasses can change/enhance the message.
-     * 
+     *
      * @return The classic "BUILD FAILED"
      */
     protected String getBuildFailedMessage() {
@@ -217,7 +217,7 @@ class DefaultLogger implements BuildLogger {
     /**
      * This is an override point: the message that indicates that a build
      * succeeded. Subclasses can change/enhance the message.
-     * 
+     *
      * @return The classic "BUILD SUCCESSFUL"
      */
     protected String getBuildSuccessfulMessage() {
@@ -227,7 +227,7 @@ class DefaultLogger implements BuildLogger {
     /**
      * Logs a message to say that the target has started if this logger allows
      * information-level messages.
-     * 
+     *
      * @param event An event with any relevant extra information. Must not be
      *            <code>null</code>.
      */
@@ -242,7 +242,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * No-op implementation.
-     * 
+     *
      * @param event Ignored.
      */
     @Override
@@ -251,7 +251,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * No-op implementation.
-     * 
+     *
      * @param event Ignored.
      */
     @Override
@@ -260,7 +260,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * No-op implementation.
-     * 
+     *
      * @param event Ignored.
      */
     @Override
@@ -270,7 +270,7 @@ class DefaultLogger implements BuildLogger {
     /**
      * Logs a message, if the priority is suitable. In non-emacs mode, task
      * level messages are prefixed by the task name which is right-justified.
-     * 
+     *
      * @param event A BuildEvent containing message information. Must not be
      *            <code>null</code>.
      */
@@ -341,11 +341,11 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Convenience method to format a specified length of time.
-     * 
+     *
      * @param millis Length of time to format, in milliseconds.
-     * 
+     *
      * @return the time as a formatted string.
-     * 
+     *
      * @see DateUtils#formatElapsedTime(long)
      */
     protected static String formatTime(final long millis) {
@@ -354,7 +354,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Prints a message to a PrintStream.
-     * 
+     *
      * @param message The message to print. Should not be <code>null</code>.
      * @param stream A PrintStream to print the message to. Must not be
      *            <code>null</code>.
@@ -374,7 +374,7 @@ class DefaultLogger implements BuildLogger {
     /**
      * Empty implementation which allows subclasses to receive the same output
      * that is generated here.
-     * 
+     *
      * @param message Message being logged. Should not be <code>null</code>.
      */
     private void log(final String message) {
@@ -382,7 +382,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Get the current time.
-     * 
+     *
      * @return the current time as a formatted string.
      * @since Ant1.7.1
      */
@@ -394,7 +394,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Get the project name or null
-     * 
+     *
      * @param event the event
      * @return the project that raised this event
      * @since Ant1.7.1

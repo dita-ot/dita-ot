@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 /**
  * String relevant utilities.
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class StringUtils {
@@ -32,7 +32,7 @@ public final class StringUtils {
 
     /**
      * Assemble all elements in collection to a string.
-     * 
+     *
      * @param coll -
      *            java.util.List
      * @param delim -
@@ -59,10 +59,10 @@ public final class StringUtils {
 
         return buff.toString();
     }
-    
+
     /**
      * Assemble all elements in map to a string.
-     * 
+     *
      * @param value map to serializer
      * @param delim entry delimiter
      * @return concatenated map
@@ -87,13 +87,13 @@ public final class StringUtils {
      * Replaces each substring of this string that matches the given string
      * with the given replacement. Differ from the JDK String.replaceAll function,
      * this method does not support regular expression based replacement on purpose.
-     * 
+     *
      * @param input input string
      * @param pattern This pattern is recognized as it is. It will not solve
      *        as an regular expression.
      * @param replacement string used to replace with
      * @return replaced string
-     * 
+     *
      */
     public static String replaceAll(final String input,
             final String pattern, final String replacement) {
@@ -114,7 +114,7 @@ public final class StringUtils {
 
     /**
      * Parse {@code props} attribute specializations
-     * 
+     *
      * @param domains input domain
      * @return list of {@code props} attribute specializations
      */
@@ -338,7 +338,7 @@ public final class StringUtils {
 
     /**
      * Normalize and collapse whitespaces from string buffer.
-     * 
+     *
      * @param strBuffer The string buffer.
      */
     public static void normalizeAndCollapseWhitespace(final StringBuilder strBuffer){

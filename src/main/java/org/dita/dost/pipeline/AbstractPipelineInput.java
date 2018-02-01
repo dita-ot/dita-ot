@@ -21,7 +21,7 @@ public interface AbstractPipelineInput {
     /**
      * Set the attribute value. Existing attribute value will
      * be overwritten.
-     * 
+     *
      * @param name attribute name
      * @param value attribute value
      */
@@ -29,7 +29,7 @@ public interface AbstractPipelineInput {
 
     /**
      * Get the attribute value.
-     * 
+     *
      * @param name attribute name
      * @return String attribute value, <code>null</code> if not defined.
      */

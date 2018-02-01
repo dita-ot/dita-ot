@@ -25,9 +25,9 @@ import org.dita.dost.writer.IDitaTranstypeIndexWriter;
 
 /**
  * This class is a collection of index term.
- * 
+ *
  * @version 1.0 2005-05-18
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class IndexTermCollection {
@@ -60,7 +60,7 @@ public final class IndexTermCollection {
 
     /**
      * Get the index type.
-     * 
+     *
      * @return index type
      */
     public String getIndexType() {
@@ -69,7 +69,7 @@ public final class IndexTermCollection {
 
     /**
      * Set the index type.
-     * 
+     *
      * @param type The indexType to set.
      */
     public void setIndexType(final String type) {
@@ -93,7 +93,7 @@ public final class IndexTermCollection {
 
     /**
      * All a new term into the collection.
-     * 
+     *
      * @param term index term
      */
     public void addTerm(final IndexTerm term) {
@@ -122,7 +122,7 @@ public final class IndexTermCollection {
 
     /**
      * Get all the term list from the collection.
-     * 
+     *
      * @return term list
      */
     public List<IndexTerm> getTermList() {
@@ -151,7 +151,7 @@ public final class IndexTermCollection {
 
     /**
      * Output index terms into index file.
-     * 
+     *
      * @throws DITAOTException exception
      */
     public void outputTerms() throws DITAOTException {

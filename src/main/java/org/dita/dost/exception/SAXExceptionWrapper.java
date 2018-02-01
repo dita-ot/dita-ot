@@ -15,7 +15,7 @@ import org.xml.sax.SAXParseException;
 
 /**
  * SAXExceptionWrapper which wrapper the SAXParseException.
- * 
+ *
  * @author wxzhang
  */
 public final class SAXExceptionWrapper extends SAXParseException {
@@ -31,7 +31,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
 
     /**
      * Constructor.
-     * 
+     *
      * @param message message
      * @param locator locator
      * @deprecated since 2.3
@@ -43,7 +43,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
 
     /**
      * Constructor.
-     * 
+     *
      * @param message message
      * @param locator locator
      * @param e Exception
@@ -56,7 +56,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
 
     /**
      * Constructor.
-     * 
+     *
      * @param message message
      * @param publicId public id
      * @param systemId systemId
@@ -72,7 +72,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
 
     /**
      * Constructor.
-     * 
+     *
      * @param message message
      * @param publicId publicId
      * @param systemId systemId
@@ -89,7 +89,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
 
     /**
      * Constructor.
-     * 
+     *
      * @param file file
      * @param inner SAXParseException
      */
@@ -101,7 +101,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
 
     /**
      * Retrieve the error message.
-     * 
+     *
      * @return error message
      */
     @Override

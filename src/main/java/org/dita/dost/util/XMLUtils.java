@@ -39,7 +39,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * XML utility methods.
- * 
+ *
  * @since 1.5.4
  * @author Jarno Elovirta
  */
@@ -159,10 +159,10 @@ public final class XMLUtils {
         }
         return res;
     }
-    
+
     /**
      * Checks if the closest DITA ancestor {@code <foreign>} or {@code <unknown>}
-     * 
+     *
      * @param classes stack of class attributes for open elements
      * @return true if closest DITA ancestor is {@code <foreign>} or {@code <unknown>}, otherwise false
      */
@@ -291,7 +291,7 @@ public final class XMLUtils {
 
     /**
      * Add or set attribute.
-     * 
+     *
      * @param atts attributes
      * @param uri namespace URI
      * @param localName local name
@@ -322,7 +322,7 @@ public final class XMLUtils {
 
     /**
      * Add or set attribute. Convenience method for {@link #addOrSetAttribute(AttributesImpl, String, String, String, String, String)}.
-     * 
+     *
      * @param atts attributes
      * @param localName local name
      * @param value attribute value
@@ -333,7 +333,7 @@ public final class XMLUtils {
 
     /**
      * Add or set attribute. Convenience method for {@link #addOrSetAttribute(AttributesImpl, String, String, String, String, String)}.
-     * 
+     *
      * @param atts attributes
      * @param att attribute node
      */
@@ -360,7 +360,7 @@ public final class XMLUtils {
 
     /**
      * Remove an attribute from the list. Do nothing if attribute does not exist.
-     * 
+     *
      * @param atts attributes
      * @param qName QName of the attribute to remove
      */
@@ -370,10 +370,10 @@ public final class XMLUtils {
             atts.removeAttribute(i);
         }
     }
-    
+
     /**
      * Get element node string value.
-     * 
+     *
      * @param element element to get string value for
      * @return concatenated text node descendant values
      */
@@ -393,7 +393,7 @@ public final class XMLUtils {
         }
         return buf.toString();
     }
-    
+
     /**
      * Transform file with XML filters. Only file URIs are supported.
      *
@@ -411,7 +411,7 @@ public final class XMLUtils {
 
     /**
      * Transform file with XML filters.
-     * 
+     *
      * @param inputFile file to transform and replace
      * @param filters XML filters to transform file with, may be an empty list
      */
@@ -427,10 +427,10 @@ public final class XMLUtils {
             throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
         }
     }
-    
+
     /**
      * Transform file with XML filters.
-     * 
+     *
      * @param inputFile input file
      * @param outputFile output file
      * @param filters XML filters to transform file with, may be an empty list
@@ -591,7 +591,7 @@ public final class XMLUtils {
 
     /**
      * Escape XML characters.
-     * 
+     *
      * @param chars char arrays
      * @param offset start position
      * @param length arrays lenth
@@ -713,7 +713,7 @@ public final class XMLUtils {
 
         /**
          * Add or set attribute.
-         * 
+         *
          * @param uri namespace URI
          * @param localName local name
          * @param qName qualified name
@@ -731,10 +731,10 @@ public final class XMLUtils {
             }
             return this;
         }
-        
+
         /**
          * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
-         * 
+         *
          * @param localName local name
          * @param value attribute value
          * @return this builder
@@ -745,7 +745,7 @@ public final class XMLUtils {
 
         /**
          * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
-         * 
+         *
          * @param uri namespace URI
          * @param localName local name
          * @param value attribute value
@@ -765,10 +765,10 @@ public final class XMLUtils {
         public AttributesBuilder add(final QName name, final String value) {
             return add(name.getNamespaceURI(), name.getLocalPart(), name.getPrefix()  + ":" + name.getLocalPart(), "CDATA", value);
         }
-        
+
         /**
          * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
-         * 
+         *
          * @param attr DOM attribute node
          * @return this builder
          */
@@ -779,10 +779,10 @@ public final class XMLUtils {
                        attr.isId() ? "ID" : "CDATA",
                        attr.getNodeValue());
         }
-        
+
         /**
          * Add or set all attributes.
-         * 
+         *
          * @param attrs attributes to add or set
          */
         public void addAll(final Attributes attrs) {
@@ -790,7 +790,7 @@ public final class XMLUtils {
                 add(attrs.getURI(i), attrs.getLocalName(i), attrs.getQName(i), attrs.getType(i), attrs.getValue(i));
             }
         }
-        
+
         /**
          * Returns a newly-created Attributes based on the contents of the builder.
          * @return new attributes

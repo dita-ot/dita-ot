@@ -118,7 +118,7 @@ public final class MergeUtils {
 
     /**
      * Add topic to set of visited topics.
-     * 
+     *
      * @param path topic path, may contain a fragment
      */
     public void visit(final URI path){

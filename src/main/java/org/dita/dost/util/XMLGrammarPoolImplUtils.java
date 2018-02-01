@@ -16,7 +16,7 @@ import org.apache.xerces.xni.grammars.XMLGrammarDescription;
 /**
  * Self implemented XML Grammar pool for grammar(schema/dtd) caching.
  * @author william
- * 
+ *
  */
 public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 
@@ -40,7 +40,7 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
     public Grammar[] retrieveInitialGrammarSet(final String grammarType) {
         return INITIAL_GRAMMAR_SET;
     }
-    
+
     /**
      * @see org.apache.xerces.util.XMLGrammarPoolImpl#putGrammar(org.apache.xerces.xni.grammars.Grammar)
      */
@@ -55,7 +55,7 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 
     /**
      * Returns the hash code value for the given grammar description.
-     * 
+     *
      * @param desc
      *            The grammar description
      * @return The hash code value
@@ -77,7 +77,7 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
      * compare the root element names(public id) for DTD grammars and the system id
      * for Schema grammars. The application can override this behaviour and add
      * its own logic.
-     * 
+     *
      * @param desc1
      *            The grammar description
      * @param desc2

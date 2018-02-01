@@ -45,20 +45,20 @@ import org.w3c.dom.NodeList;
 /**
  * This class is for converting charset and escaping
  * entities in html help component files.
- * 
+ *
  * @version 1.0 2010-09-30
- * 
+ *
  * @author Zhang Di Hua
  */
 public final class ConvertLang extends Task {
-    
+
     private static final String ATTRIBUTE_FORMAT_VALUE_WINDOWS = "windows";
     private static final String ATTRIBUTE_FORMAT_VALUE_HTML = "html";
 
     private static final String tag1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     private static final String tag2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>[OPTIONS]";
     private static final String tag3 = "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;";
-    
+
     private static final String CODEPAGE_ISO_8859_1 = "iso-8859-1";
     private static final String CODEPAGE_ISO_8859_2 = "iso-8859-2";
     private static final String CODEPAGE_ISO_8859_7 = "iso-8859-7";
@@ -432,7 +432,7 @@ public final class ConvertLang extends Task {
         }
 
     }
-    
+
     private void updateExceptionCharacters(final String charset) {
         if (exceptionCharset != null && exceptionCharset.equals(charset)) {
             return;

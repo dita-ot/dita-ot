@@ -38,7 +38,7 @@ import static org.dita.dost.util.Constants.*;
 
 /**
  * Ant task for executing pipeline modules.
- * 
+ *
  * @author Deborah Pickett
  */
 public final class ExtensibleAntInvoker extends Task {
@@ -102,13 +102,13 @@ public final class ExtensibleAntInvoker extends Task {
 
     /**
      * Handle nested module elements.
-     * 
+     *
      * @since 1.6
      */
     public void addConfiguredModule(final ModuleElem m) {
         modules.add(m);
     }
-    
+
     public void addConfiguredXslt(final XsltElem xslt) {
         modules.add(xslt);
     }
@@ -148,7 +148,7 @@ public final class ExtensibleAntInvoker extends Task {
     @Override
     public void execute() throws BuildException {
         initialize();
-        
+
         final Job job = getJob(tempDir, getProject());
         try {
             for (final ModuleElem m: modules) {
@@ -251,8 +251,8 @@ public final class ExtensibleAntInvoker extends Task {
 
     /**
      * Get job configuration from Ant project reference or create new.
-     *    
-     * @param tempDir configuration directory 
+     *
+     * @param tempDir configuration directory
      * @param project Ant project
      * @return job configuration
      */
@@ -272,7 +272,7 @@ public final class ExtensibleAntInvoker extends Task {
         }
         return job;
     }
-    
+
     private Set<File> readListFile(final List<IncludesFileElem> includes, final DITAOTAntLogger logger) {
         final Set<File> inc = new HashSet<>();
         for (final IncludesFileElem i: includes) {
@@ -297,19 +297,19 @@ public final class ExtensibleAntInvoker extends Task {
         }
         return inc;
     }
-    
+
     public static boolean isValid(final Project project, final String ifProperty, final String unlessProperty) {
         return (ifProperty == null || project.getProperties().containsKey(ifProperty))
                 && (unlessProperty == null || !project.getProperties().containsKey(unlessProperty));
     }
-    
+
     /**
      * Nested pipeline module element configuration.
-     * 
+     *
      * @since 1.6
      */
     public static class ModuleElem {
-       
+
         public final List<ParamElem> params = new ArrayList<>();
         private Class<? extends AbstractPipelineModule> cls;
         public final Collection<FileInfoFilterElem> fileInfoFilters = new ArrayList<>();
@@ -317,7 +317,7 @@ public final class ExtensibleAntInvoker extends Task {
         public void setClass(final Class<? extends AbstractPipelineModule> cls) {
             this.cls = cls;
         }
-        
+
         public void addConfiguredParam(final ParamElem p) {
             params.add(p);
         }
@@ -330,13 +330,13 @@ public final class ExtensibleAntInvoker extends Task {
             return cls;
         }
     }
-    
+
     /**
      * Nested pipeline XSLT element configuration.
      * @author jelovirt
      */
     public static class XsltElem extends ModuleElem {
-        
+
         private File style;
         private File baseDir;
         private File destDir;
@@ -350,68 +350,68 @@ public final class ExtensibleAntInvoker extends Task {
         private String filedirparameter;
         private XMLCatalog xmlcatalog;
         private boolean reloadstylesheet;
-        
+
         // Ant setters
-        
+
         public void setStyle(final File style) {
             this.style = style;
         }
-        
+
         public void setBasedir(final File baseDir) {
             this.baseDir = baseDir;
         }
-        
+
         public void setDestdir(final File destDir) {
             this.destDir = destDir;
         }
-        
+
         public void setTaskname(final String taskname) {
         }
-        
+
         public void setClasspathref(final String classpath) {
             // Ignore classpathref attribute
         }
-        
+
         public void setExtension(final String extension) {
             this.extension = extension;
         }
-        
+
         public void setReloadstylesheet(final boolean reloadstylesheet) {
             this.reloadstylesheet = reloadstylesheet;
         }
-        
+
         public void setIn(final File in) {
             this.in = in;
         }
-        
+
         public void setOut(final File out) {
             this.out = out;
         }
-        
+
         public void setIncludesfile(final File includesfile) {
               final IncludesFileElem i = new IncludesFileElem();
               i.setName(includesfile);
               includes.add(i);
         }
-        
+
         public void setExcludesfile(final File excludesfile) {
             final IncludesFileElem i = new IncludesFileElem();
             i.setName(excludesfile);
             excludes.add(i);
         }
-        
+
         public void setFilenameparameter(final String filenameparameter) {
             this.filenameparameter = filenameparameter;
         }
-        
+
         public void setFiledirparameter(final String filedirparameter) {
             this.filedirparameter = filedirparameter;
         }
-                
+
         public void addConfiguredXmlcatalog(final XMLCatalog xmlcatalog) {
             this.xmlcatalog = xmlcatalog;
         }
-        
+
         public void addConfiguredMapper(final Mapper mapper) {
             if (this.mapper != null) {
                 throw new BuildException("Cannot define more than one mapper");
@@ -423,7 +423,7 @@ public final class ExtensibleAntInvoker extends Task {
         public void addConfiguredIncludesFile(final IncludesFileElem includesFile) {
             includes.add(includesFile);
         }
-        
+
         public void addConfiguredExcludesFile(final IncludesFileElem excludesFile) {
             excludes.add(excludesFile);
         }

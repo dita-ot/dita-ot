@@ -21,7 +21,7 @@ import org.dita.dost.log.MessageUtils;
 
 /**
  * Ant echo task for custom error message.
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class DITAOTEchoTask extends Echo {
@@ -30,7 +30,7 @@ public final class DITAOTEchoTask extends Echo {
     /** Nested params. */
     private final ArrayList<ParamElem> params = new ArrayList<>();
     private DITAOTLogger logger;
-    
+
     /**
      * Default Construtor.
      *
@@ -55,7 +55,7 @@ public final class DITAOTEchoTask extends Echo {
         params.add(p);
         return p;
     }
-    
+
     /**
      * Task execute point.
      * @throws BuildException exception
@@ -81,7 +81,7 @@ public final class DITAOTEchoTask extends Echo {
 
     /**
      * Read parameter values to an array.
-     * 
+     *
      * @return parameter values where array index corresponds to parameter name
      */
     private String[] readParamValues() throws BuildException {
@@ -103,5 +103,5 @@ public final class DITAOTEchoTask extends Echo {
         }
         return prop.toArray(new String[prop.size()]);
     }
-    
+
 }

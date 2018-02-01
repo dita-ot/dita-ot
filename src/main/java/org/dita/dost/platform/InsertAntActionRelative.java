@@ -23,7 +23,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * are still correct in their new location.
  *
  * Attributes affected: import/@file
- * 
+ *
  * @author Deborah Pickett
  *
  */

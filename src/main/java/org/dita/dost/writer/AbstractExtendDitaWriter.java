@@ -26,7 +26,7 @@ public abstract class AbstractExtendDitaWriter implements AbstractWriter, IExten
     List<IndexTerm> termList = null;
 
     // AbstractWriter methods
-    
+
     public void setTermList(final List<IndexTerm> termList) {
         this.termList = termList;
     }

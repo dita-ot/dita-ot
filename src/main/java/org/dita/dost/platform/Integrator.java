@@ -62,7 +62,7 @@ import static org.dita.dost.util.XMLUtils.toList;
 /**
  * Integrator is the main class to control and excute the integration of the
  * toolkit and different plug-ins.
- * 
+ *
  * @author Zhang, Yuan Peng
  */
 public final class Integrator {
@@ -307,7 +307,7 @@ public final class Integrator {
             }
         }
         configuration.putAll(getParserConfiguration());
-        
+
         OutputStream out = null;
         try {
             final File outFile = new File(ditaDir, CONFIG_DIR + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
@@ -627,7 +627,7 @@ public final class Integrator {
 
     /**
      * Read plug-in feature.
-     * 
+     *
      * @param featureName plug-in feature name
      * @return combined list of values
      */
@@ -647,7 +647,7 @@ public final class Integrator {
     /**
      * Load the plug-ins and aggregate them by feature and fill into feature
      * table.
-     * 
+     *
      * @param plugin plugin ID
      * @return {@code true}> if plugin was loaded, otherwise {@code false}
      */
@@ -685,7 +685,7 @@ public final class Integrator {
 
     /**
      * Check whether the plugin can be loaded.
-     * 
+     *
      * @param currentPlugin plugin ID
      * @return {@code true} if plugin can be loaded, otherwise {@code false}
      */
@@ -751,7 +751,7 @@ public final class Integrator {
 
     /**
      * Parse plugin configuration file
-     * 
+     *
      * @param descFile plugin configuration
      */
     private Element parseDesc(final File descFile) {
@@ -776,9 +776,9 @@ public final class Integrator {
 
     /**
      * Validate plug-in configuration.
-     * 
+     *
      * Follow OSGi symbolic name syntax rules:
-     * 
+     *
      * <pre>
      * digit         ::= [0..9]
      * alpha         ::= [a..zA..Z]
@@ -786,9 +786,9 @@ public final class Integrator {
      * token         ::= ( alphanum | '_' | '-' )+
      * symbolic-name ::= token('.'token)*
      * </pre>
-     * 
+     *
      * Follow OSGi bundle version syntax rules:
-     * 
+     *
      * <pre>
      * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
      * major     ::= number
@@ -796,7 +796,7 @@ public final class Integrator {
      * micro     ::=number
      * qualifier ::= ( alphanum | '_' | '-' )+
      * </pre>
-     * 
+     *
      * @param f Features to validate
      */
     private void validatePlugin(final Features f) {
@@ -814,7 +814,7 @@ public final class Integrator {
 
     /**
      * Set the properties file.
-     * 
+     *
      * @param propertiesfile properties file
      */
     @Deprecated
@@ -824,7 +824,7 @@ public final class Integrator {
 
     /**
      * Set logger.
-     * 
+     *
      * @param logger logger instance
      */
     public void setLogger(final DITAOTLogger logger) {
@@ -833,7 +833,7 @@ public final class Integrator {
 
     /**
      * Get all and combine extension values
-     * 
+     *
      * @param featureTable plugin features
      * @param extension extension ID
      * @return combined extension value, {@code null} if no value available

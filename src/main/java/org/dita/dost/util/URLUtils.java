@@ -24,16 +24,16 @@ import java.util.StringTokenizer;
  * Corrects the URLs.
  */
 public final class URLUtils {
-    
+
     /**
      * Private default constructor to make class uninstantiable.
      */
     private URLUtils() {
     }
-    
+
     /**
      * Corrects the file to URL.
-     * 
+     *
      * @param file
      *            The file to be corrected. If null will throw
      *            MalformedURLException.
@@ -50,7 +50,7 @@ public final class URLUtils {
 
     /**
      * Corrects an URL.
-     * 
+     *
      * @param url
      *            The URL to be corrected. If null will throw
      *            MalformedURLException.
@@ -67,10 +67,10 @@ public final class URLUtils {
 
     /**
      * Decodes a application/x-www-form-urlencoded string using UTF-8 encoding scheme.
-     * 
+     *
      * Convenience method for {@link java.net.URLDecoder#decode(String,String) URLDecoder}:
      * use UTF-8 and do not throw {@link java.io.UnsupportedEncodingException UnsupportedEncodingException}.
-     * 
+     *
      * @param s the string to decode
      * @return the newly decoded string
      */
@@ -81,10 +81,10 @@ public final class URLUtils {
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
      * Decode UTF8/URL encoded strings.
-     * 
+     *
      * @param s
      *            the string to be decoded
      * @return the decoded string
@@ -169,7 +169,7 @@ public final class URLUtils {
     /**
      * On Windows names of files from network neighborhood must be corrected
      * before open.
-     * 
+     *
      * @param url
      *            The file URL.
      * @return The canonical or absolute file, or null if the protocol is not
@@ -288,7 +288,7 @@ public final class URLUtils {
         }
 
     }
-    
+
     // Which ASCII characters need to be escaped
     private static final boolean gNeedEscaping[] = new boolean[128];
     // The first hex character if a character needs to be escaped
@@ -323,20 +323,20 @@ public final class URLUtils {
             gAfterEscaping2[ch] = gHexChs[ch & 0xf];
         }
     }
-    
+
     /**
      * Try to clean an invalid URI.
-     * 
+     *
      * @param path URI to be escaped.
      * @return cleaned URI
      */
     public static String clean(final String path) {
         return clean(path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR), true);
     }
-    
+
     /**
      * Try to clean an invalid URI.
-     * 
+     *
      * @param path URI to be escaped.
      * @param ascii encode non-ASCII characters to ASCII
      * @return cleaned URI
@@ -405,7 +405,7 @@ public final class URLUtils {
         }
         return buffer.toString();
     }
-    
+
     /**
      * Test if URI path is absolute.
      */
@@ -413,10 +413,10 @@ public final class URLUtils {
         final String p = uri.getPath();
         return p != null && p.startsWith(URI_SEPARATOR);
     }
-    
+
     /**
      * Convert URI reference to system file path.
-     * 
+     *
      * @param filename URI to convert to system file path, may be relative or absolute
      * @return file path, {@code null} if input was {@code null}
      */
@@ -431,10 +431,10 @@ public final class URLUtils {
             return toFile(f.toString());
         }
     }
-    
+
     /**
      * Convert URI or chimera references to file paths.
-     * 
+     *
      * @param filename file reference
      * @return file path, {@code null} if input was {@code null}
      */
@@ -456,7 +456,7 @@ public final class URLUtils {
      * Covert file reference to URI. The difference between this method and
      * {@link java.io.File#File(URI)})} constructor is that this
      * method doesn't make the URI absolute.
-     * 
+     *
      * @param file system path to convert to a URI, may be {@code null}
      * @return file URI, {@code null} if input was {@code null}
      */
@@ -474,10 +474,10 @@ public final class URLUtils {
             }
         }
     }
-    
+
     /**
      * Covert file reference to URI. Fixes directory separators and escapes characters.
-     * 
+     *
      * @param file The string to be parsed into a URI, may be {@code null}
      * @return URI from parsing the given string, {@code null} if input was {@code null}
      */
@@ -498,10 +498,10 @@ public final class URLUtils {
             }
         }
     }
- 
+
     /**
      * Determines whether the parent directory contains the child element (a file or directory)
-     * 
+     *
      * @param directory the file to consider as the parent
      * @param child the file to consider as the child
      * @return true is the candidate leaf is under by the specified composite, otherwise false
@@ -515,23 +515,23 @@ public final class URLUtils {
             return c.startsWith(d);
         }
     }
- 
+
     /**
      * Strip fragment part from path.
-     * 
+     *
      * @param path path
      * @return path without path
      */
     public static URI stripFragment(final URI path) {
         return setFragment(path, null);
     }
-    
+
     /**
      * Create new URI with a given fragment.
-     * 
+     *
      * @param path URI to set fragment on
      * @param fragment new fragment, {@code null} for no fragment
-     * @return new URI instance with given fragment 
+     * @return new URI instance with given fragment
      */
     public static URI setFragment(final URI path, final String fragment) {
         try {
@@ -544,10 +544,10 @@ public final class URLUtils {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-    
+
     /**
      * Create new URI with a given path.
-     * 
+     *
      * @param orig URI to set path on
      * @param path new path, {@code null} for no path
      * @return new URI instance with given path
@@ -577,7 +577,7 @@ public final class URLUtils {
 
     /**
      * Resolves absolute URI against another absolute URI.
-     * 
+     *
      * @param base absolute base file URI
      * @param ref absolute reference file URI
      * @return relative URI if possible, otherwise original reference file URI argument
@@ -591,7 +591,7 @@ public final class URLUtils {
                 ((baseAuth == null && refAuth == null) || (baseAuth != null && refAuth != null && baseAuth.equals(refAuth))))) {
             return ref;
         }
-        
+
         URI rel;
         if (base.getPath().equals(ref.getPath()) && ref.getFragment() != null) {
             rel = toURI("");
@@ -605,7 +605,7 @@ public final class URLUtils {
             String refPath = ref.normalize().getPath();
             final StringTokenizer baseTokenizer = new StringTokenizer(basePath, URI_SEPARATOR);
             final StringTokenizer refTokenizer = new StringTokenizer(refPath, URI_SEPARATOR);
-    
+
             while (baseTokenizer.countTokens() > 1 && refTokenizer.countTokens() > 1) {
                 final String baseToken = baseTokenizer.nextToken();
                 final String refToken = refTokenizer.nextToken();
@@ -625,13 +625,13 @@ public final class URLUtils {
                     break;
                 }
             }
-    
+
             while (baseTokenizer.countTokens() > 1) {
                 baseTokenizer.nextToken();
                 upPathBuffer.append("..");
                 upPathBuffer.append(URI_SEPARATOR);
             }
-    
+
             while (refTokenizer.hasMoreTokens()) {
                 downPathBuffer.append(refTokenizer.nextToken());
                 if (refTokenizer.hasMoreTokens()) {
@@ -639,22 +639,22 @@ public final class URLUtils {
                 }
             }
             upPathBuffer.append(downPathBuffer);
-            
+
             try {
                 rel = new URI(null, null, upPathBuffer.toString(), null, null);
             } catch (final URISyntaxException e) {
                 throw new IllegalArgumentException(e);
             }
         }
-        
+
         return setFragment(rel, ref.getFragment());
     }
- 
+
     /**
      * Get relative path to base path.
-     * 
+     *
      * <p>For {@code foo/bar/baz.txt} return {@code ../../}</p>
-     * 
+     *
      * @param relativePath relative URI
      * @return relative URI to base path, {@code null} if reference path was a single file
      */
@@ -683,7 +683,7 @@ public final class URLUtils {
             return true;
         }
     }
-    
+
     public static URI addSuffix(final URI orig, final String suffix) {
         final String fragment = orig.getFragment();
         final String u = stripFragment(orig).toString();

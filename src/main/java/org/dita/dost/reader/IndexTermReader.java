@@ -28,9 +28,9 @@ import org.xml.sax.SAXException;
 /**
  * This class extends SAX's DefaultHandler, used for parse index term from dita
  * files.
- * 
+ *
  * @version 1.0 2005-04-30
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class IndexTermReader extends AbstractXMLReader {
@@ -494,8 +494,8 @@ public final class IndexTermReader extends AbstractXMLReader {
 
     /**
      * Trim whitespace from start of the string. If last character of termName and
-     * first character of temp is a space character, remove leading string from temp 
-     * 
+     * first character of temp is a space character, remove leading string from temp
+     *
      * @return trimmed temp value
      */
     private static String trimSpaceAtStart(final String temp, final String termName) {

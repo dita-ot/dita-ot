@@ -27,9 +27,9 @@ import org.dita.dost.util.XMLSerializer;
 /**
  * This class extends AbstractWriter, used to output IndexTerm list to CHM index
  * file.
- * 
+ *
  * @version 1.0 2005-05-11
- * 
+ *
  * @author Anders Svensson (based on modifications of the CHMIndexWriter class by Wu, Zhi Qiang)
  * The class outputs an index for html, including alphabetical headings. (Thanks to pre-existing functionality in DITA OT,
  * these will be sorted based on locale as long as the xml:lang attribute is used.)
@@ -93,7 +93,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
 
     /**
      * Output the given indexterm into the XML writer.
-     * 
+     *
      * @param term term to serializer
      * @param serializer XML output to write to
      */
@@ -131,7 +131,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
 
     /**
      * Find the targets in its subterms when the current term doesn't have any target
-     * 
+     *
      * @param term current IndexTerm instance
      */
     private void findTargets(final IndexTerm term) {

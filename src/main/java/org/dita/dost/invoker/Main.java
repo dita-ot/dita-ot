@@ -848,7 +848,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
          * However, in some cases, the OS goes ahead and parses this out to args
          * {"-Dname", "value"} so instead of parsing on "=", we just make the
          * "-D" characters go away and skip one argument forward.
-         * 
+         *
          * I don't know how to predict when the JDK is going to help or not, so
          * we simply look for the equals sign.
          */

@@ -41,10 +41,10 @@ final class ListTranstypeAction extends ImportAction {
         final char[] ret = retBuf.toString().toCharArray();
         buf.characters(ret, 0, ret.length);
     }
-    
+
     @Override
     public String getResult() {
-        throw new UnsupportedOperationException();        
+        throw new UnsupportedOperationException();
     }
 
 }

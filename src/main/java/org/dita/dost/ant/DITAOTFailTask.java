@@ -38,11 +38,11 @@ public final class DITAOTFailTask extends Exit {
      */
     public DITAOTFailTask(){
     }
-    
+
     /**
      * Set the id.
      * @param identifier The id to set.
-     * 
+     *
      */
     public void setId(final String identifier) {
         id = identifier;
@@ -72,11 +72,11 @@ public final class DITAOTFailTask extends Exit {
         if (!fail) {
             return;
         }
-        
+
         if (id == null) {
             throw new BuildException("id attribute must be specified");
         }
-        
+
         final MessageBean msgBean = MessageUtils.getMessage(id, readParamValues());
         final DITAOTLogger logger = new DITAOTAntLogger(getProject());
         if (msgBean != null) {
@@ -98,13 +98,13 @@ public final class DITAOTFailTask extends Exit {
                 logger.debug(msgBean.toString());
             }
         }
-        
+
         
     }
 
     /**
      * Read parameter values to an array.
-     * 
+     *
      * @return parameter values where array index corresponds to parameter name
      */
     private String[] readParamValues() throws BuildException {
@@ -126,9 +126,9 @@ public final class DITAOTFailTask extends Exit {
         }
         return prop.toArray(new String[prop.size()]);
     }
-    
+
     // Ant Exit class methods --------------------------------------------------
-    
+
     private static class NestedCondition extends ConditionBase implements Condition {
         @Override
         public boolean eval() {

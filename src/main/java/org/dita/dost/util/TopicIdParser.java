@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 
 /**
  * SAX Parser that handles topic id identification.
- * 
+ *
  */
 public final class TopicIdParser implements ContentHandler {
     private boolean isFirstId = true;

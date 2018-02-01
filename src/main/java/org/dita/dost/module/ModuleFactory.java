@@ -14,9 +14,9 @@ import org.dita.dost.log.MessageBean;
 
 /**
  * The factory to create instance for each module class.
- * 
+ *
  * @author Lian, Li
- * 
+ *
  */
 public final class ModuleFactory {
     private static ModuleFactory moduleFactory = null;
@@ -31,7 +31,7 @@ public final class ModuleFactory {
     /**
      * Method to get the only instance of ModuleFactory. ModuleFactory is a
      * singleton class.
-     * 
+     *
      * @return ModuleFactory
      */
     public static synchronized ModuleFactory instance() {
@@ -40,10 +40,10 @@ public final class ModuleFactory {
         }
         return moduleFactory;
     }
-    
+
     /**
      * Create the ModuleElem class instance according to moduleName.
-     * 
+     *
      * @param moduleClass module class
      * @return AbstractPipelineModule
      * @throws DITAOTException DITAOTException

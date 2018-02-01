@@ -23,7 +23,7 @@ import static org.dita.dost.util.URLUtils.*;
 
 /**
  * Collect copy-to information from a map.
- * 
+ *
  * <p>
  * <strong>Not thread-safe</strong>. Instances can be reused by calling
  * {@link #reset()} between calls to parse.
@@ -40,7 +40,7 @@ public final class CopyToReader extends AbstractXMLFilter {
 
     /**
      * Get the copy-to map.
-     * 
+     *
      * @return copy-to map
      */
     public Map<URI, URI> getCopyToMap() {
@@ -49,7 +49,7 @@ public final class CopyToReader extends AbstractXMLFilter {
 
     /**
      * Set current file absolute path
-     * 
+     *
      * @param currentFile absolute path to current file
      */
     public void setCurrentFile(final URI currentFile) {
@@ -58,7 +58,7 @@ public final class CopyToReader extends AbstractXMLFilter {
     }
 
     /**
-     * 
+     *
      * Reset the internal variables.
      */
     public void reset() {
@@ -84,7 +84,7 @@ public final class CopyToReader extends AbstractXMLFilter {
         processRoleStack.push(processingRole);
 
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        
+
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
 
         if (chunkLevel > 0) {
@@ -120,10 +120,10 @@ public final class CopyToReader extends AbstractXMLFilter {
 
         getContentHandler().endDocument();
     }
-    
+
     /**
      * Parse the input attributes for needed information.
-     * 
+     *
      * @param atts all attributes
      */
     private void parseAttribute(final Attributes atts) {

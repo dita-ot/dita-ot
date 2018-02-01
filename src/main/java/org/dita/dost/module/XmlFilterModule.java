@@ -39,7 +39,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
 
     /**
      * Filter files through XML filters.
-     * 
+     *
      * @param input Input parameters and resources.
      * @return always returns {@code null}
      */

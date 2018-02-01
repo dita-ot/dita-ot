@@ -29,7 +29,7 @@ import static org.dita.dost.util.XMLUtils.nonDitaContext;
 
 /**
  * Parse relevant DITA files and collect information.
- * 
+ *
  * <p>
  * <strong>Not thread-safe</strong>. Instances can be reused by calling
  * {@link #reset()} between calls to parse.
@@ -94,7 +94,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Set output utilities.
-     * 
+     *
      * @param job output utils
      */
     public void setJob(final Job job) {
@@ -103,7 +103,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get out file set.
-     * 
+     *
      * @return out file set
      */
     public Set<URI> getOutFilesSet() {
@@ -112,7 +112,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get scheme set.
-     * 
+     *
      * @return scheme set
      */
     public Set<URI> getSchemeSet() {
@@ -121,7 +121,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get scheme ref set.
-     * 
+     *
      * @return scheme ref set
      */
     public Set<URI> getSchemeRefSet() {
@@ -130,7 +130,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * List of files with "@processing-role=resource-only".
-     * 
+     *
      * @return the resource-only set
      */
     public Set<URI> getResourceOnlySet() {
@@ -138,10 +138,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         res.removeAll(normalProcessingRoleSet);
         return res;
     }
-    
+
     /**
      * List of files referenced by something other than topicref
-     * 
+     *
      * @return the resource-only set
      */
     public Set<URI> getNonTopicrefReferenceSet() {
@@ -202,7 +202,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * To see if the parsed file has conref inside.
-     * 
+     *
      * @return true if has conref and false otherwise
      */
     public boolean hasConRef() {
@@ -211,7 +211,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * To see if the parsed file has keyref inside.
-     * 
+     *
      * @return true if has keyref and false otherwise
      */
     public boolean hasKeyRef() {
@@ -220,7 +220,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * To see if the parsed file has coderef inside.
-     * 
+     *
      * @return true if has coderef and false otherwise
      */
     public boolean hasCodeRef() {
@@ -229,7 +229,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * To see if the parsed file has href inside.
-     * 
+     *
      * @return true if has href and false otherwise
      */
     public boolean hasHref() {
@@ -238,7 +238,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get all targets except copy-to.
-     * 
+     *
      * @return set of target file path with option format after
      *         {@link org.dita.dost.util.Constants#STICK STICK}
      */
@@ -272,7 +272,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get the href target.
-     * 
+     *
      * @return Returns the hrefTargets.
      */
     public Set<URI> getHrefTargets() {
@@ -281,7 +281,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get conref targets.
-     * 
+     *
      * @return Returns the conrefTargets.
      */
     public Set<URI> getConrefTargets() {
@@ -290,7 +290,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get coderef targets.
-     * 
+     *
      * @return Returns coderef targets.
      */
     public Set<URI> getCoderefTargets() {
@@ -299,7 +299,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get outditafileslist.
-     * 
+     *
      * @return Returns the outditafileslist.
      */
     public Set<URI> getOutDitaFilesSet() {
@@ -308,7 +308,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get non-conref and non-copyto targets.
-     * 
+     *
      * @return Returns the nonConrefCopytoTargets.
      */
     public Set<URI> getNonConrefCopytoTargets() {
@@ -321,7 +321,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Set current file absolute path
-     * 
+     *
      * @param currentFile absolute path to current file
      */
     public void setCurrentFile(final URI currentFile) {
@@ -332,7 +332,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Check if the current file is valid after filtering.
-     * 
+     *
      * @return true if valid and false otherwise
      */
     public boolean isValidInput() {
@@ -341,7 +341,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Check if the current file has conaction.
-     * 
+     *
      * @return true if has conaction and false otherwise
      */
     public boolean hasConaction() {
@@ -349,7 +349,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * 
+     *
      * Reset the internal variables.
      */
     public void reset() {
@@ -413,7 +413,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 normalProcessingRoleSet.add(stripFragment(currentDir.resolve(href)));
             }
         }
-        
+
         if (cls != null && cls.isValid()) {
             classes.addFirst(cls);
         } else {
@@ -550,10 +550,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         getContentHandler().endDocument();
     }
-    
+
     /**
      * Parse the input attributes for needed information.
-     * 
+     *
      * @param atts all attributes
      * @param attrName attributes to process
      */
@@ -717,7 +717,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Check if path walks up in parent directories
-     * 
+     *
      * @param toCheckPath path to check
      * @return {@code true} if path walks up, otherwise {@code false}
      */

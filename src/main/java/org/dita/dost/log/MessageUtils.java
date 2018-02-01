@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 /**
  * This class is used to get message info from message file.
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class MessageUtils {
@@ -49,7 +49,7 @@ public final class MessageUtils {
      * Get the message respond to the given id with all of the parameters
      * are replaced by those in the given 'prop', if no message found,
      * an empty message with this id will be returned.
-     * 
+     *
      * @param id id
      * @param params message parameters
      * @return MessageBean

@@ -15,9 +15,9 @@ import org.dita.dost.util.Job;
 
 /**
  * AbstractReader defines the methods that every reader class should implement.
- * 
+ *
  * @author Lian, Li
- * 
+ *
  */
 public interface AbstractReader {
 
@@ -30,7 +30,7 @@ public interface AbstractReader {
 
     /**
      * Set logger for module.
-     * 
+     *
      * @param logger logger to use for log message
      */
     void setLogger(DITAOTLogger logger);

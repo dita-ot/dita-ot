@@ -10,7 +10,7 @@ package org.dita.dost.pipeline;
 
 /**
  * None. This interface is left for future.
- * 
+ *
  * @author Lian, Li
  * @deprecated Deprecated since 2.3
  */

@@ -47,9 +47,9 @@ import static org.dita.dost.util.URLUtils.*;
 /**
  * This class extends AbstractPipelineModule, used to generate map and topic
  * list by parsing all the refered dita files.
- * 
+ *
  * @version 1.0 2004-11-25
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class GenMapAndTopicListModule extends SourceReaderModule {
@@ -195,7 +195,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
             initFilters();
             initXmlReader();
-            
+
             addToWaitList(new Reference(rootFile));
             processWaitList();
 
@@ -210,7 +210,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         return null;
     }
-    
+
     /**
      * Initialize reusable filters.
      */
@@ -219,7 +219,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         listFilter.setLogger(logger);
         listFilter.setPrimaryDitamap(rootFile);
         listFilter.setJob(job);
-        
+
         if (profilingEnabled) {
             filterUtils = parseFilterFile();
         }
@@ -228,15 +228,15 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             exportAnchorsFilter = new ExportAnchorsFilter();
             exportAnchorsFilter.setInputFile(rootFile);
         }
-        
+
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
         keydefFilter.setCurrentFile(rootFile);
         keydefFilter.setJob(job);
-        
+
         nullHandler = new DefaultHandler();
     }
-    
+
     private void parseInputParameters(final AbstractPipelineInput input) {
         ditaDir = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
         if (!ditaDir.isAbsolute()) {
@@ -282,7 +282,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             }
             assert baseInputDir.isAbsolute();
         }
-        
+
         final URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
         if (ditaInput.isAbsolute()) {
             rootFile = ditaInput;
@@ -317,10 +317,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             processFile(waitList.remove());
         }
     }
-    
+
     /**
      * Get pipe line filters
-     * 
+     *
      * @param fileToParse absolute path to current file being processed
      */
     private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
@@ -342,7 +342,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             profilingFilter.setCurrentFile(fileToParse);
             pipe.add(profilingFilter);
         }
-        
+
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             exportAnchorsFilter.setCurrentFile(fileToParse);
             exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
@@ -362,7 +362,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     /**
      * Read a file and process it for list information.
-     * 
+     *
      * @param ref system path of the file to process
      * @throws DITAOTException if processing failed
      */
@@ -371,7 +371,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         assert currentFile.isAbsolute();
         logger.info("Processing " + currentFile);
         final String[] params = { currentFile.toString() };
-        
+
         try {
             XMLReader xmlSource = getXmlReader(ref.format);
             for (final XMLFilter f: getProcessingPipe(currentFile)) {
@@ -379,8 +379,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
                 f.setEntityResolver(CatalogUtils.getCatalogResolver());
                 xmlSource = f;
             }
-            xmlSource.setContentHandler(nullHandler);            
-            
+            xmlSource.setContentHandler(nullHandler);
+
             xmlSource.parse(currentFile.toString());
 
             if (listFilter.isValidInput()) {
@@ -500,7 +500,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     /**
      * Categorize current file type
-     * 
+     *
      * @param ref file path
      */
     private void categorizeCurrentFile(final Reference ref) {
@@ -540,7 +540,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     /**
      * Categorize file.
-     * 
+     *
      * @param file file system path with optional format
      */
     private void categorizeReferenceFile(final Reference file) {
@@ -565,7 +565,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     /**
      * Update uplevels if needed. If the parameter contains a {@link org.dita.dost.util.Constants#STICK STICK}, it and
      * anything following it is removed.
-     * 
+     *
      * @param file file path
      */
     private void updateUplevels(final URI file) {
@@ -585,7 +585,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     /**
      * Add the given file the wait list if it has not been parsed.
-     * 
+     *
      * @param ref reference to absolute system path
      */
     private void addToWaitList(final Reference ref) {
@@ -627,7 +627,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     /**
      * Parse filter file
-     * 
+     *
      * @return configured filter utility
      */
     private FilterUtils parseFilterFile() {
@@ -669,7 +669,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     /**
      * Write result files.
-     * 
+     *
      * @throws DITAOTException if writing result files failed
      */
     private void outputResult() throws DITAOTException {
@@ -695,7 +695,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         job.setProperty("uplevels", getLevelsPath(rootTemp));
 
         resourceOnlySet.addAll(listFilter.getResourceOnlySet());
-        
+
         if (job.getOnlyTopicInMap()) {
             resourceOnlySet.addAll(listFilter.getNonTopicrefReferenceSet());
         }
@@ -767,7 +767,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         for (final URI file: resourceOnlySet) {
             getOrCreateFileInfo(fileinfos, file).isResourceOnly = true;
         }
-        
+
         addFlagImagesSetToProperties(job, relFlagImagesSet);
 
         final Map<URI, URI> filteredCopyTo = filterConflictingCopyTo(copyTo, fileinfos.values());
@@ -891,10 +891,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
         return res;
     }
-    
+
     /**
      * Add file prefix. For absolute paths the prefix is not added.
-     * 
+     *
      * @param set file paths
      * @return file paths with prefix
      */

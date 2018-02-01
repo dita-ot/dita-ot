@@ -74,7 +74,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         nct.add(ATTRIBUTE_NAME_NAVTITLE);
         no_copy_topic = Collections.unmodifiableSet(nct);
     }
-    
+
     /** List of key reference element definitions. */
     private final static List<KeyrefInfo> keyrefInfos;
     static {
@@ -118,7 +118,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             ATTRIBUTE_NAME_CODEBASEKEYREF,
             ATTRIBUTE_NAME_DATAKEYREF
     ));
-        
+
     private KeyScope definitionMap;
 
     /**
@@ -166,7 +166,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /** Set of link targets which are not resource-only */
     private Set<URI> normalProcessingRoleTargets;
     private MergeUtils mergeUtils;
-    
+
     /**
      * Constructor.
      */
@@ -185,21 +185,21 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         super.setLogger(logger);
         mergeUtils.setLogger(logger);
     }
-    
+
     public void setKeyDefinition(final KeyScope definitionMap) {
         this.definitionMap = definitionMap;
     }
-    
+
     /**
      * Get set of link targets which have normal processing role. Paths are relative to current file.
      */
     public Set<URI> getNormalProcessingRoleTargets() {
         return Collections.unmodifiableSet(normalProcessingRoleTargets);
     }
-    
+
     /**
      * Process key references.
-     * 
+     *
      * @param filename file to process
      * @throws DITAOTException if key reference resolution failed
      */
@@ -208,7 +208,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         assert filename.isAbsolute();
         super.write(new File(currentFile));
     }
-        
+
     // XML filter methods ------------------------------------------------------
 
     @Override
@@ -216,7 +216,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         normalProcessingRoleTargets = new HashSet<>();
         getContentHandler().startDocument();
     }
-    
+
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
         if (keyrefLevel != 0 && (length == 0 || new String(ch,start,length).trim().isEmpty())) {
@@ -405,7 +405,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         getContentHandler().characters(ch, 0, ch.length);
         getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
     }
-    
+
     /**
      * Write alt element
      *
@@ -635,7 +635,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     /**
      * Serialize DOM node into a SAX stream.
-     * 
+     *
      * @param elem element to serialize
      * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
      */
@@ -675,7 +675,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
 
     /**
-     * Change map type to topic type. 
+     * Change map type to topic type.
      */
     private String changeclassValue(final String classValue) {
         final DitaClass cls = new DitaClass(classValue);
@@ -689,7 +689,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             return cls.toString();
         }
     }
-    
+
     /**
      * change elementId into topicId if there is no topicId in key definition.
      */
@@ -706,7 +706,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private String getFirstTopicId(final URI topicFile) {
         return mergeUtils.getFirstTopicId(topicFile, false);
     }
-    
+
     /**
      * Insert topic id into href
      */
@@ -720,7 +720,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
 
     // Inner classes -----------------------------------------------------------
-    
+
     private static final class KeyrefInfo {
 
         /** DITA class. */
@@ -734,7 +734,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
         /**
          * Construct a new key reference info object.
-         * 
+         *
          * @param type element type
          * @param attrs Map of key reference to reference attributes
          * @param isEmpty flag if element is empty
@@ -764,5 +764,5 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             this.hasNestedElements = hasNestedElements;
         }
     }
-    
+
 }

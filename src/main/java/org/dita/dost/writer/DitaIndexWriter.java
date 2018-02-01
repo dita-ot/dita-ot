@@ -30,7 +30,7 @@ import org.xml.sax.XMLReader;
 
 /**
  * DitaIndexWriter reads dita topic file and insert the index information into it.
- * 
+ *
  * @author Zhang, Yuan Peng
  */
 public final class DitaIndexWriter extends AbstractXMLWriter {
@@ -119,7 +119,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         }
         try {
             if (!hasMetadataTillNow && TOPIC_PROLOG.localName.equals(qName) && startTopic && !hasWritten) {
-                
+
                 writeStartElement(TOPIC_METADATA.localName, new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_METADATA.toString()).build());
                 output.write(indexEntries);
                 writeEndElement(TOPIC_METADATA.localName);
@@ -200,11 +200,11 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             logger.error(e.getMessage(), e) ;
         }
     }
-    
+
     public void setIndexEntries(final String indexEntries) {
         this.indexEntries = indexEntries;
     }
-    
+
     private void setMatch(final String match) {
         int index = 0;
         matchList = new ArrayList<>(16);
@@ -253,13 +253,13 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             if (!hasMetadata(qName) && startTopic && !hasWritten) {
                 writeStartElement(TOPIC_METADATA.localName, new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_METADATA.toString()).build());
                 output.write(indexEntries);
-                writeEndElement(TOPIC_METADATA.localName);                
+                writeEndElement(TOPIC_METADATA.localName);
                 hasMetadataTillNow = true;
                 hasWritten = true;
             }
 
             writeStartElement(qName, atts);
-            
+
             if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null){
 
                 if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_METADATA.matcher) && startTopic && !hasWritten) {
@@ -327,9 +327,9 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
         }
     }
-    
+
     // SAX serializer methods
-    
+
     private void writeStartElement(final String qName, final Attributes atts) throws IOException {
         final int attsLen = atts.getLength();
         output.write(LESS_THAN + qName);
@@ -340,11 +340,11 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         }
         output.write(GREATER_THAN);
     }
-    
+
     private void writeEndElement(final String qName) throws IOException {
         output.write(LESS_THAN + SLASH + qName + GREATER_THAN);
     }
-    
+
     private void writeCharacters(final char[] ch, final int start, final int length) throws IOException {
         output.write(escapeXML(ch, start, length));
     }
@@ -353,5 +353,5 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         final String pi = data != null ? target + STRING_BLANK + data : target;
         output.write(LESS_THAN + QUESTION + pi + QUESTION + GREATER_THAN);
     }
-    
+
 }

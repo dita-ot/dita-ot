@@ -28,7 +28,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
     private KeyScope keys;
     /** Delayed conref utils, may be {@code null} */
     private DelayConrefUtils delayConrefUtils;
-    
+
     public void setKeyDefinitions(final KeyScope keys) {
         this.keys = keys;
     }
@@ -36,7 +36,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
     public void setDelayConrefUtils(final DelayConrefUtils delayConrefUtils) {
         this.delayConrefUtils = delayConrefUtils;
     }
-    
+
     // XML filter methods ------------------------------------------------------
 
     @Override
@@ -85,7 +85,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
 
     /**
      * Update href URI.
-     * 
+     *
      * @param href href URI
      * @return updated href URI
      */

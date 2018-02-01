@@ -49,7 +49,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
             throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
         }
     }
-    
+
     @Override
     public void setInput(final List<String> input) {
         fileNameSet.addAll(input);
@@ -64,7 +64,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
     public String getResult() {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public void getResult(final ContentHandler retBuf) throws SAXException {
         setContentHandler(retBuf);
@@ -88,7 +88,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
     }
 
     // XMLFilter methods
-    
+
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
         if (elemLevel != 0){
@@ -110,7 +110,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
         elemLevel = 0;
         // suppress
     }
-    
+
     @Override
     public void endDocument() throws SAXException {
         // suppress

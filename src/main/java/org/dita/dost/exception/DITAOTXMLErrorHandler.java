@@ -16,7 +16,7 @@ import org.xml.sax.SAXParseException;
 
 /**
  * DITAOTXMLErrorHandler to wrapper the SAXParseException and rethrow it to DITA-OT.
- * 
+ *
  * @author wxzhang
  */
 public final class DITAOTXMLErrorHandler implements ErrorHandler {

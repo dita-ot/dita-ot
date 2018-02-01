@@ -10,9 +10,9 @@ package org.dita.dost.index;
 
 /**
  * This class represent the topicref element in ditamap.
- * 
+ *
  * @version 1.0 2005-06-03
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class TopicrefElement {
@@ -32,7 +32,7 @@ public final class TopicrefElement {
 
     /**
      * Get the format attribute.
-     * 
+     *
      * @return Returns the format.
      */
     public String getFormat() {
@@ -41,7 +41,7 @@ public final class TopicrefElement {
 
     /**
      * Set the format attribute with the given value.
-     * 
+     *
      * @param formatValue The format to set.
      */
     public void setFormat(final String formatValue) {
@@ -50,7 +50,7 @@ public final class TopicrefElement {
 
     /**
      * Get href attribute.
-     * 
+     *
      * @return Returns the href.
      */
     public String getHref() {
@@ -59,7 +59,7 @@ public final class TopicrefElement {
 
     /**
      * Set href attribute with the given value.
-     * 
+     *
      * @param hrefValue The href to set.
      */
     public void setHref(final String hrefValue) {
@@ -76,7 +76,7 @@ public final class TopicrefElement {
 
     /**
      * Get navtitle attribute.
-     * 
+     *
      * @return Returns the navtitle.
      */
     public String getNavTitle(){

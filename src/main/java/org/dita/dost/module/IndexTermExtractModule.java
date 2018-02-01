@@ -36,9 +36,9 @@ import org.xml.sax.XMLReader;
 /**
  * This class extends AbstractPipelineModule, used to extract indexterm from
  * dita/ditamap files.
- * 
+ *
  * @version 1.0 2005-04-30
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
@@ -134,7 +134,7 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         handler.setLogger(logger);
         final DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
         ditamapIndexTermReader.setLogger(logger);
-        
+
         xmlReader = XMLUtils.getXMLReader();
 
         try {

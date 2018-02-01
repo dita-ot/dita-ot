@@ -11,9 +11,9 @@ import static javax.xml.XMLConstants.*;
 
 /**
  * This class contains all the constants used in DITA-OT.
- * 
+ *
  * @version 1.0 2005-06-22
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class Constants {
@@ -595,7 +595,7 @@ public final class Constants {
     public static final DitaClass DITAVAREF_D_DVR_RESOURCESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrResourceSuffix ");
     public static final DitaClass DITAVAREF_D_DVR_KEYSCOPEPREFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopePrefix ");
     public static final DitaClass DITAVAREF_D_DVR_KEYSCOPESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopeSuffix ");
-    
+
     public static final DitaClass SUBMAP = new DitaClass("+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ");
 
     /**maplinks element.*/
@@ -721,7 +721,7 @@ public final class Constants {
 
     public static final String ATTRIBUTE_CASCADE_VALUE_MERGE = "merge";
     public static final String ATTRIBUTE_CASCADE_VALUE_NOMERGE = "nomerge";
-    
+
     /** URI path separator. */
     public static final String URI_SEPARATOR = "/";
     /** UNIX path separator. */

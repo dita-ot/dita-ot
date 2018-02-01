@@ -48,7 +48,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 
     /**
      * Set valid attribute values.
-     * 
+     *
      * <p>The contents of the map is in pseudo-code
      * {@code Map<AttName, Map<ElemName, <Set<Value>>>}.
      * For default element mapping, the value is {@code *}.
@@ -62,7 +62,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
 
     // Locator methods
-    
+
     @Override
     public void setDocumentLocator(final Locator locator) {
         this.locator = locator;
@@ -243,7 +243,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 
     /**
      * Validate attribute values
-     * 
+     *
      * @param qName element name
      * @param atts attributes
      */
@@ -286,7 +286,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             }
         }
     }
-    
+
     /**
      * Validate {@code keyscope} attribute
      */
@@ -300,7 +300,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             }
         }
     }
-    
+
     private boolean isValidKeyName(final String key) {
         for (final char c : key.toCharArray()) {
             switch (c) {
@@ -344,7 +344,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 
     /**
      * Validate attribute generalization. A single element may not contain both generalized and specialized values for the same attribute.
-     * 
+     *
      * @param atts attributes
      * @see <a href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/attributegeneralize.html">DITA 1.2 specification</a>
      */
@@ -359,7 +359,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                                 logger.error(MessageUtils.getMessage("DOTJ058E",
                                         spec[j].toString(), spec[i].toString()).toString());
                             }
-                        } 
+                        }
                     }
                 }
             }

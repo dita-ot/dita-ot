@@ -30,9 +30,9 @@ import org.xml.sax.SAXException;
 /**
  * This class extends SAX's DefaultHandler, used for parsing indexterm in
  * ditamap.
- * 
+ *
  * @version 1.0 2005-04-30
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 
@@ -353,7 +353,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 
     /**
      * Set map path.
-     * 
+     *
      * @param mappath path of map file
      */
     public void setMapPath(final String mappath) {

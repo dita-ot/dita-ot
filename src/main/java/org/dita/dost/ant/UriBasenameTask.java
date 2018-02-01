@@ -42,7 +42,7 @@ import org.apache.tools.ant.Task;
  */
 
 public class UriBasenameTask extends Task {
-    
+
     private URI file;
     private String property;
     private String suffix;
@@ -92,15 +92,15 @@ public class UriBasenameTask extends Task {
         }
         getProject().setNewProperty(property, value);
     }
-    
+
     private String getName(final String path) {
         final int i = path.lastIndexOf(URI_SEPARATOR);
         if (i != -1) {
-            return path.substring(i + 1); 
+            return path.substring(i + 1);
         } else {
             return path;
         }
     }
-    
+
 }
 

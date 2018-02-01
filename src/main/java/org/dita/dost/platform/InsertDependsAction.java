@@ -32,9 +32,9 @@ final class InsertDependsAction implements IAction {
 
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
-        throw new UnsupportedOperationException();        
+        throw new UnsupportedOperationException();
     }
-    
+
     /**
      * Get result.
      * @return result

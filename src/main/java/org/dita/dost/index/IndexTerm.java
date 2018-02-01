@@ -16,9 +16,9 @@ import org.dita.dost.util.DITAOTCollator;
 
 /**
  * This class represents an indexterm.
- * 
+ *
  * @version 1.0 2005-04-30
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class IndexTerm implements Comparable<IndexTerm> {
@@ -73,7 +73,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * Get the global locale of indexterm.
-     * 
+     *
      * @return Locale language
      */
     public static Locale getTermLocale() {
@@ -82,7 +82,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * Set the global locale of indexterm.
-     * 
+     *
      * @param locale locale
      */
     public static void setTermLocale(final Locale locale) {
@@ -91,7 +91,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * Get the index term name.
-     * 
+     *
      * @return term name
      */
     public String getTermName() {
@@ -100,7 +100,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * Set the index term name.
-     * 
+     *
      * @param name name to set
      */
     public void setTermName(final String name) {
@@ -125,7 +125,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * Get the sub term list.
-     * 
+     *
      * @return sub term list
      */
     public List<IndexTerm> getSubTerms() {
@@ -166,7 +166,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
     }
     /**
      * Add a sub term into the sub term list.
-     * 
+     *
      * @param term index term to be added
      */
     public void addSubTerm(final IndexTerm term) {
@@ -202,7 +202,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * Add all the sub terms in the list.
-     * 
+     *
      * @param terms terms list
      */
     public void addSubTerms(final List<IndexTerm> terms) {
@@ -219,7 +219,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * IndexTerm will be equal if they have same name, target and subterms.
-     * 
+     *
      * @param o object to compare with.
      * @return boolean
      */
@@ -278,7 +278,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * Compare the given indexterm with current term.
-     * 
+     *
      * @param obj object to compare with
      * @return int
      */
@@ -289,7 +289,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * Get the target list of current indexterm.
-     * 
+     *
      * @return Returns the targetList.
      */
     public List<IndexTermTarget> getTargetList() {
@@ -298,7 +298,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * Add a new indexterm target.
-     * 
+     *
      * @param target indexterm target
      */
     public void addTarget(final IndexTermTarget target) {
@@ -309,7 +309,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * Add all the indexterm targets in the list.
-     * 
+     *
      * @param targets list of targets
      */
     public void addTargets(final List<IndexTermTarget> targets) {
@@ -327,7 +327,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     /**
      * See if this indexterm has sub terms.
-     * 
+     *
      * @return true if has subterms, false or else.
      */
     public boolean hasSubTerms() {
@@ -390,9 +390,9 @@ public final class IndexTerm implements Comparable<IndexTerm> {
             // if there is only one subterm, it is necessary to update
             final IndexTerm term = subTerms.get(0); // get the only subterm
             if (term.getTermPrefix()!= null &&
-                    IndexTerm_Prefix_See.equalsIgnoreCase(term.getTermPrefix().trim())){ 
+                    IndexTerm_Prefix_See.equalsIgnoreCase(term.getTermPrefix().trim())){
                 //if the only subterm is index-see update it to index-see-also
-                term.setTermPrefix(IndexTerm_Prefix_See_Also); 
+                term.setTermPrefix(IndexTerm_Prefix_See_Also);
             }
         }
     }

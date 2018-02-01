@@ -48,7 +48,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
 
     /**
      * Entry point of TopicMergeModule.
-     * 
+     *
      * @param input Input parameters and resources.
      * @return null
      * @throws DITAOTException exception
