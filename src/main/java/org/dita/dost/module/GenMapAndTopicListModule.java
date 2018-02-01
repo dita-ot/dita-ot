@@ -9,6 +9,8 @@
 package org.dita.dost.module;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.MultimapBuilder.SetMultimapBuilder;
+import com.google.common.collect.SetMultimap;
 import com.google.common.hash.Hashing;
 import org.apache.commons.io.FilenameUtils;
 import org.dita.dost.exception.DITAOTException;
@@ -80,7 +82,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private final Set<URI> flagImageSet;
 
     /** Set of all HTML and other non-DITA or non-image files */
-    private final Set<URI> htmlSet;
+    private final SetMultimap<String, URI> htmlSet;
 
     /** Set of all the href targets */
     private final Set<URI> hrefTargetSet;
@@ -162,7 +164,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         conrefSet = new HashSet<>(128);
         formatSet = new HashSet<>();
         flagImageSet = new LinkedHashSet<>(128);
-        htmlSet = new HashSet<>(128);
+        htmlSet = SetMultimapBuilder.hashKeys().hashSetValues().build();
         hrefTargetSet = new HashSet<>(128);
         coderefTargetSet = new HashSet<>(16);
         waitList = new LinkedList<>();
@@ -556,7 +558,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
             formatSet.add(file);
         } else {
-            htmlSet.add(file.filename);
+            htmlSet.put(file.format, file.filename);
         }
     }
 
@@ -731,8 +733,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             f.isFlagImage = true;
             f.format = ATTR_FORMAT_VALUE_IMAGE;
         }
-        for (final URI file: htmlSet) {
-            getOrCreateFileInfo(fileinfos, file).format = ATTR_FORMAT_VALUE_HTML;
+        for (final String format: htmlSet.keySet()) {
+            for (final URI file : htmlSet.get(format)) {
+                getOrCreateFileInfo(fileinfos, file).format = format;
+            }
         }
         for (final URI file: hrefTargetSet) {
             final FileInfo f = getOrCreateFileInfo(fileinfos, file);
