@@ -6,7 +6,10 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2htmlhelp">
+<project xmlns:dita="http://dita-ot.sourceforge.net"
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
+         name="dita2htmlhelp">
 
   <target name="dita2htmlhelp" unless="noMap"
           depends="dita2htmlhelp.init,
@@ -86,9 +89,9 @@ See the accompanying LICENSE file for applicable license.
     <xslt destdir="${htmlhelp.hhp.output.dir}"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
       <ditafileset input="true" processingRole="normal"/>
-      <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
+      <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
       <param name="HHCNAME" expression="${args.output.base}.hhc"/>
-      <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
+      <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if:set="args.htmlhelp.includefile"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
       <mapper type="merge" to="${args.output.base}.hhp"/>
@@ -106,7 +109,7 @@ See the accompanying LICENSE file for applicable license.
     <xslt destdir="${htmlhelp.hhc.output.dir}"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
       <ditafileset input="true" processingRole="normal"/>
-      <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
+      <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
       <mapper type="merge" to="${args.output.base}.hhc"/>
@@ -126,7 +129,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="targetext" value="${out.ext}"/>
         <param name="indextype" value="htmlhelp"/>
         <param name="indexclass" value="org.dita.dost.writer.CHMIndexWriter"/>
-        <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+        <param name="encoding" value="${args.dita.locale}" if:set="args.dita.locale"/>
         <param name="defaultLanguage" expression="${default.language}"/>
       </module>
     </pipeline>
