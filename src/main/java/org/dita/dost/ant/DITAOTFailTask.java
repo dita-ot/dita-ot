@@ -11,6 +11,9 @@ import static org.dita.dost.ant.ExtensibleAntInvoker.isValid;
 import static org.dita.dost.log.MessageBean.*;
 
 import java.util.ArrayList;
+
+import org.apache.tools.ant.Location;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 import org.apache.tools.ant.taskdefs.condition.ConditionBase;
 
@@ -66,6 +69,18 @@ public final class DITAOTFailTask extends Exit {
      */
     @Override
     public void execute() throws BuildException {
+        if (ifCondition != null) {
+            final String msg = MessageUtils.getMessage("DOTA014W", "if", "if:set")
+                    .setLocation(this.getLocation())
+                    .toString();
+            getProject().log(msg, Project.MSG_WARN);
+        }
+        if (unlessCondition != null) {
+            final String msg = MessageUtils.getMessage("DOTA014W", "unless", "unless:set")
+                    .setLocation(this.getLocation())
+                    .toString();
+            getProject().log(msg, Project.MSG_WARN);
+        }
         final boolean fail = nestedConditionPresent()
                        ? testNestedCondition()
                        : (testIfCondition() && testUnlessCondition());
@@ -113,7 +128,7 @@ public final class DITAOTFailTask extends Exit {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }
-            if (isValid(getProject(), p.getIf(), p.getUnless())) {
+            if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
                 final int idx = Integer.parseInt(p.getName()) - 1;
                 if (idx >= prop.size()) {
                     prop.ensureCapacity(idx + 1);
