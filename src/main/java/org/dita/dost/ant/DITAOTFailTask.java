@@ -36,13 +36,13 @@ public final class DITAOTFailTask extends Exit {
      * Default Construtor.
      *
      */
-    public DITAOTFailTask(){
+    public DITAOTFailTask() {
     }
-    
+
     /**
      * Set the id.
      * @param identifier The id to set.
-     * 
+     *
      */
     public void setId(final String identifier) {
         id = identifier;
@@ -72,39 +72,39 @@ public final class DITAOTFailTask extends Exit {
         if (!fail) {
             return;
         }
-        
+
         if (id == null) {
             throw new BuildException("id attribute must be specified");
         }
-        
+
         final MessageBean msgBean = MessageUtils.getMessage(id, readParamValues());
         final DITAOTLogger logger = new DITAOTAntLogger(getProject());
         if (msgBean != null) {
             final String type = msgBean.getType();
-            if(FATAL.equals(type)){
+            if (FATAL.equals(type)) {
                 setMessage(msgBean.toString());
-                try{
+                try {
                     super.execute();
-                }catch(final BuildException ex){
-                    throw new BuildException(msgBean.toString(),new DITAOTException(msgBean,ex,msgBean.toString()));
+                } catch (final BuildException ex) {
+                    throw new BuildException(msgBean.toString(),new DITAOTException(msgBean, ex, msgBean.toString()));
                 }
-            } else if(ERROR.equals(type)){
+            } else if (ERROR.equals(type)) {
                 logger.error(msgBean.toString());
-            } else if(WARN.equals(type)){
+            } else if (WARN.equals(type)) {
                 logger.warn(msgBean.toString());
-            } else if(INFO.equals(type)){
+            } else if (INFO.equals(type)) {
                 logger.info(msgBean.toString());
-            } else if(DEBUG.equals(type)){
+            } else if (DEBUG.equals(type)) {
                 logger.debug(msgBean.toString());
             }
         }
-        
+
         
     }
 
     /**
      * Read parameter values to an array.
-     * 
+     *
      * @return parameter values where array index corresponds to parameter name
      */
     private String[] readParamValues() throws BuildException {
@@ -126,9 +126,9 @@ public final class DITAOTFailTask extends Exit {
         }
         return prop.toArray(new String[prop.size()]);
     }
-    
+
     // Ant Exit class methods --------------------------------------------------
-    
+
     private static class NestedCondition extends ConditionBase implements Condition {
         @Override
         public boolean eval() {

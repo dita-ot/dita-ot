@@ -21,7 +21,7 @@ import static org.dita.dost.util.Constants.*;
 
 /**
  * Normalize table content.
- * 
+ *
  * <ul>
  *   <li>Rewrite table column names to {@code "col" num}, where {@code num} is the column number, and add column name to every entry.</li>
  * </ul>
@@ -287,7 +287,7 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
             }
             totalColumns = 0;
         }
-        
+
         if (depth == 1) {
             super.endPrefixMapping(DITA_OT_NS_PREFIX);
         }

@@ -47,7 +47,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private static final String ATTR_IMAGE_WIDTH = "image-width";
     private static final float MM_TO_INCH = 25.4f;
     public static final Attributes EMPTY_ATTR = new AttributesImpl();
-    
+
     // Variables ---------------------------------------------------------------
 
     private final File outputDir;
@@ -96,8 +96,8 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         } catch (DITAOTException e) {
             logger.error("Failed to read image metadata: " + e.getMessage(), e);
         }
-    } 
-    
+    }
+
     public Collection<URI> getImages() {
         return ImmutableList.copyOf(cache.keySet());
     }
@@ -129,7 +129,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             super.startElement(uri, localName, name, atts);
         }
     }
-    
+
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         super.endElement(uri, localName, name);
@@ -142,7 +142,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     }
 
     // Private methods ---------------------------------------------------------
-    
+
     public static class Dimensions {
         public String height;
         public String width;
@@ -310,5 +310,5 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
 
         return null;
     }
-    
+
 }

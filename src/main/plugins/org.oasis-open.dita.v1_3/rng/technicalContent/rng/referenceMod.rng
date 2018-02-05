@@ -165,11 +165,7 @@ ORIGINAL CREATION DATE:
       <define name="reference.attlist" combine="interleave">
         <ref name="reference.attributes"/>
         <ref name="arch-atts"/>
-        <optional>
-          <attribute name="domains"
-            a:defaultValue="(topic reference)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
-          />
-        </optional>
+        <ref name="domains-att"/>
       </define>
 
     </div>

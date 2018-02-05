@@ -220,225 +220,238 @@ See the accompanying LICENSE file for applicable license.
 
     <!--  Bookmap Chapter processing  -->
     <xsl:template name="processTopicChapter">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.body">
-            <xsl:call-template name="startPageNumbering"/>
-            <xsl:call-template name="insertBodyStaticContents"/>
-            <fo:flow flow-name="xsl-region-body">
-                <fo:block xsl:use-attribute-sets="topic">
-                    <xsl:call-template name="commonattributes"/>
-                    <xsl:variable name="level" as="xs:integer">
-                      <xsl:apply-templates select="." mode="get-topic-level"/>
-                    </xsl:variable>
-                    <xsl:if test="$level eq 1">
-                        <fo:marker marker-class-name="current-topic-number">
-                          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
-                          <xsl:for-each select="$topicref">
-                            <xsl:apply-templates select="." mode="topicTitleNumber"/>
-                          </xsl:for-each>
-                        </fo:marker>
-                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
-                    </xsl:if>
+        <xsl:variable name="expectedChapterContext" as="xs:boolean">
+            <xsl:choose>
+                <xsl:when test="empty(parent::*[contains(@class,' topic/topic ')])"><xsl:sequence select="true()"/></xsl:when>
+                <xsl:when test="count(ancestor::*[contains(@class,' topic/topic ')]) = 1 and 
+                    contains((key('map-id',parent::*/@id)[1])/@class,' bookmap/part ')"><xsl:sequence select="true()"/></xsl:when>
+                <xsl:otherwise><xsl:sequence select="false()"/></xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$expectedChapterContext">
+                <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.body">
+                    <xsl:call-template name="startPageNumbering"/>
+                    <xsl:call-template name="insertBodyStaticContents"/>
+                    <fo:flow flow-name="xsl-region-body">
+                        <xsl:apply-templates select="." mode="processTopicChapterInsideFlow"/>
+                    </fo:flow>
+                </fo:page-sequence>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="processTopicChapterInsideFlow"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template match="*" mode="processTopicChapterInsideFlow">
+        <fo:block xsl:use-attribute-sets="topic">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:variable name="level" as="xs:integer">
+              <xsl:apply-templates select="." mode="get-topic-level"/>
+            </xsl:variable>
+            <xsl:if test="$level eq 1">
+                <fo:marker marker-class-name="current-topic-number">
+                  <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                  <xsl:for-each select="$topicref">
+                    <xsl:apply-templates select="." mode="topicTitleNumber"/>
+                  </xsl:for-each>
+                </fo:marker>
+                <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
+            </xsl:if>
 
-                    <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
+            <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
-                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
-                        <xsl:with-param name="type" select="'chapter'"/>
-                    </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
+                <xsl:with-param name="type" select="'chapter'"/>
+            </xsl:apply-templates>
 
-                    <fo:block xsl:use-attribute-sets="topic.title">
-                        <xsl:call-template name="pullPrologIndexTerms"/>
-                        <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                            <xsl:apply-templates select="." mode="getTitle"/>
-                        </xsl:for-each>
-                    </fo:block>
+            <fo:block xsl:use-attribute-sets="topic.title">
+                <xsl:call-template name="pullPrologIndexTerms"/>
+                <xsl:for-each select="*[contains(@class,' topic/title ')]">
+                    <xsl:apply-templates select="." mode="getTitle"/>
+                </xsl:for-each>
+            </fo:block>
 
-                    <xsl:choose>
-                      <xsl:when test="$chapterLayout='BASIC'">
-                          <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                             contains(@class, ' topic/prolog '))]"/>
-                          <!--xsl:apply-templates select="." mode="buildRelationships"/-->
-                      </xsl:when>
-                      <xsl:otherwise>
-                          <xsl:apply-templates select="." mode="createMiniToc"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="$chapterLayout='BASIC'">
+                  <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
+                                                     contains(@class, ' topic/prolog '))]"/>
+                  <!--xsl:apply-templates select="." mode="buildRelationships"/-->
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:apply-templates select="." mode="createMiniToc"/>
+              </xsl:otherwise>
+            </xsl:choose>
 
-                    <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
-                    <xsl:call-template name="pullPrologIndexTerms.end-range"/>
-                </fo:block>
-            </fo:flow>
-        </fo:page-sequence>
+            <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+            <xsl:call-template name="pullPrologIndexTerms.end-range"/>
+        </fo:block>
     </xsl:template>
 
     <!--  Bookmap Appendix processing  -->
     <xsl:template name="processTopicAppendix">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.appendix">
-            <xsl:call-template name="startPageNumbering"/>
-            <xsl:call-template name="insertBodyStaticContents"/>
-            <fo:flow flow-name="xsl-region-body">
-                <fo:block xsl:use-attribute-sets="topic">
-                    <xsl:call-template name="commonattributes"/>
-                    <xsl:variable name="level" as="xs:integer">
-                      <xsl:apply-templates select="." mode="get-topic-level"/>
-                    </xsl:variable>
-                    <xsl:if test="$level eq 1">
-                        <fo:marker marker-class-name="current-topic-number">
-                            <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
-                            <xsl:for-each select="$topicref">
-                              <xsl:apply-templates select="." mode="topicTitleNumber"/>
-                            </xsl:for-each>
-                        </fo:marker>
-                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
-                    </xsl:if>
+        <xsl:variable name="expectedAppContext" as="xs:boolean">
+            <xsl:choose>
+                <xsl:when test="empty(parent::*[contains(@class,' topic/topic ')])"><xsl:sequence select="true()"/></xsl:when>
+                <xsl:when test="count(ancestor::*[contains(@class,' topic/topic ')]) = 1 and 
+                    contains(key('map-id',parent::*/@id)[1]/@class,' bookmap/appendices ')"><xsl:sequence select="true()"/></xsl:when>
+                <xsl:otherwise><xsl:sequence select="false()"/></xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$expectedAppContext">
+                <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.appendix">
+                    <xsl:call-template name="startPageNumbering"/>
+                    <xsl:call-template name="insertBodyStaticContents"/>
+                    <fo:flow flow-name="xsl-region-body">
+                        <xsl:apply-templates select="." mode="processTopicAppendixInsideFlow"/>
+                    </fo:flow>
+                </fo:page-sequence>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="processTopicAppendixInsideFlow"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template match="*" mode="processTopicAppendixInsideFlow">
+        <fo:block xsl:use-attribute-sets="topic">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:variable name="level" as="xs:integer">
+              <xsl:apply-templates select="." mode="get-topic-level"/>
+            </xsl:variable>
+            <xsl:if test="$level eq 1">
+                <fo:marker marker-class-name="current-topic-number">
+                    <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                    <xsl:for-each select="$topicref">
+                      <xsl:apply-templates select="." mode="topicTitleNumber"/>
+                    </xsl:for-each>
+                </fo:marker>
+                <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
+            </xsl:if>
 
-                    <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
+            <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
-                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
-                        <xsl:with-param name="type" select="'appendix'"/>
-                    </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
+                <xsl:with-param name="type" select="'appendix'"/>
+            </xsl:apply-templates>
 
-                    <fo:block xsl:use-attribute-sets="topic.title">
-                        <xsl:call-template name="pullPrologIndexTerms"/>
-                        <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                            <xsl:apply-templates select="." mode="getTitle"/>
-                        </xsl:for-each>
-                    </fo:block>
+            <fo:block xsl:use-attribute-sets="topic.title">
+                <xsl:call-template name="pullPrologIndexTerms"/>
+                <xsl:for-each select="*[contains(@class,' topic/title ')]">
+                    <xsl:apply-templates select="." mode="getTitle"/>
+                </xsl:for-each>
+            </fo:block>
 
-                    <xsl:choose>
-                      <xsl:when test="$appendixLayout='BASIC'">
-                          <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                             contains(@class, ' topic/prolog '))]"/>
-                          <!--xsl:apply-templates select="." mode="buildRelationships"/-->
-                      </xsl:when>
-                      <xsl:otherwise>
-                          <xsl:apply-templates select="." mode="createMiniToc"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="$appendixLayout='BASIC'">
+                  <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
+                                                     contains(@class, ' topic/prolog '))]"/>
+                  <!--xsl:apply-templates select="." mode="buildRelationships"/-->
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:apply-templates select="." mode="createMiniToc"/>
+              </xsl:otherwise>
+            </xsl:choose>
 
-                    <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
-                    <xsl:call-template name="pullPrologIndexTerms.end-range"/>
-                </fo:block>
-            </fo:flow>
-        </fo:page-sequence>
+            <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+            <xsl:call-template name="pullPrologIndexTerms.end-range"/>
+        </fo:block>
     </xsl:template>
 
   <!--  Bookmap appendices processing  -->
   <xsl:template name="processTopicAppendices">
-    <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.appendix">
-      <xsl:call-template name="startPageNumbering"/>
-      <xsl:call-template name="insertBodyStaticContents"/>
-      <fo:flow flow-name="xsl-region-body">
-        <fo:block xsl:use-attribute-sets="topic">
-          <xsl:call-template name="commonattributes"/>
-          <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
-            <fo:marker marker-class-name="current-topic-number">
-              <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
-              <xsl:for-each select="$topicref">
-                <xsl:apply-templates select="." mode="topicTitleNumber"/>
-              </xsl:for-each>
-            </fo:marker>
-            <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
-          </xsl:if>
-          
-          <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
-          
-          <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
-            <xsl:with-param name="type" select="'appendices'"/>
-          </xsl:apply-templates>
-          
-          <fo:block xsl:use-attribute-sets="topic.title">
-            <xsl:call-template name="pullPrologIndexTerms"/>
-            <xsl:for-each select="*[contains(@class,' topic/title ')]">
-              <xsl:apply-templates select="." mode="getTitle"/>
-            </xsl:for-each>
-          </fo:block>
-          
-          <xsl:choose>
-            <xsl:when test="$appendicesLayout='BASIC'">
-              <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                 contains(@class, ' topic/prolog '))]"/>
-              <!--xsl:apply-templates select="." mode="buildRelationships"/-->
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:apply-templates select="." mode="createMiniToc"/>
-            </xsl:otherwise>
-          </xsl:choose>
-                    
-          <xsl:for-each select="*[contains(@class,' topic/topic ')]">
-            <xsl:variable name="topicType" as="xs:string">
+      <xsl:variable name="expectedAppsContext" as="xs:boolean" 
+          select="empty(parent::*[contains(@class,' topic/topic ')])"/>
+      <xsl:choose>
+          <xsl:when test="$expectedAppsContext">
+              <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.appendix">
+                  <xsl:call-template name="startPageNumbering"/>
+                  <xsl:call-template name="insertBodyStaticContents"/>
+                  <fo:flow flow-name="xsl-region-body">
+                      <xsl:apply-templates select="." mode="processTopicAppendicesInsideFlow"/>
+                  </fo:flow>
+              </fo:page-sequence>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:apply-templates select="." mode="processTopicAppendicesInsideFlow"/>
+          </xsl:otherwise>
+      </xsl:choose>
+      <xsl:for-each select="*[contains(@class,' topic/topic ')]">
+          <xsl:variable name="topicType" as="xs:string">
               <xsl:call-template name="determineTopicType"/>
-            </xsl:variable>
-            <xsl:if test="$topicType = 'topicSimple'">
+          </xsl:variable>
+          <xsl:if test="not($topicType = 'topicSimple')">
               <xsl:apply-templates select="."/>
-            </xsl:if>
+          </xsl:if>
+      </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*" mode="processTopicAppendicesInsideFlow">
+    <fo:block xsl:use-attribute-sets="topic">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
+        <fo:marker marker-class-name="current-topic-number">
+          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+          <xsl:for-each select="$topicref">
+            <xsl:apply-templates select="." mode="topicTitleNumber"/>
           </xsl:for-each>
-          <xsl:call-template name="pullPrologIndexTerms.end-range"/>
-        </fo:block>
-      </fo:flow>
-    </fo:page-sequence>
-    <xsl:for-each select="*[contains(@class,' topic/topic ')]">
-      <xsl:variable name="topicType" as="xs:string">
-        <xsl:call-template name="determineTopicType"/>
-      </xsl:variable>
-      <xsl:if test="not($topicType = 'topicSimple')">
-        <xsl:apply-templates select="."/>
+        </fo:marker>
+        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
       </xsl:if>
-    </xsl:for-each>
+          
+      <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
+          
+      <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
+        <xsl:with-param name="type" select="'appendices'"/>
+      </xsl:apply-templates>
+          
+      <fo:block xsl:use-attribute-sets="topic.title">
+        <xsl:call-template name="pullPrologIndexTerms"/>
+        <xsl:for-each select="*[contains(@class,' topic/title ')]">
+          <xsl:apply-templates select="." mode="getTitle"/>
+        </xsl:for-each>
+      </fo:block>
+          
+      <xsl:choose>
+        <xsl:when test="$appendicesLayout='BASIC'">
+          <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
+                                             contains(@class, ' topic/prolog '))]"/>
+          <!--xsl:apply-templates select="." mode="buildRelationships"/-->
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="createMiniToc"/>
+        </xsl:otherwise>
+      </xsl:choose>
+                    
+      <xsl:for-each select="*[contains(@class,' topic/topic ')]">
+        <xsl:variable name="topicType" as="xs:string">
+          <xsl:call-template name="determineTopicType"/>
+        </xsl:variable>
+        <xsl:if test="$topicType = 'topicSimple'">
+          <xsl:apply-templates select="."/>
+        </xsl:if>
+      </xsl:for-each>
+      <xsl:call-template name="pullPrologIndexTerms.end-range"/>
+    </fo:block>
   </xsl:template>
 
     <!--  Bookmap Part processing  -->
     <xsl:template name="processTopicPart">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.part">
-            <xsl:call-template name="startPageNumbering"/>
-            <xsl:call-template name="insertBodyStaticContents"/>
-            <fo:flow flow-name="xsl-region-body">
-                <fo:block xsl:use-attribute-sets="topic">
-                    <xsl:call-template name="commonattributes"/>
-                    <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
-                        <fo:marker marker-class-name="current-topic-number">
-                          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
-                          <xsl:for-each select="$topicref">
-                            <xsl:apply-templates select="." mode="topicTitleNumber"/>
-                          </xsl:for-each>
-                        </fo:marker>
-                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
-                    </xsl:if>
-
-                    <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
-
-                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
-                        <xsl:with-param name="type" select="'part'"/>
-                    </xsl:apply-templates>
-
-                    <fo:block xsl:use-attribute-sets="topic.title">
-                        <xsl:call-template name="pullPrologIndexTerms"/>
-                        <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                            <xsl:apply-templates select="." mode="getTitle"/>
-                        </xsl:for-each>
-                    </fo:block>
-
-                    <xsl:choose>
-                      <xsl:when test="$partLayout='BASIC'">
-                          <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                             contains(@class, ' topic/prolog '))]"/>
-                          <!--xsl:apply-templates select="." mode="buildRelationships"/-->
-                      </xsl:when>
-                      <xsl:otherwise>
-                          <xsl:apply-templates select="." mode="createMiniToc"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:for-each select="*[contains(@class,' topic/topic ')]">
-                        <xsl:variable name="topicType" as="xs:string">
-                            <xsl:call-template name="determineTopicType"/>
-                        </xsl:variable>
-                        <xsl:if test="$topicType = 'topicSimple'">
-                            <xsl:apply-templates select="."/>
-                        </xsl:if>
-                    </xsl:for-each>
-                    <xsl:call-template name="pullPrologIndexTerms.end-range"/>
-                </fo:block>
-            </fo:flow>
-        </fo:page-sequence>
+        <xsl:variable name="expectedPartContext" as="xs:boolean" 
+            select="empty(parent::*[contains(@class,' topic/topic ')])"/>
+        <xsl:choose>
+            <xsl:when test="$expectedPartContext">
+                <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.part">
+                    <xsl:call-template name="startPageNumbering"/>
+                    <xsl:call-template name="insertBodyStaticContents"/>
+                    <fo:flow flow-name="xsl-region-body">
+                        <xsl:apply-templates select="." mode="processTopicPartInsideFlow"/>
+                    </fo:flow>
+                </fo:page-sequence>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="processTopicPartInsideFlow"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:for-each select="*[contains(@class,' topic/topic ')]">
             <xsl:variable name="topicType" as="xs:string">
                 <xsl:call-template name="determineTopicType"/>
@@ -447,6 +460,53 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:apply-templates select="."/>
             </xsl:if>
         </xsl:for-each>
+    </xsl:template>
+    <xsl:template match="*" mode="processTopicPartInsideFlow">
+        <fo:block xsl:use-attribute-sets="topic">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
+                <fo:marker marker-class-name="current-topic-number">
+                  <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                  <xsl:for-each select="$topicref">
+                    <xsl:apply-templates select="." mode="topicTitleNumber"/>
+                  </xsl:for-each>
+                </fo:marker>
+                <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
+            </xsl:if>
+
+            <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
+
+            <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
+                <xsl:with-param name="type" select="'part'"/>
+            </xsl:apply-templates>
+
+            <fo:block xsl:use-attribute-sets="topic.title">
+                <xsl:call-template name="pullPrologIndexTerms"/>
+                <xsl:for-each select="*[contains(@class,' topic/title ')]">
+                    <xsl:apply-templates select="." mode="getTitle"/>
+                </xsl:for-each>
+            </fo:block>
+
+            <xsl:choose>
+              <xsl:when test="$partLayout='BASIC'">
+                  <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
+                                                     contains(@class, ' topic/prolog '))]"/>
+                  <!--xsl:apply-templates select="." mode="buildRelationships"/-->
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:apply-templates select="." mode="createMiniToc"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:for-each select="*[contains(@class,' topic/topic ')]">
+                <xsl:variable name="topicType" as="xs:string">
+                    <xsl:call-template name="determineTopicType"/>
+                </xsl:variable>
+                <xsl:if test="$topicType = 'topicSimple'">
+                    <xsl:apply-templates select="."/>
+                </xsl:if>
+            </xsl:for-each>
+            <xsl:call-template name="pullPrologIndexTerms.end-range"/>
+        </fo:block>
     </xsl:template>
 
     <xsl:template name="processTopicNotices">
@@ -511,11 +571,25 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- Deprecated in 3.0: use mode="insertChapterFirstpageStaticContent" -->
     <xsl:template name="processFrontMatterTopic">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.frontmatter">
-             <!-- Ideally would use existing template "insertFrontMatterStaticContents". Using "insertBodyStaticContents"
+        <xsl:variable name="expectedFMContext" as="xs:boolean" 
+            select="empty(parent::*[contains(@class,' topic/topic ')])"/>
+        <xsl:choose>
+            <xsl:when test="$expectedFMContext">
+                <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.frontmatter">
+                    <!-- Ideally would use existing template "insertFrontMatterStaticContents". Using "insertBodyStaticContents"
                   for compatibility with 2.3 and earlier; front matter version drops headers, page numbers. -->
-             <xsl:call-template name="insertBodyStaticContents"/>
-             <fo:flow flow-name="xsl-region-body">
+                    <xsl:call-template name="insertBodyStaticContents"/>
+                    <fo:flow flow-name="xsl-region-body">
+                        <xsl:apply-templates select="." mode="processTopicFrontMatterInsideFlow"/>
+                    </fo:flow>
+                </fo:page-sequence>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="processTopicFrontMatterInsideFlow"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template match="*" mode="processTopicFrontMatterInsideFlow">
                  <fo:block xsl:use-attribute-sets="topic">
                      <xsl:call-template name="commonattributes"/>
                      <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
@@ -536,8 +610,6 @@ See the accompanying LICENSE file for applicable license.
                      </fo:block>
                      <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
                  </fo:block>
-             </fo:flow>
-         </fo:page-sequence>
    </xsl:template>
 
     <xsl:template name="insertChapterFirstpageStaticContent">

@@ -31,7 +31,7 @@ import org.apache.tools.ant.Task;
  */
 
 public class UriDirnameTask extends Task {
-    
+
     private URI file;
     private String property;
 
@@ -61,7 +61,7 @@ public class UriDirnameTask extends Task {
             getProject().setNewProperty(property, value);
         }
     }
-    
+
     private String getParentDir(final String path) {
         String value = path;
         if (!value.endsWith(URI_SEPARATOR)) {

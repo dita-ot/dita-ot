@@ -24,6 +24,7 @@ import java.net.URI;
 import java.util.*;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
+import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.StringUtils.split;
@@ -77,6 +78,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
         final String classValue = getValue(topicref, ATTRIBUTE_NAME_CLASS);
         final String processRoleValue = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
+        final String formatValue = getValue(topicref, ATTRIBUTE_NAME_FORMAT);
 
         URI outputFileName = outputFile;
         Writer tempWriter = null;
@@ -100,7 +102,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 parseFilePath = hrefValue;
             }
 
-            if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)) {
+            if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue) && isFormatDita(formatValue)) {
                 // now the path to target file make sense
                 if (chunkValue.contains(CHUNK_TO_CONTENT)) {
                     // if current element contains "to-content" in chunk attribute
@@ -187,7 +189,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 if (s != null) {
                     selectMethod = s;
                     // if the current topic href referred to a entire
-                    // topic file,it will be handled in "document" level.
+                    // topic file, it will be handled in "document" level.
                     if (targetTopicId == null) {
                         selectMethod = CHUNK_SELECT_DOCUMENT;
                     }
@@ -304,7 +306,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, UNIX_SEPARATOR + new File(workDir).getAbsolutePath());
                 }
                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toString());
-                
+
                 final File path2rootmap = toFile(getRelativePath(outputFileName, job.getInputMap())).getParentFile();
                 writeProcessingInstruction(ditaFileOutput, PI_PATH2ROOTMAP_TARGET_URI, path2rootmap == null ? "./" : toURI(path2rootmap).toString());
 

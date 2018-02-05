@@ -22,7 +22,7 @@ import org.xml.sax.Attributes;
 
 /**
  * Class description goes here.
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class MessageBean {
@@ -77,7 +77,7 @@ public final class MessageBean {
 
     /**
      * Copy constructor.
-     * 
+     *
      * @param message message
      */
     public MessageBean(final MessageBean message) {
@@ -123,7 +123,7 @@ public final class MessageBean {
     public String getType() {
         return type != null ? type.name() : null;
     }
-    
+
     /**
      * Set error location in source document.
      * @param locator current location during parsing
@@ -141,11 +141,11 @@ public final class MessageBean {
                 throw new RuntimeException("Failed to parse URI '" + locator.getSystemId() + "': " + e.getMessage(), e);
             }
         }
-        ret.srcLine = locator.getLineNumber(); 
+        ret.srcLine = locator.getLineNumber();
         ret.srcColumn = locator.getColumnNumber();
         return ret;
     }
-    
+
     /**
      * Set error location in source document.
      * @param atts source element attributes

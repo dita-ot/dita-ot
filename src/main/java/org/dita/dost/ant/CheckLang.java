@@ -25,9 +25,9 @@ import org.dita.dost.util.StringUtils;
 
 /**
  * This class is for get the first xml:lang value set in ditamap/topic files
- * 
+ *
  * @version 1.0 2010-09-30
- * 
+ *
  * @author Zhang Di Hua
  */
 public final class CheckLang extends Task {
@@ -48,7 +48,7 @@ public final class CheckLang extends Task {
      * Executes the Ant task.
      */
     @Override
-    public void execute(){
+    public void execute() {
         logger = new DITAOTAntLogger(getProject());
         logger.info(message);
 
@@ -77,17 +77,17 @@ public final class CheckLang extends Task {
             //parse the user input file(usually a map)
             saxParser.parse(inputmap, parser);
             String langCode = parser.getLangCode();
-            if(!StringUtils.isEmptyString(langCode)){
+            if (!StringUtils.isEmptyString(langCode)) {
                 setActiveProjectProperty("htmlhelp.locale", langCode);
-            }else{
+            } else {
                 //parse topic files
-                for (final FileInfo f: job.getFileInfo()){
+                for (final FileInfo f: job.getFileInfo()) {
                     if (ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
                         final File topicFile = new File(tempdir, f.file.getPath());
-                        if(topicFile.exists()){
+                        if (topicFile.exists()) {
                             saxParser.parse(topicFile, parser);
                             langCode = parser.getLangCode();
-                            if(!StringUtils.isEmptyString(langCode)){
+                            if (!StringUtils.isEmptyString(langCode)) {
                                 setActiveProjectProperty("htmlhelp.locale", langCode);
                                 break;
                             }
@@ -95,7 +95,7 @@ public final class CheckLang extends Task {
                     }
                 }
                 //no lang is set
-                if(StringUtils.isEmptyString(langCode)){
+                if (StringUtils.isEmptyString(langCode)) {
                     //use default lang code
                     setActiveProjectProperty("htmlhelp.locale", "en-us");
                 }

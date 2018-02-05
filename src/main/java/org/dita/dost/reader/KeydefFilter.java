@@ -29,14 +29,14 @@ import org.xml.sax.SAXException;
 /**
  * This class extends AbstractReader, used to parse relevant dita topics and
  * ditamap files for GenMapAndTopicListModule.
- * 
+ *
  * <p>
  * <strong>Not thread-safe</strong>. Instances can be reused by calling
  * {@link #reset()} between calls to {@link org.xml.sax.XMLReader#parse(InputSource)}.
  * </p>
  */
 public final class KeydefFilter extends AbstractXMLFilter {
-    
+
     /** Basedir of the current parsing file */
     private URI currentDir = null;
     /** Map of key definitions */
@@ -54,16 +54,16 @@ public final class KeydefFilter extends AbstractXMLFilter {
 
     /**
      * Get the Key definitions.
-     * 
+     *
      * @return Key definitions map
      */
     public Map<String, KeyDef> getKeysDMap() {
         return keysDefMap;
     }
-    
+
     /**
      * Set the relative directory of current file.
-     * 
+     *
      * @param dir dir
      */
     public void setCurrentDir(final URI dir) {
@@ -71,7 +71,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
     }
 
     /**
-     * 
+     *
      * Reset the internal variables.
      */
     public void reset() {
@@ -95,13 +95,13 @@ public final class KeydefFilter extends AbstractXMLFilter {
     @Override
     public void endDocument() throws SAXException {
         checkMultiLevelKeys(keysDefMap, keysRefMap);
-        
+
         getContentHandler().endDocument();
     }
 
     /**
      * Parse the keys attributes.
-     * 
+     *
      * @param atts all attributes
      */
     private void handleKeysAttr(final Attributes atts) {
@@ -112,9 +112,9 @@ public final class KeydefFilter extends AbstractXMLFilter {
             if (copyTo != null) {
                 target = copyTo;
             }
-    
+
             final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
-            
+
             // Many keys can be defined in a single definition, like
             // keys="a b c", a, b and c are seperated by blank.
             for (final String key : attrValue.trim().split("\\s+")) {
@@ -141,7 +141,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
                     } else {
                         // target is null or empty, it is useful in the future
                         // when consider the content of key definition
-                        keysDefMap.put(key, new KeyDef(key, null, null, null, null,null));
+                        keysDefMap.put(key, new KeyDef(key, null, null, null, null, null));
                     }
                 } else {
                     logger.info(MessageUtils.getMessage("DOTJ045I", key).toString());
@@ -149,7 +149,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
             }
         }
     }
-    
+
     /**
      * Get multi-level keys list
      */

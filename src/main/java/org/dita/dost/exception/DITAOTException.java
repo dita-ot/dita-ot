@@ -34,7 +34,7 @@ public final class DITAOTException extends Exception {
 
     /**
      * Constructs a new exception with the specified detail message.
-     * 
+     *
      * @param message the detail message
      */
     public DITAOTException(final String message) {
@@ -43,7 +43,7 @@ public final class DITAOTException extends Exception {
 
     /**
      * Constructs a new exception with the specified detail cause.
-     * 
+     *
      * @param cause the cause
      */
     public DITAOTException(final Throwable cause) {
@@ -53,7 +53,7 @@ public final class DITAOTException extends Exception {
     /**
      * Constructs a new exception with the specified detail message and
      * cause.
-     * 
+     *
      * @param message the detail message.
      * @param cause the cause
      */
@@ -64,7 +64,7 @@ public final class DITAOTException extends Exception {
     /**
      * Constructs a new exception with the detailed messagebean and
      * cause.
-     * 
+     *
      * @param msgBean the bean contains detailed information for log statistic.
      * @param cause the cause
      * @param message the detail message.

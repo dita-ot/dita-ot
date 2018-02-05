@@ -27,7 +27,7 @@ public interface AbstractPipelineModule {
 
     /**
      * Start the process of this module with the input.
-     * 
+     *
      * <p>{@link #setLogger(DITAOTLogger)} must be called before calling this method.</p>
      *
      * @param input input

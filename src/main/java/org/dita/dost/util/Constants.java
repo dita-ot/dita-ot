@@ -11,9 +11,9 @@ import static javax.xml.XMLConstants.*;
 
 /**
  * This class contains all the constants used in DITA-OT.
- * 
+ *
  * @version 1.0 2005-06-22
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class Constants {
@@ -595,7 +595,7 @@ public final class Constants {
     public static final DitaClass DITAVAREF_D_DVR_RESOURCESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrResourceSuffix ");
     public static final DitaClass DITAVAREF_D_DVR_KEYSCOPEPREFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopePrefix ");
     public static final DitaClass DITAVAREF_D_DVR_KEYSCOPESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopeSuffix ");
-    
+
     public static final DitaClass SUBMAP = new DitaClass("+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ");
 
     /**maplinks element.*/
@@ -679,11 +679,11 @@ public final class Constants {
     /**generated imagerefuri attribute.*/
     public static final String ATTRIBUTE_NAME_IMAGEREF_URI = "imagerefuri";
     /**start attribute.*/
-    public static final String ATTRIBUTE_NAME_START="start";
+    public static final String ATTRIBUTE_NAME_START = "start";
     /**conref attribute.*/
-    public static final String ATTRIBUTE_NAME_END="end";
+    public static final String ATTRIBUTE_NAME_END = "end";
     /**conaction attribute.*/
-    public static final String ATTRIBUTE_NAME_CONACTION="conaction";
+    public static final String ATTRIBUTE_NAME_CONACTION = "conaction";
     /**keyref attribute.*/
     public static final String ATTRIBUTE_NAME_KEYREF = "keyref";
     /**conkeyref attribute.*/
@@ -721,7 +721,7 @@ public final class Constants {
 
     public static final String ATTRIBUTE_CASCADE_VALUE_MERGE = "merge";
     public static final String ATTRIBUTE_CASCADE_VALUE_NOMERGE = "nomerge";
-    
+
     /** URI path separator. */
     public static final String URI_SEPARATOR = "/";
     /** UNIX path separator. */
@@ -773,7 +773,7 @@ public final class Constants {
     @Deprecated
     public static final String COPYTO_TARGET_TO_SOURCE_MAP_LIST = "copytotarget2sourcemaplist";
     /** Property name for relflag image list file */
-    public static final String REL_FLAGIMAGE_LIST="relflagimagelist";
+    public static final String REL_FLAGIMAGE_LIST = "relflagimagelist";
 
     /**Constants for common params used in ant invoker(tempDir).*/
     public static final String ANT_INVOKER_PARAM_TEMPDIR = "tempDir";
@@ -811,18 +811,18 @@ public final class Constants {
     /**Constants for extensive params used in ant invoker(transtype).*/
     public static final String ANT_INVOKER_EXT_PARAM_TRANSTYPE = "transtype";
     /**Constants for extensive params used in ant invoker(outercontrol).*/
-    public static final String ANT_INVOKER_EXT_PARAM_OUTTERCONTROL="outercontrol";
+    public static final String ANT_INVOKER_EXT_PARAM_OUTTERCONTROL = "outercontrol";
     /**Constants for extensive params used in ant invoker(generatecopyouter).*/
-    public static final String ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER="generatecopyouter";
+    public static final String ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER = "generatecopyouter";
     /**Constants for extensive params used in ant invoker(onlytopicinmap).*/
-    public static final String ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP="onlytopicinmap";
+    public static final String ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP = "onlytopicinmap";
     /**Constants for extensive params used in ant invoker(validate).*/
-    public static final String ANT_INVOKER_EXT_PARAM_VALIDATE="validate";
+    public static final String ANT_INVOKER_EXT_PARAM_VALIDATE = "validate";
     /**Constants for extensive params used in ant invoker(outputdir).*/
-    public static final String ANT_INVOKER_EXT_PARAM_OUTPUTDIR="outputdir";
+    public static final String ANT_INVOKER_EXT_PARAM_OUTPUTDIR = "outputdir";
     /**Constants for extensive params used in ant invoker(gramcache).*/
-    public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE="gramcache";
-    public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID="setsystemid";
+    public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE = "gramcache";
+    public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID = "setsystemid";
     public static final String ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE = "force-unique";
     public static final String ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR = "generate-debug-attributes";
     public static final String ANT_INVOKER_EXT_PARAM_PROCESSING_MODE = "processing-mode";

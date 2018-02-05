@@ -45,20 +45,20 @@ import org.w3c.dom.NodeList;
 /**
  * This class is for converting charset and escaping
  * entities in html help component files.
- * 
+ *
  * @version 1.0 2010-09-30
- * 
+ *
  * @author Zhang Di Hua
  */
 public final class ConvertLang extends Task {
-    
+
     private static final String ATTRIBUTE_FORMAT_VALUE_WINDOWS = "windows";
     private static final String ATTRIBUTE_FORMAT_VALUE_HTML = "html";
 
     private static final String tag1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     private static final String tag2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>[OPTIONS]";
     private static final String tag3 = "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;";
-    
+
     private static final String CODEPAGE_ISO_8859_1 = "iso-8859-1";
     private static final String CODEPAGE_ISO_8859_2 = "iso-8859-2";
     private static final String CODEPAGE_ISO_8859_7 = "iso-8859-7";
@@ -91,7 +91,7 @@ public final class ConvertLang extends Task {
      * Executes the Ant task.
      */
     @Override
-    public void execute(){
+    public void execute() {
         logger = new DITAOTAntLogger(getProject());
         logger.info(message);
 
@@ -136,7 +136,7 @@ public final class ConvertLang extends Task {
 
     }
 
-    private void createEntityMap(){
+    private void createEntityMap() {
 
         final Properties entities = new Properties();
         InputStream in = null;
@@ -167,22 +167,22 @@ public final class ConvertLang extends Task {
             final Element root = doc.getDocumentElement();
             final NodeList childNodes = root.getChildNodes();
             //search the node with langcode
-            for(int i = 0; i< childNodes.getLength(); i++){
+            for (int i = 0; i < childNodes.getLength(); i++) {
                 final Node node = childNodes.item(i);
                 //only for element node
-                if(node.getNodeType() == Node.ELEMENT_NODE){
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
                     final Element e = (Element)node;
                     final String lang = e.getAttribute(ATTRIBUTE_NAME_LANG);
                     //node found
-                    if(langcode.equalsIgnoreCase(lang)||
-                            lang.startsWith(langcode)){
+                    if (langcode.equalsIgnoreCase(lang)||
+                            lang.startsWith(langcode)) {
                         //store the value into a map
                         //charsetMap = new HashMap<String, String>();
                         //iterate child nodes skip the 1st one
                         final NodeList subChild = e.getChildNodes();
-                        for(int j = 0; j< subChild.getLength(); j++){
+                        for (int j = 0; j < subChild.getLength(); j++) {
                             final Node subNode = subChild.item(j);
-                            if(subNode.getNodeType() == Node.ELEMENT_NODE){
+                            if (subNode.getNodeType() == Node.ELEMENT_NODE) {
                                 final Element elem = (Element)subNode;
                                 final String format = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
                                 final String charset = elem.getAttribute(ATTRIBUTE_NAME_CHARSET);
@@ -196,7 +196,7 @@ public final class ConvertLang extends Task {
                 }
             }
             //no matched charset is found set default value en-us
-            if(charsetMap.size() == 0){
+            if (charsetMap.size() == 0) {
                 charsetMap.put(ATTRIBUTE_FORMAT_VALUE_HTML, "iso-8859-1");
                 charsetMap.put(ATTRIBUTE_FORMAT_VALUE_WINDOWS, "windows-1252");
             }
@@ -211,7 +211,7 @@ public final class ConvertLang extends Task {
         }
     }
 
-    private String replaceXmlTag(final String source,final String tag){
+    private String replaceXmlTag(final String source, final String tag) {
         final int startPos = source.indexOf(tag);
         final int endPos = startPos + tag.length();
         return source.substring(0, startPos) + source.substring(endPos);
@@ -228,17 +228,17 @@ public final class ConvertLang extends Task {
         }
     }
     //Recursive method
-    private void convertCharset(final File inputFile){
-        if(inputFile.isDirectory()){
+    private void convertCharset(final File inputFile) {
+        if (inputFile.isDirectory()) {
             final File[] files = inputFile.listFiles();
             if (files != null) {
                 for (final File file : files) {
                     convertCharset(file);
                 }
             }
-        }else if(FileUtils.isHTMLFile(inputFile.getName())||
+        } else if (FileUtils.isHTMLFile(inputFile.getName())||
                 FileUtils.isHHCFile(inputFile.getName())||
-                FileUtils.isHHKFile(inputFile.getName())){
+                FileUtils.isHHKFile(inputFile.getName())) {
 
             final String fileName = inputFile.getAbsolutePath();
             final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
@@ -256,9 +256,9 @@ public final class ConvertLang extends Task {
                 writer = new BufferedWriter(streamWriter);
 
                 String value = reader.readLine();
-                while(value != null){
+                while(value != null) {
                     //meta tag contains charset found
-                    if(value.contains("<meta http-equiv") && value.contains("charset")){
+                    if (value.contains("<meta http-equiv") && value.contains("charset")) {
                         final int insertPoint = value.indexOf("charset=") + "charset=".length();
                         final String subString = value.substring(0, insertPoint);
                         final int remainIndex = value.indexOf(UTF8) + UTF8.length();
@@ -271,13 +271,13 @@ public final class ConvertLang extends Task {
                         writer.write(newValue);
                         //add line break
                         writer.write(LINE_SEPARATOR);
-                    }else{
-                        if(value.contains(tag1)){
-                            value = replaceXmlTag(value,tag1);
-                        }else if(value.contains(tag2)){
-                            value = replaceXmlTag(value,tag2);
-                        }else if(value.contains(tag3)){
-                            value = replaceXmlTag(value,tag3);
+                    } else {
+                        if (value.contains(tag1)) {
+                            value = replaceXmlTag(value, tag1);
+                        } else if (value.contains(tag2)) {
+                            value = replaceXmlTag(value, tag2);
+                        } else if (value.contains(tag3)) {
+                            value = replaceXmlTag(value, tag3);
                         }
 
                         //other values
@@ -330,7 +330,7 @@ public final class ConvertLang extends Task {
     //Recursive method
     private void updateEntityAndLang(final File inputFile) {
         //directory case
-        if(inputFile.isDirectory()){
+        if (inputFile.isDirectory()) {
             final File[] files = inputFile.listFiles();
             if (files != null) {
                 for (final File file : files) {
@@ -339,15 +339,15 @@ public final class ConvertLang extends Task {
             }
         }
         //html file case
-        else if(FileUtils.isHTMLFile(inputFile.getName())){
+        else if (FileUtils.isHTMLFile(inputFile.getName())) {
             //do converting work
             convertEntityAndCharset(inputFile, ATTRIBUTE_FORMAT_VALUE_HTML);
 
         }
         //hhp/hhc/hhk file case
-        else if(FileUtils.isHHPFile(inputFile.getName()) ||
+        else if (FileUtils.isHHPFile(inputFile.getName()) ||
                 FileUtils.isHHCFile(inputFile.getName()) ||
-                FileUtils.isHHKFile(inputFile.getName())){
+                FileUtils.isHHKFile(inputFile.getName())) {
             //do converting work
             convertEntityAndCharset(inputFile, ATTRIBUTE_FORMAT_VALUE_WINDOWS);
             //update language setting of hhp file
@@ -372,17 +372,17 @@ public final class ConvertLang extends Task {
                 writer = new BufferedWriter(streamWriter);
 
                 String value = reader.readLine();
-                while(value != null){
-                    if(value.contains(tag1)){
-                        value = replaceXmlTag(value,tag1);
-                    }else if(value.contains(tag2)){
-                        value = replaceXmlTag(value,tag2);
-                    }else if(value.contains(tag3)){
-                        value = replaceXmlTag(value,tag3);
+                while(value != null) {
+                    if (value.contains(tag1)) {
+                        value = replaceXmlTag(value, tag1);
+                    } else if (value.contains(tag2)) {
+                        value = replaceXmlTag(value, tag2);
+                    } else if (value.contains(tag3)) {
+                        value = replaceXmlTag(value, tag3);
                     }
 
                     //meta tag contains charset found
-                    if(value.contains("Language=")){
+                    if (value.contains("Language=")) {
                         String newValue = langMap.get(langcode);
                         if (newValue == null) {
                             newValue = langMap.get(langcode.split("-")[0]);
@@ -394,7 +394,7 @@ public final class ConvertLang extends Task {
                             throw new IllegalArgumentException("Unsupported language code '" + langcode + "', unable to map to a Locale ID.");
                         }
 
-                    }else{
+                    } else {
                         //other values
                         writer.write(value);
                         writer.write(LINE_SEPARATOR);
@@ -432,7 +432,7 @@ public final class ConvertLang extends Task {
         }
 
     }
-    
+
     private void updateExceptionCharacters(final String charset) {
         if (exceptionCharset != null && exceptionCharset.equals(charset)) {
             return;
@@ -532,7 +532,7 @@ public final class ConvertLang extends Task {
 
             //read a character
             int charCode = reader.read();
-            while(charCode != -1){
+            while(charCode != -1) {
                 final String key = String.valueOf(charCode);
                 //Is an entity char
                 if (entityMap.containsKey(key) &&

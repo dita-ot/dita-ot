@@ -38,9 +38,9 @@ public final class CatalogUtils {
      * Set directory to find catalog-dita.xml.
      * @param ditaDir ditaDir
      */
-    public static synchronized void setDitaDir(final File ditaDir){
-        catalogResolver=null;
-        CatalogUtils.ditaDir=ditaDir;
+    public static synchronized void setDitaDir(final File ditaDir) {
+        catalogResolver = null;
+        CatalogUtils.ditaDir = ditaDir;
     }
 
     /**

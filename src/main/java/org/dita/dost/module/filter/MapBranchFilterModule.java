@@ -404,7 +404,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
             elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
         }
     }
-    
+
     static URI generateCopyTo(final URI href, final Branch filter) {
         final StringBuilder buf = new StringBuilder(href.toString());
         final Optional<String> suffix = filter.resourceSuffix;
@@ -428,5 +428,5 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         });
         return toURI(buf.toString());
     }
-    
+
 }

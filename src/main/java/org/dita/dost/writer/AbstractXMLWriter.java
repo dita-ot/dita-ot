@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 
 /**
  * AbstractXMLWriter class.
- * 
+ *
  * @version 1.0 2005-6-28
  * @author Zhang, Yuan Peng
  */
@@ -90,7 +90,7 @@ ContentHandler, EntityResolver {
             throws SAXException, IOException {
         return null;
     }
-    
+
     @Override
     public abstract void write(File filename) throws DITAOTException;
 
@@ -103,5 +103,5 @@ ContentHandler, EntityResolver {
     public void setJob(final Job job) {
         this.job = job;
     }
-    
+
 }

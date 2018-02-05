@@ -63,11 +63,11 @@
           href="#topic/table"/>. Now do it again, <xref class="- topic/xref " href="#topic/table"
           >with link text</xref>.</p>
       <p class="- topic/p ">Xref to an external website: <xref class="- topic/xref " format="html"
-          href="http://www.ibm.com"/>. Now do it again, <xref class="- topic/xref " format="html"
-          href="http://www.ibm.com">with link text</xref>.</p>
+         scope="external" href="http://www.ibm.com"/>. Now do it again, <xref class="- topic/xref " format="html"
+         scope="external" href="http://www.ibm.com">with link text</xref>.</p>
       <p class="- topic/p ">Xref to an external website with an anchor: <xref class="- topic/xref "
-          format="html" href="http://www.ibm.com/index.html#anchor"/>. Now do it again, <xref
-          class="- topic/xref " format="html" href="http://www.ibm.com/index.html#anchor">with link
+          format="html" scope="external" href="http://www.ibm.com/index.html#anchor"/>. Now do it again, <xref
+          class="- topic/xref " format="html" scope="external" href="http://www.ibm.com/index.html#anchor">with link
           text</xref>.</p>
       <fig class="- topic/fig " id="fig">
         <title class="- topic/title ">figure title</title>

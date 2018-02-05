@@ -182,6 +182,7 @@
       <xs:attributeGroup ref="topicref-atts-for-subjectScheme"/>
       <xs:attributeGroup ref="select-atts"/>
       <xs:attribute ref="ditaarch:DITAArchVersion"/>
+      <xs:attributeGroup ref="domains-att"/>     
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:attributeGroup name="subjectScheme.attlist">

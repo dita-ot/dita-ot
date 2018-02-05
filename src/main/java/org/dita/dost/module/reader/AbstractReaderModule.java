@@ -9,6 +9,8 @@
 package org.dita.dost.module.reader;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.MultimapBuilder.SetMultimapBuilder;
+import com.google.common.collect.SetMultimap;
 import org.apache.commons.io.FileUtils;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
@@ -71,7 +73,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Set of all images used for flagging */
     private final Set<URI> flagImageSet = new LinkedHashSet<>(128);
     /** Set of all HTML and other non-DITA or non-image files */
-    final Set<URI> htmlSet = new HashSet<>(128);
+    final SetMultimap<String, URI> htmlSet = SetMultimapBuilder.hashKeys().hashSetValues().build();
     /** Set of all the href targets */
     private final Set<URI> hrefTargetSet = new HashSet<>(128);
     /** Set of all the conref targets */
@@ -628,8 +630,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             f.isFlagImage = true;
             f.format = ATTR_FORMAT_VALUE_IMAGE;
         }
-        for (final URI file: htmlSet) {
-            getOrCreateFileInfo(fileinfos, file).format = ATTR_FORMAT_VALUE_HTML;
+        for (final String format: htmlSet.keySet()) {
+            for (final URI file : htmlSet.get(format)) {
+                getOrCreateFileInfo(fileinfos, file).format = format;
+            }
         }
         for (final URI file: hrefTargetSet) {
             getOrCreateFileInfo(fileinfos, file).isTarget = true;

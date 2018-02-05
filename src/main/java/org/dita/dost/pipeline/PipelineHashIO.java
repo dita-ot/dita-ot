@@ -14,9 +14,9 @@ import java.util.Map;
 /**
  * PipelineHashIO implements AbstractPipelineInput. It put all of the input information
  * in a hash map.
- * 
+ *
  * @author Lian, Li
- * 
+ *
  * @deprecated use {@link java.util.Map} instead. Deprecated since 2.3
  */
 @Deprecated
@@ -35,7 +35,7 @@ AbstractPipelineOutput {
 
     /**
      * Set the attribute vale with name into hash map.
-     * 
+     *
      * @param name name
      * @param value value
      */
@@ -46,7 +46,7 @@ AbstractPipelineOutput {
 
     /**
      * Get the attribute value according to its name.
-     * 
+     *
      * @param name name
      * @return String value
      */

@@ -20,7 +20,7 @@ import static org.dita.dost.util.Constants.*;
 
 /**
  * Normalize content.
- * 
+ *
  * <ul>
  *   <li>Add default metadata {@code cascade} attribute value.</li>
  *   <li>Strip redundant whitespace from {@code domains} attribute value.</li>

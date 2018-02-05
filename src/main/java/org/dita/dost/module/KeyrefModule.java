@@ -77,7 +77,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
     /**
      * Entry point of KeyrefModule.
-     * 
+     *
      * @param input Input parameters and resources.
      * @return null
      * @throws DITAOTException exception
@@ -136,7 +136,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                     job.add(f);
                 }
             }
-    
+
             try {
                 job.write();
             } catch (final IOException e) {

@@ -28,7 +28,7 @@ abstract class ImportAction implements IAction {
     /** Action values. */
     final Set<String> valueSet;
     /** Action parameters. */
-    final Hashtable<String,String> paramTable;
+    final Hashtable<String, String> paramTable;
     private DITAOTLogger logger;
     /** Plug-in features. */
     Map<String, Features> featureTable = null;
@@ -45,7 +45,7 @@ abstract class ImportAction implements IAction {
     public String getResult() {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * get result.
      */

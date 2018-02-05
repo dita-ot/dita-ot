@@ -52,7 +52,7 @@ public final class IntegratorTask extends Task {
         }
         this.ditaDir = ditaDir;
     }
-    
+
     /**
      * Set the properties file.
      * @param propertiesFile propertiesFile

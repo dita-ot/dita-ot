@@ -154,6 +154,10 @@ public final class TopicReaderModule extends AbstractReaderModule {
                 int eventType = in.next();
                 switch (eventType) {
                     case START_ELEMENT:
+                        final String cls = in.getAttributeValue(null, ATTRIBUTE_NAME_CLASS);
+                        if (!MAP_TOPICREF.matches(cls)) {
+                            break;
+                        }
                         final URI href = getHref(in);
                         if (href != null) {
                             FileInfo fi = job.getFileInfo(startFileInfo.src.resolve(href));
@@ -264,7 +268,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
                     logger.warn(MessageUtils.getMessage("DOTX008W", file.filename.toString()).toString());
                 }
             } else {
-                htmlSet.add(file.filename);
+                htmlSet.put(file.format, file.filename);
             }
         }
     }

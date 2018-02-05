@@ -32,9 +32,9 @@ final class Features {
     private final File pluginDir;
     private final File ditaDir;
     private final Map<String, ExtensionPoint> extensionPoints;
-    private final Hashtable<String,List<String>> featureTable;
+    private final Hashtable<String, List<String>> featureTable;
     private final List<PluginRequirement> requireList;
-    private final Hashtable<String,String> metaTable;
+    private final Hashtable<String, String> metaTable;
     private final List<String> templateList;
 
     /**
@@ -45,7 +45,7 @@ final class Features {
     public Features(final File pluginDir, final File ditaDir) {
         this.pluginDir = pluginDir;
         this.ditaDir = ditaDir;
-        extensionPoints= new HashMap<>();
+        extensionPoints = new HashMap<>();
         featureTable = new Hashtable<>(16);
         requireList = new ArrayList<>(8);
         metaTable = new Hashtable<>(16);
@@ -56,7 +56,7 @@ final class Features {
      * Return the feature pluginDir.
      * @return pluginDir
      */
-    public File getPluginDir(){
+    public File getPluginDir() {
         return pluginDir;
     }
 
@@ -85,7 +85,7 @@ final class Features {
      * @param id feature id
      * @return feature name
      */
-    public List<String> getFeature(final String id){
+    public List<String> getFeature(final String id) {
         return featureTable.get(id);
     }
 
@@ -93,7 +93,7 @@ final class Features {
      * Return the set of all features.
      * @return features
      */
-    public Map<String, List<String>> getAllFeatures(){
+    public Map<String, List<String>> getAllFeatures() {
         return featureTable;
     }
 
@@ -137,7 +137,7 @@ final class Features {
      * Add the required feature id.
      * @param id feature id
      */
-    public void addRequire(final String id){
+    public void addRequire(final String id) {
         final PluginRequirement requirement = new PluginRequirement();
         requirement.addPlugins(id);
         requireList.add(requirement);
@@ -148,7 +148,7 @@ final class Features {
      * @param id feature id
      * @param importance importance
      */
-    public void addRequire(final String id, final String importance){
+    public void addRequire(final String id, final String importance) {
         final PluginRequirement requirement = new PluginRequirement();
         requirement.addPlugins(id);
         if (importance != null) {
@@ -161,7 +161,7 @@ final class Features {
      * Get the iterator of required list.
      * @return iterator
      */
-    public Iterator<PluginRequirement> getRequireListIter(){
+    public Iterator<PluginRequirement> getRequireListIter() {
         return requireList.iterator();
     }
 
@@ -170,7 +170,7 @@ final class Features {
      * @param type type
      * @param value value
      */
-    public void addMeta(final String type, final String value){
+    public void addMeta(final String type, final String value) {
         metaTable.put(type, value);
     }
 
@@ -179,7 +179,7 @@ final class Features {
      * @param type type
      * @return meat info
      */
-    public String getMeta(final String type){
+    public String getMeta(final String type) {
         return metaTable.get(type);
     }
 
@@ -187,14 +187,14 @@ final class Features {
      * Add a template.
      * @param file file name
      */
-    public void addTemplate(final String file){
+    public void addTemplate(final String file) {
         templateList.add(file);
     }
     /**
      * get all templates.
      * @return templates list
      */
-    public List<String> getAllTemplates(){
+    public List<String> getAllTemplates() {
         return templateList;
     }
 }
