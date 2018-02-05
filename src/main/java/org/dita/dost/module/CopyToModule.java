@@ -337,7 +337,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             return toFile(URLUtils.getRelativePath(filename));
         }
     }
-    
+
     /**
      * Get path to root map
      *

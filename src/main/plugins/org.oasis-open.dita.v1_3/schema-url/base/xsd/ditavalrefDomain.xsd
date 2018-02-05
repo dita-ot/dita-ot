@@ -119,11 +119,9 @@
       <xs:attributeGroup ref="ditavalref.attributes"/>
    </xs:complexType>
    <xs:group name="ditavalref.content">
-      <xs:sequence>
-         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="ditavalmeta"/>
-         </xs:choice>
-      </xs:sequence>
+     <xs:sequence>
+       <xs:group ref="ditavalmeta" minOccurs="0"/>
+     </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="ditavalref.attributes">
       <xs:attribute name="navtitle" type="xs:string"/>

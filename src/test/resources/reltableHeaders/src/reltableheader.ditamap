@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<!--Also tests all methods for setting title in reltable column (title, navtitle, @navtitle)-->
+<map>
+  <title>Test reltable column headers</title>
+<topicref href="maintopic.dita"/>
+<topicref href="reftopic.dita"/>
+<topicref href="tasktopic.dita"/>
+<topicref href="term1.dita"/>
+<topicref href="term2.dita"/>
+<reltable>
+<title>Test group title in one column, but not other</title>
+<relheader>
+<relcolspec/>
+<relcolspec>
+<topicref>
+<topicmeta>
+<navtitle>Some good terms</navtitle>
+</topicmeta>
+</topicref>
+</relcolspec>
+</relheader>
+<relrow>
+<relcell>
+<topicref href="maintopic.dita"/>
+</relcell>
+<relcell>
+<topicref href="term1.dita"/>
+<topicref href="term2.dita"/>
+</relcell>
+</relrow>
+</reltable>
+<reltable>
+<title>Test group title in both columns</title>
+<relheader>
+<relcolspec>
+<title>Some good reference material</title>
+</relcolspec>
+<relcolspec>
+<topicref navtitle="Some really good terms"/>
+</relcolspec>
+</relheader>
+<relrow>
+<relcell>
+<topicref href="reftopic.dita"/>
+</relcell>
+<relcell>
+<topicref href="term1.dita"/>
+<topicref href="term2.dita"/>
+</relcell>
+</relrow>
+</reltable>
+<reltable>
+<title>Test topic reference in each column (DITA, non-DITA)</title>
+<relheader>
+<relcolspec>
+<topicref href="reftopic.dita"/>
+</relcolspec>
+<relcolspec>
+<topicref href="http://dita-ot.org" scope="external" format="html"/>
+</relcolspec>
+</relheader>
+<relrow>
+<relcell>
+<topicref href="maintopic.dita"/>
+</relcell>
+<relcell>
+<topicref href="tasktopic.dita"/>
+</relcell>
+</relrow>
+</reltable>
+</map>

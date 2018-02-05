@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 import static javax.xml.XMLConstants.XML_NS_URI;
-import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Configuration.Mode;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -49,7 +48,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 
     /**
      * Set valid attribute values.
-     * 
+     *
      * <p>The contents of the map is in pseudo-code
      * {@code Map<AttName, Map<ElemName, <Set<Value>>>}.
      * For default element mapping, the value is {@code *}.
@@ -63,7 +62,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
 
     // Locator methods
-    
+
     @Override
     public void setDocumentLocator(final Locator locator) {
         this.locator = locator;
@@ -85,6 +84,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
         modified = validateLang(atts, null);
         modified = validateId(localName, atts, modified);
         modified = validateHref(atts, modified);
+        modified = validateScope(atts, modified);
         modified = processFormatDitamap(atts, modified);
         validateKeys(atts);
         validateKeyscope(atts);
@@ -207,22 +207,34 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     break;
                 }
             }
-            if (uri != null && uri.getScheme() != null && uri.getScheme().equals("mailto")) {
-                final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-                if (isFormatDita(format)) {
-                    if (res == null) {
-                        res = new AttributesImpl(atts);
-                    }
-                    addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, "email");
-                    logger.error(MessageUtils.getMessage("DOTJ072E").setLocation(locator).toString());
-                }
-                final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                if (scope == null || !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
-                    if (res == null) {
-                        res = new AttributesImpl(atts);
-                    }
-                    addOrSetAttribute(res, ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL);
-                    logger.error(MessageUtils.getMessage("DOTJ073E").setLocation(locator).toString());
+        }
+        return res;
+    }
+
+    /**
+     * Fix implicit {@code scope} attribute.
+     *
+     * @return modified attributes, {@code null} if there have been no changes
+     */
+    private AttributesImpl validateScope(final Attributes atts, final AttributesImpl modified) {
+        AttributesImpl res = modified;
+        final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+        if (scope == null && href != null && href.isAbsolute()) {
+            final boolean sameScheme = Objects.equals(currentFile.getScheme(), href.getScheme());
+            final boolean sameAuthority = Objects.equals(currentFile.getRawAuthority(), href.getRawAuthority());
+            if (!(sameScheme && sameAuthority)) {
+                switch (processingMode) {
+                    case LAX:
+                        if (res == null) {
+                            res = new AttributesImpl(atts);
+                        }
+                        addOrSetAttribute(res, ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL);
+                        logger.warn(MessageUtils.getMessage("DOTJ075W", href.toString()).setLocation(locator).toString());
+                        break;
+                    default:
+                        logger.warn(MessageUtils.getMessage("DOTJ076W", href.toString()).setLocation(locator) + ", using invalid value.");
+                        break;
                 }
             }
         }
@@ -231,7 +243,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 
     /**
      * Validate attribute values
-     * 
+     *
      * @param qName element name
      * @param atts attributes
      */
@@ -274,7 +286,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             }
         }
     }
-    
+
     /**
      * Validate {@code keyscope} attribute
      */
@@ -288,7 +300,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             }
         }
     }
-    
+
     private boolean isValidKeyName(final String key) {
         for (final char c : key.toCharArray()) {
             switch (c) {
@@ -332,7 +344,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 
     /**
      * Validate attribute generalization. A single element may not contain both generalized and specialized values for the same attribute.
-     * 
+     *
      * @param atts attributes
      * @see <a href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/attributegeneralize.html">DITA 1.2 specification</a>
      */
@@ -347,7 +359,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                                 logger.error(MessageUtils.getMessage("DOTJ058E",
                                         spec[j].toString(), spec[i].toString()).toString());
                             }
-                        } 
+                        }
                     }
                 }
             }

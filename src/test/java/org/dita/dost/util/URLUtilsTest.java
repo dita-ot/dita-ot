@@ -66,7 +66,9 @@ public class URLUtilsTest {
         assertEquals("foo%20bar.dita", URLUtils.clean("foo bar.dita"));
         assertEquals("foo+bar.dita", URLUtils.clean("foo+bar.dita"));
         assertEquals("foo%20bar.dita", URLUtils.clean("foo%20bar.dita"));
-        
+        assertEquals("foo%25bar.dita", URLUtils.clean("foo%bar.dita"));
+        assertEquals("foobar.dita%25", URLUtils.clean("foobar.dita%"));
+
         assertEquals("f%C3%B6%C3%A5.dita", URLUtils.clean("f\u00f6\u00e5.dita"));
         
         assertEquals("foo/bar.dita", URLUtils.clean("foo/bar.dita"));

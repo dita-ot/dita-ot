@@ -106,7 +106,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
         } catch (final IOException e) {
             throw new DITAOTException(e);
         }
-        
+
         return null;
     }
 

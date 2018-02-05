@@ -36,14 +36,14 @@ import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**
  * XSLT processing module.
- * 
+ *
  * <p>The module matches Ant's XSLT task with the following exceptions:</p>
  * <ul>
  *   <li>If source and destination directories are same, transformation results are saved to a temporary file
  *   and the original source file is replaced after a successful transformation.</li>
  *   <li>If no {@code extension} attribute is set, the target file extension is the same as the source file extension.</li>
  * </ul>
- *  
+ *
  */
 public final class XsltModule extends AbstractPipelineModuleImpl {
 
@@ -119,7 +119,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 out = new File(replaceExtension(out.getAbsolutePath(), extension));
             }
             final boolean same = in.getAbsolutePath().equals(out.getAbsolutePath());
-            final File tmp = same ? new File(out.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis())) : out; 
+            final File tmp = same ? new File(out.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis())) : out;
             for (Map.Entry<String, String> e: params.entrySet()) {
                 logger.debug("Set parameter " + e.getKey() + " to '" + e.getValue() + "'");
                 t.setParameter(e.getKey(), e.getValue());
@@ -158,11 +158,11 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 logger.error("Failed to transform document: " + e.getMessage(), e);
                 logger.debug("Remove " + tmp.getAbsolutePath());
                 FileUtils.delete(tmp);
-            } 
+            }
         }
         return null;
     }
-    
+
     public void setStyle(final File style) {
         this.style = style;
     }
@@ -186,11 +186,11 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     public void setFilenameParam(final String filenameparameter) {
         this.filenameparameter = filenameparameter;
     }
-    
+
     public void setFiledirParam(final String filedirparameter) {
         this.filedirparameter = filedirparameter;
     }
-    
+
     public void setReloadstylesheet(final boolean reloadstylesheet) {
         this.reloadstylesheet = reloadstylesheet;
     }

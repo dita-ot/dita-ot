@@ -129,7 +129,7 @@ public final class MapMetaReader extends AbstractDomFilter {
         globalMeta.clear();
         super.read(filename);
     }
-    
+
     @Override
     public Document process(final Document doc) {
         this.doc = doc;
@@ -256,11 +256,11 @@ public final class MapMetaReader extends AbstractDomFilter {
             }
         }
     }
-    
+
     private boolean isLocalScope(final Attr scopeAttr) {
         return scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equals(scopeAttr.getNodeValue());
     }
-    
+
     private boolean isDitaFormat(final Attr formatAttr) {
         return formatAttr == null ||
             ATTR_FORMAT_VALUE_DITA.equals(formatAttr.getNodeValue()) ||
@@ -290,7 +290,7 @@ public final class MapMetaReader extends AbstractDomFilter {
 
     private void getMeta(final Element meta, final Map<String, Element> topicMetaTable) {
         final NodeList children = meta.getChildNodes();
-        for(int i = 0; i < children.getLength(); i++) {
+        for (int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 final Element elem = (Element) node;
@@ -359,7 +359,7 @@ public final class MapMetaReader extends AbstractDomFilter {
 
     private void handleGlobalMeta(final Element metadata) {
         final NodeList children = metadata.getChildNodes();
-        for(int i = 0; i < children.getLength(); i++) {
+        for (int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 final Element elem = (Element) node;
@@ -385,11 +385,11 @@ public final class MapMetaReader extends AbstractDomFilter {
 
     /**
      * Get metadata for topics
-     * 
+     *
      * @return map of metadata by topic path
      */
     public Map<URI, Map<String, Element>> getMapping() {
         return Collections.unmodifiableMap(resultTable);
-    } 
+    }
 
 }

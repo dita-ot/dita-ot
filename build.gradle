@@ -13,7 +13,7 @@ apply plugin: 'maven'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
-version = '3.0.1'
+version = '3.0.2'
 
 description = """DITA Open Toolkit"""
 
@@ -29,7 +29,7 @@ dependencies {
     compile group: 'xerces', name: 'xercesImpl', version:'2.11.0'
     compile group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
     compile group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
-    compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.8.0-5'
+    compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.8.0-7'
     compile group: 'com.ibm.icu', name: 'icu4j', version:'57.1'
     compile group: 'org.apache.ant', name: 'ant', version:'1.10.1'
     compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.1'
@@ -121,7 +121,7 @@ def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "develop" :
                    "${project.version}"
 def bundled = [
-        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.0.1/org.lwdita-2.0.1.zip",
+        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.0.2/org.lwdita-2.0.2.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
         "troff": "https://github.com/dita-ot/org.dita.troff/archive/2.5.zip",
         "tocjs": "https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip"

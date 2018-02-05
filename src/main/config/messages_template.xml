@@ -358,6 +358,16 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <message id="DOTJ075W" type="WARN">
+    <reason>Absolute link '%1' without correct 'scope' attribute.</reason>
+    <response>Using 'scope' attribute value 'external'.</response>
+  </message>
+
+  <message id="DOTJ076W" type="WARN">
+    <reason>Absolute link '%1' without correct 'scope' attribute.</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

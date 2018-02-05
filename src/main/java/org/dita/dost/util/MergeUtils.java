@@ -85,7 +85,7 @@ public final class MergeUtils {
      * @param id id
      * @param value value
      */
-    public void addId(final URI id, final String value){
+    public void addId(final URI id, final String value) {
         if (id != null && value != null) {
             final URI localId = id.normalize();
             final String localValue = value.trim();
@@ -98,7 +98,7 @@ public final class MergeUtils {
      * @param id id
      * @return value
      */
-    public String getIdValue(final URI id){
+    public String getIdValue(final URI id) {
         if (id == null) {
             return null;
         }
@@ -111,17 +111,17 @@ public final class MergeUtils {
      * @param path topic path, may contain a fragment
      * @return true if has been visited
      */
-    public boolean isVisited(final URI path){
+    public boolean isVisited(final URI path) {
         final URI localPath = stripFragment(path).normalize();
         return visitSet.contains(localPath);
     }
 
     /**
      * Add topic to set of visited topics.
-     * 
+     *
      * @param path topic path, may contain a fragment
      */
-    public void visit(final URI path){
+    public void visit(final URI path) {
         final URI localPath = stripFragment(path).normalize();
         visitSet.add(localPath);
     }

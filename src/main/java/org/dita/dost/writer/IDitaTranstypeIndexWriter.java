@@ -14,7 +14,7 @@ import org.dita.dost.index.IndexTerm;
 
 /**
  * Interface IDitaTranstypeIndexWriter.
- * 
+ *
  */
 public interface IDitaTranstypeIndexWriter {
 
@@ -26,5 +26,5 @@ public interface IDitaTranstypeIndexWriter {
     String getIndexFileName(String outputFileRoot);
 
     void setTermList(final List<IndexTerm> termList);
-    
+
 }

@@ -310,8 +310,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
 
         if (xmlLang != null) {
             currentLang = xmlLang;
-        }
-        else if (!lang.isEmpty()) {
+        } else if (!lang.isEmpty()) {
             currentLang = lang.peek();
         } else {
             currentLang = null;
@@ -330,7 +329,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     outputFile = generateOutputFilename(id);
                     output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), UTF8);
 
-                    if(atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 && currentLang != null) {
+                    if (atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 && currentLang != null) {
                         attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "CDATA", currentLang );
                     }
 //                    final FileInfo fi = generateFileInfo(outputFile);

@@ -142,7 +142,7 @@ public final class MapReaderModule extends AbstractReaderModule {
             } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
                 formatSet.add(file);
             } else {
-                htmlSet.add(file.filename);
+                htmlSet.put(file.format, file.filename);
             }
         }
     }

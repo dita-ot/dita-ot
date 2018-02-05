@@ -52,7 +52,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
 
     /**
      * Entry point of MoveMetaModule.
-     * 
+     *
      * @param input Input parameters and resources.
      * @return null
      * @throws DITAOTException exception

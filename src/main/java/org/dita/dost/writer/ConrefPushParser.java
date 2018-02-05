@@ -116,7 +116,7 @@ public final class ConrefPushParser extends AbstractXMLFilter {
     private boolean hasKeyref = false;
     /**tempDir.*/
     private File tempDir;
-    
+
     /**
      * Constructor.
      */
@@ -129,9 +129,9 @@ public final class ConrefPushParser extends AbstractXMLFilter {
     public void setMoveTable(final Hashtable<MoveKey, DocumentFragment> movetable) {
         this.movetable = movetable;
     }
-    
+
     /**
-     * 
+     *
      * @param tempDir tempDir
      */
     public void setTempDir(final File tempDir) {
@@ -165,7 +165,7 @@ public final class ConrefPushParser extends AbstractXMLFilter {
     }
     /**
      * Update conref list in job configuration and in conref list file.
-     * 
+     *
      * @param filename filename
      */
     private void updateList(final File filename) {
@@ -274,12 +274,12 @@ public final class ConrefPushParser extends AbstractXMLFilter {
     }
 
     /**
-     * 
+     *
      * @param targetClassAttribute targetClassAttribute
      * @param content string
      * @return string
      */
-    private DocumentFragment replaceElementName(final DitaClass targetClassAttribute, final DocumentFragment content) {        
+    private DocumentFragment replaceElementName(final DitaClass targetClassAttribute, final DocumentFragment content) {
         try {
             if (content.hasChildNodes()) {
                 final NodeList nodeList = content.getChildNodes();
@@ -300,7 +300,7 @@ public final class ConrefPushParser extends AbstractXMLFilter {
                             if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYREF) != null) {
                                 hasKeyref = true;
                             }
-                            elem.getOwnerDocument().renameNode(elem, elem.getNamespaceURI(), targetElementName);                            
+                            elem.getOwnerDocument().renameNode(elem, elem.getNamespaceURI(), targetElementName);
                             // process the child nodes of the current node
                             final NodeList nList = elem.getChildNodes();
                             for (int j = 0; j < nList.getLength(); j++) {
@@ -321,9 +321,9 @@ public final class ConrefPushParser extends AbstractXMLFilter {
         }
         return content;
     }
-    
+
     /**
-     * 
+     *
      * @param type pushtype
      * @param elem element
      */
@@ -473,7 +473,7 @@ public final class ConrefPushParser extends AbstractXMLFilter {
     }
 
     private void writeNode(final Node node) throws SAXException {
-        switch(node.getNodeType()) {
+        switch (node.getNodeType()) {
         case Node.DOCUMENT_FRAGMENT_NODE: {
             final NodeList children = node.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
@@ -507,5 +507,5 @@ public final class ConrefPushParser extends AbstractXMLFilter {
             throw new UnsupportedOperationException();
         }
     }
-    
+
 }

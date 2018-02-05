@@ -80,16 +80,16 @@ public final class ConrefPushReader extends AbstractXMLReader {
     /**pushType is used to record the current type of push
      it is used in endElement(....) to tell whether it is pushafter or replace.*/
     private String pushType = null;
-        
+
     /**
      * Get push table
-     * 
+     *
      * @return unmodifiable push table
      */
     public Map<File, Hashtable<MoveKey, DocumentFragment>> getPushMap() {
         return Collections.unmodifiableMap(pushtable);
     }
-    
+
     @Override
     public void read(final File filename) {
         assert filename.isAbsolute();
@@ -98,7 +98,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         start = false;
         pushcontentWriter = getXMLStreamWriter();
         pushType = null;
-        try{
+        try {
             reader.parse(filename.toURI().toString());
         } catch (final RuntimeException e) {
             throw e;
@@ -107,7 +107,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             e.printStackTrace();
         }
     }
-    
+
     private XMLStreamWriter getXMLStreamWriter() {
         pushcontentDocumentFragment = pushDocument.createDocumentFragment();
         try {
@@ -116,18 +116,18 @@ public final class ConrefPushReader extends AbstractXMLReader {
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
      * Constructor.
      */
     public ConrefPushReader() {
         pushtable = new Hashtable<>();
-        try{
+        try {
             reader = XMLUtils.getXMLReader();
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, false);
             reader.setFeature(FEATURE_NAMESPACE, true);
             reader.setContentHandler(this);
-        }catch (final Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
 
@@ -210,7 +210,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             }
         }
     }
-    
+
     /**
      * Rewrite link attributes.
      */
@@ -218,7 +218,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         final NodeList children = pushcontent.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
-            switch(child.getNodeType()) {
+            switch (child.getNodeType()) {
             case Node.ELEMENT_NODE:
                 final Element e = (Element) child;
                 replaceLinkAttributes(e);
@@ -239,10 +239,10 @@ public final class ConrefPushReader extends AbstractXMLReader {
             }
         }
     }
-    
+
     /**
      * Write start element.
-     * 
+     *
      * @param elemName element name
      * @param atts attribute
      * @param removeConref whether remeove conref info
@@ -268,7 +268,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     final String prefix = offset != -1 ? atts.getQName(index).substring(0, offset) : "";
                     pushcontentWriter.writeAttribute(prefix, atts.getURI(index), atts.getLocalName(index), value);
                 }
-    
+
             }
             //id attribute should only be added to the starting element
             //which dosen't have id attribute set
@@ -296,7 +296,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         }
     }
     /**
-     * 
+     *
      * @param value string
      * @return URL
      */
@@ -315,7 +315,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         }
     }
     /**
-     * 
+     *
      * @param target target
      * @param pushcontent content
      * @param type push type
@@ -359,7 +359,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             table.put(moveKey, appendPushContent(pushcontent, null));
         }
     }
-    
+
     private DocumentFragment appendPushContent(final DocumentFragment pushcontent, final DocumentFragment target) {
         DocumentFragment df = target;
         if (df == null) {
@@ -466,5 +466,5 @@ public final class ConrefPushReader extends AbstractXMLReader {
             return true;
         }
     }
-    
+
 }
