@@ -2742,6 +2742,6 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:include href="css-class.xsl"/>
-  <xsl:include href="functions.xsl"/>
+  <xsl:include href="plugin:org.dita.html5:xsl/functions.xsl"/>
 
 </xsl:stylesheet>
