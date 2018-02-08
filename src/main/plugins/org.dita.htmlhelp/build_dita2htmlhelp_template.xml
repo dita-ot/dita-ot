@@ -123,7 +123,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="htmlhelp.hhk.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
       <isset property="inner.transform"/>
     </condition>
-    <pipeline message="Extract index term." tempdir="${dita.temp.dir}" inputmap="${user.input.file}">
+    <pipeline message="Extract index term." inputmap="${user.input.file}">
       <module class="org.dita.dost.module.IndexTermExtractModule">
         <param name="output" location="${htmlhelp.hhk.output.dir}/${args.output.base}.hhk"/>
         <param name="targetext" value="${out.ext}"/>
