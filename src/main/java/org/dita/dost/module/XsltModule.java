@@ -11,12 +11,15 @@ import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.FileUtils;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -56,13 +59,20 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     private String filenameparameter;
     private String filedirparameter;
     private boolean reloadstylesheet;
-    private XMLCatalog xmlcatalog;
+    private EntityResolver entityResolver;
+    private URIResolver uriResolver;
     private FileNameMapper mapper;
     private String extension;
     private Transformer t;
     private XMLReader parser;
 
-    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
+    private void init() {
+        if (entityResolver == null || uriResolver == null) {
+            final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
+            entityResolver = catalogResolver;
+            uriResolver = catalogResolver;
+        }
+
         if (fileInfoFilter != null) {
             final Collection<Job.FileInfo> res = job.getFileInfo(fileInfoFilter);
             includes = new ArrayList<>(res.size());
@@ -71,6 +81,10 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             }
             baseDir = job.tempDir;
         }
+    }
+
+    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
+        init();
         if ((includes == null || includes.isEmpty()) && (in == null)) {
             return null;
         }
@@ -80,7 +94,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         }
         final TransformerFactory tf = TransformerFactory.newInstance();
         configureExtensions(tf);
-        tf.setURIResolver(xmlcatalog);
+        tf.setURIResolver(uriResolver);
         try {
             templates = tf.newTemplates(new StreamSource(style));
         } catch (TransformerConfigurationException e) {
@@ -91,7 +105,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         } catch (final SAXException e) {
             throw new RuntimeException("Failed to create XML reader: " + e.getMessage(), e);
         }
-        parser.setEntityResolver(xmlcatalog);
+        parser.setEntityResolver(entityResolver);
 
         if (in != null) {
             transform(in, out);
@@ -122,9 +136,10 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             logger.info("Loading stylesheet " + style.getAbsolutePath());
             try {
                 t = withLogger(templates.newTransformer(), logger);
-                if (Configuration.DEBUG) {
-                    t.setURIResolver(new XMLUtils.DebugURIResolver(xmlcatalog));
-                }
+                final URIResolver resolver = Configuration.DEBUG
+                        ? new XMLUtils.DebugURIResolver(uriResolver)
+                        : uriResolver;
+                t.setURIResolver(resolver);
             } catch (final TransformerConfigurationException e) {
                 throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
             }
@@ -216,7 +231,8 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     }
 
     public void setXMLCatalog(final XMLCatalog xmlcatalog) {
-        this.xmlcatalog = xmlcatalog;
+        this.entityResolver = xmlcatalog;
+        this.uriResolver = xmlcatalog;
     }
 
     public void setMapper(final FileNameMapper mapper) {
