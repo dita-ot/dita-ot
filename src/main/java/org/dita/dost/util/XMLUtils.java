@@ -29,6 +29,7 @@ import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.event.ProxyReceiver;
 import net.sf.saxon.jaxp.TransformerImpl;
 import net.sf.saxon.serialize.Emitter;
+import net.sf.saxon.lib.Logger;
 import net.sf.saxon.serialize.MessageWarner;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
@@ -107,6 +108,33 @@ public final class XMLUtils {
             });
         }
         return transformer;
+    }
+
+    public static Logger toSaxonLogger(final DITAOTLogger logger) {
+        return new Logger() {
+            @Override
+            public void println(String message, int severity) {
+                switch(severity) {
+                    case Logger.INFO:
+                        logger.info(message);
+                        break;
+                    case Logger.WARNING:
+                        logger.warn(message);
+                        break;
+                    case Logger.ERROR:
+                        logger.error(message);
+                        break;
+                    case Logger.DISASTER:
+                        throw new RuntimeException(message);
+                    default:
+                        throw new IllegalArgumentException();
+                }
+            }
+            @Override
+            public StreamResult asStreamResult() {
+                return null;
+            }
+        };
     }
 
     /**
