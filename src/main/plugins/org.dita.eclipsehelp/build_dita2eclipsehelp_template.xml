@@ -108,7 +108,7 @@ See the accompanying LICENSE file for applicable license.
         <xslt destdir="${dita.output.dir}"
               extension=".xml"
               style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
-            <ditaFileset format="ditamap" processingRole="normal"/>
+            <ditafileset format="ditamap" processingRole="normal"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
             <param name="defaultLanguage" expression="${default.language}"/>
@@ -124,7 +124,7 @@ See the accompanying LICENSE file for applicable license.
         <xslt
             destdir="${dita.output.dir}"
             style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
-            <ditaFileset format="ditamap" processingRole="normal"/>
+            <ditafileset format="ditamap" processingRole="normal"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
             <param name="defaultLanguage" expression="${default.language}"/>

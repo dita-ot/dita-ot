@@ -141,7 +141,7 @@ See the accompanying LICENSE file for applicable license.
         extension="${out.ext}" style="${args.xsl}"
         filenameparameter="FILENAME"
         filedirparameter="FILEDIR">
-        <ditaFileset format="dita" processingRole="normal"/>
+        <ditafileset format="dita" processingRole="normal"/>
         <param name="TRANSTYPE" expression="${transtype}" />
         <param name="FILTERFILE" expression="${dita.input.valfile.url}"
           if="dita.input.valfile" />
