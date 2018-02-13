@@ -687,6 +687,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             }
         }
 
+        final FileInfo root = job.getFileInfo(rootFile);
+        if (root == null) {
+            throw new RuntimeException("Unable to set input file to job configuration");
+        }
+        job.add(new FileInfo.Builder(root)
+                .isInput(true)
+                .build());
+
         try {
             logger.info("Serializing job specification");
             if (!job.tempDir.exists() && !job.tempDir.mkdirs()) {

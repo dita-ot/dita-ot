@@ -74,6 +74,7 @@ public final class Job {
     private static final String ATTRIBUTE_CONREF_PUSH = "conrefpush";
     private static final String ATTRIBUTE_SUBJECT_SCHEME = "subjectscheme";
     private static final String ATTRIBUTE_HAS_LINK = "has-link";
+    private static final String ATTRIBUTE_INPUT = "input";
     private static final String ATTRIBUTE_COPYTO_SOURCE_LIST = "copy-to-source";
     private static final String ATTRIBUTE_OUT_DITA_FILES_LIST = "out-dita";
     private static final String ATTRIBUTE_CHUNKED_DITAMAP_LIST = "chunked-ditamap";
@@ -102,6 +103,7 @@ public final class Job {
         try {
             attrToFieldMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));
             attrToFieldMap.put(ATTRIBUTE_HAS_LINK, FileInfo.class.getField("hasLink"));
+            attrToFieldMap.put(ATTRIBUTE_INPUT, FileInfo.class.getField("isInput"));
             attrToFieldMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.class.getField("hasConref"));
             attrToFieldMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getField("hasKeyref"));
             attrToFieldMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getField("hasCoderef"));
@@ -609,6 +611,8 @@ public final class Job {
         public boolean isFlagImage;
         /** Source file is outside base directory. */
         public boolean isOutDita;
+        /** File is input document that is used as processing root. */
+        public boolean isInput;
 
         FileInfo(final URI src, final URI uri, final File file) {
             if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
@@ -639,6 +643,7 @@ public final class Job {
                     ", isResourceOnly=" + isResourceOnly +
                     ", isTarget=" + isTarget +
                     ", isConrefPush=" + isConrefPush +
+                    ", isInput=" + isInput +
                     ", hasKeyref=" + hasKeyref +
                     ", hasCoderef=" + hasCoderef +
                     ", isSubjectScheme=" + isSubjectScheme +
@@ -652,48 +657,31 @@ public final class Job {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             FileInfo fileInfo = (FileInfo) o;
-
-            if (hasConref != fileInfo.hasConref) return false;
-            if (isChunked != fileInfo.isChunked) return false;
-            if (hasLink != fileInfo.hasLink) return false;
-            if (isResourceOnly != fileInfo.isResourceOnly) return false;
-            if (isTarget != fileInfo.isTarget) return false;
-            if (isConrefPush != fileInfo.isConrefPush) return false;
-            if (hasKeyref != fileInfo.hasKeyref) return false;
-            if (hasCoderef != fileInfo.hasCoderef) return false;
-            if (isSubjectScheme != fileInfo.isSubjectScheme) return false;
-            if (isSubtarget != fileInfo.isSubtarget) return false;
-            if (isFlagImage != fileInfo.isFlagImage) return false;
-            if (isOutDita != fileInfo.isOutDita) return false;
-            if (src != null ? !src.equals(fileInfo.src) : fileInfo.src != null) return false;
-            if (!uri.equals(fileInfo.uri)) return false;
-            if (!file.equals(fileInfo.file)) return false;
-            if (result != null ? !result.equals(fileInfo.result) : fileInfo.result != null) return false;
-            return format != null ? format.equals(fileInfo.format) : fileInfo.format == null;
+            return hasConref == fileInfo.hasConref &&
+                    isChunked == fileInfo.isChunked &&
+                    hasLink == fileInfo.hasLink &&
+                    isResourceOnly == fileInfo.isResourceOnly &&
+                    isTarget == fileInfo.isTarget &&
+                    isConrefPush == fileInfo.isConrefPush &&
+                    hasKeyref == fileInfo.hasKeyref &&
+                    hasCoderef == fileInfo.hasCoderef &&
+                    isSubjectScheme == fileInfo.isSubjectScheme &&
+                    isSubtarget == fileInfo.isSubtarget &&
+                    isFlagImage == fileInfo.isFlagImage &&
+                    isOutDita == fileInfo.isOutDita &&
+                    isInput == fileInfo.isInput &&
+                    Objects.equals(src, fileInfo.src) &&
+                    Objects.equals(uri, fileInfo.uri) &&
+                    Objects.equals(file, fileInfo.file) &&
+                    Objects.equals(result, fileInfo.result) &&
+                    Objects.equals(format, fileInfo.format);
         }
 
         @Override
         public int hashCode() {
-            int result1 = src != null ? src.hashCode() : 0;
-            result1 = 31 * result1 + uri.hashCode();
-            result1 = 31 * result1 + file.hashCode();
-            result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
-            result1 = 31 * result1 + (format != null ? format.hashCode() : 0);
-            result1 = 31 * result1 + (hasConref ? 1 : 0);
-            result1 = 31 * result1 + (isChunked ? 1 : 0);
-            result1 = 31 * result1 + (hasLink ? 1 : 0);
-            result1 = 31 * result1 + (isResourceOnly ? 1 : 0);
-            result1 = 31 * result1 + (isTarget ? 1 : 0);
-            result1 = 31 * result1 + (isConrefPush ? 1 : 0);
-            result1 = 31 * result1 + (hasKeyref ? 1 : 0);
-            result1 = 31 * result1 + (hasCoderef ? 1 : 0);
-            result1 = 31 * result1 + (isSubjectScheme ? 1 : 0);
-            result1 = 31 * result1 + (isSubtarget ? 1 : 0);
-            result1 = 31 * result1 + (isFlagImage ? 1 : 0);
-            result1 = 31 * result1 + (isOutDita ? 1 : 0);
-            return result1;
+            return Objects.hash(src, uri, file, result, format, hasConref, isChunked, hasLink, isResourceOnly, isTarget,
+                    isConrefPush, hasKeyref, hasCoderef, isSubjectScheme, isSubtarget, isFlagImage, isOutDita, isInput);
         }
 
         public static class Builder {
@@ -715,6 +703,7 @@ public final class Job {
             private boolean isSubtarget;
             private boolean isFlagImage;
             private boolean isOutDita;
+            private boolean isInput;
 
             public Builder() {}
             public Builder(final FileInfo orig) {
@@ -735,6 +724,7 @@ public final class Job {
                 isSubtarget = orig.isSubtarget;
                 isFlagImage = orig.isFlagImage;
                 isOutDita = orig.isOutDita;
+                isInput = orig.isInput;
             }
 
             /**
@@ -758,6 +748,7 @@ public final class Job {
                 if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
                 if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
+                if (orig.isInput) isInput = orig.isInput;
                 return this;
             }
 
@@ -799,6 +790,7 @@ public final class Job {
             public Builder isSubtarget(final boolean isSubtarget) { this.isSubtarget = isSubtarget; return this; }
             public Builder isFlagImage(final boolean isFlagImage) { this.isFlagImage = isFlagImage; return this; }
             public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
+            public Builder isInput(final boolean isInput) { this.isInput = isInput; return this; }
 
             public FileInfo build() {
                 if (uri == null && file == null) {
@@ -821,6 +813,7 @@ public final class Job {
                 fi.isSubtarget = isSubtarget;
                 fi.isFlagImage = isFlagImage;
                 fi.isOutDita = isOutDita;
+                fi.isInput = isInput;   
                 return fi;
             }
 

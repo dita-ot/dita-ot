@@ -439,6 +439,7 @@ public final class ExtensibleAntInvoker extends Task {
     public static class FileInfoFilterElem extends ConfElem {
         private String format;
         private Boolean hasConref;
+        private Boolean isInput;
         private Boolean isResourceOnly;
 
         public void setFormat(final String format) {
@@ -449,6 +450,10 @@ public final class ExtensibleAntInvoker extends Task {
             this.hasConref = conref;
         }
 
+        public void setInput(final boolean isInput) {
+            this.isInput = isInput;
+        }
+
         public void setProcessingRole(final String processingRole) {
             this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
         }
@@ -456,6 +461,7 @@ public final class ExtensibleAntInvoker extends Task {
         public Predicate<FileInfo> toFilter() {
             return f -> (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
                     (hasConref == null || f.hasConref == hasConref) &&
+                    (isInput == null || f.isInput == isInput) &&
                     (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
         }
     }
