@@ -90,7 +90,7 @@ public final class DITAOTEchoTask extends Echo {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }
-            if (isValid(getProject(), p.getIf(), p.getUnless())) {
+            if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
                 final int idx = Integer.parseInt(p.getName()) - 1;
                 if (idx >= prop.size()) {
                     prop.ensureCapacity(idx + 1);

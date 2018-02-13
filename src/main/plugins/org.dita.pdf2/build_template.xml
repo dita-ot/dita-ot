@@ -26,7 +26,10 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 -->
-<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita.build" basedir=".">
+<project xmlns:dita="http://dita-ot.sourceforge.net"
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
+         name="dita.build" basedir=".">
   
   <target name="dita2pdf2.init">
     <dita-ot-fail id="PDFX012F">
@@ -305,14 +308,14 @@ with those set forth herein.
           in="${dita.temp.dir}/stage1.xml"
           out="${dita.temp.dir}/stage2.fo">
       <param name="locale" expression="${document.locale}"/>
-      <param name="customizationDir.url" expression="${customization.dir.url}" if="customization.dir"/>
+      <param name="customizationDir.url" expression="${customization.dir.url}" if:set="customization.dir"/>
       <param name="input.dir.url" expression="${user.input.dir.url}"/>
       <param name="DRAFT" expression="${args.draft}"/>
       <param name="output.dir.url" expression="${dita.map.output.dir.url}"/>
       <param name="work.dir.url" expression="${work.dir.url}"/>
       <param name="artworkPrefix" expression="${artworkPrefixUrl}"/>
       <param name="publishRequiredCleanup" expression="${publish.required.cleanup}"/>
-      <param name="artLabel" expression="${args.artlbl}" if="args.artlbl"/>
+      <param name="artLabel" expression="${args.artlbl}" if:set="args.artlbl"/>
       <param name="antArgsBookmarkStyle" expression="${args.bookmark.style}"/>
       <param name="antArgsChapterLayout" expression="${args.chapter.layout}"/>
       <param name="include.rellinks" expression="${include.rellinks}"/>
@@ -321,7 +324,7 @@ with those set forth herein.
       <param name="bookmap-order" expression="${args.bookmap-order}"/>
       <param name="figurelink.style" expression="${args.figurelink.style}"/>
       <param name="tablelink.style" expression="${args.tablelink.style}"/>
-      <param name="variableFiles.url" expression="${variable.file.url}" if="variable.file.exists"/>
+      <param name="variableFiles.url" expression="${variable.file.url}" if:set="variable.file.exists"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <dita:extension id="dita.conductor.pdf2.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog>

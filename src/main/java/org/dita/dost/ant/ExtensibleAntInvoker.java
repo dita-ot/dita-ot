@@ -8,12 +8,14 @@
 package org.dita.dost.ant;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Location;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Mapper;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.module.ModuleFactory;
 import org.dita.dost.module.XmlFilterModule;
@@ -114,7 +116,7 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     public void addConfiguredSax(final SaxPipeElem filters) {
-        filters.setProject(getProject());
+//        filters.setProject(getProject());
         modules.add(filters);
     }
 
@@ -133,7 +135,7 @@ public final class ExtensibleAntInvoker extends Task {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }
-            if (isValid(getProject(), p.getIf(), p.getUnless())) {
+            if (isValid(getProject(),getLocation(), p.getIf(), p.getUnless())) {
                 attrs.put(p.getName(), p.getValue());
             }
         }
@@ -152,6 +154,8 @@ public final class ExtensibleAntInvoker extends Task {
         final Job job = getJob(tempDir, getProject());
         try {
             for (final ModuleElem m: modules) {
+                m.setProject(getProject());
+                m.setLocation(getLocation());
                 final PipelineHashIO pipelineInput = new PipelineHashIO();
                 for (final Map.Entry<String, String> e: attrs.entrySet()) {
                     pipelineInput.setAttribute(e.getKey(), e.getValue());
@@ -201,7 +205,7 @@ public final class ExtensibleAntInvoker extends Task {
                 if (!p.isValid()) {
                     throw new BuildException("Incomplete parameter");
                 }
-                if (isValid(getProject(), p.getIf(), p.getUnless())) {
+                if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
                     module.setParam(p.getName(), p.getValue());
                 }
             }
@@ -223,7 +227,7 @@ public final class ExtensibleAntInvoker extends Task {
                 if (!p.isValid()) {
                     throw new BuildException("Incomplete parameter");
                 }
-                if (isValid(getProject(), p.getIf(), p.getUnless())) {
+                if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
                     pipelineInput.setAttribute(p.getName(), p.getValue());
                 }
             }
@@ -276,7 +280,7 @@ public final class ExtensibleAntInvoker extends Task {
     private Set<File> readListFile(final List<IncludesFileElem> includes, final DITAOTAntLogger logger) {
         final Set<File> inc = new HashSet<>();
         for (final IncludesFileElem i: includes) {
-            if (!isValid(getProject(), i.ifProperty, null)) {
+            if (!isValid(getProject(), getLocation(), i.ifProperty, null)) {
                 continue;
             }
             BufferedReader r = null;
@@ -297,8 +301,19 @@ public final class ExtensibleAntInvoker extends Task {
         }
         return inc;
     }
-
-    public static boolean isValid(final Project project, final String ifProperty, final String unlessProperty) {
+    public static boolean isValid(final Project project, final Location location, final String ifProperty, final String unlessProperty) {
+        if (ifProperty != null) {
+            final String msg = MessageUtils.getMessage("DOTA014W", "if", "if:set")
+                    .setLocation(location)
+                    .toString();
+            project.log(msg, Project.MSG_WARN);
+        }
+        if (unlessProperty != null) {
+            final String msg = MessageUtils.getMessage("DOTA014W", "unless", "unless:set")
+                    .setLocation(location)
+                    .toString();
+            project.log(msg, Project.MSG_WARN);
+        }
         return (ifProperty == null || project.getProperties().containsKey(ifProperty))
                 && (unlessProperty == null || !project.getProperties().containsKey(unlessProperty));
     }
@@ -313,6 +328,8 @@ public final class ExtensibleAntInvoker extends Task {
         public final List<ParamElem> params = new ArrayList<>();
         private Class<? extends AbstractPipelineModule> cls;
         public final Collection<FileInfoFilterElem> fileInfoFilters = new ArrayList<>();
+        private Project project;
+        private Location location;
 
         public void setClass(final Class<? extends AbstractPipelineModule> cls) {
             this.cls = cls;
@@ -328,6 +345,22 @@ public final class ExtensibleAntInvoker extends Task {
 
         public Class<? extends AbstractPipelineModule> getImplementation() {
             return cls;
+        }
+
+        public void setProject(final Project project) {
+            this.project = project;
+        }
+
+        public Project getProject() {
+            return project;
+        }
+
+        public void setLocation(final Location location) {
+            this.location = location;
+        }
+
+        public Location getLocation() {
+            return location;
         }
     }
 
@@ -489,13 +522,13 @@ public final class ExtensibleAntInvoker extends Task {
         public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
             final List<FilterPair> res = new ArrayList<>(filters.size());
             for (final XmlFilterElem f: filters) {
-                if (isValid(getProject(), f.getIf(), f.getUnless())) {
+                if (isValid(getProject(), getLocation(), f.getIf(), f.getUnless())) {
                     final AbstractXMLFilter fc = f.getImplementation().newInstance();
                     for (final ParamElem p : f.params) {
                         if (!p.isValid()) {
                             throw new BuildException("Incomplete parameter");
                         }
-                        if (isValid(getProject(), p.getIf(), p.getUnless())) {
+                        if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
                             fc.setParam(p.getName(), p.getValue());
                         }
                     }
@@ -518,14 +551,6 @@ public final class ExtensibleAntInvoker extends Task {
                     })
                     .collect(Collectors.toList());
 
-        }
-
-        public void setProject(final Project project) {
-            this.project = project;
-        }
-
-        public Project getProject() {
-            return project;
         }
     }
 

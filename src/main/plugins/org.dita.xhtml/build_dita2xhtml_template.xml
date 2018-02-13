@@ -6,7 +6,10 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2xhtml">
+<project xmlns:dita="http://dita-ot.sourceforge.net"
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
+         name="dita2xhtml">
 
   <target name="dita2xhtml.init">
     <property name="html-version" value="xhtml"/>
@@ -58,11 +61,11 @@ See the accompanying LICENSE file for applicable license.
       <xslt destdir="${xhtml.toc.output.dir}"
             style="${args.xhtml.toc.xsl}">
         <ditafileset input="true"/>
-        <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-        <param name="contenttarget" expression="${args.xhtml.contenttarget}" if="args.xhtml.contenttarget"/>
-        <param name="CSS" expression="${args.css.file}" if="args.css.file" />
-        <param name="CSSPATH" expression="${user.csspath}" if="user.csspath" />
-        <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class" />
+        <param name="OUTEXT" expression="${out.ext}" if:set="out.ext" />
+        <param name="contenttarget" expression="${args.xhtml.contenttarget}" if:set="args.xhtml.contenttarget"/>
+        <param name="CSS" expression="${args.css.file}" if:set="args.css.file" />
+        <param name="CSSPATH" expression="${user.csspath}" if:set="user.csspath" />
+        <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if:set="args.xhtml.toc.class" />
         <params/>
         <mapper type="merge" to="${args.xhtml.toc}${out.ext}"/>
         <xmlcatalog refid="dita.catalog"/>
@@ -80,11 +83,11 @@ See the accompanying LICENSE file for applicable license.
         <xslt destdir="${dita.output.dir}"
               style="${args.xhtml.toc.xsl}">
             <ditafileset input="true"/>
-            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-            <param name="contenttarget" expression="${args.xhtml.contenttarget}" if="args.xhtml.contenttarget"/>
-            <param name="CSS" expression="${args.css.file}" if="args.css.file" />
-            <param name="CSSPATH" expression="${user.csspath}" if="user.csspath" />
-            <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class" />
+            <param name="OUTEXT" expression="${out.ext}" if:set="out.ext" />
+            <param name="contenttarget" expression="${args.xhtml.contenttarget}" if:set="args.xhtml.contenttarget"/>
+            <param name="CSS" expression="${args.css.file}" if:set="args.css.file" />
+            <param name="CSSPATH" expression="${user.csspath}" if:set="user.csspath" />
+            <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if:set="args.xhtml.toc.class" />
             <dita:extension id="dita.conductor.xhtml.toc.param" behavior="org.dita.dost.platform.InsertAction"/>
             <mapper type="glob"
                     from="${user.input.file}"

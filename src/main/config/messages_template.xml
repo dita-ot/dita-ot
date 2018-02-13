@@ -46,6 +46,10 @@ See the accompanying LICENSE file for applicable license.
     <reason>Cannot find the specified DITAVAL '%1'.</reason>
     <response></response>
   </message>
+  <message id="DOTA014W" type="WARN">
+    <reason>Attribute @%1 is deprecated.</reason>
+    <response>Use attribute @%2 instead.</response>
+  </message>
 
   <!-- Start of Java Messages -->
   

@@ -109,8 +109,8 @@ See the accompanying LICENSE file for applicable license.
               extension=".xml"
               style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
             <ditafileset format="ditamap" processingRole="normal"/>
-            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-            <param name="WORKDIR" expression="${workdir}" if="workdir"/>
+            <param name="OUTEXT" expression="${out.ext}" if:set="out.ext" />
+            <param name="WORKDIR" expression="${workdir}" if:set="workdir"/>
             <param name="defaultLanguage" expression="${default.language}"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
@@ -125,8 +125,8 @@ See the accompanying LICENSE file for applicable license.
             destdir="${dita.output.dir}"
             style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
             <ditafileset format="ditamap" processingRole="normal"/>
-            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-            <param name="WORKDIR" expression="${workdir}" if="workdir"/>
+            <param name="OUTEXT" expression="${out.ext}" if:set="out.ext" />
+            <param name="WORKDIR" expression="${workdir}" if:set="workdir"/>
             <param name="defaultLanguage" expression="${default.language}"/>
             <dita:extension behavior="org.dita.dost.platform.InsertAction" id="dita.conductor.eclipse.toc.param"/>
             <mapper classname="org.dita.dost.ant.types.JobMapper" to=".xml"/>
@@ -150,7 +150,7 @@ See the accompanying LICENSE file for applicable license.
             <param name="indextype" value="eclipsehelp"/>
             <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
             <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
-            <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+            <param name="encoding" value="${args.dita.locale}" if:set="args.dita.locale"/>
             <param name="defaultLanguage" expression="${default.language}"/>
           </module>
         </pipeline>
@@ -171,7 +171,7 @@ See the accompanying LICENSE file for applicable license.
             <param name="indextype" value="eclipsehelp"/>
             <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
             <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
-            <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+            <param name="encoding" value="${args.dita.locale}" if:set="args.dita.locale"/>
             <param name="defaultLanguage" expression="${default.language}"/>
           </module>
         </pipeline>
@@ -189,13 +189,13 @@ See the accompanying LICENSE file for applicable license.
             <param name="TOCROOT" expression="${dita.map.filename.root}" />
             <param name="version"
                    expression="${args.eclipse.version}"
-                   if="args.eclipse.version" />
+                   if:set="args.eclipse.version" />
             <param name="provider"
                    expression="${args.eclipse.provider}"
-                   if="args.eclipse.provider" />
+                   if:set="args.eclipse.provider" />
             <param name="osgi.symbolic.name"
                    expression="${args.eclipse.symbolic.name}"
-                   if="args.eclipse.symbolic.name"/>
+                   if:set="args.eclipse.symbolic.name"/>
             <outputproperty value="yes" name="indent"/>
             <param name="dita.plugin.output"
                   expression="dita.eclipse.plugin"/>
@@ -216,13 +216,13 @@ See the accompanying LICENSE file for applicable license.
             <param name="TOCROOT" expression="${dita.map.filename.root}" />
             <param name="version"
                 expression="${args.eclipse.version}"
-                if="args.eclipse.version" />
+                if:set="args.eclipse.version" />
             <param name="provider"
                 expression="${args.eclipse.provider}"
-                if="args.eclipse.provider" />
+                if:set="args.eclipse.provider" />
             <param name="osgi.symbolic.name"
                 expression="${args.eclipse.symbolic.name}"
-                if="args.eclipse.symbolic.name"/>
+                if:set="args.eclipse.symbolic.name"/>
             <outputproperty value="yes" name="indent"/>
             <param name="dita.plugin.output"
                   expression="dita.eclipse.plugin"/>
@@ -246,21 +246,21 @@ See the accompanying LICENSE file for applicable license.
       style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <param name="version"
         expression="${args.eclipse.version}"
-        if="args.eclipse.version" />
+        if:set="args.eclipse.version" />
       <param name="provider"
         expression="${args.eclipse.provider}"
-        if="args.eclipse.provider" />
+        if:set="args.eclipse.provider" />
       <param name="osgi.symbolic.name"
         expression="${args.eclipse.symbolic.name}"
-        if="args.eclipse.symbolic.name"/>
+        if:set="args.eclipse.symbolic.name"/>
       <param name="plugin"
         expression="${eclipse.plugin}" />
       <param name="fragment.country" 
         expression="${args.eclipsehelp.country}" 
-        if="eclipse.fragment.country"/>
+        if:set="eclipse.fragment.country"/>
       <param name="fragment.lang" 
         expression="${args.eclipsehelp.language}" 
-        if="args.eclipsehelp.language"/>
+        if:set="args.eclipsehelp.language"/>
       <outputproperty value="text" name="method"/>
       <param name="dita.plugin.output" 
         expression="dita.eclipse.manifest"/>
@@ -280,21 +280,21 @@ See the accompanying LICENSE file for applicable license.
       style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <param name="version"
         expression="${args.eclipse.version}"
-        if="args.eclipse.version" />
+        if:set="args.eclipse.version" />
       <param name="provider"
         expression="${args.eclipse.provider}"
-        if="args.eclipse.provider" />
+        if:set="args.eclipse.provider" />
       <param name="osgi.symbolic.name"
         expression="${args.eclipse.symbolic.name}"
-        if="args.eclipse.symbolic.name"/>
+        if:set="args.eclipse.symbolic.name"/>
       <param name="plugin"
         expression="${eclipse.plugin}" />
       <param name="fragment.country" 
         expression="${args.eclipsehelp.country}" 
-        if="eclipse.fragment.country"/>
+        if:set="eclipse.fragment.country"/>
       <param name="fragment.lang" 
         expression="${args.eclipsehelp.language}" 
-        if="args.eclipsehelp.language"/>
+        if:set="args.eclipsehelp.language"/>
       <outputproperty value="text" name="method"/>
       <param name="dita.plugin.output" 
         expression="dita.eclipse.manifest"/>
@@ -318,10 +318,10 @@ See the accompanying LICENSE file for applicable license.
           expression="dita.eclipse.properties"/>
       <param name="version"
           expression="${args.eclipse.version}"
-          if="args.eclipse.version" />
+          if:set="args.eclipse.version" />
       <param name="provider"
           expression="${args.eclipse.provider}"
-          if="args.eclipse.provider" />
+          if:set="args.eclipse.provider" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
     </pipeline>
@@ -340,10 +340,10 @@ See the accompanying LICENSE file for applicable license.
       <param name="dita.plugin.output" expression="dita.eclipse.properties"/>
       <param name="version"
           expression="${args.eclipse.version}"
-          if="args.eclipse.version" />
+          if:set="args.eclipse.version" />
       <param name="provider"
           expression="${args.eclipse.provider}"
-          if="args.eclipse.provider" />
+          if:set="args.eclipse.provider" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
     </pipeline>
