@@ -113,7 +113,8 @@ public final class DelayConrefUtils {
                 }
             }
             return false;
-
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error("Failed to read document: " + e.getMessage(), e);
         }
@@ -171,6 +172,8 @@ public final class DelayConrefUtils {
                     }
                 }
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             e.printStackTrace();
         }

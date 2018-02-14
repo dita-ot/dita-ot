@@ -137,7 +137,8 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                 hasPrologTillNow = true;
                 hasWritten = true;
             }
-
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
@@ -269,6 +270,8 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                     hasPrologTillNow = true;
                 }
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
@@ -307,6 +310,8 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             topicIdList.clear();
             reader.setErrorHandler(new DITAOTXMLErrorHandler(file, logger));
             reader.parse(file);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }finally {
@@ -321,6 +326,8 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         try {
             deleteQuietly(inputFile);
             moveFile(outputFile, inputFile);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
         }

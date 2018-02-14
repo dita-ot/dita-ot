@@ -111,6 +111,8 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
                     domToSax(indexEntries.get(curMatchTopic));
                     getContentHandler().endElement(NULL_NS_URI, TOPIC_RELATED_LINKS.localName, TOPIC_RELATED_LINKS.localName);
                     curMatchTopic = null;
+                } catch (final RuntimeException e) {
+                    throw e;
                 } catch (final Exception e) {
                     logger.error(e.getMessage(), e);
                 }

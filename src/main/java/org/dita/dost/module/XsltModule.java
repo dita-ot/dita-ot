@@ -153,6 +153,8 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                         throw new IOException("Failed to to replace input file " + out.getAbsolutePath());
                     }
                 }
+            } catch (final RuntimeException e) {
+                throw e;
             } catch (final Exception e) {
                 logger.error("Failed to transform document: " + e.getMessage(), e);
                 logger.debug("Remove " + tmp.getAbsolutePath());

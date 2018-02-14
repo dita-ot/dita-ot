@@ -63,6 +63,8 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
             serializer.writeEndElement(); // body
             serializer.writeEndElement(); // html
             serializer.writeEndDocument();
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             throw new DITAOTException(e);
         } finally {

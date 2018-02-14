@@ -90,6 +90,8 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
             }
             serializer.writeEndElement(); // index
             serializer.writeEndDocument();
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             throw new DITAOTException(e);
         } finally {
