@@ -446,10 +446,15 @@ public final class Job {
     /**
      * Get input file
      *
-     * @return input file path relative to input directory
+     * @return input file path relative to input directory, {@code null} if not set
      */
     public URI getInputMap() {
-       return toURI(getProperty(INPUT_DITAMAP_URI));
+//       return toURI(getProperty(INPUT_DITAMAP_URI));
+        return files.values().stream()
+                .filter(fi -> fi.isInput)
+                .map(fi -> getInputDir().relativize(fi.src))
+                .findAny()
+                .orElse(null);
     }
 
     /**
@@ -926,13 +931,19 @@ public final class Job {
 
     /**
      * Get input file path.
-     * @return absolute input file path
+     * @return absolute input file path, {@code null} if not set
      */
     public URI getInputFile() {
-        if (prop.containsKey(PROPERTY_INPUT_MAP_URI)) {
-            return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
-        }
-        return null;
+//        if (prop.containsKey(PROPERTY_INPUT_MAP_URI)) {
+//            return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
+//        }
+//        return null;
+        return files.values().stream()
+                .filter(fi -> fi.isInput)
+                .map(fi -> fi.src)
+                .findAny()
+                .orElse(null);
+
     }
 
     /**
