@@ -65,6 +65,7 @@ public class KeyrefModuleTest {
                 .src(new File(baseDir, "xsrc" + File.separator + "test.ditamap").toURI())
                 .result(new File(baseDir, "xsrc" + File.separator + "test.ditamap").toURI())
                 .format("ditamap")
+                .isInput(true)
                 .build());
         module.setJob(job);
         module.setLogger(new TestLogger());

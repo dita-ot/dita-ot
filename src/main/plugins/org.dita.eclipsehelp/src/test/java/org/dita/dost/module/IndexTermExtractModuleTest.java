@@ -54,6 +54,7 @@ public class IndexTermExtractModuleTest {
         job.add(new Builder()
                 .uri(create("bookmap.ditamap")).format("ditamap")
                 .src(new File(srcDir, "bookmap.ditamap").toURI())
+                .isInput(true)
                 .build());
         job.setInputMap(URI.create("bookmap.ditamap"));
         job.setInputFile(new File(srcDir, "bookmap.ditamap").toURI());

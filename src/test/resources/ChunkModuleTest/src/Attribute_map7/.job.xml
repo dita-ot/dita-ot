@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-<job>
+<?xml version="1.0" encoding="UTF-8"?><job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
@@ -46,20 +45,10 @@
     <string/>
   </property>
   <files>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/child1.dita"
-      uri="child1.dita" path="child1.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/parent1.dita"
-      uri="parent1.dita" path="parent1.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/map7.ditamap"
-      uri="map7.ditamap" path="map7.ditamap" format="ditamap"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/parent2.dita"
-      uri="parent2.dita" path="parent2.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/child2.dita"
-      uri="child2.dita" path="child2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/child1.dita" uri="child1.dita" path="child1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/parent1.dita" uri="parent1.dita" path="parent1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/map7.ditamap" uri="map7.ditamap" path="map7.ditamap" format="ditamap" input="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/parent2.dita" uri="parent2.dita" path="parent2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/child2.dita" uri="child2.dita" path="child2.dita" format="dita" target="true"/>
   </files>
 </job>

@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-<job>
+<?xml version="1.0" encoding="UTF-8"?><job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
@@ -46,20 +45,10 @@
     <string/>
   </property>
   <files>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/map5.dita"
-      uri="map5.dita" path="map5.dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/t1.dita"
-      uri="t1.dita" path="t1.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/nested1.dita"
-      uri="nested1.dita" path="nested1.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/t2.dita"
-      uri="t2.dita" path="t2.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/map5.ditamap"
-      uri="map5.ditamap" path="map5.ditamap" format="ditamap"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/map5.dita" uri="map5.dita" path="map5.dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/t1.dita" uri="t1.dita" path="t1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/nested1.dita" uri="nested1.dita" path="nested1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/t2.dita" uri="t2.dita" path="t2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/map5.ditamap" uri="map5.ditamap" path="map5.ditamap" format="ditamap" input="true"/>
   </files>
 </job>

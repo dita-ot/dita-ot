@@ -8,6 +8,8 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
+import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
 import static org.junit.Assert.assertEquals;
 
@@ -30,7 +32,7 @@ import org.xml.sax.SAXException;
 
 public class TestTopicMergeModule {
 
-    final File resourceDir = TestUtils.getResourceDir(TestTopicMergeModule.class);
+    private final File resourceDir = TestUtils.getResourceDir(TestTopicMergeModule.class);
     private File tempDir;
 
     public TopicMergeModule module;
@@ -38,9 +40,10 @@ public class TestTopicMergeModule {
     //    private AbstractFacade facade;
 
     private PipelineHashIO pipelineInput;
-    final File ditalistfile = new File (resourceDir, "compare.xml");
-    File tobecomparefile;
-    File temporaryDir;
+    private final File ditalistfile = new File (resourceDir, "compare.xml");
+    private File tobecomparefile;
+    private File temporaryDir;
+    private Job job;
 
     @Before
     public void setUp() throws IOException {
@@ -50,7 +53,19 @@ public class TestTopicMergeModule {
         pipelineInput = new PipelineHashIO();
         
         temporaryDir = new File(tempDir, "temp");
+        final File srcDir = new File(tempDir, "src");
+        srcDir.mkdirs();
         TestUtils.copy(new File(resourceDir, "temp"), temporaryDir);
+
+        job = new Job(temporaryDir);
+        job.setInputMap(URI.create("test.ditamap"));
+        job.add(new Job.FileInfo.Builder()
+                .src(new File(srcDir, "test.ditamap").toURI())
+                .uri(URI.create("test.ditamap"))
+                .format(ATTR_FORMAT_VALUE_DITAMAP)
+                .isInput(true)
+                .build());
+        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
 
         final File inputMap = new File(temporaryDir, "test.ditamap");
         
@@ -81,8 +96,6 @@ public class TestTopicMergeModule {
     {
         final TopicMergeModule topicmergemodule = new TopicMergeModule();
         topicmergemodule.setLogger(new TestUtils.TestLogger());
-        final Job job = new Job(temporaryDir);
-        job.setInputMap(URI.create("test.ditamap"));
         topicmergemodule.setJob(job);
         topicmergemodule.execute(pipelineInput);
         

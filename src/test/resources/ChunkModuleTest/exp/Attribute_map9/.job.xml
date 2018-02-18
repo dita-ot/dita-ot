@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-<job>
+<?xml version="1.0" encoding="UTF-8"?><job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
@@ -46,14 +45,8 @@
     <string/>
   </property>
   <files>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Y.dita"
-      uri="Y.dita" path="Y.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/map9.ditamap"
-      uri="map9.ditamap" path="map9.ditamap" format="ditamap"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/X.dita"
-      uri="X.dita" path="X.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Y.dita" uri="Y.dita" path="Y.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/map9.ditamap" uri="map9.ditamap" path="map9.ditamap" format="ditamap" input="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/X.dita" uri="X.dita" path="X.dita" format="dita" target="true"/>
   </files>
 </job>
