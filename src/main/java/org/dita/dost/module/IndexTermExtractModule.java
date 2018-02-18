@@ -140,7 +140,7 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         try {
             xmlReader.setContentHandler(handler);
 
-            final FileInfo fileInfo = job.getFileInfo(job.getInputFile());
+            final FileInfo fileInfo = job.getFileInfo(f -> f.isInput).iterator().next();
             final URI tempInputMap = job.tempDirURI.resolve(fileInfo.uri);
             for (final URI aTopicList : topicList) {
                 URI target;

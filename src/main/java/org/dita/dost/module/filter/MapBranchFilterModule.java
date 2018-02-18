@@ -71,7 +71,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        final FileInfo fi = job.getFileInfo(job.getInputMap());
+        final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
         if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
             return null;
         }

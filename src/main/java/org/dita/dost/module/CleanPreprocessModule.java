@@ -101,7 +101,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         }
 
         // start map
-        final FileInfo start = job.getFileInfo(job.getInputFile());
+        final FileInfo start = job.getFileInfo(f -> f.isInput).iterator().next();
         if (start != null) {
             job.setInputMap(start.uri);
         }

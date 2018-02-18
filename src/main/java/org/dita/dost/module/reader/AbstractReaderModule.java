@@ -326,6 +326,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                     .src(currentFile)
                     .uri(rel)
                     .result(currentFile)
+                    .isInput(currentFile.equals(rootFile))
                     .build();
             job.add(stub);
         }
