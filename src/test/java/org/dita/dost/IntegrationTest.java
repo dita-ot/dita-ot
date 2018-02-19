@@ -76,6 +76,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .input(Paths.get("test.ditamap"))
                 .test();
     }
+    
+    @Test
+    public void testlocktitle() throws Throwable {
+        builder().name("locktitle")
+                .transtype(PREPROCESS)
+                .input(Paths.get("TestingLocktitle.ditamap"))
+                .test();
+    }
 
     @Test
     public void testimage_extension_mixedcase() throws Throwable {

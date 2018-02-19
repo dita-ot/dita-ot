@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en-us" domains="(topic hi-d)"><title>Locktitle test: map navtitles 3, 5, 6 should be locked in each group</title>
+<topichead>
+<topicmeta>
+<navtitle>Start with topics that do not have navtitle inside</navtitle></topicmeta>
+<topicref href="titletest1.dita"/>
+<topicref href="titletest2.dita" navtitle="ignore this navtitle att"/>
+<topicref href="titletest2a.dita" navtitle="REALLY ignore this navtitle att" locktitle="no"/>
+<topicref href="titletest3.dita" navtitle="lock this navtitle attribute for topic 3!" locktitle="yes"/>
+<topicref href="titletest4.dita"><topicmeta><navtitle>Ignore this navtitle element</navtitle>
+<searchtitle>Also have a search title here</searchtitle></topicmeta></topicref>
+<topicref href="titletest4a.dita" locktitle="no"><topicmeta><navtitle>REALLY ignore this navtitle element</navtitle>
+<audience experiencelevel="none"/></topicmeta></topicref>
+<topicref href="titletest5.dita" locktitle="yes"><topicmeta><navtitle>lock this navtitle element for topic 5!!</navtitle></topicmeta></topicref>
+<topicref href="titletest6.dita" navtitle="Locked att but element too" locktitle="yes"><topicmeta><navtitle>Locked navtitle element for topic 6, also have att</navtitle></topicmeta></topicref>
+</topichead>
+<topichead>
+<topicmeta>
+<navtitle>Now with topics that DO have navtitle inside</navtitle></topicmeta>
+<topicref href="navtitletest1.dita"/>
+<topicref href="navtitletest2.dita" navtitle="ignore this navtitle att"/>
+<topicref href="navtitletest2a.dita" navtitle="REALLY ignore this navtitle att" locktitle="no"/>
+<topicref href="navtitletest3.dita" navtitle="lock this navtitle attribute on topic 3!" locktitle="yes"/>
+<topicref href="navtitletest4.dita"><topicmeta><navtitle>Ignore this navtitle element</navtitle>
+<searchtitle>Also have a search title here</searchtitle></topicmeta></topicref>
+<topicref href="navtitletest4a.dita" locktitle="no"><topicmeta><navtitle>REALLY ignore this navtitle element</navtitle>
+<audience experiencelevel="none"/></topicmeta></topicref>
+<topicref href="navtitletest5.dita" locktitle="yes"><topicmeta><navtitle>lock this navtitle element on topic 5!!</navtitle></topicmeta></topicref>
+<topicref href="navtitletest6.dita" navtitle="Locked att but element too" locktitle="yes"><topicmeta><navtitle>Locked navtitle element for topic 6, also have att</navtitle></topicmeta></topicref>
+</topichead>
+</map>
