@@ -101,7 +101,8 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        processMap(job.getInputMap());
+        final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+        processMap(in.uri);
 
         try {
             job.write();
