@@ -92,7 +92,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
      * Process start map to read copy-to map and write unique topic references.
      */
     private void processMap() throws DITAOTException {
-        final URI in = job.tempDirURI.resolve(job.getInputMap());
+        final URI in = job.tempDirURI.resolve(job.getFileInfo(fi -> fi.isInput).iterator().next().uri);
 
         final List<XMLFilter> pipe = getProcessingPipe(in);
 
