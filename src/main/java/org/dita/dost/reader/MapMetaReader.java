@@ -305,6 +305,12 @@ public final class MapMetaReader extends AbstractDomFilter {
                         //append node to the list if it exist in topic meta table
                         topicMetaTable.get(metaKey).appendChild(resultDoc.importNode(elem, true));
                     } else {
+                        if (TOPIC_NAVTITLE.matches(classValue)) {
+                            //Add locktitle value to navtitle so we know whether it should be pushed to topics
+                            final String locktitleAttr =  ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE) != null ? 
+                                                          ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE).getNodeValue() : "no";
+                            elem.setAttributeNS(DITA_OT_NS, DITA_OT_NS_PREFIX + ":" + ATTRIBUTE_NAME_LOCKTITLE, locktitleAttr);
+                        }
                         final Element stub = resultDoc.createElement(ELEMENT_STUB);
                         stub.appendChild(resultDoc.importNode(elem, true));
                         topicMetaTable.put(metaKey, stub);

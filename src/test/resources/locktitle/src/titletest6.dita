@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="titletest6">
+  <title>This is a title, defined in the topic. 6</title>
+  <body>
+    <p>Topic paragraph</p>
+  </body>
+</topic>
