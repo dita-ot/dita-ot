@@ -47,16 +47,26 @@ See the accompanying LICENSE file for applicable license.
       <xsl:value-of select="concat($msgcat, $msgnum, $msgsev)"/>
     </xsl:param>
     
+    <xsl:variable name="msgdoc" select="document('plugin:org.dita.base:config/messages.xml')" as="document-node()?"/>
     <xsl:variable name="msgcontent" as="xs:string*">
       <xsl:choose>
         <xsl:when test="$msg != '***'">
           <xsl:value-of select="$msg"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:variable name="msgdoc" select="document('plugin:org.dita.base:config/messages.xml')"/>
           <xsl:apply-templates select="$msgdoc/messages/message[@id = $id]" mode="get-message-content">    
             <xsl:with-param name="params" select="$msgparams"/>    
           </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="msgseverity" as="xs:string*">
+      <xsl:choose>
+        <xsl:when test="$msgsev != 'I'">
+          <xsl:value-of select="$msg"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$msgdoc/messages/message[@id = $id]/@type"/>    
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -84,7 +94,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:sequence select="$msgcontent"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$msgsev = 'F'">
+      <xsl:when test="$msgsev = 'F' or $msgseverity='FATAL'">
         <xsl:message terminate="yes">
           <xsl:value-of select="$m" separator=""/>
         </xsl:message>
