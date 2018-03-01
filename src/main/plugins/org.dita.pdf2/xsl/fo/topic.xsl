@@ -444,6 +444,9 @@ See the accompanying LICENSE file for applicable license.
                             $topicref/@navtitle">
                 <xsl:value-of select="$topicref/@navtitle"/>
             </xsl:when>
+            <xsl:when test="*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]">
+                <xsl:apply-templates select="*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]/node()"/> 
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="getTitle"/>
             </xsl:otherwise>
