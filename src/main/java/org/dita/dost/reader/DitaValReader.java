@@ -193,7 +193,7 @@ public final class DitaValReader implements AbstractReader {
                 action = readFlag(elem);
                 break;
             default:
-                throw new IllegalArgumentException("Invalid action: " + attAction);
+                throw new IllegalArgumentException(MessageUtils.getMessage("DOTJ077F", attAction).toString());
         }
         if (action != null) {
             final QName attName;

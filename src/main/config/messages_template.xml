@@ -367,6 +367,11 @@ See the accompanying LICENSE file for applicable license.
     <reason>Absolute link '%1' without correct 'scope' attribute.</reason>
     <response></response>
   </message>
+  
+  <message id="DOTJ077F" type="FATAL">
+    <reason>Invalid action attribute '%1' on DITAVAL property.</reason>
+    <response></response>
+  </message>
 
   <!-- End of Java Messages -->
     
