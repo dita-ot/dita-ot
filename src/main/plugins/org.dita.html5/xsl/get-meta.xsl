@@ -436,7 +436,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- this value is based on output format used for DC indexing, not source.
        Put in this odd template for easy overriding, if creating another output format. -->
   <xsl:template match="*" mode="gen-format-metadata">
-    <meta name="DC.Format" content="XHTML"/>
+    <meta name="DC.Format" content="HTML5"/>
   </xsl:template>
   
   <!-- INSTANTIATION: Identifier --> <!-- id is an attribute on Topic -->
