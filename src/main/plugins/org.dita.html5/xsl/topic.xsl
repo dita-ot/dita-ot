@@ -1024,13 +1024,13 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="glossentries" select="$m_entry-file-contents/descendant-or-self::*[contains(@class, ' glossentry/glossentry ')]" as="element()*"/>
     <xsl:choose>
       <xsl:when test="$m_glossid = '' and $glossentries[lang($m_reflang)]">
-        <xsl:sequence select="$glossentries[lang($m_reflang)]"/>
+        <xsl:sequence select="$glossentries[lang($m_reflang)][1]"/>
       </xsl:when>
       <xsl:when test="not($m_glossid = '') and $glossentries[@id = $m_glossid][lang($m_reflang)]">
         <xsl:sequence select="$glossentries[@id = $m_glossid][lang($m_reflang)]"/>
       </xsl:when>
       <xsl:when test="$m_glossid = '' and $glossentries[lang($DEFAULTLANG)]">
-        <xsl:sequence select="$glossentries[lang($DEFAULTLANG)]"/>
+        <xsl:sequence select="$glossentries[lang($DEFAULTLANG)][1]"/>
       </xsl:when>
       <xsl:when test="not($m_glossid = '') and $glossentries[@id = $m_glossid][lang($DEFAULTLANG)]">
         <xsl:sequence select="$glossentries[@id = $m_glossid][lang($DEFAULTLANG)]"/>
@@ -2742,6 +2742,6 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:include href="css-class.xsl"/>
-  <xsl:include href="functions.xsl"/>
+  <xsl:include href="plugin:org.dita.html5:xsl/functions.xsl"/>
 
 </xsl:stylesheet>

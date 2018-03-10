@@ -1,4 +1,4 @@
-<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" class="- map/map "
   domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
   title="test" ditaarch:DITAArchVersion="1.2">
   <topicmeta class="- map/topicmeta ">
@@ -175,7 +175,7 @@
       <unknown class="- topic/unknown ">topicref unknown</unknown>
       <linktext class="- map/linktext ">topicref linktext</linktext>
       <shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
-      <navtitle class="- topic/navtitle ">topicref navtitle</navtitle>
+      <navtitle class="- topic/navtitle " dita-ot:locktitle="no">topicref navtitle</navtitle>
     </topicmeta>
   </topicref>
   <topicref class="- map/topicref " href="c.xml">
@@ -292,7 +292,7 @@
       <unknown class="- topic/unknown ">topicref unknown</unknown>
       <linktext class="- map/linktext ">topicref linktext</linktext>
       <shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
-      <navtitle class="- topic/navtitle ">topicref navtitle</navtitle>
+      <navtitle class="- topic/navtitle " dita-ot:locktitle="no">topicref navtitle</navtitle>
     </topicmeta>
   </topicref>
 </map>
