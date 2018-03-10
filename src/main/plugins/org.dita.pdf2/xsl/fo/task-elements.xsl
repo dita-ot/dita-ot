@@ -418,7 +418,7 @@ See the accompanying LICENSE file for applicable license.
           <fo:table-header xsl:use-attribute-sets="chhead">
             <fo:table-row xsl:use-attribute-sets="chhead__row">
               <xsl:apply-templates select="." mode="emptyChoptionHd"/>
-              <xsl:apply-templates select="." mode="emptyDescHd"/>
+              <xsl:apply-templates select="." mode="emptyChdescHd"/>
             </fo:table-row>
           </fo:table-header>
         </xsl:otherwise>
@@ -460,7 +460,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:if>
         <xsl:apply-templates/>
         <xsl:if test="empty(*[contains(@class,' task/chdeschd ')])">
-          <xsl:apply-templates select="." mode="emptyDescHd"/>
+          <xsl:apply-templates select="." mode="emptyChdescHd"/>
         </xsl:if>
       </fo:table-row>
     </fo:table-header>
