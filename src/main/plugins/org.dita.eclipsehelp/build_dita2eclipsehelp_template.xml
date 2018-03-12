@@ -142,7 +142,6 @@ See the accompanying LICENSE file for applicable license.
             description="Build Eclipse Help index file">
         <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
         <pipeline message="Extract index term."
-            tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}">
           <module class="org.dita.dost.module.IndexTermExtractModule">
             <param name="output" location="${dita.output.dir}/${user.input.file}"/>
@@ -163,7 +162,6 @@ See the accompanying LICENSE file for applicable license.
         description="Build Eclipse Help index file">
         <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
         <pipeline message="Extract index term."
-            tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}">
           <module class="org.dita.dost.module.IndexTermExtractModule">
             <param name="output" location="${dita.output.dir}/index.xml"/>

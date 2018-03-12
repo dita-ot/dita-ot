@@ -144,8 +144,7 @@ with those set forth herein.
   <target name="map2pdf2" unless="noMap">
     <dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
     <pipeline message="topicmerge" taskname="topic-merge"
-              inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
-              tempdir="${dita.temp.dir.fullpath}">
+              inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}">
       <module class="org.dita.dost.module.TopicMergeModule">
         <param name="output" location="${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml"/>
         <param name="style" location="${dita.plugin.org.dita.pdf2.dir}/xsl/common/topicmerge.xsl"/>
