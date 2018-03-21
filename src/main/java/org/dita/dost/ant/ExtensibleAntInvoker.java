@@ -439,7 +439,7 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     public static class FileInfoFilterElem extends ConfElem {
-        private Set<String> format = Collections.emptySet();
+        private Set<String> formats = Collections.emptySet();
         private Boolean hasConref;
         private Boolean isResourceOnly;
 
@@ -448,7 +448,7 @@ public final class ExtensibleAntInvoker extends Task {
             if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
                 supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
             }
-            this.format = builder.build();
+            this.formats = builder.build();
 
         }
 
@@ -461,7 +461,7 @@ public final class ExtensibleAntInvoker extends Task {
         }
 
         public Predicate<FileInfo> toFilter() {
-            return f -> (format.isEmpty() || format.contains(f.format)) &&
+            return f -> (formats.isEmpty() || formats.contains(f.format)) &&
                     (hasConref == null || f.hasConref == hasConref) &&
                     (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
         }

@@ -28,14 +28,13 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Resource collection that finds matching resources from job configuration.
  */
 public class JobSourceSet extends AbstractFileSet implements ResourceCollection {
 
-    private Set<String> format = Collections.emptySet();
+    private Set<String> formats = Collections.emptySet();
     private Boolean hasConref;
     private Boolean isResourceOnly;
     private Collection<Resource> res;
@@ -49,7 +48,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         if (res == null) {
             final Job job = getJob();
             res = new ArrayList<>();
-            for (final Job.FileInfo f : job.getFileInfo(f -> (format.isEmpty() || format.contains(f.format)) &&
+            for (final Job.FileInfo f : job.getFileInfo(f -> (formats.isEmpty() || formats.contains(f.format)) &&
                     (hasConref == null || f.hasConref == hasConref) &&
                     (isResourceOnly == null || f.isResourceOnly == isResourceOnly))) {
                 log("Scanning for " + f.file.getPath(), Project.MSG_VERBOSE);
@@ -119,7 +118,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
             supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
         }
-        this.format = builder.build();
+        this.formats = builder.build();
     }
 
     public void setConref(final boolean conref) {
