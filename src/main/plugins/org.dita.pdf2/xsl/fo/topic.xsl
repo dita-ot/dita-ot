@@ -997,6 +997,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setExpanse"/>
+            <xsl:call-template name="setScale"/>
             <xsl:if test="not(@id)">
               <xsl:attribute name="id">
                 <xsl:call-template name="get-id"/>
@@ -1249,6 +1250,12 @@ See the accompanying LICENSE file for applicable license.
         <xsl:param name="href"/>
         <xsl:param name="height" as="xs:string?"/>
         <xsl:param name="width" as="xs:string?"/>
+        <xsl:param name="scale" as="xs:string?">
+            <xsl:choose>
+                <xsl:when test="@scale"><xsl:value-of select="@scale"/></xsl:when>
+                <xsl:when test="ancestor::*[@scale]"><xsl:value-of select="ancestor::*[@scale][1]/@scale"/></xsl:when>
+            </xsl:choose>
+        </xsl:param>
 <!--Using align attribute set according to image @align attribute-->
         <xsl:call-template name="processAttrSetReflection">
                 <xsl:with-param name="attrSet" select="concat('__align__', $imageAlign)"/>
@@ -1291,12 +1298,12 @@ See the accompanying LICENSE file for applicable license.
                     </xsl:choose>
                 </xsl:attribute>
             </xsl:if>
-            <xsl:if test="not($width) and not($height) and @scale">
+            <xsl:if test="not($width) and not($height) and $scale">
                 <xsl:attribute name="content-width">
-                    <xsl:value-of select="concat(@scale,'%')"/>
+                    <xsl:value-of select="concat($scale,'%')"/>
                 </xsl:attribute>
             </xsl:if>
-          <xsl:if test="@scalefit = 'yes' and not($width) and not($height) and not(@scale)">            
+          <xsl:if test="@scalefit = 'yes' and not($width) and not($height) and not($scale)">            
             <xsl:attribute name="width">100%</xsl:attribute>
             <xsl:attribute name="height">100%</xsl:attribute>
             <xsl:attribute name="content-width">scale-to-fit</xsl:attribute>
