@@ -620,6 +620,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="@navtitle">
             <xsl:value-of select="@navtitle"/>
           </xsl:when>
+          <xsl:when test="*/*[contains(@class,' map/linktext ')]">
+            <xsl:value-of select="*/*[contains(@class,' map/linktext ')]"/>
+          </xsl:when>
           <xsl:otherwise>
             <xsl:text>#none#</xsl:text>
             <xsl:apply-templates select="." mode="ditamsg:missing-navtitle-peer"/>
