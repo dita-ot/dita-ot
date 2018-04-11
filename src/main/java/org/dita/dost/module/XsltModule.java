@@ -50,6 +50,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
     private Templates templates;
     private final Map<String, String> params = new HashMap<>();
+    private final Properties properties = new Properties();
     private File style;
     private File in;
     private File out;
@@ -143,6 +144,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             } catch (final TransformerConfigurationException e) {
                 throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
             }
+            t.setOutputProperties(properties);
         }
 
         final boolean same = in.getAbsolutePath().equals(out.getAbsolutePath());
@@ -196,6 +198,10 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
     public void setParam(final String key, final String value) {
         params.put(key, value);
+    }
+
+    public void setOutputProperty(final String name, final String value) {
+        properties.setProperty(name, value);
     }
 
     public void setIncludes(final Collection<File> includes) {

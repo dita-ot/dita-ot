@@ -209,6 +209,12 @@ public final class ExtensibleAntInvoker extends Task {
                     module.setParam(p.getName(), p.getValue());
                 }
             }
+            for (final OutputPropertyElem o : ((XsltElem) m).outputProperties) {
+                if (!o.isValid()) {
+                    throw new BuildException("Incomplete outputproperty");
+                }
+                module.setOutputProperty(o.name, o.value);
+            }
             return module;
         } else if (m instanceof SaxPipeElem) {
             final SaxPipeElem fm = (SaxPipeElem) m;
@@ -377,6 +383,7 @@ public final class ExtensibleAntInvoker extends Task {
         private File out;
         private final List<IncludesFileElem> includes = new ArrayList<>();
         private final List<IncludesFileElem> excludes = new ArrayList<>();
+        private final List<OutputPropertyElem> outputProperties = new ArrayList<>();
         private Mapper mapper;
         private String extension;
         private String filenameparameter;
@@ -459,6 +466,24 @@ public final class ExtensibleAntInvoker extends Task {
 
         public void addConfiguredExcludesFile(final IncludesFileElem excludesFile) {
             excludes.add(excludesFile);
+        }
+
+        public void addOutputProperty(final OutputPropertyElem outputProperty) {
+            outputProperties.add(outputProperty);
+        }
+    }
+
+    public static class OutputPropertyElem extends ConfElem {
+        private String name;
+        private String value;
+        public void setName(final String name) {
+            this.name = name;
+        }
+        public void setValue(final String value) {
+            this.value = value;
+        }
+        public boolean isValid() {
+            return (name != null && value != null);
         }
     }
 
