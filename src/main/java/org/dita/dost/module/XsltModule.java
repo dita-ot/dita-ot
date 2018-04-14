@@ -8,11 +8,9 @@
 package org.dita.dost.module;
 
 import com.google.common.annotations.VisibleForTesting;
-import net.sf.saxon.jaxp.SaxonTransformerFactory;
 import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.trans.UncheckedXPathException;
-import net.sf.saxon.lib.StandardErrorListener;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.XPathException;
 import org.apache.tools.ant.types.XMLCatalog;
@@ -42,7 +40,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 import static org.dita.dost.util.FileUtils.replaceExtension;
-import static org.dita.dost.util.XMLUtils.toSaxonLogger;
+import static org.dita.dost.util.XMLUtils.toErrorListener;
 
 /**
  * XSLT processing module.
@@ -112,9 +110,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
         processor = new Processor(config);
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
-        final StandardErrorListener listener = new StandardErrorListener();
-        listener.setLogger(toSaxonLogger(logger));
-        xsltCompiler.setErrorListener(listener);
+        xsltCompiler.setErrorListener(toErrorListener(logger));
         try {
             templates = xsltCompiler.compile(new StreamSource(style));
         } catch (SaxonApiException e) {
@@ -160,6 +156,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 final URIResolver resolver = Configuration.DEBUG
                         ? new XMLUtils.DebugURIResolver(uriResolver)
                         : uriResolver;
+                t.setErrorListener(toErrorListener(logger));
                 t.setURIResolver(resolver);
             } catch (final Exception e) {
                 throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
@@ -288,24 +285,15 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         this.extension = extension.startsWith(".") ? extension : ("." + extension);
     }
 
-//    @VisibleForTesting
-//    void configureExtensions(TransformerFactory tf) {
-//        if (tf instanceof SaxonTransformerFactory) {
-//            configureSaxonExtensions((SaxonTransformerFactory) tf);
-//        }
-//    }
-//
-//    private void configureSaxonExtensions(SaxonTransformerFactory tfi) {
-//        configureSaxonExtensions(tfi.getConfiguration());
-//    }
-
     /**
      * Registers Saxon full integrated function definitions.
+     *
      * The intgrated function should be an instance of net.sf.saxon.lib.ExtensionFunctionDefinition abstract class.
      * @see <a href="https://www.saxonica.com/html/documentation/extensibility/integratedfunctions/ext-full-J.html">Saxon
      *      Java extension functions: full interface</a>
      */
-    private void configureSaxonExtensions(final net.sf.saxon.Configuration conf) {
+    @VisibleForTesting
+    void configureSaxonExtensions(final net.sf.saxon.Configuration conf) {
         for (ExtensionFunctionDefinition def : ServiceLoader.load(ExtensionFunctionDefinition.class)) {
             try {
                 conf.registerExtensionFunction(def.getClass().newInstance());
@@ -320,11 +308,9 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
     /**
      * Registers collation URI resolvers.
-     * 
-     * @param conf Saxon configuratin
      */
     @VisibleForTesting
-    private void configureSaxonCollationResolvers(final net.sf.saxon.Configuration conf) {
+    void configureSaxonCollationResolvers(final net.sf.saxon.Configuration conf) {
         for (DelegatingCollationUriResolver resolver : ServiceLoader.load(DelegatingCollationUriResolver.class)) {
             try {
                 final DelegatingCollationUriResolver newResolver = resolver.getClass().newInstance();

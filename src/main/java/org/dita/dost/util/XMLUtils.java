@@ -28,6 +28,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import net.sf.saxon.event.ProxyReceiver;
 import net.sf.saxon.jaxp.TransformerImpl;
+import net.sf.saxon.lib.StandardErrorListener;
 import net.sf.saxon.serialize.Emitter;
 import net.sf.saxon.lib.Logger;
 import net.sf.saxon.serialize.MessageWarner;
@@ -108,6 +109,12 @@ public final class XMLUtils {
             });
         }
         return transformer;
+    }
+
+    public static ErrorListener toErrorListener(final DITAOTLogger logger) {
+        final StandardErrorListener listener = new StandardErrorListener();
+        listener.setLogger(toSaxonLogger(logger));
+        return listener;
     }
 
     public static Logger toSaxonLogger(final DITAOTLogger logger) {

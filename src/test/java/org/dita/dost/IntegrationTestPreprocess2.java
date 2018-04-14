@@ -60,8 +60,8 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("badconref.dita"))
                 .put("validate", "false")
-                .warnCount(2)
-                .errorCount(5)
+                .warnCount(3)
+                .errorCount(4)
                 .test();
     }
 
@@ -71,8 +71,8 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("test.ditamap"))
                 .put("generate-debug-attributes", "false")
-                .errorCount(3)
-                .warnCount(1)
+                .errorCount(2)
+                .warnCount(2)
                 .test();
     }
 
@@ -86,6 +86,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
                 .warnCount(0)
                 .test();
     }
+
 
     @Test
     public void testcontrolValueFile4() throws Throwable {
