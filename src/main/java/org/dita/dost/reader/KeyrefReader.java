@@ -209,7 +209,7 @@ public final class KeyrefReader implements AbstractReader {
                     final Document d = builder.newDocument();
                     final Element copy = (Element) d.importNode(elem, true);
                     d.appendChild(copy);
-                    final String h = copy.getAttribute(ATTRIBUTE_NAME_HREF);
+                    final String h = copy.getAttribute(ATTRIBUTE_NAME_COPY_TO).isEmpty() ? copy.getAttribute(ATTRIBUTE_NAME_HREF) : copy.getAttribute(ATTRIBUTE_NAME_COPY_TO);
                     final URI href = h.isEmpty() ? null : toURI(h);
                     final String s = copy.getAttribute(ATTRIBUTE_NAME_SCOPE);
                     final String scope = s.isEmpty() ? null : s;
