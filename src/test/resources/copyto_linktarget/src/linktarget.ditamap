@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+
+<map>
+<title>Link to a copy-to target</title>
+<topicref href="test1.dita"/>
+<topicref href="test1.dita" copy-to="new-topic-filename.dita"/>
+</map>
