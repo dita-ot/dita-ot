@@ -105,7 +105,16 @@ with those set forth herein.
       <not><isset property="file.protocol.prefix"/></not>
     </condition>
     
-    <property name="xml.catalog.files" value="${customization.dir}/catalog.xml;${dita.plugin.org.dita.pdf2.dir}/cfg/catalog.xml;${dita.dir}/catalog-dita.xml"/>
+    <path id="xml.catalog.path">
+      <pathelement location="${customization.dir}/catalog.xml"/>
+      <pathelement location="${dita.plugin.org.dita.pdf2.dir}/cfg/catalog.xml"/>
+      <pathelement location="${dita.dir}/catalog-dita.xml"/>
+    </path>
+    <xmlcatalog id="xml.catalog">
+      <catalogpath refid="xml.catalog.path"/>
+    </xmlcatalog>
+    <!-- Deprecated since 3.1 -->
+    <pathconvert property="xml.catalog.files" refid="xml.catalog.path"/>
     
     <property name="xsl.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl"/>
     <property name="xsl.fo.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/fo"/>
@@ -289,8 +298,9 @@ with those set forth herein.
     </condition>
 
     <index-preprocess input="${inputFile.url}" output="${dita.temp.dir}/stage1.xml"
-                      indexConfig="${index.config.file}" locale="${document.locale}"
-                      catalogs="${xml.catalog.files}"/> 
+                      indexConfig="${index.config.file}" locale="${document.locale}">
+      <xmlcatalog refid="xml.catalog"/>
+    </index-preprocess> 
   </target>
   
   <target name="transform.topic2fo.main">
@@ -326,9 +336,7 @@ with those set forth herein.
       <param name="variableFiles.url" expression="${variable.file.url}" if:set="variable.file.exists"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <dita:extension id="dita.conductor.pdf2.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <xmlcatalog>
-        <catalogpath path="${xml.catalog.files}"/>
-      </xmlcatalog>
+      <xmlcatalog refid="xml.catalog"/>
     </xslt>
     </pipeline>
   </target>
@@ -371,9 +379,7 @@ with those set forth herein.
     <i18n-preprocess input="${dita.temp.dir}/stage2.fo" output="${pdf2.temp.dir}/topic.fo"
                      config="${i18n.config.file}"
                      style="${xsl.fo.dir}/i18n-postprocess.xsl">
-      <xmlcatalog>
-        <catalogpath path="${xml.catalog.files}"/>
-      </xmlcatalog>
+      <xmlcatalog refid="xml.catalog"/>
     </i18n-preprocess>
   </target>
   <target name="transform.topic2fo.i18n.no-filter" if="pdf2.i18n.skip">
