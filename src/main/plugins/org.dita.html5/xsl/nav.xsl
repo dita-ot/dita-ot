@@ -13,8 +13,6 @@ See the accompanying LICENSE file for applicable license.
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot ditamsg">
   
-  <xsl:import href="plugin:org.dita.html5:xsl/map2html5Impl.xsl"/>
-  
   <xsl:param name="nav-toc" as="xs:string?"/>
   <xsl:param name="FILEDIR" as="xs:string?"/>
   <xsl:param name="FILENAME" as="xs:string?"/>
