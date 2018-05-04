@@ -799,14 +799,18 @@ public final class FilterUtils {
             if (style != null) {
                 propAtts.add("style", Stream.of(style).collect(Collectors.joining(" ")));
             }
-            contentHandler.startElement(NULL_NS_URI, "prop", "prop", propAtts.build());
+            if (changebar != null) {
+                propAtts.add("changebar", Stream.of(changebar).collect(Collectors.joining(" ")));
+            }
+            String tagname = null != changebar ? "revprop" : "prop"; 
+            contentHandler.startElement(NULL_NS_URI, tagname, tagname, propAtts.build());
             if (isStart && startflag != null) {
                 startflag.writeFlag(contentHandler, "startflag");
             }
             if (!isStart && endflag != null) {
                 endflag.writeFlag(contentHandler, "endflag");
             }
-            contentHandler.endElement(NULL_NS_URI, "prop", "prop");
+            contentHandler.endElement(NULL_NS_URI, tagname, tagname);
         }
 
         public Element getStartFlag() {
