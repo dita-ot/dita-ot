@@ -131,30 +131,22 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop" mode="changebar">
-      <xsl:param name="changebar-id"/>
-      <xsl:param name="changebar-style">
-        <xsl:choose>
-          <xsl:when test="@changebar = ('none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset')">
-            <xsl:value-of select="@changebar"/>
-          </xsl:when>
-          <xsl:otherwise>groove</xsl:otherwise>
-        </xsl:choose>
-      </xsl:param>
-      <xsl:param name="changebar-color">
-        <!-- Could take color from @changebar, but for now take from @color to allow @changebar to set style; bar color matches text -->
-        <xsl:choose>
-          <xsl:when test="@color"><xsl:value-of select="@color"/></xsl:when>
-          <xsl:otherwise>black</xsl:otherwise>
-        </xsl:choose>
-      </xsl:param>
-      <fo:change-bar-begin 
-        change-bar-class="{$changebar-id}" 
-        change-bar-style="{$changebar-style}" 
-        change-bar-color="{$changebar-color}" 
-        change-bar-offset="2mm"/>
-    </xsl:template>
-    <xsl:template match="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop" mode="changebar">
+  <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop" mode="changebar">
+    <xsl:param name="changebar-id"/>
+    
+    <xsl:variable name="change-bar-style-atts" as="attribute()*">
+      <xsl:call-template name="parseChangeBarStyle">
+        <xsl:with-param name="value" select="string(@changebar)"/>
+      </xsl:call-template>                
+    </xsl:variable>
+    
+    <fo:change-bar-begin 
+      change-bar-class="{$changebar-id}">
+      <xsl:sequence select="$change-bar-style-atts"/>
+    </fo:change-bar-begin>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop" mode="changebar">
       <xsl:param name="changebar-id"/>
       <fo:change-bar-end change-bar-class="{$changebar-id}"/>
     </xsl:template>
