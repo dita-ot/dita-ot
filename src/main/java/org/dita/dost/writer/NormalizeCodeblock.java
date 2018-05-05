@@ -10,11 +10,9 @@ package org.dita.dost.writer;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_OUTPUTCLASS;
 import static org.dita.dost.util.Constants.PR_D_CODEBLOCK;
 
 /**
@@ -24,6 +22,7 @@ import static org.dita.dost.util.Constants.PR_D_CODEBLOCK;
  */
 public final class NormalizeCodeblock extends AbstractXMLFilter {
 
+    private Set<String> outputClass = new HashSet(Arrays.asList("normalize-space"));
     private int depth = 0;
     private Collection<SAXEvent> buf = new ArrayList<>();
 
@@ -58,8 +57,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
 //            contentHandler.endPrefixMapping(prefix);
 //        }
 //    }
-
-
+    
     @Override
     public void startElement(String uri, String localName, String qName,
                              Attributes atts)
@@ -67,12 +65,16 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         if (depth > 0) {
             depth++;
             buf.add(new StartElementEvent(uri, localName, qName, atts));
-        } else if (PR_D_CODEBLOCK.matches(atts)) {
+        } else if (PR_D_CODEBLOCK.matches(atts) && hasStripWhitespace(atts.getValue(ATTRIBUTE_NAME_OUTPUTCLASS))) {
             depth = 1;
             super.startElement(uri, localName, qName, atts);
         } else {
             super.startElement(uri, localName, qName, atts);
         }
+    }
+
+    private boolean hasStripWhitespace(String value) {
+        return value != null && Arrays.stream(value.split("\\s+")).anyMatch(cls -> outputClass.contains(cls));
     }
 
     @Override
