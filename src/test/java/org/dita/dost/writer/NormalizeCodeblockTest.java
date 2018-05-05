@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,7 +25,7 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import java.io.File;
 
-import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.junit.Assert.assertEquals;
 
 public class NormalizeCodeblockTest {
 
@@ -49,10 +51,44 @@ public class NormalizeCodeblockTest {
     }
 
     @Test
+    public void testOnlyTextWithIndent() throws Exception {
+        final Document act = filter(new File(srcDir, "onlyTextWithIndent.xml"));
+        final Document exp = documentBuilder.parse(new File(expDir, "onlyTextWithIndent.xml"));
+        assertXMLEqual(exp, act);
+    }
+
+    @Test
     public void testNestedElement() throws Exception {
         final Document act = filter(new File(srcDir, "nestedElement.xml"));
         final Document exp = documentBuilder.parse(new File(expDir, "nestedElement.xml"));
         assertXMLEqual(exp, act);
+    }
+
+    @Test
+    public void testNestedElementWithIndent() throws Exception {
+        final Document act = filter(new File(srcDir, "nestedElementWithIndent.xml"));
+        final Document exp = documentBuilder.parse(new File(expDir, "nestedElementWithIndent.xml"));
+        assertXMLEqual(exp, act);
+    }
+
+    @Test
+    public void testCountLeadingSpace() {
+        final NormalizeCodeblock filter = new NormalizeCodeblock();
+        assertEquals(0, filter.countLeadingSpace("foo"));
+        assertEquals(2, filter.countLeadingSpace("  foo"));
+        assertEquals(0, filter.countLeadingSpace(""));
+        assertEquals(2, filter.countLeadingSpace("  "));
+
+    }
+
+    private void assertXMLEqual(Document exp, Document act) {
+        final Diff d = DiffBuilder
+                .compare(exp)
+                .withTest(act)
+                .build();
+        if (d.hasDifferences()) {
+            throw new AssertionError(d.toString());
+        }
     }
 
     private Document filter(final File file) throws Exception {

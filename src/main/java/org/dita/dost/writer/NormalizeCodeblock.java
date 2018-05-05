@@ -11,7 +11,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.dita.dost.util.Constants.PR_D_CODEBLOCK;
 
@@ -79,7 +81,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         if (depth > 0) {
             depth--;
             if (depth == 0) {
-                for (final SAXEvent event : buf) {
+                for (final SAXEvent event : normalizeSpace(buf)) {
                     if (event instanceof StartElementEvent) {
                         final StartElementEvent e = (StartElementEvent) event;
                         super.startElement(e.uri, e.localName, e.qName, e.atts);
@@ -104,6 +106,50 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         } else {
             super.endElement(uri, localName, qName);
         }
+    }
+
+    private Collection<SAXEvent> normalizeSpace(Collection<SAXEvent> buf) {
+        final StringBuilder merged = new StringBuilder();
+        for (final SAXEvent event : buf) {
+            if (event instanceof CharactersEvent) {
+                final CharactersEvent e = (CharactersEvent) event;
+                merged.append(e.ch, e.start, e.length);
+            }
+        }
+        final int min = Arrays.stream(merged.toString().split("\n"))
+                .filter(str -> !str.isEmpty())
+                .mapToInt(this::countLeadingSpace)
+                .min()
+                .orElse(0);
+        if (min == 0) {
+            return buf;
+        }
+        final List<SAXEvent> res = new ArrayList<>(buf.size());
+        boolean firstCharactersEvent = true;
+        for (final SAXEvent event : buf) {
+            if (event instanceof CharactersEvent) {
+                final CharactersEvent e = (CharactersEvent) event;
+                final char[] ch = stripLeadingSpace(firstCharactersEvent, min, e.ch, e.start, e.length);
+                res.add(new CharactersEvent(ch, 0, ch.length));
+                firstCharactersEvent = false;
+            } else {
+                res.add(event);
+            }
+        }
+        return res;
+    }
+
+    char[] stripLeadingSpace(boolean first, int prefix, char[] ch, int start, int length) {
+        final String str = first
+                ? new String(ch, start + prefix, length - prefix)
+                : new String(ch, start, length);
+        return str
+                .replaceAll("\n {" + prefix + "}", "\n")
+                .toCharArray();
+    }
+
+    int countLeadingSpace(String ch) {
+        return ch.replaceAll("^( *)\\S*", "$1").length();
     }
 
     @Override
