@@ -11,6 +11,7 @@ package org.dita.dost.util;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 public class SaxCache {
 
@@ -56,7 +57,7 @@ public class SaxCache {
             this.uri = uri;
             this.localName = localName;
             this.qName = qName;
-            this.atts = atts;
+            this.atts = new AttributesImpl(atts);
         }
 
         @Override
@@ -88,8 +89,10 @@ public class SaxCache {
         public final int length;
 
         public CharactersEvent(char ch[], int start, int length) {
-            this.ch = ch;
-            this.start = start;
+            final char[] copy = new char[length];
+            System.arraycopy(ch, start, copy, 0, length);
+            this.ch = copy;
+            this.start = 0;
             this.length = length;
         }
 
@@ -105,8 +108,10 @@ public class SaxCache {
         public final int length;
 
         public IgnorableWhitespaceEvent(char ch[], int start, int length) {
-            this.ch = ch;
-            this.start = start;
+            final char[] copy = new char[length];
+            System.arraycopy(ch, start, copy, 0, length);
+            this.ch = copy;
+            this.start = 0;
             this.length = length;
         }
 
