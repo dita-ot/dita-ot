@@ -7,6 +7,7 @@
  */
 package org.dita.dost.writer;
 
+import org.dita.dost.util.SaxCache;
 import org.dita.dost.util.SaxCache.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -86,6 +87,35 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     private Collection<SaxEvent> normalizeSpace(Collection<SaxEvent> buf) {
+        final int min = getMinimumIndent(buf);
+        if (min == 0) {
+            return buf;
+        }
+        final List<SaxEvent> res = new ArrayList<>(buf.size());
+        boolean previousEndedInLinefeed = true;
+        for (final SaxEvent event : buf) {
+            if (event instanceof CharactersEvent) {
+                final CharactersEvent e = (CharactersEvent) event;
+                final char[] ch = stripLeadingSpace(previousEndedInLinefeed, min, e.ch, e.start, e.length);
+                res.add(new CharactersEvent(ch, 0, ch.length));
+                previousEndedInLinefeed = ch[ch.length - 1] == '\n';
+            } else {
+                res.add(event);
+            }
+        }
+        return res;
+    }
+
+    private int getMinimumIndent(Collection<SaxEvent> buf) {
+        final String merged = getCharacters(buf);
+        return Arrays.stream(merged.split("\n"))
+                .filter(str -> !str.isEmpty())
+                .mapToInt(this::countLeadingSpace)
+                .min()
+                .orElse(0);
+    }
+
+    private String getCharacters(Collection<SaxEvent> buf) {
         final StringBuilder merged = new StringBuilder();
         for (final SaxEvent event : buf) {
             if (event instanceof CharactersEvent) {
@@ -93,27 +123,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
                 merged.append(e.ch, e.start, e.length);
             }
         }
-        final int min = Arrays.stream(merged.toString().split("\n"))
-                .filter(str -> !str.isEmpty())
-                .mapToInt(this::countLeadingSpace)
-                .min()
-                .orElse(0);
-        if (min == 0) {
-            return buf;
-        }
-        final List<SaxEvent> res = new ArrayList<>(buf.size());
-        boolean firstCharactersEvent = true;
-        for (final SaxEvent event : buf) {
-            if (event instanceof CharactersEvent) {
-                final CharactersEvent e = (CharactersEvent) event;
-                final char[] ch = stripLeadingSpace(firstCharactersEvent, min, e.ch, e.start, e.length);
-                res.add(new CharactersEvent(ch, 0, ch.length));
-                firstCharactersEvent = false;
-            } else {
-                res.add(event);
-            }
-        }
-        return res;
+        return merged.toString();
     }
 
     char[] stripLeadingSpace(boolean first, int prefix, char[] ch, int start, int length) {
