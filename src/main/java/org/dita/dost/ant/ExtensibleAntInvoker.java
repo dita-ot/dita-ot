@@ -7,6 +7,7 @@
  */
 package org.dita.dost.ant;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Location;
 import org.apache.tools.ant.Project;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.supportedImageExtensions;
 
 /**
  * Ant task for executing pipeline modules.
@@ -495,13 +497,18 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     public static class FileInfoFilterElem extends ConfElem {
-        private String format;
+        private Set<String> formats = Collections.emptySet();
         private Boolean hasConref;
         private Boolean isInput;
         private Boolean isResourceOnly;
 
         public void setFormat(final String format) {
-            this.format = format;
+            final ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(format);
+            if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
+                supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
+            }
+            this.formats = builder.build();
+
         }
 
         public void setConref(final boolean conref) {
@@ -517,7 +524,7 @@ public final class ExtensibleAntInvoker extends Task {
         }
 
         public Predicate<FileInfo> toFilter() {
-            return f -> (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
+            return f -> (formats.isEmpty() || formats.contains(f.format)) &&
                     (hasConref == null || f.hasConref == hasConref) &&
                     (isInput == null || f.isInput == isInput) &&
                     (isResourceOnly == null || f.isResourceOnly == isResourceOnly);

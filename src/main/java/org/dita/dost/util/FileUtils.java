@@ -32,7 +32,7 @@ public final class FileUtils {
      * Supported image extensions. File extensions contain a leading dot.
      */
     @Deprecated
-    private final static List<String> supportedImageExtensions;
+    public final static List<String> supportedImageExtensions;
     static {
         final List<String> sie = new ArrayList<>();
         final String imageExtensions = Configuration.configuration.get(CONF_SUPPORTED_IMAGE_EXTENSIONS);

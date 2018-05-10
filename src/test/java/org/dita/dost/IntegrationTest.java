@@ -143,6 +143,16 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .input(Paths.get("TC4.ditamap"))
                 .test();
     }
+    
+    @Test
+    public void testcopyto_linktarget() throws Throwable {
+        builder().name("copyto_linktarget")
+                .transtype(PREPROCESS)
+                .input(Paths.get("linktarget.ditamap"))
+                .errorCount(2)
+                .warnCount(1)
+                .test();
+    }
 
     @Test
     public void testcopyto_sametarget2() throws Throwable {

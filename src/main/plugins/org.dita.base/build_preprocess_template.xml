@@ -84,6 +84,7 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Preprocess and merge ditavals" taskname="ditaval-merge" if:set="args.filter">
       <module class="org.dita.dost.module.MergeDitavalModule">
         <param name="ditaval" value="${args.filter}"/>
+        <param name="ditadir" location="${dita.dir}"/>
       </module>
     </pipeline>
   </target>

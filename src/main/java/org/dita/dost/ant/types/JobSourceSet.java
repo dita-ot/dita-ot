@@ -8,8 +8,11 @@
 package org.dita.dost.ant.types;
 
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_IMAGE;
+import static org.dita.dost.util.FileUtils.supportedImageExtensions;
 import static org.dita.dost.util.URLUtils.*;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.AbstractFileSet;
 import org.apache.tools.ant.types.Resource;
@@ -25,16 +28,14 @@ import org.dita.dost.util.Job.FileInfo;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Resource collection that finds matching resources from job configuration.
  */
 public class JobSourceSet extends AbstractFileSet implements ResourceCollection {
 
-    private String format;
+    private Set<String> formats = Collections.emptySet();
     private Boolean hasConref;
     private Boolean isInput;
     private Boolean isResourceOnly;
@@ -113,7 +114,11 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
     }
 
     public void setFormat(final String format) {
-        this.format = format;
+        final ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(format);
+        if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
+            supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
+        }
+        this.formats = builder.build();
     }
 
     public void setConref(final boolean conref) {
@@ -129,7 +134,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
     }
 
     private boolean filter(final FileInfo f) {
-        return (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
+        return (formats == null || (formats.contains(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
                 (hasConref == null || f.hasConref == hasConref) &&
                 (isInput == null || f.isInput == isInput) &&
                 (isResourceOnly == null || f.isResourceOnly == isResourceOnly);

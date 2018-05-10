@@ -439,7 +439,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="." mode="validate-entry-position"/>
         <xsl:choose>
             <xsl:when test="ancestor::*[contains(@class, ' topic/table ')][1]/@rowheader = 'firstcol'
-                        and empty(preceding-sibling::*[contains(@class, ' topic/entry ')])">
+                and @dita-ot:x = '1'">
                 <fo:table-cell xsl:use-attribute-sets="tbody.row.entry__firstcol">
                     <xsl:apply-templates select="." mode="processTableEntry"/>
                 </fo:table-cell>
