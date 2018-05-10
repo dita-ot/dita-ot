@@ -184,10 +184,10 @@ See the accompanying LICENSE file for applicable license.
       <not><isset property="xep.failOnError"/></not>
     </condition>
     
-    <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${xsl.formatter.ext}">
+    <condition property="outputFile" value="${dita.output.dir}/${outputFile.base}${xsl.formatter.ext}">
       <not><isset property="outputFile"/></not>
     </condition>
-    <mkdir dir="${dita.map.output.dir}"/>
+    <mkdir dir="${dita.output.dir}"/>
     
     <echo level="info" taskname="xep">Processing ${pdf2.temp.dir}/topic.fo to ${outputFile}</echo>
     <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode"

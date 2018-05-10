@@ -187,10 +187,10 @@ See the accompanying LICENSE file for applicable license.
       </condition>
     </fail>
     
-    <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${xsl.formatter.ext}">
+    <condition property="outputFile" value="${dita.output.dir}/${outputFile.base}${xsl.formatter.ext}">
       <not><isset property="outputFile"/></not>
     </condition>
-    <mkdir dir="${dita.map.output.dir}"/>
+    <mkdir dir="${dita.output.dir}"/>
     
     <antcall target="transform.fo2pdf.ah.nooption"/>
     <antcall target="transform.fo2pdf.ah.hasoption"/>

@@ -325,7 +325,7 @@ public class TestKeyrefReader {
         assertEquals("nested-three.dita", scope2.get("scope1.map.key3").href.toString());
     }
 
-    // DITA 1.3 specificiation examples
+    // DITA 1.3 specification examples
 
     @Test
     public void testExample7() throws DITAOTException {
@@ -513,6 +513,18 @@ public class TestKeyrefReader {
         assertEquals(2, d.keySet().size());
         assertEquals("def2", d.get("a").element.getAttribute("id"));
         assertEquals("def1", d.get("A.a").element.getAttribute("id"));
+    }
+    
+    @Test
+    public void testCopyto() throws DITAOTException {
+        final File filename = new File(srcDir, "copyto.ditamap");
+
+        final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.read(filename.toURI(), readMap(filename));
+        final KeyScope root = keyrefreader.getKeyDefinition();
+
+        assertEquals("topic-original.dita", root.get("original").href.toString());
+        assertEquals("topic-copy.dita", root.get("copy").href.toString());
     }
 
     private void log(final KeyScope scope, final String indent) {
