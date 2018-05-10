@@ -7,6 +7,7 @@
  */
 package org.dita.dost.writer;
 
+import org.dita.dost.util.SaxCache.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -24,40 +25,28 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
 
     private Set<String> outputClass = new HashSet(Arrays.asList("normalize-space"));
     private int depth = 0;
-    private Collection<SAXEvent> buf = new ArrayList<>();
+    private Collection<SaxEvent> buf = new ArrayList<>();
 
-//    /**
-//     * Filter a start Namespace prefix mapping event.
-//     *
-//     * @param prefix The Namespace prefix.
-//     * @param uri The Namespace URI.
-//     * @exception org.xml.sax.SAXException The client may throw
-//     *            an exception during processing.
-//     */
-//    public void startPrefixMapping (String prefix, String uri)
-//            throws SAXException
-//    {
-//        if (contentHandler != null) {
-//            contentHandler.startPrefixMapping(prefix, uri);
-//        }
-//    }
-//
-//
-//    /**
-//     * Filter an end Namespace prefix mapping event.
-//     *
-//     * @param prefix The Namespace prefix.
-//     * @exception org.xml.sax.SAXException The client may throw
-//     *            an exception during processing.
-//     */
-//    public void endPrefixMapping (String prefix)
-//            throws SAXException
-//    {
-//        if (contentHandler != null) {
-//            contentHandler.endPrefixMapping(prefix);
-//        }
-//    }
-    
+    @Override
+    public void startPrefixMapping(String prefix, String uri)
+            throws SAXException {
+        if (depth > 0) {
+            buf.add(new StartPrefixMappingEvent(prefix, uri));
+        } else {
+            super.startPrefixMapping(prefix, uri);
+        }
+    }
+
+    @Override
+    public void endPrefixMapping(String prefix)
+            throws SAXException {
+        if (depth > 0) {
+            buf.add(new EndPrefixMappingEvent(prefix));
+        } else {
+            super.endPrefixMapping(prefix);
+        }
+    }
+
     @Override
     public void startElement(String uri, String localName, String qName,
                              Attributes atts)
@@ -83,22 +72,8 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         if (depth > 0) {
             depth--;
             if (depth == 0) {
-                for (final SAXEvent event : normalizeSpace(buf)) {
-                    if (event instanceof StartElementEvent) {
-                        final StartElementEvent e = (StartElementEvent) event;
-                        super.startElement(e.uri, e.localName, e.qName, e.atts);
-                    } else if (event instanceof EndElementEvent) {
-                        final EndElementEvent e = (EndElementEvent) event;
-                        super.endElement(e.uri, e.localName, e.qName);
-                    } else if (event instanceof CharactersEvent) {
-                        final CharactersEvent e = (CharactersEvent) event;
-                        super.characters(e.ch, e.start, e.length);
-                    } else if (event instanceof ProcessingInstructionEvent) {
-                        final ProcessingInstructionEvent e = (ProcessingInstructionEvent) event;
-                        super.processingInstruction(e.target, e.data);
-                    } else {
-                        throw new IllegalArgumentException(event.getClass().getCanonicalName());
-                    }
+                for (final SaxEvent event : normalizeSpace(buf)) {
+                    event.write(getContentHandler());
                 }
                 buf.clear();
                 super.endElement(uri, localName, qName);
@@ -110,9 +85,9 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         }
     }
 
-    private Collection<SAXEvent> normalizeSpace(Collection<SAXEvent> buf) {
+    private Collection<SaxEvent> normalizeSpace(Collection<SaxEvent> buf) {
         final StringBuilder merged = new StringBuilder();
-        for (final SAXEvent event : buf) {
+        for (final SaxEvent event : buf) {
             if (event instanceof CharactersEvent) {
                 final CharactersEvent e = (CharactersEvent) event;
                 merged.append(e.ch, e.start, e.length);
@@ -126,9 +101,9 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         if (min == 0) {
             return buf;
         }
-        final List<SAXEvent> res = new ArrayList<>(buf.size());
+        final List<SaxEvent> res = new ArrayList<>(buf.size());
         boolean firstCharactersEvent = true;
-        for (final SAXEvent event : buf) {
+        for (final SaxEvent event : buf) {
             if (event instanceof CharactersEvent) {
                 final CharactersEvent e = (CharactersEvent) event;
                 final char[] ch = stripLeadingSpace(firstCharactersEvent, min, e.ch, e.start, e.length);
@@ -181,57 +156,6 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
             buf.add(new ProcessingInstructionEvent(target, data));
         } else {
             super.processingInstruction(target, data);
-        }
-    }
-
-    interface SAXEvent {
-    }
-
-    static class StartElementEvent implements SAXEvent {
-        final String uri;
-        final String localName;
-        final String qName;
-        final Attributes atts;
-
-        StartElementEvent(String uri, String localName, String qName, Attributes atts) {
-            this.uri = uri;
-            this.localName = localName;
-            this.qName = qName;
-            this.atts = atts;
-        }
-    }
-
-    static class EndElementEvent implements SAXEvent {
-        final String uri;
-        final String localName;
-        final String qName;
-
-        EndElementEvent(String uri, String localName, String qName) {
-            this.uri = uri;
-            this.localName = localName;
-            this.qName = qName;
-        }
-    }
-
-    static class CharactersEvent implements SAXEvent {
-        final char[] ch;
-        final int start;
-        final int length;
-
-        CharactersEvent(char ch[], int start, int length) {
-            this.ch = ch;
-            this.start = start;
-            this.length = length;
-        }
-    }
-
-    static class ProcessingInstructionEvent implements SAXEvent {
-        final String target;
-        final String data;
-
-        ProcessingInstructionEvent(String target, String data) {
-            this.target = target;
-            this.data = data;
         }
     }
 

@@ -78,7 +78,6 @@ public class NormalizeCodeblockTest {
         assertEquals(2, filter.countLeadingSpace("  foo"));
         assertEquals(0, filter.countLeadingSpace(""));
         assertEquals(2, filter.countLeadingSpace("  "));
-
     }
 
     private void assertXMLEqual(Document exp, Document act) {
