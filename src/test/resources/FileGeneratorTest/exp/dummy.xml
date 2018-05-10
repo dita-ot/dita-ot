@@ -4,6 +4,8 @@
 
   <target foo='bar'></target>
   
+  <target depends="bar"/>
+
   <target name="help">
     <echo>&quot;</echo>
     <echo>&apos;</echo>
