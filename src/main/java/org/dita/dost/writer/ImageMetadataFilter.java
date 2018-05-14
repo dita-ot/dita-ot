@@ -107,7 +107,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String name,
             final Attributes atts) throws SAXException {
-        if (TOPIC_IMAGE.matches(atts)) {
+        if (TOPIC_IMAGE.matches(atts) || SVG_D_SVGREF.matches(atts)) {
             final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder(atts);
             final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
             if (href != null) {

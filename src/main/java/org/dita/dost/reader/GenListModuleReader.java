@@ -586,6 +586,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             // Collect non-conref and non-copyto targets
             if ((followLinks() && canFollow(attrValue))
                     || TOPIC_IMAGE.matches(attrClass)
+                    || SVG_D_SVGREF.matches(attrClass)
                     || DITAVAREF_D_DITAVALREF.matches(attrClass)) {
                 nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
             }
