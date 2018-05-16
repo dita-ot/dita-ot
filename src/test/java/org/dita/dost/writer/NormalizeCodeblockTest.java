@@ -72,6 +72,13 @@ public class NormalizeCodeblockTest {
     }
 
     @Test
+    public void testNestedElementWithIndentAndNewline() throws Exception {
+        final Document act = filter(new File(srcDir, "nestedElementWithIndentAndNewline.xml"));
+        final Document exp = documentBuilder.parse(new File(expDir, "nestedElementWithIndentAndNewline.xml"));
+        assertXMLEqual(exp, act);
+    }
+
+    @Test
     public void testCountLeadingSpace() {
         final NormalizeCodeblock filter = new NormalizeCodeblock();
         assertEquals(0, filter.countLeadingSpace("foo"));
