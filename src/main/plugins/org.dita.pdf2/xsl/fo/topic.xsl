@@ -1176,7 +1176,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:variable name="job" select="document(resolve-uri('.job.xml', $work.dir.url))" as="document-node()?"/>
   <xsl:key name="jobFile" match="file" use="@uri"/>
 
-    <xsl:template match="*[contains(@class,' topic/image ')]">
+    <xsl:template match="*[contains(@class,' topic/image ')]" name="image">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <xsl:choose>
             <xsl:when test="empty(@href)"/>

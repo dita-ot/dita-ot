@@ -92,6 +92,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:import href="markup-domain.xsl"/>
     <xsl:import href="../../cfg/fo/attrs/xml-domain-attr.xsl"/>
     <xsl:import href="xml-domain.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/svg-domain-attr.xsl"/>
+    <xsl:import href="svg-domain.xsl"/>
 
     <xsl:import href="../../cfg/fo/attrs/static-content-attr.xsl"/>
     <xsl:import href="static-content.xsl"/>
