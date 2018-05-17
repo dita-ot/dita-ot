@@ -1107,7 +1107,8 @@ See the accompanying LICENSE file for applicable license.
         </fo:inline>
     </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/keyword ')]" name="topic.keyword">
+  <xsl:template match="*" mode="inlineTextOptionalKeyref">
+    <xsl:param name="copyAttributes" as="element()?"/>
     <xsl:param name="keys" select="@keyref" as="attribute()?"/>
     <xsl:param name="contents" as="node()*">
       <xsl:variable name="target" select="key('id', substring(@href, 2))"/>
@@ -1123,14 +1124,16 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="topicref" select="key('map-id', substring(@href, 2))"/>
     <xsl:choose>
       <xsl:when test="$keys and @href and not($topicref/ancestor-or-self::*[@linking][1]/@linking = ('none', 'sourceonly'))">
-        <fo:basic-link xsl:use-attribute-sets="xref keyword">
+        <fo:basic-link xsl:use-attribute-sets="xref">
+          <xsl:sequence select="$copyAttributes/@*"/>
           <xsl:call-template name="commonattributes"/>
           <xsl:call-template name="buildBasicLinkDestination"/>
           <xsl:copy-of select="$contents"/>
         </fo:basic-link>
       </xsl:when>
       <xsl:otherwise>
-        <fo:inline xsl:use-attribute-sets="keyword">
+        <fo:inline>
+          <xsl:sequence select="$copyAttributes/@*"/>
           <xsl:call-template name="commonattributes"/>
           <xsl:copy-of select="$contents"/>
         </fo:inline>
@@ -1138,11 +1141,16 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
 
+    <xsl:template match="*[contains(@class,' topic/keyword ')]" name="topic.keyword">
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="keyword"/></xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:template>
+
     <xsl:template match="*[contains(@class,' topic/ph ')]">
-        <fo:inline xsl:use-attribute-sets="ph">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="ph"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/boolean ')]">
@@ -1442,10 +1450,9 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/cite ')]">
-        <fo:inline xsl:use-attribute-sets="cite">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="cite"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="@platform | @product | @audience | @otherprops | @importance | @rev | @status"/>

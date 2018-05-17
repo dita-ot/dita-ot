@@ -150,10 +150,9 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/option ')]">
-        <fo:inline xsl:use-attribute-sets="option">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="option"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/var ')]">
@@ -164,10 +163,9 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/parmname ')]">
-        <fo:inline xsl:use-attribute-sets="parmname">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="parmname"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/synph ')]">
@@ -199,10 +197,9 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/apiname ')]">
-        <fo:inline xsl:use-attribute-sets="apiname">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="apiname"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/parml ')]">
@@ -225,12 +222,13 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="*"> <!-- tagged content - do not default to bold -->
-                    <xsl:apply-templates/>
+                    <xsl:apply-templates select="." mode="inlineTextOptionalKeyref"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <fo:inline xsl:use-attribute-sets="pt__content">
-                        <xsl:apply-templates/>
-                    </fo:inline> <!-- text only - bold it -->
+                    <!-- text only - bold it -->
+                    <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+                        <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="pt__content"/></xsl:with-param>
+                    </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
         </fo:block>
