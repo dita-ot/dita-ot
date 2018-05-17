@@ -101,7 +101,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/dt ')])">
               <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
             </xsl:if>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="." mode="inlineTextOptionalKeyref"/>
         </fo:block>
     </xsl:template>
 

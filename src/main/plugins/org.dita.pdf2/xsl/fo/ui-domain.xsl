@@ -45,17 +45,15 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:call-template>
             </xsl:if>
         </xsl:if>
-        <fo:inline xsl:use-attribute-sets="uicontrol">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="uicontrol"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' ui-d/wintitle ')]">
-        <fo:inline xsl:use-attribute-sets="wintitle">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="wintitle"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' ui-d/menucascade ')]">

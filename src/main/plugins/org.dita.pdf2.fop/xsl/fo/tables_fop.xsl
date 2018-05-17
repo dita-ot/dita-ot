@@ -20,7 +20,7 @@ See the accompanying LICENSE file for applicable license.
               <xsl:apply-templates select="../@id" mode="dlentry-id-for-fop"/>
               <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
             </xsl:if>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="." mode="inlineTextOptionalKeyref"/>
         </fo:block>
     </xsl:template>
 
