@@ -70,6 +70,8 @@ test {
     exclude '**/EndToEndTest*.class'
 }
 
+test.maxParallelForks = 4
+
 // Integration test
 
 def integrationTestSystemProperties = [
