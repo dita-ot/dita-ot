@@ -148,7 +148,7 @@ public class AbstractIntegrationTest {
     private static final File baseTempDir = new File(System.getProperty(TEMP_DIR) != null
             ? System.getProperty(TEMP_DIR)
             : "build" + File.separator + "tmp" + File.separator + "integrationTest");
-    private static final File resourceDir = new File(baseDir, "resources");
+    static final File resourceDir = new File(baseDir, "resources");
     private static DocumentBuilder db;
     private static HtmlDocumentBuilder htmlb;
     private static int level;

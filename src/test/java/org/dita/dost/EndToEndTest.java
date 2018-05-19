@@ -2,6 +2,7 @@ package org.dita.dost;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.file.Paths;
 
 import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
@@ -29,7 +30,8 @@ public class EndToEndTest extends AbstractIntegrationTest {
         builder().name("e2e")
                 .transtype(PDF)
                 .input(Paths.get("root.ditamap"))
-                .warnCount(16)
+                .put("args.fo.userconfig", new File(resourceDir, "e2e" + File.separator + "fop.xconf").getAbsolutePath())
+                .warnCount(10)
                 .run();
     }
 
