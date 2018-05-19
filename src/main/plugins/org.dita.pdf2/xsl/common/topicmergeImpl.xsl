@@ -362,7 +362,7 @@ See the accompanying LICENSE file for applicable license.
              match="*[not(contains(@class, ' topic/topic '))]/@id"
              use="concat(ancestor::*[contains(@class, ' topic/topic ')][1]/@id, '|', .)"/>
 
-    <xsl:template match="@id[not(parent::*[contains(@class, ' topic/topic ')])]">
+    <xsl:template match="*[namespace-uri() = '']/@id[not(parent::*[contains(@class, ' topic/topic ')])]">
         <xsl:param name="newid"/>
         <xsl:attribute name="id">
             <xsl:value-of select="concat($newid, $separator, .)"/>
