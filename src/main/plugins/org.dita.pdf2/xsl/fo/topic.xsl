@@ -1318,12 +1318,22 @@ See the accompanying LICENSE file for applicable license.
             <xsl:attribute name="content-height">scale-to-fit</xsl:attribute>
             <xsl:attribute name="scaling">uniform</xsl:attribute>
           </xsl:if>
+          <xsl:choose>
+            <xsl:when test="*[contains(@class,' topic/alt ')]">
+              <xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="graphicAlternateText"/>
+            </xsl:when>
+            <xsl:when test="@alt">
+              <xsl:apply-templates select="@alt" mode="graphicAlternateText"/>
+            </xsl:when>
+          </xsl:choose>
+          
           <xsl:apply-templates select="node() except (text(),
                                                       *[contains(@class, ' topic/alt ') or
                                                         contains(@class, ' topic/longdescref ')])"/>
         </fo:external-graphic>
     </xsl:template>
 
+    <xsl:template match="*|@alt" mode="graphicAlternateText"/>
 
     <xsl:template match="*[contains(@class,' topic/alt ')]">
         <fo:block xsl:use-attribute-sets="alt">
