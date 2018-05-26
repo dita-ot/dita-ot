@@ -47,7 +47,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:variable name="codeblock.wrap" select="false()"/>
   <xsl:variable name="codeblock.tab-width" as="xs:integer" select="4"/>
   <xsl:template match="node()" mode="codeblock.generate-line-number" as="xs:boolean">
-    <xsl:sequence select="false()"/>
+    <xsl:sequence select="tokenize(@outputclass, '\s+') = 'show-line-numbers'"/>
   </xsl:template>
   <xsl:template match="node()" mode="codeblock.show-whitespace" as="xs:boolean">
     <xsl:sequence select="tokenize(@outputclass, '\s+') = 'show-whitespace'"/>
