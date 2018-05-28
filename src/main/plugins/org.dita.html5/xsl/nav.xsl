@@ -51,7 +51,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:variable name="current-file" select="translate(if ($FILEDIR = '.') then $FILENAME else concat($FILEDIR, '/', $FILENAME), '\', '/')" as="xs:string?"/>
-  <xsl:variable name="current-topicrefs" select="$input.map//*[contains(@class, ' map/topicref ')][ends-with($current-file, dita-ot:get-path($PATH2PROJ, .))]" as="element()*"/>
+  <xsl:variable name="current-topicrefs" select="$input.map//*[contains(@class, ' map/topicref ')][dita-ot:get-path($PATH2PROJ, .) = $current-file]" as="element()*"/>
   <xsl:variable name="current-topicref" select="$current-topicrefs[1]" as="element()?"/>
   
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="toc-pull">

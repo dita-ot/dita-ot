@@ -30,6 +30,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 
 import static org.dita.dost.util.FileUtils.replaceExtension;
@@ -158,7 +159,8 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             t.setParameter(filenameparameter, in.getName());
         }
         if (filedirparameter != null) {
-            final String v = in.getParent() != null ? in.getParent() : ".";
+            final Path rel = job.tempDir.toPath().relativize(in.getAbsoluteFile().toPath()).getParent();
+            final String v = rel != null ? rel.toString() : ".";
             logger.debug("Set parameter " + filedirparameter + " to '" + v + "'");
             t.setParameter(filedirparameter, v);
         }
