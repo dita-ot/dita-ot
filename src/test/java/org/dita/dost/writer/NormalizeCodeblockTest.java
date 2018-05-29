@@ -58,6 +58,13 @@ public class NormalizeCodeblockTest {
     }
 
     @Test
+    public void testOnlyTextWithSpaces() throws Exception {
+        final Document act = filter(new File(srcDir, "onlyTextWithSpaces.xml"));
+        final Document exp = documentBuilder.parse(new File(expDir, "onlyTextWithSpaces.xml"));
+        assertXMLEqual(exp, act);
+    }
+
+    @Test
     public void testNestedElement() throws Exception {
         final Document act = filter(new File(srcDir, "nestedElement.xml"));
         final Document exp = documentBuilder.parse(new File(expDir, "nestedElement.xml"));
@@ -82,7 +89,9 @@ public class NormalizeCodeblockTest {
     public void testCountLeadingSpace() {
         final NormalizeCodeblock filter = new NormalizeCodeblock();
         assertEquals(0, filter.countLeadingSpace("foo"));
+        assertEquals(0, filter.countLeadingSpace("foo bar"));
         assertEquals(2, filter.countLeadingSpace("  foo"));
+        assertEquals(2, filter.countLeadingSpace("  foo bar"));
         assertEquals(0, filter.countLeadingSpace(""));
         assertEquals(2, filter.countLeadingSpace("  "));
     }

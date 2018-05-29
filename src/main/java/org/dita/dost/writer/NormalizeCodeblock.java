@@ -136,7 +136,12 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     int countLeadingSpace(String ch) {
-        return ch.replaceAll("^( *)\\S*", "$1").length();
+        for (int i = 0; i < ch.length(); i++) {
+            if (!Character.isWhitespace(ch.charAt(i))) {
+                return i;
+            }
+        }
+        return ch.length();
     }
 
     @Override
