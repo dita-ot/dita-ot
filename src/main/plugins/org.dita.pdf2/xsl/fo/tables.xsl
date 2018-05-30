@@ -1059,7 +1059,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*" mode="simpletableTopBorder">
         <xsl:param name="frame" select="(ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"
             as="xs:string"/>
-        <xsl:if test="$frame = 'all' or $frame = 'topbot' or $frame = 'top'">
+        <xsl:if test="$frame = ('all', 'topbot', 'top')">
             <xsl:call-template name="processAttrSetReflection">
                 <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
                 <xsl:with-param name="path" select="$tableAttrs"/>
@@ -1069,7 +1069,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*" mode="simpletableSideBorders">
         <xsl:param name="frame" select="(ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"
             as="xs:string"/>
-        <xsl:if test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides')">
+        <xsl:if test="$frame = ('all', 'topbot', 'sides')">
             <xsl:call-template name="processAttrSetReflection">
                 <xsl:with-param name="attrSet" select="'__tableframe__left'"/>
                 <xsl:with-param name="path" select="$tableAttrs"/>
@@ -1091,7 +1091,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template name="generateSimpleTableHorizontalBorders">
         <xsl:param name="frame" as="xs:string?"/>
         <xsl:choose>
-            <xsl:when test="$frame = ('all', 'topbot', 'sides') or not($frame)">
+            <xsl:when test="$frame = ('all', 'topbot', 'sides') or empty($frame)">
                 <xsl:call-template name="processAttrSetReflection">
                     <xsl:with-param name="attrSet" select="'__tableframe__bottom'"/>
                     <xsl:with-param name="path" select="$tableAttrs"/>
@@ -1103,7 +1103,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template name="generateSimpleTableVerticalBorders">
         <xsl:param name="frame" as="xs:string?"/>
         <xsl:choose>
-            <xsl:when test="$frame = ('all', 'topbot', 'sides') or not($frame)">
+            <xsl:when test="$frame = ('all', 'topbot', 'sides') or empty($frame)">
                 <xsl:call-template name="processAttrSetReflection">
                     <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
                     <xsl:with-param name="path" select="$tableAttrs"/>
