@@ -89,6 +89,7 @@ See the accompanying LICENSE file for applicable license.
      ensured that known required attributes did not override the conref target. They are left
      here for completeness. -->
   <xsl:template match="*[contains(@class, ' topic/image ')]/@href" mode="get-source-attribute" priority="10"/>
+  <xsl:template match="*[contains(@class, ' svg-d/svgref ')]/@href" mode="get-source-attribute" priority="10"/>
   <xsl:template match="*[contains(@class, ' topic/tgroup ')]/@cols" mode="get-source-attribute" priority="10"/>
   <xsl:template match="*[contains(@class, ' topic/boolean ')]/@state" mode="get-source-attribute" priority="10"/>
   <xsl:template match="*[contains(@class, ' topic/state ')]/@name" mode="get-source-attribute" priority="10"/>
@@ -517,6 +518,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="@xtrc | @xtrf" mode="original-attributes" priority="10"/>
   <xsl:template match="@conref" mode="original-attributes" priority="10"/>
   <xsl:template match="*[contains(@class, ' topic/image ')]/@href" mode="original-attributes" priority="10"/>
+  <xsl:template match="*[contains(@class, ' svg-d/svgref ')]/@href" mode="original-attributes" priority="10"/>
   <xsl:template match="*[contains(@class, ' topic/tgroup ')]/@cols" mode="original-attributes" priority="10"/>
   <xsl:template match="*[contains(@class, ' topic/boolean ')]/@state" mode="original-attributes" priority="10"/>
   <xsl:template match="*[contains(@class, ' topic/state ')]/@name" mode="original-attributes" priority="10"/>

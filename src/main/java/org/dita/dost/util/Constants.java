@@ -595,6 +595,8 @@ public final class Constants {
     public static final DitaClass DITAVAREF_D_DVR_RESOURCESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrResourceSuffix ");
     public static final DitaClass DITAVAREF_D_DVR_KEYSCOPEPREFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopePrefix ");
     public static final DitaClass DITAVAREF_D_DVR_KEYSCOPESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopeSuffix ");
+    public static final DitaClass SVG_D_SVG_CONTAINER = new DitaClass("+ topic/foreign svg-d/svg-container ");
+    public static final DitaClass SVG_D_SVGREF = new DitaClass("+ topic/xref svg-d/svgref ");
 
     public static final DitaClass SUBMAP = new DitaClass("+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ");
 
