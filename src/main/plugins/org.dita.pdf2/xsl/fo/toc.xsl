@@ -45,12 +45,13 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template name="createTocHeader">
         <fo:block xsl:use-attribute-sets="__toc__header" id="{$id.toc}">
+            <xsl:apply-templates select="." mode="customTopicAnchor"/>
             <xsl:call-template name="getVariable">
                 <xsl:with-param name="id" select="'Table of Contents'"/>
             </xsl:call-template>
         </fo:block>
     </xsl:template>
-
+    
     <xsl:template match="/" mode="toc">
         <xsl:apply-templates mode="toc">
             <xsl:with-param name="include" select="'true'"/>

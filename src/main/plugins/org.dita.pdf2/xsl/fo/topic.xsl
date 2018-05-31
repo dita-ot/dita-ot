@@ -103,6 +103,7 @@ See the accompanying LICENSE file for applicable license.
                         </xsl:call-template>
                     </xsl:attribute>
                 </fo:wrapper>
+                <xsl:apply-templates select="." mode="customTopicAnchor"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <xsl:apply-templates select="." mode="getTitle"/>
             </fo:block>
