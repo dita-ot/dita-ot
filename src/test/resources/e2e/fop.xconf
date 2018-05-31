@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fop version="1.0">
+  <strict-validation>false</strict-validation>
+  <base>.</base>
+  <source-resolution>72</source-resolution>
+  <target-resolution>72</target-resolution>
+  <default-page-settings height="11.00in" width="8.50in"/>
+  <renderers>
+    <renderer mime="application/pdf">
+      <fonts>
+        <!--auto-detect/-->
+      </fonts>
+    </renderer>
+  </renderers>
+</fop>

@@ -67,7 +67,10 @@ artifacts {
 
 test {
     exclude '**/IntegrationTest*.class'
+    exclude '**/EndToEndTest*.class'
 }
+
+test.maxParallelForks = 4
 
 // Integration test
 
@@ -88,6 +91,29 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
     maxHeapSize = "1024m"
     systemProperties = integrationTestSystemProperties
     include '**/IntegrationTest*.class'
+}
+
+// End to end test
+
+dependencies {
+    testCompile project(':eclipsehelp')
+    testCompile project(':htmlhelp')
+}
+
+def e2eTestSystemProperties = [
+        temp_dir : "${buildDir}/tmp/e2eTest",
+        dita_dir : "${projectDir}/src/main",
+        basedir : "${projectDir}/src/test"
+]
+if (System.getProperty("log_level") != null) {
+    integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
+}
+
+task e2eTest(type: Test, dependsOn: 'buildLocal') {
+    minHeapSize = "128m"
+    maxHeapSize = "1024m"
+    systemProperties = e2eTestSystemProperties
+    include '**/EndToEndTest*.class'
 }
 
 // Install
