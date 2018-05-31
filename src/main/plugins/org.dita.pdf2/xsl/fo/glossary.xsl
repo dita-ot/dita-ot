@@ -21,6 +21,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:with-param name="id" select="'Glossary'"/>
           </xsl:call-template>
         </fo:marker>
+        <xsl:apply-templates select="." mode="customTopicMarker"/>
         <fo:block xsl:use-attribute-sets="__glossary__label" id="{$id.glossary}">
           <xsl:call-template name="getVariable">
             <xsl:with-param name="id" select="'Glossary'"/>

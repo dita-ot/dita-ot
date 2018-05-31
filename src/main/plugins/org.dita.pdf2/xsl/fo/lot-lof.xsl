@@ -71,6 +71,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:with-param name="id" select="'List of Tables'"/>
         </xsl:call-template>
       </fo:marker>
+      <xsl:apply-templates select="." mode="customTopicMarker"/>
       <xsl:call-template name="getVariable">
         <xsl:with-param name="id" select="'List of Tables'"/>
       </xsl:call-template>
@@ -147,6 +148,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:with-param name="id" select="'List of Figures'"/>
         </xsl:call-template>
       </fo:marker>
+      <xsl:apply-templates select="." mode="customTopicMarker"/>
       <xsl:call-template name="getVariable">
         <xsl:with-param name="id" select="'List of Figures'"/>
       </xsl:call-template>

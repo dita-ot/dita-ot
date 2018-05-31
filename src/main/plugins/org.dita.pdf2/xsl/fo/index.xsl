@@ -521,6 +521,7 @@ See the accompanying LICENSE file for applicable license.
                             <xsl:with-param name="id" select="'Index'"/>
                           </xsl:call-template>
                         </fo:marker>
+                        <xsl:apply-templates select="." mode="customTopicMarker"/>
                         <xsl:copy-of select="$index"/>
                     </fo:flow>
 

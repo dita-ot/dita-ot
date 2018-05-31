@@ -260,6 +260,7 @@ See the accompanying LICENSE file for applicable license.
                             <xsl:with-param name="id" select="'Table of Contents'"/>
                           </xsl:call-template>
                         </fo:marker>
+                        <xsl:apply-templates select="." mode="customTopicMarker"/>
                         <xsl:copy-of select="$toc"/>
                     </fo:block>
                 </fo:flow>

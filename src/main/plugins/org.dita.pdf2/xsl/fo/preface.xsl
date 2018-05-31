@@ -64,6 +64,7 @@ See the accompanying LICENSE file for applicable license.
                  </fo:marker>
                  <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
              </xsl:if>
+             <xsl:apply-templates select="." mode="customTopicMarker"/>
              <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
              <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                  <xsl:with-param name="type" select="'preface'"/>
