@@ -521,6 +521,7 @@ See the accompanying LICENSE file for applicable license.
                             <xsl:with-param name="id" select="'Index'"/>
                           </xsl:call-template>
                         </fo:marker>
+                        <xsl:apply-templates select="." mode="customTopicMarker"/>
                         <xsl:copy-of select="$index"/>
                     </fo:flow>
 
@@ -540,6 +541,7 @@ See the accompanying LICENSE file for applicable license.
 
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="__index__label" id="{$id.index}">
+                    <xsl:apply-templates select="." mode="customTopicAnchor"/>
                     <xsl:call-template name="getVariable">
                         <xsl:with-param name="id" select="'Index'"/>
                     </xsl:call-template>

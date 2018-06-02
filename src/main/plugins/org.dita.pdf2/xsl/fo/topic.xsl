@@ -103,6 +103,7 @@ See the accompanying LICENSE file for applicable license.
                         </xsl:call-template>
                     </xsl:attribute>
                 </fo:wrapper>
+                <xsl:apply-templates select="." mode="customTopicAnchor"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <xsl:apply-templates select="." mode="getTitle"/>
             </fo:block>
@@ -139,10 +140,14 @@ See the accompanying LICENSE file for applicable license.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    
+    <!-- Hook that allows adding anchors to titled non topic elements. -->
+    <xsl:template match="*[contains(@class,' topic/title ')]" mode="customTitleAnchor"/>
 
     <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="section.title">
             <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:apply-templates select="." mode="getTitle"/>
         </fo:block>
     </xsl:template>
@@ -150,6 +155,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="example.title">
             <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -157,6 +163,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="fig.title">
             <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:call-template name="getVariable">
                 <xsl:with-param name="id" select="'Figure.title'"/>
                 <xsl:with-param name="params">

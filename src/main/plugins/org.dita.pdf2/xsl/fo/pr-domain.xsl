@@ -356,6 +356,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="syntaxdiagram.title">
             <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>

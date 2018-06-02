@@ -120,6 +120,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:if>
       <fo:block>
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
+        <xsl:apply-templates select="." mode="customTopicMarker"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/prolog ')]"/>
         <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
@@ -130,6 +131,12 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="." mode="topicEpilog"/>
       </fo:block>
     </xsl:template>
+    
+    <!-- Hook that allows extra markers at the start of any topic block -->
+    <xsl:template match="*" mode="customTopicMarker"/>
+    
+    <!-- Hook that allows extra markers at the start of any topic block -->
+    <xsl:template match="*" mode="customTopicAnchor"/>
 
     <!-- Hook that allows common end-of-topic processing (after nested topics). -->
     <xsl:template match="*" mode="topicEpilog">
@@ -258,6 +265,7 @@ See the accompanying LICENSE file for applicable license.
                 </fo:marker>
                 <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
             </xsl:if>
+            <xsl:apply-templates select="." mode="customTopicMarker"/>
 
             <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
@@ -266,6 +274,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:apply-templates>
 
             <fo:block xsl:use-attribute-sets="topic.title">
+                <xsl:apply-templates select="." mode="customTopicAnchor"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <xsl:for-each select="*[contains(@class,' topic/title ')]">
                     <xsl:apply-templates select="." mode="getTitle"/>
@@ -328,6 +337,7 @@ See the accompanying LICENSE file for applicable license.
                 </fo:marker>
                 <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
             </xsl:if>
+            <xsl:apply-templates select="." mode="customTopicMarker"/>
 
             <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
@@ -336,6 +346,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:apply-templates>
 
             <fo:block xsl:use-attribute-sets="topic.title">
+                <xsl:apply-templates select="." mode="customTopicAnchor"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <xsl:for-each select="*[contains(@class,' topic/title ')]">
                     <xsl:apply-templates select="." mode="getTitle"/>
@@ -397,6 +408,7 @@ See the accompanying LICENSE file for applicable license.
         </fo:marker>
         <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
       </xsl:if>
+      <xsl:apply-templates select="." mode="customTopicMarker"/>
           
       <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
           
@@ -405,6 +417,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:apply-templates>
           
       <fo:block xsl:use-attribute-sets="topic.title">
+        <xsl:apply-templates select="." mode="customTopicAnchor"/>
         <xsl:call-template name="pullPrologIndexTerms"/>
         <xsl:for-each select="*[contains(@class,' topic/title ')]">
           <xsl:apply-templates select="." mode="getTitle"/>
@@ -473,6 +486,7 @@ See the accompanying LICENSE file for applicable license.
                 </fo:marker>
                 <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
             </xsl:if>
+            <xsl:apply-templates select="." mode="customTopicMarker"/>
 
             <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
@@ -481,6 +495,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:apply-templates>
 
             <fo:block xsl:use-attribute-sets="topic.title">
+                <xsl:apply-templates select="." mode="customTopicAnchor"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <xsl:for-each select="*[contains(@class,' topic/title ')]">
                     <xsl:apply-templates select="." mode="getTitle"/>
@@ -536,6 +551,7 @@ See the accompanying LICENSE file for applicable license.
                         </fo:marker>
                         <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                     </xsl:if>
+                    <xsl:apply-templates select="." mode="customTopicMarker"/>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
@@ -544,6 +560,7 @@ See the accompanying LICENSE file for applicable license.
                     </xsl:apply-templates>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
+                        <xsl:apply-templates select="." mode="customTopicAnchor"/>
                         <xsl:call-template name="pullPrologIndexTerms"/>
                         <xsl:for-each select="*[contains(@class,' topic/title ')]">
                             <xsl:apply-templates select="." mode="getTitle"/>
@@ -598,11 +615,13 @@ See the accompanying LICENSE file for applicable license.
                          </fo:marker>
                          <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                      </xsl:if>
+                     <xsl:apply-templates select="." mode="customTopicMarker"/>
                      <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
                      <fo:block xsl:use-attribute-sets="topic.title">
                          <xsl:attribute name="id">
                              <xsl:call-template name="generate-toc-id"/>
                          </xsl:attribute>
+                         <xsl:apply-templates select="." mode="customTopicAnchor"/>
                          <xsl:call-template name="pullPrologIndexTerms"/>
                          <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                              <xsl:apply-templates select="." mode="getTitle"/>
