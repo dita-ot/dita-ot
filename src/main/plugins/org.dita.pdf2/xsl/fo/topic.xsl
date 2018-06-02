@@ -1481,6 +1481,14 @@ See the accompanying LICENSE file for applicable license.
             <xsl:value-of select="."/>
         </xsl:attribute>
     </xsl:template>
+    
+    <!-- Templates to reprocess reused content while dropping IDs from reuse context -->
+    <xsl:template match="@id" mode="dropCopiedIds"/>
+    <xsl:template match="*|@*|text()" mode="dropCopiedIds">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|*|text()" mode="dropCopiedIds"/>
+        </xsl:copy>
+    </xsl:template>
 
     <!-- Process common attributes -->
     <xsl:template name="commonattributes">

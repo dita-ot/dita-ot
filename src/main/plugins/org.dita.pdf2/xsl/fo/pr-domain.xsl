@@ -284,7 +284,6 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/pt ')]">
         <fo:block xsl:use-attribute-sets="pt">
-            <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="*"> <!-- tagged content - do not default to bold -->
                     <xsl:apply-templates select="." mode="inlineTextOptionalKeyref"/>
