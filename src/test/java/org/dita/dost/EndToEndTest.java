@@ -32,7 +32,6 @@ public class EndToEndTest extends AbstractIntegrationTest {
                 .transtype(PDF)
                 .input(Paths.get("root.ditamap"))
                 .put("args.fo.userconfig", new File(resourceDir, "e2e" + File.separator + "fop.xconf").getAbsolutePath())
-                .warnCount(10)
                 .run();
     }
 
