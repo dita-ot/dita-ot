@@ -6,7 +6,7 @@
  * See the accompanying LICENSE file for applicable license.
  */
 import org.apache.tools.ant.filters.ReplaceTokens
-import java.nio.file.Paths
+import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -179,7 +179,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
     }
     from ("src/main") {
         exclude "**/.gradle"
-        exclude "**/build.gradle"
+        exclude "plugins/**/build.gradle"
         exclude "**/settings.gradle"
         exclude ".*"
         exclude "local.properties"
@@ -189,10 +189,15 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "*.*"
         include "bin/dita"
         include "bin/dita.bat"
+        exclude "docsrc/.github"
+        exclude "docsrc/.gradle"
+        exclude "docsrc/.travis"
+        exclude "docsrc/.travis.yml"
         exclude "docsrc/*.md"
         exclude "docsrc/*.xpr"
         exclude "docsrc/site.*"
         exclude "docsrc/build"
+        exclude "docsrc/out"
         exclude "docsrc/temp"
         include "docsrc/**"
         include "dtd/**"
@@ -268,24 +273,17 @@ task integrateDistPlugins() {
 }
 integrateDistPlugins.mustRunAfter integrateDistTemp
 
-task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
-    main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath +
-            files("${distTempDir}", "${projectDir}/src/main/config") +
-            (file("${projectDir}/src/main/plugins/org.dita.pdf2.fop/lib").exists()
-                ? files(file("${projectDir}/src/main/plugins/org.dita.pdf2.fop/lib").listFiles())
-                : files())
-    workingDir distTempDir
-    args "-f"
-    args file("${distTempDir}/docsrc/build.xml")
-    args "-Dbasedir=" + file("${distTempDir}/docsrc")
-    args "-Ddita.home=" + distTempDir
+task generateDocs(type: Exec, dependsOn: integrateDistTemp) {
+    workingDir file("${distTempDir}/docsrc")
+    commandLine Os.isFamily(Os.FAMILY_WINDOWS) ? file("${distTempDir}/docsrc/gradlew.bat") : file("${distTempDir}/docsrc/gradlew")
     args "dist"
 }
 generateDocs.mustRunAfter integrateDistPlugins
 generateDocs.onlyIf { skipDocs() }
 
 task cleanGenerateDocs(type: Delete) {
+    delete "${distTempDir}/temp"
+    delete "${distTempDir}/docsrc/.gradle"
     delete "${distTempDir}/docsrc/temp"
 }
 cleanGenerateDocs.mustRunAfter generateDocs
