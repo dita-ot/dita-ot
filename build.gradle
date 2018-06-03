@@ -5,8 +5,15 @@
  *
  * See the accompanying LICENSE file for applicable license.
  */
+plugins {
+    id 'com.github.eerohele.dita-ot-gradle' version '0.5.0'
+    id 'com.github.eerohele.saxon-gradle' version '0.6.0'
+}
+
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.nio.file.Paths
+import com.github.eerohele.DitaOtTask
+import com.github.eerohele.SaxonXsltTask
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -189,6 +196,12 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "*.*"
         include "bin/dita"
         include "bin/dita.bat"
+        exclude "docsrc/.github"
+        exclude "docsrc/.travis"
+        exclude "docsrc/.travis.yml"
+        exclude "docsrc/gradle"
+        exclude "docsrc/gradlew"
+        exclude "docsrc/gradlew.bat"
         exclude "docsrc/*.md"
         exclude "docsrc/*.xpr"
         exclude "docsrc/site.*"
@@ -268,25 +281,93 @@ task integrateDistPlugins() {
 }
 integrateDistPlugins.mustRunAfter integrateDistTemp
 
-task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
-    main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath +
-            files("${distTempDir}", "${projectDir}/src/main/config") +
-            (file("${projectDir}/src/main/plugins/org.dita.pdf2.fop/lib").exists()
-                ? files(file("${projectDir}/src/main/plugins/org.dita.pdf2.fop/lib").listFiles())
-                : files())
-    workingDir distTempDir
-    args "-f"
-    args file("${distTempDir}/docsrc/build.xml")
-    args "-Dbasedir=" + file("${distTempDir}/docsrc")
-    args "-Ddita.home=" + distTempDir
-    args "dist"
+String ditavalFile = "${distTempDir}/docsrc/platform.ditaval"
+ditaOt.dir distTempDir
+
+task messages(type: SaxonXsltTask) {
+    input "${distTempDir}/config/messages.xml"
+    output "${distTempDir}/docsrc/topics/DITA-messages.xml"
+    stylesheet "${distTempDir}/docsrc/resources/messages.xsl"
 }
+messages.mustRunAfter integrateDistPlugins
+
+task params(type: SaxonXsltTask) {
+    input "${distTempDir}/config/plugins.xml"
+    output "${distTempDir}/docsrc/parameters/all-parameters.dita"
+    stylesheet "${distTempDir}/docsrc/resources/params.xsl"
+    parameters('output-dir.url': file("${distTempDir}/docsrc/parameters").toURI().toString())
+    outputs.dir "${distTempDir}/docsrc/parameters"
+}
+params.mustRunAfter integrateDistPlugins
+
+task extensionPoints(type: SaxonXsltTask) {
+    input "${distTempDir}/config/plugins.xml"
+    output "${distTempDir}/docsrc/extension-points/all-extension-points.dita"
+    stylesheet "${distTempDir}/docsrc/resources/extension-points.xsl"
+    parameters('output-dir.url': file("${distTempDir}/docsrc/extension-points").toURI().toString())
+    outputs.dir "${distTempDir}/docsrc/extension-points"
+}
+extensionPoints.mustRunAfter integrateDistPlugins
+
+task generatePlatformFilter {
+    ant.condition(property: 'platform', value: 'windows') {
+        os(family: 'windows')
+    }
+
+    ant.condition(property: 'platform', value: 'osx' ) {
+        os(family: 'mac')
+    }
+
+    ant.condition(property: 'platform', value: 'unix' ) {
+        os(family: 'unix')
+    }
+
+    ant.echoxml(file: ditavalFile) {
+        val {
+            prop(action: 'include', att: 'platform', val: platform)
+            prop(action: 'exclude', att: 'platform')
+        }
+    }
+}
+generatePlatformFilter.mustRunAfter integrateDistPlugins
+
+task autoGenerate(dependsOn: [messages, params, extensionPoints, generatePlatformFilter]) {
+    description 'Run tasks that generate content from resource files and the build environment.'
+}
+
+task pdf(type: DitaOtTask, dependsOn: autoGenerate) {
+    input "${distTempDir}/docsrc/userguide-book.ditamap"
+    output "${distTempDir}/doc"
+    transtype 'pdf'
+
+    properties {
+        property(file: "${distTempDir}/docsrc/samples/properties/docs-build-pdf.properties")
+    }
+}
+pdf.mustRunAfter autoGenerate
+
+task html(type: DitaOtTask, dependsOn: autoGenerate) {
+    input "${distTempDir}/docsrc/userguide.ditamap"
+    output "${distTempDir}/doc"
+    transtype 'html5'
+    filter "${distTempDir}/docsrc/resources/html.ditaval"
+
+    properties {
+        property name: "args.hdr", value: file("${distTempDir}/docsrc/resources/header.xml").getAbsolutePath()
+        property name: "args.cssroot", value: file("${distTempDir}/docsrc/resources").getAbsolutePath()
+        property(file: "${distTempDir}/docsrc/samples/properties/docs-build-html5.properties")
+    }
+}
+html.mustRunAfter autoGenerate
+
+task generateDocs(dependsOn: [pdf, html])
 generateDocs.mustRunAfter integrateDistPlugins
 generateDocs.onlyIf { skipDocs() }
 
 task cleanGenerateDocs(type: Delete) {
+    delete "${distTempDir}/docsrc/out"
     delete "${distTempDir}/docsrc/temp"
+    delete "${distTempDir}/temp"
 }
 cleanGenerateDocs.mustRunAfter generateDocs
 cleanGenerateDocs.onlyIf { skipDocs() }
