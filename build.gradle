@@ -196,7 +196,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/.travis.yml"
         exclude "docsrc/*.md"
         exclude "docsrc/*.xpr"
-        exclude "docsrc/site.*"
         exclude "docsrc/build"
         exclude "docsrc/out"
         exclude "docsrc/platform.ditaval"
