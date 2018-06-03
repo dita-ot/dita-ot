@@ -13,6 +13,7 @@ dependencies {
     runtime group: 'org.apache.pdfbox', name: 'fontbox', version: '2.0.7'
     runtime group: 'org.apache.xmlgraphics', name: 'batik-all', version: '1.10'
     runtime group: 'xml-apis', name: 'xml-apis-ext', version: '1.3.04'
+    runtime group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.25'
 }
 
 task copyInstall(type: Copy) {
@@ -47,6 +48,7 @@ task copyInstall(type: Copy) {
         exclude 'batik-util-*.jar'
         exclude 'batik-xml-*.jar'
         exclude 'commons-io-*.jar'
+        exclude 'commons-logging-*.jar'
         exclude 'xalan-*.jar'
         exclude 'xml-apis-2*.jar'
     }
@@ -85,6 +87,7 @@ task copyDistTemp(type: Copy) {
         exclude 'batik-util-*.jar'
         exclude 'batik-xml-*.jar'
         exclude 'commons-io-*.jar'
+        exclude 'commons-logging-*.jar'
         exclude 'xalan-*.jar'
         exclude 'xml-apis-2*.jar'
         into "plugins/org.dita.pdf2.fop/lib"
