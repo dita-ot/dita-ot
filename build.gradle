@@ -189,6 +189,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "*.*"
         include "bin/dita"
         include "bin/dita.bat"
+        exclude "docsrc/.editorconfig"
         exclude "docsrc/.github"
         exclude "docsrc/.gradle"
         exclude "docsrc/.travis"
