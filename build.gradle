@@ -199,6 +199,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/site.*"
         exclude "docsrc/build"
         exclude "docsrc/out"
+        exclude "docsrc/platform.ditaval"
         exclude "docsrc/temp"
         include "docsrc/**"
         include "dtd/**"
