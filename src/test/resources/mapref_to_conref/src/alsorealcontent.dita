@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="realcontent">
+  <title>INDIRECT REAL CONTENT HERE</title>
+  <body>
+    <p>Do I show up too? I'm only in the indirect map that's conref'ed into another map that's
+pulled into the root map</p>
+  </body>
+</topic>
