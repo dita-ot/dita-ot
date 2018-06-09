@@ -45,12 +45,13 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template name="createTocHeader">
         <fo:block xsl:use-attribute-sets="__toc__header" id="{$id.toc}">
+            <xsl:apply-templates select="." mode="customTopicAnchor"/>
             <xsl:call-template name="getVariable">
                 <xsl:with-param name="id" select="'Table of Contents'"/>
             </xsl:call-template>
         </fo:block>
     </xsl:template>
-
+    
     <xsl:template match="/" mode="toc">
         <xsl:apply-templates mode="toc">
             <xsl:with-param name="include" select="'true'"/>
@@ -77,7 +78,10 @@ See the accompanying LICENSE file for applicable license.
                             </xsl:attribute>
                             <xsl:apply-templates select="$mapTopicref" mode="tocPrefix"/>
                             <fo:inline xsl:use-attribute-sets="__toc__title">
-                                <xsl:call-template name="getNavTitle" />
+                                <xsl:variable name="pulledNavigationTitle" as="node()*">
+                                    <xsl:call-template name="getNavTitle" />
+                                </xsl:variable>
+                                <xsl:apply-templates select="$pulledNavigationTitle" mode="dropCopiedIds"/>
                             </fo:inline>
                             <fo:inline xsl:use-attribute-sets="__toc__page-number">
                                 <fo:leader xsl:use-attribute-sets="__toc__leader"/>
@@ -260,6 +264,7 @@ See the accompanying LICENSE file for applicable license.
                             <xsl:with-param name="id" select="'Table of Contents'"/>
                           </xsl:call-template>
                         </fo:marker>
+                        <xsl:apply-templates select="." mode="customTopicMarker"/>
                         <xsl:copy-of select="$toc"/>
                     </fo:block>
                 </fo:flow>

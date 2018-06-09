@@ -8,7 +8,7 @@
 package org.dita.dost.writer;
 
 import com.google.common.collect.ImmutableList;
-import org.apache.commons.codec.binary.Base64;
+import com.google.common.io.BaseEncoding;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.reader.SvgMetadataReader;
 import org.dita.dost.util.Job;
@@ -107,7 +107,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String name,
             final Attributes atts) throws SAXException {
-        if (TOPIC_IMAGE.matches(atts)) {
+        if (TOPIC_IMAGE.matches(atts) || SVG_D_SVGREF.matches(atts)) {
             final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder(atts);
             final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
             if (href != null) {
@@ -262,7 +262,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             final String metadata = data.substring(0, separator);
             if (metadata.endsWith(";base64")) {
                 logger.info("Base-64 encoded data URI");
-                return new ByteArrayInputStream(Base64.decodeBase64(data.substring(separator + 1)));
+                return new ByteArrayInputStream(BaseEncoding.base64().decode(data.substring(separator + 1)));
             } else {
                 logger.info("ASCII encoded data URI");
                 return new ByteArrayInputStream(data.substring(separator).getBytes());

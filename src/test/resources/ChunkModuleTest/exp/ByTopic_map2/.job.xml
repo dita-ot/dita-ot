@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-<job>
+<?xml version="1.0" encoding="UTF-8"?><job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
@@ -48,11 +47,7 @@
   <files>
     <file uri="N1.dita" path="N1.dita" format="dita"/>
     <file uri="N1a.dita" path="N1a.dita" format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/nested2.dita"
-      uri="nested2.dita" path="nested2.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/map2.ditamap"
-      uri="map2.ditamap" path="map2.ditamap" format="ditamap"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/nested2.dita" uri="nested2.dita" path="nested2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/map2.ditamap" uri="map2.ditamap" path="map2.ditamap" format="ditamap" input="true"/>
   </files>
 </job>

@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-<job>
+<?xml version="1.0" encoding="UTF-8"?><job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
@@ -46,34 +45,20 @@
     <string/>
   </property>
   <files>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita4.dita"
-      uri="dita4.dita" path="dita4.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita4.dita" uri="dita4.dita" path="dita4.dita" format="dita" target="true"/>
     <file uri="Chunk6.dita" path="Chunk6.dita" format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/topicgroup_chunk.ditamap"
-      uri="topicgroup_chunk.ditamap" path="topicgroup_chunk.ditamap" format="ditamap"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/topicgroup_chunk.ditamap" uri="topicgroup_chunk.ditamap" path="topicgroup_chunk.ditamap" format="ditamap" input="true"/>
     <file uri="Chunk0.dita" path="Chunk0.dita" format="dita"/>
     <file uri="Chunk8.dita" path="Chunk8.dita" format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita2.dita"
-      uri="dita2.dita" path="dita2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita2.dita" uri="dita2.dita" path="dita2.dita" format="dita" target="true"/>
     <file uri="Chunk11.dita" path="Chunk11.dita" format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita5.dita"
-      uri="dita5.dita" path="dita5.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita5.dita" uri="dita5.dita" path="dita5.dita" format="dita" target="true"/>
     <file uri="Chunk7.dita" path="Chunk7.dita" format="dita"/>
     <file uri="Chunk1.dita" path="Chunk1.dita" format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita1.dita"
-      uri="dita1.dita" path="dita1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita1.dita" uri="dita1.dita" path="dita1.dita" format="dita" target="true"/>
     <file uri="Chunk10.dita" path="Chunk10.dita" format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita3.dita"
-      uri="dita3.dita" path="dita3.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita3.dita" uri="dita3.dita" path="dita3.dita" format="dita" target="true"/>
     <file uri="Chunk9.dita" path="Chunk9.dita" format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita6.dita"
-      uri="dita6.dita" path="dita6.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita6.dita" uri="dita6.dita" path="dita6.dita" format="dita" target="true"/>
   </files>
 </job>

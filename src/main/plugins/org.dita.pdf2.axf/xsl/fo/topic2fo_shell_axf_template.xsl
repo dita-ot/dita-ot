@@ -16,6 +16,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="../../cfg/fo/attrs/index-attr_axf.xsl" />
   <xsl:import href="root-processing_axf.xsl"/>
   <xsl:import href="index_axf.xsl"/>
+  <xsl:import href="topic_axf.xsl"/>
   
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 

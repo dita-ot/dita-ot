@@ -45,9 +45,22 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
   <xsl:variable name="codeblock.wrap" select="false()"/>
+  <xsl:variable name="codeblock.tab-width" as="xs:integer" select="4"/>
   <xsl:template match="node()" mode="codeblock.generate-line-number" as="xs:boolean">
-    <xsl:sequence select="false()"/>
+    <xsl:sequence select="tokenize(@outputclass, '\s+') = 'show-line-numbers'"/>
   </xsl:template>
+  <xsl:template match="node()" mode="codeblock.show-whitespace" as="xs:boolean">
+    <xsl:sequence select="tokenize(@outputclass, '\s+') = 'show-whitespace'"/>
+  </xsl:template>
+  <xsl:template match="node()" mode="codeblock.whitespace-character.space" as="item()">
+    <xsl:text>&#xB7;</xsl:text>
+  </xsl:template>
+  <xsl:template match="node()" mode="codeblock.whitespace-character.tab" as="item()">
+    <xsl:value-of>
+      <xsl:text>&#x2192;</xsl:text>
+      <xsl:for-each select="2 to $codeblock.tab-width">&#xA0;</xsl:for-each>
+    </xsl:value-of>
+  </xsl:template>  
 
     <xsl:template match="*[contains(@class,' pr-d/codeblock ')]">
         <xsl:call-template name="generateAttrLabel"/>
@@ -59,8 +72,17 @@ See the accompanying LICENSE file for applicable license.
             <xsl:variable name="codeblock.line-number" as="xs:boolean">
               <xsl:apply-templates select="." mode="codeblock.generate-line-number"/>
             </xsl:variable>
+            <xsl:variable name="codeblock.show-whitespace" as="xs:boolean">
+              <xsl:apply-templates select="." mode="codeblock.show-whitespace"/>
+            </xsl:variable>
+            <xsl:variable name="codeblock.whitespace-character.space" as="item()">
+              <xsl:apply-templates select="." mode="codeblock.whitespace-character.space"/>
+            </xsl:variable>
+            <xsl:variable name="codeblock.whitespace-character.tab" as="item()">
+              <xsl:apply-templates select="." mode="codeblock.whitespace-character.tab"/>
+            </xsl:variable>
             <xsl:choose>
-              <xsl:when test="$codeblock.wrap or $codeblock.line-number">
+              <xsl:when test="$codeblock.wrap or $codeblock.line-number or $codeblock.show-whitespace">
                 <xsl:variable name="content" as="node()*">
                   <xsl:apply-templates/>
                 </xsl:variable>
@@ -75,10 +97,17 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:variable name="line-count" select="count($buf/descendant::processing-instruction('line-number'))"/>
                     <xsl:apply-templates select="$buf" mode="codeblock">
                       <xsl:with-param name="line-count" select="$line-count" tunnel="yes"/>
+                      <xsl:with-param name="codeblock.show-whitespace" select="$codeblock.show-whitespace" tunnel="yes"/>
+                      <xsl:with-param name="codeblock.whitespace-character.space" select="$codeblock.whitespace-character.space" tunnel="yes"/>
+                      <xsl:with-param name="codeblock.whitespace-character.tab" select="$codeblock.whitespace-character.tab" tunnel="yes"/>
                     </xsl:apply-templates>    
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:apply-templates select="$content" mode="codeblock"/>
+                    <xsl:apply-templates select="$content" mode="codeblock">
+                      <xsl:with-param name="codeblock.show-whitespace" select="$codeblock.show-whitespace" tunnel="yes"/>
+                      <xsl:with-param name="codeblock.whitespace-character.space" select="$codeblock.whitespace-character.space" tunnel="yes"/>
+                      <xsl:with-param name="codeblock.whitespace-character.tab" select="$codeblock.whitespace-character.tab" tunnel="yes"/>
+                    </xsl:apply-templates>
                   </xsl:otherwise>
                 </xsl:choose>                
               </xsl:when>
@@ -132,11 +161,47 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="text()" mode="codeblock"
                 name="codeblock.text" priority="10">
     <xsl:param name="text" select="."/>
+    <xsl:param name="codeblock.show-whitespace" as="xs:boolean" select="false()" tunnel="yes"/>
+    <xsl:param name="codeblock.whitespace-character.space" as="item()" select="' '" tunnel="yes"/>
+    <xsl:param name="codeblock.whitespace-character.tab" as="item()" select="'&#x09;'" tunnel="yes"/>
     <xsl:variable name="head" select="substring($text, 1, 1)"/>
     <xsl:variable name="tail" select="substring($text, 2)"/>
     <xsl:choose>
-      <xsl:when test="$codeblock.wrap and $head = (' ', '&#xA0;')">
-        <xsl:text>&#xA0;&#xAD;</xsl:text>
+      <xsl:when test="$head = (' ', '&#xA0;')">
+        <xsl:choose>
+          <xsl:when test="$codeblock.show-whitespace">
+            <fo:inline xsl:use-attribute-sets="codeblock.whitespace">
+              <xsl:copy-of select="$codeblock.whitespace-character.space"/>
+            </fo:inline>
+          </xsl:when>
+          <xsl:when test="$codeblock.wrap">
+            <xsl:text>&#xA0;</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$head"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="$codeblock.wrap">
+          <xsl:text>&#xAD;</xsl:text>
+        </xsl:if>
+      </xsl:when>
+      <xsl:when test="$head = ('&#x9;')">
+        <xsl:choose>
+          <xsl:when test="$codeblock.show-whitespace">
+            <fo:inline xsl:use-attribute-sets="codeblock.whitespace">
+              <xsl:copy-of select="$codeblock.whitespace-character.tab"/>
+            </fo:inline>
+          </xsl:when>
+          <xsl:when test="$codeblock.wrap">
+            <xsl:text>&#xA0;</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$head"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="$codeblock.wrap">
+          <xsl:text>&#xAD;</xsl:text>
+        </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$head"/>
@@ -150,10 +215,9 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/option ')]">
-        <fo:inline xsl:use-attribute-sets="option">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="option"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/var ')]">
@@ -164,10 +228,9 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/parmname ')]">
-        <fo:inline xsl:use-attribute-sets="parmname">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="parmname"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/synph ')]">
@@ -199,10 +262,9 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/apiname ')]">
-        <fo:inline xsl:use-attribute-sets="apiname">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="apiname"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/parml ')]">
@@ -222,15 +284,15 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/pt ')]">
         <fo:block xsl:use-attribute-sets="pt">
-            <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="*"> <!-- tagged content - do not default to bold -->
-                    <xsl:apply-templates/>
+                    <xsl:apply-templates select="." mode="inlineTextOptionalKeyref"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <fo:inline xsl:use-attribute-sets="pt__content">
-                        <xsl:apply-templates/>
-                    </fo:inline> <!-- text only - bold it -->
+                    <!-- text only - bold it -->
+                    <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+                        <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="pt__content"/></xsl:with-param>
+                    </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
         </fo:block>
@@ -293,6 +355,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="syntaxdiagram.title">
             <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>

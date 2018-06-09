@@ -18,26 +18,8 @@ See the accompanying LICENSE file for applicable license.
                   preprocess2.init,
                   ditaval-merge,
                   
-                  map-reader,
-                  map-mapref,
-                  map-branch-filter,
-                  map-keyref,
-                  map-conrefpush,
-                  map-conref,
-                  map-profile,
-    
-                  topic-reader,
-                  topic-branch-filter,
-                  topic-keyref,
-                  topic-copy-to,
-                  topic-conrefpush,
-                  topic-conref,
-                  topic-profile,
-                  topic-fragment,
-                  topic-chunk,
-                  topic-move-meta-entries,
-                  topic-maplink,
-                  topic-topicpull,
+                  preprocess2.maps,
+                  preprocess2.topics,
                   
                   map-clean-map,
                   clean-preprocess,
@@ -52,6 +34,29 @@ See the accompanying LICENSE file for applicable license.
     <!-- Deprecated since 2.4 -->
     <property name="user.input.file.listfile" value="usr.input.file.list"/>
   </target>
+
+  <target name="preprocess2.maps"
+          depends="map-reader,
+                  map-mapref,
+                  map-branch-filter,
+                  map-keyref,
+                  map-conrefpush,
+                  map-conref,
+                  map-profile"/>
+
+  <target name="preprocess2.topics"
+          depends="topic-reader,
+                  topic-branch-filter,
+                  topic-keyref,
+                  topic-copy-to,
+                  topic-conrefpush,
+                  topic-conref,
+                  topic-profile,
+                  topic-fragment,
+                  topic-chunk,
+                  topic-move-meta-entries,
+                  topic-maplink,
+                  topic-topicpull"/>
 
   <target name="preprocess2-topic"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
@@ -155,15 +160,11 @@ See the accompanying LICENSE file for applicable license.
     </condition>
     <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
-      <xslt basedir="${dita.temp.dir}"
-        reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
-        filenameparameter="file-being-processed">
-        <!-- TODO only merge start map -->
+      <module class="org.dita.dost.module.MaprefModule">
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
         <ditafileset format="ditamap"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
-      </xslt>
+      </module>
     </pipeline>
   </target>
 
@@ -180,23 +181,16 @@ See the accompanying LICENSE file for applicable license.
     description="Resolve input map files keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
       <module class="org.dita.dost.module.KeyrefModule">
-        <ditaFileset format="ditamap"/>
+        <ditafileset format="ditamap"/>
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
-      <xslt basedir="${dita.temp.dir}"
-        reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
-        filenameparameter="file-being-processed">
-        <!-- TODO only merge start map -->
-        <ditaFileset format="ditamap"/>
-        <!--param name="TRANSTYPE" expression="${transtype}" /-->
-        <param name="child-topicref-warning" expression="false"/>
-        <param name="keep-submap-href" expression="false"/>
+      <module class="org.dita.dost.module.MaprefModule">
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
+        <ditafileset format="ditamap"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
-      </xslt>
+      </module>
     </pipeline>
   </target>
   
@@ -205,7 +199,7 @@ See the accompanying LICENSE file for applicable license.
     description="Resolve input map files conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
-        <ditaFileset format="ditamap"/>
+        <ditafileset format="ditamap"/>
       </module>
     </pipeline>  
   </target>
@@ -221,7 +215,7 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
         style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/map-conref.xsl" filenameparameter="file-being-processed">
-        <ditaFileset format="ditamap" conref="true"/>
+        <ditafileset format="ditamap" conref="true"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -235,7 +229,7 @@ See the accompanying LICENSE file for applicable license.
     description="Profile input map files">
     <pipeline message="Profile filtering." taskname="profile">
       <module class="org.dita.dost.module.FilterModule">
-        <ditaFileset format="ditamap"/>
+        <ditafileset format="ditamap"/>
         <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
         <param name="transtype" value="${transtype}"/>
       </module>
@@ -284,7 +278,7 @@ See the accompanying LICENSE file for applicable license.
           description="Resolve keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
       <module class="org.dita.dost.module.KeyrefModule">
-        <ditaFileset format="dita"/>
+        <ditafileset format="dita"/>
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
@@ -303,8 +297,8 @@ See the accompanying LICENSE file for applicable license.
           description="Resolve conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
-        <ditaFileset format="dita"/>
-        <ditaFileset format="ditamap"/>
+        <ditafileset format="dita"/>
+        <ditafileset format="ditamap"/>
       </module>
     </pipeline>
   </target>
@@ -320,8 +314,8 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
-        <ditaFileset conref="true" format="dita"/>
-        <ditaFileset conref="true" format="ditamap"/>
+        <ditafileset conref="true" format="dita"/>
+        <ditafileset conref="true" format="ditamap"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -335,7 +329,7 @@ See the accompanying LICENSE file for applicable license.
           description="Profile input files">
     <pipeline message="Profile filtering." taskname="profile">
       <module class="org.dita.dost.module.FilterModule">
-        <ditaFileset format="dita"/>
+        <ditafileset format="dita"/>
         <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
         <param name="transtype" value="${transtype}"/>
       </module>
@@ -352,7 +346,7 @@ See the accompanying LICENSE file for applicable license.
           description="Normalize same topic fragment identifiers and table column names, and resolve coderef">
     <pipeline message="Resolve topic fragment." taskname="topic-fragment">
       <sax>
-        <ditaFileset format="dita"/>
+        <ditafileset format="dita"/>
         <filter class="org.dita.dost.writer.TopicFragmentFilter">
           <param name="attributes" value="href"/>
         </filter>
@@ -360,6 +354,7 @@ See the accompanying LICENSE file for applicable license.
           <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
         </filter>
         <filter class="org.dita.dost.writer.CoderefResolver" unless:set="preprocess.coderef.skip"/>
+        <filter class="org.dita.dost.writer.NormalizeCodeblock" unless:set="preprocess.normalize-codeblock.skip"/>
       </sax>
     </pipeline>
   </target>
@@ -412,7 +407,7 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
         style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
-        <ditaFileset format="dita"/>
+        <ditafileset format="dita"/>
         <param name="TABLELINK" expression="${args.tablelink.style}" if:set="args.tablelink.style" />
         <param name="FIGURELINK" expression="${args.figurelink.style}" if:set="args.figurelink.style" />
         <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if:set="onlytopic.in.map"/>
@@ -433,7 +428,7 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
-        <ditaFileset format="ditamap"/>
+        <ditafileset format="ditamap"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>

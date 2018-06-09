@@ -6,7 +6,10 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2htmlhelp">
+<project xmlns:dita="http://dita-ot.sourceforge.net"
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
+         name="dita2htmlhelp">
 
   <target name="dita2htmlhelp" unless="noMap"
           depends="dita2htmlhelp.init,
@@ -82,19 +85,18 @@ See the accompanying LICENSE file for applicable license.
     <condition property="htmlhelp.hhp.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
       <isset property="inner.transform"/>
     </condition>
-    <xslt basedir="${dita.temp.dir}"
-          destdir="${htmlhelp.hhp.output.dir}"
-          includesfile="${dita.temp.dir}/${user.input.file.listfile}"
-          classpathref="dost.class.path"
+    <pipeline>
+    <xslt destdir="${htmlhelp.hhp.output.dir}"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
-      <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
+      <ditafileset input="true" processingRole="normal"/>
+      <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
       <param name="HHCNAME" expression="${args.output.base}.hhc"/>
-      <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
+      <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if:set="args.htmlhelp.includefile"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
-      <mergemapper to="${args.output.base}.hhp"/>
+      <mapper type="merge" to="${args.output.base}.hhp"/>
     </xslt>
+    </pipeline>
   </target>
 
   <target name="dita.map.htmlhelp.hhc" depends="dita.map.htmlhelp.init"
@@ -103,17 +105,16 @@ See the accompanying LICENSE file for applicable license.
     <condition property="htmlhelp.hhc.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
       <isset property="inner.transform"/>
     </condition>
-    <xslt basedir="${dita.temp.dir}"
-          destdir="${htmlhelp.hhc.output.dir}"
-          includesfile="${dita.temp.dir}/${user.input.file.listfile}"
-          classpathref="dost.class.path"
+    <pipeline>
+    <xslt destdir="${htmlhelp.hhc.output.dir}"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
-      <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
+      <ditafileset input="true" processingRole="normal"/>
+      <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
-      <mergemapper to="${args.output.base}.hhc"/>
+      <mapper type="merge" to="${args.output.base}.hhc"/>
     </xslt>
+    </pipeline>
   </target>
 
   <target name="dita.map.htmlhelp.hhk" depends="dita.map.htmlhelp.init"
@@ -122,13 +123,13 @@ See the accompanying LICENSE file for applicable license.
     <condition property="htmlhelp.hhk.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
       <isset property="inner.transform"/>
     </condition>
-    <pipeline message="Extract index term." tempdir="${dita.temp.dir}" inputmap="${user.input.file}">
+    <pipeline message="Extract index term." inputmap="${user.input.file}">
       <module class="org.dita.dost.module.IndexTermExtractModule">
         <param name="output" location="${htmlhelp.hhk.output.dir}/${args.output.base}.hhk"/>
         <param name="targetext" value="${out.ext}"/>
         <param name="indextype" value="htmlhelp"/>
         <param name="indexclass" value="org.dita.dost.writer.CHMIndexWriter"/>
-        <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+        <param name="encoding" value="${args.dita.locale}" if:set="args.dita.locale"/>
         <param name="defaultLanguage" expression="${default.language}"/>
       </module>
     </pipeline>

@@ -23,6 +23,7 @@ import org.dita.dost.ant.ExtensibleAntInvoker;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -36,6 +37,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
     private Set<String> formats = Collections.emptySet();
     private Boolean hasConref;
+    private Boolean isInput;
     private Boolean isResourceOnly;
     private Collection<Resource> res;
     private boolean isFilesystemOnly = true;
@@ -48,9 +50,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         if (res == null) {
             final Job job = getJob();
             res = new ArrayList<>();
-            for (final Job.FileInfo f : job.getFileInfo(f -> (formats.isEmpty() || formats.contains(f.format)) &&
-                    (hasConref == null || f.hasConref == hasConref) &&
-                    (isResourceOnly == null || f.isResourceOnly == isResourceOnly))) {
+            for (final FileInfo f : job.getFileInfo(this::filter)) {
                 log("Scanning for " + f.file.getPath(), Project.MSG_VERBOSE);
                 final File tempFile = new File(job.tempDir, f.file.getPath());
                 if (tempFile.exists()) {
@@ -125,8 +125,19 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         this.hasConref = conref;
     }
 
+    public void setInput(final boolean isInput) {
+        this.isInput = isInput;
+    }
+
     public void setProcessingRole(final String processingRole) {
         this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+    }
+
+    private boolean filter(final FileInfo f) {
+        return (formats == null || (formats.contains(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
+                (hasConref == null || f.hasConref == hasConref) &&
+                (isInput == null || f.isInput == isInput) &&
+                (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
     }
 
     private static class JobResource extends URLResource {

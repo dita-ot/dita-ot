@@ -179,6 +179,8 @@ public final class ConrefPushParser extends AbstractXMLFilter {
                 f.hasKeyref = true;
             }
             job.write();
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
@@ -229,6 +231,8 @@ public final class ConrefPushParser extends AbstractXMLFilter {
                     if (contentForPushAfter != null) {
                         writeNode(contentForPushAfter);
                     }
+                } catch (final RuntimeException e) {
+                    throw e;
                 } catch (final Exception e) {
                     logger.error(e.getMessage(), e) ;
                 }
@@ -316,6 +320,8 @@ public final class ConrefPushParser extends AbstractXMLFilter {
                     }
                 }
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             e.printStackTrace();
         }

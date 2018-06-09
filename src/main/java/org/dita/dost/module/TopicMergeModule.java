@@ -32,6 +32,8 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MergeMapParser;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 
 /**
  * The module handles topic merge in issues as PDF.
@@ -59,7 +61,8 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        final File ditaInput = new File(job.tempDirURI.resolve(job.getInputMap()));
+        final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+        final File ditaInput = new File(job.tempDirURI.resolve(in.uri));
         if (!ditaInput.exists()) {
             logger.error(MessageUtils.getMessage("DOTJ025E").toString());
             return null;

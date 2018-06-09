@@ -64,6 +64,10 @@ See the accompanying LICENSE file for applicable license.
       <xsl:attribute name="color">gray</xsl:attribute>
       <xsl:attribute name="padding-end">1em</xsl:attribute>
     </xsl:attribute-set>
+    
+  <xsl:attribute-set name="codeblock.whitespace">
+    <xsl:attribute name="color">#C0C0C0</xsl:attribute>
+  </xsl:attribute-set>
 
     <xsl:attribute-set name="option">
     </xsl:attribute-set>

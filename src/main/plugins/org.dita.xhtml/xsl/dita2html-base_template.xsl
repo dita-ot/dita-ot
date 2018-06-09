@@ -46,6 +46,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:import href="xslhtml/abbrev-d.xsl"/>
 <xsl:import href="xslhtml/markup-d.xsl"/>
 <xsl:import href="xslhtml/xml-d.xsl"/>
+<xsl:import href="xslhtml/svg-d.xsl"/>
 <!-- Integrate support for flagging with dita-ot pseudo-domain -->
 <xsl:import href="xslhtml/htmlflag.xsl"/>  
   

@@ -13,9 +13,6 @@ apply plugin: 'signing'
 signing {
     sign configurations.archives
 }
-task dummy() << {
-    println("ossrhUsername: ${ossrhUsername}")
-}
 
 uploadArchives {
     repositories {

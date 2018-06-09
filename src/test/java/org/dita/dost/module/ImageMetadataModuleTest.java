@@ -51,7 +51,7 @@ public class ImageMetadataModuleTest {
         final Job job = new Job(tempDir);
         job.setProperty("uplevels", "");
         job.setInputDir(srcDir.toURI());
-        job.addAll(asList("img.tiff", "img.png", "img.gif", "img.jpg").stream()
+        job.addAll(asList("img.xxx", "img.png", "img.gif", "img.jpg").stream()
                 .map(p -> new Builder()
                         .uri(create(p)).src(new File(srcDir, p).toURI()).format("html")
                         .build())
@@ -73,7 +73,7 @@ public class ImageMetadataModuleTest {
         assertEquals("image", job.getFileInfo(create("img.png")).format);
         assertEquals("image", job.getFileInfo(create("img.gif")).format);
         assertEquals("image", job.getFileInfo(create("img.jpg")).format);
-        assertEquals("image", job.getFileInfo(create("img.tiff")).format);
+        assertEquals("image", job.getFileInfo(create("img.xxx")).format);
     }
 
     @AfterClass

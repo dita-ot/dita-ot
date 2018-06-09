@@ -141,6 +141,8 @@ public final class MergeMapParser extends XMLFilterImpl {
             reader.parse(filename.toURI().toString());
             topicParser.getContentHandler().endDocument();
             output.write(topicBuffer.toByteArray());
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }

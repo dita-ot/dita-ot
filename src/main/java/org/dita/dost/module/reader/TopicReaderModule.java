@@ -110,7 +110,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
     }
 
     private Document getMapDocument() throws SAXException {
-        final FileInfo fi = job.getFileInfo(job.getInputMap());
+        final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
         if (fi == null) {
             return null;
         }
@@ -125,7 +125,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
     @Override
     public void readStartFile() throws DITAOTException {
-        FileInfo fi = job.getFileInfo(job.getInputFile());
+        FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
         if (fi == null) {
             addToWaitList(new Reference(job.getInputFile()));
         } else {
@@ -143,7 +143,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
     private List<Reference> getStartDocuments() throws DITAOTException {
         final List<Reference> res = new ArrayList<>();
-        final FileInfo startFileInfo = job.getFileInfo(job.getInputFile());
+        final FileInfo startFileInfo = job.getFileInfo(f -> f.isInput).iterator().next();
         assert startFileInfo.src != null;
         final URI tmp = job.tempDirURI.resolve(startFileInfo.uri);
         final Source source = new StreamSource(tmp.toString());

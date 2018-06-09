@@ -68,8 +68,11 @@ See the accompanying LICENSE file for applicable license.
             </xsl:when>
             <!-- When the target has a short description and no local override, use the target -->
             <xsl:when test="$element/*[contains(@class, ' topic/shortdesc ')]">
-                <fo:block xsl:use-attribute-sets="link__shortdesc">
+                <xsl:variable name="generatedShortdesc" as="element()*">
                     <xsl:apply-templates select="$element/*[contains(@class, ' topic/shortdesc ')]"/>
+                </xsl:variable>
+                <fo:block xsl:use-attribute-sets="link__shortdesc">
+                    <xsl:apply-templates select="$generatedShortdesc" mode="dropCopiedIds"/>
                 </fo:block>
             </xsl:when>
         </xsl:choose>
@@ -628,6 +631,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
     <fo:block xsl:use-attribute-sets="linklist.title">
+      <xsl:apply-templates select="." mode="customTitleAnchor"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>

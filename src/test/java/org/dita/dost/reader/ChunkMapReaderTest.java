@@ -59,6 +59,7 @@ public class ChunkMapReaderTest {
         job.add(new Job.FileInfo.Builder()
                 .src(new File(srcDir, "maps" + File.separator + "gen.ditamap").toURI())
                 .uri(toURI("maps/gen.ditamap"))
+                .isInput(true)
                 .build());
         for (final String srcFile : getSrcFiles()) {
             final URI dst = tempDir.toURI().resolve(srcFile);
@@ -159,6 +160,7 @@ public class ChunkMapReaderTest {
                 .src(new File(srcDir, map).toURI())
                 .uri(toURI(map))
                 .result(new File(srcDir, map).toURI())
+                .isInput(true)
                 .build());
         for (final String srcFile : topics) {
             final URI dst = tempDir.toURI().resolve(srcFile);

@@ -107,7 +107,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
-            final URI mapFile = job.getInputMap();
+            final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+            final URI mapFile = in.uri;
             logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
             reader.read(job.tempDirURI.resolve(mapFile), doc);
 
@@ -153,7 +154,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     /** Collect topics for key reference processing and modify map to reflect new file names. */
     private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) {
         final List<ResolveTask> res = new ArrayList<>();
-        res.add(new ResolveTask(rootScope, job.getFileInfo(job.getInputMap()), null));
+        final FileInfo input = job.getFileInfo(fi -> fi.isInput).iterator().next();
+        res.add(new ResolveTask(rootScope, input, null));
         // Collect topics from map and rewrite topicrefs for duplicates
         walkMap(doc.getDocumentElement(), rootScope, res);
         // Collect topics not in map and map itself
@@ -387,7 +389,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     private Document readMap() throws DITAOTException {
         InputSource in = null;
         try {
-            in = new InputSource(job.tempDirURI.resolve(job.getInputMap()).toString());
+            final FileInfo input = job.getFileInfo(fi -> fi.isInput).iterator().next();
+            in = new InputSource(job.tempDirURI.resolve(input.uri).toString());
             return XMLUtils.getDocumentBuilder().parse(in);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to parse map: " + e.getMessage(), e);
@@ -404,7 +407,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         Result out = null;
         try {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            out = new StreamResult(new File(job.tempDirURI.resolve(job.getInputMap())));
+            final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+            out = new StreamResult(job.tempDirURI.resolve(in.uri).toString());
             transformer.transform(new DOMSource(doc), out);
         } catch (final TransformerConfigurationException e) {
             throw new RuntimeException(e);

@@ -83,6 +83,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         ki.add(new KeyrefInfo(TOPIC_DATA, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_DATA_ABOUT, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_IMAGE, ATTRIBUTE_NAME_HREF, false, true));
+        ki.add(new KeyrefInfo(SVG_D_SVGREF, ATTRIBUTE_NAME_HREF, true, false));
         ki.add(new KeyrefInfo(TOPIC_LINK, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_LQ, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(MAP_NAVREF, "mapref", true, false));
@@ -336,7 +337,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                         }
                                     }
                                 }
-                            } else if (fallbackToNavtitleOrHref(elem)) {
+                            } else if (!currentElement.isEmpty && fallbackToNavtitleOrHref(elem)) {
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
                                 if (linktext.getLength() > 0) {
                                     domToSax((Element) linktext.item(0), false);
@@ -441,6 +442,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         for (final KeyrefInfo k : keyrefInfos) {
             if (k.type.matches(cls)) {
                 currentElement = k;
+                break;
             }
         }
         Attributes resAtts = atts;

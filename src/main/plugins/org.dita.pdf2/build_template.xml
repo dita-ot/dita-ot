@@ -26,7 +26,10 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 -->
-<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita.build" basedir=".">
+<project xmlns:dita="http://dita-ot.sourceforge.net"
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
+         name="dita.build" basedir=".">
   
   <target name="dita2pdf2.init">
     <dita-ot-fail id="PDFX012F">
@@ -102,7 +105,16 @@ with those set forth herein.
       <not><isset property="file.protocol.prefix"/></not>
     </condition>
     
-    <property name="xml.catalog.files" value="${customization.dir}/catalog.xml;${dita.plugin.org.dita.pdf2.dir}/cfg/catalog.xml;${dita.dir}/catalog-dita.xml"/>
+    <path id="xml.catalog.path">
+      <pathelement location="${customization.dir}/catalog.xml"/>
+      <pathelement location="${dita.plugin.org.dita.pdf2.dir}/cfg/catalog.xml"/>
+      <pathelement location="${dita.dir}/catalog-dita.xml"/>
+    </path>
+    <xmlcatalog id="xml.catalog">
+      <catalogpath refid="xml.catalog.path"/>
+    </xmlcatalog>
+    <!-- Deprecated since 3.1 -->
+    <pathconvert property="xml.catalog.files" refid="xml.catalog.path"/>
     
     <property name="xsl.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl"/>
     <property name="xsl.fo.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/fo"/>
@@ -141,8 +153,7 @@ with those set forth herein.
   <target name="map2pdf2" unless="noMap">
     <dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
     <pipeline message="topicmerge" taskname="topic-merge"
-              inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
-              tempdir="${dita.temp.dir.fullpath}">
+              inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}">
       <module class="org.dita.dost.module.TopicMergeModule">
         <param name="output" location="${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml"/>
         <param name="style" location="${dita.plugin.org.dita.pdf2.dir}/xsl/common/topicmerge.xsl"/>
@@ -287,8 +298,9 @@ with those set forth herein.
     </condition>
 
     <index-preprocess input="${inputFile.url}" output="${dita.temp.dir}/stage1.xml"
-                      indexConfig="${index.config.file}" locale="${document.locale}"
-                      catalogs="${xml.catalog.files}"/> 
+                      indexConfig="${index.config.file}" locale="${document.locale}">
+      <xmlcatalog refid="xml.catalog"/>
+    </index-preprocess> 
   </target>
   
   <target name="transform.topic2fo.main">
@@ -300,18 +312,19 @@ with those set forth herein.
     <makeurl property="user.input.dir.url" file="${user.input.dir}" validate="no"/>    
     <makeurl property="variable.file.url" file="${variable.file}" validate="no"/>
 
+    <pipeline>
     <xslt style="${temp.transformation.file}"
           in="${dita.temp.dir}/stage1.xml"
           out="${dita.temp.dir}/stage2.fo">
       <param name="locale" expression="${document.locale}"/>
-      <param name="customizationDir.url" expression="${customization.dir.url}" if="customization.dir"/>
+      <param name="customizationDir.url" expression="${customization.dir.url}" if:set="customization.dir"/>
       <param name="input.dir.url" expression="${user.input.dir.url}"/>
       <param name="DRAFT" expression="${args.draft}"/>
       <param name="output.dir.url" expression="${dita.map.output.dir.url}"/>
       <param name="work.dir.url" expression="${work.dir.url}"/>
       <param name="artworkPrefix" expression="${artworkPrefixUrl}"/>
       <param name="publishRequiredCleanup" expression="${publish.required.cleanup}"/>
-      <param name="artLabel" expression="${args.artlbl}" if="args.artlbl"/>
+      <param name="artLabel" expression="${args.artlbl}" if:set="args.artlbl"/>
       <param name="antArgsBookmarkStyle" expression="${args.bookmark.style}"/>
       <param name="antArgsChapterLayout" expression="${args.chapter.layout}"/>
       <param name="include.rellinks" expression="${include.rellinks}"/>
@@ -320,13 +333,12 @@ with those set forth herein.
       <param name="bookmap-order" expression="${args.bookmap-order}"/>
       <param name="figurelink.style" expression="${args.figurelink.style}"/>
       <param name="tablelink.style" expression="${args.tablelink.style}"/>
-      <param name="variableFiles.url" expression="${variable.file.url}" if="variable.file.exists"/>
+      <param name="variableFiles.url" expression="${variable.file.url}" if:set="variable.file.exists"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <dita:extension id="dita.conductor.pdf2.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <xmlcatalog>
-        <catalogpath path="${xml.catalog.files}"/>
-      </xmlcatalog>
+      <xmlcatalog refid="xml.catalog"/>
     </xslt>
+    </pipeline>
   </target>
 
   <target name="transform.topic2fo.i18n"
@@ -367,9 +379,7 @@ with those set forth herein.
     <i18n-preprocess input="${dita.temp.dir}/stage2.fo" output="${pdf2.temp.dir}/topic.fo"
                      config="${i18n.config.file}"
                      style="${xsl.fo.dir}/i18n-postprocess.xsl">
-      <xmlcatalog>
-        <catalogpath path="${xml.catalog.files}"/>
-      </xmlcatalog>
+      <xmlcatalog refid="xml.catalog"/>
     </i18n-preprocess>
   </target>
   <target name="transform.topic2fo.i18n.no-filter" if="pdf2.i18n.skip">

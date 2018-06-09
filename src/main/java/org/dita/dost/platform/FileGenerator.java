@@ -8,23 +8,25 @@
  */
 package org.dita.dost.platform;
 
-import static java.util.Arrays.*;
-
-import java.io.*;
-import java.util.*;
-
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
-import org.xml.sax.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
-import org.xml.sax.helpers.XMLReaderFactory;
 
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.*;
+import java.util.*;
+
+import static java.util.Arrays.asList;
 
 /**
  * Generate outputfile with templates.
@@ -42,6 +44,8 @@ final class FileGenerator extends XMLFilterImpl {
 
     private static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
     private static final String TEMPLATE_PREFIX = "_template.";
+
+    private static final Map<String, String> DEFAULT_EXTENSIONS = Collections.emptyMap();
 
     private DITAOTLogger logger;
     /** Plug-in features. */
@@ -86,7 +90,9 @@ final class FileGenerator extends XMLFilterImpl {
         try (final InputStream in = new BufferedInputStream(new FileInputStream(fileName));
              final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            XMLReader reader = XMLReaderFactory.createXMLReader();
+            final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+            parserFactory.setNamespaceAware(true);
+            XMLReader reader = parserFactory.newSAXParser().getXMLReader();
             this.setContentHandler(null);
             this.setParent(reader);
             reader = this;
@@ -122,11 +128,9 @@ final class FileGenerator extends XMLFilterImpl {
 
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
-        IAction action = null;
         try {
             if (DITA_OT_NS.equals(uri) && EXTENSION_ELEM.equals(localName)) {
-                // Element extension: <dita:extension id="extension-point" behavior="classname"/>
-                action = (IAction)Class.forName(attributes.getValue(BEHAVIOR_ATTR)).newInstance();
+                final IAction action = (IAction)Class.forName(attributes.getValue(BEHAVIOR_ATTR)).newInstance();
                 action.setLogger(logger);
                 action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
                 for (int i = 0; i <  attributes.getLength(); i++) {
@@ -140,34 +144,27 @@ final class FileGenerator extends XMLFilterImpl {
                 action.setFeatures(pluginTable);
                 action.getResult(getContentHandler());
             } else {
+                final Map<String, String> extensions = parseExtensions(attributes.getValue(DITA_OT_NS, EXTENSION_ATTR));
                 final AttributesBuilder atts = new AttributesBuilder();
                 final int attLen = attributes.getLength();
                 for (int i = 0; i < attLen; i++) {
+                    final String name = attributes.getLocalName(i);
                     if (DITA_OT_NS.equals(attributes.getURI(i))) {
-                        // Attribute extension: <element dita:extension="localname classname ..." dita:localname="...">
-                        if (!(EXTENSION_ATTR.equals(attributes.getLocalName(i)))) {
-                            final String extensions = attributes.getValue(DITA_OT_NS, EXTENSION_ATTR);
-                            final StringTokenizer extensionTokenizer = new StringTokenizer(extensions);
-                            // Get the classname that implements this localname.
-                            while (extensionTokenizer.hasMoreTokens()) {
-                                final String thisExtension = extensionTokenizer.nextToken();
-                                final String thisExtensionClass = extensionTokenizer.nextToken();
-                                if (thisExtension.equals(attributes.getLocalName(i))) {
-                                    action = (IAction)Class.forName(thisExtensionClass).newInstance();
-                                    break;
-                                }
+                        if (!(EXTENSION_ATTR.equals(name))) {
+                            if (extensions.containsKey(name)) {
+                                final IAction action = (IAction)Class.forName(extensions.get(name)).newInstance();
+                                action.setLogger(logger);
+                                action.setFeatures(pluginTable);
+                                action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
+                                action.setInput(asList(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR)));
+                                final String result = action.getResult();
+                                atts.add(name, result);
+                            } else {
+                                throw new IllegalArgumentException("Extension attribute " + name + " not defined");
                             }
-                            action.setLogger(logger);
-                            action.setFeatures(pluginTable);
-                            action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
-                            action.setInput(asList(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR)));
-                            atts.add(attributes.getLocalName(i), action.getResult());
                         }
-                    } else if (attributes.getQName(i).startsWith("xmlns:") && DITA_OT_NS.equals(attributes.getValue(i))) {
-                        // Ignore xmlns:dita.
                     } else {
-                        // Normal attribute.
-                        atts.add(attributes.getURI(i), attributes.getLocalName(i), attributes.getQName(i), attributes.getType(i), attributes.getValue(i));
+                        atts.add(attributes.getURI(i), name, attributes.getQName(i), attributes.getType(i), attributes.getValue(i));
                     }
                 }
                 getContentHandler().startElement(uri, localName, qName, atts.build());
@@ -176,6 +173,20 @@ final class FileGenerator extends XMLFilterImpl {
             e.printStackTrace();
             logger.error(e.getMessage(), e) ;
         }
+    }
+
+    private Map<String, String> parseExtensions(final String extensions) {
+        if (extensions == null) {
+            return DEFAULT_EXTENSIONS;
+        }
+        final Map<String, String> res = new HashMap<>(DEFAULT_EXTENSIONS);
+        final StringTokenizer extensionTokenizer = new StringTokenizer(extensions);
+        while (extensionTokenizer.hasMoreTokens()) {
+            final String thisExtension = extensionTokenizer.nextToken();
+            final String thisExtensionClass = extensionTokenizer.nextToken();
+            res.put(thisExtension, thisExtensionClass);
+        }
+        return res;
     }
 
 }

@@ -10,7 +10,7 @@ before_script:
 - git submodule update --init --recursive
 - "./gradlew"
 script:
-- "./gradlew check integrationTest --info --stacktrace --no-daemon"
+- "./gradlew check integrationTest e2eTest --info --stacktrace --no-daemon"
 after_success:
 - "./gradlew dist --stacktrace --no-daemon -Pcommit=${TRAVIS_COMMIT} -Ptag=${TRAVIS_TAG} -PskipGenerateDocs=${SKIP_GENERATE_DOCS}"
 notifications:

@@ -59,13 +59,11 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        final Collection<FileInfo> fis = new ArrayList<>();
-        fis.add(job.getFileInfo(job.getInputMap()));
+        final Collection<FileInfo> fis = job.getFileInfo(fi -> fi.isInput);
         if (!fis.isEmpty()) {
             final Map<URI, Map<String, Element>> mapSet = getMapMetadata(fis);
             pushMetadata(mapSet);
             pullTopicMetadata(input, fis);
-
         }
 
         return null;

@@ -70,7 +70,8 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        processMap(job.getInputMap());
+        final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+        processMap(in.uri);
 
         addFlagImagesSetToProperties(job, relFlagImagesSet);
 

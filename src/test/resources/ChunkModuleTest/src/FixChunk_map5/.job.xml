@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-<job>
+<?xml version="1.0" encoding="UTF-8"?><job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
@@ -46,32 +45,14 @@
     <string/>
   </property>
   <files>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/child1.dita"
-      uri="child1.dita" path="child1.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/parent1.dita"
-      uri="parent1.dita" path="parent1.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/parentchunk.dita"
-      uri="parentchunk.dita" path="parentchunk.dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/grandchild3.dita"
-      uri="grandchild3.dita" path="grandchild3.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/child2.dita"
-      uri="child2.dita" path="child2.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/child2chunk.dita"
-      uri="child2chunk.dita" path="child2chunk.dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/child3.dita"
-      uri="child3.dita" path="child3.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/grandchild2.dita"
-      uri="grandchild2.dita" path="grandchild2.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/map5.ditamap"
-      uri="map5.ditamap" path="map5.ditamap" format="ditamap"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/child1.dita" uri="child1.dita" path="child1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/parent1.dita" uri="parent1.dita" path="parent1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/parentchunk.dita" uri="parentchunk.dita" path="parentchunk.dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/grandchild3.dita" uri="grandchild3.dita" path="grandchild3.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/child2.dita" uri="child2.dita" path="child2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/child2chunk.dita" uri="child2chunk.dita" path="child2chunk.dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/child3.dita" uri="child3.dita" path="child3.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/grandchild2.dita" uri="grandchild2.dita" path="grandchild2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkFixChunkTest/src/map5.ditamap" uri="map5.ditamap" path="map5.ditamap" format="ditamap" input="true"/>
   </files>
 </job>

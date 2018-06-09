@@ -64,11 +64,13 @@ See the accompanying LICENSE file for applicable license.
                  </fo:marker>
                  <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
              </xsl:if>
+             <xsl:apply-templates select="." mode="customTopicMarker"/>
              <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
              <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                  <xsl:with-param name="type" select="'preface'"/>
              </xsl:apply-templates>
              <fo:block xsl:use-attribute-sets="topic.title">
+                 <xsl:apply-templates select="." mode="customTopicAnchor"/>
                  <xsl:call-template name="pullPrologIndexTerms"/>
                  <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                      <xsl:apply-templates select="." mode="getTitle"/>

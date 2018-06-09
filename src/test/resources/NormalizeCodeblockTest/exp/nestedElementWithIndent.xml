@@ -1,0 +1,7 @@
+<topic class="- topic/topic ">
+  <body class="- topic/body ">
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve" outputclass="normalize-space">foo
+  <b class="+ topic/ph hi-d/b ">bar</b>
+baz</codeblock>
+  </body>
+</topic>

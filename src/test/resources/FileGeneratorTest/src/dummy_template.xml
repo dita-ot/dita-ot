@@ -7,6 +7,9 @@
   <target dita:foo="attribute"
           dita:extension="foo org.dita.dost.platform.FileGeneratorTest$AttributeAction"/>
   
+  <target dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          dita:depends="{foo},bar,{baz}"/>
+
   <target name="help">
     <echo>&quot;</echo>
     <echo>&apos;</echo>

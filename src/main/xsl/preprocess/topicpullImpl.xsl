@@ -460,6 +460,12 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:if>
   </xsl:template>
   
+  <xsl:template match="*[contains(@class, ' svg-d/svgref ')]" priority="10">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()"/>
+    </xsl:copy>
+  </xsl:template>
+
   <!-- Process an in-line cross reference. Retrieve link text, type, and
        description if possible (and not already specified locally). -->
   <xsl:template match="*[dita-ot:is-link(.)]">

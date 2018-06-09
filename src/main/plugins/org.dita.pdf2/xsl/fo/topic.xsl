@@ -103,6 +103,7 @@ See the accompanying LICENSE file for applicable license.
                         </xsl:call-template>
                     </xsl:attribute>
                 </fo:wrapper>
+                <xsl:apply-templates select="." mode="customTopicAnchor"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <xsl:apply-templates select="." mode="getTitle"/>
             </fo:block>
@@ -139,10 +140,14 @@ See the accompanying LICENSE file for applicable license.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    
+    <!-- Hook that allows adding anchors to titled non topic elements. -->
+    <xsl:template match="*[contains(@class,' topic/title ')]" mode="customTitleAnchor"/>
 
     <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="section.title">
             <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:apply-templates select="." mode="getTitle"/>
         </fo:block>
     </xsl:template>
@@ -150,6 +155,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="example.title">
             <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -157,6 +163,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="fig.title">
             <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:call-template name="getVariable">
                 <xsl:with-param name="id" select="'Figure.title'"/>
                 <xsl:with-param name="params">
@@ -1107,7 +1114,8 @@ See the accompanying LICENSE file for applicable license.
         </fo:inline>
     </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/keyword ')]" name="topic.keyword">
+  <xsl:template match="*" mode="inlineTextOptionalKeyref">
+    <xsl:param name="copyAttributes" as="element()?"/>
     <xsl:param name="keys" select="@keyref" as="attribute()?"/>
     <xsl:param name="contents" as="node()*">
       <xsl:variable name="target" select="key('id', substring(@href, 2))"/>
@@ -1123,14 +1131,16 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="topicref" select="key('map-id', substring(@href, 2))"/>
     <xsl:choose>
       <xsl:when test="$keys and @href and not($topicref/ancestor-or-self::*[@linking][1]/@linking = ('none', 'sourceonly'))">
-        <fo:basic-link xsl:use-attribute-sets="xref keyword">
+        <fo:basic-link xsl:use-attribute-sets="xref">
+          <xsl:sequence select="$copyAttributes/@*"/>
           <xsl:call-template name="commonattributes"/>
           <xsl:call-template name="buildBasicLinkDestination"/>
           <xsl:copy-of select="$contents"/>
         </fo:basic-link>
       </xsl:when>
       <xsl:otherwise>
-        <fo:inline xsl:use-attribute-sets="keyword">
+        <fo:inline>
+          <xsl:sequence select="$copyAttributes/@*"/>
           <xsl:call-template name="commonattributes"/>
           <xsl:copy-of select="$contents"/>
         </fo:inline>
@@ -1138,11 +1148,16 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
 
+    <xsl:template match="*[contains(@class,' topic/keyword ')]" name="topic.keyword">
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="keyword"/></xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:template>
+
     <xsl:template match="*[contains(@class,' topic/ph ')]">
-        <fo:inline xsl:use-attribute-sets="ph">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="ph"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/boolean ')]">
@@ -1168,7 +1183,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:variable name="job" select="document(resolve-uri('.job.xml', $work.dir.url))" as="document-node()?"/>
   <xsl:key name="jobFile" match="file" use="@uri"/>
 
-    <xsl:template match="*[contains(@class,' topic/image ')]">
+    <xsl:template match="*[contains(@class,' topic/image ')]" name="image">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <xsl:choose>
             <xsl:when test="empty(@href)"/>
@@ -1310,12 +1325,22 @@ See the accompanying LICENSE file for applicable license.
             <xsl:attribute name="content-height">scale-to-fit</xsl:attribute>
             <xsl:attribute name="scaling">uniform</xsl:attribute>
           </xsl:if>
+          <xsl:choose>
+            <xsl:when test="*[contains(@class,' topic/alt ')]">
+              <xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="graphicAlternateText"/>
+            </xsl:when>
+            <xsl:when test="@alt">
+              <xsl:apply-templates select="@alt" mode="graphicAlternateText"/>
+            </xsl:when>
+          </xsl:choose>
+          
           <xsl:apply-templates select="node() except (text(),
                                                       *[contains(@class, ' topic/alt ') or
                                                         contains(@class, ' topic/longdescref ')])"/>
         </fo:external-graphic>
     </xsl:template>
 
+    <xsl:template match="*|@alt" mode="graphicAlternateText"/>
 
     <xsl:template match="*[contains(@class,' topic/alt ')]">
         <fo:block xsl:use-attribute-sets="alt">
@@ -1442,10 +1467,9 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/cite ')]">
-        <fo:inline xsl:use-attribute-sets="cite">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:inline>
+        <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+            <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="cite"/></xsl:with-param>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="@platform | @product | @audience | @otherprops | @importance | @rev | @status"/>
@@ -1456,6 +1480,14 @@ See the accompanying LICENSE file for applicable license.
         <xsl:attribute name="id">
             <xsl:value-of select="."/>
         </xsl:attribute>
+    </xsl:template>
+    
+    <!-- Templates to reprocess reused content while dropping IDs from reuse context -->
+    <xsl:template match="@id" mode="dropCopiedIds"/>
+    <xsl:template match="*|@*|text()" mode="dropCopiedIds">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|*|text()" mode="dropCopiedIds"/>
+        </xsl:copy>
     </xsl:template>
 
     <!-- Process common attributes -->

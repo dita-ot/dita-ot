@@ -207,6 +207,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .input(Paths.get("bookmap.ditamap"))
                 .test();
     }
+    
+    @Test
+    public void testmapref_to_conref() throws Throwable {
+        builder().name("mapref_to_conref")
+                .transtype(PREPROCESS)
+                .input(Paths.get("root.ditamap"))
+                .test();
+    }
 
     @Test
     public void testMetadataInheritance() throws Throwable {

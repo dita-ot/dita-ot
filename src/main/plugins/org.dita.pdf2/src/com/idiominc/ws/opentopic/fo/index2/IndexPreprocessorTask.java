@@ -1,19 +1,15 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
-import static org.dita.dost.util.Constants.*;
-
 import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.Project;
-import org.apache.xml.resolver.tools.CatalogResolver;
+import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -57,7 +53,7 @@ extends Task {
     //    private String input = null;
     private String input = "";
     private String output = "";
-    private String catalogs = null;
+    private XMLCatalog xmlcatalog;
     private String locale = "ja";
     private String indexConfig = "";
     public static boolean failOnError = false;
@@ -72,25 +68,10 @@ extends Task {
     public void execute()
             throws BuildException {
         checkParameters();
-        if (this.catalogs != null) {
-            System.setProperty("xml.catalog.files", this.catalogs);
-        }
 
         try {
             final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
-            documentBuilder.setEntityResolver(new CatalogResolver() {
-                @Override
-                public InputSource resolveEntity(final String publicId, String systemId) {
-                    // strip path from DTD location
-                    final int slashIdx = systemId.lastIndexOf("/");
-                    if (slashIdx >= 0) {
-                        systemId = systemId.substring(slashIdx + 1);
-                    }
-
-                    // resolve real location with XMLCatalogResolver
-                    return super.resolveEntity(publicId, systemId);
-                }
-            });
+            documentBuilder.setEntityResolver(xmlcatalog);
 
             final Document doc = documentBuilder.parse(input);
             final IndexPreprocessor preprocessor = new IndexPreprocessor(this.prefix, this.namespace_url);
@@ -162,11 +143,9 @@ extends Task {
         this.output = theOutput;
     }
 
-
-    public void setCatalogs(final String theCatalogs) {
-        this.catalogs = theCatalogs;
+    public void addConfiguredXmlcatalog(final XMLCatalog xmlcatalog) {
+        this.xmlcatalog = xmlcatalog;
     }
-
 
     public void setLocale(final String theLocale) {
         this.locale = theLocale;
