@@ -365,7 +365,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:otherwise>
               <!--grab type, text and metadata, as long there's an href to grab from, otherwise error-->
               <xsl:choose>
-                <xsl:when test="@href=''"/>
+                <xsl:when test="@href=''">
+                  <xsl:apply-templates/>
+                </xsl:when>
                 <xsl:when test="@href">
                   <xsl:apply-templates select="." mode="topicpull:get-stuff">
                     <xsl:with-param name="localtype" select="$type" as="xs:string?"/>
@@ -374,6 +376,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:apply-templates select="." mode="ditamsg:missing-href"/>
+                  <xsl:apply-templates/>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:otherwise>
