@@ -124,14 +124,11 @@ public final class MapReaderModule extends AbstractReaderModule {
 
     @Override
     void categorizeReferenceFile(final Reference file) {
-//        // avoid files referred by coderef being added into wait list
-//        if (listFilter.getCoderefTargets().contains(file.filename)) {
-//            return;
-//        }
-        if (formatFilter.test(file.format)) {
-//            if (isFormatDita(file.format)) {
-//                addToWaitList(file);
-//            } else
+        if (file.format == null || ATTR_FORMAT_VALUE_DITA.equals(file.format)) {
+            return;
+        }
+        // Ignore topics
+//        if (formatFilter.test(file.format)) {
             if (ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
                 addToWaitList(file);
             } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
@@ -144,7 +141,7 @@ public final class MapReaderModule extends AbstractReaderModule {
             } else {
                 htmlSet.put(file.format, file.filename);
             }
-        }
+//        }
     }
 
 }

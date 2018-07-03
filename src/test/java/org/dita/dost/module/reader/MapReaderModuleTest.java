@@ -8,6 +8,7 @@
 
 package org.dita.dost.module.reader;
 
+import org.dita.dost.TestUtils;
 import org.dita.dost.reader.GenListModuleReader;
 import static org.dita.dost.util.Constants.*;
 
@@ -25,6 +26,7 @@ public class MapReaderModuleTest {
     @Before
     public void setUp() {
         reader = new MapReaderModule();
+        reader.setLogger(new TestUtils.TestLogger());
     }
 
     @Test
@@ -48,7 +50,7 @@ public class MapReaderModuleTest {
     @Test
     public void categorizeReferenceFileImage() throws Exception {
         reader.categorizeReferenceFile(new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.jpg"), ATTR_FORMAT_VALUE_IMAGE));
-        assertEquals(0, reader.formatSet.size());
+        assertEquals(1, reader.formatSet.size());
     }
 
 }
