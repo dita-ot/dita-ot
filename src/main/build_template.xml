@@ -23,6 +23,7 @@ See the accompanying LICENSE file for applicable license.
     </not>
   </condition>
     
+  <!-- Deprecated since 3.1 -->
   <path id="dost.class.path">
     <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction"/>
     <pathelement location="${dita.dir}/lib/dost.jar"/>

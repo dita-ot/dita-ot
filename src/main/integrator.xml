@@ -29,6 +29,7 @@ See the accompanying LICENSE file for applicable license.
     </not>
   </condition>
   
+  <!-- Deprecated since 3.1 -->
   <path id="dost.class.path">
     <pathelement location="${dita.dir}/lib/dost.jar"/>
     <pathelement location="${dita.dir}/lib/dost-configuration.jar"/>
