@@ -58,14 +58,14 @@ See the accompanying LICENSE file for applicable license.
     <tstamp>
       <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
     </tstamp>
-    <property name="base.temp.dir" location="${basedir}/temp"/>
+    <property name="base.temp.dir" location="${dita.dir}/temp"/>
     <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
     <fail message="dita.temp.dir property must be an absolute path: ${dita.temp.dir}">
       <condition>
         <not><isabsolute path="${dita.temp.dir}"/></not>
       </condition>
     </fail>
-    <property name="output.dir" location="${basedir}/out" />
+    <property name="output.dir" location="${dita.dir}/out" />
     <condition property="dita.output.dir" value="${dita.temp.dir}${file.separator}${temp.output.dir.name}" else="${output.dir}">
       <isset property="temp.output.dir.name"/>
     </condition>
