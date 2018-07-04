@@ -19,9 +19,6 @@ See the accompanying LICENSE file for applicable license.
     <catalogpath path="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
   </xmlcatalog>
 
-  <!-- Deprecated -->
-  <path id="dost.jar.path" refid="dost.class.path"/>
-
   <taskdef name="pipeline" classname="org.dita.dost.ant.ExtensibleAntInvoker"/>
   <taskdef name="dita-ot-echo" classname="org.dita.dost.ant.DITAOTEchoTask"/>
   <taskdef name="dita-ot-fail" classname="org.dita.dost.ant.DITAOTFailTask"/>
