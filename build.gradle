@@ -97,6 +97,8 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
 dependencies {
     testCompile project(':eclipsehelp')
     testCompile project(':htmlhelp')
+    testCompile project(':fo')
+    testCompile project(':fop')
 }
 
 def e2eTestSystemProperties = [
