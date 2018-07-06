@@ -90,7 +90,14 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
      * @return updated href URI
      */
     private URI getRelativePath(final URI href) {
-        final URI keyValue = job.tempDirURI.resolve(stripFragment(href));
+        final URI keyValue;
+        final URI inputMap = job.getInputMap();
+        if (inputMap != null) {
+            final URI tmpMap = job.tempDirURI.resolve(inputMap);
+            keyValue = tmpMap.resolve(stripFragment(href));
+        } else {
+            keyValue = job.tempDirURI.resolve(stripFragment(href));
+        }
         return URLUtils.getRelativePath(currentFile, keyValue);
     }
 
