@@ -14,12 +14,15 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 import static org.dita.dost.reader.ChunkMapReader.CHUNK_TO_CONTENT;
 import static org.dita.dost.util.Configuration.ditaFormat;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * Collect copy-to information from a map.
@@ -31,11 +34,17 @@ import static org.dita.dost.util.URLUtils.*;
  */
 public final class CopyToReader extends AbstractXMLFilter {
 
-    /** Map of copy-to target to source */
+    /**
+     * Map of copy-to target to source
+     */
     private final Map<URI, URI> copyToMap = new HashMap<>(16);
-    /** chunk nesting level */
+    /**
+     * chunk nesting level
+     */
     private int chunkLevel = 0;
-    /** Stack for @processing-role value */
+    /**
+     * Stack for @processing-role value
+     */
     private final Stack<String> processRoleStack = new Stack<>();
 
     /**
@@ -58,7 +67,6 @@ public final class CopyToReader extends AbstractXMLFilter {
     }
 
     /**
-     *
      * Reset the internal variables.
      */
     public void reset() {
@@ -127,8 +135,8 @@ public final class CopyToReader extends AbstractXMLFilter {
      * @param atts all attributes
      */
     private void parseAttribute(final Attributes atts) {
-        URI attrValue = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
-        if (attrValue == null) {
+        URI target = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
+        if (target == null) {
             return;
         }
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
@@ -136,12 +144,12 @@ public final class CopyToReader extends AbstractXMLFilter {
         // external resource is filtered here.
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
                 // FIXME: testing for :// here is incorrect, rely on source scope instead
-                || attrValue.toString().contains(COLON_DOUBLE_SLASH) || attrValue.toString().startsWith(SHARP)) {
+                || target.toString().contains(COLON_DOUBLE_SLASH) || target.toString().startsWith(SHARP)) {
             return;
         }
 
-        final URI target = stripFragment(attrValue.isAbsolute() ? attrValue : currentFile.resolve(attrValue));
-        assert target.isAbsolute();
+        final URI targetAbs = stripFragment(target.isAbsolute() ? target : currentFile.resolve(target));
+        assert targetAbs.isAbsolute();
 
         final String attrFormat = getFormat(atts);
 
@@ -149,16 +157,20 @@ public final class CopyToReader extends AbstractXMLFilter {
             final URI source = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
             if (source != null) {
                 if (source.toString().isEmpty()) {
-                    logger.warn("Copy-to task [href=\"\" copy-to=\"" + target + "\"] was ignored.");
+                    logger.warn("Copy-to task [href=\"\" copy-to=\"" + targetAbs + "\"] was ignored.");
                 } else {
-                    final URI value = stripFragment(currentFile.resolve(source));
-                    if (copyToMap.get(target) != null) {
-                        if (!value.equals(copyToMap.get(target))) {
-                            logger.warn(MessageUtils.getMessage("DOTX065W", source.toString(), target.toString()).toString());
+                    final URI sourceAbs = stripFragment(currentFile.resolve(source));
+                    assert sourceAbs.isAbsolute();
+                    final URI copyToSourceAbs = copyToMap.get(targetAbs);
+                    if (copyToSourceAbs != null) {
+                        if (!sourceAbs.equals(copyToSourceAbs)) {
+                            logger.warn(MessageUtils.getMessage("DOTX065W", source.toString(), targetAbs.toString()).toString());
                         }
-                    } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
-                            CHUNK_TO_CONTENT))) {
-                        copyToMap.put(target, value);
+                    } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null &&
+                            atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)) {
+                        // Ignore
+                    } else {
+                        copyToMap.put(targetAbs, sourceAbs);
                     }
                 }
             }
@@ -187,7 +199,7 @@ public final class CopyToReader extends AbstractXMLFilter {
         if (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA)) {
             return true;
         }
-        for (final String f: ditaFormat) {
+        for (final String f : ditaFormat) {
             if (f.equals(attrFormat)) {
                 return true;
             }
