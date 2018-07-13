@@ -81,20 +81,20 @@ See the accompanying LICENSE file for applicable license.
     </condition>
     <property name="user.csspath" value="${args.csspath}/"/>
 
-    <condition property="args.css.real" value="${args.cssroot}${file.separator}${args.css}">
+    <condition property="user.css.real" value="${args.cssroot}${file.separator}${args.css}">
       <isset property="args.cssroot"/>
     </condition>
-    <condition property="args.css.real" value="${args.css}">
+    <condition property="user.css.real" value="${args.css}">
       <not>
         <isset property="args.cssroot"/>
       </not>
     </condition>
     
-    <available property="args.css.present" file="${args.css.real}" type="file"/>
+    <available property="args.css.present" file="${user.css.real}" type="file"/>
     
-    <local name="args.css.file.temp"/>
-    <basename property="args.css.file.temp" file="${args.css}"/>
-    <condition property="args.css.file" value="${args.css.file.temp}">
+    <local name="user.css.basename"/>
+    <basename property="user.css.basename" file="${args.css}"/>
+    <condition property="args.css.file" value="${user.css.basename}">
       <or>
         <isset property="args.css.present"/>
         <isset property="user.csspath.url"/>
@@ -258,7 +258,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="html5.copy-css-user" if="user.copycss.yes">
-    <copy file="${args.css.real}" todir="${user.csspath.real}"/>
+    <copy file="${user.css.real}" todir="${user.csspath.real}"/>
   </target>
 
 </project>
