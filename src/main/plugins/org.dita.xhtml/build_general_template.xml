@@ -140,7 +140,6 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
         destdir="${dita.output.dir}"
         reloadstylesheet="${dita.xhtml.reloadstylesheet}"
-        classpathref="dost.class.path"
         extension="${out.ext}" style="${args.xsl}"
         filenameparameter="FILENAME"
         filedirparameter="FILEDIR">
