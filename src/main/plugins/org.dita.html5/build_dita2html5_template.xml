@@ -90,13 +90,11 @@ See the accompanying LICENSE file for applicable license.
       </not>
     </condition>
     
-    <available property="args.css.present" file="${user.css.real}" type="file"/>
-    
     <local name="user.css.basename"/>
     <basename property="user.css.basename" file="${args.css}"/>
     <condition property="args.css.file" value="${user.css.basename}">
       <or>
-        <isset property="args.css.present"/>
+        <available file="${user.css.real}" type="file"/>
         <isset property="user.csspath.url"/>
       </or>
     </condition>
@@ -244,7 +242,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="user.copycss.yes">
       <and>
         <equals arg1="${args.copycss}" arg2="yes"/>
-        <isset property="args.css.present"/>
+        <available file="${user.css.real}" type="file"/>
       </and>
     </condition>
     <property name="user.csspath.real" location="${dita.output.dir}/${user.csspath}"/>
