@@ -61,31 +61,26 @@ See the accompanying LICENSE file for applicable license.
       </condition>
       <param name="1" value="${args.hdf}"/>
     </dita-ot-fail>
+    
     <!-- begin to check and init css relevant properties -->
+    
     <condition property="user.csspath.url">
       <or>
         <contains string="${args.csspath}" substring="http://"/>
         <contains string="${args.csspath}" substring="https://"/>
       </or>
     </condition>
-    <condition property="args.csspath.absolute">
-      <isabsolute path="${args.csspath}"/>
-    </condition>
-    <!-- Set the csspath as default empty directory when there is no user
-      input csspath or user input csspath is a local absolute path. -->
+        
     <condition property="user.csspath" value="">
       <or>
         <not>
           <isset property="args.csspath"/>
         </not>
-        <isset property="args.csspath.absolute"/>
+        <isabsolute path="${args.csspath}"/>
       </or>
     </condition>
-    <condition property="user.csspath" value="${args.csspath}/">
-      <not>
-        <isset property="user.csspath"/>
-      </not>
-    </condition>
+    <property name="user.csspath" value="${args.csspath}/"/>
+
     <condition property="args.css.real" value="${args.cssroot}${file.separator}${args.css}">
       <isset property="args.cssroot"/>
     </condition>
@@ -94,7 +89,10 @@ See the accompanying LICENSE file for applicable license.
         <isset property="args.cssroot"/>
       </not>
     </condition>
-    <available file="${args.css.real}" property="args.css.present" type="file"/>
+    
+    <available property="args.css.present" file="${args.css.real}" type="file"/>
+    
+    <local name="args.css.file.temp"/>
     <basename property="args.css.file.temp" file="${args.css}"/>
     <condition property="args.css.file" value="${args.css.file.temp}">
       <or>
@@ -102,7 +100,9 @@ See the accompanying LICENSE file for applicable license.
         <isset property="user.csspath.url"/>
       </or>
     </condition>
+    
     <!-- end to check and init css relevant parameters -->
+    
     <condition property="out.ext" value=".html">
       <not>
         <isset property="args.outext"/>
