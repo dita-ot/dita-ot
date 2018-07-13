@@ -512,5 +512,5 @@
     </topicmeta>
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="nondita_use_href" href="http://www.dita-ot.org/2.5/" scope="external" format="html"/>  
-
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="copy" href="a.xml" copy-to="a-copy.xml" processing-role="resource-only"/>
 </map>
