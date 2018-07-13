@@ -84,11 +84,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="user.css.real" value="${args.cssroot}${file.separator}${args.css}">
       <isset property="args.cssroot"/>
     </condition>
-    <condition property="user.css.real" value="${args.css}">
-      <not>
-        <isset property="args.cssroot"/>
-      </not>
-    </condition>
+    <property name="user.css.real" value="${args.css}"/>
     
     <local name="user.css.basename"/>
     <basename property="user.css.basename" file="${args.css}"/>
