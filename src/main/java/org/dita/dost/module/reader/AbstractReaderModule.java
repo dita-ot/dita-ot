@@ -680,7 +680,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
         for (final URI target : filteredCopyTo.keySet()) {
             final URI tmp = tempFileNameScheme.generateTempFileName(target);
-            final FileInfo fi = new FileInfo.Builder().result(target).uri(tmp).build();
+            final URI src = filteredCopyTo.get(target);
+            final FileInfo fi = new FileInfo.Builder().src(src).result(target).uri(tmp).build();
             // FIXME: what's the correct value for this? Accept all?
             if (formatFilter.test(fi.format)
                     || fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {

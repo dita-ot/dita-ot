@@ -100,6 +100,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
             final Result result = new DOMResult(doc);
             final Transformer transformer = withLogger(templates.newTransformer(), logger);
             transformer.setURIResolver(CatalogUtils.getCatalogResolver());
+            transformer.setParameter("file-being-processed", inputFile.getName());
             transformer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
