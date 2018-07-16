@@ -10,10 +10,11 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'signing'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
-version = '3.1'
+version = '3.1.1'
 
 description = """DITA Open Toolkit"""
 
@@ -148,7 +149,7 @@ def distFileName = (project.hasProperty("tag") && tag.empty) ?
 def bundled = [
         "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.0.5/org.lwdita-2.0.5.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
-        "troff": "https://github.com/dita-ot/org.dita.troff/archive/2.5.zip",
+        "troff": "https://github.com/dita-ot/org.dita.troff/archive/3.1.1.zip",
         "tocjs": "https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip"
 ]
 
@@ -335,4 +336,62 @@ test {
         'src/test/xsl/plugins/org.dita.html5/xsl/functions.xspec',
         'src/test/xsl/preprocess/maplinkImpl.xspec'
     )
+}
+
+// Repository deployment
+
+def ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : 'ossrhUsername'
+def ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : 'ossrhPassword'
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'DITA Open Toolkit'
+                packaging 'jar'
+                description 'DITA-OT base library'
+                url 'https://www.dita-ot.org/'
+
+                scm {
+                    connection 'scm:git:https://github.com/dita-ot/dita-ot.git'
+                    developerConnection 'scm:git:git@github.com:dita-ot/dita-ot.git'
+                    url 'https://github.com/dita-ot/dita-ot/'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'robander'
+                        name 'Robert D Anderson'
+                        email 'robander@us.ibm.com'
+                    }
+                    developer {
+                        id 'jelovirt'
+                        name 'Jarno Elovirta'
+                        email 'jarno@elovirta.com'
+                    }
+                }
+            }
+        }
+    }
 }

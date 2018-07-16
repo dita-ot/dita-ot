@@ -40,16 +40,25 @@ public final class AhfLogProcessorTask extends Task {
             String line;
             // command line
             line = in.readLine();
+            if (line == null) {
+                return;
+            }
             log(line, Project.MSG_VERBOSE);
             // product line
             line = in.readLine();
+            if (line == null) {
+                return;
+            }
             if (line.startsWith(PREFIX)) {
                 line = line.substring(PREFIX.length());
             }
             log(line.trim(), Project.MSG_VERBOSE);
             // copyright line
-            line = in.readLine().trim();
-            log(line, Project.MSG_DEBUG);
+            line = in.readLine();
+            if (line == null) {
+                return;
+            }
+            log(line.trim(), Project.MSG_DEBUG);
             // separator row
             in.readLine();
             // messages
