@@ -101,7 +101,7 @@ public class AbstractIntegrationTest {
                 "build-init", "preprocess"),
         XHTML("xhtml", false,
                 "dita2xhtml"),
-        HTML5("html", false,
+        HTML5("html5", false,
                 "dita2html5"),
         PDF("pdf", false,
                 "dita2pdf2"),
@@ -183,12 +183,13 @@ public class AbstractIntegrationTest {
         // remove temp & output
     }
 
-    protected void test() throws Throwable {
-        run();
+    protected File test() throws Throwable {
+        final File actDir = run();
         compare();
+        return actDir;
     }
 
-    protected AbstractIntegrationTest run() throws Throwable {
+    protected File run() throws Throwable {
         final File testDir = Paths.get("src", "test", "resources", name).toFile();
         final File srcDir = new File(testDir, SRC_DIR);
         final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
@@ -225,7 +226,7 @@ public class AbstractIntegrationTest {
             }
             throw new Throwable("Case " + testDir.getName() + " failed: " + e.getMessage(), e);
         }
-        return this;
+        return new File(actDir, transtype.name);
     }
 
     protected AbstractIntegrationTest compare() throws Throwable {
