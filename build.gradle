@@ -202,8 +202,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/temp"
         include "docsrc/**"
         include "dtd/**"
-        //include "lib/**/*.properties"
-        exclude "lib/configuration.properties"
         include "plugins/org.dita.base/**"
         include "plugins/org.dita.eclipsehelp/**"
         include "plugins/org.dita.html5/**"
@@ -240,18 +238,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task updateConfiguration() {
-    doLast {
-        if (project.hasProperty('commit') && !commit.empty) {
-            ant.propertyfile(file: "${distTempDir}/lib/configuration.properties") {
-                entry(key: "otversion", operation: "=", value: "${distVersion}")
-            }
-        }
-    }
-}
-updateConfiguration.mustRunAfter copyDistTemp
-
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp", updateConfiguration]) {
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir

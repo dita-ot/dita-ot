@@ -61,7 +61,7 @@ public final class Configuration {
             if (plugingConfigurationInputStream != null) {
                 pluginProperties.load(plugingConfigurationInputStream);
             } else {
-                final File configurationFile = new File("lib", Integrator.class.getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
+                final File configurationFile = new File("config", Integrator.class.getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
                 if (configurationFile.exists()) {
                     plugingConfigurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
                     pluginProperties.load(plugingConfigurationInputStream);
@@ -90,7 +90,7 @@ public final class Configuration {
             if (configurationInputStream != null) {
                 properties.load(configurationInputStream);
             } else {
-                final File configurationFile = new File("lib", CONF_PROPERTIES);
+                final File configurationFile = new File("config", CONF_PROPERTIES);
                 if (configurationFile.exists()) {
                     configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
                     properties.load(configurationInputStream);
