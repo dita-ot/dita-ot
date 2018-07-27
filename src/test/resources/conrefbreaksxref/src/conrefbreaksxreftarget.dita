@@ -10,7 +10,9 @@
 <section id="section"><title>Section that is pulled to another topic.</title><p>Look
 as the figure in this section: <xref href="#this-target/fig"></xref>.</p><p>Look
 at a figure in this topic, outside of this section: <xref href="#this-target/out"></xref></p><p>Now
-look at this topic: <xref href="#this-target"><?Pub Caret?></xref></p><p>Now
+look at this topic: <xref href="#this-target"><?Pub Caret?></xref></p>
+<p>Now look at "current topic" with #. syntax: <xref href="#."/></p>
+<p>Now look at "fig in current topic" with #./fig syntax: <xref href="#./fig"/></p><p>Now
 look at the topic below: <xref href="#sub"></xref>.</p><p>Now look at a figure
 in the topic below: <xref href="#sub/fig"></xref></p><fig id="fig"><title>Figure
 In My Section</title>
