@@ -539,6 +539,10 @@ See the accompanying LICENSE file for applicable license.
         <xsl:when test="starts-with(., 'http://') or starts-with(., 'https://') or starts-with(., 'ftp://')">
           <xsl:value-of select="."/>
         </xsl:when>
+        
+        <xsl:when test=". = '#.' or starts-with(., '#./')">
+          <xsl:value-of select="."/>
+        </xsl:when>
 
         <xsl:when test="starts-with(., '#')">
           <xsl:choose>
