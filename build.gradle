@@ -114,6 +114,7 @@ if (System.getProperty("log_level") != null) {
 task e2eTest(type: Test, dependsOn: 'buildLocal') {
     minHeapSize = "128m"
     maxHeapSize = "1024m"
+    maxParallelForks = 4
     systemProperties = e2eTestSystemProperties
     include '**/EndToEndTest*.class'
 }

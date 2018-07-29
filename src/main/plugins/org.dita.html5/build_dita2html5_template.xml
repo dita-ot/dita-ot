@@ -61,48 +61,42 @@ See the accompanying LICENSE file for applicable license.
       </condition>
       <param name="1" value="${args.hdf}"/>
     </dita-ot-fail>
+    
     <!-- begin to check and init css relevant properties -->
+    
     <condition property="user.csspath.url">
       <or>
         <contains string="${args.csspath}" substring="http://"/>
         <contains string="${args.csspath}" substring="https://"/>
       </or>
     </condition>
-    <condition property="args.csspath.absolute">
-      <isabsolute path="${args.csspath}"/>
-    </condition>
-    <!-- Set the csspath as default empty directory when there is no user
-      input csspath or user input csspath is a local absolute path. -->
+        
     <condition property="user.csspath" value="">
       <or>
         <not>
           <isset property="args.csspath"/>
         </not>
-        <isset property="args.csspath.absolute"/>
+        <isabsolute path="${args.csspath}"/>
       </or>
     </condition>
-    <condition property="user.csspath" value="${args.csspath}/">
-      <not>
-        <isset property="user.csspath"/>
-      </not>
-    </condition>
-    <condition property="args.css.real" value="${args.cssroot}${file.separator}${args.css}">
+    <property name="user.csspath" value="${args.csspath}/"/>
+
+    <condition property="user.css.real" value="${args.cssroot}${file.separator}${args.css}">
       <isset property="args.cssroot"/>
     </condition>
-    <condition property="args.css.real" value="${args.css}">
-      <not>
-        <isset property="args.cssroot"/>
-      </not>
-    </condition>
-    <available file="${args.css.real}" property="args.css.present" type="file"/>
-    <basename property="args.css.file.temp" file="${args.css}"/>
-    <condition property="args.css.file" value="${args.css.file.temp}">
+    <property name="user.css.real" value="${args.css}"/>
+    
+    <local name="user.css.basename"/>
+    <basename property="user.css.basename" file="${args.css}"/>
+    <condition property="args.css.file" value="${user.css.basename}">
       <or>
-        <isset property="args.css.present"/>
+        <available file="${user.css.real}" type="file"/>
         <isset property="user.csspath.url"/>
       </or>
     </condition>
+    
     <!-- end to check and init css relevant parameters -->
+    
     <condition property="out.ext" value=".html">
       <not>
         <isset property="args.outext"/>
@@ -244,7 +238,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="user.copycss.yes">
       <and>
         <equals arg1="${args.copycss}" arg2="yes"/>
-        <isset property="args.css.present"/>
+        <available file="${user.css.real}" type="file"/>
       </and>
     </condition>
     <property name="user.csspath.real" location="${dita.output.dir}/${user.csspath}"/>
@@ -258,7 +252,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="html5.copy-css-user" if="user.copycss.yes">
-    <copy file="${args.css.real}" todir="${user.csspath.real}"/>
+    <copy file="${user.css.real}" todir="${user.csspath.real}"/>
   </target>
 
 </project>
