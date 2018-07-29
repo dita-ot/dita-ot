@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Registry {
 
     public final String name;
-    public final String vers;
+    public final SemVer vers;
     public final Dependency[] deps;
     public final String url;
     public final String cksum;
@@ -26,7 +26,7 @@ public class Registry {
                      @JsonProperty("url") String url,
                      @JsonProperty("cksum") String cksum) {
         this.name = name;
-        this.vers = vers;
+        this.vers = new SemVer(vers);
         this.deps = deps;
         this.url = url;
         this.cksum = cksum;
@@ -35,13 +35,13 @@ public class Registry {
     private static class Dependency {
 
         public final String name;
-        public final String req;
-
+        public final SemVerMatch req;
 
         private Dependency(@JsonProperty("name") String name,
                            @JsonProperty("req") String req) {
             this.name = name;
-            this.req = req;
+            this.req = new SemVerMatch(req);
         }
     }
+
 }
