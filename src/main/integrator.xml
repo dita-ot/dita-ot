@@ -39,6 +39,9 @@ See the accompanying LICENSE file for applicable license.
   <taskdef name="integrate" classname="org.dita.dost.ant.IntegratorTask">
     <classpath refid="dost.class.path"/>
   </taskdef>
+  <taskdef name="registry" classname="org.dita.dost.ant.RegistryTask">
+    <classpath refid="dost.class.path"/>
+  </taskdef>
   
   <target name="integrate">
     <integrate ditadir="${dita.dir}" />
@@ -89,6 +92,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="install.init">
     <fail unless="plugin.file"/>
     <available file="${plugin.file}" property="install.file.exists"/>
+    <local name="current.date"/>
     <tstamp>
       <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
     </tstamp>
@@ -99,9 +103,22 @@ See the accompanying LICENSE file for applicable license.
     <unzip src="${plugin.file}" dest="${dita.temp.dir}"/>
   </target>
   <target name="install.download" unless="install.file.exists">
+    <local name="install.download.file.abs"/>
     <tempfile property="install.download.file.abs" destdir="${dita.temp.dir}" suffix=".zip"/>
+    <local name="install.download.file"/>
     <basename property="install.download.file" file="${install.download.file.abs}"/>
-    <get src="${plugin.file}" dest="${dita.temp.dir}/${install.download.file}" ignoreerrors="false" verbose="on"/>
+    <local name="plugin.file.url"/>
+    <condition property="plugin.file.url" value="${plugin.file}">
+      <and>
+        <matches pattern="^(http)s?" string="${plugin.file}"/>
+        <http url="${plugin.file}"/>
+      </and>
+    </condition>
+    <registry property="plugin.file.url" name="${plugin.file}" />
+    <property name="plugin.file.url" value="${plugin.file}"/>
+
+    <get src="${plugin.file.url}" dest="${dita.temp.dir}/${install.download.file}" ignoreerrors="false" verbose="on"/>
+
     <unzip src="${dita.temp.dir}/${install.download.file}" dest="${dita.temp.dir}"/>
     <delete file="${dita.temp.dir}/${install.download.file}"/>
   </target>

@@ -36,6 +36,8 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.6'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'
     runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.3'
     testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
     testCompile group: 'junit', name: 'junit', version:'4.12'
