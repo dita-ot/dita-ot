@@ -8,9 +8,12 @@
 
 package org.dita.dost.platform;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SemVerMatchTest {
 
@@ -205,6 +208,22 @@ public class SemVerMatchTest {
         //        1.2 - 2.3.4 := >=1.2.0 <=2.3.4
         //        1.2.3 - 2.3 := >=1.2.3 <2.4.0
         //        1.2.3 - 2 := >=1.2.3 <3.0.0
+    }
+
+    @Test
+    public void testContains() {
+        assertTrue(
+                new SemVerMatch(
+                    new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
+                    new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 0, 0)
+                )
+                .contains(new SemVer(0, 1, 0)));
+        assertFalse(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 0, 0)
+                )
+                        .contains(new SemVer(2, 0, 0)));
     }
 
 }

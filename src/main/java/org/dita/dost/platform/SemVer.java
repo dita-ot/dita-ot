@@ -16,6 +16,12 @@ public class SemVer implements Comparable<SemVer> {
     public final int minor;
     public final int patch;
 
+    public SemVer(int major, int minor, int patch) {
+        this.major = major;
+        this.minor = minor;
+        this.patch = patch;
+    }
+
     public SemVer(String version) {
         String[] tokens = version.split("\\.");
         major = Integer.valueOf(tokens[0]);

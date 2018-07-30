@@ -28,18 +28,14 @@ public class SemVerMatch {
 
     public static class Range {
         public final Match match;
-        public final Integer major;
-        public final Integer minor;
-        public final Integer patch;
+        public final SemVer version;
 
         public Range(Match match, Integer major, Integer minor, Integer patch) {
             if (match == null || major == null || minor == null || patch == null) {
                 throw new NullPointerException();
             }
             this.match = match;
-            this.major = major;
-            this.minor = minor;
-            this.patch = patch;
+            this.version = new SemVer(major, minor, patch);
         }
 
         @Override
@@ -71,11 +67,7 @@ public class SemVerMatch {
                         throw new IllegalArgumentException();
                 }
             }
-            buf.append(major.toString())
-                    .append('.')
-                    .append(minor != null ? minor.toString() : "x")
-                    .append('.')
-                    .append(patch != null ? patch.toString() : "x");
+            buf.append(version.toString());
             return buf.toString();
         }
 
@@ -85,17 +77,14 @@ public class SemVerMatch {
             if (o == null || getClass() != o.getClass()) return false;
             Range range = (Range) o;
             return match == range.match &&
-                    Objects.equals(major, range.major) &&
-                    Objects.equals(minor, range.minor) &&
-                    Objects.equals(patch, range.patch);
+                    Objects.equals(version, range.version);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(match, major, minor, patch);
+            return Objects.hash(match, version);
         }
     }
-
 
     private static final Pattern MATCH_PATTERN = Pattern.compile("(~|\\^|<=?|>=?)?(.+)");
 
@@ -284,9 +273,47 @@ public class SemVerMatch {
         }
     }
 
+    public boolean contains(SemVer semver) {
+        if (start != null && !compare(start.version, semver, start.match)) {
+            return false;
+        }
+        if (end != null && !compare(end.version, semver, end.match)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean compare(SemVer self, SemVer other, Match ops) {
+        final int res = -1 * self.compareTo(other);
+        switch(ops) {
+            case LT:
+                return res < 0;
+            case LE:
+                return res <= 0;
+            case GT:
+                return res > 0;
+            case GE:
+                return res >= 0;
+            case EQ:
+                return res == 0;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
     @Override
     public String toString() {
-        return start + (start != null && end != null ? " " : "") + end;
+        final StringBuilder buf = new StringBuilder();
+        if (start != null) {
+            buf.append(start);
+        }
+        if (start != null && end != null) {
+            buf.append(" ");
+        }
+        if (end != null) {
+            buf.append(end);
+        }
+        return buf.toString();
     }
 
 }

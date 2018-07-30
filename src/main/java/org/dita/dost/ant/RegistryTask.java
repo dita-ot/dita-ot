@@ -8,10 +8,12 @@
 package org.dita.dost.ant;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.dita.dost.platform.Registry;
+import org.dita.dost.platform.Registry.Dependency;
 import org.dita.dost.platform.SemVer;
 import org.dita.dost.util.Configuration;
 
@@ -68,8 +70,18 @@ public final class RegistryTask extends Task {
         }
     }
 
-    private boolean matchingPlatformVersion(Registry reg) {
-        return true;
+    @VisibleForTesting
+    boolean matchingPlatformVersion(Registry reg) {
+        final Optional<Dependency> platformDependency = reg.deps.stream()
+                .filter(dep -> dep.name.equals("org.dita.base"))
+                .findFirst();
+        if (platformDependency.isPresent()) {
+            final SemVer platform = new SemVer(Configuration.configuration.get("otversion"));
+            final Dependency dep = platformDependency.get();
+            return dep.req.contains(platform);
+        } else {
+            return true;
+        }
     }
 
     public void setName(final String name) {
