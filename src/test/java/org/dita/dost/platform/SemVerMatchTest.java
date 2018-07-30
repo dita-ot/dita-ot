@@ -10,26 +10,201 @@ package org.dita.dost.platform;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SemVerMatchTest {
 
     @Test
     public void testPlainConstructor() {
-        final SemVerMatch m = new SemVerMatch("1.2.3");
-        assertEquals(null, m.match);
-        assertEquals(Integer.valueOf(1), m.major);
-        assertEquals(Integer.valueOf(2), m.minor);
-        assertEquals(Integer.valueOf(3), m.patch);
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 3),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 2, 4)
+                ),
+                new SemVerMatch("1.2.3"));
+    }
+
+    @Test
+    public void testXRangeConstructor() {
+        //    * := >=0.0.0 (Any version satisfies)
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
+                        null
+                ),
+                new SemVerMatch("*"));
+        //        1.x := >=1.0.0 <2.0.0 (Matching major version)
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 0, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
+                ),
+                new SemVerMatch("1.x"));
+        //        1.2.x := >=1.2.0 <1.3.0 (Matching major and minor versions)
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 3, 0)
+                ),
+                new SemVerMatch("1.2.x"));
+        //        "" (empty string) := * := >=0.0.0
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
+                        null
+                ),
+                new SemVerMatch("*"));
+        //        1 := 1.x.x := >=1.0.0 <2.0.0
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 0, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
+                ),
+                new SemVerMatch("1"));
+        //        1.2 := 1.2.x := >=1.2.0 <1.3.0
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 3, 0)
+                ),
+                new SemVerMatch("1.2"));
     }
 
     @Test
     public void testTildeConstructor() {
-        final SemVerMatch m = new SemVerMatch("~1.2");
-        assertEquals(SemVerMatch.Match.TILDE, m.match);
-        assertEquals(Integer.valueOf(1), m.major);
-        assertEquals(Integer.valueOf(2), m.minor);
-        assertEquals(null, m.patch);
+        //        ~1.2.3 := >=1.2.3 <1.(2+1).0 := >=1.2.3 <1.3.0
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 3),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 3, 0)
+                ),
+                new SemVerMatch("~1.2.3"));
+        //        ~1.2 := >=1.2.0 <1.(2+1).0 := >=1.2.0 <1.3.0 (Same as 1.2.x)
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 3, 0)
+                ),
+                new SemVerMatch("~1.2"));
+        //        ~1 := >=1.0.0 <(1+1).0.0 := >=1.0.0 <2.0.0 (Same as 1.x)
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 0, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
+                ),
+                new SemVerMatch("~1"));
+        //        ~0.2.3 := >=0.2.3 <0.(2+1).0 := >=0.2.3 <0.3.0
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 2, 3),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 3, 0)
+                ),
+                new SemVerMatch("~0.2.3"));
+        //        ~0.2 := >=0.2.0 <0.(2+1).0 := >=0.2.0 <0.3.0 (Same as 0.2.x)
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 2, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 3, 0)
+                ),
+                new SemVerMatch("~0.2"));
+        //        ~0 := >=0.0.0 <(0+1).0.0 := >=0.0.0 <1.0.0 (Same as 0.x)
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 0, 0)
+                ),
+                new SemVerMatch("~0"));
+        //        ~1.2.3-beta.2 := >=1.2.3-beta.2 <1.3.0
+//        assertEquals(
+//                new SemVerMatch(
+//                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 3),
+//                        new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 3, 0)
+//                ),
+//                new SemVerMatch("~1.2.3-beta.2"));
+    }
+
+    @Test
+    public void testCaretConstructor() {
+        //        ^1.2.3 := >=1.2.3 <2.0.0
+        final SemVerMatch actual1 = new SemVerMatch("^1.2.3");
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 3),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
+                ),
+                actual1);
+        //        ^0.2.3 := >=0.2.3 <0.3.0
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 2, 3),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 3, 0)
+                ),
+                new SemVerMatch("^0.2.3"));
+        //        ^0.0.3 := >=0.0.3 <0.0.4
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 3),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 0, 4)
+                ),
+                new SemVerMatch("^0.0.3"));
+        //        ^1.2.3-beta.2 := >=1.2.3-beta.2 <2.0.0
+//        assertEquals(
+//                new SemVerMatch(
+//                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 3),
+//                        new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
+//                ),
+//                new SemVerMatch("1.2.3-beta.2"));
+        //        ^0.0.3-beta := >=0.0.3-beta <0.0.4
+//        assertEquals(
+//                new SemVerMatch(
+//                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 3),
+//                        new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 0, 4)
+//                ),
+//                new SemVerMatch("^0.0.3-beta"));
+        //        ^1.2.x := >=1.2.0 <2.0.0
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
+                ),
+                new SemVerMatch("^1.2.x"));
+        //        ^0.0.x := >=0.0.0 <0.1.0
+        final SemVerMatch actual = new SemVerMatch("^0.0.x");
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 1, 0)
+                ),
+                actual);
+        //        ^0.0 := >=0.0.0 <0.1.0
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 1, 0)
+                ),
+                new SemVerMatch("^0.0"));
+        //        ^1.x := >=1.0.0 <2.0.0
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 0, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
+                ),
+                new SemVerMatch("^1.x"));
+        //        ^0.x := >=0.0.0 <1.0.0
+        assertEquals(
+                new SemVerMatch(
+                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
+                        new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 0, 0)
+                ),
+                new SemVerMatch("^0.x"));
+    }
+
+    @Test
+    public void testHyphenRangeParse() {
+        //        1.2.3 - 2.3.4 := >=1.2.3 <=2.3.4
+        //        1.2 - 2.3.4 := >=1.2.0 <=2.3.4
+        //        1.2.3 - 2.3 := >=1.2.3 <2.4.0
+        //        1.2.3 - 2 := >=1.2.3 <3.0.0
     }
 
 }
