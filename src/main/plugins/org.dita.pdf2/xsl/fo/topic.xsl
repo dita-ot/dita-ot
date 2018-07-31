@@ -933,7 +933,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/lq ')]">
-        <fo:block>
+        <fo:block xsl:use-attribute-sets="lq">
             <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="@href or @reftitle">
