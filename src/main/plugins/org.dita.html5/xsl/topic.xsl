@@ -986,16 +986,10 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- quotes - only do 1 level, no flip-flopping -->
   <xsl:template match="*[contains(@class, ' topic/q ')]" name="topic.q">
-    <span class="q">
+    <q>
       <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="getVariable">
-        <xsl:with-param name="id" select="'OpenQuote'"/>
-      </xsl:call-template>
       <xsl:apply-templates/>
-      <xsl:call-template name="getVariable">
-        <xsl:with-param name="id" select="'CloseQuote'"/>
-      </xsl:call-template>
-    </span>
+    </q>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/term ')]" mode="output-term">
