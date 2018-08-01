@@ -260,59 +260,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             ANT_TEMP_DIR, "-t"
     );
 
-    @Deprecated
-    private static final Map<String, Argument> LEGACY_ARGUMENTS = new HashMap<>();
-    static {
-        // LEGACY_ARGUMENTS.put("/basedir", new StringArgument("basedir"));
-        // LEGACY_ARGUMENTS.put("/ditadir", new StringArgument("dita.dir"));
-        LEGACY_ARGUMENTS.put("/i", new AbsoluteFileArgument("args.input"));
-        LEGACY_ARGUMENTS.put("/if", new AbsoluteFileArgument("dita.input"));
-        LEGACY_ARGUMENTS.put("/id", new AbsoluteFileArgument("dita.input.dirname"));
-        LEGACY_ARGUMENTS.put("/artlbl", new StringArgument("args.artlbl"));
-        LEGACY_ARGUMENTS.put("/draft", new StringArgument("args.draft"));
-        LEGACY_ARGUMENTS.put("/ftr", new StringArgument("args.ftr"));
-        LEGACY_ARGUMENTS.put("/hdr", new StringArgument("args.hdr"));
-        LEGACY_ARGUMENTS.put("/hdf", new StringArgument("args.hdf"));
-        LEGACY_ARGUMENTS.put("/csspath", new StringArgument("args.csspath"));
-        LEGACY_ARGUMENTS.put("/cssroot", new StringArgument("args.cssroot"));
-        LEGACY_ARGUMENTS.put("/css", new StringArgument("args.css"));
-        LEGACY_ARGUMENTS.put("/filter", new AbsoluteFileArgument("args.filter"));
-        LEGACY_ARGUMENTS.put("/outdir", new AbsoluteFileArgument("output.dir"));
-        LEGACY_ARGUMENTS.put("/transtype", new StringArgument("transtype"));
-        LEGACY_ARGUMENTS.put("/indexshow", new StringArgument("args.indexshow"));
-        LEGACY_ARGUMENTS.put("/outext", new StringArgument("args.outext"));
-        LEGACY_ARGUMENTS.put("/copycss", new StringArgument("args.copycss"));
-        LEGACY_ARGUMENTS.put("/xsl", new AbsoluteFileArgument("args.xsl"));
-        LEGACY_ARGUMENTS.put("/xslpdf", new AbsoluteFileArgument("args.xsl.pdf"));
-        LEGACY_ARGUMENTS.put("/tempdir", new AbsoluteFileArgument(ANT_TEMP_DIR));
-        LEGACY_ARGUMENTS.put("/cleantemp", new StringArgument("clean.temp"));
-        LEGACY_ARGUMENTS.put("/foimgext", new StringArgument("args.fo.img.ext"));
-        LEGACY_ARGUMENTS.put("/javahelptoc", new StringArgument("args.javahelp.toc"));
-        LEGACY_ARGUMENTS.put("/javahelpmap", new StringArgument("args.javahelp.map"));
-        LEGACY_ARGUMENTS.put("/eclipsehelptoc", new StringArgument("args.eclipsehelp.toc"));
-        LEGACY_ARGUMENTS.put("/eclipsecontenttoc", new StringArgument("args.eclipsecontent.toc"));
-        LEGACY_ARGUMENTS.put("/xhtmltoc", new StringArgument("args.xhtml.toc"));
-        LEGACY_ARGUMENTS.put("/xhtmlclass", new StringArgument("args.xhtml.classattr"));
-        LEGACY_ARGUMENTS.put("/usetasklabels", new StringArgument("args.gen.task.lbl"));
-        LEGACY_ARGUMENTS.put("/logdir", new AbsoluteFileArgument("args.logdir"));
-        LEGACY_ARGUMENTS.put("/ditalocale", new StringArgument("args.dita.locale"));
-        LEGACY_ARGUMENTS.put("/fooutputrellinks", new StringArgument("args.fo.output.rel.links"));
-        LEGACY_ARGUMENTS.put("/foincluderellinks", new StringArgument("args.fo.include.rellinks"));
-        LEGACY_ARGUMENTS.put("/odtincluderellinks", new StringArgument("args.odt.include.rellinks"));
-        LEGACY_ARGUMENTS.put("/retaintopicfo", new StringArgument("retain.topic.fo"));
-        LEGACY_ARGUMENTS.put("/version", new StringArgument("args.eclipse.version"));
-        LEGACY_ARGUMENTS.put("/provider", new StringArgument("args.eclipse.provider"));
-        LEGACY_ARGUMENTS.put("/fouserconfig", new StringArgument("args.fo.userconfig"));
-        LEGACY_ARGUMENTS.put("/htmlhelpincludefile", new StringArgument("args.htmlhelp.includefile"));
-        LEGACY_ARGUMENTS.put("/validate", new StringArgument("validate"));
-        LEGACY_ARGUMENTS.put("/outercontrol", new StringArgument("outer.control"));
-        LEGACY_ARGUMENTS.put("/generateouter", new StringArgument("generate.copy.outer"));
-        LEGACY_ARGUMENTS.put("/onlytopicinmap", new StringArgument("onlytopic.in.map"));
-        LEGACY_ARGUMENTS.put("/debug", new StringArgument("args.debug"));
-        LEGACY_ARGUMENTS.put("/grammarcache", new StringArgument("args.grammar.cache"));
-        LEGACY_ARGUMENTS.put("/odtimgembed", new StringArgument("args.odt.img.embed"));
-    }
-
     /** The default build file name. {@value} */
     public static final String DEFAULT_BUILD_FILENAME = "build.xml";
 
@@ -620,8 +567,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg)));
             } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
                 handleParameterArg(arg, args, getPluginArguments().get(getArgumentName(arg)));
-            } else if (LEGACY_ARGUMENTS.containsKey(getArgumentName(arg))) {
-                handleLegacyParameterArg(arg, args);
             } else if (LAUNCH_COMMANDS.contains(arg)) {
                 // catch script/ant mismatch with a meaningful message
                 // we could ignore it, but there are likely to be other
@@ -887,26 +832,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
 
         definedProps.put(argument.property, argument.getValue(value));
-    }
-
-    /** Handler legacy parameter argument */
-    @Deprecated
-    private void handleLegacyParameterArg(final String arg, final Deque<String> args) {
-        String name = arg.substring(0, arg.length());
-        String value;
-        int posEq = name.indexOf(":");
-        if (posEq > 0) {
-            value = name.substring(posEq + 1);
-            name = name.substring(0, posEq);
-        } else {
-            value = args.pop();
-        }
-        if (value == null) {
-            throw new BuildException("Missing value for property " + name);
-        }
-        final Argument a = LEGACY_ARGUMENTS.get(name);
-
-        definedProps.put(a.property, a.getValue(value));
     }
 
     /** Get argument name */
