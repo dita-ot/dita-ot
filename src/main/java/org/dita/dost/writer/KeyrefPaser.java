@@ -448,8 +448,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         Attributes resAtts = atts;
         hasChecked = false;
         empty = true;
-        if (!hasKeyref(atts)) {
-            // If the keyrefLevel doesn't equal 0, it means that current element is under the key reference element
+        if (!hasKeyref(atts) || currentElement == null) {
+            // If the keyrefLevel doesn't equal 0, it means that current element is under the key reference element;
             if (keyrefLevel != 0) {
                 keyrefLevel++;
                 hasSubElem.pop();
