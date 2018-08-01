@@ -29,7 +29,7 @@ import java.util.Optional;
 
 public final class RegistryTask extends Task {
 
-    private static final String registry = Configuration.configuration.get("registry");
+    private static final List<String> registries = Arrays.asList(Configuration.configuration.get("registry").trim().split("\\s+"));
 
     private String name;
     private SemVer version;
@@ -38,23 +38,28 @@ public final class RegistryTask extends Task {
 
     @Override
     public void execute() throws BuildException {
-        final URI registryUrl = URI.create(registry + name + ".json");
-        getProject().log("Read registry", Project.MSG_DEBUG);
-        try (BufferedInputStream in = new BufferedInputStream(registryUrl.toURL().openStream())) {
-            getProject().log("Parse registry", Project.MSG_DEBUG);
-            final List<Registry> regs = Arrays.asList(mapper.readValue(in, Registry[].class));
-            final Optional<Registry> reg = getRegistry(regs);
-            reg.ifPresent(match -> getProject().setProperty(property, match.url));
-            if (!reg.isPresent()) {
-                throw new BuildException("Unable to find matching version " + version);
+        for (final String registry : registries) {
+            final URI registryUrl = URI.create(registry + name + ".json");
+            log(String.format("Read registry %s", registry), Project.MSG_DEBUG);
+            try (BufferedInputStream in = new BufferedInputStream(registryUrl.toURL().openStream())) {
+                log("Parse registry", Project.MSG_DEBUG);
+                final List<Registry> regs = Arrays.asList(mapper.readValue(in, Registry[].class));
+                final Optional<Registry> reg = getRegistry(regs);
+                if (reg.isPresent()) {
+                    final Registry plugin = reg.get();
+                    log(String.format("Plugin found at %s@%s", registryUrl, plugin.vers), Project.MSG_INFO);
+                    getProject().setProperty(property, plugin.url);
+                    return;
+                }
+            } catch (MalformedURLException e) {
+                log(String.format("Invalid registry URL %s: %s", registryUrl, e.getMessage()), e, Project.MSG_ERR);
+            } catch (FileNotFoundException e) {
+                log(String.format("Registry configuration %s not found", registryUrl), e, Project.MSG_DEBUG);
+            } catch (IOException e) {
+                log(String.format("Failed to read registry configuration %s: %s", registryUrl, e.getMessage()), e, Project.MSG_ERR);
             }
-        } catch (MalformedURLException e) {
-            getProject().log("Invalid registry URL " + registryUrl + ": " + e.getMessage(), e, Project.MSG_ERR);
-        } catch (FileNotFoundException e) {
-            getProject().log("Registry configuration " + registryUrl + " not found", e, Project.MSG_DEBUG);
-        } catch (IOException e) {
-            getProject().log("Failed to read registry configuration " + registryUrl + ": " + e.getMessage(), e, Project.MSG_ERR);
         }
+        throw new BuildException("Unable to find matching plugin");
     }
 
     private Optional<Registry> getRegistry(List<Registry> regs) {

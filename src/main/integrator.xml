@@ -117,7 +117,7 @@ See the accompanying LICENSE file for applicable license.
     <registry property="plugin.file.url" name="${plugin.file}" />
     <property name="plugin.file.url" value="${plugin.file}"/>
 
-    <get src="${plugin.file.url}" dest="${dita.temp.dir}/${install.download.file}" ignoreerrors="false" verbose="on"/>
+    <get src="${plugin.file.url}" dest="${dita.temp.dir}/${install.download.file}" ignoreerrors="false" verbose="off" />
 
     <unzip src="${dita.temp.dir}/${install.download.file}" dest="${dita.temp.dir}"/>
     <delete file="${dita.temp.dir}/${install.download.file}"/>
