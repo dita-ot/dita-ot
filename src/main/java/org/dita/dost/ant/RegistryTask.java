@@ -22,19 +22,21 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public final class RegistryTask extends Task {
 
-    private static final List<String> registries = Arrays.asList(Configuration.configuration.get("registry").trim().split("\\s+"));
+    private List<String> registries;
 
     private String name;
     private SemVer version;
     private String property;
     private ObjectMapper mapper = new ObjectMapper();
+
+    @Override
+    public void init() {
+        registries = Arrays.asList(Configuration.configuration.get("registry").trim().split("\\s+"));
+    }
 
     @Override
     public void execute() throws BuildException {
