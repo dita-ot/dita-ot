@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "../dtd/technicalContent/dtd/map.dtd">
+<map xml:lang="en-us">
+<title>Test conref range</title>
+<topicref href="conrefsource.dita"/>
+<topicref href="conreftarget.dita" keys="contarget"/>
+</map>

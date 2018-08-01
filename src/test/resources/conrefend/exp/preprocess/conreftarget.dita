@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><?workdir /C:\Users\IBM_ADMIN\github\robander\dita-ot\build\tmp\integrationTest\conrefend\temp\preprocess?><?workdir-uri file:/C:/Users/IBM_ADMIN/github/robander/dita-ot/build/tmp/integrationTest/conrefend/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="target" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic ">
+<title class="- topic/title ">Target</title>
+<body class="- topic/body ">
+<p id="startp" class="- topic/p ">First element in simple range</p>
+<note class="- topic/note ">This is here to complicate things</note>
+<p id="endp" class="- topic/p ">Last element in simple range</p>
+</body>
+<topic id="A" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic ">
+<title class="- topic/title ">A</title>
+<shortdesc class="- topic/shortdesc ">Test for github issue #2222</shortdesc>
+</topic>
+<topic id="M" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic ">
+<title class="- topic/title ">Middle</title>
+</topic>
+<topic id="Z" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic ">
+<title class="- topic/title ">Z</title>
+</topic>
+</topic>

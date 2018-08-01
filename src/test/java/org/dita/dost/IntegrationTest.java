@@ -199,6 +199,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(2)
                 .test();
     }
+    
+    @Test
+    public void testconrefend() throws Throwable {
+        builder().name("conrefend")
+                .transtype(PREPROCESS)
+                .input(Paths.get("range.ditamap"))
+                .test();
+    }
 
     @Test
     public void testmapref_topicrefID() throws Throwable {
