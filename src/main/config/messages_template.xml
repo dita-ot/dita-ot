@@ -752,6 +752,11 @@ See the accompanying LICENSE file for applicable license.
     <reason>Removing broken link to "%1".</reason>
     <response/>
   </message>
+  
+  <message id="DOTX074W" type="WARN">
+    <reason>No formatting defined for unknown class attribute value "%1".</reason>
+    <response/>
+  </message>
 
   <!-- End of XSL Messages --> 
       

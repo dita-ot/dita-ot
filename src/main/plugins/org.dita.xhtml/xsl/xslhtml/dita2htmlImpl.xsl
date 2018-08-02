@@ -2066,19 +2066,12 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- (this rule should NOT produce output in production setting) -->
 <xsl:template match="*" name="topic.undefined_element">
-  <span style="background-color: yellow;">
-    <span style="font-weight: bold">
-      <xsl:text>[</xsl:text>
-      <xsl:for-each select="ancestor-or-self::*">
-       <xsl:text>/</xsl:text>
-       <xsl:value-of select="name()" />
-     </xsl:for-each>
-     {"<xsl:value-of select="@class"/>"}<xsl:text>) </xsl:text>
-    </span>
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="id" select="'DOTX074W'"/>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@class"/></xsl:with-param>
+  </xsl:call-template>
+  <span class="undefined_element">
     <xsl:apply-templates/>
-    <span style="font-weight: bold">
-      <xsl:text> (</xsl:text><xsl:value-of select="name()"/><xsl:text>]</xsl:text>
-    </span>
   </span>
 </xsl:template>
 
