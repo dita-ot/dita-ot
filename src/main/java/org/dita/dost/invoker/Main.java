@@ -200,6 +200,22 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         }
     }
+    
+    private List<String> INSTALLED_PLUGINS;
+
+    // Load the list of installed plugins
+    private synchronized List<String> getInstalledPlugins() {
+        if (INSTALLED_PLUGINS == null) {
+            final List<Element> plugins = toList(getPluginConfiguration().getElementsByTagName("plugin"));
+            INSTALLED_PLUGINS = new ArrayList<>(plugins.size());
+            for (Element thisplugin : plugins) {
+                if (thisplugin.getAttribute("id") != null) {
+                    INSTALLED_PLUGINS.add(thisplugin.getAttribute("id").toString());                    
+                }
+            }
+        }
+        return INSTALLED_PLUGINS;
+    }
 
     private static Map<String, Argument> PLUGIN_ARGUMENTS;
 
@@ -511,6 +527,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         boolean justPrintUsage = false;
         boolean justPrintVersion = false;
         boolean justPrintDiagnostics = false;
+        boolean justPrintPlugins = false;
         useColor = getUseColor();
 
         final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
@@ -521,6 +538,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 justPrintUsage = true;
             } else if (isLongForm(arg, "-version")) {
                 justPrintVersion = true;
+            } else if (isLongForm(arg, "-plugins")) {
+                justPrintPlugins = true;
             } else if (isLongForm(arg, "-install")) {
                 handleArgInstall(arg, args);
             } else if (isLongForm(arg, "-uninstall")) {
@@ -593,7 +612,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // Load the property files specified by --propertyfile
         loadPropertyFiles();
 
-        if (justPrintUsage || justPrintVersion || justPrintDiagnostics) {
+        if (justPrintUsage || justPrintVersion || justPrintDiagnostics || justPrintPlugins) {
             if (justPrintVersion) {
                 printVersion(msgOutputLevel);
             }
@@ -602,6 +621,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
             if (justPrintDiagnostics) {
                 Diagnostics.doReport(System.out, msgOutputLevel);
+            }
+            if (justPrintPlugins) {
+                printPlugins(); 
             }
             return;
         } else if (install) {
@@ -766,6 +788,21 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             throw new BuildException("You must specify a installation package when using the --uninstall argument");
         }
         uninstallId = value;
+    }
+    
+    /** Handle the --plugins argument */
+    private void printPlugins() {
+        final StringBuilder msg = new StringBuilder();
+        if (getInstalledPlugins() != null) {
+            msg.append("The following DITA-OT plugins are installed:\n");
+            Iterator<String> pluginsIterator = INSTALLED_PLUGINS.iterator();
+            while (pluginsIterator.hasNext()) {
+                msg.append("   " + pluginsIterator.next() + "\n");
+            }
+        } else {
+            msg.append("No DITA-OT plugins are installed.");
+        }
+        System.out.println(msg.toString());
     }
 
     /** Handle the --buildfile, --file, -f argument */
@@ -1206,6 +1243,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("   or: dita --propertyfile=<file> [options]\n");
         msg.append("   or: dita --install [=<file>]\n");
         msg.append("   or: dita --uninstall <id>\n");
+        msg.append("   or: dita --plugins\n");
         msg.append("   or: dita --help\n");
         msg.append("   or: dita --version\n");
         msg.append("Arguments: \n");
@@ -1215,6 +1253,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("  --install [<file>]          install plug-in from a ZIP file\n");
         msg.append("  --install                   reload plugins\n");
         msg.append("  --uninstall <id>            uninstall plug-in with the ID\n");
+        msg.append("  --plugins                   print list of installed plug-ins\n");
         msg.append("  -h, --help                  print this message\n");
         msg.append("  --version                   print version information and exit\n");
         msg.append("Options: \n");
