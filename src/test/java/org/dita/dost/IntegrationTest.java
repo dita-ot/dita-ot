@@ -67,6 +67,15 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("reltableheader.ditamap"))
                 .test();
+    }    
+    
+    @Test
+    public void testreltableTextlink() throws Throwable {
+        builder().name("reltableTextlink")
+                .transtype(PREPROCESS)
+                .input(Paths.get("1132.ditamap"))
+                .errorCount(1)
+                .test();
     }
 
     @Test
