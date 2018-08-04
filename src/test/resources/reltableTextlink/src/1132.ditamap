@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en"><title>Test text-only ref</title>
+<topicref href="booklist.dita"/>
+<topicref href="booklist2.dita"/>
+<keydef keys="resolved">
+<topicmeta>
+<linktext>
+<ph><cite>What if?</cite> by Randall Munroe</ph>
+</linktext>
+<shortdesc>Adding text-only link via keyref</shortdesc>
+</topicmeta>
+</keydef>
+<reltable>
+<relrow>
+<relcell>
+<topicref href="booklist.dita"/>
+</relcell>
+<relcell>
+<topicref>
+<topicmeta>
+<linktext><ph><cite>American Gods</cite> by Neil Gaiman</ph></linktext>
+<shortdesc>I often list this as my favorite book</shortdesc>
+</topicmeta>
+</topicref>
+<topicref href="https://en.wikipedia.org/wiki/Discworld" format="html" scope="external">
+<topicmeta>
+<linktext>Pretty much anything from Discworld</linktext>
+<shortdesc>Terry Pratchett is awesome</shortdesc>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+<relrow>
+<relcell>
+<topicref href="booklist2.dita"/>
+</relcell>
+<relcell>
+<topicref>
+<topicmeta>
+<linktext><ph><cite>Good Omens</cite> by Neil Gaiman and Terry Pratchett</ph></linktext>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+</reltable>
+</map>

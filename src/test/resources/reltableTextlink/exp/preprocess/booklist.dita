@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><?workdir /C:\Users\IBM_ADMIN\github\robander\dita-ot-3.1\build\tmp\integrationTest\reltableTextlink\temp\preprocess?><?workdir-uri file:/C:/Users/IBM_ADMIN/github/robander/dita-ot-3.1/build/tmp/integrationTest/reltableTextlink/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="books" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic ">
+  <title class="- topic/title ">Good books</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">I'm gonna do text-only links to a couple of books.</p>
+  </body>
+<related-links class="- topic/related-links "><linkpool class="- topic/linkpool "><link class="- topic/link " mapclass="- map/topicref " role="friend"><linktext class="- topic/linktext "><ph class="- topic/ph "><cite class="- topic/cite ">American Gods</cite> by Neil Gaiman</ph></linktext><desc class="- topic/desc ">I often list this as my favorite book</desc></link><link class="- topic/link " format="html" href="https://en.wikipedia.org/wiki/Discworld" mapclass="- map/topicref " role="friend" scope="external"><?ditaot usertext?><linktext class="- topic/linktext "><?ditaot usertext?>Pretty much anything from Discworld</linktext><?ditaot usershortdesc?><desc class="- topic/desc ">Terry Pratchett is awesome</desc></link></linkpool>
+<link class="- topic/link ">
+<linktext class="- topic/linktext "><ph class="- topic/ph "><cite class="- topic/cite ">World without Mind</cite> by Franklin Foer</ph></linktext>
+<desc class="- topic/desc ">what happens to a desc?</desc>
+</link>
+<link href="booklist2.dita" class="- topic/link " type="topic"><?ditaot usertext?><linktext class="- topic/linktext ">This is a hard-coded link to booklist2</linktext><?ditaot usershortdesc?><desc class="- topic/desc ">With a short description</desc></link>
+</related-links>
+</topic>
