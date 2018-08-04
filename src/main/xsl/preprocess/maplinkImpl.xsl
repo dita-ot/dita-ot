@@ -801,8 +801,11 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:function name="dita-ot:hasHrefOrLinktext" as="xs:boolean">
     <xsl:param name="el" as="element()"/>
-    <xsl:value-of select="if (($el/@href and not($el/@href = '')) or $el/*/*[contains(@class,' map/linktext ') or contains(@class,' topic/linktext ')])
-                          then (true()) else (false())"/>
+    <xsl:sequence
+      select="
+        ($el/@href and not($el/@href = '')) or
+        $el/*/*[contains(@class, ' map/linktext ') or contains(@class, ' topic/linktext ')]"
+    />
   </xsl:function>
   
 </xsl:stylesheet>
