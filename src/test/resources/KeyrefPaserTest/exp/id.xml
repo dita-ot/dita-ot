@@ -10,7 +10,7 @@
     id="nolink" ditaarch:DITAArchVersion="1.2">
     <title class="- topic/title ">Without href</title>
     <body class="- topic/body ">
-      <p class="- topic/p " id="p"/>
+      <p class="- topic/p " id="p" keyref="invalid-attribute">Keyref not valid on this element, caused failure in #3008</p>
     </body>
   </topic>
   <related-links class="- topic/related-links ">
