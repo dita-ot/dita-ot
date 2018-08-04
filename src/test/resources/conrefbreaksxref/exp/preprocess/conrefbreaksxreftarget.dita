@@ -5,7 +5,9 @@
 <section id="section" class="- topic/section "><title class="- topic/title ">Section that is pulled to another topic.</title><p class="- topic/p ">Look
 as the figure in this section: <xref href="#this-target/fig" class="- topic/xref " type="fig"><?ditaot gentext?>Figure 1</xref>.</p><p class="- topic/p ">Look
 at a figure in this topic, outside of this section: <xref href="#this-target/out" class="- topic/xref " type="fig"><?ditaot gentext?>Figure 2</xref></p><p class="- topic/p ">Now
-look at this topic: <xref href="#this-target" class="- topic/xref " type="topic"><?ditaot gentext?>conrefbreaksxref target<?ditaot genshortdesc?><desc class="- topic/desc ">This topic is referenced by another, and has some internal linking.</desc></xref></p><p class="- topic/p ">Now
+look at this topic: <xref href="#this-target" class="- topic/xref " type="topic"><?ditaot gentext?>conrefbreaksxref target<?ditaot genshortdesc?><desc class="- topic/desc ">This topic is referenced by another, and has some internal linking.</desc></xref></p>
+<p class="- topic/p ">Now look at "current topic" with #. syntax: <xref href="#this-target" class="- topic/xref " type="topic"><?ditaot gentext?>conrefbreaksxref target<?ditaot genshortdesc?><desc class="- topic/desc ">This topic is referenced by another, and has some internal linking.</desc></xref></p>
+<p class="- topic/p ">Now look at "fig in current topic" with #./fig syntax: <xref href="#this-target/fig" class="- topic/xref " type="fig"><?ditaot gentext?>Figure 1</xref></p><p class="- topic/p ">Now
 look at the topic below: <xref href="#sub" class="- topic/xref " type="topic"><?ditaot gentext?>Sub-topic in the reusable file</xref>.</p><p class="- topic/p ">Now look at a figure
 in the topic below: <xref href="#sub/fig" class="- topic/xref " type="fig"><?ditaot gentext?>Figure 3</xref></p><fig id="fig" class="- topic/fig "><title class="- topic/title ">Figure
 In My Section</title>
