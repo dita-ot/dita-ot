@@ -962,9 +962,16 @@ public final class Constants {
     /**chunk attribute.*/
     public static final String ATTRIBUTE_NAME_CHUNK = "chunk";
 
-    /**constants for indexterm prefix(See).*/
+    /**constants for indexterm prefix(See).
+     *
+     * @deprecated since 3.2
+     **/
     public static final String IndexTerm_Prefix_See = "See";
-    /**constants for indexterm prefix(See also).*/
+    /**constants for indexterm prefix(See also).
+     *
+     * @deprecated since 3.2
+     **/
+    @Deprecated
     public static final String IndexTerm_Prefix_See_Also = "See also";
     /**name attribute.*/
     public static final String ATTRIBUTE_NAME_NAME = "name";

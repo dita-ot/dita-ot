@@ -22,6 +22,17 @@ import org.dita.dost.util.DITAOTCollator;
  * @author Wu, Zhi Qiang
  */
 public final class IndexTerm implements Comparable<IndexTerm> {
+
+    public enum IndexTermPrefix {
+        SEE("See"), SEE_ALSO("See also");
+
+        public final String message;
+
+        IndexTermPrefix(String message) {
+            this.message = message;
+        }
+    }
+
     /** The locale of  the indexterm, used for sorting. */
     private static Locale termLocale = null;
 
@@ -43,8 +54,8 @@ public final class IndexTerm implements Comparable<IndexTerm> {
     /** The sub indexterms contained by this indexterm. */
     private List<IndexTerm> subTerms = null;
 
-    /** The prefix added to the term name (such as IndexTerm_Prefix_See or IndexTerm_Prefix_See_Also). */
-    private String termPrefix = null;
+    /** The prefix added to the term name (such as IndexTermPrefix.SEE or IndexTermPrefix.SEE_Also). */
+    private IndexTermPrefix termPrefix = null;
 
     /** The list of rtl locale.*/
     private static final ArrayList<String> rtlLocaleList;
@@ -173,8 +184,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
         int i = 0;
         final int subTermNum = subTerms.size();
 
-        if (!IndexTerm_Prefix_See.equals(term.getTermPrefix()) &&
-                !IndexTerm_Prefix_See_Also.equals(term.getTermPrefix())) {
+        if (IndexTermPrefix.SEE != term.getTermPrefix() && IndexTermPrefix.SEE_ALSO != term.getTermPrefix()) {
             //if the term is not "index-see" or "index-see-also"
             leaf = false;
         }
@@ -345,18 +355,18 @@ public final class IndexTerm implements Comparable<IndexTerm> {
     }
 
     /**
-     * Get the term prefix (such as IndexTerm_Prefix_See_Also).
+     * Get the term prefix (such as IndexTermPrefix.SEE_Also).
      * @return term prefix
      */
-    public String getTermPrefix() {
+    public IndexTermPrefix getTermPrefix() {
         return termPrefix;
     }
 
     /**
-     * Set the term prefix (such as IndexTerm_Prefix_See_Also).
+     * Set the term prefix (such as IndexTermPrefix.SEE_Also).
      * @param termPrefix term prefix to set
      */
-    public void setTermPrefix(final String termPrefix) {
+    public void setTermPrefix(final IndexTermPrefix termPrefix) {
         this.termPrefix = termPrefix;
     }
 
@@ -369,15 +379,15 @@ public final class IndexTerm implements Comparable<IndexTerm> {
             return termName;
         } else {
             if (termLocale == null) {
-                return termPrefix + STRING_BLANK + termName;
-            } else if (rtlLocaleList.contains(termLocale.toString())) {
-                return termName + STRING_BLANK
-                        + Messages.getString("IndexTerm." + termPrefix.toLowerCase().trim().replace(' ', '-'),
-                                termLocale);
+                return termPrefix.message + STRING_BLANK + termName;
             } else {
-                return Messages.getString("IndexTerm." + termPrefix.toLowerCase().trim().replace(' ', '-'),
-                        termLocale)
-                        + STRING_BLANK + termName;
+                final String key = "IndexTerm." + termPrefix.message.toLowerCase().trim().replace(' ', '-');
+                final String msg = Messages.getString(key, termLocale);
+                if (rtlLocaleList.contains(termLocale.toString())) {
+                    return termName + STRING_BLANK + msg;
+                } else {
+                    return msg + STRING_BLANK + termName;
+                }
             }
         }
     }
@@ -389,11 +399,11 @@ public final class IndexTerm implements Comparable<IndexTerm> {
         if (subTerms.size() == 1) {
             // if there is only one subterm, it is necessary to update
             final IndexTerm term = subTerms.get(0); // get the only subterm
-            if (term.getTermPrefix()!= null &&
-                    IndexTerm_Prefix_See.equalsIgnoreCase(term.getTermPrefix().trim())) {
+            if (term.getTermPrefix() == IndexTermPrefix.SEE) {
                 //if the only subterm is index-see update it to index-see-also
-                term.setTermPrefix(IndexTerm_Prefix_See_Also);
+                term.setTermPrefix(IndexTermPrefix.SEE_ALSO);
             }
+//            subTerms.set(0, term);
         }
     }
 

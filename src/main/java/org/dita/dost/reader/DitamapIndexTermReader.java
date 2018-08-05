@@ -10,6 +10,7 @@
 package org.dita.dost.reader;
 
 import static org.apache.commons.io.FilenameUtils.*;
+import static org.dita.dost.index.IndexTerm.IndexTermPrefix.*;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
@@ -285,7 +286,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                     parentTerm.updateSubTerm();
                 }
             }
-            indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
+            indexTerm.setTermPrefix(SEE_ALSO);
             elementStack.push(indexTerm);
         }
     }
@@ -298,14 +299,14 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             final IndexTerm indexTerm = new IndexTerm();
             IndexTerm parentTerm;
 
-            indexTerm.setTermPrefix(IndexTerm_Prefix_See);
+            indexTerm.setTermPrefix(SEE);
 
             if (!elementStack.isEmpty()
                     && elementStack.peek() instanceof IndexTerm) {
                 parentTerm = (IndexTerm)elementStack.peek();
                 if (parentTerm.hasSubTerms()) {
                     parentTerm.updateSubTerm();
-                    indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
+                    indexTerm.setTermPrefix(SEE_ALSO);
                 }
             }
             elementStack.push(indexTerm);

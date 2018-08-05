@@ -7,6 +7,8 @@
  */
 package org.dita.dost.index;
 
+import static org.dita.dost.index.IndexTerm.IndexTermPrefix.*;
+import static org.dita.dost.index.IndexTerm.IndexTermPrefix.SEE;
 import static org.junit.Assert.*;
 
 import org.dita.dost.util.Constants;
@@ -41,7 +43,7 @@ public class IndexTermTest {
     public void setUp() {
         empty.setTermName("");
         empty.setTermKey("");
-        empty.setTermPrefix("");
+        empty.setTermPrefix(null);
         whitespace.setTermName("  \t  \n  ");
         whitespace.setTermKey("  \t  \n  ");
         number.setTermName("3.14159265");
@@ -58,7 +60,7 @@ public class IndexTermTest {
         nonAscii.setTermKey("\u65e5\u672c\u8a9e");
         prefixed.setTermName("fixed");
         prefixed.setTermKey("fixed");
-        prefixed.setTermPrefix("index term pre");
+        prefixed.setTermPrefix(SEE);
         nested.setTermName("root");
         nested.setTermKey("root");
         nested.addSubTerms(construct("sub", 2, 1));
@@ -258,32 +260,31 @@ public class IndexTermTest {
     public void testGetTermPrefix() {
         final IndexTerm i = new IndexTerm();
         assertNull(i.getTermPrefix());
-        i.setTermPrefix("");
-        assertEquals("", i.getTermPrefix());
-        i.setTermPrefix("prefix");
-        assertEquals("prefix", i.getTermPrefix());
+        i.setTermPrefix(null);
+        assertEquals(null, i.getTermPrefix());
+        i.setTermPrefix(SEE);
+        assertEquals(SEE, i.getTermPrefix());
     }
 
     @Test
     public void testSetTermPrefix() {
         new IndexTerm().setTermPrefix(null);
-        new IndexTerm().setTermPrefix("");
     }
 
     @Test
     public void testGetTermFullName() {
         IndexTerm.setTermLocale(null);
         assertEquals("simple", simple.getTermFullName());
-        assertEquals("index term pre fixed", prefixed.getTermFullName());
+        assertEquals("See fixed", prefixed.getTermFullName());
         final IndexTerm empty = new IndexTerm();
         empty.setTermName("empty");
-        empty.setTermPrefix("");
-        assertEquals(" empty", empty.getTermFullName());
+        empty.setTermPrefix(null);
+        assertEquals("empty", empty.getTermFullName());
 
         IndexTerm.setTermLocale(DEFAULT_LOCALE);
-        assertEquals("IndexTerm.index-term-pre fixed", prefixed.getTermFullName());
+        assertEquals("See fixed", prefixed.getTermFullName());
         IndexTerm.setTermLocale(StringUtils.getLocale("ar_EG"));
-        assertEquals("IndexTerm.index-term-pre fixed", prefixed.getTermFullName());
+        assertEquals("\u0623\u0646\u0638\u0631 fixed", prefixed.getTermFullName());
         IndexTerm.setTermLocale(null);
     }
 
@@ -291,21 +292,21 @@ public class IndexTermTest {
     public void testUpdateSubTerm() {
         final IndexTerm single = new IndexTerm();
         final IndexTerm singleSub = new IndexTerm();
-        singleSub.setTermPrefix(Constants.IndexTerm_Prefix_See);
+        singleSub.setTermPrefix(SEE);
         single.addSubTerm(singleSub);
         single.updateSubTerm();
         for (final IndexTerm s: single.getSubTerms()) {
-            assertEquals(Constants.IndexTerm_Prefix_See_Also, s.getTermPrefix());
+            assertEquals(SEE_ALSO, s.getTermPrefix());
         }
 
         final IndexTerm more = new IndexTerm();
         final IndexTerm moreSub = new IndexTerm();
-        moreSub.setTermPrefix(Constants.IndexTerm_Prefix_See);
+        moreSub.setTermPrefix(SEE);
         more.addSubTerm(moreSub);
         more.addSubTerm(new IndexTerm());
         more.updateSubTerm();
         for (final IndexTerm m: more.getSubTerms()) {
-            assertFalse(Constants.IndexTerm_Prefix_See_Also.equals(m));
+            assertFalse(SEE_ALSO.equals(m));
         }
     }
 
