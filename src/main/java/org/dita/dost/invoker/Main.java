@@ -29,6 +29,7 @@ package org.dita.dost.invoker;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -55,6 +56,7 @@ import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -200,21 +202,18 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         }
     }
-    
-    private List<String> INSTALLED_PLUGINS;
 
-    // Load the list of installed plugins
-    private synchronized List<String> getInstalledPlugins() {
-        if (INSTALLED_PLUGINS == null) {
-            final List<Element> plugins = toList(getPluginConfiguration().getElementsByTagName("plugin"));
-            INSTALLED_PLUGINS = new ArrayList<>(plugins.size());
-            for (Element thisplugin : plugins) {
-                if (thisplugin.getAttribute("id") != null) {
-                    INSTALLED_PLUGINS.add(thisplugin.getAttribute("id").toString());                    
-                }
-            }
-        }
-        return INSTALLED_PLUGINS;
+    /**
+     * Read the list of installed plugins
+     */
+    private List<String> getInstalledPlugins() {
+        final List<Element> plugins = toList(getPluginConfiguration().getElementsByTagName("plugin"));
+        return plugins.stream()
+                .map((Element elem) -> elem.getAttributeNode("id"))
+                .filter(Objects::nonNull)
+                .map(Attr::getValue)
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     private static Map<String, Argument> PLUGIN_ARGUMENTS;
@@ -792,17 +791,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     
     /** Handle the --plugins argument */
     private void printPlugins() {
-        final StringBuilder msg = new StringBuilder();
-        if (getInstalledPlugins() != null) {
-            msg.append("The following DITA-OT plugins are installed:\n");
-            Iterator<String> pluginsIterator = INSTALLED_PLUGINS.iterator();
-            while (pluginsIterator.hasNext()) {
-                msg.append("   " + pluginsIterator.next() + "\n");
+        final List<String> installedPlugins = getInstalledPlugins();
+        if (installedPlugins != null) {
+            System.out.println("The following DITA-OT plugins are installed:");
+            for (final String plugin : installedPlugins) {
+                System.out.println("   " + plugin);
             }
         } else {
-            msg.append("No DITA-OT plugins are installed.");
+            System.out.println("No DITA-OT plugins are installed.");
         }
-        System.out.println(msg.toString());
     }
 
     /** Handle the --buildfile, --file, -f argument */
