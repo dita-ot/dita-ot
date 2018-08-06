@@ -16,7 +16,9 @@ See the accompanying license.txt file for applicable licenses.
     <fo:table xsl:use-attribute-sets="hazardstatement">
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="globalAtts"/>
-      <xsl:call-template name="displayAtts"/>
+      <xsl:call-template name="displayAtts">
+        <xsl:with-param name="element" select="."/>
+      </xsl:call-template>
       <fo:table-column xsl:use-attribute-sets="hazardstatement.image.column"/>
       <fo:table-column xsl:use-attribute-sets="hazardstatement.content.column"/>
       <fo:table-body>
@@ -92,15 +94,24 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' hazard-d/typeofhazard ')]">
-    <xsl:call-template name="p"/>
+    <fo:block xsl:use-attribute-sets="p">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:block>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' hazard-d/consequence ')]">
-    <xsl:call-template name="p"/>
+    <fo:block xsl:use-attribute-sets="p">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:block>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' hazard-d/howtoavoid ')]">
-    <xsl:call-template name="p"/>
+    <fo:block xsl:use-attribute-sets="p">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:block>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' hazard-d/hazardsymbol ')]">
