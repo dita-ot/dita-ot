@@ -114,10 +114,21 @@ See the accompanying LICENSE file for applicable license.
         <http url="${plugin.file}"/>
       </and>
     </condition>
-    <registry property="plugin.file.url" name="${plugin.file}" />
+    <registry property="plugin.file.url" name="${plugin.file}" checksum="plugin.file.checksum" />
     <property name="plugin.file.url" value="${plugin.file}"/>
 
     <get src="${plugin.file.url}" dest="${dita.temp.dir}/${install.download.file}" ignoreerrors="false" verbose="off" />
+    <local name="install.download.checksum"/>
+    <checksum file="${dita.temp.dir}/${install.download.file}" algorithm="SHA-256"
+              property="install.download.checksum"/>
+    
+    <fail message="Downloaded plugin file checksum does not match expected value">
+      <condition>
+        <not>
+          <equals arg1="${plugin.file.checksum}" arg2="${install.download.checksum}"/>
+        </not>
+      </condition>
+    </fail>
 
     <unzip src="${dita.temp.dir}/${install.download.file}" dest="${dita.temp.dir}"/>
     <delete file="${dita.temp.dir}/${install.download.file}"/>

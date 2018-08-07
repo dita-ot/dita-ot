@@ -31,6 +31,7 @@ public final class RegistryTask extends Task {
     private String name;
     private SemVer version;
     private String property;
+    private String checksumProperty;
     private ObjectMapper mapper = new ObjectMapper();
 
     @Override
@@ -51,6 +52,7 @@ public final class RegistryTask extends Task {
                     final Registry plugin = reg.get();
                     log(String.format("Plugin found at %s@%s", registryUrl, plugin.vers), Project.MSG_INFO);
                     getProject().setProperty(property, plugin.url);
+                    getProject().setProperty(checksumProperty, plugin.cksum);
                     return;
                 }
             } catch (MalformedURLException e) {
@@ -104,6 +106,10 @@ public final class RegistryTask extends Task {
 
     public void setProperty(final String property) {
         this.property = property;
+    }
+
+    public void setChecksum(final String checksumProperty) {
+        this.checksumProperty = checksumProperty;
     }
 
 }
