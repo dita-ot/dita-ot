@@ -799,25 +799,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /** Handle the --plugins argument */
     private void printPlugins() {
         final List<String> installedPlugins = getInstalledPlugins();
-        if (installedPlugins != null) {
-            System.out.println("The following DITA-OT plugins are installed:");
-            for (final String plugin : installedPlugins) {
-                System.out.println("   " + plugin);
-            }
-        } else {
-            System.out.println("No DITA-OT plugins are installed.");
+        for (final String plugin : installedPlugins) {
+            System.out.println(plugin);
         }
     }
 
     /** Handle the --transtypes argument */
     private void printTranstypes() {
-        if (!transtypes.isEmpty()) {
-            System.out.println("The following DITA-OT transtypes are installed:");
-            for (final String transtype : transtypes) {
-                System.out.println("   " + transtype);
-            }
-        } else {
-            System.out.println("No DITA-OT transtypes are installed.");
+        for (final String transtype : transtypes) {
+            System.out.println(transtype);
         }
     }
 
