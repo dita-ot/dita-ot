@@ -29,6 +29,7 @@ package org.dita.dost.invoker;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -55,6 +56,7 @@ import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -62,6 +64,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.Constants.PLUGIN_CONF;
 import static org.dita.dost.util.XMLUtils.getChildElements;
@@ -199,6 +202,19 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 args.put(e.getKey().substring(1), e.getValue());
             }
         }
+    }
+
+    /**
+     * Read the list of installed plugins
+     */
+    private List<String> getInstalledPlugins() {
+        final List<Element> plugins = toList(getPluginConfiguration().getElementsByTagName("plugin"));
+        return plugins.stream()
+                .map((Element elem) -> elem.getAttributeNode("id"))
+                .filter(Objects::nonNull)
+                .map(Attr::getValue)
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     private static Map<String, Argument> PLUGIN_ARGUMENTS;
@@ -511,6 +527,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         boolean justPrintUsage = false;
         boolean justPrintVersion = false;
         boolean justPrintDiagnostics = false;
+        boolean justPrintPlugins = false;
+        boolean justPrintTranstypes = false;
         useColor = getUseColor();
 
         final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
@@ -521,6 +539,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 justPrintUsage = true;
             } else if (isLongForm(arg, "-version")) {
                 justPrintVersion = true;
+            } else if (isLongForm(arg, "-plugins")) {
+                justPrintPlugins = true;
+            } else if (isLongForm(arg, "-transtypes")) {
+                justPrintTranstypes = true;
             } else if (isLongForm(arg, "-install")) {
                 handleArgInstall(arg, args);
             } else if (isLongForm(arg, "-uninstall")) {
@@ -593,7 +615,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // Load the property files specified by --propertyfile
         loadPropertyFiles();
 
-        if (justPrintUsage || justPrintVersion || justPrintDiagnostics) {
+        if (justPrintUsage || justPrintVersion || justPrintDiagnostics || justPrintPlugins ||justPrintTranstypes) {
             if (justPrintVersion) {
                 printVersion(msgOutputLevel);
             }
@@ -602,6 +624,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
             if (justPrintDiagnostics) {
                 Diagnostics.doReport(System.out, msgOutputLevel);
+            }
+            if (justPrintPlugins) {
+                printPlugins(); 
+            }
+            if (justPrintTranstypes) {
+                printTranstypes();
             }
             return;
         } else if (install) {
@@ -766,6 +794,21 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             throw new BuildException("You must specify a installation package when using the --uninstall argument");
         }
         uninstallId = value;
+    }
+    
+    /** Handle the --plugins argument */
+    private void printPlugins() {
+        final List<String> installedPlugins = getInstalledPlugins();
+        for (final String plugin : installedPlugins) {
+            System.out.println(plugin);
+        }
+    }
+
+    /** Handle the --transtypes argument */
+    private void printTranstypes() {
+        for (final String transtype : transtypes) {
+            System.out.println(transtype);
+        }
     }
 
     /** Handle the --buildfile, --file, -f argument */
@@ -1206,6 +1249,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("   or: dita --propertyfile=<file> [options]\n");
         msg.append("   or: dita --install [=<file>]\n");
         msg.append("   or: dita --uninstall <id>\n");
+        msg.append("   or: dita --plugins\n");
+        msg.append("   or: dita --transtypes\n");
         msg.append("   or: dita --help\n");
         msg.append("   or: dita --version\n");
         msg.append("Arguments: \n");
@@ -1215,6 +1260,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("  --install [<file>]          install plug-in from a ZIP file\n");
         msg.append("  --install                   reload plugins\n");
         msg.append("  --uninstall <id>            uninstall plug-in with the ID\n");
+        msg.append("  --plugins                   print list of installed plug-ins\n");
+        msg.append("  --transtypes                print list of installed transtypes\n");
         msg.append("  -h, --help                  print this message\n");
         msg.append("  --version                   print version information and exit\n");
         msg.append("Options: \n");
