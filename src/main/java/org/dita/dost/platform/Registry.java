@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.annotations.VisibleForTesting;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +23,7 @@ public class Registry {
     public final String name;
     public final SemVer vers;
     public final List<Dependency> deps;
-    public final String url;
+    public final URL url;
     public final String cksum;
 
     @JsonCreator
@@ -33,7 +35,11 @@ public class Registry {
         this.name = name;
         this.vers = new SemVer(vers);
         this.deps = Collections.unmodifiableList(Arrays.asList(deps));
-        this.url = url;
+        try {
+            this.url = url != null ? new URL(url) : null;
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException(e);
+        }
         this.cksum = cksum;
     }
 

@@ -15,9 +15,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class RegistryTaskTest {
+public class PluginInstallTaskTest {
 
-    final RegistryTask registryTask = new RegistryTask();
+    final PluginInstallTask registryTask = new PluginInstallTask();
 
     @Test
     public void matchingPlatformVersion() {
