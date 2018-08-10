@@ -1,0 +1,8 @@
+<topic class="- topic/topic " domains="(topic hi-d)" id="topic" ditaarch:DITAArchVersion="1.3" xml:lang="en"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <title class="- topic/title ">Conref test for #2948</title>
+  <body class="- topic/body ">
+    <p class="- topic/p " id="test">Same-topic conref</p>
+    <p class="- topic/p " conref="#./test"/>
+  </body>
+</topic>

@@ -317,6 +317,16 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(1)
                 .test();
     }
+    
+    @Test
+    public void testconref_topiconly() throws Throwable {
+        builder().name("conref_topiconly")
+                .transtype(XHTML)
+                .input(Paths.get("conref_to_self.dita"))
+                .put("validate", "false")
+                .warnCount(1)
+                .test();
+    }
 
     @Test
     public void testpushAfter_between_Specialization() throws Throwable {
