@@ -168,7 +168,7 @@ public final class ExtensibleAntInvoker extends Task {
                 mod.setJob(job);
                 mod.execute(pipelineInput);
                 long end = System.currentTimeMillis();
-                logger.debug("{0} processing took {1} ms", mod.getClass().getSimpleName(), Long.valueOf(end - start));
+                logger.debug("{0} processing took {1} ms", mod.getClass().getSimpleName(), end - start);
             }
         } catch (final DITAOTException e) {
             throw new BuildException("Failed to run pipeline: " + e.getMessage(), e);
