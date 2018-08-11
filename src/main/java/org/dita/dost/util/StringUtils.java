@@ -128,7 +128,7 @@ public final class StringUtils {
             final List<QName> propList = Stream.of(propPath.split("\\s+"))
                     .map(QName::valueOf)
                     .collect(Collectors.toList());
-            propsBuffer.add(propList.toArray(new QName[propList.size()]));
+            propsBuffer.add(propList.toArray(new QName[0]));
             propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS, propsEnd);
             propsEnd = domains.indexOf(")",propsStart);
         }

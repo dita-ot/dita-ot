@@ -63,8 +63,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private static final Set<String> no_copy_topic;
     static {
-        final Set<String> nct = new HashSet<>();
-        nct.addAll(no_copy);
+        final Set<String> nct = new HashSet<>(no_copy);
         nct.add("query");
         nct.add("search");
         nct.add(ATTRIBUTE_NAME_TOC);

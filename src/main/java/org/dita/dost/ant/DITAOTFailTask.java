@@ -137,7 +137,7 @@ public final class DITAOTFailTask extends Exit {
                 prop.set(idx, p.getValue());
             }
         }
-        return prop.toArray(new String[prop.size()]);
+        return prop.toArray(new String[0]);
     }
 
     // Ant Exit class methods --------------------------------------------------
