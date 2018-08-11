@@ -73,13 +73,13 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
     
     /**
      * Check if an element is an unlocked navtitle, which should not be pushed into topics.
-     * 
-     * @param checkForNavtitle
-     * @return
+     *
+     * @param metadataContainer container element
+     * @param checkForNavtitle title element
      */
     boolean skipUnlockedNavtitle(final Element metadataContainer, final Element checkForNavtitle) {
-        if (!TOPIC_TITLEALTS.matches(metadataContainer.getAttribute(ATTRIBUTE_NAME_CLASS)) || 
-                !TOPIC_NAVTITLE.matches(checkForNavtitle.getAttribute(ATTRIBUTE_NAME_CLASS))) {
+        if (!TOPIC_TITLEALTS.matches(metadataContainer) ||
+                !TOPIC_NAVTITLE.matches(checkForNavtitle)) {
             return false;
         } else if (checkForNavtitle.getAttributeNodeNS(DITA_OT_NS, ATTRIBUTE_NAME_LOCKTITLE) == null) {
             return false;
