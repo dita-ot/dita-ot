@@ -293,9 +293,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     private void writeToContentChunk(final String tmpContent, final URI outputFileName, final boolean needWriteDitaTag) throws IOException {
         assert outputFileName.isAbsolute();
         logger.info("Writing " + outputFileName);
-        OutputStreamWriter ditaFileOutput = null;
-        try {
-            ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8);
+        try (OutputStreamWriter ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8)) {
             if (outputFileName.equals(changeTable.get(outputFileName))) {
                 // if the output file is newly generated file
                 // write the xml header and workdir PI into new file
@@ -336,10 +334,6 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             ditaFileOutput.flush();
         } catch (SAXException e) {
             throw new IOException(e);
-        } finally {
-            if (ditaFileOutput != null) {
-                ditaFileOutput.close();
-            }
         }
     }
 
