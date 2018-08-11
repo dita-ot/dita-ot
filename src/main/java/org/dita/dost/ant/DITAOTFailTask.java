@@ -7,24 +7,22 @@
  */
 package org.dita.dost.ant;
 
-import static org.dita.dost.ant.ExtensibleAntInvoker.isValid;
-import static org.dita.dost.log.MessageBean.*;
-
-import java.util.ArrayList;
-
-import org.apache.tools.ant.Location;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Exit;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 import org.apache.tools.ant.taskdefs.condition.ConditionBase;
-
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.taskdefs.Exit;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.ant.ExtensibleAntInvoker.ParamElem;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
+
+import java.util.ArrayList;
+
+import static org.dita.dost.ant.ExtensibleAntInvoker.isValid;
+import static org.dita.dost.log.MessageBean.*;
 
 /**
  * Ant echo task for custom error message.

@@ -8,7 +8,6 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.Document;

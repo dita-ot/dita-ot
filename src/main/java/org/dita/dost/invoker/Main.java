@@ -26,27 +26,9 @@
 
 package org.dita.dost.invoker;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.BuildListener;
-import org.apache.tools.ant.BuildLogger;
-import org.apache.tools.ant.DemuxInputStream;
-import org.apache.tools.ant.DemuxOutputStream;
-import org.apache.tools.ant.Diagnostics;
-import org.apache.tools.ant.ExitStatusException;
-import org.apache.tools.ant.Location;
-import org.apache.tools.ant.MagicNames;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.ProjectHelper;
-import org.apache.tools.ant.ProjectHelperRepository;
-import org.apache.tools.ant.PropertyHelper;
-import org.apache.tools.ant.Target;
+import org.apache.tools.ant.*;
 import org.apache.tools.ant.input.DefaultInputHandler;
 import org.apache.tools.ant.input.InputHandler;
 import org.apache.tools.ant.launch.AntMain;
@@ -63,6 +45,9 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;

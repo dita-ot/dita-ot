@@ -7,7 +7,6 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.util.SaxCache;
 import org.dita.dost.util.SaxCache.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

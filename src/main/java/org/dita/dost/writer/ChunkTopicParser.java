@@ -8,7 +8,6 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.Element;
@@ -21,15 +20,17 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.*;
 import java.net.URI;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.FileUtils.getRelativeUnixPath;
 import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**

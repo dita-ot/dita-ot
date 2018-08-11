@@ -8,7 +8,6 @@
  */
 package org.dita.dost.reader;
 
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
