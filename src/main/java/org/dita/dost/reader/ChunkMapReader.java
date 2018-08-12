@@ -367,9 +367,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 currentPath = currentFile.resolve(href);
             }
             if (currentPath != null) {
-                if (changeTable.containsKey(currentPath)) {
-                    changeTable.remove(currentPath);
-                }
+                changeTable.remove(currentPath);
                 final String processingRole = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                     changeTable.put(currentPath, currentPath);
