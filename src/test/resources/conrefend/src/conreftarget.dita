@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="target">
+<title>Target</title>
+<body>
+<p id="startp">First element in simple range</p>
+<note>This is here to complicate things</note>
+<p id="endp">Last element in simple range</p>
+</body>
+<topic id="A">
+<title>A</title>
+<shortdesc>Test for github issue #2222</shortdesc>
+</topic>
+<topic id="M">
+<title>Middle</title>
+</topic>
+<topic id="Z">
+<title>Z</title>
+</topic>
+</topic>

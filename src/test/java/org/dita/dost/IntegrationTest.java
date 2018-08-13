@@ -208,6 +208,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(2)
                 .test();
     }
+    
+    @Test
+    public void testconrefend() throws Throwable {
+        builder().name("conrefend")
+                .transtype(PREPROCESS)
+                .input(Paths.get("range.ditamap"))
+                .test();
+    }
 
     @Test
     public void testmapref_topicrefID() throws Throwable {
@@ -314,6 +322,16 @@ public class IntegrationTest extends AbstractIntegrationTest {
         builder().name("conref")
                 .transtype(PREPROCESS)
                 .input(Paths.get("lang-common1.dita"))
+                .put("validate", "false")
+                .warnCount(1)
+                .test();
+    }
+    
+    @Test
+    public void testconref_topiconly() throws Throwable {
+        builder().name("conref_topiconly")
+                .transtype(XHTML)
+                .input(Paths.get("conref_to_self.dita"))
                 .put("validate", "false")
                 .warnCount(1)
                 .test();

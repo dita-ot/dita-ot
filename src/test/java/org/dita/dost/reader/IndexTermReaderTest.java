@@ -75,6 +75,7 @@ public class IndexTermReaderTest {
         exp.add(generateIndexTerms(target, "Primary", "Secondary", "Tertiary"));
         exp.add(generateIndexTerms(target, "Primary normalized", "Secondary normalized", "Tertiary normalized"));
         exp.add(generateIndexTerms(target, " Primary unnormalized ", " Secondary unnormalized ", " Tertiary unnormalized "));
+        exp.add(generateIndexTermErrorCondition(target, "Test empty title"));
 
         assertEquals(new HashSet<IndexTerm>(exp),
                 new HashSet<IndexTerm>(act));
@@ -105,6 +106,19 @@ public class IndexTermReaderTest {
             final IndexTermTarget primaryTarget = new IndexTermTarget();
             primaryTarget.setTargetName("Index test");
             primaryTarget.setTargetURI(target.getAbsolutePath() + "#concept");
+            primary.addTarget(primaryTarget);
+        }
+        return primary;
+    }
+    
+    private IndexTerm generateIndexTermErrorCondition(final File target, final String text) {
+        final IndexTerm primary = new IndexTerm();
+        primary.setTermName(text);
+        primary.setTermKey(text);
+        if (target != null) {
+            final IndexTermTarget primaryTarget = new IndexTermTarget();
+            primaryTarget.setTargetName("***");
+            primaryTarget.setTargetURI(target.getAbsolutePath() + "#error");
             primary.addTarget(primaryTarget);
         }
         return primary;
