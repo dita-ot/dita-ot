@@ -102,7 +102,7 @@ public final class StringUtils {
         int newIndex;
 
         while ((newIndex = input.indexOf(pattern, startIndex)) >= 0) {
-            result.append(input.substring(startIndex, newIndex));
+            result.append(input, startIndex, newIndex);
             result.append(replacement);
             startIndex = newIndex + pattern.length();
         }

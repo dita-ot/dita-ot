@@ -373,7 +373,7 @@ public final class FilterUtils {
     private String getLabelValue(final QName propName, final String attrPropsValue) {
         if (attrPropsValue != null) {
             int propStart = -1;
-            if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.indexOf(" " + propName + "(", 0) != -1) {
+            if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.indexOf(" " + propName + "(") != -1) {
                 propStart = attrPropsValue.indexOf(propName + "(");
             }
             if (propStart != -1) {

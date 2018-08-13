@@ -265,7 +265,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     for (final String s : keylist) {
                         if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
                             logger.warn(MessageUtils.getMessage("DOTJ049W",
-                                    attrName.toString(), qName.toString(), attrValue, StringUtils.join(valueSet, COMMA)).toString());
+                                    attrName.toString(), qName, attrValue, StringUtils.join(valueSet, COMMA)).toString());
                         }
                     }
                 }

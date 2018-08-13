@@ -825,7 +825,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
          * I don't know how to predict when the JDK is going to help or not, so
          * we simply look for the equals sign.
          */
-        String name = arg.substring(2, arg.length());
+        String name = arg.substring(2);
         String value;
         final int posEq = name.indexOf("=");
         if (posEq > 0) {
@@ -895,7 +895,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     /** Handle the --propertyfile argument. */
     private void handleArgPropertyFile(final String arg, final Deque<String> args) {
-        String name = arg.substring(2, arg.length());
+        String name = arg.substring(2);
         String value;
         final int posEq = name.indexOf("=");
         if (posEq > 0) {
@@ -1478,7 +1478,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             msg.append(" ");
             msg.append(names.elementAt(i));
             if (descriptions != null) {
-                msg.append(spaces.substring(0, maxlen - names.elementAt(i).length() + 2));
+                msg.append(spaces, 0, maxlen - names.elementAt(i).length() + 2);
                 msg.append(descriptions.elementAt(i));
             }
             msg.append(lSep);

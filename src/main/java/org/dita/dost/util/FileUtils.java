@@ -477,12 +477,10 @@ public final class FileUtils {
         } else if (index != -1) {
             final String fileName = file.substring(0, index);
             final int fileExtIndex = fileName.lastIndexOf(DOT);
-            return (fileExtIndex != -1) ? fileName.substring(fileExtIndex + 1,
-                    fileName.length()) : null;
+            return fileExtIndex != -1 ? fileName.substring(fileExtIndex + 1) : null;
         } else {
             final int fileExtIndex = file.lastIndexOf(DOT);
-            return (fileExtIndex != -1) ? file.substring(fileExtIndex + 1,
-                    file.length()) : null;
+            return fileExtIndex != -1 ? file.substring(fileExtIndex + 1) : null;
         }
     }
 
