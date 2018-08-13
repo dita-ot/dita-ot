@@ -14,7 +14,7 @@ apply plugin: 'signing'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
-version = '3.1.1'
+version = '3.1.2'
 
 description = """DITA Open Toolkit"""
 
