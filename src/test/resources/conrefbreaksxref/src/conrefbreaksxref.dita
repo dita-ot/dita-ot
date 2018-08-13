@@ -9,6 +9,10 @@
 <body>
 <section conref="conrefbreaksxreftarget.dita#this-target/section"><?Pub Caret?></section>
 <section conref="subdir/conrefbreaksxrefsubdir.dita#subdir/section"></section>
+<fig id="fig">
+<title>Figure in the <b>referencing</b> topic</title>
+<p>Links pulled in with #./fig syntax should go here</p>
+</fig>
 </body>
 </topic>
 <?Pub *0000000511?>

@@ -12,8 +12,8 @@ See the accompanying LICENSE file for applicable license.
   <loadproperties>
     <javaresource name="application.properties"/>
   </loadproperties>
-  <property file="${dita.dir}/lib/org.dita.dost.platform/plugin.properties"/>
-  <property file="${dita.dir}/lib/configuration.properties"/>
+  <property file="${dita.dir}/config/org.dita.dost.platform/plugin.properties"/>
+  <property file="${dita.dir}/config/configuration.properties"/>
   
   <xmlcatalog id="dita.catalog">
     <catalogpath path="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>

@@ -237,6 +237,9 @@ public final class IndexTermReader extends AbstractXMLReader {
             inTitleElement = false;
             if (!topicIdStack.empty() && !titleMap.containsKey(topicIdStack.peek())) {
                 //If this is the first topic title
+                if (title == null) {  //Guard against zero-content titles
+                    title = "***";
+                }
                 if (titleMap.size() == 0) {
                     defaultTitle = title;
                 }

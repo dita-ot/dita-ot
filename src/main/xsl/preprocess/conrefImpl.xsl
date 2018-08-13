@@ -461,24 +461,15 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:copy>
-                    <xsl:for-each select="@*">
-                      <xsl:if test="not(local-name(.) = 'id')">
-                        <xsl:choose>
-                          <xsl:when test="name() = 'href'">
-                            <!--@href need to update, not implement currently. @href may point to local part, but if @href pull into other file,
-                          then @href couldn't work correctly. This is the reason why @href need to update. We leave it as the future work.-->
-                            <xsl:apply-templates select=".">
-                              <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                              <xsl:with-param name="topicid" select="$topicid"/>
-                              <xsl:with-param name="elemid" select="$elemid"/>
-                            </xsl:apply-templates>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:copy/>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:if>
-                    </xsl:for-each>
+                    <xsl:if test="@id and contains(@class, ' topic/topic ')">
+                      <xsl:attribute name="id" select="generate-id(.)"/>
+                    </xsl:if>
+                    <xsl:apply-templates select="@href">
+                      <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
+                      <xsl:with-param name="topicid" select="$topicid"/>
+                      <xsl:with-param name="elemid" select="$elemid"/>
+                    </xsl:apply-templates>
+                    <xsl:copy-of select="@* except (@id, @href)"/>
                     <xsl:apply-templates select="* | comment() | processing-instruction() | text()">
                       <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
                       <xsl:with-param name="topicid" select="$topicid"/>
@@ -537,6 +528,10 @@ See the accompanying LICENSE file for applicable license.
         </xsl:when>
 
         <xsl:when test="starts-with(., 'http://') or starts-with(., 'https://') or starts-with(., 'ftp://')">
+          <xsl:value-of select="."/>
+        </xsl:when>
+        
+        <xsl:when test=". = '#.' or starts-with(., '#./')">
           <xsl:value-of select="."/>
         </xsl:when>
 

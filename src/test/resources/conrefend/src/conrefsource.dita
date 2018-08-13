@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="conrefsource">
+  <title>Pull in ranges</title>
+  <body>
+    <p conkeyref="contarget/startp"/>
+    <p conkeyref="contarget/startp" conrefend="default.dita#default/endp" id="check-this-id"/>
+  </body>
+  <topic id="testTopicRange" conref="conreftarget.dita#A" conrefend="conreftarget.dita#Z">
+    <title/>
+  </topic>
+</topic>

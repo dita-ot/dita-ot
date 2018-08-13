@@ -14,7 +14,7 @@ apply plugin: 'signing'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
-version = '3.1.1'
+version = '3.1.2'
 
 description = """DITA Open Toolkit"""
 
@@ -147,7 +147,7 @@ def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "develop" :
                    "${project.version}"
 def bundled = [
-        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.0.5/org.lwdita-2.0.5.zip",
+        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.0.6/org.lwdita-2.0.6.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
         "troff": "https://github.com/dita-ot/org.dita.troff/archive/3.1.1.zip",
         "tocjs": "https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip"
@@ -202,8 +202,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/temp"
         include "docsrc/**"
         include "dtd/**"
-        //include "lib/**/*.properties"
-        exclude "lib/configuration.properties"
         include "plugins/org.dita.base/**"
         include "plugins/org.dita.eclipsehelp/**"
         include "plugins/org.dita.html5/**"
@@ -240,18 +238,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task updateConfiguration() {
-    doLast {
-        if (project.hasProperty('commit') && !commit.empty) {
-            ant.propertyfile(file: "${distTempDir}/lib/configuration.properties") {
-                entry(key: "otversion", operation: "=", value: "${distVersion}")
-            }
-        }
-    }
-}
-updateConfiguration.mustRunAfter copyDistTemp
-
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp", updateConfiguration]) {
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir
