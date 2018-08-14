@@ -233,15 +233,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static Argument getArgument(Element param) {
         final String name = param.getAttribute("name");
         final String type = param.getAttribute("type");
-        if (type.equals("file")) {
-            return new FileArgument(name);
-        } else if (type.equals("enum")) {
-            final Set<String> vals = getChildElements(param).stream()
-                    .map(XMLUtils::getText)
-                    .collect(Collectors.toSet());
-            return new EnumArgument(name, vals);
-        } else {
-            return new StringArgument(name);
+        switch (type) {
+            case "file":
+                return new FileArgument(name);
+            case "enum":
+                final Set<String> vals = getChildElements(param).stream()
+                        .map(XMLUtils::getText)
+                        .collect(Collectors.toSet());
+                return new EnumArgument(name, vals);
+            default:
+                return new StringArgument(name);
         }
     }
 
