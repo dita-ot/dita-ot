@@ -343,7 +343,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                         //not necessary to do node type check here
                         //because inheritStub doesn't contains any node
                         //other than Element.
-                        final Node stub = topicMetaTable.get(key);
+                        final Element stub = topicMetaTable.get(key);
                         final Node inheritStub = inheritance.get(key);
                         if (stub != inheritStub) {
                             // Merge the value if stub does not equal to inheritStub
@@ -355,7 +355,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                                 stub.appendChild(item);
                             }
                         }
-                        topicMetaTable.put(key, (Element) stub);
+                        topicMetaTable.put(key, stub);
                     }
                 }
             }

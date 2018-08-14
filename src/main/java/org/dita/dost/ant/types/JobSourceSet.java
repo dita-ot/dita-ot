@@ -156,7 +156,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         @Override
         public synchronized String getName() {
             if (isReference()) {
-                return ((Resource) getCheckedRef()).getName();
+                return getCheckedRef().getName();
             }
             return relPath;
         }

@@ -1164,7 +1164,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final int count = listeners.size();
         for (int i = 0; i < count; i++) {
             final String className = listeners.elementAt(i);
-            final BuildListener listener = (BuildListener) ClasspathUtils.newInstance(className,
+            final BuildListener listener = ClasspathUtils.newInstance(className,
                     Main.class.getClassLoader(), BuildListener.class);
             project.setProjectReference(listener);
 
@@ -1185,7 +1185,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         if (inputHandlerClassname == null) {
             handler = new DefaultInputHandler();
         } else {
-            handler = (InputHandler) ClasspathUtils.newInstance(inputHandlerClassname, Main.class.getClassLoader(),
+            handler = ClasspathUtils.newInstance(inputHandlerClassname, Main.class.getClassLoader(),
                     InputHandler.class);
             project.setProjectReference(handler);
         }
@@ -1205,7 +1205,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         BuildLogger logger;
         if (loggerClassname != null) {
             try {
-                logger = (BuildLogger) ClasspathUtils.newInstance(loggerClassname, Main.class.getClassLoader(),
+                logger = ClasspathUtils.newInstance(loggerClassname, Main.class.getClassLoader(),
                         BuildLogger.class);
             } catch (final BuildException e) {
                 printErrorMessage("The specified logger class " + loggerClassname + " could not be used because "

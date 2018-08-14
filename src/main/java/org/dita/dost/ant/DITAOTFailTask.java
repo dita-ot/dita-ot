@@ -149,7 +149,7 @@ public final class DITAOTFailTask extends Exit {
                 throw new BuildException(
                     "A single nested condition is required.");
             }
-            return ((Condition) (getConditions().nextElement())).eval();
+            return getConditions().nextElement().eval();
         }
     }
 
