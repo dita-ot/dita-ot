@@ -20,6 +20,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.*;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -293,7 +294,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     private void writeToContentChunk(final String tmpContent, final URI outputFileName, final boolean needWriteDitaTag) throws IOException {
         assert outputFileName.isAbsolute();
         logger.info("Writing " + outputFileName);
-        try (OutputStreamWriter ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8)) {
+        try (OutputStreamWriter ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), StandardCharsets.UTF_8)) {
             if (outputFileName.equals(changeTable.get(outputFileName))) {
                 // if the output file is newly generated file
                 // write the xml header and workdir PI into new file

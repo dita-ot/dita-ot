@@ -23,9 +23,9 @@ import static org.dita.dost.util.Constants.PR_D_CODEBLOCK;
  */
 public final class NormalizeCodeblock extends AbstractXMLFilter {
 
-    private Set<String> outputClass = new HashSet(Collections.singletonList("normalize-space"));
+    private final Set<String> outputClass = new HashSet<>(Collections.singletonList("normalize-space"));
     private int depth = 0;
-    private Collection<SaxEvent> buf = new ArrayList<>();
+    private final Collection<SaxEvent> buf = new ArrayList<>();
 
     @Override
     public void startPrefixMapping(String prefix, String uri)

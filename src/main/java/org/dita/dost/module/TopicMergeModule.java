@@ -21,6 +21,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 import static org.dita.dost.util.Constants.*;
@@ -70,12 +71,12 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
 
         final ByteArrayOutputStream midBuffer = new ByteArrayOutputStream();
         try {
-            midBuffer.write(XML_HEAD.getBytes(UTF8));
+            midBuffer.write(XML_HEAD.getBytes(StandardCharsets.UTF_8));
             midBuffer.write(("<dita-merge " + ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION + "='" + DITA_NAMESPACE + "' "
-                    + XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX + "='" + DITA_OT_NS + "'>").getBytes(UTF8));
+                    + XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX + "='" + DITA_OT_NS + "'>").getBytes(StandardCharsets.UTF_8));
             mapParser.setOutputStream(midBuffer);
             mapParser.read(ditaInput, job.tempDir);
-            midBuffer.write("</dita-merge>".getBytes(UTF8));
+            midBuffer.write("</dita-merge>".getBytes(StandardCharsets.UTF_8));
         } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         } catch (final IOException e) {
