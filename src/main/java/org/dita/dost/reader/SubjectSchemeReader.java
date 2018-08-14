@@ -111,21 +111,10 @@ public class SubjectSchemeReader {
             return Collections.emptyMap();
         }
         final Properties prop = new Properties();
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(inputFile);
+        try (FileInputStream in = new FileInputStream(inputFile)) {
             prop.loadFromXML(in);
-            in.close();
         } catch (final IOException e) {
             throw new IOException("Failed to read subject scheme graph: " + e.getMessage(), e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    // NOOP
-                }
-            }
         }
 
         for (final Map.Entry<Object, Object> entry: prop.entrySet()) {
@@ -160,21 +149,10 @@ public class SubjectSchemeReader {
             final String value = StringUtils.join(entry.getValue(), COMMA);
             prop.setProperty(key.getPath(), value);
         }
-        OutputStream os = null;
-        try {
-            os = new FileOutputStream(outputFile);
+        try (OutputStream os = new FileOutputStream(outputFile)) {
             prop.storeToXML(os, null);
-            os.close();
         } catch (final IOException e) {
             throw new IOException("Failed to write subject scheme graph: " + e.getMessage(), e);
-        } finally {
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (final Exception e) {
-                    // NOOP
-                }
-            }
         }
     }
 

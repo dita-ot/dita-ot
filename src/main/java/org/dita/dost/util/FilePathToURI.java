@@ -8,6 +8,8 @@
  */
 package org.dita.dost.util;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Used to escape a file path to a URI.
  */
@@ -109,11 +111,7 @@ final class FilePathToURI {
             // Get UTF-8 bytes for the remaining sub-string
             byte[] bytes;
             byte b;
-            try {
-                bytes = path.substring(i).getBytes("UTF-8");
-            } catch (final java.io.UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+            bytes = path.substring(i).getBytes(StandardCharsets.UTF_8);
             len = bytes.length;
 
             // For each byte

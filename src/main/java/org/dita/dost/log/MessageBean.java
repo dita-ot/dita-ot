@@ -28,7 +28,7 @@ import static org.dita.dost.util.URLUtils.toURI;
 public final class MessageBean {
 
     public enum Type {
-        FATAL, ERROR, WARN, INFO, DEBUG;
+        FATAL, ERROR, WARN, INFO, DEBUG
     }
 
     public static final String FATAL = Type.FATAL.name();

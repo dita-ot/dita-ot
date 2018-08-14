@@ -26,27 +26,9 @@
 
 package org.dita.dost.invoker;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.BuildListener;
-import org.apache.tools.ant.BuildLogger;
-import org.apache.tools.ant.DemuxInputStream;
-import org.apache.tools.ant.DemuxOutputStream;
-import org.apache.tools.ant.Diagnostics;
-import org.apache.tools.ant.ExitStatusException;
-import org.apache.tools.ant.Location;
-import org.apache.tools.ant.MagicNames;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.ProjectHelper;
-import org.apache.tools.ant.ProjectHelperRepository;
-import org.apache.tools.ant.PropertyHelper;
-import org.apache.tools.ant.Target;
+import org.apache.tools.ant.*;
 import org.apache.tools.ant.input.DefaultInputHandler;
 import org.apache.tools.ant.input.InputHandler;
 import org.apache.tools.ant.launch.AntMain;
@@ -63,6 +45,9 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
@@ -248,15 +233,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static Argument getArgument(Element param) {
         final String name = param.getAttribute("name");
         final String type = param.getAttribute("type");
-        if (type.equals("file")) {
-            return new FileArgument(name);
-        } else if (type.equals("enum")) {
-            final Set<String> vals = getChildElements(param).stream()
-                    .map(XMLUtils::getText)
-                    .collect(Collectors.toSet());
-            return new EnumArgument(name, vals);
-        } else {
-            return new StringArgument(name);
+        switch (type) {
+            case "file":
+                return new FileArgument(name);
+            case "enum":
+                final Set<String> vals = getChildElements(param).stream()
+                        .map(XMLUtils::getText)
+                        .collect(Collectors.toSet());
+                return new EnumArgument(name, vals);
+            default:
+                return new StringArgument(name);
         }
     }
 
@@ -840,7 +826,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
          * I don't know how to predict when the JDK is going to help or not, so
          * we simply look for the equals sign.
          */
-        String name = arg.substring(2, arg.length());
+        String name = arg.substring(2);
         String value;
         final int posEq = name.indexOf("=");
         if (posEq > 0) {
@@ -910,7 +896,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     /** Handle the --propertyfile argument. */
     private void handleArgPropertyFile(final String arg, final Deque<String> args) {
-        String name = arg.substring(2, arg.length());
+        String name = arg.substring(2);
         String value;
         final int posEq = name.indexOf("=");
         if (posEq > 0) {
@@ -1179,7 +1165,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final int count = listeners.size();
         for (int i = 0; i < count; i++) {
             final String className = listeners.elementAt(i);
-            final BuildListener listener = (BuildListener) ClasspathUtils.newInstance(className,
+            final BuildListener listener = ClasspathUtils.newInstance(className,
                     Main.class.getClassLoader(), BuildListener.class);
             project.setProjectReference(listener);
 
@@ -1200,7 +1186,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         if (inputHandlerClassname == null) {
             handler = new DefaultInputHandler();
         } else {
-            handler = (InputHandler) ClasspathUtils.newInstance(inputHandlerClassname, Main.class.getClassLoader(),
+            handler = ClasspathUtils.newInstance(inputHandlerClassname, Main.class.getClassLoader(),
                     InputHandler.class);
             project.setProjectReference(handler);
         }
@@ -1220,7 +1206,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         BuildLogger logger;
         if (loggerClassname != null) {
             try {
-                logger = (BuildLogger) ClasspathUtils.newInstance(loggerClassname, Main.class.getClassLoader(),
+                logger = ClasspathUtils.newInstance(loggerClassname, Main.class.getClassLoader(),
                         BuildLogger.class);
             } catch (final BuildException e) {
                 printErrorMessage("The specified logger class " + loggerClassname + " could not be used because "
@@ -1493,7 +1479,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             msg.append(" ");
             msg.append(names.elementAt(i));
             if (descriptions != null) {
-                msg.append(spaces.substring(0, maxlen - names.elementAt(i).length() + 2));
+                msg.append(spaces, 0, maxlen - names.elementAt(i).length() + 2);
                 msg.append(descriptions.elementAt(i));
             }
             msg.append(lSep);

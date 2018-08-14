@@ -8,7 +8,6 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.Document;
@@ -23,6 +22,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import javax.xml.parsers.DocumentBuilder;
 import java.io.*;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
@@ -159,7 +159,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 conflictTable.put(outputFileName, t);
                 dotchunk = false;
             }
-            output = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8);
+            output = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), StandardCharsets.UTF_8);
             outputFile = outputFileName;
 
             if (!dotchunk) {
@@ -327,7 +327,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     outputFileNameStack.push(outputFile);
 
                     outputFile = generateOutputFilename(id);
-                    output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), UTF8);
+                    output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), StandardCharsets.UTF_8);
 
                     if (atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 && currentLang != null) {
                         attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "CDATA", currentLang );

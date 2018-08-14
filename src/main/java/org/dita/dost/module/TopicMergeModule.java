@@ -8,32 +8,24 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.withLogger;
-import static javax.xml.XMLConstants.*;
-
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MergeMapParser;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**
  * The module handles topic merge in issues as PDF.
@@ -79,12 +71,12 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
 
         final ByteArrayOutputStream midBuffer = new ByteArrayOutputStream();
         try {
-            midBuffer.write(XML_HEAD.getBytes(UTF8));
+            midBuffer.write(XML_HEAD.getBytes(StandardCharsets.UTF_8));
             midBuffer.write(("<dita-merge " + ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION + "='" + DITA_NAMESPACE + "' "
-                    + XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX + "='" + DITA_OT_NS + "'>").getBytes(UTF8));
+                    + XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX + "='" + DITA_OT_NS + "'>").getBytes(StandardCharsets.UTF_8));
             mapParser.setOutputStream(midBuffer);
             mapParser.read(ditaInput, job.tempDir);
-            midBuffer.write("</dita-merge>".getBytes(UTF8));
+            midBuffer.write("</dita-merge>".getBytes(StandardCharsets.UTF_8));
         } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         } catch (final IOException e) {

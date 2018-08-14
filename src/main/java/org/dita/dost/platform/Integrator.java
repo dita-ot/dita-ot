@@ -393,7 +393,7 @@ public final class Integrator {
         int offset = 0;
         while (m.find()) {
             final int index = Integer.parseInt(m.group(1));
-            buf.append(res.substring(offset, m.start()));
+            buf.append(res, offset, m.start());
             buf.append("{").append(index - 1).append("}");
             offset = m.end();
         }

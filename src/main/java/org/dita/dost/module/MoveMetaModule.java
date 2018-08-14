@@ -8,36 +8,34 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.withLogger;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.XMLUtils;
-import org.dita.dost.util.XMLUtils.DebugURIResolver;
-import org.w3c.dom.Element;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.XMLUtils.DebugURIResolver;
 import org.dita.dost.writer.DitaMapMetaWriter;
 import org.dita.dost.writer.DitaMetaWriter;
+import org.w3c.dom.Element;
 
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**
  * Cascades metadata from maps to topics and then from topics to maps.
