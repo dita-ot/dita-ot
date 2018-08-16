@@ -15,7 +15,6 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Expand;
 import org.apache.tools.ant.taskdefs.Get;
-import org.apache.tools.zip.ZipUtil;
 import org.dita.dost.platform.Registry;
 import org.dita.dost.platform.Registry.Dependency;
 import org.dita.dost.platform.SemVer;
@@ -25,16 +24,16 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -46,7 +45,7 @@ public final class PluginInstallTask extends Task {
 
     private File tempDir;
     private String pluginFile;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void init() {
@@ -74,7 +73,8 @@ public final class PluginInstallTask extends Task {
             if (uri.isAbsolute()) {
                 return uri.toURL();
             }
-        } catch (MalformedURLException | URISyntaxException e) {}
+        } catch (MalformedURLException | URISyntaxException e) {
+        }
         return null;
     }
 
@@ -101,18 +101,10 @@ public final class PluginInstallTask extends Task {
                     throw new BuildException("Unable to find plugin " + pluginFile);
                 }
                 final File tempFile = get(plugin.url);
-                // TODO: verify checksum
-                //  <local name="install.download.checksum"/>
-                //  <checksum file="${dita.temp.dir}/${install.download.file}" algorithm="SHA-256"
-                //    property="install.download.checksum"/>
-                //
-                //  <fail message="Downloaded plugin file checksum does not match expected value">
-                //    <condition>
-                //      <not>
-                //        <equals arg1="${plugin.file.checksum}" arg2="${install.download.checksum}"/>
-                //      </not>
-                //    </condition>
-                //  </fail>
+                final String checksum = getFileHash(tempFile);
+                if (!checksum.equalsIgnoreCase(plugin.cksum)) {
+                    throw new BuildException(new IllegalArgumentException(String.format("Downloaded plugin file checksum %s does not match expected value %s", checksum, plugin.cksum)));
+                }
                 tempPluginDir = unzip(tempFile);
                 pluginName = plugin.name;
             }
@@ -126,6 +118,30 @@ public final class PluginInstallTask extends Task {
         } finally {
             cleanUp();
         }
+    }
+
+    private String getFileHash(final File file) {
+        try (DigestInputStream digestInputStream = new DigestInputStream(new BufferedInputStream(
+                new FileInputStream(file)), MessageDigest.getInstance("SHA-256"))) {
+            final byte[] buffer = new byte[4096];
+            while (digestInputStream.read(buffer) > -1) {
+            }
+            final MessageDigest digest = digestInputStream.getMessageDigest();
+            final byte[] sha256 = digest.digest();
+            return printHexBinary(sha256);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalArgumentException(e);
+        } catch (IOException e) {
+            throw new BuildException("Failed to calculate file checksum: " + e.getMessage(), e);
+        }
+    }
+
+    private String printHexBinary(byte[] md5) {
+        final StringBuilder sb = new StringBuilder();
+        for (byte b : md5) {
+            sb.append(String.format("%02X", b));
+        }
+        return sb.toString().toLowerCase();
     }
 
     private String getPluginName(final File pluginDir) {
