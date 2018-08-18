@@ -84,7 +84,7 @@ public final class PluginInstallTask extends Task {
     @Override
     public void execute() throws BuildException {
         if (pluginFile == null) {
-            throw new BuildException("pluginName argument not set");
+            throw new BuildException(new IllegalStateException("pluginName argument not set"));
         }
 
         try {
@@ -95,7 +95,7 @@ public final class PluginInstallTask extends Task {
                 tempPluginDir = unzip(Paths.get(pluginFile).toFile());
                 pluginName = getPluginName(tempPluginDir);
             } else if (url != null) {
-                final File tempFile = get(url);
+                final File tempFile = get(url, null);
                 tempPluginDir = unzip(tempFile);
                 pluginName = getPluginName(tempPluginDir);
             } else {
@@ -103,17 +103,13 @@ public final class PluginInstallTask extends Task {
                 if (plugin == null) {
                     throw new BuildException("Unable to find plugin " + pluginFile);
                 }
-                final File tempFile = get(plugin.url);
-                final String checksum = getFileHash(tempFile);
-                if (!checksum.equalsIgnoreCase(plugin.cksum)) {
-                    throw new BuildException(new IllegalArgumentException(String.format("Downloaded plugin file checksum %s does not match expected value %s", checksum, plugin.cksum)));
-                }
+                final File tempFile = get(plugin.url, plugin.cksum);
                 tempPluginDir = unzip(tempFile);
                 pluginName = plugin.name;
             }
             final File pluginDir = getPluginDir(pluginName);
             if (pluginDir.exists()) {
-                throw new BuildException(new IllegalStateException(String.format("Plug-in %s already exists: %s", pluginName, pluginDir)));
+                throw new BuildException(new IllegalStateException(String.format("Plug-in %s already installed: %s", pluginName, pluginDir)));
             }
             Files.move(tempPluginDir.toPath(), pluginDir.toPath());
         } catch (IOException e) {
@@ -139,7 +135,7 @@ public final class PluginInstallTask extends Task {
         }
     }
 
-    private String printHexBinary(byte[] md5) {
+    private String printHexBinary(final byte[] md5) {
         final StringBuilder sb = new StringBuilder();
         for (byte b : md5) {
             sb.append(String.format("%02X", b));
@@ -178,7 +174,7 @@ public final class PluginInstallTask extends Task {
             try (BufferedInputStream in = new BufferedInputStream(registryUrl.toURL().openStream())) {
                 log("Parse registry", Project.MSG_DEBUG);
                 final List<Registry> regs = Arrays.asList(mapper.readValue(in, Registry[].class));
-                final Optional<Registry> reg = getRegistry(regs, version);
+                final Optional<Registry> reg = findPlugin(regs, version);
                 if (reg.isPresent()) {
                     final Registry plugin = reg.get();
                     log(String.format("Plugin found at %s@%s", registryUrl, plugin.vers), Project.MSG_INFO);
@@ -195,7 +191,7 @@ public final class PluginInstallTask extends Task {
         return null;
     }
 
-    private File get(final URL url) {
+    private File get(final URL url, final String expectedChecksum) {
         final File tempPluginFile = new File(tempDir, "plugin.zip");
 
         final Get get = new Get();
@@ -206,6 +202,13 @@ public final class PluginInstallTask extends Task {
         get.setIgnoreErrors(false);
         get.setVerbose(false);
         get.execute();
+
+        if (expectedChecksum != null) {
+            final String checksum = getFileHash(tempPluginFile);
+            if (!checksum.equalsIgnoreCase(expectedChecksum)) {
+                throw new BuildException(new IllegalArgumentException(String.format("Downloaded plugin file checksum %s does not match expected value %s", checksum, plugin.cksum)));
+            }
+        }
 
         return tempPluginFile;
     }
@@ -238,7 +241,7 @@ public final class PluginInstallTask extends Task {
         }
     }
 
-    private Optional<Registry> getRegistry(List<Registry> regs, final SemVer version) {
+    private Optional<Registry> findPlugin(final List<Registry> regs, final SemVer version) {
         if (version == null) {
             return regs.stream()
                     .filter(this::matchingPlatformVersion)
@@ -252,7 +255,7 @@ public final class PluginInstallTask extends Task {
     }
 
     @VisibleForTesting
-    boolean matchingPlatformVersion(Registry reg) {
+    boolean matchingPlatformVersion(final Registry reg) {
         final Optional<Dependency> platformDependency = reg.deps.stream()
                 .filter(dep -> dep.name.equals("org.dita.base"))
                 .findFirst();
