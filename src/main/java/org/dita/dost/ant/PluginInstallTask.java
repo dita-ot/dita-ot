@@ -10,6 +10,8 @@ package org.dita.dost.ant;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -100,9 +102,6 @@ public final class PluginInstallTask extends Task {
                 pluginName = getPluginName(tempPluginDir);
             } else {
                 final Registry plugin = readRegistry();
-                if (plugin == null) {
-                    throw new BuildException("Unable to find plugin " + pluginFile);
-                }
                 final File tempFile = get(plugin.url, plugin.cksum);
                 tempPluginDir = unzip(tempFile);
                 pluginName = plugin.name;
@@ -122,9 +121,7 @@ public final class PluginInstallTask extends Task {
     private String getFileHash(final File file) {
         try (DigestInputStream digestInputStream = new DigestInputStream(new BufferedInputStream(
                 new FileInputStream(file)), MessageDigest.getInstance("SHA-256"))) {
-            final byte[] buffer = new byte[4096];
-            while (digestInputStream.read(buffer) > -1) {
-            }
+            IOUtils.copy(digestInputStream, new NullOutputStream());
             final MessageDigest digest = digestInputStream.getMessageDigest();
             final byte[] sha256 = digest.digest();
             return printHexBinary(sha256);
@@ -188,7 +185,7 @@ public final class PluginInstallTask extends Task {
                 log(String.format("Failed to read registry configuration %s: %s", registryUrl, e.getMessage()), e, Project.MSG_ERR);
             }
         }
-        return null;
+        throw new BuildException("Unable to find plugin " + pluginFile);
     }
 
     private File get(final URL url, final String expectedChecksum) {
@@ -206,7 +203,7 @@ public final class PluginInstallTask extends Task {
         if (expectedChecksum != null) {
             final String checksum = getFileHash(tempPluginFile);
             if (!checksum.equalsIgnoreCase(expectedChecksum)) {
-                throw new BuildException(new IllegalArgumentException(String.format("Downloaded plugin file checksum %s does not match expected value %s", checksum, plugin.cksum)));
+                throw new BuildException(new IllegalArgumentException(String.format("Downloaded plugin file checksum %s does not match expected value %s", checksum, expectedChecksum)));
             }
         }
 
