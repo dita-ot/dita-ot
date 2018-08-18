@@ -150,6 +150,7 @@ public final class PluginInstallTask extends Task {
     }
 
     private Registry readRegistry(final String name, final SemVer version) {
+        Registry res = null;
         for (final String registry : registries) {
             final URI registryUrl = URI.create(registry + name + ".json");
             log(String.format("Read registry %s", registry), Project.MSG_DEBUG);
@@ -160,7 +161,8 @@ public final class PluginInstallTask extends Task {
                 if (reg.isPresent()) {
                     final Registry plugin = reg.get();
                     log(String.format("Plugin found at %s@%s", registryUrl, plugin.vers), Project.MSG_INFO);
-                    return plugin;
+                    res = plugin;
+                    break;
                 }
             } catch (MalformedURLException e) {
                 log(String.format("Invalid registry URL %s: %s", registryUrl, e.getMessage()), e, Project.MSG_ERR);
@@ -170,7 +172,14 @@ public final class PluginInstallTask extends Task {
                 log(String.format("Failed to read registry configuration %s: %s", registryUrl, e.getMessage()), e, Project.MSG_ERR);
             }
         }
-        throw new BuildException("Unable to find plugin " + pluginFile);
+        if (res == null) {
+            throw new BuildException("Unable to find plugin " + pluginFile);
+        }
+        res.deps.stream()
+            .filter(dep -> !installedPlugins.contains(dep.name))
+            .forEach(dep -> log(String.format("Dependency %s not installed", dep.name), Project.MSG_WARN));
+
+        return res;
     }
 
     private File get(final URL url, final String expectedChecksum) {
