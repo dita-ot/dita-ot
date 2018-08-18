@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public final class PluginInstallTask extends Task {
 
@@ -49,7 +50,9 @@ public final class PluginInstallTask extends Task {
 
     @Override
     public void init() {
-        registries = Arrays.asList(Configuration.configuration.get("registry").trim().split("\\s+"));
+        registries = Arrays.stream(Configuration.configuration.get("registry").trim().split("\\s+"))
+                .map(registry -> registry.endsWith("/") ? registry : (registry + "/"))
+                .collect(Collectors.toList());
         try {
             tempDir = Files.createTempDirectory(null).toFile();
         } catch (IOException e) {

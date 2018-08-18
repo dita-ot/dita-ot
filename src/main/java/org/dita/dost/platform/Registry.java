@@ -9,6 +9,7 @@
 package org.dita.dost.platform;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -18,6 +19,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Registry {
 
     public final String name;
@@ -34,7 +39,7 @@ public class Registry {
                     @JsonProperty("cksum") String cksum) {
         this.name = name;
         this.vers = new SemVer(vers);
-        this.deps = Collections.unmodifiableList(Arrays.asList(deps));
+        this.deps = deps == null ? emptyList() : unmodifiableList(Arrays.asList(deps));
         try {
             this.url = url != null ? new URL(url) : null;
         } catch (MalformedURLException e) {
