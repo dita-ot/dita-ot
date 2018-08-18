@@ -21,6 +21,7 @@ import org.dita.dost.platform.Plugins;
 import org.dita.dost.platform.Registry;
 import org.dita.dost.platform.Registry.Dependency;
 import org.dita.dost.platform.SemVer;
+import org.dita.dost.platform.SemVerMatch;
 import org.dita.dost.util.Configuration;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -38,10 +39,7 @@ import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class PluginInstallTask extends Task {
@@ -54,7 +52,7 @@ public final class PluginInstallTask extends Task {
     private Path pluginFile;
     private URL pluginUrl;
     private String pluginName;
-    private SemVer pluginVersion;
+    private SemVerMatch pluginVersion;
 
     @Override
     public void init() {
@@ -86,26 +84,34 @@ public final class PluginInstallTask extends Task {
         }
 
         try {
-            final String name;
-            final File tempPluginDir;
+            final Map<String, File> installs = new HashMap<>();
             if (pluginFile != null && Files.exists(pluginFile)) {
-                tempPluginDir = unzip(pluginFile.toFile());
-                name = getPluginName(tempPluginDir);
+                final File tempPluginDir = unzip(pluginFile.toFile());
+                final String name = getPluginName(tempPluginDir);
+                installs.put(name, tempPluginDir);
             } else if (pluginUrl != null) {
                 final File tempFile = get(pluginUrl, null);
-                tempPluginDir = unzip(tempFile);
-                name = getPluginName(tempPluginDir);
+                final File tempPluginDir = unzip(tempFile);
+                final String name = getPluginName(tempPluginDir);
+                installs.put(name, tempPluginDir);
             } else {
-                final Registry plugin = readRegistry(this.pluginName, pluginVersion);
-                final File tempFile = get(plugin.url, plugin.cksum);
-                tempPluginDir = unzip(tempFile);
-                name = plugin.name;
+                final Set<Registry> plugins = readRegistry(this.pluginName, pluginVersion);
+                for (final Registry plugin : plugins) {
+                    final File tempFile = get(plugin.url, plugin.cksum);
+                    final File tempPluginDir = unzip(tempFile);
+                    final String name = plugin.name;
+                    installs.put(name, tempPluginDir);
+                }
             }
-            final File pluginDir = getPluginDir(name);
-            if (pluginDir.exists()) {
-                throw new BuildException(new IllegalStateException(String.format("Plug-in %s already installed: %s", name, pluginDir)));
+            for (final Map.Entry<String, File> install : installs.entrySet()) {
+                final String name = install.getKey();
+                final File tempPluginDir = install.getValue();
+                final File pluginDir = getPluginDir(name);
+                if (pluginDir.exists()) {
+                    throw new BuildException(new IllegalStateException(String.format("Plug-in %s already installed: %s", name, pluginDir)));
+                }
+                Files.move(tempPluginDir.toPath(), pluginDir.toPath());
             }
-            Files.move(tempPluginDir.toPath(), pluginDir.toPath());
         } catch (IOException e) {
             throw new BuildException(e.getMessage(), e);
         } finally {
@@ -149,7 +155,8 @@ public final class PluginInstallTask extends Task {
         return Paths.get(getProject().getProperty("dita.dir"), "plugins", id).toFile();
     }
 
-    private Registry readRegistry(final String name, final SemVer version) {
+    private Set<Registry> readRegistry(final String name, final SemVerMatch version) {
+        log(String.format("Reading registries for %s@%s", name, version), Project.MSG_DEBUG);
         Registry res = null;
         for (final String registry : registries) {
             final URI registryUrl = URI.create(registry + name + ".json");
@@ -175,11 +182,15 @@ public final class PluginInstallTask extends Task {
         if (res == null) {
             throw new BuildException("Unable to find plugin " + pluginFile);
         }
-        res.deps.stream()
-            .filter(dep -> !installedPlugins.contains(dep.name))
-            .forEach(dep -> log(String.format("Dependency %s not installed", dep.name), Project.MSG_WARN));
 
-        return res;
+        Set<Registry> results = new HashSet<>();
+        results.add(res);
+        res.deps.stream()
+                .filter(dep -> !installedPlugins.contains(dep.name))
+                .flatMap(dep -> readRegistry(dep.name, dep.req).stream())
+                .forEach(results::add);
+
+        return results;
     }
 
     private File get(final URL url, final String expectedChecksum) {
@@ -232,7 +243,7 @@ public final class PluginInstallTask extends Task {
         }
     }
 
-    private Optional<Registry> findPlugin(final List<Registry> regs, final SemVer version) {
+    private Optional<Registry> findPlugin(final List<Registry> regs, final SemVerMatch version) {
         if (version == null) {
             return regs.stream()
                     .filter(this::matchingPlatformVersion)
@@ -240,7 +251,7 @@ public final class PluginInstallTask extends Task {
         } else {
             return regs.stream()
                     .filter(this::matchingPlatformVersion)
-                    .filter(reg -> reg.vers.equals(version))
+                    .filter(reg -> version.contains(reg.vers))
                     .findFirst();
         }
     }
@@ -272,7 +283,7 @@ public final class PluginInstallTask extends Task {
         if (pluginFile.contains("@")) {
             final String[] tokens = pluginFile.split("@");
             pluginName = tokens[0];
-            pluginVersion = new SemVer(tokens[1]);
+            pluginVersion = new SemVerMatch(tokens[1]);
         } else {
             pluginName = pluginFile;
             pluginVersion = null;
