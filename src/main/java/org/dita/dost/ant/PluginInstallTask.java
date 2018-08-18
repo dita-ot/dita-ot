@@ -17,6 +17,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Expand;
 import org.apache.tools.ant.taskdefs.Get;
+import org.dita.dost.platform.Plugins;
 import org.dita.dost.platform.Registry;
 import org.dita.dost.platform.Registry.Dependency;
 import org.dita.dost.platform.SemVer;
@@ -32,6 +33,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -47,8 +49,12 @@ public final class PluginInstallTask extends Task {
     private List<String> registries;
 
     private File tempDir;
-    private String pluginFile;
     private final ObjectMapper mapper = new ObjectMapper();
+    private List<String> installedPlugins;
+    private Path pluginFile;
+    private URL pluginUrl;
+    private String pluginName;
+    private SemVer pluginVersion;
 
     @Override
     public void init() {
@@ -60,6 +66,7 @@ public final class PluginInstallTask extends Task {
         } catch (IOException e) {
             throw new BuildException("Failed to create temporary directory: " + e.getMessage(), e);
         }
+        installedPlugins = Plugins.getInstalledPlugins();
     }
 
     private void cleanUp() {
@@ -72,43 +79,31 @@ public final class PluginInstallTask extends Task {
         }
     }
 
-    private URL asAbsoluteUrl() {
-        try {
-            final URI uri = new URI(pluginFile);
-            if (uri.isAbsolute()) {
-                return uri.toURL();
-            }
-        } catch (MalformedURLException | URISyntaxException e) {
-        }
-        return null;
-    }
-
     @Override
     public void execute() throws BuildException {
-        if (pluginFile == null) {
+        if (pluginFile == null && pluginUrl == null && pluginName == null) {
             throw new BuildException(new IllegalStateException("pluginName argument not set"));
         }
 
         try {
-            final String pluginName;
+            final String name;
             final File tempPluginDir;
-            final URL url = asAbsoluteUrl();
-            if (Files.exists(Paths.get(pluginFile))) {
-                tempPluginDir = unzip(Paths.get(pluginFile).toFile());
-                pluginName = getPluginName(tempPluginDir);
-            } else if (url != null) {
-                final File tempFile = get(url, null);
+            if (pluginFile != null && Files.exists(pluginFile)) {
+                tempPluginDir = unzip(pluginFile.toFile());
+                name = getPluginName(tempPluginDir);
+            } else if (pluginUrl != null) {
+                final File tempFile = get(pluginUrl, null);
                 tempPluginDir = unzip(tempFile);
-                pluginName = getPluginName(tempPluginDir);
+                name = getPluginName(tempPluginDir);
             } else {
-                final Registry plugin = readRegistry();
+                final Registry plugin = readRegistry(this.pluginName, pluginVersion);
                 final File tempFile = get(plugin.url, plugin.cksum);
                 tempPluginDir = unzip(tempFile);
-                pluginName = plugin.name;
+                name = plugin.name;
             }
-            final File pluginDir = getPluginDir(pluginName);
+            final File pluginDir = getPluginDir(name);
             if (pluginDir.exists()) {
-                throw new BuildException(new IllegalStateException(String.format("Plug-in %s already installed: %s", pluginName, pluginDir)));
+                throw new BuildException(new IllegalStateException(String.format("Plug-in %s already installed: %s", name, pluginDir)));
             }
             Files.move(tempPluginDir.toPath(), pluginDir.toPath());
         } catch (IOException e) {
@@ -154,17 +149,7 @@ public final class PluginInstallTask extends Task {
         return Paths.get(getProject().getProperty("dita.dir"), "plugins", id).toFile();
     }
 
-    private Registry readRegistry() {
-        final String name;
-        final SemVer version;
-        if (pluginFile.contains("@")) {
-            final String[] tokens = pluginFile.split("@");
-            name = tokens[0];
-            version = new SemVer(tokens[1]);
-        } else {
-            name = pluginFile;
-            version = null;
-        }
+    private Registry readRegistry(final String name, final SemVer version) {
         for (final String registry : registries) {
             final URI registryUrl = URI.create(registry + name + ".json");
             log(String.format("Read registry %s", registry), Project.MSG_DEBUG);
@@ -266,7 +251,23 @@ public final class PluginInstallTask extends Task {
     }
 
     public void setPluginFile(final String pluginFile) {
-        this.pluginFile = pluginFile;
+        this.pluginFile = Paths.get(pluginFile);
+        try {
+            final URI uri = new URI(pluginFile);
+            if (uri.isAbsolute()) {
+                this.pluginUrl = uri.toURL();
+            }
+        } catch (MalformedURLException | URISyntaxException e) {
+            // Ignore
+        }
+        if (pluginFile.contains("@")) {
+            final String[] tokens = pluginFile.split("@");
+            pluginName = tokens[0];
+            pluginVersion = new SemVer(tokens[1]);
+        } else {
+            pluginName = pluginFile;
+            pluginVersion = null;
+        }
     }
 
 }
