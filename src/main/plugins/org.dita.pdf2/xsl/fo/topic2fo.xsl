@@ -58,6 +58,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:import href="../../cfg/fo/attrs/tables-attr.xsl"/>
     <xsl:import href="tables.xsl"/>
     <xsl:import href="root-processing.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/topic-attr.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/concept-attr.xsl"/>
     <xsl:import href="../../cfg/fo/attrs/commons-attr.xsl"/>
     <xsl:import href="commons.xsl"/>
     <xsl:import href="../../cfg/fo/attrs/toc-attr.xsl"/>
