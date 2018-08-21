@@ -6,7 +6,7 @@ Copyright 2011 Jarno Elovirta
 
 See the accompanying LICENSE file for applicable license.
 -->
-<plugin id="org.dita.eclipsehelp">
+<plugin id="org.dita.eclipsehelp" version="${version}">
   <!-- extension points -->
   <extension-point id="dita.xsl.eclipse.plugin" name="Eclipse plugin XSLT import"/>
   <extension-point id="dita.map.eclipse.index.pre" name="Eclipse index extraction pre-target"/>

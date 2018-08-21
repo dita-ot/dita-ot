@@ -6,7 +6,7 @@ Copyright 2011 Jarno Elovirta
 
 See the accompanying LICENSE file for applicable license.
 -->
-<plugin id="org.dita.base">
+<plugin id="org.dita.base" version="${version}">
   <!-- base extension points -->
   <extension-point id="package.version" name="Plug-in version"/>
   <extension-point id="package.support.email" name="Plug-in support email"/>

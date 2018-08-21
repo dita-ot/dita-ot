@@ -181,6 +181,12 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "LICENSE"
     }
     from ("src/main") {
+        include "plugins/*/plugin.xml"
+        expand(
+                version: project.version
+        )
+    }
+    from ("src/main") {
         exclude "**/.gradle"
         exclude "plugins/**/build.gradle"
         exclude "**/settings.gradle"
@@ -205,6 +211,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/temp"
         include "docsrc/**"
         include "dtd/**"
+        exclude "plugins/*/plugin.xml"
         include "plugins/org.dita.base/**"
         include "plugins/org.dita.eclipsehelp/**"
         include "plugins/org.dita.html5/**"
