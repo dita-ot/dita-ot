@@ -30,11 +30,9 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -44,32 +42,17 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.dita.dost.TestUtils;
-import org.dita.dost.util.CatalogUtils;
 
 public class KeyrefPaserTest {
 
-    private static File tempDir;
-    private static File tempDirSubDir;
     private static final File resourceDir = TestUtils.getResourceDir(KeyrefPaserTest.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
-    private static CatalogResolver resolver;
 
     private static KeyScope keyDefinition;
 
     @BeforeClass
     public static void setUp() throws Exception {
-        CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
-        tempDir = TestUtils.createTempDir(KeyrefPaserTest.class);
-        tempDirSubDir = new File(tempDir, "subdir");
-        tempDirSubDir.mkdirs();
-        TestUtils.normalize(new File(srcDir, "a.xml"), new File(tempDir, "a.xml"));
-        TestUtils.normalize(new File(srcDir, "b.ditamap"), new File(tempDir, "b.ditamap"));
-        TestUtils.normalize(new File(srcDir, "subdir" + File.separator + "c.ditamap"), new File(tempDir, "subdir" + File.separator + "c.ditamap"));
-        TestUtils.normalize(new File(srcDir, "id.xml"), new File(tempDir, "id.xml"));
-        TestUtils.normalize(new File(srcDir, "fallback.xml"), new File(tempDir, "fallback.xml"));
-        resolver = CatalogUtils.getCatalogResolver();
-
         keyDefinition = readKeyMap(Paths.get("keys.ditamap"));
     }
 
@@ -77,65 +60,65 @@ public class KeyrefPaserTest {
     public void testTopicWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(srcDir));
         parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File(tempDir, "a.xml").toURI());
-        parser.write(new File(tempDir, "a.xml"));
+        parser.setCurrentFile(new File(srcDir, "a.xml").toURI());
+        parser.write(new File(srcDir, "a.xml"));
 
         assertXMLEqual(new InputSource(new File(expDir, "a.xml").toURI().toString()),
-                new InputSource(new File(tempDir, "a.xml").toURI().toString()));
+                new InputSource(new File(srcDir, "a.xml").toURI().toString()));
     }
 
     @Test
     public void testFragment() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(srcDir));
         parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File(tempDir, "id.xml").toURI());
-        parser.write(new File(tempDir, "id.xml"));
+        parser.setCurrentFile(new File(srcDir, "id.xml").toURI());
+        parser.write(new File(srcDir, "id.xml"));
 
         assertXMLEqual(new InputSource(new File(expDir, "id.xml").toURI().toString()),
-                new InputSource(new File(tempDir, "id.xml").toURI().toString()));
+                new InputSource(new File(srcDir, "id.xml").toURI().toString()));
     }
     
     @Test
     public void testFallback() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(srcDir));
         parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File(tempDir, "fallback.xml").toURI());
-        parser.write(new File(tempDir, "fallback.xml"));
+        parser.setCurrentFile(new File(srcDir, "fallback.xml").toURI());
+        parser.write(new File(srcDir, "fallback.xml"));
 
         assertXMLEqual(new InputSource(new File(expDir, "fallback.xml").toURI().toString()),
-                new InputSource(new File(tempDir, "fallback.xml").toURI().toString()));
+                new InputSource(new File(srcDir, "fallback.xml").toURI().toString()));
     }
 
     @Test
     public void testMapWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(srcDir));
         parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File(tempDir, "b.ditamap").toURI());
-        parser.write(new File(tempDir, "b.ditamap"));
+        parser.setCurrentFile(new File(srcDir, "b.ditamap").toURI());
+        parser.write(new File(srcDir, "b.ditamap"));
 
         assertXMLEqual(new InputSource(new File(expDir, "b.ditamap").toURI().toString()),
-                new InputSource(new File(tempDir, "b.ditamap").toURI().toString()));
+                new InputSource(new File(srcDir, "b.ditamap").toURI().toString()));
     }
 
     @Test
     public void testUpLevelMapWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(srcDir));
         parser.setKeyDefinition(readKeyMap(Paths.get("subdir", "c.ditamap")));
-        parser.setCurrentFile(new File(tempDir, "subdir"+ File.separator +"c.ditamap").toURI());
-        parser.write(new File(tempDir, "subdir"+ File.separator +"c.ditamap"));
+        parser.setCurrentFile(new File(srcDir, "subdir"+ File.separator +"c.ditamap").toURI());
+        parser.write(new File(srcDir, "subdir"+ File.separator +"c.ditamap"));
 
         assertXMLEqual(new InputSource(new File(expDir, "subdir"+ File.separator +"c.ditamap").toURI().toString()),
-                new InputSource(new File(tempDir, "subdir"+ File.separator +"c.ditamap").toURI().toString()));
+                new InputSource(new File(srcDir, "subdir"+ File.separator +"c.ditamap").toURI().toString()));
     }
 
     @Test
@@ -174,22 +157,15 @@ public class KeyrefPaserTest {
         
         return (Document) r.getNode();
     }
-    
-
-    @AfterClass
-    public static void tearDown() throws IOException {
-        TestUtils.forceDelete(tempDir);
-    }
 
     private static KeyScope readKeyMap(final Path map) throws Exception {
         final URI keyMapFile = srcDir.toPath().resolve(map).toUri();
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final InputSource inputSource = new InputSource(keyMapFile.toString());
         final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-        documentBuilder.setEntityResolver(resolver);
         final Document document = documentBuilder.parse(inputSource);
 
-        final Map<String, Element> keys = new HashMap<String, Element>();
+        final Map<String, Element> keys = new HashMap<>();
         final NodeList keydefs = document.getElementsByTagName("keydef");
         final Map<String, KeyDef> keymap = new HashMap<>();
         for (int i = 0; i < keydefs.getLength(); i++) {
@@ -198,7 +174,7 @@ public class KeyrefPaserTest {
             doc.appendChild(doc.importNode(elem, true));
             keys.put(elem.getAttribute("keys"), elem);
             final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")),
-                    null, null, tempDir.toPath().resolve(map).toUri(), elem);
+                    null, null, srcDir.toPath().resolve(map).toUri(), elem);
             keymap.put(keyDef.keys, keyDef);
         }
         return new KeyScope(null, null, keymap, Collections.emptyList());

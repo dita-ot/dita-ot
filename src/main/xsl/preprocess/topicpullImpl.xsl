@@ -363,17 +363,23 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
               <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
-              <!--grab type, text and metadata, as long there's an href to grab from, otherwise error-->
+              <!--grab type, text and metadata, as long there's an href to grab from, otherwise allow local linktext, otherwise error-->
               <xsl:choose>
-                <xsl:when test="@href=''"/>
+                <xsl:when test="@href=''">
+                  <xsl:apply-templates/>
+                </xsl:when>
                 <xsl:when test="@href">
                   <xsl:apply-templates select="." mode="topicpull:get-stuff">
                     <xsl:with-param name="localtype" select="$type" as="xs:string?"/>
                     <xsl:with-param name="targetElement" select="$targetElement" as="element()?"/>
                   </xsl:apply-templates>
                 </xsl:when>
+                <xsl:when test="*[contains(@class, ' topic/linktext ')]">
+                  <xsl:apply-templates/>
+                </xsl:when>
                 <xsl:otherwise>
                   <xsl:apply-templates select="." mode="ditamsg:missing-href"/>
+                  <xsl:apply-templates/>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:otherwise>
@@ -460,12 +466,18 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:if>
   </xsl:template>
   
+  <xsl:template match="*[contains(@class, ' svg-d/svgref ')]" priority="10">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()"/>
+    </xsl:copy>
+  </xsl:template>
+
   <!-- Process an in-line cross reference. Retrieve link text, type, and
        description if possible (and not already specified locally). -->
   <xsl:template match="*[dita-ot:is-link(.)]">
     <xsl:choose>
       <xsl:when test="normalize-space(@href)='' or empty(@href)">
-        <xsl:if test="empty(@keyref)">
+        <xsl:if test="empty(@keyref) and @href">
           <!-- If keyref is specified, keyref code can generate message about unresolved key -->
           <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
         </xsl:if>

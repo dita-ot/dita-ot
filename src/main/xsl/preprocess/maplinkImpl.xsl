@@ -15,6 +15,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-utilities.xsl"/>
+  <xsl:import href="../common/dita-textonly.xsl"/>
   
   <xsl:output method="xml" encoding="utf-8" indent="no" />
   
@@ -338,34 +339,45 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]" mode="grab-group-title"/>
     </xsl:variable>
     
-    <xsl:if test="$linklist and exists($group-title) and not($group-title = '')">
-      <xsl:if test="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]">
-          <xsl:with-param name="role">friend</xsl:with-param>
-        </xsl:apply-templates>
+    <xsl:for-each select="ancestor::*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position()!=$position]">
+      <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][dita-ot:hasHrefOrLinktext(.)]">
+        <xsl:variable name="cellposition" as="xs:integer">
+          <xsl:apply-templates mode="get-position" select="."/>
+        </xsl:variable>
+        <xsl:variable name="cellgroup-title" as="xs:string?">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$cellposition]" mode="grab-group-title"/>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="$linklist and exists($cellgroup-title)">
+            <xsl:apply-templates mode="generate-ordered-links-2" select=".">
+              <xsl:with-param name="position" as="xs:integer" select="$cellposition"/>
+              <xsl:with-param name="group-title" as="xs:string?" select="$cellgroup-title"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:when test="not($linklist) and empty($cellgroup-title)">
+            <xsl:apply-templates mode="link" select="descendant::*[contains(@class, ' map/topicref ')][dita-ot:hasHrefOrLinktext(.)]">
+              <xsl:with-param name="role">friend</xsl:with-param>
+            </xsl:apply-templates>            
+          </xsl:when>
+        </xsl:choose>
       </xsl:if>
-      <xsl:if test="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]">
-          <xsl:with-param name="role">friend</xsl:with-param>
-        </xsl:apply-templates>
-      </xsl:if>
-      <xsl:if test="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">  
-        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]">
-          <xsl:with-param name="role">friend</xsl:with-param>
-        </xsl:apply-templates>
-      </xsl:if>  
+    </xsl:for-each>
+
+    <xsl:if test="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][dita-ot:hasHrefOrLinktext(.)]">
+      <xsl:choose>
+        <xsl:when test="$linklist and exists($group-title)">
+          <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]">
+            <xsl:with-param name="role">friend</xsl:with-param>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="not($linklist) and empty($group-title)">
+          <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][dita-ot:hasHrefOrLinktext(.)]">
+            <xsl:with-param name="role">friend</xsl:with-param>
+          </xsl:apply-templates>
+        </xsl:when>
+      </xsl:choose>
     </xsl:if>
-    <xsl:if test="not($linklist) and (empty($group-title) or $group-title = '')">
-      <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:with-param name="role">friend</xsl:with-param>
-      </xsl:apply-templates>
-      <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:with-param name="role">friend</xsl:with-param>
-      </xsl:apply-templates>
-      <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:with-param name="role">friend</xsl:with-param>
-      </xsl:apply-templates>
-    </xsl:if>
+
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' map/topicref ')]"
@@ -386,13 +398,13 @@ See the accompanying LICENSE file for applicable license.
         <title class="- topic/title ">
           <xsl:value-of select="$group-title"/>
         </title>
-        <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position() = $position]//*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]" mode="link">
+        <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position() = $position]//*[contains(@class, ' map/topicref ')][dita-ot:hasHrefOrLinktext(.)]" mode="link">
           <xsl:with-param name="role">friend</xsl:with-param>
         </xsl:apply-templates>
       </linklist>
     </xsl:if>
     <xsl:if test="not($linklist) and (empty($group-title) or $group-title = '')">
-      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position() = $position]//*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]" mode="link">
+      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position() = $position]//*[contains(@class, ' map/topicref ')][dita-ot:hasHrefOrLinktext(.)]" mode="link">
         <xsl:with-param name="role">friend</xsl:with-param>
       </xsl:apply-templates>
     </xsl:if>
@@ -416,31 +428,35 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>  
   
   <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="grab-group-title" as="xs:string?">
-    <xsl:variable name="file-origin">
-      <xsl:call-template name="get-file-uri">
-        <xsl:with-param name="href" select="@href"/>
-        <xsl:with-param name="file-prefix" select="$file-prefix"/>
-      </xsl:call-template>
+    <xsl:variable name="file-origin" as="xs:string?">
+      <xsl:if test="not(empty(@href)) and (empty(@format) or @format='dita') and (empty(@scope) or @scope='local')">
+        <xsl:call-template name="get-file-uri">
+          <xsl:with-param name="href" select="@href"/>
+          <xsl:with-param name="file-prefix" select="$file-prefix"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:variable>
-    <xsl:variable name="file">
-      <xsl:call-template name="replace-blank">
-        <xsl:with-param name="file-origin">
-          <xsl:value-of select="$file-origin"/>
-        </xsl:with-param>
-      </xsl:call-template>
+    <xsl:variable name="file" as="xs:string?">
+      <xsl:if test="exists($file-origin)">
+        <xsl:call-template name="replace-blank">
+          <xsl:with-param name="file-origin">
+            <xsl:value-of select="$file-origin"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')][not(title = '')]">
-        <xsl:value-of select="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')]"/>
+      <xsl:when test="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')]">
+        <xsl:apply-templates select="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
       </xsl:when>
       <xsl:when test="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:value-of select="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
+        <xsl:apply-templates select="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
       </xsl:when>
       <xsl:when test="@navtitle and not(@navtitle = '')">
         <xsl:value-of select="@navtitle"/>
       </xsl:when>
-      <xsl:when test="document($file,/)//*[contains(@class, ' topic/title ')]">
-        <xsl:value-of select="document($file,/)//*[contains(@class, ' topic/title ')][1]"/>
+      <xsl:when test="exists($file) and document($file,/)//*[contains(@class, ' topic/title ')]">
+        <xsl:apply-templates select="document($file,/)//*[contains(@class, ' topic/title ')][1]" mode="text-only"/>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
@@ -449,12 +465,12 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="link-to-other"/>
   
   <xsl:template mode="generate-ordered-links-2" match="*[contains(@class, ' map/relcell ')]">
-    <xsl:variable name="position" as="xs:integer">
+    <xsl:param name="position" as="xs:integer">
       <xsl:apply-templates mode="get-position" select="."/>
-    </xsl:variable>
-    <xsl:variable name="group-title">
+    </xsl:param>
+    <xsl:param name="group-title" as="xs:string?">
       <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position() = $position]" mode="grab-group-title"/>
-    </xsl:variable>
+    </xsl:param>
     <linklist class="- topic/linklist ">
       <xsl:copy-of select="@xtrf | @xtrc"/>
       <xsl:if test="/*[@id]">
@@ -465,8 +481,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:value-of select="$group-title"/>
         </title>
         <xsl:apply-templates select="descendant::*[contains(@class, ' map/topicref ')]
-                                                  [@href and not(@href = '')]
-                                                  [not(@linking = ('none', 'sourceonly'))]"
+                                                  [dita-ot:hasHrefOrLinktext(.)]"
                              mode="link">
           <xsl:with-param name="role">friend</xsl:with-param>
         </xsl:apply-templates> 
@@ -499,7 +514,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:template mode="link" 
-              match="*[@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))][not(@processing-role = 'resource-only')]">
+    match="*[dita-ot:hasHrefOrLinktext(.)][not(@processing-role = 'resource-only')]">
     <xsl:param name="role" as="xs:string?" select="()"/>
     <xsl:param name="otherrole" as="xs:string?" select="()"/>
     <xsl:param name="pathBackToMapDirectory" as="xs:string" tunnel="yes"/>
@@ -512,22 +527,6 @@ See the accompanying LICENSE file for applicable license.
         <xsl:if test="@class">
           <xsl:attribute name="mapclass" select="@class"/>
         </xsl:if>
-        <xsl:choose>
-          <xsl:when test="ancestor-or-self::*[@scope]">
-            <xsl:copy-of select="ancestor-or-self::*[@scope][1]/@scope"/>    
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:attribute name="scope">local</xsl:attribute>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:choose>
-          <xsl:when test="ancestor-or-self::*[@format]">
-            <xsl:copy-of select="ancestor-or-self::*[@format][1]/@format"/>    
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:attribute name="format">dita</xsl:attribute>
-          </xsl:otherwise>
-        </xsl:choose>
         <xsl:copy-of select="ancestor-or-self::*[@type][1]/@type |
                              ancestor-or-self::*[@platform][1]/@platform |
                              ancestor-or-self::*[@product][1]/@product |
@@ -535,22 +534,40 @@ See the accompanying LICENSE file for applicable license.
                              ancestor-or-self::*[@otherprops][1]/@otherprops |
                              ancestor-or-self::*[@rev][1]/@rev"/>
         <xsl:copy-of select="@importance | @xtrf | @xtrc"/>
-        <xsl:attribute name="href">
+        <xsl:if test="@href and not(@href = '')">
           <xsl:choose>
-            <xsl:when test="starts-with(@href,'http://') or starts-with(@href,'/') or
-                            starts-with(@href,'https://') or starts-with(@href,'ftp:/') or @scope = 'external'">
-              <xsl:value-of select="@href"/>
+            <xsl:when test="ancestor-or-self::*[@scope]">
+              <xsl:copy-of select="ancestor-or-self::*[@scope][1]/@scope"/>
             </xsl:when>
-            <!-- If the target has a copy-to value, link to that -->
-            <xsl:when test="@copy-to and not(contains(@chunk, 'to-content'))">
-              <xsl:value-of select="dita-ot:normalize-uri(concat($pathBackToMapDirectory, @copy-to))"/>
-            </xsl:when>
-            <!--ref between two local paths - adjust normally-->
             <xsl:otherwise>
-              <xsl:value-of select="dita-ot:normalize-uri(concat($pathBackToMapDirectory, @href))"/>
+              <xsl:attribute name="scope">local</xsl:attribute>
+            </xsl:otherwise>
+            </xsl:choose>
+        <xsl:choose>
+            <xsl:when test="ancestor-or-self::*[@format]">
+              <xsl:copy-of select="ancestor-or-self::*[@format][1]/@format"/>    
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="format">dita</xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:attribute>
+          <xsl:attribute name="href">
+            <xsl:choose>
+              <xsl:when test="starts-with(@href,'http://') or starts-with(@href,'/') or
+                              starts-with(@href,'https://') or starts-with(@href,'ftp:/') or @scope = 'external'">
+                <xsl:value-of select="@href"/>
+              </xsl:when>
+              <!-- If the target has a copy-to value, link to that -->
+              <xsl:when test="@copy-to and not(contains(@chunk, 'to-content'))">
+                <xsl:value-of select="dita-ot:normalize-uri(concat($pathBackToMapDirectory, @copy-to))"/>
+              </xsl:when>
+              <!--ref between two local paths - adjust normally-->
+              <xsl:otherwise>
+                <xsl:value-of select="dita-ot:normalize-uri(concat($pathBackToMapDirectory, @href))"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+        </xsl:if>
         <xsl:if test="exists($role)">
           <xsl:attribute name="role" select="$role"/>
         </xsl:if>
@@ -771,15 +788,26 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template name="get-file-uri">
     <xsl:param name="href" as="xs:string"/>
     <xsl:param name="file-prefix" as="xs:string"/>
-    <xsl:value-of select="$file-prefix"/>    
     <xsl:choose>
       <xsl:when test="contains($href,'#')">
-        <xsl:value-of select="substring-before($href,'#')"/>
+        <xsl:value-of select="concat($file-prefix,substring-before($href,'#'))"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$href"/>
+        <xsl:value-of select="concat($file-prefix,$href)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  
+  <xsl:function name="dita-ot:hasHrefOrLinktext" as="xs:boolean">
+    <xsl:param name="el" as="element()"/>
+    <xsl:sequence
+      select="
+        (
+          ($el/@href and not($el/@href = '')) or
+          $el/*/*[contains(@class, ' map/linktext ') or contains(@class, ' topic/linktext ')]
+        ) and
+        not($el/@linking = ('none', 'sourceonly'))"
+    />
+  </xsl:function>
   
 </xsl:stylesheet>

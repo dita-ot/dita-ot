@@ -8,8 +8,11 @@
 package org.dita.dost.ant.types;
 
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_IMAGE;
+import static org.dita.dost.util.FileUtils.supportedImageExtensions;
 import static org.dita.dost.util.URLUtils.*;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.AbstractFileSet;
 import org.apache.tools.ant.types.Resource;
@@ -20,21 +23,21 @@ import org.dita.dost.ant.ExtensibleAntInvoker;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Resource collection that finds matching resources from job configuration.
  */
 public class JobSourceSet extends AbstractFileSet implements ResourceCollection {
 
-    private String format;
+    private Set<String> formats = Collections.emptySet();
     private Boolean hasConref;
+    private Boolean isInput;
     private Boolean isResourceOnly;
     private Collection<Resource> res;
     private boolean isFilesystemOnly = true;
@@ -47,9 +50,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         if (res == null) {
             final Job job = getJob();
             res = new ArrayList<>();
-            for (final Job.FileInfo f : job.getFileInfo(f -> (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
-                    (hasConref == null || f.hasConref == hasConref) &&
-                    (isResourceOnly == null || f.isResourceOnly == isResourceOnly))) {
+            for (final FileInfo f : job.getFileInfo(this::filter)) {
                 log("Scanning for " + f.file.getPath(), Project.MSG_VERBOSE);
                 final File tempFile = new File(job.tempDir, f.file.getPath());
                 if (tempFile.exists()) {
@@ -113,15 +114,30 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
     }
 
     public void setFormat(final String format) {
-        this.format = format;
+        final ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(format);
+        if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
+            supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
+        }
+        this.formats = builder.build();
     }
 
     public void setConref(final boolean conref) {
         this.hasConref = conref;
     }
 
+    public void setInput(final boolean isInput) {
+        this.isInput = isInput;
+    }
+
     public void setProcessingRole(final String processingRole) {
         this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+    }
+
+    private boolean filter(final FileInfo f) {
+        return (formats == null || (formats.contains(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
+                (hasConref == null || f.hasConref == hasConref) &&
+                (isInput == null || f.isInput == isInput) &&
+                (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
     }
 
     private static class JobResource extends URLResource {
@@ -140,7 +156,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         @Override
         public synchronized String getName() {
             if (isReference()) {
-                return ((Resource) getCheckedRef()).getName();
+                return getCheckedRef().getName();
             }
             return relPath;
         }

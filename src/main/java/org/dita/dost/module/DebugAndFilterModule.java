@@ -53,7 +53,7 @@ import org.xml.sax.ext.LexicalHandler;
  * DebugAndFilterModule implement the second step in preprocess. It will insert debug
  * information into every dita files and filter out the information that is not
  * necessary.
- * 
+ *
  * @author Zhang, Yuan Peng
  */
 public final class DebugAndFilterModule extends SourceReaderModule {
@@ -319,7 +319,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
 
     /**
      * Output subject schema file.
-     * 
+     *
      * @throws DITAOTException if generation files
      */
     private void outputSubjectScheme() throws DITAOTException {
@@ -400,7 +400,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
                      * TODO: we have a keyref here to extend into child scheme, but can't
                      * find any matching <subjectdef> in child scheme. Shall we throw out
                      * a warning?
-                     * 
+                     *
                      * Not for now, just bypass it.
                      */
                     continue;
@@ -475,10 +475,10 @@ public final class DebugAndFilterModule extends SourceReaderModule {
 
     /**
      * Serialize subject scheme file.
-     * 
+     *
      * @param filename output filepath
      * @param root subject scheme document
-     * 
+     *
      * @throws DITAOTException if generation fails
      */
     private void generateScheme(final File filename, final Document root) throws DITAOTException {
@@ -506,7 +506,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             }
         }
     }
-    
+
     /**
      * Get path to base directory
      *
@@ -551,7 +551,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
      * @param inputMap absolute input map path
      * @return {@code true} if outside start directory, otherwise {@code false}
      */
-    private static boolean isOutFile(final File filePathName, final File inputMap){
+    private static boolean isOutFile(final File filePathName, final File inputMap) {
         final File relativePath = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
         return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
     }

@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-<job>
+<?xml version="1.0" encoding="UTF-8"?><job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
@@ -46,27 +45,11 @@
     <string>../</string>
   </property>
   <files>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/dita.xml"
-      uri="chunk_map_tocontent/dita.xml" path="chunk_map_tocontent/dita.xml" format="dita"
-      has-link="true" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/dita2.dita"
-      uri="chunk_map_tocontent/dita2.dita" path="chunk_map_tocontent/dita2.dita" format="dita"
-      target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map.ditamap"
-      uri="chunk_map_tocontent/map.ditamap" path="chunk_map_tocontent/map.ditamap" format="ditamap"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map_chunk_source.ditamap"
-      uri="chunk_map_tocontent/map_chunk_source.ditamap"
-      path="chunk_map_tocontent/map_chunk_source.ditamap" format="ditamap"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/dita1.dita"
-      uri="chunk_map_tocontent/dita1.dita" path="chunk_map_tocontent/dita1.dita" format="dita"
-      target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/"
-      uri="chunk_map_tocontent/" path="chunk_map_tocontent" format="image"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/dita.xml" uri="chunk_map_tocontent/dita.xml" path="chunk_map_tocontent/dita.xml" format="dita" has-link="true" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/dita2.dita" uri="chunk_map_tocontent/dita2.dita" path="chunk_map_tocontent/dita2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map.ditamap" uri="chunk_map_tocontent/map.ditamap" path="chunk_map_tocontent/map.ditamap" format="ditamap" input="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map_chunk_source.ditamap" uri="chunk_map_tocontent/map_chunk_source.ditamap" path="chunk_map_tocontent/map_chunk_source.ditamap" format="ditamap"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/dita1.dita" uri="chunk_map_tocontent/dita1.dita" path="chunk_map_tocontent/dita1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/" uri="chunk_map_tocontent/" path="chunk_map_tocontent" format="image"/>
   </files>
 </job>

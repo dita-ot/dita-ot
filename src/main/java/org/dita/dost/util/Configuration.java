@@ -22,7 +22,7 @@ import org.dita.dost.platform.Integrator;
 
 /**
  * Global configuration object for static configurations.
- * 
+ *
  * @since 1.5.3
  * @author Jarno Elovirta
  */
@@ -33,14 +33,14 @@ public final class Configuration {
 
     /**
      * Immutable configuration properties.
-     * 
+     *
      * <p>If configuration file is not found e.g. during integration, the
      * configuration will be an empty.</p>
      */
     public final static Map<String, String> configuration;
     static {
         final Map<String, String> c = new HashMap<>();
-        
+
         final Properties applicationProperties = new Properties();
         try (InputStream applicationInputStream = Configuration.class.getClassLoader().getResourceAsStream(APP_CONF_PROPERTIES)) {
             if (applicationInputStream != null) {
@@ -61,7 +61,7 @@ public final class Configuration {
             if (plugingConfigurationInputStream != null) {
                 pluginProperties.load(plugingConfigurationInputStream);
             } else {
-                final File configurationFile = new File("lib", Integrator.class.getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
+                final File configurationFile = new File("config", Integrator.class.getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
                 if (configurationFile.exists()) {
                     plugingConfigurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
                     pluginProperties.load(plugingConfigurationInputStream);
@@ -81,7 +81,7 @@ public final class Configuration {
         for (final Map.Entry<Object, Object> e: pluginProperties.entrySet()) {
             c.put(e.getKey().toString(), e.getValue().toString());
         }
-        
+
         final Properties properties = new Properties();
         InputStream configurationInputStream = null;
         try {
@@ -90,7 +90,7 @@ public final class Configuration {
             if (configurationInputStream != null) {
                 properties.load(configurationInputStream);
             } else {
-                final File configurationFile = new File("lib", CONF_PROPERTIES);
+                final File configurationFile = new File("config", CONF_PROPERTIES);
                 if (configurationFile.exists()) {
                     configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
                     properties.load(configurationInputStream);
@@ -110,7 +110,7 @@ public final class Configuration {
         for (final Map.Entry<Object, Object> e: properties.entrySet()) {
             c.put(e.getKey().toString(), e.getValue().toString());
         }
-        
+
         configuration = Collections.unmodifiableMap(c);
     }
 
@@ -123,11 +123,11 @@ public final class Configuration {
         /** Processing continues after error with error recovery */
         LAX
     }
-    
+
     /** Private constructor to disallow instance creation. */
     private Configuration() {
     }
-    
+
     /** List of print-oriented transtypes. */
     public static final List<String> printTranstype;
     static {
@@ -175,7 +175,7 @@ public final class Configuration {
         }
         pluginResourceDirs = Collections.unmodifiableMap(ps);
     }
-    
+
     public static final Map<String, String> parserMap;
     public static final Map<String, Map<String, Boolean>> parserFeatures;
     static {

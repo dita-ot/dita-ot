@@ -32,7 +32,7 @@ final class ListTranstypeAction extends ImportAction {
         final List<String> v = new ArrayList<>(valueSet);
         Collections.sort(v);
         final StringBuilder retBuf = new StringBuilder();
-        for (final Iterator<String> i = v.iterator(); i.hasNext(); ) {
+        for (final Iterator<String> i = v.iterator(); i.hasNext();) {
             retBuf.append(i.next());
             if (i.hasNext()) {
                 retBuf.append(separator);
@@ -41,10 +41,10 @@ final class ListTranstypeAction extends ImportAction {
         final char[] ret = retBuf.toString().toCharArray();
         buf.characters(ret, 0, ret.length);
     }
-    
+
     @Override
     public String getResult() {
-        throw new UnsupportedOperationException();        
+        throw new UnsupportedOperationException();
     }
 
 }

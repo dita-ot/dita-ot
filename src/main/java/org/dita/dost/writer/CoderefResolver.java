@@ -26,19 +26,19 @@ import org.dita.dost.log.MessageUtils;
 
 /**
  * Coderef element resolver filter.
- * 
+ *
  * <p>The format attribute is assumed to follow the syntax:</p>
- * 
+ *
  * <pre>format (";" space* "charset=" charset)?</pre>
- * 
+ *
  * <p>If no charset if defined or the charset name is not recognized,
  * {@link java.nio.charset.Charset#defaultCharset() default charset} is used in
  * reading the code file.</p>
- * 
+ *
  * <p>The href attribute can contain an optional line range:</p>
- * 
+ *
  * <pre>uri ("#line-range(" start ("," end)? ")" )?</pre>
- * 
+ *
  * <p>Start and end line numbers start from 1 and are inclusive. If end range
  * is omitted, range ends in last line.</p>
  * <p>Optional id range is defined using:</p>
@@ -88,11 +88,11 @@ public final class CoderefResolver extends AbstractXMLFilter {
 
         if (PR_D_CODEREF.matches(atts)) {
             ignoreDepth++;
-            try{
+            try {
                 final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-                if (hrefValue != null){
+                if (hrefValue != null) {
                     final File codeFile = getFile(hrefValue);
-                    if (codeFile != null && codeFile.exists()){
+                    if (codeFile != null && codeFile.exists()) {
                         logger.debug("Resolve coderef " + codeFile);
                         final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT));
                         final Range range = getRange(hrefValue);
@@ -117,13 +117,13 @@ public final class CoderefResolver extends AbstractXMLFilter {
     }
 
     private File getFile(URI hrefValue) {
-        File tempFile = toFile(stripFragment(currentFile.resolve(hrefValue))).getAbsoluteFile();
+        final File tempFile = toFile(stripFragment(currentFile.resolve(hrefValue))).getAbsoluteFile();
         final URI rel = job.tempDirURI.relativize(tempFile.toURI());
         final Job.FileInfo fi = job.getFileInfo(rel);
 
-        if (tempFile.exists() && fi != null && PR_D_CODEREF.localName.equals(fi.format)) {
-            return tempFile;
-        }
+//        if (tempFile.exists() && fi != null && PR_D_CODEREF.localName.equals(fi.format)) {
+//            return tempFile;
+//        }
         if (fi != null && "file".equals(fi.src.getScheme())) {
             return new File(fi.src);
         }
@@ -300,10 +300,10 @@ public final class CoderefResolver extends AbstractXMLFilter {
             }
         }
     }
-    
+
     /**
      * Get code file charset.
-     * 
+     *
      * @param value format attribute value, may be {@code null}
      * @return charset if set, otherwise default charset
      */

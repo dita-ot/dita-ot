@@ -1120,7 +1120,8 @@ public class ChunkMapReaderTest {
             mapReader.setJob(job);
             mapReader.supportToNavigation(false);
 
-            final File mapFile = new File(tempDir, job.getInputMap().getPath());
+            final URI path = job.getInputMap();
+            final File mapFile = new File(tempDir, path.getPath());
             mapReader.read(mapFile);
 
             assertEquals(change, relativize(mapReader.getChangeTable(), tempDir));

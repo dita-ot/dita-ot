@@ -53,7 +53,7 @@ public class ImageMetadataFilterTest {
 
         assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
-        assertEquals(Arrays.asList("img.png", "img.gif", "img.jpg", "img.tiff").stream()
+        assertEquals(Arrays.asList("img.png", "img.gif", "img.jpg", "img.xxx").stream()
                         .map(img -> new File(srcDir, img).toURI())
                         .collect(Collectors.toSet()),
                 new HashSet(filter.getImages()));
@@ -74,7 +74,7 @@ public class ImageMetadataFilterTest {
 
         assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
-        assertEquals(Arrays.asList("img.png", "img.gif", "img.jpg", "img.tiff").stream()
+        assertEquals(Arrays.asList("img.png", "img.gif", "img.jpg", "img.xxx").stream()
                         .map(img -> new File(srcDir, img).toURI())
                         .collect(Collectors.toSet()),
                 new HashSet(filter.getImages()));

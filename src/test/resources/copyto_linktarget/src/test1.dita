@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+ <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+ 
+<topic id="test1" xml:lang="en-us">
+<title>test with link</title>
+<body>
+<p>Error condition; this link should use keys, but should not break the build: <xref
+href="new-topic-filename.dita"/></p>
+</body>
+</topic>

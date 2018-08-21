@@ -92,7 +92,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
      * Process start map to read copy-to map and write unique topic references.
      */
     private void processMap() throws DITAOTException {
-        final URI in = job.tempDirURI.resolve(job.getInputMap());
+        final URI in = job.tempDirURI.resolve(job.getFileInfo(fi -> fi.isInput).iterator().next().uri);
 
         final List<XMLFilter> pipe = getProcessingPipe(in);
 
@@ -142,8 +142,10 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             final FileInfo targetFi = job.getFileInfo(target);
             final URI source = job.tempDirURI.relativize(e.getValue());
             final FileInfo sourceFi = job.getFileInfo(source);
-            // Filter copy-to where target is used directly.
-            if (targetFi != null && targetFi.src != null) {
+            // Filter when copy-to was ignored (so target is not in job),
+            // or where target is used directly
+            if (targetFi == null ||
+                    (targetFi != null && targetFi.src != null)) {
                 continue;
             }
             copyToMap.put(targetFi, sourceFi);
@@ -167,7 +169,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             if (new File(targetFile).exists()) {
                 logger.warn(MessageUtils.getMessage("DOTX064W", copytoTarget.getPath()).toString());
             } else {
-                final URI inputMapInTemp = job.tempDirURI.resolve(job.getInputMap());
+                final FileInfo input = job.getFileInfo(fi -> fi.isInput).iterator().next();
+                final URI inputMapInTemp = job.tempDirURI.resolve(input.uri);
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
                 // add new file info into job
                 final FileInfo src = job.getFileInfo(copytoSource);
@@ -337,7 +340,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             return toFile(URLUtils.getRelativePath(filename));
         }
     }
-    
+
     /**
      * Get path to root map
      *

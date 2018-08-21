@@ -13,11 +13,11 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:import href="../../cfg/fo/attrs/commons-attr_fop.xsl"/>
   <xsl:import href="../../cfg/fo/attrs/tables-attr_fop.xsl"/>
-  <xsl:import href="../../cfg/fo/attrs/toc-attr_fop.xsl"/>
   <xsl:import href="root-processing_fop.xsl"/>
   <xsl:import href="tables_fop.xsl"/>
   <xsl:import href="index_fop.xsl"/>
   <xsl:import href="flagging_fop.xsl"/>
+  <xsl:import href="topic_fop.xsl"/>
 
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 

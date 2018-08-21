@@ -45,11 +45,11 @@ import org.xml.sax.XMLReader;
  * to process the topic file. Instances are reusable but not thread-safe.
  */
 public final class MergeMapParser extends XMLFilterImpl {
-    
+
     private static final String ATTRIBUTE_NAME_FIRST_TOPIC_ID = "first_topic_id";
     public static final String ATTRIBUTE_NAME_OHREF = "ohref";
     public static final String ATTRIBUTE_NAME_OID = "oid";
-    
+
     private final XMLReader reader;
     private final MergeTopicParser topicParser;
     private final MergeUtils util;
@@ -73,11 +73,11 @@ public final class MergeMapParser extends XMLFilterImpl {
         util = new MergeUtils();
         topicParser = new MergeTopicParser(util);
         topicBuffer = new ByteArrayOutputStream();
-        try{
+        try {
             reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            
+
             final TransformerFactory tf = TransformerFactory.newInstance();
             if (!tf.getFeature(SAXTransformerFactory.FEATURE)) {
                 throw new RuntimeException("SAX transformation factory not supported");
@@ -87,34 +87,34 @@ public final class MergeMapParser extends XMLFilterImpl {
             s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION , "yes");
             s.setResult(new StreamResult(topicBuffer));
             topicParser.setContentHandler(s);
-        } catch (final RuntimeException e){
+        } catch (final RuntimeException e) {
             throw e;
-        }catch (final Exception e){
+        } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
     }
-    
+
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
         topicParser.setLogger(logger);
     }
-    
+
     public final void setJob(final Job job) {
         this.job = job;
     }
 
     /**
      * Set merge output file
-     * 
+     *
      * @param outputFile merge output file
      */
     public void setOutput(final File outputFile) {
         topicParser.setOutput(outputFile);
     }
-    
+
     /**
      * Set output.
-     * 
+     *
      * @param output output stream
      */
     public void setOutputStream(final OutputStream output) {
@@ -123,13 +123,13 @@ public final class MergeMapParser extends XMLFilterImpl {
 
     /**
      * Read map.
-     * 
+     *
      * @param filename map file path
      * @param tmpDir temporary directory path, may be {@code null}
      */
     public void read(final File filename, final File tmpDir) {
         tempdir = tmpDir != null ? tmpDir : filename.getParentFile();
-        try{
+        try {
             final TransformerHandler s = stf.newTransformerHandler();
             s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION, "yes");
             s.setResult(new StreamResult(output));
@@ -141,7 +141,9 @@ public final class MergeMapParser extends XMLFilterImpl {
             reader.parse(filename.toURI().toString());
             topicParser.getContentHandler().endDocument();
             output.write(topicBuffer.toByteArray());
-        }catch(final Exception e){
+        } catch (final RuntimeException e) {
+            throw e;
+        } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
     }
@@ -163,7 +165,7 @@ public final class MergeMapParser extends XMLFilterImpl {
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (processStack.empty() || !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processStack.peek())){
+        if (processStack.empty() || !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processStack.peek())) {
             getContentHandler().characters(ch, start, length);
         }
     }
@@ -235,13 +237,13 @@ public final class MergeMapParser extends XMLFilterImpl {
         }
         getContentHandler().startElement(uri, localName, qName, atts != null ? atts : attributes);
     }
-    
+
     @Override
     public void endDocument() throws SAXException {
         // read href dita topic list
         // compare visitedSet with the list
         // if list item not in visitedSet then call MergeTopicParser to parse it
-        try{
+        try {
             for (final FileInfo f: job.getFileInfo()) {
                 if (f.isTarget) {
                     String element = f.file.getPath();
@@ -252,7 +254,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                     final URI abs = job.tempDirURI.resolve(f.uri);
                     if (!util.isVisited(abs)) {
                         util.visit(abs);
-                        if (!f.isResourceOnly){
+                        if (!f.isResourceOnly) {
                             //ensure the file exists
                             final File file = new File(dirPath, element);
                             if (file.exists()) {
@@ -265,13 +267,13 @@ public final class MergeMapParser extends XMLFilterImpl {
                     }
                 }
             }
-        } catch (final RuntimeException e){
+        } catch (final RuntimeException e) {
             throw e;
-        }catch (final Exception e){
+        } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
-        
+
         getContentHandler().endDocument();
     }
-    
+
 }

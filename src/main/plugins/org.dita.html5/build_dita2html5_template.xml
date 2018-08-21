@@ -6,7 +6,10 @@ Copyright 2015 Jarno Elovirta
 
 See the accompanying LICENSE file for applicable license.
 -->
-<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2html5">
+<project xmlns:dita="http://dita-ot.sourceforge.net"
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
+         name="dita2html5">
 
   <target name="dita2html5"
           depends="html5.init,
@@ -58,48 +61,42 @@ See the accompanying LICENSE file for applicable license.
       </condition>
       <param name="1" value="${args.hdf}"/>
     </dita-ot-fail>
+    
     <!-- begin to check and init css relevant properties -->
+    
     <condition property="user.csspath.url">
       <or>
         <contains string="${args.csspath}" substring="http://"/>
         <contains string="${args.csspath}" substring="https://"/>
       </or>
     </condition>
-    <condition property="args.csspath.absolute">
-      <isabsolute path="${args.csspath}"/>
-    </condition>
-    <!-- Set the csspath as default empty directory when there is no user
-      input csspath or user input csspath is a local absolute path. -->
+        
     <condition property="user.csspath" value="">
       <or>
         <not>
           <isset property="args.csspath"/>
         </not>
-        <isset property="args.csspath.absolute"/>
+        <isabsolute path="${args.csspath}"/>
       </or>
     </condition>
-    <condition property="user.csspath" value="${args.csspath}/">
-      <not>
-        <isset property="user.csspath"/>
-      </not>
-    </condition>
-    <condition property="args.css.real" value="${args.cssroot}${file.separator}${args.css}">
+    <property name="user.csspath" value="${args.csspath}/"/>
+
+    <condition property="user.css.real" value="${args.cssroot}${file.separator}${args.css}">
       <isset property="args.cssroot"/>
     </condition>
-    <condition property="args.css.real" value="${args.css}">
-      <not>
-        <isset property="args.cssroot"/>
-      </not>
-    </condition>
-    <available file="${args.css.real}" property="args.css.present" type="file"/>
-    <basename property="args.css.file.temp" file="${args.css}"/>
-    <condition property="args.css.file" value="${args.css.file.temp}">
+    <property name="user.css.real" value="${args.css}"/>
+    
+    <local name="user.css.basename"/>
+    <basename property="user.css.basename" file="${args.css}"/>
+    <condition property="args.css.file" value="${user.css.basename}">
       <or>
-        <isset property="args.css.present"/>
+        <available file="${user.css.real}" type="file"/>
         <isset property="user.csspath.url"/>
       </or>
     </condition>
+    
     <!-- end to check and init css relevant parameters -->
+    
     <condition property="out.ext" value=".html">
       <not>
         <isset property="args.outext"/>
@@ -132,7 +129,7 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="html5.image-metadata"
           unless="html5.image-metadata.skip" description="Read image metadata">
-    <pipeline message="Read image metadata." taskname="image-metadata" tempdir="${dita.temp.dir}">
+    <pipeline message="Read image metadata." taskname="image-metadata">
       <module class="org.dita.dost.module.ImageMetadataModule">
         <param name="outputdir" location="${dita.output.dir}"/>
       </module>
@@ -180,31 +177,29 @@ See the accompanying LICENSE file for applicable license.
     <element name="params" optional="true" implicit="true"/>
     <sequential>
       <pipeline message="Convert DITA topic to HTML5" taskname="xslt">
-      <xslt basedir="${dita.temp.dir}"
-            destdir="${dita.output.dir}"
+      <xslt destdir="${dita.output.dir}"
             reloadstylesheet="${dita.html5.reloadstylesheet}"
-            classpathref="dost.class.path"
             extension="${out.ext}"
             style="${args.xsl}"
             filenameparameter="FILENAME"
             filedirparameter="FILEDIR">
-        <ditaFileset format="dita" processingRole="normal"/>
-        <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile"/>
-        <param name="CSS" expression="${args.css.file}" if="args.css.file"/>
-        <param name="CSSPATH" expression="${user.csspath}" if="user.csspath"/>
-        <param name="HDF" expression="${args.hdf}" if="args.hdf"/>
-        <param name="HDR" expression="${args.hdr}" if="args.hdr"/>
-        <param name="FTR" expression="${args.ftr}" if="args.ftr"/>
-        <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
-        <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>
-        <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl"/>
-        <param name="PRESERVE-DITA-CLASS" expression="${args.html5.classattr}" if="args.html5.classattr"/>
-        <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if="args.hide.parent.link"/>
+        <ditafileset format="dita" processingRole="normal"/>
+        <param name="FILTERFILE" expression="${dita.input.valfile.url}" if:set="dita.input.valfile"/>
+        <param name="CSS" expression="${args.css.file}" if:set="args.css.file"/>
+        <param name="CSSPATH" expression="${user.csspath}" if:set="user.csspath"/>
+        <param name="HDF" expression="${args.hdf}" if:set="args.hdf"/>
+        <param name="HDR" expression="${args.hdr}" if:set="args.hdr"/>
+        <param name="FTR" expression="${args.ftr}" if:set="args.ftr"/>
+        <param name="DRAFT" expression="${args.draft}" if:set="args.draft"/>
+        <param name="ARTLBL" expression="${args.artlbl}" if:set="args.artlbl"/>
+        <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if:set="args.gen.task.lbl"/>
+        <param name="PRESERVE-DITA-CLASS" expression="${args.html5.classattr}" if:set="args.html5.classattr"/>
+        <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if:set="args.hide.parent.link"/>
         <param name="include.rellinks" expression="${include.rellinks}"/>
-        <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
-        <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta"/>
-        <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
-        <param name="BASEDIR" expression="${basedir}"/>
+        <param name="INDEXSHOW" expression="${args.indexshow}" if:set="args.indexshow"/>
+        <param name="genDefMeta" expression="${args.gen.default.meta}" if:set="args.gen.default.meta"/>
+        <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
+        <param name="BASEDIR" expression="${dita.dir}"/>
         <param name="OUTPUTDIR" expression="${dita.output.dir}"/>
         <param name="defaultLanguage" expression="${default.language}"/>
         <params/>
@@ -222,17 +217,15 @@ See the accompanying LICENSE file for applicable license.
         <isset property="inner.transform"/>
       </condition>
       <pipeline message="Convert DITA map to HTML5" taskname="xslt">
-      <xslt basedir="${dita.temp.dir}"
-            destdir="${html5.toc.output.dir}"
-            includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
-            classpathref="dost.class.path"
+      <xslt destdir="${html5.toc.output.dir}"
             style="${args.html5.toc.xsl}">
-        <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile"/>
-        <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
-        <param name="contenttarget" expression="${args.html5.contenttarget}" if="args.html5.contenttarget"/>
-        <param name="CSS" expression="${args.css.file}" if="args.css.file"/>
-        <param name="CSSPATH" expression="${user.csspath}" if="user.csspath"/>
-        <param name="OUTPUTCLASS" expression="${args.html5.toc.class}" if="args.html5.toc.class"/>
+        <ditafileset input="true"/>
+        <param name="FILTERFILE" expression="${dita.input.valfile.url}" if:set="dita.input.valfile"/>
+        <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
+        <param name="contenttarget" expression="${args.html5.contenttarget}" if:set="args.html5.contenttarget"/>
+        <param name="CSS" expression="${args.css.file}" if:set="args.css.file"/>
+        <param name="CSSPATH" expression="${user.csspath}" if:set="user.csspath"/>
+        <param name="OUTPUTCLASS" expression="${args.html5.toc.class}" if:set="args.html5.toc.class"/>
         <params/>
         <mapper type="merge" to="${args.html5.toc}${out.ext}"/>
         <xmlcatalog refid="dita.catalog"/>
@@ -245,7 +238,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="user.copycss.yes">
       <and>
         <equals arg1="${args.copycss}" arg2="yes"/>
-        <isset property="args.css.present"/>
+        <available file="${user.css.real}" type="file"/>
       </and>
     </condition>
     <property name="user.csspath.real" location="${dita.output.dir}/${user.csspath}"/>
@@ -259,7 +252,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="html5.copy-css-user" if="user.copycss.yes">
-    <copy file="${args.css.real}" todir="${user.csspath.real}"/>
+    <copy file="${user.css.real}" todir="${user.csspath.real}"/>
   </target>
 
 </project>

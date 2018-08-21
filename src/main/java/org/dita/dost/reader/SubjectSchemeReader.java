@@ -30,11 +30,11 @@ import org.w3c.dom.NodeList;
 
 /**
  * Subject scheme reader.
- * 
+ *
  * @since 1.8
  */
 public class SubjectSchemeReader {
-    
+
     private DITAOTLogger logger;
     private Job job;
     private final Map<QName, Map<String, Set<Element>>> bindingMap;
@@ -46,7 +46,7 @@ public class SubjectSchemeReader {
         defaultValueMap = new HashMap<>();
         bindingMap = new HashMap<>();
     }
-    
+
     /**
      * reset.
      */
@@ -55,13 +55,13 @@ public class SubjectSchemeReader {
         defaultValueMap.clear();
         bindingMap.clear();
     }
-    
+
     /**
      * Get map of valid attribute values based on subject scheme. The
      * contents of the map is in pseudo-code
      * {@code Map<AttName, Map<ElemName, <Set<Value>>>}. For default element
      * mapping, the value is {@code *}.
-     * 
+     *
      * @return valid attribute values or empty map
      */
     public Map<QName, Map<String, Set<String>>> getValidValuesMap() {
@@ -73,25 +73,25 @@ public class SubjectSchemeReader {
      * contents of the map is in pseudo-code
      * {@code Map<AttName, Map<ElemName, Default>>}. For default element
      * mapping, the value is {@code *}.
-     * 
+     *
      * @return default values or empty map
      */
     public Map<QName, Map<String, String>> getDefaultValueMap() {
         return defaultValueMap;
     }
-    
+
     /**
      * Get map subject scheme definitions. The
      * contents of the map is in pseudo-code
      * {@code Map<AttName, Map<ElemName, Set<Element>>>}. For default element
      * mapping, the value is {@code *}.
-     * 
+     *
      * @return subject scheme definitions
      */
     public SubjectScheme getSubjectSchemeMap() {
         return new SubjectScheme(bindingMap);
     }
-    
+
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -111,21 +111,10 @@ public class SubjectSchemeReader {
             return Collections.emptyMap();
         }
         final Properties prop = new Properties();
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(inputFile);
+        try (FileInputStream in = new FileInputStream(inputFile)) {
             prop.loadFromXML(in);
-            in.close();
         } catch (final IOException e) {
             throw new IOException("Failed to read subject scheme graph: " + e.getMessage(), e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    // NOOP
-                }
-            }
         }
 
         for (final Map.Entry<Object, Object> entry: prop.entrySet()) {
@@ -160,21 +149,10 @@ public class SubjectSchemeReader {
             final String value = StringUtils.join(entry.getValue(), COMMA);
             prop.setProperty(key.getPath(), value);
         }
-        OutputStream os = null;
-        try {
-            os = new FileOutputStream(outputFile);
+        try (OutputStream os = new FileOutputStream(outputFile)) {
             prop.storeToXML(os, null);
-            os.close();
         } catch (final IOException e) {
             throw new IOException("Failed to write subject scheme graph: " + e.getMessage(), e);
-        } finally {
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (final Exception e) {
-                    // NOOP
-                }
-            }
         }
     }
 
@@ -298,7 +276,7 @@ public class SubjectSchemeReader {
 
     /**
      * Populate valid values map
-     * 
+     *
      * @param subtree subject scheme definition element
      * @param elementName element name
      * @param attName attribute name

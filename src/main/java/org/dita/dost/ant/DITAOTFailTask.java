@@ -7,21 +7,22 @@
  */
 package org.dita.dost.ant;
 
-import static org.dita.dost.ant.ExtensibleAntInvoker.isValid;
-import static org.dita.dost.log.MessageBean.*;
-
-import java.util.ArrayList;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Exit;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 import org.apache.tools.ant.taskdefs.condition.ConditionBase;
-
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.taskdefs.Exit;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.ant.ExtensibleAntInvoker.ParamElem;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
+
+import java.util.ArrayList;
+
+import static org.dita.dost.ant.ExtensibleAntInvoker.isValid;
+import static org.dita.dost.log.MessageBean.*;
 
 /**
  * Ant echo task for custom error message.
@@ -36,13 +37,13 @@ public final class DITAOTFailTask extends Exit {
      * Default Construtor.
      *
      */
-    public DITAOTFailTask(){
+    public DITAOTFailTask() {
     }
-    
+
     /**
      * Set the id.
      * @param identifier The id to set.
-     * 
+     *
      */
     public void setId(final String identifier) {
         id = identifier;
@@ -66,45 +67,57 @@ public final class DITAOTFailTask extends Exit {
      */
     @Override
     public void execute() throws BuildException {
+        if (ifCondition != null) {
+            final String msg = MessageUtils.getMessage("DOTA014W", "if", "if:set")
+                    .setLocation(this.getLocation())
+                    .toString();
+            getProject().log(msg, Project.MSG_WARN);
+        }
+        if (unlessCondition != null) {
+            final String msg = MessageUtils.getMessage("DOTA014W", "unless", "unless:set")
+                    .setLocation(this.getLocation())
+                    .toString();
+            getProject().log(msg, Project.MSG_WARN);
+        }
         final boolean fail = nestedConditionPresent()
                        ? testNestedCondition()
                        : (testIfCondition() && testUnlessCondition());
         if (!fail) {
             return;
         }
-        
+
         if (id == null) {
             throw new BuildException("id attribute must be specified");
         }
-        
+
         final MessageBean msgBean = MessageUtils.getMessage(id, readParamValues());
         final DITAOTLogger logger = new DITAOTAntLogger(getProject());
         if (msgBean != null) {
             final String type = msgBean.getType();
-            if(FATAL.equals(type)){
+            if (FATAL.equals(type)) {
                 setMessage(msgBean.toString());
-                try{
+                try {
                     super.execute();
-                }catch(final BuildException ex){
-                    throw new BuildException(msgBean.toString(),new DITAOTException(msgBean,ex,msgBean.toString()));
+                } catch (final BuildException ex) {
+                    throw new BuildException(msgBean.toString(),new DITAOTException(msgBean, ex, msgBean.toString()));
                 }
-            } else if(ERROR.equals(type)){
+            } else if (ERROR.equals(type)) {
                 logger.error(msgBean.toString());
-            } else if(WARN.equals(type)){
+            } else if (WARN.equals(type)) {
                 logger.warn(msgBean.toString());
-            } else if(INFO.equals(type)){
+            } else if (INFO.equals(type)) {
                 logger.info(msgBean.toString());
-            } else if(DEBUG.equals(type)){
+            } else if (DEBUG.equals(type)) {
                 logger.debug(msgBean.toString());
             }
         }
-        
+
         
     }
 
     /**
      * Read parameter values to an array.
-     * 
+     *
      * @return parameter values where array index corresponds to parameter name
      */
     private String[] readParamValues() throws BuildException {
@@ -113,7 +126,7 @@ public final class DITAOTFailTask extends Exit {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }
-            if (isValid(getProject(), p.getIf(), p.getUnless())) {
+            if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
                 final int idx = Integer.parseInt(p.getName()) - 1;
                 if (idx >= prop.size()) {
                     prop.ensureCapacity(idx + 1);
@@ -124,11 +137,11 @@ public final class DITAOTFailTask extends Exit {
                 prop.set(idx, p.getValue());
             }
         }
-        return prop.toArray(new String[prop.size()]);
+        return prop.toArray(new String[0]);
     }
-    
+
     // Ant Exit class methods --------------------------------------------------
-    
+
     private static class NestedCondition extends ConditionBase implements Condition {
         @Override
         public boolean eval() {
@@ -136,7 +149,7 @@ public final class DITAOTFailTask extends Exit {
                 throw new BuildException(
                     "A single nested condition is required.");
             }
-            return ((Condition) (getConditions().nextElement())).eval();
+            return getConditions().nextElement().eval();
         }
     }
 

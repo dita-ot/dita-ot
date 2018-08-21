@@ -40,13 +40,14 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.xmlunit.util.IterableNodeList.asList;
 
 /**
  * Test utilities.
- * 
+ *
  * @author Jarno Elovirta
  */
 public class TestUtils {
@@ -54,6 +55,7 @@ public class TestUtils {
     public static final File testStub = new File("src" + File.separator + "test" + File.separator + "resources");
 
     private static final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
     static {
         builderFactory.setNamespaceAware(true);
         builderFactory.setIgnoringComments(true);
@@ -61,7 +63,7 @@ public class TestUtils {
 
     /**
      * Get test resource directory
-     * 
+     *
      * @param testClass test class
      * @return resource directory
      * @throws RuntimeException if retrieving the directory failed
@@ -77,10 +79,10 @@ public class TestUtils {
             throw new RuntimeException("Failed to find resource for " + testClass.getSimpleName() + ":" + e.getMessage(), e);
         }
     }
-    
+
     /**
      * Create temporary directory based on test class.
-     * 
+     *
      * @param testClass test class
      * @return temporary directory
      * @throws IOException if creating directory failed
@@ -96,7 +98,7 @@ public class TestUtils {
 
     /**
      * Read file contents into a string.
-     * 
+     *
      * @param file file to read
      * @return contents of the file
      * @throws IOException if reading file failed
@@ -107,8 +109,8 @@ public class TestUtils {
 
     /**
      * Read file contents into a string.
-     * 
-     * @param file file to read
+     *
+     * @param file       file to read
      * @param ignoreHead ignore first row
      * @return contents of the file
      * @throws IOException if reading file failed
@@ -141,8 +143,8 @@ public class TestUtils {
 
     /**
      * Read XML file contents into a string.
-     * 
-     * @param file XML file to read
+     *
+     * @param file      XML file to read
      * @param normalize normalize whitespace
      * @return contents of the file
      * @throws Exception if parsing the file failed
@@ -200,9 +202,9 @@ public class TestUtils {
 
         @Override
         public void startElement(final String uri, final String localName, final String qName,
-                final Attributes atts) throws SAXException {
+                                 final Attributes atts) throws SAXException {
             final AttributesImpl attsBuf = new AttributesImpl(atts);
-            for (final String a: new String[] {"class", "domains", "xtrf", "xtrc"}) {
+            for (final String a : new String[]{"class", "domains", "xtrf", "xtrc"}) {
                 final int i = attsBuf.getIndex(a);
                 if (i != -1) {
                     attsBuf.removeAttribute(i);
@@ -220,14 +222,14 @@ public class TestUtils {
 
     /**
      * Deletes a file. If file is a directory, delete it and all sub-directories.
-     * 
+     *
      * @param file file or directory to delete, must not be null
      * @throws IOException in case deletion is unsuccessful
      */
     public static void forceDelete(final File file) throws IOException {
         if (file.exists()) {
             if (file.isDirectory()) {
-                for (final File c: file.listFiles()) {
+                for (final File c : file.listFiles()) {
                     forceDelete(c);
                 }
             }
@@ -239,7 +241,7 @@ public class TestUtils {
 
     /**
      * Copy directories recursively.
-     * 
+     *
      * @param src source directory
      * @param dst destination directory
      * @throws IOException if copying failed
@@ -251,7 +253,7 @@ public class TestUtils {
             if (!dst.exists() && !dst.mkdirs()) {
                 throw new IOException("Failed to create directory " + dst);
             }
-            for (final File s: src.listFiles()) {
+            for (final File s : src.listFiles()) {
                 copy(s, new File(dst, s.getName()));
             }
         }
@@ -259,7 +261,7 @@ public class TestUtils {
 
     /**
      * Normalize XML file.
-     * 
+     *
      * @param src source XML file
      * @param dst destination XML file
      * @throws Exception if parsing or serializing failed
@@ -275,7 +277,7 @@ public class TestUtils {
             in = new BufferedInputStream(new FileInputStream(src));
             out = new BufferedOutputStream(new FileOutputStream(dst));
             serializer.transform(new SAXSource(parser, new InputSource(in)),
-                                 new StreamResult(out));
+                    new StreamResult(out));
         } finally {
             if (in != null) {
                 in.close();
@@ -335,12 +337,12 @@ public class TestUtils {
     public static void assertXMLEqual(InputSource exp, InputSource act) {
         try {
             final Diff d;
-                d = DiffBuilder
-                        .compare(ignoreComments(builderFactory.newDocumentBuilder().parse(exp)))
-                        .withTest(ignoreComments(builderFactory.newDocumentBuilder().parse(act)))
-                        .ignoreWhitespace()
-                        .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
-                        .build();
+            d = DiffBuilder
+                    .compare(ignoreComments(builderFactory.newDocumentBuilder().parse(exp)))
+                    .withTest(ignoreComments(builderFactory.newDocumentBuilder().parse(act)))
+                    .ignoreWhitespace()
+                    .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
+                    .build();
             if (d.hasDifferences()) {
                 throw new AssertionError(d.toString());
             }
@@ -372,18 +374,22 @@ public class TestUtils {
         public Object getAttribute(final String arg0) throws IllegalArgumentException {
             throw new UnsupportedOperationException();
         }
+
         @Override
         public boolean getFeature(final String arg0) throws ParserConfigurationException {
             throw new UnsupportedOperationException();
         }
+
         @Override
         public DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
             return new HtmlDocumentBuilder();
         }
+
         @Override
         public void setAttribute(final String arg0, final Object arg1) throws IllegalArgumentException {
             throw new UnsupportedOperationException();
         }
+
         @Override
         public void setFeature(final String arg0, final boolean arg1) throws ParserConfigurationException {
             throw new UnsupportedOperationException();
@@ -405,15 +411,15 @@ public class TestUtils {
     public static class TestLogger extends MarkerIgnoringBase implements DITAOTLogger {
 
         private boolean failOnError;
-        
+
         public TestLogger() {
             this.failOnError = true;
         }
-        
+
         public TestLogger(final boolean failOnError) {
             this.failOnError = failOnError;
         }
-        
+
         public void info(final String msg) {
             //System.out.println(msg);
         }
@@ -554,7 +560,7 @@ public class TestUtils {
         }
 
     }
-    
+
     /**
      * DITA-OT logger that will cache messages.
      */
@@ -571,7 +577,7 @@ public class TestUtils {
         }
 
         private List<Message> buf = new ArrayList<Message>();
-        
+
         public void info(final String msg) {
             buf.add(new Message(Message.Level.INFO, msg, null));
         }
@@ -637,7 +643,7 @@ public class TestUtils {
                 buf.add(new Message(Message.Level.ERROR, msg, null));
             }
         }
-        
+
         @Override
         public void error(String format, Object arg) {
             if (strict) {
@@ -711,7 +717,7 @@ public class TestUtils {
         public void debug(String format, Object arg) {
             buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arg), null));
         }
-        
+
         @Override
         public void debug(String format, Object arg1, Object arg2) {
             buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arg1, arg2), null));
@@ -733,21 +739,48 @@ public class TestUtils {
         }
 
         public static final class Message {
-            public enum Level { DEBUG, INFO, WARN, ERROR, FATAL }
+            public enum Level {DEBUG, INFO, WARN, ERROR, FATAL}
+
             public final Level level;
             public final String message;
             public final Throwable exception;
+
             public Message(final Level level, final String message, final Throwable exception) {
                 this.level = level;
                 this.message = message;
                 this.exception = exception;
             }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                Message message1 = (Message) o;
+                return level == message1.level &&
+                        Objects.equals(message, message1.message) &&
+                        Objects.equals(exception, message1.exception);
+            }
+
+            @Override
+            public int hashCode() {
+
+                return Objects.hash(level, message, exception);
+            }
+
+            @Override
+            public String toString() {
+                return "Message{" +
+                        "level=" + level +
+                        ", message='" + message + '\'' +
+                        ", exception=" + exception +
+                        '}';
+            }
         }
-        
+
         public List<Message> getMessages() {
             return Collections.unmodifiableList(buf);
         }
-        
+
     }
 
 }

@@ -10,6 +10,7 @@
 package org.dita.dost.reader;
 
 import static org.apache.commons.io.FilenameUtils.*;
+import static org.dita.dost.index.IndexTerm.IndexTermPrefix.*;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
@@ -30,9 +31,9 @@ import org.xml.sax.SAXException;
 /**
  * This class extends SAX's DefaultHandler, used for parsing indexterm in
  * ditamap.
- * 
+ *
  * @version 1.0 2005-04-30
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 
@@ -84,20 +85,20 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
         char flag = '\n';
         //used for store the new String
         final StringBuilder sb = new StringBuilder();
-        for(final char c : chars){
+        for (final char c : chars) {
             //when a whitespace is met
-            if(c==' '){
+            if (c == ' ') {
                 //this is the first whitespace
-                if(flag!=' '){
+                if (flag != ' ') {
                     //put it in the result string
                     sb.append(c);
                     //store the space in the flag
                     flag = c;
-                }else{
+                } else {
                     //abundant space, ignore it
                 }
                 //the consecutive whitespace is interrupted
-            }else{
+            } else {
                 //put it in the result string
                 sb.append(c);
                 //clear the flag
@@ -131,22 +132,22 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             Object obj;
 
             if (indexTerm.getTermName() == null || indexTerm.getTermName().trim().equals("")) {
-                if(indexTerm.getEndAttribute() != null && !indexTerm.hasSubTerms()){
+                if (indexTerm.getEndAttribute() != null && !indexTerm.hasSubTerms()) {
                     return;
-                }else{
+                } else {
                     indexTerm.setTermName("***");
                     logger.warn(MessageUtils.getMessage("DOTJ014W").toString());
                 }
             }
 
-            if(indexTerm.getTermKey() == null){
+            if (indexTerm.getTermKey() == null) {
                 indexTerm.setTermKey(indexTerm.getTermName());
             }
 
             obj = elementStack.peek();
 
             if (obj instanceof TopicrefElement) {
-                if(((TopicrefElement)obj).getHref()!=null){
+                if (((TopicrefElement)obj).getHref() != null) {
                     genTargets(indexTerm, (TopicrefElement)obj);
                     //IndexTermCollection.getInstantce().addTerm(indexTerm);
                     result.addTerm(indexTerm);
@@ -165,7 +166,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             if (term.getTermKey() == null) {
                 term.setTermKey(term.getTermFullName());
             }
-            if (elementStack.peek() instanceof IndexTerm){
+            if (elementStack.peek() instanceof IndexTerm) {
                 final IndexTerm parentTerm = (IndexTerm) elementStack.peek();
                 parentTerm.addSubTerm(term);
             }
@@ -180,20 +181,20 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
         final String href = obj.getHref();
 
         final StringBuilder buffer = new StringBuilder();
-        if (!href.contains(COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)){
+        if (!href.contains(COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)) {
             if (mapPath != null && mapPath.length() != 0) {
                 buffer.append(mapPath);
                 buffer.append(SLASH);
             }
             buffer.append(href);
             targetURI = new File(normalize(buffer.toString())).getPath();
-        }else{
+        } else {
             targetURI = href;
         }
 
-        if (obj.getNavTitle() != null){
+        if (obj.getNavTitle() != null) {
             target.setTargetName(obj.getNavTitle());
-        }else {
+        } else {
             target.setTargetName(href);
         }
 
@@ -204,12 +205,12 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
     }
 
     private void assignTarget(final IndexTerm indexTerm, final IndexTermTarget target) {
-        if (indexTerm.isLeaf()){
+        if (indexTerm.isLeaf()) {
             indexTerm.addTarget(target);
         }
 
-        if (indexTerm.hasSubTerms()){
-            for (final Object subTerm : indexTerm.getSubTerms()){
+        if (indexTerm.hasSubTerms()) {
+            for (final Object subTerm : indexTerm.getSubTerms()) {
                 assignTarget((IndexTerm)subTerm, target);
             }
         }
@@ -224,28 +225,28 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                 && TOPIC_INDEXTERM.matches(classAttr)) {
             // add the element name to the indexterm specialization element
             // list if it does not already exist in that list.
-            if (!indexTermSpecList.contains(localName)){
+            if (!indexTermSpecList.contains(localName)) {
                 indexTermSpecList.add(localName);
             }
         }
 
         if (classAttr != null
-                && MAP_TOPICREF.matches(classAttr)){
-            if (!topicrefSpecList.contains(localName)){
+                && MAP_TOPICREF.matches(classAttr)) {
+            if (!topicrefSpecList.contains(localName)) {
                 topicrefSpecList.add(localName);
             }
         }
 
         if (classAttr != null
-                && INDEXING_D_INDEX_SEE.matches(classAttr)){
-            if (!indexSeeSpecList.contains(localName)){
+                && INDEXING_D_INDEX_SEE.matches(classAttr)) {
+            if (!indexSeeSpecList.contains(localName)) {
                 indexSeeSpecList.add(localName);
             }
         }
 
         if (classAttr != null
-                && INDEXING_D_INDEX_SEE_ALSO.matches(classAttr)){
-            if (!indexSeeAlsoSpecList.contains(localName)){
+                && INDEXING_D_INDEX_SEE_ALSO.matches(classAttr)) {
+            if (!indexSeeAlsoSpecList.contains(localName)) {
                 indexSeeAlsoSpecList.add(localName);
             }
         }
@@ -278,14 +279,14 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                 && needPushTerm()) {
             final IndexTerm indexTerm = new IndexTerm();
             IndexTerm parentTerm;
-            if(!elementStack.isEmpty()
-                    && elementStack.peek() instanceof IndexTerm){
+            if (!elementStack.isEmpty()
+                    && elementStack.peek() instanceof IndexTerm) {
                 parentTerm = (IndexTerm)elementStack.peek();
-                if(parentTerm.hasSubTerms()){
+                if (parentTerm.hasSubTerms()) {
                     parentTerm.updateSubTerm();
                 }
             }
-            indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
+            indexTerm.setTermPrefix(SEE_ALSO);
             elementStack.push(indexTerm);
         }
     }
@@ -298,14 +299,14 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             final IndexTerm indexTerm = new IndexTerm();
             IndexTerm parentTerm;
 
-            indexTerm.setTermPrefix(IndexTerm_Prefix_See);
+            indexTerm.setTermPrefix(SEE);
 
-            if(!elementStack.isEmpty()
-                    && elementStack.peek() instanceof IndexTerm){
+            if (!elementStack.isEmpty()
+                    && elementStack.peek() instanceof IndexTerm) {
                 parentTerm = (IndexTerm)elementStack.peek();
-                if(parentTerm.hasSubTerms()){
+                if (parentTerm.hasSubTerms()) {
                     parentTerm.updateSubTerm();
-                    indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
+                    indexTerm.setTermPrefix(SEE_ALSO);
                 }
             }
             elementStack.push(indexTerm);
@@ -320,10 +321,10 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             indexTerm.setStartAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
             indexTerm.setEndAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
             IndexTerm parentTerm;
-            if(!elementStack.isEmpty()
-                    && elementStack.peek() instanceof IndexTerm){
+            if (!elementStack.isEmpty()
+                    && elementStack.peek() instanceof IndexTerm) {
                 parentTerm = (IndexTerm)elementStack.peek();
-                if(parentTerm.hasSubTerms()){
+                if (parentTerm.hasSubTerms()) {
                     parentTerm.updateSubTerm();
                 }
             }
@@ -353,7 +354,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 
     /**
      * Set map path.
-     * 
+     *
      * @param mappath path of map file
      */
     public void setMapPath(final String mappath) {

@@ -48,7 +48,7 @@ import static org.dita.dost.util.XMLUtils.*;
 /**
  * DitaValReader reads and parses the information from ditaval file which
  * contains the information of filtering and flagging.
- * 
+ *
  * @author Zhang, Yuan Peng
  */
 public final class DitaValReader implements AbstractReader {
@@ -81,7 +81,7 @@ public final class DitaValReader implements AbstractReader {
         super();
         filterMap = new HashMap<>();
         imageList = new ArrayList<>(256);
-        relFlagImageList= new ArrayList<>(256);
+        relFlagImageList = new ArrayList<>(256);
 
         try {
             final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -151,7 +151,7 @@ public final class DitaValReader implements AbstractReader {
         }
 
         readDocument(doc);
-        
+
         if (bindingMap != null && !bindingMap.isEmpty()) {
             final Map<FilterKey, Action> buf = new HashMap<>(filterMap);
             for (final Map.Entry<FilterKey, Action> e: buf.entrySet()) {
@@ -193,7 +193,7 @@ public final class DitaValReader implements AbstractReader {
                 action = readFlag(elem);
                 break;
             default:
-                throw new IllegalArgumentException("Invalid action: " + attAction);
+                throw new IllegalArgumentException(MessageUtils.getMessage("DOTJ077F", attAction).toString());
         }
         if (action != null) {
             final QName attName;
@@ -309,7 +309,7 @@ public final class DitaValReader implements AbstractReader {
 
     /**
      * Insert subject scheme based action into filetermap if key not present in the map
-     * 
+     *
      * @param subTree subject scheme definition element
      * @param attName attribute name
      * @param action action to insert
@@ -379,7 +379,7 @@ public final class DitaValReader implements AbstractReader {
         return null;
     }
 
-    
+
     /**
      * Insert action into filetermap if key not present in the map
      */
@@ -387,7 +387,7 @@ public final class DitaValReader implements AbstractReader {
         if (filterMap.get(key) == null) {
             filterMap.put(key, action);
         } else {
-            logger.error(MessageUtils.getMessage("DOTJ007E", key.toString()).toString());
+            logger.warn(MessageUtils.getMessage("DOTJ007W", key.toString()).toString());
         }
     }
 
@@ -417,7 +417,7 @@ public final class DitaValReader implements AbstractReader {
      * get image list relative to the .ditaval file.
      * @return image list
      */
-    public List<URI> getRelFlagImageList(){
+    public List<URI> getRelFlagImageList() {
         return relFlagImageList;
     }
 

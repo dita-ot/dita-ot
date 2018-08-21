@@ -69,7 +69,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
 
         try {
-            final File mapFile = new File(job.tempDirURI.resolve(job.getInputMap()));
+            final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+            final File mapFile = new File(job.tempDirURI.resolve(in.uri));
             if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile.toURI())) {
                 for (final FileInfo f : job.getFileInfo()) {
                     if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
@@ -178,7 +179,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     // as entry in chunkTopics, it should be removed.
                     hrefTopics.removeIf(ent -> job.tempDirURI.resolve(ent).equals(
                             job.tempDirURI.resolve(s)));
-                } else if (hrefTopics.contains(s)) {
+                } else {
                     hrefTopics.remove(s);
                 }
             }
@@ -194,9 +195,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
         for (final URI t : hrefTopics) {
             topicList.add(t);
-            if (oldTopicList.contains(t)) {
-                oldTopicList.remove(t);
-            }
+            oldTopicList.remove(t);
         }
 
         final Set<URI> chunkedTopicSet = new LinkedHashSet<>(128);
@@ -218,17 +217,13 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     chunkedTopicSet.add(newChunkedFile);
                     if (!topicList.contains(newChunkedFile)) {
                         topicList.add(newChunkedFile);
-                        if (oldTopicList.contains(newChunkedFile)) {
-                            // newly chunked file shouldn't be deleted
-                            oldTopicList.remove(newChunkedFile);
-                        }
+                        // newly chunked file shouldn't be deleted
+                        oldTopicList.remove(newChunkedFile);
                     }
                 } else {
                     if (!ditamapList.contains(newChunkedFile)) {
                         ditamapList.add(newChunkedFile);
-                        if (oldTopicList.contains(newChunkedFile)) {
-                            oldTopicList.remove(newChunkedFile);
-                        }
+                        oldTopicList.remove(newChunkedFile);
                     }
                     chunkedDitamapSet.add(newChunkedFile);
                 }
@@ -278,12 +273,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                             logger.error("Failed to replace chunk topic: " + e.getMessage(), e);
 
                         }
-                        if (topicList.contains(relativePath)) {
-                            topicList.remove(relativePath);
-                        }
-                        if (chunkedTopicSet.contains(relativePath)) {
-                            chunkedTopicSet.remove(relativePath);
-                        }
+                        topicList.remove(relativePath);
+                        chunkedTopicSet.remove(relativePath);
                         relativePath = getRelativePath(xmlDitalist, target);
                         topicList.add(relativePath);
                         chunkedTopicSet.add(relativePath);

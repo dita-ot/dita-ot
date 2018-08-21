@@ -16,6 +16,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:import href="topic.xsl"/>
   <xsl:import href="concept.xsl"/>
+  <xsl:import href="glossdisplay.xsl"/>
   <xsl:import href="task.xsl"/>
   <xsl:import href="reference.xsl"/>  
   <xsl:import href="ut-d.xsl"/>
@@ -26,6 +27,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="abbrev-d.xsl"/>
   <xsl:import href="markup-d.xsl"/>
   <xsl:import href="xml-d.xsl"/>
+  <xsl:import href="svg-d.xsl"/>
   
   <xsl:import href="nav.xsl"/>
   

@@ -13,20 +13,23 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
+import java.util.regex.Pattern;
+
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 
 /**
  * Normalize content.
- * 
+ *
  * <ul>
  *   <li>Add default metadata {@code cascade} attribute value.</li>
+ *   <li>Strip redundant whitespace from {@code domains} attribute value.</li>
  * </ul>
  */
 public final class NormalizeFilter extends AbstractXMLFilter {
 
+    private final Pattern whitespace = Pattern.compile("\\s+");
     private Configuration.Mode processingMode;
-
     private int depth;
 
     public NormalizeFilter() {
@@ -48,16 +51,29 @@ public final class NormalizeFilter extends AbstractXMLFilter {
             super.startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
         }
 
-        final AttributesImpl res = new AttributesImpl(atts);
+        AttributesImpl res = null;
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
         if (MAP_MAP.matches(cls)) {
-            if (res.getIndex(ATTRIBUTE_NAME_CASCADE) == -1) {
+            if (atts.getIndex(ATTRIBUTE_NAME_CASCADE) == -1) {
+                if (res == null) {
+                    res = new AttributesImpl(atts);
+                }
                 XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CASCADE,
                         configuration.getOrDefault("default.cascade", ATTRIBUTE_CASCADE_VALUE_MERGE));
             }
         }
+        if (MAP_MAP.matches(cls) || TOPIC_TOPIC.matches(cls)) {
+            final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
+            if (domains != null) {
+                final String normalized = whitespace.matcher(domains.trim()).replaceAll(" ");
+                if (res == null) {
+                    res = new AttributesImpl(atts);
+                }
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_DOMAINS, normalized);
+            }
+        }
 
-        getContentHandler().startElement(uri, localName, qName, res);
+        getContentHandler().startElement(uri, localName, qName, res != null ? res : atts);
     }
 
     @Override

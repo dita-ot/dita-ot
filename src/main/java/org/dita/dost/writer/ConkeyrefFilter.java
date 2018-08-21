@@ -28,7 +28,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
     private KeyScope keys;
     /** Delayed conref utils, may be {@code null} */
     private DelayConrefUtils delayConrefUtils;
-    
+
     public void setKeyDefinitions(final KeyScope keys) {
         this.keys = keys;
     }
@@ -36,7 +36,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
     public void setDelayConrefUtils(final DelayConrefUtils delayConrefUtils) {
         this.delayConrefUtils = delayConrefUtils;
     }
-    
+
     // XML filter methods ------------------------------------------------------
 
     @Override
@@ -69,7 +69,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
                         target = setFragment(target, keyFragment + SLASH + id);
                     } else if (id != null) {
                         target = setFragment(target, id);
-                    } else if (keyFragment != null){
+                    } else if (keyFragment != null) {
                         target = setFragment(target, keyFragment);
                     }
                     XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target.toString());
@@ -85,12 +85,19 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
 
     /**
      * Update href URI.
-     * 
+     *
      * @param href href URI
      * @return updated href URI
      */
     private URI getRelativePath(final URI href) {
-        final URI keyValue = job.tempDirURI.resolve(stripFragment(href));
+        final URI keyValue;
+        final URI inputMap = job.getInputMap();
+        if (inputMap != null) {
+            final URI tmpMap = job.tempDirURI.resolve(inputMap);
+            keyValue = tmpMap.resolve(stripFragment(href));
+        } else {
+            keyValue = job.tempDirURI.resolve(stripFragment(href));
+        }
         return URLUtils.getRelativePath(currentFile, keyValue);
     }
 

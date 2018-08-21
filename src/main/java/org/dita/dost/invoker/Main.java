@@ -26,26 +26,9 @@
 
 package org.dita.dost.invoker;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.BuildListener;
-import org.apache.tools.ant.BuildLogger;
-import org.apache.tools.ant.DemuxInputStream;
-import org.apache.tools.ant.DemuxOutputStream;
-import org.apache.tools.ant.Diagnostics;
-import org.apache.tools.ant.ExitStatusException;
-import org.apache.tools.ant.Location;
-import org.apache.tools.ant.MagicNames;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.ProjectHelper;
-import org.apache.tools.ant.ProjectHelperRepository;
-import org.apache.tools.ant.PropertyHelper;
-import org.apache.tools.ant.Target;
+import org.apache.tools.ant.*;
 import org.apache.tools.ant.input.DefaultInputHandler;
 import org.apache.tools.ant.input.InputHandler;
 import org.apache.tools.ant.launch.AntMain;
@@ -55,13 +38,18 @@ import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.Constants.PLUGIN_CONF;
 import static org.dita.dost.util.XMLUtils.getChildElements;
@@ -201,6 +189,19 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
+    /**
+     * Read the list of installed plugins
+     */
+    private List<String> getInstalledPlugins() {
+        final List<Element> plugins = toList(getPluginConfiguration().getElementsByTagName("plugin"));
+        return plugins.stream()
+                .map((Element elem) -> elem.getAttributeNode("id"))
+                .filter(Objects::nonNull)
+                .map(Attr::getValue)
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
     private static Map<String, Argument> PLUGIN_ARGUMENTS;
 
     // Lazy load parameters
@@ -232,15 +233,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static Argument getArgument(Element param) {
         final String name = param.getAttribute("name");
         final String type = param.getAttribute("type");
-        if (type.equals("file")) {
-            return new FileArgument(name);
-        } else if (type.equals("enum")) {
-            final Set<String> vals = getChildElements(param).stream()
-                    .map(XMLUtils::getText)
-                    .collect(Collectors.toSet());
-            return new EnumArgument(name, vals);
-        } else {
-            return new StringArgument(name);
+        switch (type) {
+            case "file":
+                return new FileArgument(name);
+            case "enum":
+                final Set<String> vals = getChildElements(param).stream()
+                        .map(XMLUtils::getText)
+                        .collect(Collectors.toSet());
+                return new EnumArgument(name, vals);
+            default:
+                return new StringArgument(name);
         }
     }
 
@@ -259,59 +261,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             "args.filter", "--filter",
             ANT_TEMP_DIR, "-t"
     );
-
-    @Deprecated
-    private static final Map<String, Argument> LEGACY_ARGUMENTS = new HashMap<>();
-    static {
-        // LEGACY_ARGUMENTS.put("/basedir", new StringArgument("basedir"));
-        // LEGACY_ARGUMENTS.put("/ditadir", new StringArgument("dita.dir"));
-        LEGACY_ARGUMENTS.put("/i", new AbsoluteFileArgument("args.input"));
-        LEGACY_ARGUMENTS.put("/if", new AbsoluteFileArgument("dita.input"));
-        LEGACY_ARGUMENTS.put("/id", new AbsoluteFileArgument("dita.input.dirname"));
-        LEGACY_ARGUMENTS.put("/artlbl", new StringArgument("args.artlbl"));
-        LEGACY_ARGUMENTS.put("/draft", new StringArgument("args.draft"));
-        LEGACY_ARGUMENTS.put("/ftr", new StringArgument("args.ftr"));
-        LEGACY_ARGUMENTS.put("/hdr", new StringArgument("args.hdr"));
-        LEGACY_ARGUMENTS.put("/hdf", new StringArgument("args.hdf"));
-        LEGACY_ARGUMENTS.put("/csspath", new StringArgument("args.csspath"));
-        LEGACY_ARGUMENTS.put("/cssroot", new StringArgument("args.cssroot"));
-        LEGACY_ARGUMENTS.put("/css", new StringArgument("args.css"));
-        LEGACY_ARGUMENTS.put("/filter", new AbsoluteFileArgument("args.filter"));
-        LEGACY_ARGUMENTS.put("/outdir", new AbsoluteFileArgument("output.dir"));
-        LEGACY_ARGUMENTS.put("/transtype", new StringArgument("transtype"));
-        LEGACY_ARGUMENTS.put("/indexshow", new StringArgument("args.indexshow"));
-        LEGACY_ARGUMENTS.put("/outext", new StringArgument("args.outext"));
-        LEGACY_ARGUMENTS.put("/copycss", new StringArgument("args.copycss"));
-        LEGACY_ARGUMENTS.put("/xsl", new AbsoluteFileArgument("args.xsl"));
-        LEGACY_ARGUMENTS.put("/xslpdf", new AbsoluteFileArgument("args.xsl.pdf"));
-        LEGACY_ARGUMENTS.put("/tempdir", new AbsoluteFileArgument(ANT_TEMP_DIR));
-        LEGACY_ARGUMENTS.put("/cleantemp", new StringArgument("clean.temp"));
-        LEGACY_ARGUMENTS.put("/foimgext", new StringArgument("args.fo.img.ext"));
-        LEGACY_ARGUMENTS.put("/javahelptoc", new StringArgument("args.javahelp.toc"));
-        LEGACY_ARGUMENTS.put("/javahelpmap", new StringArgument("args.javahelp.map"));
-        LEGACY_ARGUMENTS.put("/eclipsehelptoc", new StringArgument("args.eclipsehelp.toc"));
-        LEGACY_ARGUMENTS.put("/eclipsecontenttoc", new StringArgument("args.eclipsecontent.toc"));
-        LEGACY_ARGUMENTS.put("/xhtmltoc", new StringArgument("args.xhtml.toc"));
-        LEGACY_ARGUMENTS.put("/xhtmlclass", new StringArgument("args.xhtml.classattr"));
-        LEGACY_ARGUMENTS.put("/usetasklabels", new StringArgument("args.gen.task.lbl"));
-        LEGACY_ARGUMENTS.put("/logdir", new AbsoluteFileArgument("args.logdir"));
-        LEGACY_ARGUMENTS.put("/ditalocale", new StringArgument("args.dita.locale"));
-        LEGACY_ARGUMENTS.put("/fooutputrellinks", new StringArgument("args.fo.output.rel.links"));
-        LEGACY_ARGUMENTS.put("/foincluderellinks", new StringArgument("args.fo.include.rellinks"));
-        LEGACY_ARGUMENTS.put("/odtincluderellinks", new StringArgument("args.odt.include.rellinks"));
-        LEGACY_ARGUMENTS.put("/retaintopicfo", new StringArgument("retain.topic.fo"));
-        LEGACY_ARGUMENTS.put("/version", new StringArgument("args.eclipse.version"));
-        LEGACY_ARGUMENTS.put("/provider", new StringArgument("args.eclipse.provider"));
-        LEGACY_ARGUMENTS.put("/fouserconfig", new StringArgument("args.fo.userconfig"));
-        LEGACY_ARGUMENTS.put("/htmlhelpincludefile", new StringArgument("args.htmlhelp.includefile"));
-        LEGACY_ARGUMENTS.put("/validate", new StringArgument("validate"));
-        LEGACY_ARGUMENTS.put("/outercontrol", new StringArgument("outer.control"));
-        LEGACY_ARGUMENTS.put("/generateouter", new StringArgument("generate.copy.outer"));
-        LEGACY_ARGUMENTS.put("/onlytopicinmap", new StringArgument("onlytopic.in.map"));
-        LEGACY_ARGUMENTS.put("/debug", new StringArgument("args.debug"));
-        LEGACY_ARGUMENTS.put("/grammarcache", new StringArgument("args.grammar.cache"));
-        LEGACY_ARGUMENTS.put("/odtimgembed", new StringArgument("args.odt.img.embed"));
-    }
 
     /** The default build file name. {@value} */
     public static final String DEFAULT_BUILD_FILENAME = "build.xml";
@@ -564,6 +513,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         boolean justPrintUsage = false;
         boolean justPrintVersion = false;
         boolean justPrintDiagnostics = false;
+        boolean justPrintPlugins = false;
+        boolean justPrintTranstypes = false;
         useColor = getUseColor();
 
         final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
@@ -574,6 +525,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 justPrintUsage = true;
             } else if (isLongForm(arg, "-version")) {
                 justPrintVersion = true;
+            } else if (isLongForm(arg, "-plugins")) {
+                justPrintPlugins = true;
+            } else if (isLongForm(arg, "-transtypes")) {
+                justPrintTranstypes = true;
             } else if (isLongForm(arg, "-install")) {
                 handleArgInstall(arg, args);
             } else if (isLongForm(arg, "-uninstall")) {
@@ -620,8 +575,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg)));
             } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
                 handleParameterArg(arg, args, getPluginArguments().get(getArgumentName(arg)));
-            } else if (LEGACY_ARGUMENTS.containsKey(getArgumentName(arg))) {
-                handleLegacyParameterArg(arg, args);
             } else if (LAUNCH_COMMANDS.contains(arg)) {
                 // catch script/ant mismatch with a meaningful message
                 // we could ignore it, but there are likely to be other
@@ -648,7 +601,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // Load the property files specified by --propertyfile
         loadPropertyFiles();
 
-        if (justPrintUsage || justPrintVersion || justPrintDiagnostics) {
+        if (justPrintUsage || justPrintVersion || justPrintDiagnostics || justPrintPlugins ||justPrintTranstypes) {
             if (justPrintVersion) {
                 printVersion(msgOutputLevel);
             }
@@ -657,6 +610,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
             if (justPrintDiagnostics) {
                 Diagnostics.doReport(System.out, msgOutputLevel);
+            }
+            if (justPrintPlugins) {
+                printPlugins(); 
+            }
+            if (justPrintTranstypes) {
+                printTranstypes();
             }
             return;
         } else if (install) {
@@ -822,6 +781,21 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
         uninstallId = value;
     }
+    
+    /** Handle the --plugins argument */
+    private void printPlugins() {
+        final List<String> installedPlugins = getInstalledPlugins();
+        for (final String plugin : installedPlugins) {
+            System.out.println(plugin);
+        }
+    }
+
+    /** Handle the --transtypes argument */
+    private void printTranstypes() {
+        for (final String transtype : transtypes) {
+            System.out.println(transtype);
+        }
+    }
 
     /** Handle the --buildfile, --file, -f argument */
     private void handleArgBuildFile(final Deque<String> args) {
@@ -848,11 +822,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
          * However, in some cases, the OS goes ahead and parses this out to args
          * {"-Dname", "value"} so instead of parsing on "=", we just make the
          * "-D" characters go away and skip one argument forward.
-         * 
+         *
          * I don't know how to predict when the JDK is going to help or not, so
          * we simply look for the equals sign.
          */
-        String name = arg.substring(2, arg.length());
+        String name = arg.substring(2);
         String value;
         final int posEq = name.indexOf("=");
         if (posEq > 0) {
@@ -889,26 +863,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         definedProps.put(argument.property, argument.getValue(value));
     }
 
-    /** Handler legacy parameter argument */
-    @Deprecated
-    private void handleLegacyParameterArg(final String arg, final Deque<String> args) {
-        String name = arg.substring(0, arg.length());
-        String value;
-        int posEq = name.indexOf(":");
-        if (posEq > 0) {
-            value = name.substring(posEq + 1);
-            name = name.substring(0, posEq);
-        } else {
-            value = args.pop();
-        }
-        if (value == null) {
-            throw new BuildException("Missing value for property " + name);
-        }
-        final Argument a = LEGACY_ARGUMENTS.get(name);
-
-        definedProps.put(a.property, a.getValue(value));
-    }
-
     /** Get argument name */
     private String getArgumentName(final String arg) {
         int pos = arg.indexOf("=");
@@ -942,7 +896,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     /** Handle the --propertyfile argument. */
     private void handleArgPropertyFile(final String arg, final Deque<String> args) {
-        String name = arg.substring(2, arg.length());
+        String name = arg.substring(2);
         String value;
         final int posEq = name.indexOf("=");
         if (posEq > 0) {
@@ -1211,7 +1165,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final int count = listeners.size();
         for (int i = 0; i < count; i++) {
             final String className = listeners.elementAt(i);
-            final BuildListener listener = (BuildListener) ClasspathUtils.newInstance(className,
+            final BuildListener listener = ClasspathUtils.newInstance(className,
                     Main.class.getClassLoader(), BuildListener.class);
             project.setProjectReference(listener);
 
@@ -1232,7 +1186,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         if (inputHandlerClassname == null) {
             handler = new DefaultInputHandler();
         } else {
-            handler = (InputHandler) ClasspathUtils.newInstance(inputHandlerClassname, Main.class.getClassLoader(),
+            handler = ClasspathUtils.newInstance(inputHandlerClassname, Main.class.getClassLoader(),
                     InputHandler.class);
             project.setProjectReference(handler);
         }
@@ -1252,7 +1206,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         BuildLogger logger;
         if (loggerClassname != null) {
             try {
-                logger = (BuildLogger) ClasspathUtils.newInstance(loggerClassname, Main.class.getClassLoader(),
+                logger = ClasspathUtils.newInstance(loggerClassname, Main.class.getClassLoader(),
                         BuildLogger.class);
             } catch (final BuildException e) {
                 printErrorMessage("The specified logger class " + loggerClassname + " could not be used because "
@@ -1281,6 +1235,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("   or: dita --propertyfile=<file> [options]\n");
         msg.append("   or: dita --install [=<file>]\n");
         msg.append("   or: dita --uninstall <id>\n");
+        msg.append("   or: dita --plugins\n");
+        msg.append("   or: dita --transtypes\n");
         msg.append("   or: dita --help\n");
         msg.append("   or: dita --version\n");
         msg.append("Arguments: \n");
@@ -1290,6 +1246,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("  --install [<file>]          install plug-in from a ZIP file\n");
         msg.append("  --install                   reload plugins\n");
         msg.append("  --uninstall <id>            uninstall plug-in with the ID\n");
+        msg.append("  --plugins                   print list of installed plug-ins\n");
+        msg.append("  --transtypes                print list of installed transtypes\n");
         msg.append("  -h, --help                  print this message\n");
         msg.append("  --version                   print version information and exit\n");
         msg.append("Options: \n");
@@ -1521,7 +1479,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             msg.append(" ");
             msg.append(names.elementAt(i));
             if (descriptions != null) {
-                msg.append(spaces.substring(0, maxlen - names.elementAt(i).length() + 2));
+                msg.append(spaces, 0, maxlen - names.elementAt(i).length() + 2);
                 msg.append(descriptions.elementAt(i));
             }
             msg.append(lSep);

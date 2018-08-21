@@ -22,12 +22,12 @@ import org.xml.sax.helpers.AttributesImpl;
  * InsertCatalogActionRelative inserts the children of the root element of an XML document
  * into a plugin extension point, rewriting relative file references so that they
  * are still correct in their new location.
- * 
+ *
  * Attributes affected: (public|system|uri)/@uri
  *   (nextCatalog|delegateURI|delegateSystem|delegatePublic)/@catalog
  *   (rewriteSystem|rewriteURI)/@rewritePrefix
  * To do: Handle xml:base.
- * 
+ *
  * @author Deborah Pickett
  * @deprecated use {@link ImportCatalogActionRelative} instead
  */
@@ -40,7 +40,7 @@ final class InsertCatalogActionRelative extends InsertAction {
         final AttributesImpl attrBuf = new AttributesImpl();
 
         final int attLen = attributes.getLength();
-        for (int i = 0; i < attLen; i++){
+        for (int i = 0; i < attLen; i++) {
             String value;
             final File targetFile = new File(new File(currentFile).getParentFile(), attributes.getValue(i));
             final int index = attributes.getIndex("xml:base");
@@ -55,7 +55,7 @@ final class InsertCatalogActionRelative extends InsertAction {
                                     "rewriteURI".equals(localName)) && "rewritePrefix".equals(attributes.getQName(i)))
                                     && !attributes.getValue(i).contains(COLON)) {
                 // Rewrite URI to be local to its final resting place.
-                if (index == -1){
+                if (index == -1) {
                     //If there are no xml:base attributes, then we need to split
                     final String path = FileUtils.getFullPathNoEndSeparator(FileUtils.getRelativeUnixPath(
                             paramTable.get(FileGenerator.PARAM_TEMPLATE),
@@ -67,23 +67,20 @@ final class InsertCatalogActionRelative extends InsertAction {
                             "xml:base", attributes.getType(i), path);
                     attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
                             attributes.getQName(i), attributes.getType(i), filename);
-                }
-                else {
+                } else {
                     //If there is an xml:base attribute, then we do nothing.
                     value = attributes.getValue(i);
                     attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
                             attributes.getQName(i), attributes.getType(i), value);
                 }
-            }
-            else if(i==index){
+            } else if (i == index) {
                 //We've found xml:base.  Need to add parent plugin directory to the original value.
                 value = FileUtils.getFullPathNoEndSeparator(FileUtils.getRelativeUnixPath(
                         paramTable.get(FileGenerator.PARAM_TEMPLATE),
                         targetFile.toString())) + "/" + attributes.getValue(i);
                 attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
                         attributes.getQName(i), attributes.getType(i), value);
-            }
-            else {
+            } else {
                 value = attributes.getValue(i);
                 attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
                         attributes.getQName(i), attributes.getType(i), value);

@@ -48,6 +48,8 @@ public class AbstractIntegrationTest {
     private String[] targets;
     private Path input;
     private Map<String, Object> args = new HashMap<>();
+    private List<TestListener.Message> log;
+    private File actDir;
     private int warnCount = 0;
     private int errorCount = 0;
 
@@ -99,6 +101,10 @@ public class AbstractIntegrationTest {
                 "build-init", "preprocess"),
         XHTML("xhtml", false,
                 "dita2xhtml"),
+        HTML5("html5", false,
+                "dita2html5"),
+        PDF("pdf", false,
+                "dita2pdf2"),
         ECLIPSEHELP("eclipsehelp", false,
                 "dita2eclipsehelp"),
         HTMLHELP("htmlhelp", false,
@@ -142,7 +148,7 @@ public class AbstractIntegrationTest {
     private static final File baseTempDir = new File(System.getProperty(TEMP_DIR) != null
             ? System.getProperty(TEMP_DIR)
             : "build" + File.separator + "tmp" + File.separator + "integrationTest");
-    private static final File resourceDir = new File(baseDir, "resources");
+    static final File resourceDir = new File(baseDir, "resources");
     private static DocumentBuilder db;
     private static HtmlDocumentBuilder htmlb;
     private static int level;
@@ -177,10 +183,15 @@ public class AbstractIntegrationTest {
         // remove temp & output
     }
 
-    protected void test() throws Throwable {
+    protected File test() throws Throwable {
+        final File actDir = run();
+        compare();
+        return actDir;
+    }
+
+    protected File run() throws Throwable {
         final File testDir = Paths.get("src", "test", "resources", name).toFile();
         final File srcDir = new File(testDir, SRC_DIR);
-        final File expDir = new File(testDir, EXP_DIR);
         final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
         final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
 
@@ -197,17 +208,16 @@ public class AbstractIntegrationTest {
         builder.put("args.input", new File(srcDir, input.toFile().toString()).getAbsolutePath());
         final Map<String, String> params = builder.build();
 
-        List<TestListener.Message> log = null;
         try {
-            log = runOt(testDir, transtype, tempDir, outDir, params, targets);
+            this.log = runOt(testDir, transtype, tempDir, outDir, params, targets);
             assertEquals("Warn message count does not match expected",
                     warnCount,
                     countMessages(log, Project.MSG_WARN));
             assertEquals("Error message count does not match expected",
                     errorCount,
                     countMessages(log, Project.MSG_ERR));
-            final File actDir = transtype.compareTemp ? tempDir : outDir;
-            compare(expDir, actDir);
+
+            this.actDir = transtype.compareTemp ? tempDir : outDir;
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Throwable e) {
@@ -216,6 +226,15 @@ public class AbstractIntegrationTest {
             }
             throw new Throwable("Case " + testDir.getName() + " failed: " + e.getMessage(), e);
         }
+        return new File(actDir, transtype.name);
+    }
+
+    protected AbstractIntegrationTest compare() throws Throwable {
+        final File testDir = Paths.get("src", "test", "resources", name).toFile();
+        final File expDir = new File(testDir, EXP_DIR);
+
+        compare(expDir, actDir);
+        return this;
     }
 
     @Deprecated

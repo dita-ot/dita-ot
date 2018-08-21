@@ -30,10 +30,10 @@ See the accompanying LICENSE file for applicable license.
         <ul>
           <xsl:choose>
             <xsl:when test="$nav-toc = 'partial'">
-              <xsl:apply-templates select="$current-topicrefs[1]" mode="toc-pull">
+              <xsl:apply-templates select="$current-topicref" mode="toc-pull">
                 <xsl:with-param name="pathFromMaplist" select="$PATH2PROJ" as="xs:string"/>
                 <xsl:with-param name="children" as="element()*">
-                  <xsl:apply-templates select="$current-topicrefs[1]/*[contains(@class, ' map/topicref ')]" mode="toc">
+                    <xsl:apply-templates select="$current-topicref/*[contains(@class, ' map/topicref ')]" mode="toc">
                     <xsl:with-param name="pathFromMaplist" select="$PATH2PROJ" as="xs:string"/>
                   </xsl:apply-templates>
                 </xsl:with-param>
@@ -50,9 +50,9 @@ See the accompanying LICENSE file for applicable license.
     </xsl:if>
   </xsl:template>
   
-  <xsl:variable name="current-file" select="translate(if ($FILEDIR = '.') then $FILENAME else concat($FILEDIR, '/', $FILENAME), '\', '/')"/>
-  <xsl:variable name="current-topicrefs" select="$input.map//*[contains(@class, ' map/topicref ')][dita-ot:get-path($PATH2PROJ, .) = $current-file]"/>
-  <xsl:variable name="current-topicref" select="$current-topicrefs[1]"/>
+  <xsl:variable name="current-file" select="translate(if ($FILEDIR = '.') then $FILENAME else concat($FILEDIR, '/', $FILENAME), '\', '/')" as="xs:string?"/>
+  <xsl:variable name="current-topicrefs" select="$input.map//*[contains(@class, ' map/topicref ')][dita-ot:get-path($PATH2PROJ, .) = $current-file]" as="element()*"/>
+  <xsl:variable name="current-topicref" select="$current-topicrefs[1]" as="element()?"/>
   
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="toc-pull">
     <xsl:param name="pathFromMaplist" select="$PATH2PROJ" as="xs:string"/>
@@ -224,27 +224,29 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
   
-  <xsl:function name="dita-ot:get-path">
+  <xsl:function name="dita-ot:get-path" as="xs:string?">
     <xsl:param name="pathFromMaplist" as="xs:string"/>
     <xsl:param name="node" as="element()"/>
-    <xsl:for-each select="$node[1]">
-      <xsl:if test="not(@scope = 'external')">
-        <xsl:call-template name="strip-leading-parent">
-          <xsl:with-param name="path" select="$pathFromMaplist"/>
-        </xsl:call-template>
-      </xsl:if>
-      <xsl:choose>
-        <xsl:when test="@copy-to and not(contains(@chunk, 'to-content')) and 
-                        (not(@format) or @format = 'dita' or @format = 'ditamap') ">
-          <xsl:value-of select="@copy-to"/>
-        </xsl:when>
-        <xsl:when test="contains(@chunk, 'to-content')">
-          <xsl:value-of select="substring-before(@href,'#')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="@href"/>
-        </xsl:otherwise>
-      </xsl:choose>
+    <xsl:for-each select="$node">
+      <xsl:value-of>
+        <xsl:if test="not(@scope = 'external')">
+          <xsl:call-template name="strip-leading-parent">
+            <xsl:with-param name="path" select="$pathFromMaplist"/>
+          </xsl:call-template>
+        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="@copy-to and not(contains(@chunk, 'to-content')) and
+                          (not(@format) or @format = 'dita' or @format = 'ditamap') ">
+            <xsl:value-of select="@copy-to"/>
+          </xsl:when>
+          <xsl:when test="contains(@chunk, 'to-content')">
+            <xsl:value-of select="substring-before(@href,'#')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@href"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:value-of>
     </xsl:for-each>
   </xsl:function>
   

@@ -30,11 +30,11 @@ import org.xml.sax.helpers.AttributesImpl;
 /**
  * XML serializer. Users a {@link javax.xml.transform.sax.TransformerHandler
  * TransformerHandler} as the underlying serializer.
- * 
+ *
  * <p>When possible, use {@link javax.xml.stream.XMLStreamWriter XMLStreamWriter} instead.</p>
- * 
+ *
  * <p><strong>Not thread-safe.</strong></p>
- * 
+ *
  * @since 1.5.3
  * @author Jarno Elovirta
  */
@@ -85,7 +85,7 @@ public class XMLSerializer {
 
     /**
      * Get serializer instance.
-     * 
+     *
      * @param out output stream
      */
     public static XMLSerializer newInstance(final OutputStream out) {
@@ -94,7 +94,7 @@ public class XMLSerializer {
 
     /**
      * Get serializer instance.
-     * 
+     *
      * @param out output writer
      */
     public static XMLSerializer newInstance(final Writer out) {
@@ -105,7 +105,7 @@ public class XMLSerializer {
 
     /**
      * Get underlying serializer.
-     * 
+     *
      * @return serialization handler
      */
     public TransformerHandler getTransformerHandler() {
@@ -114,7 +114,7 @@ public class XMLSerializer {
 
     /**
      * Close output.
-     * 
+     *
      * @throws IOException if closing result output failed
      */
     public void close() throws IOException {
@@ -131,7 +131,7 @@ public class XMLSerializer {
 
     /**
      * Start document.
-     * 
+     *
      * @throws SAXException if processing the event failed
      */
     public void writeStartDocument() throws SAXException {
@@ -140,7 +140,7 @@ public class XMLSerializer {
 
     /**
      * End document.
-     * 
+     *
      * @throws SAXException if processing the event failed
      */
     public void writeEndDocument() throws SAXException {
@@ -152,7 +152,7 @@ public class XMLSerializer {
 
     /**
      * Write start element without attributes.
-     * 
+     *
      * @param qName element QName
      * @throws SAXException if processing the event failed
      */
@@ -162,7 +162,7 @@ public class XMLSerializer {
 
     /**
      * Write start element without attributes.
-     * 
+     *
      * @param qName element QName
      * @throws SAXException if processing the event failed
      */
@@ -176,7 +176,7 @@ public class XMLSerializer {
 
     /**
      * Write namepace prefix.
-     * 
+     *
      * @param prefix namespace prefix
      * @param uri namespace URI
      * @throws IllegalStateException if start element is not open
@@ -199,7 +199,7 @@ public class XMLSerializer {
 
     /**
      * Write attribute
-     * 
+     *
      * @param qName attribute name
      * @param value attribute value
      * @throws IllegalStateException if start element is not open
@@ -210,7 +210,7 @@ public class XMLSerializer {
 
     /**
      * Write attribute
-     * 
+     *
      * @param uri namespace URI
      * @param qName attribute name
      * @param value attribute value
@@ -230,7 +230,7 @@ public class XMLSerializer {
 
     /**
      * Write end element.
-     * 
+     *
      * @throws SAXException if processing the event failed
      */
     public void writeEndElement() throws SAXException {
@@ -246,7 +246,7 @@ public class XMLSerializer {
 
     /**
      * Write characters.
-     * 
+     *
      * @param text character data
      * @throws SAXException if processing the event failed
      * @throws IllegalStateException if start element is not open
@@ -261,7 +261,7 @@ public class XMLSerializer {
 
     /**
      * Write characters.
-     * 
+     *
      * @param ch character data array
      * @param start start index
      * @param length length data to write
@@ -278,7 +278,7 @@ public class XMLSerializer {
 
     /**
      * Write processing instruction.
-     * 
+     *
      * @param target processing instruction name
      * @param data processing instruction data, {@code null} if no data
      * @throws SAXException if processing the event failed
@@ -290,7 +290,7 @@ public class XMLSerializer {
 
     /**
      * Write comment.
-     * 
+     *
      * @param data comment data
      * @throws SAXException if processing the event failed
      */

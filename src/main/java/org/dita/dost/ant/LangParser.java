@@ -15,7 +15,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Content handler to read {@code xml:lang} attribute from map or topic element.
- * 
+ *
  * @author william
  *
  */
@@ -25,7 +25,7 @@ final class LangParser extends DefaultHandler {
 
     /**
      * Get {@code xml:lang} attribute value of last map or topic element.
-     * 
+     *
      * @return language code, {@code null} if not found
      */
     public String getLangCode() {
@@ -43,7 +43,7 @@ final class LangParser extends DefaultHandler {
         final String classAttr = attributes.getValue(ATTRIBUTE_NAME_CLASS);
         final String langAttr = attributes.getValue(ATTRIBUTE_NAME_XML_LANG);
 
-        if(classAttr != null && langAttr != null) {
+        if (classAttr != null && langAttr != null) {
             if (MAP_MAP.matches(classAttr) || TOPIC_TOPIC.matches(classAttr)) {
                 langCode = langAttr.toLowerCase();
             }

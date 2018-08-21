@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-<job>
+<?xml version="1.0" encoding="UTF-8"?><job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
@@ -46,186 +45,42 @@
     <string/>
   </property>
   <files>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Y1a.dita" path="Y1a.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Y1a.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk19.dita" path="Chunk19.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk19.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk5.dita" path="Chunk5.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk5.dita"
-      format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="documentX.dita" path="documentX.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/documentX.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk16.dita" path="Chunk16.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk16.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk2.dita" path="Chunk2.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk2.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Z.dita" path="Z.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Z.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk22.dita" path="Chunk22.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk22.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk8.dita" path="Chunk8.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk8.dita"
-      format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Y2.dita" path="Y2.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Y2.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk7.dita" path="Chunk7.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk7.dita"
-      format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk1.dita" path="Chunk1.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk1.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="documentY.dita" path="documentY.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/documentY.dita"
-      format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="topicX.dita" path="topicX.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/topicX.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk10.dita" path="Chunk10.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk10.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk13.dita" path="Chunk13.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk13.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk21.dita" path="Chunk21.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk21.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk4.dita" path="Chunk4.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk4.dita"
-      format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk20.dita" path="Chunk20.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk20.dita"
-      format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Y1a.dita" path="Y1a.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Y1a.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk19.dita" path="Chunk19.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk19.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk5.dita" path="Chunk5.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk5.dita" format="dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="documentX.dita" path="documentX.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/documentX.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk16.dita" path="Chunk16.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk16.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk2.dita" path="Chunk2.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Z.dita" path="Z.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Z.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk22.dita" path="Chunk22.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk22.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk8.dita" path="Chunk8.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk8.dita" format="dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Y2.dita" path="Y2.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Y2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk7.dita" path="Chunk7.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk7.dita" format="dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk1.dita" path="Chunk1.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="documentY.dita" path="documentY.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/documentY.dita" format="dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="topicX.dita" path="topicX.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/topicX.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk10.dita" path="Chunk10.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk10.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk13.dita" path="Chunk13.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk13.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk21.dita" path="Chunk21.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk21.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk4.dita" path="Chunk4.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk4.dita" format="dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk20.dita" path="Chunk20.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk20.dita" format="dita" target="true"/>
     <file uri="Chunk23.dita" path="Chunk23.dita" format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="document.dita" path="document.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/document.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk12.dita" path="Chunk12.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk12.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk6.dita" path="Chunk6.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk6.dita"
-      format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="X.dita" path="X.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/X.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Z1.dita" path="Z1.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Z1.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk17.dita" path="Chunk17.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk17.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk0.dita" path="Chunk0.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk0.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="topicYbranch.dita" path="topicYbranch.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/topicYbranch.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk11.dita" path="Chunk11.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk11.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Y.dita" path="Y.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Y.dita"
-      format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk14.dita" path="Chunk14.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk14.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="topicY.dita" path="topicY.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/topicY.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Y1.dita" path="Y1.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Y1.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/map1.ditamap"
-      uri="map1.ditamap" path="map1.ditamap"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/map1.ditamap"
-      format="ditamap"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk15.dita" path="Chunk15.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk15.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk18.dita" path="Chunk18.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk18.dita"
-      format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita"
-      uri="Chunk9.dita" path="Chunk9.dita"
-      result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk9.dita"
-      format="dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="document.dita" path="document.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/document.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk12.dita" path="Chunk12.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk12.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk6.dita" path="Chunk6.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk6.dita" format="dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="X.dita" path="X.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/X.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Z1.dita" path="Z1.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Z1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk17.dita" path="Chunk17.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk17.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk0.dita" path="Chunk0.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk0.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="topicYbranch.dita" path="topicYbranch.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/topicYbranch.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk11.dita" path="Chunk11.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk11.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Y.dita" path="Y.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Y.dita" format="dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk14.dita" path="Chunk14.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk14.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="topicY.dita" path="topicY.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/topicY.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Y1.dita" path="Y1.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Y1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/map1.ditamap" uri="map1.ditamap" path="map1.ditamap" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/map1.ditamap" format="ditamap" input="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk15.dita" path="Chunk15.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk15.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk18.dita" path="Chunk18.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk18.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="Chunk9.dita" path="Chunk9.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Chunk9.dita" format="dita"/>
   </files>
 </job>

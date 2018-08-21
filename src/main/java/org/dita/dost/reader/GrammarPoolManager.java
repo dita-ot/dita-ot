@@ -21,7 +21,7 @@ public final class GrammarPoolManager {
 
     /**
      * Get grammar pool
-     * 
+     *
      * @return grammar pool instance
      */
     public static XMLGrammarPool getGrammarPool() {

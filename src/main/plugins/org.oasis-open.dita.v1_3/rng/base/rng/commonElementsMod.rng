@@ -2385,6 +2385,9 @@ ORIGINAL CREATION DATE:
               </choice>
             </attribute>
           </optional>
+          <optional>
+            <attribute name="format" dita:since="1.3 errata 02"/>
+          </optional>
           <ref name="univ-atts"/>
           <optional>
             <attribute name="outputclass"/>

@@ -90,4 +90,5 @@
     <topicref class="- map/topicref " keyref="indextermref_link"/>
     <navref class="- map/navref " keyref="navref_link"/>
   </topicgroup>
+  <topicref class="- map/topicref " keyref="copy"/>
 </map>

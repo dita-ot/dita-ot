@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="titletest5">
+  <title>This is a title, defined in the topic. 5</title>
+<titlealts>
+<navtitle>This is a navtitle element defined inside topic 5</navtitle>
+</titlealts>
+  <body>
+    <p>Topic paragraph</p>
+  </body>
+</topic>

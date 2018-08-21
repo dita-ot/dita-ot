@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="books">
+  <title>Good books</title>
+  <body>
+    <p>I'm gonna do text-only links to a couple of books.</p>
+  </body>
+<related-links>
+<link>
+<linktext><ph><cite>World without Mind</cite> by Franklin Foer</ph></linktext>
+<desc>what happens to a desc?</desc>
+</link>
+<link href="booklist2.dita">
+<linktext>This is a hard-coded link to booklist2</linktext>
+<desc>With a short description</desc>
+</link>
+</related-links>
+</topic>

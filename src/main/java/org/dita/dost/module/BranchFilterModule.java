@@ -79,7 +79,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         ditaValReader = new DitaValReader();
         xmlUtils = new XMLUtils();
     }
-    
+
     @Override
     public void setLogger(final DITAOTLogger logger) {
         super.setLogger(logger);
@@ -101,7 +101,8 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        processMap(job.getInputMap());
+        final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+        processMap(in.uri);
 
         try {
             job.write();
@@ -496,7 +497,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             }
         }
     }
-    
+
     /** Immutable branch definition. */
     public static class Branch {
         /** Empty root branch */
@@ -614,7 +615,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
         }
     }
-    
+
     static URI generateCopyTo(final URI href, final Branch filter) {
         final StringBuilder buf = new StringBuilder(href.toString());
         final Optional<String> suffix = filter.resourceSuffix;
@@ -638,5 +639,5 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         });
         return toURI(buf.toString());
     }
-    
+
 }

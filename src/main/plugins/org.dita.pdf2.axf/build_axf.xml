@@ -110,6 +110,8 @@ See the accompanying LICENSE file for applicable license.
       </and>
     </condition>
 
+    <property name="axf.failOnError" value="true"/>
+
     <!-- run.sh on Linux, AHFCmd.exe or XSLCmd.exe on Windows -->
     <condition property="fo.ah.program.name" value="run.sh">
       <and>
@@ -187,10 +189,10 @@ See the accompanying LICENSE file for applicable license.
       </condition>
     </fail>
     
-    <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${xsl.formatter.ext}">
+    <condition property="outputFile" value="${dita.output.dir}/${outputFile.base}${xsl.formatter.ext}">
       <not><isset property="outputFile"/></not>
     </condition>
-    <mkdir dir="${dita.map.output.dir}"/>
+    <mkdir dir="${dita.output.dir}"/>
     
     <antcall target="transform.fo2pdf.ah.nooption"/>
     <antcall target="transform.fo2pdf.ah.hasoption"/>
@@ -211,6 +213,13 @@ See the accompanying LICENSE file for applicable license.
       <arg value="1"/>
     </exec>
     <log-processor file="${dita.temp.dir}/pdf2.ah.log" taskname="ahf"/>
+    <dita-ot-fail id="PDFX013F">
+      <condition>
+        <not>
+          <equals arg1="${errCode}" arg2="0"/>
+        </not>
+      </condition>
+    </dita-ot-fail>
   </target>
 
   <target name="transform.fo2pdf.ah.hasoption" if="axf.opt">
@@ -230,6 +239,13 @@ See the accompanying LICENSE file for applicable license.
       <arg value="${axf.opt}"/>
     </exec>
     <log-processor file="${dita.temp.dir}/pdf2.ah.log" taskname="ahf"/>
+    <dita-ot-fail id="PDFX013F">
+      <condition>
+        <not>
+          <equals arg1="${errCode}" arg2="0"/>
+        </not>
+      </condition>
+    </dita-ot-fail>
   </target>
 
 </project>

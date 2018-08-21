@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-<job>
+<?xml version="1.0" encoding="UTF-8"?><job>
   <property name="user.input.file">
     <string>foo</string>
   </property>
@@ -23,13 +22,13 @@
     <string>file:/foo/bar</string>
   </property>
   <files>
-    <file uri="foo2" path="foo2" conref-target="true"/>
-    <file uri="bar2" path="bar2" conref-target="true"/>
-    <file uri="foo3" path="foo3" copy-to-source="true"/>
-    <file uri="foo" path="foo" subjectscheme="true"/>
-    <file uri="foo1" path="foo1" format="ditamap" active="true"/>
-    <file uri="bar1" path="bar1" format="ditamap" active="true"/>
-    <file uri="bar3" path="bar3" copy-to-source="true"/>
-    <file uri="bar" path="bar" subjectscheme="true"/>
+    <file src="file:/foo/bar/foo2" uri="foo2" path="foo2" conref-target="true"/>
+    <file src="file:/foo/bar/bar2" uri="bar2" path="bar2" conref-target="true"/>
+    <file src="file:/foo/bar/foo3" uri="foo3" path="foo3" copy-to-source="true"/>
+    <file src="file:/foo/bar/foo" uri="foo" path="foo" format="ditamap" input="true"/>
+    <file src="file:/foo/bar/foo1" uri="foo1" path="foo1" format="ditamap" active="true"/>
+    <file src="file:/foo/bar/bar1" uri="bar1" path="bar1" format="ditamap" active="true"/>
+    <file src="file:/foo/bar/bar3" uri="bar3" path="bar3" copy-to-source="true"/>
+    <file src="file:/foo/bar/bar" uri="bar" path="bar" subjectscheme="true"/>
   </files>
 </job>

@@ -8,6 +8,7 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.index.IndexTerm.IndexTermPrefix.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.StringUtils.*;
@@ -28,9 +29,9 @@ import org.xml.sax.SAXException;
 /**
  * This class extends SAX's DefaultHandler, used for parse index term from dita
  * files.
- * 
+ *
  * @version 1.0 2005-04-30
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class IndexTermReader extends AbstractXMLReader {
@@ -183,10 +184,10 @@ public final class IndexTermReader extends AbstractXMLReader {
         // in the list.
         if (indexTermSpecList.contains(localName)) {
             final IndexTerm term = termStack.pop();
-            if (term.getTermName() == null || term.getTermName().trim().equals("")){
-                if(term.getEndAttribute() != null && !term.hasSubTerms()){
+            if (term.getTermName() == null || term.getTermName().trim().equals("")) {
+                if (term.getEndAttribute() != null && !term.hasSubTerms()) {
                     return;
-                } else{
+                } else {
                     term.setTermName("***");
                     logger.warn(MessageUtils.getMessage("DOTJ014W").toString());
                 }
@@ -199,7 +200,7 @@ public final class IndexTermReader extends AbstractXMLReader {
             //if this term is the leaf term
             //leaf means the current indexterm element doesn't contains any subterms
             //or only has "index-see" or "index-see-also" subterms.
-            if (term.isLeaf()){
+            if (term.isLeaf()) {
                 //generate a target which points to current topic and
                 //assign it to current term.
                 final IndexTermTarget target = genTarget();
@@ -235,9 +236,12 @@ public final class IndexTermReader extends AbstractXMLReader {
          */
         if (titleSpecList.contains(localName)) {
             inTitleElement = false;
-            if(!topicIdStack.empty() && !titleMap.containsKey(topicIdStack.peek())){
+            if (!topicIdStack.empty() && !titleMap.containsKey(topicIdStack.peek())) {
                 //If this is the first topic title
-                if(titleMap.size() == 0) {
+                if (title == null) {  //Guard against zero-content titles
+                    title = "***";
+                }
+                if (titleMap.size() == 0) {
                     defaultTitle = title;
                 }
                 titleMap.put(topicIdStack.peek(), title);
@@ -250,7 +254,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         }
 
         // For <topic>
-        if (topicSpecList.contains(localName)){
+        if (topicSpecList.contains(localName)) {
             topicIdStack.pop();
         }
     }
@@ -263,9 +267,9 @@ public final class IndexTermReader extends AbstractXMLReader {
         final IndexTermTarget target = new IndexTermTarget();
         String fragment;
 
-        if(topicIdStack.peek() == null){
+        if (topicIdStack.peek() == null) {
             fragment = null;
-        }else{
+        } else {
             fragment = topicIdStack.peek();
         }
 
@@ -274,7 +278,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         } else {
             target.setTargetName(targetFile);
         }
-        if(fragment != null) {
+        if (fragment != null) {
             target.setTargetURI(setFragment(targetFile, fragment));
         } else {
             target.setTargetURI(targetFile);
@@ -308,8 +312,8 @@ public final class IndexTermReader extends AbstractXMLReader {
 
         handleSpecialization(localName, classAttr);
         parseTopic(localName, attributes.getValue(ATTRIBUTE_NAME_ID));
-        //change parseIndexTerm(localName) to parseIndexTerm(localName,attributes)
-        parseIndexTerm(localName,attributes);
+        //change parseIndexTerm(localName) to parseIndexTerm(localName, attributes)
+        parseIndexTerm(localName, attributes);
         parseIndexSee(localName);
         parseIndexSeeAlso(localName);
 
@@ -337,8 +341,8 @@ public final class IndexTermReader extends AbstractXMLReader {
         }
     }
 
-    private void parseTopic(final String localName, final String id){
-        if (topicSpecList.contains(localName)){
+    private void parseTopic(final String localName, final String id) {
+        if (topicSpecList.contains(localName)) {
             topicIdStack.push(id);
         }
     }
@@ -349,13 +353,13 @@ public final class IndexTermReader extends AbstractXMLReader {
         if (indexSeeAlsoSpecList.contains(localName)) {
             final IndexTerm indexTerm = new IndexTerm();
             IndexTerm parentTerm;
-            if(!termStack.isEmpty()){
+            if (!termStack.isEmpty()) {
                 parentTerm = termStack.peek();
-                if(parentTerm.hasSubTerms()){
+                if (parentTerm.hasSubTerms()) {
                     parentTerm.updateSubTerm();
                 }
             }
-            indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
+            indexTerm.setTermPrefix(SEE_ALSO);
             termStack.push(indexTerm);
         }
     }
@@ -367,13 +371,13 @@ public final class IndexTermReader extends AbstractXMLReader {
             final IndexTerm indexTerm = new IndexTerm();
             IndexTerm parentTerm;
 
-            indexTerm.setTermPrefix(IndexTerm_Prefix_See);
+            indexTerm.setTermPrefix(SEE);
 
-            if(!termStack.isEmpty()){
+            if (!termStack.isEmpty()) {
                 parentTerm = termStack.peek();
-                if(parentTerm.hasSubTerms()){
+                if (parentTerm.hasSubTerms()) {
                     parentTerm.updateSubTerm();
-                    indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
+                    indexTerm.setTermPrefix(SEE_ALSO);
                 }
             }
             termStack.push(indexTerm);
@@ -389,9 +393,9 @@ public final class IndexTermReader extends AbstractXMLReader {
             indexTerm.setEndAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
 
             IndexTerm parentTerm;
-            if(!termStack.isEmpty()){
+            if (!termStack.isEmpty()) {
                 parentTerm = termStack.peek();
-                if(parentTerm.hasSubTerms()){
+                if (parentTerm.hasSubTerms()) {
                     parentTerm.updateSubTerm();
                 }
             }
@@ -438,7 +442,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         } else if (TOPIC_TITLE.matches(classAttr)) {
             //add the element name to the title specailization element list
             // if it does not exist in that list.
-            if (!titleSpecList.contains(localName)){
+            if (!titleSpecList.contains(localName)) {
                 titleSpecList.add(localName);
             }
         }
@@ -456,8 +460,8 @@ public final class IndexTermReader extends AbstractXMLReader {
      * Update the target name of constructed IndexTerm recursively
      *
      */
-    private void updateIndexTermTargetName(){
-        if(defaultTitle == null){
+    private void updateIndexTermTargetName() {
+        if (defaultTitle == null) {
             defaultTitle = targetFile;
         }
         for (final IndexTerm indexterm : indexTermList) {
@@ -468,25 +472,25 @@ public final class IndexTermReader extends AbstractXMLReader {
     /**
      * Update the target name of each IndexTerm, recursively.
      */
-    private void updateIndexTermTargetName(final IndexTerm indexterm){
+    private void updateIndexTermTargetName(final IndexTerm indexterm) {
         final int targetSize = indexterm.getTargetList().size();
         final int subtermSize = indexterm.getSubTerms().size();
 
-        for(int i=0; i<targetSize; i++){
+        for (int i = 0; i<targetSize; i++) {
             final IndexTermTarget target = indexterm.getTargetList().get(i);
             final String uri = target.getTargetURI();
             final int indexOfSharp = uri.lastIndexOf(SHARP);
             final String fragment = (indexOfSharp == -1 || uri.endsWith(SHARP))?
                     null:
-                        uri.substring(indexOfSharp+1);
-            if(fragment != null && titleMap.containsKey(fragment)){
+                        uri.substring(indexOfSharp + 1);
+            if (fragment != null && titleMap.containsKey(fragment)) {
                 target.setTargetName(titleMap.get(fragment));
-            }else{
+            } else {
                 target.setTargetName(defaultTitle);
             }
         }
 
-        for(int i=0; i<subtermSize; i++){
+        for (int i = 0; i<subtermSize; i++) {
             final IndexTerm subterm = indexterm.getSubTerms().get(i);
             updateIndexTermTargetName(subterm);
         }
@@ -494,13 +498,13 @@ public final class IndexTermReader extends AbstractXMLReader {
 
     /**
      * Trim whitespace from start of the string. If last character of termName and
-     * first character of temp is a space character, remove leading string from temp 
-     * 
+     * first character of temp is a space character, remove leading string from temp
+     *
      * @return trimmed temp value
      */
     private static String trimSpaceAtStart(final String temp, final String termName) {
-        if(termName != null && termName.charAt(termName.length() - 1) == ' ') {
-            if(temp.charAt(0) == ' ') {
+        if (termName != null && termName.charAt(termName.length() - 1) == ' ') {
+            if (temp.charAt(0) == ' ') {
                 return temp.substring(1);
             }
         }

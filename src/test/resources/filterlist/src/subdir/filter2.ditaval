@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE val PUBLIC "-//OASIS//DTD DITA DITAVAL//EN" "ditaval.dtd">
 <val>
     <prop action="include" att="otherprops" val="subinclude" />
     <prop action="exclude" att="otherprops" val="subexclude" />

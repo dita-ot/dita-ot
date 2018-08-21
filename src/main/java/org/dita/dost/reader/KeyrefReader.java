@@ -66,7 +66,7 @@ public final class KeyrefReader implements AbstractReader {
     public KeyrefReader() {
         builder = XMLUtils.getDocumentBuilder();
     }
-    
+
     @Override
     public void read(final File filename) {
         throw new UnsupportedOperationException();
@@ -84,7 +84,7 @@ public final class KeyrefReader implements AbstractReader {
 
     /**
      * Get key definitions for root scope. Each key definition Element has a distinct Document.
-     * 
+     *
      * @return root key scope
      */
     public KeyScope getKeyDefinition() {
@@ -93,7 +93,7 @@ public final class KeyrefReader implements AbstractReader {
 
     /**
      * Read key definitions
-     * 
+     *
      * @param filename absolute URI to DITA map with key definitions
      * @param doc key definition DITA map
      */
@@ -160,8 +160,7 @@ public final class KeyrefReader implements AbstractReader {
             if (child.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
                 final List<KeyScope> childScope = readScopes(child);
                 childScopes.addAll(childScope);
-            }
-            else {
+            } else {
                 readChildScopes(child, childScopes);
             }
         }
@@ -210,7 +209,7 @@ public final class KeyrefReader implements AbstractReader {
                     final Document d = builder.newDocument();
                     final Element copy = (Element) d.importNode(elem, true);
                     d.appendChild(copy);
-                    final String h = copy.getAttribute(ATTRIBUTE_NAME_HREF);
+                    final String h = copy.getAttribute(ATTRIBUTE_NAME_COPY_TO).isEmpty() ? copy.getAttribute(ATTRIBUTE_NAME_HREF) : copy.getAttribute(ATTRIBUTE_NAME_COPY_TO);
                     final URI href = h.isEmpty() ? null : toURI(h);
                     final String s = copy.getAttribute(ATTRIBUTE_NAME_SCOPE);
                     final String scope = s.isEmpty() ? null : s;

@@ -68,8 +68,11 @@ See the accompanying LICENSE file for applicable license.
             </xsl:when>
             <!-- When the target has a short description and no local override, use the target -->
             <xsl:when test="$element/*[contains(@class, ' topic/shortdesc ')]">
-                <fo:block xsl:use-attribute-sets="link__shortdesc">
+                <xsl:variable name="generatedShortdesc" as="element()*">
                     <xsl:apply-templates select="$element/*[contains(@class, ' topic/shortdesc ')]"/>
+                </xsl:variable>
+                <fo:block xsl:use-attribute-sets="link__shortdesc">
+                    <xsl:apply-templates select="$generatedShortdesc" mode="dropCopiedIds"/>
                 </fo:block>
             </xsl:when>
         </xsl:choose>
@@ -486,7 +489,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
     </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/link ')]" mode="processLink">
+  <xsl:template match="*[contains(@class,' topic/link ')][not(empty(@href) or @href='')]" mode="processLink">
     <xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
     <xsl:variable name="element" select="key('key_anchor',$destination, $root)[1]"/>
 
@@ -541,6 +544,21 @@ See the accompanying LICENSE file for applicable license.
       <xsl:with-param name="linkScope" select="$linkScope"/>
     </xsl:call-template>
     </fo:block>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class,' topic/link ')][empty(@href) or @href='']" mode="processLink">   
+    <xsl:if test="*[contains(@class, ' topic/linktext ')]">
+      <fo:block xsl:use-attribute-sets="link">
+        <fo:inline>
+          <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
+        </fo:inline>
+        <xsl:if test="*[contains(@class, ' topic/desc ')]">
+          <fo:block xsl:use-attribute-sets="link__shortdesc">
+            <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
+          </fo:block>
+        </xsl:if>
+      </fo:block>
+    </xsl:if>
   </xsl:template>
 
     <xsl:template name="buildBasicLinkDestination">
@@ -628,6 +646,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
     <fo:block xsl:use-attribute-sets="linklist.title">
+      <xsl:apply-templates select="." mode="customTitleAnchor"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>

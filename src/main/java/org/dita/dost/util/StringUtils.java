@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 /**
  * String relevant utilities.
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class StringUtils {
@@ -32,7 +32,7 @@ public final class StringUtils {
 
     /**
      * Assemble all elements in collection to a string.
-     * 
+     *
      * @param coll -
      *            java.util.List
      * @param delim -
@@ -59,10 +59,10 @@ public final class StringUtils {
 
         return buff.toString();
     }
-    
+
     /**
      * Assemble all elements in map to a string.
-     * 
+     *
      * @param value map to serializer
      * @param delim entry delimiter
      * @return concatenated map
@@ -87,13 +87,13 @@ public final class StringUtils {
      * Replaces each substring of this string that matches the given string
      * with the given replacement. Differ from the JDK String.replaceAll function,
      * this method does not support regular expression based replacement on purpose.
-     * 
+     *
      * @param input input string
      * @param pattern This pattern is recognized as it is. It will not solve
      *        as an regular expression.
      * @param replacement string used to replace with
      * @return replaced string
-     * 
+     *
      */
     public static String replaceAll(final String input,
             final String pattern, final String replacement) {
@@ -102,7 +102,7 @@ public final class StringUtils {
         int newIndex;
 
         while ((newIndex = input.indexOf(pattern, startIndex)) >= 0) {
-            result.append(input.substring(startIndex, newIndex));
+            result.append(input, startIndex, newIndex);
             result.append(replacement);
             startIndex = newIndex + pattern.length();
         }
@@ -114,21 +114,21 @@ public final class StringUtils {
 
     /**
      * Parse {@code props} attribute specializations
-     * 
+     *
      * @param domains input domain
      * @return list of {@code props} attribute specializations
      */
-    public static QName[][] getExtProps(final String domains){
+    public static QName[][] getExtProps(final String domains) {
         // FIXME Dont' mix arrays and collections
         final List<QName[]> propsBuffer = new ArrayList<>();
         int propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS);
         int propsEnd = domains.indexOf(")",propsStart);
-        while (propsStart != -1 && propsEnd != -1){
+        while (propsStart != -1 && propsEnd != -1) {
             final String propPath = domains.substring(propsStart + 2, propsEnd).trim();
             final List<QName> propList = Stream.of(propPath.split("\\s+"))
                     .map(QName::valueOf)
                     .collect(Collectors.toList());
-            propsBuffer.add(propList.toArray(new QName[propList.size()]));
+            propsBuffer.add(propList.toArray(new QName[0]));
             propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS, propsEnd);
             propsEnd = domains.indexOf(")",propsStart);
         }
@@ -164,7 +164,7 @@ public final class StringUtils {
      * @param s input string
      * @return true if the string is null or ""
      */
-    public static boolean isEmptyString(final String s){
+    public static boolean isEmptyString(final String s) {
         return (s == null || s.trim().length() == 0);
     }
 
@@ -176,15 +176,15 @@ public final class StringUtils {
      * @param withSpace whether insert a blank
      * @return processed string
      */
-    public static String setOrAppend(final String target, final String value, final boolean withSpace){
-        if(target == null){
+    public static String setOrAppend(final String target, final String value, final boolean withSpace) {
+        if (target == null) {
             return value;
-        }if(value == null){
+        }if(value == null) {
             return target;
-        }else{
-            if(withSpace && !target.endsWith(STRING_BLANK)){
+        } else {
+            if (withSpace && !target.endsWith(STRING_BLANK)) {
                 return target + STRING_BLANK + value;
-            }else{
+            } else {
                 return target + value;
             }
         }
@@ -197,7 +197,7 @@ public final class StringUtils {
      * @throws NullPointerException when anEncoding parameter is {@code null}
      */
 
-    public static Locale getLocale(final String anEncoding){
+    public static Locale getLocale(final String anEncoding) {
         Locale aLocale = null;
         String country = null;
         String language = null;
@@ -221,9 +221,9 @@ public final class StringUtils {
             //we will only grab the value for xxx.
             final int underscoreIndex = tempString.indexOf("_");
 
-            if (underscoreIndex == -1){
+            if (underscoreIndex == -1) {
                 language = tempString;
-            }else if (underscoreIndex == 2 || underscoreIndex == 3){
+            } else if (underscoreIndex == 2 || underscoreIndex == 3) {
                 //check is first subtag is two or three characters in length.
                 language = tempString.substring(0, underscoreIndex);
             }
@@ -237,13 +237,13 @@ public final class StringUtils {
             //All country tags should be three characters or less.
             //If the subtag is longer than three characters, it assumes that
             //is a dialect or variant.
-            if (subtag2.length() <= 3){
+            if (subtag2.length() <= 3) {
                 country = subtag2.toUpperCase();
                 aLocale = new Locale(language, country);
-            }else if (subtag2.length() > 3 && subtag2.length() <= 8){
+            } else if (subtag2.length() > 3 && subtag2.length() <= 8) {
                 variant = subtag2;
                 aLocale = new Locale(language, "", variant);
-            }else if (subtag2.length() > 8){
+            } else if (subtag2.length() > 8) {
                 //return an error!
             }
 
@@ -253,17 +253,17 @@ public final class StringUtils {
 
             language = tokenizer.nextToken().toLowerCase();
             final String subtag2 = tokenizer.nextToken();
-            if (subtag2.length() <= 3){
+            if (subtag2.length() <= 3) {
                 country = subtag2.toUpperCase();
-            }else if (subtag2.length() > 3 && subtag2.length() <= 8){
-            }else if (subtag2.length() > 8){
+            } else if (subtag2.length() > 3 && subtag2.length() <= 8) {
+            } else if (subtag2.length() > 8) {
                 //return an error!
             }
             variant = tokenizer.nextToken();
 
             aLocale = new Locale(language, country, variant);
 
-        }else {
+        } else {
             //return an warning or do nothing.
             //The xml:lang attribute is empty.
             aLocale = new Locale(LANGUAGE_EN,
@@ -338,17 +338,17 @@ public final class StringUtils {
 
     /**
      * Normalize and collapse whitespaces from string buffer.
-     * 
+     *
      * @param strBuffer The string buffer.
      */
-    public static void normalizeAndCollapseWhitespace(final StringBuilder strBuffer){
+    public static void normalizeAndCollapseWhitespace(final StringBuilder strBuffer) {
         WhiteSpaceState currentState = WhiteSpaceState.WORD;
         for (int i = strBuffer.length() - 1; i >= 0; i--) {
             final char currentChar = strBuffer.charAt(i);
             if (Character.isWhitespace(currentChar)) {
                 if (currentState == WhiteSpaceState.SPACE) {
                     strBuffer.delete(i, i + 1);
-                } else if(currentChar != ' ') {
+                } else if (currentChar != ' ') {
                     strBuffer.replace(i, i + 1, " ");
                 }
                 currentState = WhiteSpaceState.SPACE;

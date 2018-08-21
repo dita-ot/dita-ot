@@ -30,7 +30,7 @@ final class Messages {
      * @param msgLocale locale
      * @return string
      */
-    public static String getString (final String key, final Locale msgLocale){
+    public static String getString (final String key, final Locale msgLocale) {
         /*read message resource file.*/
         ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, msgLocale);
         try {

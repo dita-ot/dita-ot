@@ -13,8 +13,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:include href="get-meta.xsl"/>
   <xsl:include href="rel-links.xsl"/>
-  <xsl:include href="glossdisplay.xsl"/>
-  
+
   <!-- =========== DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS =========== -->
   
   <!-- /CSS = default CSS filename parameter ('')-->
@@ -987,16 +986,10 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- quotes - only do 1 level, no flip-flopping -->
   <xsl:template match="*[contains(@class, ' topic/q ')]" name="topic.q">
-    <span class="q">
+    <q>
       <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="getVariable">
-        <xsl:with-param name="id" select="'OpenQuote'"/>
-      </xsl:call-template>
       <xsl:apply-templates/>
-      <xsl:call-template name="getVariable">
-        <xsl:with-param name="id" select="'CloseQuote'"/>
-      </xsl:call-template>
-    </span>
+    </q>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/term ')]" mode="output-term">
@@ -1025,13 +1018,13 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="glossentries" select="$m_entry-file-contents/descendant-or-self::*[contains(@class, ' glossentry/glossentry ')]" as="element()*"/>
     <xsl:choose>
       <xsl:when test="$m_glossid = '' and $glossentries[lang($m_reflang)]">
-        <xsl:sequence select="$glossentries[lang($m_reflang)]"/>
+        <xsl:sequence select="$glossentries[lang($m_reflang)][1]"/>
       </xsl:when>
       <xsl:when test="not($m_glossid = '') and $glossentries[@id = $m_glossid][lang($m_reflang)]">
         <xsl:sequence select="$glossentries[@id = $m_glossid][lang($m_reflang)]"/>
       </xsl:when>
       <xsl:when test="$m_glossid = '' and $glossentries[lang($DEFAULTLANG)]">
-        <xsl:sequence select="$glossentries[lang($DEFAULTLANG)]"/>
+        <xsl:sequence select="$glossentries[lang($DEFAULTLANG)][1]"/>
       </xsl:when>
       <xsl:when test="not($m_glossid = '') and $glossentries[@id = $m_glossid][lang($DEFAULTLANG)]">
         <xsl:sequence select="$glossentries[@id = $m_glossid][lang($DEFAULTLANG)]"/>
@@ -1871,19 +1864,12 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- (this rule should NOT produce output in production setting) -->
   <xsl:template match="*" name="topic.undefined_element">
-    <span style="background-color: yellow;">
-      <span style="font-weight: bold">
-        <xsl:text>[</xsl:text>
-        <xsl:for-each select="ancestor-or-self::*">
-         <xsl:text>/</xsl:text>
-         <xsl:value-of select="name()" />
-       </xsl:for-each>
-       {"<xsl:value-of select="@class"/>"}<xsl:text>) </xsl:text>
-      </span>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="id" select="'DOTX074W'"/>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="@class"/></xsl:with-param>
+    </xsl:call-template>
+    <span class="undefined_element">
       <xsl:apply-templates/>
-      <span style="font-weight: bold">
-        <xsl:text> (</xsl:text><xsl:value-of select="name()"/><xsl:text>]</xsl:text>
-      </span>
     </span>
   </xsl:template>
   
@@ -2743,6 +2729,6 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:include href="css-class.xsl"/>
-  <xsl:include href="functions.xsl"/>
+  <xsl:include href="plugin:org.dita.html5:xsl/functions.xsl"/>
 
 </xsl:stylesheet>

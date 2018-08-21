@@ -45,7 +45,7 @@ See the accompanying LICENSE file for applicable license.
     <!-- Process with "outofline" in tables.xsl -->
   </xsl:template>
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]
-                        [parent::*[contains(@class,' topic/image ')]]" priority="10">
+                        [parent::*[contains(@class,' topic/image ') or contains(@class, ' svg-d/svgref ')]]" priority="10">
     <!-- Process with "outofline" in commons.xsl -->
   </xsl:template>
 
@@ -182,7 +182,8 @@ See the accompanying LICENSE file for applicable license.
         </xsl:variable>
         <xsl:choose>
           <xsl:when test="parent::*[contains(@class,' topic/dl ') or
-                                    contains(@class,' topic/image ')]">
+                                    contains(@class,' topic/image ') or
+                                    contains(@class, ' svg-d/svgref ')]">
             <fo:inline xsl:use-attribute-sets="image__inline">
               <xsl:apply-templates select="$flags"/>
             </fo:inline>

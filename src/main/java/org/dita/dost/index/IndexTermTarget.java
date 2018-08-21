@@ -10,9 +10,9 @@ package org.dita.dost.index;
 
 /**
  * This class represent the target of an index term.
- * 
+ *
  * @version 1.0 2005-05-11
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class IndexTermTarget {
@@ -30,7 +30,7 @@ public final class IndexTermTarget {
 
     /**
      * Get the target topic's name (title).
-     * 
+     *
      * @return Returns the targetName.
      */
     public String getTargetName() {
@@ -47,7 +47,7 @@ public final class IndexTermTarget {
 
     /**
      * Get the target topic's URI.
-     * 
+     *
      * @return Returns the targetURI.
      */
     public String getTargetURI() {
@@ -64,7 +64,7 @@ public final class IndexTermTarget {
 
     /**
      * The index term targets will be equal if the target topics have same name and URI value.
-     * 
+     *
      * @param obj object to compare
      * @return boolean true if equals
      */

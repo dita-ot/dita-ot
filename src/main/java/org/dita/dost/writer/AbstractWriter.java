@@ -16,15 +16,15 @@ import org.dita.dost.util.Job;
 
 /**
  * AbstractWriter defines the method every writer class should implement.
- * 
+ *
  * @author Lian, Li
- * 
+ *
  */
 public interface AbstractWriter {
 
     /**
      * Call the writer to write or rewrite the file.
-     * 
+     *
      * @param filename system path to process
      * @throws DITAOTException DITAOTException
      */
@@ -32,7 +32,7 @@ public interface AbstractWriter {
 
     /**
      * Set logger for module.
-     * 
+     *
      * @param logger logger to use for log message
      */
     void setLogger(DITAOTLogger logger);

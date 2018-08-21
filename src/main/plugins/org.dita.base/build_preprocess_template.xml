@@ -84,6 +84,7 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Preprocess and merge ditavals" taskname="ditaval-merge" if:set="args.filter">
       <module class="org.dita.dost.module.MergeDitavalModule">
         <param name="ditaval" value="${args.filter}"/>
+        <param name="ditadir" location="${dita.dir}"/>
       </module>
     </pipeline>
   </target>
@@ -190,8 +191,8 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Profile filtering." taskname="profile"
               inputmap="${args.input}">
       <module class="org.dita.dost.module.FilterModule">
-        <ditaFileset format="dita"/>
-        <ditaFileset format="ditamap"/>
+        <ditafileset format="dita"/>
+        <ditafileset format="ditamap"/>
         <!--param name="ditadir" location="${dita.dir}"/-->
         <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
         <!--param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/-->
@@ -236,8 +237,8 @@ See the accompanying LICENSE file for applicable license.
     description="Resolve conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
-        <ditaFileset format="dita"/>
-        <ditaFileset format="ditamap"/>
+        <ditafileset format="dita"/>
+        <ditafileset format="ditamap"/>
       </module>
     </pipeline>
     <job-helper file="conref.list" property="conreflist"/>
@@ -276,7 +277,7 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
         style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
-        <ditaFileset conref="true"/>
+        <ditafileset conref="true"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -302,6 +303,7 @@ See the accompanying LICENSE file for applicable license.
           <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
         </filter>
         <filter class="org.dita.dost.writer.CoderefResolver" unless:set="preprocess.coderef.skip"/>
+        <filter class="org.dita.dost.writer.NormalizeCodeblock" unless:set="preprocess.normalize-codeblock.skip"/>
       </sax>
     </pipeline>
   </target>
@@ -327,13 +329,11 @@ See the accompanying LICENSE file for applicable license.
     </condition>
     <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
-      <xslt basedir="${dita.temp.dir}"
-          reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
+      <module class="org.dita.dost.module.MaprefModule">
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
         <ditafileset format="ditamap"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
-      </xslt>
+      </module>
     </pipeline>
   </target>
 
@@ -360,7 +360,7 @@ See the accompanying LICENSE file for applicable license.
             reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
             filenameparameter="file-being-processed">
-        <ditaFileset format="ditamap"/>
+        <ditafileset format="ditamap"/>
         <param name="TRANSTYPE" expression="${transtype}" />
         <param name="child-topicref-warning" expression="false"/>
         <param name="keep-submap-href" expression="false"/>
@@ -468,7 +468,7 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
         style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
-        <ditaFileset format="dita"/>
+        <ditafileset format="dita"/>
         <param name="TABLELINK" expression="${args.tablelink.style}" if:set="args.tablelink.style" />
         <param name="FIGURELINK" expression="${args.figurelink.style}" if:set="args.figurelink.style" />
         <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if:set="onlytopic.in.map"/>
@@ -499,7 +499,7 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
-        <ditaFileset format="ditamap"/>
+        <ditafileset format="ditamap"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>

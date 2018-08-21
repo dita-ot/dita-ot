@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="morebooks">
+  <title>More good books</title>
+  <body>
+    <p>I'm gonna do text-only links to a couple of books, adding keys this time.</p>
+  </body>
+<related-links>
+<link>
+<linktext><ph><cite>Killers of the Flower Moon</cite> by David Grann</ph></linktext>
+<desc>A depressing but important read</desc>
+</link>
+<link keyref="resolved"/>
+<link keyref="unresolved"><!--Should still log a message--></link>
+<link href="http://metadita.org/books/" scope="external" format="html">
+<linktext>all sorts of books</linktext>
+<desc>this is a short description for my external linked book list</desc>
+</link>
+</related-links>
+</topic>

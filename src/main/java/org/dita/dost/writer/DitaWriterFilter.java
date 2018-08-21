@@ -28,7 +28,7 @@ import static org.dita.dost.reader.GenListModuleReader.*;
 
 /**
  * Insert document PIs and normalize attributes.
- * 
+ *
  * <p>The following processing instructions are added before the root element:</p>
  * <dl>
  *   <dt>{@link Constants#PI_WORKDIR_TARGET}</dt>
@@ -91,7 +91,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void startDocument() throws SAXException {
         // XXX May be require fixup
-        final File path2Project = DebugAndFilterModule.getPathtoProject(FileUtils.getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
+        final File relativeToMap = FileUtils.getRelativePath(toFile(job.getInputFile()), toFile(currentFile));
+        final File path2Project = DebugAndFilterModule.getPathtoProject(relativeToMap,
                 toFile(currentFile),
                 toFile(job.getInputFile()),
                 job);
@@ -146,12 +147,12 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             String attValue = origValue;
             if (ATTRIBUTE_NAME_CONREF.equals(attQName.getLocalPart())) {
                 attValue = replaceHREF(QName.valueOf(ATTRIBUTE_NAME_CONREF), atts).toString();
-            } else if(ATTRIBUTE_NAME_HREF.equals(attQName.getLocalPart()) || ATTRIBUTE_NAME_COPY_TO.equals(attQName.getLocalPart())){
+            } else if (ATTRIBUTE_NAME_HREF.equals(attQName.getLocalPart()) || ATTRIBUTE_NAME_COPY_TO.equals(attQName.getLocalPart())) {
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
-                        atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)){
+                        atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)) {
                     attValue = replaceHREF(attQName, atts).toString();
                 }
-            } else if(ATTRIBUTE_NAME_FORMAT.equals(attQName.getLocalPart())) {
+            } else if (ATTRIBUTE_NAME_FORMAT.equals(attQName.getLocalPart())) {
                 final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
                 final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                 // verify format is correct
@@ -196,7 +197,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
      * @param atts attributes
      * @return attribute value, may be {@code null}
      */
-    private URI replaceHREF(final QName attName, final Attributes atts){
+    private URI replaceHREF(final QName attName, final Attributes atts) {
         URI attValue = toURI(atts.getValue(attName.getNamespaceURI(), attName.getLocalPart()));
         if (attValue != null) {
             final String fragment = attValue.getFragment();

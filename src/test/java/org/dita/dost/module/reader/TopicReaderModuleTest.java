@@ -37,12 +37,20 @@ public class TopicReaderModuleTest {
         reader.setLogger(new TestUtils.TestLogger());
         final Job job = new Job(tempDir.getRoot());
         job.setInputFile(URI.create("file:///foo/bar/baz.ditamap"));
+        job.setInputMap(URI.create("baz.ditamap"));
+        job.setInputDir(URI.create("file:///foo/bar/"));
+        job.add(new Job.FileInfo.Builder()
+                .src(URI.create("file:///foo/bar/baz.ditamap"))
+                .uri(URI.create("baz.ditamap"))
+                .isInput(true)
+                .build());
         reader.setJob(job);
         final PipelineHashIO input = new PipelineHashIO();
         input.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, tempDir.getRoot().getAbsolutePath());
         input.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, "1");
         input.setAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL, Job.OutterControl.FAIL.toString());
         input.setAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR, tempDir.getRoot().getAbsolutePath());
+        input.setAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED, Boolean.FALSE.toString());
         reader.parseInputParameters(input);
         reader.init();
         reader.initFilters();

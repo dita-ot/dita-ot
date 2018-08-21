@@ -398,6 +398,9 @@ See the accompanying LICENSE file for applicable license.
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="univAttrs"/>
       <xsl:call-template name="globalAtts"/>
+      <xsl:call-template name="displayAtts">
+        <xsl:with-param name="element" select="."/>
+      </xsl:call-template>
 
       <xsl:if test="@relcolwidth">
         <xsl:variable name="fix-relcolwidth">
@@ -418,7 +421,7 @@ See the accompanying LICENSE file for applicable license.
           <fo:table-header xsl:use-attribute-sets="chhead">
             <fo:table-row xsl:use-attribute-sets="chhead__row">
               <xsl:apply-templates select="." mode="emptyChoptionHd"/>
-              <xsl:apply-templates select="." mode="emptyDescHd"/>
+              <xsl:apply-templates select="." mode="emptyChdescHd"/>
             </fo:table-row>
           </fo:table-header>
         </xsl:otherwise>
@@ -433,6 +436,9 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*" mode="emptyChoptionHd">
     <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd">
+      <xsl:apply-templates select="." mode="simpletableHorizontalBorders"/>
+      <xsl:apply-templates select="." mode="simpletableTopBorder"/>
+      <xsl:apply-templates select="." mode="simpletableVerticalBorders"/>
       <fo:block xsl:use-attribute-sets="chhead.choptionhd__content">
         <xsl:call-template name="getVariable">
           <xsl:with-param name="id" select="'Option'"/>
@@ -443,6 +449,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*" mode="emptyChdescHd">
     <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd">
+      <xsl:apply-templates select="." mode="simpletableHorizontalBorders"/>
+      <xsl:apply-templates select="." mode="simpletableTopBorder"/>
       <fo:block xsl:use-attribute-sets="chhead.chdeschd__content">
         <xsl:call-template name="getVariable">
           <xsl:with-param name="id" select="'Description'"/>
@@ -460,7 +468,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:if>
         <xsl:apply-templates/>
         <xsl:if test="empty(*[contains(@class,' task/chdeschd ')])">
-          <xsl:apply-templates select="." mode="emptyDescHd"/>
+          <xsl:apply-templates select="." mode="emptyChdescHd"/>
         </xsl:if>
       </fo:table-row>
     </fo:table-header>
@@ -476,6 +484,9 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/choptionhd ')]">
     <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd">
       <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="." mode="simpletableHorizontalBorders"/>
+      <xsl:apply-templates select="." mode="simpletableTopBorder"/>
+      <xsl:apply-templates select="." mode="simpletableVerticalBorders"/>
       <fo:block xsl:use-attribute-sets="chhead.choptionhd__content">
         <xsl:apply-templates/>
       </fo:block>
@@ -485,6 +496,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/chdeschd ')]">
     <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd">
       <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="." mode="simpletableHorizontalBorders"/>
+      <xsl:apply-templates select="." mode="simpletableTopBorder"/>
       <fo:block xsl:use-attribute-sets="chhead.chdeschd__content">
         <xsl:apply-templates/>
       </fo:block>
@@ -495,6 +508,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="keyCol" select="ancestor::*[contains(@class, ' task/choicetable ')][1]/@keycol"/>
     <fo:table-cell xsl:use-attribute-sets="chrow.choption">
       <xsl:call-template name="commonattributes"/>
+      <xsl:if test="../following-sibling::*[contains(@class, ' task/chrow ')]">
+        <xsl:apply-templates select="." mode="simpletableHorizontalBorders"/>
+      </xsl:if>
+      <xsl:apply-templates select="." mode="simpletableVerticalBorders"/>
       <xsl:choose>
         <xsl:when test="$keyCol = 1">
           <fo:block xsl:use-attribute-sets="chrow.choption__keycol-content">
@@ -514,6 +531,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="keyCol" select="number(ancestor::*[contains(@class, ' task/choicetable ')][1]/@keycol)"/>
     <fo:table-cell xsl:use-attribute-sets="chrow.chdesc">
       <xsl:call-template name="commonattributes"/>
+      <xsl:if test="../following-sibling::*[contains(@class, ' task/chrow ')]">
+        <xsl:apply-templates select="." mode="simpletableHorizontalBorders"/>
+      </xsl:if>
       <xsl:choose>
         <xsl:when test="$keyCol = 2">
           <fo:block xsl:use-attribute-sets="chrow.chdesc__keycol-content">

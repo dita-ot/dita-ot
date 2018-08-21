@@ -22,22 +22,24 @@
       </xs:appinfo>
    </xs:annotation>
 
-   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:mapMod.xsd:1.3">
-      <xs:group name="topicref">
-         <xs:sequence>
-            <xs:group ref="mapgroup-d-topicref"/>
-         </xs:sequence>
-      </xs:group>
-   </xs:redefine>
-   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:mapGroupMod.xsd:1.3">
-      <xs:group name="mapgroup-d-topicref">
-         <xs:sequence>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-               <xs:group ref="keydef"/>
-               <xs:group ref="mapref"/>
-               <xs:group ref="topicgroup"/>
-            </xs:choice>
-         </xs:sequence>
-      </xs:group>
-   </xs:redefine>
+  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningObjectMapIntMod.xsd:1.3">
+    <xs:group name="topicref">
+      <xs:choice>
+        <xs:group ref="mapgroup-d-topicref"/>
+        <xs:group ref="ditavalref-d-topicref"/>
+        <xs:group ref="learningmap-d-topicref"/>
+      </xs:choice>
+    </xs:group>
+  </xs:redefine>
+
+  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:mapGroupMod.xsd:1.3">
+    <xs:group name="mapgroup-d-topicref">
+      <xs:choice>
+        <xs:element ref="keydef"/>
+        <xs:element ref="mapref"/>
+        <xs:element ref="topicgroup"/>
+      </xs:choice>
+    </xs:group>
+  </xs:redefine>  
+
 </xs:schema>

@@ -18,9 +18,9 @@ import org.xml.sax.Attributes;
 
 /**
  * DITA specialization hierarchy object.
- * 
+ *
  * <p>Instances of this class are immutable and are safe for use by multiple concurrent threads.</p>
- * 
+ *
  * @since 1.5.3
  * @author Jarno Elovirta
  */
@@ -45,7 +45,7 @@ public final class DitaClass {
 
     /**
      * Constructor
-     * 
+     *
      * @param cls DITA specialization hierarchy string
      */
     public DitaClass(final String cls) {
@@ -64,7 +64,7 @@ public final class DitaClass {
     /**
      * Get class instance.
      * @param cls DITA class, may be {@code null}
-     * @return DITA class, {@code null} if the input was {@code null} 
+     * @return DITA class, {@code null} if the input was {@code null}
      */
     private static DitaClass getInstance(final String cls) {
         if (cls == null) {
@@ -72,7 +72,7 @@ public final class DitaClass {
         }
         return new DitaClass(cls);
     }
-    
+
     /**
      * Get class instance.
      * @param atts attributes, may be {@code null}
@@ -84,7 +84,7 @@ public final class DitaClass {
         }
         return getInstance(atts.getValue(ATTRIBUTE_NAME_CLASS));
     }
-    
+
     /**
      * Get class instance.
      * @param elem element, may be {@code null}
@@ -100,7 +100,7 @@ public final class DitaClass {
         }
         return getInstance(attr.getNodeValue());
     }
-    
+
     // Public methods
 
     @Override
@@ -128,7 +128,7 @@ public final class DitaClass {
 
     /**
      * Get DITA specialization hierarchy string, i.e. the class attribute value.
-     * 
+     *
      * @return specialization hierarchy string
      */
     @Override
@@ -138,7 +138,7 @@ public final class DitaClass {
 
     /**
      * Test if given DITA class matches this DITA class.
-     * 
+     *
      * @param cls DITA element class
      * @return {@code true} if given class matches this class, otherwise {@code false}
      */
@@ -148,7 +148,7 @@ public final class DitaClass {
 
     /**
      * Test if given DITA class string matches this DITA class.
-     * 
+     *
      * @param classString DITA element class string
      * @return {@code true} if given class matches this class, otherwise {@code false}
      */
@@ -158,7 +158,7 @@ public final class DitaClass {
 
     /**
      * Test if given DITA class string matches this DITA class.
-     * 
+     *
      * @param atts SAX attributes
      * @return {@code true} if given attribute set has a class attribute and it matches this class, otherwise {@code false}
      */
@@ -168,7 +168,7 @@ public final class DitaClass {
 
     /**
      * Test if given DITA class string matches this DITA class.
-     * 
+     *
      * @param node DOM DITA element
      * @return {@code true} if given node is an Element and its class matches this class, otherwise {@code false}
      */
@@ -178,11 +178,11 @@ public final class DitaClass {
         }
         return false;
     }
-    
+
     /**
      * Test if the current DitaClass is a valid DITA class value
-     * 
-     * @return {@code true} if uses valid DITA class syntax, otherwise {@code false} 
+     *
+     * @return {@code true} if uses valid DITA class syntax, otherwise {@code false}
      */
     public boolean isValid () {
         return validDitaClass;

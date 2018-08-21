@@ -8,27 +8,27 @@
  */
 package org.dita.dost.log;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
+import org.apache.tools.ant.Location;
+import org.dita.dost.exception.DITAOTException;
+import org.w3c.dom.Element;
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.dita.dost.exception.DITAOTException;
-import org.w3c.dom.Element;
-import org.xml.sax.Locator;
-
-import org.xml.sax.Attributes;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * Class description goes here.
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class MessageBean {
 
     public enum Type {
-        FATAL, ERROR, WARN, INFO, DEBUG;
+        FATAL, ERROR, WARN, INFO, DEBUG
     }
 
     public static final String FATAL = Type.FATAL.name();
@@ -77,7 +77,7 @@ public final class MessageBean {
 
     /**
      * Copy constructor.
-     * 
+     *
      * @param message message
      */
     public MessageBean(final MessageBean message) {
@@ -123,7 +123,7 @@ public final class MessageBean {
     public String getType() {
         return type != null ? type.name() : null;
     }
-    
+
     /**
      * Set error location in source document.
      * @param locator current location during parsing
@@ -141,11 +141,11 @@ public final class MessageBean {
                 throw new RuntimeException("Failed to parse URI '" + locator.getSystemId() + "': " + e.getMessage(), e);
             }
         }
-        ret.srcLine = locator.getLineNumber(); 
+        ret.srcLine = locator.getLineNumber();
         ret.srcColumn = locator.getColumnNumber();
         return ret;
     }
-    
+
     /**
      * Set error location in source document.
      * @param atts source element attributes
@@ -193,6 +193,14 @@ public final class MessageBean {
                 }
             }
         }
+        return ret;
+    }
+
+    public MessageBean setLocation(final Location location) {
+        final MessageBean ret = new MessageBean(this);
+        ret.srcFile = toURI(location.getFileName());
+        ret.srcLine = location.getLineNumber();
+        ret.srcColumn = location.getColumnNumber();
         return ret;
     }
 

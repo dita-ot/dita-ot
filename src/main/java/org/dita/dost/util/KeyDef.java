@@ -27,7 +27,7 @@ import org.w3c.dom.Element;
  * Key definition.
  */
 public class KeyDef {
-    
+
     public static final String ELEMENT_STUB = "stub";
     private static final String ATTRIBUTE_SOURCE = "source";
     private static final String ATTRIBUTE_HREF = "href";
@@ -35,7 +35,7 @@ public class KeyDef {
     private static final String ATTRIBUTE_FORMAT = "format";
     private static final String ATTRIBUTE_KEYS = "keys";
     private static final String ELEMENT_KEYDEF = "keydef";
-    
+
     /** Space delimited list of key names */
     public final String keys;
     public final URI href;
@@ -46,7 +46,7 @@ public class KeyDef {
 
     /**
      * Construct new key definition.
-     * 
+     *
      * @param keys key name
      * @param href href URI, may be {@code null}
      * @param scope link scope, may be {@code null}
@@ -79,20 +79,18 @@ public class KeyDef {
 
     /**
      * Write key definition XML configuration file
-     * 
+     *
      * @param keydefFile key definition file
      * @param keydefs list of key definitions
      * @throws DITAOTException if writing configuration file failed
      */
     public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
-        OutputStream out = null;
         XMLStreamWriter keydef = null;
-        try {
-            out = new FileOutputStream(keydefFile);
+        try (OutputStream out = new FileOutputStream(keydefFile)) {
             keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out, "UTF-8");
             keydef.writeStartDocument();
             keydef.writeStartElement(ELEMENT_STUB);
-            for (final KeyDef k: keydefs) {
+            for (final KeyDef k : keydefs) {
                 keydef.writeStartElement(ELEMENT_KEYDEF);
                 keydef.writeAttribute(ATTRIBUTE_KEYS, k.keys);
                 if (k.href != null) {
@@ -108,7 +106,7 @@ public class KeyDef {
                     keydef.writeAttribute(ATTRIBUTE_SOURCE, k.source.toString());
                 }
                 keydef.writeEndElement();
-            }        
+            }
             keydef.writeEndDocument();
         } catch (final XMLStreamException | IOException e) {
             throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
@@ -116,12 +114,8 @@ public class KeyDef {
             if (keydef != null) {
                 try {
                     keydef.close();
-                } catch (final XMLStreamException e) {}
-            }
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (final IOException e) {}
+                } catch (final XMLStreamException e) {
+                }
             }
         }
     }
@@ -187,5 +181,5 @@ public class KeyDef {
         }
         return true;
     }
-    
+
 }

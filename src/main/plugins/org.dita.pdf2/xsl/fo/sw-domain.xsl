@@ -54,24 +54,21 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/msgnum ')]">
-      <fo:inline xsl:use-attribute-sets="msgnum">
-        <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates/>
-      </fo:inline>
+      <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+        <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="msgnum"/></xsl:with-param>
+      </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/cmdname ')]">
-      <fo:inline xsl:use-attribute-sets="cmdname">
-        <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates/>
-      </fo:inline>
+      <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+        <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="cmdname"/></xsl:with-param>
+      </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/varname ')]">
-      <fo:inline xsl:use-attribute-sets="varname">
-        <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates/>
-      </fo:inline>
+      <xsl:apply-templates select="." mode="inlineTextOptionalKeyref">
+        <xsl:with-param name="copyAttributes" as="element()"><wrapper xsl:use-attribute-sets="varname"/></xsl:with-param>
+      </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/filepath ')]">

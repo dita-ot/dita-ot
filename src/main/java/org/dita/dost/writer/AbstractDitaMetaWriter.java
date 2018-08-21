@@ -46,7 +46,9 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
             if (!newChildren.isEmpty()) {
                 final Element insertPoint = getInsertionRef(metadataContainer, order.subList(i, order.size()));
                 for (final Element newChild: newChildren) {
-                    if (insertPoint != null) {
+                    if (skipUnlockedNavtitle(metadataContainer, newChild)) {
+                        //Navtitle element without locktitle="yes", do not push into topic
+                    } else if (insertPoint != null) {
                         if (uniqueSet.contains(cls) && cls.matches(insertPoint)) {
                             metadataContainer.replaceChild(newChild, insertPoint);
                         } else {
@@ -67,6 +69,24 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
             }
         }
         return false;
+    }
+    
+    /**
+     * Check if an element is an unlocked navtitle, which should not be pushed into topics.
+     *
+     * @param metadataContainer container element
+     * @param checkForNavtitle title element
+     */
+    boolean skipUnlockedNavtitle(final Element metadataContainer, final Element checkForNavtitle) {
+        if (!TOPIC_TITLEALTS.matches(metadataContainer) ||
+                !TOPIC_NAVTITLE.matches(checkForNavtitle)) {
+            return false;
+        } else if (checkForNavtitle.getAttributeNodeNS(DITA_OT_NS, ATTRIBUTE_NAME_LOCKTITLE) == null) {
+            return false;
+        } else if (ATTRIBUTE_NAME_LOCKTITLE_VALUE_YES.matches(checkForNavtitle.getAttributeNodeNS(DITA_OT_NS, ATTRIBUTE_NAME_LOCKTITLE).getValue())) {
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
@@ -30,7 +31,7 @@ import org.xml.sax.XMLReader;
 
 /**
  * DitaIndexWriter reads dita topic file and insert the index information into it.
- * 
+ *
  * @author Zhang, Yuan Peng
  */
 public final class DitaIndexWriter extends AbstractXMLWriter {
@@ -92,7 +93,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
      * check whether the hierarchy of current node match the matchList
      */
     private boolean checkMatch() {
-        if (matchList == null){
+        if (matchList == null) {
             return true;
         }
         final int matchSize = matchList.size();
@@ -114,12 +115,12 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
-        if (!startTopic){
+        if (!startTopic) {
             topicIdList.remove(topicIdList.size() - 1);
         }
         try {
             if (!hasMetadataTillNow && TOPIC_PROLOG.localName.equals(qName) && startTopic && !hasWritten) {
-                
+
                 writeStartElement(TOPIC_METADATA.localName, new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_METADATA.toString()).build());
                 output.write(indexEntries);
                 writeEndElement(TOPIC_METADATA.localName);
@@ -137,13 +138,14 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                 hasPrologTillNow = true;
                 hasWritten = true;
             }
-
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
     }
 
-    private boolean hasMetadata(final String qName){
+    private boolean hasMetadata(final String qName) {
         //check whether there is <metadata> in <prolog> element
         //if there is <prolog> element and there is no <metadata> element before
         //and current element is <resourceid>, then there is no <metadata> in current
@@ -151,26 +153,24 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         return !(hasPrologTillNow && !hasMetadataTillNow && TOPIC_RESOURCEID.localName.equals(qName));
     }
 
-    private boolean hasProlog(final Attributes atts){
+    private boolean hasProlog(final Attributes atts) {
         //check whether there is <prolog> in the current topic
         //if current element is <body> and there is no <prolog> before
         //then this topic has no <prolog> and return false
 
-        if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null){
-            if (!hasPrologTillNow){
-                if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_BODY.matcher)){
+        if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {
+            if (!hasPrologTillNow) {
+                if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_BODY.matcher)) {
                     return false;
-                }
-                else if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_RELATED_LINKS.matcher)){
+                } else if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_RELATED_LINKS.matcher)) {
                     return false;
-                }
-                else if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_TOPIC.matcher)){
+                } else if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_TOPIC.matcher)) {
 
-                    if (topicLevel > 0){
+                    if (topicLevel > 0) {
                         topicLevel++;
-                    }else if (topicLevel == -1){
+                    } else if (topicLevel == -1) {
                         topicLevel = 1;
-                    }else {
+                    } else {
                         return false;
                     }
                     return false;  //Eric
@@ -200,11 +200,11 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             logger.error(e.getMessage(), e) ;
         }
     }
-    
+
     public void setIndexEntries(final String indexEntries) {
         this.indexEntries = indexEntries;
     }
-    
+
     private void setMatch(final String match) {
         int index = 0;
         matchList = new ArrayList<>(16);
@@ -226,7 +226,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             final Attributes atts) throws SAXException {
 
         try {
-            if (topicLevel != -1){
+            if (topicLevel != -1) {
                 if (!hasProlog(atts) && startTopic && !hasWritten) {
                     // if <prolog> don't exist
                     writeStartElement(TOPIC_PROLOG.localName, new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_PROLOG.toString()).build());
@@ -238,13 +238,13 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                     hasWritten = true;
                 }
             }
-            if ( !startTopic && !ELEMENT_NAME_DITA.equals(qName)){
-                if (atts.getValue(ATTRIBUTE_NAME_ID) != null){
+            if (!startTopic && !ELEMENT_NAME_DITA.equals(qName)) {
+                if (atts.getValue(ATTRIBUTE_NAME_ID) != null) {
                     topicIdList.add(atts.getValue(ATTRIBUTE_NAME_ID));
-                }else{
+                } else {
                     topicIdList.add("null");
                 }
-                if (topicIdList.size() >= matchList.size()){
+                if (topicIdList.size() >= matchList.size()) {
                     //To access topic by id globally
                     startTopic = checkMatch();
                 }
@@ -253,14 +253,14 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             if (!hasMetadata(qName) && startTopic && !hasWritten) {
                 writeStartElement(TOPIC_METADATA.localName, new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_METADATA.toString()).build());
                 output.write(indexEntries);
-                writeEndElement(TOPIC_METADATA.localName);                
+                writeEndElement(TOPIC_METADATA.localName);
                 hasMetadataTillNow = true;
                 hasWritten = true;
             }
 
             writeStartElement(qName, atts);
-            
-            if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null){
+
+            if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {
 
                 if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_METADATA.matcher) && startTopic && !hasWritten) {
                     hasMetadataTillNow = true;
@@ -271,6 +271,8 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                     hasPrologTillNow = true;
                 }
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
@@ -285,16 +287,16 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         File outputFile = null;
 
         try {
-            if(filename.endsWith(SHARP)){
+            if (filename.endsWith(SHARP)) {
                 filename = filename.substring(0, filename.length()-1);
             }
 
-            if(filename.lastIndexOf(SHARP)!=-1){
-                file = filename.substring(0,filename.lastIndexOf(SHARP));
+            if (filename.lastIndexOf(SHARP) != -1) {
+                file = filename.substring(0, filename.lastIndexOf(SHARP));
                 topic = filename.substring(filename.lastIndexOf(SHARP)+1);
                 setMatch(topic);
                 startTopic = false;
-            }else{
+            } else {
                 file = filename;
                 matchList = null;
                 startTopic = true;
@@ -304,16 +306,18 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             hasWritten = false;
             inputFile = new File(file);
             outputFile = new File(file + FILE_EXTENSION_TEMP);
-            output = new OutputStreamWriter(new FileOutputStream(outputFile), UTF8);
+            output = new OutputStreamWriter(new FileOutputStream(outputFile), StandardCharsets.UTF_8);
 
             topicIdList.clear();
             reader.setErrorHandler(new DITAOTXMLErrorHandler(file, logger));
             reader.parse(file);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }finally {
             if (output != null) {
-                try{
+                try {
                     output.close();
                 } catch (final Exception e) {
                     logger.error(e.getMessage(), e) ;
@@ -323,13 +327,15 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         try {
             deleteQuietly(inputFile);
             moveFile(outputFile, inputFile);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
         }
     }
-    
+
     // SAX serializer methods
-    
+
     private void writeStartElement(final String qName, final Attributes atts) throws IOException {
         final int attsLen = atts.getLength();
         output.write(LESS_THAN + qName);
@@ -340,11 +346,11 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         }
         output.write(GREATER_THAN);
     }
-    
+
     private void writeEndElement(final String qName) throws IOException {
         output.write(LESS_THAN + SLASH + qName + GREATER_THAN);
     }
-    
+
     private void writeCharacters(final char[] ch, final int start, final int length) throws IOException {
         output.write(escapeXML(ch, start, length));
     }
@@ -353,5 +359,5 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         final String pi = data != null ? target + STRING_BLANK + data : target;
         output.write(LESS_THAN + QUESTION + pi + QUESTION + GREATER_THAN);
     }
-    
+
 }

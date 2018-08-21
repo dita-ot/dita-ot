@@ -18,18 +18,14 @@
 <!ENTITY learningAggregationsTopicref-constraints
   "(map learningAggregationsTopicref-c)"
 >
-<!ENTITY % mapgroup-d-topicref                             "mapgroup-d-topicref">
 <!ENTITY % keydef                                          "keydef">
 <!ENTITY % mapref                                          "mapref">
 <!ENTITY % topicgroup                                      "topicgroup">
 
-<!ENTITY % topicref
-              "%mapgroup-d-topicref;"
->
 <!ENTITY % mapgroup-d-topicref
-              "(%keydef; |
-                %mapref; |
-                %topicgroup;)*"
+              "%keydef; |
+               %mapref; |
+               %topicgroup;"
 >
 
 <!-- ================== DITA Learning Simple Topicref Constraint ==================== -->

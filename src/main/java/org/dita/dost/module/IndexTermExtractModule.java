@@ -36,9 +36,9 @@ import org.xml.sax.XMLReader;
 /**
  * This class extends AbstractPipelineModule, used to extract indexterm from
  * dita/ditamap files.
- * 
+ *
  * @version 1.0 2005-04-30
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
@@ -93,7 +93,8 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         final String encoding = input.getAttribute(ANT_INVOKER_EXT_PARAM_ENCODING);
         final String indextype = input.getAttribute(ANT_INVOKER_EXT_PARAM_INDEXTYPE);
         final String indexclass = input.getAttribute(ANT_INVOKER_EXT_PARAM_INDEXCLASS);
-        inputMap = new File(job.tempDirURI.resolve(job.getInputMap()));
+        final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+        inputMap = new File(job.tempDirURI.resolve(in.uri));
         targetExt = input.getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
 
         /*
@@ -134,13 +135,13 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         handler.setLogger(logger);
         final DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
         ditamapIndexTermReader.setLogger(logger);
-        
+
         xmlReader = XMLUtils.getXMLReader();
 
         try {
             xmlReader.setContentHandler(handler);
 
-            final FileInfo fileInfo = job.getFileInfo(job.getInputFile());
+            final FileInfo fileInfo = job.getFileInfo(f -> f.isInput).iterator().next();
             final URI tempInputMap = job.tempDirURI.resolve(fileInfo.uri);
             for (final URI aTopicList : topicList) {
                 URI target;
@@ -156,7 +157,7 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                 handler.setTargetFile(targetPathFromMapWithoutExt + targetExt);
 
                 try {
-                    /*if(!new File(job.tempDir, target).exists()){
+                    /*if(!new File(job.tempDir, target).exists()) {
                         logger.logWarn("Cannot find file "+ target);
                         continue;
                     }*/
@@ -188,7 +189,7 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
 
                 ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
                 try {
-                    /*if(!new File(job.tempDir, ditamap).exists()){
+                    /*if(!new File(job.tempDir, ditamap).exists()) {
                         logger.logWarn("Cannot find file "+ ditamap);
                         continue;
                     }*/

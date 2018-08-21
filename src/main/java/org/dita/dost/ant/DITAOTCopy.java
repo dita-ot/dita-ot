@@ -28,7 +28,7 @@ import org.apache.tools.ant.util.FileUtils;
  * @author Wu, Zhi Qiang
  */
 public final class DITAOTCopy extends Task {
-    
+
     private String includes = null;
     private File includesFile = null;
     private String relativePaths = null;
@@ -37,9 +37,9 @@ public final class DITAOTCopy extends Task {
 
     /**
      * Default Constructor.
-     * 
+     *
      */
-    public DITAOTCopy(){
+    public DITAOTCopy() {
     }
 
     /**
@@ -49,7 +49,7 @@ public final class DITAOTCopy extends Task {
     public void setIncludes(final String incld) {
         includes = incld;
     }
-    
+
     /**
      * Set the copy files list file.
      * @param includesFile list file for includes to set.
@@ -112,7 +112,7 @@ public final class DITAOTCopy extends Task {
                             break;
                         }
                     }
-                    if (srcFile.exists() && destFile != null) {                      
+                    if (srcFile.exists() && destFile != null) {
                         fileUtils.copyFile(srcFile, destFile);
                     }
                 }
@@ -128,18 +128,12 @@ public final class DITAOTCopy extends Task {
         }
         if (includesFile != null) {
             final List<String> res = new ArrayList<>();
-            BufferedReader r = null;
-            try {
-                r = new BufferedReader(new FileReader(includesFile));
+            try (BufferedReader r = new BufferedReader(new FileReader(includesFile))) {
                 String line;
                 while ((line = r.readLine()) != null) {
                     if (!line.trim().isEmpty()) {
                         res.add(line.trim());
                     }
-                }
-            } finally {
-                if (r != null) {
-                    r.close();
                 }
             }
             return res;
@@ -147,5 +141,5 @@ public final class DITAOTCopy extends Task {
             return Arrays.asList(includes.split(COMMA));
         }
     }
-    
+
 }

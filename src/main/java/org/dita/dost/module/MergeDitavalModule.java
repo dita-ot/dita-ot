@@ -37,17 +37,18 @@ import org.dita.dost.util.*;
 import org.xml.sax.*;
 
 /**
- * This class reads a list of DITAVAL files, and merges 
+ * This class reads a list of DITAVAL files, and merges
  * conditions into a single file
- * 
+ *
  * @since 2.5
- * 
+ *
  * @author robander
  */
 public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
 
     /** Absolute paths for filter files. */
     private final List<File> ditavalFiles = new LinkedList<>();
+    private File ditaDir = null;
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -71,6 +72,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
 
     private void parseInputParameters(final AbstractPipelineInput input) {
         final File basedir = toFile(input.getAttribute(ANT_INVOKER_PARAM_BASEDIR));
+        ditaDir = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
         if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
             final String[] allDitavalFiles = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL).split(File.pathSeparator);
             for (final String oneDitavalFile : allDitavalFiles) {
@@ -103,6 +105,8 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
 
     private void writeMergedDitaval() throws DITAOTException {
         final DocumentBuilder ditavalbuilder = XMLUtils.getDocumentBuilder();
+        CatalogUtils.setDitaDir(ditaDir);
+        ditavalbuilder.setEntityResolver(CatalogUtils.getCatalogResolver());
         XMLStreamWriter export = null;
         try (OutputStream exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))) {
             export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
@@ -156,8 +160,8 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
                         }
                     }
                     if (atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ||
-                            atts.getNamedItem(ATTRIBUTE_NAME_IMG) != null ) {
-                        final String imagerefAtt = atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ? 
+                            atts.getNamedItem(ATTRIBUTE_NAME_IMG) != null) {
+                        final String imagerefAtt = atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ?
                                 atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF).getNodeValue() :    // DITA 1.1 and later: use @imageref on <startflag>, <endflag>
                                 atts.getNamedItem(ATTRIBUTE_NAME_IMG).getNodeValue();          // Pre-DITA 1.1: use @img on <prop>
                         if (toURI(imagerefAtt).isAbsolute()) {

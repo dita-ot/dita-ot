@@ -32,7 +32,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
     private final XMLReader reader;
     private DITAOTLogger logger;
     private final Set<String> fileNameSet;
-    final Hashtable<String,String> paramTable;
+    final Hashtable<String, String> paramTable;
     private int elemLevel = 0;
     /** Current processing file. */
     String currentFile;
@@ -49,7 +49,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
             throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
         }
     }
-    
+
     @Override
     public void setInput(final List<String> input) {
         fileNameSet.addAll(input);
@@ -64,11 +64,11 @@ class InsertAction extends XMLFilterImpl implements IAction {
     public String getResult() {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public void getResult(final ContentHandler retBuf) throws SAXException {
         setContentHandler(retBuf);
-        try{
+        try {
             for (final String fileName: fileNameSet) {
                 currentFile = fileName;
                 reader.parse(currentFile);
@@ -88,10 +88,10 @@ class InsertAction extends XMLFilterImpl implements IAction {
     }
 
     // XMLFilter methods
-    
+
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
-        if (elemLevel != 0){
+        if (elemLevel != 0) {
             getContentHandler().startElement(uri, localName, qName, attributes);
         }
         elemLevel ++;
@@ -110,7 +110,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
         elemLevel = 0;
         // suppress
     }
-    
+
     @Override
     public void endDocument() throws SAXException {
         // suppress

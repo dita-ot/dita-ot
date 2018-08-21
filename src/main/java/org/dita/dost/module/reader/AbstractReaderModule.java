@@ -9,6 +9,8 @@
 package org.dita.dost.module.reader;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.MultimapBuilder.SetMultimapBuilder;
+import com.google.common.collect.SetMultimap;
 import org.apache.commons.io.FileUtils;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
@@ -71,7 +73,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Set of all images used for flagging */
     private final Set<URI> flagImageSet = new LinkedHashSet<>(128);
     /** Set of all HTML and other non-DITA or non-image files */
-    final Set<URI> htmlSet = new HashSet<>(128);
+    final SetMultimap<String, URI> htmlSet = SetMultimapBuilder.hashKeys().hashSetValues().build();
     /** Set of all the href targets */
     private final Set<URI> hrefTargetSet = new HashSet<>(128);
     /** Set of all the conref targets */
@@ -324,6 +326,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                     .src(currentFile)
                     .uri(rel)
                     .result(currentFile)
+                    .isInput(currentFile.equals(rootFile))
                     .build();
             job.add(stub);
         }
@@ -628,8 +631,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             f.isFlagImage = true;
             f.format = ATTR_FORMAT_VALUE_IMAGE;
         }
-        for (final URI file: htmlSet) {
-            getOrCreateFileInfo(fileinfos, file).format = ATTR_FORMAT_VALUE_HTML;
+        for (final String format: htmlSet.keySet()) {
+            for (final URI file : htmlSet.get(format)) {
+                getOrCreateFileInfo(fileinfos, file).format = format;
+            }
         }
         for (final URI file: hrefTargetSet) {
             getOrCreateFileInfo(fileinfos, file).isTarget = true;
@@ -675,13 +680,22 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
         for (final URI target : filteredCopyTo.keySet()) {
             final URI tmp = tempFileNameScheme.generateTempFileName(target);
-            final FileInfo fi = new FileInfo.Builder().result(target).uri(tmp).build();
+            final URI src = filteredCopyTo.get(target);
+            final FileInfo fi = new FileInfo.Builder().src(src).result(target).uri(tmp).build();
             // FIXME: what's the correct value for this? Accept all?
             if (formatFilter.test(fi.format)
                     || fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
                 job.add(fi);
             }
         }
+
+        final FileInfo root = job.getFileInfo(rootFile);
+        if (root == null) {
+            throw new RuntimeException("Unable to set input file to job configuration");
+        }
+        job.add(new FileInfo.Builder(root)
+                .isInput(true)
+                .build());
 
         try {
             logger.info("Serializing job specification");

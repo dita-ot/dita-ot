@@ -221,6 +221,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq" use-attribute-sets="common.block">
+        <xsl:attribute name="start-indent">30pt + from-parent(start-indent)</xsl:attribute>
+        <xsl:attribute name="end-indent">15pt + from-parent(end-indent)</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq_simple" use-attribute-sets="common.block">

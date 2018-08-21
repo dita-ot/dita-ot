@@ -23,9 +23,9 @@ import org.xml.sax.SAXException;
 /**
  * This class extends AbstractReader, implement SAX's ContentHandler
  * and EntityResolver.
- * 
+ *
  * @version 1.0 2005-06-24
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public abstract class AbstractXMLReader implements AbstractReader,

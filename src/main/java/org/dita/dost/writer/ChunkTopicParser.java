@@ -8,7 +8,6 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.Element;
@@ -21,14 +20,18 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.*;
 import java.net.URI;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
+import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.FileUtils.getRelativeUnixPath;
 import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**
@@ -77,6 +80,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
         final String classValue = getValue(topicref, ATTRIBUTE_NAME_CLASS);
         final String processRoleValue = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
+        final String formatValue = getValue(topicref, ATTRIBUTE_NAME_FORMAT);
 
         URI outputFileName = outputFile;
         Writer tempWriter = null;
@@ -100,7 +104,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 parseFilePath = hrefValue;
             }
 
-            if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)) {
+            if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue) && isFormatDita(formatValue)) {
                 // now the path to target file make sense
                 if (chunkValue.contains(CHUNK_TO_CONTENT)) {
                     // if current element contains "to-content" in chunk attribute
@@ -187,7 +191,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 if (s != null) {
                     selectMethod = s;
                     // if the current topic href referred to a entire
-                    // topic file,it will be handled in "document" level.
+                    // topic file, it will be handled in "document" level.
                     if (targetTopicId == null) {
                         selectMethod = CHUNK_SELECT_DOCUMENT;
                     }
@@ -290,9 +294,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     private void writeToContentChunk(final String tmpContent, final URI outputFileName, final boolean needWriteDitaTag) throws IOException {
         assert outputFileName.isAbsolute();
         logger.info("Writing " + outputFileName);
-        OutputStreamWriter ditaFileOutput = null;
-        try {
-            ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8);
+        try (OutputStreamWriter ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), StandardCharsets.UTF_8)) {
             if (outputFileName.equals(changeTable.get(outputFileName))) {
                 // if the output file is newly generated file
                 // write the xml header and workdir PI into new file
@@ -304,7 +306,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, UNIX_SEPARATOR + new File(workDir).getAbsolutePath());
                 }
                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toString());
-                
+
                 final File path2rootmap = toFile(getRelativePath(outputFileName, job.getInputMap())).getParentFile();
                 writeProcessingInstruction(ditaFileOutput, PI_PATH2ROOTMAP_TARGET_URI, path2rootmap == null ? "./" : toURI(path2rootmap).toString());
 
@@ -333,10 +335,6 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             ditaFileOutput.flush();
         } catch (SAXException e) {
             throw new IOException(e);
-        } finally {
-            if (ditaFileOutput != null) {
-                ditaFileOutput.close();
-            }
         }
     }
 

@@ -101,7 +101,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/dt ')])">
               <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
             </xsl:if>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="." mode="inlineTextOptionalKeyref"/>
         </fo:block>
     </xsl:template>
 
@@ -297,6 +297,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]">
         <fo:block xsl:use-attribute-sets="table.title">
             <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:call-template name="getVariable">
                 <xsl:with-param name="id" select="'Table.title'"/>
                 <xsl:with-param name="params">
@@ -439,7 +440,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="." mode="validate-entry-position"/>
         <xsl:choose>
             <xsl:when test="ancestor::*[contains(@class, ' topic/table ')][1]/@rowheader = 'firstcol'
-                        and empty(preceding-sibling::*[contains(@class, ' topic/entry ')])">
+                and @dita-ot:x = '1'">
                 <fo:table-cell xsl:use-attribute-sets="tbody.row.entry__firstcol">
                     <xsl:apply-templates select="." mode="processTableEntry"/>
                 </fo:table-cell>
@@ -653,20 +654,10 @@ See the accompanying LICENSE file for applicable license.
         <xsl:variable name="rowsep" as="xs:string">
             <xsl:call-template name="getTableRowsep"/>
         </xsl:variable>
-        <xsl:variable name="frame" as="xs:string">
-          <xsl:variable name="f" select="ancestor::*[contains(@class, ' topic/table ')][1]/@frame"/>
-          <xsl:choose>
-            <xsl:when test="$f">
-              <xsl:value-of select="$f"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="$table.frame-default"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
+        <xsl:variable name="frame" as="xs:string" select="(ancestor::*[contains(@class, ' topic/table ')][1]/@frame, $table.frame-default)[1]"/>
         <xsl:variable name="needTopBorderOnBreak" as="xs:boolean">
             <xsl:choose>
-                <xsl:when test="$frame = 'all' or $frame = 'topbot' or $frame = 'top'">
+                <xsl:when test="$frame = ('all', 'topbot', 'top')">
                     <xsl:choose>
                         <xsl:when test="../parent::node()[contains(@class, ' topic/thead ')]">
                             <xsl:sequence select="true()"/>
@@ -780,16 +771,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template name="displayAtts">
         <xsl:param name="element" as="element()"/>
-        <xsl:variable name="frame" as="xs:string">
-          <xsl:choose>
-            <xsl:when test="$element/@frame">
-              <xsl:value-of select="$element/@frame"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="$table.frame-default"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
+        <xsl:variable name="frame" as="xs:string" select="($element/@frame, $table.frame-default)[1]"/>
 
         <xsl:if test="$element/@expanse">
           <xsl:for-each select="$element">
@@ -929,37 +911,18 @@ See the accompanying LICENSE file for applicable license.
           <xsl:for-each select="$current">
             <fo:table-cell xsl:use-attribute-sets="strow.stentry">
                 <xsl:call-template name="commonattributes"/>
-                <xsl:variable name="frame" as="xs:string">
-                    <xsl:choose>
-                        <xsl:when test="../@frame">
-                            <xsl:value-of select="../@frame"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="$table.frame-default"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
+                <xsl:variable name="frame" as="xs:string" select="(../@frame, $table.frame-default)[1]"/>
                 <xsl:if test="following-sibling::*[contains(@class, ' topic/strow ')]">
-                    <xsl:call-template name="generateSimpleTableHorizontalBorders">
-                        <xsl:with-param name="frame" select="$frame"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="simpletableHorizontalBorders">
+                        <xsl:with-param name="frame" select="$frame" as="xs:string"/>
+                    </xsl:apply-templates>
                 </xsl:if>
-                <xsl:if test="$frame = 'all' or $frame = 'topbot' or $frame = 'top'">
-                    <xsl:call-template name="processAttrSetReflection">
-                        <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
-                        <xsl:with-param name="path" select="$tableAttrs"/>
-                    </xsl:call-template>
-                </xsl:if>
-                <xsl:if test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides')">
-                    <xsl:call-template name="processAttrSetReflection">
-                        <xsl:with-param name="attrSet" select="'__tableframe__left'"/>
-                        <xsl:with-param name="path" select="$tableAttrs"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="processAttrSetReflection">
-                        <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
-                        <xsl:with-param name="path" select="$tableAttrs"/>
-                    </xsl:call-template>
-                </xsl:if>
+                <xsl:apply-templates select="." mode="simpletableTopBorder">
+                    <xsl:with-param name="frame" select="$frame" as="xs:string"/>
+                </xsl:apply-templates>
+                <xsl:apply-templates select="." mode="simpletableSideBorders">
+                    <xsl:with-param name="frame" select="$frame" as="xs:string"/>
+                </xsl:apply-templates>
                 <fo:block>
                     <fo:inline>&#160;</fo:inline>
                 </fo:block>
@@ -1018,31 +981,18 @@ See the accompanying LICENSE file for applicable license.
         <fo:table-cell xsl:use-attribute-sets="sthead.stentry">
             <xsl:call-template name="commonattributes"/>
             <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
-            <xsl:variable name="frame" as="xs:string">
-                <xsl:variable name="f" select="ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame"/>
-                <xsl:choose>
-                    <xsl:when test="$f">
-                        <xsl:value-of select="$f"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$table.frame-default"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
+            <xsl:variable name="frame" as="xs:string" select="(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"/>
 
-            <xsl:call-template name="generateSimpleTableHorizontalBorders">
-                <xsl:with-param name="frame" select="$frame"/>
-            </xsl:call-template>
-            <xsl:if test="$frame = 'all' or $frame = 'topbot' or $frame = 'top'">
-                <xsl:call-template name="processAttrSetReflection">
-                    <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
-                    <xsl:with-param name="path" select="$tableAttrs"/>
-                </xsl:call-template>
-            </xsl:if>
+            <xsl:apply-templates select="." mode="simpletableHorizontalBorders">
+                <xsl:with-param name="frame" select="$frame" as="xs:string"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="simpletableTopBorder">
+                <xsl:with-param name="frame" select="$frame" as="xs:string"/>
+            </xsl:apply-templates>
             <xsl:if test="following-sibling::*[contains(@class, ' topic/stentry ')]">
-                <xsl:call-template name="generateSimpleTableVerticalBorders">
-                    <xsl:with-param name="frame" select="$frame"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="simpletableVerticalBorders">
+                    <xsl:with-param name="frame" select="$frame" as="xs:string"/>
+                </xsl:apply-templates>
             </xsl:if>
 
             <xsl:choose>
@@ -1068,27 +1018,17 @@ See the accompanying LICENSE file for applicable license.
         <fo:table-cell xsl:use-attribute-sets="strow.stentry">
             <xsl:call-template name="commonattributes"/>
             <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
-            <xsl:variable name="frame" as="xs:string">
-                <xsl:variable name="f" select="ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame"/>
-                <xsl:choose>
-                    <xsl:when test="$f">
-                        <xsl:value-of select="$f"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$table.frame-default"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
+            <xsl:variable name="frame" as="xs:string" select="(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"/>
 
             <xsl:if test="../following-sibling::*[contains(@class, ' topic/strow ')]">
-                <xsl:call-template name="generateSimpleTableHorizontalBorders">
-                    <xsl:with-param name="frame" select="$frame"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="simpletableHorizontalBorders">
+                    <xsl:with-param name="frame" select="$frame" as="xs:string"/>
+                </xsl:apply-templates>
             </xsl:if>
             <xsl:if test="following-sibling::*[contains(@class, ' topic/stentry ')]">
-                <xsl:call-template name="generateSimpleTableVerticalBorders">
-                    <xsl:with-param name="frame" select="$frame"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="simpletableVerticalBorders">
+                    <xsl:with-param name="frame" select="$frame" as="xs:string"/>
+                </xsl:apply-templates>
             </xsl:if>
 
             <xsl:choose>
@@ -1110,10 +1050,49 @@ See the accompanying LICENSE file for applicable license.
         </fo:table-cell>
     </xsl:template>
 
+    <xsl:template match="*" mode="simpletableHorizontalBorders">
+        <xsl:param name="frame" select="(ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"
+            as="xs:string"/>
+        <xsl:call-template name="generateSimpleTableHorizontalBorders">
+            <xsl:with-param name="frame" select="$frame"/>
+        </xsl:call-template>
+    </xsl:template>
+    <xsl:template match="*" mode="simpletableTopBorder">
+        <xsl:param name="frame" select="(ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"
+            as="xs:string"/>
+        <xsl:if test="$frame = ('all', 'topbot', 'top')">
+            <xsl:call-template name="processAttrSetReflection">
+                <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
+                <xsl:with-param name="path" select="$tableAttrs"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template match="*" mode="simpletableSideBorders">
+        <xsl:param name="frame" select="(ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"
+            as="xs:string"/>
+        <xsl:if test="$frame = ('all', 'topbot', 'sides')">
+            <xsl:call-template name="processAttrSetReflection">
+                <xsl:with-param name="attrSet" select="'__tableframe__left'"/>
+                <xsl:with-param name="path" select="$tableAttrs"/>
+            </xsl:call-template>
+            <xsl:call-template name="processAttrSetReflection">
+                <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
+                <xsl:with-param name="path" select="$tableAttrs"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template match="*" mode="simpletableVerticalBorders">
+        <xsl:param name="frame" select="(ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"
+            as="xs:string"/>
+        <xsl:call-template name="generateSimpleTableVerticalBorders">
+            <xsl:with-param name="frame" select="$frame"/>
+        </xsl:call-template>
+    </xsl:template>
+
     <xsl:template name="generateSimpleTableHorizontalBorders">
         <xsl:param name="frame" as="xs:string?"/>
         <xsl:choose>
-            <xsl:when test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides') or not($frame)">
+            <xsl:when test="$frame = ('all', 'topbot', 'sides') or empty($frame)">
                 <xsl:call-template name="processAttrSetReflection">
                     <xsl:with-param name="attrSet" select="'__tableframe__bottom'"/>
                     <xsl:with-param name="path" select="$tableAttrs"/>
@@ -1125,7 +1104,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template name="generateSimpleTableVerticalBorders">
         <xsl:param name="frame" as="xs:string?"/>
         <xsl:choose>
-            <xsl:when test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides') or not($frame)">
+            <xsl:when test="$frame = ('all', 'topbot', 'sides') or empty($frame)">
                 <xsl:call-template name="processAttrSetReflection">
                     <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
                     <xsl:with-param name="path" select="$tableAttrs"/>

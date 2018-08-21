@@ -23,7 +23,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * are still correct in their new location.
  *
  * Attributes affected: import/@file
- * 
+ *
  * @author Deborah Pickett
  *
  */
@@ -41,7 +41,7 @@ final class InsertAntActionRelative extends InsertAction {
         final AttributesImpl attrBuf = new AttributesImpl();
 
         final int attLen = attributes.getLength();
-        for (int i = 0; i < attLen; i++){
+        for (int i = 0; i < attLen; i++) {
             String value;
             if (relativeAttrs.containsKey(localName)
                     && relativeAttrs.get(localName).equals(attributes.getQName(i))
@@ -53,8 +53,7 @@ final class InsertAntActionRelative extends InsertAction {
                 value = FileUtils.getRelativeUnixPath(
                         paramTable.get(FileGenerator.PARAM_TEMPLATE),
                         targetFile.toString());
-            }
-            else {
+            } else {
                 value = attributes.getValue(i);
             }
             attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),

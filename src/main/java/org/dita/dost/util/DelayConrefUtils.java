@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
- * 
+ *
  * Delay conref feature related utility functions.
  * @author william
  *
@@ -81,7 +81,7 @@ public final class DelayConrefUtils {
      */
     public boolean findTopicId(final File absolutePathToFile, final String id) {
 
-        if(!absolutePathToFile.exists()){
+        if (!absolutePathToFile.exists()) {
             return false;
         }
         try {
@@ -105,15 +105,16 @@ public final class DelayConrefUtils {
                     }
                 }
                 final String classValue = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
-                if(classValue!=null && TOPIC_TOPIC.matches(classValue)){
+                if (classValue != null && TOPIC_TOPIC.matches(classValue)) {
                     //topic id found
-                    if(pe.getAttribute(ATTRIBUTE_NAME_ID).equals(id)){
+                    if (pe.getAttribute(ATTRIBUTE_NAME_ID).equals(id)) {
                         return true;
                     }
                 }
             }
             return false;
-
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error("Failed to read document: " + e.getMessage(), e);
         }
@@ -135,42 +136,44 @@ public final class DelayConrefUtils {
         boolean keyrefExported = false;
         try {
             //load export.xml only once
-            if(root==null){
+            if (root == null) {
                 final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
                 builder.setEntityResolver(CatalogUtils.getCatalogResolver());
                 root = builder.parse(new InputSource(new FileInputStream(exportFile)));
             }
             //get file node which contains the export node
             final Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
-            if(fileNode!=null){
+            if (fileNode != null) {
                 //iterate the child nodes
                 final NodeList pList = fileNode.getChildNodes();
                 for (int j = 0; j < pList.getLength(); j++) {
                     final Node node = pList.item(j);
-                    if(Node.ELEMENT_NODE == node.getNodeType()){
+                    if (Node.ELEMENT_NODE == node.getNodeType()) {
                         final Element child = (Element)node;
                         //compare keys
-                        if(child.getNodeName().equals("keyref")&&
+                        if (child.getNodeName().equals("keyref")&&
                                 child.getAttribute(ATTRIBUTE_NAME_NAME)
-                                .equals(key)){
+                                .equals(key)) {
                             keyrefExported = true;
                             //compare topic id
-                        }else if(child.getNodeName().equals("topicid")&&
+                        } else if (child.getNodeName().equals("topicid")&&
                                 child.getAttribute(ATTRIBUTE_NAME_NAME)
-                                .equals(id)){
+                                .equals(id)) {
                             idExported = true;
                             //compare element id
-                        }else if(child.getNodeName().equals("id")&&
+                        } else if (child.getNodeName().equals("id")&&
                                 child.getAttribute(ATTRIBUTE_NAME_NAME)
-                                .equals(id)){
+                                .equals(id)) {
                             idExported = true;
                         }
                     }
-                    if(idExported && keyrefExported){
+                    if (idExported && keyrefExported) {
                         break;
                     }
                 }
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             e.printStackTrace();
         }
@@ -203,8 +206,8 @@ public final class DelayConrefUtils {
                 }
             }
             String value = pe.getNodeName();
-            if(StringUtils.isEmptyString(value)||
-                    !value.equals(tagName)){
+            if (StringUtils.isEmptyString(value)||
+                    !value.equals(tagName)) {
                 continue;
             }
 

@@ -326,7 +326,7 @@
   </message>-->
   
   <message id="DOTJ045I" type="INFO">
-    <reason>The key &quot;%1&quot; is defined more than once in the same map file. The reference href=&quot;%2&quot; is ignored.</reason>
+    <reason>The key &quot;%1&quot; is defined more than once in the same map file.</reason>
     <response></response>
   </message>
   

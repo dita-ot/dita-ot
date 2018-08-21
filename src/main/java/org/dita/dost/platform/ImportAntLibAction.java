@@ -30,13 +30,13 @@ final class ImportAntLibAction extends ImportAction {
         for (final String value: valueSet) {
             final String resolvedValue = FileUtils.getRelativeUnixPath(
                     templateFilePath, value);
-            if(FileUtils.isAbsolutePath(resolvedValue)){
+            if (FileUtils.isAbsolutePath(resolvedValue)) {
                 // if resolvedValue is absolute path
                 retBuf.startElement(NULL_NS_URI, "pathelement", "pathelement", new AttributesBuilder()
                     .add("location", resolvedValue)
                     .build());
                 retBuf.endElement(NULL_NS_URI, "pathelement", "pathelement");
-            }else{// if resolvedValue is relative path
+            } else {// if resolvedValue is relative path
                 retBuf.startElement(NULL_NS_URI, "pathelement", "pathelement", new AttributesBuilder()
                     .add("location", "${dita.dir}${file.separator}" + resolvedValue)
                     .build());

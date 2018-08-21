@@ -63,8 +63,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private static final Set<String> no_copy_topic;
     static {
-        final Set<String> nct = new HashSet<>();
-        nct.addAll(no_copy);
+        final Set<String> nct = new HashSet<>(no_copy);
         nct.add("query");
         nct.add("search");
         nct.add(ATTRIBUTE_NAME_TOC);
@@ -74,7 +73,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         nct.add(ATTRIBUTE_NAME_NAVTITLE);
         no_copy_topic = Collections.unmodifiableSet(nct);
     }
-    
+
     /** List of key reference element definitions. */
     private final static List<KeyrefInfo> keyrefInfos;
     static {
@@ -83,6 +82,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         ki.add(new KeyrefInfo(TOPIC_DATA, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_DATA_ABOUT, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_IMAGE, ATTRIBUTE_NAME_HREF, false, true));
+        ki.add(new KeyrefInfo(SVG_D_SVGREF, ATTRIBUTE_NAME_HREF, true, false));
         ki.add(new KeyrefInfo(TOPIC_LINK, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_LQ, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(MAP_NAVREF, "mapref", true, false));
@@ -118,7 +118,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             ATTRIBUTE_NAME_CODEBASEKEYREF,
             ATTRIBUTE_NAME_DATAKEYREF
     ));
-        
+
     private KeyScope definitionMap;
 
     /**
@@ -166,7 +166,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /** Set of link targets which are not resource-only */
     private Set<URI> normalProcessingRoleTargets;
     private MergeUtils mergeUtils;
-    
+
     /**
      * Constructor.
      */
@@ -185,21 +185,21 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         super.setLogger(logger);
         mergeUtils.setLogger(logger);
     }
-    
+
     public void setKeyDefinition(final KeyScope definitionMap) {
         this.definitionMap = definitionMap;
     }
-    
+
     /**
      * Get set of link targets which have normal processing role. Paths are relative to current file.
      */
     public Set<URI> getNormalProcessingRoleTargets() {
         return Collections.unmodifiableSet(normalProcessingRoleTargets);
     }
-    
+
     /**
      * Process key references.
-     * 
+     *
      * @param filename file to process
      * @throws DITAOTException if key reference resolution failed
      */
@@ -208,7 +208,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         assert filename.isAbsolute();
         super.write(new File(currentFile));
     }
-        
+
     // XML filter methods ------------------------------------------------------
 
     @Override
@@ -216,10 +216,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         normalProcessingRoleTargets = new HashSet<>();
         getContentHandler().startDocument();
     }
-    
+
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (keyrefLevel != 0 && (length == 0 || new String(ch,start,length).trim().isEmpty())) {
+        if (keyrefLevel != 0 && (length == 0 || new String(ch, start, length).trim().isEmpty())) {
             if (!hasChecked) {
                 empty = true;
             }
@@ -264,7 +264,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 .filter(item -> TOPIC_KEYWORDS.matches(item.getParentNode()))
                                 .collect(Collectors.toList());
                         // XXX: No need to look for term as content model for keywords doesn't allow it
-//                        if (nodeList.getLength() == 0 ) {
+//                        if (nodeList.getLength() == 0) {
 //                            nodeList = elem.getElementsByTagName(TOPIC_TERM.localName);
 //                        }
                         if (!keywordsInKeywords.isEmpty()) {
@@ -336,7 +336,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                         }
                                     }
                                 }
-                            } else if (fallbackToNavtitleOrHref(elem)) {
+                            } else if (!currentElement.isEmpty && fallbackToNavtitleOrHref(elem)) {
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
                                 if (linktext.getLength() > 0) {
                                     domToSax((Element) linktext.item(0), false);
@@ -405,7 +405,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         getContentHandler().characters(ch, 0, ch.length);
         getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
     }
-    
+
     /**
      * Write alt element
      *
@@ -441,13 +441,14 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         for (final KeyrefInfo k : keyrefInfos) {
             if (k.type.matches(cls)) {
                 currentElement = k;
+                break;
             }
         }
         Attributes resAtts = atts;
         hasChecked = false;
         empty = true;
-        if (!hasKeyref(atts)) {
-            // If the keyrefLevel doesn't equal 0, it means that current element is under the key reference element
+        if (!hasKeyref(atts) || currentElement == null) {
+            // If the keyrefLevel doesn't equal 0, it means that current element is under the key reference element;
             if (keyrefLevel != 0) {
                 keyrefLevel++;
                 hasSubElem.pop();
@@ -614,7 +615,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     // Private methods ---------------------------------------------------------
 
-    private boolean isLocalDita(final Element elem ) {
+    private boolean isLocalDita(final Element elem) {
         final String scopeValue = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
         final String formatValue = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
         return ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)) &&
@@ -635,7 +636,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     /**
      * Serialize DOM node into a SAX stream.
-     * 
+     *
      * @param elem element to serialize
      * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
      */
@@ -675,7 +676,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
 
     /**
-     * Change map type to topic type. 
+     * Change map type to topic type.
      */
     private String changeclassValue(final String classValue) {
         final DitaClass cls = new DitaClass(classValue);
@@ -689,7 +690,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             return cls.toString();
         }
     }
-    
+
     /**
      * change elementId into topicId if there is no topicId in key definition.
      */
@@ -706,7 +707,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private String getFirstTopicId(final URI topicFile) {
         return mergeUtils.getFirstTopicId(topicFile, false);
     }
-    
+
     /**
      * Insert topic id into href
      */
@@ -720,7 +721,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
 
     // Inner classes -----------------------------------------------------------
-    
+
     private static final class KeyrefInfo {
 
         /** DITA class. */
@@ -734,7 +735,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
         /**
          * Construct a new key reference info object.
-         * 
+         *
          * @param type element type
          * @param attrs Map of key reference to reference attributes
          * @param isEmpty flag if element is empty
@@ -764,5 +765,5 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             this.hasNestedElements = hasNestedElements;
         }
     }
-    
+
 }

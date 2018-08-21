@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-<job>
+<?xml version="1.0" encoding="UTF-8"?><job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
@@ -49,11 +48,7 @@
     <file uri="batcaring.dita" path="batcaring.dita" format="dita"/>
     <file uri="batfeeding.dita" path="batfeeding.dita" format="dita"/>
     <file uri="batcleaning.dita" path="batcleaning.dita" format="dita"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/battytasks.dita"
-      uri="battytasks.dita" path="battytasks.dita" format="dita" target="true"/>
-    <file
-      src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/batseparate0.ditamap"
-      uri="batseparate0.ditamap" path="batseparate0.ditamap" format="ditamap"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/battytasks.dita" uri="battytasks.dita" path="battytasks.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkByTopicTest/src/batseparate0.ditamap" uri="batseparate0.ditamap" path="batseparate0.ditamap" format="ditamap" input="true"/>
   </files>
 </job>

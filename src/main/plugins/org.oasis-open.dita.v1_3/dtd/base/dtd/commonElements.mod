@@ -1369,6 +1369,9 @@
                            inline |
                            -dita-use-conref-target)
                                     'inline'
+               format
+                          CDATA
+                                    #IMPLIED
                %univ-atts;
                outputclass
                           CDATA

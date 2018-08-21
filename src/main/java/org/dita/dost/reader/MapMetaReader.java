@@ -129,7 +129,7 @@ public final class MapMetaReader extends AbstractDomFilter {
         globalMeta.clear();
         super.read(filename);
     }
-    
+
     @Override
     public Document process(final Document doc) {
         this.doc = doc;
@@ -256,11 +256,11 @@ public final class MapMetaReader extends AbstractDomFilter {
             }
         }
     }
-    
+
     private boolean isLocalScope(final Attr scopeAttr) {
         return scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equals(scopeAttr.getNodeValue());
     }
-    
+
     private boolean isDitaFormat(final Attr formatAttr) {
         return formatAttr == null ||
             ATTR_FORMAT_VALUE_DITA.equals(formatAttr.getNodeValue()) ||
@@ -290,7 +290,7 @@ public final class MapMetaReader extends AbstractDomFilter {
 
     private void getMeta(final Element meta, final Map<String, Element> topicMetaTable) {
         final NodeList children = meta.getChildNodes();
-        for(int i = 0; i < children.getLength(); i++) {
+        for (int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 final Element elem = (Element) node;
@@ -305,6 +305,12 @@ public final class MapMetaReader extends AbstractDomFilter {
                         //append node to the list if it exist in topic meta table
                         topicMetaTable.get(metaKey).appendChild(resultDoc.importNode(elem, true));
                     } else {
+                        if (TOPIC_NAVTITLE.matches(classValue)) {
+                            //Add locktitle value to navtitle so we know whether it should be pushed to topics
+                            final String locktitleAttr =  ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE) != null ? 
+                                                          ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE).getNodeValue() : "no";
+                            elem.setAttributeNS(DITA_OT_NS, DITA_OT_NS_PREFIX + ":" + ATTRIBUTE_NAME_LOCKTITLE, locktitleAttr);
+                        }
                         final Element stub = resultDoc.createElement(ELEMENT_STUB);
                         stub.appendChild(resultDoc.importNode(elem, true));
                         topicMetaTable.put(metaKey, stub);
@@ -337,7 +343,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                         //not necessary to do node type check here
                         //because inheritStub doesn't contains any node
                         //other than Element.
-                        final Node stub = topicMetaTable.get(key);
+                        final Element stub = topicMetaTable.get(key);
                         final Node inheritStub = inheritance.get(key);
                         if (stub != inheritStub) {
                             // Merge the value if stub does not equal to inheritStub
@@ -349,7 +355,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                                 stub.appendChild(item);
                             }
                         }
-                        topicMetaTable.put(key, (Element) stub);
+                        topicMetaTable.put(key, stub);
                     }
                 }
             }
@@ -359,7 +365,7 @@ public final class MapMetaReader extends AbstractDomFilter {
 
     private void handleGlobalMeta(final Element metadata) {
         final NodeList children = metadata.getChildNodes();
-        for(int i = 0; i < children.getLength(); i++) {
+        for (int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 final Element elem = (Element) node;
@@ -385,11 +391,11 @@ public final class MapMetaReader extends AbstractDomFilter {
 
     /**
      * Get metadata for topics
-     * 
+     *
      * @return map of metadata by topic path
      */
     public Map<URI, Map<String, Element>> getMapping() {
         return Collections.unmodifiableMap(resultTable);
-    } 
+    }
 
 }

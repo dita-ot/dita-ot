@@ -21,7 +21,7 @@ import org.dita.dost.log.MessageUtils;
 
 /**
  * Ant echo task for custom error message.
- * 
+ *
  * @author Wu, Zhi Qiang
  */
 public final class DITAOTEchoTask extends Echo {
@@ -30,12 +30,12 @@ public final class DITAOTEchoTask extends Echo {
     /** Nested params. */
     private final ArrayList<ParamElem> params = new ArrayList<>();
     private DITAOTLogger logger;
-    
+
     /**
      * Default Construtor.
      *
      */
-    public DITAOTEchoTask(){
+    public DITAOTEchoTask() {
     }
     /**
      * Setter function for id.
@@ -55,7 +55,7 @@ public final class DITAOTEchoTask extends Echo {
         params.add(p);
         return p;
     }
-    
+
     /**
      * Task execute point.
      * @throws BuildException exception
@@ -67,13 +67,13 @@ public final class DITAOTEchoTask extends Echo {
         final MessageBean msgBean = MessageUtils.getMessage(id, readParamValues());
         if (msgBean != null) {
             final String type = msgBean.getType();
-            if(ERROR.equals(type)){
+            if (ERROR.equals(type)) {
                 logger.error(msgBean.toString());
-            } else if(WARN.equals(type)){
+            } else if (WARN.equals(type)) {
                 logger.warn(msgBean.toString());
-            } else if(INFO.equals(type)){
+            } else if (INFO.equals(type)) {
                 logger.info(msgBean.toString());
-            } else if(DEBUG.equals(type)){
+            } else if (DEBUG.equals(type)) {
                 logger.debug(msgBean.toString());
             }
         }
@@ -81,7 +81,7 @@ public final class DITAOTEchoTask extends Echo {
 
     /**
      * Read parameter values to an array.
-     * 
+     *
      * @return parameter values where array index corresponds to parameter name
      */
     private String[] readParamValues() throws BuildException {
@@ -90,7 +90,7 @@ public final class DITAOTEchoTask extends Echo {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }
-            if (isValid(getProject(), p.getIf(), p.getUnless())) {
+            if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
                 final int idx = Integer.parseInt(p.getName()) - 1;
                 if (idx >= prop.size()) {
                     prop.ensureCapacity(idx + 1);
@@ -101,7 +101,7 @@ public final class DITAOTEchoTask extends Echo {
                 prop.set(idx, p.getValue());
             }
         }
-        return prop.toArray(new String[prop.size()]);
+        return prop.toArray(new String[0]);
     }
-    
+
 }

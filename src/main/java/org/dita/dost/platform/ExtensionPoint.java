@@ -8,7 +8,7 @@
 
 /**
  * Extension point.
- * 
+ *
  * @since 1.5.3
  * @author Jarno Elovirta
  */
@@ -23,7 +23,7 @@ final class ExtensionPoint {
 
     /**
      * Extension point constructor.
-     * 
+     *
      * @param id extension point ID
      * @param name extension point name, may be {@code null}
      * @param plugin ID of the plugin that defines the extension point

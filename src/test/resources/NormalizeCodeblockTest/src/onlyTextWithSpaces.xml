@@ -1,0 +1,7 @@
+<topic class="- topic/topic ">
+  <body class="- topic/body ">
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve" outputclass="normalize-space">output.dir = out/pdf
+args.gen.task.lbl = YES
+args.rellinks = nofamily</codeblock>
+  </body>
+</topic>

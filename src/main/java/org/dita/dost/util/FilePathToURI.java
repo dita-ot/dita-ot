@@ -8,17 +8,19 @@
  */
 package org.dita.dost.util;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Used to escape a file path to a URI.
  */
 final class FilePathToURI {
-    
+
     /**
      * Private default constructor to make class uninstantiable.
      */
     private FilePathToURI() {
     }
-    
+
     // Which ASCII characters need to be escaped
     private static final boolean gNeedEscaping[] = new boolean[128];
     // The first hex character if a character needs to be escaped
@@ -51,9 +53,9 @@ final class FilePathToURI {
     /** To escape a file path to a URI, by using %HH to represent special ASCII characters:
      * 0x00~0x1F, 0x7F, ' ', '<', '>', '#', '%' and '"' and non-ASCII characters
      * (whose value >= 128).
-     * 
+     *
      * '\' character will also be escaped.
-     * 
+     *
      * @param path The path to be escaped.
      * @return The escaped URI.
      */
@@ -71,7 +73,7 @@ final class FilePathToURI {
      * To escape a file path to a URI, by using %HH to represent
      * special ASCII characters: 0x00~0x1F, 0x7F, ' ', '<', '>', '#', '%'
      * and '"' and non-ASCII characters (whose value >= 128).
-     * 
+     *
      * @param path The path to be escaped.
      * @return The escaped path.
      */
@@ -99,8 +101,7 @@ final class FilePathToURI {
                 buffer.append(gAfterEscaping1[ch]);
                 buffer.append(gAfterEscaping2[ch]);
                 // Record the fact that it's escaped
-            }
-            else {
+            } else {
                 buffer.append((char)ch);
             }
         }
@@ -110,11 +111,7 @@ final class FilePathToURI {
             // Get UTF-8 bytes for the remaining sub-string
             byte[] bytes;
             byte b;
-            try {
-                bytes = path.substring(i).getBytes("UTF-8");
-            } catch (final java.io.UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+            bytes = path.substring(i).getBytes(StandardCharsets.UTF_8);
             len = bytes.length;
 
             // For each byte
@@ -126,13 +123,11 @@ final class FilePathToURI {
                     buffer.append('%');
                     buffer.append(gHexChs[ch >> 4]);
                     buffer.append(gHexChs[ch & 0xf]);
-                }
-                else if (gNeedEscaping[b]) {
+                } else if (gNeedEscaping[b]) {
                     buffer.append('%');
                     buffer.append(gAfterEscaping1[b]);
                     buffer.append(gAfterEscaping2[b]);
-                }
-                else {
+                } else {
                     buffer.append((char)b);
                 }
             }

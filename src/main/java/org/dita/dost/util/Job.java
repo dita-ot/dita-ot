@@ -39,15 +39,15 @@ import org.xml.sax.XMLReader;
 
 /**
  * Definition of current job.
- * 
+ *
  * <p>Instances are thread-safe.</p>
- * 
+ *
  * @since 1.5.4
  */
 public final class Job {
 
     private static final String JOB_FILE = ".job.xml";
-    
+
     private static final String ELEMENT_JOB = "job";
     private static final String ATTRIBUTE_KEY = "key";
     private static final String ELEMENT_ENTRY = "entry";
@@ -74,12 +74,13 @@ public final class Job {
     private static final String ATTRIBUTE_CONREF_PUSH = "conrefpush";
     private static final String ATTRIBUTE_SUBJECT_SCHEME = "subjectscheme";
     private static final String ATTRIBUTE_HAS_LINK = "has-link";
+    private static final String ATTRIBUTE_INPUT = "input";
     private static final String ATTRIBUTE_COPYTO_SOURCE_LIST = "copy-to-source";
     private static final String ATTRIBUTE_OUT_DITA_FILES_LIST = "out-dita";
     private static final String ATTRIBUTE_CHUNKED_DITAMAP_LIST = "chunked-ditamap";
     private static final String ATTRIBUTE_FLAG_IMAGE_LIST = "flag-image";
     private static final String ATTRIBUTE_SUBSIDIARY_TARGET_LIST = "subtarget";
-    
+
     private static final String PROPERTY_OUTER_CONTROL = ANT_INVOKER_EXT_PARAM_OUTTERCONTROL;
     private static final String PROPERTY_ONLY_TOPIC_IN_MAP = ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP;
     private static final String PROPERTY_GENERATE_COPY_OUTER = ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER;
@@ -97,17 +98,18 @@ public final class Job {
     public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
     /** Map of serialization attributes to file info boolean fields. */
-    private static final Map<String, Field> attrToFieldMap= new HashMap<>();
+    private static final Map<String, Field> attrToFieldMap = new HashMap<>();
     static {
         try {
             attrToFieldMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));
-            attrToFieldMap.put(ATTRIBUTE_HAS_LINK, FileInfo.class.getField("hasLink"));    
-            attrToFieldMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.class.getField("hasConref"));    
-            attrToFieldMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getField("hasKeyref"));    
-            attrToFieldMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getField("hasCoderef"));    
-            attrToFieldMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.class.getField("isResourceOnly"));    
+            attrToFieldMap.put(ATTRIBUTE_HAS_LINK, FileInfo.class.getField("hasLink"));
+            attrToFieldMap.put(ATTRIBUTE_INPUT, FileInfo.class.getField("isInput"));
+            attrToFieldMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.class.getField("hasConref"));
+            attrToFieldMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getField("hasKeyref"));
+            attrToFieldMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getField("hasCoderef"));
+            attrToFieldMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.class.getField("isResourceOnly"));
             attrToFieldMap.put(ATTRIBUTE_TARGET, FileInfo.class.getField("isTarget"));
-            attrToFieldMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getField("isConrefPush"));    
+            attrToFieldMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getField("isConrefPush"));
             attrToFieldMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getField("isSubjectScheme"));
             attrToFieldMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getField("isOutDita"));
             attrToFieldMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
@@ -116,17 +118,17 @@ public final class Job {
             throw new RuntimeException(e);
         }
     }
-    
+
     private final Map<String, Object> prop;
     public final File tempDir;
     public final URI tempDirURI;
     private final File jobFile;
     private final ConcurrentMap<URI, FileInfo> files = new ConcurrentHashMap<>();
     private long lastModified;
-    
+
     /**
      * Create new job configuration instance. Initialise by reading temporary configuration files.
-     *  
+     *
      * @param tempDir temporary directory
      * @throws IOException if reading configuration files failed
      * @throws IllegalStateException if configuration files are missing
@@ -154,11 +156,11 @@ public final class Job {
     public boolean isStale() {
         return jobFile.lastModified() > lastModified;
     }
-    
+
     /**
      * Read temporary configuration files. If configuration files are not found,
      * assume an empty job object is being created.
-     * 
+     *
      * @throws IOException if reading configuration files failed
      * @throws IllegalStateException if configuration files are missing
      */
@@ -180,7 +182,7 @@ public final class Job {
             prop.put(PROPERTY_OUTER_CONTROL, OutterControl.WARN.toString());
         }
     }
-    
+
     private final static class JobHandler extends DefaultHandler {
 
         private final Map<String, Object> prop;
@@ -190,12 +192,12 @@ public final class Job {
         private String key;
         private Set<String> set;
         private Map<String, String> map;
-        
+
         JobHandler(final Map<String, Object> prop, final Map<URI, FileInfo> files) {
             this.prop = prop;
             this.files = files;
         }
-        
+
         @Override
         public void characters(final char[] ch, final int start, final int length) throws SAXException {
             if (buf != null) {
@@ -209,7 +211,7 @@ public final class Job {
                 buf.append(ch, start, length);
             }
         }
-        
+
         @Override
         public void startElement(final String ns, final String localName, final String qName, final Attributes atts) throws SAXException {
             final String n = localName != null ? localName : qName;
@@ -255,7 +257,7 @@ public final class Job {
                     break;
             }
         }
-        
+
         @Override
         public void endElement(final String uri, final String localName, final String qName) throws SAXException {
             final String n = localName != null ? localName : qName;
@@ -286,12 +288,12 @@ public final class Job {
                     break;
             }
         }
-        
+
     }
-    
+
     /**
      * Store job into temporary configuration files.
-     * 
+     *
      * @throws IOException if writing configuration files failed
      */
     public void write() throws IOException {
@@ -388,36 +390,36 @@ public final class Job {
         }
         lastModified = jobFile.lastModified();
     }
-    
+
     /**
      * Add file info. If file info with the same file already exists, it will be replaced.
      */
     public void add(final FileInfo fileInfo) {
         files.put(fileInfo.uri, fileInfo);
     }
-    
+
     /**
      * Remove file info.
-     * 
+     *
      * @return removed file info, {@code null} if not found
      */
     public FileInfo remove(final FileInfo fileInfo) {
         return files.remove(fileInfo.uri);
     }
-    
+
     /**
      * Searches for the property with the specified key in this property list.
-     * 
+     *
      * @param key property key
      * @return the value in this property list with the specified key value, {@code null} if not found
      */
     public String getProperty(final String key) {
         return (String) prop.get(key);
     }
-    
+
     /**
      * Get a map of string properties.
-     * 
+     *
      * @return map of properties, may be an empty map
      */
     public Map<String, String> getProperties() {
@@ -429,10 +431,10 @@ public final class Job {
         }
         return Collections.unmodifiableMap(res);
     }
-        
+
     /**
      * Set property value.
-     * 
+     *
      * @param key property key
      * @param value property value
      * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
@@ -444,10 +446,15 @@ public final class Job {
     /**
      * Get input file
      *
-     * @return input file path relative to input directory
+     * @return input file path relative to input directory, {@code null} if not set
      */
     public URI getInputMap() {
-       return toURI(getProperty(INPUT_DITAMAP_URI));
+//       return toURI(getProperty(INPUT_DITAMAP_URI));
+        return files.values().stream()
+                .filter(fi -> fi.isInput)
+                .map(fi -> getInputDir().relativize(fi.src))
+                .findAny()
+                .orElse(null);
     }
 
     /**
@@ -464,7 +471,7 @@ public final class Job {
 
     /**
      * Get input directory.
-     * 
+     *
      * @return absolute input directory path
      */
     public URI getInputDir() {
@@ -486,7 +493,7 @@ public final class Job {
 
     /**
      * Get all file info objects as a map
-     * 
+     *
      * @return map of file info objects, where the key is the {@link FileInfo#file} value. May be empty
      */
     public Map<File, FileInfo> getFileInfoMap() {
@@ -496,19 +503,19 @@ public final class Job {
         }
         return Collections.unmodifiableMap(ret);
     }
-    
+
     /**
      * Get all file info objects
-     * 
+     *
      * @return collection of file info objects, may be empty
      */
     public Collection<FileInfo> getFileInfo() {
         return Collections.unmodifiableCollection(new ArrayList<>(files.values()));
     }
-    
+
     /**
      * Get file info objects that pass the filter
-     * 
+     *
      * @param filter filter file info object must pass
      * @return collection of file info objects that pass the filter, may be empty
      */
@@ -539,7 +546,7 @@ public final class Job {
                     .orElse(null);
         }
     }
-    
+
     /**
      * Get or create FileInfo for given path.
      * @param file relative URI to temporary directory
@@ -558,10 +565,10 @@ public final class Job {
         }
         return i;
     }
-    
+
     /**
      * Add a collection of file info objects
-     * 
+     *
      * @param fs file info objects
      */
     public void addAll(final Collection<FileInfo> fs) {
@@ -569,12 +576,12 @@ public final class Job {
             add(f);
         }
     }
-        
+
     /**
      * File info object.
      */
     public static final class FileInfo {
-        
+
         /** Absolute source URI. */
         public URI src;
         /** File URI. */
@@ -609,7 +616,9 @@ public final class Job {
         public boolean isFlagImage;
         /** Source file is outside base directory. */
         public boolean isOutDita;
-        
+        /** File is input document that is used as processing root. */
+        public boolean isInput;
+
         FileInfo(final URI src, final URI uri, final File file) {
             if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
             this.src = src;
@@ -639,6 +648,7 @@ public final class Job {
                     ", isResourceOnly=" + isResourceOnly +
                     ", isTarget=" + isTarget +
                     ", isConrefPush=" + isConrefPush +
+                    ", isInput=" + isInput +
                     ", hasKeyref=" + hasKeyref +
                     ", hasCoderef=" + hasCoderef +
                     ", isSubjectScheme=" + isSubjectScheme +
@@ -652,52 +662,35 @@ public final class Job {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             FileInfo fileInfo = (FileInfo) o;
-
-            if (hasConref != fileInfo.hasConref) return false;
-            if (isChunked != fileInfo.isChunked) return false;
-            if (hasLink != fileInfo.hasLink) return false;
-            if (isResourceOnly != fileInfo.isResourceOnly) return false;
-            if (isTarget != fileInfo.isTarget) return false;
-            if (isConrefPush != fileInfo.isConrefPush) return false;
-            if (hasKeyref != fileInfo.hasKeyref) return false;
-            if (hasCoderef != fileInfo.hasCoderef) return false;
-            if (isSubjectScheme != fileInfo.isSubjectScheme) return false;
-            if (isSubtarget != fileInfo.isSubtarget) return false;
-            if (isFlagImage != fileInfo.isFlagImage) return false;
-            if (isOutDita != fileInfo.isOutDita) return false;
-            if (src != null ? !src.equals(fileInfo.src) : fileInfo.src != null) return false;
-            if (!uri.equals(fileInfo.uri)) return false;
-            if (!file.equals(fileInfo.file)) return false;
-            if (result != null ? !result.equals(fileInfo.result) : fileInfo.result != null) return false;
-            return format != null ? format.equals(fileInfo.format) : fileInfo.format == null;
+            return hasConref == fileInfo.hasConref &&
+                    isChunked == fileInfo.isChunked &&
+                    hasLink == fileInfo.hasLink &&
+                    isResourceOnly == fileInfo.isResourceOnly &&
+                    isTarget == fileInfo.isTarget &&
+                    isConrefPush == fileInfo.isConrefPush &&
+                    hasKeyref == fileInfo.hasKeyref &&
+                    hasCoderef == fileInfo.hasCoderef &&
+                    isSubjectScheme == fileInfo.isSubjectScheme &&
+                    isSubtarget == fileInfo.isSubtarget &&
+                    isFlagImage == fileInfo.isFlagImage &&
+                    isOutDita == fileInfo.isOutDita &&
+                    isInput == fileInfo.isInput &&
+                    Objects.equals(src, fileInfo.src) &&
+                    Objects.equals(uri, fileInfo.uri) &&
+                    Objects.equals(file, fileInfo.file) &&
+                    Objects.equals(result, fileInfo.result) &&
+                    Objects.equals(format, fileInfo.format);
         }
 
         @Override
         public int hashCode() {
-            int result1 = src != null ? src.hashCode() : 0;
-            result1 = 31 * result1 + uri.hashCode();
-            result1 = 31 * result1 + file.hashCode();
-            result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
-            result1 = 31 * result1 + (format != null ? format.hashCode() : 0);
-            result1 = 31 * result1 + (hasConref ? 1 : 0);
-            result1 = 31 * result1 + (isChunked ? 1 : 0);
-            result1 = 31 * result1 + (hasLink ? 1 : 0);
-            result1 = 31 * result1 + (isResourceOnly ? 1 : 0);
-            result1 = 31 * result1 + (isTarget ? 1 : 0);
-            result1 = 31 * result1 + (isConrefPush ? 1 : 0);
-            result1 = 31 * result1 + (hasKeyref ? 1 : 0);
-            result1 = 31 * result1 + (hasCoderef ? 1 : 0);
-            result1 = 31 * result1 + (isSubjectScheme ? 1 : 0);
-            result1 = 31 * result1 + (isSubtarget ? 1 : 0);
-            result1 = 31 * result1 + (isFlagImage ? 1 : 0);
-            result1 = 31 * result1 + (isOutDita ? 1 : 0);
-            return result1;
+            return Objects.hash(src, uri, file, result, format, hasConref, isChunked, hasLink, isResourceOnly, isTarget,
+                    isConrefPush, hasKeyref, hasCoderef, isSubjectScheme, isSubtarget, isFlagImage, isOutDita, isInput);
         }
 
         public static class Builder {
-            
+
             private URI src;
             private URI uri;
             private File file;
@@ -715,7 +708,8 @@ public final class Job {
             private boolean isSubtarget;
             private boolean isFlagImage;
             private boolean isOutDita;
-        
+            private boolean isInput;
+
             public Builder() {}
             public Builder(final FileInfo orig) {
                 src = orig.src;
@@ -735,10 +729,11 @@ public final class Job {
                 isSubtarget = orig.isSubtarget;
                 isFlagImage = orig.isFlagImage;
                 isOutDita = orig.isOutDita;
+                isInput = orig.isInput;
             }
-            
+
             /**
-             * Add file info to this builder. Only non-null and true values will be added. 
+             * Add file info to this builder. Only non-null and true values will be added.
              */
             public Builder add(final FileInfo orig) {
                 if (orig.src != null) src = orig.src;
@@ -758,6 +753,7 @@ public final class Job {
                 if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
                 if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
+                if (orig.isInput) isInput = orig.isInput;
                 return this;
             }
 
@@ -781,7 +777,7 @@ public final class Job {
 //                if (orig.isOutDita) isOutDita = orig.isOutDita;
                 return this;
             }
-            
+
             public Builder src(final URI src) { assert src.isAbsolute(); this.src = src; return this; }
             public Builder uri(final URI uri) { this.uri = uri; this.file = null; return this; }
             public Builder file(final File file) { this.file = file; this.uri = null; return this; }
@@ -799,6 +795,7 @@ public final class Job {
             public Builder isSubtarget(final boolean isSubtarget) { this.isSubtarget = isSubtarget; return this; }
             public Builder isFlagImage(final boolean isFlagImage) { this.isFlagImage = isFlagImage; return this; }
             public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
+            public Builder isInput(final boolean isInput) { this.isInput = isInput; return this; }
 
             public FileInfo build() {
                 if (uri == null && file == null) {
@@ -821,11 +818,12 @@ public final class Job {
                 fi.isSubtarget = isSubtarget;
                 fi.isFlagImage = isFlagImage;
                 fi.isOutDita = isOutDita;
+                fi.isInput = isInput;   
                 return fi;
             }
-            
+
         }
-        
+
     }
 
     public enum OutterControl {
@@ -836,7 +834,7 @@ public final class Job {
         /** Quiet behavior. */
         QUIET
     }
-    
+
     public enum Generate {
         /** Not generate outer files. */
         NOT_GENERATEOUTTER(1),
@@ -858,13 +856,13 @@ public final class Job {
             throw new IllegalArgumentException();
         }
     }
-    
+
     /**
      * Retrieve the outercontrol.
      * @return String outercontrol behavior
      *
      */
-    public OutterControl getOutterControl(){
+    public OutterControl getOutterControl() {
         return OutterControl.valueOf(prop.get(PROPERTY_OUTER_CONTROL).toString());
     }
 
@@ -872,7 +870,7 @@ public final class Job {
      * Set the outercontrol.
      * @param control control
      */
-    public void setOutterControl(final String control){
+    public void setOutterControl(final String control) {
         prop.put(PROPERTY_OUTER_CONTROL, OutterControl.valueOf(control.toUpperCase()).toString());
     }
 
@@ -880,7 +878,7 @@ public final class Job {
      * Retrieve the flag of onlytopicinmap.
      * @return boolean if only topic in map
      */
-    public boolean getOnlyTopicInMap(){
+    public boolean getOnlyTopicInMap() {
         return Boolean.parseBoolean(prop.get(PROPERTY_ONLY_TOPIC_IN_MAP).toString());
     }
 
@@ -888,11 +886,11 @@ public final class Job {
      * Set the onlytopicinmap.
      * @param flag onlytopicinmap flag
      */
-    public void setOnlyTopicInMap(final boolean flag){
+    public void setOnlyTopicInMap(final boolean flag) {
         prop.put(PROPERTY_ONLY_TOPIC_IN_MAP, Boolean.toString(flag));
     }
 
-    public Generate getGeneratecopyouter(){
+    public Generate getGeneratecopyouter() {
         return Generate.valueOf(prop.get(PROPERTY_GENERATE_COPY_OUTER).toString());
     }
 
@@ -900,7 +898,7 @@ public final class Job {
      * Set the generatecopyouter.
      * @param flag generatecopyouter flag
      */
-    public void setGeneratecopyouter(final String flag){
+    public void setGeneratecopyouter(final String flag) {
         setGeneratecopyouter(Generate.get(Integer.parseInt(flag)));
     }
 
@@ -908,15 +906,15 @@ public final class Job {
      * Set the generatecopyouter.
      * @param flag generatecopyouter flag
      */
-    public void setGeneratecopyouter(final Generate flag){
+    public void setGeneratecopyouter(final Generate flag) {
         prop.put(PROPERTY_GENERATE_COPY_OUTER, flag.toString());
     }
- 
+
     /**
      * Get output dir.
      * @return absolute output dir
      */
-    public File getOutputDir(){
+    public File getOutputDir() {
         if (prop.containsKey(PROPERTY_OUTPUT_DIR)) {
             return new File(prop.get(PROPERTY_OUTPUT_DIR).toString());
         }
@@ -927,19 +925,25 @@ public final class Job {
      * Set output dir.
      * @param outputDir absolute output dir
      */
-    public void setOutputDir(final File outputDir){
+    public void setOutputDir(final File outputDir) {
         prop.put(PROPERTY_OUTPUT_DIR, outputDir.getAbsolutePath());
     }
 
     /**
      * Get input file path.
-     * @return absolute input file path
+     * @return absolute input file path, {@code null} if not set
      */
     public URI getInputFile() {
-        if (prop.containsKey(PROPERTY_INPUT_MAP_URI)) {
-            return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
-        }
-        return null;
+//        if (prop.containsKey(PROPERTY_INPUT_MAP_URI)) {
+//            return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
+//        }
+//        return null;
+        return files.values().stream()
+                .filter(fi -> fi.isInput)
+                .map(fi -> fi.src)
+                .findAny()
+                .orElse(null);
+
     }
 
     /**
@@ -971,5 +975,5 @@ public final class Job {
         tempFileNameScheme.setBaseDir(getInputDir());
         return tempFileNameScheme;
     }
-    
+
 }

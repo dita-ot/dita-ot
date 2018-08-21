@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Integration action to output plugin information to Ant build.
- * 
+ *
  * @author Jarno Elovirta
  * @since 1.5.3
  */
@@ -38,7 +38,7 @@ final class ImportPluginInfoAction extends ImportAction {
             final Features f = e.getValue();
             final String name = "dita.plugin."+ e.getKey() + ".dir";
             final StringBuilder location = new StringBuilder();
-            
+
             final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
             if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
                 location.append("${dita.dir}");
