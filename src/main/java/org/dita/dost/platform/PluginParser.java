@@ -17,6 +17,9 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
+import static org.dita.dost.util.XMLUtils.toList;
 
 /**
  * Parse plugin configuration file.
@@ -39,8 +42,10 @@ public class PluginParser {
     private static final String TRANSTYPE_ABSTRACT_ATTR = "abstract";
     private static final String TRANSTYPE_NAME_ATTR = "name";
     public static final String FEATURE_ID_ATTR = "extension";
+    public static final String FEATURE_VALUE_ATTR = "value";
     public static final String PLUGIN_ELEM = REQUIRE_PLUGIN_ATTR;
     private static final String PLUGIN_ID_ATTR = "id";
+    private static final String PLUGIN_VERSION_ATTR = "version";
 
     private final File ditaDir;
     private final DocumentBuilder builder;
@@ -88,7 +93,7 @@ public class PluginParser {
             throw new Exception("Failed to parse " + file + ": " + e.getMessage(), e);
         }
 
-        final Element root = doc.getDocumentElement();
+        final Element root = migrate(doc.getDocumentElement());
         currentPlugin = root.getAttribute(PLUGIN_ID_ATTR);
         features.setPluginId(currentPlugin);
 
@@ -117,12 +122,28 @@ public class PluginParser {
         return root;
     }
 
+    /**
+     * Migrate from deprecated plugin format to new format
+     */
+    private Element migrate(Element root) {
+        if (root.getAttributeNode(PLUGIN_VERSION_ATTR) == null) {
+            final List<Element> features = toList(root.getElementsByTagName(FEATURE_ELEM));
+            final String version = features.stream()
+                    .filter(elem -> elem.getAttribute(FEATURE_ID_ATTR).equals("package.version"))
+                    .findFirst()
+                    .map(elem -> elem.getAttribute(FEATURE_VALUE_ATTR))
+                    .orElse("0.0.0");
+            root.setAttribute(PLUGIN_VERSION_ATTR, version);
+        }
+        return root;
+    }
+
     private void addTranstype(final Element elem) {
         if (!Boolean.parseBoolean(elem.getAttribute(TRANSTYPE_ABSTRACT_ATTR))) {
             final Document doc = elem.getOwnerDocument();
             for (final String transtype : elem.getAttribute(TRANSTYPE_NAME_ATTR).split("\\s+")) {
-                final Element buf = doc.createElement(EXTENSION_POINT_ELEM);
-                buf.setAttribute("value", transtype);
+                final Element buf = doc.createElement(FEATURE_ELEM);
+                buf.setAttribute(FEATURE_VALUE_ATTR, transtype);
                 features.addFeature("dita.conductor.transtype.check", buf);
             }
         }
