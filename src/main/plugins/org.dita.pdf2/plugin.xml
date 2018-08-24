@@ -6,7 +6,7 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<plugin id="org.dita.pdf2">
+<plugin id="org.dita.pdf2" version="${version}">
   <!-- extension points -->
   <extension-point id="dita.xsl.xslfo" name="PDF XSLT import"/>
   <extension-point id="dita.xsl.xslfo.i18n-postprocess" name="PDF I18N postprocess import"/>

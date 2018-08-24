@@ -36,6 +36,8 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.6'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'
     runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.3'
     testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
     testCompile group: 'junit', name: 'junit', version:'4.12'
@@ -181,6 +183,12 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "LICENSE"
     }
     from ("src/main") {
+        include "plugins/*/plugin.xml"
+        expand(
+                version: project.version
+        )
+    }
+    from ("src/main") {
         exclude "**/.gradle"
         exclude "plugins/**/build.gradle"
         exclude "**/settings.gradle"
@@ -205,6 +213,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/temp"
         include "docsrc/**"
         include "dtd/**"
+        exclude "plugins/*/plugin.xml"
         include "plugins/org.dita.base/**"
         include "plugins/org.dita.eclipsehelp/**"
         include "plugins/org.dita.html5/**"

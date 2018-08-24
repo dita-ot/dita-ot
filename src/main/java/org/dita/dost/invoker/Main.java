@@ -36,6 +36,7 @@ import org.apache.tools.ant.property.ResolvePropertyMap;
 import org.apache.tools.ant.util.ClasspathUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
+import org.dita.dost.platform.Plugins;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Attr;
@@ -189,25 +190,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
-    /**
-     * Read the list of installed plugins
-     */
-    private List<String> getInstalledPlugins() {
-        final List<Element> plugins = toList(getPluginConfiguration().getElementsByTagName("plugin"));
-        return plugins.stream()
-                .map((Element elem) -> elem.getAttributeNode("id"))
-                .filter(Objects::nonNull)
-                .map(Attr::getValue)
-                .sorted()
-                .collect(Collectors.toList());
-    }
-
     private static Map<String, Argument> PLUGIN_ARGUMENTS;
 
     // Lazy load parameters
     private synchronized Map<String, Argument> getPluginArguments() {
         if (PLUGIN_ARGUMENTS == null) {
-            final List<Element> params = toList(getPluginConfiguration().getElementsByTagName("param"));
+            final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
             PLUGIN_ARGUMENTS = params.stream()
                     .map(Main::getArgument)
                     .collect(Collectors.toMap(
@@ -243,14 +231,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 return new EnumArgument(name, vals);
             default:
                 return new StringArgument(name);
-        }
-    }
-
-    private Document getPluginConfiguration() {
-        try (final InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_CONF)) {
-            return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
-        } catch (final ParserConfigurationException | SAXException | IOException e) {
-            throw new RuntimeException("Failed to read plugin configuration: " + e.getMessage(), e);
         }
     }
 
@@ -784,7 +764,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     
     /** Handle the --plugins argument */
     private void printPlugins() {
-        final List<String> installedPlugins = getInstalledPlugins();
+        final List<String> installedPlugins = Plugins.getInstalledPlugins();
         for (final String plugin : installedPlugins) {
             System.out.println(plugin);
         }
@@ -1233,7 +1213,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final StringBuilder msg = new StringBuilder();
         msg.append("Usage: dita -i <file> -f <name> [options]\n");
         msg.append("   or: dita --propertyfile=<file> [options]\n");
-        msg.append("   or: dita --install [=<file>]\n");
+        msg.append("   or: dita --install [=<file> | <url> | <id>]\n");
         msg.append("   or: dita --uninstall <id>\n");
         msg.append("   or: dita --plugins\n");
         msg.append("   or: dita --transtypes\n");
@@ -1243,7 +1223,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("  -i <file>, --input=<file>   input file\n");
         msg.append("  -f <name>, --format=<name>  output format (transformation type)\n");
         msg.append("  --propertyfile=<name>       load all properties from file\n");
-        msg.append("  --install [<file>]          install plug-in from a ZIP file\n");
+        msg.append("  --install [<file>]          install plug-in from a local ZIP file\n");
+        msg.append("  --install [<url>]           install plug-in from a URL\n");
+        msg.append("  --install [<id>]            install plug-in from plugin registry\n");
         msg.append("  --install                   reload plugins\n");
         msg.append("  --uninstall <id>            uninstall plug-in with the ID\n");
         msg.append("  --plugins                   print list of installed plug-ins\n");

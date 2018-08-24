@@ -39,7 +39,8 @@ See the accompanying LICENSE file for applicable license.
   <taskdef name="integrate" classname="org.dita.dost.ant.IntegratorTask">
     <classpath refid="dost.class.path"/>
   </taskdef>
-  
+  <taskdef name="install" classname="org.dita.dost.ant.PluginInstallTask"/>
+
   <target name="integrate">
     <integrate ditadir="${dita.dir}" />
     <!-- place property files into a JAR so Ant will find them -->
@@ -65,45 +66,8 @@ See the accompanying LICENSE file for applicable license.
     <antcall target="integrate"/>
   </target>
 
-  <target name="install" description="Install plug-in" depends="install.init, install.local, install.download">
-    <pathconvert property="temp.plugin.file">
-      <first>
-        <fileset dir="${dita.temp.dir}">
-          <include name="**/plugin.xml"/>
-        </fileset>
-      </first>
-    </pathconvert>
-    <dirname property="temp.plugin.dir" file="${temp.plugin.file}"/>
-    <xmlproperty file="${temp.plugin.file}" collapseAttributes="true"/>
-    <available property="plugin.exists" file="${dita.dir}/plugins/${plugin.id}"/>
-    <antcall target="install.move"/>
-    <delete dir="${dita.temp.dir}"/>
-    <fail if="plugin.exists">Plug-in ${dita.dir}/plugins/${plugin.id} already exists.</fail>
-  </target>
-  <target name="install.move" unless="plugin.exists">
-    <move todir="${dita.dir}/plugins/${plugin.id}">
-      <fileset dir="${temp.plugin.dir}"/>
-    </move>
-    <antcall target="integrate"/>
-  </target>
-  <target name="install.init">
-    <fail unless="plugin.file"/>
-    <available file="${plugin.file}" property="install.file.exists"/>
-    <tstamp>
-      <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
-    </tstamp>
-    <property name="dita.temp.dir" location="${dita.dir}/temp/temp${current.date}" />
-    <mkdir dir="${dita.temp.dir}"/>
-  </target>
-  <target name="install.local" if="install.file.exists">
-    <unzip src="${plugin.file}" dest="${dita.temp.dir}"/>
-  </target>
-  <target name="install.download" unless="install.file.exists">
-    <tempfile property="install.download.file.abs" destdir="${dita.temp.dir}" suffix=".zip"/>
-    <basename property="install.download.file" file="${install.download.file.abs}"/>
-    <get src="${plugin.file}" dest="${dita.temp.dir}/${install.download.file}" ignoreerrors="false" verbose="on"/>
-    <unzip src="${dita.temp.dir}/${install.download.file}" dest="${dita.temp.dir}"/>
-    <delete file="${dita.temp.dir}/${install.download.file}"/>
+  <target name="install" description="Install plug-in" >
+    <install pluginFile="${plugin.file}"/>
   </target>
   
   <target name="uninstall" description="Uninstall plug-in">

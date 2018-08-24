@@ -6,6 +6,7 @@
 plugin =
   element plugin {
     attribute id { xsd:NCName },
+    attribute version? { version }?,
     (feature | transtype | extension-point | require | metadata | template)*
   }
 feature =
@@ -59,8 +60,10 @@ extension-point =
 require =
   element require {
     attribute plugin { xsd:NCName },
+    attribute version? { version },
     attribute importance { "required" | "optional" }?
   }
+version = text
 metadata =
   element metadata {
     attribute type { xsd:NCName },
