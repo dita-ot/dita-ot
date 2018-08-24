@@ -793,6 +793,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     
   </xsl:template>
   
+  <!-- If a link is to a title, assume the parent is the real target, process accordingly -->
+  <xsl:template match="*[contains(@class,' topic/title ')]" mode="topicpull:resolvelinktext">
+    <xsl:apply-templates select=".." mode="topicpull:resolvelinktext"/>
+  </xsl:template>
+  
   <!-- Get the link text from a specific topic. -->
   <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="topicpull:resolvelinktext">  
     
@@ -1116,12 +1121,15 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Getting text from a dlentry target: use the contents of the term -->
   <xsl:template match="*[contains(@class, ' topic/dlentry ')][*[contains(@class,' topic/dt ')]]"
     mode="topicpull:resolvelinktext">
-    
     <xsl:variable name="target-text" as="xs:string*">
       <xsl:apply-templates
         select="*[contains(@class,' topic/dt ')][1]" mode="text-only"/>
     </xsl:variable>
     <xsl:value-of select="normalize-space(string-join($target-text, ''))"/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/dt ')]" mode="topicpull:resolvelinktext">
+    <xsl:apply-templates select="." mode="text-only"/>
   </xsl:template>
   
   <!--getting the shortdesc for a link; called from main mode template for link/xref, 
