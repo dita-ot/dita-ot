@@ -691,7 +691,10 @@ See the accompanying LICENSE file for applicable license.
         <fo:block xsl:use-attribute-sets="section">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:section-heading"/>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
+            <fo:block xsl:use-attribute-sets="section__content">
+                <xsl:apply-templates select="node() except (*[contains(@class,' topic/title ')])"/>
+            </fo:block>
         </fo:block>
     </xsl:template>
 
@@ -705,7 +708,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' topic/example ')]">
         <fo:block xsl:use-attribute-sets="example">
             <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
+            <fo:block xsl:use-attribute-sets="example__content">
+                <xsl:apply-templates select="node() except (*[contains(@class,' topic/title ')])"/>
+            </fo:block>
         </fo:block>
     </xsl:template>
 
