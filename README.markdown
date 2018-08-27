@@ -2,8 +2,7 @@
 
 The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for XML content authored in the _Darwin Information Typing Architecture_.
 
-See [dita-ot.org][2] for documentation, information about releases, and download packages.
-
+Visit the project website at [dita-ot.org][2] for documentation, information about releases, and [download packages][9].  
 For information on additional DITA and DITA-OT resources, see [SUPPORT][8].
 
 - [Prerequisites](#prerequisites)
