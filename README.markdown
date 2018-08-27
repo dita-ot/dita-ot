@@ -6,6 +6,12 @@ See [dita-ot.org][2] for documentation, information about releases, and download
 
 For information on additional DITA and DITA-OT resources, see [SUPPORT][8].
 
+- [Prerequisites](#prerequisites)
+- [Installing](#installing)
+- [Building output](#building-output)
+- [For developers](#for-developers)
+- [License](#license)
+
 ## Prerequisites
 
 To build and use DITA-OT, you’ll need:
