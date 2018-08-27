@@ -1,16 +1,16 @@
 # DITA Open Toolkit [![Build Status][1]](http://travis-ci.org/dita-ot/dita-ot) [![Slack][7]](http://slack.dita-ot.org/)
 
-The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for XML content authored in the _Darwin Information Typing Architecture_. 
+The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for XML content authored in the _Darwin Information Typing Architecture_.
 
-See [dita-ot.org][2] for documentation, information about releases, and download packages. 
+See [dita-ot.org][2] for documentation, information about releases, and download packages.
 
-For information on additional DITA and DITA-OT resources, see [SUPPORT][8]. 
+For information on additional DITA and DITA-OT resources, see [SUPPORT][8].
 
 ## Prerequisites
 
 To build and use DITA-OT, you’ll need:
 
-* Java Development Kit 8 or newer
+- Java Development Kit 8 or newer
 
 ## Install
 
@@ -20,25 +20,25 @@ On macOS you can install dita-ot using homebrew:
 
 ## Building
 
-1. Clone the DITA-OT Git repository:
+1.  Clone the DITA-OT Git repository:
 
         git clone git://github.com/dita-ot/dita-ot.git
 
-2. Move to the DITA-OT directory:
+2.  Move to the DITA-OT directory:
 
         cd dita-ot
 
-3. Fetch the submodules:
+3.  Fetch the submodules:
 
         git submodule update --init --recursive
 
-4. In the root directory, run Gradle to compile the Java code and install plugins:
+4.  In the root directory, run Gradle to compile the Java code and install plugins:
 
         ./gradlew
 
 ## Usage
 
-1. Run the `dita` command to generate output:
+1.  Run the `dita` command to generate output:
 
         src/main/bin/dita [options]
 
@@ -46,11 +46,11 @@ On macOS you can install dita-ot using homebrew:
 
 ## Distribution
 
-1. In the root directory, set up build environment:
+1.  In the root directory, set up build environment:
 
         ./gradlew
 
-2. Build distribution packages:
+2.  Build distribution packages:
 
         ./gradlew dist
 
