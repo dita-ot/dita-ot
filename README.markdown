@@ -12,11 +12,18 @@ To build and use DITA-OT, you’ll need:
 
 - Java Development Kit 8 or newer
 
-## Install
+## Installing
 
-On macOS you can install dita-ot using homebrew:
+1.  Download the distribution package from [dita-ot.org/download][9].
+2.  Extract the contents of the package to the directory where you want to install the DITA-OT.
 
-`brew install dita-ot`
+### Installing on macOS via Homebrew
+
+On macOS, you can also install DITA-OT using the [Homebrew][10] package manager:
+
+    brew install dita-ot
+
+Homebrew will automatically download the latest version of the toolkit, install it in a subfolder of the local package Cellar and symlink the `dita` command to `/usr/local/bin/dita`.
 
 ## Building
 
@@ -72,3 +79,5 @@ The DITA Open Toolkit is licensed for use under the [Apache License 2.0][6].
 [6]: http://www.apache.org/licenses/LICENSE-2.0
 [7]: http://slack.dita-ot.org/badge.svg
 [8]: https://github.com/dita-ot/dita-ot/blob/develop/.github/SUPPORT.md
+[9]: https://www.dita-ot.org/download
+[10]: https://brew.sh
