@@ -25,6 +25,25 @@ On macOS, you can also install DITA-OT using the [Homebrew][10] package manager:
 
 Homebrew will automatically download the latest version of the toolkit, install it in a subfolder of the local package Cellar and symlink the `dita` command to `/usr/local/bin/dita`.
 
+## Building output
+
+You can generate output using the DITA Open Toolkit `dita` command-line tool.
+
+1.  On the command line, change to the `bin` folder of the DITA-OT installation directory:
+
+        cd path/to/dita-ot-dir/bin
+
+2.  Run the `dita` command to generate output:
+
+        dita --input=input-file --format=format [options]
+
+    where:
+
+    - _`input-file`_ is the DITA map or DITA file that you want to process
+    - _`format`_ is the output format (or “transformation type”)
+
+See the [documentation][3] for arguments and [options][4].
+
 ## Building
 
 1.  Clone the DITA-OT Git repository:
@@ -42,14 +61,6 @@ Homebrew will automatically download the latest version of the toolkit, install 
 4.  In the root directory, run Gradle to compile the Java code and install plugins:
 
         ./gradlew
-
-## Usage
-
-1.  Run the `dita` command to generate output:
-
-        src/main/bin/dita [options]
-
-    See the [documentation][3] for arguments and [options][4].
 
 ## Distribution
 
