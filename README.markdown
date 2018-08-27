@@ -65,9 +65,9 @@ On macOS you can install dita-ot using homebrew:
 The DITA Open Toolkit is licensed for use under the [Apache License 2.0][6].
 
 [1]: https://travis-ci.org/dita-ot/dita-ot.svg?branch=develop
-[2]: http://www.dita-ot.org/
-[3]: http://www.dita-ot.org/dev/
-[4]: http://www.dita-ot.org/dev/user-guide/build-using-dita-command.html
+[2]: https://www.dita-ot.org/
+[3]: https://www.dita-ot.org/dev/
+[4]: https://www.dita-ot.org/dev/topics/build-using-dita-command.html
 [5]: http://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI
 [6]: http://www.apache.org/licenses/LICENSE-2.0
 [7]: http://slack.dita-ot.org/badge.svg
