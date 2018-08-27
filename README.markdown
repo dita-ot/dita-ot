@@ -44,13 +44,16 @@ You can generate output using the DITA Open Toolkit `dita` command-line tool.
 
 See the [documentation][3] for arguments and [options][4].
 
-## Building
+## For developers
+
+<details>
+<summary>Building the toolkit from source code and compiling the distribution package</summary>
 
 1.  Clone the DITA-OT Git repository:
 
         git clone git://github.com/dita-ot/dita-ot.git
 
-2.  Move to the DITA-OT directory:
+2.  Change to the DITA-OT directory:
 
         cd dita-ot
 
@@ -62,13 +65,13 @@ See the [documentation][3] for arguments and [options][4].
 
         ./gradlew
 
-## Distribution
+### Distribution builds
 
-1.  In the root directory, set up build environment:
+1.  In the root directory, set up the build environment:
 
         ./gradlew
 
-2.  Build distribution packages:
+2.  Build the distribution packages:
 
         ./gradlew dist
 
@@ -77,6 +80,8 @@ See the [documentation][3] for arguments and [options][4].
     If Gradle throws an error like `java.lang.OutOfMemoryError: Java heap space`, you probably need to increase the maximum Java heap size. One way to do this is to set the `GRADLE_OPTS` environment variable to a value like `-Xmx1024m`.
 
     For more information on the `-Xmx` option, see the [Java SE Documentation][5].
+
+</details>
 
 ## License
 
