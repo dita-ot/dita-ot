@@ -12,6 +12,12 @@ To build and use DITA-OT, you’ll need:
 
 * Java Development Kit 8 or newer
 
+## Install
+
+On macOS you can install dita-ot using homebrew:
+
+`brew install dita-ot`
+
 ## Building
 
 1. Clone the DITA-OT Git repository:
