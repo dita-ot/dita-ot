@@ -1,9 +1,9 @@
-# DITA Open Toolkit [![Build Status][1]](http://travis-ci.org/dita-ot/dita-ot) [![Slack][2]](http://slack.dita-ot.org/)
+# DITA Open Toolkit [![Build]](http://travis-ci.org/dita-ot/dita-ot) [![Slack]](http://slack.dita-ot.org/)
 
 The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for XML content authored in the _Darwin Information Typing Architecture_.
 
-Visit the project website at [dita-ot.org][3] for documentation, information about releases, and [download packages][4].  
-For information on additional DITA and DITA-OT resources, see [SUPPORT][5].
+Visit the project website at [dita-ot.org][site] for documentation, information about releases, and [download packages][dist].  
+For information on additional DITA and DITA-OT resources, see [SUPPORT].
 
 - [Prerequisites](#prerequisites)
 - [Installing](#installing)
@@ -19,12 +19,12 @@ To build and use DITA-OT, you’ll need:
 
 ## Installing
 
-1.  Download the distribution package from [dita-ot.org/download][4].
+1.  Download the distribution package from [dita-ot.org/download][dist].
 2.  Extract the contents of the package to the directory where you want to install the DITA-OT.
 
 ### Installing on macOS via Homebrew
 
-On macOS, you can also install DITA-OT using the [Homebrew][6] package manager:
+On macOS, you can also install DITA-OT using the [Homebrew] package manager:
 
     brew install dita-ot
 
@@ -47,7 +47,7 @@ You can generate output using the DITA Open Toolkit `dita` command-line tool.
     - _`input-file`_ is the DITA map or DITA file that you want to process
     - _`format`_ is the output format (or “transformation type”)
 
-See the [documentation][7] for arguments and [options][8].
+See the [documentation][docs] for arguments and [options].
 
 ## For developers
 
@@ -84,21 +84,21 @@ See the [documentation][7] for arguments and [options][8].
 
     If Gradle throws an error like `java.lang.OutOfMemoryError: Java heap space`, you probably need to increase the maximum Java heap size. One way to do this is to set the `GRADLE_OPTS` environment variable to a value like `-Xmx1024m`.
 
-    For more information on the `-Xmx` option, see the [Java SE Documentation][9].
+    For more information on the `-Xmx` option, see the [Java SE Documentation][java].
 
 </details>
 
 ## License
 
-The DITA Open Toolkit is licensed for use under the [Apache License 2.0][10].
+The DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 
-[1]: https://travis-ci.org/dita-ot/dita-ot.svg?branch=develop
-[2]: http://slack.dita-ot.org/badge.svg
-[3]: https://www.dita-ot.org/
-[4]: https://www.dita-ot.org/download
-[5]: https://github.com/dita-ot/dita-ot/blob/develop/.github/SUPPORT.md
-[6]: https://brew.sh
-[7]: https://www.dita-ot.org/dev/
-[8]: https://www.dita-ot.org/dev/topics/build-using-dita-command.html
-[9]: http://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI
-[10]: http://www.apache.org/licenses/LICENSE-2.0
+[build]: https://travis-ci.org/dita-ot/dita-ot.svg?branch=develop
+[slack]: http://slack.dita-ot.org/badge.svg
+[site]: https://www.dita-ot.org/
+[dist]: https://www.dita-ot.org/download
+[support]: https://github.com/dita-ot/dita-ot/blob/develop/.github/SUPPORT.md
+[homebrew]: https://brew.sh
+[docs]: https://www.dita-ot.org/dev/
+[options]: https://www.dita-ot.org/dev/topics/build-using-dita-command.html
+[java]: http://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI
+[apache]: http://www.apache.org/licenses/LICENSE-2.0
