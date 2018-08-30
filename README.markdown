@@ -1,6 +1,6 @@
 # DITA Open Toolkit [![Build]](http://travis-ci.org/dita-ot/dita-ot) [![Slack]](http://slack.dita-ot.org/)
 
-The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for XML content authored in the _Darwin Information Typing Architecture_.
+_DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for XML content authored in the _Darwin Information Typing Architecture_.
 
 Visit the project website at [dita-ot.org][site] for documentation, information about releases, and [download packages][dist].  
 For information on additional DITA and DITA-OT resources, see [SUPPORT].
@@ -21,7 +21,7 @@ You can download the Oracle JRE or JDK from [oracle.com/technetwork/java][java].
 ## Installing
 
 1.  Download the distribution package from [dita-ot.org/download][dist].
-2.  Extract the contents of the package to the directory where you want to install the DITA-OT.
+2.  Extract the contents of the package to the directory where you want to install DITA-OT.
 
 ### Installing on macOS via Homebrew
 
@@ -33,7 +33,7 @@ Homebrew will automatically download the latest version of the toolkit, install 
 
 ## Building output
 
-You can generate output using the DITA Open Toolkit `dita` command-line tool.
+You can generate output using the `dita` command-line tool included with DITA Open Toolkit.
 
 1.  On the command line, change to the `bin` folder of the DITA-OT installation directory:
 
@@ -91,7 +91,7 @@ See the [documentation][docs] for arguments and [options].
 
 ## License
 
-The DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
+DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 
 [build]: https://travis-ci.org/dita-ot/dita-ot.svg?branch=develop
 [slack]: http://slack.dita-ot.org/badge.svg
