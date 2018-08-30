@@ -96,18 +96,18 @@ See the accompanying LICENSE file for applicable license.
     <param name="args.input" desc="Specifies the master file for your documentation project." type="file" required="true"/>
     <param name="args.input.dir" desc="Specifies the base directory for your documentation project." type="dir"/>
     <!-- Deprecated since 2.5 -->
-    <param name="args.logdir" desc="Specifies the location where the DITA-OT places log files for your project." type="dir" deprecated="true"/>
+    <param name="args.logdir" desc="Specifies the location where DITA-OT places log files for your project." type="dir" deprecated="true"/>
     <param name="args.output.base" desc="Specifies the name of the output file without file extension." type="string"/>
     <param name="args.tablelink.style" desc="Specifies how cross references to tables are styled." type="enum">
       <val>NUMBER</val>
       <val>TITLE</val>
       <val>NUMTITLE</val>
     </param>
-    <param name="clean.temp" desc="Specifies whether the DITA-OT deletes the files in the temporary directory after it finishes a build." type="enum">
+    <param name="clean.temp" desc="Specifies whether DITA-OT deletes the files in the temporary directory after it finishes a build." type="enum">
       <val default="true">yes</val>
       <val>no</val>
     </param>
-    <param name="dita.dir" desc="Specifies where the DITA-OT is installed." type="dir"/>
+    <param name="dita.dir" desc="Specifies where DITA-OT is installed." type="dir"/>
     <param name="dita.temp.dir" desc="Specifies the location of the temporary directory." type="dir"/>
     <param name="dita.input.valfile" deprecated="true" desc="Specifies a filter file to be used to include, exclude, or flag content." type="file"/>
     <param name="filter-stage" desc="Specifies whether filtering is done before all other processing, or after key and conref processing." type="enum">
@@ -126,7 +126,7 @@ See the accompanying LICENSE file for applicable license.
       <val>true</val>
       <val default="true">false</val>
     </param>
-    <param name="outer.control" desc="Specifies how the DITA-OT handles content files that are not located in or below the directory containing the master DITA map." type="enum">
+    <param name="outer.control" desc="Specifies how DITA-OT handles content files that are not located in or below the directory containing the master DITA map." type="enum">
       <val desc="Fail quickly if files are going to be generated or copied outside of the directory.">fail</val>
       <val desc="Complete the operation if files will be generated or copied outside of the directory, but log a warning." default="true">warn</val>
       <val desc="Quietly finish without generating warnings or errors.">quiet</val>
@@ -134,7 +134,7 @@ See the accompanying LICENSE file for applicable license.
     <param name="output.dir" desc="Specifies the name and location of the output directory." type="dir"/>
     <param name="root-chunk-override" desc="Override for map chunk attribute value." type="string"/>
     <param name="transtype" desc="Specifies the output format (transformation type)." type="file" required="true"/>
-    <param name="validate" desc="Specifies whether the DITA-OT validates the content." type="enum">
+    <param name="validate" desc="Specifies whether DITA-OT validates the content." type="enum">
       <val default="true">true</val>
       <val>false</val>
     </param>
@@ -142,10 +142,10 @@ See the accompanying LICENSE file for applicable license.
       <val desc="Enables generation of debugging attributes" default="true">true</val>
       <val desc="Disables generation of debugging attributes">false</val>
     </param>
-    <param name="processing-mode" desc="Specifies how the DITA-OT handles errors and error recovery." type="enum">
-      <val desc="When an error is encountered, the DITA-OT stops processing">strict</val>
-      <val desc="When an error is encountered, the DITA-OT attempts to recover from it" default="true">lax</val>
-      <val desc="When an error is encountered, the DITA-OT continues processing but does not attempt error recovery">skip</val>
+    <param name="processing-mode" desc="Specifies how DITA-OT handles errors and error recovery." type="enum">
+      <val desc="When an error is encountered, DITA-OT stops processing">strict</val>
+      <val desc="When an error is encountered, DITA-OT attempts to recover from it" default="true">lax</val>
+      <val desc="When an error is encountered, DITA-OT continues processing but does not attempt error recovery">skip</val>
     </param>
     <param name="conserve-memory" desc="Conserve memory at the expense of processing speed" type="enum">
       <val>true</val>
