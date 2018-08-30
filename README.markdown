@@ -5,17 +5,18 @@ The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing en
 Visit the project website at [dita-ot.org][site] for documentation, information about releases, and [download packages][dist].  
 For information on additional DITA and DITA-OT resources, see [SUPPORT].
 
-- [Prerequisites](#prerequisites)
+- [Prerequisites: Java 8](#prerequisites-java-8)
 - [Installing](#installing)
 - [Building output](#building-output)
 - [For developers](#for-developers)
 - [License](#license)
 
-## Prerequisites
+## Prerequisites: Java 8
 
-To build and use DITA-OT, you’ll need:
+- To _build_ DITA-OT, you’ll need Java Development Kit (JDK), version 8 or newer
+- To _run_ DITA-OT, the Java Runtime Environment (JRE) is sufficient
 
-- Java Development Kit 8 or newer
+You can download the Oracle JRE or JDK from [oracle.com/technetwork/java][java].
 
 ## Installing
 
@@ -84,7 +85,7 @@ See the [documentation][docs] for arguments and [options].
 
     If Gradle throws an error like `java.lang.OutOfMemoryError: Java heap space`, you probably need to increase the maximum Java heap size. One way to do this is to set the `GRADLE_OPTS` environment variable to a value like `-Xmx1024m`.
 
-    For more information on the `-Xmx` option, see the [Java SE Documentation][java].
+    For more information on the `-Xmx` option, see the [Java SE Documentation][javadoc].
 
 </details>
 
@@ -97,8 +98,9 @@ The DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache]
 [site]: https://www.dita-ot.org/
 [dist]: https://www.dita-ot.org/download
 [support]: https://github.com/dita-ot/dita-ot/blob/develop/.github/SUPPORT.md
+[java]: http://www.oracle.com/technetwork/java/javase/downloads
 [homebrew]: https://brew.sh
 [docs]: https://www.dita-ot.org/dev/
 [options]: https://www.dita-ot.org/dev/topics/build-using-dita-command.html
-[java]: http://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI
+[javadoc]: http://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI
 [apache]: http://www.apache.org/licenses/LICENSE-2.0
