@@ -95,7 +95,7 @@ See the accompanying LICENSE file for applicable license.
   
   <message id="DOTJ018I" type="INFO">
     <reason>Log file '%1' was generated successfully in directory '%2'.</reason>
-    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the DITA-OT user guide.</response>
+    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the DITA-OT documentation.</response>
   </message>
   
   <message id="DOTJ020W" type="WARN">
@@ -121,12 +121,12 @@ See the accompanying LICENSE file for applicable license.
   
   <message id="DOTJ025E" type="ERROR">
     <reason>The input to the "topic merge" transform process could not be found.</reason>
-    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT User Guide for additional causes.</response>
+    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT documentation for additional causes.</response>
   </message>
   
   <message id="DOTJ026E" type="ERROR">
     <reason>The "topic merge" did not generate any output.</reason>
-    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT User Guide for additional causes.</response>
+    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT documentation for additional causes.</response>
   </message>
 
   <message id="DOTJ028E" type="ERROR">
@@ -253,7 +253,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ052E" type="ERROR">
     <reason>Code reference charset "%1" not supported.</reason>
-    <response>See the DITA-OT User guide for supported charset values on the format attribute.</response>
+    <response>See the DITA-OT documentation for supported charset values on the format attribute.</response>
   </message>
 
   <!-- Obsolete since 2.3 -->
