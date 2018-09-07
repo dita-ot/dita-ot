@@ -54,8 +54,10 @@ public final class IndexPreprocessor {
     
     private final String prefix;
     private final String namespace_url;
+    private final Stack<Boolean> excludedDraftSection = new Stack<>();
     private final IndexDitaProcessor indexDitaProcessor;
     private final IndexGroupProcessor indexGroupProcessor;
+    private boolean includeDraft = false;
     private DITAOTLogger logger;
     private static final String elIndexRangeStartName = "start";
     private static final String elIndexRangeEndName = "end";
@@ -66,9 +68,12 @@ public final class IndexPreprocessor {
      * @param prefix index prefix
      * @param theNamespace_url index element namespace URI
      */
-    public IndexPreprocessor(final String prefix, final String theNamespace_url) {
+    public IndexPreprocessor(final String prefix, final String theNamespace_url, final String draftParameter) {
         this.prefix = prefix;
         this.namespace_url = theNamespace_url;
+        this.excludedDraftSection.clear();
+        this.excludedDraftSection.add(false);
+        includeDraft = draftParameter.equals(ARGS_DRAFT_YES) ? true : false;
         indexDitaProcessor = new IndexDitaProcessor();
         indexGroupProcessor = new IndexGroupProcessor();
     }
@@ -155,15 +160,21 @@ public final class IndexPreprocessor {
     private Node[] processCurrNode(final Node theNode, final Document theTargetDocument, final IndexEntryFoundListener theIndexEntryFoundListener) {
         final NodeList childNodes = theNode.getChildNodes();
 
-        if (checkElementName(theNode)) {
+        if (checkElementName(theNode) && !excludedDraftSection.peek()) {
             return processIndexNode(theNode, theTargetDocument, theIndexEntryFoundListener);
         } else {
             final Node result = theTargetDocument.importNode(theNode, false);
+            if (!includeDraft && checkDraftNode(theNode)) {
+                excludedDraftSection.add(true);
+            }
             for (int i = 0; i < childNodes.getLength(); i++) {
                 final Node[] processedNodes = processCurrNode(childNodes.item(i), theTargetDocument, theIndexEntryFoundListener);
                 for (final Node node : processedNodes) {
                     result.appendChild(node);
                 }
+            }
+            if (!includeDraft && checkDraftNode(theNode)) {
+                excludedDraftSection.pop();
             }
             return new Node[]{result};
         }
@@ -238,6 +249,11 @@ public final class IndexPreprocessor {
                 || INDEXING_D_INDEX_SORT_AS.matches(node)
                 || INDEXING_D_INDEX_SEE.matches(node)
                 || INDEXING_D_INDEX_SEE_ALSO.matches(node);
+    }
+    
+    private boolean checkDraftNode(final Node node) {
+        return TOPIC_DRAFT_COMMENT.matches(node)
+                || TOPIC_REQUIRED_CLEANUP.matches(node);
     }
 
     /**
