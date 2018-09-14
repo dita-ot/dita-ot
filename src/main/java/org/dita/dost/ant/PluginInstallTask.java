@@ -7,6 +7,9 @@
  */
 package org.dita.dost.ant;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.io.FileUtils;
@@ -17,11 +20,8 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Expand;
 import org.apache.tools.ant.taskdefs.Get;
-import org.dita.dost.platform.Plugins;
-import org.dita.dost.platform.Registry;
+import org.dita.dost.platform.*;
 import org.dita.dost.platform.Registry.Dependency;
-import org.dita.dost.platform.SemVer;
-import org.dita.dost.platform.SemVerMatch;
 import org.dita.dost.util.Configuration;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -41,6 +41,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class PluginInstallTask extends Task {
 
@@ -156,14 +157,22 @@ public final class PluginInstallTask extends Task {
     }
 
     private Set<Registry> readRegistry(final String name, final SemVerMatch version) {
-        log(String.format("Reading registries for %s@%s", name, version), Project.MSG_DEBUG);
+        log(String.format("Reading registries for %s@%s", name, version), Project.MSG_INFO);
         Registry res = null;
         for (final String registry : registries) {
             final URI registryUrl = URI.create(registry + name + ".json");
-            log(String.format("Read registry %s", registry), Project.MSG_DEBUG);
+            log(String.format("Read registry %s", registry), Project.MSG_INFO);
             try (BufferedInputStream in = new BufferedInputStream(registryUrl.toURL().openStream())) {
-                log("Parse registry", Project.MSG_DEBUG);
-                final List<Registry> regs = Arrays.asList(mapper.readValue(in, Registry[].class));
+                log("Parse registry", Project.MSG_INFO);
+                final JsonFactory factory = mapper.getFactory();
+                final JsonParser parser = factory.createParser(in);
+                final JsonNode obj = mapper.readTree(parser);
+                final Collection<Registry> regs;
+                if (obj.isArray()) {
+                    regs = Arrays.asList(mapper.treeToValue(obj, Registry[].class));
+                } else {
+                    regs = resolveAlias(mapper.treeToValue(obj, Alias.class));
+                }
                 final Optional<Registry> reg = findPlugin(regs, version);
                 if (reg.isPresent()) {
                     final Registry plugin = reg.get();
@@ -174,7 +183,7 @@ public final class PluginInstallTask extends Task {
             } catch (MalformedURLException e) {
                 log(String.format("Invalid registry URL %s: %s", registryUrl, e.getMessage()), e, Project.MSG_ERR);
             } catch (FileNotFoundException e) {
-                log(String.format("Registry configuration %s not found", registryUrl), e, Project.MSG_DEBUG);
+                log(String.format("Registry configuration %s not found", registryUrl), e, Project.MSG_INFO);
             } catch (IOException e) {
                 log(String.format("Failed to read registry configuration %s: %s", registryUrl, e.getMessage()), e, Project.MSG_ERR);
             }
@@ -191,6 +200,10 @@ public final class PluginInstallTask extends Task {
                 .forEach(results::add);
 
         return results;
+    }
+
+    private Collection<Registry> resolveAlias(Alias registry) {
+        return readRegistry(registry.alias, null);
     }
 
     private File get(final URL url, final String expectedChecksum) {
@@ -243,7 +256,7 @@ public final class PluginInstallTask extends Task {
         }
     }
 
-    private Optional<Registry> findPlugin(final List<Registry> regs, final SemVerMatch version) {
+    private Optional<Registry> findPlugin(final Collection<Registry> regs, final SemVerMatch version) {
         if (version == null) {
             return regs.stream()
                     .filter(this::matchingPlatformVersion)

@@ -11,12 +11,10 @@ package org.dita.dost.platform;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.annotations.VisibleForTesting;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -55,7 +53,7 @@ public class Registry {
 
         @JsonCreator
         public Dependency(@JsonProperty("name") String name,
-                           @JsonProperty("req") String req) {
+                          @JsonProperty("req") String req) {
             this.name = name;
             this.req = new SemVerMatch(req);
         }
