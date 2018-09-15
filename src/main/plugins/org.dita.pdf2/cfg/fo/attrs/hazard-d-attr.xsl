@@ -6,6 +6,20 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="2.0">
 
+  <!-- Source: https://www.nema.org/Standards/ComplimentaryDocuments/ANSI%20Z535_1-2017%20CONTENTS%20AND%20SCOPE.pdf -->
+  <xsl:variable name="hazard.ansi.red" select="'#C8102E'"/>
+  <xsl:variable name="hazard.ansi.orange" select="'#FF8200'"/>
+  <xsl:variable name="hazard.ansi.yellow" select="'#FFD100'"/>
+  <xsl:variable name="hazard.ansi.green" select="'#007B5F'"/>
+  <xsl:variable name="hazard.ansi.blue" select="'#0072CE'"/>
+  <xsl:variable name="hazard.ansi.purple" select="'#6D2077'"/>
+
+  <!-- Source: https://en.wikipedia.org/wiki/ISO_3864 -->
+  <xsl:variable name="hazard.iso.red" select="'#9B2423'"/>
+  <xsl:variable name="hazard.iso.yellow" select="'#F9A800'"/>
+  <xsl:variable name="hazard.iso.green" select="'#237F52'"/>
+  <xsl:variable name="hazard.iso.blue" select="'#005387'"/>
+  
   <xsl:attribute-set name="hazardstatement">
     <xsl:attribute name="width">100%</xsl:attribute>
     <xsl:attribute name="space-before">8pt</xsl:attribute>
@@ -34,21 +48,21 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:attribute-set name="hazardstatement.title.danger">
     <xsl:attribute name="color">white</xsl:attribute>
-    <xsl:attribute name="background-color">#d63231</xsl:attribute>
+    <xsl:attribute name="background-color" select="$hazard.ansi.red"/>
     <xsl:attribute name="font-style">normal</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="hazardstatement.title.warning">
-    <xsl:attribute name="background-color">#ed9c3d</xsl:attribute>
+    <xsl:attribute name="background-color" select="$hazard.ansi.orange"/>
     <xsl:attribute name="font-style">normal</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="hazardstatement.title.caution">
-    <xsl:attribute name="background-color">#eae639</xsl:attribute>
+    <xsl:attribute name="background-color" select="$hazard.ansi.yellow"/>
     <xsl:attribute name="font-style">normal</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="hazardstatement.title.notice">
     <xsl:attribute name="color">white</xsl:attribute>
     <xsl:attribute name="font-style">italic</xsl:attribute>
-    <xsl:attribute name="background-color">#2469a5</xsl:attribute>
+    <xsl:attribute name="background-color" select="$hazard.ansi.blue"/>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="hazardstatement.image" use-attribute-sets="hazardstatement.cell">
