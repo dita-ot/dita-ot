@@ -73,7 +73,7 @@ public final class IndexPreprocessor {
         this.namespace_url = theNamespace_url;
         this.excludedDraftSection.clear();
         this.excludedDraftSection.add(false);
-        includeDraft = draftParameter.equals(ARGS_DRAFT_YES) ? true : false;
+        includeDraft = draftParameter.equals(ARGS_DRAFT_YES);
         indexDitaProcessor = new IndexDitaProcessor();
         indexGroupProcessor = new IndexGroupProcessor();
     }
