@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en-us"><title>Test if links in resource-only topics are followed</title>
+<topicref href="maintopic.dita"/>
+<topicref href="resourceonly.dita" processing-role="resource-only"/>
+</map>
