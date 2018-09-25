@@ -265,7 +265,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
                 formatSet.add(file);
                 if (!exists(file.filename)) {
-                    logger.warn(MessageUtils.getMessage("DOTX008W", file.filename.toString()).toString());
+                    logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
                 }
             } else {
                 htmlSet.put(file.format, file.filename);

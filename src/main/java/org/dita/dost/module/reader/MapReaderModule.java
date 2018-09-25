@@ -134,7 +134,7 @@ public final class MapReaderModule extends AbstractReaderModule {
             } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
                 formatSet.add(file);
                 if (!exists(file.filename)) {
-                    logger.warn(MessageUtils.getMessage("DOTX008W", file.filename.toString()).toString());
+                    logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
                 }
             } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
                 formatSet.add(file);
