@@ -7,6 +7,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.util.XMLUtils;
+import static org.dita.dost.util.Constants.*;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -56,6 +57,7 @@ extends Task {
     private XMLCatalog xmlcatalog;
     private String locale = "ja";
     private String indexConfig = "";
+    private String draft = ARGS_DRAFT_NO;
     public static boolean failOnError = false;
     public static boolean processingFaild = false;
     private static final String prefix = "opentopic-index";
@@ -74,7 +76,7 @@ extends Task {
             documentBuilder.setEntityResolver(xmlcatalog);
 
             final Document doc = documentBuilder.parse(input);
-            final IndexPreprocessor preprocessor = new IndexPreprocessor(this.prefix, this.namespace_url);
+            final IndexPreprocessor preprocessor = new IndexPreprocessor(this.prefix, this.namespace_url, this.draft);
             preprocessor.setLogger(new DITAOTAntLogger(getProject()));
 
             // Walks through source document and builds an array of IndexEntry and builds
@@ -158,6 +160,10 @@ extends Task {
 
     public void setFailOnError(final String theFailOnErro) {
         this.failOnError = theFailOnErro.equals("true");
+    }
+    
+    public void setDraft(final String draftValue) {
+        this.draft = draftValue;
     }
 
     private void setActiveProjectProperty(final String propertyName, final String propertyValue) {
