@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en-us"><title>Input map</title>
+<topicref href="composite.dita" chunk="by-topic"/>
+<topicref href="mixup/composite.dita" chunk="by-topic"/>
+</map>
