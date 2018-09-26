@@ -136,7 +136,7 @@ See the accompanying LICENSE file for applicable license.
                         </xsl:call-template>
                       </xsl:when>
                       <xsl:otherwise>
-                          <fo:index-range-begin id="{$selfID}_{generate-id()}" index-key="{$selfID}" />
+                          <fo:index-range-begin id="{../@indexid}_{generate-id()}" index-key="{../@indexid}" />
                       </xsl:otherwise>
                   </xsl:choose>
               </xsl:otherwise>
@@ -169,7 +169,7 @@ See the accompanying LICENSE file for applicable license.
                       </xsl:when>
                       <xsl:otherwise>
                           <xsl:for-each select="$precMarker//opentopic-index:refID[@value = $selfID]/@value">
-                              <fo:index-range-end ref-id="{$selfID}_{generate-id()}" />
+                              <fo:index-range-end ref-id="{../@indexid}_{generate-id()}" />
                           </xsl:for-each>
                       </xsl:otherwise>
                   </xsl:choose>
@@ -180,7 +180,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   <xsl:template match="opentopic-index:index.entry">
       <xsl:for-each select="opentopic-index:refID[last()]">
-          <fo:inline index-key="{@value}"/>
+          <fo:inline index-key="{@indexid}"/>
       </xsl:for-each>
       <xsl:apply-templates/>
   </xsl:template>
@@ -473,7 +473,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:copy-of select="$index.separator"/>
           <fo:index-page-citation-list>
             <xsl:for-each select="$idxs">
-              <fo:index-key-reference ref-index-key="{@value}" xsl:use-attribute-sets="__index__page__link"/>
+              <fo:index-key-reference ref-index-key="{@indexid}" xsl:use-attribute-sets="__index__page__link"/>
             </xsl:for-each>
           </fo:index-page-citation-list>
         </xsl:if>
