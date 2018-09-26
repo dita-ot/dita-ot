@@ -61,6 +61,7 @@ public final class IndexPreprocessor {
     private DITAOTLogger logger;
     private static final String elIndexRangeStartName = "start";
     private static final String elIndexRangeEndName = "end";
+    private static final String hashPrefix = "indexid";
 
     /**
      * Create new index preprocessor.
@@ -315,6 +316,7 @@ public final class IndexPreprocessor {
             final String[] refIDs = indexEntry.getRefIDs();
             for (final String refID : refIDs) {
                 final Element referenceIDElement = createElement(theTargetDocument, "refID");
+                referenceIDElement.setAttribute("indexid", hashPrefix + Integer.toString(refID.hashCode()));
                 referenceIDElement.setAttribute("value", refID);
                 indexEntryNode.appendChild(referenceIDElement);
             }
