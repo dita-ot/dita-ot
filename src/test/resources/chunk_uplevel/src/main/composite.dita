@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dita PUBLIC "-//OASIS//DTD DITA Composite//EN" "ditabase.dtd">
+<dita>
+<topic id="chunkmefirst">
+<title>First topic in main dir!</title>
+<body>
+<p><keyword conref="../common/reuse.dita#reuse/kwd"/></p>
+</body>
+<concept id="chunkmetoo">
+<title>Second topic in main dir!</title>
+<conbody>
+<p>thing</p>
+</conbody>
+</concept>
+</topic>
+</dita>
