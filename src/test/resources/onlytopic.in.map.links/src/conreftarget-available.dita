@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="reuse">
+<title>Reuse topic</title>
+<body>
+<p><ph id="ph">Phrase in reuse topic</ph></p>
+<p>Now a link I don't need to follow; today throws incorrect "Ignoring copy-to" message: <xref
+href="linkFromConrefTarget-NotNeeded.dita"/></p>
+</body>
+</topic>
