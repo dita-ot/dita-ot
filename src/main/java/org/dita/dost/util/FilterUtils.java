@@ -221,7 +221,7 @@ public final class FilterUtils {
         if ((conflictColor && foregroundConflictColor != null)
                 || (conflictBackcolor && backgroundConflictColor != null)) {
             return res.stream()
-                    .map(f -> new Flag(conflictColor ? foregroundConflictColor : f.color,
+                    .map(f -> new Flag(ELEMENT_NAME_PROP, conflictColor ? foregroundConflictColor : f.color,
                             conflictBackcolor ? backgroundConflictColor : f.backcolor,
                             f.style, f.changebar, f.startflag, f.endflag))
                     .collect(Collectors.toSet());
@@ -700,6 +700,7 @@ public final class FilterUtils {
 
     public static class Flag implements Action {
 
+        public final String proptype;
         public final String color;
         public final String backcolor;
         public final String[] style;
@@ -707,8 +708,9 @@ public final class FilterUtils {
         public final FlagImage startflag;
         public final FlagImage endflag;
 
-        public Flag(String color, String backcolor, String[] style, String changebar,
-                    FlagImage startflag, FlagImage endflag) {
+        public Flag(String proptype, String color, String backcolor, String[] style, String changebar,
+                FlagImage startflag, FlagImage endflag) {
+            this.proptype = proptype;
             this.color = color;
             this.backcolor = backcolor;
             this.style = style;
@@ -718,7 +720,7 @@ public final class FilterUtils {
         }
 
         public Flag adjustPath(final URI currentFile, final Job job) {
-            return new Flag(color, backcolor, style, changebar,
+            return new Flag(proptype, color, backcolor, style, changebar,
                     adjustPath(startflag, currentFile, job),
                     adjustPath(endflag, currentFile, job));
         }
@@ -799,14 +801,17 @@ public final class FilterUtils {
             if (style != null) {
                 propAtts.add("style", Stream.of(style).collect(Collectors.joining(" ")));
             }
-            contentHandler.startElement(NULL_NS_URI, "prop", "prop", propAtts.build());
+            if (changebar != null) {
+                propAtts.add("changebar", changebar);
+            }
+            contentHandler.startElement(NULL_NS_URI, proptype, proptype, propAtts.build());
             if (isStart && startflag != null) {
                 startflag.writeFlag(contentHandler, "startflag");
             }
             if (!isStart && endflag != null) {
                 endflag.writeFlag(contentHandler, "endflag");
             }
-            contentHandler.endElement(NULL_NS_URI, "prop", "prop");
+            contentHandler.endElement(NULL_NS_URI, proptype, proptype);
         }
 
         public Element getStartFlag() {
