@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dita PUBLIC "-//OASIS//DTD DITA Composite//EN" "ditabase.dtd">
 <dita>
-  <topic id="chunkmefirst">
+<topic id="chunkmefirst">
 <title>First topic in main dir!</title>
 <body>
 <p><keyword conref="../common/reuse.dita#reuse/kwd"/></p>
@@ -14,24 +14,3 @@
 </concept>
 </topic>
 </dita>
-
-<!--
-    [chunk] ..............Starting element: concept
-    [chunk] OK I MATCHED THE START OF A TOPIC
-    [chunk] Added [concept] to topicSpecSet
-    [chunk] chunk is by-topic and next topic is found!
-    [chunk] OutputFile is currently file:/C:/DITA-OT/TESTGITHUB/chunkupdir/main/
-temp/chunkmefirst.dita
-    [chunk] Pushed to output stack
-    [chunk] Pushed output file name file:/C:/DITA-OT/TESTGITHUB/chunkupdir/main/
-temp/chunkmefirst.ditato outputFileNameStack
-    [chunk] Current ID is: chunkmetoo
-    [chunk] GENERATING FILE NAME! Got file info for file:/C:/DITA-OT/TESTGITHUB/chunkupdir/main/temp/in.ditamap
-    [chunk] Result resolved as: file:/C:/DITA-OT/TESTGITHUB/chunkupdir/main/chunkmetoo.dita
-    [chunk] Generated temp file name:chunkmetoo.dita
-    [chunk] Now gonna return temp resolved as: file:/C:/DITA-OT/TESTGITHUB/chunkupdir/main/temp/chunkmetoo.dita
-    [chunk] Now outputFile is regenerated: file:/C:/DITA-OT/TESTGITHUB/chunkupdi
-r/main/temp/chunkmetoo.dita
-    [chunk] Created output stream for that file
-    [chunk] ..............Starting element: title
--->
