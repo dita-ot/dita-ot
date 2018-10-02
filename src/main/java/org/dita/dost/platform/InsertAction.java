@@ -20,7 +20,8 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
-import org.xml.sax.helpers.XMLReaderFactory;
+
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  * InsertAction implements IAction and insert the resource
@@ -43,7 +44,9 @@ class InsertAction extends XMLFilterImpl implements IAction {
         fileNameSet = new LinkedHashSet<>(16);
         paramTable = new Hashtable<>();
         try {
-            reader = XMLReaderFactory.createXMLReader();
+            final SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            reader = factory.newSAXParser().getXMLReader();
             reader.setContentHandler(this);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
@@ -88,6 +91,20 @@ class InsertAction extends XMLFilterImpl implements IAction {
     }
 
     // XMLFilter methods
+
+    @Override
+    public void startPrefixMapping (String prefix, String uri) throws SAXException {
+        if (elemLevel != 0) {
+            getContentHandler().startPrefixMapping(prefix, uri);
+        }
+    }
+
+    @Override
+    public void endPrefixMapping (String prefix) throws SAXException {
+        if (elemLevel != 0) {
+            getContentHandler().endPrefixMapping(prefix);
+        }
+    }
 
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
