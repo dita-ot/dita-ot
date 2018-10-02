@@ -78,7 +78,7 @@ See the accompanying LICENSE file for applicable license.
                             </xsl:attribute>
                             <xsl:apply-templates select="$mapTopicref" mode="tocPrefix"/>
                             <fo:inline xsl:use-attribute-sets="__toc__title">
-                                <xsl:variable name="pulledNavigationTitle" as="node()*">
+                                <xsl:variable name="pulledNavigationTitle" as="item()*">
                                     <xsl:call-template name="getNavTitle" />
                                 </xsl:variable>
                                 <xsl:apply-templates select="$pulledNavigationTitle" mode="dropCopiedIds"/>
