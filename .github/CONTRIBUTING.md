@@ -43,7 +43,7 @@ To send a pull request, create a feature branch in your fork with a name like `f
 
 For more information, see [Contributing to Open Source on GitHub][9].
 
-[1]: https://github.com/dita-ot/dita-ot/issues/new
+[1]: https://github.com/dita-ot/dita-ot/issues/new/choose
 [2]: https://github.com/dita-ot/dita-ot/issues
 [3]: https://help.github.com/articles/fork-a-repo/
 [4]: https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/
