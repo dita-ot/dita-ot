@@ -62,6 +62,7 @@ require =
     attribute plugin { xsd:NCName },
     attribute version { version }?,
     attribute importance { "required" | "optional" }?
+    attribute version { xsd:string }?
   }
 version = text
 metadata =
