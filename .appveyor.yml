@@ -1,0 +1,25 @@
+version: 3.1.{build}
+
+pull_requests:
+  do_not_increment_build_number: true
+# TODO: Change this for releases
+skip_non_tags: false
+configuration: release
+install:
+  - choco install -y jre8 InnoSetup
+  - set PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%
+  - cmd: FOR /F "tokens=*" %%F IN ('"git describe --tags --abbrev=0"') DO SET suffix=%%F
+
+artifacts:
+  - path: release/*.exe
+
+build_script:
+  - gradlew.bat buildLocal integrateDistTemp integrateDistPlugins
+  - iscc.exe /DAppVersion=%suffix% /DInstallTarget=system /DOutputDir="release" setup.iss || goto :error
+
+deploy:
+- provider: GitHub
+  artifact: 'release\*.exe'
+  prerelease: true
+  auth_token:
+    secure: jmoHow11p0dg5XMz80GqLQ==
