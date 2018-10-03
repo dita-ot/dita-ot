@@ -961,6 +961,10 @@ public final class Constants {
     public static final String DEFAULT_ACTION = "default";
     /**chunk attribute.*/
     public static final String ATTRIBUTE_NAME_CHUNK = "chunk";
+    
+    /** constants for args.draft argument value. **/
+    public static final String ARGS_DRAFT_YES = "yes";
+    public static final String ARGS_DRAFT_NO = "no";
 
     /**constants for indexterm prefix(See).
      *

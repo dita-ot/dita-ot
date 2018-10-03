@@ -232,6 +232,7 @@ public final class DitaValReader implements AbstractReader {
     private Flag readFlag(Element elem) {
         final String style = getValue(elem, ATTRIBUTE_NAME_STYLE);
         return new Flag(
+                elem.getLocalName(),
                 getValue(elem, ATTRIBUTE_NAME_COLOR),
                 getValue(elem, ATTRIBUTE_NAME_BACKCOLOR),
                 style != null ? style.trim().split("\\s+") : null,

@@ -60,11 +60,11 @@ See the accompanying LICENSE file for applicable license.
     <reason>There are multiple index entries found to close the index range for "%1".</reason>
     <response>Ensure that any index term with start="%1" has only one matching end term with end="%1".</response>
   </message>
-  <message id="PDFX004F" type="FATAL">
+  <message id="PDFX004F" type="ERROR">
     <reason>A topic reference was found with href="".</reason>
     <response>Please specify a target or remove the href attribute.</response>
   </message>
-  <message id="PDFX005F" type="FATAL">
+  <message id="PDFX005F" type="ERROR">
     <reason>The topic reference href="%1" could not be found.</reason>
     <response>Please correct the reference, or set the scope or format attribute if the target is not a local DITA topic.</response>
   </message>

@@ -1441,7 +1441,7 @@ See the accompanying LICENSE file for applicable license.
                                 </fo:inline>
                             </fo:block>
                         </fo:list-item-label>
-                        <fo:list-item-body start-indent="body-start()">
+                        <fo:list-item-body start-indent="body-start()" text-align="start">
                             <fo:block>
                                 <xsl:apply-templates/>
                             </fo:block>

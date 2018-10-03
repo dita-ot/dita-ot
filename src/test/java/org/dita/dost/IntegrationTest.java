@@ -109,6 +109,15 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .input(Paths.get("test.ditamap"))
                 .test();
     }
+    
+    @Test
+    public void testchunk_uplevel() throws Throwable {
+        builder().name("chunk_uplevel")
+                .transtype(PREPROCESS)
+                .input(Paths.get("main/chunkup.ditamap"))
+                .put("outer.control", "quiet")
+                .test();
+    }
 
     @Test
     public void testconref_pushreplace() throws Throwable {

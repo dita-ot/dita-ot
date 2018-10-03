@@ -202,7 +202,23 @@ See the accompanying LICENSE file for applicable license.
               <xsl:apply-templates select="$target/@chunk"/>
               <xsl:apply-templates select="@* except (@class, @href, @dita-ot:orig-href, @format, @dita-ot:orig-format, @keys, @keyscope, @type)"/>
               <xsl:apply-templates select="$target/@*" mode="preserve-submap-attributes"/>
-              <xsl:apply-templates select="$targetTitleAndTopicmeta" mode="preserve-submap-title-and-topicmeta"/>
+              <xsl:apply-templates select="$targetTitleAndTopicmeta" mode="preserve-submap-title-and-topicmeta">
+                <xsl:with-param name="relative-path" tunnel="yes">
+                  <xsl:choose>
+                    <xsl:when test="not($relative-path = ('#none#', ''))">
+                      <xsl:value-of select="$relative-path"/>
+                      <xsl:call-template name="find-relative-path">
+                        <xsl:with-param name="remainingpath" select="$href"/>
+                      </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:call-template name="find-relative-path">
+                        <xsl:with-param name="remainingpath" select="$href"/>
+                      </xsl:call-template>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:with-param>
+              </xsl:apply-templates>
               <xsl:apply-templates select="*[contains(@class, ' ditavalref-d/ditavalref ')]"/>
               <xsl:apply-templates select="$contents">
                 <xsl:with-param name="refclass" select="$refclass"/>

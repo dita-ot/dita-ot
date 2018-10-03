@@ -41,6 +41,7 @@ public class FilterUtilsTest {
     private static final QName PROPS = QName.valueOf("props");
     private static final QName GUI = QName.valueOf("gui");
     private static final QName OTHERPROPS = QName.valueOf("otherprops");
+    private static final QName REV = QName.valueOf("rev");
 
     private static final Map<FilterKey, Action> filterMap = ImmutableMap.<FilterKey, Action>builder()
             .put(new FilterKey(PLATFORM, "unix"), Action.INCLUDE)
@@ -199,7 +200,7 @@ public class FilterUtilsTest {
 
     @Test
     public void testgetFlagsDefaultFlag() {
-        final Flag flag = new Flag("red", null, null, null, null, null);
+        final Flag flag = new Flag("prop", "red", null, null, null, null, null);
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(PLATFORM, null), flag)
@@ -216,13 +217,15 @@ public class FilterUtilsTest {
 
     @Test
     public void testGetFlags() {
-        final Flag flag = new Flag("red", null, null, null, null, null);
+        final Flag flag = new Flag("prop", "red", null, null, null, null, null);
+        final Flag revflag = new Flag("revprop", null, null, null, "solid", null, null);
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(PLATFORM, "unix"), flag)
                         .put(new FilterKey(PLATFORM, "osx"), flag)
                         .put(new FilterKey(PLATFORM, "linux"), flag)
                         .put(new FilterKey(AUDIENCE, "expert"), flag)
+                        .put(new FilterKey(REV, "r1"), revflag)
                         .build(), null, null);
         f.setLogger(new TestUtils.TestLogger());
 
@@ -232,6 +235,9 @@ public class FilterUtilsTest {
         assertEquals(
                 singleton(flag),
                 f.getFlags(attr(PLATFORM, "amiga unix"), new QName[0][0]));
+        assertEquals(
+                singleton(revflag),
+                f.getFlags(attr(REV, "r1 r2"), new QName[0][0]));
         assertEquals(
                 emptySet(),
                 f.getFlags(attr(PLATFORM, "amiga"), new QName[0][0]));
@@ -358,8 +364,8 @@ public class FilterUtilsTest {
 
     @Test
     public void testGetFlagLabel() {
-        final Flag flagRed = new Flag("red", null, null, null, null, null);
-        final Flag flagBlue = new Flag("blue", null, null, null, null, null);
+        final Flag flagRed = new Flag("prop", "red", null, null, null, null, null);
+        final Flag flagBlue = new Flag("prop", "blue", null, null, null, null, null);
         
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
@@ -387,8 +393,8 @@ public class FilterUtilsTest {
 
     @Test
     public void testConflict() {
-        final Flag flagRed = new Flag("red", null, null, null, null, null);
-        final Flag flagBlue = new Flag("blue", null, null, null, null, null);
+        final Flag flagRed = new Flag("prop", "red", null, null, null, null, null);
+        final Flag flagBlue = new Flag("prop", "blue", null, null, null, null, null);
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(OS, "amiga"), flagRed)
@@ -396,7 +402,7 @@ public class FilterUtilsTest {
                         .build(), "yellow", "green");
         f.setLogger(new TestUtils.TestLogger());
 
-        final Flag flagYellow = new Flag("yellow", null, null, null, null, null);
+        final Flag flagYellow = new Flag("prop", "yellow", null, null, null, null, null);
         assertEquals(
                 singleton(flagYellow),
                 f.getFlags(attr(PROPS, "os(amiga unix windows)"), new QName[][] {{PROPS, OS}}));

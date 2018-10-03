@@ -294,7 +294,8 @@ with those set forth herein.
     </condition>
 
     <index-preprocess input="${inputFile.url}" output="${dita.temp.dir}/stage1.xml"
-                      indexConfig="${index.config.file}" locale="${document.locale}">
+                      indexConfig="${index.config.file}" locale="${document.locale}"
+                      draft="${args.draft}">
       <xmlcatalog refid="xml.catalog"/>
     </index-preprocess> 
   </target>
