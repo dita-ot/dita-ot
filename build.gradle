@@ -305,7 +305,33 @@ task generateJavadocs(type: Javadoc) {
 }
 generateJavadocs.onlyIf { skipDocs() }
 
-task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+def plugins = [
+        "org.dita.eclipsehelp",
+        "org.dita.html5",
+        "org.dita.htmlhelp",
+        "org.dita.pdf2",
+        "org.dita.pdf2.axf",
+        "org.dita.pdf2.fop",
+        "org.dita.pdf2.xep",
+        "org.dita.xhtml",
+]
+
+task distPlugins() {
+    dependsOn plugins.collect{ name ->
+        def taskName = "distPlugin${name.split("\\.").collect{token -> return token.capitalize()}.join("")}"
+        return tasks.create(taskName, Zip) {
+            from ("${distTempDir}/plugins/${name}") {
+                exclude "build"
+                exclude "src"
+                exclude "out"
+            }
+            archiveName "${name}-${version}.zip"
+        }.name
+    }
+}
+distPlugins.mustRunAfter integrateDistPlugins
+
+task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, generateDocs, cleanGenerateDocs, generateJavadocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
