@@ -454,6 +454,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:attribute name="provisional-label-separation">2mm</xsl:attribute>
         <xsl:attribute name="line-height">1.2</xsl:attribute>
         <xsl:attribute name="start-indent">0pt</xsl:attribute>
+        <xsl:attribute name="font-weight">normal</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__align__left">
