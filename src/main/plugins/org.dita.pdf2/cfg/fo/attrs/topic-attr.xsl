@@ -455,6 +455,8 @@ See the accompanying LICENSE file for applicable license.
         <xsl:attribute name="line-height">1.2</xsl:attribute>
         <xsl:attribute name="start-indent">0pt</xsl:attribute>
         <xsl:attribute name="font-weight">normal</xsl:attribute>
+        <xsl:attribute name="font-style">normal</xsl:attribute>
+        <xsl:attribute name="text-decoration">no-underline no-overline</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__align__left">
