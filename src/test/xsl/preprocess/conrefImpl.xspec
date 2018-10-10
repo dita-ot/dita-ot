@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
+  stylesheet="../../../main/xsl/preprocess/conrefImpl.xsl">
+  
+  <x:param name="ORIGINAL-DOMAINS" select="'(topic) (topic weakConstraint-c) (topic hi-d) (topic hi-d sharedHighlightConstraint-c) s(topic strictConstraint-c)'"/>
+  <x:param name="STRICT-CONSTRAINTS" select="'s(topic strictConstraint-c)'"/>
+
+  <x:scenario label="Test domains validation">
+    <x:scenario label="Test equal domains, fail weak is false">
+      <x:call function="conref:isValid">
+        <x:param select="'(topic) (topic weakConstraint-c) (topic hi-d) (topic hi-d sharedHighlightConstraint-c) s(topic strictConstraint-c)'"/>
+        <x:param select="false()"/>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    <x:scenario label="Test equal domains, fail weak is true">
+      <x:call function="conref:isValid">
+        <x:param select="'(topic) (topic weakConstraint-c) (topic hi-d) (topic hi-d sharedHighlightConstraint-c) s(topic strictConstraint-c)'"/>
+        <x:param select="true()"/>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    
+    <x:scenario label="Target is missing a strict constraint; fail for weak is false, but should still should always fail">
+      <x:call function="conref:isValid">
+        <x:param select="'(topic) (topic weakConstraint-c) (topic hi-d) (topic hi-d sharedHighlightConstraint-c) '"/>
+        <x:param select="false()"/>
+      </x:call>
+      <x:expect label="" select="false()"/>
+    </x:scenario>
+    
+    <x:scenario label="Target is missing a constraint but also missing the related domain">
+      <x:call function="conref:isValid">
+        <x:param select="'(topic) (topic weakConstraint-c) s(topic strictConstraint-c)'"/>
+        <x:param select="true()"/>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    
+    <x:scenario label="Target is missing a weak constraint; pass because fail for weak is false">
+      <x:call function="conref:isValid">
+        <x:param select="'(topic) (topic hi-d) (topic hi-d sharedHighlightConstraint-c) s(topic strictConstraint-c)'"/>
+        <x:param select="false()"/>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    
+    <x:scenario label="Target is missing a weak constraint; fail because fail for weak is true">
+      <x:call function="conref:isValid">
+        <x:param select="'(topic) (topic hi-d) (topic hi-d sharedHighlightConstraint-c) s(topic strictConstraint-c)'"/>
+        <x:param select="true()"/>
+      </x:call>
+      <x:expect label="" select="false()"/>
+    </x:scenario>    
+    
+  </x:scenario>
+
+</x:description>

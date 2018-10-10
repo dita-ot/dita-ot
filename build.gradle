@@ -370,6 +370,7 @@ test {
         'src/test/xsl/common/dita-utilities.xspec',
         'src/test/xsl/common/uri-utils.xspec',
         'src/test/xsl/plugins/org.dita.html5/xsl/functions.xspec',
+        'src/test/xsl/preprocess/conrefImpl.xspec',
         'src/test/xsl/preprocess/maplinkImpl.xspec'
     )
 }
