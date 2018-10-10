@@ -16,6 +16,7 @@ See the accompanying LICENSE file for applicable license.
   <extension-point id="dita.image.extensions" name="Image file extension"/>
   <extension-point id="dita.html.extensions" name="HTML file extension"/>
   <extension-point id="dita.resource.extensions" name="Resource file extension"/>
+  <extension-point id="depend.custom.params.init" name="Contribute custom parameters"/>
   <!-- deprecated -->
   <extension-point id="dita.conductor.transtype.check" name="Transtype check"/>
   <extension-point id="dita.transtype.print" name="Print transtype"/>
