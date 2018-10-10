@@ -47,10 +47,14 @@ See the accompanying LICENSE file for applicable license.
       <isfalse value="${clean.temp}"/>
     </condition>
     <antcall>
+      <target name="custom.params.init"/>
       <target name="dita2${transtype}"/>
       <target name="clean-temp"/>
     </antcall>
   </target>
+  
+  <target name="custom.params.init" dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+    dita:depends="{depend.custom.params.init}"/>
   
   <dita:extension id="dita.conductor.plugin" behavior="org.dita.dost.platform.ImportPluginInfoAction"/>
   <dita:extension id="ant.import" behavior="org.dita.dost.platform.ImportAntAction"/>
