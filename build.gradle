@@ -331,7 +331,18 @@ task distPlugins() {
 }
 distPlugins.mustRunAfter integrateDistPlugins
 
-task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+task distPluginChecksums() {
+    doLast {
+        ant.checksum(algorithm: "SHA-256", fileext: ".sha256") {
+            fileset(dir: "${buildDir}/distributions") {
+                include(name: '*.zip')
+            }
+        }
+    }
+}
+distPluginChecksums.mustRunAfter distPlugins
+
+task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateDocs, cleanGenerateDocs, generateJavadocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
