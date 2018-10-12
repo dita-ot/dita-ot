@@ -818,6 +818,10 @@ public final class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER = "generatecopyouter";
     /**Constants for extensive params used in ant invoker(onlytopicinmap).*/
     public static final String ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP = "onlytopicinmap";
+    /**Constants for extensive params used in ant invoker(crawl).*/
+    public static final String ANT_INVOKER_EXT_PARAM_CRAWL = "crawl";
+    public static final String ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_MAP = "map";
+    public static final String ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_TOPIC = "topic";
     /**Constants for extensive params used in ant invoker(validate).*/
     public static final String ANT_INVOKER_EXT_PARAM_VALIDATE = "validate";
     /**Constants for extensive params used in ant invoker(outputdir).*/
