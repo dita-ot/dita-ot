@@ -884,10 +884,10 @@ public final class Job {
     }
 
     /**
-     * Retrieve the link crawling property.
+     * Retrieve the link crawling behaviour.
      * @return {@code true} if crawl links in topics, {@code false} if only crawl links in maps
      */
-    public boolean getCrawl() {
+    public boolean crawlTopics() {
         if (prop.get(PROPERTY_LINK_CRAWLER) == null) {
             return true;
         }

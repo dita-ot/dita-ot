@@ -260,7 +260,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             return;
         }
         if (formatFilter.test(file.format)) {
-            if (isFormatDita(file.format) && !job.getCrawl() &&
+            if (isFormatDita(file.format) && !job.crawlTopics() &&
                     !listFilter.getConrefTargets().contains(file.filename)) {
                 return;  // Do not process topics linked from within topics
             } else if (isFormatDita(file.format) && (!job.getOnlyTopicInMap() || listFilter.getConrefTargets().contains(file.filename))) {

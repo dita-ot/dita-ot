@@ -184,15 +184,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
         return rootClass != null && MAP_MAP.matches(rootClass);
     }
-    
-    /**
-     * Is link crawling limited to the map
-     *
-     * @return {@code true} if limited to maps, otherwise {@code false}
-     */
-    public boolean isLinkCrawlLimitedToMap() {
-        return !job.getCrawl();
-    }
 
     /**
      * Get relationship graph between subject schema. Keys are subject scheme map paths and values
@@ -415,7 +406,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (href != null && href.getPath() != null && !href.getPath().isEmpty() &&
                 !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope) && !ATTR_SCOPE_VALUE_PEER.equals(scope)) {
             if (isFormatDita(atts.getValue(ATTRIBUTE_NAME_FORMAT)) && !isDitaMap() &&
-                    isLinkCrawlLimitedToMap()) {
+                    !job.crawlTopics()) {
                 // Topic link within a topic, ignore if only crawling map
             } else if (!(MAP_TOPICREF.matches(cls))) {
                 nonTopicrefReferenceSet.add(stripFragment(currentDir.resolve(href)));
@@ -597,7 +588,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             hasHref = true;
             // Collect non-conref and non-copyto targets
             if (isFormatDita(attrFormat) && !isDitaMap() &&
-                    isLinkCrawlLimitedToMap()) {
+                    !job.crawlTopics()) {
                 // DITA link in a topic, but not crawling topics
             } else if ((followLinks() && canFollow(attrValue))
                     || TOPIC_IMAGE.matches(attrClass)
@@ -746,7 +737,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * Should links be followed.
      */
     private boolean followLinks() {
-        if (isLinkCrawlLimitedToMap() && !isDitaMap()) {
+        if (!job.crawlTopics() && !isDitaMap()) {
             return false;
         }
         return !job.getOnlyTopicInMap() || isDitaMap();
