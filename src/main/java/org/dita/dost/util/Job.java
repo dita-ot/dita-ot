@@ -904,7 +904,7 @@ public final class Job {
     
     /**
      * Set the link crawling property.
-     * @param flag crawlvalue flag
+     * @param crawlvalue crawl mode
      */
     public void setCrawl(final String crawlvalue) {
         prop.put(PROPERTY_LINK_CRAWLER, crawlvalue);
