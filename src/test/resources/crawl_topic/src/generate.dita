@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "file:/C:/shaoxr/DITA-OT1.3.1/dtd/topic.dtd">
+<topic id="Id1">
+<title>Title</title>
+<body>
+<ul>
+<li><xref href="#Id1">Link to this topic</xref></li>
+<li><xref href="localditaxref.dita"/></li>
+<li><xref href="peerditaxref.dita" scope="peer">Peer topic, do not get it</xref></li>
+<li><xref href="externalditaxref.dita" scope="external">External topic, do not get it</xref></li>
+<li><xref href="peerhtmlxref.html" scope="peer" format="html">Peer HTML xref</xref></li>
+<li><xref href="externalhtmlxref.html" scope="external" format="html">External HTML xref</xref></li>
+</ul>
+</body>
+<related-links>
+<link href="localditalink.dita"/>
+<link href="peerditalink.dita" scope="peer"><linktext>Peer topic link, do not get it</linktext></link>
+<link href="externalditalink.dita" scope="external"><linktext>External topic link, do not get it</linktext></link>
+<link href="peerhtmllink.html" scope="peer" format="html"><linktext>Peer html link, do not get it</linktext></link>
+<link href="externalhtmllink.html" scope="external" format="html"><linktext>External html link, do not get it</linktext></link>
+</related-links>
+</topic>
+

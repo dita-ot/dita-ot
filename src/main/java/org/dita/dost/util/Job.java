@@ -907,7 +907,9 @@ public final class Job {
      * @param crawlvalue crawl mode
      */
     public void setCrawl(final String crawlvalue) {
-        prop.put(PROPERTY_LINK_CRAWLER, crawlvalue);
+        if (crawlvalue != null) {
+            prop.put(PROPERTY_LINK_CRAWLER, crawlvalue);
+        }
     }
 
     public Generate getGeneratecopyouter() {
