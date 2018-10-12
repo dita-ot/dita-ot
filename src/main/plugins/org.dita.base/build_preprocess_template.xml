@@ -105,7 +105,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
         <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
-        <param name="crawl" value="${args.crawl}"/>
+        <param name="crawl" value="${args.crawl}" if:set="args.crawl"/>
         <param name="outputdir" location="${dita.output.dir}"/>
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>

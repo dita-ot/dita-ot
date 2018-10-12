@@ -549,7 +549,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         if (listFilter.getCoderefTargets().contains(file.filename)) {
             return;
         }
-        if (isFormatDita(file.format) && listFilter.isDitaTopic() && 
+        if (isFormatDita(file.format) && listFilter.isDitaTopic() &&
                 !job.crawlTopics() &&
                 !listFilter.getConrefTargets().contains(file.filename)) {
             return;  // Do not process topics linked from within topics
