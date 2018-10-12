@@ -868,9 +868,29 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    public void testCrawlTopicPreprocess() throws Throwable {
+        builder().name("crawl_topic")
+                .transtype(PREPROCESS)
+                .input(Paths.get("input.ditamap"))
+                .put("args.crawl", "topic")
+                .test();
+    }
+
+    @Test
     public void testCrawlMap() throws Throwable {
         builder().name("crawl_map")
                 .transtype(XHTML)
+                .input(Paths.get("input.ditamap"))
+                .put("args.crawl", "map")
+                .errorCount(2)
+                .warnCount(2)
+                .test();
+    }
+
+    @Test
+    public void testCrawlMapPreprocess() throws Throwable {
+        builder().name("crawl_map")
+                .transtype(PREPROCESS)
                 .input(Paths.get("input.ditamap"))
                 .put("args.crawl", "map")
                 .errorCount(2)

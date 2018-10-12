@@ -230,10 +230,10 @@ public class AbstractIntegrationTest {
     }
 
     protected AbstractIntegrationTest compare() throws Throwable {
-        final File testDir = Paths.get("src", "test", "resources", name).toFile();
-        final File expDir = new File(testDir, EXP_DIR);
+        final File exp = Paths.get("src", "test", "resources", name, EXP_DIR, transtype.toString()).toFile();
+        final File act = actDir.toPath().resolve(transtype.toString()).toFile();
 
-        compare(expDir, actDir);
+        compare(exp, act);
         return this;
     }
 
