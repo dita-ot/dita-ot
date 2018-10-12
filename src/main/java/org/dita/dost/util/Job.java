@@ -885,13 +885,13 @@ public final class Job {
 
     /**
      * Retrieve the link crawling property.
-     * @return String crawl behavior, default to crawl all topics
+     * @return {@code true} if crawl links in topics, {@code false} if only crawl links in maps
      */
-    public String getCrawl() {
+    public boolean getCrawl() {
         if (prop.get(PROPERTY_LINK_CRAWLER) == null) {
-            return ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_TOPIC;
+            return true;
         }
-        return prop.get(PROPERTY_LINK_CRAWLER).toString();
+        return prop.get(PROPERTY_LINK_CRAWLER).toString().equals(ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_TOPIC);
     }
 
     /**

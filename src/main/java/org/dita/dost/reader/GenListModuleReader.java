@@ -191,7 +191,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * @return {@code true} if limited to maps, otherwise {@code false}
      */
     public boolean isLinkCrawlLimitedToMap() {
-        return job.getCrawl() != null && job.getCrawl().equals(ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_MAP);
+        return !job.getCrawl();
     }
 
     /**

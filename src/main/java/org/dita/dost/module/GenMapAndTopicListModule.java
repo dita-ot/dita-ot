@@ -550,7 +550,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             return;
         }
         if (isFormatDita(file.format) && listFilter.isDitaTopic() && 
-                job.getCrawl().equals(ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_MAP) &&
+                !job.getCrawl() &&
                 !listFilter.getConrefTargets().contains(file.filename)) {
             return;  // Do not process topics linked from within topics
         } else if ((isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format))) {
@@ -706,7 +706,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         resourceOnlySet.addAll(listFilter.getResourceOnlySet());
 
-        if (job.getOnlyTopicInMap() || job.getCrawl().equals(ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_MAP)) {
+        if (job.getOnlyTopicInMap() || !job.getCrawl()) {
             resourceOnlySet.addAll(listFilter.getNonTopicrefReferenceSet());
         }
 
