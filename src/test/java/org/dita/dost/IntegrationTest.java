@@ -863,7 +863,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
         builder().name("crawl_topic")
                 .transtype(XHTML)
                 .input(Paths.get("input.ditamap"))
-                .put("args.crawl", "topic")
+                .put("link-crawl", "topic")
                 .test();
     }
 
@@ -872,7 +872,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
         builder().name("crawl_topic")
                 .transtype(PREPROCESS)
                 .input(Paths.get("input.ditamap"))
-                .put("args.crawl", "topic")
+                .put("link-crawl", "topic")
                 .test();
     }
 
@@ -881,7 +881,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
         builder().name("crawl_map")
                 .transtype(XHTML)
                 .input(Paths.get("input.ditamap"))
-                .put("args.crawl", "map")
+                .put("link-crawl", "map")
                 .errorCount(2)
                 .warnCount(2)
                 .test();
@@ -892,7 +892,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
         builder().name("crawl_map")
                 .transtype(PREPROCESS)
                 .input(Paths.get("input.ditamap"))
-                .put("args.crawl", "map")
+                .put("link-crawl", "map")
                 .errorCount(2)
                 .warnCount(2)
                 .test();

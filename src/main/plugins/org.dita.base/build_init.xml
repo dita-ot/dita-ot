@@ -181,7 +181,7 @@ See the accompanying LICENSE file for applicable license.
        </not>
   </condition>
 
-    <property name="args.crawl" value="topic"/>
+    <property name="link-crawl" value="topic"/>
     
     <!--
     default value : warn
