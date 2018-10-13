@@ -180,6 +180,9 @@ See the accompanying LICENSE file for applicable license.
        <isset property="onlytopic.in.map" />
        </not>
   </condition>
+
+    <property name="link-crawl" value="topic"/>
+    
     <!--
     default value : warn
   fail     :1a) Fail quickly if files are going to be generated/copied outside of that directory

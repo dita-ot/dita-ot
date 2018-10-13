@@ -83,6 +83,7 @@ public final class Job {
 
     private static final String PROPERTY_OUTER_CONTROL = ANT_INVOKER_EXT_PARAM_OUTTERCONTROL;
     private static final String PROPERTY_ONLY_TOPIC_IN_MAP = ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP;
+    private static final String PROPERTY_LINK_CRAWLER = ANT_INVOKER_EXT_PARAM_CRAWL;
     private static final String PROPERTY_GENERATE_COPY_OUTER = ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER;
     private static final String PROPERTY_OUTPUT_DIR = ANT_INVOKER_EXT_PARAM_OUTPUTDIR;
     /** Deprecated since 2.2 */
@@ -883,11 +884,32 @@ public final class Job {
     }
 
     /**
+     * Retrieve the link crawling behaviour.
+     * @return {@code true} if crawl links in topics, {@code false} if only crawl links in maps
+     */
+    public boolean crawlTopics() {
+        if (prop.get(PROPERTY_LINK_CRAWLER) == null) {
+            return true;
+        }
+        return prop.get(PROPERTY_LINK_CRAWLER).toString().equals(ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_TOPIC);
+    }
+
+    /**
      * Set the onlytopicinmap.
      * @param flag onlytopicinmap flag
      */
     public void setOnlyTopicInMap(final boolean flag) {
         prop.put(PROPERTY_ONLY_TOPIC_IN_MAP, Boolean.toString(flag));
+    }
+    
+    /**
+     * Set the link crawling property.
+     * @param crawlvalue crawl mode
+     */
+    public void setCrawl(final String crawlvalue) {
+        if (crawlvalue != null) {
+            prop.put(PROPERTY_LINK_CRAWLER, crawlvalue);
+        }
     }
 
     public Generate getGeneratecopyouter() {

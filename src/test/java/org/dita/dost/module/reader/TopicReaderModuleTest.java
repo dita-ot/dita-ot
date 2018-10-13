@@ -49,6 +49,7 @@ public class TopicReaderModuleTest {
         input.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, tempDir.getRoot().getAbsolutePath());
         input.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, "1");
         input.setAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL, Job.OutterControl.FAIL.toString());
+        input.setAttribute(ANT_INVOKER_EXT_PARAM_CRAWL, "topic");
         input.setAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR, tempDir.getRoot().getAbsolutePath());
         input.setAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED, Boolean.FALSE.toString());
         reader.parseInputParameters(input);

@@ -103,6 +103,10 @@ See the accompanying LICENSE file for applicable license.
       <val>TITLE</val>
       <val>NUMTITLE</val>
     </param>
+    <param name="link-crawl" desc="Specifies whether to crawl only those topic links found in maps, or all discovered topic links." type="enum">
+      <val>map</val>
+      <val default="true">topic</val>
+    </param>
     <param name="clean.temp" desc="Specifies whether DITA-OT deletes the files in the temporary directory after it finishes a build." type="enum">
       <val default="true">yes</val>
       <val>no</val>

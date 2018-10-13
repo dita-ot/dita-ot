@@ -230,6 +230,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         job.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
         job.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
         job.setOnlyTopicInMap(Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP)));
+        job.setCrawl(Optional.ofNullable(input.getAttribute(ANT_INVOKER_EXT_PARAM_CRAWL))
+                .orElse(ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_TOPIC));
 
         // Set the OutputDir
         final File path = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
