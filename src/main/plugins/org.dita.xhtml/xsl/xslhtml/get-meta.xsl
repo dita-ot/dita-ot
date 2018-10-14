@@ -169,7 +169,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:variable name="titlemeta">
     <xsl:apply-templates select="*|text()" mode="text-only"/>
   </xsl:variable>
-  <meta name="DC.Title">
+  <meta name="dc.title">
     <xsl:attribute name="content"><xsl:value-of select="normalize-space($titlemeta)"/></xsl:attribute>
   </meta>
   <xsl:value-of select="$newline"/>
@@ -211,13 +211,13 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- CONTENT: Source - prolog/source/@href -->
 <xsl:template match="*[contains(@class,' topic/source ')]/@href" mode="gen-metadata">
-  <meta name="DC.Source" content="{normalize-space(.)}"/>
+  <meta name="dc.source" content="{normalize-space(.)}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- CONTENT: Coverage prolog/metadata/category -->
 <xsl:template match="*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/category ')]" mode="gen-metadata">
-  <meta name="DC.Coverage" content="{normalize-space(.)}"/>
+  <meta name="dc.coverage" content="{normalize-space(.)}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -235,7 +235,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:variable>
 
   <xsl:if test="string-length($keywords-content)>0">
-    <meta name="DC.subject" content="{$keywords-content}"/>
+    <meta name="dc.subject" content="{$keywords-content}"/>
     <xsl:value-of select="$newline"/>
     <meta name="keywords" content="{$keywords-content}"/>
     <xsl:value-of select="$newline"/>
@@ -261,7 +261,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:otherwise>
      </xsl:choose>
     </xsl:variable>
-    <meta name="DC.Relation" scheme="URI">
+    <meta name="dc.relation" scheme="URI">
       <xsl:attribute name="content"><xsl:value-of select="$linkmeta_ext"/></xsl:attribute>
     </meta>
     <xsl:value-of select="$newline"/>
@@ -278,10 +278,10 @@ See the accompanying LICENSE file for applicable license.
 <xsl:template match="*[contains(@class,' topic/author ')]" mode="gen-metadata">
   <xsl:choose>
     <xsl:when test="@type= 'contributor'">
-      <meta name="DC.Contributor" content="{normalize-space(.)}"/>
+      <meta name="dc.contributor" content="{normalize-space(.)}"/>
     </xsl:when>
     <xsl:otherwise>
-      <meta name="DC.Creator" content="{normalize-space(.)}"/>
+      <meta name="dc.creator" content="{normalize-space(.)}"/>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:value-of select="$newline"/>
@@ -289,7 +289,7 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- INTELLECTUAL PROPERTY: Publisher - prolog/publisher -->
 <xsl:template match="*[contains(@class,' topic/publisher ')]" mode="gen-metadata">
-  <meta name="DC.Publisher" content="{normalize-space(.)}"/>
+  <meta name="dc.publisher" content="{normalize-space(.)}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -324,7 +324,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </meta>
   <xsl:value-of select="$newline"/>
-  <meta name="DC.Rights.Owner">
+  <meta name="dc.rights.owner">
     <xsl:attribute name="content">
          <xsl:choose>
        <xsl:when test="*[contains(@class,' topic/copyrholder ')]/text()">
@@ -355,31 +355,31 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- Usage Rights - prolog/permissions -->
 <xsl:template match="*[contains(@class,' topic/permissions ')]" mode="gen-metadata">
-  <meta name="DC.Rights.Usage" content="{@view}"/>
+  <meta name="dc.rights.usage" content="{@view}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- = = = = = = = = = = = Product - Audience = = = = = = = = = = = -->
 <!-- Audience -->
 <xsl:template match="*[contains(@class,' topic/audience ')]/@experiencelevel" mode="gen-metadata">
-  <meta name="DC.Audience.Experiencelevel" content="{.}"/>
+  <meta name="dc.audience.experiencelevel" content="{.}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/audience ')]/@importance" mode="gen-metadata">
-  <meta name="DC.Audience.Importance" content="{.}"/>
+  <meta name="dc.audience.importance" content="{.}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/audience ')]/@name" mode="gen-metadata">
-  <meta name="DC.Audience.Name" content="{.}"/>
+  <meta name="dc.audience.name" content="{.}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/audience ')]/@job" mode="gen-metadata">
  <xsl:choose>
   <xsl:when test=".='other'">
-   <meta name="DC.Audience.Job" content="{normalize-space(../@otherjob)}"/>
+   <meta name="dc.audience.job" content="{normalize-space(../@otherjob)}"/>
   </xsl:when>
   <xsl:otherwise>
-   <meta name="DC.Audience.Job" content="{.}"/>
+   <meta name="dc.audience.job" content="{.}"/>
   </xsl:otherwise>
  </xsl:choose>
  <xsl:value-of select="$newline"/>
@@ -387,10 +387,10 @@ See the accompanying LICENSE file for applicable license.
 <xsl:template match="*[contains(@class,' topic/audience ')]/@type" mode="gen-metadata">
  <xsl:choose>
   <xsl:when test=".='other'">
-   <meta name="DC.Audience.Type" content="{normalize-space(../@othertype)}"/>
+   <meta name="dc.audience.type" content="{normalize-space(../@othertype)}"/>
   </xsl:when>
   <xsl:otherwise>
-   <meta name="DC.Audience.Type" content="{.}"/>
+   <meta name="dc.audience.type" content="{.}"/>
   </xsl:otherwise>
  </xsl:choose>
   <xsl:value-of select="$newline"/>
@@ -481,27 +481,27 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- INSTANTIATION: Date - prolog/critdates/created -->
 <xsl:template match="*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/created ')]" mode="gen-metadata">
-  <meta name="DC.Date.Created" content="{@date}"/>
+  <meta name="dc.date.created" content="{@date}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- prolog/critdates/revised/@modified -->
 <xsl:template match="*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@modified" mode="gen-metadata">
-  <meta name="DC.Date.Modified" content="{.}"/>
+  <meta name="dc.date.modified" content="{.}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- prolog/critdates/revised/@golive -->
 <xsl:template match="*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@golive" mode="gen-metadata">
-  <meta name="DC.Date.Issued" content="{.}"/>
+  <meta name="dc.date.issued" content="{.}"/>
   <xsl:value-of select="$newline"/>
-  <meta name="DC.Date.Available" content="{.}"/>
+  <meta name="dc.date.available" content="{.}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- prolog/critdates/revised/@expiry -->
 <xsl:template match="*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@expiry" mode="gen-metadata">
-  <meta name="DC.Date.Expiry" content="{.}"/>
+  <meta name="dc.date.expiry" content="{.}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -515,20 +515,20 @@ See the accompanying LICENSE file for applicable license.
 <!-- this value is based on output format used for DC indexing, not source.
      Put in this odd template for easy overriding, if creating another output format. -->
 <xsl:template match="*" mode="gen-format-metadata">
-  <meta name="DC.Format" content="XHTML"/>
+  <meta name="dc.Format" content="XHTML"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- INSTANTIATION: Identifier --> <!-- id is an attribute on Topic -->
 <xsl:template match="@id" mode="gen-metadata">
-  <meta name="DC.Identifier" content="{.}"/>
+  <meta name="dc.identifier" content="{.}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- INSTANTIATION: Language -->
 <!-- ideally, take the first token of the language attribute value -->
 <xsl:template match="@xml:lang" mode="gen-metadata">
-  <meta name="DC.Language" content="{.}"/>
+  <meta name="dc.language" content="{.}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
