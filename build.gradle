@@ -34,7 +34,13 @@ dependencies {
     compile group: 'com.ibm.icu', name: 'icu4j', version:'61.1'
     compile group: 'org.apache.ant', name: 'ant', version:'1.10.3'
     compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.3'
-    compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+    compile(group: 'com.google.guava', name: 'guava', version: '25.1-jre') {
+        exclude group: 'org.checkerframework', module: 'checker-qual'
+        exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+        exclude group: 'com.google.errorprone:', module: 'error_prone_annotations'
+        exclude group: 'com.google.j2objc', module: 'j2objc-annotations'
+    }
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.6'
