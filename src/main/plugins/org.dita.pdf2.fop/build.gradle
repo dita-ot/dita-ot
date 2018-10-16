@@ -7,6 +7,7 @@ description = """DITA Open Toolkit PDF plug-in for FOP."""
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 dependencies {
     runtime(group: 'org.apache.xmlgraphics', name: 'fop', version: '2.3') {

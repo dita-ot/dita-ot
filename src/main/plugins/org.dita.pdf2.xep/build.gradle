@@ -14,6 +14,7 @@ description = """DITA Open Toolkit PDF plug-in for RenderX."""
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 dependencies {
     compile rootProject

@@ -14,6 +14,7 @@ description = """DITA Open Toolkit Eclipse Help plug-in."""
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 dependencies {
     compile rootProject
