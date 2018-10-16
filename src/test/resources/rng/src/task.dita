@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="urn:oasis:names:tc:dita:rng:task.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="urn:oasis:names:tc:dita:rng:task.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<task id="task">
+  <title>Task</title>
+  <shortdesc>Shortdesc.</shortdesc>
+  <taskbody>
+    <context>
+      <p>Paragraph.</p>
+    </context>
+  </taskbody>
+</task>
