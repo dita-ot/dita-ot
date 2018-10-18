@@ -758,6 +758,17 @@ See the accompanying LICENSE file for applicable license.
     <response/>
   </message>
 
+  <message id="DOTX075W" type="WARN">
+    <reason>A content reference in a constrained document type is pulling content from an unconstrained document type. The reference will resolve, but may result in content that violates one of the document constraints in "%1".</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX076E" type="ERROR">
+    <reason>A content reference in a constrained document type cannot be resolved because it would violate one of the document constraints "%1".</reason>
+    <response>The current constrained document may only reuse content from documents with equivalent constraints.</response>
+  </message>
+
+
   <!-- End of XSL Messages --> 
       
   <!-- Add any messages defined by plugins. -->

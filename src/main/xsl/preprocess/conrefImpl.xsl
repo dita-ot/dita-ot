@@ -27,6 +27,13 @@ See the accompanying LICENSE file for applicable license.
   <xsl:param name="file-being-processed"/>
 
   <xsl:variable name="ORIGINAL-DOMAINS" select="(/*/@domains | /dita/*[@domains][1]/@domains)[1]" as="xs:string"/>
+  <xsl:variable name="STRICT-CONSTRAINTS">
+    <xsl:value-of>
+      <xsl:for-each select="tokenize(normalize-space($ORIGINAL-DOMAINS), '\)\s*?')[starts-with(normalize-space(.), 's(') and contains(., '-c')]">
+        <xsl:value-of select="concat(., ') ')"/>
+      </xsl:for-each>
+    </xsl:value-of>
+  </xsl:variable>
 
   <xsl:key name="id" match="*[@id]" use="@id"/>
 
@@ -278,7 +285,10 @@ See the accompanying LICENSE file for applicable license.
               <xsl:when test="empty($target-doc)">
                 <xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/>
               </xsl:when>
-              <xsl:when test="conref:isValid($domains)">
+              <xsl:when test="conref:isValid($domains,false())">
+                <xsl:if test="not(conref:isValid($domains,true()))">
+                  <xsl:apply-templates select="." mode="ditamsg:weakConstraintMismatch"/>
+                </xsl:if>
                 <xsl:for-each select="$target-doc">
                   <xsl:variable name="target" as="element()*">
                     <xsl:choose>
@@ -355,7 +365,7 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:for-each>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
+                <xsl:apply-templates select="." mode="ditamsg:strictConstraintMismatch"/>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:when>
@@ -698,15 +708,18 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:function name="conref:isValid" as="xs:boolean">
     <xsl:param name="domains" as="xs:string?"/>
+    <xsl:param name="failWeakConstraints" as="xs:boolean"/>
     <xsl:call-template name="checkValid">
       <xsl:with-param name="sourceDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
       <xsl:with-param name="targetDomains" select="normalize-space(concat('(topic) ', $domains))"/>
+      <xsl:with-param name="failWeakConstraints" select="$failWeakConstraints" as="xs:boolean"/>
     </xsl:call-template>
   </xsl:function>
 
   <xsl:template name="checkValid" as="xs:boolean">
     <xsl:param name="sourceDomains"/>
     <xsl:param name="targetDomains"/>
+    <xsl:param name="failWeakConstraints" as="xs:boolean"/>
 
     <!-- format the out -->
     <xsl:variable name="output" as="xs:string">
@@ -721,7 +734,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:variable>
 
     <!-- break string into node-set -->
-    <xsl:variable name="subDomains" select="reverse(tokenize($output, '\(|\)\s*?\(|\)'))"/>
+    <xsl:variable name="subDomains" select="reverse(tokenize($output, '(s?\()|\)\s*?\(|\)'))"/>
     <!-- get domains value having constraints e.g [topic simpleSection-c]-->
     <xsl:variable name="constraints" select="$subDomains[contains(., '-c')]"/>
     <xsl:choose>
@@ -766,6 +779,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="checkValid">
               <xsl:with-param name="sourceDomains" select="normalize-space($remainString)"/>
               <xsl:with-param name="targetDomains" select="$targetDomains"/>
+              <xsl:with-param name="failWeakConstraints" select="$failWeakConstraints"/>
             </xsl:call-template>
           </xsl:when>
           <!--If the target does not have (topic hi-d) and (topic hi-d, continue to test #2-->
@@ -780,14 +794,33 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="checkValid">
               <xsl:with-param name="sourceDomains" select="normalize-space($remainString)"/>
               <xsl:with-param name="targetDomains" select="$targetDomains"/>
+              <xsl:with-param name="failWeakConstraints" select="$failWeakConstraints"/>
             </xsl:call-template>
           </xsl:when>
           <!--If the target topic has the original module (topic hi-d) but does not have constraintItem (topic hi-d basicHighlight-c)
               or If the target topic has the beginning original module (topic hi-d but does not have constraintItem (topic hi-d basicHighlight-c)-->
-          <!--conref is not allowed  -->
+          <!--It may be pulling invalid content. Allow with warning if loose constraint, fail if strict constraint.  -->
           <xsl:when test="(contains($targetDomains, $originalModule) and not(contains($targetDomains, $constraintItem)))
                        or (contains($targetDomains, substring-before($originalModule, ')' )) and not(contains($targetDomains, $constraintItem)))">
-            <xsl:sequence select="false()"/>
+            <xsl:choose>
+              <xsl:when test="contains($STRICT-CONSTRAINTS,concat('s',$constraintItem)) or $failWeakConstraints">
+                <xsl:sequence select="false()"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:variable name="remainString" as="xs:string">
+                  <xsl:value-of>
+                    <xsl:for-each select="remove($constraints, 1)">
+                      <xsl:value-of select="concat('(', ., ')' , ' ')"/>
+                    </xsl:for-each>
+                  </xsl:value-of>
+                </xsl:variable>
+                <xsl:call-template name="checkValid">
+                  <xsl:with-param name="sourceDomains" select="normalize-space($remainString)"/>
+                  <xsl:with-param name="targetDomains" select="$targetDomains"/>
+                  <xsl:with-param name="failWeakConstraints" select="$failWeakConstraints"/>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:when>
         </xsl:choose>
       </xsl:otherwise>
@@ -862,6 +895,25 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="ditamsg:domainMismatch">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX012W'"/>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:strictConstraintMismatch">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="id" select="'DOTX076E'"/>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="normalize-space($STRICT-CONSTRAINTS)"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:weakConstraintMismatch">
+    <xsl:variable name="out-c" as="xs:string">
+      <xsl:value-of>
+        <xsl:for-each select="tokenize(normalize-space($ORIGINAL-DOMAINS), '\)\s*?')[contains(., '-c')]">
+          <xsl:value-of select="concat(., ') ')"/>
+        </xsl:for-each>
+      </xsl:value-of>
+    </xsl:variable>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="id" select="'DOTX075W'"/>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="normalize-space($out-c)"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <!-- If this conref has already been followed, stop to prevent an infinite loop -->
