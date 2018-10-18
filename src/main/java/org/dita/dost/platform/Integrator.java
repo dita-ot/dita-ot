@@ -156,6 +156,8 @@ public final class Integrator {
      * Execute point of Integrator.
      */
     public void execute() throws Exception {
+        final Set<String> pluginList = getPluginIds(readPlugins());
+
         // Read the properties file, if it exists.
         properties = new Properties();
         if (propertiesFile != null) {
@@ -225,8 +227,24 @@ public final class Integrator {
             }
         }
 
-        parsePlugin();
+        mergePlugins();
         integrate();
+        logChanges(pluginList, getPluginIds(pluginsDoc));
+    }
+
+    private void logChanges(final Set<String> orig, final Set<String> mod) {
+        final List<String> removed = new ArrayList<String>(orig);
+        removed.removeAll(mod);
+        removed.sort(Comparator.naturalOrder());
+        for (final String p : removed) {
+            logger.info("Removed " + p);
+        }
+        final List<String> added = new ArrayList<String>(mod);
+        added.removeAll(orig);
+        added.sort(Comparator.naturalOrder());
+        for (final String p : added) {
+            logger.info("Added " + p);
+        }
     }
 
     /**
@@ -720,10 +738,27 @@ public final class Integrator {
         return true;
     }
 
+    private Document readPlugins() {
+        final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml");
+        try {
+            return XMLUtils.getDocumentBuilder().parse(plugins);
+        } catch (SAXException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Set<String> getPluginIds(final Document doc) {
+        final List<Element> ps = toList(doc.getElementsByTagName("plugin"));
+        return ps.stream()
+                .filter(p -> p.getAttributeNode("id") != null)
+                .map(p -> p.getAttribute("id"))
+                .collect(Collectors.toSet());
+    }
+
     /**
-     * Parse plugin configuration files.
+     * Merge plugin configuration files.
      */
-    private void parsePlugin() {
+    private void mergePlugins() {
         final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
         pluginsDoc.appendChild(root);
         if (!descSet.isEmpty()) {
