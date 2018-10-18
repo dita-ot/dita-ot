@@ -578,6 +578,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         }
 
+        if (install && msgOutputLevel < Project.MSG_INFO) {
+            emacsMode = true;
+        }
+
         // Load the property files specified by --propertyfile
         loadPropertyFiles();
 

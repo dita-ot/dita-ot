@@ -237,13 +237,13 @@ public final class Integrator {
         removed.removeAll(mod);
         removed.sort(Comparator.naturalOrder());
         for (final String p : removed) {
-            logger.info("Removed " + p);
+            logger.warn("Removed " + p);
         }
         final List<String> added = new ArrayList<String>(mod);
         added.removeAll(orig);
         added.sort(Comparator.naturalOrder());
         for (final String p : added) {
-            logger.info("Added " + p);
+            logger.warn("Added " + p);
         }
     }
 
