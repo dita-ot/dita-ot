@@ -34,6 +34,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.DigestInputStream;
@@ -284,7 +285,11 @@ public final class PluginInstallTask extends Task {
     }
 
     public void setPluginFile(final String pluginFile) {
-        this.pluginFile = Paths.get(pluginFile);
+        try {
+            this.pluginFile = Paths.get(pluginFile);
+        } catch (InvalidPathException e) {
+            // Ignore
+        }
         try {
             final URI uri = new URI(pluginFile);
             if (uri.isAbsolute()) {
