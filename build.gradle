@@ -163,7 +163,8 @@ def bundled = [
         "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.0.6/org.lwdita-2.0.6.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
         "troff": "https://github.com/dita-ot/org.dita.troff/archive/3.1.1.zip",
-        "tocjs": "https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip"
+        "tocjs": "https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip",
+        "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.2.1/org.oasis-open.xdita.v0_2_1.zip"
 ]
 
 task cleanDistTemp(type: Delete) {
