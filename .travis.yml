@@ -43,3 +43,9 @@ deploy:
   on:
     tags: true
     repo: dita-ot/dita-ot
+- provider: script
+  script: bash .travis/registry.sh
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: dita-ot/dita-ot
