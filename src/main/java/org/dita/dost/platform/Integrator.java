@@ -740,6 +740,9 @@ public final class Integrator {
 
     private Document readPlugins() {
         final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml");
+        if (!plugins.exists()) {
+            return null;
+        }
         try {
             return XMLUtils.getDocumentBuilder().parse(plugins);
         } catch (SAXException | IOException e) {
@@ -748,6 +751,9 @@ public final class Integrator {
     }
 
     private Set<String> getPluginIds(final Document doc) {
+        if (doc == null) {
+            return Collections.emptySet();
+        }
         final List<Element> ps = toList(doc.getElementsByTagName("plugin"));
         return ps.stream()
                 .filter(p -> p.getAttributeNode("id") != null)
