@@ -105,6 +105,7 @@ See the accompanying LICENSE file for applicable license.
                 </fo:wrapper>
                 <xsl:apply-templates select="." mode="customTopicAnchor"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
+                <xsl:apply-templates select="preceding-sibling::*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
                 <xsl:apply-templates select="." mode="getTitle"/>
             </fo:block>
         </fo:block>
