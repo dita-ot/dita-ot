@@ -898,4 +898,12 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .test();
     }
 
+    @Test
+    public void testRng() throws Throwable {
+        builder().name("rng")
+                .transtype(PREPROCESS)
+                .input(Paths.get("root.ditamap"))
+                .test();
+    }
+
 }
