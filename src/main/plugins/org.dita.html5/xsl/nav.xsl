@@ -24,9 +24,13 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="document($input.map.url)" mode="normalize-map"/>
   </xsl:variable>
 
+  <xsl:attribute-set name="toc">
+    <xsl:attribute name="role">toc</xsl:attribute>
+  </xsl:attribute-set>
+
   <xsl:template match="*" mode="gen-user-sidetoc">
     <xsl:if test="$nav-toc = ('partial', 'full')">
-      <nav role="toc">
+      <nav xsl:use-attribute-sets="toc">
         <ul>
           <xsl:choose>
             <xsl:when test="$nav-toc = 'partial'">
