@@ -3,7 +3,8 @@
 _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for XML content authored in the _Darwin Information Typing Architecture_.
 
 Visit the project website at [dita-ot.org][site] for documentation, information about releases, and [download packages][dist].  
-For information on additional DITA and DITA-OT resources, see [SUPPORT].
+
+For information on additional DITA and DITA-OT resources, see [SUPPORT]. To report a bug or suggest a feature, [create an issue][issue]. For more information on how you can help contribute to the project, see [CONTRIBUTING].
 
 - [Prerequisites: Java 8](#prerequisites-java-8)
 - [Installing](#installing)
@@ -104,3 +105,5 @@ DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 [options]: https://www.dita-ot.org/dev/topics/build-using-dita-command.html
 [javadoc]: http://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI
 [apache]: http://www.apache.org/licenses/LICENSE-2.0
+[issue]: https://github.com/dita-ot/dita-ot/issues/new/choose
+[contributing]: https://github.com/dita-ot/dita-ot/blob/develop/.github/CONTRIBUTING.md
