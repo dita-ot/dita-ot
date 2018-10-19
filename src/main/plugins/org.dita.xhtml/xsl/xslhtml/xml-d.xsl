@@ -63,7 +63,9 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' xml-d/xmlpi ')]">
     <code>
       <xsl:call-template name="commonattributes"/>
+      <xsl:text>&lt;?</xsl:text>
       <xsl:apply-templates/>
+      <xsl:text>?&gt;</xsl:text>
     </code>
   </xsl:template>
     
