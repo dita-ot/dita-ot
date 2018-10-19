@@ -531,7 +531,8 @@ See the accompanying LICENSE file for applicable license.
                 contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
                 contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
                 contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
-                contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">
+                contains(@class,' topic/table ') or contains(@class,' topic/ul ') or
+                contains(@class,' topic/div ')]">
                 <xsl:sequence select="true()"/>
             </xsl:when>
             <xsl:when test="$ctx/following-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
@@ -539,7 +540,8 @@ See the accompanying LICENSE file for applicable license.
                 contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
                 contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
                 contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
-                contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">
+                contains(@class,' topic/table ') or contains(@class,' topic/ul ') or
+                contains(@class,' topic/div ')]">
                 <xsl:sequence select="true()"/>
             </xsl:when>
             <xsl:otherwise>
