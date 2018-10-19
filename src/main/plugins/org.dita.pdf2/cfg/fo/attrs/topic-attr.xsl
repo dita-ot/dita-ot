@@ -213,7 +213,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:attribute name="start-indent">72pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="div">
+    <xsl:attribute-set name="div" use-attribute-sets="common.block">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="p" use-attribute-sets="common.block">
