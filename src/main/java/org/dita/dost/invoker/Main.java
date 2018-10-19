@@ -1229,7 +1229,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("  --install [<file>]          install plug-in from a local ZIP file\n");
         msg.append("  --install [<url>]           install plug-in from a URL\n");
         msg.append("  --install [<id>]            install plug-in from plugin registry\n");
-        msg.append("  --install                   reload plugins\n");
+        msg.append("  --install                   reload plug-ins\n");
         msg.append("  --uninstall <id>            uninstall plug-in with the ID\n");
         msg.append("  --plugins                   print list of installed plug-ins\n");
         msg.append("  --transtypes                print list of installed transtypes\n");
