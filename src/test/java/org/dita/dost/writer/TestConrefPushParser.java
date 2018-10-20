@@ -61,12 +61,12 @@ public class TestConrefPushParser {
         /*
          * the part of content of conrefpush_stub2.xml is
          * <ol>
-         *     <li id="A">A</li>
+         *     <li id="A" dita-ot:orig-foobar="foo.dita#bar/buzz" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot">A</li>
          *     <li id="B">B</li>
          *     <li id="C">C</li>
          * </ol>
          * 
-         * the part of content of conrefpush_stup.xml is
+         * the part of content of conrefpush_stub.xml is
          *  <steps>
          *      <step conaction="pushbefore"><cmd>before</cmd></step>
          *   <step conref="conrefpush_stub2.xml#X/A" conaction="mark"/>
@@ -82,7 +82,7 @@ public class TestConrefPushParser {
          *      before
          *      </ph>
          *  </li>
-         *  <li id="A" class="- topic/li ">A</li>
+         *  <li id="A" class="- topic/li " dita-ot:orig-foobar="foo.dita#bar/buzz" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot">A</li>
          *    <li id="B" class="- topic/li ">B</li>
          *    <li class="- topic/li task/step ">
          *        <ph class="- topic/ph task/cmd ">
@@ -133,12 +133,14 @@ public class TestConrefPushParser {
                 if(node.getNodeType() == Node.ELEMENT_NODE){
                     element = (Element)node;
                     if(element.getAttributes().getNamedItem("id")!=null && element.getAttributes().getNamedItem("id").getNodeValue().equals("A")){
+                        //Verify that namespace atts on A were preserved
+                        assertEquals("<li class=\"- topic/li \" dita-ot:orig-foobar=\"foo.dita#bar/buzz\" id=\"A\" xmlns:dita-ot=\"http://dita-ot.sourceforge.net/ns/201007/dita-ot\">A</li>", nodeToString(element));
                         // get node of before
                         node = element.getPreviousSibling();
                         while(node.getNodeType() != Node.ELEMENT_NODE){
                             node = node.getPreviousSibling();
                         }
-                        assertEquals("<li class=\"- topic/li task/step \"><ph class=\"- topic/ph task/cmd \">before</ph></li>", nodeToString((Element)node));
+                        assertEquals("<li class=\"- topic/li task/step \" xmlns:dita-ot=\"http://dita-ot.sourceforge.net/ns/201007/dita-ot\"><ph class=\"- topic/ph task/cmd \">before</ph></li>", nodeToString((Element)node));
                     }else if(element.getAttributes().getNamedItem("id")!=null && element.getAttributes().getNamedItem("id").getNodeValue().equals("B")){
                         // get node of after
                         node = element.getNextSibling();
