@@ -14,8 +14,10 @@ import static org.dita.dost.util.URLUtils.*;
 import java.io.File;
 import java.net.URI;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.stream.FactoryConfigurationError;
@@ -253,6 +255,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         //conref information like @conref @conaction in current element
         //when copying it to pushcontent. True means remove and false means
         //not remove.
+        final Set<String> namespaces = new HashSet<>(32);
         try {
             pushcontentWriter.writeStartElement(elemName);
             for (int index = 0; index < atts.getLength(); index++) {
@@ -266,9 +269,14 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     }
                     final int offset = atts.getQName(index).indexOf(":");
                     final String prefix = offset != -1 ? atts.getQName(index).substring(0, offset) : "";
+                    if (!namespaces.contains(prefix)) {
+                        namespaces.add(prefix);
+                        if (!(prefix.equals(""))) {
+                            pushcontentWriter.writeNamespace(prefix, atts.getURI(index));
+                        }
+                    }
                     pushcontentWriter.writeAttribute(prefix, atts.getURI(index), atts.getLocalName(index), value);
                 }
-
             }
             //id attribute should only be added to the starting element
             //which dosen't have id attribute set
