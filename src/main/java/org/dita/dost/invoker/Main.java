@@ -1226,11 +1226,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("Arguments: \n");
         msg.append("  -i <file>, --input=<file>   input file\n");
         msg.append("  -f <name>, --format=<name>  output format (transformation type)\n");
-        msg.append("  --propertyfile=<name>       load all properties from file\n");
         msg.append("  --install [<file>]          install plug-in from a local ZIP file\n");
         msg.append("  --install [<url>]           install plug-in from a URL\n");
         msg.append("  --install [<id>]            install plug-in from plugin registry\n");
-        msg.append("  --install                   reload plugins\n");
+        msg.append("  --install                   reload plug-ins\n");
         msg.append("  --uninstall <id>            uninstall plug-in with the ID\n");
         msg.append("  --plugins                   print list of installed plug-ins\n");
         msg.append("  --transtypes                print list of installed transtypes\n");
@@ -1263,6 +1262,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("    -file    <file>              ''" + lSep);
         // msg.append("    -f       <file>              ''" + lSep);
         msg.append("  --<property>=<value>        use value for given property\n");
+        msg.append("  --propertyfile=<name>       load all properties from file\n");
         // msg.append("  -keep-going, -k        execute all targets that do not depend"
         // + lSep);
         // msg.append("                         on failed target(s)" + lSep);
