@@ -152,7 +152,7 @@ task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":ax
 
 // Distribution
 
-def distTempDir = file("${buildDir}/tmp/dist")
+ext.distTempDir = file("${buildDir}/tmp/dist")
 def distVersion = project.hasProperty("commit") && (!project.hasProperty("tag") || tag.empty) ?
                   "${project.version}+${commit.substring(0, 7)}" :
                   "${project.version}"
@@ -166,6 +166,8 @@ def bundled = [
         "tocjs": "https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip",
         "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.2.1/org.oasis-open.xdita.v0_2_1.zip"
 ]
+
+apply from: 'gradle/dist.gradle'
 
 task cleanDistTemp(type: Delete) {
     delete distTempDir
@@ -258,8 +260,9 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
     destinationDir = distTempDir
 }
 copyDistTemp.outputs.dir distTempDir
+generateNotices.mustRunAfter copyDistTemp
 
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, generateNotices, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir

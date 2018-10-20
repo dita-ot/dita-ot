@@ -1,0 +1,55 @@
+import java.nio.file.*
+import static groovy.io.FileType.*
+import static groovy.io.FileVisitResult.*
+
+def copyLicense(license, jar) {
+    Files.copy(Paths.get("gradle", license), file("${jar}.LICENSE").toPath())
+}
+
+task generateNotices() {
+    doLast {
+        println("jars")
+        file(distTempDir).traverse(type: FILES, nameFilter: ~/.*\.jar$/) {
+            if (it.getParentFile().getName() != "lib") {
+                // println("skip ${it}")
+            } else {
+                switch(it.getName()) {
+                    case ~/^batik-.*$/:
+                    case ~/^commons-.*$/:
+                    case ~/^avalon-.*$/:
+                    case ~/^fop-.*$/:
+                    case ~/^ant-.*$/:
+                    case ~/^ant\..*$/:
+                    case ~/^xml-apis-.*$/:
+                    case ~/^xercesImpl-.*$/:
+                    case ~/^xmlgraphics-commons-.*$/:
+                    case ~/^xml-resolver-.*$/:
+                    case ~/^serializer-.*$/:
+                    case ~/^fontbox-.*$/:
+                    case ~/^jackson-.*$/:
+                    case ~/^guava-.*$/:
+                        copyLicense("apache2.txt", it)
+                        break;
+                    case ~/^slf4j-.*$/:
+                    case ~/^jcl-over-slf4j-.*$/:
+                        copyLicense("mit-slf4j.txt", it)
+                        break;
+                    case ~/^Saxon-.*$/:
+                        copyLicense("mpl2.txt", it)
+                        break;
+                    case ~/^logback-.*$/:
+                        copyLicense("epl-1.0.txt", it)
+                        break;
+                    case ~/^icu4j-.*$/:
+                        copyLicense("icu.txt", it)
+                        break;
+                    case ~/^jing-.*$/:
+                        copyLicense("bsd-jing.txt", it)
+                        break;
+                    default:
+                        println "??? ${it}"
+                }
+            }
+        }
+    }
+}
