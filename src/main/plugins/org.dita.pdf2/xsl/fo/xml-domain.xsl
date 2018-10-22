@@ -64,7 +64,9 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' xml-d/xmlpi ')]">
     <fo:inline xsl:use-attribute-sets="xmlpi">
       <xsl:call-template name="commonattributes"/>
+      <xsl:text>&lt;?</xsl:text>
       <xsl:apply-templates/>
+      <xsl:text>?&gt;</xsl:text>
     </fo:inline>
   </xsl:template>
   
