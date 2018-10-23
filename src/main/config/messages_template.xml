@@ -381,6 +381,16 @@ See the accompanying LICENSE file for applicable license.
     <reason>Invalid action attribute '%1' on DITAVAL property.</reason>
     <response></response>
   </message>
+  
+  <message id="DOTJ078F" type="FATAL">
+    <reason>Input file '%1' could not be loaded.</reason>
+    <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
+  </message>
+  
+  <message id="DOTJ079E" type="ERROR">
+    <reason>File '%1' could not be loaded.</reason>
+    <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
+  </message>
 
   <!-- End of Java Messages -->
     
