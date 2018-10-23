@@ -57,9 +57,7 @@ with those set forth herein.
     <property name="preprocess.copy-image.skip" value="true"/>
     <property name="clean-preprocess.use-result-filename" value="false"/>
     <condition property="preprocess.chunk.skip" value="true">
-      <not>
-        <equals arg1="${org.dita.pdf2.chunk.enabled}" arg2="true"/>
-      </not>
+      <isfalse value="${org.dita.pdf2.chunk.enabled}"/>
     </condition>
     
     <condition property="args.rellinks" value="nofamily">
