@@ -8,7 +8,7 @@ def licenses = [
         [name: 'xmlgraphics-commons', title: 'Apache XML Graphics Commons', license: ['apache2.txt']],
         [name: 'commons-io', title: 'Commons IO', license: ['apache2.txt']],
         [name: 'xercesImpl', title: 'Xerces2 Java', license: ['apache2.txt']],
-        [name: 'xml-apis', title: 'XML Standard API', license: ['apache2.txt']],
+        [name: 'xml-apis', title: 'XML Commons External', license: ['apache2.txt', 'LICENSE.dom-documentation.txt', 'LICENSE.dom-software.txt', 'LICENSE.sax.txt']],
         [name: 'xml-resolver', title: 'Resolver', license: ['apache2.txt']],
         [name: 'Saxon-HE', title: 'Saxon-HE', license: ['mpl2.txt', 'CERN.txt', 'JAMESCLARK.txt', 'THAI.txt', 'UNICODE.txt']],
         [name: 'icu4j', title: 'ICU4J', license: ['icu.txt']],
