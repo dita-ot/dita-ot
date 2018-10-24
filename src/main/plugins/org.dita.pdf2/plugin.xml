@@ -49,6 +49,10 @@ See the accompanying LICENSE file for applicable license.
       <val desc="Enables I18N processing" default="true">true</val>
       <val desc="Disables I18N processing">false</val>
     </param>
+    <param name="org.dita.pdf2.chunk.enabled" desc="Enables chunk attribute processing." type="enum">
+      <val desc="Enables chunk processing">true</val>
+      <val desc="Disables chunk processing" default="true">false</val>
+    </param>
   </transtype>
   <transtype name="pdf2" extends="pdf" desc="PDF2"/>
   <feature extension="dita.transtype.print" value="pdf"/>
