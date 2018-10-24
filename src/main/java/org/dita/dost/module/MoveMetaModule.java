@@ -34,8 +34,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**

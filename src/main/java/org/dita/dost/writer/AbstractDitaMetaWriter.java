@@ -203,8 +203,7 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
     }
  
     private Element matchTopicElementById(Element topic) {
-        if (!topic.getTagName().equals(ELEMENT_NAME_DITA) &&
-                topic.getAttribute(ATTRIBUTE_NAME_ID) != null &&
+        if (topic.getAttribute(ATTRIBUTE_NAME_ID) != null &&
                 topic.getAttribute(ATTRIBUTE_NAME_ID).toString().equals(topicid)) {
             return topic;
         } else {
