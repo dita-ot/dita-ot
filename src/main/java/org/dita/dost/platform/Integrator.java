@@ -115,6 +115,7 @@ public final class Integrator {
     private final Set<String> extensionPoints;
     private final Map<String, Integer> pluginOrder = new HashMap<>();
     private Properties properties;
+    private Set<String> pluginList;
 
     /**
      * Default Constructor.
@@ -149,15 +150,14 @@ public final class Integrator {
         });
         parser = new PluginParser(ditaDir);
         pluginsDoc = XMLUtils.getDocumentBuilder().newDocument();
-//        pluginsDoc.setResult(new StreamResult(new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml")));
+
+        pluginList = getPluginIds(readPlugins());
     }
 
     /**
      * Execute point of Integrator.
      */
     public void execute() throws Exception {
-        final Set<String> pluginList = getPluginIds(readPlugins());
-
         // Read the properties file, if it exists.
         properties = new Properties();
         if (propertiesFile != null) {
@@ -896,4 +896,12 @@ public final class Integrator {
         }
     }
 
+    /**
+     * Add ID of a plugin that has been removed.
+     *
+     * @param name plugin ID
+     */
+    public void addRemoved(String name) {
+        pluginList.remove(name);
+    }
 }

@@ -511,6 +511,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 justPrintTranstypes = true;
             } else if (isLongForm(arg, "-install")) {
                 handleArgInstall(arg, args);
+            } else if (isLongForm(arg, "-force")) {
+                definedProps.put("force", "true");
             } else if (isLongForm(arg, "-uninstall")) {
                 handleArgUninstall(args);
             } else if (isLongForm(arg, "-diagnostics")) {
@@ -1244,6 +1246,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
         msg.append("  --filter=<files>            filter and flagging files\n");
+        msg.append("  --force                     force install plug-in\n");
         msg.append("  -t, --temp=<dir>            temporary directory\n");
         msg.append("  -v, --verbose               verbose logging\n");
         msg.append("  -d, --debug                 print debugging information\n");

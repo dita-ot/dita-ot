@@ -43,6 +43,11 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="integrate">
     <integrate ditadir="${dita.dir}" />
+    <antcall target="configuration-jar"/>
+  </target>
+
+  <!-- Deprecated since 3.2 -->
+  <target name="configuration-jar">
     <!-- place property files into a JAR so Ant will find them -->
     <jar destfile="${basedir}/lib/dost-configuration.jar">
       <fileset dir="${basedir}/config">
@@ -67,8 +72,9 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="install" description="Install plug-in" >
-    <install pluginFile="${plugin.file}"/>
-    <antcall target="integrate"/>
+    <property name="force" value="false"/>
+    <install pluginFile="${plugin.file}" force="${force}"/>
+    <antcall target="configuration-jar"/>
   </target>
   
   <target name="uninstall" description="Uninstall plug-in">
