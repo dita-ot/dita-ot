@@ -32,9 +32,14 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
     )));
 
     private Map<String, Element> metaTable;
+    private String topicid = null;
 
     public void setMetaTable(final Map<String, Element> metaTable) {
         this.metaTable = metaTable;
+    }
+    
+    public void setTopicId(final String topicid) {
+        this.topicid = topicid;
     }
 
     public abstract Document process(final Document doc);
@@ -174,6 +179,49 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
             }
         }
         return res;
+    }
+ 
+    public Element getMatchingTopicElement(Element doc) {
+        Element res = null;
+        if (this.topicid == null) {
+            return matchFirstTopicInDoc(doc);
+        }
+        res = matchTopicElementById(doc);
+        if (res != null) {
+            return res;
+        } else {
+            return matchFirstTopicInDoc(doc);
+        }
+    }
+
+    private Element matchFirstTopicInDoc(Element doc) {
+        if (doc.getTagName().equals(ELEMENT_NAME_DITA)) {
+            return getFirstChildElement(doc, TOPIC_TOPIC);
+        } else {
+            return doc;
+        }
+    }
+ 
+    private Element matchTopicElementById(Element topic) {
+        if (!topic.getTagName().equals(ELEMENT_NAME_DITA) &&
+                topic.getAttribute(ATTRIBUTE_NAME_ID) != null &&
+                topic.getAttribute(ATTRIBUTE_NAME_ID).toString().equals(topicid)) {
+            return topic;
+        } else {
+            final NodeList children = topic.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                final Node child = children.item(i);
+                if (child.getNodeType() == Node.ELEMENT_NODE) {
+                    final Element elem = (Element) child;
+                    Element res = null;
+                    res = matchTopicElementById(elem);
+                    if (res != null) {
+                        return res;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void insertAfter(final Node newChild, final Node refChild) {

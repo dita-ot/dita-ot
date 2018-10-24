@@ -224,7 +224,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                     final URI copyToUri = stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
                     topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(copyToUri));
                 } else {
-                    final URI hrefUri = stripFragment(URLUtils.toURI(hrefAttr.getNodeValue()));
+                    final URI hrefUri = URLUtils.toURI(hrefAttr.getNodeValue());
                     topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(hrefUri));
                 }
                 if (resultTable.containsKey(topicPath)) {

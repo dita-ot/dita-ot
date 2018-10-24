@@ -64,7 +64,7 @@ public final class DitaMetaWriter extends AbstractDitaMetaWriter {
     ));
 
     public Document process(final Document doc) {
-        Element root = doc.getDocumentElement();
+        Element root = getMatchingTopicElement(doc.getDocumentElement());
         if (root.getTagName().equals(ELEMENT_NAME_DITA)) {
             root = getFirstChildElement(root, TOPIC_TOPIC);
         }

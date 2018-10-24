@@ -35,6 +35,7 @@ import java.util.Map.Entry;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**
@@ -149,7 +150,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
             mapInserter.setLogger(logger);
             mapInserter.setJob(job);
             for (final Entry<URI, Map<String, Element>> entry : mapSet.entrySet()) {
-                final URI key = entry.getKey();
+                final URI key = stripFragment(entry.getKey());
                 final FileInfo fi = job.getFileInfo(key);
                 if (fi == null) {
                     logger.error("File " + new File(job.tempDir, key.getPath()) + " was not found.");
@@ -173,7 +174,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
             topicInserter.setLogger(logger);
             topicInserter.setJob(job);
             for (final Entry<URI, Map<String, Element>> entry : mapSet.entrySet()) {
-                final URI key = entry.getKey();
+                final URI key = stripFragment(entry.getKey());
                 final FileInfo fi = job.getFileInfo(key);
                 if (fi == null) {
                     logger.error("File " + new File(job.tempDir, key.getPath()) + " was not found.");
@@ -182,6 +183,8 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 final URI targetFileName = job.tempDirURI.resolve(fi.uri);
                 assert targetFileName.isAbsolute();
                 if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+                    final String topicid = entry.getKey().getFragment();
+                    topicInserter.setTopicId(topicid);
                     topicInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
                         topicInserter.read(toFile(targetFileName));
