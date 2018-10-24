@@ -255,7 +255,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         //conref information like @conref @conaction in current element
         //when copying it to pushcontent. True means remove and false means
         //not remove.
-        final Set<String> namespaces = new HashSet<>(32);
+        final Set<String> namespaces = new HashSet<>();
         try {
             pushcontentWriter.writeStartElement(elemName);
             for (int index = 0; index < atts.getLength(); index++) {
@@ -271,7 +271,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     final String prefix = offset != -1 ? atts.getQName(index).substring(0, offset) : "";
                     if (!namespaces.contains(prefix)) {
                         namespaces.add(prefix);
-                        if (!(prefix.equals(""))) {
+                        if (!prefix.isEmpty()) {
                             pushcontentWriter.writeNamespace(prefix, atts.getURI(index));
                         }
                     }
