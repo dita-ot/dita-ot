@@ -295,4 +295,140 @@
       <navtitle class="- topic/navtitle " dita-ot:locktitle="no">topicref navtitle</navtitle>
     </topicmeta>
   </topicref>
+<topicref class="- map/topicref " href="nest.xml">
+<topicmeta class="- map/topicmeta ">
+<author class="- topic/author ">map author</author>
+<source class="- topic/source ">map source</source>
+<publisher class="- topic/publisher ">map publisher</publisher>
+<copyright class="- topic/copyright ">
+<copyryear class="- topic/copyryear " year="2010"/>
+<copyrholder class="- topic/copyrholder ">map copyrholder</copyrholder>
+</copyright>
+<critdates class="- topic/critdates ">
+<created class="- topic/created " date="2010"/>
+<revised class="- topic/revised " modified="2010"/>
+</critdates>
+<permissions class="- topic/permissions " view="map permissins"/>
+<audience class="- topic/audience "/>
+<audience class="- topic/audience "/>
+<category class="- topic/category ">map category</category>
+<category class="- topic/category ">map category</category>
+<prodinfo class="- topic/prodinfo ">
+<prodname class="- topic/prodname ">map prodnamefoo</prodname>
+<vrmlist class="- topic/vrmlist ">
+<vrm class="- topic/vrm " version="1.0"/>
+</vrmlist>
+</prodinfo>
+<prodinfo class="- topic/prodinfo ">
+<prodname class="- topic/prodname ">map prodnamefoo</prodname>
+<vrmlist class="- topic/vrmlist ">
+<vrm class="- topic/vrm " version="1.0"/>
+</vrmlist>
+</prodinfo>
+<othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+<othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+</topicmeta>
+</topicref>
+<topicref class="- map/topicref " href="nest.xml#first">
+<topicmeta class="- map/topicmeta ">
+<author class="- topic/author ">map author</author>
+<source class="- topic/source ">map source</source>
+<publisher class="- topic/publisher ">map publisher</publisher>
+<copyright class="- topic/copyright ">
+<copyryear class="- topic/copyryear " year="2010"/>
+<copyrholder class="- topic/copyrholder ">map copyrholder</copyrholder>
+</copyright>
+<critdates class="- topic/critdates ">
+<created class="- topic/created " date="2010"/>
+<revised class="- topic/revised " modified="2010"/>
+</critdates>
+<permissions class="- topic/permissions " view="map permissins"/>
+<audience class="- topic/audience "/>
+<audience class="- topic/audience "/>
+<category class="- topic/category ">map category</category>
+<category class="- topic/category ">map category</category>
+<prodinfo class="- topic/prodinfo ">
+<prodname class="- topic/prodname ">map prodnamefoo</prodname>
+<vrmlist class="- topic/vrmlist ">
+<vrm class="- topic/vrm " version="1.0"/>
+</vrmlist>
+</prodinfo>
+<prodinfo class="- topic/prodinfo ">
+<prodname class="- topic/prodname ">map prodnamefoo</prodname>
+<vrmlist class="- topic/vrmlist ">
+<vrm class="- topic/vrm " version="1.0"/>
+</vrmlist>
+</prodinfo>
+<othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+<othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+</topicmeta>
+</topicref>
+<topicref class="- map/topicref " href="nest.xml#second">
+<topicmeta class="- map/topicmeta ">
+<author class="- topic/author ">map author</author>
+<source class="- topic/source ">map source</source>
+<publisher class="- topic/publisher ">map publisher</publisher>
+<copyright class="- topic/copyright ">
+<copyryear class="- topic/copyryear " year="2010"/>
+<copyrholder class="- topic/copyrholder ">map copyrholder</copyrholder>
+</copyright>
+<critdates class="- topic/critdates ">
+<created class="- topic/created " date="2010"/>
+<revised class="- topic/revised " modified="2010"/>
+</critdates>
+<permissions class="- topic/permissions " view="map permissins"/>
+<audience class="- topic/audience "/>
+<audience class="- topic/audience "/>
+<category class="- topic/category ">map category</category>
+<category class="- topic/category ">map category</category>
+<prodinfo class="- topic/prodinfo ">
+<prodname class="- topic/prodname ">map prodnamefoo</prodname>
+<vrmlist class="- topic/vrmlist ">
+<vrm class="- topic/vrm " version="1.0"/>
+</vrmlist>
+</prodinfo>
+<prodinfo class="- topic/prodinfo ">
+<prodname class="- topic/prodname ">map prodnamefoo</prodname>
+<vrmlist class="- topic/vrmlist ">
+<vrm class="- topic/vrm " version="1.0"/>
+</vrmlist>
+</prodinfo>
+<othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+<othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+</topicmeta>
+</topicref>
+<topicref class="- map/topicref " href="nest.xml#nest">
+<topicmeta class="- map/topicmeta ">
+<author class="- topic/author ">map author</author>
+<source class="- topic/source ">map source</source>
+<publisher class="- topic/publisher ">map publisher</publisher>
+<copyright class="- topic/copyright ">
+<copyryear class="- topic/copyryear " year="2010"/>
+<copyrholder class="- topic/copyrholder ">map copyrholder</copyrholder>
+</copyright>
+<critdates class="- topic/critdates ">
+<created class="- topic/created " date="2010"/>
+<revised class="- topic/revised " modified="2010"/>
+</critdates>
+<permissions class="- topic/permissions " view="map permissins"/>
+<audience class="- topic/audience "/>
+<audience class="- topic/audience "/>
+<category class="- topic/category ">map category</category>
+<category class="- topic/category ">map category</category>
+<prodinfo class="- topic/prodinfo ">
+<prodname class="- topic/prodname ">map prodnamefoo</prodname>
+<vrmlist class="- topic/vrmlist ">
+<vrm class="- topic/vrm " version="1.0"/>
+</vrmlist>
+</prodinfo>
+<prodinfo class="- topic/prodinfo ">
+<prodname class="- topic/prodname ">map prodnamefoo</prodname>
+<vrmlist class="- topic/vrmlist ">
+<vrm class="- topic/vrm " version="1.0"/>
+</vrmlist>
+</prodinfo>
+<othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+<othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+</topicmeta>
+</topicref>
 </map>

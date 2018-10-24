@@ -187,4 +187,8 @@
       <unknown class="- topic/unknown ">topicref unknown</unknown>
     </topicmeta>
   </topicref>
+  <topicref class="- map/topicref " href="nest.xml"/>
+  <topicref class="- map/topicref " href="nest.xml#first"/>
+  <topicref class="- map/topicref " href="nest.xml#second"/>
+  <topicref class="- map/topicref " href="nest.xml#nest"/>
 </map>
