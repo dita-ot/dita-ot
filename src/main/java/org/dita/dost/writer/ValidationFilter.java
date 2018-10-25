@@ -83,7 +83,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
         AttributesImpl modified;
         modified = validateLang(atts, null);
         modified = validateId(localName, atts, modified);
-        modified = validateHref(atts, modified);
+        modified = validateReference(ATTRIBUTE_NAME_HREF, atts, modified);
+        modified = validateReference(ATTRIBUTE_NAME_CONREF, atts, modified);
         modified = validateScope(atts, modified);
         modified = processFormatDitamap(atts, modified);
         validateKeys(atts);
@@ -175,13 +176,13 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
 
     /**
-     * Validate and fix {@code href} attribute for URI validity.
+     * Validate and fix {@code href} or {@code conref} attribute for URI validity.
      *
      * @return modified attributes, {@code null} if there have been no changes
      */
-    private AttributesImpl validateHref(final Attributes atts, final AttributesImpl modified) {
+    private AttributesImpl validateReference (final String attrName, final Attributes atts, final AttributesImpl modified) {
         AttributesImpl res = modified;
-        final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
+        final String href = atts.getValue(attrName);
         if (href != null) {
             URI uri = null;
             try {
@@ -189,9 +190,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
             } catch (final URISyntaxException e) {
                 switch (processingMode) {
                 case STRICT:
-                    throw new RuntimeException(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ": " + e.getMessage(), e);
+                    throw new RuntimeException(MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ": " + e.getMessage(), e);
                 case SKIP:
-                    logger.error(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
+                    logger.error(MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ", using invalid value.");
                     break;
                 case LAX:
                     try {
@@ -199,10 +200,10 @@ public final class ValidationFilter extends AbstractXMLFilter {
                         if (res == null) {
                             res = new AttributesImpl(atts);
                         }
-                        res.setValue(res.getIndex(ATTRIBUTE_NAME_HREF), uri.toASCIIString());
-                        logger.error(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using '" + uri.toASCIIString() + "'.");
+                        res.setValue(res.getIndex(attrName), uri.toASCIIString());
+                        logger.error(MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ", using '" + uri.toASCIIString() + "'.");
                     } catch (final URISyntaxException e1) {
-                        logger.error(MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
+                        logger.error(MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ", using invalid value.");
                     }
                     break;
                 }
