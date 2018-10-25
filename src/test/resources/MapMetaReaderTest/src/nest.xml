@@ -1,0 +1,27 @@
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.3">
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+domains="(topic hi-d)"
+id="first" ditaarch:DITAArchVersion="1.3">
+<title class="- topic/title ">first</title>
+<prolog class="- topic/prolog ">
+<metadata class="- topic/metadata ">
+<audience class="- topic/audience "/>
+</metadata>
+</prolog>
+</topic>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+domains="(topic hi-d)"
+id="second" ditaarch:DITAArchVersion="1.3">
+<title class="- topic/title ">Second</title>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+domains="(topic hi-d)"
+id="nest" ditaarch:DITAArchVersion="1.3">
+<title class="- topic/title ">Nested in second</title>
+<prolog class="- topic/prolog ">
+<metadata class="- topic/metadata ">
+<audience class="- topic/audience "/>
+</metadata>
+</prolog>
+</topic>
+</topic>
+</dita>

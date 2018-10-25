@@ -9,6 +9,7 @@
 package org.dita.dost.writer;
 
 import org.dita.dost.util.DitaClass;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,9 +33,14 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
     )));
 
     private Map<String, Element> metaTable;
+    private String topicid = null;
 
     public void setMetaTable(final Map<String, Element> metaTable) {
         this.metaTable = metaTable;
+    }
+    
+    public void setTopicId(final String topicid) {
+        this.topicid = topicid;
     }
 
     public abstract Document process(final Document doc);
@@ -174,6 +180,38 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
             }
         }
         return res;
+    }
+ 
+    public Element getMatchingTopicElement(Element root) {
+        if (this.topicid != null) {
+            final Element res = matchTopicElementById(root);
+            if (res != null) {
+                return res;
+            }
+        }
+        return matchFirstTopicInDoc(root);
+    }
+
+    private Element matchFirstTopicInDoc(Element root) {
+        if (root.getTagName().equals(ELEMENT_NAME_DITA)) {
+            return getFirstChildElement(root, TOPIC_TOPIC);
+        } else {
+            return root;
+        }
+    }
+ 
+    private Element matchTopicElementById(Element topic) {
+        if (topic.getAttribute(ATTRIBUTE_NAME_ID).equals(topicid)) {
+            return topic;
+        } else {
+            for (final Element elem : XMLUtils.getChildElements((topic))) {
+                final Element res = matchTopicElementById(elem);
+                if (res != null) {
+                    return res;
+                }
+            }
+        }
+        return null;
     }
 
     private void insertAfter(final Node newChild, final Node refChild) {
