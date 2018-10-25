@@ -260,9 +260,8 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
     destinationDir = distTempDir
 }
 copyDistTemp.outputs.dir distTempDir
-generateNotices.mustRunAfter copyDistTemp
 
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, generateNotices, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir
@@ -353,8 +352,9 @@ task distPluginChecksums() {
     }
 }
 distPluginChecksums.mustRunAfter distPlugins
+generateNotices.mustRunAfter distPlugins
 
-task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"

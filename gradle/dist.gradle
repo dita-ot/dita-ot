@@ -20,6 +20,7 @@ def licenses = [
         [name: 'jackson', title: 'Jackson', license: ['apache2.txt']],
         [name: 'jing', title: 'Jing', license: ['bsd-jing.txt']],
         [name: 'gradle-wrapper'],
+        [name: 'org.lwdita'],
         [name: 'fo'],
         [name: 'eclipsehelp'],
         [name: 'eclipsehelp'],
@@ -30,7 +31,11 @@ def licenses = [
         [name: 'dost'],
         [name: 'error_prone_annotations'],
         [name: null, title: 'DITA 1.1 DTDs and Schemas', license: ['oasis-dita11.txt']],
-        [name: null, title: 'DITA 1.2 DTDs and Schemas', license: ['oasis-dita12.txt']]
+        [name: null, title: 'DITA 1.2 DTDs and Schemas', license: ['oasis-dita12.txt']],
+        // org.lwdita plugin
+        [name: 'flexmark', title: 'flexmark-java', license: ['bsd-flexmark.txt']],
+        [name: 'htmlparser', title: 'Validator.nu HTML Parser', license: ['htmlparser-license.txt']],
+        [name: 'autolink', title: 'autolink-java', license: ['autolink-license.txt']],
 ]
 
 task generateNotices() {
