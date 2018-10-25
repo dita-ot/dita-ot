@@ -9,6 +9,7 @@
 package org.dita.dost.writer;
 
 import org.dita.dost.util.DitaClass;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -181,42 +182,32 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
         return res;
     }
  
-    public Element getMatchingTopicElement(Element doc) {
-        Element res = null;
-        if (this.topicid == null) {
-            return matchFirstTopicInDoc(doc);
+    public Element getMatchingTopicElement(Element root) {
+        if (this.topicid != null) {
+            final Element res = matchTopicElementById(root);
+            if (res != null) {
+                return res;
+            }
         }
-        res = matchTopicElementById(doc);
-        if (res != null) {
-            return res;
-        } else {
-            return matchFirstTopicInDoc(doc);
-        }
+        return matchFirstTopicInDoc(root);
     }
 
-    private Element matchFirstTopicInDoc(Element doc) {
-        if (doc.getTagName().equals(ELEMENT_NAME_DITA)) {
-            return getFirstChildElement(doc, TOPIC_TOPIC);
+    private Element matchFirstTopicInDoc(Element root) {
+        if (root.getTagName().equals(ELEMENT_NAME_DITA)) {
+            return getFirstChildElement(root, TOPIC_TOPIC);
         } else {
-            return doc;
+            return root;
         }
     }
  
     private Element matchTopicElementById(Element topic) {
-        if (topic.getAttribute(ATTRIBUTE_NAME_ID) != null &&
-                topic.getAttribute(ATTRIBUTE_NAME_ID).toString().equals(topicid)) {
+        if (topic.getAttribute(ATTRIBUTE_NAME_ID).equals(topicid)) {
             return topic;
         } else {
-            final NodeList children = topic.getChildNodes();
-            for (int i = 0; i < children.getLength(); i++) {
-                final Node child = children.item(i);
-                if (child.getNodeType() == Node.ELEMENT_NODE) {
-                    final Element elem = (Element) child;
-                    Element res = null;
-                    res = matchTopicElementById(elem);
-                    if (res != null) {
-                        return res;
-                    }
+            for (final Element elem : XMLUtils.getChildElements((topic))) {
+                final Element res = matchTopicElementById(elem);
+                if (res != null) {
+                    return res;
                 }
             }
         }
