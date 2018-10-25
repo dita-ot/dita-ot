@@ -90,6 +90,31 @@ public class ValidationFilterTest {
         assertEquals("http://example.com/foo/bar%20baz:qux", res.get(0));
         assertEquals("http://example.com/valid/bar+baz:qux", res.get(1));
     }
+    
+    @Test
+    public void testConref() throws SAXException, URISyntaxException {
+        final List<String> res = new ArrayList<String>();
+        f.setContentHandler(new DefaultHandler() {
+            @Override
+            public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+                res.add(atts.getValue(ATTRIBUTE_NAME_CONREF));
+            }
+        });
+        final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
+        f.setLogger(l);
+
+        f.startElement(NULL_NS_URI, TOPIC_KEYWORD.localName, TOPIC_KEYWORD.localName, new AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CONREF, "sub\\backslash.dita#topic/back")
+                .build());
+        f.startElement(NULL_NS_URI, TOPIC_KEYWORD.localName, TOPIC_KEYWORD.localName, new AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CONREF, "sub/slash.dita#topic/valid")
+                .build());
+
+        assertEquals(1, l.getMessages().size());
+        assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
+        assertEquals("sub/backslash.dita#topic/back", res.get(0));
+        assertEquals("sub/slash.dita#topic/valid", res.get(1));
+    }
 
     @Test
     public void testScope() throws SAXException, URISyntaxException {
