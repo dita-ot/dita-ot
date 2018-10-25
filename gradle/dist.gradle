@@ -39,6 +39,8 @@ def licenses = [
 ]
 
 task generateNotices() {
+    def notices = file("${distTempDir}/NOTICES.txt")
+    outputs.file(notices)
     doLast {
         file(distTempDir).traverse(type: FILES, nameFilter: ~/.*\.jar$/) {
             def name = it.getName()
@@ -48,7 +50,7 @@ task generateNotices() {
             }
         }
 
-        file("${distTempDir}/NOTICES.txt").withWriter('UTF-8') { out ->
+        notices.withWriter('UTF-8') { out ->
             out.writeLine("""DITA Open Toolkit: Third Party Notices
 
 This Notices file contains certain notices and important information that
