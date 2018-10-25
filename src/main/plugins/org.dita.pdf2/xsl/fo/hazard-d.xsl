@@ -11,6 +11,7 @@ See the accompanying license.txt file for applicable licenses.
                 exclude-result-prefixes="xs dita-ot">
 
   <xsl:template match="*[contains(@class, ' hazard-d/hazardstatement ')]">
+    <xsl:variable name="type" select="(@type, 'caution')[1]" as="xs:string"/>
     <xsl:variable name="number-cells" as="xs:integer" select="2"/>
     <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
     <fo:table xsl:use-attribute-sets="hazardstatement">
@@ -26,13 +27,13 @@ See the accompanying license.txt file for applicable licenses.
           <fo:table-cell xsl:use-attribute-sets="hazardstatement.title">
             <xsl:variable name="atts" as="element()">
               <xsl:choose>
-                <xsl:when test="@type = 'danger'">
+                <xsl:when test="$type = 'danger'">
                   <w xsl:use-attribute-sets="hazardstatement.title.danger"/>
                 </xsl:when>
-                <xsl:when test="@type = 'warning'">
+                <xsl:when test="$type = 'warning'">
                   <w xsl:use-attribute-sets="hazardstatement.title.warning"/>
                 </xsl:when>
-                <xsl:when test="@type = 'caution'">
+                <xsl:when test="$type = 'caution'">
                   <w xsl:use-attribute-sets="hazardstatement.title.caution"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -42,7 +43,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:variable>
             <xsl:sequence select="$atts/@*"/>
             <fo:block>
-              <xsl:if test="@type = ('danger', 'warning', 'caution')">
+              <xsl:if test="$type = ('danger', 'warning', 'caution')">
                 <xsl:variable name="image" as="xs:string">
                   <xsl:call-template name="getVariable">
                     <xsl:with-param name="id" select="'hazard.image.default'"/>
@@ -55,7 +56,7 @@ See the accompanying license.txt file for applicable licenses.
               </xsl:if>
               <fo:inline>
                 <xsl:call-template name="getVariable">
-                  <xsl:with-param name="id" select="if (exists(@type)) then dita-ot:capitalize(@type) else 'Caution'"/>
+                  <xsl:with-param name="id" select="dita-ot:capitalize($type)"/>
                 </xsl:call-template>
               </fo:inline>
             </fo:block>
