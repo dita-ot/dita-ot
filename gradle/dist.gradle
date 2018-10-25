@@ -32,6 +32,7 @@ def licenses = [
         [name: 'error_prone_annotations'],
         [name: null, title: 'DITA 1.1 DTDs and Schemas', license: ['oasis-dita11.txt']],
         [name: null, title: 'DITA 1.2 DTDs and Schemas', license: ['oasis-dita12.txt']],
+        [name: null, title: 'DITA 1.3 RNGs, DTDs, and Schemas', license: ['oasis-dita13.txt']],
         // org.lwdita plugin
         [name: 'flexmark', title: 'flexmark-java', license: ['bsd-flexmark.txt']],
         [name: 'htmlparser', title: 'Validator.nu HTML Parser', license: ['htmlparser-license.txt']],
@@ -54,12 +55,12 @@ task generateNotices() {
             out.writeLine("""DITA Open Toolkit: Third Party Notices
 
 This Notices file contains certain notices and important information that
-DITA Open Toolkit Project licensors and contributors (the “Project”) are
+DITA Open Toolkit Project licensors and contributors (the “Project�) are
 required to provide to you with respect to certain third party components
-included in DITA Open Toolkit (the “Program”).
+included in DITA Open Toolkit (the “Program�).
 
 Your use of the Program is governed by the license terms set forth in the
-“license.txt” file or other license terms and conditions accompanying the
+“license.txt� file or other license terms and conditions accompanying the
 Program, and NOT by any terms contained in this Notices file below.  The notices
 and information below are provided for informational purposes only.
 
