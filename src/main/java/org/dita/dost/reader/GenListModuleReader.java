@@ -660,7 +660,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             } else if (attrValue.startsWith(SHARP)) {
                 filename = currentFile;
             } else {
-                filename = currentDir.resolve(attrValue);
+                filename = currentDir.resolve(target);
             }
             filename = stripFragment(filename);
 
