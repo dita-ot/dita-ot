@@ -180,13 +180,12 @@ public final class ValidationFilter extends AbstractXMLFilter {
      *
      * @return modified attributes, {@code null} if there have been no changes
      */
-    private AttributesImpl validateReference (final String attrName, final Attributes atts, final AttributesImpl modified) {
+    private AttributesImpl validateReference(final String attrName, final Attributes atts, final AttributesImpl modified) {
         AttributesImpl res = modified;
         final String href = atts.getValue(attrName);
         if (href != null) {
-            URI uri = null;
             try {
-                uri = new URI(href);
+                new URI(href);
             } catch (final URISyntaxException e) {
                 switch (processingMode) {
                 case STRICT:
@@ -196,7 +195,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     break;
                 case LAX:
                     try {
-                        uri = new URI(URLUtils.clean(href.trim()));
+                        final URI uri = new URI(URLUtils.clean(href.trim()));
                         if (res == null) {
                             res = new AttributesImpl(atts);
                         }
