@@ -152,7 +152,7 @@ task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":ax
 
 // Distribution
 
-def distTempDir = file("${buildDir}/tmp/dist")
+ext.distTempDir = file("${buildDir}/tmp/dist")
 def distVersion = project.hasProperty("commit") && (!project.hasProperty("tag") || tag.empty) ?
                   "${project.version}+${commit.substring(0, 7)}" :
                   "${project.version}"
@@ -166,6 +166,8 @@ def bundled = [
         "tocjs": "https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip",
         "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.2.1/org.oasis-open.xdita.v0_2_1.zip"
 ]
+
+apply from: 'gradle/dist.gradle'
 
 task cleanDistTemp(type: Delete) {
     delete distTempDir
@@ -350,8 +352,9 @@ task distPluginChecksums() {
     }
 }
 distPluginChecksums.mustRunAfter distPlugins
+generateNotices.mustRunAfter distPlugins
 
-task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
