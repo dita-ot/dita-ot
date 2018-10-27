@@ -56,12 +56,12 @@ task generateNotices() {
             out.writeLine("""DITA Open Toolkit: Third Party Notices
 
 This Notices file contains certain notices and important information that
-DITA Open Toolkit Project licensors and contributors (the “Project”) are
+DITA Open Toolkit Project licensors and contributors (the "Project") are
 required to provide to you with respect to certain third party components
-included in DITA Open Toolkit (the “Program”).
+included in DITA Open Toolkit (the "Program").
 
 Your use of the Program is governed by the license terms set forth in the
-“license.txt” file or other license terms and conditions accompanying the
+"LICENSE" file or other license terms and conditions accompanying the
 Program, and NOT by any terms contained in this Notices file below.  The notices
 and information below are provided for informational purposes only.
 
@@ -90,7 +90,9 @@ the following terms and conditions:
                 license.license.each {
                     out.writeLine('-' * 80)
                     out.writeLine('')
-                    out.writeLine(Paths.get("gradle", it).toFile().text)
+                    Paths.get("gradle", it).toFile().readLines("UTF-8").each {
+                        out.writeLine(it)
+                    }
                 }
             }
         }
