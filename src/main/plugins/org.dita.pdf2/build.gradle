@@ -17,8 +17,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile rootProject
-//    compile group: 'org.apache.xmlgraphics', name: 'fop', version: '1.1'
+    implementation rootProject
 }
 sourceSets {
     main {
