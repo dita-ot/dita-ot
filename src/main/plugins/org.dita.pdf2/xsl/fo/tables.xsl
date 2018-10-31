@@ -508,7 +508,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="char" as="xs:string"/>
     <xsl:param name="charoff" as="xs:integer"/>
         <xsl:choose>
-            <xsl:when test="not(descendant::*)">
+            <xsl:when test="not(descendant::* | descendant::processing-instruction() | descendant::comment())">
                 <xsl:variable name="text-before" select="substring-before(text(), $char)"/>
                 <xsl:variable name="text-after" select="substring-after(text(), $text-before)"/>
                 <fo:list-block start-indent="0pt"
