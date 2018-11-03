@@ -1,3 +1,9 @@
+---
+name: Bug report
+about: Create a report to help us improve
+
+---
+
 ## Expected Behavior
 <!-- If you're describing a bug, tell us what should happen. -->
 

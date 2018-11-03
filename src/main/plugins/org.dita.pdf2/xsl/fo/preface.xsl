@@ -72,11 +72,12 @@ See the accompanying LICENSE file for applicable license.
              <fo:block xsl:use-attribute-sets="topic.title">
                  <xsl:apply-templates select="." mode="customTopicAnchor"/>
                  <xsl:call-template name="pullPrologIndexTerms"/>
+                 <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
                  <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                      <xsl:apply-templates select="." mode="getTitle"/>
                  </xsl:for-each>
              </fo:block>
-             <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
+             <xsl:apply-templates select="*[not(contains(@class,' topic/title ') or contains(@class,' ditaot-d/ditaval-startprop '))]"/>
          </fo:block>
      </xsl:template>
 

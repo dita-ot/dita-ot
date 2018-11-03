@@ -224,7 +224,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                     final URI copyToUri = stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
                     topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(copyToUri));
                 } else {
-                    final URI hrefUri = stripFragment(URLUtils.toURI(hrefAttr.getNodeValue()));
+                    final URI hrefUri = URLUtils.toURI(hrefAttr.getNodeValue());
                     topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(hrefUri));
                 }
                 if (resultTable.containsKey(topicPath)) {
@@ -343,7 +343,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                         //not necessary to do node type check here
                         //because inheritStub doesn't contains any node
                         //other than Element.
-                        final Node stub = topicMetaTable.get(key);
+                        final Element stub = topicMetaTable.get(key);
                         final Node inheritStub = inheritance.get(key);
                         if (stub != inheritStub) {
                             // Merge the value if stub does not equal to inheritStub
@@ -355,7 +355,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                                 stub.appendChild(item);
                             }
                         }
-                        topicMetaTable.put(key, (Element) stub);
+                        topicMetaTable.put(key, stub);
                     }
                 }
             }

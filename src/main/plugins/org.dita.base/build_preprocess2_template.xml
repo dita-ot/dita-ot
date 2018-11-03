@@ -134,6 +134,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
         <!--param name="onlytopicinmap" value="${onlytopic.in.map}"/-->
+        <!--<param name="crawl" value="${link-crawl}"/>-->
         <param name="outputdir" location="${dita.output.dir}"/>
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
@@ -254,6 +255,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
         <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
+        <param name="crawl" value="${link-crawl}" if:set="link-crawl"/>
         <param name="outputdir" location="${dita.output.dir}"/>
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
@@ -407,7 +409,7 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
         style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
-        <ditafileset format="dita"/>
+        <ditafileset format="dita" processingRole="normal"/>
         <param name="TABLELINK" expression="${args.tablelink.style}" if:set="args.tablelink.style" />
         <param name="FIGURELINK" expression="${args.figurelink.style}" if:set="args.figurelink.style" />
         <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if:set="onlytopic.in.map"/>

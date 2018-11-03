@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
@@ -305,7 +306,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             hasWritten = false;
             inputFile = new File(file);
             outputFile = new File(file + FILE_EXTENSION_TEMP);
-            output = new OutputStreamWriter(new FileOutputStream(outputFile), UTF8);
+            output = new OutputStreamWriter(new FileOutputStream(outputFile), StandardCharsets.UTF_8);
 
             topicIdList.clear();
             reader.setErrorHandler(new DITAOTXMLErrorHandler(file, logger));

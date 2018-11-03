@@ -7,6 +7,7 @@
  */
 package org.dita.dost.index;
 
+import static org.dita.dost.TestUtils.assertHtmlEqual;
 import static org.junit.Assert.*;
 
 import org.dita.dost.TestUtils;
@@ -24,9 +25,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xml.sax.InputSource;
 
 public class IndexTermCollectionTest {
 
+    private static final File resourceDir = TestUtils.getResourceDir(IndexTermCollectionTest.class);
+    private static final File expDir = new File(resourceDir, "exp");
     private File tempDir;
 
     @Before
@@ -129,6 +133,9 @@ public class IndexTermCollectionTest {
         i.addTerm(second);
         i.addTerm(first);
         i.outputTerms();
+
+        assertHtmlEqual(new InputSource(new File(expDir, "foo.hhk").toURI().toString()),
+                new InputSource(new File(tempDir, "foo.hhk").toURI().toString()));
     }
 
     @Test @Ignore
@@ -148,7 +155,8 @@ public class IndexTermCollectionTest {
 
     @After
     public void tearDown() throws IOException {
-        TestUtils.forceDelete(tempDir);
+        System.err.println(tempDir);
+//        TestUtils.forceDelete(tempDir);
     }
 
 }

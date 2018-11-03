@@ -8,7 +8,6 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.Element;
@@ -21,15 +20,18 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.*;
 import java.net.URI;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.FileUtils.getRelativeUnixPath;
 import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**
@@ -292,9 +294,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     private void writeToContentChunk(final String tmpContent, final URI outputFileName, final boolean needWriteDitaTag) throws IOException {
         assert outputFileName.isAbsolute();
         logger.info("Writing " + outputFileName);
-        OutputStreamWriter ditaFileOutput = null;
-        try {
-            ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8);
+        try (OutputStreamWriter ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), StandardCharsets.UTF_8)) {
             if (outputFileName.equals(changeTable.get(outputFileName))) {
                 // if the output file is newly generated file
                 // write the xml header and workdir PI into new file
@@ -335,10 +335,6 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             ditaFileOutput.flush();
         } catch (SAXException e) {
             throw new IOException(e);
-        } finally {
-            if (ditaFileOutput != null) {
-                ditaFileOutput.close();
-            }
         }
     }
 

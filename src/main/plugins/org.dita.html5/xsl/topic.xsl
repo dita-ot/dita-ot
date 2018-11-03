@@ -986,16 +986,10 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- quotes - only do 1 level, no flip-flopping -->
   <xsl:template match="*[contains(@class, ' topic/q ')]" name="topic.q">
-    <span class="q">
+    <q>
       <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="getVariable">
-        <xsl:with-param name="id" select="'OpenQuote'"/>
-      </xsl:call-template>
       <xsl:apply-templates/>
-      <xsl:call-template name="getVariable">
-        <xsl:with-param name="id" select="'CloseQuote'"/>
-      </xsl:call-template>
-    </span>
+    </q>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/term ')]" mode="output-term">
@@ -1870,19 +1864,12 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- (this rule should NOT produce output in production setting) -->
   <xsl:template match="*" name="topic.undefined_element">
-    <span style="background-color: yellow;">
-      <span style="font-weight: bold">
-        <xsl:text>[</xsl:text>
-        <xsl:for-each select="ancestor-or-self::*">
-         <xsl:text>/</xsl:text>
-         <xsl:value-of select="name()" />
-       </xsl:for-each>
-       {"<xsl:value-of select="@class"/>"}<xsl:text>) </xsl:text>
-      </span>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="id" select="'DOTX074W'"/>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="@class"/></xsl:with-param>
+    </xsl:call-template>
+    <span class="undefined_element">
       <xsl:apply-templates/>
-      <span style="font-weight: bold">
-        <xsl:text> (</xsl:text><xsl:value-of select="name()"/><xsl:text>]</xsl:text>
-      </span>
     </span>
   </xsl:template>
   
@@ -2411,6 +2398,10 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="addAttributesToBody">
   </xsl:template>
 
+  <xsl:attribute-set name="banner">
+    <xsl:attribute name="role">banner</xsl:attribute>
+  </xsl:attribute-set>
+
   <!-- Process <body> content that is appropriate for HTML5 header section. -->
   <xsl:template match="*" mode="addHeaderToHtmlBodyElement">
     <xsl:variable name="header-content" as="node()*">
@@ -2424,15 +2415,24 @@ See the accompanying LICENSE file for applicable license.
     </xsl:variable>
 
     <xsl:if test="exists($header-content)">
-      <header role="banner">
+      <header xsl:use-attribute-sets="banner">
         <xsl:sequence select="$header-content"/>
       </header>
     </xsl:if>
   </xsl:template>
 
+  <xsl:attribute-set name="main">
+    <xsl:attribute name="role">main</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="article">
+    <xsl:attribute name="role">article</xsl:attribute>
+  </xsl:attribute-set>
+  
+
   <xsl:template match="*" mode="addContentToHtmlBodyElement">
-    <main role="main">
-      <article role="article">
+    <main xsl:use-attribute-sets="main">
+      <article xsl:use-attribute-sets="article">
         <xsl:attribute name="aria-labelledby">
           <xsl:apply-templates select="*[contains(@class,' topic/title ')] |
                                        self::dita/*[1]/*[contains(@class,' topic/title ')]" mode="return-aria-label-id"/>
@@ -2450,13 +2450,18 @@ See the accompanying LICENSE file for applicable license.
     </main>
   </xsl:template>
 
+  <xsl:attribute-set name="footer">
+    <xsl:attribute name="role">contentinfo</xsl:attribute>
+  </xsl:attribute-set>
+  
+
   <xsl:template match="*" mode="addFooterToHtmlBodyElement">
     <xsl:variable name="footer-content" as="node()*">
       <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here -->
       <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
     </xsl:variable>
     <xsl:if test="exists($footer-content)">
-      <footer role="contentinfo">
+      <footer xsl:use-attribute-sets="footer">
         <xsl:sequence select="$footer-content"/>
       </footer>
     </xsl:if>

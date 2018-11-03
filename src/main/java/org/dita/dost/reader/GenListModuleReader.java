@@ -405,7 +405,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (href != null && href.getPath() != null && !href.getPath().isEmpty() &&
                 !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope) && !ATTR_SCOPE_VALUE_PEER.equals(scope)) {
-            if (!(MAP_TOPICREF.matches(cls))) {
+            if (isFormatDita(atts.getValue(ATTRIBUTE_NAME_FORMAT)) && !isDitaMap() &&
+                    !job.crawlTopics()) {
+                // Topic link within a topic, ignore if only crawling map
+            } else if (!(MAP_TOPICREF.matches(cls))) {
                 nonTopicrefReferenceSet.add(stripFragment(currentDir.resolve(href)));
             } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                 resourceOnlySet.add(stripFragment(currentDir.resolve(href)));
@@ -584,7 +587,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
             hasHref = true;
             // Collect non-conref and non-copyto targets
-            if ((followLinks() && canFollow(attrValue))
+            if (isFormatDita(attrFormat) && !isDitaMap() &&
+                    !job.crawlTopics()) {
+                // DITA link in a topic, but not crawling topics
+            } else if ((followLinks() && canFollow(attrValue))
                     || TOPIC_IMAGE.matches(attrClass)
                     || SVG_D_SVGREF.matches(attrClass)
                     || DITAVAREF_D_DITAVALREF.matches(attrClass)) {
@@ -654,7 +660,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             } else if (attrValue.startsWith(SHARP)) {
                 filename = currentFile;
             } else {
-                filename = currentDir.resolve(attrValue);
+                filename = currentDir.resolve(target);
             }
             filename = stripFragment(filename);
 
@@ -731,6 +737,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * Should links be followed.
      */
     private boolean followLinks() {
+        if (!job.crawlTopics() && !isDitaMap()) {
+            return false;
+        }
         return !job.getOnlyTopicInMap() || isDitaMap();
     }
 

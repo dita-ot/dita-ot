@@ -8,6 +8,7 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.index.IndexTerm.IndexTermPrefix.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.StringUtils.*;
@@ -358,7 +359,7 @@ public final class IndexTermReader extends AbstractXMLReader {
                     parentTerm.updateSubTerm();
                 }
             }
-            indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
+            indexTerm.setTermPrefix(SEE_ALSO);
             termStack.push(indexTerm);
         }
     }
@@ -370,13 +371,13 @@ public final class IndexTermReader extends AbstractXMLReader {
             final IndexTerm indexTerm = new IndexTerm();
             IndexTerm parentTerm;
 
-            indexTerm.setTermPrefix(IndexTerm_Prefix_See);
+            indexTerm.setTermPrefix(SEE);
 
             if (!termStack.isEmpty()) {
                 parentTerm = termStack.peek();
                 if (parentTerm.hasSubTerms()) {
                     parentTerm.updateSubTerm();
-                    indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
+                    indexTerm.setTermPrefix(SEE_ALSO);
                 }
             }
             termStack.push(indexTerm);

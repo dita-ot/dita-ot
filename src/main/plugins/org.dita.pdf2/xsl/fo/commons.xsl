@@ -123,9 +123,8 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="." mode="customTopicMarker"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/prolog ')]"/>
-        <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
-                                       not(contains(@class, ' topic/prolog ')) and
-                                       not(contains(@class, ' topic/topic '))]"/>
+          <xsl:apply-templates select="* except(*[contains(@class, ' topic/title ') or contains(@class,' ditaot-d/ditaval-startprop ') or
+              contains(@class, ' topic/prolog ') or contains(@class, ' topic/topic ')])"/>
         <!--xsl:apply-templates select="." mode="buildRelationships"/-->
         <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
         <xsl:apply-templates select="." mode="topicEpilog"/>
@@ -276,6 +275,7 @@ See the accompanying LICENSE file for applicable license.
             <fo:block xsl:use-attribute-sets="topic.title">
                 <xsl:apply-templates select="." mode="customTopicAnchor"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
+                <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
                 <xsl:for-each select="*[contains(@class,' topic/title ')]">
                     <xsl:apply-templates select="." mode="getTitle"/>
                 </xsl:for-each>
@@ -283,8 +283,8 @@ See the accompanying LICENSE file for applicable license.
 
             <xsl:choose>
               <xsl:when test="$chapterLayout='BASIC'">
-                  <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                     contains(@class, ' topic/prolog '))]"/>
+                  <xsl:apply-templates select="* except(*[contains(@class, ' topic/title ') or contains(@class,' ditaot-d/ditaval-startprop ') or
+                      contains(@class, ' topic/prolog ') or contains(@class, ' topic/topic ')])"/>
                   <!--xsl:apply-templates select="." mode="buildRelationships"/-->
               </xsl:when>
               <xsl:otherwise>
@@ -347,6 +347,7 @@ See the accompanying LICENSE file for applicable license.
 
             <fo:block xsl:use-attribute-sets="topic.title">
                 <xsl:apply-templates select="." mode="customTopicAnchor"/>
+                <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <xsl:for-each select="*[contains(@class,' topic/title ')]">
                     <xsl:apply-templates select="." mode="getTitle"/>
@@ -355,8 +356,8 @@ See the accompanying LICENSE file for applicable license.
 
             <xsl:choose>
               <xsl:when test="$appendixLayout='BASIC'">
-                  <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                     contains(@class, ' topic/prolog '))]"/>
+                  <xsl:apply-templates select="* except(*[contains(@class, ' topic/title ') or contains(@class,' ditaot-d/ditaval-startprop ') or
+                      contains(@class, ' topic/prolog ') or contains(@class, ' topic/topic ')])"/>
                   <!--xsl:apply-templates select="." mode="buildRelationships"/-->
               </xsl:when>
               <xsl:otherwise>
@@ -419,6 +420,7 @@ See the accompanying LICENSE file for applicable license.
       <fo:block xsl:use-attribute-sets="topic.title">
         <xsl:apply-templates select="." mode="customTopicAnchor"/>
         <xsl:call-template name="pullPrologIndexTerms"/>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
         <xsl:for-each select="*[contains(@class,' topic/title ')]">
           <xsl:apply-templates select="." mode="getTitle"/>
         </xsl:for-each>
@@ -426,8 +428,8 @@ See the accompanying LICENSE file for applicable license.
           
       <xsl:choose>
         <xsl:when test="$appendicesLayout='BASIC'">
-          <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                             contains(@class, ' topic/prolog '))]"/>
+          <xsl:apply-templates select="* except(*[contains(@class, ' topic/title ') or contains(@class,' ditaot-d/ditaval-startprop ') or
+                contains(@class, ' topic/prolog ') or contains(@class, ' topic/topic ')])"/>
           <!--xsl:apply-templates select="." mode="buildRelationships"/-->
         </xsl:when>
         <xsl:otherwise>
@@ -497,6 +499,7 @@ See the accompanying LICENSE file for applicable license.
             <fo:block xsl:use-attribute-sets="topic.title">
                 <xsl:apply-templates select="." mode="customTopicAnchor"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
+                <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
                 <xsl:for-each select="*[contains(@class,' topic/title ')]">
                     <xsl:apply-templates select="." mode="getTitle"/>
                 </xsl:for-each>
@@ -504,8 +507,8 @@ See the accompanying LICENSE file for applicable license.
 
             <xsl:choose>
               <xsl:when test="$partLayout='BASIC'">
-                  <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                     contains(@class, ' topic/prolog '))]"/>
+                  <xsl:apply-templates select="* except(*[contains(@class, ' topic/title ') or contains(@class,' ditaot-d/ditaval-startprop ') or
+                      contains(@class, ' topic/prolog ') or contains(@class, ' topic/topic ')])"/>
                   <!--xsl:apply-templates select="." mode="buildRelationships"/-->
               </xsl:when>
               <xsl:otherwise>
@@ -562,6 +565,7 @@ See the accompanying LICENSE file for applicable license.
                     <fo:block xsl:use-attribute-sets="topic.title">
                         <xsl:apply-templates select="." mode="customTopicAnchor"/>
                         <xsl:call-template name="pullPrologIndexTerms"/>
+                        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
                         <xsl:for-each select="*[contains(@class,' topic/title ')]">
                             <xsl:apply-templates select="." mode="getTitle"/>
                         </xsl:for-each>
@@ -569,8 +573,8 @@ See the accompanying LICENSE file for applicable license.
 
                     <xsl:choose>
                       <xsl:when test="$noticesLayout='BASIC'">
-                          <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                             contains(@class, ' topic/prolog '))]"/>
+                          <xsl:apply-templates select="* except(*[contains(@class, ' topic/title ') or contains(@class,' ditaot-d/ditaval-startprop ') or
+                              contains(@class, ' topic/prolog ') or contains(@class, ' topic/topic ')])"/>
                           <!--xsl:apply-templates select="." mode="buildRelationships"/-->
                       </xsl:when>
                       <xsl:otherwise>
@@ -623,11 +627,12 @@ See the accompanying LICENSE file for applicable license.
                          </xsl:attribute>
                          <xsl:apply-templates select="." mode="customTopicAnchor"/>
                          <xsl:call-template name="pullPrologIndexTerms"/>
+                         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
                          <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                              <xsl:apply-templates select="." mode="getTitle"/>
                          </xsl:for-each>
                      </fo:block>
-                     <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
+                     <xsl:apply-templates select="*[not(contains(@class,' topic/title ') or contains(@class,' ditaot-d/ditaval-startprop '))]"/>
                  </fo:block>
    </xsl:template>
 
@@ -779,6 +784,7 @@ See the accompanying LICENSE file for applicable license.
                               </fo:block>
                             </xsl:if>
                             <xsl:apply-templates select="*[contains(@class,' topic/body ')]/*"/>
+                            <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]"/>
 
                             <xsl:if test="*[contains(@class,' topic/related-links ')]//
                                           *[contains(@class,' topic/link ')][not(@role) or @role!='child']">

@@ -818,6 +818,10 @@ public final class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER = "generatecopyouter";
     /**Constants for extensive params used in ant invoker(onlytopicinmap).*/
     public static final String ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP = "onlytopicinmap";
+    /**Constants for extensive params used in ant invoker(crawl).*/
+    public static final String ANT_INVOKER_EXT_PARAM_CRAWL = "crawl";
+    public static final String ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_MAP = "map";
+    public static final String ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_TOPIC = "topic";
     /**Constants for extensive params used in ant invoker(validate).*/
     public static final String ANT_INVOKER_EXT_PARAM_VALIDATE = "validate";
     /**Constants for extensive params used in ant invoker(outputdir).*/
@@ -966,9 +970,16 @@ public final class Constants {
     public static final String ARGS_DRAFT_YES = "yes";
     public static final String ARGS_DRAFT_NO = "no";
 
-    /**constants for indexterm prefix(See).*/
+    /**constants for indexterm prefix(See).
+     *
+     * @deprecated since 3.2
+     **/
     public static final String IndexTerm_Prefix_See = "See";
-    /**constants for indexterm prefix(See also).*/
+    /**constants for indexterm prefix(See also).
+     *
+     * @deprecated since 3.2
+     **/
+    @Deprecated
     public static final String IndexTerm_Prefix_See_Also = "See also";
     /**name attribute.*/
     public static final String ATTRIBUTE_NAME_NAME = "name";

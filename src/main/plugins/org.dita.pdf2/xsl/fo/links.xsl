@@ -237,6 +237,17 @@ See the accompanying LICENSE file for applicable license.
     </xsl:call-template>
     </xsl:template>
 
+    <xsl:template match="*[contains(@class, ' topic/dlentry ')]" mode="retrieveReferenceTitle">
+      <xsl:apply-templates select="*[contains(@class,' topic/dt ')][1]" mode="retrieveReferenceTitle"/>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' topic/dt ')]" mode="retrieveReferenceTitle">
+      <xsl:apply-templates select="." mode="text-only"/>
+    </xsl:template>
+  
+    <xsl:template match="*[contains(@class, ' topic/title ')]" mode="retrieveReferenceTitle">
+      <xsl:apply-templates select=".." mode="retrieveReferenceTitle"/>
+    </xsl:template>
+
     <!-- Default rule: if element has a title, use that, otherwise return '#none#' -->
     <xsl:template match="*" mode="retrieveReferenceTitle" >
         <xsl:choose>
@@ -489,7 +500,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
     </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/link ')]" mode="processLink">
+  <xsl:template match="*[contains(@class,' topic/link ')][not(empty(@href) or @href='')]" mode="processLink">
     <xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
     <xsl:variable name="element" select="key('key_anchor',$destination, $root)[1]"/>
 
@@ -544,6 +555,21 @@ See the accompanying LICENSE file for applicable license.
       <xsl:with-param name="linkScope" select="$linkScope"/>
     </xsl:call-template>
     </fo:block>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class,' topic/link ')][empty(@href) or @href='']" mode="processLink">   
+    <xsl:if test="*[contains(@class, ' topic/linktext ')]">
+      <fo:block xsl:use-attribute-sets="link">
+        <fo:inline>
+          <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
+        </fo:inline>
+        <xsl:if test="*[contains(@class, ' topic/desc ')]">
+          <fo:block xsl:use-attribute-sets="link__shortdesc">
+            <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
+          </fo:block>
+        </xsl:if>
+      </fo:block>
+    </xsl:if>
   </xsl:template>
 
     <xsl:template name="buildBasicLinkDestination">

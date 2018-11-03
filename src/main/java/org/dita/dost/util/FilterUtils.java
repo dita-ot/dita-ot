@@ -249,7 +249,7 @@ public final class FilterUtils {
     @VisibleForTesting
     List<Flag> extCheckFlag(final QName[] propList, final List<String> attValue) {
         final List<Flag> res = new ArrayList<>();
-        for (final QName attName : Arrays.asList(propList)) {
+        for (final QName attName : propList) {
             for (final String attSubValue : attValue) {
                 Action filterAction = filterMap.get(new FilterKey(attName, attSubValue));
                 if (filterAction == null) {
@@ -373,7 +373,7 @@ public final class FilterUtils {
     private String getLabelValue(final QName propName, final String attrPropsValue) {
         if (attrPropsValue != null) {
             int propStart = -1;
-            if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.indexOf(" " + propName + "(", 0) != -1) {
+            if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.contains(" " + propName + "(")) {
                 propStart = attrPropsValue.indexOf(propName + "(");
             }
             if (propStart != -1) {

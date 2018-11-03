@@ -67,6 +67,15 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("reltableheader.ditamap"))
                 .test();
+    }    
+    
+    @Test
+    public void testreltableTextlink() throws Throwable {
+        builder().name("reltableTextlink")
+                .transtype(PREPROCESS)
+                .input(Paths.get("1132.ditamap"))
+                .errorCount(1)
+                .test();
     }
 
     @Test
@@ -498,7 +507,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("badconref.dita"))
                 .put("validate", "false")
-                .warnCount(1)
+                .warnCount(2)
                 .errorCount(2)
                 .test();
     }
@@ -846,6 +855,54 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(XHTML)
                 .input(Paths.get("input.ditamap"))
                 .put("onlytopic.in.map", "false")
+                .test();
+    }
+
+    @Test
+    public void testCrawlTopic() throws Throwable {
+        builder().name("crawl_topic")
+                .transtype(XHTML)
+                .input(Paths.get("input.ditamap"))
+                .put("link-crawl", "topic")
+                .test();
+    }
+
+    @Test
+    public void testCrawlTopicPreprocess() throws Throwable {
+        builder().name("crawl_topic")
+                .transtype(PREPROCESS)
+                .input(Paths.get("input.ditamap"))
+                .put("link-crawl", "topic")
+                .test();
+    }
+
+    @Test
+    public void testCrawlMap() throws Throwable {
+        builder().name("crawl_map")
+                .transtype(XHTML)
+                .input(Paths.get("input.ditamap"))
+                .put("link-crawl", "map")
+                .errorCount(2)
+                .warnCount(2)
+                .test();
+    }
+
+    @Test
+    public void testCrawlMapPreprocess() throws Throwable {
+        builder().name("crawl_map")
+                .transtype(PREPROCESS)
+                .input(Paths.get("input.ditamap"))
+                .put("link-crawl", "map")
+                .errorCount(2)
+                .warnCount(2)
+                .test();
+    }
+
+    @Test
+    public void testRng() throws Throwable {
+        builder().name("rng")
+                .transtype(PREPROCESS)
+                .input(Paths.get("root.ditamap"))
                 .test();
     }
 

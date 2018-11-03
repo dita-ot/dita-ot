@@ -140,7 +140,6 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
         destdir="${dita.output.dir}"
         reloadstylesheet="${dita.xhtml.reloadstylesheet}"
-        classpathref="dost.class.path"
         extension="${out.ext}" style="${args.xsl}"
         filenameparameter="FILENAME"
         filedirparameter="FILEDIR">
@@ -164,7 +163,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="INDEXSHOW" expression="${args.indexshow}" if:set="args.indexshow" />
         <param name="genDefMeta" expression="${args.gen.default.meta}" if:set="args.gen.default.meta" />
         <param name="OUTEXT" expression="${out.ext}" if:set="out.ext" />
-        <param name="BASEDIR" expression="${basedir}"/>
+        <param name="BASEDIR" expression="${dita.dir}"/>
         <param name="OUTPUTDIR" expression="${dita.output.dir}"/>
         <param name="DBG" expression="${args.debug}" if:set="args.debug"/>
         <param name="defaultLanguage" expression="${default.language}"/>

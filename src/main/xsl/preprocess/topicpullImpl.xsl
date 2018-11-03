@@ -363,17 +363,23 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
               <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
-              <!--grab type, text and metadata, as long there's an href to grab from, otherwise error-->
+              <!--grab type, text and metadata, as long there's an href to grab from, otherwise allow local linktext, otherwise error-->
               <xsl:choose>
-                <xsl:when test="@href=''"/>
+                <xsl:when test="@href=''">
+                  <xsl:apply-templates/>
+                </xsl:when>
                 <xsl:when test="@href">
                   <xsl:apply-templates select="." mode="topicpull:get-stuff">
                     <xsl:with-param name="localtype" select="$type" as="xs:string?"/>
                     <xsl:with-param name="targetElement" select="$targetElement" as="element()?"/>
                   </xsl:apply-templates>
                 </xsl:when>
+                <xsl:when test="*[contains(@class, ' topic/linktext ')]">
+                  <xsl:apply-templates/>
+                </xsl:when>
                 <xsl:otherwise>
                   <xsl:apply-templates select="." mode="ditamsg:missing-href"/>
+                  <xsl:apply-templates/>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:otherwise>
@@ -471,7 +477,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:template match="*[dita-ot:is-link(.)]">
     <xsl:choose>
       <xsl:when test="normalize-space(@href)='' or empty(@href)">
-        <xsl:if test="empty(@keyref)">
+        <xsl:if test="empty(@keyref) and @href">
           <!-- If keyref is specified, keyref code can generate message about unresolved key -->
           <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
         </xsl:if>
@@ -785,6 +791,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:otherwise>
     </xsl:choose>
     
+  </xsl:template>
+  
+  <!-- If a link is to a title, assume the parent is the real target, process accordingly -->
+  <xsl:template match="*[contains(@class,' topic/title ')]" mode="topicpull:resolvelinktext">
+    <xsl:apply-templates select=".." mode="topicpull:resolvelinktext"/>
   </xsl:template>
   
   <!-- Get the link text from a specific topic. -->
@@ -1110,12 +1121,15 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Getting text from a dlentry target: use the contents of the term -->
   <xsl:template match="*[contains(@class, ' topic/dlentry ')][*[contains(@class,' topic/dt ')]]"
     mode="topicpull:resolvelinktext">
-    
     <xsl:variable name="target-text" as="xs:string*">
       <xsl:apply-templates
         select="*[contains(@class,' topic/dt ')][1]" mode="text-only"/>
     </xsl:variable>
     <xsl:value-of select="normalize-space(string-join($target-text, ''))"/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/dt ')]" mode="topicpull:resolvelinktext">
+    <xsl:apply-templates select="." mode="text-only"/>
   </xsl:template>
   
   <!--getting the shortdesc for a link; called from main mode template for link/xref, 

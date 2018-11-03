@@ -105,6 +105,7 @@ See the accompanying LICENSE file for applicable license.
                 </fo:wrapper>
                 <xsl:apply-templates select="." mode="customTopicAnchor"/>
                 <xsl:call-template name="pullPrologIndexTerms"/>
+                <xsl:apply-templates select="preceding-sibling::*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
                 <xsl:apply-templates select="." mode="getTitle"/>
             </fo:block>
         </fo:block>
@@ -519,36 +520,41 @@ See the accompanying LICENSE file for applicable license.
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
+    
+    <xsl:function name="dita-ot:formatShortdescAsBlock" as="xs:boolean">
+        <xsl:param name="ctx" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="not($ctx/parent::*[contains(@class,' topic/abstract ')])">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:when test="$ctx/preceding-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
+                contains(@class,' topic/fig ') or contains(@class,' topic/lines ') or
+                contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
+                contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
+                contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
+                contains(@class,' topic/table ') or contains(@class,' topic/ul ') or
+                contains(@class,' topic/div ')]">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:when test="$ctx/following-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
+                contains(@class,' topic/fig ') or contains(@class,' topic/lines ') or
+                contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
+                contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
+                contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
+                contains(@class,' topic/table ') or contains(@class,' topic/ul ') or
+                contains(@class,' topic/div ')]">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 
     <!-- For SF Bug 2879171: modify so that shortdesc is inline when inside
          abstract with only other text or inline markup. -->
     <xsl:template match="*[contains(@class,' topic/shortdesc ')]">
-        <xsl:variable name="format-as-block" as="xs:boolean">
-            <xsl:choose>
-                <xsl:when test="not(parent::*[contains(@class,' topic/abstract ')])">
-                  <xsl:sequence select="true()"/>
-                </xsl:when>
-                <xsl:when test="preceding-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
-                                         contains(@class,' topic/fig ') or contains(@class,' topic/lines ') or
-                                         contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
-                                         contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
-                                         contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
-                                         contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">
-                  <xsl:sequence select="true()"/>
-                </xsl:when>
-                <xsl:when test="following-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
-                                         contains(@class,' topic/fig ') or contains(@class,' topic/lines ') or
-                                         contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
-                                         contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
-                                         contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
-                                         contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">
-                  <xsl:sequence select="true()"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:sequence select="false()"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
+        <xsl:variable name="format-as-block" as="xs:boolean" select="dita-ot:formatShortdescAsBlock(.)"/>
         <xsl:choose>
             <xsl:when test="$format-as-block">
                 <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
@@ -560,9 +566,6 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*" mode="format-shortdesc-as-block">
-        <!--fo:block xsl:use-attribute-sets="shortdesc" id="{@id}">
-            <xsl:apply-templates/>
-        </fo:block-->
         <!--compare the length of shortdesc with the got max chars-->
         <fo:block xsl:use-attribute-sets="topic__shortdesc">
             <xsl:call-template name="commonattributes"/>
@@ -570,6 +573,9 @@ See the accompanying LICENSE file for applicable license.
             <xsl:if test="string-length(.) lt $maxCharsInShortDesc">
                 <!-- Low-strength keep to avoid conflict with keeps on titles. -->
                 <xsl:attribute name="keep-with-next.within-page">5</xsl:attribute>
+            </xsl:if>
+            <xsl:if test="parent::*[contains(@class,' topic/abstract ')]">
+                <xsl:attribute name="start-indent">from-parent(start-indent)</xsl:attribute>
             </xsl:if>
             <xsl:apply-templates/>
         </fo:block>
@@ -691,7 +697,10 @@ See the accompanying LICENSE file for applicable license.
         <fo:block xsl:use-attribute-sets="section">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:section-heading"/>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
+            <fo:block xsl:use-attribute-sets="section__content">
+                <xsl:apply-templates select="node() except (*[contains(@class,' topic/title ')])"/>
+            </fo:block>
         </fo:block>
     </xsl:template>
 
@@ -705,7 +714,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' topic/example ')]">
         <fo:block xsl:use-attribute-sets="example">
             <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
+            <fo:block xsl:use-attribute-sets="example__content">
+                <xsl:apply-templates select="node() except (*[contains(@class,' topic/title ')])"/>
+            </fo:block>
         </fo:block>
     </xsl:template>
 
@@ -934,7 +946,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/lq ')]">
-        <fo:block>
+        <fo:block xsl:use-attribute-sets="lq">
             <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="@href or @reftitle">

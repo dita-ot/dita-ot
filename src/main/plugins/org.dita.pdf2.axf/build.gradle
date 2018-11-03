@@ -14,10 +14,11 @@ description = """DITA Open Toolkit PDF plug-in for AntennaHouse Renderer."""
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 dependencies {
-    compile rootProject
-    testCompile group: 'junit', name: 'junit', version:'4.12'
+    implementation rootProject
+    testImplementation group: 'junit', name: 'junit', version:'4.12'
 }
 sourceSets {
     main {

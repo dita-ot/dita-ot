@@ -1,3 +1,9 @@
+---
+name: Pull request
+about: Propose changes to fix an issue or implement a new feature
+
+---
+
 ## Description
 <!-- Describe your changes in detail. -->
 

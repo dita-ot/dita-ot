@@ -34,11 +34,12 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    exclude-result-prefixes="xs opentopic opentopic-func ot-placeholder opentopic-index"
+    exclude-result-prefixes="xs dita-ot opentopic opentopic-func ot-placeholder opentopic-index"
     version="2.0">
   
     <xsl:variable name="map" select="//opentopic:map"/>
@@ -76,6 +77,9 @@ See the accompanying LICENSE file for applicable license.
                             <xsl:attribute name="internal-destination">
                               <xsl:call-template name="generate-toc-id"/>
                             </xsl:attribute>
+                            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop[@changebar]" mode="changebar">
+                                <xsl:with-param name="changebar-id" select="concat(dita-ot:generate-changebar-id(.),'-toc')"/>
+                            </xsl:apply-templates>
                             <xsl:apply-templates select="$mapTopicref" mode="tocPrefix"/>
                             <fo:inline xsl:use-attribute-sets="__toc__title">
                                 <xsl:variable name="pulledNavigationTitle" as="item()*">
@@ -83,6 +87,9 @@ See the accompanying LICENSE file for applicable license.
                                 </xsl:variable>
                                 <xsl:apply-templates select="$pulledNavigationTitle" mode="dropCopiedIds"/>
                             </fo:inline>
+                            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop[@changebar]" mode="changebar">
+                                <xsl:with-param name="changebar-id" select="concat(dita-ot:generate-changebar-id(.),'-toc')"/>
+                            </xsl:apply-templates>
                             <fo:inline xsl:use-attribute-sets="__toc__page-number">
                                 <fo:leader xsl:use-attribute-sets="__toc__leader"/>
                                 <fo:page-number-citation>

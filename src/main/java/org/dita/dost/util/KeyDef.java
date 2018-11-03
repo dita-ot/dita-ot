@@ -85,14 +85,12 @@ public class KeyDef {
      * @throws DITAOTException if writing configuration file failed
      */
     public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
-        OutputStream out = null;
         XMLStreamWriter keydef = null;
-        try {
-            out = new FileOutputStream(keydefFile);
+        try (OutputStream out = new FileOutputStream(keydefFile)) {
             keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out, "UTF-8");
             keydef.writeStartDocument();
             keydef.writeStartElement(ELEMENT_STUB);
-            for (final KeyDef k: keydefs) {
+            for (final KeyDef k : keydefs) {
                 keydef.writeStartElement(ELEMENT_KEYDEF);
                 keydef.writeAttribute(ATTRIBUTE_KEYS, k.keys);
                 if (k.href != null) {
@@ -116,12 +114,8 @@ public class KeyDef {
             if (keydef != null) {
                 try {
                     keydef.close();
-                } catch (final XMLStreamException e) {}
-            }
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (final IOException e) {}
+                } catch (final XMLStreamException e) {
+                }
             }
         }
     }

@@ -95,7 +95,7 @@ See the accompanying LICENSE file for applicable license.
   
   <message id="DOTJ018I" type="INFO">
     <reason>Log file '%1' was generated successfully in directory '%2'.</reason>
-    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the DITA-OT user guide.</response>
+    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the DITA-OT documentation.</response>
   </message>
   
   <message id="DOTJ020W" type="WARN">
@@ -121,12 +121,12 @@ See the accompanying LICENSE file for applicable license.
   
   <message id="DOTJ025E" type="ERROR">
     <reason>The input to the "topic merge" transform process could not be found.</reason>
-    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT User Guide for additional causes.</response>
+    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT documentation for additional causes.</response>
   </message>
   
   <message id="DOTJ026E" type="ERROR">
     <reason>The "topic merge" did not generate any output.</reason>
-    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT User Guide for additional causes.</response>
+    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT documentation for additional causes.</response>
   </message>
 
   <message id="DOTJ028E" type="ERROR">
@@ -253,7 +253,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ052E" type="ERROR">
     <reason>Code reference charset "%1" not supported.</reason>
-    <response>See the DITA-OT User guide for supported charset values on the format attribute.</response>
+    <response>See the DITA-OT documentation for supported charset values on the format attribute.</response>
   </message>
 
   <!-- Obsolete since 2.3 -->
@@ -380,6 +380,16 @@ See the accompanying LICENSE file for applicable license.
   <message id="DOTJ077F" type="FATAL">
     <reason>Invalid action attribute '%1' on DITAVAL property.</reason>
     <response></response>
+  </message>
+  
+  <message id="DOTJ078F" type="FATAL">
+    <reason>Input file '%1' could not be loaded.</reason>
+    <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
+  </message>
+  
+  <message id="DOTJ079E" type="ERROR">
+    <reason>File '%1' could not be loaded.</reason>
+    <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
   </message>
 
   <!-- End of Java Messages -->
@@ -752,6 +762,22 @@ See the accompanying LICENSE file for applicable license.
     <reason>Removing broken link to "%1".</reason>
     <response/>
   </message>
+  
+  <message id="DOTX074W" type="WARN">
+    <reason>No formatting defined for unknown class attribute value "%1".</reason>
+    <response/>
+  </message>
+
+  <message id="DOTX075W" type="WARN">
+    <reason>A content reference in a constrained document type is pulling content from an unconstrained document type. The reference will resolve, but may result in content that violates one of the document constraints in "%1".</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX076E" type="ERROR">
+    <reason>A content reference in a constrained document type cannot be resolved because it would violate one of the document constraints "%1".</reason>
+    <response>The current constrained document may only reuse content from documents with equivalent constraints.</response>
+  </message>
+
 
   <!-- End of XSL Messages --> 
       

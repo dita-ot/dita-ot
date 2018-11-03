@@ -6,7 +6,7 @@ Copyright 2011 Jarno Elovirta
 
 See the accompanying LICENSE file for applicable license.
 -->
-<plugin id="org.dita.xhtml">
+<plugin id="org.dita.xhtml" version="${version}">
   <!-- extension points -->
   <extension-point id="dita.xsl.xhtml" name="HTML/XHTML XSLT import"/>
   <extension-point id="dita.conductor.html.param" name="HTML XSLT parameters"/>

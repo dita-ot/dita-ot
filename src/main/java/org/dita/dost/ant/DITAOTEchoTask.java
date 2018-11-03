@@ -101,7 +101,7 @@ public final class DITAOTEchoTask extends Echo {
                 prop.set(idx, p.getValue());
             }
         }
-        return prop.toArray(new String[prop.size()]);
+        return prop.toArray(new String[0]);
     }
 
 }

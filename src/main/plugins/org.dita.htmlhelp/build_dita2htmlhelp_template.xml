@@ -139,12 +139,12 @@ See the accompanying LICENSE file for applicable license.
     <taskdef name="check-lang" classname="org.dita.dost.ant.CheckLang"/>
     <taskdef name="convert-lang" classname="org.dita.dost.ant.ConvertLang"/>
     <check-lang message="Check Language"
-                basedir="${basedir}"
+                basedir="${dita.dir}"
                 tempdir="${dita.temp.dir}"
                 inputmap="${user.input.file}"
                 outputdir="${dita.output.dir}"/>
     <convert-lang message="Convert Language"
-                  basedir="${basedir}"
+                  basedir="${dita.dir}"
                   outputdir="${dita.output.dir}"
                   langcode="${htmlhelp.locale}"/>
   </target>

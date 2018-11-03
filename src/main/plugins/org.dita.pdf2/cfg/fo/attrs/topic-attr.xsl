@@ -213,7 +213,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:attribute name="start-indent">72pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="div">
+    <xsl:attribute-set name="div" use-attribute-sets="common.block">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="p" use-attribute-sets="common.block">
@@ -221,6 +221,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq" use-attribute-sets="common.block">
+        <xsl:attribute name="start-indent">30pt + from-parent(start-indent)</xsl:attribute>
+        <xsl:attribute name="end-indent">15pt + from-parent(end-indent)</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq_simple" use-attribute-sets="common.block">
@@ -452,6 +454,9 @@ See the accompanying LICENSE file for applicable license.
         <xsl:attribute name="provisional-label-separation">2mm</xsl:attribute>
         <xsl:attribute name="line-height">1.2</xsl:attribute>
         <xsl:attribute name="start-indent">0pt</xsl:attribute>
+        <xsl:attribute name="font-weight">normal</xsl:attribute>
+        <xsl:attribute name="font-style">normal</xsl:attribute>
+        <xsl:attribute name="text-decoration">no-underline no-overline</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__align__left">

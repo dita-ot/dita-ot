@@ -1,0 +1,100 @@
+import java.nio.file.Paths
+
+import static groovy.io.FileType.FILES
+
+def licenses = [
+        [name: 'avalon-framework', title: 'Avalon Framework', license: ['apache2.txt']],
+        [name: 'batik', title: 'Batik', license: ['apache2.txt']],
+        [name: 'xmlgraphics-commons', title: 'Apache XML Graphics Commons', license: ['apache2.txt']],
+        [name: 'commons-io', title: 'Commons IO', license: ['apache2.txt']],
+        [name: 'xercesImpl', title: 'Xerces2 Java', license: ['apache2.txt']],
+        [name: 'xml-apis', title: 'XML Commons External', license: ['apache2.txt', 'LICENSE.dom-documentation.txt', 'LICENSE.dom-software.txt', 'LICENSE.sax.txt']],
+        [name: 'xml-resolver', title: 'Resolver', license: ['apache2.txt']],
+        [name: 'Saxon-HE', title: 'Saxon-HE', license: ['mpl2.txt', 'CERN.txt', 'JAMESCLARK.txt', 'THAI.txt', 'UNICODE.txt']],
+        [name: 'icu4j', title: 'ICU4J', license: ['icu.txt']],
+        [name: 'ant', title: 'Ant', license: ['apache2.txt']],
+        [name: 'guava', title: 'Guava', license: ['apache2.txt']],
+        [name: 'slf4j', title: 'SLF4J', license: ['mit-slf4j.txt']],
+        [name: 'jcl-over-slf4j', title: 'SLF4J', license: ['mit-slf4j.txt']],
+        [name: 'logback', title: 'Logback', license: ['epl-1.0.txt']],
+        [name: 'jackson', title: 'Jackson', license: ['apache2.txt']],
+        [name: 'jing', title: 'Jing', license: ['bsd-jing.txt']],
+        [name: 'gradle-wrapper'],
+        [name: 'org.lwdita'],
+        [name: 'fo'],
+        [name: 'eclipsehelp'],
+        [name: 'eclipsehelp'],
+        [name: 'htmlhelp'],
+        [name: 'htmlhelp'],
+        [name: 'xep'],
+        [name: 'axf'],
+        [name: 'dost'],
+        [name: 'error_prone_annotations'],
+        [name: null, title: 'DITA 1.1 DTDs and Schemas', license: ['oasis-dita11.txt']],
+        [name: null, title: 'DITA 1.2 DTDs and Schemas', license: ['oasis-dita12.txt']],
+        [name: null, title: 'DITA 1.3 RNGs, DTDs, and Schemas', license: ['oasis-dita13.txt']],
+        [name: null, title: 'Lightweight DITA DTDs and samples', license: ['oasis-lwdita.txt']],
+        // org.lwdita plugin
+        [name: 'flexmark', title: 'flexmark-java', license: ['bsd-flexmark.txt']],
+        [name: 'htmlparser', title: 'Validator.nu HTML Parser', license: ['htmlparser-license.txt']],
+        [name: 'autolink', title: 'autolink-java', license: ['autolink-license.txt']],
+]
+
+task generateNotices() {
+    def notices = file("${distTempDir}/NOTICES.txt")
+    outputs.file(notices)
+    doLast {
+        file(distTempDir).traverse(type: FILES, nameFilter: ~/.*\.jar$/) {
+            def name = it.getName()
+            def key = licenses.find { it.name != null && name.startsWith(it.name) }
+            if (key == null) {
+                throw new GradleScriptException("License for ${name} not found", new RuntimeException());
+            }
+        }
+
+        notices.withWriter('UTF-8') { out ->
+            out.writeLine("""DITA Open Toolkit: Third Party Notices
+
+This Notices file contains certain notices and important information that
+DITA Open Toolkit Project licensors and contributors (the "Project") are
+required to provide to you with respect to certain third party components
+included in DITA Open Toolkit (the "Program").
+
+Your use of the Program is governed by the license terms set forth in the
+"LICENSE" file or other license terms and conditions accompanying the
+Program, and NOT by any terms contained in this Notices file below.  The notices
+and information below are provided for informational purposes only.
+
+This Notices file may identify information or components listed in the
+agreements for the Program that are not used by, or that were not shipped with,
+the Program as you installed it.
+
+IMPORTANT: The Project does not represent or warrant that the information in
+this Notices file is accurate. Third party websites are independent of the
+Project and the Project does not represent or warrant that the information on
+any third party web site referenced in this Notices file is accurate. The
+Project disclaims any and all liability for errors and omissions or for any
+damages accruing from the use of this Notices file or its contents, including
+without limitation URLs or references to any third party websites.
+""")
+            licenses.findAll { it.license != null }
+                    .sort { it.title }
+                    .each { license ->
+                out.writeLine('=' * 80)
+                out.writeLine("""
+The Program includes the following software component, which was obtained under
+the following terms and conditions:
+""")
+                out.writeLine(license.title)
+                out.writeLine('')
+                license.license.each {
+                    out.writeLine('-' * 80)
+                    out.writeLine('')
+                    Paths.get("gradle", it).toFile().readLines("UTF-8").each {
+                        out.writeLine(it)
+                    }
+                }
+            }
+        }
+    }
+}

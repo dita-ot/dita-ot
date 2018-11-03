@@ -259,6 +259,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         job.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
         job.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
         job.setOnlyTopicInMap(Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP)));
+        job.setCrawl(input.getAttribute(ANT_INVOKER_EXT_PARAM_CRAWL));
 
         // Set the OutputDir
         final File path = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
@@ -406,12 +407,20 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             }
             failureList.add(currentFile);
         } catch (final FileNotFoundException e) {
-            if (currentFile.equals(rootFile)) {
-                throw new DITAOTException(MessageUtils.getMessage("DOTA069F", params).toString(), e);
+            if (!exists(currentFile)) {
+                if (currentFile.equals(rootFile)) {
+                    throw new DITAOTException(MessageUtils.getMessage("DOTA069F", params).toString(), e);
+                } else if (processingMode == Mode.STRICT) {
+                    throw new DITAOTException(MessageUtils.getMessage("DOTX008E", params).toString(), e);
+                } else {
+                    logger.error(MessageUtils.getMessage("DOTX008E", params).toString());
+                }
+            } else if (currentFile.equals(rootFile)) {
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ078F", params).toString() + " Cannot load file: " + e.getMessage(), e);
             } else if (processingMode == Mode.STRICT) {
-                throw new DITAOTException(MessageUtils.getMessage("DOTX008E", params).toString() + ": " + e.getMessage(), e);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ079E", params).toString() + " Cannot load file: " + e.getMessage(), e);
             } else {
-                logger.error(MessageUtils.getMessage("DOTX008E", params).toString());
+                logger.error(MessageUtils.getMessage("DOTJ079E", params).toString() + " Cannot load file: " + e.getMessage());
             }
             failureList.add(currentFile);
         } catch (final Exception e) {
@@ -548,7 +557,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         if (listFilter.getCoderefTargets().contains(file.filename)) {
             return;
         }
-        if ((isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format))) {
+        if (isFormatDita(file.format) && listFilter.isDitaTopic() &&
+                !job.crawlTopics() &&
+                !listFilter.getConrefTargets().contains(file.filename)) {
+            return;  // Do not process topics linked from within topics
+        } else if ((isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format))) {
             addToWaitList(file);
         } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
             formatSet.add(file);
@@ -701,7 +714,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         resourceOnlySet.addAll(listFilter.getResourceOnlySet());
 
-        if (job.getOnlyTopicInMap()) {
+        if (job.getOnlyTopicInMap() || !job.crawlTopics()) {
             resourceOnlySet.addAll(listFilter.getNonTopicrefReferenceSet());
         }
 

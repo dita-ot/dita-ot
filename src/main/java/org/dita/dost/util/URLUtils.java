@@ -18,6 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
 
 /**
@@ -379,11 +380,7 @@ public final class URLUtils {
             // Get UTF-8 bytes for the remaining sub-string
             byte[] bytes;
             byte b;
-            try {
-                bytes = path.substring(i).getBytes("UTF-8");
-            } catch (final java.io.UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+            bytes = path.substring(i).getBytes(StandardCharsets.UTF_8);
             len = bytes.length;
 
             // For each byte

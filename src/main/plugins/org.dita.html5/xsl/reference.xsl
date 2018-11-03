@@ -24,7 +24,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="setaname"/>
     <table cellpadding="4" cellspacing="0"><!--summary=""-->
       <xsl:call-template name="setid"/>
-      <xsl:attribute name="border" select="if (@frame = 'none') then 0 else 1"/>
+      <xsl:if test="not(@frame = 'none')">
+        <xsl:attribute name="border" select="1"/>
+      </xsl:if>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class">
           <xsl:choose>

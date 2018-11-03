@@ -36,10 +36,6 @@ See the accompanying LICENSE file for applicable license.
     xmlns:rx="http://www.renderx.com/XSL/Extensions"
     version="2.0">
 
-  <!-- FIXME these imports should be moved to shell -->
-  <xsl:import href="topic-attr.xsl"/>
-  <xsl:import href="concept-attr.xsl"/>
-
   <!-- common attribute sets -->
 
   <xsl:attribute-set name="common.border__top">

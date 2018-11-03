@@ -73,7 +73,7 @@
   
   <message id="DOTJ002F" type="FATAL">
     <reason>Unsupported parameter &apos;%1&apos;.</reason>
-    <response>Please refer to the DITA-OT User Guide for supported parameters.</response>
+    <response>Please refer to the DITA-OT documentation for supported parameters.</response>
   </message>
   
   <message id="DOTJ003F" type="FATAL">
@@ -164,7 +164,7 @@
 
   <message id="DOTJ018I" type="INFO">
     <reason>Log file &apos;%1&apos; was generated successfully in directory &apos;%2&apos;.</reason>
-    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the DITA-OT user guide.</response>
+    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the DITA-OT documentation.</response>
   </message>
 
   <!-- 2012-06-08: This message no longer exists in the code; commenting out. -->
@@ -208,12 +208,12 @@
   
   <message id="DOTJ025E" type="ERROR">
     <reason>The input to the &quot;topic merge&quot; transform process could not be found.</reason>
-    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT User Guide for additional causes.</response>
+    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT documentation for additional causes.</response>
   </message>
   
   <message id="DOTJ026E" type="ERROR">
     <reason>The &quot;topic merge&quot; did not generate any output.</reason>
-    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT User Guide for additional causes.</response>
+    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT documentation for additional causes.</response>
   </message>
   
   <!-- 2012-06-08: This message no longer exists in the code; commenting out. -->
@@ -365,7 +365,7 @@
   
   <message id="DOTJ052E" type="ERROR">
     <reason>Code reference charset &quot;%1&quot; not supported.</reason>
-    <response>See the DITA-OT User guide for supported charset values on the format attribute.</response>
+    <response>See the DITA-OT documentation for supported charset values on the format attribute.</response>
   </message>
   
   <message id="DOTJ053W" type="WARN">

@@ -157,9 +157,13 @@ See the accompanying LICENSE file for applicable license.
     </xsl:if>
   </xsl:template>
 
+  <xsl:attribute-set name="navigation">
+    <xsl:attribute name="role">navigation</xsl:attribute>
+  </xsl:attribute-set>
+
   <!--main template for setting up all links after the body - applied to the related-links container-->
   <xsl:template match="*[contains(@class, ' topic/related-links ')]" name="topic.related-links">
-    <nav role="navigation">
+    <nav xsl:use-attribute-sets="navigation">
       <xsl:call-template name="commonattributes"/>
       <xsl:if test="$include.roles = ('child', 'descendant')">
         <xsl:call-template name="ul-child-links"/>

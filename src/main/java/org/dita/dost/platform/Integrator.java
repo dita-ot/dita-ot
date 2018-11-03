@@ -23,9 +23,9 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.xml.XMLConstants;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -115,6 +115,7 @@ public final class Integrator {
     private final Set<String> extensionPoints;
     private final Map<String, Integer> pluginOrder = new HashMap<>();
     private Properties properties;
+    private Set<String> pluginList;
 
     /**
      * Default Constructor.
@@ -127,7 +128,9 @@ public final class Integrator {
         featureTable = new Hashtable<>(16);
         extensionPoints = new HashSet<>();
         try {
-            reader = XMLReaderFactory.createXMLReader();
+            final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+            parserFactory.setNamespaceAware(true);
+            reader = parserFactory.newSAXParser().getXMLReader();
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -147,7 +150,8 @@ public final class Integrator {
         });
         parser = new PluginParser(ditaDir);
         pluginsDoc = XMLUtils.getDocumentBuilder().newDocument();
-//        pluginsDoc.setResult(new StreamResult(new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml")));
+
+        pluginList = getPluginIds(readPlugins());
     }
 
     /**
@@ -223,8 +227,24 @@ public final class Integrator {
             }
         }
 
-        parsePlugin();
+        mergePlugins();
         integrate();
+        logChanges(pluginList, getPluginIds(pluginsDoc));
+    }
+
+    private void logChanges(final Set<String> orig, final Set<String> mod) {
+        final List<String> removed = new ArrayList<String>(orig);
+        removed.removeAll(mod);
+        removed.sort(Comparator.naturalOrder());
+        for (final String p : removed) {
+            logger.warn("Removed " + p);
+        }
+        final List<String> added = new ArrayList<String>(mod);
+        added.removeAll(orig);
+        added.sort(Comparator.naturalOrder());
+        for (final String p : added) {
+            logger.warn("Added " + p);
+        }
     }
 
     /**
@@ -393,7 +413,7 @@ public final class Integrator {
         int offset = 0;
         while (m.find()) {
             final int index = Integer.parseInt(m.group(1));
-            buf.append(res.substring(offset, m.start()));
+            buf.append(res, offset, m.start());
             buf.append("{").append(index - 1).append("}");
             offset = m.end();
         }
@@ -718,10 +738,33 @@ public final class Integrator {
         return true;
     }
 
+    private Document readPlugins() {
+        final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml");
+        if (!plugins.exists()) {
+            return null;
+        }
+        try {
+            return XMLUtils.getDocumentBuilder().parse(plugins);
+        } catch (SAXException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Set<String> getPluginIds(final Document doc) {
+        if (doc == null) {
+            return Collections.emptySet();
+        }
+        final List<Element> ps = toList(doc.getElementsByTagName("plugin"));
+        return ps.stream()
+                .filter(p -> p.getAttributeNode("id") != null)
+                .map(p -> p.getAttribute("id"))
+                .collect(Collectors.toSet());
+    }
+
     /**
-     * Parse plugin configuration files.
+     * Merge plugin configuration files.
      */
-    private void parsePlugin() {
+    private void mergePlugins() {
         final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
         pluginsDoc.appendChild(root);
         if (!descSet.isEmpty()) {
@@ -853,4 +896,12 @@ public final class Integrator {
         }
     }
 
+    /**
+     * Add ID of a plugin that has been removed.
+     *
+     * @param name plugin ID
+     */
+    public void addRemoved(String name) {
+        pluginList.remove(name);
+    }
 }

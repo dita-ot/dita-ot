@@ -14,7 +14,7 @@ apply plugin: 'signing'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
-version = '3.1.3'
+version = '3.2'
 
 description = """DITA Open Toolkit"""
 
@@ -22,7 +22,8 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-     mavenCentral()
+    mavenCentral()
+    jcenter()
 }
 dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
@@ -33,9 +34,18 @@ dependencies {
     compile group: 'com.ibm.icu', name: 'icu4j', version:'61.1'
     compile group: 'org.apache.ant', name: 'ant', version:'1.10.3'
     compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.3'
-    compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+    compile(group: 'com.google.guava', name: 'guava', version: '25.1-jre') {
+        exclude group: 'org.checkerframework', module: 'checker-qual'
+        exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+        exclude group: 'com.google.errorprone:', module: 'error_prone_annotations'
+        exclude group: 'com.google.j2objc', module: 'j2objc-annotations'
+    }
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.6'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'
+    compile group: 'org.dita-ot', name: 'jing', version: '2.0.0'
     runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.3'
     testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
     testCompile group: 'junit', name: 'junit', version:'4.12'
@@ -98,6 +108,8 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
 dependencies {
     testCompile project(':eclipsehelp')
     testCompile project(':htmlhelp')
+    testCompile project(':fo')
+    testCompile project(':fop')
 }
 
 def e2eTestSystemProperties = [
@@ -112,6 +124,7 @@ if (System.getProperty("log_level") != null) {
 task e2eTest(type: Test, dependsOn: 'buildLocal') {
     minHeapSize = "128m"
     maxHeapSize = "1024m"
+    maxParallelForks = 4
     systemProperties = e2eTestSystemProperties
     include '**/EndToEndTest*.class'
 }
@@ -139,7 +152,7 @@ task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":ax
 
 // Distribution
 
-def distTempDir = file("${buildDir}/tmp/dist")
+ext.distTempDir = file("${buildDir}/tmp/dist")
 def distVersion = project.hasProperty("commit") && (!project.hasProperty("tag") || tag.empty) ?
                   "${project.version}+${commit.substring(0, 7)}" :
                   "${project.version}"
@@ -147,11 +160,14 @@ def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "develop" :
                    "${project.version}"
 def bundled = [
-        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.0.6/org.lwdita-2.0.6.zip",
+        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.0.7/org.lwdita-2.0.7.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
         "troff": "https://github.com/dita-ot/org.dita.troff/archive/3.1.1.zip",
-        "tocjs": "https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip"
+        "tocjs": "https://github.com/dita-ot/com.sophos.tocjs/archive/2.5.zip",
+        "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.2.2/org.oasis-open.xdita.v0_2_2.zip"
 ]
+
+apply from: 'gradle/dist.gradle'
 
 task cleanDistTemp(type: Delete) {
     delete distTempDir
@@ -178,6 +194,12 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "LICENSE"
     }
     from ("src/main") {
+        include "plugins/*/plugin.xml"
+        expand(
+                version: project.version
+        )
+    }
+    from ("src/main") {
         exclude "**/.gradle"
         exclude "plugins/**/build.gradle"
         exclude "**/settings.gradle"
@@ -202,6 +224,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/temp"
         include "docsrc/**"
         include "dtd/**"
+        exclude "plugins/*/plugin.xml"
         include "plugins/org.dita.base/**"
         include "plugins/org.dita.eclipsehelp/**"
         include "plugins/org.dita.html5/**"
@@ -293,7 +316,45 @@ task generateJavadocs(type: Javadoc) {
 }
 generateJavadocs.onlyIf { skipDocs() }
 
-task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+def plugins = [
+        "org.dita.eclipsehelp",
+        "org.dita.html5",
+        "org.dita.htmlhelp",
+        "org.dita.pdf2",
+        "org.dita.pdf2.axf",
+        "org.dita.pdf2.fop",
+        "org.dita.pdf2.xep",
+        "org.dita.xhtml",
+]
+
+task distPlugins() {
+    dependsOn plugins.collect{ name ->
+        def taskName = "distPlugin${name.split("\\.").collect{token -> return token.capitalize()}.join("")}"
+        return tasks.create(taskName, Zip) {
+            from ("${distTempDir}/plugins/${name}") {
+                exclude "build"
+                exclude "src"
+                exclude "out"
+            }
+            archiveName "${name}-${version}.zip"
+        }.name
+    }
+}
+distPlugins.mustRunAfter integrateDistPlugins
+
+task distPluginChecksums() {
+    doLast {
+        ant.checksum(algorithm: "SHA-256", fileext: ".sha256") {
+            fileset(dir: "${buildDir}/distributions") {
+                include(name: '*.zip')
+            }
+        }
+    }
+}
+distPluginChecksums.mustRunAfter distPlugins
+generateNotices.mustRunAfter distPlugins
+
+task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
@@ -321,6 +382,7 @@ test {
         'src/test/xsl/common/dita-utilities.xspec',
         'src/test/xsl/common/uri-utils.xspec',
         'src/test/xsl/plugins/org.dita.html5/xsl/functions.xspec',
+        'src/test/xsl/preprocess/conrefImpl.xspec',
         'src/test/xsl/preprocess/maplinkImpl.xspec'
     )
 }
