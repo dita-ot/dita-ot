@@ -17,12 +17,12 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile rootProject
-    testCompile rootProject
-    testCompile group: 'junit', name: 'junit', version:'4.12'
-    testCompile group: 'org.xmlunit', name: 'xmlunit-core', version: '2.3.0'
-    testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
-    testCompile rootProject.sourceSets.test.output
+    implementation rootProject
+    testImplementation rootProject
+    testImplementation group: 'junit', name: 'junit', version:'4.12'
+    testImplementation group: 'org.xmlunit', name: 'xmlunit-core', version: '2.3.0'
+    testImplementation group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
+    testImplementation rootProject.sourceSets.test.output
 }
 
 jar.archiveName = "${project.name}.jar"
