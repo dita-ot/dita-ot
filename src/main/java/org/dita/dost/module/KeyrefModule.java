@@ -260,6 +260,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         if (hrefNode == null) {
             hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
         }
+        if (hrefNode == null && SUBMAP.matches(elem)) {
+            hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_DITA_OT_ORIG_HREF);
+        }
         final boolean isResourceOnly = isResourceOnly(elem);
         for (final KeyScope s: ss) {
             if (hrefNode != null) {
