@@ -92,5 +92,5 @@
     <topicref class="- map/topicref " href="a.xml" keyref="indextermref_link"/>
     <navref class="- map/navref " keyref="navref_link" mapref="a.xml"/>
   </topicgroup>
-  <topicref class="- map/topicref " keyref="copy" href="a.xml" copy-to="a-copy.xml"/>
+  <topicref class="- map/topicref " keyref="copy" href="a-copy.xml" copy-to="a-copy.xml"/>
 </map>
