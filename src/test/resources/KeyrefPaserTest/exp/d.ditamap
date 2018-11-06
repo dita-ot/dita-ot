@@ -3,16 +3,16 @@
   ditaarch:DITAArchVersion="1.2">
 
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup " keyscope="KEY_SCOPE">
-    <topicref class="- map/topicref " format="dead" href="dead" keyref="ks_topicref_link" scope="external" type="dead"/>
-    <topicref class="- map/topicref " keyref="ks_author_link"/>
-    <topicref class="- map/topicref " keyref="ks_data_link"/>
-    <topicref class="- map/topicref " keyref="ks_data-about_link"/>
-    <topicref class="- map/topicref " keyref="ks_publisher_link"/>
-    <topicref class="- map/topicref " keyref="ks_source_link"/>
-    <topicref class="- map/topicref " keyref="ks_indexterm_link"/>
-    <topicref class="- map/topicref " keyref="ks_index-base_link"/>
-    <topicref class="- map/topicref " keyref="ks_indextermref_link"/>
-    <navref class="- map/navref " keyref="ks_navref_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_topicref_link" type="dead"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_author_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_data_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_data-about_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_publisher_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_source_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_indexterm_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_index-base_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_indextermref_link"/>
+    <navref class="- map/navref " keyref="ks_navref_link" mapref="a.xml"/>
 
     <topicref class="- map/topicref " href="a.xml" keyref="topicref_link" type="dead"/>
     <topicref class="- map/topicref " href="a.xml" keyref="author_link"/>
