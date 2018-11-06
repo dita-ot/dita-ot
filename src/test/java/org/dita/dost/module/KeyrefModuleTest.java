@@ -153,8 +153,8 @@ public class KeyrefModuleTest {
         final Job.FileInfo subMapInfo = module.job.getFileInfo(subMap);
         final Optional<ResolveTask> subMapTask =  res.stream().filter(r -> r.in.equals(subMapInfo)).findFirst();
 
-        assertFalse(subMapTask.isPresent());
-//        assertEquals(subMapTask.get().scope, childScope);
+        assertTrue(subMapTask.isPresent());
+        assertEquals(subMapTask.get().scope, childScope);
 
         assertXMLEqual(exp, act);
     }
