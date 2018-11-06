@@ -122,6 +122,19 @@ public class KeyrefPaserTest {
     }
 
     @Test
+    public void testMapWithKeyScopes() throws Exception {
+        final KeyrefPaser parser = new KeyrefPaser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(srcDir));
+        parser.setKeyDefinition(keyDefinition);
+        parser.setCurrentFile(new File(srcDir, "d.ditamap").toURI());
+        parser.write(new File(srcDir, "d.ditamap"));
+
+        assertXMLEqual(new InputSource(new File(expDir, "d.ditamap").toURI().toString()),
+                new InputSource(new File(srcDir, "d.ditamap").toURI().toString()));
+    }
+
+    @Test
     public void testDomToSax() throws TransformerConfigurationException, SAXException, IOException, ParserConfigurationException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         final DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         
