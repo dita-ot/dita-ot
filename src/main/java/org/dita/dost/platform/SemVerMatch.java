@@ -86,7 +86,7 @@ public class SemVerMatch {
         }
     }
 
-    private static final Pattern MATCH_PATTERN = Pattern.compile("(~|\\^|<=?|>=?)?(.+)");
+    private static final Pattern MATCH_PATTERN = Pattern.compile("(~|\\^|<=?|>=?)?([0-9.x*]+?)(-.+?(\\+.+?)?)?");
 
     public final Range start;
     public final Range end;
