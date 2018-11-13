@@ -18,6 +18,16 @@ import static org.junit.Assert.assertTrue;
 public class SemVerMatchTest {
 
     @Test
+    public void testParse() {
+        new SemVerMatch("1.2.3-4.z.5");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testParseInvalid() {
+        new SemVerMatch("1.2.3+meta");
+    }
+
+    @Test
     public void testPlainConstructor() {
         assertEquals(
                 new SemVerMatch(
