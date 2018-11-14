@@ -154,7 +154,9 @@ See the accompanying LICENSE file for applicable license.
     <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
       <module class="org.dita.dost.module.MaprefModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
+        <param name="style">
+          <fileset dir="${dita.plugin.org.dita.base.dir}" includes="xsl/preprocess/mapref.xsl"/>
+        </param>
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -182,7 +184,9 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
       <module class="org.dita.dost.module.MaprefModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
+        <param name="style">
+          <fileset dir="${dita.plugin.org.dita.base.dir}" includes="xsl/preprocess/mapref.xsl"/>
+        </param>
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -209,9 +213,11 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref in input files" taskname="conref">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/map-conref.xsl"
         filenameparameter="file-being-processed"
         parallel="${parallel}">
+        <style>
+          <fileset dir="${dita.plugin.org.dita.base.dir}" includes="xsl/preprocess/map-conref.xsl"/>
+        </style>
         <ditafileset format="ditamap" conref="true" input="true"/>
         <ditafileset format="ditamap" conref="true" inputResource="true"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
@@ -309,9 +315,11 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref in input files" taskname="conref">
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl"
             filenameparameter="file-being-processed"
             parallel="${parallel}">
+        <style>
+          <fileset dir="${dita.plugin.org.dita.base.dir}" includes="xsl/preprocess/conref.xsl"/>
+        </style>
         <ditafileset conref="true" format="dita"/>
         <ditafileset conref="true" format="ditamap"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
@@ -378,7 +386,9 @@ See the accompanying LICENSE file for applicable license.
     description="Move metadata entries">
     <pipeline message="Move metadata entries." taskname="move-meta">
       <module class="org.dita.dost.module.MoveMetaModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl"/>
+        <param name="style">
+          <fileset dir="${dita.plugin.org.dita.base.dir}" includes="xsl/preprocess/mappull.xsl"/>
+        </param>
         <param name="conserve-memory" expression="${conserve-memory}" if:set="conserve-memory"/>
         <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
@@ -391,7 +401,9 @@ See the accompanying LICENSE file for applicable license.
     <property name="dita.preprocess.reloadstylesheet.maplink" value="${dita.preprocess.reloadstylesheet}"/>
     <pipeline message="Move related links" taskname="maplink">
       <module class="org.dita.dost.module.MoveLinksModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl"/>
+        <param name="style">
+          <fileset dir="${dita.plugin.org.dita.base.dir}" includes="xsl/preprocess/maplink.xsl"/>
+        </param>
         <param name="include.rellinks" expression="${include.rellinks}" if:set="include.rellinks"/>
       </module>
     </pipeline>
@@ -404,8 +416,10 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Pull metadata for link and xref element" taskname="topicpull">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl"
         parallel="${parallel}">
+        <style>
+          <fileset dir="${dita.plugin.org.dita.base.dir}" includes="xsl/preprocess/topicpull.xsl"/>
+        </style>
         <ditafileset format="dita" processingRole="normal"/>
         <param name="TABLELINK" expression="${args.tablelink.style}" if:set="args.tablelink.style" />
         <param name="FIGURELINK" expression="${args.figurelink.style}" if:set="args.figurelink.style" />
@@ -422,8 +436,10 @@ See the accompanying LICENSE file for applicable license.
     <property name="dita.preprocess.reloadstylesheet.clean-map" value="${dita.preprocess.reloadstylesheet}"/>
     <pipeline message="Clean ditamap" taskname="clean-map">
       <xslt basedir="${dita.temp.dir}"
-            reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
-            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
+            reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}">
+        <style>
+          <fileset dir="${dita.plugin.org.dita.base.dir}" includes="xsl/preprocess/clean-map.xsl"/>
+        </style>
         <ditafileset format="ditamap"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.*;
 
 import org.dita.dost.platform.Integrator;
@@ -126,6 +127,31 @@ public final class Configuration {
 
     /** Private constructor to disallow instance creation. */
     private Configuration() {
+    }
+
+    public static final Optional<File> workspace;
+    static {
+        final String value = configuration.get("workspace");
+        if (value != null) {
+            if (value.equals(".")) {
+                workspace = Optional.empty();
+            } else {
+                workspace = Optional.of(new File(value));
+            }
+        } else {
+            final String os = System.getProperty("os.name").toLowerCase();
+            if (os.contains("mac")) {
+                workspace = Optional.ofNullable(System.getenv("HOME"))
+                        .map(dir -> Paths.get(dir, "Library", "Application Support", "DITA-OT").toFile());
+            } else if (os.contains("nix") || os.contains("nux")) {
+                workspace = Optional.of(new File("/var/lib/DITA-OT"));
+            } else if (os.contains("win")) {
+                workspace = Optional.ofNullable(System.getenv("LOCALAPPDATA"))
+                        .map(dir -> Paths.get(dir, "DITA-OT").toFile());
+            } else {
+                workspace = Optional.empty();
+            }
+        }
     }
 
     /** List of print-oriented transtypes. */

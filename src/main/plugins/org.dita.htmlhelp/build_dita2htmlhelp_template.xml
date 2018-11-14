@@ -82,8 +82,10 @@ See the accompanying LICENSE file for applicable license.
       <isset property="inner.transform"/>
     </condition>
     <pipeline>
-    <xslt destdir="${htmlhelp.hhp.output.dir}"
-          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
+    <xslt destdir="${htmlhelp.hhp.output.dir}">
+      <style>
+        <fileset dir="${dita.plugin.org.dita.htmlhelp.dir}" includes="xsl/map2hhp.xsl"/>
+      </style>
       <ditafileset input="true" processingRole="normal"/>
       <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
       <param name="HHCNAME" expression="${args.output.base}.hhc"/>
@@ -102,8 +104,10 @@ See the accompanying LICENSE file for applicable license.
       <isset property="inner.transform"/>
     </condition>
     <pipeline>
-    <xslt destdir="${htmlhelp.hhc.output.dir}"
-          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
+    <xslt destdir="${htmlhelp.hhc.output.dir}">
+      <style>
+        <fileset dir="${dita.plugin.org.dita.htmlhelp.dir}" includes="xsl/map2hhc.xsl"/>
+      </style>
       <ditafileset input="true" processingRole="normal"/>
       <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
       <param name="defaultLanguage" expression="${default.language}"/>
