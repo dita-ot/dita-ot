@@ -96,8 +96,8 @@ public class FileGeneratorTest {
     }
 
     private static abstract class AbstractAction implements IAction {
-        protected List<String> inputs = new ArrayList<String>();
-        protected Map<String, String> params = new HashMap<String, String>();
+        protected List<String> inputs = new ArrayList<>();
+        protected Map<String, String> params = new HashMap<>();
         protected Map<String, Features> features;
         public void setInput(final List<String> input) {
             inputs.addAll(input);
@@ -117,7 +117,7 @@ public class FileGeneratorTest {
     public static class ElementAction extends AbstractAction {
         @Override
         public void getResult(ContentHandler output) throws SAXException {
-            final Map<String, String> paramsExp = new HashMap<String, String>();
+            final Map<String, String> paramsExp = new HashMap<>();
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
             paramsExp.put("id", "element");
             paramsExp.put("behavior", this.getClass().getName());
@@ -138,9 +138,8 @@ public class FileGeneratorTest {
     public static class AttributeAction extends AbstractAction {
         @Override
         public String getResult() {
-            final Map<String, String> paramsExp = new HashMap<String, String>();
+            final Map<String, String> paramsExp = new HashMap<>();
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
-//            paramsExp.put(FileGenerator.PARAM_LOCALNAME, "foo");
             assertEquals(paramsExp, params);
             final List<String> inputExp = Arrays.asList(new String[] {"attribute"});
             assertEquals(inputExp, inputs);
@@ -149,7 +148,7 @@ public class FileGeneratorTest {
         }
 
         @Override
-        public void getResult(ContentHandler output) throws SAXException {
+        public void getResult(ContentHandler output) {
             throw new UnsupportedOperationException();
         }
     }

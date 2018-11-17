@@ -54,27 +54,12 @@ final class FileGenerator extends XMLFilterImpl {
     /** Template file. */
     private File templateFile;
 
-    /**
-     * Default Constructor.
-     */
-    public FileGenerator() {
-        this(null, null);
-    }
-
-    /**
-     * Constructor init featureTable.
-     * @param featureTbl featureTbl
-     */
     public FileGenerator(final Hashtable<String, List<String>> featureTbl, final Map<String, Features> pluginTable) {
         featureTable = featureTbl;
         this.pluginTable = pluginTable;
         templateFile = null;
     }
 
-    /**
-     * Set logger.
-     * @param logger logger instance
-     */
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
