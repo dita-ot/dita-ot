@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2006 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
+<project xmlns:dita="http://dita-ot.sourceforge.net">
+
+  <!-- Deprecated since 3.1 -->
+  <path id="dost.class.path">
+    <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction"/>
+    <pathelement location="${dita.dir}/lib/dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost-configuration.jar"/>
+  </path>
+
+  <dita:extension id="dita.conductor.plugin" behavior="org.dita.dost.platform.ImportPluginInfoAction"/>
+  <dita:extension id="ant.import" behavior="org.dita.dost.platform.ImportAntAction"/>
+  <dita:extension id="dita.conductor.target.relative" behavior="org.dita.dost.platform.InsertAntActionRelative"/>
+  <dita:extension id="dita.conductor.target" behavior="org.dita.dost.platform.InsertAction"/>
+
+  <!-- Deprecated since 2.1 -->
+  <target name="help">
+    <echo level="info">See http://www.dita-ot.org/${otrelease}/</echo>
+  </target>
+
+</project>
+

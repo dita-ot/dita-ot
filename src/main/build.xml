@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2006 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
+<project name="DOST" default="init">
+
+  <!-- Initialize DITA-OT base directory -->
+  <dirname property="ant.file.DOST.dir" file="${ant.file.DOST}" />
+  <condition property="dita.dir" value="${ant.file.DOST.dir}">
+    <not>
+      <isset property="dita.dir" />
+    </not>
+  </condition>
+  <condition property="dita.dir" value="${basedir}">
+    <not>
+      <isset property="dita.dir" />
+    </not>
+  </condition>
+
+  <property file="${dita.dir}/local.properties"/>
+
+  <target name="init">
+    <dita-ot-fail id="DOTA001F">
+      <condition>
+        <and>
+          <not>
+            <equals arg1="${transtype}" arg2="xhtml" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="eclipsehelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="html5" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="htmlhelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="pdf2" casesensitive="false"/>
+          </not>
+        </and>
+      </condition>
+      <param name="1" value="${transtype}"/>
+    </dita-ot-fail>
+    <condition property="clean.temp" value="true">
+      <not>
+        <isset property="clean.temp"/>
+      </not>
+    </condition>
+    <condition property="clean-temp.skip">
+      <isfalse value="${clean.temp}"/>
+    </condition>
+    <antcall>
+      <target name="dita2${transtype}"/>
+      <target name="clean-temp"/>
+    </antcall>
+  </target>
+
+  <include>
+    <fileset file="${dita.dir}/plugins/org.dita.base/build.xml"/>
+  </include>
+
+</project>

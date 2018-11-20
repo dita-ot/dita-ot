@@ -124,7 +124,11 @@ final class Features {
             final String valueElement = valueTokenizer.nextToken();
             if (valueElement != null && valueElement.trim().length() != 0) {
                 if (isFile && !FileUtils.isAbsolutePath(valueElement)) {
-                    valueBuffer.add(pluginDir + File.separator + valueElement.trim());
+                    if (id.equals("ant.import")) {
+                        valueBuffer.add("${dita.plugin." + this.id + ".dir}" + File.separator + valueElement.trim());
+                    } else {
+                        valueBuffer.add(pluginDir + File.separator + valueElement.trim());
+                    }
                 } else {
                     valueBuffer.add(valueElement.trim());
                 }

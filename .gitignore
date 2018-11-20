@@ -8,8 +8,6 @@ target/
 src/main/lib/*.jar
 
 # Generated resources
-src/main/build.xml
-src/main/catalog-dita.xml
 src/main/config/env.bat
 src/main/config/env.sh
 src/main/config/messages.xml
@@ -21,6 +19,15 @@ src/main/plugins/org.dita.base/build.xml
 src/main/plugins/org.dita.base/build_preprocess.xml
 src/main/plugins/org.dita.base/build_preprocess2.xml
 src/main/plugins/org.dita.base/catalog-dita.xml
+src/main/plugins/org.dita.base/xsl/common/allstrings.xml
+src/main/plugins/org.dita.base/xsl/common/strings.xml
+src/main/plugins/org.dita.base/xsl/preprocess/conref.xsl
+src/main/plugins/org.dita.base/xsl/preprocess/flag.xsl
+src/main/plugins/org.dita.base/xsl/preprocess/map-conref.xsl
+src/main/plugins/org.dita.base/xsl/preprocess/maplink.xsl
+src/main/plugins/org.dita.base/xsl/preprocess/mappull.xsl
+src/main/plugins/org.dita.base/xsl/preprocess/mapref.xsl
+src/main/plugins/org.dita.base/xsl/preprocess/topicpull.xsl
 src/main/plugins/org.dita.eclipsehelp/build_dita2eclipsehelp.xml
 src/main/plugins/org.dita.eclipsehelp/lib/eclipsehelp.jar
 src/main/plugins/org.dita.eclipsehelp/xsl/map2eclipse.xsl
@@ -62,16 +69,6 @@ src/main/plugins/org.dita.xhtml/xsl/map2html-coverImpl.xsl
 src/main/plugins/org.dita.xhtml/xsl/map2htmltoc.xsl
 src/main/startcmd.bat
 src/main/startcmd.sh
-src/main/xsl/common/allstrings.xml
-src/main/xsl/common/strings.xml
-src/main/xsl/preprocess/conref.xsl
-src/main/xsl/preprocess/flag.xsl
-src/main/xsl/preprocess/map-conref.xsl
-src/main/xsl/preprocess/maplink.xsl
-src/main/xsl/preprocess/mappull.xsl
-src/main/xsl/preprocess/mapref.xsl
-src/main/xsl/preprocess/topicpull.xsl
-
 
 # OS-specific entries below
 
