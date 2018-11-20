@@ -199,7 +199,7 @@ See the accompanying LICENSE file for applicable license.
       <sysproperty key="com.renderx.xep.CONFIG" value="${xep.config.file}"/>
       <!--Set up catalog resolver with the DITA main catalog file, useful for solving for example SVG image DOCTYPES-->
       <sysproperty key="com.renderx.sax.entityresolver" value="org.apache.xml.resolver.tools.CatalogResolver"/>
-      <sysproperty key="xml.catalog.files" value="${dita.dir}/catalog-dita.xml"/>
+      <sysproperty key="xml.catalog.files" value="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
     </java>
     <condition property="xepExitedOnError" value="true">
       <not><equals arg1="${errCode}" arg2="0"/></not>
