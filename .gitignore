@@ -10,7 +10,6 @@ src/main/lib/*.jar
 # Generated resources
 src/main/config/env.bat
 src/main/config/env.sh
-src/main/config/messages.xml
 src/main/config/messages_en_US.properties
 src/main/config/org.dita.dost.platform/plugin.properties
 src/main/config/plugins.xml
@@ -19,6 +18,7 @@ src/main/plugins/org.dita.base/build.xml
 src/main/plugins/org.dita.base/build_preprocess.xml
 src/main/plugins/org.dita.base/build_preprocess2.xml
 src/main/plugins/org.dita.base/catalog-dita.xml
+src/main/plugins/org.dita.base/config/messages.xml
 src/main/plugins/org.dita.base/xsl/common/allstrings.xml
 src/main/plugins/org.dita.base/xsl/common/strings.xml
 src/main/plugins/org.dita.base/xsl/preprocess/conref.xsl

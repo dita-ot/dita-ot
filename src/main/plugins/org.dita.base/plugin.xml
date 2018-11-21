@@ -182,7 +182,7 @@ See the accompanying LICENSE file for applicable license.
   <template file="build_template.xml"/>
   <template file="build_preprocess_template.xml"/>
   <template file="build_preprocess2_template.xml"/>
-  <template file="../../config/messages_template.xml"/>
+  <template file="config/messages_template.xml"/>
   <template file="xsl/common/allstrings_template.xml"/>
   <template file="xsl/common/strings_template.xml"/>
   <template file="xsl/preprocess/maplink_template.xsl"/>
