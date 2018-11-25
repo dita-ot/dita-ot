@@ -14,24 +14,24 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="plugin:org.dita.base:xsl/common/related-links.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
   
-  <xsl:import href="topic.xsl"/>
-  <xsl:import href="concept.xsl"/>
-  <xsl:import href="glossdisplay.xsl"/>
-  <xsl:import href="task.xsl"/>
-  <xsl:import href="reference.xsl"/>  
-  <xsl:import href="ut-d.xsl"/>
-  <xsl:import href="sw-d.xsl"/>
-  <xsl:import href="pr-d.xsl"/>
-  <xsl:import href="ui-d.xsl"/>
-  <xsl:import href="hi-d.xsl"/>
-  <xsl:import href="abbrev-d.xsl"/>
-  <xsl:import href="markup-d.xsl"/>
-  <xsl:import href="xml-d.xsl"/>
-  <xsl:import href="svg-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/topic.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/concept.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/glossdisplay.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/task.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/reference.xsl"/>  
+  <xsl:import href="plugin:org.dita.html5:xsl/ut-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/sw-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/pr-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/ui-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/hi-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/abbrev-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/markup-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/xml-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/svg-d.xsl"/>
   
-  <xsl:import href="nav.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/nav.xsl"/>
   
-  <xsl:import href="htmlflag.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/htmlflag.xsl"/>
     
   <dita:extension id="dita.xsl.html5" 
       behavior="org.dita.dost.platform.ImportXSLAction" 

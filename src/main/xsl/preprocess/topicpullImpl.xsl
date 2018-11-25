@@ -53,9 +53,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 exclude-result-prefixes="dita-ot topicpull ditamsg xs">
-  <xsl:import href="../common/dita-utilities.xsl"/>
-  <xsl:import href="../common/output-message.xsl"/>
-  <xsl:import href="../common/dita-textonly.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
   <!-- Define the error message prefix identifier -->
   <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>

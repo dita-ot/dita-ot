@@ -18,38 +18,38 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- stylesheet imports -->
 <!-- the main dita to xhtml converter -->
-<xsl:import href="xslhtml/dita2htmlImpl.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/dita2htmlImpl.xsl"/>
 
 <!-- the dita to xhtml converter for concept documents -->
-<xsl:import href="xslhtml/conceptdisplay.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/conceptdisplay.xsl"/>
 
 <!-- the dita to xhtml converter for glossentry documents -->
-<xsl:import href="xslhtml/glossdisplay.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/glossdisplay.xsl"/>
 
 <!-- the dita to xhtml converter for task documents -->
-<xsl:import href="xslhtml/taskdisplay.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/taskdisplay.xsl"/>
 
 <!-- the dita to xhtml converter for reference documents -->
-<xsl:import href="xslhtml/refdisplay.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/refdisplay.xsl"/>
 
 <!-- user technologies domain -->
-<xsl:import href="xslhtml/ut-d.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/ut-d.xsl"/>
 <!-- software domain -->
-<xsl:import href="xslhtml/sw-d.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/sw-d.xsl"/>
 <!-- programming domain -->
-<xsl:import href="xslhtml/pr-d.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/pr-d.xsl"/>
 <!-- ui domain -->
-<xsl:import href="xslhtml/ui-d.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/ui-d.xsl"/>
 <!-- highlighting domain -->
-<xsl:import href="xslhtml/hi-d.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/hi-d.xsl"/>
 <!-- abbreviated-form domain -->
-<xsl:import href="xslhtml/abbrev-d.xsl"/>
-<xsl:import href="xslhtml/markup-d.xsl"/>
-<xsl:import href="xslhtml/xml-d.xsl"/>
-<xsl:import href="xslhtml/svg-d.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/abbrev-d.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/markup-d.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/xml-d.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/svg-d.xsl"/>
 <!-- Integrate support for flagging with dita-ot pseudo-domain -->
-<xsl:import href="xslhtml/htmlflag.xsl"/>  
-  
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/htmlflag.xsl"/>  
+
 <dita:extension id="dita.xsl.xhtml" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
 <!-- the dita to xhtml converter for element reference documents - not used now -->

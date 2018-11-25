@@ -10,7 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet version="2.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:import href="syntax-braces.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/syntax-braces.xsl"/>
 
 <!-- programming-domain.ent domain: codeblock | codeph | var | kwd | synph | oper | delim | sep | repsep |
                                     option | parmname | apiname-->

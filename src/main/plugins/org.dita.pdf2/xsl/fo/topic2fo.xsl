@@ -44,73 +44,73 @@ See the accompanying LICENSE file for applicable license.
     <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
     <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
     <xsl:import href="plugin:org.dita.base:xsl/common/related-links.xsl"/>
-  
-    <xsl:import href="../common/attr-set-reflection.xsl"/>
-    <xsl:import href="../common/vars.xsl"/>
-
-    <xsl:import href="../../cfg/fo/attrs/basic-settings.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/layout-masters-attr.xsl"/>
-    <xsl:import href="../../cfg/fo/layout-masters.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/links-attr.xsl"/>
-    <xsl:import href="links.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/lists-attr.xsl"/>
-    <xsl:import href="lists.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/tables-attr.xsl"/>
-    <xsl:import href="tables.xsl"/>
-    <xsl:import href="root-processing.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/topic-attr.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/concept-attr.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/commons-attr.xsl"/>
-    <xsl:import href="commons.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/toc-attr.xsl"/>
-    <xsl:import href="toc.xsl"/>
-    <xsl:import href="bookmarks.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/index-attr.xsl"/>
-    <xsl:import href="index.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/front-matter-attr.xsl"/>
-    <xsl:import href="front-matter.xsl"/>
-    <xsl:import href="preface.xsl"/>
-
-    <xsl:import href="../../cfg/fo/attrs/map-elements-attr.xsl"/>
-    <xsl:import href="map-elements.xsl"/>
-
-    <xsl:import href="../../cfg/fo/attrs/task-elements-attr.xsl"/>
-    <xsl:import href="task-elements.xsl"/>
-
-    <xsl:import href="../../cfg/fo/attrs/reference-elements-attr.xsl"/>
-    <xsl:import href="reference-elements.xsl"/>
-
-    <xsl:import href="../../cfg/fo/attrs/sw-domain-attr.xsl"/>
-    <xsl:import href="sw-domain.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/pr-domain-attr.xsl"/>
-    <xsl:import href="pr-domain.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/hi-domain-attr.xsl"/>
-    <xsl:import href="hi-domain.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/ui-domain-attr.xsl"/>
-    <xsl:import href="ui-domain.xsl"/>
-    <xsl:import href="ut-domain.xsl"/>
-    <xsl:import href="abbrev-domain.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/markup-domain-attr.xsl"/>
-    <xsl:import href="markup-domain.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/xml-domain-attr.xsl"/>
-    <xsl:import href="xml-domain.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/svg-domain-attr.xsl"/>
-    <xsl:import href="svg-domain.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/hazard-d-attr.xsl"/>
-    <xsl:import href="hazard-d.xsl"/>
-
-    <xsl:import href="../../cfg/fo/attrs/static-content-attr.xsl"/>
-    <xsl:import href="static-content.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/glossary-attr.xsl"/>
-    <xsl:import href="glossary.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/lot-lof-attr.xsl"/>
-    <xsl:import href="lot-lof.xsl"/>
-
-    <xsl:import href="../../cfg/fo/attrs/learning-elements-attr.xsl"/>
-    <xsl:import href="learning-elements.xsl"/>
-
-    <xsl:import href="flagging.xsl"/>
-    <xsl:import href="flagging-from-preprocess.xsl"/>
+    
+    <xsl:import href="plugin:org.dita.pdf2:xsl/common/attr-set-reflection.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/common/vars.xsl"/>
+    
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/basic-settings.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/layout-masters-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/layout-masters.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/links-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/links.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/lists-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/lists.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/tables-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/tables.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/root-processing.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/topic-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/concept-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/commons-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/commons.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/toc-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/toc.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/bookmarks.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/index-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/index.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/front-matter-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/front-matter.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/preface.xsl"/>
+    
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/map-elements-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/map-elements.xsl"/>
+    
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/task-elements-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/task-elements.xsl"/>
+    
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/reference-elements-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/reference-elements.xsl"/>
+    
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/sw-domain-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/sw-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/pr-domain-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/pr-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/hi-domain-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/hi-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/ui-domain-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/ui-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/ut-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/abbrev-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/markup-domain-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/markup-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/xml-domain-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/xml-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/svg-domain-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/svg-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/hazard-d-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/hazard-d.xsl"/>
+    
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/static-content-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/static-content.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/glossary-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/glossary.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/lot-lof-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/lot-lof.xsl"/>
+    
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/learning-elements-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/learning-elements.xsl"/>
+    
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/flagging.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/flagging-from-preprocess.xsl"/>
 
 
     <xsl:output method="xml" encoding="utf-8" indent="no"/>
