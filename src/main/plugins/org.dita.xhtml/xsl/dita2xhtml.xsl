@@ -17,7 +17,7 @@ See the accompanying LICENSE file for applicable license.
               doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
               doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
  
-  <xsl:include href="dita2xhtml-util.xsl"/>
+  <xsl:include href="plugin:org.dita.xhtml:xsl/dita2xhtml-util.xsl"/>
   
   <!-- Add both lang and xml:lang attributes -->
   <xsl:template match="@xml:lang" name="generate-lang">

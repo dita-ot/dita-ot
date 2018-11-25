@@ -434,7 +434,7 @@ See the accompanying LICENSE file for applicable license.
       select="$n/ancestor-or-self::*[contains(@class, ' topic/topic ')][1]"/>
   </xsl:function>
 
-  <xsl:include href="uri-utils.xsl"/>
+  <xsl:include href="plugin:org.dita.base:xsl/common/uri-utils.xsl"/>
 
 </xsl:stylesheet>
 

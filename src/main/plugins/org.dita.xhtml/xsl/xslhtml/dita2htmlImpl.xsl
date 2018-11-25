@@ -21,8 +21,8 @@ See the accompanying LICENSE file for applicable license.
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
 <xsl:import href="plugin:org.dita.base:xsl/common/related-links.xsl"/>
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-<xsl:include href="get-meta.xsl"/>
-<xsl:include href="rel-links.xsl"/>
+<xsl:include href="plugin:org.dita.xhtml:xsl/xslhtml/get-meta.xsl"/>
+<xsl:include href="plugin:org.dita.xhtml:xsl/xslhtml/rel-links.xsl"/>
 
 <!-- =========== OUTPUT METHOD =========== -->
 
@@ -1713,7 +1713,7 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- ===================================================================== -->
 
-<xsl:include href="tables.xsl"/>
+<xsl:include href="plugin:org.dita.xhtml:xsl/xslhtml/tables.xsl"/>
 
 <!-- =========== FOOTNOTE =========== -->
 <xsl:template match="*[contains(@class, ' topic/fn ')]" name="topic.fn">
