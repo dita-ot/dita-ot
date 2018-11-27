@@ -31,7 +31,7 @@ See the accompanying LICENSE file for applicable license.
         <fo:inline id="{.}"/>
     </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/entry ')]">
+  <xsl:template match="*[contains(@class,' topic/entry ')]" priority="1">
     <xsl:choose>
       <xsl:when test="dita-ot:get-entry-end-position(.) gt number(ancestor::*[contains(@class,' topic/tgroup ')][1]/@cols)">
         <!-- FOP crashes if an entry extends beyond the table width -->
@@ -43,6 +43,29 @@ See the accompanying LICENSE file for applicable license.
         <xsl:next-match/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
+    <xsl:apply-templates select="." mode="validate-entry-position"/>
+    <fo:table-cell xsl:use-attribute-sets="thead.row.entry">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="applySpansAttrs"/>
+      <xsl:call-template name="applyAlignAttrs"/>
+      <xsl:call-template name="generateTableEntryBorder"/>
+      <fo:block xsl:use-attribute-sets="thead.row.entry__content">
+        <xsl:call-template name="processEntryContent"/>
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
+  
+  <xsl:template match="*" mode="processTableEntry">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="applySpansAttrs"/>
+    <xsl:call-template name="applyAlignAttrs"/>
+    <xsl:call-template name="generateTableEntryBorder"/>
+    <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+      <xsl:call-template name="processEntryContent"/>
+    </fo:block>
   </xsl:template>
 
 </xsl:stylesheet>
