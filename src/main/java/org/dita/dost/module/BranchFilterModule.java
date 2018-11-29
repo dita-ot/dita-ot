@@ -7,6 +7,7 @@
  */
 package org.dita.dost.module;
 
+import org.apache.commons.io.FilenameUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
@@ -345,7 +346,6 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         if (!copyTo.isEmpty()) {
             final URI dstUri = map.resolve(copyTo);
             final URI dstAbsUri = job.tempDirURI.resolve(dstUri);
-            final FileInfo dstFileInfo = job.getFileInfo(dstAbsUri);
             final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
             final URI srcUri = map.resolve(href);
             final URI srcAbsUri = job.tempDirURI.resolve(srcUri);
@@ -569,12 +569,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
             if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
                 final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
-
                 final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
-
                 final URI dstSource;
                 dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
                 final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
+                final String dstPathFromMap = !copyTo.isEmpty() ? FilenameUtils.getPath(copyTo) : FilenameUtils.getPath(href);
                 final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
                         .result(dstSource)
                         .uri(dstTemp);
@@ -589,7 +588,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                 final FileInfo dstFileInfo = dstBuilder
                         .build();
 
-                elem.setAttribute(BRANCH_COPY_TO, dstTemp.toString());
+                elem.setAttribute(BRANCH_COPY_TO, dstPathFromMap + FilenameUtils.getName(dstTemp.toString()));
                 if (!copyTo.isEmpty()) {
                     elem.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
                 }

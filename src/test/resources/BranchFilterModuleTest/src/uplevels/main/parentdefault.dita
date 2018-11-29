@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /C:\DCS\test\P025471\main\temp\main?><?workdir-uri file:/C:/DCS/test/P025471/main/temp/main/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="parent" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic " xtrf="file:/C:/DCS/test/P025471/main/parentdefault.dita" xtrc="topic:1;3:20">
+  <title class="- topic/title " xtrf="file:/C:/DCS/test/P025471/main/parentdefault.dita" xtrc="title:1;4:10">Parent topic</title>
+  <body class="- topic/body " xtrf="file:/C:/DCS/test/P025471/main/parentdefault.dita" xtrc="body:1;5:9">
+<p class="- topic/p " xtrf="file:/C:/DCS/test/P025471/main/parentdefault.dita" xtrc="p:1;6:4">Next step:<ul class="- topic/ul " xtrf="file:/C:/DCS/test/P025471/main/parentdefault.dita" xtrc="ul:1;6:18">
+<li audience="advanced" class="- topic/li " xtrf="file:/C:/DCS/test/P025471/main/parentdefault.dita" xtrc="li:1;7:25">Do some really cool technical whiz-bang stuff</li>
+<li audience="novice" class="- topic/li " xtrf="file:/C:/DCS/test/P025471/main/parentdefault.dita" xtrc="li:2;8:23">Check out the book "DITA-OT for novices"</li>
+</ul></p>
+</body>
+</topic>
