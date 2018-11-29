@@ -15,7 +15,7 @@ See the accompanying LICENSE file for applicable license.
     xmlns:suitesol="http://suite-sol.com/namespaces/mapcounts"
     version="2.0">
 
-   <xsl:import href="flag-rules.xsl"/>
+   <xsl:import href="plugin:org.dita.pdf2:xsl/fo/flag-rules.xsl"/>
    <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
    <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   

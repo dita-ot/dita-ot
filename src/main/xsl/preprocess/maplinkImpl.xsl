@@ -13,9 +13,9 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 exclude-result-prefixes="xs dita-ot">
   
-  <xsl:import href="../common/output-message.xsl"/>
-  <xsl:import href="../common/dita-utilities.xsl"/>
-  <xsl:import href="../common/dita-textonly.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
   
   <xsl:output method="xml" encoding="utf-8" indent="no" />
   

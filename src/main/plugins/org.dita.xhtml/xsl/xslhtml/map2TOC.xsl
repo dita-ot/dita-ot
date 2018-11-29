@@ -13,7 +13,7 @@ See the accompanying LICENSE file for applicable license.
         exclude-result-prefixes="html">
 
 <!-- stylesheet imports -->
-<xsl:import href="mapwalker.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/mapwalker.xsl"/>
 
 <xsl:template match="*[contains(@class,' map/map ')]">
   <xsl:apply-templates select="." mode="toctop"/>

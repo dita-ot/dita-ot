@@ -11,13 +11,13 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:import href="plugin:org.dita.pdf2:xsl/fo/topic2fo.xsl"/>
 
-  <xsl:import href="../../cfg/fo/attrs/commons-attr_fop.xsl"/>
-  <xsl:import href="../../cfg/fo/attrs/tables-attr_fop.xsl"/>
-  <xsl:import href="root-processing_fop.xsl"/>
-  <xsl:import href="tables_fop.xsl"/>
-  <xsl:import href="index_fop.xsl"/>
-  <xsl:import href="flagging_fop.xsl"/>
-  <xsl:import href="topic_fop.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.fop:cfg/fo/attrs/commons-attr_fop.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.fop:cfg/fo/attrs/tables-attr_fop.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.fop:xsl/fo/root-processing_fop.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.fop:xsl/fo/tables_fop.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.fop:xsl/fo/index_fop.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.fop:xsl/fo/flagging_fop.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.fop:xsl/fo/topic_fop.xsl"/>
 
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 

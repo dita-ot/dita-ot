@@ -9,7 +9,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="2.0">
 
-  <xsl:import href="topicmergeImpl.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2:xsl/common/topicmergeImpl.xsl"/>
   <dita:extension id="org.dita.pdf2.xsl.topicmerge" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
 </xsl:stylesheet>

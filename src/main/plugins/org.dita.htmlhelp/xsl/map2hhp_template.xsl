@@ -12,7 +12,7 @@ See the accompanying LICENSE file for applicable license.
 
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
 <!-- Import the main ditamap to HTML Help Project file conversion -->
-<xsl:import href="map2htmlhelp/map2hhpImpl.xsl"/>
+<xsl:import href="plugin:org.dita.htmlhelp:xsl/map2htmlhelp/map2hhpImpl.xsl"/>
 
 <dita:extension id="dita.xsl.htmlhelp.map2hhp" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 

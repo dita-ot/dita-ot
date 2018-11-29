@@ -11,7 +11,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- Import the main ditamap to Eclipse TOC Contents conversion -->
-<xsl:import href="map2eclipse/map2eclipseImpl.xsl"/>
+<xsl:import href="plugin:org.dita.eclipsehelp:xsl/map2eclipse/map2eclipseImpl.xsl"/>
 
 <dita:extension id="dita.xsl.eclipse.toc" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
