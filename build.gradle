@@ -389,8 +389,21 @@ test {
 
 // Repository deployment
 
-def ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : 'ossrhUsername'
-def ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : 'ossrhPassword'
+def getRepositoryUsername() {
+    return project.hasProperty('ossrhUsername') ?
+            project.property('ossrhUsername') :
+            System.env.containsKey('OSSRH_USERNAME') ?
+                    System.env['OSSRH_USERNAME'] :
+                    ""
+}
+
+def getRepositoryPassword() {
+    return project.hasProperty('ossrhPassword') ?
+            project.property('ossrhPassword') :
+            System.env.containsKey('OSSRH_PASSWORD') ?
+                    System.env['OSSRH_PASSWORD'] :
+                    ""
+}
 
 signing {
     sign configurations.archives
@@ -402,11 +415,11 @@ uploadArchives {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+                authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
             }
 
             snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+                authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
             }
 
             pom.project {
