@@ -47,10 +47,18 @@ public class FileGeneratorTest {
     private File tempDir;
 
     private static File tempFile;
-    private final static Hashtable<String, List<String>> features = new Hashtable<String, List<String>>();
+    private final static Hashtable<String, List<FileValue>> features = new Hashtable<>();
     static {
-        features.put("element", asList("foo", "bar", "baz"));
-        features.put("attribute", asList("foo", "bar", "baz"));
+        features.put("element", asList(
+                new FileValue(null, "foo"),
+                new FileValue(null, "bar"),
+                new FileValue(null, "baz")
+        ));
+        features.put("attribute", asList(
+                new FileValue(null, "foo"),
+                new FileValue(null, "bar"),
+                new FileValue(null, "baz")
+        ));
     }
     private final static Map<String, Features> plugins = new HashMap<String, Features>();
     static {
@@ -96,19 +104,24 @@ public class FileGeneratorTest {
     }
 
     private static abstract class AbstractAction implements IAction {
-        protected List<String> inputs = new ArrayList<String>();
+        protected List<FileValue> inputs = new ArrayList<>();
         protected Map<String, String> params = new HashMap<String, String>();
         protected Map<String, Features> features;
-        public void setInput(final List<String> input) {
+        @Override
+        public void setInput(final List<FileValue> input) {
             inputs.addAll(input);
         }
+        @Override
         public void addParam(final String name, final String value) {
             params.put(name, value);
         }
+        @Override
         public void setFeatures(final Map<String, Features> features) {
             this.features = features;
         }
+        @Override
         public abstract String getResult();
+        @Override
         public void setLogger(final DITAOTLogger logger) {
             // NOOP
         }
@@ -122,7 +135,10 @@ public class FileGeneratorTest {
             paramsExp.put("id", "element");
             paramsExp.put("behavior", this.getClass().getName());
             assertEquals(paramsExp, params);
-            final List<String> inputExp = Arrays.asList(new String[] {"foo", "bar", "baz"});
+            final List<FileValue> inputExp = Arrays.asList(
+                    new FileValue(null, "foo"),
+                    new FileValue(null, "bar"),
+                    new FileValue(null, "baz"));
             assertEquals(inputExp, inputs);
             assertEquals(FileGeneratorTest.plugins, features);
             output.startElement(NULL_NS_URI, "foo", "foo", new AttributesBuilder().add("bar", "baz").build());
@@ -142,7 +158,7 @@ public class FileGeneratorTest {
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
 //            paramsExp.put(FileGenerator.PARAM_LOCALNAME, "foo");
             assertEquals(paramsExp, params);
-            final List<String> inputExp = Arrays.asList(new String[] {"attribute"});
+            final List<FileValue> inputExp = Arrays.asList(new FileValue[] {new FileValue(null, "attribute")});
             assertEquals(inputExp, inputs);
             assertEquals(FileGeneratorTest.plugins, features);
             return "bar";

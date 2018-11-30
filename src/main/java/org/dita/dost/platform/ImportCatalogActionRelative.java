@@ -23,9 +23,9 @@ final class ImportCatalogActionRelative extends ImportAction {
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
         final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
-        for (final String value: valueSet) {
+        for (final FileValue value: valueSet) {
             buf.startElement("urn:oasis:names:tc:entity:xmlns:xml:catalog", "nextCatalog", "nextCatalog", new AttributesBuilder()
-                .add("catalog", FileUtils.getRelativeUnixPath(templateFilePath, value))
+                .add("catalog", FileUtils.getRelativeUnixPath(templateFilePath, value.value))
                 .build());
             buf.endElement("urn:oasis:names:tc:entity:xmlns:xml:catalog", "nextCatalog", "nextCatalog");
         }

@@ -100,7 +100,7 @@ public final class Integrator {
 
     /** Plugin table which contains detected plugins. */
     private final Map<String, Features> pluginTable;
-    private final Set<String> templateSet = new HashSet<>(16);
+    private final Map<String, FileValue> templateSet;
     private final File ditaDir;
     /** Plugin configuration file. */
     private final Set<File> descSet;
@@ -109,7 +109,7 @@ public final class Integrator {
     private final PluginParser parser;
     private DITAOTLogger logger;
     private final Set<String> loadedPlugin;
-    private final Hashtable<String, List<String>> featureTable;
+    private final Hashtable<String, List<FileValue>> featureTable;
     @Deprecated
     private File propertiesFile;
     private final Set<String> extensionPoints;
@@ -123,6 +123,7 @@ public final class Integrator {
     public Integrator(final File ditaDir) {
         this.ditaDir = ditaDir;
         pluginTable = new HashMap<>(16);
+        templateSet = new HashMap<>(16);
         descSet = new HashSet<>(16);
         loadedPlugin = new HashSet<>(16);
         featureTable = new Hashtable<>(16);
@@ -207,7 +208,7 @@ public final class Integrator {
         for (final String tmpl : properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
             final String t = tmpl.trim();
             if (t.length() != 0) {
-                templateSet.add(t);
+                templateSet.put(t, null);
             }
         }
 
@@ -261,9 +262,10 @@ public final class Integrator {
         }
 
         // generate the files from template
-        for (final String template : templateSet) {
-            final File templateFile = new File(ditaDir, template);
+        for (final Entry<String, FileValue> template : templateSet.entrySet()) {
+            final File templateFile = new File(ditaDir, template.getKey());
             logger.debug("Process template " + templateFile.getPath());
+//            fileGen.setPluginId(template.getValue().id);
             fileGen.generate(templateFile);
         }
 
@@ -278,8 +280,8 @@ public final class Integrator {
             }
         }
         if (featureTable.containsKey(FEAT_IMAGE_EXTENSIONS)) {
-            for (final String ext : featureTable.get(FEAT_IMAGE_EXTENSIONS)) {
-                final String e = ext.trim();
+            for (final FileValue ext : featureTable.get(FEAT_IMAGE_EXTENSIONS)) {
+                final String e = ext.value.trim();
                 if (e.length() != 0) {
                     imgExts.add(e);
                 }
@@ -293,7 +295,7 @@ public final class Integrator {
         // transtypes
         final String transtypes = featureTable.entrySet().stream()
                 .filter(e -> e.getKey().equals(FEAT_TRANSTYPES))
-                .flatMap(e -> e.getValue().stream())
+                .flatMap(e -> e.getValue().stream().map(val -> val.value))
                 .distinct()
                 .collect(Collectors.joining(CONF_LIST_SEPARATOR));
         configuration.put(CONF_TRANSTYPES, transtypes);
@@ -301,8 +303,8 @@ public final class Integrator {
         // print transtypes
         final Set<String> printTranstypes = new HashSet<>();
         if (featureTable.containsKey(FEAT_PRINT_TRANSTYPES)) {
-            for (final String ext : featureTable.get(FEAT_PRINT_TRANSTYPES)) {
-                final String e = ext.trim();
+            for (final FileValue ext : featureTable.get(FEAT_PRINT_TRANSTYPES)) {
+                final String e = ext.value.trim();
                 if (e.length() != 0) {
                     printTranstypes.add(e);
                 }
@@ -356,7 +358,9 @@ public final class Integrator {
             messages.store(messagesOut, null);
         }
 
-        final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS) ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS))) : Collections.EMPTY_SET;
+        final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS)
+                ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS)))
+                : Collections.EMPTY_SET;
         writeEnvShell(jars);
         writeEnvBatch(jars);
 
@@ -469,11 +473,11 @@ public final class Integrator {
         return res;
     }
 
-    private Collection<File> relativize(final Collection<String> src) {
+    private Collection<File> relativize(final Collection<FileValue> src) {
         final Collection<File> res = new ArrayList<>(src.size());
         final File base = new File(ditaDir, "dummy");
-        for (final String lib: src) {
-            final File libFile = toFile(lib);
+        for (final FileValue lib: src) {
+            final File libFile = toFile(lib.value);
             if (!libFile.exists()) {
                 throw new IllegalArgumentException("Library file not found: " + libFile.getAbsolutePath());
             }
@@ -654,8 +658,8 @@ public final class Integrator {
     private String readExtensions(final String featureName) {
         final Set<String> exts = new HashSet<>();
         if (featureTable.containsKey(featureName)) {
-            for (final String ext : featureTable.get(featureName)) {
-                final String e = ext.trim();
+            for (final FileValue ext : featureTable.get(featureName)) {
+                final String e = ext.value.trim();
                 if (e.length() != 0) {
                     exts.add(e);
                 }
@@ -676,25 +680,31 @@ public final class Integrator {
             final Features pluginFeatures = pluginTable.get(plugin);
             final Map<String, List<String>> featureSet = pluginFeatures.getAllFeatures();
             for (final Map.Entry<String, List<String>> currentFeature : featureSet.entrySet()) {
-                if (!extensionPoints.contains(currentFeature.getKey())) {
+                final String key = currentFeature.getKey();
+                final List<FileValue> values = currentFeature.getValue().stream()
+                        .map(val -> new FileValue(plugin, val))
+                        .collect(Collectors.toList());
+                if (!extensionPoints.contains(key)) {
                     final String msg = "Plug-in " + plugin + " uses an undefined extension point "
-                            + currentFeature.getKey();
+                            + key;
                     throw new RuntimeException(msg);
                 }
-                if (featureTable.containsKey(currentFeature.getKey())) {
-                    final List<String> value = featureTable.get(currentFeature.getKey());
-                    value.addAll(currentFeature.getValue());
-                    featureTable.put(currentFeature.getKey(), value);
+                if (featureTable.containsKey(key)) {
+                    final List<FileValue> value = featureTable.get(key);
+                    value.addAll(values);
+                    featureTable.put(key, value);
                 } else {
                     //Make shallow clone to avoid making modifications directly to list inside the current feature.
-                    List<String> currentFeatureValue = currentFeature.getValue();
-                    featureTable.put(currentFeature.getKey(), currentFeatureValue != null ? new ArrayList<>(currentFeatureValue) : null);
+                    List<FileValue> currentFeatureValue = values;
+                    featureTable.put(key, currentFeatureValue != null ? new ArrayList<>(currentFeatureValue) : null);
                 }
             }
 
-            for (final String templateName : pluginFeatures.getAllTemplates()) {
-                templateSet.add(FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy",
-                        pluginFeatures.getPluginDir() + File.separator + templateName));
+            for (final FileValue templateName : pluginFeatures.getAllTemplates()) {
+                final String template = new File(pluginFeatures.getPluginDir().toURI().resolve(templateName.value)).getAbsolutePath();
+                final String templatePath = FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy",
+                        template);
+                templateSet.put(templatePath, templateName);
             }
             loadedPlugin.add(plugin);
             return true;

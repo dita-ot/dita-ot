@@ -185,23 +185,25 @@ public class FeaturesTest {
     @Test
     public void testAddTemplate() {
         final Features f = new Features(new File("base", "plugins"), new File("base"));
-        f.addTemplate("foo");
-        f.addTemplate("foo");
-        f.addTemplate("bar");
+        f.addTemplate(new FileValue("base", "foo"));
+        f.addTemplate(new FileValue("base", "foo"));
+        f.addTemplate(new FileValue("base", "bar"));
         f.addTemplate(null);
     }
 
     @Test
     public void testGetAllTemplates() {
         final Features f = new Features(new File("base", "plugins"), new File("base"));
-        f.addTemplate("foo");
-        f.addTemplate("foo");
-        f.addTemplate("bar");
+        f.addTemplate(new FileValue("base", "foo"));
+        f.addTemplate(new FileValue("base", "foo"));
+        f.addTemplate(new FileValue("base", "bar"));
         f.addTemplate(null);
 
-        final List<String> act = f.getAllTemplates();
-        Collections.sort(act, new Comparator<String>() {
-            public int compare(final String arg0, final String arg1) {
+        final List<FileValue> act = f.getAllTemplates();
+        Collections.sort(act, new Comparator<FileValue>() {
+            public int compare(final FileValue a0, final FileValue a1) {
+                final String arg0 = a0.value;
+                final String arg1 = a1.value;
                 if (arg0 == null && arg1 == null) {
                     return 0;
                 } else if (arg0 == null) {

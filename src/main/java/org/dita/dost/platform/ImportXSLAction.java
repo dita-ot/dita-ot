@@ -24,13 +24,18 @@ final class ImportXSLAction extends ImportAction {
      */
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
-        final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
-        for (final String value: valueSet) {
+        for (final FileValue value: valueSet) {
+            final String href = getHref(value);
             buf.startElement("http://www.w3.org/1999/XSL/Transform", "import", "xsl:import", new AttributesBuilder()
-                .add("href", FileUtils.getRelativeUnixPath(templateFilePath, value))
+                .add("href", href)
                 .build());
             buf.endElement("http://www.w3.org/1999/XSL/Transform", "import", "xsl:import");
         }
+    }
+
+    private String getHref(final FileValue value) {
+        final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
+        return FileUtils.getRelativeUnixPath(templateFilePath, value.value);
     }
 
 }
