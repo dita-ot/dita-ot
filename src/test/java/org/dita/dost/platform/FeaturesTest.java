@@ -16,14 +16,7 @@ import static java.util.Arrays.*;
 import static org.dita.dost.platform.PluginParser.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -202,21 +195,18 @@ public class FeaturesTest {
         final List<FileValue> act = f.getAllTemplates();
         Collections.sort(act, new Comparator<FileValue>() {
             public int compare(final FileValue a0, final FileValue a1) {
-                final String arg0 = a0.value;
-                final String arg1 = a1.value;
-                if (arg0 == null && arg1 == null) {
-                    return 0;
-                } else if (arg0 == null) {
-                    return 1;
-                } else if (arg1 == null) {
+                if (a0 == null || a1 == null) {
                     return -1;
-                } else {
-                    return arg0.compareTo(arg1);
                 }
+                return Objects.compare(a0.value, a1.value, String::compareTo);
             }
         });
-        assertArrayEquals(new String[] {"bar", "foo", "foo", null},
-                act.toArray(new String[0]));
+        assertEquals(Arrays.asList(
+                null,
+                new FileValue("base", "bar"),
+                new FileValue("base", "foo"),
+                new FileValue("base", "foo")),
+                act);
     }
 
     private static Element getElement(final String value, final String type) {

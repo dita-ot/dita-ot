@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.ContentHandler;
@@ -37,8 +38,12 @@ final class ImportXSLAction extends ImportAction {
 
     private URI getHref(final FileValue value) {
         final URI pluginDir = featureTable.get(value.id).getPluginDir().toURI();
-        final URI templateFile = URLUtils.toFile(value.value).toURI();
+        final URI templateFile = URLUtils.toFile(value.value).toURI().normalize();
         final URI template = pluginDir.relativize(templateFile);
+        if (value.id == null || template.isAbsolute()) {
+            final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
+            return URLUtils.toURI(FileUtils.getRelativeUnixPath(templateFilePath, value.value));
+        }
         return URI.create("plugin:" + value.id + ":" + template);
     }
 
