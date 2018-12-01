@@ -8,10 +8,12 @@
  */
 package org.dita.dost.platform;
 
-import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
+
+import java.net.URI;
 
 /**
  * ImportXSLAction class.
@@ -25,17 +27,19 @@ final class ImportXSLAction extends ImportAction {
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
         for (final FileValue value: valueSet) {
-            final String href = getHref(value);
+            final URI href = getHref(value);
             buf.startElement("http://www.w3.org/1999/XSL/Transform", "import", "xsl:import", new AttributesBuilder()
-                .add("href", href)
+                .add("href", href.toString())
                 .build());
             buf.endElement("http://www.w3.org/1999/XSL/Transform", "import", "xsl:import");
         }
     }
 
-    private String getHref(final FileValue value) {
-        final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
-        return FileUtils.getRelativeUnixPath(templateFilePath, value.value);
+    private URI getHref(final FileValue value) {
+        final URI pluginDir = featureTable.get(value.id).getPluginDir().toURI();
+        final URI templateFile = URLUtils.toFile(value.value).toURI();
+        final URI template = pluginDir.relativize(templateFile);
+        return URI.create("plugin:" + value.id + ":" + template);
     }
 
 }
