@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -29,7 +30,9 @@ final class ListTranstypeAction extends ImportAction {
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
         final String separator = paramTable.getOrDefault("separator", "|");
-        final List<String> v = new ArrayList<>(valueSet);
+        final List<String> v = valueSet.stream()
+                .map(fileValue -> fileValue.value)
+                .collect(Collectors.toList());
         Collections.sort(v);
         final StringBuilder retBuf = new StringBuilder();
         for (final Iterator<String> i = v.iterator(); i.hasNext();) {

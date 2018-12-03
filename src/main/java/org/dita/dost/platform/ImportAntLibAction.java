@@ -27,9 +27,8 @@ final class ImportAntLibAction extends ImportAction {
     @Override
     public void getResult(final ContentHandler retBuf) throws SAXException {
         final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
-        for (final String value: valueSet) {
-            final String resolvedValue = FileUtils.getRelativeUnixPath(
-                    templateFilePath, value);
+        for (final Value value: valueSet) {
+            final String resolvedValue = FileUtils.getRelativeUnixPath(templateFilePath, value.value);
             if (FileUtils.isAbsolutePath(resolvedValue)) {
                 // if resolvedValue is absolute path
                 retBuf.startElement(NULL_NS_URI, "pathelement", "pathelement", new AttributesBuilder()
