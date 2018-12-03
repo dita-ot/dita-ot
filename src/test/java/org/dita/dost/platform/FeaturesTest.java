@@ -178,23 +178,23 @@ public class FeaturesTest {
     @Test
     public void testAddTemplate() {
         final Features f = new Features(new File("base", "plugins"), new File("base"));
-        f.addTemplate(new FileValue("base", "foo"));
-        f.addTemplate(new FileValue("base", "foo"));
-        f.addTemplate(new FileValue("base", "bar"));
+        f.addTemplate(new Value("base", "foo"));
+        f.addTemplate(new Value("base", "foo"));
+        f.addTemplate(new Value("base", "bar"));
         f.addTemplate(null);
     }
 
     @Test
     public void testGetAllTemplates() {
         final Features f = new Features(new File("base", "plugins"), new File("base"));
-        f.addTemplate(new FileValue("base", "foo"));
-        f.addTemplate(new FileValue("base", "foo"));
-        f.addTemplate(new FileValue("base", "bar"));
+        f.addTemplate(new Value("base", "foo"));
+        f.addTemplate(new Value("base", "foo"));
+        f.addTemplate(new Value("base", "bar"));
         f.addTemplate(null);
 
-        final List<FileValue> act = f.getAllTemplates();
-        Collections.sort(act, new Comparator<FileValue>() {
-            public int compare(final FileValue a0, final FileValue a1) {
+        final List<Value> act = f.getAllTemplates();
+        Collections.sort(act, new Comparator<Value>() {
+            public int compare(final Value a0, final Value a1) {
                 if (a0 == null || a1 == null) {
                     return -1;
                 }
@@ -203,9 +203,9 @@ public class FeaturesTest {
         });
         assertEquals(Arrays.asList(
                 null,
-                new FileValue("base", "bar"),
-                new FileValue("base", "foo"),
-                new FileValue("base", "foo")),
+                new Value("base", "bar"),
+                new Value("base", "foo"),
+                new Value("base", "foo")),
                 act);
     }
 

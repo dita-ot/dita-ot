@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 final class InsertDependsAction implements IAction {
 
     /** Action value. */
-    private List<FileValue> value;
+    private List<Value> value;
     /** Plug-in features. */
     private Map<String, Features> featureTable = null;
 
@@ -42,7 +42,7 @@ final class InsertDependsAction implements IAction {
     @Override
     public String getResult() {
         final List<String> result = new ArrayList<>();
-        for (final FileValue t: value) {
+        for (final Value t: value) {
             final String token = t.value.trim();
             // Pieces which are surrounded with braces are extension points.
             if (token.startsWith("{") && token.endsWith("}")) {
@@ -66,7 +66,7 @@ final class InsertDependsAction implements IAction {
      * @param input input
      */
     @Override
-    public void setInput(final List<FileValue> input) {
+    public void setInput(final List<Value> input) {
         value = input;
     }
     @Override

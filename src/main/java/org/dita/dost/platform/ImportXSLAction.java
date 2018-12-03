@@ -27,7 +27,7 @@ final class ImportXSLAction extends ImportAction {
      */
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
-        for (final FileValue value: valueSet) {
+        for (final Value value: valueSet) {
             final URI href = getHref(value);
             buf.startElement("http://www.w3.org/1999/XSL/Transform", "import", "xsl:import", new AttributesBuilder()
                 .add("href", href.toString())
@@ -36,7 +36,7 @@ final class ImportXSLAction extends ImportAction {
         }
     }
 
-    private URI getHref(final FileValue value) {
+    private URI getHref(final Value value) {
         final URI pluginDir = featureTable.get(value.id).getPluginDir().toURI();
         final URI templateFile = URLUtils.toFile(value.value).toURI().normalize();
         final URI template = pluginDir.relativize(templateFile);

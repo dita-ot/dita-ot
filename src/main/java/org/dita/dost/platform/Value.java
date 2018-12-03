@@ -10,7 +10,7 @@ package org.dita.dost.platform;
 
 import java.util.Objects;
 
-public class FileValue {
+public class Value {
     public final String id;
     public final String value;
 
@@ -18,9 +18,9 @@ public class FileValue {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FileValue fileValue = (FileValue) o;
-        return Objects.equals(id, fileValue.id) &&
-                Objects.equals(value, fileValue.value);
+        Value value = (Value) o;
+        return Objects.equals(id, value.id) &&
+                Objects.equals(this.value, value.value);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class FileValue {
         return Objects.hash(id, value);
     }
 
-    public FileValue(final String id, final String value) {
+    public Value(final String id, final String value) {
         this.id = id;
         this.value = value;
     }

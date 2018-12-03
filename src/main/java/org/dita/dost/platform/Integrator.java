@@ -100,7 +100,7 @@ public final class Integrator {
 
     /** Plugin table which contains detected plugins. */
     private final Map<String, Features> pluginTable;
-    private final Map<String, FileValue> templateSet;
+    private final Map<String, Value> templateSet;
     private final File ditaDir;
     /** Plugin configuration file. */
     private final Set<File> descSet;
@@ -109,7 +109,7 @@ public final class Integrator {
     private final PluginParser parser;
     private DITAOTLogger logger;
     private final Set<String> loadedPlugin;
-    private final Hashtable<String, List<FileValue>> featureTable;
+    private final Hashtable<String, List<Value>> featureTable;
     @Deprecated
     private File propertiesFile;
     private final Set<String> extensionPoints;
@@ -262,7 +262,7 @@ public final class Integrator {
         }
 
         // generate the files from template
-        for (final Entry<String, FileValue> template : templateSet.entrySet()) {
+        for (final Entry<String, Value> template : templateSet.entrySet()) {
             final File templateFile = new File(ditaDir, template.getKey());
             logger.debug("Process template " + templateFile.getPath());
 //            fileGen.setPluginId(template.getValue().id);
@@ -280,7 +280,7 @@ public final class Integrator {
             }
         }
         if (featureTable.containsKey(FEAT_IMAGE_EXTENSIONS)) {
-            for (final FileValue ext : featureTable.get(FEAT_IMAGE_EXTENSIONS)) {
+            for (final Value ext : featureTable.get(FEAT_IMAGE_EXTENSIONS)) {
                 final String e = ext.value.trim();
                 if (e.length() != 0) {
                     imgExts.add(e);
@@ -303,7 +303,7 @@ public final class Integrator {
         // print transtypes
         final Set<String> printTranstypes = new HashSet<>();
         if (featureTable.containsKey(FEAT_PRINT_TRANSTYPES)) {
-            for (final FileValue ext : featureTable.get(FEAT_PRINT_TRANSTYPES)) {
+            for (final Value ext : featureTable.get(FEAT_PRINT_TRANSTYPES)) {
                 final String e = ext.value.trim();
                 if (e.length() != 0) {
                     printTranstypes.add(e);
@@ -473,10 +473,10 @@ public final class Integrator {
         return res;
     }
 
-    private Collection<File> relativize(final Collection<FileValue> src) {
+    private Collection<File> relativize(final Collection<Value> src) {
         final Collection<File> res = new ArrayList<>(src.size());
         final File base = new File(ditaDir, "dummy");
-        for (final FileValue lib: src) {
+        for (final Value lib: src) {
             final File libFile = toFile(lib.value);
             if (!libFile.exists()) {
                 throw new IllegalArgumentException("Library file not found: " + libFile.getAbsolutePath());
@@ -658,7 +658,7 @@ public final class Integrator {
     private String readExtensions(final String featureName) {
         final Set<String> exts = new HashSet<>();
         if (featureTable.containsKey(featureName)) {
-            for (final FileValue ext : featureTable.get(featureName)) {
+            for (final Value ext : featureTable.get(featureName)) {
                 final String e = ext.value.trim();
                 if (e.length() != 0) {
                     exts.add(e);
@@ -681,8 +681,8 @@ public final class Integrator {
             final Map<String, List<String>> featureSet = pluginFeatures.getAllFeatures();
             for (final Map.Entry<String, List<String>> currentFeature : featureSet.entrySet()) {
                 final String key = currentFeature.getKey();
-                final List<FileValue> values = currentFeature.getValue().stream()
-                        .map(val -> new FileValue(plugin, val))
+                final List<Value> values = currentFeature.getValue().stream()
+                        .map(val -> new Value(plugin, val))
                         .collect(Collectors.toList());
                 if (!extensionPoints.contains(key)) {
                     final String msg = "Plug-in " + plugin + " uses an undefined extension point "
@@ -690,17 +690,17 @@ public final class Integrator {
                     throw new RuntimeException(msg);
                 }
                 if (featureTable.containsKey(key)) {
-                    final List<FileValue> value = featureTable.get(key);
+                    final List<Value> value = featureTable.get(key);
                     value.addAll(values);
                     featureTable.put(key, value);
                 } else {
                     //Make shallow clone to avoid making modifications directly to list inside the current feature.
-                    List<FileValue> currentFeatureValue = values;
+                    List<Value> currentFeatureValue = values;
                     featureTable.put(key, currentFeatureValue != null ? new ArrayList<>(currentFeatureValue) : null);
                 }
             }
 
-            for (final FileValue templateName : pluginFeatures.getAllTemplates()) {
+            for (final Value templateName : pluginFeatures.getAllTemplates()) {
                 final String template = new File(pluginFeatures.getPluginDir().toURI().resolve(templateName.value)).getAbsolutePath();
                 final String templatePath = FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy",
                         template);

@@ -49,7 +49,7 @@ final class FileGenerator extends XMLFilterImpl {
 
     private DITAOTLogger logger;
     /** Plug-in features. */
-    private final Map<String, List<FileValue>> featureTable;
+    private final Map<String, List<Value>> featureTable;
     private final Map<String, Features> pluginTable;
     /** Template file. */
     private File templateFile;
@@ -65,7 +65,7 @@ final class FileGenerator extends XMLFilterImpl {
      * Constructor init featureTable.
      * @param featureTbl featureTbl
      */
-    public FileGenerator(final Hashtable<String, List<FileValue>> featureTbl, final Map<String, Features> pluginTable) {
+    public FileGenerator(final Hashtable<String, List<Value>> featureTbl, final Map<String, Features> pluginTable) {
         featureTable = featureTbl;
         this.pluginTable = pluginTable;
         templateFile = null;
@@ -156,8 +156,8 @@ final class FileGenerator extends XMLFilterImpl {
                                 action.setLogger(logger);
                                 action.setFeatures(pluginTable);
                                 action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
-                                final List<FileValue> value = Stream.of(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR))
-                                        .map(val -> new FileValue(null, val))
+                                final List<Value> value = Stream.of(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR))
+                                        .map(val -> new Value(null, val))
                                         .collect(Collectors.toList());
                                 action.setInput(value);
                                 final String result = action.getResult();

@@ -20,9 +20,6 @@ import org.dita.dost.TestUtils;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 public class PluginParserTest {
 
@@ -40,8 +37,8 @@ public class PluginParserTest {
         final Features f = p.getFeatures();
         assertEquals(
                 Arrays.asList(
-                        new FileValue("dummy", "xsl/shell_template.xsl"),
-                        new FileValue("dummy", "xsl/shell2_template.xsl")),
+                        new Value("dummy", "xsl/shell_template.xsl"),
+                        new Value("dummy", "xsl/shell2_template.xsl")),
                 f.getAllTemplates());
     }
 

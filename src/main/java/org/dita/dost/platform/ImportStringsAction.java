@@ -26,7 +26,7 @@ final class ImportStringsAction extends ImportAction {
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
         final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
-        for (final FileValue value: valueSet) {
+        for (final Value value: valueSet) {
             buf.startElement(NULL_NS_URI, "stringfile", "stringfile", new AttributesBuilder().build());
             final char[] location =  FileUtils.getRelativeUnixPath(templateFilePath, value.value).toCharArray();
             buf.characters(location, 0, location.length);
