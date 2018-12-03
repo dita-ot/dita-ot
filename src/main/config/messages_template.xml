@@ -392,6 +392,11 @@ See the accompanying LICENSE file for applicable license.
     <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
   </message>
 
+  <message id="DOTJ080W" type="WARN">
+    <reason>Integrator configuration '%1' has been deprecated.</reason>
+    <response>Use plugin configuration '%1' instead.</response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  
