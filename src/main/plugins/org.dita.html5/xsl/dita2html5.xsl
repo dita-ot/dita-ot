@@ -9,7 +9,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="2.0">
   
-  <xsl:import href="dita2html5Impl.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/dita2html5Impl.xsl"/>
   
   <xsl:output method="html"
               encoding="UTF-8"

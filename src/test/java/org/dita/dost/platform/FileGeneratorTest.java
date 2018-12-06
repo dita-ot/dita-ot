@@ -29,14 +29,12 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -47,10 +45,18 @@ public class FileGeneratorTest {
     private File tempDir;
 
     private static File tempFile;
-    private final static Hashtable<String, List<String>> features = new Hashtable<String, List<String>>();
+    private final static Hashtable<String, List<Value>> features = new Hashtable<>();
     static {
-        features.put("element", asList("foo", "bar", "baz"));
-        features.put("attribute", asList("foo", "bar", "baz"));
+        features.put("element", asList(
+                new Value(null, "foo"),
+                new Value(null, "bar"),
+                new Value(null, "baz")
+        ));
+        features.put("attribute", asList(
+                new Value(null, "foo"),
+                new Value(null, "bar"),
+                new Value(null, "baz")
+        ));
     }
     private final static Map<String, Features> plugins = new HashMap<String, Features>();
     static {
@@ -96,19 +102,24 @@ public class FileGeneratorTest {
     }
 
     private static abstract class AbstractAction implements IAction {
-        protected List<String> inputs = new ArrayList<>();
+        protected List<Value> inputs = new ArrayList<>();
         protected Map<String, String> params = new HashMap<>();
         protected Map<String, Features> features;
-        public void setInput(final List<String> input) {
+        @Override
+        public void setInput(final List<Value> input) {
             inputs.addAll(input);
         }
+        @Override
         public void addParam(final String name, final String value) {
             params.put(name, value);
         }
+        @Override
         public void setFeatures(final Map<String, Features> features) {
             this.features = features;
         }
+        @Override
         public abstract String getResult();
+        @Override
         public void setLogger(final DITAOTLogger logger) {
             // NOOP
         }
@@ -122,7 +133,10 @@ public class FileGeneratorTest {
             paramsExp.put("id", "element");
             paramsExp.put("behavior", this.getClass().getName());
             assertEquals(paramsExp, params);
-            final List<String> inputExp = Arrays.asList(new String[] {"foo", "bar", "baz"});
+            final List<Value> inputExp = Arrays.asList(
+                    new Value(null, "foo"),
+                    new Value(null, "bar"),
+                    new Value(null, "baz"));
             assertEquals(inputExp, inputs);
             assertEquals(FileGeneratorTest.plugins, features);
             output.startElement(NULL_NS_URI, "foo", "foo", new AttributesBuilder().add("bar", "baz").build());
@@ -141,7 +155,7 @@ public class FileGeneratorTest {
             final Map<String, String> paramsExp = new HashMap<>();
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
             assertEquals(paramsExp, params);
-            final List<String> inputExp = Arrays.asList(new String[] {"attribute"});
+            final List<Value> inputExp = Arrays.asList(new Value[] {new Value(null, "attribute")});
             assertEquals(inputExp, inputs);
             assertEquals(FileGeneratorTest.plugins, features);
             return "bar";

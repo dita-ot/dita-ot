@@ -25,8 +25,8 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.*;
-
-import static java.util.Arrays.asList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Generate outputfile with templates.
@@ -49,12 +49,23 @@ final class FileGenerator extends XMLFilterImpl {
 
     private DITAOTLogger logger;
     /** Plug-in features. */
-    private final Map<String, List<String>> featureTable;
+    private final Map<String, List<Value>> featureTable;
     private final Map<String, Features> pluginTable;
     /** Template file. */
     private File templateFile;
 
-    public FileGenerator(final Hashtable<String, List<String>> featureTbl, final Map<String, Features> pluginTable) {
+    /**
+     * Default Constructor.
+     */
+    public FileGenerator() {
+        this(null, null);
+    }
+
+    /**
+     * Constructor init featureTable.
+     * @param featureTbl featureTbl
+     */
+    public FileGenerator(final Hashtable<String, List<Value>> featureTbl, final Map<String, Features> pluginTable) {
         featureTable = featureTbl;
         this.pluginTable = pluginTable;
         templateFile = null;
@@ -141,7 +152,10 @@ final class FileGenerator extends XMLFilterImpl {
                                 action.setLogger(logger);
                                 action.setFeatures(pluginTable);
                                 action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
-                                action.setInput(asList(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR)));
+                                final List<Value> value = Stream.of(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR))
+                                        .map(val -> new Value(null, val))
+                                        .collect(Collectors.toList());
+                                action.setInput(value);
                                 final String result = action.getResult();
                                 atts.add(name, result);
                             } else {

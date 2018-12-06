@@ -7,6 +7,8 @@
  */
 package org.dita.dost.util;
 
+import org.apache.xml.resolver.Catalog;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +28,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -71,7 +74,12 @@ public class XSpecTest {
     @BeforeClass
     public static void setUpClass() throws TransformerException {
         transformerFactory = TransformerFactory.newInstance();
-        resolver = new ClassPathResolver(transformerFactory.getURIResolver());
+        final File ditaDir = new File(Optional.ofNullable(System.getProperty("dita.dir"))
+                .orElse("src" + File.separator + "main"))
+                .getAbsoluteFile();
+        CatalogUtils.setDitaDir(ditaDir);
+        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
+        resolver = new ClassPathResolver(catalogResolver);
         transformerFactory.setURIResolver(resolver);
         final Source stylesheet = resolver.resolve("classpath:///XSpec/generate-xspec-tests.xsl", "");
         compiler = transformerFactory.newTransformer(stylesheet);

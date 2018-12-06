@@ -674,6 +674,6 @@ See the accompanying LICENSE file for applicable license.
     </xsl:if>
   </xsl:template>
 
-  <xsl:include href="choicetable.xsl"/>
+  <xsl:include href="plugin:org.dita.html5:xsl/choicetable.xsl"/>
 
 </xsl:stylesheet>

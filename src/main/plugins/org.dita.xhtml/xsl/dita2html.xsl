@@ -17,7 +17,7 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- stylesheet imports -->
 <!-- the main dita to xhtml converter -->
-<xsl:import href="dita2html-base.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/dita2html-base.xsl"/>
 
 <xsl:output method="html"
             encoding="UTF-8"

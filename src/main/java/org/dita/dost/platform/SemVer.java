@@ -8,25 +8,57 @@
 
 package org.dita.dost.platform;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SemVer implements Comparable<SemVer> {
 
     public final int major;
     public final int minor;
     public final int patch;
+    public final List<Object> preRelease;
 
     public SemVer(int major, int minor, int patch) {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
+        this.preRelease = Collections.emptyList();
     }
 
     public SemVer(String version) {
-        String[] tokens = version.split("\\.");
+        String value = version;
+        String preRel = null;
+        final int sep = value.indexOf('-');
+        if (sep != -1) {
+            preRel = value.substring(sep + 1);
+            value = value.substring(0, sep);
+        }
+        String build = null;
+        if (preRel != null) {
+            final int buildSep = preRel.indexOf('+');
+            if (buildSep != -1) {
+                build = preRel.substring(buildSep + 1);
+                preRel = preRel.substring(0, buildSep);
+            }
+        }
+        String[] tokens = value.split("\\.");
         major = Integer.valueOf(tokens[0]);
         minor = tokens.length >= 2 ? Integer.valueOf(tokens[1]) : 0;
         patch = tokens.length >= 3 ? Integer.valueOf(tokens[2]) : 0;
+        preRelease = preRel != null
+                ? Stream.of(preRel.split("\\."))
+                .map(token -> {
+                    try {
+                        return Integer.valueOf(token);
+                    } catch (NumberFormatException e) {
+                        return token;
+                    }
+                })
+                .collect(Collectors.toList())
+                : Collections.emptyList();
     }
 
     @Override

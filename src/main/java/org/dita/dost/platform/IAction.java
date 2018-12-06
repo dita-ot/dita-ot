@@ -24,7 +24,7 @@ public interface IAction {
      * Set the input string.
      * @param input input
      */
-    void setInput(List<String> input);
+    void setInput(List<Value> input);
     /**
      * Add input parameter.
      * @param name parameter name

@@ -11,12 +11,12 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:import href="plugin:org.dita.pdf2:xsl/fo/topic2fo.xsl"/>
 
-  <xsl:import href="../../cfg/fo/attrs/tables-attr_axf.xsl"/>
-  <xsl:import href="../../cfg/fo/attrs/toc-attr_axf.xsl"/>
-  <xsl:import href="../../cfg/fo/attrs/index-attr_axf.xsl" />
-  <xsl:import href="root-processing_axf.xsl"/>
-  <xsl:import href="index_axf.xsl"/>
-  <xsl:import href="topic_axf.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.axf:cfg/fo/attrs/tables-attr_axf.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.axf:cfg/fo/attrs/toc-attr_axf.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.axf:cfg/fo/attrs/index-attr_axf.xsl" />
+  <xsl:import href="plugin:org.dita.pdf2.axf:xsl/fo/root-processing_axf.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.axf:xsl/fo/index_axf.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.axf:xsl/fo/topic_axf.xsl"/>
   
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 

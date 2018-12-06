@@ -11,7 +11,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- Import the main ditamap to HTML Help Contents conversion -->
-<xsl:import href="map2htmlhelp/map2hhcImpl.xsl"/>
+<xsl:import href="plugin:org.dita.htmlhelp:xsl/map2htmlhelp/map2hhcImpl.xsl"/>
 
 <dita:extension id="dita.xsl.htmlhelp.map2hhc" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 

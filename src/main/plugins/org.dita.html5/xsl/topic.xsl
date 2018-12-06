@@ -11,8 +11,8 @@ See the accompanying LICENSE file for applicable license.
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot dita2html ditamsg">
   
-  <xsl:include href="get-meta.xsl"/>
-  <xsl:include href="rel-links.xsl"/>
+  <xsl:include href="plugin:org.dita.html5:xsl/get-meta.xsl"/>
+  <xsl:include href="plugin:org.dita.html5:xsl/rel-links.xsl"/>
 
   <!-- =========== DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS =========== -->
   
@@ -2625,8 +2625,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:include href="tables.xsl"/>
-  <xsl:include href="simpletable.xsl"/>
+  <xsl:include href="plugin:org.dita.html5:xsl/tables.xsl"/>
+  <xsl:include href="plugin:org.dita.html5:xsl/simpletable.xsl"/>
   
   <xsl:key name="enumerableByClass"
     match="*[contains(@class, ' topic/fig ')][*[contains(@class, ' topic/title ')]] |
@@ -2746,7 +2746,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
   
-  <xsl:include href="css-class.xsl"/>
+  <xsl:include href="plugin:org.dita.html5:xsl/css-class.xsl"/>
   <xsl:include href="plugin:org.dita.html5:xsl/functions.xsl"/>
 
 </xsl:stylesheet>

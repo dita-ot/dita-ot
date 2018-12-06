@@ -11,12 +11,12 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:import href="plugin:org.dita.pdf2:xsl/fo/topic2fo.xsl"/>
 
-  <xsl:import href="../../cfg/fo/attrs/commons-attr_xep.xsl"/>
-  <xsl:import href="../../cfg/fo/attrs/layout-masters-attr_xep.xsl"/>
-  <xsl:import href="root-processing_xep.xsl"/>
-  <xsl:import href="../../cfg/fo/attrs/index-attr_xep.xsl"/>
-  <xsl:import href="index_xep.xsl"/>
-  <xsl:import href="topic_xep.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.xep:cfg/fo/attrs/commons-attr_xep.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.xep:cfg/fo/attrs/layout-masters-attr_xep.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.xep:xsl/fo/root-processing_xep.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.xep:cfg/fo/attrs/index-attr_xep.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.xep:xsl/fo/index_xep.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2.xep:xsl/fo/topic_xep.xsl"/>
 
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 

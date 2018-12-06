@@ -35,7 +35,7 @@ final class Features {
     private final Hashtable<String, List<String>> featureTable;
     private final List<PluginRequirement> requireList;
     private final Hashtable<String, String> metaTable;
-    private final List<String> templateList;
+    private final List<Value> templateList;
 
     /**
      * Constructor init pluginDir.
@@ -187,14 +187,14 @@ final class Features {
      * Add a template.
      * @param file file name
      */
-    public void addTemplate(final String file) {
+    public void addTemplate(final Value file) {
         templateList.add(file);
     }
     /**
      * get all templates.
      * @return templates list
      */
-    public List<String> getAllTemplates() {
+    public List<Value> getAllTemplates() {
         return templateList;
     }
 }

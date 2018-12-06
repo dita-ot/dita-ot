@@ -32,7 +32,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
 
     private final XMLReader reader;
     private DITAOTLogger logger;
-    private final Set<String> fileNameSet;
+    private final Set<Value> fileNameSet;
     final Hashtable<String, String> paramTable;
     private int elemLevel = 0;
     /** Current processing file. */
@@ -54,7 +54,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
     }
 
     @Override
-    public void setInput(final List<String> input) {
+    public void setInput(final List<Value> input) {
         fileNameSet.addAll(input);
     }
 
@@ -72,8 +72,8 @@ class InsertAction extends XMLFilterImpl implements IAction {
     public void getResult(final ContentHandler retBuf) throws SAXException {
         setContentHandler(retBuf);
         try {
-            for (final String fileName: fileNameSet) {
-                currentFile = fileName;
+            for (final Value fileName: fileNameSet) {
+                currentFile = fileName.value;
                 reader.parse(currentFile);
             }
         } catch (final Exception e) {
