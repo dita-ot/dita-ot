@@ -44,8 +44,8 @@ See the accompanying LICENSE file for applicable license.
     version="2.0">
 
     <!-- FIXME these imports should be moved to shell -->
-    <xsl:import href="topic.xsl"/>
-    <xsl:import href="concept.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/topic.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/concept.xsl"/>
 
     <xsl:key name="id" match="*[@id]" use="@id"/>
     <xsl:key name="map-id"

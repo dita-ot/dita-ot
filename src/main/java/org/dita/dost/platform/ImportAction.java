@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 abstract class ImportAction implements IAction {
 
     /** Action values. */
-    final Set<String> valueSet;
+    final Set<Value> valueSet;
     /** Action parameters. */
     final Hashtable<String, String> paramTable;
     private DITAOTLogger logger;
@@ -57,7 +57,7 @@ abstract class ImportAction implements IAction {
      * @param input input
      */
     @Override
-    public void setInput(final List<String> input) {
+    public void setInput(final List<Value> input) {
         valueSet.addAll(input);
     }
 

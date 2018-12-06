@@ -11,8 +11,8 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- Import the main ditamap to HTML TOC conversion -->
-<xsl:import href="map2htmtoc/map2htmtocImpl.xsl"/>
-<xsl:import href="map2htmtoc/map2htmlImpl.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/map2htmtoc/map2htmtocImpl.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/map2htmtoc/map2htmlImpl.xsl"/>
 
 <dita:extension id="dita.xsl.htmltoc" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 

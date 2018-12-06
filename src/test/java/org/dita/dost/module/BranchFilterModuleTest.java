@@ -73,6 +73,43 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         }
         return job;
     }
+    
+    private Job getUplevelsJob(File uplevelsTempDir) throws IOException {
+        final Job job = new Job(uplevelsTempDir);
+        job.setInputDir(uplevelsTempDir.toURI());
+        job.add(new Job.FileInfo.Builder()
+                .src(new File(uplevelsTempDir, "main/testuplevels.ditamap").toURI())
+                .result(new File(uplevelsTempDir, "main/testuplevels.ditamap").toURI())
+                .uri(URI.create("main/testuplevels.ditamap"))
+                .format(ATTR_FORMAT_VALUE_DITAMAP)
+                .build());
+        for (final String uri: Arrays.asList("main/advanced.ditaval", "main/novice.ditaval")) {
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(uplevelsTempDir, uri).toURI())
+                    .result(new File(uplevelsTempDir, uri).toURI())
+                    .uri(URI.create(uri))
+                    .format(ATTR_FORMAT_VALUE_DITAVAL)
+                    .build());
+        }
+        for (final String uri: Arrays.asList("main/parent.dita", "main/kiddo.dita", "main/subdirkiddo.dita",
+                "peer/peerkiddo.dita","main/parentdefault.dita", "main/kiddodefault.dita", "main/subdirkiddodefault.dita",
+                "peer/peerkiddodefault.dita")) {
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(uplevelsTempDir, uri).toURI())
+                    .result(new File(uplevelsTempDir, uri).toURI())
+                    .uri(URI.create(uri))
+                    .format(ATTR_FORMAT_VALUE_DITA)
+                    .build());
+        }
+        for (final String uri: Arrays.asList("main/weechild.dita", "main/subdir/weechild.dita",
+                "main/weechilddefault.dita", "main/subdir/weechilddefault.dita")) {
+            job.add(new Job.FileInfo.Builder()
+                    .result(new File(uplevelsTempDir, uri).toURI())
+                    .uri(URI.create(uri))
+                    .build());
+        }
+        return job;
+    }
 
     @After
     public void tearDown() throws Exception {
@@ -137,6 +174,72 @@ public class BranchFilterModuleTest extends BranchFilterModule {
                 .collect(Collectors.toList());
         Collections.sort(filesAct);
         assertEquals(filesExp, filesAct);
+        assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    }
+    
+    @Test
+    public void testUplevelsMap() throws IOException, SAXException {
+        final File uplevelsExpDir = new File (expDir, "uplevels");
+        final File uplevelsTempDir = new File (tempDir, "uplevels"); 
+        final BranchFilterModule m = new BranchFilterModule();
+        final Job job = getUplevelsJob(uplevelsTempDir);
+        m.setJob(job);
+        final CachingLogger logger = new CachingLogger();
+        m.setLogger(logger);
+        
+        m.processMap(URI.create("main/testuplevels.ditamap"));
+        assertXMLEqual(new InputSource(new File(uplevelsExpDir, "main/testuplevels.ditamap").toURI().toString()),
+                new InputSource(new File(uplevelsTempDir, "main/testuplevels.ditamap").toURI().toString()));
+
+        final List<String> exp = Arrays.asList(
+                "main/novice.ditaval", "main/advanced.ditaval",
+                "main/kiddo.dita", "main/kiddodefault.dita", "main/parent.dita", "main/parentdefault.dita",
+                "main/parentdefault-1.dita", "main/parent-novice.dita", "main/PREFIX-parent-advanced.dita",
+                "main/PREFIX-weechild-advanced.dita", "main/subdirkiddo.dita", "main/subdirkiddodefault.dita",
+                "main/testuplevels.ditamap", "main/weechilddefault-1.dita", "main/weechild-novice.dita",
+                "main/subdir/PREFIX-weechild-advanced.dita", "main/subdir/weechilddefault-1.dita", "main/subdir/weechild-novice.dita",
+                "peer/peerkiddo.dita", "peer/peerkiddodefault.dita", "peer/peerkiddodefault-1.dita",
+                "peer/peerkiddo-novice.dita", "peer/PREFIX-peerkiddo-advanced.dita",
+                "main/weechild.dita", "main/subdir/weechilddefault.dita",
+                "main/subdir/weechild.dita", "main/weechilddefault.dita");
+        
+        assertEquals(exp.size(), job.getFileInfo().size());
+        for (final String f : exp) {
+            assertNotNull(job.getFileInfo(URI.create(f)));
+        }
+
+        final List<String> filesExpMain = Arrays.asList(
+                "main/kiddo.dita", "main/kiddodefault.dita", "main/parent.dita", "main/parentdefault.dita",
+                "main/parentdefault-1.dita", "main/parent-novice.dita", "main/PREFIX-parent-advanced.dita",
+                "main/PREFIX-weechild-advanced.dita", "main/subdirkiddo.dita", "main/subdirkiddodefault.dita",
+                "main/weechilddefault-1.dita", "main/weechild-novice.dita"
+        );
+        final List<String> filesExpMainSubdir = Arrays.asList(
+                "main/subdir/PREFIX-weechild-advanced.dita", "main/subdir/weechilddefault-1.dita", "main/subdir/weechild-novice.dita"
+        );
+        final List<String> filesExpPeer = Arrays.asList(
+                "peer/peerkiddo.dita", "peer/peerkiddodefault.dita", "peer/peerkiddodefault-1.dita",
+                "peer/peerkiddo-novice.dita", "peer/PREFIX-peerkiddo-advanced.dita"
+        );
+        Collections.sort(filesExpMain);
+        Collections.sort(filesExpMainSubdir);
+        Collections.sort(filesExpPeer);
+        final List<String> filesActMain = Arrays.stream(new File (uplevelsTempDir + File.separator + "main").listFiles((dir, name) -> name.endsWith(".dita")))
+                .map(f -> "main/" + f.getName())
+                .collect(Collectors.toList());
+        final List<String> filesActMainSubdir = Arrays.stream(new File (uplevelsTempDir + File.separator + "main/subdir").listFiles((dir, name) -> name.endsWith(".dita")))
+                .map(f -> "main/subdir/" + f.getName())
+                .collect(Collectors.toList());
+        final List<String> filesActPeer = Arrays.stream(new File (uplevelsTempDir + File.separator + "peer").listFiles((dir, name) -> name.endsWith(".dita")))
+                .map(f -> "peer/" + f.getName())
+                .collect(Collectors.toList());
+        
+        Collections.sort(filesActMain);
+        Collections.sort(filesActMainSubdir);
+        Collections.sort(filesActPeer);
+        assertEquals(filesExpMain, filesActMain);
+        assertEquals(filesExpMainSubdir, filesActMainSubdir);
+        assertEquals(filesExpPeer, filesActPeer);
         assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
     }
 

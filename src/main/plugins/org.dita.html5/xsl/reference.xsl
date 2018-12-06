@@ -318,6 +318,6 @@ See the accompanying LICENSE file for applicable license.
     </xsl:if>
   </xsl:template>
 
-  <xsl:include href="properties.xsl"/>
+  <xsl:include href="plugin:org.dita.html5:xsl/properties.xsl"/>
 
 </xsl:stylesheet>

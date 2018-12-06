@@ -9,7 +9,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
-  <xsl:import href="syntax-braces.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/syntax-braces.xsl"/>
 
   <xsl:template match="*[contains(@class, ' pr-d/codeblock ')]" name="topic.pr-d.codeblock">
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>

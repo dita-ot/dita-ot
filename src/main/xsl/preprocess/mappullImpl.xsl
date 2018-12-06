@@ -40,9 +40,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:saxon="http://saxon.sf.net/"
                 exclude-result-prefixes="xs dita-ot mappull ditamsg saxon">
-  <xsl:import href="../common/output-message.xsl"/>
-  <xsl:import href="../common/dita-utilities.xsl"/>
-  <xsl:import href="../common/dita-textonly.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix" as="xs:string">DOTX</xsl:variable>
   <!-- If converting to PDF, never try to pull info from targets with print="no" -->

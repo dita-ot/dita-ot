@@ -16,14 +16,7 @@ import static java.util.Arrays.*;
 import static org.dita.dost.platform.PluginParser.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -185,36 +178,35 @@ public class FeaturesTest {
     @Test
     public void testAddTemplate() {
         final Features f = new Features(new File("base", "plugins"), new File("base"));
-        f.addTemplate("foo");
-        f.addTemplate("foo");
-        f.addTemplate("bar");
+        f.addTemplate(new Value("base", "foo"));
+        f.addTemplate(new Value("base", "foo"));
+        f.addTemplate(new Value("base", "bar"));
         f.addTemplate(null);
     }
 
     @Test
     public void testGetAllTemplates() {
         final Features f = new Features(new File("base", "plugins"), new File("base"));
-        f.addTemplate("foo");
-        f.addTemplate("foo");
-        f.addTemplate("bar");
+        f.addTemplate(new Value("base", "foo"));
+        f.addTemplate(new Value("base", "foo"));
+        f.addTemplate(new Value("base", "bar"));
         f.addTemplate(null);
 
-        final List<String> act = f.getAllTemplates();
-        Collections.sort(act, new Comparator<String>() {
-            public int compare(final String arg0, final String arg1) {
-                if (arg0 == null && arg1 == null) {
-                    return 0;
-                } else if (arg0 == null) {
-                    return 1;
-                } else if (arg1 == null) {
+        final List<Value> act = f.getAllTemplates();
+        Collections.sort(act, new Comparator<Value>() {
+            public int compare(final Value a0, final Value a1) {
+                if (a0 == null || a1 == null) {
                     return -1;
-                } else {
-                    return arg0.compareTo(arg1);
                 }
+                return Objects.compare(a0.value, a1.value, String::compareTo);
             }
         });
-        assertArrayEquals(new String[] {"bar", "foo", "foo", null},
-                act.toArray(new String[0]));
+        assertEquals(Arrays.asList(
+                null,
+                new Value("base", "bar"),
+                new Value("base", "foo"),
+                new Value("base", "foo")),
+                act);
     }
 
     private static Element getElement(final String value, final String type) {

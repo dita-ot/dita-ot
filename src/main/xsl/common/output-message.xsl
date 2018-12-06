@@ -13,7 +13,7 @@ See the accompanying LICENSE file for applicable license.
   message template. To include this file, you will need the following
   two commands in your XSL:
   
-  <xsl:include href="output-message.xsl"/>           - Place with other included files
+  <xsl:include href="plugin:org.dita.base:xsl/common/output-message.xsl"/>           - Place with other included files
   
   <xsl:variable name="msgprefix">DOTX</xsl:variable> - Place with other variables
   

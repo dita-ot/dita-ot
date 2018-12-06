@@ -19,9 +19,9 @@ See the accompanying LICENSE file for applicable license.
   exclude-result-prefixes="dita-ot"
   >
 
-  <xsl:import href="topic2textonly.xsl"/>
-  <xsl:import href="map2textonly.xsl"/>
-  <xsl:import href="ui-d2textonly.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/topic2textonly.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/map2textonly.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/ui-d2textonly.xsl"/>
      
   
 </xsl:stylesheet>
