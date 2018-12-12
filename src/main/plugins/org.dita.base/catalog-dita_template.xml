@@ -9,6 +9,8 @@ See the accompanying LICENSE file for applicable license.
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
          xmlns:dita="http://dita-ot.sourceforge.net">
 
+  <rewriteURI uriStartString="platform:" rewritePrefix="../../"/>
+
   <dita:extension id="dita.catalog.plugin-info"
     behavior="org.dita.dost.platform.ImportPluginCatalogAction"/>
 

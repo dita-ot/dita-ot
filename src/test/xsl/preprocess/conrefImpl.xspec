@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
   xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
-  stylesheet="../../../main/xsl/preprocess/conrefImpl.xsl">
+  stylesheet="../../../main/plugins/org.dita.base/xsl/preprocess/conrefImpl.xsl">
   
   <x:param name="ORIGINAL-DOMAINS" select="'(topic) (topic weakConstraint-c) (topic hi-d) (topic hi-d sharedHighlightConstraint-c) s(topic strictConstraint-c)'"/>
   <x:param name="STRICT-CONSTRAINTS" select="'s(topic strictConstraint-c)'"/>

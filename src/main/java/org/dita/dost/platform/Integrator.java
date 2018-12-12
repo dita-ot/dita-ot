@@ -40,6 +40,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.Map.Entry;
@@ -374,6 +375,8 @@ public final class Integrator {
 
     private Properties readMessageBundle() throws IOException, XMLStreamException {
         final Properties messages = new Properties();
+//        final Path basePluginDir = pluginTable.get("org.dita.base").getPluginDir().toPath();
+//        final File messagesXmlFile = basePluginDir.resolve(CONFIG_DIR).resolve("messages.xml").toFile();
         final File messagesXmlFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages.xml").toFile();
         if (messagesXmlFile.exists()) {
             try (final InputStream in = new FileInputStream(messagesXmlFile)) {

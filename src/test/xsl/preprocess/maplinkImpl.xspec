@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
-  stylesheet="../../../main/xsl/preprocess/maplinkImpl.xsl">
+  stylesheet="../../../main/plugins/org.dita.base/xsl/preprocess/maplinkImpl.xsl">
 
   <x:scenario label="Scenario for testing function GetPathToMap">
     <x:scenario label="Scenario for testing function GetPathToMap">

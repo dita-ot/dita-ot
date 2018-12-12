@@ -47,7 +47,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:value-of select="concat($msgcat, $msgnum, $msgsev)"/>
     </xsl:param>
     
-    <xsl:variable name="msgdoc" select="document('plugin:org.dita.base:config/messages.xml')" as="document-node()?"/>
+    <xsl:variable name="msgdoc" select="document('platform:/config/messages.xml')" as="document-node()?"/>
     <xsl:variable name="msgcontent" as="xs:string*">
       <xsl:choose>
         <xsl:when test="$msg != '***'">

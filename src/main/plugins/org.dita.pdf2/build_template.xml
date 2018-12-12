@@ -111,7 +111,7 @@ with those set forth herein.
     <path id="xml.catalog.path">
       <pathelement location="${customization.dir}/catalog.xml"/>
       <pathelement location="${dita.plugin.org.dita.pdf2.dir}/cfg/catalog.xml"/>
-      <pathelement location="${dita.dir}/catalog-dita.xml"/>
+      <pathelement location="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
     </path>
     <xmlcatalog id="xml.catalog">
       <catalogpath refid="xml.catalog.path"/>
