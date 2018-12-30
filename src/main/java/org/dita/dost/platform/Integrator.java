@@ -371,6 +371,8 @@ public final class Integrator {
                 .build();
         writeStartcmdShell(libJars);
         writeStartcmdBatch(libJars);
+
+        customIntegration();
     }
 
     private Properties readMessageBundle() throws IOException, XMLStreamException {
@@ -436,6 +438,20 @@ public final class Integrator {
         }
         res.sort(Comparator.comparing(File::getAbsolutePath));
         return res;
+    }
+
+    private void customIntegration() {
+        final ServiceLoader<CustomIntegrator> customIntegrators = ServiceLoader.load(CustomIntegrator.class);
+        for (final CustomIntegrator customIntegrator : customIntegrators) {
+            customIntegrator.setLogger(logger);
+            customIntegrator.setDitaDir(ditaDir);
+            try {
+                customIntegrator.process();
+            } catch (final Exception e) {
+                logger.error("Custom integrator " + customIntegrator.getClass().getName() + " failed: " + e.getMessage(), e);
+
+            }
+        }
     }
 
     private Iterable<String> orderPlugins(final Set<String> ids) {
