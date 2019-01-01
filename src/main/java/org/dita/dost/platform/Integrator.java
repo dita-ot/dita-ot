@@ -209,6 +209,7 @@ public final class Integrator {
         for (final String tmpl : properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
             final String t = tmpl.trim();
             if (t.length() != 0) {
+                logger.warn(MessageUtils.getMessage("DOTJ080W", "templates", "template").toString());
                 templateSet.put(t, null);
             }
         }
