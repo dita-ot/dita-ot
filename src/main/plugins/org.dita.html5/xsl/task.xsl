@@ -612,6 +612,18 @@ See the accompanying LICENSE file for applicable license.
     </xsl:apply-templates>
   </xsl:template>
   
+  <xsl:template match="*[contains(@class,' task/taskbody ')]/*[contains(@class,' topic/example ')]">
+    <section>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="gen-toc-id"/>
+      <xsl:call-template name="setidaname"/>
+      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+      <xsl:apply-templates select="." mode="dita2html:section-heading"/>
+      <xsl:apply-templates select="node() except *[contains(@class, ' topic/title ')]"/>
+      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+    </section>
+  </xsl:template>
+  
   <xsl:template match="*[contains(@class,' task/taskbody ')]/*[contains(@class,' topic/example ')][not(*[contains(@class,' topic/title ')])]" mode="dita2html:section-heading">
     <xsl:apply-templates select="." mode="generate-task-label">
       <xsl:with-param name="use-label">
