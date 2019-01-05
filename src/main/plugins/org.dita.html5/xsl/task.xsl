@@ -113,48 +113,52 @@ See the accompanying LICENSE file for applicable license.
         <xsl:otherwise>ul</xsl:otherwise>
       </xsl:choose>
     </xsl:param>
-    <xsl:apply-templates select="." mode="generate-task-label">
-      <xsl:with-param name="use-label">
-        <xsl:call-template name="getVariable">
-          <xsl:with-param name="id">
-            <xsl:choose>
-              <xsl:when test="contains(@class,' task/steps ')">task_procedure</xsl:when>
-              <xsl:otherwise>task_procedure_unordered</xsl:otherwise>
-            </xsl:choose>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:with-param>
-    </xsl:apply-templates>
-    <xsl:choose>
-      <xsl:when test="*[contains(@class,' task/step ')] and not(*[contains(@class,' task/step ')][2])">
-        <!-- Single step. Process any stepsection before the step (cannot appear after). -->
-        <xsl:apply-templates select="*[contains(@class,' task/stepsection ')]"/>
-        <xsl:apply-templates select="*[contains(@class,' task/step ')]" mode="onestep">
-          <xsl:with-param name="step_expand" select="$step_expand"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <xsl:when test="not(*[contains(@class,' task/stepsection ')])">
-        <xsl:apply-templates select="." mode="step-elements-with-no-stepsection">
-          <xsl:with-param name="step_expand" select="$step_expand"/>
-          <xsl:with-param name="list-type" select="$list-type"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <xsl:when test="*[1][contains(@class,' task/stepsection ')] and not(*[contains(@class,' task/stepsection ')][2])">
-        <!-- Stepsection is first, no other appearances -->
-        <xsl:apply-templates select="*[contains(@class,' task/stepsection ')]"/>
-        <xsl:apply-templates select="." mode="step-elements-with-no-stepsection">
-          <xsl:with-param name="step_expand" select="$step_expand"/>
-          <xsl:with-param name="list-type" select="$list-type"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- Stepsection elements mixed in with steps -->
-        <xsl:apply-templates select="." mode="step-elements-with-stepsection">
-          <xsl:with-param name="step_expand" select="$step_expand"/>
-          <xsl:with-param name="list-type" select="$list-type"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
+    <section>
+      <xsl:call-template name="gen-toc-id"/>
+      <xsl:call-template name="setidaname"/>
+      <xsl:apply-templates select="." mode="generate-task-label">
+        <xsl:with-param name="use-label">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id">
+              <xsl:choose>
+                <xsl:when test="contains(@class,' task/steps ')">task_procedure</xsl:when>
+                <xsl:otherwise>task_procedure_unordered</xsl:otherwise>
+              </xsl:choose>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:choose>
+        <xsl:when test="*[contains(@class,' task/step ')] and not(*[contains(@class,' task/step ')][2])">
+          <!-- Single step. Process any stepsection before the step (cannot appear after). -->
+          <xsl:apply-templates select="*[contains(@class,' task/stepsection ')]"/>
+          <xsl:apply-templates select="*[contains(@class,' task/step ')]" mode="onestep">
+            <xsl:with-param name="step_expand" select="$step_expand"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="not(*[contains(@class,' task/stepsection ')])">
+          <xsl:apply-templates select="." mode="step-elements-with-no-stepsection">
+            <xsl:with-param name="step_expand" select="$step_expand"/>
+            <xsl:with-param name="list-type" select="$list-type"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="*[1][contains(@class,' task/stepsection ')] and not(*[contains(@class,' task/stepsection ')][2])">
+          <!-- Stepsection is first, no other appearances -->
+          <xsl:apply-templates select="*[contains(@class,' task/stepsection ')]"/>
+          <xsl:apply-templates select="." mode="step-elements-with-no-stepsection">
+            <xsl:with-param name="step_expand" select="$step_expand"/>
+            <xsl:with-param name="list-type" select="$list-type"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- Stepsection elements mixed in with steps -->
+          <xsl:apply-templates select="." mode="step-elements-with-stepsection">
+            <xsl:with-param name="step_expand" select="$step_expand"/>
+            <xsl:with-param name="list-type" select="$list-type"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </section>
   </xsl:template>
   
   <xsl:template match="*" mode="step-elements-with-no-stepsection">
