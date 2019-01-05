@@ -45,9 +45,8 @@ See the accompanying LICENSE file for applicable license.
   </div>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' task/prereq ')]" mode="get-output-class">p</xsl:template>
   <xsl:template match="*[contains(@class,' task/prereq ')]" name="topic.task.prereq">
-  <div class="p">
+  <section>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-toc-id"/>
     <xsl:call-template name="setidaname"/>
@@ -77,7 +76,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:call-template>
       </a></p>
     </xsl:if>
-  </div>
+  </section>
   </xsl:template>
   
   <xsl:template match="*" mode="make-steps-compact">
