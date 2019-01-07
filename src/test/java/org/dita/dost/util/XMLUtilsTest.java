@@ -25,6 +25,16 @@ import org.junit.Test;
 public class XMLUtilsTest {
 
     @Test
+    public void testGetPrefix() {
+        assertEquals("", XMLUtils.getPrefix("foo"));
+        assertEquals("bar", XMLUtils.getPrefix("bar:foo"));
+        try {
+            XMLUtils.getPrefix(null);
+            fail();
+        } catch (final NullPointerException e) {}
+    }
+
+    @Test
     public void testAddOrSetAttributeAttributesImplStringStringStringStringString() {
         final AttributesImpl atts = new AttributesImpl();
         XMLUtils.addOrSetAttribute(atts, "foo", "foo", "foo", "CDATA", "foo");
