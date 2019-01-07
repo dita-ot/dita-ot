@@ -15,7 +15,7 @@ See the accompanying LICENSE file for applicable license.
                 exclude-result-prefixes="xs dita-ot table simpletable">
 
   <xsl:variable name="empty-property" as="element(property)">
-    <property class="- topic/sthead reference/property ">
+    <property class="- topic/strow reference/property ">
       <proptype class="- topic/stentry reference/proptype "/>
       <propvalue class="- topic/stentry reference/propvalue "/>
       <propdesc class="- topic/stentry reference/propdesc "/>
