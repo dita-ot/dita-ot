@@ -240,6 +240,11 @@ public final class ExtensibleAntInvoker extends Task {
                 }
             }
             final AbstractPipelineModule module = factory.createModule(m.getImplementation());
+            try {
+                module.setProcessingPipe(m.getFilters());
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new BuildException(e);
+            }
             if (!m.fileInfoFilters.isEmpty()) {
                 module.setFileInfoFilter(combine(m.fileInfoFilters));
             }
@@ -325,6 +330,7 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public static class ModuleElem {
 
+        public final List<XmlFilterElem> filters = new ArrayList<>();
         public final List<ParamElem> params = new ArrayList<>();
         private Class<? extends AbstractPipelineModule> cls;
         public final Collection<FileInfoFilterElem> fileInfoFilters = new ArrayList<>();
@@ -341,6 +347,33 @@ public final class ExtensibleAntInvoker extends Task {
 
         public void addConfiguredDitaFileset(final FileInfoFilterElem fileInfoFilter) {
             fileInfoFilters.add(fileInfoFilter);
+        }
+
+        public void addConfiguredFilter(final XmlFilterElem filter) {
+            filters.add(filter);
+        }
+
+        public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
+            final List<FilterPair> res = new ArrayList<>(filters.size());
+            for (final XmlFilterElem f: filters) {
+                if (isValid(getProject(), getLocation(), f.getIf(), f.getUnless())) {
+                    final AbstractXMLFilter fc = f.getImplementation().newInstance();
+                    for (final ParamElem p : f.params) {
+                        if (!p.isValid()) {
+                            throw new BuildException("Incomplete parameter");
+                        }
+                        if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
+                            fc.setParam(p.getName(), p.getValue());
+                        }
+                    }
+                    final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
+//                    predicates.addAll(getFormat());
+//                    assert !predicates.isEmpty();
+                    Predicate<FileInfo> fs = combine(predicates);
+                    res.add(new FilterPair(fc, fs));
+                }
+            }
+            return res;
         }
 
         public Class<? extends AbstractPipelineModule> getImplementation() {
@@ -529,8 +562,8 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public static class SaxPipeElem extends ModuleElem {
 
-        private final List<XmlFilterElem> filters = new ArrayList<>();
-        private Project project;
+//        private final List<XmlFilterElem> filters = new ArrayList<>();
+//        private Project project;
         private List<String> format;
 
         // Ant setters
@@ -539,10 +572,11 @@ public final class ExtensibleAntInvoker extends Task {
             this.format = Collections.singletonList(format);
         }
 
-        public void addConfiguredFilter(final XmlFilterElem filter) {
-            filters.add(filter);
-        }
+//        public void addConfiguredFilter(final XmlFilterElem filter) {
+//            filters.add(filter);
+//        }
 
+        @Override
         public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
             final List<FilterPair> res = new ArrayList<>(filters.size());
             for (final XmlFilterElem f: filters) {

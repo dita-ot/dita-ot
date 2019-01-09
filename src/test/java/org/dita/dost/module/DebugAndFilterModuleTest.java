@@ -17,10 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -96,6 +93,8 @@ public class DebugAndFilterModuleTest {
         final DebugAndFilterModule module = new DebugAndFilterModule();
         module.setLogger(new TestUtils.TestLogger());
         module.setJob(job);
+        module.setProcessingPipe(Collections.emptyList());
+        
         module.execute(pipelineInput);
     }
 

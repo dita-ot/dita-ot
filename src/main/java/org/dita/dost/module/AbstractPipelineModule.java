@@ -15,6 +15,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -47,5 +48,7 @@ public interface AbstractPipelineModule {
     void setJob(Job job);
 
     void setFileInfoFilter(Predicate<FileInfo> fileInfoFilter);
+
+    void setProcessingPipe(List<XmlFilterModule.FilterPair> pipe);
 
 }
