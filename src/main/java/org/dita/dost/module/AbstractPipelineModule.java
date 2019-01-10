@@ -49,6 +49,7 @@ public interface AbstractPipelineModule {
 
     void setFileInfoFilter(Predicate<FileInfo> fileInfoFilter);
 
-    void setProcessingPipe(List<XmlFilterModule.FilterPair> pipe);
+    default void setProcessingPipe(List<XmlFilterModule.FilterPair> pipe) {
+    }
 
 }
