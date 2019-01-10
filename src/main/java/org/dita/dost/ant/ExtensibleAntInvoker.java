@@ -266,6 +266,9 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     private static Predicate<FileInfo> combine(final Collection<FileInfoFilterElem> filters) {
+        if (filters.isEmpty()) {
+            return f -> true;
+        }
         final List<Predicate<FileInfo>> res = filters.stream()
                 .map(FileInfoFilterElem::toFilter)
                 .collect(Collectors.toList());
