@@ -29,7 +29,6 @@ import java.util.function.Predicate;
 public final class XmlFilterModule extends AbstractPipelineModuleImpl {
 
     private final XMLUtils xmlUtils = new XMLUtils();
-    private List<FilterPair> pipe;
 
     @Override
     public void setLogger(final DITAOTLogger logger) {
@@ -59,10 +58,6 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
-    public void setProcessingPipe(final List<FilterPair> pipe) {
-        this.pipe = pipe;
-    }
-
     /**
      * Get pipe line filters
      *
@@ -72,7 +67,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
         final URI fileToParse = job.tempDirURI.resolve(fi.uri);
         assert fileToParse.isAbsolute();
         final List<XMLFilter> res = new ArrayList<>();
-        for (final FilterPair p: pipe) {
+        for (final FilterPair p: filters) {
             if (p.predicate.test(fi)) {
                 final AbstractXMLFilter f = p.filter;
                 logger.debug("Configure filter " + f.getClass().getCanonicalName());
