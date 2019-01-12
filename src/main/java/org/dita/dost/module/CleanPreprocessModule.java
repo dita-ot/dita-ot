@@ -16,6 +16,8 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
+import org.dita.dost.writer.AbstractXMLFilter;
 import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
 import org.xml.sax.XMLFilter;
@@ -27,9 +29,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.dita.dost.util.Constants.*;
-
-import org.dita.dost.util.XMLUtils;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
 
 /**
  * Move temporary files not based on output URI to match output URI structure.
@@ -124,7 +125,9 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     }
 
-    /** Get common base directory for all files */
+    /**
+     * Get common base directory for all files
+     */
     @VisibleForTesting
     URI getBaseDir() {
         URI baseDir = job.getInputDir();
@@ -196,6 +199,17 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
         if (fi.format != null && fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
             res.add(mapFilter);
+        }
+
+        for (final XmlFilterModule.FilterPair p : filters) {
+            if (p.predicate.test(fi)) {
+                final AbstractXMLFilter f = p.filter;
+                logger.debug("Configure filter " + f.getClass().getCanonicalName());
+                f.setCurrentFile(srcFile.toURI());
+                f.setJob(job);
+                f.setLogger(logger);
+                res.add(f);
+            }
         }
 
         return res;
