@@ -136,6 +136,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="profiling.enable" value="${filter-on-parse}" unless:set="filter-on-parse"/>
         <param name="generate-debug-attributes" value="${generate-debug-attributes}" if:set="generate-debug-attributes"/>
         <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
+        <dita:extension id="dita.preprocess.debug-filter.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
     <!-- generate list files -->

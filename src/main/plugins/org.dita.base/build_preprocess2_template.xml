@@ -142,6 +142,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="profiling.enable" value="${map.filter-on-parse}" unless:set="map.filter-on-parse"/>
         <param name="generate-debug-attributes" value="${generate-debug-attributes}" if:set="generate-debug-attributes"/>
         <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
+        <dita:extension id="dita.preprocess.map-reader.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
     <!-- TODO replace with direct resource collection availability test -->
@@ -265,6 +266,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
         <!-- Not needed for topics -->
         <!--param name="force-unique" value="${force-unique}" if:set="force-unique"/-->
+        <dita:extension id="dita.preprocess.topic-reader.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
   </target>
