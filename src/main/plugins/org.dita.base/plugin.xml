@@ -51,6 +51,9 @@ See the accompanying LICENSE file for applicable license.
   <!-- Deprecated since 2.1 -->
   <extension-point id="depend.preprocess.copy-subsidiary.pre" name="Copy subsidiary pre-target"/>
   <extension-point id="depend.preprocess.post" name="Preprocessing post-target"/>
+  <extension-point id="dita.preprocess.debug-filter.param" name="Debug filter module parameters"/>
+  <extension-point id="dita.preprocess.map-reader.param" name="Debug filter module parameters"/>
+  <extension-point id="dita.preprocess.topic-reader.param" name="Debug filter module parameters"/>
   <extension-point id="dita.preprocess.conref.param" name="Content reference XSLT parameters"/>
   <extension-point id="dita.preprocess.mapref.param" name="Map reference XSLT parameters"/>
   <extension-point id="dita.preprocess.mappull.param" name="Map pull  XSLT parameters"/>
