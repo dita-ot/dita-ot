@@ -22,7 +22,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <!-- Wrapper for glossentry (concept) group: "Related concepts" in a <div>. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='glossentry']" mode="related-links:result-group" name="related-links:result.glossentry">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='glossentry']" mode="related-links:result-group" name="related-links:result.glossentry" priority="1">
     <xsl:param name="links"/>
     <xsl:call-template name="related-links:result.concept">
       <xsl:with-param name="links" select="$links"/>
