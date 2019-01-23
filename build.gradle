@@ -27,7 +27,7 @@ repositories {
 }
 dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
-    compile group: 'xerces', name: 'xercesImpl', version:'2.11.0'
+    compile group: 'xerces', name: 'xercesImpl', version:'2.12.0'
     compile group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
     compile group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
     compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.8.0-12'
