@@ -36,7 +36,7 @@ public class KeyScope {
     }
 
     public Set<String> keySet() {
-        return keyDefinition.keySet();
+        return Collections.unmodifiableSet(keyDefinition.keySet());
     }
 
     public KeyScope getChildScope(final String scope) {

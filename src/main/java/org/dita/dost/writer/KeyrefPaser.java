@@ -119,7 +119,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             ATTRIBUTE_NAME_DATAKEYREF
     ));
 
-    private KeyScope definitionMap;
+
+    /**
+     * Stack used to store the current KeyScope, and its start uri.
+     */
+    private final Deque<KeyScope> definitionMaps;
 
     /**
      * Stack used to store the place of current element
@@ -172,6 +176,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     public KeyrefPaser() {
         keyrefLevel = 0;
+        definitionMaps = new ArrayDeque<>();
         keyrefLevalStack = new ArrayDeque<>();
         validKeyref = new ArrayDeque<>();
         empty = true;
@@ -187,7 +192,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
 
     public void setKeyDefinition(final KeyScope definitionMap) {
-        this.definitionMap = definitionMap;
+        this.definitionMaps.push(definitionMap);
     }
 
     /**
@@ -376,6 +381,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             elemName.pop();
             hasSubElem.pop();
         }
+
+        definitionMaps.pop();
+
         getContentHandler().endElement(uri, localName, name);
     }
 
@@ -436,6 +444,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String name,
             final Attributes atts) throws SAXException {
+        final KeyScope childScope = Optional.ofNullable(atts.getValue(ATTRIBUTE_NAME_KEYSCOPE))
+                .flatMap(n -> Optional.ofNullable(definitionMaps.peek().getChildScope(n)))
+                .orElse(definitionMaps.peek());
+        definitionMaps.push(childScope);
+
         currentElement = null;
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
         for (final KeyrefInfo k : keyrefInfos) {
@@ -488,7 +501,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                     elementId = keyrefValue.substring(slashIndex);
                 }
 
-                keyDef = definitionMap.get(keyName);
+                keyDef = definitionMaps.peek().get(keyName);
                 final Element elem = keyDef != null ? keyDef.element : null;
 
                 // If definition is not null
@@ -557,9 +570,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                         } else {
                             // key does not exist.
-                            final MessageBean m = definitionMap.name == null
+                            final MessageBean m = definitionMaps.peek().name == null
                                     ? MessageUtils.getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
-                                    : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                                    : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMaps.peek().name);
                             logger.info(m.setLocation(atts).toString());
                         }
 
@@ -586,9 +599,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                     }
                 } else {
                     // key does not exist
-                    final MessageBean m = definitionMap.name == null
+                    final MessageBean m = definitionMaps.peek().name == null
                             ? MessageUtils.getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
-                            : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                            : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMaps.peek().name);
                     logger.info(m.setLocation(atts).toString());
                 }
 

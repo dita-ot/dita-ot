@@ -16,7 +16,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
-import org.junit.Assert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -31,14 +31,12 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static java.net.URI.create;
 import static java.util.Collections.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.createTempDir;
-import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class KeyrefModuleTest {
 
@@ -46,11 +44,12 @@ public class KeyrefModuleTest {
     private static final URI inputMap = new File(baseDir, "xsrc" + File.separator + "test.ditamap").toURI();
     private static final URI subMap = new File(baseDir, "xsrc" + File.separator + "submap.ditamap").toURI();
 
-    KeyrefModule module;
+    private File tempDir;
+    private KeyrefModule module;
 
     @Before
     public void setUp() throws IOException {
-        final File tempDir = createTempDir(KeyrefModuleTest.class);
+        tempDir = createTempDir(KeyrefModuleTest.class);
 
         module = new KeyrefModule();
         final Job job = new Job(tempDir);
@@ -79,6 +78,11 @@ public class KeyrefModuleTest {
                 .build());
         module.setJob(job);
         module.setLogger(new TestLogger());
+    }
+
+    @After
+    public void tearDown() throws IOException {
+       TestUtils.forceDelete(tempDir);
     }
 
     @Test
@@ -150,11 +154,8 @@ public class KeyrefModuleTest {
         module.walkMap(act.getDocumentElement(), keyScope, res);
         final Document exp = b.parse(new File(baseDir, "exp" + File.separator + "test.ditamap"));
 
-        final Job.FileInfo subMapInfo = module.job.getFileInfo(subMap);
-        final Optional<ResolveTask> subMapTask =  res.stream().filter(r -> r.in.equals(subMapInfo)).findFirst();
-
-        assertFalse(subMapTask.isPresent());
-//        assertEquals(subMapTask.get().scope, childScope);
+        final ResolveTask subMapTask = res.stream().filter(r -> r.in.src.equals(subMap)).findFirst().get();
+        assertEquals(subMapTask.scope, childScope);
 
         assertXMLEqual(exp, act);
     }
