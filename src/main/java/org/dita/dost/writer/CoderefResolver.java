@@ -17,6 +17,7 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -320,7 +321,12 @@ public final class CoderefResolver extends AbstractXMLFilter {
             }
         }
         if (c == null) {
-            c = Charset.defaultCharset();
+            final String defaultCharset = Configuration.configuration.get("default.coderef-charset");
+            if (defaultCharset != null) {
+                c = Charset.forName(defaultCharset);
+            } else {
+                c = Charset.defaultCharset();
+            }
         }
         return c;
     }
