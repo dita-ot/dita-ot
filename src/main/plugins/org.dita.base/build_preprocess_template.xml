@@ -574,7 +574,12 @@ See the accompanying LICENSE file for applicable license.
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
     <copy todir="${copy-html.todir}" failonerror="false">
-      <ditafileset format="html" />
+      <ditafileset>
+        <excludes format="dita"/>
+        <excludes format="ditamap"/>
+        <excludes format="ditaval"/>
+        <excludes format="image"/>
+      </ditafileset>
     </copy>
   </target>
   
