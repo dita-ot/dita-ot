@@ -39,20 +39,14 @@ import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.platform.Plugins;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
-import static org.dita.dost.util.Constants.PLUGIN_CONF;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 import static org.dita.dost.util.XMLUtils.toList;
 
@@ -102,10 +96,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 case "yes":
                 case "on":
                 case "1":
-                    System.err.println("Return " + trueValue + " for " + value);
                     return trueValue;
                 default:
-                    System.err.println("Return " + falseValue + " for " + value);
                     return falseValue;
             }
         }
@@ -971,7 +963,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             while (propertyNames.hasMoreElements()) {
                 final String name = propertyNames.nextElement().toString();
                 if (!definedProps.containsKey(name)) {
-                    definedProps.put(name, props.getProperty(name));
+                    final Argument arg = getPluginArguments().get("--" + name);
+                    final String value = props.getProperty(name);
+                    if (arg != null) {
+                        definedProps.put(name, arg.getValue(value));
+                    } else {
+                        definedProps.put(name, value);
+                    }
                 }
             }
         }
