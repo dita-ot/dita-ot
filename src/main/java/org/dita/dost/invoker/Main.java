@@ -86,6 +86,31 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
+    private static class BooleanArgument extends Argument {
+        final String trueValue;
+        final String falseValue;
+        BooleanArgument(final String property, final String trueValue, final String falseValue) {
+            super(property);
+            this.trueValue = trueValue;
+            this.falseValue = falseValue;
+        }
+
+        @Override
+        String getValue(final String value) {
+            switch(value.toLowerCase()) {
+                case "true":
+                case "yes":
+                case "on":
+                case "1":
+                    System.err.println("Return " + trueValue + " for " + value);
+                    return trueValue;
+                default:
+                    System.err.println("Return " + falseValue + " for " + value);
+                    return falseValue;
+            }
+        }
+    }
+
     private static class EnumArgument extends Argument {
         final Set<String> values;
         EnumArgument(final String property, final Set<String> values) {
@@ -228,6 +253,19 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 final Set<String> vals = getChildElements(param).stream()
                         .map(XMLUtils::getText)
                         .collect(Collectors.toSet());
+                if (vals.size() == 2) {
+                    if (vals.contains("true") && vals.contains("false")) {
+                        return new BooleanArgument(name, "true", "false");
+                    } else if (vals.contains("TRUE") && vals.contains("FALSE")) {
+                        return new BooleanArgument(name, "TRUE", "FALSE");
+                    } else if (vals.contains("yes") && vals.contains("no")) {
+                        return new BooleanArgument(name, "yes", "no");
+                    } else if (vals.contains("1") && vals.contains("0")) {
+                        return new BooleanArgument(name, "1", "0");
+                    } else if (vals.contains("on") && vals.contains("off")) {
+                        return new BooleanArgument(name, "on", "off");
+                    }
+                }
                 return new EnumArgument(name, vals);
             default:
                 return new StringArgument(name);
