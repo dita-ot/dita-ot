@@ -36,22 +36,22 @@ import java.util.*;
  */
 public class JobSourceSet extends AbstractFileSet implements ResourceCollection {
 
-    private Includes include;
-    private List<Includes> includes;
-    private List<Includes> excludes;
+    private SelectorElem include;
+    private List<SelectorElem> includes;
+    private List<SelectorElem> excludes;
     private Collection<Resource> res;
     private boolean isFilesystemOnly = true;
 
     public JobSourceSet() {
         super();
-        include = new Includes();
+        include = new SelectorElem();
         includes = new ArrayList<>();
         excludes = new ArrayList<>();
     }
 
     private Collection<Resource> getResults() {
         if (res == null) {
-            if (!include.formats.isEmpty() || include.hasConref != null || include.isInput != null || include.isResourceOnly != null) {
+            if (!include.isEmpty()) {
                 includes.add(include);
             }
             final Job job = getJob();
@@ -136,17 +136,17 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         include.setProcessingRole(processingRole);
     }
 
-    public void addConfiguredIncludes(final Includes include) {
+    public void addConfiguredIncludes(final SelectorElem include) {
         includes.add(include);
     }
 
-    public void addConfiguredExcludes(final Includes exclude) {
+    public void addConfiguredExcludes(final SelectorElem exclude) {
         excludes.add(exclude);
     }
 
     @VisibleForTesting
     public boolean filter(final FileInfo f) {
-        for (final Includes excl: excludes) {
+        for (final SelectorElem excl: excludes) {
             if (filter(f, excl)) {
                 return false;
             }
@@ -154,7 +154,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         if (includes.isEmpty()) {
             return true;
         } else {
-            for (final Includes incl: includes) {
+            for (final SelectorElem incl: includes) {
                 if (filter(f, incl)) {
                     return true;
                 }
@@ -163,7 +163,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         }
     }
 
-    private boolean filter(final FileInfo f, final Includes incl) {
+    private boolean filter(final FileInfo f, final SelectorElem incl) {
         return (incl.formats.isEmpty() || incl.formats.contains(f.format)) &&
                 (incl.hasConref == null || f.hasConref == incl.hasConref) &&
                 (incl.isInput == null || f.isInput == incl.isInput) &&
@@ -192,16 +192,16 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         }
     }
 
-    public static class Includes {
+    public static class SelectorElem {
         private Set<String> formats = Collections.emptySet();
         private Boolean hasConref;
         private Boolean isInput;
         private Boolean isResourceOnly;
 
-        public Includes() {
+        public SelectorElem() {
         }
 
-        public Includes(Set<String> formats, Boolean hasConref, Boolean isInput, Boolean isResourceOnly) {
+        public SelectorElem(Set<String> formats, Boolean hasConref, Boolean isInput, Boolean isResourceOnly) {
             this.formats = formats != null ? formats : Collections.emptySet();
             this.hasConref = hasConref;
             this.isInput = isInput;
@@ -226,6 +226,10 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
         public void setProcessingRole(final String processingRole) {
             this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+        }
+
+        public boolean isEmpty() {
+            return formats.isEmpty() && hasConref == null && isInput == null && isResourceOnly == null;
         }
     }
 }

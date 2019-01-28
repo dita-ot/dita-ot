@@ -11,7 +11,7 @@ package org.dita.dost.ant.types;
 import com.google.common.io.Files;
 import org.apache.tools.ant.types.Resource;
 import org.dita.dost.TestUtils;
-import org.dita.dost.ant.types.JobSourceSet.Includes;
+import org.dita.dost.ant.types.JobSourceSet.SelectorElem;
 import org.dita.dost.util.Job;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -86,7 +86,7 @@ public class JobSourceSetTest {
     @Test
     public void testFilterIncludesFormat() {
         jobSourceSet.addConfiguredIncludes(
-                new Includes(new HashSet<>(Arrays.asList("dita")), null, null, null)
+                new SelectorElem(new HashSet<>(Arrays.asList("dita")), null, null, null)
         );
         assertTrue(jobSourceSet.filter(job.getFileInfo(URI.create("a.dita"))));
         assertFalse(jobSourceSet.filter(job.getFileInfo(URI.create("a.ditamap"))));
@@ -96,10 +96,10 @@ public class JobSourceSetTest {
     @Test
     public void testFilterIncludesMultipleFormat() {
         jobSourceSet.addConfiguredIncludes(
-                new Includes(new HashSet<>(Arrays.asList("dita")), null, null, null)
+                new SelectorElem(new HashSet<>(Arrays.asList("dita")), null, null, null)
         );
         jobSourceSet.addConfiguredIncludes(
-                new Includes(new HashSet<>(Arrays.asList("ditamap")), null, null, null)
+                new SelectorElem(new HashSet<>(Arrays.asList("ditamap")), null, null, null)
         );
         assertTrue(jobSourceSet.filter(job.getFileInfo(URI.create("a.dita"))));
         assertTrue(jobSourceSet.filter(job.getFileInfo(URI.create("a.ditamap"))));
@@ -109,7 +109,7 @@ public class JobSourceSetTest {
     @Test
     public void testFilterExcludesFormat() {
         jobSourceSet.addConfiguredExcludes(
-                new Includes(new HashSet<>(Arrays.asList("dita")), null, null, null)
+                new SelectorElem(new HashSet<>(Arrays.asList("dita")), null, null, null)
         );
         assertFalse(jobSourceSet.filter(job.getFileInfo(URI.create("a.dita"))));
         assertTrue(jobSourceSet.filter(job.getFileInfo(URI.create("a.ditamap"))));
@@ -119,10 +119,10 @@ public class JobSourceSetTest {
     @Test
     public void testFilterExcludesMultipleFormat() {
         jobSourceSet.addConfiguredExcludes(
-                new Includes(new HashSet<>(Arrays.asList("dita")), null, null, null)
+                new SelectorElem(new HashSet<>(Arrays.asList("dita")), null, null, null)
         );
         jobSourceSet.addConfiguredExcludes(
-                new Includes(new HashSet<>(Arrays.asList("ditamap")), null, null, null)
+                new SelectorElem(new HashSet<>(Arrays.asList("ditamap")), null, null, null)
         );
         assertFalse(jobSourceSet.filter(job.getFileInfo(URI.create("a.dita"))));
         assertFalse(jobSourceSet.filter(job.getFileInfo(URI.create("a.ditamap"))));
