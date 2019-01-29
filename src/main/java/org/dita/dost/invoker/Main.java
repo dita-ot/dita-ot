@@ -246,16 +246,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                         .map(XMLUtils::getText)
                         .collect(Collectors.toSet());
                 if (vals.size() == 2) {
-                    if (vals.contains("true") && vals.contains("false")) {
-                        return new BooleanArgument(name, "true", "false");
-                    } else if (vals.contains("TRUE") && vals.contains("FALSE")) {
-                        return new BooleanArgument(name, "TRUE", "FALSE");
-                    } else if (vals.contains("yes") && vals.contains("no")) {
-                        return new BooleanArgument(name, "yes", "no");
-                    } else if (vals.contains("1") && vals.contains("0")) {
-                        return new BooleanArgument(name, "1", "0");
-                    } else if (vals.contains("on") && vals.contains("off")) {
-                        return new BooleanArgument(name, "on", "off");
+                    for (Map.Entry<String, String> pair: TRUTHY_VALUES.entrySet()) {
+                        if (vals.contains(pair.getKey()) && vals.contains(pair.getValue())) {
+                            return new BooleanArgument(name, pair.getKey(), pair.getValue());
+                        }
                     }
                 }
                 return new EnumArgument(name, vals);
@@ -271,6 +265,19 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             "args.filter", "--filter",
             ANT_TEMP_DIR, "-t"
     );
+
+    private static final Map<String, String> TRUTHY_VALUES;
+    static {
+        TRUTHY_VALUES = ImmutableMap.<String, String>builder()
+                .put("true", "false")
+                .put("TRUE", "FALSE")
+                .put("yes", "no")
+                .put("YES", "NO")
+                .put("1", "0")
+                .put("on", "off")
+                .put("ON", "OFF")
+                .build();
+    }
 
     /** The default build file name. {@value} */
     public static final String DEFAULT_BUILD_FILENAME = "build.xml";
