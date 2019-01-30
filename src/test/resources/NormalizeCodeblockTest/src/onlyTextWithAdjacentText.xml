@@ -1,0 +1,10 @@
+<topic class="- topic/topic ">
+  <body class="- topic/body ">
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve" outputclass="normalize-space">    &lt;div id="app-2">
+      &lt;span v-bind:title="message">
+        Hover your mouse over me for a few seconds
+        to see my dynamically bound title!
+      &lt;/span>
+    &lt;/div></codeblock>
+  </body>
+</topic>
