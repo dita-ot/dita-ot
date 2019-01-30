@@ -28,7 +28,6 @@ See the accompanying LICENSE file for applicable license.
                   debug-filter,
                   mapref,
                   branch-filter,
-                  copy-files,
                   keyref,
                   copy-to,
                   conrefpush,
@@ -40,6 +39,7 @@ See the accompanying LICENSE file for applicable license.
                   maplink,
                   topicpull,
                   clean-map,
+                  copy-files,
                   {depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
