@@ -7,8 +7,7 @@
  */
 package org.dita.dost.ant.types;
 
-import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
-import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_IMAGE;
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.supportedImageExtensions;
 import static org.dita.dost.util.URLUtils.*;
 
@@ -164,7 +163,8 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
     }
 
     private boolean filter(final FileInfo f, final SelectorElem incl) {
-        return (incl.formats.isEmpty() || incl.formats.contains(f.format)) &&
+        final String format = f.format != null ? f.format : ATTR_FORMAT_VALUE_DITA;
+        return (incl.formats.isEmpty() || (incl.formats.contains(format))) &&
                 (incl.hasConref == null || f.hasConref == incl.hasConref) &&
                 (incl.isInput == null || f.isInput == incl.isInput) &&
                 (incl.isResourceOnly == null || f.isResourceOnly == incl.isResourceOnly);
