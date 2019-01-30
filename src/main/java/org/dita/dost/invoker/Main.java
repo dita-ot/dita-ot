@@ -39,20 +39,14 @@ import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.platform.Plugins;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
-import static org.dita.dost.util.Constants.PLUGIN_CONF;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 import static org.dita.dost.util.XMLUtils.toList;
 
@@ -83,6 +77,29 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         @Override
         String getValue(final String value) {
             return value;
+        }
+    }
+
+    private static class BooleanArgument extends Argument {
+        final String trueValue;
+        final String falseValue;
+        BooleanArgument(final String property, final String trueValue, final String falseValue) {
+            super(property);
+            this.trueValue = trueValue;
+            this.falseValue = falseValue;
+        }
+
+        @Override
+        String getValue(final String value) {
+            switch(value.toLowerCase()) {
+                case "true":
+                case "yes":
+                case "on":
+                case "1":
+                    return trueValue;
+                default:
+                    return falseValue;
+            }
         }
     }
 
@@ -228,6 +245,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 final Set<String> vals = getChildElements(param).stream()
                         .map(XMLUtils::getText)
                         .collect(Collectors.toSet());
+                if (vals.size() == 2) {
+                    for (Map.Entry<String, String> pair: TRUTHY_VALUES.entrySet()) {
+                        if (vals.contains(pair.getKey()) && vals.contains(pair.getValue())) {
+                            return new BooleanArgument(name, pair.getKey(), pair.getValue());
+                        }
+                    }
+                }
                 return new EnumArgument(name, vals);
             default:
                 return new StringArgument(name);
@@ -241,6 +265,19 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             "args.filter", "--filter",
             ANT_TEMP_DIR, "-t"
     );
+
+    private static final Map<String, String> TRUTHY_VALUES;
+    static {
+        TRUTHY_VALUES = ImmutableMap.<String, String>builder()
+                .put("true", "false")
+                .put("TRUE", "FALSE")
+                .put("yes", "no")
+                .put("YES", "NO")
+                .put("1", "0")
+                .put("on", "off")
+                .put("ON", "OFF")
+                .build();
+    }
 
     /** The default build file name. {@value} */
     public static final String DEFAULT_BUILD_FILENAME = "build.xml";
@@ -933,7 +970,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             while (propertyNames.hasMoreElements()) {
                 final String name = propertyNames.nextElement().toString();
                 if (!definedProps.containsKey(name)) {
-                    definedProps.put(name, props.getProperty(name));
+                    final Argument arg = getPluginArguments().get("--" + name);
+                    final String value = props.getProperty(name);
+                    if (arg != null) {
+                        definedProps.put(name, arg.getValue(value));
+                    } else {
+                        definedProps.put(name, value);
+                    }
                 }
             }
         }
