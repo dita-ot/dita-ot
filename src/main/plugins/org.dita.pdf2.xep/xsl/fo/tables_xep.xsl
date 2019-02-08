@@ -13,27 +13,25 @@ See the accompanying LICENSE file for applicable license.
   version="2.0"
   exclude-result-prefixes="xs dita-ot">
   
-  <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
-    <xsl:apply-templates select="." mode="validate-entry-position"/>
-    <fo:table-cell xsl:use-attribute-sets="thead.row.entry">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="applySpansAttrs"/>
-      <xsl:call-template name="applyAlignAttrs"/>
-      <xsl:call-template name="generateTableEntryBorder"/>
-      <fo:block xsl:use-attribute-sets="thead.row.entry__content">
-        <xsl:call-template name="processEntryContent"/>
-      </fo:block>
-    </fo:table-cell>
+  <!-- By default in XEP, rotated table entries will extend to the end of the page, unless a height is provided for the container.
+       To enable rotation, explicitly set the height (and optionally width) as follows:
+       1) Uncomment the fo:block-container
+       2) Adjust the height and width values to either
+       2a) An appropriate default that is acceptable for all of your rotated cells, or
+       2b) A specific or calculated value based on the cell content --> 
+  <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="rotateTableEntryContent">
+    <!--<fo:block-container reference-orientation="90" width="150px" height="80px">-->
+    <fo:block xsl:use-attribute-sets="thead.row.entry__content">
+      <xsl:call-template name="processEntryContent"/>
+    </fo:block>
+    <!--</fo:block-container>-->
   </xsl:template>
-  
-  <xsl:template match="*" mode="processTableEntry">
-    <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="applySpansAttrs"/>
-    <xsl:call-template name="applyAlignAttrs"/>
-    <xsl:call-template name="generateTableEntryBorder"/>
+  <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="rotateTableEntryContent">
+    <!--<fo:block-container reference-orientation="90" width="150px" height="80px">-->
     <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
       <xsl:call-template name="processEntryContent"/>
     </fo:block>
+    <!--</fo:block-container>-->
   </xsl:template>
 
 </xsl:stylesheet>

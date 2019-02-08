@@ -31,7 +31,7 @@ See the accompanying LICENSE file for applicable license.
         <fo:inline id="{.}"/>
     </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/entry ')]" priority="1">
+  <xsl:template match="*[contains(@class,' topic/entry ')]">
     <xsl:choose>
       <xsl:when test="dita-ot:get-entry-end-position(.) gt number(ancestor::*[contains(@class,' topic/tgroup ')][1]/@cols)">
         <!-- FOP crashes if an entry extends beyond the table width -->
@@ -44,28 +44,26 @@ See the accompanying LICENSE file for applicable license.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
-  <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
-    <xsl:apply-templates select="." mode="validate-entry-position"/>
-    <fo:table-cell xsl:use-attribute-sets="thead.row.entry">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="applySpansAttrs"/>
-      <xsl:call-template name="applyAlignAttrs"/>
-      <xsl:call-template name="generateTableEntryBorder"/>
+  
+  <!-- By default in FOP, rotated text in a table entry does not change the cell size, so rotated text will overwrite other cells.
+       To enable rotation, explicitly set the height and width as follows:
+       1) Uncomment the fo:block-container
+       2) Adjust the height and width values to either
+       2a) An appropriate default that is acceptable for all of your rotated cells, or
+       2b) A specific or calculated value based on the cell content --> 
+  <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="rotateTableEntryContent">
+    <!--<fo:block-container reference-orientation="90" width="150px" height="80px">-->
       <fo:block xsl:use-attribute-sets="thead.row.entry__content">
         <xsl:call-template name="processEntryContent"/>
       </fo:block>
-    </fo:table-cell>
+    <!--</fo:block-container>-->
   </xsl:template>
-  
-  <xsl:template match="*" mode="processTableEntry">
-    <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="applySpansAttrs"/>
-    <xsl:call-template name="applyAlignAttrs"/>
-    <xsl:call-template name="generateTableEntryBorder"/>
-    <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
-      <xsl:call-template name="processEntryContent"/>
-    </fo:block>
+  <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="rotateTableEntryContent">
+    <!--<fo:block-container reference-orientation="90" width="150px" height="80px">-->
+      <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+        <xsl:call-template name="processEntryContent"/>
+      </fo:block>
+    <!--</fo:block-container>-->
   </xsl:template>
 
 </xsl:stylesheet>

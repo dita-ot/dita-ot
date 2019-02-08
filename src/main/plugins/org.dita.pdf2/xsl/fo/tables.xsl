@@ -430,11 +430,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="generateTableEntryBorder"/>
             <xsl:choose>
                 <xsl:when test="@rotate eq '1'">
-                    <fo:block-container reference-orientation="90">
-                        <fo:block xsl:use-attribute-sets="thead.row.entry__content">
-                            <xsl:call-template name="processEntryContent"/>
-                        </fo:block>
-                    </fo:block-container>
+                    <xsl:apply-templates select="." mode="rotateTableEntryContent"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <fo:block xsl:use-attribute-sets="thead.row.entry__content">
@@ -443,6 +439,14 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:otherwise>
                 </xsl:choose>
         </fo:table-cell>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="rotateTableEntryContent">
+        <fo:block-container reference-orientation="90">
+            <fo:block xsl:use-attribute-sets="thead.row.entry__content">
+                <xsl:call-template name="processEntryContent"/>
+            </fo:block>
+        </fo:block-container>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
@@ -469,11 +473,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:call-template name="generateTableEntryBorder"/>
         <xsl:choose>
             <xsl:when test="@rotate eq '1'">
-                <fo:block-container reference-orientation="90">
-                    <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
-                        <xsl:call-template name="processEntryContent"/>
-                    </fo:block>
-                </fo:block-container>
+                <xsl:apply-templates select="." mode="rotateTableEntryContent"/>
             </xsl:when>
             <xsl:otherwise>
                 <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
@@ -481,6 +481,14 @@ See the accompanying LICENSE file for applicable license.
                 </fo:block>
             </xsl:otherwise>
             </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="rotateTableEntryContent">
+        <fo:block-container reference-orientation="90">
+            <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+                <xsl:call-template name="processEntryContent"/>
+            </fo:block>
+        </fo:block-container>
     </xsl:template>
 
     <xsl:template name="processEntryContent">
