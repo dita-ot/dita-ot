@@ -212,7 +212,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="keys" select="@keyref" as="attribute()?"/>
     <xsl:param name="contents" as="node()*">
       <!-- Current node can be preprocessed and may not be part of source document, check for root() to ensure key() is resolvable -->
-      <xsl:variable name="target" select="if (exists(root()) and @href) then key('id', substring(@href, 2)) else ()" as="element()?"/>
+      <xsl:variable name="target" select="if (exists(root()) and @href) then key('id', substring(@href, 2))[1] else ()" as="element()?"/>
       <xsl:choose>
         <xsl:when test="not(normalize-space(.)) and $keys and $target/self::*[contains(@class,' topic/topic ')]">
           <xsl:apply-templates select="$target/*[contains(@class, ' topic/title ')]/node()"/>
@@ -1132,7 +1132,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="keys" select="@keyref" as="attribute()?"/>
     <xsl:param name="contents" as="node()*">
       <!-- Current node can be preprocessed and may not be part of source document, check for root() to ensure key() is resolvable -->
-      <xsl:variable name="target" select="if (exists(root()) and @href) then key('id', substring(@href, 2)) else ()" as="element()?"/>
+      <xsl:variable name="target" select="if (exists(root()) and @href) then key('id', substring(@href, 2))[1] else ()" as="element()?"/>
       <xsl:choose>
         <xsl:when test="not(normalize-space(.)) and $keys and $target/self::*[contains(@class,' topic/topic ')]">
           <xsl:apply-templates select="$target/*[contains(@class, ' topic/title ')]/node()"/>
