@@ -746,7 +746,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/prolog ')]
             //opentopic-index:index.entry[not(parent::opentopic-index:index.entry) and not(@end-range = 'true')]"/>
       <!-- index ranges from map -->
-      <xsl:variable name="topicref" select="key('map-id', @id)" as="element()?"/>
+      <xsl:variable name="topicref" select="key('map-id', @id)[1]" as="element()?"/>
       <xsl:apply-templates select="$topicref/
                                      *[contains(@class, ' map/topicmeta ')]/
                                        *[contains(@class, ' topic/keywords ')]/

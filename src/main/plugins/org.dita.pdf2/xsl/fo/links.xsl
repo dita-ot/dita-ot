@@ -330,7 +330,10 @@ See the accompanying LICENSE file for applicable license.
         <xsl:variable name="href-fragment" select="substring-after(@href, '#')"/>
         <xsl:variable name="elemId" select="substring-after($href-fragment, '/')"/>
         <xsl:variable name="topicId" select="substring-before($href-fragment, '/')"/>
-      <xsl:variable name="footnote-target" select="key('fnById', $elemId)[ancestor::*[contains(@class, ' topic/topic ')][1]/@id = $topicId]" as="element()?"/>
+        <xsl:variable name="footnote-target" 
+          select="(key('fnById', $elemId)[ancestor::*[contains(@class, ' topic/topic ')][1]/@id = $topicId])[1]" 
+          as="element()?"
+        />
         <xsl:apply-templates select="$footnote-target" mode="footnote-callout"/>
     </xsl:template>
 
