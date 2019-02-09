@@ -19,6 +19,7 @@ def licenses = [
         [name: 'logback', title: 'Logback', license: ['epl-1.0.txt']],
         [name: 'jackson', title: 'Jackson', license: ['apache2.txt']],
         [name: 'jing', title: 'Jing', license: ['bsd-jing.txt']],
+        [name: 'isorelax', title: 'Isorelax', license: ['isorelax.txt']],
         [name: 'gradle-wrapper'],
         [name: 'org.lwdita'],
         [name: 'fo'],
