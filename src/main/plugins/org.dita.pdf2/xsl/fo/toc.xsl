@@ -65,7 +65,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:apply-templates select="." mode="get-topic-level"/>
         </xsl:variable>
         <xsl:if test="$topicLevel &lt; $tocMaximumLevel">
-            <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]"/>
+            <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]" as="element()?"/>
             <xsl:choose>
               <!-- In a future version, suppressing Notices in the TOC should not be hard-coded. -->
               <xsl:when test="$retain-bookmap-order and $mapTopicref/self::*[contains(@class, ' bookmap/notices ')]"/>
