@@ -69,7 +69,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' topic/topic ')]" mode="index-entries">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]"/>
+        <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]" as="element()?"/>
         <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
             <xsl:apply-templates mode="index-entries"/>
         </xsl:if>
@@ -77,7 +77,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' topic/topic ')]" mode="index-postprocess">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]"/>
+        <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]" as="element()?"/>
         <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
             <xsl:apply-templates mode="index-entries"/>
         </xsl:if>
@@ -284,7 +284,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:apply-templates select="." mode="get-see-destination-id"/>
         </xsl:value-of>
       </xsl:variable>
-      <xsl:variable name="ref" select="key('opentopic-index:index.entry-def', $id)"/>
+      <xsl:variable name="ref" select="key('opentopic-index:index.entry-def', $id)[1]" as="element()?"/>
       <xsl:if test="exists($ref)">
         <xsl:value-of select="generate-id($ref[1])"/>
       </xsl:if>
@@ -492,7 +492,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="refID"/>
 
     <xsl:for-each select="$index-entries">
-      <xsl:variable name="entries" select="key('index-key',$value)"/>
+      <xsl:variable name="entries" select="key('index-key',$value)[1]" as="element()*"/>
       <xsl:value-of select="$entries[opentopic-index:refID/@value = $refID]"/>
     </xsl:for-each>
   </xsl:function>

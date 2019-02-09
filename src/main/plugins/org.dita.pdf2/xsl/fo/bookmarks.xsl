@@ -50,7 +50,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="bookmark">
-        <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]"/>
+        <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]" as="element()?"/>
         <xsl:variable name="topicTitle">
             <xsl:call-template name="getNavTitle"/>
         </xsl:variable>

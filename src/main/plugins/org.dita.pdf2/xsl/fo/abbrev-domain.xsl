@@ -25,7 +25,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' abbrev-d/abbreviated-form ')]" name="topic.abbreviated-form">
     <xsl:variable name="keys" select="@keyref"/>
-    <xsl:variable name="target" select="key('id', substring(@href, 2))"/>
+    <xsl:variable name="target" select="key('id', substring(@href, 2))[1]" as="element()?"/>
     <xsl:choose>
       <xsl:when test="$keys and $target/self::*[contains(@class,' glossentry/glossentry ')]">
         <xsl:call-template name="topic.term">
