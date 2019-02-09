@@ -112,7 +112,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*" mode="commonTopicProcessing">
       <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
         <fo:marker marker-class-name="current-topic-number">
-          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)" as="element()?"/>
           <xsl:for-each select="$topicref">
             <xsl:apply-templates select="." mode="topicTitleNumber"/>
           </xsl:for-each>
@@ -257,7 +257,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:variable>
             <xsl:if test="$level eq 1">
                 <fo:marker marker-class-name="current-topic-number">
-                  <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                  <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)" as="element()?"/>
                   <xsl:for-each select="$topicref">
                     <xsl:apply-templates select="." mode="topicTitleNumber"/>
                   </xsl:for-each>
@@ -330,7 +330,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:variable>
             <xsl:if test="$level eq 1">
                 <fo:marker marker-class-name="current-topic-number">
-                    <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                  <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)" as="element()?"/>
                     <xsl:for-each select="$topicref">
                       <xsl:apply-templates select="." mode="topicTitleNumber"/>
                     </xsl:for-each>
@@ -402,7 +402,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:call-template name="commonattributes"/>
       <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
         <fo:marker marker-class-name="current-topic-number">
-          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)" as="element()?"/>
           <xsl:for-each select="$topicref">
             <xsl:apply-templates select="." mode="topicTitleNumber"/>
           </xsl:for-each>
@@ -481,7 +481,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="commonattributes"/>
             <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
                 <fo:marker marker-class-name="current-topic-number">
-                  <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                  <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)" as="element()?"/>
                   <xsl:for-each select="$topicref">
                     <xsl:apply-templates select="." mode="topicTitleNumber"/>
                   </xsl:for-each>
@@ -547,7 +547,7 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:call-template name="commonattributes"/>
                     <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
-                          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)" as="element()?"/>
                           <xsl:for-each select="$topicref">
                             <xsl:apply-templates select="." mode="topicTitleNumber"/>
                           </xsl:for-each>
@@ -825,8 +825,8 @@ See the accompanying LICENSE file for applicable license.
       <xsl:variable name="foundTopicType" as="xs:string?">
         <xsl:variable name="topic" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]"/>
         <xsl:variable name="id" select="$topic/@id"/>
-        <xsl:variable name="mapTopics" select="key('map-id', $id)"/>
-        <xsl:apply-templates select="$mapTopics[1]" mode="determineTopicType"/>
+        <xsl:variable name="mapTopics" select="key('map-id', $id)[1]" as="element()?"/>
+        <xsl:apply-templates select="$mapTopics" mode="determineTopicType"/>
       </xsl:variable>
       <xsl:choose>
         <xsl:when test="exists($foundTopicType) and $foundTopicType != ''">

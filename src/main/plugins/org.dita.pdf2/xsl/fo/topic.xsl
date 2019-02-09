@@ -112,7 +112,10 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
   <xsl:template match="*" mode="get-topic-level" as="xs:integer">
-    <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@id)"/>
+    <xsl:variable name="topicref" 
+      select="key('map-id', ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@id)[1]"
+      as="element()?"
+    />
     <xsl:sequence select="count(ancestor-or-self::*[contains(@class,' topic/topic ')]) -
                           count($topicref/ancestor-or-self::*[(contains(@class,' bookmap/part ') and
                                                                ((exists(@navtitle) or
@@ -222,7 +225,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:param>
-    <xsl:variable name="topicref" select="key('map-id', substring(@href, 2))"/>
+    <xsl:variable name="topicref" select="key('map-id', substring(@href, 2))[1]" as="element()?"/>
     <xsl:choose>
       <xsl:when test="$keys and @href and not($topicref/ancestor-or-self::*[@linking][1]/@linking = ('none', 'sourceonly'))">
         <fo:basic-link xsl:use-attribute-sets="xref term">
@@ -443,7 +446,7 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- Gets navigation title of current topic, used for bookmarks/TOC -->
     <xsl:template name="getNavTitle">
-        <xsl:variable name="topicref" select="key('map-id', @id)[1]"/>
+        <xsl:variable name="topicref" select="key('map-id', @id)[1]" as="element()?"/>
         <xsl:choose>
             <xsl:when test="$topicref/@locktitle='yes' and
                             $topicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
@@ -743,7 +746,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/prolog ')]
             //opentopic-index:index.entry[not(parent::opentopic-index:index.entry) and not(@end-range = 'true')]"/>
       <!-- index ranges from map -->
-      <xsl:variable name="topicref" select="key('map-id', @id)"/>
+      <xsl:variable name="topicref" select="key('map-id', @id)" as="element()?"/>
       <xsl:apply-templates select="$topicref/
                                      *[contains(@class, ' map/topicmeta ')]/
                                        *[contains(@class, ' topic/keywords ')]/
@@ -757,7 +760,7 @@ See the accompanying LICENSE file for applicable license.
                                          descendant::opentopic-index:index.entry[not(parent::opentopic-index:index.entry) and
                                                                                  @end-range = 'true']"/>
       <!-- index ranges from map -->
-      <xsl:variable name="topicref" select="key('map-id', @id)"/>
+      <xsl:variable name="topicref" select="key('map-id', @id)[1]" as="element()?"/>
       <xsl:apply-templates select="$topicref/
                                      *[contains(@class, ' map/topicmeta ')]/
                                        *[contains(@class, ' topic/keywords ')]/
@@ -1142,7 +1145,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:param>
-    <xsl:variable name="topicref" select="key('map-id', substring(@href, 2))"/>
+    <xsl:variable name="topicref" select="key('map-id', substring(@href, 2))[1]" as="element()?"/>
     <xsl:choose>
       <xsl:when test="$keys and @href and not($topicref/ancestor-or-self::*[@linking][1]/@linking = ('none', 'sourceonly'))">
         <fo:basic-link xsl:use-attribute-sets="xref">
