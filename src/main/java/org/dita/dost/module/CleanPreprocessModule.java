@@ -135,7 +135,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         final Collection<FileInfo> fis = job.getFileInfo();
         for (final FileInfo fi : fis) {
             final URI res = fi.result.resolve(".");
-            baseDir = getCommonBase(baseDir, res);
+            baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
         }
 
         return baseDir;
@@ -146,7 +146,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         assert left.isAbsolute();
         assert right.isAbsolute();
         if (!left.getScheme().equals(right.getScheme())) {
-            throw new IllegalArgumentException("Argument schemes do not match");
+            return null;
         }
         final URI l = left.resolve(".");
         final URI r = right.resolve(".");
