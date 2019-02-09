@@ -38,7 +38,7 @@ dependencies {
         exclude group: 'org.checkerframework', module: 'checker-qual'
         exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
-        exclude group: 'com.google.errorprone:', module: 'error_prone_annotations'
+        exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
         exclude group: 'com.google.j2objc', module: 'j2objc-annotations'
     }
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
@@ -200,9 +200,10 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         )
     }
     from ("src/main") {
-        exclude "**/.gradle"
+        exclude ".gradle"
         exclude "plugins/**/build.gradle"
-        exclude "**/settings.gradle"
+        exclude "plugins/**/settings.gradle"
+        exclude "plugins/**/.gradle"
         exclude ".*"
         exclude "local.properties"
         exclude "build.log"
@@ -284,9 +285,9 @@ task integrateDistPlugins() {
 integrateDistPlugins.mustRunAfter integrateDistTemp
 
 task generateDocs(type: Exec, dependsOn: integrateDistTemp) {
-    workingDir file("${distTempDir}/docsrc")
-    commandLine Os.isFamily(Os.FAMILY_WINDOWS) ? file("${distTempDir}/docsrc/gradlew.bat") : file("${distTempDir}/docsrc/gradlew")
-    args "dist"
+    workingDir = file("${distTempDir}/docsrc")
+    commandLine = Os.isFamily(Os.FAMILY_WINDOWS) ? file("${distTempDir}/docsrc/gradlew.bat") : file("${distTempDir}/docsrc/gradlew")
+    args = ["--no-daemon", "dist"]
 }
 generateDocs.mustRunAfter integrateDistPlugins
 generateDocs.onlyIf { skipDocs() }
@@ -408,31 +409,33 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            pom {
-                name = 'DITA Open Toolkit'
-                description = 'DITA-OT base library'
-                url = 'https://www.dita-ot.org/'
-                scm {
-                    connection = 'scm:git:https://github.com/dita-ot/dita-ot.git'
-                    developerConnection = 'scm:git:git@github.com:dita-ot/dita-ot.git'
-                    url = 'https://github.com/dita-ot/dita-ot/'
-                }
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            afterEvaluate {
+                pom {
+                    name = 'DITA Open Toolkit'
+                    description = 'DITA-OT base library'
+                    url = 'https://www.dita-ot.org/'
+                    scm {
+                        connection = 'scm:git:https://github.com/dita-ot/dita-ot.git'
+                        developerConnection = 'scm:git:git@github.com:dita-ot/dita-ot.git'
+                        url = 'https://github.com/dita-ot/dita-ot/'
                     }
-                }
-                developers {
-                    developer {
-                        id = 'robander'
-                        name = 'Robert D Anderson'
-                        email = 'robander@us.ibm.com'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
                     }
-                    developer {
-                        id = 'jelovirt'
-                        name = 'Jarno Elovirta'
-                        email = 'jarno@elovirta.com'
+                    developers {
+                        developer {
+                            id = 'robander'
+                            name = 'Robert D Anderson'
+                            email = 'robander@us.ibm.com'
+                        }
+                        developer {
+                            id = 'jelovirt'
+                            name = 'Jarno Elovirta'
+                            email = 'jarno@elovirta.com'
+                        }
                     }
                 }
             }
