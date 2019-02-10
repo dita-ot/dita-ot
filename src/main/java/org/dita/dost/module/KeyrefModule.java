@@ -37,7 +37,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.writer.ConkeyrefFilter;
-import org.dita.dost.writer.KeyrefPaser;
+import org.dita.dost.writer.KeyrefParser;
 
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
@@ -350,7 +350,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
         filters.add(topicFragmentFilter);
 
-        final KeyrefPaser parser = new KeyrefPaser();
+        final KeyrefParser parser = new KeyrefParser();
         parser.setLogger(logger);
         parser.setJob(job);
         parser.setKeyDefinition(r.scope);

@@ -48,9 +48,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.dita.dost.TestUtils;
 
-public class KeyrefPaserTest {
+public class KeyrefParserTest {
 
-    private static final File resourceDir = TestUtils.getResourceDir(KeyrefPaserTest.class);
+    private static final File resourceDir = TestUtils.getResourceDir(KeyrefParserTest.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
 
@@ -59,7 +59,7 @@ public class KeyrefPaserTest {
 
     @Before
     public void setUp() throws Exception {
-        tempDir = createTempDir(KeyrefPaserTest.class);
+        tempDir = createTempDir(KeyrefParserTest.class);
         TestUtils.copy(srcDir, tempDir);
 
         keyDefinition = readKeyMap(Paths.get("keys.ditamap"));
@@ -72,7 +72,7 @@ public class KeyrefPaserTest {
 
     @Test
     public void testTopicWrite() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
+        final KeyrefParser parser = new KeyrefParser();
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
@@ -85,7 +85,7 @@ public class KeyrefPaserTest {
 
     @Test
     public void testFragment() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
+        final KeyrefParser parser = new KeyrefParser();
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
@@ -98,7 +98,7 @@ public class KeyrefPaserTest {
     
     @Test
     public void testFallback() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
+        final KeyrefParser parser = new KeyrefParser();
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
@@ -111,7 +111,7 @@ public class KeyrefPaserTest {
 
     @Test
     public void testMapWrite() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
+        final KeyrefParser parser = new KeyrefParser();
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
@@ -124,7 +124,7 @@ public class KeyrefPaserTest {
 
     @Test
     public void testUpLevelMapWrite() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
+        final KeyrefParser parser = new KeyrefParser();
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(readKeyMap(Paths.get("subdir", "c.ditamap")));
@@ -137,7 +137,7 @@ public class KeyrefPaserTest {
 
     @Test
     public void testMapWithKeyScopes() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
+        final KeyrefParser parser = new KeyrefParser();
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
@@ -172,10 +172,10 @@ public class KeyrefPaserTest {
         final TransformerHandler h = f.newTransformerHandler();
         h.setResult(r);
         
-        final KeyrefPaser parser = new KeyrefPaser();
+        final KeyrefParser parser = new KeyrefParser();
         parser.setContentHandler(h);
         
-        final Method m = KeyrefPaser.class.getDeclaredMethod("domToSax", Element.class, boolean.class);
+        final Method m = KeyrefParser.class.getDeclaredMethod("domToSax", Element.class, boolean.class);
         m.setAccessible(true);
         
         h.startDocument();
