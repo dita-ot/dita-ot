@@ -579,6 +579,7 @@ See the accompanying LICENSE file for applicable license.
         <excludes format="ditamap"/>
         <excludes format="ditaval"/>
         <excludes format="image"/>
+        <excludes format="coderef"/>
       </ditafileset>
     </copy>
   </target>
