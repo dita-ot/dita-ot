@@ -22,3 +22,20 @@
 
 .typeofhazard {
 }
+
+.hazardstatement--caution {
+    background-color: #FFD100;
+}
+.hazardstatement--danger {
+    background-color: #C8102E;
+}
+.hazardstatement--warning {
+    background-color: #FF8200;
+}
+.hazardstatement--attention, .hazardstatement--note, .hazardstatement--notice {
+    background-color: #0072CE;
+}
+.hazardstatement--fastpath, .hazardstatement--important, .hazardstatement--other, 
+.hazardstatement--remember, .hazardstatement--restriction, .hazardstatement--tip,   {
+    @extend .hazardstatement--caution;
+}
