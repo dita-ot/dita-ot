@@ -55,9 +55,14 @@ See the accompanying license.txt file for applicable licenses.
                                      baseline-shift="baseline"/>
               </xsl:if>
               <fo:inline>
-                <xsl:call-template name="getVariable">
-                  <xsl:with-param name="id" select="dita-ot:capitalize($type)"/>
-                </xsl:call-template>
+                <xsl:choose>
+                  <xsl:when test="$type='other'"><xsl:value-of select="@othertype"/></xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="getVariable">
+                      <xsl:with-param name="id" select="dita-ot:capitalize($type)"/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
               </fo:inline>
             </fo:block>
           </fo:table-cell>
