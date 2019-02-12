@@ -188,6 +188,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="." mode="tm-scope"/>
       </xsl:variable>
         <fo:inline xsl:use-attribute-sets="tm">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
             <xsl:choose>
               <xsl:when test="not($generate-symbol)"/>
