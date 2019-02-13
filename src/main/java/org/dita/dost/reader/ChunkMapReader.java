@@ -448,22 +448,29 @@ public final class ChunkMapReader extends AbstractDomFilter {
         try (final OutputStream output = new FileOutputStream(new File(outputFileName))) {
             final XMLSerializer serializer = XMLSerializer.newInstance(output);
             serializer.writeStartDocument();
-            serializer.writeStartElement(TOPIC_TOPIC.localName);
-            serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.2");
-            serializer.writeAttribute(ATTRIBUTE_NAME_ID, id);
-            serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString());
-            serializer.writeAttribute(ATTRIBUTE_NAME_DOMAINS, "");
-            serializer.writeStartElement(TOPIC_TITLE.localName);
-            serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TITLE.toString());
-            serializer.writeCharacters(title);
-            serializer.writeEndElement(); // title
-            if (shortDesc != null) {
-                serializer.writeStartElement(TOPIC_SHORTDESC.localName);
-                serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_SHORTDESC.toString());
-                serializer.writeCharacters(shortDesc);
-                serializer.writeEndElement(); // shortdesc
+            if (title.isEmpty() && shortDesc == null) {
+                //topicgroup with no title, no shortdesc, just need a non titled stub
+                serializer.writeStartElement(ELEMENT_NAME_DITA);
+                serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
+                serializer.writeEndElement(); // dita
+            } else {
+                serializer.writeStartElement(TOPIC_TOPIC.localName);
+                serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
+                serializer.writeAttribute(ATTRIBUTE_NAME_ID, id);
+                serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString());
+                serializer.writeAttribute(ATTRIBUTE_NAME_DOMAINS, "");
+                serializer.writeStartElement(TOPIC_TITLE.localName);
+                serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TITLE.toString());
+                serializer.writeCharacters(title);
+                serializer.writeEndElement(); // title
+                if (shortDesc != null) {
+                    serializer.writeStartElement(TOPIC_SHORTDESC.localName);
+                    serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_SHORTDESC.toString());
+                    serializer.writeCharacters(shortDesc);
+                    serializer.writeEndElement(); // shortdesc
+                }
+                serializer.writeEndElement(); // topic
             }
-            serializer.writeEndElement(); // topic
             serializer.writeEndDocument();
             serializer.close();
         } catch (final IOException | SAXException e) {
