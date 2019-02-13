@@ -71,4 +71,20 @@
       <topicref class="- map/topicref " href="Chunk15.dita#unique_16"/>
     </topichead>
   </topicref>
+
+<!-- Test chunking of groups when already chunking -->
+<topicref href="Chunk20.dita#topicID" chunk="to-content" class="- map/topicref ">
+<topicgroup chunk="to-content" class="- map/topicref " href="Chunk17.dita#Chunk17">
+<topicref href="Chunk17.dita#topicID" class="- map/topicref "/>
+</topicgroup>
+<topichead chunk="to-content" class="+ map/topicref mapgroup-d/topichead " href="Chunk18.dita#Chunk18">
+<topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Navigation title in a topichead</navtitle></topicmeta>
+<topicref href="Chunk18.dita#topicID" class="- map/topicref "/>
+</topichead>
+<topicref chunk="to-content" class="- map/topicref " href="Chunk19.dita#Chunk19">
+<topicmeta class="- map/topicmeta "><shortdesc class="- map/shortdesc ">This is an edge case but should not crash:
+short description on a chunked group but without a title.</shortdesc></topicmeta>
+<topicref href="Chunk19.dita#topicID" class="- map/topicref "/>
+</topicref>
+</topicref>
 </map>
