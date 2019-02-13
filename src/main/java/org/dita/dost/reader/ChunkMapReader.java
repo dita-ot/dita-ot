@@ -535,8 +535,23 @@ public final class ChunkMapReader extends AbstractDomFilter {
         final ChunkTopicParser chunkParser = new ChunkTopicParser();
         chunkParser.setLogger(logger);
         chunkParser.setJob(job);
+        createChildTopicrefStubs(getChildElements(topicref, MAP_TOPICREF));
         chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
         chunkParser.write(currentFile);
+    }
+    
+    //Before combining topics in a branch, ensure any descendant topicref with @chunk and no @href has a stub
+    private void createChildTopicrefStubs(final List<Element> topicrefs) {
+        if (!topicrefs.isEmpty()) {
+            for (final Element currentElem : topicrefs) {
+                final String href = getValue(currentElem, ATTRIBUTE_NAME_HREF);
+                final String chunk = getValue(currentElem,ATTRIBUTE_NAME_CHUNK);
+                if (href == null && chunk != null) {
+                    generateStumpTopic(currentElem);
+                }
+                createChildTopicrefStubs(getChildElements(currentElem, MAP_TOPICREF));
+            }
+        }
     }
 
     private void updateReltable(final Element elem) {
