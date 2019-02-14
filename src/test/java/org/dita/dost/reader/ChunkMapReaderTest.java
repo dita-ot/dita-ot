@@ -136,8 +136,7 @@ public class ChunkMapReaderTest {
         assertEquals(ImmutableMap.<URI, URI>builder()
                         .put(prefixTemp("Chunk0.dita"), prefixTemp("Chunk0.dita"))
                         .put(prefixTemp("Chunk2.dita"), prefixTemp("Chunk2.dita"))
-                        .put(prefixTemp("Chunk1.dita"), prefixTemp("Chunk2.dita#Chunk1"))
-                        .put(prefixTemp("Chunk1.dita#Chunk1"), prefixTemp("Chunk2.dita#Chunk1"))
+                        .put(prefixTemp("Chunk1.dita"), prefixTemp("Chunk2.dita"))
                         .put(prefixTemp("2.dita"), prefixTemp("Chunk2.dita#topic_qft_qwn_hv"))
                         .put(prefixTemp("2.dita#topic_qft_qwn_hv"), prefixTemp("Chunk2.dita#topic_qft_qwn_hv"))
                         .build(),
