@@ -42,6 +42,7 @@
       </metadata>
     </prolog>
     <body class="- topic/body ">
+      <p class="- topic/p " conref="">Invalid conref, ignore the attribute</p>
       <p class="- topic/p ">Xref to the another file: <xref class="- topic/xref "
           href="lang-concept.dita"/>. Now do it again, <xref class="- topic/xref "
           href="lang-concept.dita">with link text</xref>.</p>

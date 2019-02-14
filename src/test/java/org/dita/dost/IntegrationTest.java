@@ -332,7 +332,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("lang-common1.dita"))
                 .put("validate", "false")
-                .warnCount(1)
+                .warnCount(2)
                 .test();
     }
     
