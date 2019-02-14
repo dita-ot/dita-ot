@@ -546,7 +546,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         chunkParser.write(currentFile);
     }
     
-    //Before combining topics in a branch, ensure any descendant topicref with @chunk and no @href has a stub
+    /** Before combining topics in a branch, ensure any descendant topicref with @chunk and no @href has a stub */
     private void createChildTopicrefStubs(final List<Element> topicrefs) {
         if (!topicrefs.isEmpty()) {
             for (final Element currentElem : topicrefs) {
