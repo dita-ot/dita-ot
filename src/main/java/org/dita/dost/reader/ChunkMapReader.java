@@ -421,9 +421,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
         if (navtitle == null) {
             navtitle = getValue(topicref, ATTRIBUTE_NAME_NAVTITLE);
         }
-        if (navtitle == null) {
-            navtitle = name;
-        }
         final String shortDesc = getChildElementValueOfTopicmeta(topicref, MAP_SHORTDESC);
 
         writeChunk(absTemp, name, navtitle, shortDesc);
@@ -448,7 +445,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         try (final OutputStream output = new FileOutputStream(new File(outputFileName))) {
             final XMLSerializer serializer = XMLSerializer.newInstance(output);
             serializer.writeStartDocument();
-            if (title.isEmpty() && shortDesc == null) {
+            if (title == null && shortDesc == null) {
                 //topicgroup with no title, no shortdesc, just need a non titled stub
                 serializer.writeStartElement(ELEMENT_NAME_DITA);
                 serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
@@ -461,7 +458,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 serializer.writeAttribute(ATTRIBUTE_NAME_DOMAINS, "");
                 serializer.writeStartElement(TOPIC_TITLE.localName);
                 serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TITLE.toString());
-                serializer.writeCharacters(title);
+                if (title != null) {
+                    serializer.writeCharacters(title);
+                }
                 serializer.writeEndElement(); // title
                 if (shortDesc != null) {
                     serializer.writeStartElement(TOPIC_SHORTDESC.localName);
