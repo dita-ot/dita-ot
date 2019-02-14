@@ -428,12 +428,25 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="applySpansAttrs"/>
             <xsl:call-template name="applyAlignAttrs"/>
             <xsl:call-template name="generateTableEntryBorder"/>
-            <fo:block xsl:use-attribute-sets="thead.row.entry__content">
-                <xsl:apply-templates select="." mode="ancestor-start-flag"/>
-                <xsl:call-template name="processEntryContent"/>
-                <xsl:apply-templates select="." mode="ancestor-end-flag"/>
-            </fo:block>
+            <xsl:choose>
+                <xsl:when test="@rotate eq '1'">
+                    <xsl:apply-templates select="." mode="rotateTableEntryContent"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <fo:block xsl:use-attribute-sets="thead.row.entry__content">
+                        <xsl:call-template name="processEntryContent"/>
+                    </fo:block>
+                </xsl:otherwise>
+                </xsl:choose>
         </fo:table-cell>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="rotateTableEntryContent">
+        <fo:block-container reference-orientation="90">
+            <fo:block xsl:use-attribute-sets="thead.row.entry__content">
+                <xsl:call-template name="processEntryContent"/>
+            </fo:block>
+        </fo:block-container>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
@@ -458,11 +471,24 @@ See the accompanying LICENSE file for applicable license.
         <xsl:call-template name="applySpansAttrs"/>
         <xsl:call-template name="applyAlignAttrs"/>
         <xsl:call-template name="generateTableEntryBorder"/>
-        <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
-            <xsl:apply-templates select="." mode="ancestor-start-flag"/>
-            <xsl:call-template name="processEntryContent"/>
-            <xsl:apply-templates select="." mode="ancestor-end-flag"/>
-        </fo:block>
+        <xsl:choose>
+            <xsl:when test="@rotate eq '1'">
+                <xsl:apply-templates select="." mode="rotateTableEntryContent"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+                    <xsl:call-template name="processEntryContent"/>
+                </fo:block>
+            </xsl:otherwise>
+            </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="rotateTableEntryContent">
+        <fo:block-container reference-orientation="90">
+            <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+                <xsl:call-template name="processEntryContent"/>
+            </fo:block>
+        </fo:block-container>
     </xsl:template>
 
     <xsl:template name="processEntryContent">
@@ -491,6 +517,7 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:apply-templates select="." mode="ancestor-start-flag"/>
         <xsl:choose>
             <xsl:when test="exists($char) and string-length($char) ne 0">
                 <xsl:call-template name="processCharAlignment">
@@ -502,6 +529,7 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:apply-templates/>
             </xsl:otherwise>
         </xsl:choose>
+        <xsl:apply-templates select="." mode="ancestor-end-flag"/>
     </xsl:template>
 
   <xsl:template name="processCharAlignment">
