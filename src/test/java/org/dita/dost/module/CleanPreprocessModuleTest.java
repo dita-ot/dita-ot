@@ -28,6 +28,7 @@ public class CleanPreprocessModuleTest {
         assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/a"), create("file:/foo/bar/b")));
         assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/b")));
         assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/baz/b")));
+        assertEquals(null, module.getCommonBase(create("file:/foo/bar/a"), create("https://example.com/baz/b")));
     }
 
     @Test
@@ -41,6 +42,22 @@ public class CleanPreprocessModuleTest {
         job.add(new Builder()
                 .uri(create("topics/topic.dita"))
                 .result(create("file:/foo/bar/topics/topic.dita"))
+                .build());
+        module.setJob(job);
+        assertEquals(create("file:/foo/bar/"), module.getBaseDir());
+    }
+
+    @Test
+    public void getBaseDirExternal() throws Exception {
+        final Job job = new Job(new File("").getAbsoluteFile());
+        job.setInputDir(URI.create("file:/foo/bar/"));
+        job.add(new Builder()
+                .uri(create("map.ditamap"))
+                .result(create("file:/foo/bar/map.ditamap"))
+                .build());
+        job.add(new Builder()
+                .uri(create("topics/topic.dita"))
+                .result(create("https://example.com/topics/bar/topics/topic.dita"))
                 .build());
         module.setJob(job);
         assertEquals(create("file:/foo/bar/"), module.getBaseDir());
