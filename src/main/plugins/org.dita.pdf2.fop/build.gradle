@@ -59,6 +59,7 @@ task copyInstall(type: Copy) {
         exclude 'commons-io-*.jar'
         exclude 'commons-logging-*.jar'
         exclude 'xalan-*.jar'
+        exclude 'serializer-*.jar'
         exclude 'xml-apis-2*.jar'
     }
     destinationDir = file("lib")
@@ -98,6 +99,7 @@ task copyDistTemp(type: Copy) {
         exclude 'commons-io-*.jar'
         exclude 'commons-logging-*.jar'
         exclude 'xalan-*.jar'
+        exclude 'serializer-*.jar'
         exclude 'xml-apis-2*.jar'
         into "plugins/org.dita.pdf2.fop/lib"
     }
