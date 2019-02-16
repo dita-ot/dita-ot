@@ -224,7 +224,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/platform.ditaval"
         exclude "docsrc/temp"
         include "docsrc/**"
-        include "dtd/**"
         exclude "plugins/*/plugin.xml"
         include "plugins/org.dita.base/**"
         include "plugins/org.dita.eclipsehelp/**"
@@ -251,7 +250,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "plugins/org.oasis-open.dita.v1_3/**"
         exclude "temp"
         include "config/**"
-        exclude "resources/**"
+        include "resources/plugin.rnc"
         // legacy build scripts
         include "startcmd.*"
         include "bin/ant"
