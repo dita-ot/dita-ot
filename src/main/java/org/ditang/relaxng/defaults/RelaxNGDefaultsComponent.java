@@ -786,9 +786,6 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
 
   /**
    * Sets the value of a property during parsing.
-   * 
-   * @param propertyId
-   * @param value
    */
   public void setProperty(String propertyId, Object value)
       throws XMLConfigurationException {

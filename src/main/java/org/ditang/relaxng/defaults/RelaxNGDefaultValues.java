@@ -85,8 +85,6 @@ public abstract class RelaxNGDefaultValues {
     /**
      * Get a key for an element.
      * 
-     * @param elementLocalName
-     * @param elementNamespace
      * @return A string formed from the element local name and its namespace.
      */
     private String getKey(String elementLocalName, String elementNamespace) {
@@ -138,12 +136,6 @@ public abstract class RelaxNGDefaultValues {
     /** The attribute default value */
     String value;
 
-    /**
-     * 
-     * @param localName
-     * @param namespace
-     * @param value
-     */
     public Attribute(String localName, String namespace, String value) {
       this.localName = localName;
       this.namespace = namespace;
@@ -154,9 +146,7 @@ public abstract class RelaxNGDefaultValues {
   /**
    * Updates the annotation model.
    * 
-   * @param in
-   *          The schema input source.
-   * @throws SAXException 
+   * @param in The schema input source.
    */
   public void update(InputSource in) throws SAXException {
     defaultValuesCollector = null;
