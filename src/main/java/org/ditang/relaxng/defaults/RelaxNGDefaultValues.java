@@ -116,11 +116,7 @@ public abstract class RelaxNGDefaultValues {
     public void defaultValue(String elementLocalName, String elementNamespace,
         String attributeLocalName, String attributeNamepsace, String value) {
       String key = getKey(elementLocalName, elementNamespace);
-      List<Attribute> list = defaults.get(key);
-      if (list == null) {
-        list = new ArrayList<>();
-        defaults.put(key, list);
-      }
+      List<Attribute> list = defaults.computeIfAbsent(key, k -> new ArrayList<>());
       list.add(new Attribute(attributeLocalName, attributeNamepsace, value));
     }
   }
