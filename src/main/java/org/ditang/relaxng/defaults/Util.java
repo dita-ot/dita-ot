@@ -55,8 +55,8 @@ public class Util {
         '^', '~', '[', ']', '`', '\'', '&' };
     int len = escChs.length;
     char ch;
-    for (int i = 0; i < len; i++) {
-      ch = escChs[i];
+    for (char escCh : escChs) {
+      ch = escCh;
       gNeedEscaping[ch] = true;
       gAfterEscaping1[ch] = gHexChs[ch >> 4];
       gAfterEscaping2[ch] = gHexChs[ch & 0xf];
@@ -201,7 +201,7 @@ public class Util {
     }
 
     // If there is a % that means the url was already corrected.
-    if (url.indexOf("%") != -1) {
+    if (url.contains("%")) {
       return initialUrl;
     }
 
