@@ -70,7 +70,7 @@ public abstract class RelaxNGDefaultValues {
     /**
      * Stores the default attributes as a hash map with the element info as key.
      */
-    private HashMap<String, List<Attribute>> defaults = new HashMap<String, List<Attribute>>();
+    private HashMap<String, List<Attribute>> defaults = new HashMap<>();
 
     /**
      * Constructor.
@@ -118,7 +118,7 @@ public abstract class RelaxNGDefaultValues {
       String key = getKey(elementLocalName, elementNamespace);
       List<Attribute> list = defaults.get(key);
       if (list == null) {
-        list = new ArrayList<Attribute>();
+        list = new ArrayList<>();
         defaults.put(key, list);
       }
       list.add(new Attribute(attributeLocalName, attributeNamepsace, value));
@@ -160,8 +160,6 @@ public abstract class RelaxNGDefaultValues {
           properties);
       Pattern start = sw.getStart();
       defaultValuesCollector = new DefaultValuesCollector(start);
-    } catch (IncorrectSchemaException e) {
-      eh.warning(new SAXParseException("Error loading defaults: " + e.getMessage(), null, e));
     } catch (Exception e) {
       eh.warning(new SAXParseException("Error loading defaults: " + e.getMessage(), null, e));
     } catch (StackOverflowError e) {

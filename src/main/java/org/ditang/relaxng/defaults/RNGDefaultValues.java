@@ -69,8 +69,8 @@ public class RNGDefaultValues extends RelaxNGDefaultValues {
         source = new SAXSource(resolver.createXMLReader(),
             source.getInputSource());
       }
-      return new SAXParseable<Pattern, NameClass, Locator, VoidValue, CommentListImpl, AnnotationsImpl>(
-          source, resolver, eh);
+      return new SAXParseable<>(
+              source, resolver, eh);
     }
 
   }

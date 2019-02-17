@@ -50,7 +50,7 @@ public class KeyScope {
 
         KeyScope keyScope = (KeyScope) o;
 
-        if (name != null ? !name.equals(keyScope.name) : keyScope.name != null) return false;
+        if (!Objects.equals(name, keyScope.name)) return false;
         if (!keyDefinition.equals(keyScope.keyDefinition)) return false;
         return childScopes.equals(keyScope.childScopes);
     }

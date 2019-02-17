@@ -236,13 +236,13 @@ public final class Integrator {
     }
 
     private void logChanges(final Set<String> orig, final Set<String> mod) {
-        final List<String> removed = new ArrayList<String>(orig);
+        final List<String> removed = new ArrayList<>(orig);
         removed.removeAll(mod);
         removed.sort(Comparator.naturalOrder());
         for (final String p : removed) {
             logger.warn("Removed " + p);
         }
-        final List<String> added = new ArrayList<String>(mod);
+        final List<String> added = new ArrayList<>(mod);
         added.removeAll(orig);
         added.sort(Comparator.naturalOrder());
         for (final String p : added) {
