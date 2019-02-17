@@ -66,7 +66,7 @@ public class MapCleanFilter extends AbstractXMLFilter {
     }
 
     @Override
-    public void characters(char ch[], int start, int length)
+    public void characters(char[] ch, int start, int length)
             throws SAXException {
         if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
             getContentHandler().characters(ch, start, length);
@@ -74,7 +74,7 @@ public class MapCleanFilter extends AbstractXMLFilter {
     }
 
     @Override
-    public void ignorableWhitespace(char ch[], int start, int length)
+    public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
         if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
             getContentHandler().ignorableWhitespace(ch, start, length);

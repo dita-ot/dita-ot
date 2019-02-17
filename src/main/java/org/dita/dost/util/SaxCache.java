@@ -88,7 +88,7 @@ public class SaxCache {
         public final int start;
         public final int length;
 
-        public CharactersEvent(char ch[], int start, int length) {
+        public CharactersEvent(char[] ch, int start, int length) {
             final char[] copy = new char[length];
             System.arraycopy(ch, start, copy, 0, length);
             this.ch = copy;
@@ -107,7 +107,7 @@ public class SaxCache {
         public final int start;
         public final int length;
 
-        public IgnorableWhitespaceEvent(char ch[], int start, int length) {
+        public IgnorableWhitespaceEvent(char[] ch, int start, int length) {
             final char[] copy = new char[length];
             System.arraycopy(ch, start, copy, 0, length);
             this.ch = copy;

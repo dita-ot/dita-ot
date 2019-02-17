@@ -179,7 +179,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         LAUNCH_COMMANDS.add("-lib");
         LAUNCH_COMMANDS.add("-cp");
         LAUNCH_COMMANDS.add("-noclasspath");
-        LAUNCH_COMMANDS.add("-noclasspath");
         LAUNCH_COMMANDS.add("-nouserlib");
         LAUNCH_COMMANDS.add("-main");
     }

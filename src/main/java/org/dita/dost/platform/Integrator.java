@@ -362,7 +362,7 @@ public final class Integrator {
 
         final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS)
                 ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS)))
-                : Collections.EMPTY_SET;
+                : Collections.emptySet();
         writeEnvShell(jars);
         writeEnvBatch(jars);
 
