@@ -23,19 +23,20 @@
 .typeofhazard {
 }
 
-.hazardstatement--caution {
+.hazardstatement {
+  &--caution {
     background-color: #FFD100;
-}
-.hazardstatement--danger {
+  }
+  &--danger {
     background-color: #C8102E;
-}
-.hazardstatement--warning {
+  }
+  &--warning {
     background-color: #FF8200;
-}
-.hazardstatement--attention, .hazardstatement--note, .hazardstatement--notice {
+  }
+  &--attention, &--note, &--notice {
     background-color: #0072CE;
-}
-.hazardstatement--fastpath, .hazardstatement--important, .hazardstatement--other, 
-.hazardstatement--remember, .hazardstatement--restriction, .hazardstatement--tip,   {
+  }
+  &--fastpath, &--important, &--other, &--remember, &--restriction, &--tip {
     @extend .hazardstatement--caution;
+  }
 }
