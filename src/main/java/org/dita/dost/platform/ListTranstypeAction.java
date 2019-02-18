@@ -32,6 +32,7 @@ final class ListTranstypeAction extends ImportAction {
         final String separator = paramTable.getOrDefault("separator", "|");
         final List<String> v = valueSet.stream()
                 .map(fileValue -> fileValue.value)
+                .distinct()
                 .collect(Collectors.toList());
         Collections.sort(v);
         final StringBuilder retBuf = new StringBuilder();
