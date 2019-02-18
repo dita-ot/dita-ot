@@ -47,6 +47,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/markup-d.xsl"/>
 <xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/xml-d.xsl"/>
 <xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/svg-d.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/hazard-d.xsl"/>
 <!-- Integrate support for flagging with dita-ot pseudo-domain -->
 <xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/htmlflag.xsl"/>  
 

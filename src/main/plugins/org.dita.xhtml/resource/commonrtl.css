@@ -250,6 +250,19 @@ h6.tasklabel {
 .warningtitle {
   font-weight: bold;
 }
+.hazardstatement--caution, .hazardstatement--fastpath, .hazardstatement--important, .hazardstatement--other,
+.hazardstatement--remember, .hazardstatement--restriction, .hazardstatement--tip {
+  background-color: #FFD100;
+}
+.hazardstatement--danger {
+  background-color: #C8102E;
+}
+.hazardstatement--warning {
+  background-color: #FF8200;
+}
+.hazardstatement--attention, .hazardstatement--note, .hazardstatement--notice {
+  background-color: #0072CE;
+}
 /* Simple lists do not get a bullet */
 ul.simple {
   list-style-type: none;
