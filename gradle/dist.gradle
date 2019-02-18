@@ -5,6 +5,8 @@ import static groovy.io.FileType.FILES
 def licenses = [
         [name: 'avalon-framework', title: 'Avalon Framework', license: ['apache2.txt']],
         [name: 'batik', title: 'Batik', license: ['apache2.txt']],
+        [name: 'pdfbox', title: 'PDFBox', license: ['apache2.txt']],
+        [name: 'fontbox', title: 'PDFBox', license: ['apache2.txt']],
         [name: 'xmlgraphics-commons', title: 'Apache XML Graphics Commons', license: ['apache2.txt']],
         [name: 'commons-io', title: 'Commons IO', license: ['apache2.txt']],
         [name: 'xercesImpl', title: 'Xerces2 Java', license: ['apache2.txt']],
