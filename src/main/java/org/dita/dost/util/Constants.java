@@ -1038,7 +1038,9 @@ public final class Constants {
     public static final String ATTR_CONACTION_VALUE_PUSHBEFORE = "pushbefore";
     /** Conaction push replace value */
     public static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
-
+    
+    /** Standard token for attribute to be ignored due to conref */
+    public static final String ATTR_VALUE_DITA_USE_CONREF_TARGET = "-dita-use-conref-target";
 
     /** constants for filtering or flagging. */
     public static final String DEFAULT_ACTION = "default";
