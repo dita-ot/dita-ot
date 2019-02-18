@@ -1053,6 +1053,7 @@ public final class Constants {
      *
      * @deprecated since 3.2
      **/
+    @Deprecated
     public static final String IndexTerm_Prefix_See = "See";
     /**constants for indexterm prefix(See also).
      *
