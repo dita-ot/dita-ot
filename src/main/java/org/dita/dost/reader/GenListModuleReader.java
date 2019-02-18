@@ -651,22 +651,26 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private void parseConrefAttr(final Attributes atts) throws SAXException {
         String attrValue = atts.getValue(ATTRIBUTE_NAME_CONREF);
         if (attrValue != null) {
-            hasConRef = true;
-
-            URI filename;
-            final URI target = toURI(attrValue);
-            if (isAbsolute(target)) {
-                filename = target;
-            } else if (attrValue.startsWith(SHARP)) {
-                filename = currentFile;
+            if (attrValue.isEmpty()) {
+                logger.warn(MessageUtils.getMessage("DOTJ081W").setLocation(atts).toString());
             } else {
-                filename = currentDir.resolve(target);
-            }
-            filename = stripFragment(filename);
+                hasConRef = true;
 
-            // Collect only conref target topic files
-            conrefTargets.add(filename);
-            toOutFile(filename, atts);
+                URI filename;
+                final URI target = toURI(attrValue);
+                if (isAbsolute(target)) {
+                    filename = target;
+                } else if (attrValue.startsWith(SHARP)) {
+                    filename = currentFile;
+                } else {
+                    filename = currentDir.resolve(target);
+                }
+                filename = stripFragment(filename);
+
+                // Collect only conref target topic files
+                conrefTargets.add(filename);
+                toOutFile(filename, atts);
+            }
         }
     }
 

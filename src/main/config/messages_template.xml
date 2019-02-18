@@ -397,6 +397,11 @@ See the accompanying LICENSE file for applicable license.
     <response>Use plugin configuration '%1' instead.</response>
   </message>
 
+  <message id="DOTJ081W" type="WARN">
+    <reason>Ignoring empty conref attribute conref="".</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

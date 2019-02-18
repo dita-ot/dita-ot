@@ -443,6 +443,41 @@
     <response></response>
   </message>
 
+  <message id="DOTJ075W" type="WARN">
+    <reason>Absolute link '%1' without correct 'scope' attribute.</reason>
+    <response>Using 'scope' attribute value 'external'.</response>
+  </message>
+  
+  <message id="DOTJ076W" type="WARN">
+    <reason>Absolute link '%1' without correct 'scope' attribute.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTJ077F" type="FATAL">
+    <reason>Invalid action attribute '%1' on DITAVAL property.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTJ078F" type="FATAL">
+    <reason>Input file '%1' could not be loaded.</reason>
+    <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
+  </message>
+  
+  <message id="DOTJ079E" type="ERROR">
+    <reason>File '%1' could not be loaded.</reason>
+    <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
+  </message>
+  
+  <message id="DOTJ080W" type="WARN">
+    <reason>Integrator configuration '%1' has been deprecated.</reason>
+    <response>Use plugin configuration '%1' instead.</response>
+  </message>
+  
+  <message id="DOTJ081W" type="WARN">
+    <reason>Ignoring empty conref attribute conref="".</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  
