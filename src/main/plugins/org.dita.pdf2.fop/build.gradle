@@ -12,6 +12,7 @@ repositories {
 dependencies {
     runtimeOnly(group: 'org.apache.xmlgraphics', name: 'fop', version: '2.3') {
         exclude group: 'xalan'
+        exclude group: 'org.apache.pdfbox'
     }
     runtimeOnly group: 'org.apache.pdfbox', name: 'fontbox', version: '2.0.13'
     runtimeOnly(group: 'org.apache.xmlgraphics', name: 'batik-all', version: '1.10') {
