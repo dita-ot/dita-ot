@@ -324,7 +324,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             if (needWriteDitaTag) {
                 final AttributesImpl atts = new AttributesImpl();
                 addOrSetAttribute(atts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, DITA_NAMESPACE);
-                addOrSetAttribute(atts, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.2");
+                addOrSetAttribute(atts, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
                 writeStartElement(ditaFileOutput, ELEMENT_NAME_DITA, atts);
             }
             // write the final result to the output file

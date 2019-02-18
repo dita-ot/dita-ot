@@ -421,9 +421,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
         if (navtitle == null) {
             navtitle = getValue(topicref, ATTRIBUTE_NAME_NAVTITLE);
         }
-        if (navtitle == null) {
-            navtitle = name;
-        }
         final String shortDesc = getChildElementValueOfTopicmeta(topicref, MAP_SHORTDESC);
 
         writeChunk(absTemp, name, navtitle, shortDesc);
@@ -448,22 +445,31 @@ public final class ChunkMapReader extends AbstractDomFilter {
         try (final OutputStream output = new FileOutputStream(new File(outputFileName))) {
             final XMLSerializer serializer = XMLSerializer.newInstance(output);
             serializer.writeStartDocument();
-            serializer.writeStartElement(TOPIC_TOPIC.localName);
-            serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.2");
-            serializer.writeAttribute(ATTRIBUTE_NAME_ID, id);
-            serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString());
-            serializer.writeAttribute(ATTRIBUTE_NAME_DOMAINS, "");
-            serializer.writeStartElement(TOPIC_TITLE.localName);
-            serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TITLE.toString());
-            serializer.writeCharacters(title);
-            serializer.writeEndElement(); // title
-            if (shortDesc != null) {
-                serializer.writeStartElement(TOPIC_SHORTDESC.localName);
-                serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_SHORTDESC.toString());
-                serializer.writeCharacters(shortDesc);
-                serializer.writeEndElement(); // shortdesc
+            if (title == null && shortDesc == null) {
+                //topicgroup with no title, no shortdesc, just need a non titled stub
+                serializer.writeStartElement(ELEMENT_NAME_DITA);
+                serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
+                serializer.writeEndElement(); // dita
+            } else {
+                serializer.writeStartElement(TOPIC_TOPIC.localName);
+                serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
+                serializer.writeAttribute(ATTRIBUTE_NAME_ID, id);
+                serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString());
+                serializer.writeAttribute(ATTRIBUTE_NAME_DOMAINS, "");
+                serializer.writeStartElement(TOPIC_TITLE.localName);
+                serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TITLE.toString());
+                if (title != null) {
+                    serializer.writeCharacters(title);
+                }
+                serializer.writeEndElement(); // title
+                if (shortDesc != null) {
+                    serializer.writeStartElement(TOPIC_SHORTDESC.localName);
+                    serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_SHORTDESC.toString());
+                    serializer.writeCharacters(shortDesc);
+                    serializer.writeEndElement(); // shortdesc
+                }
+                serializer.writeEndElement(); // topic
             }
-            serializer.writeEndElement(); // topic
             serializer.writeEndDocument();
             serializer.close();
         } catch (final IOException | SAXException e) {
@@ -535,8 +541,23 @@ public final class ChunkMapReader extends AbstractDomFilter {
         final ChunkTopicParser chunkParser = new ChunkTopicParser();
         chunkParser.setLogger(logger);
         chunkParser.setJob(job);
+        createChildTopicrefStubs(getChildElements(topicref, MAP_TOPICREF));
         chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
         chunkParser.write(currentFile);
+    }
+    
+    /** Before combining topics in a branch, ensure any descendant topicref with @chunk and no @href has a stub */
+    private void createChildTopicrefStubs(final List<Element> topicrefs) {
+        if (!topicrefs.isEmpty()) {
+            for (final Element currentElem : topicrefs) {
+                final String href = getValue(currentElem, ATTRIBUTE_NAME_HREF);
+                final String chunk = getValue(currentElem,ATTRIBUTE_NAME_CHUNK);
+                if (href == null && chunk != null) {
+                    generateStumpTopic(currentElem);
+                }
+                createChildTopicrefStubs(getChildElements(currentElem, MAP_TOPICREF));
+            }
+        }
     }
 
     private void updateReltable(final Element elem) {
