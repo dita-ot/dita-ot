@@ -14,7 +14,9 @@ See the accompanying LICENSE file for applicable license.
   <feature extension="dita.conductor.lib.import" file="lib/avalon-framework-api-4.3.1.jar"/>
   <feature extension="dita.conductor.lib.import" file="lib/avalon-framework-impl-4.3.1.jar"/>
   <feature extension="dita.conductor.lib.import" file="lib/batik-all-1.10.jar"/>
-  <feature extension="dita.conductor.lib.import" file="lib/fontbox-2.0.7.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/fontbox-2.0.13.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/fop-pdf-images-2.3.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/pdfbox-2.0.13.jar"/>
   <feature extension="dita.conductor.lib.import" file="lib/fop-2.3.jar"/>
   <feature extension="dita.conductor.lib.import" file="lib/jcl-over-slf4j-1.7.25.jar"/>
   <feature extension="dita.conductor.lib.import" file="lib/xml-apis-ext-1.3.04.jar"/>
