@@ -7,12 +7,35 @@
  */
 package org.dita.dost.module;
 
-import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import static org.dita.dost.util.FileUtils.replaceExtension;
+import static org.dita.dost.util.XMLUtils.withLogger;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ServiceLoader;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
@@ -24,17 +47,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import javax.xml.transform.*;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.*;
-
-import static org.dita.dost.util.FileUtils.replaceExtension;
-import static org.dita.dost.util.XMLUtils.withLogger;
+import net.sf.saxon.TransformerFactoryImpl;
+import net.sf.saxon.lib.CollationURIResolver;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
 
 /**
  * XSLT processing module.
@@ -96,6 +111,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         }
         final TransformerFactory tf = TransformerFactory.newInstance();
         configureExtensions(tf);
+        configureCollationResolvers(tf);
         tf.setURIResolver(uriResolver);
         try {
             templates = tf.newTemplates(new StreamSource(style));
@@ -252,7 +268,9 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     }
 
     private void configureExtensions (TransformerFactory tf) {
-        if (tf.getClass().isAssignableFrom(net.sf.saxon.TransformerFactoryImpl.class)) {
+        if (tf.getClass().isAssignableFrom(net.sf.saxon.TransformerFactoryImpl.class)
+            || tf instanceof net.sf.saxon.TransformerFactoryImpl
+            ) {
             configureSaxonExtensions((net.sf.saxon.TransformerFactoryImpl) tf);
         }
     }
@@ -275,6 +293,40 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    /**
+     * Registers collation URI resolvers.
+     * 
+     * @param tf The transformer factory to configure.
+     */
+    private void configureCollationResolvers(TransformerFactory tf) {
+      if (tf.getClass().isAssignableFrom(net.sf.saxon.TransformerFactoryImpl.class)
+          || tf instanceof net.sf.saxon.TransformerFactoryImpl
+          ) {
+          configureSaxonCollationResolvers((net.sf.saxon.TransformerFactoryImpl) tf);
+      }
+      
+    }
+
+    private void configureSaxonCollationResolvers(TransformerFactoryImpl tf) {
+      final net.sf.saxon.Configuration conf = tf.getConfiguration();
+      for (DelegatingCollationUriResolver resolver : ServiceLoader.load(DelegatingCollationUriResolver.class)) {
+          try {
+            DelegatingCollationUriResolver newResolver = resolver.getClass().newInstance();
+            CollationURIResolver currentResolver = conf.getCollationURIResolver();
+              if (currentResolver != null) {
+                newResolver.setBaseResolver(currentResolver);
+              }
+              conf.setCollationURIResolver(newResolver);
+          } catch (InstantiationException e) {
+            throw new RuntimeException("Failed to register " + resolver.getClass().getSimpleName()
+                    + ". Cannot create instance of " + resolver.getClass().getName() + ": " + e.getMessage(), e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+      }
+      
     }
 
 }
