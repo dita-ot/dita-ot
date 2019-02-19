@@ -27,17 +27,21 @@
   &--caution {
     background-color: $hazard-ansi-yellow;
   }
+
   &--danger {
     background-color: $hazard-ansi-red;
   }
+
   &--warning {
     background-color: $hazard-ansi-orange;
   }
+
   &--attention,
   &--note,
   &--notice {
     background-color: $hazard-ansi-blue;
   }
+
   &--fastpath,
   &--important,
   &--other,
