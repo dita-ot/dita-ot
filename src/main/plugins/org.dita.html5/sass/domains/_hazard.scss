@@ -9,21 +9,6 @@
 }
 
 .hazardstatement {
-}
-
-.hazardsymbol {
-}
-
-.howtoavoid {
-}
-
-.messagepanel {
-}
-
-.typeofhazard {
-}
-
-.hazardstatement {
   &--caution {
     background-color: $hazard-ansi-yellow;
   }
@@ -50,4 +35,16 @@
   &--tip {
     @extend .hazardstatement--caution;
   }
+}
+
+.hazardsymbol {
+}
+
+.howtoavoid {
+}
+
+.messagepanel {
+}
+
+.typeofhazard {
 }
