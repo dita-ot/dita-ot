@@ -11,5 +11,8 @@
     <p
       id="p-with-keyref">This is a keyref xref to the target "XRef target topic": <xref
       keyref="xref-target-01">keyref xref to xref-target-topic</xref></p>
+    <p>Now try conref on an actual xref, with -dita-use-conref-target
+      <xref id="xref" href="https://www.dita-ot.org" format="html" scope="external">project site</xref>
+      <xref conref="#./xref" href="-dita-use-conref-target"/></p>
   </body>
 </topic>

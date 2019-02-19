@@ -565,6 +565,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (attrValue == null) {
             return;
         }
+
+        //Check if this attribute will be ignored due to conref
+        final String attrConref = atts.getValue(ATTRIBUTE_NAME_CONREF);
+        if (attrConref != null && !attrConref.isEmpty() && ATTR_VALUE_DITA_USE_CONREF_TARGET.equals(attrValue.toString())) {
+            return;
+        }
+
         final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
 
