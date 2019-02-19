@@ -25,16 +25,16 @@
 
 .hazardstatement {
   &--caution {
-    background-color: #FFD100;
+    background-color: $hazard-ansi-yellow;
   }
   &--danger {
-    background-color: #C8102E;
+    background-color: $hazard-ansi-red;
   }
   &--warning {
-    background-color: #FF8200;
+    background-color: $hazard-ansi-orange;
   }
   &--attention, &--note, &--notice {
-    background-color: #0072CE;
+    background-color: $hazard-ansi-blue;
   }
   &--fastpath, &--important, &--other, &--remember, &--restriction, &--tip {
     @extend .hazardstatement--caution;

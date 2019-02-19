@@ -22,6 +22,21 @@ $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
 $brand-primary:          darken(#428bca, 6.5%) !default; // #337ab7
 
+// Hazard statement colors
+//
+// Source: https://www.nema.org/Standards/ComplimentaryDocuments/ANSI%20Z535_1-2017%20CONTENTS%20AND%20SCOPE.pdf
+$hazard-ansi-red:       #c8102e; // danger
+$hazard-ansi-orange:    #ff8200; // warning
+$hazard-ansi-yellow:    #ffd100; // caution
+$hazard-ansi-green:     #007b5f;
+$hazard-ansi-blue:      #0072ce; // note
+$hazard-ansi-purple:    #6d2077;
+
+// Source: https://en.wikipedia.org/wiki/ISO_3864
+$hazard-iso-red:        #9b2423;
+$hazard-iso-yellow:     #f9a800;
+$hazard-iso-green:      #237f52;
+$hazard-iso-blue:       #005387;
 
 //== Scaffolding
 //
@@ -111,6 +126,7 @@ $pre-bg:                      #f5f5f5 !default;
 $pre-color:                   $gray-dark !default;
 $pre-border-color:            #ccc !default;
 
+$screen-bg:             $pre-border-color;
 
 //== Type
 //
