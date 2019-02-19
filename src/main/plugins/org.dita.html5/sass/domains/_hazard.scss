@@ -33,10 +33,17 @@
   &--warning {
     background-color: $hazard-ansi-orange;
   }
-  &--attention, &--note, &--notice {
+  &--attention,
+  &--note,
+  &--notice {
     background-color: $hazard-ansi-blue;
   }
-  &--fastpath, &--important, &--other, &--remember, &--restriction, &--tip {
+  &--fastpath,
+  &--important,
+  &--other,
+  &--remember,
+  &--restriction,
+  &--tip {
     @extend .hazardstatement--caution;
   }
 }
