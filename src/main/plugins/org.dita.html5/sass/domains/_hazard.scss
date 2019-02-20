@@ -9,7 +9,13 @@
 }
 
 .hazardstatement {
-  &--caution {
+  &--caution,
+  &--fastpath,
+  &--important,
+  &--other,
+  &--remember,
+  &--restriction,
+  &--tip {
     background-color: $hazard-ansi-yellow;
   }
 
@@ -25,15 +31,6 @@
   &--note,
   &--notice {
     background-color: $hazard-ansi-blue;
-  }
-
-  &--fastpath,
-  &--important,
-  &--other,
-  &--remember,
-  &--restriction,
-  &--tip {
-    @extend .hazardstatement--caution;
   }
 }
 
