@@ -26,6 +26,7 @@
 
   &--danger {
     background-color: $hazard-ansi-red;
+    color: $hazard-heading-light;
   }
 
   &--warning {
@@ -36,6 +37,7 @@
   &--note,
   &--notice {
     background-color: $hazard-ansi-blue;
+    color: $hazard-heading-light;
   }
 }
 
