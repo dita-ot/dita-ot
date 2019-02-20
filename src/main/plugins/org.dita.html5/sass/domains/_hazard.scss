@@ -4,11 +4,34 @@
 //
 // See the accompanying LICENSE file for applicable license.
 
-// block 
+// block
 .consequence {
 }
 
 .hazardstatement {
+  &--caution,
+  &--fastpath,
+  &--important,
+  &--other,
+  &--remember,
+  &--restriction,
+  &--tip {
+    background-color: $hazard-ansi-yellow;
+  }
+
+  &--danger {
+    background-color: $hazard-ansi-red;
+  }
+
+  &--warning {
+    background-color: $hazard-ansi-orange;
+  }
+
+  &--attention,
+  &--note,
+  &--notice {
+    background-color: $hazard-ansi-blue;
+  }
 }
 
 .hazardsymbol {
@@ -21,22 +44,4 @@
 }
 
 .typeofhazard {
-}
-
-.hazardstatement {
-  &--caution {
-    background-color: #FFD100;
-  }
-  &--danger {
-    background-color: #C8102E;
-  }
-  &--warning {
-    background-color: #FF8200;
-  }
-  &--attention, &--note, &--notice {
-    background-color: #0072CE;
-  }
-  &--fastpath, &--important, &--other, &--remember, &--restriction, &--tip {
-    @extend .hazardstatement--caution;
-  }
 }

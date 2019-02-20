@@ -4,17 +4,17 @@
 //
 // See the accompanying LICENSE file for applicable license.
 
-// block 
+// block
 .screen {
-  padding: 5px 5px 5px 5px;
+  background-color: $screen-bg;
   border: outset;
-  background-color: #CCCCCC;
-  margin-top: 2px;
   margin-bottom: 2px;
+  margin-top: 2px;
+  padding: 5px;
   white-space: pre;
 }
 
-// inline 
+// inline
 .menucascade {
 }
 

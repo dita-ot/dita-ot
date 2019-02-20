@@ -4,20 +4,13 @@
 //
 // See the accompanying LICENSE file for applicable license.
 
-div.tasklabel {
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
-h2.tasklabel,
-h3.tasklabel,
-h4.tasklabel,
-h5.tasklabel,
-h6.tasklabel {
+.tasklabel {
   font-size: 100%;
+  margin-bottom: 1em;
+  margin-top: 1em;
 }
 
-// block 
+// block
 .chdesc {
 }
 
@@ -90,7 +83,7 @@ h6.tasklabel {
 .tasktroubleshooting {
 }
 
-// inline 
+// inline
 .cmd {
 }
 
