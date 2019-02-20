@@ -385,5 +385,20 @@
       <x:expect label="return false()" select="false()"/>
     </x:scenario>
   </x:scenario>
+  
+  <x:scenario label="Normalize path with space and backslash">
+    <x:call function="dita-ot:normalize-href">
+      <x:param name="href" select="'foo bar\this that.dita'"/>
+    </x:call>
+    
+    <x:expect label="path normalized with / and %20" select="'foo%20bar/this%20that.dita'"/>
+  </x:scenario>
+  <x:scenario label="Normalize path that doesn't need normalization">
+    <x:call function="dita-ot:normalize-href">
+      <x:param name="href" select="'foo%20bar/this%20that.dita'"/>
+    </x:call>
+    
+    <x:expect label="path not modified" select="'foo%20bar/this%20that.dita'"/>
+  </x:scenario>
 
 </x:description>
