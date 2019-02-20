@@ -4,17 +4,10 @@
 //
 // See the accompanying LICENSE file for applicable license.
 
-div.tasklabel {
+.tasklabel {
+  font-size: 100%;
   margin-bottom: 1em;
   margin-top: 1em;
-}
-
-h2.tasklabel,
-h3.tasklabel,
-h4.tasklabel,
-h5.tasklabel,
-h6.tasklabel {
-  font-size: 100%;
 }
 
 // block
