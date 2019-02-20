@@ -97,7 +97,6 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/dt ')]">
         <fo:block xsl:use-attribute-sets="dlentry.dt__content">
-            <xsl:call-template name="commonattributes"/>
             <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/dt ')])">
               <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
             </xsl:if>
