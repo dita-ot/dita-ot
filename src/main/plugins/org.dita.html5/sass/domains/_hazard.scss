@@ -9,6 +9,11 @@
 }
 
 .hazardstatement {
+  td,
+  th {
+    padding: 0.5rem;
+  }
+
   &--caution,
   &--fastpath,
   &--important,
