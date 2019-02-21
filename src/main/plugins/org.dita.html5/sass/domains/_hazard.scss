@@ -19,13 +19,7 @@
     text-transform: uppercase;
   }
 
-  &--caution,
-  &--fastpath,
-  &--important,
-  &--other,
-  &--remember,
-  &--restriction,
-  &--tip {
+  &--caution {
     background-color: $hazard-ansi-yellow;
   }
 
@@ -39,8 +33,14 @@
   }
 
   &--attention,
+  &--fastpath,
+  &--important,
   &--note,
-  &--notice {
+  &--notice,
+  &--other,
+  &--remember,
+  &--restriction,
+  &--tip {
     background-color: $hazard-ansi-blue;
     color: $hazard-heading-light;
     font-style: italic;
