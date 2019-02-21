@@ -7,29 +7,9 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.FileUtils.replaceExtension;
-import static org.dita.dost.util.XMLUtils.withLogger;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ServiceLoader;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.Templates;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
+import net.sf.saxon.jaxp.SaxonTransformerFactory;
+import net.sf.saxon.lib.CollationURIResolver;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.FileUtils;
@@ -47,9 +27,17 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import net.sf.saxon.TransformerFactoryImpl;
-import net.sf.saxon.lib.CollationURIResolver;
-import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import javax.xml.transform.*;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
+
+import static org.dita.dost.util.FileUtils.replaceExtension;
+import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**
  * XSLT processing module.
@@ -267,11 +255,9 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         this.extension = extension.startsWith(".") ? extension : ("." + extension);
     }
 
-    private void configureExtensions (TransformerFactory tf) {
-        if (tf.getClass().isAssignableFrom(net.sf.saxon.TransformerFactoryImpl.class)
-            || tf instanceof net.sf.saxon.TransformerFactoryImpl
-            ) {
-            configureSaxonExtensions((net.sf.saxon.TransformerFactoryImpl) tf);
+    private void configureExtensions(TransformerFactory tf) {
+        if (tf instanceof SaxonTransformerFactory) {
+            configureSaxonExtensions((SaxonTransformerFactory) tf);
         }
     }
 
@@ -281,7 +267,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
      * @see <a href="https://www.saxonica.com/html/documentation/extensibility/integratedfunctions/ext-full-J.html">Saxon
      *      Java extension functions: full interface</a>
      */
-    private void configureSaxonExtensions(net.sf.saxon.TransformerFactoryImpl tfi) {
+    private void configureSaxonExtensions(SaxonTransformerFactory tfi) {
         final net.sf.saxon.Configuration conf = tfi.getConfiguration();
         for (ExtensionFunctionDefinition def : ServiceLoader.load(ExtensionFunctionDefinition.class)) {
             try {
@@ -301,32 +287,28 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
      * @param tf The transformer factory to configure.
      */
     private void configureCollationResolvers(TransformerFactory tf) {
-      if (tf.getClass().isAssignableFrom(net.sf.saxon.TransformerFactoryImpl.class)
-          || tf instanceof net.sf.saxon.TransformerFactoryImpl
-          ) {
-          configureSaxonCollationResolvers((net.sf.saxon.TransformerFactoryImpl) tf);
-      }
-      
+        if (tf instanceof SaxonTransformerFactory) {
+            configureSaxonCollationResolvers((SaxonTransformerFactory) tf);
+        }
     }
 
-    private void configureSaxonCollationResolvers(TransformerFactoryImpl tf) {
-      final net.sf.saxon.Configuration conf = tf.getConfiguration();
-      for (DelegatingCollationUriResolver resolver : ServiceLoader.load(DelegatingCollationUriResolver.class)) {
-          try {
-            DelegatingCollationUriResolver newResolver = resolver.getClass().newInstance();
-            CollationURIResolver currentResolver = conf.getCollationURIResolver();
-              if (currentResolver != null) {
-                newResolver.setBaseResolver(currentResolver);
-              }
-              conf.setCollationURIResolver(newResolver);
-          } catch (InstantiationException e) {
-            throw new RuntimeException("Failed to register " + resolver.getClass().getSimpleName()
-                    + ". Cannot create instance of " + resolver.getClass().getName() + ": " + e.getMessage(), e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+    private void configureSaxonCollationResolvers(SaxonTransformerFactory tf) {
+        final net.sf.saxon.Configuration conf = tf.getConfiguration();
+        for (DelegatingCollationUriResolver resolver : ServiceLoader.load(DelegatingCollationUriResolver.class)) {
+            try {
+                final DelegatingCollationUriResolver newResolver = resolver.getClass().newInstance();
+                final CollationURIResolver currentResolver = conf.getCollationURIResolver();
+                if (currentResolver != null) {
+                    newResolver.setBaseResolver(currentResolver);
+                }
+                conf.setCollationURIResolver(newResolver);
+            } catch (InstantiationException e) {
+                throw new RuntimeException("Failed to register " + resolver.getClass().getSimpleName()
+                        + ". Cannot create instance of " + resolver.getClass().getName() + ": " + e.getMessage(), e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
-      }
-      
     }
 
 }
