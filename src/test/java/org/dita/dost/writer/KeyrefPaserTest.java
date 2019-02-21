@@ -82,6 +82,20 @@ public class KeyrefPaserTest {
         assertXMLEqual(new InputSource(new File(expDir, "a.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "a.xml").toURI().toString()));
     }
+    
+    @Test
+    public void testTopicWriteSubdir() throws Exception {
+        final KeyrefPaser parser = new KeyrefPaser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir));
+        parser.setKeyDefinition(keyDefinition);
+        final String tempSubDir = tempDir + File.separator + "subdir";
+        parser.setCurrentFile(new File(tempSubDir, "subdirtopic.xml").toURI());
+        parser.write(new File(tempSubDir, "subdirtopic.xml"));
+
+        assertXMLEqual(new InputSource(new File(expDir + File.separator + "subdir", "subdirtopic.xml").toURI().toString()),
+                new InputSource(new File(tempSubDir, "subdirtopic.xml").toURI().toString()));
+    }
 
     @Test
     public void testFragment() throws Exception {

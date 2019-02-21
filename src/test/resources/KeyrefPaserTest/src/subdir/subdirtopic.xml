@@ -1,0 +1,17 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)"
+  id="subdirtopic" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Keyref in subdir</title>
+    <body class="- topic/body ">
+      <object class="- topic/object " datakeyref="localmp4"/>
+      <image class="- topic/image " keyref="localsvg"/>
+      <p class="- topic/p ">
+        <xref class="- topic/xref " keyref="xref_link"/>
+        <xref class="- topic/xref " keyref="peerdita"/>
+        <xref class="- topic/xref " keyref="localpdf"/>
+        <xref class="- topic/xref " keyref="localmp4"/>
+        <xref class="- topic/xref " keyref="externalunknown"/>
+        <xref class="- topic/xref " keyref="peerabsolute"/>
+      </p>
+    </body>
+</topic>
