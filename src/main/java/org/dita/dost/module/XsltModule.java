@@ -7,6 +7,7 @@
  */
 package org.dita.dost.module;
 
+import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.jaxp.SaxonTransformerFactory;
 import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -255,7 +256,8 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         this.extension = extension.startsWith(".") ? extension : ("." + extension);
     }
 
-    private void configureExtensions(TransformerFactory tf) {
+    @VisibleForTesting
+    void configureExtensions(TransformerFactory tf) {
         if (tf instanceof SaxonTransformerFactory) {
             configureSaxonExtensions((SaxonTransformerFactory) tf);
         }
@@ -286,7 +288,8 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
      * 
      * @param tf The transformer factory to configure.
      */
-    private void configureCollationResolvers(TransformerFactory tf) {
+    @VisibleForTesting
+    void configureCollationResolvers(TransformerFactory tf) {
         if (tf instanceof SaxonTransformerFactory) {
             configureSaxonCollationResolvers((SaxonTransformerFactory) tf);
         }
