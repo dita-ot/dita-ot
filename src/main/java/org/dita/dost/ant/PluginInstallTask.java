@@ -34,10 +34,13 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -128,7 +131,23 @@ public final class PluginInstallTask extends Task {
                         throw new BuildException(new IllegalStateException(String.format("Plug-in %s already installed: %s", name, pluginDir)));
                     }
                 }
-                Files.move(tempPluginDir.toPath(), pluginDir.toPath());
+                Files.walkFileTree(tempPluginDir.toPath(), new SimpleFileVisitor<Path>() {
+
+					@Override
+					public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+						Path targetPath = pluginDir.toPath().resolve(tempPluginDir.toPath().relativize(dir));
+						if(!Files.exists(targetPath)) {
+							Files.createDirectory(targetPath);
+						}
+						return FileVisitResult.CONTINUE;
+					}
+
+					@Override
+					public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+						Files.copy(file, pluginDir.toPath().resolve(tempPluginDir.toPath().relativize(file)));
+						return FileVisitResult.CONTINUE;
+					}
+				});
             }
         } catch (IOException e) {
             throw new BuildException(e.getMessage(), e);
