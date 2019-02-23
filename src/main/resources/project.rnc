@@ -1,0 +1,53 @@
+project = element project { (deliverable | input-set | profile-set | publication-set)* }
+deliverable =
+  element deliverable {
+    attribute name { text }?,
+    (inputs | profile | publication)*
+  }
+inputs =
+  element inputs {
+    (attribute ref { text }
+     | attribute name { text })?,
+    input*
+  }
+input =
+  element input {
+    attribute href { text }
+  }
+ditaval =
+  element ditaval {
+    attribute href { text }?,
+    text
+  }
+param =
+  element param {
+    attribute name { text }?,
+    (attribute href { xsd:anyURI }
+     | attribute value { text })
+  }
+transtype =
+  element transtype {
+    attribute name { text }?
+  }
+profile =
+  element profile {
+    attribute ref { text }?,
+    attribute name { text }?,
+    (ditaval | prop)*
+  }
+prop =
+  element prop {
+    attribute val { text }?,
+    attribute action { text }?,
+    attribute att { text }?
+  }
+publication =
+  element publication {
+    attribute ref { text }?,
+    attribute name { text }?,
+    (transtype*, param*)
+  }
+input-set = element input-set { inputs* }
+profile-set = element profile-set { profile* }
+publication-set = element publication-set { publication* }
+start = project
