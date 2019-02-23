@@ -7,12 +7,16 @@
  */
 package org.dita.dost.module;
 
+import com.google.common.annotations.VisibleForTesting;
+import net.sf.saxon.jaxp.SaxonTransformerFactory;
+import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
@@ -96,6 +100,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         }
         final TransformerFactory tf = TransformerFactory.newInstance();
         configureExtensions(tf);
+        configureCollationResolvers(tf);
         tf.setURIResolver(uriResolver);
         try {
             templates = tf.newTemplates(new StreamSource(style));
@@ -251,9 +256,10 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         this.extension = extension.startsWith(".") ? extension : ("." + extension);
     }
 
-    private void configureExtensions (TransformerFactory tf) {
-        if (tf.getClass().isAssignableFrom(net.sf.saxon.TransformerFactoryImpl.class)) {
-            configureSaxonExtensions((net.sf.saxon.TransformerFactoryImpl) tf);
+    @VisibleForTesting
+    void configureExtensions(TransformerFactory tf) {
+        if (tf instanceof SaxonTransformerFactory) {
+            configureSaxonExtensions((SaxonTransformerFactory) tf);
         }
     }
 
@@ -263,7 +269,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
      * @see <a href="https://www.saxonica.com/html/documentation/extensibility/integratedfunctions/ext-full-J.html">Saxon
      *      Java extension functions: full interface</a>
      */
-    private void configureSaxonExtensions(net.sf.saxon.TransformerFactoryImpl tfi) {
+    private void configureSaxonExtensions(SaxonTransformerFactory tfi) {
         final net.sf.saxon.Configuration conf = tfi.getConfiguration();
         for (ExtensionFunctionDefinition def : ServiceLoader.load(ExtensionFunctionDefinition.class)) {
             try {
@@ -271,6 +277,37 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             } catch (InstantiationException e) {
                 throw new RuntimeException("Failed to register " + def.getFunctionQName().getDisplayName()
                         + ". Cannot create instance of " + def.getClass().getName() + ": " + e.getMessage(), e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * Registers collation URI resolvers.
+     * 
+     * @param tf The transformer factory to configure.
+     */
+    @VisibleForTesting
+    void configureCollationResolvers(TransformerFactory tf) {
+        if (tf instanceof SaxonTransformerFactory) {
+            configureSaxonCollationResolvers((SaxonTransformerFactory) tf);
+        }
+    }
+
+    private void configureSaxonCollationResolvers(SaxonTransformerFactory tf) {
+        final net.sf.saxon.Configuration conf = tf.getConfiguration();
+        for (DelegatingCollationUriResolver resolver : ServiceLoader.load(DelegatingCollationUriResolver.class)) {
+            try {
+                final DelegatingCollationUriResolver newResolver = resolver.getClass().newInstance();
+                final CollationURIResolver currentResolver = conf.getCollationURIResolver();
+                if (currentResolver != null) {
+                    newResolver.setBaseResolver(currentResolver);
+                }
+                conf.setCollationURIResolver(newResolver);
+            } catch (InstantiationException e) {
+                throw new RuntimeException("Failed to register " + resolver.getClass().getSimpleName()
+                        + ". Cannot create instance of " + resolver.getClass().getName() + ": " + e.getMessage(), e);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
