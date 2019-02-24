@@ -19,9 +19,7 @@
         ]
       },
       "publications": {
-        "transtypes": [
-          "html5"
-        ],
+        "transtype": "html5",
         "params": [
           {
             "name": "args.gen.task.lbl",

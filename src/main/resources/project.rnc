@@ -45,12 +45,14 @@ publication =
   element publication {
     attribute ref { text }?,
     attribute name { text }?,
-    (transtype*, param*)
+    attribute transtype { text },
+    # (transtype, param*)
+    param*
   }
-transtype =
-  element transtype {
-    attribute name { text }?
-  }
+# transtype =
+#  element transtype {
+#    attribute name { text }?
+#  }
 param =
   element param {
     attribute name { text }?,

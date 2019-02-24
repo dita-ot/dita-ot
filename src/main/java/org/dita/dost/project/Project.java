@@ -14,8 +14,13 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
+import java.io.File;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @JacksonXmlRootElement(localName = "project")
 public class Project {
@@ -33,8 +38,10 @@ public class Project {
         public final String name;
         @JacksonXmlElementWrapper(useWrapping = false)
         public final Inputs inputs;
+        @JacksonXmlProperty(localName = "profile")
         @JacksonXmlElementWrapper(useWrapping = false)
         public final Profile profiles;
+        @JacksonXmlProperty(localName = "publication")
         @JacksonXmlElementWrapper(useWrapping = false)
         public final Publication publications;
 
@@ -108,17 +115,16 @@ public class Project {
         }
 
         public static class Publication {
-            @JacksonXmlElementWrapper(useWrapping = false)
-            @JacksonXmlProperty(localName = "transtype")
-            public final List<String> transtypes;
+            @JacksonXmlProperty(isAttribute = true)
+            public final String transtype;
             @JacksonXmlElementWrapper(useWrapping = false)
             @JacksonXmlProperty(localName = "param")
             public final List<Param> params;
 
             @JsonCreator
-            public Publication(@JsonProperty("transtypes") List<String> transtypes,
+            public Publication(@JsonProperty("transtype") String transtype,
                                @JsonProperty("params") List<Param> params) {
-                this.transtypes = transtypes;
+                this.transtype = transtype;
                 this.params = params;
             }
 
@@ -141,5 +147,15 @@ public class Project {
                 }
             }
         }
+    }
+
+    public List<Map<String, String>> getArguments() {
+        final URI base = new File(".").toURI();
+        return deliverables.stream().map(deliverable -> {
+            final Map<String, String> args = new HashMap<>();
+            args.put("args.input", base.resolve(deliverable.inputs.inputs.get(0).href).toString());
+            args.put("transtype", deliverable.publications.transtype);
+            return args;
+        }).collect(Collectors.toList());
     }
 }
