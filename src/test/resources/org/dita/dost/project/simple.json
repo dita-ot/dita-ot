@@ -1,0 +1,42 @@
+{
+  "deliverables": [
+    {
+      "name": "name",
+      "inputs": {
+        "name": "inputs-name",
+        "ref": "inputs-ref",
+        "inputs": [
+          {
+            "href": "site.ditamap"
+          }
+        ]
+      },
+      "profiles": {
+        "name": "profile-name",
+        "ref": "profile-ref",
+        "ditavals": [
+          {
+            "href": "site.ditaval"
+          }
+        ]
+      },
+      "publications": {
+        "transtypes": [
+          "html5"
+        ],
+        "params": [
+          {
+            "name": "args.gen.task.lbl",
+            "value": "YES",
+            "href": null
+          },
+          {
+            "name": "args.rellinks",
+            "value": "noparent",
+            "href": null
+          }
+        ]
+      }
+    }
+  ]
+}

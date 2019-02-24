@@ -1,9 +1,15 @@
+
+## Publication project
 project = element project { (deliverable | input-set | profile-set | publication-set)* }
+
+## Project deliverable
 deliverable =
   element deliverable {
     attribute name { text }?,
     (inputs | profile | publication)*
   }
+
+## Input resources
 inputs =
   element inputs {
     (attribute ref { text }
@@ -14,26 +20,18 @@ input =
   element input {
     attribute href { text }
   }
-ditaval =
-  element ditaval {
-    attribute href { text }?,
-    text
-  }
-param =
-  element param {
-    attribute name { text }?,
-    (attribute href { xsd:anyURI }
-     | attribute value { text })
-  }
-transtype =
-  element transtype {
-    attribute name { text }?
-  }
+
+## Filter and highligh profile
 profile =
   element profile {
     attribute ref { text }?,
     attribute name { text }?,
     (ditaval | prop)*
+  }
+ditaval =
+  element ditaval {
+    attribute href { text }?,
+    text
   }
 prop =
   element prop {
@@ -41,13 +39,31 @@ prop =
     attribute action { text }?,
     attribute att { text }?
   }
+
+## Publication
 publication =
   element publication {
     attribute ref { text }?,
     attribute name { text }?,
     (transtype*, param*)
   }
+transtype =
+  element transtype {
+    attribute name { text }?
+  }
+param =
+  element param {
+    attribute name { text }?,
+    (attribute href { xsd:anyURI }
+     | attribute value { text })
+  }
+
+## Input set
 input-set = element input-set { inputs* }
+
+## Profile set 
 profile-set = element profile-set { profile* }
+
+## Publication set
 publication-set = element publication-set { publication* }
 start = project
