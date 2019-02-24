@@ -52,18 +52,18 @@ public class Project {
         public static class Inputs {
             @JacksonXmlProperty(isAttribute = true)
             public final String name;
-            @JacksonXmlProperty(isAttribute = true)
-            public final String ref;
+//            @JacksonXmlProperty(isAttribute = true)
+//            public final String ref;
             @JacksonXmlProperty(localName = "input")
             @JacksonXmlElementWrapper(useWrapping = false)
             public final List<Input> inputs;
 
             @JsonCreator
             public Inputs(@JsonProperty("name") String name,
-                          @JsonProperty("ref") String ref,
+//                          @JsonProperty("ref") String ref,
                           @JsonProperty("inputs") List<Input> inputs) {
                 this.name = name;
-                this.ref = ref;
+//                this.ref = ref;
                 this.inputs = inputs;
             }
 
@@ -81,18 +81,18 @@ public class Project {
         public static class Profile {
             @JacksonXmlProperty(isAttribute = true)
             public final String name;
-            @JacksonXmlProperty(isAttribute = true)
-            public final String ref;
+//            @JacksonXmlProperty(isAttribute = true)
+//            public final String ref;
             @JacksonXmlElementWrapper(useWrapping = false)
             @JacksonXmlProperty(localName = "ditaval")
             public final List<DitaVal> ditavals;
 
             @JsonCreator
             public Profile(@JsonProperty("name") String name,
-                           @JsonProperty("ref") String ref,
+//                           @JsonProperty("ref") String ref,
                            @JsonProperty("ditavals") List<DitaVal> ditavals) {
                 this.name = name;
-                this.ref = ref;
+//                this.ref = ref;
                 this.ditavals = ditavals;
             }
 

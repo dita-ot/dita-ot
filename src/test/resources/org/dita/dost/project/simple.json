@@ -4,7 +4,6 @@
       "name": "name",
       "inputs": {
         "name": "inputs-name",
-        "ref": "inputs-ref",
         "inputs": [
           {
             "href": "site.ditamap"
@@ -13,7 +12,6 @@
       },
       "profiles": {
         "name": "profile-name",
-        "ref": "profile-ref",
         "ditavals": [
           {
             "href": "site.ditaval"

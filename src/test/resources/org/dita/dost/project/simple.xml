@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
   <deliverable name="name">
-    <inputs name="inputs-name" ref="inputs-ref">
+    <inputs name="inputs-name"><!--ref="inputs-ref"-->
       <input href="site.ditamap"/>
     </inputs>
-    <profiles name="profile-name" ref="profile-ref">
+    <profiles name="profile-name"><!--ref="profile-ref"-->
       <ditaval href="site.ditaval"/>
     </profiles>
     <publications>

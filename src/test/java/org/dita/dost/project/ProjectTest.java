@@ -11,7 +11,6 @@ package org.dita.dost.project;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.sun.tools.javac.util.List;
 import org.dita.dost.project.Project.Deliverable.Inputs;
 import org.dita.dost.project.Project.Deliverable.Inputs.Input;
 import org.dita.dost.project.Project.Deliverable.Profile;
@@ -22,6 +21,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Arrays;
 
 public class ProjectTest {
 
@@ -54,11 +54,15 @@ public class ProjectTest {
     }
 
     private Project getProject() {
-        return new Project(List.of(new Project.Deliverable(
+        return new Project(Arrays.asList(new Project.Deliverable(
                 "name",
-                new Inputs("inputs-name", "inputs-ref", List.of(new Input(URI.create("site.ditamap")))),
-                new Profile("profile-name", "profile-ref", List.of(new DitaVal(URI.create("site.ditaval")))),
-                new Publication(List.of("html5"), List.of(
+                new Inputs("inputs-name",
+//                        "inputs-ref",
+                        Arrays.asList(new Input(URI.create("site.ditamap")))),
+                new Profile("profile-name",
+//                        "profile-ref",
+                        Arrays.asList(new DitaVal(URI.create("site.ditaval")))),
+                new Publication(Arrays.asList("html5"), Arrays.asList(
                         new Publication.Param("args.gen.task.lbl", "YES", null),
                         new Publication.Param("args.rellinks", "noparent", null)
                 ))
