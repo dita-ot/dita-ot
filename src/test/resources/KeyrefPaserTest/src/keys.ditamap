@@ -995,4 +995,36 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="nondita_use_href" href="http://www.dita-ot.org/2.5/" scope="external" format="html"/>  
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="copy" href="a.xml" copy-to="a-copy.xml" processing-role="resource-only"/>
+
+  <!-- Tests for local+peer relative paths referenced from subdir -->
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="peerdita" href="../peer/peer-in-subdir.dita" processing-role="resource-only" scope="peer">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">Peer DITA topic with relative path to be adjusted</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="localpdf" href="pdffile.pdf" processing-role="resource-only" format="pdf">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">PDF in main directory</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="localmp4" href="movie.mp4" processing-role="resource-only" format="mp4">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">mp4 in main directory</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="localsvg" href="example.svg" processing-role="resource-only" format="svg">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">SVG in main directory</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="externalunknown" href="foo.bar" processing-role="resource-only" format="unknown" scope="external">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">external unknown, do not adjust path even if appears relative</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="peerabsolute" href="https://example.com/peer.pdf" processing-role="resource-only" format="pdf" scope="peer">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">Peer PDF but absolute path</linktext>
+    </topicmeta>
+  </keydef>
 </map>

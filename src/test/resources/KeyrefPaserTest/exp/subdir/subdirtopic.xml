@@ -1,0 +1,18 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)"
+  id="subdirtopic" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Keyref in subdir</title>
+    <body class="- topic/body ">
+      <object class="- topic/object " datakeyref="localmp4" data="../movie.mp4" format="mp4"/>
+      <image class="- topic/image " keyref="localsvg" href="../example.svg" format="svg"><alt class="- topic/alt ">SVG in main directory</alt></image>
+      <p class="- topic/p ">
+        <xref class="- topic/xref " keyref="xref_link" href="../a.xml"><keyword class="- topic/keyword ">xref keyword</keyword>
+          <keyword class="- topic/keyword ">xref keyword B</keyword></xref>
+        <xref class="- topic/xref " keyref="peerdita" href="../../peer/peer-in-subdir.dita" scope="peer">Peer DITA topic with relative path to be adjusted</xref>
+        <xref class="- topic/xref " keyref="localpdf" href="../pdffile.pdf" format="pdf">PDF in main directory</xref>
+        <xref class="- topic/xref " keyref="localmp4" href="../movie.mp4" format="mp4">mp4 in main directory</xref>
+        <xref class="- topic/xref " keyref="externalunknown" href="foo.bar" format="unknown" scope="external">external unknown, do not adjust path even if appears relative</xref>
+        <xref class="- topic/xref " keyref="peerabsolute" href="https://example.com/peer.pdf" format="pdf" scope="peer">Peer PDF but absolute path</xref>
+      </p>
+    </body>
+</topic>

@@ -553,8 +553,16 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 }
                             } else {
                                 valid = true;
-                                final URI targetOutput = normalizeHrefValue(href, elementId);
-                                XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
+                                if (href.isAbsolute() || 
+                                        (keyDef.scope != null && keyDef.scope.equals(ATTR_SCOPE_VALUE_EXTERNAL))) {
+                                    final URI targetOutput = normalizeHrefValue(href, elementId);
+                                    XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
+                                } else { //Adjust path for peer or local references with relative path
+                                    final URI target = keyDef.source.resolve(href);
+                                    final URI relativeTarget = URLUtils.getRelativePath(currentFile, target);
+                                    final URI targetOutput = normalizeHrefValue(relativeTarget, elementId);
+                                    XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
+                                }
 
                                 if (keyDef.scope != null && !keyDef.scope.equals(ATTR_SCOPE_VALUE_LOCAL)) {
                                     XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_SCOPE, keyDef.scope);
