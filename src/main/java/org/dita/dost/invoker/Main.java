@@ -342,12 +342,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private boolean readyToRun = false;
 
     /**
-     * Whether or not we should only parse and display the project help
-     * information.
-     */
-    private boolean projectHelp = false;
-
-    /**
      * Whether or not a logfile is being used. This is used to check if the
      * output streams must be closed.
      */
@@ -575,9 +569,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 handleArgInputHandler(args);
             } else if (isLongForm(arg, "-emacs") || arg.equals("-e")) {
                 emacsMode = true;
-            } else if (isLongForm(arg, "-projecthelp") || arg.equals("-p")) {
-                // set the flag to display the targets and quit
-                projectHelp = true;
             } else if (isLongForm(arg, "-find") || arg.equals("-s")) {
                 searchForFile = true;
                 args.pop();
@@ -1110,9 +1101,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 System.setOut(new PrintStream(new DemuxOutputStream(project, false)));
                 System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
 
-                if (!projectHelp) {
-                    project.fireBuildStarted();
-                }
+                project.fireBuildStarted();
 
                 // set the thread priorities
                 if (threadPriority != null) {
@@ -1152,12 +1141,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
                 ProjectHelper.configureProject(project, buildFile);
 
-                if (projectHelp) {
-                    printDescription(project);
-                    printTargets(project, msgOutputLevel > Project.MSG_INFO, msgOutputLevel > Project.MSG_VERBOSE);
-                    return;
-                }
-
                 // make sure that we have a target to execute
                 if (targets.size() == 0) {
                     if (project.getDefaultTarget() != null) {
@@ -1181,22 +1164,18 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             error = exc;
             throw exc;
         } finally {
-            if (!projectHelp) {
-                try {
-                    project.fireBuildFinished(error);
-                } catch (final Throwable t) {
-                    // yes, I know it is bad style to catch Throwable,
-                    // but if we don't, we lose valuable information
-                    printErrorMessage("Caught an exception while logging the" + " end of the build.  Exception was:");
-                    t.printStackTrace();
-                    if (error != null) {
-                        printErrorMessage("There has been an error prior to" + " that:");
-                        error.printStackTrace();
-                    }
-                    throw new BuildException(t);
+            try {
+                project.fireBuildFinished(error);
+            } catch (final Throwable t) {
+                // yes, I know it is bad style to catch Throwable,
+                // but if we don't, we lose valuable information
+                printErrorMessage("Caught an exception while logging the" + " end of the build.  Exception was:");
+                t.printStackTrace();
+                if (error != null) {
+                    printErrorMessage("There has been an error prior to" + " that:");
+                    error.printStackTrace();
                 }
-            } else if (error != null) {
-                project.log(error.toString(), Project.MSG_ERR);
+                throw new BuildException(t);
             }
         }
     }
@@ -1305,7 +1284,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("  --version                   print version information and exit\n");
         msg.append("Options: \n");
         msg.append("  -o, --output=<dir>          output directory\n");
-        // msg.append("  -projecthelp, -p       print project help information" + lSep);
         // msg.append("  -diagnostics           print information that might be helpful to"
         // + lSep);
         // msg.append("                         diagnose or report problems." +
