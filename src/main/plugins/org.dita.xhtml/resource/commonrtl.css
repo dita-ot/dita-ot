@@ -250,18 +250,28 @@ h6.tasklabel {
 .warningtitle {
   font-weight: bold;
 }
-.hazardstatement--caution, .hazardstatement--fastpath, .hazardstatement--important, .hazardstatement--other,
-.hazardstatement--remember, .hazardstatement--restriction, .hazardstatement--tip {
-  background-color: #FFD100;
+.hazardstatement td,
+.hazardstatement th {
+  padding: 0.5rem;
+}
+.hazardstatement th {
+  text-align: center;
+  text-transform: uppercase;
+}
+.hazardstatement--caution {
+  background-color: #ffd100;
 }
 .hazardstatement--danger {
-  background-color: #C8102E;
+  background-color: #c8102e;
+  color: #fff;
 }
 .hazardstatement--warning {
-  background-color: #FF8200;
+  background-color: #ff8200;
 }
-.hazardstatement--attention, .hazardstatement--note, .hazardstatement--notice {
-  background-color: #0072CE;
+.hazardstatement--attention, .hazardstatement--fastpath, .hazardstatement--important, .hazardstatement--note, .hazardstatement--notice, .hazardstatement--other, .hazardstatement--remember, .hazardstatement--restriction, .hazardstatement--tip {
+  background-color: #0072ce;
+  color: #fff;
+  font-style: italic;
 }
 /* Simple lists do not get a bullet */
 ul.simple {

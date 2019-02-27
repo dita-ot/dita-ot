@@ -9,18 +9,23 @@
 }
 
 .hazardstatement {
-  &--caution,
-  &--fastpath,
-  &--important,
-  &--other,
-  &--remember,
-  &--restriction,
-  &--tip {
+  td,
+  th {
+    padding: 0.5rem;
+  }
+
+  th {
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  &--caution {
     background-color: $hazard-ansi-yellow;
   }
 
   &--danger {
     background-color: $hazard-ansi-red;
+    color: $hazard-heading-light;
   }
 
   &--warning {
@@ -28,9 +33,17 @@
   }
 
   &--attention,
+  &--fastpath,
+  &--important,
   &--note,
-  &--notice {
+  &--notice,
+  &--other,
+  &--remember,
+  &--restriction,
+  &--tip {
     background-color: $hazard-ansi-blue;
+    color: $hazard-heading-light;
+    font-style: italic;
   }
 }
 
