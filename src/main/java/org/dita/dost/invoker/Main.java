@@ -550,7 +550,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             } else if (isLongForm(arg, "-force")) {
                 definedProps.put("force", "true");
             } else if (isLongForm(arg, "-uninstall")) {
-                handleArgUninstall(args);
+                handleArgUninstall(arg, args);
             } else if (isLongForm(arg, "-diagnostics")) {
                 justPrintDiagnostics = true;
                 // } else if (arg.equals("-quiet") || arg.equals("-q")) {
@@ -788,16 +788,40 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /** Handle the --install argument */
     private void handleArgInstall(final String arg, final Deque<String> args) {
         install = true;
-        final String value = args.peek();
-        if (value != null && !value.startsWith("-")) {
-            installFile = args.pop();
+        String name = arg;
+        final int posEq = name.indexOf("=");
+        String value;
+        if (posEq != -1)  {
+            value = name.substring(posEq + 1);
+        } else {
+            value = args.peek();
+            if (value != null && !value.startsWith("-")) {
+                value = args.pop();
+            } else {
+                value = null;
+            }
+        }
+        if (value != null) {
+            installFile = value;
         }
     }
 
     /** Handle the --uninstall argument */
-    private void handleArgUninstall(final Deque<String> args) {
+    private void handleArgUninstall(final String arg, final Deque<String> args) {
         install = true;
-        final String value = args.pop();
+        String name = arg;
+        final int posEq = name.indexOf("=");
+        String value;
+        if (posEq != -1)  {
+            value = name.substring(posEq + 1);
+        } else {
+            value = args.peek();
+            if (value != null && !value.startsWith("-")) {
+                value = args.pop();
+            } else {
+                value = null;
+            }
+        }
         if (value == null) {
             throw new BuildException("You must specify a installation package when using the --uninstall argument");
         }
