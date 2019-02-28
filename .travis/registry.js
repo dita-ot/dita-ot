@@ -35,7 +35,7 @@ async function update() {
             req: dep.name === "org.dita.base" ? `>=${minorVersion}` : dep.req
           };
         }),
-        url: `https://github.com/dita-ot/dita-ot/releases/download/${version}/${pluginName}-${version}.zip`,
+        url: `https://github.com/dita-ot/dita-ot/releases/download/${version.endsWith('.0') ? minorVersion : version}/${pluginName}-${version}.zip`,
         cksum: checksum
       });
     } else {
@@ -53,7 +53,7 @@ async function update() {
               req: `>=${version}`
             }
           ],
-          url: `https://github.com/dita-ot/dita-ot/releases/download/${version}/${pluginName}-${version}.zip`,
+          url: `https://github.com/dita-ot/dita-ot/releases/download/${version.endsWith('.0') ? minorVersion : version}/${pluginName}-${version}.zip`,
           cksum: checksum
         }
       ];
