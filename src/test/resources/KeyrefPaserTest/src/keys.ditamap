@@ -477,6 +477,488 @@
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="root" href="a.xml"/>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="root-with-id" href="a.xml#a"/>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="nested-with-id" href="a.xml#nolink"/>
+
+
+  <!-- Keys to test key scope resolution -->
+  <topicgroup keyscope="KEY_SCOPE">
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_empty" processing-role="resource-only"/>
+    <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_third" processing-role="resource-only"/>
+    <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_second" processing-role="resource-only"/>
+    <keydef class="+ map/topicref mapgroup-d/keydef " collection-type="family" format="html" href="a.xml" id="override" keys="ks_all" linking="sourceonly" locktitle="yes" navtitle="override"
+            processing-role="normal">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">navtitle</navtitle>
+        <linktext class="- map/linktext ">linktext</linktext>
+        <searchtitle class="- map/searchtitle ">searchtitle</searchtitle>
+        <shortdesc class="- map/shortdesc ">shortdesc</shortdesc>
+        <author class="- topic/author ">author</author>
+        <source class="- topic/source ">source</source>
+        <publisher class="- topic/publisher ">publisher</publisher>
+        <copyright class="- topic/copyright ">
+          <copyryear class="- topic/copyryear " year="2012"/>
+          <copyrholder class="- topic/copyrholder ">Example</copyrholder>
+        </copyright>
+        <critdates class="- topic/critdates ">
+          <created class="- topic/created " date="2012-08-16"/>
+        </critdates>
+        <permissions class="- topic/permissions " view="all"/>
+        <metadata class="- topic/metadata ">
+          <audience class="- topic/audience " name="metadata-audience"/>
+          <category class="- topic/category ">metadata category</category>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">metadata keywords</keyword>
+          </keywords>
+          <prodinfo class="- topic/prodinfo ">
+            <prodname class="- topic/prodname ">metadata test</prodname>
+            <vrmlist class="- topic/vrmlist ">
+              <vrm class="- topic/vrm " version="1"/>
+            </vrmlist>
+          </prodinfo>
+          <othermeta class="- topic/othermeta " content="metadata-othermeta" name="metadata-othermeta"/>
+          <data class="- topic/data ">metadata data</data>
+          <data-about class="- topic/data-about ">
+            <data class="- topic/data ">metadata data-about</data>
+          </data-about>
+          <foreign class="- topic/foreign ">metadata foreign</foreign>
+          <unknown class="- topic/unknown ">metadata unknown</unknown>
+        </metadata>
+        <audience class="- topic/audience " name="audience"/>
+        <category class="- topic/category ">category</category>
+        <keywords class="- topic/keywords ">
+          <keyword class="- topic/keyword ">keywords</keyword>
+        </keywords>
+        <exportanchors class="+ topic/keywords delay-d/exportanchors ">
+          <anchorid class="+ topic/keyword delay-d/anchorid " id="anchorid"/>
+        </exportanchors>
+        <prodinfo class="- topic/prodinfo ">
+          <prodname class="- topic/prodname ">test</prodname>
+          <vrmlist class="- topic/vrmlist ">
+            <vrm class="- topic/vrm " version="1"/>
+          </vrmlist>
+        </prodinfo>
+        <othermeta class="- topic/othermeta " content="othermeta" name="othermeta"/>
+        <resourceid class="- topic/resourceid " id="resourceid"/>
+        <data class="- topic/data ">data</data>
+        <data-about class="- topic/data-about ">
+          <data class="- topic/data ">data-about</data>
+        </data-about>
+        <foreign class="- topic/foreign ">foreign</foreign>
+        <unknown class="- topic/unknown ">unknown</unknown>
+      </topicmeta>
+    </keydef>
+    <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_author" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">author linktext</linktext>
+          <shortdesc class="- map/shortdesc ">author shortdesc</shortdesc>
+          <author class="- topic/author ">author author</author>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">author keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_data" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">data linktext</linktext>
+          <shortdesc class="- map/shortdesc ">data shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">data keyword</keyword>
+          </keywords>
+          <data class="- topic/data ">data data</data>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_data-about" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">data-about linktext</linktext>
+          <shortdesc class="- map/shortdesc ">data-about shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">data-about keyword</keyword>
+          </keywords>
+          <data-about class="- topic/data-about ">
+            <data class="- topic/data ">data-about data-about</data>
+          </data-about>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_image" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">image linktext</linktext>
+          <shortdesc class="- map/shortdesc ">image shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">image keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">link linktext</linktext>
+          <shortdesc class="- map/shortdesc ">link shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">link keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_lq" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">lq linktext</linktext>
+          <shortdesc class="- map/shortdesc ">lq shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">lq keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_navref" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">navref linktext</linktext>
+          <shortdesc class="- map/shortdesc ">navref shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">navref keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_publisher" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">publisher linktext</linktext>
+          <shortdesc class="- map/shortdesc ">publisher shortdesc</shortdesc>
+          <publisher class="- topic/publisher ">publisher publisher</publisher>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">publisher keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_source" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">source linktext</linktext>
+          <shortdesc class="- map/shortdesc ">source shortdesc</shortdesc>
+          <source class="- topic/source ">source source</source>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">source keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_topicref" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">topicref linktext</linktext>
+          <shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">topicref keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_xref" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">xref linktext</linktext>
+          <shortdesc class="- map/shortdesc ">xref shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">xref keyword</keyword>
+            <keyword class="- topic/keyword ">xref keyword B</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_cite" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">cite linktext</linktext>
+          <shortdesc class="- map/shortdesc ">cite shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">cite keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_dt" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">dt linktext</linktext>
+          <shortdesc class="- map/shortdesc ">dt shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">dt keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_keyword" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">keyword linktext</linktext>
+          <shortdesc class="- map/shortdesc ">keyword shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">keyword keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_term" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">term linktext</linktext>
+          <shortdesc class="- map/shortdesc ">term shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">term keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_ph" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">ph linktext</linktext>
+          <shortdesc class="- map/shortdesc ">ph shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">ph keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_indexterm" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">indexterm linktext</linktext>
+          <shortdesc class="- map/shortdesc ">indexterm shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">indexterm keyword</keyword>
+            <indexterm class="- topic/indexterm ">indexterm indexterm</indexterm>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_index-base" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">index-base linktext</linktext>
+          <shortdesc class="- map/shortdesc ">index-base shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">index-base keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_indextermref" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">indextermref linktext</linktext>
+          <shortdesc class="- map/shortdesc ">indextermref shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">indextermref keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_object" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">object linktext</linktext>
+          <shortdesc class="- map/shortdesc ">object shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">object keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_param" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">param linktext</linktext>
+          <shortdesc class="- map/shortdesc ">param shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">param keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+    </topicgroup>
+    <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_author_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">author linktext</linktext>
+          <shortdesc class="- map/shortdesc ">author shortdesc</shortdesc>
+          <author class="- topic/author ">author author</author>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">author keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_data_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">data linktext</linktext>
+          <shortdesc class="- map/shortdesc ">data shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">data keyword</keyword>
+          </keywords>
+          <data class="- topic/data ">data data</data>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_data-about_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">data-about linktext</linktext>
+          <shortdesc class="- map/shortdesc ">data-about shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">data-about keyword</keyword>
+          </keywords>
+          <data-about class="- topic/data-about ">
+            <data class="- topic/data ">data-about data-about</data>
+          </data-about>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="b.gif" keys="ks_image_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">image linktext</linktext>
+          <shortdesc class="- map/shortdesc ">image shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">image keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="b.gif" keys="ks_image_link_common" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">Normal practice: use linktext for alt text</linktext>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_link_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">link linktext</linktext>
+          <shortdesc class="- map/shortdesc ">link shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">link keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_lq_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">lq linktext</linktext>
+          <shortdesc class="- map/shortdesc ">lq shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">lq keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_navref_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">navref linktext</linktext>
+          <shortdesc class="- map/shortdesc ">navref shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">navref keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_publisher_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">publisher linktext</linktext>
+          <shortdesc class="- map/shortdesc ">publisher shortdesc</shortdesc>
+          <publisher class="- topic/publisher ">publisher publisher</publisher>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">publisher keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_source_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">source linktext</linktext>
+          <shortdesc class="- map/shortdesc ">source shortdesc</shortdesc>
+          <source class="- topic/source ">source source</source>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">source keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_topicref_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">topicref linktext</linktext>
+          <shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">topicref keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_xref_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">xref linktext</linktext>
+          <shortdesc class="- map/shortdesc ">xref shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">xref keyword</keyword>
+            <keyword class="- topic/keyword ">xref keyword B</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_cite_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">cite linktext</linktext>
+          <shortdesc class="- map/shortdesc ">cite shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">cite keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_dt_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">dt linktext</linktext>
+          <shortdesc class="- map/shortdesc ">dt shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">dt keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_keyword_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">keyword linktext</linktext>
+          <shortdesc class="- map/shortdesc ">keyword shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">keyword keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_term_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">term linktext</linktext>
+          <shortdesc class="- map/shortdesc ">term shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">term keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_ph_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">ph linktext</linktext>
+          <shortdesc class="- map/shortdesc ">ph shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">ph keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_indexterm_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">indexterm linktext</linktext>
+          <shortdesc class="- map/shortdesc ">indexterm shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">indexterm keyword</keyword>
+            <indexterm class="- topic/indexterm ">indexterm indexterm</indexterm>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_index-base_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">index-base linktext</linktext>
+          <shortdesc class="- map/shortdesc ">index-base shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">index-base keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_indextermref_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">indextermref linktext</linktext>
+          <shortdesc class="- map/shortdesc ">indextermref shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">indextermref keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_object_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">object linktext</linktext>
+          <shortdesc class="- map/shortdesc ">object shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">object keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+      <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="ks_param_link" processing-role="resource-only">
+        <topicmeta class="- map/topicmeta ">
+          <linktext class="- map/linktext ">param linktext</linktext>
+          <shortdesc class="- map/shortdesc ">param shortdesc</shortdesc>
+          <keywords class="- topic/keywords ">
+            <keyword class="- topic/keyword ">param keyword</keyword>
+          </keywords>
+        </topicmeta>
+      </keydef>
+    </topicgroup>
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_scope-local" href="a.xml"/>
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_scope-peer" href="b.xml" scope="peer"/>
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_scope-external" href="http://www.example.com/" format="html" scope="external"/>
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_root" href="a.xml"/>
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_root-with-id" href="a.xml#a"/>
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="ks_nested-with-id" href="a.xml#nolink"/>
+  </topicgroup>
+
   <!-- Keys to test fallback text resolution against DITA 1.3 rules, cases not covered above
   http://docs.oasis-open.org/dita/dita/v1.3/errata01/os/complete/part1-base/archSpec/base/processing-keyref-for-text.html
   -->
@@ -513,4 +995,36 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="nondita_use_href" href="http://www.dita-ot.org/2.5/" scope="external" format="html"/>  
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="copy" href="a.xml" copy-to="a-copy.xml" processing-role="resource-only"/>
+
+  <!-- Tests for local+peer relative paths referenced from subdir -->
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="peerdita" href="../peer/peer-in-subdir.dita" processing-role="resource-only" scope="peer">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">Peer DITA topic with relative path to be adjusted</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="localpdf" href="pdffile.pdf" processing-role="resource-only" format="pdf">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">PDF in main directory</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="localmp4" href="movie.mp4" processing-role="resource-only" format="mp4">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">mp4 in main directory</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="localsvg" href="example.svg" processing-role="resource-only" format="svg">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">SVG in main directory</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="externalunknown" href="foo.bar" processing-role="resource-only" format="unknown" scope="external">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">external unknown, do not adjust path even if appears relative</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="peerabsolute" href="https://example.com/peer.pdf" processing-role="resource-only" format="pdf" scope="peer">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">Peer PDF but absolute path</linktext>
+    </topicmeta>
+  </keydef>
 </map>

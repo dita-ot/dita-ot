@@ -246,7 +246,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
      *
      * @param fileToParse absolute URI to current file being processed
      */
-    private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
+    @Override
+    List<XMLFilter> getProcessingPipe(final URI fileToParse) {
         final List<XMLFilter> pipe = new ArrayList<>();
 
         if (genDebugInfo) {
@@ -279,6 +280,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
 
         pipe.add(topicFragmentFilter);
 
+        pipe.addAll(super.getProcessingPipe(fileToParse));
 //        linkRewriteFilter.setCurrentFile(currentFile);
 //        pipe.add(linkRewriteFilter);
 

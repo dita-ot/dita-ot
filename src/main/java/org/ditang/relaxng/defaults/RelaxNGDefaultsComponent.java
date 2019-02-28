@@ -267,17 +267,13 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
         Input input = new Input();
         try {
           resolver.resolve(id, input);
-        } catch (IOException e1) {
-          if (DEBUG) {
-            e1.printStackTrace();
-          }
-        } catch (ResolverException e1) {
+        } catch (IOException | ResolverException e1) {
           if (DEBUG) {
             e1.printStackTrace();
           }
         }
-        
-        
+
+
         InputSource in = null;
         if(input.isResolved()) {
           in = new InputSource(input.getUri());
@@ -786,9 +782,6 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
 
   /**
    * Sets the value of a property during parsing.
-   * 
-   * @param propertyId
-   * @param value
    */
   public void setProperty(String propertyId, Object value)
       throws XMLConfigurationException {

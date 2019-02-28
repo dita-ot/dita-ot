@@ -66,4 +66,20 @@
       <topicref href="dita9.dita" class="- map/topicref "/>
     </topichead>
   </topicref>
+
+  <!-- Test chunking of groups when already chunking -->
+  <topicref href="container.dita" chunk="to-content" class="- map/topicref ">
+    <topicgroup chunk="to-content" class="+ map/topicref mapgroup-d/topicgroup ">
+      <topicref href="groupkid.dita" class="- map/topicref "/>
+    </topicgroup>
+    <topichead chunk="to-content" class="+ map/topicref mapgroup-d/topichead ">
+      <topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">Navigation title in a topichead</navtitle></topicmeta>
+      <topicref href="headkid.dita" class="- map/topicref "/>
+    </topichead>
+    <topicref chunk="to-content" class="- map/topicref ">
+      <topicmeta class="- map/topicmeta "><shortdesc class="- map/shortdesc ">This is an edge case but should not crash:
+short description on a chunked group but without a title.</shortdesc></topicmeta>
+      <topicref href="shortkid.dita" class="- map/topicref "/>
+    </topicref>
+  </topicref>
 </map>

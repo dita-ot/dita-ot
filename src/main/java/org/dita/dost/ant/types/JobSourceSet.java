@@ -7,11 +7,11 @@
  */
 package org.dita.dost.ant.types;
 
-import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
-import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_IMAGE;
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.supportedImageExtensions;
 import static org.dita.dost.util.URLUtils.*;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.AbstractFileSet;
@@ -35,19 +35,24 @@ import java.util.*;
  */
 public class JobSourceSet extends AbstractFileSet implements ResourceCollection {
 
-    private Set<String> formats = Collections.emptySet();
-    private Boolean hasConref;
-    private Boolean isInput;
-    private Boolean isResourceOnly;
+    private SelectorElem include;
+    private List<SelectorElem> includes;
+    private List<SelectorElem> excludes;
     private Collection<Resource> res;
     private boolean isFilesystemOnly = true;
 
     public JobSourceSet() {
         super();
+        include = new SelectorElem();
+        includes = new ArrayList<>();
+        excludes = new ArrayList<>();
     }
 
     private Collection<Resource> getResults() {
         if (res == null) {
+            if (!include.isEmpty()) {
+                includes.add(include);
+            }
             final Job job = getJob();
             res = new ArrayList<>();
             for (final FileInfo f : job.getFileInfo(this::filter)) {
@@ -82,7 +87,8 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         return res;
     }
 
-    private Job getJob() {
+    @VisibleForTesting
+    Job getJob() {
         String tempDir = getProject().getUserProperty(ANT_TEMP_DIR);
         if (tempDir == null) {
             tempDir = getProject().getProperty(ANT_TEMP_DIR);
@@ -114,30 +120,54 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
     }
 
     public void setFormat(final String format) {
-        final ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(format);
-        if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
-            supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
-        }
-        this.formats = builder.build();
+        include.setFormat(format);
     }
 
     public void setConref(final boolean conref) {
-        this.hasConref = conref;
+        include.setConref(conref);
     }
 
     public void setInput(final boolean isInput) {
-        this.isInput = isInput;
+        include.setInput(isInput);
     }
 
     public void setProcessingRole(final String processingRole) {
-        this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+        include.setProcessingRole(processingRole);
     }
 
-    private boolean filter(final FileInfo f) {
-        return (formats == null || (formats.contains(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
-                (hasConref == null || f.hasConref == hasConref) &&
-                (isInput == null || f.isInput == isInput) &&
-                (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
+    public void addConfiguredIncludes(final SelectorElem include) {
+        includes.add(include);
+    }
+
+    public void addConfiguredExcludes(final SelectorElem exclude) {
+        excludes.add(exclude);
+    }
+
+    @VisibleForTesting
+    public boolean filter(final FileInfo f) {
+        for (final SelectorElem excl: excludes) {
+            if (filter(f, excl)) {
+                return false;
+            }
+        }
+        if (includes.isEmpty()) {
+            return true;
+        } else {
+            for (final SelectorElem incl: includes) {
+                if (filter(f, incl)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    private boolean filter(final FileInfo f, final SelectorElem incl) {
+        final String format = f.format != null ? f.format : ATTR_FORMAT_VALUE_DITA;
+        return (incl.formats.isEmpty() || (incl.formats.contains(format))) &&
+                (incl.hasConref == null || f.hasConref == incl.hasConref) &&
+                (incl.isInput == null || f.isInput == incl.isInput) &&
+                (incl.isResourceOnly == null || f.isResourceOnly == incl.isResourceOnly);
     }
 
     private static class JobResource extends URLResource {
@@ -162,4 +192,44 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         }
     }
 
+    public static class SelectorElem {
+        private Set<String> formats = Collections.emptySet();
+        private Boolean hasConref;
+        private Boolean isInput;
+        private Boolean isResourceOnly;
+
+        public SelectorElem() {
+        }
+
+        public SelectorElem(Set<String> formats, Boolean hasConref, Boolean isInput, Boolean isResourceOnly) {
+            this.formats = formats != null ? formats : Collections.emptySet();
+            this.hasConref = hasConref;
+            this.isInput = isInput;
+            this.isResourceOnly = isResourceOnly;
+        }
+
+        public void setFormat(final String format) {
+            final ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(format);
+            if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
+                supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
+            }
+            this.formats = builder.build();
+        }
+
+        public void setConref(final boolean conref) {
+            this.hasConref = conref;
+        }
+
+        public void setInput(final boolean isInput) {
+            this.isInput = isInput;
+        }
+
+        public void setProcessingRole(final String processingRole) {
+            this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+        }
+
+        public boolean isEmpty() {
+            return formats.isEmpty() && hasConref == null && isInput == null && isResourceOnly == null;
+        }
+    }
 }

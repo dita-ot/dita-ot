@@ -24,10 +24,9 @@
   </topicref>
   <topicref class="- map/topicref " href="b.xml" keyref="topicref" navtitle="b" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
-      <?ditaot gentext?>
-      <linktext class="- map/linktext ">b</linktext>
-    </topicmeta>
+      <navtitle class="- topic/navtitle ">b</navtitle><?ditaot usertext?><linktext class="- map/linktext ">topicref linktext</linktext><?ditaot usershortdesc?><shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
+      <keywords class="- topic/keywords "><keyword class="- topic/keyword ">topicref keyword</keyword></keywords>
+      </topicmeta>
   </topicref>
   <navref class="- map/navref " mapref="b.xml" keyref="navref" scope="peer"/>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="author" navtitle="b" processing-role="resource-only" scope="peer">

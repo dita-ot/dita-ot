@@ -119,7 +119,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             ATTRIBUTE_NAME_DATAKEYREF
     ));
 
-    private KeyScope definitionMap;
+
+    /**
+     * Stack used to store the current KeyScope, and its start uri.
+     */
+    private final Deque<KeyScope> definitionMaps;
 
     /**
      * Stack used to store the place of current element
@@ -172,6 +176,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     public KeyrefPaser() {
         keyrefLevel = 0;
+        definitionMaps = new ArrayDeque<>();
         keyrefLevalStack = new ArrayDeque<>();
         validKeyref = new ArrayDeque<>();
         empty = true;
@@ -187,7 +192,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
 
     public void setKeyDefinition(final KeyScope definitionMap) {
-        this.definitionMap = definitionMap;
+        this.definitionMaps.push(definitionMap);
     }
 
     /**
@@ -232,16 +237,22 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
-        if (keyrefLevel != 0 && empty && !elemName.peek().equals(MAP_TOPICREF.localName)) {
+        if (keyrefLevel != 0 && empty) {
             // If current element is in the scope of key reference element
             // and the element is empty
             if (!validKeyref.isEmpty() && validKeyref.peek()) {
                 final Element elem = keyDef.element;
                 // Key reference is valid,
                 // need to pull matching content from the key definition
-                // If current element name doesn't equal the key reference element
-                // just grab the content from the matching element of key definition
-                if (!name.equals(elemName.peek())) {
+                // If keyref on topicref, and no topicmeta, copy topicmeta from key definition
+                if (elemName.peek().equals(MAP_TOPICREF.localName)) {
+                    final Optional<Element> topicmetaNode = XMLUtils.getChildElement(elem, MAP_TOPICMETA);
+                    if (topicmetaNode.isPresent()) {
+                        domToSax(topicmetaNode.get(), true, false);
+                    }
+                } else if (!name.equals(elemName.peek())) {
+                    // If current element name doesn't equal the key reference element
+                    // just grab the content from the matching element of key definition
                     final NodeList nodeList = elem.getElementsByTagName(name);
                     if (nodeList.getLength() > 0) {
                         final Element node = (Element) nodeList.item(0);
@@ -376,6 +387,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             elemName.pop();
             hasSubElem.pop();
         }
+
+        definitionMaps.pop();
+
         getContentHandler().endElement(uri, localName, name);
     }
 
@@ -436,6 +450,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String name,
             final Attributes atts) throws SAXException {
+        final KeyScope childScope = Optional.ofNullable(atts.getValue(ATTRIBUTE_NAME_KEYSCOPE))
+                .flatMap(n -> Optional.ofNullable(definitionMaps.peek().getChildScope(n)))
+                .orElse(definitionMaps.peek());
+        definitionMaps.push(childScope);
+
         currentElement = null;
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
         for (final KeyrefInfo k : keyrefInfos) {
@@ -488,7 +507,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                     elementId = keyrefValue.substring(slashIndex);
                 }
 
-                keyDef = definitionMap.get(keyName);
+                keyDef = definitionMaps.peek().get(keyName);
                 final Element elem = keyDef != null ? keyDef.element : null;
 
                 // If definition is not null
@@ -534,8 +553,16 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 }
                             } else {
                                 valid = true;
-                                final URI targetOutput = normalizeHrefValue(href, elementId);
-                                XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
+                                if (href.isAbsolute() || 
+                                        (keyDef.scope != null && keyDef.scope.equals(ATTR_SCOPE_VALUE_EXTERNAL))) {
+                                    final URI targetOutput = normalizeHrefValue(href, elementId);
+                                    XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
+                                } else { //Adjust path for peer or local references with relative path
+                                    final URI target = keyDef.source.resolve(href);
+                                    final URI relativeTarget = URLUtils.getRelativePath(currentFile, target);
+                                    final URI targetOutput = normalizeHrefValue(relativeTarget, elementId);
+                                    XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
+                                }
 
                                 if (keyDef.scope != null && !keyDef.scope.equals(ATTR_SCOPE_VALUE_LOCAL)) {
                                     XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_SCOPE, keyDef.scope);
@@ -557,9 +584,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                         } else {
                             // key does not exist.
-                            final MessageBean m = definitionMap.name == null
+                            final MessageBean m = definitionMaps.peek().name == null
                                     ? MessageUtils.getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
-                                    : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                                    : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMaps.peek().name);
                             logger.info(m.setLocation(atts).toString());
                         }
 
@@ -586,9 +613,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                     }
                 } else {
                     // key does not exist
-                    final MessageBean m = definitionMap.name == null
+                    final MessageBean m = definitionMaps.peek().name == null
                             ? MessageUtils.getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
-                            : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                            : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMaps.peek().name);
                     logger.info(m.setLocation(atts).toString());
                 }
 
@@ -635,18 +662,29 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
 
     /**
-     * Serialize DOM node into a SAX stream.
+     * Serialize DOM node into a SAX stream, while modifying map classes to topic classes for common elements.
      *
      * @param elem element to serialize
      * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
      */
     private void domToSax(final Element elem, final boolean retainElements) throws SAXException {
+        domToSax(elem, retainElements, true);
+    }
+    
+    /**
+     * Serialize DOM node into a SAX stream.
+     *
+     * @param elem element to serialize
+     * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
+     * @param swapMapClass {@code true} to change map/ to topic/ in common class attributes, {@code false} to leave as is
+     */
+    private void domToSax(final Element elem, final boolean retainElements, final boolean swapMapClass) throws SAXException {
         if (retainElements) {
             final AttributesImpl atts = new AttributesImpl();
             final NamedNodeMap attrs = elem.getAttributes();
             for (int i = 0; i < attrs.getLength(); i++) {
                 final Attr a = (Attr) attrs.item(i);
-                if (a.getNodeName().equals(ATTRIBUTE_NAME_CLASS)) {
+                if (a.getNodeName().equals(ATTRIBUTE_NAME_CLASS) && swapMapClass) {
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, changeclassValue(a.getNodeValue()));
                 } else {
                     XMLUtils.addOrSetAttribute(atts, a);
@@ -661,9 +699,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 final Element e = (Element) node;
                 // retain tm and text elements
                 if (TOPIC_TM.matches(e) || TOPIC_TEXT.matches(e)) {
-                    domToSax(e, true);
+                    domToSax(e, true, swapMapClass);
                 } else {
-                    domToSax(e, retainElements);
+                    domToSax(e, retainElements, swapMapClass);
                 }
             } else if (node.getNodeType() == Node.TEXT_NODE) {
                 final char[] ch = node.getNodeValue().toCharArray();

@@ -16,6 +16,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -35,24 +36,32 @@ import static java.net.URI.create;
 import static java.util.Collections.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.createTempDir;
-import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
 import static org.junit.Assert.assertEquals;
 
 public class KeyrefModuleTest {
 
     private static final File baseDir = TestUtils.getResourceDir(KeyrefModuleTest.class);
     private static final URI inputMap = new File(baseDir, "xsrc" + File.separator + "test.ditamap").toURI();
+    private static final URI subMap = new File(baseDir, "xsrc" + File.separator + "submap.ditamap").toURI();
 
-    KeyrefModule module;
+    private File tempDir;
+    private KeyrefModule module;
 
     @Before
     public void setUp() throws IOException {
-        final File tempDir = createTempDir(KeyrefModuleTest.class);
+        tempDir = createTempDir(KeyrefModuleTest.class);
 
         module = new KeyrefModule();
         final Job job = new Job(tempDir);
         job.setInputDir(new File(baseDir, "xsrc").toURI());
         job.setInputMap(URI.create("test.ditamap"));
+        job.add(new Job.FileInfo.Builder()
+                .uri(URI.create("submap.ditamap"))
+                .src(new File(baseDir, "xsrc" + File.separator + "submap.ditamap").toURI())
+                .result(new File(baseDir, "xsrc" + File.separator + "submap.ditamap").toURI())
+                .format("ditamap")
+                .hasKeyref(true)
+                .build());
         job.add(new Job.FileInfo.Builder()
                 .uri(URI.create("topic.dita"))
                 .src(new File(baseDir, "xsrc" + File.separator + "topic.dita").toURI())
@@ -69,6 +78,11 @@ public class KeyrefModuleTest {
                 .build());
         module.setJob(job);
         module.setLogger(new TestLogger());
+    }
+
+    @After
+    public void tearDown() throws IOException {
+       TestUtils.forceDelete(tempDir);
     }
 
     @Test
@@ -121,21 +135,27 @@ public class KeyrefModuleTest {
     public void testWalkMap() throws ParserConfigurationException, IOException, SAXException {
         final DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         final Document act = b.parse(new File(baseDir, "src" + File.separator + "test.ditamap"));
+        final KeyScope childScope = new KeyScope("A", "A",
+                            ImmutableMap.of(
+                                    "VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null),
+                                    "A.VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null)
+                            ),
+                            EMPTY_LIST
+        );
         final KeyScope keyScope =
                 new KeyScope("#root", null,
                             ImmutableMap.of(
                                     "VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null),
-                                    "A.VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null)),
-                            singletonList(
-                                new KeyScope("A", "A",
-                                            ImmutableMap.of(
-                                                    "VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null),
-                                                    "A.VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null)),
-                                            EMPTY_LIST)
-        ));
+                                    "A.VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null)
+                            ),
+                            singletonList(childScope)
+        );
         final List<ResolveTask> res = new ArrayList<>();
         module.walkMap(act.getDocumentElement(), keyScope, res);
         final Document exp = b.parse(new File(baseDir, "exp" + File.separator + "test.ditamap"));
+
+        final ResolveTask subMapTask = res.stream().filter(r -> r.in.src.equals(subMap)).findFirst().get();
+        assertEquals(subMapTask.scope, childScope);
 
         assertXMLEqual(exp, act);
     }

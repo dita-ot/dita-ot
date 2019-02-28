@@ -35,7 +35,7 @@ final class ImportPluginCatalogAction extends ImportAction {
 
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
-        // plugin properties
+        final File basePluginDir = featureTable.get("org.dita.base").getPluginDir();
         for (final Entry<String, Features> e: featureTable.entrySet()) {
             final Features f = e.getValue();
             final String name = PLUGIN_URI_SCHEME + ":" + e.getKey() + ":";
@@ -47,7 +47,7 @@ final class ImportPluginCatalogAction extends ImportAction {
             } else if (f.getPluginDir().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
                 location.append(
                         FileUtils.getRelativeUnixPath(
-                                new File(f.getDitaDir(), "plugin.xml").toURI().toString(),
+                                new File(basePluginDir, "plugin.xml").toURI().toString(),
                                 f.getPluginDir().toURI().toString()));
             } else {
                 location.append(f.getPluginDir().toURI().toString());

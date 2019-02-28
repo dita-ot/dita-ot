@@ -170,9 +170,6 @@ public abstract class OxygenRelaxNGSchemaReader extends SchemaReaderImpl {
    * @param spb The schema pattern builder.
    * @param properties The properties map.
    * @return The schema wrapper.
-   * 
-   * @throws SAXException
-   * @throws IncorrectSchemaException
    */
   private static SchemaWrapper wrapPattern2(Pattern start, SchemaPatternBuilder spb, PropertyMap properties)
     throws SAXException, IncorrectSchemaException {

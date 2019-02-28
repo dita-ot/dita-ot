@@ -565,6 +565,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (attrValue == null) {
             return;
         }
+
+        //Check if this attribute will be ignored due to conref
+        final String attrConref = atts.getValue(ATTRIBUTE_NAME_CONREF);
+        if (attrConref != null && !attrConref.isEmpty() && ATTR_VALUE_DITA_USE_CONREF_TARGET.equals(attrValue.toString())) {
+            return;
+        }
+
         final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
 
@@ -651,22 +658,26 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private void parseConrefAttr(final Attributes atts) throws SAXException {
         String attrValue = atts.getValue(ATTRIBUTE_NAME_CONREF);
         if (attrValue != null) {
-            hasConRef = true;
-
-            URI filename;
-            final URI target = toURI(attrValue);
-            if (isAbsolute(target)) {
-                filename = target;
-            } else if (attrValue.startsWith(SHARP)) {
-                filename = currentFile;
+            if (attrValue.isEmpty()) {
+                logger.warn(MessageUtils.getMessage("DOTJ081W").setLocation(atts).toString());
             } else {
-                filename = currentDir.resolve(target);
-            }
-            filename = stripFragment(filename);
+                hasConRef = true;
 
-            // Collect only conref target topic files
-            conrefTargets.add(filename);
-            toOutFile(filename, atts);
+                URI filename;
+                final URI target = toURI(attrValue);
+                if (isAbsolute(target)) {
+                    filename = target;
+                } else if (attrValue.startsWith(SHARP)) {
+                    filename = currentFile;
+                } else {
+                    filename = currentDir.resolve(target);
+                }
+                filename = stripFragment(filename);
+
+                // Collect only conref target topic files
+                conrefTargets.add(filename);
+                toOutFile(filename, atts);
+            }
         }
     }
 

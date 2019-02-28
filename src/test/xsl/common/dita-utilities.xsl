@@ -4,8 +4,8 @@
                 exclude-result-prefixes="xs"
                 version="2.0">
   
-  <xsl:import href="../../../main/xsl/common/dita-utilities.xsl"/>
-  <xsl:import href="../../../main/xsl/common/output-message.xsl"/>
+  <xsl:import href="../../../main/plugins/org.dita.base/xsl/common/dita-utilities.xsl"/>
+  <xsl:import href="../../../main/plugins/org.dita.base/xsl/common/output-message.xsl"/>
   
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   

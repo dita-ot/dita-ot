@@ -926,13 +926,13 @@ public final class FilterUtils {
 
             Flag flag = (Flag) o;
 
-            if (color != null ? !color.equals(flag.color) : flag.color != null) return false;
-            if (backcolor != null ? !backcolor.equals(flag.backcolor) : flag.backcolor != null) return false;
+            if (!Objects.equals(color, flag.color)) return false;
+            if (!Objects.equals(backcolor, flag.backcolor)) return false;
             // Probably incorrect - comparing Object[] arrays with Arrays.equals
             if (!Arrays.equals(style, flag.style)) return false;
-            if (changebar != null ? !changebar.equals(flag.changebar) : flag.changebar != null) return false;
-            if (startflag != null ? !startflag.equals(flag.startflag) : flag.startflag != null) return false;
-            return endflag != null ? endflag.equals(flag.endflag) : flag.endflag == null;
+            if (!Objects.equals(changebar, flag.changebar)) return false;
+            if (!Objects.equals(startflag, flag.startflag)) return false;
+            return Objects.equals(endflag, flag.endflag);
         }
 
         @Override
@@ -981,8 +981,8 @@ public final class FilterUtils {
 
                 FlagImage flagImage = (FlagImage) o;
 
-                if (href != null ? !href.equals(flagImage.href) : flagImage.href != null) return false;
-                return alt != null ? alt.equals(flagImage.alt) : flagImage.alt == null;
+                if (!Objects.equals(href, flagImage.href)) return false;
+                return Objects.equals(alt, flagImage.alt);
             }
 
             @Override

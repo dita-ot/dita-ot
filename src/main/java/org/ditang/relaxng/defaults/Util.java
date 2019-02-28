@@ -9,6 +9,7 @@ package org.ditang.relaxng.defaults;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
 
 /**
@@ -32,12 +33,12 @@ public class Util {
     return windows;
   }
 
-  // which ASCII characters need to be escaped
-  private static boolean gNeedEscaping[] = new boolean[128];
-  // the first hex character if a character needs to be escaped
-  private static char gAfterEscaping1[] = new char[128];
-  // the second hex character if a character needs to be escaped
-  private static char gAfterEscaping2[] = new char[128];
+    // which ASCII characters need to be escaped
+    private static boolean[] gNeedEscaping = new boolean[128];
+    // the first hex character if a character needs to be escaped
+    private static char[] gAfterEscaping1 = new char[128];
+    // the second hex character if a character needs to be escaped
+    private static char[] gAfterEscaping2 = new char[128];
   private static char[] gHexChs = { '0', '1', '2', '3', '4', '5', '6', '7',
       '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
   // initialize the above 3 arrays
@@ -54,8 +55,8 @@ public class Util {
         '^', '~', '[', ']', '`', '\'', '&' };
     int len = escChs.length;
     char ch;
-    for (int i = 0; i < len; i++) {
-      ch = escChs[i];
+    for (char escCh : escChs) {
+      ch = escCh;
       gNeedEscaping[ch] = true;
       gAfterEscaping1[ch] = gHexChs[ch >> 4];
       gAfterEscaping2[ch] = gHexChs[ch & 0xf];
@@ -120,12 +121,7 @@ public class Util {
       // get UTF-8 bytes for the remaining sub-string
       byte[] bytes = null;
       byte b;
-      try {
-        bytes = path.substring(i).getBytes("UTF-8");
-      } catch (java.io.UnsupportedEncodingException e) {
-        // should never happen
-        return path;
-      }
+      bytes = path.substring(i).getBytes(StandardCharsets.UTF_8);
       len = bytes.length;
       // for each byte
       for (i = 0; i < len; i++) {
@@ -205,7 +201,7 @@ public class Util {
     }
 
     // If there is a % that means the url was already corrected.
-    if (url.indexOf("%") != -1) {
+    if (url.contains("%")) {
       return initialUrl;
     }
 

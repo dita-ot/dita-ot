@@ -1,0 +1,188 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+  ditaarch:DITAArchVersion="1.2">
+
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup " keyscope="KEY_SCOPE">
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_topicref_link" type="dead">
+     <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">topicref linktext</linktext>
+      <shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
+      <keywords class="- topic/keywords ">
+       <keyword class="- topic/keyword ">topicref keyword</keyword>
+      </keywords>
+     </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_author_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">author linktext</linktext>
+    <shortdesc class="- map/shortdesc ">author shortdesc</shortdesc>
+    <author class="- topic/author ">author author</author>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">author keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_data_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">data linktext</linktext>
+    <shortdesc class="- map/shortdesc ">data shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">data keyword</keyword>
+    </keywords>
+    <data class="- topic/data ">data data</data>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_data-about_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">data-about linktext</linktext>
+    <shortdesc class="- map/shortdesc ">data-about shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">data-about keyword</keyword>
+    </keywords>
+    <data-about class="- topic/data-about ">
+    <data class="- topic/data ">data-about data-about</data>
+    </data-about>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_publisher_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">publisher linktext</linktext>
+    <shortdesc class="- map/shortdesc ">publisher shortdesc</shortdesc>
+    <publisher class="- topic/publisher ">publisher publisher</publisher>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">publisher keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_source_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">source linktext</linktext>
+    <shortdesc class="- map/shortdesc ">source shortdesc</shortdesc>
+    <source class="- topic/source ">source source</source>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">source keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_indexterm_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">indexterm linktext</linktext>
+    <shortdesc class="- map/shortdesc ">indexterm shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">indexterm keyword</keyword>
+    <indexterm class="- topic/indexterm ">indexterm indexterm</indexterm>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_index-base_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">index-base linktext</linktext>
+    <shortdesc class="- map/shortdesc ">index-base shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">index-base keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="ks_indextermref_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">indextermref linktext</linktext>
+    <shortdesc class="- map/shortdesc ">indextermref shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">indextermref keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <navref class="- map/navref " keyref="ks_navref_link" mapref="a.xml"/>
+
+    <topicref class="- map/topicref " href="a.xml" keyref="topicref_link" type="dead">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">topicref linktext</linktext>
+    <shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">topicref keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="author_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">author linktext</linktext>
+    <shortdesc class="- map/shortdesc ">author shortdesc</shortdesc>
+    <author class="- topic/author ">author author</author>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">author keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="data_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">data linktext</linktext>
+    <shortdesc class="- map/shortdesc ">data shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">data keyword</keyword>
+    </keywords>
+    <data class="- topic/data ">data data</data>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="data-about_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">data-about linktext</linktext>
+    <shortdesc class="- map/shortdesc ">data-about shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">data-about keyword</keyword>
+    </keywords>
+    <data-about class="- topic/data-about ">
+    <data class="- topic/data ">data-about data-about</data>
+    </data-about>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="publisher_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">publisher linktext</linktext>
+    <shortdesc class="- map/shortdesc ">publisher shortdesc</shortdesc>
+    <publisher class="- topic/publisher ">publisher publisher</publisher>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">publisher keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="source_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">source linktext</linktext>
+    <shortdesc class="- map/shortdesc ">source shortdesc</shortdesc>
+    <source class="- topic/source ">source source</source>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">source keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="indexterm_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">indexterm linktext</linktext>
+    <shortdesc class="- map/shortdesc ">indexterm shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">indexterm keyword</keyword>
+    <indexterm class="- topic/indexterm ">indexterm indexterm</indexterm>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="index-base_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">index-base linktext</linktext>
+    <shortdesc class="- map/shortdesc ">index-base shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">index-base keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="a.xml" keyref="indextermref_link">
+    <topicmeta class="- map/topicmeta ">
+    <linktext class="- map/linktext ">indextermref linktext</linktext>
+    <shortdesc class="- map/shortdesc ">indextermref shortdesc</shortdesc>
+    <keywords class="- topic/keywords ">
+    <keyword class="- topic/keyword ">indextermref keyword</keyword>
+    </keywords>
+    </topicmeta>
+    </topicref>
+    <navref class="- map/navref " keyref="navref_link" mapref="a.xml"/>
+  </topicgroup>
+</map>

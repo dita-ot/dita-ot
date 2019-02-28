@@ -54,7 +54,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:if>
   </xsl:template>
   
-  <xsl:variable name="current-file" select="translate(if ($FILEDIR = '.') then $FILENAME else concat($FILEDIR, '/', $FILENAME), '\', '/')" as="xs:string?"/>
+  <xsl:variable name="current-file" select="dita-ot:normalize-href(if ($FILEDIR = '.') then $FILENAME else concat($FILEDIR, '/', $FILENAME))" as="xs:string?"/>
   <xsl:variable name="current-topicrefs" select="$input.map//*[contains(@class, ' map/topicref ')][dita-ot:get-path($PATH2PROJ, .) = $current-file]" as="element()*"/>
   <xsl:variable name="current-topicref" select="$current-topicrefs[1]" as="element()?"/>
   

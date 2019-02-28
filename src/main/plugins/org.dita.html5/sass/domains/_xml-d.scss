@@ -7,14 +7,14 @@
 // Sass partial for DITA 1.3 XML mention domain
 
 $code-fonts: Menlo, Monaco, Consolas, "Courier New", monospace;
-$markup-color: #663399;
+$markup-color: #639;
 
 @mixin markupname {
   color: $markup-color;
   font-family: $code-fonts;
 }
 
-// inline 
+// inline
 .numcharref {
   @include markupname;
 }

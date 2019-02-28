@@ -9,7 +9,7 @@ See the accompanying LICENSE file for applicable license.
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-  stylesheet="../../../main/xsl/common/uri-utils.xsl">
+  stylesheet="../../../main/plugins/org.dita.base/xsl/common/uri-utils.xsl">
   
   <x:scenario label="dita-ot:strip-fragment">
     <x:scenario label="strip fragment from URI with fragment">

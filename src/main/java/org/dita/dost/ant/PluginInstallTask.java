@@ -128,7 +128,7 @@ public final class PluginInstallTask extends Task {
                         throw new BuildException(new IllegalStateException(String.format("Plug-in %s already installed: %s", name, pluginDir)));
                     }
                 }
-                Files.move(tempPluginDir.toPath(), pluginDir.toPath());
+                FileUtils.moveDirectory(tempPluginDir, pluginDir);
             }
         } catch (IOException e) {
             throw new BuildException(e.getMessage(), e);

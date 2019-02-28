@@ -63,7 +63,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     private boolean hasStripWhitespace(String value) {
-        return value != null && Arrays.stream(value.split("\\s+")).anyMatch(cls -> outputClass.contains(cls));
+        return value != null && Arrays.stream(value.split("\\s+")).anyMatch(outputClass::contains);
     }
 
     @Override
@@ -72,7 +72,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         if (depth > 0) {
             depth--;
             if (depth == 0) {
-                for (final SaxEvent event : normalizeSpace(buf)) {
+                for (final SaxEvent event : normalizeSpace(mergeAdjacentText(buf))) {
                     event.write(getContentHandler());
                 }
                 buf.clear();
@@ -83,6 +83,41 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         } else {
             super.endElement(uri, localName, qName);
         }
+    }
+
+    private Collection<SaxEvent> mergeAdjacentText(Collection<SaxEvent> stream) {
+        final List<SaxEvent> res = new ArrayList<>();
+        final List<CharactersEvent> buf = new ArrayList<>();
+        for (final SaxEvent event : stream) {
+            if (event instanceof CharactersEvent) {
+                buf.add((CharactersEvent) event);
+            } else {
+                if (!buf.isEmpty()) {
+                    res.add(merge(buf));
+                    buf.clear();
+                }
+                res.add(event);
+            }
+        }
+        if (!buf.isEmpty()) {
+            res.add(merge(buf));
+        }
+        return res;
+    }
+
+    private CharactersEvent merge(final List<CharactersEvent> buf) {
+        if (buf.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        if (buf.size() == 1) {
+            return buf.get(0);
+        }
+        final StringBuilder merged = new StringBuilder();
+        for (final CharactersEvent e : buf) {
+            merged.append(e.ch, e.start, e.length);
+        }
+        final char[] cs = merged.toString().toCharArray();
+        return new CharactersEvent(cs, 0, cs.length);
     }
 
     private Collection<SaxEvent> normalizeSpace(Collection<SaxEvent> buf) {
@@ -97,7 +132,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
                 final CharactersEvent e = (CharactersEvent) event;
                 final char[] ch = stripLeadingSpace(previousEndedInLinefeed, min, e.ch, e.start, e.length);
                 res.add(new CharactersEvent(ch, 0, ch.length));
-                previousEndedInLinefeed = ch[ch.length - 1] == '\n';
+                previousEndedInLinefeed = ch.length != 0 && ch[ch.length - 1] == '\n';
             } else {
                 res.add(event);
             }
@@ -125,7 +160,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         return merged.toString();
     }
 
-    char[] stripLeadingSpace(boolean first, int prefix, char[] ch, int start, int length) {
+    private char[] stripLeadingSpace(boolean first, int prefix, char[] ch, int start, int length) {
         final String str = first
                 ? new String(ch, start + prefix, length - prefix)
                 : new String(ch, start, length);
@@ -144,7 +179,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     @Override
-    public void characters(char ch[], int start, int length)
+    public void characters(char[] ch, int start, int length)
             throws SAXException {
         if (depth > 0) {
             buf.add(new CharactersEvent(ch, start, length));
@@ -154,7 +189,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     @Override
-    public void ignorableWhitespace(char ch[], int start, int length)
+    public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
         if (depth > 0) {
             buf.add(new CharactersEvent(ch, start, length));

@@ -129,18 +129,23 @@ public final class MapReaderModule extends AbstractReaderModule {
         }
         // Ignore topics
 //        if (formatFilter.test(file.format)) {
-            if (ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
+        switch (file.format) {
+            case ATTR_FORMAT_VALUE_DITAMAP:
                 addToWaitList(file);
-            } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
+                break;
+            case ATTR_FORMAT_VALUE_IMAGE:
                 formatSet.add(file);
                 if (!exists(file.filename)) {
                     logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
                 }
-            } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
+                break;
+            case ATTR_FORMAT_VALUE_DITAVAL:
                 formatSet.add(file);
-            } else {
+                break;
+            default:
                 htmlSet.put(file.format, file.filename);
-            }
+                break;
+        }
 //        }
     }
 

@@ -103,7 +103,7 @@ public class FileGeneratorTest {
 
     private static abstract class AbstractAction implements IAction {
         protected List<Value> inputs = new ArrayList<>();
-        protected Map<String, String> params = new HashMap<String, String>();
+        protected Map<String, String> params = new HashMap<>();
         protected Map<String, Features> features;
         @Override
         public void setInput(final List<Value> input) {
@@ -128,7 +128,7 @@ public class FileGeneratorTest {
     public static class ElementAction extends AbstractAction {
         @Override
         public void getResult(ContentHandler output) throws SAXException {
-            final Map<String, String> paramsExp = new HashMap<String, String>();
+            final Map<String, String> paramsExp = new HashMap<>();
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
             paramsExp.put("id", "element");
             paramsExp.put("behavior", this.getClass().getName());
@@ -152,9 +152,8 @@ public class FileGeneratorTest {
     public static class AttributeAction extends AbstractAction {
         @Override
         public String getResult() {
-            final Map<String, String> paramsExp = new HashMap<String, String>();
+            final Map<String, String> paramsExp = new HashMap<>();
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
-//            paramsExp.put(FileGenerator.PARAM_LOCALNAME, "foo");
             assertEquals(paramsExp, params);
             final List<Value> inputExp = Arrays.asList(new Value[] {new Value(null, "attribute")});
             assertEquals(inputExp, inputs);
@@ -163,7 +162,7 @@ public class FileGeneratorTest {
         }
 
         @Override
-        public void getResult(ContentHandler output) throws SAXException {
+        public void getResult(ContentHandler output) {
             throw new UnsupportedOperationException();
         }
     }

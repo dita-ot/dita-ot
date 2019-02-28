@@ -49,13 +49,21 @@ public final class ExtensibleAntInvoker extends Task {
 
     private DITAOTAntLogger logger;
     private final ModuleFactory factory = ModuleFactory.instance();
-    /** Pipeline attributes and parameters */
+    /**
+     * Pipeline attributes and parameters
+     */
     private final Map<String, String> attrs = new HashMap<>();
-    /** Nested params. */
+    /**
+     * Nested params.
+     */
     private final ArrayList<ParamElem> pipelineParams;
-    /** Nested modules. */
+    /**
+     * Nested modules.
+     */
     private final ArrayList<ModuleElem> modules;
-    /** Temporary directory. */
+    /**
+     * Temporary directory.
+     */
     private File tempDir;
 
     /**
@@ -70,6 +78,7 @@ public final class ExtensibleAntInvoker extends Task {
 
     /**
      * Set message.
+     *
      * @param m message
      */
     public void setMessage(final String m) {
@@ -78,6 +87,7 @@ public final class ExtensibleAntInvoker extends Task {
 
     /**
      * Set input map.
+     *
      * @param inputmap input map file, may be relative or absolute
      */
     public void setInputmap(final String inputmap) {
@@ -86,6 +96,7 @@ public final class ExtensibleAntInvoker extends Task {
 
     /**
      * Set temporary directory.
+     *
      * @param tempdir temporary directory
      */
     public void setTempdir(final File tempdir) {
@@ -96,6 +107,7 @@ public final class ExtensibleAntInvoker extends Task {
     /**
      * Handle nested parameters. Add the key/value to the pipeline hash, unless
      * the "if" attribute is set and refers to a unset property.
+     *
      * @return parameter
      */
     public ParamElem createParam() {
@@ -137,7 +149,7 @@ public final class ExtensibleAntInvoker extends Task {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }
-            if (isValid(getProject(),getLocation(), p.getIf(), p.getUnless())) {
+            if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
                 attrs.put(p.getName(), p.getValue());
             }
         }
@@ -147,6 +159,7 @@ public final class ExtensibleAntInvoker extends Task {
 
     /**
      * Execution point of this invoker.
+     *
      * @throws BuildException exception
      */
     @Override
@@ -155,11 +168,11 @@ public final class ExtensibleAntInvoker extends Task {
 
         final Job job = getJob(tempDir, getProject());
         try {
-            for (final ModuleElem m: modules) {
+            for (final ModuleElem m : modules) {
                 m.setProject(getProject());
                 m.setLocation(getLocation());
                 final PipelineHashIO pipelineInput = new PipelineHashIO();
-                for (final Map.Entry<String, String> e: attrs.entrySet()) {
+                for (final Map.Entry<String, String> e : attrs.entrySet()) {
                     pipelineInput.setAttribute(e.getKey(), e.getValue());
                 }
                 AbstractPipelineModule mod = getPipelineModule(m, pipelineInput);
@@ -240,6 +253,11 @@ public final class ExtensibleAntInvoker extends Task {
                 }
             }
             final AbstractPipelineModule module = factory.createModule(m.getImplementation());
+            try {
+                module.setProcessingPipe(m.getFilters());
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new BuildException(e);
+            }
             if (!m.fileInfoFilters.isEmpty()) {
                 module.setFileInfoFilter(combine(m.fileInfoFilters));
             }
@@ -248,6 +266,9 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     private static Predicate<FileInfo> combine(final Collection<FileInfoFilterElem> filters) {
+        if (filters.isEmpty()) {
+            return f -> true;
+        }
         final List<Predicate<FileInfo>> res = filters.stream()
                 .map(FileInfoFilterElem::toFilter)
                 .collect(Collectors.toList());
@@ -287,7 +308,7 @@ public final class ExtensibleAntInvoker extends Task {
 
     private Set<File> readListFile(final List<IncludesFileElem> includes, final DITAOTAntLogger logger) {
         final Set<File> inc = new HashSet<>();
-        for (final IncludesFileElem i: includes) {
+        for (final IncludesFileElem i : includes) {
             if (!isValid(getProject(), getLocation(), i.ifProperty, null)) {
                 continue;
             }
@@ -301,6 +322,7 @@ public final class ExtensibleAntInvoker extends Task {
         }
         return inc;
     }
+
     public static boolean isValid(final Project project, final Location location, final String ifProperty, final String unlessProperty) {
         if (ifProperty != null) {
             final String msg = MessageUtils.getMessage("DOTA014W", "if", "if:set")
@@ -325,6 +347,7 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public static class ModuleElem {
 
+        public final List<XmlFilterElem> filters = new ArrayList<>();
         public final List<ParamElem> params = new ArrayList<>();
         private Class<? extends AbstractPipelineModule> cls;
         public final Collection<FileInfoFilterElem> fileInfoFilters = new ArrayList<>();
@@ -341,6 +364,33 @@ public final class ExtensibleAntInvoker extends Task {
 
         public void addConfiguredDitaFileset(final FileInfoFilterElem fileInfoFilter) {
             fileInfoFilters.add(fileInfoFilter);
+        }
+
+        public void addConfiguredFilter(final XmlFilterElem filter) {
+            filters.add(filter);
+        }
+
+        public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
+            final List<FilterPair> res = new ArrayList<>(filters.size());
+            for (final XmlFilterElem f : filters) {
+                if (isValid(getProject(), getLocation(), f.getIf(), f.getUnless())) {
+                    final AbstractXMLFilter fc = f.getImplementation().newInstance();
+                    for (final ParamElem p : f.params) {
+                        if (!p.isValid()) {
+                            throw new BuildException("Incomplete parameter");
+                        }
+                        if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
+                            fc.setParam(p.getName(), p.getValue());
+                        }
+                    }
+                    final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
+//                    predicates.addAll(getFormat());
+//                    assert !predicates.isEmpty();
+                    Predicate<FileInfo> fs = combine(predicates);
+                    res.add(new FilterPair(fc, fs));
+                }
+            }
+            return res;
         }
 
         public Class<? extends AbstractPipelineModule> getImplementation() {
@@ -366,6 +416,7 @@ public final class ExtensibleAntInvoker extends Task {
 
     /**
      * Nested pipeline XSLT element configuration.
+     *
      * @author jelovirt
      */
     public static class XsltElem extends ModuleElem {
@@ -423,9 +474,9 @@ public final class ExtensibleAntInvoker extends Task {
         }
 
         public void setIncludesfile(final File includesfile) {
-              final IncludesFileElem i = new IncludesFileElem();
-              i.setName(includesfile);
-              includes.add(i);
+            final IncludesFileElem i = new IncludesFileElem();
+            i.setName(includesfile);
+            includes.add(i);
         }
 
         public void setExcludesfile(final File excludesfile) {
@@ -470,12 +521,15 @@ public final class ExtensibleAntInvoker extends Task {
     public static class OutputPropertyElem extends ConfElem {
         private String name;
         private String value;
+
         public void setName(final String name) {
             this.name = name;
         }
+
         public void setValue(final String value) {
             this.value = value;
         }
+
         public boolean isValid() {
             return (name != null && value != null);
         }
@@ -483,6 +537,7 @@ public final class ExtensibleAntInvoker extends Task {
 
     public static class IncludesFileElem extends ConfElem {
         private File file;
+
         public void setName(final File file) {
             this.file = file;
         }
@@ -525,12 +580,11 @@ public final class ExtensibleAntInvoker extends Task {
 
     /**
      * Nested pipeline SAX filter pipe element configuration.
+     *
      * @author jelovirt
      */
     public static class SaxPipeElem extends ModuleElem {
 
-        private final List<XmlFilterElem> filters = new ArrayList<>();
-        private Project project;
         private List<String> format;
 
         // Ant setters
@@ -539,13 +593,10 @@ public final class ExtensibleAntInvoker extends Task {
             this.format = Collections.singletonList(format);
         }
 
-        public void addConfiguredFilter(final XmlFilterElem filter) {
-            filters.add(filter);
-        }
-
+        @Override
         public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
             final List<FilterPair> res = new ArrayList<>(filters.size());
-            for (final XmlFilterElem f: filters) {
+            for (final XmlFilterElem f : filters) {
                 if (isValid(getProject(), getLocation(), f.getIf(), f.getUnless())) {
                     final AbstractXMLFilter fc = f.getImplementation().newInstance();
                     for (final ParamElem p : f.params) {
@@ -578,7 +629,9 @@ public final class ExtensibleAntInvoker extends Task {
         }
     }
 
-    /** Nested pipeline SAX filter element configuration. */
+    /**
+     * Nested pipeline SAX filter element configuration.
+     */
     public static class XmlFilterElem extends ConfElem {
 
         public final List<FileInfoFilterElem> fileInfoFilters = new ArrayList<>();
@@ -606,7 +659,9 @@ public final class ExtensibleAntInvoker extends Task {
 
     }
 
-    /** Nested parameters. */
+    /**
+     * Nested parameters.
+     */
     public static class ParamElem extends ConfElem {
 
         private String name;
@@ -614,6 +669,7 @@ public final class ExtensibleAntInvoker extends Task {
 
         /**
          * Get parameter name.
+         *
          * @return parameter name, {@code null} if not set
          */
         public String getName() {
@@ -622,6 +678,7 @@ public final class ExtensibleAntInvoker extends Task {
 
         /**
          * Validate that all required attributes have been set.
+         *
          * @return isValid {@code true} is valid object, otherwise {@code false}
          */
         public boolean isValid() {
@@ -630,6 +687,7 @@ public final class ExtensibleAntInvoker extends Task {
 
         /**
          * Set parameter name.
+         *
          * @param s name
          */
         public void setName(final String s) {
@@ -638,6 +696,7 @@ public final class ExtensibleAntInvoker extends Task {
 
         /**
          * Get parameter value.
+         *
          * @return parameter value, {@code null} if not set
          */
         public String getValue() {
@@ -646,6 +705,7 @@ public final class ExtensibleAntInvoker extends Task {
 
         /**
          * Set parameter value.
+         *
          * @param v parameter value
          */
         public void setExpression(final String v) {
@@ -654,6 +714,7 @@ public final class ExtensibleAntInvoker extends Task {
 
         /**
          * Set parameter value.
+         *
          * @param v parameter value
          */
         public void setValue(final String v) {
@@ -662,6 +723,7 @@ public final class ExtensibleAntInvoker extends Task {
 
         /**
          * Set parameter file value.
+         *
          * @param v parameter file value
          */
         public void setLocation(final File v) {

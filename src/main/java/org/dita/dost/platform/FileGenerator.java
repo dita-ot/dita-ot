@@ -71,10 +71,6 @@ final class FileGenerator extends XMLFilterImpl {
         templateFile = null;
     }
 
-    /**
-     * Set logger.
-     * @param logger logger instance
-     */
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }

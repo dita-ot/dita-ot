@@ -172,5 +172,10 @@ See the accompanying LICENSE file for applicable license.
       $table/@keycol and xs:integer($table/@keycol) eq count($entry/preceding-sibling::*) + 1
     "/>
   </xsl:function>
+  
+  <xsl:function name="dita-ot:normalize-href" as="xs:string?">
+    <xsl:param name="href" as="xs:string"/>
+    <xsl:value-of select="replace(translate($href, '\', '/'), ' ', '%20')"/>
+  </xsl:function>
 
 </xsl:stylesheet>

@@ -7,7 +7,7 @@
  */
 package org.dita.dost.util;
 
-import static javax.xml.XMLConstants.NULL_NS_URI;
+import static javax.xml.XMLConstants.*;
 import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
 
@@ -79,6 +79,14 @@ public final class XMLUtils {
             ((TransformerImpl) transformer).getUnderlyingController().setMessageEmitter(mw);
         }
         return transformer;
+    }
+
+    /**
+     * Get prefix from QName.
+     */
+    public static String getPrefix(final String qname) {
+        final int sep = qname.indexOf(':');
+        return sep != -1 ? qname.substring(0, sep) : DEFAULT_NS_PREFIX;
     }
 
     /**

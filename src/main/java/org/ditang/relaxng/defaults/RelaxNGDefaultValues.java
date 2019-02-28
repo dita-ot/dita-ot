@@ -70,7 +70,7 @@ public abstract class RelaxNGDefaultValues {
     /**
      * Stores the default attributes as a hash map with the element info as key.
      */
-    private HashMap<String, List<Attribute>> defaults = new HashMap<String, List<Attribute>>();
+    private HashMap<String, List<Attribute>> defaults = new HashMap<>();
 
     /**
      * Constructor.
@@ -85,8 +85,6 @@ public abstract class RelaxNGDefaultValues {
     /**
      * Get a key for an element.
      * 
-     * @param elementLocalName
-     * @param elementNamespace
      * @return A string formed from the element local name and its namespace.
      */
     private String getKey(String elementLocalName, String elementNamespace) {
@@ -118,11 +116,7 @@ public abstract class RelaxNGDefaultValues {
     public void defaultValue(String elementLocalName, String elementNamespace,
         String attributeLocalName, String attributeNamepsace, String value) {
       String key = getKey(elementLocalName, elementNamespace);
-      List<Attribute> list = defaults.get(key);
-      if (list == null) {
-        list = new ArrayList<Attribute>();
-        defaults.put(key, list);
-      }
+      List<Attribute> list = defaults.computeIfAbsent(key, k -> new ArrayList<>());
       list.add(new Attribute(attributeLocalName, attributeNamepsace, value));
     }
   }
@@ -138,12 +132,6 @@ public abstract class RelaxNGDefaultValues {
     /** The attribute default value */
     String value;
 
-    /**
-     * 
-     * @param localName
-     * @param namespace
-     * @param value
-     */
     public Attribute(String localName, String namespace, String value) {
       this.localName = localName;
       this.namespace = namespace;
@@ -154,9 +142,7 @@ public abstract class RelaxNGDefaultValues {
   /**
    * Updates the annotation model.
    * 
-   * @param in
-   *          The schema input source.
-   * @throws SAXException 
+   * @param in The schema input source.
    */
   public void update(InputSource in) throws SAXException {
     defaultValuesCollector = null;
@@ -170,8 +156,6 @@ public abstract class RelaxNGDefaultValues {
           properties);
       Pattern start = sw.getStart();
       defaultValuesCollector = new DefaultValuesCollector(start);
-    } catch (IncorrectSchemaException e) {
-      eh.warning(new SAXParseException("Error loading defaults: " + e.getMessage(), null, e));
     } catch (Exception e) {
       eh.warning(new SAXParseException("Error loading defaults: " + e.getMessage(), null, e));
     } catch (StackOverflowError e) {

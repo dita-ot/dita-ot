@@ -150,65 +150,70 @@ public final class ConrefPushReader extends AbstractXMLReader {
 
         final String conactValue = atts.getValue(ATTRIBUTE_NAME_CONACTION);
         if (!start && conactValue != null) {
-            if (ATTR_CONACTION_VALUE_PUSHBEFORE.equals(conactValue)) {
-                if (pushcontentDocumentFragment.getChildNodes().getLength() != 0) {
-                    // there are redundant "pushbefore", create a new pushcontent and emit a warning message.
-                    if (pushcontentWriter != null) {
-                        try {
-                            pushcontentWriter.close();
-                        } catch (final XMLStreamException e) {
-                            throw new SAXException(e);
+            switch (conactValue) {
+                case ATTR_CONACTION_VALUE_PUSHBEFORE:
+                    if (pushcontentDocumentFragment.getChildNodes().getLength() != 0) {
+                        // there are redundant "pushbefore", create a new pushcontent and emit a warning message.
+                        if (pushcontentWriter != null) {
+                            try {
+                                pushcontentWriter.close();
+                            } catch (final XMLStreamException e) {
+                                throw new SAXException(e);
+                            }
                         }
+                        pushcontentWriter = getXMLStreamWriter();
+                        logger.warn(MessageUtils.getMessage("DOTJ044W").setLocation(atts).toString());
                     }
-                    pushcontentWriter = getXMLStreamWriter();
-                    logger.warn(MessageUtils.getMessage("DOTJ044W").setLocation(atts).toString());
-                }
-                start = true;
-                level = 1;
-                putElement(name, atts, true);
-                pushType = ATTR_CONACTION_VALUE_PUSHBEFORE;
-            } else if (ATTR_CONACTION_VALUE_PUSHAFTER.equals(conactValue)) {
-                start = true;
-                level = 1;
-                if (target == null) {
-                    logger.error(MessageUtils.getMessage("DOTJ039E").setLocation(atts).toString());
-                } else {
+                    start = true;
+                    level = 1;
                     putElement(name, atts, true);
-                    pushType = ATTR_CONACTION_VALUE_PUSHAFTER;
-                }
-            } else if (ATTR_CONACTION_VALUE_PUSHREPLACE.equals(conactValue)) {
-                start = true;
-                level = 1;
-                target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
-                if (target == null) {
-                    logger.error(MessageUtils.getMessage("DOTJ040E").setLocation(atts).toString());
-                } else {
-                    pushType = ATTR_CONACTION_VALUE_PUSHREPLACE;
-                    putElement(name, atts, true);
-                }
+                    pushType = ATTR_CONACTION_VALUE_PUSHBEFORE;
+                    break;
+                case ATTR_CONACTION_VALUE_PUSHAFTER:
+                    start = true;
+                    level = 1;
+                    if (target == null) {
+                        logger.error(MessageUtils.getMessage("DOTJ039E").setLocation(atts).toString());
+                    } else {
+                        putElement(name, atts, true);
+                        pushType = ATTR_CONACTION_VALUE_PUSHAFTER;
+                    }
+                    break;
+                case ATTR_CONACTION_VALUE_PUSHREPLACE:
+                    start = true;
+                    level = 1;
+                    target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
+                    if (target == null) {
+                        logger.error(MessageUtils.getMessage("DOTJ040E").setLocation(atts).toString());
+                    } else {
+                        pushType = ATTR_CONACTION_VALUE_PUSHREPLACE;
+                        putElement(name, atts, true);
+                    }
 
-            } else if (ATTR_CONACTION_VALUE_MARK.equals(conactValue)) {
-                target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
-                if (target == null) {
-                    logger.error(MessageUtils.getMessage("DOTJ068E").setLocation(atts).toString());
-                }
-                if (target != null &&
-                        pushcontentDocumentFragment != null && pushcontentDocumentFragment.getChildNodes().getLength() > 0 &&
-                        ATTR_CONACTION_VALUE_PUSHBEFORE.equals(pushType)) {
-                    //pushcontent != null means it is pushbefore action
-                    //we need to add target and content to pushtable
-                    if (pushcontentWriter != null) {
-                        try {
-                            pushcontentWriter.close();
-                        } catch (final XMLStreamException e) {
-                            throw new SAXException(e);
-                        }
+                    break;
+                case ATTR_CONACTION_VALUE_MARK:
+                    target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
+                    if (target == null) {
+                        logger.error(MessageUtils.getMessage("DOTJ068E").setLocation(atts).toString());
                     }
-                    addtoPushTable(target, replaceContent(pushcontentDocumentFragment), pushType);
-                    pushcontentWriter = getXMLStreamWriter();
-                    target = null;
-                    pushType = null;
-                }
+                    if (target != null &&
+                            pushcontentDocumentFragment != null && pushcontentDocumentFragment.getChildNodes().getLength() > 0 &&
+                            ATTR_CONACTION_VALUE_PUSHBEFORE.equals(pushType)) {
+                        //pushcontent != null means it is pushbefore action
+                        //we need to add target and content to pushtable
+                        if (pushcontentWriter != null) {
+                            try {
+                                pushcontentWriter.close();
+                            } catch (final XMLStreamException e) {
+                                throw new SAXException(e);
+                            }
+                        }
+                        addtoPushTable(target, replaceContent(pushcontentDocumentFragment), pushType);
+                        pushcontentWriter = getXMLStreamWriter();
+                        target = null;
+                        pushType = null;
+                    }
+                    break;
             }
         }
     }

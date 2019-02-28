@@ -40,6 +40,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.Map.Entry;
@@ -208,6 +209,7 @@ public final class Integrator {
         for (final String tmpl : properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
             final String t = tmpl.trim();
             if (t.length() != 0) {
+                logger.warn(MessageUtils.getMessage("DOTJ080W", "templates", "template").toString());
                 templateSet.put(t, null);
             }
         }
@@ -234,13 +236,13 @@ public final class Integrator {
     }
 
     private void logChanges(final Set<String> orig, final Set<String> mod) {
-        final List<String> removed = new ArrayList<String>(orig);
+        final List<String> removed = new ArrayList<>(orig);
         removed.removeAll(mod);
         removed.sort(Comparator.naturalOrder());
         for (final String p : removed) {
             logger.warn("Removed " + p);
         }
-        final List<String> added = new ArrayList<String>(mod);
+        final List<String> added = new ArrayList<>(mod);
         added.removeAll(orig);
         added.sort(Comparator.naturalOrder());
         for (final String p : added) {
@@ -360,7 +362,7 @@ public final class Integrator {
 
         final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS)
                 ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS)))
-                : Collections.EMPTY_SET;
+                : Collections.emptySet();
         writeEnvShell(jars);
         writeEnvBatch(jars);
 
@@ -370,10 +372,14 @@ public final class Integrator {
                 .build();
         writeStartcmdShell(libJars);
         writeStartcmdBatch(libJars);
+
+        customIntegration();
     }
 
     private Properties readMessageBundle() throws IOException, XMLStreamException {
         final Properties messages = new Properties();
+//        final Path basePluginDir = pluginTable.get("org.dita.base").getPluginDir().toPath();
+//        final File messagesXmlFile = basePluginDir.resolve(CONFIG_DIR).resolve("messages.xml").toFile();
         final File messagesXmlFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages.xml").toFile();
         if (messagesXmlFile.exists()) {
             try (final InputStream in = new FileInputStream(messagesXmlFile)) {
@@ -433,6 +439,20 @@ public final class Integrator {
         }
         res.sort(Comparator.comparing(File::getAbsolutePath));
         return res;
+    }
+
+    private void customIntegration() {
+        final ServiceLoader<CustomIntegrator> customIntegrators = ServiceLoader.load(CustomIntegrator.class);
+        for (final CustomIntegrator customIntegrator : customIntegrators) {
+            customIntegrator.setLogger(logger);
+            customIntegrator.setDitaDir(ditaDir);
+            try {
+                customIntegrator.process();
+            } catch (final Exception e) {
+                logger.error("Custom integrator " + customIntegrator.getClass().getName() + " failed: " + e.getMessage(), e);
+
+            }
+        }
     }
 
     private Iterable<String> orderPlugins(final Set<String> ids) {

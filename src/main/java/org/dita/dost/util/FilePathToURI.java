@@ -22,11 +22,11 @@ final class FilePathToURI {
     }
 
     // Which ASCII characters need to be escaped
-    private static final boolean gNeedEscaping[] = new boolean[128];
+    private static final boolean[] gNeedEscaping = new boolean[128];
     // The first hex character if a character needs to be escaped
-    private static final char gAfterEscaping1[] = new char[128];
+    private static final char[] gAfterEscaping1 = new char[128];
     // The second hex character if a character needs to be escaped
-    private static final char gAfterEscaping2[] = new char[128];
+    private static final char[] gAfterEscaping2 = new char[128];
     private static final char[] gHexChs = {'0', '1', '2', '3', '4', '5', '6', '7',
         '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
     // Initialize the above 3 arrays

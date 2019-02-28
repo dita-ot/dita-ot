@@ -324,7 +324,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      *
      * @param fileToParse absolute path to current file being processed
      */
-    private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
+    @Override
+    List<XMLFilter> getProcessingPipe(final URI fileToParse) {
         assert fileToParse.isAbsolute();
         final List<XMLFilter> pipe = new ArrayList<>();
 

@@ -65,6 +65,13 @@ public class NormalizeCodeblockTest {
     }
 
     @Test
+    public void testOnlyTextWithAdjacentText() throws Exception {
+        final Document act = filter(new File(srcDir, "onlyTextWithAdjacentText.xml"));
+        final Document exp = documentBuilder.parse(new File(expDir, "onlyTextWithAdjacentText.xml"));
+        assertXMLEqual(exp, act);
+    }
+
+    @Test
     public void testNestedElement() throws Exception {
         final Document act = filter(new File(srcDir, "nestedElement.xml"));
         final Document exp = documentBuilder.parse(new File(expDir, "nestedElement.xml"));

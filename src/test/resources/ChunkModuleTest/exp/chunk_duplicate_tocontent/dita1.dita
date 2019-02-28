@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><?workdir /var/folders/p2/pbpbnbdn3db6hns_6j1jdyd00000gn/T/org.dita.dost.module.ChunkModuleTest/chunk_duplicate_tocontent?><?workdir-uri file:/var/folders/p2/pbpbnbdn3db6hns_6j1jdyd00000gn/T/org.dita.dost.module.ChunkModuleTest/chunk_duplicate_tocontent/?><?path2project?><?path2project-uri ./?>
-<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.2">
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.3">
   <?workdir /Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/chunk_duplicate_tocontent?>
   <?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/chunk_duplicate_tocontent/?>
   <?path2project?>

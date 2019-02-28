@@ -28,6 +28,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="plugin:org.dita.html5:xsl/markup-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/xml-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/svg-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/hazard-d.xsl"/>
   
   <xsl:import href="plugin:org.dita.html5:xsl/nav.xsl"/>
   

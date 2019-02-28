@@ -1,0 +1,30 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+  ditaarch:DITAArchVersion="1.2">
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup " keyscope="KEY_SCOPE">
+
+    <!-- Test scoped keys -->
+    <topicref class="- map/topicref " format="dead" href="dead" keyref="ks_topicref_link" scope="external" type="dead"/>
+    <topicref class="- map/topicref " keyref="ks_author_link"/>
+    <topicref class="- map/topicref " keyref="ks_data_link"/>
+    <topicref class="- map/topicref " keyref="ks_data-about_link"/>
+    <topicref class="- map/topicref " keyref="ks_publisher_link"/>
+    <topicref class="- map/topicref " keyref="ks_source_link"/>
+    <topicref class="- map/topicref " keyref="ks_indexterm_link"/>
+    <topicref class="- map/topicref " keyref="ks_index-base_link"/>
+    <topicref class="- map/topicref " keyref="ks_indextermref_link"/>
+    <navref class="- map/navref " keyref="ks_navref_link"/>
+
+    <!-- Test non-scoped keys -->
+    <topicref class="- map/topicref " format="dead" href="dead" keyref="topicref_link" scope="external" type="dead"/>
+    <topicref class="- map/topicref " keyref="author_link"/>
+    <topicref class="- map/topicref " keyref="data_link"/>
+    <topicref class="- map/topicref " keyref="data-about_link"/>
+    <topicref class="- map/topicref " keyref="publisher_link"/>
+    <topicref class="- map/topicref " keyref="source_link"/>
+    <topicref class="- map/topicref " keyref="indexterm_link"/>
+    <topicref class="- map/topicref " keyref="index-base_link"/>
+    <topicref class="- map/topicref " keyref="indextermref_link"/>
+    <navref class="- map/navref " keyref="navref_link"/>
+  </topicgroup>
+</map>

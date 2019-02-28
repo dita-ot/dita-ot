@@ -51,6 +51,9 @@ See the accompanying LICENSE file for applicable license.
   <!-- Deprecated since 2.1 -->
   <extension-point id="depend.preprocess.copy-subsidiary.pre" name="Copy subsidiary pre-target"/>
   <extension-point id="depend.preprocess.post" name="Preprocessing post-target"/>
+  <extension-point id="dita.preprocess.debug-filter.param" name="Debug filter module parameters"/>
+  <extension-point id="dita.preprocess.map-reader.param" name="Debug filter module parameters"/>
+  <extension-point id="dita.preprocess.topic-reader.param" name="Debug filter module parameters"/>
   <extension-point id="dita.preprocess.conref.param" name="Content reference XSLT parameters"/>
   <extension-point id="dita.preprocess.mapref.param" name="Map reference XSLT parameters"/>
   <extension-point id="dita.preprocess.mappull.param" name="Map pull  XSLT parameters"/>
@@ -174,22 +177,21 @@ See the accompanying LICENSE file for applicable license.
   <feature extension="dita.html.extensions" value=".htm"/>
   <feature extension="dita.resource.extensions" value=".pdf"/>
   <feature extension="dita.resource.extensions" value=".swf"/>
-  <feature extension="dita.basedir-resource-directory" value="true"/>
   <feature extension="ant.import" file="build_init.xml"/>
   <feature extension="ant.import" file="build_preprocess.xml"/>
   <feature extension="ant.import" file="build_preprocess2.xml"/>
-  <feature extension="dita.xsl.strings" file="../../xsl/common/common-strings.xml"/>
-  <template file="../../catalog-dita_template.xml"/>
-  <template file="../../build_template.xml"/>
+  <feature extension="dita.xsl.strings" file="xsl/common/common-strings.xml"/>
+  <template file="catalog-dita_template.xml"/>
+  <template file="build_template.xml"/>
   <template file="build_preprocess_template.xml"/>
   <template file="build_preprocess2_template.xml"/>
   <template file="../../config/messages_template.xml"/>
-  <template file="../../xsl/common/allstrings_template.xml"/>
-  <template file="../../xsl/common/strings_template.xml"/>
-  <template file="../../xsl/preprocess/maplink_template.xsl"/>
-  <template file="../../xsl/preprocess/mapref_template.xsl"/>
-  <template file="../../xsl/preprocess/mappull_template.xsl"/>
-  <template file="../../xsl/preprocess/conref_template.xsl"/>
-  <template file="../../xsl/preprocess/map-conref_template.xsl"/>
-  <template file="../../xsl/preprocess/topicpull_template.xsl"/>
+  <template file="xsl/common/allstrings_template.xml"/>
+  <template file="xsl/common/strings_template.xml"/>
+  <template file="xsl/preprocess/maplink_template.xsl"/>
+  <template file="xsl/preprocess/mapref_template.xsl"/>
+  <template file="xsl/preprocess/mappull_template.xsl"/>
+  <template file="xsl/preprocess/conref_template.xsl"/>
+  <template file="xsl/preprocess/map-conref_template.xsl"/>
+  <template file="xsl/preprocess/topicpull_template.xsl"/>
 </plugin>

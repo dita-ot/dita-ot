@@ -44,5 +44,26 @@ See the accompanying LICENSE file for applicable license.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  
+  <!-- By default in FOP, rotated text in a table entry does not change the cell size, so rotated text will overwrite other cells.
+       To enable rotation, explicitly set the height and width as follows:
+       1) Uncomment the fo:block-container
+       2) Adjust the height and width values to either
+       2a) An appropriate default that is acceptable for all of your rotated cells, or
+       2b) A specific or calculated value based on the cell content --> 
+  <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="rotateTableEntryContent">
+    <!--<fo:block-container reference-orientation="90" width="150px" height="80px">-->
+      <fo:block xsl:use-attribute-sets="thead.row.entry__content">
+        <xsl:call-template name="processEntryContent"/>
+      </fo:block>
+    <!--</fo:block-container>-->
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="rotateTableEntryContent">
+    <!--<fo:block-container reference-orientation="90" width="150px" height="80px">-->
+      <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+        <xsl:call-template name="processEntryContent"/>
+      </fo:block>
+    <!--</fo:block-container>-->
+  </xsl:template>
 
 </xsl:stylesheet>
