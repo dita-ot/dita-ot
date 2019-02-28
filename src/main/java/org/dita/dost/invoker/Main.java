@@ -26,8 +26,11 @@
 
 package org.dita.dost.invoker;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.input.DefaultInputHandler;
 import org.apache.tools.ant.input.InputHandler;
@@ -195,6 +198,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ARGUMENTS.put("--filter", new AbsoluteFileListArgument("args.filter"));
         ARGUMENTS.put("-t", new AbsoluteFileArgument(ANT_TEMP_DIR));
         ARGUMENTS.put("--temp", new AbsoluteFileArgument(ANT_TEMP_DIR));
+        ARGUMENTS.put("-p", new AbsoluteFileArgument("project.file"));
+        ARGUMENTS.put("--project", new AbsoluteFileArgument("project.file"));
         addSingleHyphenOptions(ARGUMENTS);
     }
 
@@ -290,7 +295,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private boolean install;
     /** Plug-in installation file. May be either a system path or a URL. */
     private String installFile;
-
+    /** Project file */
+    private File projectFile;
     /** Plug-in uninstall ID. */
     private String uninstallId;
 
@@ -541,6 +547,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 justPrintTranstypes = true;
             } else if (isLongForm(arg, "-install")) {
                 handleArgInstall(arg, args);
+            } else if (isLongForm(arg, "-project") || arg.equals("-p")) {
+                handleArgProject(arg, args);
             } else if (isLongForm(arg, "-force")) {
                 definedProps.put("force", "true");
             } else if (isLongForm(arg, "-uninstall")) {
@@ -649,17 +657,19 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 targets.add("integrate");
             }
         } else {
-            if (!definedProps.containsKey("transtype")) {
-                printErrorMessage("Error: Transformation type not defined");
-                printUsage();
-                throw new BuildException("");
-                //justPrintUsage = true;
-            }
-            if (!definedProps.containsKey("args.input")) {
-                printErrorMessage("Error: Input file not defined");
-                printUsage();
-                throw new BuildException("");
-                //justPrintUsage = true;
+            if (projectFile == null) {
+                if (!definedProps.containsKey("transtype")) {
+                    printErrorMessage("Error: Transformation type not defined");
+                    printUsage();
+                    throw new BuildException("");
+                    //justPrintUsage = true;
+                }
+                if (!definedProps.containsKey("args.input")) {
+                    printErrorMessage("Error: Input file not defined");
+                    printUsage();
+                    throw new BuildException("");
+                    //justPrintUsage = true;
+                }
             }
             // default values
             if (!definedProps.containsKey("output.dir")) {
@@ -668,6 +678,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             if (!definedProps.containsKey("base.temp.dir") && !definedProps.containsKey(ANT_TEMP_DIR)) {
                 definedProps.put("base.temp.dir", new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
             }
+        }
+
+        if (projectFile != null) {
+            final org.dita.dost.project.Project project = readProjectFile();
+            final List<Map<String, String>> projectArgs = project.getArguments();
+            for (final Map<String, String> pa : projectArgs) {
+
+            }
+
+
         }
 
         // if buildFile was not specified on the command line,
@@ -740,6 +760,34 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         readyToRun = true;
     }
 
+    private org.dita.dost.project.Project readProjectFile() throws BuildException {
+        if (!projectFile.exists()) {
+            printErrorMessage("Project file " + projectFile + " does not exist");
+            throw new BuildException("");
+        }
+        switch (FilenameUtils.getExtension(projectFile.getName()).toLowerCase()) {
+            case "xml": {
+                final ObjectMapper objectMapper = new XmlMapper();
+                try {
+                    return objectMapper.readValue(projectFile, org.dita.dost.project.Project.class);
+                } catch (IOException e) {
+                    throw new BuildException("Failed to read project file " + projectFile, e);
+                }
+            }
+            case "json": {
+                final ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    return objectMapper.readValue(projectFile, org.dita.dost.project.Project.class);
+                } catch (IOException e) {
+                    throw new BuildException("Failed to read project file " + projectFile, e);
+                }
+            }
+            default:
+                printErrorMessage("Unsupported project file format");
+                throw new BuildException("");
+        }
+    }
+
     private boolean getUseColor() {
         final String os = System.getProperty("os.name");
         if (os != null && os.startsWith("Windows")) {
@@ -795,6 +843,25 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         if (value != null) {
             installFile = value;
         }
+    }
+
+    /**
+     * Handle the --project argument
+     */
+    private void handleArgProject(final String arg, final Deque<String> args) {
+        String name = arg;
+        final int posEq = name.indexOf("=");
+        final String value;
+        if (posEq != -1)  {
+            value = name.substring(posEq + 1);
+            name = name.substring(0, posEq);
+        } else {
+            value = args.pop();
+        }
+        if (value == null) {
+            throw new BuildException("Missing value for project " + name);
+        }
+        projectFile = new File(value).getAbsoluteFile();
     }
 
     /** Handle the --uninstall argument */
@@ -1263,6 +1330,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static void printUsage() {
         final StringBuilder msg = new StringBuilder();
         msg.append("Usage: dita -i <file> -f <name> [options]\n");
+        msg.append("   or: dita --project=<file> [options]\n");
         msg.append("   or: dita --propertyfile=<file> [options]\n");
         msg.append("   or: dita --install [=<file> | <url> | <id>]\n");
         msg.append("   or: dita --uninstall <id>\n");
@@ -1273,6 +1341,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("Arguments: \n");
         msg.append("  -i <file>, --input=<file>   input file\n");
         msg.append("  -f <name>, --format=<name>  output format (transformation type)\n");
+        msg.append("  -p <name>, --project=<name> run project file\n");
         msg.append("  --install [<file>]          install plug-in from a local ZIP file\n");
         msg.append("  --install [<url>]           install plug-in from a URL\n");
         msg.append("  --install [<id>]            install plug-in from plugin registry\n");
