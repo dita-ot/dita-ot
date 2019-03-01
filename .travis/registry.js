@@ -32,7 +32,7 @@ async function update() {
         deps: last.deps.map(dep => {
           return {
             ...dep,
-            req: dep.name === "org.dita.base" ? `>=${minorVersion}` : dep.req
+            req: dep.name === "org.dita.base" ? `>=${version}` : dep.req
           };
         }),
         url: `https://github.com/dita-ot/dita-ot/releases/download/${version.endsWith('.0') ? minorVersion : version}/${pluginName}-${version}.zip`,
