@@ -16,7 +16,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import java.io.File;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +37,8 @@ public class Project {
         public final String name;
         @JacksonXmlElementWrapper(useWrapping = false)
         public final Inputs inputs;
+        @JacksonXmlElementWrapper(localName = "output")
+        public final URI output;
         @JacksonXmlProperty(localName = "profile")
         @JacksonXmlElementWrapper(useWrapping = false)
         public final Profile profiles;
@@ -48,10 +49,12 @@ public class Project {
         @JsonCreator
         public Deliverable(@JsonProperty("name") String name,
                            @JsonProperty("inputs") Inputs inputs,
+                           @JsonProperty("output") URI output,
                            @JsonProperty("profiles") Profile profiles,
                            @JsonProperty("publications") Publication publications) {
             this.name = name;
             this.inputs = inputs;
+            this.output = output;
             this.profiles = profiles;
             this.publications = publications;
         }

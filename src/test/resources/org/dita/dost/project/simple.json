@@ -10,6 +10,7 @@
           }
         ]
       },
+      "output": "./site",
       "profiles": {
         "name": "profile-name",
         "ditavals": [

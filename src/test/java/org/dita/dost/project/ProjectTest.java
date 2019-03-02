@@ -75,6 +75,7 @@ public class ProjectTest {
                 new Inputs("inputs-name",
 //                        "inputs-ref",
                         Arrays.asList(new Input(URI.create("site.ditamap")))),
+                URI.create("./site"),
                 new Profile("profile-name",
 //                        "profile-ref",
                         Arrays.asList(new DitaVal(URI.create("site.ditaval")))),

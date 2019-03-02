@@ -5,6 +5,7 @@
     <inputs name="inputs-name"><!--ref="inputs-ref"-->
       <input href="site.ditamap"/>
     </inputs>
+    <output>./site</output>
     <profile name="profile-name"><!--ref="profile-ref"-->
       <ditaval href="site.ditaval"/>
     </profile>
