@@ -40,11 +40,14 @@ import org.apache.tools.ant.util.ClasspathUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.platform.Plugins;
+import org.dita.dost.project.Project.Deliverable;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
 
 import java.io.*;
+import java.net.URI;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -86,6 +89,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static class BooleanArgument extends Argument {
         final String trueValue;
         final String falseValue;
+
         BooleanArgument(final String property, final String trueValue, final String falseValue) {
             super(property);
             this.trueValue = trueValue;
@@ -94,7 +98,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
         @Override
         String getValue(final String value) {
-            switch(value.toLowerCase()) {
+            switch (value.toLowerCase()) {
                 case "true":
                 case "yes":
                 case "on":
@@ -108,6 +112,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     private static class EnumArgument extends Argument {
         final Set<String> values;
+
         EnumArgument(final String property, final Set<String> values) {
             super(property);
             this.values = values;
@@ -178,6 +183,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Main.
      */
     private static final Set<String> LAUNCH_COMMANDS = new HashSet<>();
+
     static {
         LAUNCH_COMMANDS.add("-lib");
         LAUNCH_COMMANDS.add("-cp");
@@ -187,6 +193,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
 
     private static final Map<String, Argument> ARGUMENTS = new HashMap<>();
+
     static {
         ARGUMENTS.put("-f", new StringArgument("transtype"));
         ARGUMENTS.put("--format", new StringArgument("transtype"));
@@ -250,7 +257,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                         .map(XMLUtils::getText)
                         .collect(Collectors.toSet());
                 if (vals.size() == 2) {
-                    for (Map.Entry<String, String> pair: TRUTHY_VALUES.entrySet()) {
+                    for (Map.Entry<String, String> pair : TRUTHY_VALUES.entrySet()) {
                         if (vals.contains(pair.getKey()) && vals.contains(pair.getValue())) {
                             return new BooleanArgument(name, pair.getKey(), pair.getValue());
                         }
@@ -271,6 +278,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     );
 
     private static final Map<String, String> TRUTHY_VALUES;
+
     static {
         TRUTHY_VALUES = ImmutableMap.<String, String>builder()
                 .put("true", "false")
@@ -283,45 +291,75 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 .build();
     }
 
-    /** The default build file name. {@value} */
+    /**
+     * The default build file name. {@value}
+     */
     public static final String DEFAULT_BUILD_FILENAME = "build.xml";
 
-    /** Our current message output status. Follows Project.MSG_XXX. */
+    /**
+     * Our current message output status. Follows Project.MSG_XXX.
+     */
     private int msgOutputLevel = Project.MSG_WARN;
 
-    /** File that we are using for configuration. */
+    /**
+     * File that we are using for configuration.
+     */
     private File buildFile; /* null */
-    /** Run integrator */
+    /**
+     * Run integrator
+     */
     private boolean install;
-    /** Plug-in installation file. May be either a system path or a URL. */
+    /**
+     * Plug-in installation file. May be either a system path or a URL.
+     */
     private String installFile;
-    /** Project file */
+    /**
+     * Project file
+     */
     private File projectFile;
-    /** Plug-in uninstall ID. */
+    /**
+     * Plug-in uninstall ID.
+     */
     private String uninstallId;
 
-    /** Stream to use for logging. */
+    /**
+     * Stream to use for logging.
+     */
     private static PrintStream out = System.out;
 
-    /** Stream that we are using for logging error messages. */
+    /**
+     * Stream that we are using for logging error messages.
+     */
     private static PrintStream err = System.err;
 
-    /** The build targets. */
+    /**
+     * The build targets.
+     */
     private final Vector<String> targets = new Vector<>();
 
-    /** Set of properties that can be used by tasks. */
+    /**
+     * Set of properties that can be used by tasks.
+     */
     private final Map<String, Object> definedProps = new HashMap<>();
 
-    /** Names of classes to add as listeners to project. */
+    /**
+     * Names of classes to add as listeners to project.
+     */
     private final Vector<String> listeners = new Vector<>(1);
 
-    /** File names of property files to load on startup. */
+    /**
+     * File names of property files to load on startup.
+     */
     private final Vector<String> propertyFiles = new Vector<>(1);
 
-    /** Indicates whether this build is to support interactive input */
+    /**
+     * Indicates whether this build is to support interactive input
+     */
     private boolean allowInput = true;
 
-    /** keep going mode */
+    /**
+     * keep going mode
+     */
     private boolean keepGoingMode = false;
 
     /**
@@ -368,7 +406,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * <code>null</code>.
      *
      * @param t Throwable to print the message of. Must not be <code>null</code>
-     *            .
+     *          .
      */
     private void printMessage(final Throwable t) {
         final String message = t.getMessage();
@@ -392,16 +430,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * it any extra user properties which have been specified, and then runs the
      * build using the classloader provided.
      *
-     * @param args Command line arguments. Must not be <code>null</code>.
+     * @param args                     Command line arguments. Must not be <code>null</code>.
      * @param additionalUserProperties Any extra properties to use in this
-     *            build. May be <code>null</code>, which is the equivalent to
-     *            passing in an empty set of properties.
-     * @param coreLoader Classloader used for core classes. May be
-     *            <code>null</code> in which case the system classloader is
-     *            used.
+     *                                 build. May be <code>null</code>, which is the equivalent to
+     *                                 passing in an empty set of properties.
+     * @param coreLoader               Classloader used for core classes. May be
+     *                                 <code>null</code> in which case the system classloader is
+     *                                 used.
      */
     public static void start(final String[] args, final Properties additionalUserProperties,
-            final ClassLoader coreLoader) {
+                             final ClassLoader coreLoader) {
         final Main m = new Main();
         m.startAnt(args, additionalUserProperties, coreLoader);
     }
@@ -409,11 +447,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /**
      * Start Ant
      *
-     * @param args command line args
+     * @param args                     command line args
      * @param additionalUserProperties properties to set beyond those that may
-     *            be specified on the args list
-     * @param coreLoader - not used
-     *
+     *                                 be specified on the args list
+     * @param coreLoader               - not used
      * @since Ant 1.6
      */
     @Override
@@ -439,7 +476,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
 
         if (additionalUserProperties != null) {
-            for (final Enumeration<Object> e = additionalUserProperties.keys(); e.hasMoreElements();) {
+            for (final Enumeration<Object> e = additionalUserProperties.keys(); e.hasMoreElements(); ) {
                 final String key = (String) e.nextElement();
                 final String property = additionalUserProperties.getProperty(key);
                 definedProps.put(key, property);
@@ -516,7 +553,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * launcher-only arguments do not get passed through to this routine.
      *
      * @param arguments the command line arguments.
-     *
      * @since Ant 1.6
      */
     private void processArgs(final String[] arguments) {
@@ -622,7 +658,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // Load the property files specified by --propertyfile
         loadPropertyFiles();
 
-        if (justPrintUsage || justPrintVersion || justPrintDiagnostics || justPrintPlugins ||justPrintTranstypes) {
+        if (justPrintUsage || justPrintVersion || justPrintDiagnostics || justPrintPlugins || justPrintTranstypes) {
             if (justPrintVersion) {
                 printVersion(msgOutputLevel);
             }
@@ -633,7 +669,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 Diagnostics.doReport(System.out, msgOutputLevel);
             }
             if (justPrintPlugins) {
-                printPlugins(); 
+                printPlugins();
             }
             if (justPrintTranstypes) {
                 printTranstypes();
@@ -681,13 +717,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
 
         if (projectFile != null) {
-            final org.dita.dost.project.Project project = readProjectFile();
-            final List<Map<String, String>> projectArgs = project.getArguments();
-            for (final Map<String, String> pa : projectArgs) {
-
-            }
-
-
+            handleProject();
         }
 
         // if buildFile was not specified on the command line,
@@ -760,6 +790,36 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         readyToRun = true;
     }
 
+    private void handleProject() {
+        final URI base = projectFile.toURI();
+        final org.dita.dost.project.Project project = readProjectFile();
+
+        project.deliverables.forEach(deliverable -> {
+            final String input = base.resolve(deliverable.inputs.inputs.get(0).href).toString();
+            definedProps.put("args.input", input);
+            final URI outputDir = Paths.get(definedProps.get("output.dir").toString()).toUri();
+            final String output = Paths.get(outputDir.resolve(deliverable.output)).toString();
+            definedProps.put("output.dir", output);
+            final Deliverable.Publication publications = deliverable.publications;
+            definedProps.put("transtype", publications.transtype);
+            publications.params.forEach(param -> {
+                if (param.value != null) {
+                    final Argument argument = getPluginArguments().getOrDefault(param.name, new StringArgument(param.name));
+                    final String value = argument.getValue(param.value);
+                    definedProps.put(param.name, value);
+                } else {
+                    final String value = base.resolve(param.href).toString();
+                    definedProps.put(param.name, value);
+
+                }
+            });
+            final String filters = deliverable.profiles.ditavals.stream()
+                    .map(ditaVal -> Paths.get(base.resolve(ditaVal.href)).toString())
+                    .collect(Collectors.joining(File.pathSeparator));
+            definedProps.put("args.filter", filters);
+        });
+    }
+
     private org.dita.dost.project.Project readProjectFile() throws BuildException {
         if (!projectFile.exists()) {
             printErrorMessage("Project file " + projectFile + " does not exist");
@@ -824,13 +884,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     // Methods for handling the command line arguments
     // --------------------------------------------------------
 
-    /** Handle the --install argument */
+    /**
+     * Handle the --install argument
+     */
     private void handleArgInstall(final String arg, final Deque<String> args) {
         install = true;
         String name = arg;
         final int posEq = name.indexOf("=");
         String value;
-        if (posEq != -1)  {
+        if (posEq != -1) {
             value = name.substring(posEq + 1);
         } else {
             value = args.peek();
@@ -852,7 +914,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         String name = arg;
         final int posEq = name.indexOf("=");
         final String value;
-        if (posEq != -1)  {
+        if (posEq != -1) {
             value = name.substring(posEq + 1);
             name = name.substring(0, posEq);
         } else {
@@ -864,13 +926,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         projectFile = new File(value).getAbsoluteFile();
     }
 
-    /** Handle the --uninstall argument */
+    /**
+     * Handle the --uninstall argument
+     */
     private void handleArgUninstall(final String arg, final Deque<String> args) {
         install = true;
         String name = arg;
         final int posEq = name.indexOf("=");
         String value;
-        if (posEq != -1)  {
+        if (posEq != -1) {
             value = name.substring(posEq + 1);
         } else {
             value = args.peek();
@@ -885,8 +949,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
         uninstallId = value;
     }
-    
-    /** Handle the --plugins argument */
+
+    /**
+     * Handle the --plugins argument
+     */
     private void printPlugins() {
         final List<String> installedPlugins = Plugins.getInstalledPlugins();
         for (final String plugin : installedPlugins) {
@@ -894,14 +960,18 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
-    /** Handle the --transtypes argument */
+    /**
+     * Handle the --transtypes argument
+     */
     private void printTranstypes() {
         for (final String transtype : transtypes) {
             System.out.println(transtype);
         }
     }
 
-    /** Handle the --buildfile, --file, -f argument */
+    /**
+     * Handle the --buildfile, --file, -f argument
+     */
     private void handleArgBuildFile(final Deque<String> args) {
         final String value = args.pop();
         if (value == null) {
@@ -910,7 +980,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         buildFile = new File(value.replace('/', File.separatorChar));
     }
 
-    /** Handle --listener argument */
+    /**
+     * Handle --listener argument
+     */
     private void handleArgListener(final Deque<String> args) {
         final String value = args.pop();
         if (value == null) {
@@ -919,7 +991,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         listeners.addElement(value);
     }
 
-    /** Handler -D argument */
+    /**
+     * Handler -D argument
+     */
     private void handleArgDefine(final String arg, final Deque<String> args) {
         /*
          * Interestingly enough, we get to here when a user uses -Dname=value.
@@ -949,7 +1023,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         definedProps.put(name, value);
     }
 
-    /** Handler parameter argument */
+    /**
+     * Handler parameter argument
+     */
     private void handleParameterArg(final String arg, final Deque<String> args, final Argument argument) {
         String name = arg;
         String value;
@@ -967,7 +1043,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         definedProps.put(argument.property, argument.getValue(value));
     }
 
-    /** Get argument name */
+    /**
+     * Get argument name
+     */
     private String getArgumentName(final String arg) {
         int pos = arg.indexOf("=");
         if (pos == -1) {
@@ -976,7 +1054,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return arg.substring(0, pos != -1 ? pos : arg.length());
     }
 
-    /** Handle the --logger argument. */
+    /**
+     * Handle the --logger argument.
+     */
     private void handleArgLogger(final Deque<String> args) {
         if (loggerClassname != null) {
             throw new BuildException("Only one logger class may be specified.");
@@ -987,7 +1067,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
-    /** Handle the --inputhandler argument. */
+    /**
+     * Handle the --inputhandler argument.
+     */
     private void handleArgInputHandler(final Deque<String> args) {
         if (inputHandlerClassname != null) {
             throw new BuildException("Only one input handler class may be specified.");
@@ -998,7 +1080,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
-    /** Handle the --propertyfile argument. */
+    /**
+     * Handle the --propertyfile argument.
+     */
     private void handleArgPropertyFile(final String arg, final Deque<String> args) {
         String name = arg.substring(2);
         String value;
@@ -1014,7 +1098,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         propertyFiles.addElement(value);
     }
 
-    /** Handle the --nice argument. */
+    /**
+     * Handle the --nice argument.
+     */
     private void handleArgNice(final Deque<String> args) {
         final String value = args.pop();
         if (value == null) {
@@ -1031,7 +1117,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
-    /** Load the property files specified by --propertyfile */
+    /**
+     * Load the property files specified by --propertyfile
+     */
     private void loadPropertyFiles() {
         for (int propertyFileIndex = 0; propertyFileIndex < propertyFiles.size(); propertyFileIndex++) {
             final String filename = propertyFiles.elementAt(propertyFileIndex);
@@ -1068,10 +1156,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * <p>
      * Added to simulate File.getParentFile() from JDK 1.2.
      *
-     * @deprecated since 1.6.x
-     *
      * @param file File to find parent of. Must not be <code>null</code>.
      * @return Parent file or null if none
+     * @deprecated since 1.6.x
      */
     @Deprecated
     private File getParentFile(final File file) {
@@ -1091,12 +1178,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * search of a build file. Once the root of the file-system has been reached
      * <code>null</code> is returned.
      *
-     * @param start Leaf directory of search. Must not be <code>null</code>.
+     * @param start  Leaf directory of search. Must not be <code>null</code>.
      * @param suffix Suffix filename to look for in parents. Must not be
-     *            <code>null</code>.
-     *
+     *               <code>null</code>.
      * @return A handle to the build file if one is found, <code>null</code> if
-     *         not
+     * not
      */
     private File findBuildFile(final String start, final String suffix) {
         if (msgOutputLevel >= Project.MSG_INFO) {
@@ -1129,10 +1215,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * returned after issuing a warning), this method returns immediately.
      *
      * @param coreLoader The classloader to use to find core classes. May be
-     *            <code>null</code>, in which case the system classloader is
-     *            used.
-     *
-     * @exception BuildException if the build fails
+     *                   <code>null</code>, in which case the system classloader is
+     *                   used.
+     * @throws BuildException if the build fails
      */
     private void runBuild(final ClassLoader coreLoader) throws BuildException {
 
@@ -1252,7 +1337,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * the default listener, to the specified project.
      *
      * @param project The project to add listeners to. Must not be
-     *            <code>null</code>.
+     *                <code>null</code>.
      */
     @Override
     protected void addBuildListeners(final Project project) {
@@ -1275,9 +1360,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Creates the InputHandler and adds it to the project.
      *
      * @param project the project instance.
-     *
-     * @exception BuildException if a specified InputHandler implementation
-     *                could not be loaded.
+     * @throws BuildException if a specified InputHandler implementation
+     *                        could not be loaded.
      */
     private void addInputHandler(final Project project) throws BuildException {
         InputHandler handler;
@@ -1295,6 +1379,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     // RuntimeException rather than just using a BuildException here? Is it
     // in case the message could end up being written to no loggers (as the
     // loggers could have failed to be created due to this failure)?
+
     /**
      * Creates the default build logger for sending build events to the ant log.
      *
@@ -1407,7 +1492,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /**
      * Prints the Ant version information to <code>System.out</code>.
      *
-     * @exception BuildException if the version information is unavailable
+     * @throws BuildException if the version information is unavailable
      */
     private static void printVersion(final int logLevel) throws BuildException {
         System.out.println("DITA-OT version " + Configuration.configuration.get("otversion"));
@@ -1419,7 +1504,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * <code>System.out</code>.
      *
      * @param project The project to display a description of. Must not be
-     *            <code>null</code>.
+     *                <code>null</code>.
      */
     private static void printDescription(final Project project) {
         if (project.getDescription() != null) {
@@ -1461,10 +1546,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Prints a list of all targets in the specified project to
      * <code>System.out</code>, optionally including subtargets.
      *
-     * @param project The project to display a description of. Must not be
-     *            <code>null</code>.
+     * @param project         The project to display a description of. Must not be
+     *                        <code>null</code>.
      * @param printSubTargets Whether or not subtarget names should also be
-     *            printed.
+     *                        printed.
      */
     private static void printTargets(final Project project, boolean printSubTargets, final boolean printDependencies) {
         // find the target with the longest name
@@ -1530,8 +1615,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * the list sorted alphabetically.
      *
      * @param names The current list of names. Must not be <code>null</code>.
-     * @param name The name to find a place for. Must not be <code>null</code>.
-     *
+     * @param name  The name to find a place for. Must not be <code>null</code>.
      * @return the correct place in the list for the given name
      */
     private static int findTargetPosition(final Vector<String> names, final String name) {
@@ -1549,24 +1633,23 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Writes a formatted list of target names to <code>System.out</code> with
      * an optional description.
      *
-     *
-     * @param project the project instance.
-     * @param names The names to be printed. Must not be <code>null</code>.
+     * @param project      the project instance.
+     * @param names        The names to be printed. Must not be <code>null</code>.
      * @param descriptions The associated target descriptions. May be
-     *            <code>null</code>, in which case no descriptions are
-     *            displayed. If non-<code>null</code>, this should have as many
-     *            elements as <code>names</code>.
+     *                     <code>null</code>, in which case no descriptions are
+     *                     displayed. If non-<code>null</code>, this should have as many
+     *                     elements as <code>names</code>.
      * @param dependencies The list of dependencies for each target. The
-     *            dependencies are listed as a non null enumeration of String.
-     * @param heading The heading to display. Should not be <code>null</code>.
-     * @param maxlen The maximum length of the names of the targets. If
-     *            descriptions are given, they are padded to this position so
-     *            they line up (so long as the names really <i>are</i> shorter
-     *            than this).
+     *                     dependencies are listed as a non null enumeration of String.
+     * @param heading      The heading to display. Should not be <code>null</code>.
+     * @param maxlen       The maximum length of the names of the targets. If
+     *                     descriptions are given, they are padded to this position so
+     *                     they line up (so long as the names really <i>are</i> shorter
+     *                     than this).
      */
     private static void printTargets(final Project project, final Vector<String> names,
-            final Vector<String> descriptions, final Vector<Enumeration<String>> dependencies, final String heading,
-            final int maxlen) {
+                                     final Vector<String> descriptions, final Vector<Enumeration<String>> dependencies, final String heading,
+                                     final int maxlen) {
         // now, start printing the targets and their descriptions
         final String lSep = System.getProperty("line.separator");
         // got a bit annoyed that I couldn't find a pad function
