@@ -6,7 +6,7 @@ project = element project { (deliverable | input-set | profile-set | publication
 deliverable =
   element deliverable {
     attribute name { text }?,
-    (inputs | profile | publication)*
+    (inputs* & output & profile* & publication*)
   }
 
 ## Input resources
@@ -19,6 +19,12 @@ inputs =
 input =
   element input {
     attribute href { text }
+  }
+
+## Output directory
+output =
+  element output {
+    text
   }
 
 ## Filter and highligh profile

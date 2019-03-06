@@ -797,7 +797,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         project.deliverables.forEach(deliverable -> {
             final String input = base.resolve(deliverable.inputs.inputs.get(0).href).toString();
             definedProps.put("args.input", input);
-            final URI outputDir = Paths.get(definedProps.get("output.dir").toString()).toUri();
+            final URI outputDir = new File(definedProps.get("output.dir").toString()).toURI();
             final String output = Paths.get(outputDir.resolve(deliverable.output)).toString();
             definedProps.put("output.dir", output);
             final Deliverable.Publication publications = deliverable.publications;
