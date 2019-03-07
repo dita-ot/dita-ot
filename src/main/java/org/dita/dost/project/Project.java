@@ -13,9 +13,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.dita.dost.invoker.Main;
 
 import java.io.File;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +62,8 @@ public class Project {
         }
 
         public static class Inputs {
-            @JacksonXmlProperty(isAttribute = true)
-            public final String name;
+//            @JacksonXmlProperty(isAttribute = true)
+//            public final String name;
 //            @JacksonXmlProperty(isAttribute = true)
 //            public final String ref;
             @JacksonXmlProperty(localName = "input")
@@ -69,10 +71,10 @@ public class Project {
             public final List<Input> inputs;
 
             @JsonCreator
-            public Inputs(@JsonProperty("name") String name,
+            public Inputs(//@JsonProperty("name") String name,
 //                          @JsonProperty("ref") String ref,
                           @JsonProperty("inputs") List<Input> inputs) {
-                this.name = name;
+                //this.name = name;
 //                this.ref = ref;
                 this.inputs = inputs;
             }
@@ -89,8 +91,8 @@ public class Project {
         }
 
         public static class Profile {
-            @JacksonXmlProperty(isAttribute = true)
-            public final String name;
+//            @JacksonXmlProperty(isAttribute = true)
+//            public final String name;
 //            @JacksonXmlProperty(isAttribute = true)
 //            public final String ref;
             @JacksonXmlElementWrapper(useWrapping = false)
@@ -98,10 +100,10 @@ public class Project {
             public final List<DitaVal> ditavals;
 
             @JsonCreator
-            public Profile(@JsonProperty("name") String name,
+            public Profile(//@JsonProperty("name") String name,
 //                           @JsonProperty("ref") String ref,
                            @JsonProperty("ditavals") List<DitaVal> ditavals) {
-                this.name = name;
+//                this.name = name;
 //                this.ref = ref;
                 this.ditavals = ditavals;
             }
@@ -150,15 +152,5 @@ public class Project {
                 }
             }
         }
-    }
-
-    public List<Map<String, String>> getArguments() {
-        final URI base = new File(".").toURI();
-        return deliverables.stream().map(deliverable -> {
-            final Map<String, String> args = new HashMap<>();
-            args.put("args.input", base.resolve(deliverable.inputs.inputs.get(0).href).toString());
-            args.put("transtype", deliverable.publications.transtype);
-            return args;
-        }).collect(Collectors.toList());
     }
 }

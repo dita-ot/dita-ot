@@ -3,7 +3,6 @@
     {
       "name": "name",
       "inputs": {
-        "name": "inputs-name",
         "inputs": [
           {
             "href": "site.ditamap"
@@ -12,7 +11,6 @@
       },
       "output": "./site",
       "profiles": {
-        "name": "profile-name",
         "ditavals": [
           {
             "href": "site.ditaval"

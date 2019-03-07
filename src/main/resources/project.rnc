@@ -1,19 +1,26 @@
 
 ## Publication project
-project = element project { (deliverable | input-set | profile-set | publication-set)* }
+project = element project {
+  (deliverable
+   #| input-set
+   #| profile-set
+   #| publication-set
+   )*
+}
 
 ## Project deliverable
 deliverable =
   element deliverable {
     attribute name { text }?,
-    (inputs* & output & profile* & publication*)
+    #(inputs* & output & profile* & publication*)
+    (inputs, output, profile, publication)
   }
 
 ## Input resources
 inputs =
   element inputs {
-    (attribute ref { text }
-     | attribute name { text })?,
+    #(attribute ref { text }
+    # | attribute name { text })?,
     input*
   }
 input =
@@ -30,8 +37,8 @@ output =
 ## Filter and highligh profile
 profile =
   element profile {
-    attribute ref { text }?,
-    attribute name { text }?,
+    #(attribute ref { text }
+    # | attribute name { text })?,
     (ditaval | prop)*
   }
 ditaval =
@@ -49,8 +56,8 @@ prop =
 ## Publication
 publication =
   element publication {
-    attribute ref { text }?,
-    attribute name { text }?,
+    #(attribute ref { text }
+    # | attribute name { text })?,
     attribute transtype { text },
     # (transtype, param*)
     param*

@@ -59,24 +59,14 @@ public class ProjectTest {
         xmlMapper.writeValueAsString(project);
     }
 
-    @Test
-    public void getArgumentsSimple() {
-        final Project project = getProject();
-        final List<Map<String, String>> act = project.getArguments();
-        final List<Map<String, String>> exp = Arrays.asList(ImmutableMap.of(
-                "args.input", new File(".").toURI().resolve("site.ditamap").toString(),
-                "transtype", "html5"));
-        assertEquals(exp, act);
-    }
-
     private Project getProject() {
         return new Project(Arrays.asList(new Project.Deliverable(
                 "name",
-                new Inputs("inputs-name",
+                new Inputs(//"inputs-name",
 //                        "inputs-ref",
                         Arrays.asList(new Input(URI.create("site.ditamap")))),
                 URI.create("./site"),
-                new Profile("profile-name",
+                new Profile(//"profile-name",
 //                        "profile-ref",
                         Arrays.asList(new DitaVal(URI.create("site.ditaval")))),
                 new Publication("html5", Arrays.asList(

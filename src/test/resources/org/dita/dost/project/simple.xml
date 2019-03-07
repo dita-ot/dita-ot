@@ -2,11 +2,11 @@
 <?xml-model href="../../../../../../main/resources/project.rnc" type="application/relax-ng-compact-syntax"?>
 <project>
   <deliverable name="name">
-    <inputs name="inputs-name"><!--ref="inputs-ref"-->
+    <inputs>
       <input href="site.ditamap"/>
     </inputs>
     <output>./site</output>
-    <profile name="profile-name"><!--ref="profile-ref"-->
+    <profile>
       <ditaval href="site.ditaval"/>
     </profile>
     <publication transtype="html5">
