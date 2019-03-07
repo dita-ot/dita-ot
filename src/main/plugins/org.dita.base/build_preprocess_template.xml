@@ -194,7 +194,7 @@ See the accompanying LICENSE file for applicable license.
               inputmap="${args.input}">
       <module class="org.dita.dost.module.FilterModule">
         <ditafileset format="dita"/>
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
         <!--param name="ditadir" location="${dita.dir}"/-->
         <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
         <!--param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/-->
@@ -240,7 +240,7 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
         <ditafileset format="dita"/>
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
       </module>
     </pipeline>
     <job-helper file="conref.list" property="conreflist"/>
@@ -362,7 +362,7 @@ See the accompanying LICENSE file for applicable license.
             reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
             filenameparameter="file-being-processed">
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
         <param name="TRANSTYPE" expression="${transtype}" />
         <param name="child-topicref-warning" expression="false"/>
         <param name="keep-submap-href" expression="false"/>
@@ -501,7 +501,7 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
