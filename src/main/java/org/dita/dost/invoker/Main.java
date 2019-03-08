@@ -803,6 +803,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             final Deliverable.Publication publications = deliverable.publications;
             definedProps.put("transtype", publications.transtype);
             publications.params.forEach(param -> {
+                if (definedProps.containsKey(param.name)) {
+                    return;
+                }
                 if (param.value != null) {
                     final Argument argument = getPluginArguments().getOrDefault(param.name, new StringArgument(param.name));
                     final String value = argument.getValue(param.value);
