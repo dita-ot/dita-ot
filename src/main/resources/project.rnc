@@ -5,7 +5,7 @@ project = element project {
    #| input-set
    #| profile-set
    #| publication-set
-   )*
+   )#*
 }
 
 ## Project deliverable
