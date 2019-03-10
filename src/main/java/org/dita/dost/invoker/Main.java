@@ -811,9 +811,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     final String value = argument.getValue(param.value);
                     definedProps.put(param.name, value);
                 } else {
-                    final String value = base.resolve(param.href).toString();
+                    final String value;
+                    final Argument argument = getPluginArguments().get("--" + param.name);
+                    if (argument != null && (argument instanceof FileArgument || argument instanceof AbsoluteFileArgument)) {
+                        value = Paths.get(base.resolve(param.href)).toString();
+                    } else {
+                        value = param.href.toString();
+                    }
                     definedProps.put(param.name, value);
-
                 }
             });
             final String filters = deliverable.profiles.ditavals.stream()
