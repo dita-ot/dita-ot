@@ -795,7 +795,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final org.dita.dost.project.Project project = readProjectFile();
 
         project.deliverables.forEach(deliverable -> {
-            final String input = base.resolve(deliverable.inputs.inputs.get(0).href).toString();
+            final Deliverable.Context context = deliverable.context;
+            final String input = base.resolve(context.inputs.inputs.get(0).href).toString();
             definedProps.put("args.input", input);
             final URI outputDir = new File(definedProps.get("output.dir").toString()).toURI();
             final String output = Paths.get(outputDir.resolve(deliverable.output)).toString();
@@ -821,7 +822,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     definedProps.put(param.name, value);
                 }
             });
-            final String filters = deliverable.profiles.ditavals.stream()
+            final String filters = context.profiles.ditavals.stream()
                     .map(ditaVal -> Paths.get(base.resolve(ditaVal.href)).toString())
                     .collect(Collectors.joining(File.pathSeparator));
             definedProps.put("args.filter", filters);

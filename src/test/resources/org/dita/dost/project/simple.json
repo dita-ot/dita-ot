@@ -2,21 +2,23 @@
   "deliverables": [
     {
       "name": "name",
-      "inputs": {
-        "inputs": [
-          {
-            "href": "site.ditamap"
-          }
-        ]
+      "context": {
+        "inputs": {
+          "inputs": [
+            {
+              "href": "site.ditamap"
+            }
+          ]
+        },
+        "profiles": {
+          "ditavals": [
+            {
+              "href": "site.ditaval"
+            }
+          ]
+        }
       },
       "output": "./site",
-      "profiles": {
-        "ditavals": [
-          {
-            "href": "site.ditaval"
-          }
-        ]
-      },
       "publications": {
         "transtype": "html5",
         "params": [

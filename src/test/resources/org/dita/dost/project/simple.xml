@@ -2,13 +2,15 @@
 <?xml-model href="../../../../../../main/resources/project.rnc" type="application/relax-ng-compact-syntax"?>
 <project>
   <deliverable name="name">
-    <inputs>
-      <input href="site.ditamap"/>
-    </inputs>
+    <context>
+      <inputs>
+        <input href="site.ditamap"/>
+      </inputs>
+      <profile>
+        <ditaval href="site.ditaval"/>
+      </profile>
+    </context>
     <output>./site</output>
-    <profile>
-      <ditaval href="site.ditaval"/>
-    </profile>
     <publication transtype="html5">
       <param name="args.gen.task.lbl" value="YES"/>
       <param name="args.rellinks" value="noparent"/>
