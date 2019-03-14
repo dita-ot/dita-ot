@@ -23,6 +23,8 @@
       "output": "./site",
       "publications": {
         "transtype": "html5",
+        "id": "sitePub",
+        "name": "Site",
         "params": [
           {
             "name": "args.gen.task.lbl",

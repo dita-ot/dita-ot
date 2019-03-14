@@ -66,7 +66,7 @@ public class ProjectTest {
                                 Arrays.asList(new DitaVal(URI.create("site.ditaval"))))
                 ),
                 URI.create("./site"),
-                new Publication("html5", Arrays.asList(
+                new Publication("Site", "site", "html5", Arrays.asList(
                         new Publication.Param("args.gen.task.lbl", "YES", null),
                         new Publication.Param("args.rellinks", "noparent", null)
                 ))

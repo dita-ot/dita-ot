@@ -11,7 +11,7 @@
       </profile>
     </context>
     <output>./site</output>
-    <publication transtype="html5">
+    <publication transtype="html5" id="sitePub" name="Site">
       <param name="args.gen.task.lbl" value="YES"/>
       <param name="args.rellinks" value="noparent"/>
     </publication>

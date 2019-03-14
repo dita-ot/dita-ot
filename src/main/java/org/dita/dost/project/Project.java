@@ -133,14 +133,22 @@ public class Project {
 
         public static class Publication {
             @JacksonXmlProperty(isAttribute = true)
+            public final String name;
+            @JacksonXmlProperty(isAttribute = true)
+            public final String id;
+            @JacksonXmlProperty(isAttribute = true)
             public final String transtype;
             @JacksonXmlElementWrapper(useWrapping = false)
             @JacksonXmlProperty(localName = "param")
             public final List<Param> params;
 
             @JsonCreator
-            public Publication(@JsonProperty("transtype") String transtype,
+            public Publication(@JsonProperty("name") String name,
+                               @JsonProperty("id") String id,
+                               @JsonProperty("transtype") String transtype,
                                @JsonProperty("params") List<Param> params) {
+                this.name = name;
+                this.id = id;
                 this.transtype = transtype;
                 this.params = params;
             }
