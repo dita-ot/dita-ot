@@ -18,7 +18,13 @@ deliverable =
   }
 
 ## Context
-context = element context { inputs, profile }
+context =
+  element context {
+    attribute name { text }?,
+    attribute id { xsd:ID }?,
+    inputs,
+    profile
+  }
 
 ## Input resources
 inputs =

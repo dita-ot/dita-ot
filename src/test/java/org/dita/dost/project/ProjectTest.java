@@ -57,7 +57,7 @@ public class ProjectTest {
     private Project getProject() {
         return new Project(Arrays.asList(new Project.Deliverable(
                 "name",
-                new Context(
+                new Context("Site", "site",
                         new Inputs(//"inputs-name",
 //                        "inputs-ref",
                                 Arrays.asList(new Input(URI.create("site.ditamap")))),

@@ -2,7 +2,7 @@
 <?xml-model href="../../../../../../main/resources/project.rnc" type="application/relax-ng-compact-syntax"?>
 <project>
   <deliverable name="name">
-    <context>
+    <context name="Site" id="site">
       <inputs>
         <input href="site.ditamap"/>
       </inputs>

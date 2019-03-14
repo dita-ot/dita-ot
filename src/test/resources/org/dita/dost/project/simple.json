@@ -3,6 +3,8 @@
     {
       "name": "name",
       "context": {
+        "name": "Site",
+        "id": "site",
         "inputs": {
           "inputs": [
             {

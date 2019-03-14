@@ -51,10 +51,10 @@ public class Project {
         }
 
         public static class Context {
-            //            @JacksonXmlProperty(isAttribute = true)
-//            public final String name;
-//            @JacksonXmlProperty(isAttribute = true)
-//            public final String ref;
+            @JacksonXmlProperty(isAttribute = true)
+            public final String name;
+            @JacksonXmlProperty(isAttribute = true)
+            public final String id;
             @JacksonXmlElementWrapper(useWrapping = false)
             public final Inputs inputs;
             @JacksonXmlProperty(localName = "profile")
@@ -62,12 +62,12 @@ public class Project {
             public final Profile profiles;
 
             @JsonCreator
-            public Context(//@JsonProperty("name") String name,
-//                          @JsonProperty("ref") String ref,
+            public Context(@JsonProperty("name") String name,
+                           @JsonProperty("id") String id,
                            @JsonProperty("inputs") Inputs inputs,
                            @JsonProperty("profiles") Profile profiles) {
-//                this.name = name;
-//                this.ref = ref;
+                this.name = name;
+                this.id = id;
                 this.inputs = inputs;
                 this.profiles = profiles;
             }
@@ -103,7 +103,7 @@ public class Project {
         }
 
         public static class Profile {
-//            @JacksonXmlProperty(isAttribute = true)
+            //            @JacksonXmlProperty(isAttribute = true)
 //            public final String name;
 //            @JacksonXmlProperty(isAttribute = true)
 //            public final String ref;
