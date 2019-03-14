@@ -1,0 +1,84 @@
+
+## Publication project
+project = element project {
+  (deliverable
+   #| input-set
+   #| profile-set
+   #| publication-set
+   )#*
+}
+
+## Project deliverable
+deliverable =
+  element deliverable {
+    attribute name { text }?,
+    #(inputs* & output & profile* & publication*)
+    (inputs, output, profile, publication)
+  }
+
+## Input resources
+inputs =
+  element inputs {
+    #(attribute ref { text }
+    # | attribute name { text })?,
+    input*
+  }
+input =
+  element input {
+    attribute href { text }
+  }
+
+## Output directory
+output =
+  element output {
+    text
+  }
+
+## Filter and highligh profile
+profile =
+  element profile {
+    #(attribute ref { text }
+    # | attribute name { text })?,
+    (ditaval | prop)*
+  }
+ditaval =
+  element ditaval {
+    attribute href { text }?,
+    text
+  }
+prop =
+  element prop {
+    attribute val { text }?,
+    attribute action { text }?,
+    attribute att { text }?
+  }
+
+## Publication
+publication =
+  element publication {
+    #(attribute ref { text }
+    # | attribute name { text })?,
+    attribute transtype { text },
+    # (transtype, param*)
+    param*
+  }
+# transtype =
+#  element transtype {
+#    attribute name { text }?
+#  }
+param =
+  element param {
+    attribute name { text }?,
+    (attribute href { xsd:anyURI }
+     | attribute value { text })
+  }
+
+## Input set
+input-set = element input-set { inputs* }
+
+## Profile set 
+profile-set = element profile-set { profile* }
+
+## Publication set
+publication-set = element publication-set { publication* }
+start = project
