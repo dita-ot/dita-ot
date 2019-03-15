@@ -82,13 +82,25 @@ See the accompanying LICENSE file for applicable license.
   <target name="preprocess2.init">
     <dita-ot-fail id="DOTA002F">
       <condition>
-        <not><isset property="args.input"/></not>
+        <and>
+          <not><isset property="args.input"/></not>
+          <not><isset property="args.inputs"/></not>
+        </and>
       </condition>
     </dita-ot-fail>
 
     <property name="clean-preprocess.use-result-filename" value="true"/>
-    
-    <basename property="dita.input.filename" file="${args.input}" />
+    <!-- First input file -->
+    <local name="input.first"/>
+    <pathconvert property="input.first">
+      <first>
+        <path path="${args.input}" if:set="args.input"/>
+        <path path="${args.inputs}" if:set="args.inputs"/>
+      </first>
+    </pathconvert>
+    <!-- Root filename -->
+    <basename property="dita.input.filename" file="${input.first}" />
+    <!-- Root filename without file extension -->
     <pathconvert property="dita.map.filename.root">
       <path path="${dita.input.filename}"/>
       <chainedmapper>
@@ -96,10 +108,11 @@ See the accompanying LICENSE file for applicable license.
         <mapper type="regexp" from="^(.+)(\..+?)$$" to="\1"/>
       </chainedmapper>
     </pathconvert>
-    <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>    
+    <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>
     
     <echo level="info">*****************************************************************</echo>
-    <echo level="info">* input = ${args.input}</echo>
+    <echo level="info" if:set="args.input">* input = ${args.input}</echo>
+    <echo level="info" if:set="args.inputs">* inputs = ${args.inputs}</echo>
     <echo level="info">* resources = ${args.resources}</echo>
     <echo level="info">*****************************************************************</echo>
     
@@ -147,6 +160,7 @@ See the accompanying LICENSE file for applicable license.
       <module class="org.dita.dost.module.reader.MapReaderModule">
         <param name="resources" value="${args.resources}" if:set="args.resources"/>
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
+        <param name="inputs" value="${args.inputs}" if:set="args.inputs"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
