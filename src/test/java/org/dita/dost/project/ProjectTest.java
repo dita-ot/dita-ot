@@ -11,7 +11,7 @@ package org.dita.dost.project;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.google.common.collect.ImmutableMap;
+import org.dita.dost.project.Project.Deliverable.Context;
 import org.dita.dost.project.Project.Deliverable.Inputs;
 import org.dita.dost.project.Project.Deliverable.Inputs.Input;
 import org.dita.dost.project.Project.Deliverable.Profile;
@@ -19,15 +19,10 @@ import org.dita.dost.project.Project.Deliverable.Profile.DitaVal;
 import org.dita.dost.project.Project.Deliverable.Publication;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import static junit.framework.TestCase.assertEquals;
 
 public class ProjectTest {
 
@@ -62,14 +57,16 @@ public class ProjectTest {
     private Project getProject() {
         return new Project(Arrays.asList(new Project.Deliverable(
                 "name",
-                new Inputs(//"inputs-name",
+                new Context("Site", "site",
+                        new Inputs(//"inputs-name",
 //                        "inputs-ref",
-                        Arrays.asList(new Input(URI.create("site.ditamap")))),
-                URI.create("./site"),
-                new Profile(//"profile-name",
+                                Arrays.asList(new Input(URI.create("site.ditamap")))),
+                        new Profile(//"profile-name",
 //                        "profile-ref",
-                        Arrays.asList(new DitaVal(URI.create("site.ditaval")))),
-                new Publication("html5", Arrays.asList(
+                                Arrays.asList(new DitaVal(URI.create("site.ditaval"))))
+                ),
+                URI.create("./site"),
+                new Publication("Site", "site", "html5", Arrays.asList(
                         new Publication.Param("args.gen.task.lbl", "YES", null),
                         new Publication.Param("args.rellinks", "noparent", null)
                 ))

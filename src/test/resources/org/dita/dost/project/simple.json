@@ -2,23 +2,29 @@
   "deliverables": [
     {
       "name": "name",
-      "inputs": {
-        "inputs": [
-          {
-            "href": "site.ditamap"
-          }
-        ]
+      "context": {
+        "name": "Site",
+        "id": "site",
+        "inputs": {
+          "inputs": [
+            {
+              "href": "site.ditamap"
+            }
+          ]
+        },
+        "profiles": {
+          "ditavals": [
+            {
+              "href": "site.ditaval"
+            }
+          ]
+        }
       },
       "output": "./site",
-      "profiles": {
-        "ditavals": [
-          {
-            "href": "site.ditaval"
-          }
-        ]
-      },
       "publications": {
         "transtype": "html5",
+        "id": "sitePub",
+        "name": "Site",
         "params": [
           {
             "name": "args.gen.task.lbl",

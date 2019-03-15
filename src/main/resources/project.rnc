@@ -1,25 +1,36 @@
 
 ## Publication project
-project = element project {
-  (deliverable
-   #| input-set
-   #| profile-set
-   #| publication-set
-   )#*
-}
+project =
+  element project {
+    deliverable
+    # | input-set
+    # | profile-set
+    # | publication-set
+    # *
+    
+  }
 
 ## Project deliverable
 deliverable =
   element deliverable {
     attribute name { text }?,
-    #(inputs* & output & profile* & publication*)
-    (inputs, output, profile, publication)
+    # (inputs* & output & profile* & publication*)
+    (context, output, publication)
+  }
+
+## Context
+context =
+  element context {
+    attribute name { text }?,
+    attribute id { xsd:ID }?,
+    inputs,
+    profile
   }
 
 ## Input resources
 inputs =
   element inputs {
-    #(attribute ref { text }
+    # (attribute ref { text }
     # | attribute name { text })?,
     input*
   }
@@ -29,15 +40,12 @@ input =
   }
 
 ## Output directory
-output =
-  element output {
-    text
-  }
+output = element output { text }
 
 ## Filter and highligh profile
 profile =
   element profile {
-    #(attribute ref { text }
+    # (attribute ref { text }
     # | attribute name { text })?,
     (ditaval | prop)*
   }
@@ -56,8 +64,8 @@ prop =
 ## Publication
 publication =
   element publication {
-    #(attribute ref { text }
-    # | attribute name { text })?,
+    attribute name { text }?,
+    attribute id { xsd:ID }?,
     attribute transtype { text },
     # (transtype, param*)
     param*

@@ -556,8 +556,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * @since Ant 1.6
      */
     private void processArgs(final String[] arguments) {
-        String searchForThis = null;
-        boolean searchForFile = false;
         PrintStream logTo = null;
 
         // cycle through given args
@@ -613,11 +611,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 handleArgInputHandler(args);
             } else if (isLongForm(arg, "-emacs") || arg.equals("-e")) {
                 emacsMode = true;
-            } else if (isLongForm(arg, "-find") || arg.equals("-s")) {
-                searchForFile = true;
-                args.pop();
-                // eat up next arg if present, default to build.xml
-                searchForThis = args.peek();
             } else if (isLongForm(arg, "-propertyfile")) {
                 handleArgPropertyFile(arg, args);
             } else if (arg.equals("-k") || isLongForm(arg, "-keep-going")) {
@@ -720,58 +713,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             handleProject();
         }
 
-        // if buildFile was not specified on the command line,
-        if (buildFile == null) {
-            // but --find then search for it
-            if (searchForFile) {
-                if (searchForThis != null) {
-                    buildFile = findBuildFile(System.getProperty("user.dir"), searchForThis);
-                    if (buildFile == null) {
-                        throw new BuildException("Could not locate a build file!");
-                    }
-                } else {
-                    // no search file specified: so search an existing default
-                    // file
-                    final Iterator<ProjectHelper> it = ProjectHelperRepository.getInstance().getHelpers();
-                    do {
-                        final ProjectHelper helper = it.next();
-                        searchForThis = helper.getDefaultBuildFile();
-                        if (msgOutputLevel >= Project.MSG_VERBOSE) {
-                            System.out.println("Searching the default build file: " + searchForThis);
-                        }
-                        buildFile = findBuildFile(System.getProperty("user.dir"), searchForThis);
-                    } while (buildFile == null && it.hasNext());
-                    if (buildFile == null) {
-                        throw new BuildException("Could not locate a build file!");
-                    }
-                }
-            } else {
-                // no build file specified: so search an existing default file
-                final Iterator<ProjectHelper> it = ProjectHelperRepository.getInstance().getHelpers();
-                do {
-                    final ProjectHelper helper = it.next();
-                    buildFile = new File(helper.getDefaultBuildFile());
-                    if (msgOutputLevel >= Project.MSG_VERBOSE) {
-                        System.out.println("Trying the default build file: " + buildFile);
-                    }
-                } while (!buildFile.exists() && it.hasNext());
-            }
-        }
-
         // make sure buildfile exists
-        if (!buildFile.exists()) {
+        if (!buildFile.exists() || buildFile.isDirectory()) {
             System.out.println("Buildfile: " + buildFile + " does not exist!");
             throw new BuildException("Build failed");
-        }
-
-        if (buildFile.isDirectory()) {
-            final File whatYouMeant = new File(buildFile, "build.xml");
-            if (whatYouMeant.isFile()) {
-                buildFile = whatYouMeant;
-            } else {
-                System.out.println("What? Buildfile: " + buildFile + " is a dir!");
-                throw new BuildException("Build failed");
-            }
         }
 
         // Normalize buildFile for re-import detection
@@ -795,7 +740,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final org.dita.dost.project.Project project = readProjectFile();
 
         project.deliverables.forEach(deliverable -> {
-            final String input = base.resolve(deliverable.inputs.inputs.get(0).href).toString();
+            final Deliverable.Context context = deliverable.context;
+            final String input = base.resolve(context.inputs.inputs.get(0).href).toString();
             definedProps.put("args.input", input);
             final URI outputDir = new File(definedProps.get("output.dir").toString()).toURI();
             final String output = Paths.get(outputDir.resolve(deliverable.output)).toString();
@@ -821,7 +767,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     definedProps.put(param.name, value);
                 }
             });
-            final String filters = deliverable.profiles.ditavals.stream()
+            final String filters = context.profiles.ditavals.stream()
                     .map(ditaVal -> Paths.get(base.resolve(ditaVal.href)).toString())
                     .collect(Collectors.joining(File.pathSeparator));
             definedProps.put("args.filter", filters);
@@ -1477,10 +1423,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("                         on failed target(s)" + lSep);
         // msg.append("  -inputhandler <class>  the class which will handle input requests"
         // + lSep);
-        // msg.append("  -find <file>           (s)earch for buildfile towards the root of"
-        // + lSep);
-        // msg.append("    -s  <file>           the filesystem and use it" +
-        // lSep);
         // msg.append("  -nice  number          A niceness value for the main thread:"
         // + lSep
         // +
