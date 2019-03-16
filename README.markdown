@@ -98,7 +98,7 @@ DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 [slack]: http://slack.dita-ot.org/badge.svg
 [site]: https://www.dita-ot.org/
 [dist]: https://www.dita-ot.org/download
-[support]: https://github.com/dita-ot/dita-ot/blob/develop/.github/SUPPORT.md
+[support]: https://github.com/dita-ot/.github/blob/master/SUPPORT.md
 [java]: http://www.oracle.com/technetwork/java/javase/downloads
 [homebrew]: https://brew.sh
 [docs]: https://www.dita-ot.org/dev/
@@ -106,4 +106,4 @@ DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 [javadoc]: http://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI
 [apache]: http://www.apache.org/licenses/LICENSE-2.0
 [issue]: https://github.com/dita-ot/dita-ot/issues/new/choose
-[contributing]: https://github.com/dita-ot/dita-ot/blob/develop/.github/CONTRIBUTING.md
+[contributing]: https://github.com/dita-ot/.github/blob/master/CONTRIBUTING.md
