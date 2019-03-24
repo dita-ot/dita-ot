@@ -1,0 +1,43 @@
+{
+  "deliverables": [
+    {
+      "name": "common-name",
+      "context": {
+        "name": "common-Site",
+        "id": "common-site",
+        "inputs": {
+          "inputs": [
+            {
+              "href": "site.ditamap"
+            }
+          ]
+        },
+        "profiles": {
+          "ditavals": [
+            {
+              "href": "site.ditaval"
+            }
+          ]
+        }
+      },
+      "output": "./site",
+      "publications": {
+        "transtype": "html5",
+        "id": "common-sitePub",
+        "name": "common-Site",
+        "params": [
+          {
+            "name": "args.gen.task.lbl",
+            "value": "YES",
+            "href": null
+          },
+          {
+            "name": "args.rellinks",
+            "value": "noparent",
+            "href": null
+          }
+        ]
+      }
+    }
+  ]
+}
