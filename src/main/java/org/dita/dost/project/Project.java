@@ -22,10 +22,15 @@ public class Project {
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "deliverable")
     public final List<Deliverable> deliverables;
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "include")
+    public final List<ProjectRef> includes;
 
     @JsonCreator
-    public Project(@JsonProperty("deliverables") List<Deliverable> deliverables) {
+    public Project(@JsonProperty("deliverables") List<Deliverable> deliverables,
+                   @JsonProperty("includes") List<ProjectRef> includes) {
         this.deliverables = deliverables;
+        this.includes = includes;
     }
 
     public static class Deliverable {
@@ -171,6 +176,16 @@ public class Project {
                     this.href = href;
                 }
             }
+        }
+    }
+
+    public static class ProjectRef {
+        @JacksonXmlProperty(isAttribute = true)
+        public final URI href;
+
+        @JsonCreator
+        public ProjectRef(@JsonProperty("href") URI href) {
+            this.href = href;
         }
     }
 }

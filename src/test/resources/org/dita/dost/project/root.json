@@ -1,0 +1,10 @@
+{
+  "includes": [
+    {
+      "href": "common.json"
+    },
+    {
+      "href": "simple.json"
+    }
+  ]
+}

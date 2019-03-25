@@ -22,22 +22,51 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
+import static org.junit.Assert.*;
+
 public class ProjectTest {
+
+    @Test
+    public void read() throws IOException, URISyntaxException {
+        final URI file = getClass().getClassLoader().getResource("org/dita/dost/project/simple.json").toURI();
+        final Project project = ProjectFactory.load(file);
+        assertEquals(1, project.deliverables.size());
+        assertNull(project.includes);
+    }
 
     @Test
     public void deserializeXmlSimple() throws IOException {
         final ObjectMapper xmlMapper = new XmlMapper();
         final InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.xml");
-        xmlMapper.readValue(in, Project.class);
+        final Project project = xmlMapper.readValue(in, Project.class);
+        assertNotNull(project.deliverables);
+        assertNull(project.includes);
     }
 
     @Test
     public void deserializeJsonSimple() throws IOException {
         final ObjectMapper xmlMapper = new ObjectMapper();
         final InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.json");
-        xmlMapper.readValue(in, Project.class);
+        final Project project = xmlMapper.readValue(in, Project.class);
+        assertNotNull(project.deliverables);
+        assertNull(project.includes);
+    }
+
+    @Test
+    public void deserializeJsonRoot() throws IOException, URISyntaxException {
+        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/root.json").toURI();
+        final Project project = ProjectFactory.load(input);
+        assertEquals(2, project.deliverables.size());
+        assertEquals(2, project.includes.size());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deserializeJsonRecursive() throws IOException, URISyntaxException {
+        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/recursive.json").toURI();
+        ProjectFactory.load(input);
     }
 
     @Test
@@ -51,6 +80,13 @@ public class ProjectTest {
     public void serializeJsonSimple() throws IOException {
         final ObjectMapper xmlMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
         final Project project = getProject();
+        xmlMapper.writeValueAsString(project);
+    }
+
+    @Test
+    public void serializeJsonRoot() throws IOException {
+        final ObjectMapper xmlMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+        final Project project = new Project(null, Arrays.asList(new Project.ProjectRef(URI.create("simple.json"))));
         xmlMapper.writeValueAsString(project);
     }
 
@@ -70,6 +106,6 @@ public class ProjectTest {
                         new Publication.Param("args.gen.task.lbl", "YES", null),
                         new Publication.Param("args.rellinks", "noparent", null)
                 ))
-        )));
+        )), null);
     }
 }
