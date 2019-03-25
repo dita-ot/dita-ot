@@ -1,0 +1,34 @@
+{
+  "includes": [
+    {
+      "href": "common.json"
+    }
+  ],
+  "deliverables": [
+    {
+      "name": "name",
+      "context": {
+        "name": "Site",
+        "id": "site",
+        "inputs": {
+          "inputs": [
+            {
+              "href": "site.ditamap"
+            }
+          ]
+        },
+        "profiles": {
+          "ditavals": [
+            {
+              "href": "site.ditaval"
+            }
+          ]
+        }
+      },
+      "output": "./site",
+      "publications": {
+        "idref": "common-sitePub2"
+      }
+    }
+  ]
+}

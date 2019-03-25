@@ -59,8 +59,17 @@ public class ProjectTest {
     public void deserializeJsonRoot() throws IOException, URISyntaxException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/root.json").toURI();
         final Project project = ProjectFactory.load(input);
-        assertEquals(2, project.deliverables.size());
+        assertEquals(1, project.deliverables.size());
         assertEquals(2, project.includes.size());
+    }
+
+    @Test
+    public void deserializeJsonProduct() throws IOException, URISyntaxException {
+        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/product.json").toURI();
+        final Project project = ProjectFactory.load(input);
+        assertEquals(1, project.deliverables.size());
+        assertEquals(1, project.publications.size());
+        assertEquals("common-sitePub2", project.deliverables.get(0).publications.id);
     }
 
     @Test(expected = RuntimeException.class)
@@ -86,7 +95,7 @@ public class ProjectTest {
     @Test
     public void serializeJsonRoot() throws IOException {
         final ObjectMapper xmlMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        final Project project = new Project(null, Arrays.asList(new Project.ProjectRef(URI.create("simple.json"))));
+        final Project project = new Project(null, Arrays.asList(new Project.ProjectRef(URI.create("simple.json"))), null);
         xmlMapper.writeValueAsString(project);
     }
 
@@ -102,10 +111,10 @@ public class ProjectTest {
                                 Arrays.asList(new DitaVal(URI.create("site.ditaval"))))
                 ),
                 URI.create("./site"),
-                new Publication("Site", "site", "html5", Arrays.asList(
+                new Publication("Site", "site", null,"html5", Arrays.asList(
                         new Publication.Param("args.gen.task.lbl", "YES", null),
                         new Publication.Param("args.rellinks", "noparent", null)
                 ))
-        )), null);
+        )), null, null);
     }
 }

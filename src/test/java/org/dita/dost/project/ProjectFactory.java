@@ -14,10 +14,8 @@ import com.google.common.collect.ImmutableSet;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProjectFactory {
 
@@ -25,10 +23,32 @@ public class ProjectFactory {
 
     public static Project load(final URI file) throws IOException {
         try {
-            return load(file, Collections.emptySet());
+            return resolveReferences(load(file, Collections.emptySet()));
         } catch (IOException e) {
             throw new IOException("Failed to read project file: " + e.getMessage(), e);
         }
+    }
+
+    private static Project resolveReferences(Project src) {
+        return new Project(
+                src.deliverables.stream()
+                        .map(deliverable -> new Project.Deliverable(
+                                deliverable.name,
+                                deliverable.context,
+                                deliverable.output,
+                                Optional.ofNullable(deliverable.publications.idref)
+                                        .map(idref -> {
+                                            final Project.Deliverable.Publication pub = src.publications.stream()
+                                                    .filter(publication -> Objects.equals(publication.id, deliverable.publications.idref))
+                                                    .findAny()
+                                                    .orElseThrow(() -> new IllegalArgumentException(String.format("Publication not %s found", deliverable.publications.idref)));
+                                            return pub;
+                                        })
+                                        .orElse(deliverable.publications)
+                        ))
+                        .collect(Collectors.toList()),
+                src.includes,
+                src.publications);
     }
 
     private static Project load(final URI file, final Set<URI> processed) throws IOException {
@@ -36,24 +56,32 @@ public class ProjectFactory {
             throw new RuntimeException("Recursive project file import: " + file);
         }
         final Project project = reader.readValue(file.toURL());
-        return resolve(project, file, ImmutableSet.<URI>builder().addAll(processed).add(file).build());
+        return resolveIncludes(project, file, ImmutableSet.<URI>builder().addAll(processed).add(file).build());
     }
 
-    private static Project resolve(final Project project, final URI base, final Set<URI> processed) throws IOException {
+    private static Project resolveIncludes(final Project project, final URI base, final Set<URI> processed) throws IOException {
         if (project.includes == null || project.includes.isEmpty()) {
             return project;
         }
-        final List<Project.Deliverable> res = project.deliverables != null
+        final List<Project.Deliverable> deliverables = project.deliverables != null
                 ? new ArrayList(project.deliverables)
+                : new ArrayList();
+        final List<Project.Deliverable.Publication> publications = project.publications != null
+                ? new ArrayList(project.publications)
                 : new ArrayList();
         if (project.includes != null) {
             for (final Project.ProjectRef projectRef : project.includes) {
                 final URI href = projectRef.href.isAbsolute() ? projectRef.href : base.resolve(projectRef.href);
                 final Project ref = load(href, processed);
-                res.addAll(ref.deliverables);
+                if (ref.deliverables != null) {
+                    deliverables.addAll(ref.deliverables);
+                }
+                if (ref.publications != null) {
+                    publications.addAll(ref.publications);
+                }
             }
         }
-        return new Project(res, project.includes);
+        return new Project(deliverables, project.includes, publications);
     }
 
 }

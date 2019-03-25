@@ -25,12 +25,17 @@ public class Project {
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "include")
     public final List<ProjectRef> includes;
+    @JacksonXmlProperty(localName = "publication")
+    @JacksonXmlElementWrapper(useWrapping = false)
+    public final List<Deliverable.Publication> publications;
 
     @JsonCreator
     public Project(@JsonProperty("deliverables") List<Deliverable> deliverables,
-                   @JsonProperty("includes") List<ProjectRef> includes) {
+                   @JsonProperty("includes") List<ProjectRef> includes,
+                   @JsonProperty("publications") List<Deliverable.Publication> publications) {
         this.deliverables = deliverables;
         this.includes = includes;
+        this.publications = publications;
     }
 
     public static class Deliverable {
@@ -142,6 +147,8 @@ public class Project {
             @JacksonXmlProperty(isAttribute = true)
             public final String id;
             @JacksonXmlProperty(isAttribute = true)
+            public final String idref;
+            @JacksonXmlProperty(isAttribute = true)
             public final String transtype;
             @JacksonXmlElementWrapper(useWrapping = false)
             @JacksonXmlProperty(localName = "param")
@@ -150,10 +157,12 @@ public class Project {
             @JsonCreator
             public Publication(@JsonProperty("name") String name,
                                @JsonProperty("id") String id,
+                               @JsonProperty("idref") String idref,
                                @JsonProperty("transtype") String transtype,
                                @JsonProperty("params") List<Param> params) {
                 this.name = name;
                 this.id = id;
+                this.idref = idref;
                 this.transtype = transtype;
                 this.params = params;
             }

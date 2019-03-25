@@ -1,43 +1,21 @@
 {
-  "deliverables": [
+  "publications": [
     {
-      "name": "common-name",
-      "context": {
-        "name": "common-Site",
-        "id": "common-site",
-        "inputs": {
-          "inputs": [
-            {
-              "href": "site.ditamap"
-            }
-          ]
+      "transtype": "html5",
+      "id": "common-sitePub2",
+      "name": "common-Site",
+      "params": [
+        {
+          "name": "args.gen.task.lbl",
+          "value": "YES",
+          "href": null
         },
-        "profiles": {
-          "ditavals": [
-            {
-              "href": "site.ditaval"
-            }
-          ]
+        {
+          "name": "args.rellinks",
+          "value": "noparent",
+          "href": null
         }
-      },
-      "output": "./site",
-      "publications": {
-        "transtype": "html5",
-        "id": "common-sitePub",
-        "name": "common-Site",
-        "params": [
-          {
-            "name": "args.gen.task.lbl",
-            "value": "YES",
-            "href": null
-          },
-          {
-            "name": "args.rellinks",
-            "value": "noparent",
-            "href": null
-          }
-        ]
-      }
+      ]
     }
   ]
 }
