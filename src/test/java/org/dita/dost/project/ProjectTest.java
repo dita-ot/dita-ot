@@ -43,7 +43,7 @@ public class ProjectTest {
         final InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.xml");
         final Project project = xmlMapper.readValue(in, Project.class);
         assertNotNull(project.deliverables);
-        assertNull( project.includes);
+        assertNull(project.includes);
     }
 
     @Test
@@ -61,6 +61,12 @@ public class ProjectTest {
         final Project project = ProjectFactory.load(input);
         assertEquals(2, project.deliverables.size());
         assertEquals(2, project.includes.size());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deserializeJsonRecursive() throws IOException, URISyntaxException {
+        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/recursive.json").toURI();
+        ProjectFactory.load(input);
     }
 
     @Test
