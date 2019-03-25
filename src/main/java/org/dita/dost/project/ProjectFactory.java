@@ -10,6 +10,7 @@ package org.dita.dost.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 
 import java.io.IOException;
@@ -29,22 +30,23 @@ public class ProjectFactory {
         }
     }
 
-    private static Project resolveReferences(Project src) {
+    @VisibleForTesting
+    static Project resolveReferences(Project src) {
         return new Project(
                 src.deliverables.stream()
                         .map(deliverable -> new Project.Deliverable(
                                 deliverable.name,
                                 deliverable.context,
                                 deliverable.output,
-                                Optional.ofNullable(deliverable.publications.idref)
+                                Optional.ofNullable(deliverable.publication.idref)
                                         .map(idref -> {
                                             final Project.Deliverable.Publication pub = src.publications.stream()
-                                                    .filter(publication -> Objects.equals(publication.id, deliverable.publications.idref))
+                                                    .filter(publication -> Objects.equals(publication.id, deliverable.publication.idref))
                                                     .findAny()
-                                                    .orElseThrow(() -> new IllegalArgumentException(String.format("Publication not %s found", deliverable.publications.idref)));
+                                                    .orElseThrow(() -> new RuntimeException(String.format("Publication not %s found", deliverable.publication.idref)));
                                             return pub;
                                         })
-                                        .orElse(deliverable.publications)
+                                        .orElse(deliverable.publication)
                         ))
                         .collect(Collectors.toList()),
                 src.includes,

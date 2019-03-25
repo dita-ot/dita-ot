@@ -47,17 +47,17 @@ public class Project {
         public final URI output;
         @JacksonXmlProperty(localName = "publication")
         @JacksonXmlElementWrapper(useWrapping = false)
-        public final Publication publications;
+        public final Publication publication;
 
         @JsonCreator
         public Deliverable(@JsonProperty("name") String name,
                            @JsonProperty("context") Context context,
                            @JsonProperty("output") URI output,
-                           @JsonProperty("publications") Publication publications) {
+                           @JsonProperty("publication") Publication publication) {
             this.name = name;
             this.context = context;
             this.output = output;
-            this.publications = publications;
+            this.publication = publication;
         }
 
         public static class Context {

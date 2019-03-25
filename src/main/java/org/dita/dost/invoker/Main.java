@@ -746,7 +746,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             final URI outputDir = new File(definedProps.get("output.dir").toString()).toURI();
             final String output = Paths.get(outputDir.resolve(deliverable.output)).toString();
             definedProps.put("output.dir", output);
-            final Deliverable.Publication publications = deliverable.publications;
+            final Deliverable.Publication publications = deliverable.publication;
             definedProps.put("transtype", publications.transtype);
             publications.params.forEach(param -> {
                 if (definedProps.containsKey(param.name)) {

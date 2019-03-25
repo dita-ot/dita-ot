@@ -69,7 +69,7 @@ public class ProjectTest {
         final Project project = ProjectFactory.load(input);
         assertEquals(1, project.deliverables.size());
         assertEquals(1, project.publications.size());
-        assertEquals("common-sitePub2", project.deliverables.get(0).publications.id);
+        assertEquals("common-sitePub2", project.deliverables.get(0).publication.id);
     }
 
     @Test(expected = RuntimeException.class)
