@@ -72,6 +72,15 @@ public class ProjectTest {
         assertEquals("common-sitePub2", project.deliverables.get(0).publication.id);
     }
 
+    @Test
+    public void deserializeXmlProduct() throws IOException, URISyntaxException {
+        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/product.xml").toURI();
+        final Project project = ProjectFactory.load(input);
+        assertEquals(1, project.deliverables.size());
+        assertEquals(1, project.publications.size());
+        assertEquals("common-sitePub2", project.deliverables.get(0).publication.id);
+    }
+
     @Test(expected = RuntimeException.class)
     public void deserializeJsonRecursive() throws IOException, URISyntaxException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/recursive.json").toURI();

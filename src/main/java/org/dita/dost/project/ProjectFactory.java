@@ -10,8 +10,10 @@ package org.dita.dost.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
+import org.dita.dost.util.FileUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,9 +22,11 @@ import java.util.stream.Collectors;
 
 public class ProjectFactory {
 
-    private static final ObjectReader reader = new ObjectMapper().reader().forType(Project.class);
+    private static final ObjectReader jsonReader = new ObjectMapper().reader().forType(Project.class);
+    private static final ObjectReader xmlReader = new XmlMapper().reader().forType(Project.class);
 
     public static Project load(final URI file) throws IOException {
+
         try {
             return resolveReferences(load(file, Collections.emptySet()));
         } catch (IOException e) {
@@ -57,8 +61,20 @@ public class ProjectFactory {
         if (processed.contains(file)) {
             throw new RuntimeException("Recursive project file import: " + file);
         }
+        final ObjectReader reader = getObjectReader(file);
         final Project project = reader.readValue(file.toURL());
         return resolveIncludes(project, file, ImmutableSet.<URI>builder().addAll(processed).add(file).build());
+    }
+
+    private static ObjectReader getObjectReader(final URI file) {
+        switch (FileUtils.getExtension(file.getPath()).toLowerCase()) {
+            case "xml":
+                return xmlReader;
+            case "json":
+                return jsonReader;
+            default:
+                throw new RuntimeException("Unrecognized project file format: " + file);
+        }
     }
 
     private static Project resolveIncludes(final Project project, final URI base, final Set<URI> processed) throws IOException {
