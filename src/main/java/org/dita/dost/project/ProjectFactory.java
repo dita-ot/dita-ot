@@ -47,7 +47,7 @@ public class ProjectFactory {
                                             final Project.Deliverable.Publication pub = src.publications.stream()
                                                     .filter(publication -> Objects.equals(publication.id, deliverable.publication.idref))
                                                     .findAny()
-                                                    .orElseThrow(() -> new RuntimeException(String.format("Publication not %s found", deliverable.publication.idref)));
+                                                    .orElseThrow(() -> new RuntimeException(String.format("Publication not found: %s", deliverable.publication.idref)));
                                             return pub;
                                         })
                                         .orElse(deliverable.publication)
