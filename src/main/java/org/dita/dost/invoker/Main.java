@@ -26,11 +26,8 @@
 
 package org.dita.dost.invoker;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.input.DefaultInputHandler;
 import org.apache.tools.ant.input.InputHandler;
@@ -41,6 +38,7 @@ import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.platform.Plugins;
 import org.dita.dost.project.Project.Deliverable;
+import org.dita.dost.project.ProjectFactory;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
@@ -779,26 +777,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             printErrorMessage("Project file " + projectFile + " does not exist");
             throw new BuildException("");
         }
-        switch (FilenameUtils.getExtension(projectFile.getName()).toLowerCase()) {
-            case "xml": {
-                final ObjectMapper objectMapper = new XmlMapper();
-                try {
-                    return objectMapper.readValue(projectFile, org.dita.dost.project.Project.class);
-                } catch (IOException e) {
-                    throw new BuildException("Failed to read project file " + projectFile, e);
-                }
-            }
-            case "json": {
-                final ObjectMapper objectMapper = new ObjectMapper();
-                try {
-                    return objectMapper.readValue(projectFile, org.dita.dost.project.Project.class);
-                } catch (IOException e) {
-                    throw new BuildException("Failed to read project file " + projectFile, e);
-                }
-            }
-            default:
-                printErrorMessage("Unsupported project file format");
-                throw new BuildException("");
+        try {
+            return ProjectFactory.load(projectFile.toURI());
+        } catch (Exception e) {
+            printErrorMessage(e.getMessage());
+            throw new BuildException("");
         }
     }
 
