@@ -8,22 +8,7 @@
     {
       "name": "name",
       "context": {
-        "name": "Site",
-        "id": "site",
-        "inputs": {
-          "inputs": [
-            {
-              "href": "site.ditamap"
-            }
-          ]
-        },
-        "profiles": {
-          "ditavals": [
-            {
-              "href": "site.ditaval"
-            }
-          ]
-        }
+        "idref": "site"
       },
       "output": "./site",
       "publication": {

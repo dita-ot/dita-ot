@@ -81,6 +81,14 @@ public class ProjectTest {
         assertEquals("common-sitePub2", project.deliverables.get(0).publication.id);
     }
 
+    @Test
+    public void test() throws URISyntaxException, IOException {
+        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/common.json").toURI();
+        final Project project = ProjectFactory.load(input);
+        System.err.println(new XmlMapper().writeValueAsString(project));
+
+    }
+
     @Test(expected = RuntimeException.class)
     public void deserializeJsonRecursive() throws IOException, URISyntaxException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/recursive.json").toURI();
@@ -104,14 +112,14 @@ public class ProjectTest {
     @Test
     public void serializeJsonRoot() throws IOException {
         final ObjectMapper xmlMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        final Project project = new Project(null, Arrays.asList(new Project.ProjectRef(URI.create("simple.json"))), null);
+        final Project project = new Project(null, Arrays.asList(new Project.ProjectRef(URI.create("simple.json"))), null, null);
         xmlMapper.writeValueAsString(project);
     }
 
     private Project getProject() {
         return new Project(Arrays.asList(new Project.Deliverable(
                 "name",
-                new Context("Site", "site",
+                new Context("Site", "site", null,
                         new Inputs(//"inputs-name",
 //                        "inputs-ref",
                                 Arrays.asList(new Input(URI.create("site.ditamap")))),
@@ -124,6 +132,6 @@ public class ProjectTest {
                         new Publication.Param("args.gen.task.lbl", "YES", null),
                         new Publication.Param("args.rellinks", "noparent", null)
                 ))
-        )), null, null);
+        )), null, null, null);
     }
 }

@@ -28,14 +28,19 @@ public class Project {
     @JacksonXmlProperty(localName = "publication")
     @JacksonXmlElementWrapper(useWrapping = false)
     public final List<Deliverable.Publication> publications;
+    @JacksonXmlProperty(localName = "context")
+    @JacksonXmlElementWrapper(useWrapping = false)
+    public final List<Deliverable.Context> contexts;
 
     @JsonCreator
     public Project(@JsonProperty("deliverables") List<Deliverable> deliverables,
                    @JsonProperty("includes") List<ProjectRef> includes,
-                   @JsonProperty("publications") List<Deliverable.Publication> publications) {
+                   @JsonProperty("publications") List<Deliverable.Publication> publications,
+                   @JsonProperty("contexts") List<Deliverable.Context> contexts) {
         this.deliverables = deliverables;
         this.includes = includes;
         this.publications = publications;
+        this.contexts = contexts;
     }
 
     public static class Deliverable {
@@ -65,6 +70,8 @@ public class Project {
             public final String name;
             @JacksonXmlProperty(isAttribute = true)
             public final String id;
+            @JacksonXmlProperty(isAttribute = true)
+            public final String idref;
             @JacksonXmlElementWrapper(useWrapping = false)
             public final Inputs inputs;
             @JacksonXmlProperty(localName = "profile")
@@ -74,10 +81,12 @@ public class Project {
             @JsonCreator
             public Context(@JsonProperty("name") String name,
                            @JsonProperty("id") String id,
+                           @JsonProperty("idref") String idref,
                            @JsonProperty("inputs") Inputs inputs,
                            @JsonProperty("profiles") Profile profiles) {
                 this.name = name;
                 this.id = id;
+                this.idref = idref;
                 this.inputs = inputs;
                 this.profiles = profiles;
             }

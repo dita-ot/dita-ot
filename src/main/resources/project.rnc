@@ -1,9 +1,8 @@
 
 ## Publication project
-project = element project { includes* & deliverable? & publications* }
+project = element project { includes* & deliverable? & publication* & context* }
 
-## Wrapper for reusable publications
-publications = element publications { publication* }
+## Include project file
 includes =
   element include {
     attribute href { xsd:anyURI }
@@ -14,7 +13,7 @@ deliverable =
   element deliverable {
     attribute name { text }?,
     # (inputs* & output & profile* & publication*)
-    (context, output, (publication | publication-ref))
+    ((context | context-ref), output, (publication | publication-ref))
   }
 
 ## Context
@@ -24,6 +23,12 @@ context =
     attribute id { xsd:ID }?,
     inputs,
     profile
+  }
+
+## Publication reference
+context-ref =
+  element context {
+    attribute idref { xsd:ID }
   }
 
 ## Input resources
@@ -68,13 +73,8 @@ publication =
     attribute name { text }?,
     attribute id { xsd:ID }?,
     attribute transtype { text },
-    # (transtype, param*)
     param*
   }
-# transtype =
-#  element transtype {
-#    attribute name { text }?
-#  }
 
 ## Publication reference
 publication-ref =

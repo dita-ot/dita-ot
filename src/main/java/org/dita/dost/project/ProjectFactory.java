@@ -37,12 +37,23 @@ public class ProjectFactory {
     @VisibleForTesting
     static Project resolveReferences(Project src) {
         return new Project(
+                src.deliverables == null ? Collections.emptyList() :
                 src.deliverables.stream()
                         .map(deliverable -> new Project.Deliverable(
                                 deliverable.name,
-                                deliverable.context,
+                                Optional.ofNullable(deliverable.context)
+                                        .flatMap(context -> Optional.ofNullable(context.idref))
+                                        .map(idref -> {
+                                            final Project.Deliverable.Context pub = src.contexts.stream()
+                                                    .filter(context -> Objects.equals(context.id, deliverable.context.idref))
+                                                    .findAny()
+                                                    .orElseThrow(() -> new RuntimeException(String.format("Context not found: %s", deliverable.context.idref)));
+                                            return pub;
+                                        })
+                                        .orElse(deliverable.context),
                                 deliverable.output,
-                                Optional.ofNullable(deliverable.publication.idref)
+                                Optional.ofNullable(deliverable.publication)
+                                        .flatMap(publication -> Optional.ofNullable(publication.idref))
                                         .map(idref -> {
                                             final Project.Deliverable.Publication pub = src.publications.stream()
                                                     .filter(publication -> Objects.equals(publication.id, deliverable.publication.idref))
@@ -54,7 +65,8 @@ public class ProjectFactory {
                         ))
                         .collect(Collectors.toList()),
                 src.includes,
-                src.publications);
+                src.publications,
+                src.contexts);
     }
 
     private static Project load(final URI file, final Set<URI> processed) throws IOException {
@@ -87,6 +99,9 @@ public class ProjectFactory {
         final List<Project.Deliverable.Publication> publications = project.publications != null
                 ? new ArrayList(project.publications)
                 : new ArrayList();
+        final List<Project.Deliverable.Context> contexts = project.contexts != null
+                ? new ArrayList(project.contexts)
+                : new ArrayList();
         if (project.includes != null) {
             for (final Project.ProjectRef projectRef : project.includes) {
                 final URI href = projectRef.href.isAbsolute() ? projectRef.href : base.resolve(projectRef.href);
@@ -97,9 +112,12 @@ public class ProjectFactory {
                 if (ref.publications != null) {
                     publications.addAll(ref.publications);
                 }
+                if (ref.contexts != null) {
+                    contexts.addAll(ref.contexts);
+                }
             }
         }
-        return new Project(deliverables, project.includes, publications);
+        return new Project(deliverables, project.includes, publications, contexts);
     }
 
 }
