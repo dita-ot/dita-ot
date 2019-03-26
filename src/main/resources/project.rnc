@@ -1,13 +1,12 @@
 
 ## Publication project
-project =
-  element project {
-    deliverable
-    # | input-set
-    # | profile-set
-    # | publication-set
-    # *
-    
+project = element project { includes* & deliverable? & publications* }
+
+## Wrapper for reusable publications
+publications = element publications { publication* }
+includes =
+  element include {
+    attribute href { xsd:anyURI }
   }
 
 ## Project deliverable
@@ -15,7 +14,7 @@ deliverable =
   element deliverable {
     attribute name { text }?,
     # (inputs* & output & profile* & publication*)
-    (context, output, publication)
+    (context, output, (publication | publication-ref))
   }
 
 ## Context
@@ -34,13 +33,15 @@ inputs =
     # | attribute name { text })?,
     input*
   }
+  
+## Input resource
 input =
   element input {
-    attribute href { text }
+    attribute href { xsd:anyURI }
   }
 
 ## Output directory
-output = element output { text }
+output = element output { xsd:anyURI }
 
 ## Filter and highligh profile
 profile =
@@ -51,7 +52,7 @@ profile =
   }
 ditaval =
   element ditaval {
-    attribute href { text }?,
+    attribute href { xsd:anyURI  }?,
     text
   }
 prop =
@@ -74,6 +75,12 @@ publication =
 #  element transtype {
 #    attribute name { text }?
 #  }
+
+## Publication reference
+publication-ref =
+  element publication {
+    attribute idref { xsd:ID }
+  }
 param =
   element param {
     attribute name { text }?,

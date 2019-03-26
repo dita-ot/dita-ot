@@ -1,4 +1,9 @@
 {
+  "includes": [
+    {
+      "href": "common.json"
+    }
+  ],
   "deliverables": [
     {
       "name": "name",
@@ -22,21 +27,7 @@
       },
       "output": "./site",
       "publication": {
-        "transtype": "html5",
-        "id": "sitePub",
-        "name": "Site",
-        "params": [
-          {
-            "name": "args.gen.task.lbl",
-            "value": "YES",
-            "href": null
-          },
-          {
-            "name": "args.rellinks",
-            "value": "noparent",
-            "href": null
-          }
-        ]
+        "idref": "common-sitePub2"
       }
     }
   ]
