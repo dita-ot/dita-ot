@@ -21,7 +21,7 @@
         }
       },
       "output": "./site",
-      "publications": {
+      "publication": {
         "transtype": "html5",
         "id": "sitePub",
         "name": "Site",

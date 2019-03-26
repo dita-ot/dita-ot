@@ -26,7 +26,7 @@
         }
       },
       "output": "./site",
-      "publications": {
+      "publication": {
         "idref": "common-sitePub2"
       }
     }
