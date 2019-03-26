@@ -61,8 +61,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     private Mode processingMode;
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private boolean genDebugInfo;
-    /** Absolute input map path. */
-    private URI inputMap;
     private boolean setSystemId;
     /** Profiling is enabled. */
     private boolean profilingEnabled;
@@ -309,13 +307,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         genDebugInfo = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR));
         final String mode = input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
         processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
-
-        // Absolute input directory path
-        URI inputDir = job.getInputDir();
-        if (!inputDir.isAbsolute()) {
-            inputDir = baseDir.toURI().resolve(inputDir);
-        }
-        inputMap = inputDir.resolve(job.getInputMap());
     }
 
 
@@ -355,7 +346,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
                 }
                 if (children != null) {
                     for (final URI childpath: children) {
-                        final Document childRoot = builder.parse(inputMap.resolve(childpath.getPath()).toString());
+                        final Document childRoot = builder.parse(job.getInputFile().resolve(childpath.getPath()).toString());
                         mergeScheme(parentRoot, childRoot);
                         generateScheme(new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION), childRoot);
                     }
