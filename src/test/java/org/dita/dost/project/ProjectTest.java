@@ -8,8 +8,10 @@
 
 package org.dita.dost.project;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Deliverable.Inputs;
 import org.dita.dost.project.Project.Deliverable.Inputs.Input;
@@ -23,14 +25,13 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ProjectTest {
 
     private final ObjectReader jsonReader = new ObjectMapper().readerFor(Project.class);
     private final ObjectWriter jsonWriter = new ObjectMapper().writerFor(Project.class).with(SerializationFeature.INDENT_OUTPUT);
-    private final ObjectWriter xmlWriter = new XmlMapper().writerFor(Project.class).with(SerializationFeature.INDENT_OUTPUT);
-
 
     @Test
     public void deserializeJsonSimple() throws IOException {
@@ -61,13 +62,7 @@ public class ProjectTest {
             assertEquals("common-sitePub2", project.deliverables.get(0).publication.idref);
         }
     }
-
-    @Test
-    public void serializeXmlSimple() throws IOException {
-        final Project project = getProject();
-        xmlWriter.writeValueAsString(project);
-    }
-
+    
     @Test
     public void serializeJsonSimple() throws IOException {
         final Project project = getProject();

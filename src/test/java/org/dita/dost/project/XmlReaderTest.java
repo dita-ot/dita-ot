@@ -24,7 +24,22 @@ public class XmlReaderTest {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.xml")) {
             final Project project = xmlReader.read(in);
             assertEquals(1, project.deliverables.size());
+            final Project.Deliverable deliverable = project.deliverables.get(0);
+            assertEquals("name", deliverable.name);
+            assertEquals(null, deliverable.context);
+            assertEquals("./site", deliverable.output.toString());
+            final Project.Publication publication = deliverable.publication;
+            assertEquals("Site", publication.name);
+            assertEquals("sitePub", publication.id);
+            assertEquals(null, publication.idref);
+            assertEquals("html5", publication.transtype);
+            assertEquals(2, publication.params.size());
+            assertEquals("args.gen.task.lbl", publication.params.get(0).name);
+            assertEquals("YES", publication.params.get(0).value);
+            assertEquals(null, publication.params.get(0).href);
             assertTrue(project.includes.isEmpty());
+            assertTrue(project.publications.isEmpty());
+            assertTrue(project.contexts.isEmpty());
         }
     }
 

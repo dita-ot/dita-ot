@@ -88,7 +88,6 @@ public class Project {
     }
 
     public static class ProjectRef {
-        @JacksonXmlProperty(isAttribute = true)
         public final URI href;
 
         @JsonCreator
