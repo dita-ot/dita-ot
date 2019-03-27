@@ -19,24 +19,24 @@ import java.util.List;
 
 @JacksonXmlRootElement(localName = "project")
 public class Project {
-    @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "deliverable")
-    public final List<Deliverable> deliverables;
     @JacksonXmlElementWrapper(useWrapping = false)
+    public final List<Deliverable> deliverables;
     @JacksonXmlProperty(localName = "include")
+    @JacksonXmlElementWrapper(useWrapping = false)
     public final List<ProjectRef> includes;
     @JacksonXmlProperty(localName = "publication")
     @JacksonXmlElementWrapper(useWrapping = false)
-    public final List<Deliverable.Publication> publications;
+    public final List<Publication> publications;
     @JacksonXmlProperty(localName = "context")
     @JacksonXmlElementWrapper(useWrapping = false)
-    public final List<Deliverable.Context> contexts;
+    public final List<Context> contexts;
 
     @JsonCreator
     public Project(@JsonProperty("deliverables") List<Deliverable> deliverables,
                    @JsonProperty("includes") List<ProjectRef> includes,
-                   @JsonProperty("publications") List<Deliverable.Publication> publications,
-                   @JsonProperty("contexts") List<Deliverable.Context> contexts) {
+                   @JsonProperty("publications") List<Publication> publications,
+                   @JsonProperty("contexts") List<Context> contexts) {
         this.deliverables = deliverables;
         this.includes = includes;
         this.publications = publications;
@@ -46,12 +46,13 @@ public class Project {
     public static class Deliverable {
         @JacksonXmlProperty(isAttribute = true)
         public final String name;
-        @JacksonXmlElementWrapper(localName = "context")
+        //        @JacksonXmlProperty(localName = "context")
+//        @JacksonXmlElementWrapper(useWrapping = false)
         public final Context context;
         @JacksonXmlElementWrapper(localName = "output")
         public final URI output;
         @JacksonXmlProperty(localName = "publication")
-        @JacksonXmlElementWrapper(useWrapping = false)
+//        @JacksonXmlElementWrapper(useWrapping = false)
         public final Publication publication;
 
         @JsonCreator
@@ -63,33 +64,6 @@ public class Project {
             this.context = context;
             this.output = output;
             this.publication = publication;
-        }
-
-        public static class Context {
-            @JacksonXmlProperty(isAttribute = true)
-            public final String name;
-            @JacksonXmlProperty(isAttribute = true)
-            public final String id;
-            @JacksonXmlProperty(isAttribute = true)
-            public final String idref;
-            @JacksonXmlElementWrapper(useWrapping = false)
-            public final Inputs inputs;
-            @JacksonXmlProperty(localName = "profile")
-            @JacksonXmlElementWrapper(useWrapping = false)
-            public final Profile profiles;
-
-            @JsonCreator
-            public Context(@JsonProperty("name") String name,
-                           @JsonProperty("id") String id,
-                           @JsonProperty("idref") String idref,
-                           @JsonProperty("inputs") Inputs inputs,
-                           @JsonProperty("profiles") Profile profiles) {
-                this.name = name;
-                this.id = id;
-                this.idref = idref;
-                this.inputs = inputs;
-                this.profiles = profiles;
-            }
         }
 
         public static class Inputs {
@@ -126,8 +100,8 @@ public class Project {
 //            public final String name;
 //            @JacksonXmlProperty(isAttribute = true)
 //            public final String ref;
-            @JacksonXmlElementWrapper(useWrapping = false)
             @JacksonXmlProperty(localName = "ditaval")
+            @JacksonXmlElementWrapper(useWrapping = false)
             public final List<DitaVal> ditavals;
 
             @JsonCreator
@@ -150,51 +124,6 @@ public class Project {
             }
         }
 
-        public static class Publication {
-            @JacksonXmlProperty(isAttribute = true)
-            public final String name;
-            @JacksonXmlProperty(isAttribute = true)
-            public final String id;
-            @JacksonXmlProperty(isAttribute = true)
-            public final String idref;
-            @JacksonXmlProperty(isAttribute = true)
-            public final String transtype;
-            @JacksonXmlElementWrapper(useWrapping = false)
-            @JacksonXmlProperty(localName = "param")
-            public final List<Param> params;
-
-            @JsonCreator
-            public Publication(@JsonProperty("name") String name,
-                               @JsonProperty("id") String id,
-                               @JsonProperty("idref") String idref,
-                               @JsonProperty("transtype") String transtype,
-                               @JsonProperty("params") List<Param> params) {
-                this.name = name;
-                this.id = id;
-                this.idref = idref;
-                this.transtype = transtype;
-                this.params = params;
-            }
-
-            public static class Param {
-                @JacksonXmlProperty(isAttribute = true)
-                public final String name;
-                @JacksonXmlProperty(isAttribute = true)
-                public final String value;
-                @JacksonXmlProperty(isAttribute = true)
-                public final URI href;
-
-                @JsonCreator
-                public Param(
-                        @JsonProperty("name") String name,
-                        @JsonProperty("value") String value,
-                        @JsonProperty("href") URI href) {
-                    this.name = name;
-                    this.value = value;
-                    this.href = href;
-                }
-            }
-        }
     }
 
     public static class ProjectRef {
@@ -204,6 +133,79 @@ public class Project {
         @JsonCreator
         public ProjectRef(@JsonProperty("href") URI href) {
             this.href = href;
+        }
+    }
+
+    public static class Context {
+        @JacksonXmlProperty(isAttribute = true)
+        public final String name;
+        @JacksonXmlProperty(isAttribute = true)
+        public final String id;
+        @JacksonXmlProperty(isAttribute = true)
+        public final String idref;
+        //            @JacksonXmlElementWrapper(useWrapping = false)
+        public final Deliverable.Inputs inputs;
+        @JacksonXmlProperty(localName = "profile")
+//            @JacksonXmlElementWrapper(useWrapping = false)
+        public final Deliverable.Profile profiles;
+
+        @JsonCreator
+        public Context(@JsonProperty("name") String name,
+                       @JsonProperty("id") String id,
+                       @JsonProperty("idref") String idref,
+                       @JsonProperty("inputs") Deliverable.Inputs inputs,
+                       @JsonProperty("profiles") Deliverable.Profile profiles) {
+            this.name = name;
+            this.id = id;
+            this.idref = idref;
+            this.inputs = inputs;
+            this.profiles = profiles;
+        }
+    }
+
+    public static class Publication {
+        @JacksonXmlProperty(isAttribute = true)
+        public final String name;
+        @JacksonXmlProperty(isAttribute = true)
+        public final String id;
+        @JacksonXmlProperty(isAttribute = true)
+        public final String idref;
+        @JacksonXmlProperty(isAttribute = true)
+        public final String transtype;
+        @JacksonXmlProperty(localName = "param")
+        @JacksonXmlElementWrapper(useWrapping = false)
+        public final List<Param> params;
+
+        @JsonCreator
+        public Publication(@JsonProperty("name") String name,
+                           @JsonProperty("id") String id,
+                           @JsonProperty("idref") String idref,
+                           @JsonProperty("transtype") String transtype,
+                           @JsonProperty("params") List<Param> params) {
+            this.name = name;
+            this.id = id;
+            this.idref = idref;
+            this.transtype = transtype;
+            this.params = params;
+        }
+
+        public static class Param {
+            @JacksonXmlProperty(isAttribute = true)
+            public final String name;
+            @JacksonXmlProperty(isAttribute = true)
+            public final String value;
+            @JacksonXmlProperty(isAttribute = true)
+            public final URI href;
+
+            @JsonCreator
+            public Param(
+                    @JsonProperty("name") String name,
+                    @JsonProperty("value") String value,
+                    @JsonProperty("href") URI href) {
+                this.name = name;
+                this.value = value;
+                this.href = href;
+            }
         }
     }
 }

@@ -13,6 +13,9 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
+import org.dita.dost.project.Project.Context;
+import org.dita.dost.project.Project.Deliverable;
+import org.dita.dost.project.Project.Publication;
 import org.dita.dost.util.FileUtils;
 
 import java.io.IOException;
@@ -26,7 +29,6 @@ public class ProjectFactory {
     private static final ObjectReader xmlReader = new XmlMapper().reader().forType(Project.class);
 
     public static Project load(final URI file) throws IOException {
-
         try {
             return resolveReferences(load(file, Collections.emptySet()));
         } catch (IOException e) {
@@ -39,12 +41,12 @@ public class ProjectFactory {
         return new Project(
                 src.deliverables == null ? Collections.emptyList() :
                 src.deliverables.stream()
-                        .map(deliverable -> new Project.Deliverable(
+                        .map(deliverable -> new Deliverable(
                                 deliverable.name,
                                 Optional.ofNullable(deliverable.context)
                                         .flatMap(context -> Optional.ofNullable(context.idref))
                                         .map(idref -> {
-                                            final Project.Deliverable.Context pub = src.contexts.stream()
+                                            final Context pub = src.contexts.stream()
                                                     .filter(context -> Objects.equals(context.id, deliverable.context.idref))
                                                     .findAny()
                                                     .orElseThrow(() -> new RuntimeException(String.format("Context not found: %s", deliverable.context.idref)));
@@ -55,7 +57,7 @@ public class ProjectFactory {
                                 Optional.ofNullable(deliverable.publication)
                                         .flatMap(publication -> Optional.ofNullable(publication.idref))
                                         .map(idref -> {
-                                            final Project.Deliverable.Publication pub = src.publications.stream()
+                                            final Publication pub = src.publications.stream()
                                                     .filter(publication -> Objects.equals(publication.id, deliverable.publication.idref))
                                                     .findAny()
                                                     .orElseThrow(() -> new RuntimeException(String.format("Publication not found: %s", deliverable.publication.idref)));
@@ -93,13 +95,13 @@ public class ProjectFactory {
         if (project.includes == null || project.includes.isEmpty()) {
             return project;
         }
-        final List<Project.Deliverable> deliverables = project.deliverables != null
+        final List<Deliverable> deliverables = project.deliverables != null
                 ? new ArrayList(project.deliverables)
                 : new ArrayList();
-        final List<Project.Deliverable.Publication> publications = project.publications != null
+        final List<Publication> publications = project.publications != null
                 ? new ArrayList(project.publications)
                 : new ArrayList();
-        final List<Project.Deliverable.Context> contexts = project.contexts != null
+        final List<Context> contexts = project.contexts != null
                 ? new ArrayList(project.contexts)
                 : new ArrayList();
         if (project.includes != null) {
