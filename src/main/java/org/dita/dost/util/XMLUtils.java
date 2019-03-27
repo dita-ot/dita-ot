@@ -110,6 +110,26 @@ public final class XMLUtils {
     }
 
     /**
+     * Get first child element by element name.
+     *
+     * @param elem root element
+     * @param name element name to match element
+     * @return matching element
+     */
+    public static Optional<Element> getChildElement(final Element elem, final String name) {
+        final NodeList children = elem.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                if (name.equals(child.getNodeName()) || name.equals(child.getLocalName())) {
+                    return Optional.of((Element) child);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
      * Get first child element by DITA class.
      *
      * @param elem root element
@@ -127,6 +147,26 @@ public final class XMLUtils {
         return Optional.empty();
     }
 
+    /**
+     * List child elements by element name.
+     *
+     * @param elem root element
+     * @param name element name to match elements
+     * @return list of matching elements
+     */
+    public static List<Element> getChildElements(final Element elem, final String name) {
+        final NodeList children =  elem.getChildNodes();
+        final List<Element> res = new ArrayList<>(children.getLength());
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                if (name.equals(child.getLocalName()) || name.equals(child.getNodeName())) {
+                    res.add((Element) child);
+                }
+            }
+        }
+        return res;
+    }
 
     /**
      * List child elements by DITA class.

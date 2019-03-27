@@ -16,7 +16,6 @@ import org.dita.dost.project.Project.Deliverable.Inputs.Input;
 import org.dita.dost.project.Project.Deliverable.Profile;
 import org.dita.dost.project.Project.Deliverable.Profile.DitaVal;
 import org.dita.dost.project.Project.Publication;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -29,37 +28,16 @@ import static org.junit.Assert.*;
 public class ProjectTest {
 
     private final ObjectReader jsonReader = new ObjectMapper().readerFor(Project.class);
-    private final ObjectReader xmlReader = new XmlMapper().readerFor(Project.class);
     private final ObjectWriter jsonWriter = new ObjectMapper().writerFor(Project.class).with(SerializationFeature.INDENT_OUTPUT);
     private final ObjectWriter xmlWriter = new XmlMapper().writerFor(Project.class).with(SerializationFeature.INDENT_OUTPUT);
 
 
     @Test
-    @Ignore
-    public void deserializeXmlSimple() throws IOException {
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.xml")) {
-            final Project project = xmlReader.readValue(in);
-            assertNotNull(project.deliverables);
-            assertNull(project.includes);
-        }
-    }
-
-    @Test
     public void deserializeJsonSimple() throws IOException {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.json")) {
             final Project project = jsonReader.readValue(in);
-            assertNotNull(project.deliverables);
-            assertNull(project.includes);
-        }
-    }
-
-    @Test
-    @Ignore
-    public void deserializeXmlCommon() throws IOException {
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/common.xml")) {
-            final Project project = xmlReader.readValue(in);
-            assertNull(project.deliverables);
-            assertNull(project.includes);
+            assertEquals(1, project.deliverables.size());
+            assertTrue(project.includes.isEmpty());
         }
     }
 
@@ -67,8 +45,10 @@ public class ProjectTest {
     public void deserializeJsonCommon() throws IOException {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/common.json")) {
             final Project project = jsonReader.readValue(in);
-            assertNull(project.deliverables);
-            assertNull(project.includes);
+            assertTrue(project.deliverables.isEmpty());
+            assertTrue(project.includes.isEmpty());
+            assertEquals(1, project.contexts.size());
+            assertEquals(1, project.publications.size());
         }
     }
 
@@ -76,18 +56,9 @@ public class ProjectTest {
     public void deserializeJsonProduct() throws IOException {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/product.json")) {
             final Project project = jsonReader.readValue(input);
-            new XmlMapper().writerFor(Project.class).writeValueAsString(project);
-        }
-    }
-
-    @Test
-    @Ignore
-    public void deserializeXmlProduct() throws IOException {
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/product.xml")) {
-            final Project project = xmlReader.readValue(input);
             assertEquals(1, project.deliverables.size());
-            assertEquals(1, project.publications.size());
-            assertEquals("common-sitePub2", project.deliverables.get(0).publication.id);
+            assertEquals(0, project.publications.size());
+            assertEquals("common-sitePub2", project.deliverables.get(0).publication.idref);
         }
     }
 

@@ -11,7 +11,6 @@ package org.dita.dost.project;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Deliverable;
 import org.dita.dost.project.Project.Publication;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -20,8 +19,8 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 
 import static java.util.Collections.singletonList;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class ProjectFactoryTest {
 
@@ -115,7 +114,7 @@ public class ProjectFactoryTest {
         final URI file = getClass().getClassLoader().getResource("org/dita/dost/project/simple.json").toURI();
         final Project project = ProjectFactory.load(file);
         assertEquals(1, project.deliverables.size());
-        assertNull(project.includes);
+        assertTrue(project.includes.isEmpty());
     }
 
     @Test
@@ -129,16 +128,6 @@ public class ProjectFactoryTest {
     @Test
     public void deserializeJsonProduct() throws IOException, URISyntaxException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/product.json").toURI();
-        final Project project = ProjectFactory.load(input);
-        assertEquals(1, project.deliverables.size());
-        assertEquals(1, project.publications.size());
-        assertEquals("common-sitePub2", project.deliverables.get(0).publication.id);
-    }
-
-    @Test
-    @Ignore
-    public void deserializeXmlProduct() throws IOException, URISyntaxException {
-        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/product.xml").toURI();
         final Project project = ProjectFactory.load(input);
         assertEquals(1, project.deliverables.size());
         assertEquals(1, project.publications.size());
