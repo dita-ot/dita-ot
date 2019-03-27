@@ -8,10 +8,7 @@
 
 package org.dita.dost.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Deliverable.Inputs;
@@ -19,6 +16,7 @@ import org.dita.dost.project.Project.Deliverable.Inputs.Input;
 import org.dita.dost.project.Project.Deliverable.Profile;
 import org.dita.dost.project.Project.Deliverable.Profile.DitaVal;
 import org.dita.dost.project.Project.Publication;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -37,6 +35,7 @@ public class ProjectTest {
 
 
     @Test
+    @Ignore
     public void deserializeXmlSimple() throws IOException {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.xml")) {
             final Project project = xmlReader.readValue(in);
@@ -55,6 +54,7 @@ public class ProjectTest {
     }
 
     @Test
+    @Ignore
     public void deserializeXmlCommon() throws IOException {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/common.xml")) {
             final Project project = xmlReader.readValue(in);
@@ -76,11 +76,12 @@ public class ProjectTest {
     public void deserializeJsonProduct() throws IOException {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/product.json")) {
             final Project project = jsonReader.readValue(input);
-            System.out.println(new XmlMapper().writerFor(Project.class).writeValueAsString(project));
+            new XmlMapper().writerFor(Project.class).writeValueAsString(project);
         }
     }
 
     @Test
+    @Ignore
     public void deserializeXmlProduct() throws IOException {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/product.xml")) {
             final Project project = xmlReader.readValue(input);

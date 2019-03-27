@@ -9,6 +9,7 @@
 package org.dita.dost.project;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -46,12 +47,12 @@ public class Project {
     public static class Deliverable {
         @JacksonXmlProperty(isAttribute = true)
         public final String name;
-        //        @JacksonXmlProperty(localName = "context")
+        @JacksonXmlProperty(localName = "context")
 //        @JacksonXmlElementWrapper(useWrapping = false)
         public final Context context;
-        @JacksonXmlElementWrapper(localName = "output")
+//        @JacksonXmlElementWrapper(localName = "output")
         public final URI output;
-        @JacksonXmlProperty(localName = "publication")
+//        @JacksonXmlProperty(localName = "publication")
 //        @JacksonXmlElementWrapper(useWrapping = false)
         public final Publication publication;
 
@@ -143,9 +144,10 @@ public class Project {
         public final String id;
         @JacksonXmlProperty(isAttribute = true)
         public final String idref;
+//        @JacksonXmlProperty(localName = "input")
         //            @JacksonXmlElementWrapper(useWrapping = false)
         public final Deliverable.Inputs inputs;
-        @JacksonXmlProperty(localName = "profile")
+//        @JacksonXmlProperty(localName = "profile")
 //            @JacksonXmlElementWrapper(useWrapping = false)
         public final Deliverable.Profile profiles;
 
