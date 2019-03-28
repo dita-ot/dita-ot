@@ -4,7 +4,7 @@
   <include href="common.xml"/>
   <deliverable name="name">
     <context idref="site"/>
-    <output>./site</output>
+    <output href="./site"/>
     <publication idref="common-sitePub2"/>
   </deliverable>
 </project>

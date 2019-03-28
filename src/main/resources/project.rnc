@@ -38,7 +38,7 @@ inputs =
     # | attribute name { text })?,
     input*
   }
-  
+
 ## Input resource
 input =
   element input {
@@ -46,7 +46,10 @@ input =
   }
 
 ## Output directory
-output = element output { xsd:anyURI }
+output =
+  element output {
+    attribute href { xsd:anyURI }
+  }
 
 ## Filter and highligh profile
 profile =
@@ -57,7 +60,7 @@ profile =
   }
 ditaval =
   element ditaval {
-    attribute href { xsd:anyURI  }?,
+    attribute href { xsd:anyURI }?,
     text
   }
 prop =

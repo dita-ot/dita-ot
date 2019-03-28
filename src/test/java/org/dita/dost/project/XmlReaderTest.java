@@ -26,7 +26,12 @@ public class XmlReaderTest {
             assertEquals(1, project.deliverables.size());
             final Project.Deliverable deliverable = project.deliverables.get(0);
             assertEquals("name", deliverable.name);
-            assertEquals(null, deliverable.context);
+            assertNotNull(deliverable.context);
+            assertEquals("Site", deliverable.context.name);
+            assertEquals("site", deliverable.context.id);
+            assertEquals(null, deliverable.context.idref);
+            assertEquals(1, deliverable.context.inputs.inputs.size());
+            assertEquals(1, deliverable.context.profiles.ditavals.size());
             assertEquals("./site", deliverable.output.toString());
             final Project.Publication publication = deliverable.publication;
             assertEquals("Site", publication.name);

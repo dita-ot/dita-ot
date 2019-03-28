@@ -8,14 +8,26 @@
 
 package org.dita.dost.project;
 
-import org.dita.dost.util.XMLUtils;
+import com.thaiopensource.relaxng.jaxp.CompactSyntaxSchemaFactory;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -27,51 +39,117 @@ import static org.dita.dost.util.XMLUtils.*;
 
 public class XmlReader {
 
+    public static final String ATTR_HREF = "href";
+    public static final String ATTR_ID = "id";
+    public static final String ATTR_IDREF = "idref";
+    public static final String ATTR_NAME = "name";
+    public static final String ATTR_TRANSTYPE = "transtype";
+    public static final String ATTR_VALUE = "value";
+    public static final String ELEM_CONTEXT = "context";
+    public static final String ELEM_DELIVERABLE = "deliverable";
+    public static final String ELEM_DITAVAL = "ditaval";
+    public static final String ELEM_INCLUDE = "include";
+    public static final String ELEM_INPUT = "input";
+    public static final String ELEM_INPUTS = "inputs";
+    public static final String ELEM_OUTPUT = "output";
+    public static final String ELEM_PARAM = "param";
+    public static final String ELEM_PROFILE = "profile";
+    public static final String ELEM_PUBLICATION = "publication";
+
+    private final Validator validator;
+    private final DocumentBuilder documentBuilder;
+    private final SAXTransformerFactory saxTransformerFactory;
+
+    public XmlReader() {
+        try {
+            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        saxTransformerFactory = (SAXTransformerFactory) TransformerFactory.newInstance();
+        final SchemaFactory f = new CompactSyntaxSchemaFactory();
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("project.rnc")) {
+            validator = f.newSchema(new StreamSource(in)).newValidator();
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException("Failed to read project schema: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Read and validate project file.
+     *
+     * @param file input project file
+     * @return project
+     */
     public Project read(final URI file) throws IOException {
         try (InputStream in = file.toURL().openStream()) {
             return read(in);
         }
     }
 
+    /**
+     * Read and validate project file.
+     *
+     * @param in input project file stream
+     * @return project
+     */
     public Project read(final InputStream in) throws IOException {
         try {
-            final Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+            final Document document = readDocument(in);
             final Element project = document.getDocumentElement();
             return new Project(
-                    getChildElements(project, "deliverable").stream()
+                    getChildElements(project, ELEM_DELIVERABLE).stream()
                             .map(this::readDeliverable)
                             .collect(Collectors.toList()),
-                    getChildElements(project, "include").stream()
-                            .map(include -> getAttribute(include, "href"))
+                    getChildElements(project, ELEM_INCLUDE).stream()
+                            .map(include -> getAttribute(include, ATTR_HREF))
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .map(this::toURI)
                             .map(include -> new Project.ProjectRef(include))
                             .collect(Collectors.toList()),
-                    getChildElements(project, "publication").stream()
+                    getChildElements(project, ELEM_PUBLICATION).stream()
                             .map(this::readPublication)
                             .collect(Collectors.toList()),
-                    getChildElements(project, "context").stream()
+                    getChildElements(project, ELEM_CONTEXT).stream()
                             .map(this::readContext)
                             .collect(Collectors.toList())
             );
-        } catch (ParserConfigurationException | SAXException e) {
+        } catch (SAXException e) {
             throw new IOException(e);
+        } catch (TransformerConfigurationException e) {
+            throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Read and validate project file.
+     *
+     * @param in input project file
+     * @return project file document
+     */
+    private Document readDocument(InputStream in) throws TransformerConfigurationException, SAXException, IOException {
+        final Document document = documentBuilder.newDocument();
+
+        final TransformerHandler domSerializer = saxTransformerFactory.newTransformerHandler();
+        domSerializer.setResult(new DOMResult(document));
+        validator.validate(new SAXSource(new InputSource(in)), new SAXResult(domSerializer));
+
+        return document;
+    }
+
     private Project.Deliverable readDeliverable(final Element deliverable) {
-        final String name = getValue(deliverable, "name");
+        final String name = getValue(deliverable, ATTR_NAME);
         return new Project.Deliverable(
                 name,
-                getChildElement(deliverable, "context")
+                getChildElement(deliverable, ELEM_CONTEXT)
                         .map(this::readContext)
                         .orElse(null),
-                getChildElement(deliverable, "output")
-                        .map(XMLUtils::getStringValue)
+                getChildElement(deliverable, ELEM_OUTPUT)
+                        .flatMap(output -> getAttribute(output, ATTR_HREF))
                         .map(this::toURI)
                         .orElse(null),
-                getChildElement(deliverable, "publication")
+                getChildElement(deliverable, ELEM_PUBLICATION)
                         .map(this::readPublication)
                         .orElse(null)
         );
@@ -79,17 +157,45 @@ public class XmlReader {
 
     private Project.Publication readPublication(final Element publication) {
         return new Project.Publication(
-                getValue(publication, "name"),
-                getValue(publication, "id"),
-                getValue(publication, "idref"),
-                getValue(publication, "transtype"),
-                getChildElements(publication, "param").stream()
+                getValue(publication, ATTR_NAME),
+                getValue(publication, ATTR_ID),
+                getValue(publication, ATTR_IDREF),
+                getValue(publication, ATTR_TRANSTYPE),
+                getChildElements(publication, ELEM_PARAM).stream()
                         .map(param -> new Project.Publication.Param(
-                                getValue(param, "name"),
-                                getValue(param, "value"),
-                                getAttribute(param, "href").map(this::toURI).orElse(null)
+                                getValue(param, ATTR_NAME),
+                                getValue(param, ATTR_VALUE),
+                                getAttribute(param, ATTR_HREF).map(this::toURI).orElse(null)
                         ))
                         .collect(Collectors.toList())
+        );
+    }
+
+    private Project.Context readContext(final Element context) {
+        return new Project.Context(
+                getValue(context, ATTR_NAME),
+                getValue(context, ATTR_ID),
+                getValue(context, ATTR_IDREF),
+                getChildElement(context, ELEM_INPUTS)
+                        .map(inputs -> getChildElements(inputs, ELEM_INPUT).stream()
+                                .map(input -> getAttribute(input, ATTR_HREF).map(this::toURI))
+                                .filter(Optional::isPresent)
+                                .map(Optional::get)
+                                .map(input -> new Project.Deliverable.Inputs.Input(input))
+                                .collect(Collectors.toList())
+                        )
+                        .map(inputs -> new Project.Deliverable.Inputs(inputs))
+                        .orElse(null),
+                getChildElement(context, ELEM_PROFILE)
+                        .map(inputs -> getChildElements(inputs, ELEM_DITAVAL).stream()
+                                .map(input -> getAttribute(input, ATTR_HREF).map(this::toURI))
+                                .filter(Optional::isPresent)
+                                .map(Optional::get)
+                                .map(input -> new Project.Deliverable.Profile.DitaVal(input))
+                                .collect(Collectors.toList())
+                        )
+                        .map(inputs -> new Project.Deliverable.Profile(inputs))
+                        .orElse(null)
         );
     }
 
@@ -107,33 +213,5 @@ public class XmlReader {
             return Optional.of(attr.getValue());
         }
         return Optional.empty();
-    }
-
-    private Project.Context readContext(final Element context) {
-        return new Project.Context(
-                getValue(context, "name"),
-                getValue(context, "id"),
-                getValue(context, "idref"),
-                getChildElement(context, "inputs")
-                        .map(inputs -> getChildElements(inputs, "input").stream()
-                                .map(input -> getAttribute(input, "href").map(this::toURI))
-                                .filter(Optional::isPresent)
-                                .map(Optional::get)
-                                .map(input -> new Project.Deliverable.Inputs.Input(input))
-                                .collect(Collectors.toList())
-                        )
-                        .map(inputs -> new Project.Deliverable.Inputs(inputs))
-                        .orElse(null),
-                getChildElement(context, "profiles")
-                        .map(inputs -> getChildElements(inputs, "ditaval").stream()
-                                .map(input -> getAttribute(input, "href").map(this::toURI))
-                                .filter(Optional::isPresent)
-                                .map(Optional::get)
-                                .map(input -> new Project.Deliverable.Profile.DitaVal(input))
-                                .collect(Collectors.toList())
-                        )
-                        .map(inputs -> new Project.Deliverable.Profile(inputs))
-                        .orElse(null)
-        );
     }
 }
