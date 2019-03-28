@@ -37,7 +37,8 @@ import org.apache.tools.ant.util.ClasspathUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.platform.Plugins;
-import org.dita.dost.project.Project.Deliverable;
+import org.dita.dost.project.Project.Context;
+import org.dita.dost.project.Project.Publication;
 import org.dita.dost.project.ProjectFactory;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
@@ -738,13 +739,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final org.dita.dost.project.Project project = readProjectFile();
 
         project.deliverables.forEach(deliverable -> {
-            final Deliverable.Context context = deliverable.context;
+            final Context context = deliverable.context;
             final String input = base.resolve(context.inputs.inputs.get(0).href).toString();
             definedProps.put("args.input", input);
             final URI outputDir = new File(definedProps.get("output.dir").toString()).toURI();
             final String output = Paths.get(outputDir.resolve(deliverable.output)).toString();
             definedProps.put("output.dir", output);
-            final Deliverable.Publication publications = deliverable.publication;
+            final Publication publications = deliverable.publication;
             definedProps.put("transtype", publications.transtype);
             publications.params.forEach(param -> {
                 if (definedProps.containsKey(param.name)) {

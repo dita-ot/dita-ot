@@ -10,9 +10,12 @@ package org.dita.dost.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
+import org.dita.dost.project.Project.Context;
+import org.dita.dost.project.Project.Deliverable;
+import org.dita.dost.project.Project.ProjectRef;
+import org.dita.dost.project.Project.Publication;
 import org.dita.dost.util.FileUtils;
 
 import java.io.IOException;
@@ -23,10 +26,9 @@ import java.util.stream.Collectors;
 public class ProjectFactory {
 
     private static final ObjectReader jsonReader = new ObjectMapper().reader().forType(Project.class);
-    private static final ObjectReader xmlReader = new XmlMapper().reader().forType(Project.class);
+    private static final XmlReader xmlReader = new XmlReader();
 
     public static Project load(final URI file) throws IOException {
-
         try {
             return resolveReferences(load(file, Collections.emptySet()));
         } catch (IOException e) {
@@ -37,58 +39,71 @@ public class ProjectFactory {
     @VisibleForTesting
     static Project resolveReferences(Project src) {
         return new Project(
-                src.deliverables.stream()
-                        .map(deliverable -> new Project.Deliverable(
-                                deliverable.name,
-                                deliverable.context,
-                                deliverable.output,
-                                Optional.ofNullable(deliverable.publication.idref)
-                                        .map(idref -> {
-                                            final Project.Deliverable.Publication pub = src.publications.stream()
-                                                    .filter(publication -> Objects.equals(publication.id, deliverable.publication.idref))
-                                                    .findAny()
-                                                    .orElseThrow(() -> new RuntimeException(String.format("Publication not found: %s", deliverable.publication.idref)));
-                                            return pub;
-                                        })
-                                        .orElse(deliverable.publication)
-                        ))
-                        .collect(Collectors.toList()),
+                src.deliverables == null ? Collections.emptyList() :
+                        src.deliverables.stream()
+                                .map(deliverable -> new Deliverable(
+                                        deliverable.name,
+                                        Optional.ofNullable(deliverable.context)
+                                                .flatMap(context -> Optional.ofNullable(context.idref))
+                                                .map(idref -> {
+                                                    final Context pub = src.contexts.stream()
+                                                            .filter(context -> Objects.equals(context.id, deliverable.context.idref))
+                                                            .findAny()
+                                                            .orElseThrow(() -> new RuntimeException(String.format("Context not found: %s", deliverable.context.idref)));
+                                                    return pub;
+                                                })
+                                                .orElse(deliverable.context),
+                                        deliverable.output,
+                                        Optional.ofNullable(deliverable.publication)
+                                                .flatMap(publication -> Optional.ofNullable(publication.idref))
+                                                .map(idref -> {
+                                                    final Publication pub = src.publications.stream()
+                                                            .filter(publication -> Objects.equals(publication.id, deliverable.publication.idref))
+                                                            .findAny()
+                                                            .orElseThrow(() -> new RuntimeException(String.format("Publication not found: %s", deliverable.publication.idref)));
+                                                    return pub;
+                                                })
+                                                .orElse(deliverable.publication)
+                                ))
+                                .collect(Collectors.toList()),
                 src.includes,
-                src.publications);
+                src.publications,
+                src.contexts);
     }
 
     private static Project load(final URI file, final Set<URI> processed) throws IOException {
         if (processed.contains(file)) {
             throw new RuntimeException("Recursive project file import: " + file);
         }
-        final ObjectReader reader = getObjectReader(file);
-        final Project project = reader.readValue(file.toURL());
-        return resolveIncludes(project, file, ImmutableSet.<URI>builder().addAll(processed).add(file).build());
-    }
-
-    private static ObjectReader getObjectReader(final URI file) {
+        final Project project;
         switch (FileUtils.getExtension(file.getPath()).toLowerCase()) {
             case "xml":
-                return xmlReader;
+                project = xmlReader.read(file);
+                break;
             case "json":
-                return jsonReader;
+                project = jsonReader.readValue(file.toURL());
+                break;
             default:
                 throw new RuntimeException("Unrecognized project file format: " + file);
         }
+        return resolveIncludes(project, file, ImmutableSet.<URI>builder().addAll(processed).add(file).build());
     }
 
     private static Project resolveIncludes(final Project project, final URI base, final Set<URI> processed) throws IOException {
         if (project.includes == null || project.includes.isEmpty()) {
             return project;
         }
-        final List<Project.Deliverable> deliverables = project.deliverables != null
+        final List<Deliverable> deliverables = project.deliverables != null
                 ? new ArrayList(project.deliverables)
                 : new ArrayList();
-        final List<Project.Deliverable.Publication> publications = project.publications != null
+        final List<Publication> publications = project.publications != null
                 ? new ArrayList(project.publications)
                 : new ArrayList();
+        final List<Context> contexts = project.contexts != null
+                ? new ArrayList(project.contexts)
+                : new ArrayList();
         if (project.includes != null) {
-            for (final Project.ProjectRef projectRef : project.includes) {
+            for (final ProjectRef projectRef : project.includes) {
                 final URI href = projectRef.href.isAbsolute() ? projectRef.href : base.resolve(projectRef.href);
                 final Project ref = load(href, processed);
                 if (ref.deliverables != null) {
@@ -97,9 +112,12 @@ public class ProjectFactory {
                 if (ref.publications != null) {
                     publications.addAll(ref.publications);
                 }
+                if (ref.contexts != null) {
+                    contexts.addAll(ref.contexts);
+                }
             }
         }
-        return new Project(deliverables, project.includes, publications);
+        return new Project(deliverables, project.includes, publications, contexts);
     }
 
 }

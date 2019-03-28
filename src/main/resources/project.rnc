@@ -1,9 +1,8 @@
 
 ## Publication project
-project = element project { includes* & deliverable? & publications* }
+project = element project { includes* & deliverable? & publication* & context* }
 
-## Wrapper for reusable publications
-publications = element publications { publication* }
+## Include project file
 includes =
   element include {
     attribute href { xsd:anyURI }
@@ -14,7 +13,7 @@ deliverable =
   element deliverable {
     attribute name { text }?,
     # (inputs* & output & profile* & publication*)
-    (context, output, (publication | publication-ref))
+    ((context | context-ref), output, (publication | publication-ref))
   }
 
 ## Context
@@ -26,6 +25,12 @@ context =
     profile
   }
 
+## Publication reference
+context-ref =
+  element context {
+    attribute idref { xsd:ID }
+  }
+
 ## Input resources
 inputs =
   element inputs {
@@ -33,7 +38,7 @@ inputs =
     # | attribute name { text })?,
     input*
   }
-  
+
 ## Input resource
 input =
   element input {
@@ -41,7 +46,10 @@ input =
   }
 
 ## Output directory
-output = element output { xsd:anyURI }
+output =
+  element output {
+    attribute href { xsd:anyURI }
+  }
 
 ## Filter and highligh profile
 profile =
@@ -52,7 +60,7 @@ profile =
   }
 ditaval =
   element ditaval {
-    attribute href { xsd:anyURI  }?,
+    attribute href { xsd:anyURI }?,
     text
   }
 prop =
@@ -68,13 +76,8 @@ publication =
     attribute name { text }?,
     attribute id { xsd:ID }?,
     attribute transtype { text },
-    # (transtype, param*)
     param*
   }
-# transtype =
-#  element transtype {
-#    attribute name { text }?
-#  }
 
 ## Publication reference
 publication-ref =

@@ -8,25 +8,77 @@
 
 package org.dita.dost.project;
 
+import org.dita.dost.project.Project.Context;
+import org.dita.dost.project.Project.Deliverable;
+import org.dita.dost.project.Project.Publication;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
 
+import static java.util.Collections.singletonList;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class ProjectFactoryTest {
 
     @Test
-    public void resolveReferences() {
+    public void resolveReferences_deliverable() {
         final Project src = new Project(
-                Collections.singletonList(
-                        new Project.Deliverable(null, null, null,
-                                new Project.Deliverable.Publication(null, null, "id", null, null)
+                singletonList(
+                        new Deliverable(
+                                null,
+                                null,
+                                null,
+                                new Publication(
+                                        null,
+                                        null,
+                                        "id",
+                                        null,
+                                        null)
                         )
                 ),
                 null,
-                Collections.singletonList(
-                        new Project.Deliverable.Publication(null, "id", null, null, null)
+                singletonList(
+                        new Publication(
+                                null,
+                                "id",
+                                null,
+                                null,
+                                null)
+                ),
+                null
+        );
+        ProjectFactory.resolveReferences(src);
+    }
+
+    @Test
+    public void resolveReferences_context() {
+        final Project src = new Project(
+                singletonList(
+                        new Deliverable(
+                                null,
+                                new Context(
+                                        null,
+                                        null,
+                                        "id",
+                                        null,
+                                        null),
+                                null,
+                                null
+                        )
+                ),
+                null,
+                null,
+                singletonList(
+                        new Context(
+                                null,
+                                "id",
+                                null,
+                                null,
+                                null)
                 )
         );
         ProjectFactory.resolveReferences(src);
@@ -35,16 +87,57 @@ public class ProjectFactoryTest {
     @Test(expected = RuntimeException.class)
     public void resolveReferences_notFound() {
         final Project src = new Project(
-                Collections.singletonList(
-                        new Project.Deliverable(null, null, null,
-                                new Project.Deliverable.Publication(null, null, "missing", null, null)
+                singletonList(
+                        new Deliverable(
+                                null,
+                                null,
+                                null,
+                                new Publication(
+                                        null,
+                                        null,
+                                        "missing",
+                                        null,
+                                        null)
                         )
                 ),
                 null,
-                Collections.emptyList()
+                Collections.emptyList(),
+                null
         );
         final Project act = ProjectFactory.resolveReferences(src);
         assertEquals("id", act.deliverables.get(0).publication.id);
+    }
+
+
+    @Test
+    public void read() throws IOException, URISyntaxException {
+        final URI file = getClass().getClassLoader().getResource("org/dita/dost/project/simple.json").toURI();
+        final Project project = ProjectFactory.load(file);
+        assertEquals(1, project.deliverables.size());
+        assertTrue(project.includes.isEmpty());
+    }
+
+    @Test
+    public void deserializeJsonRoot() throws IOException, URISyntaxException {
+        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/root.json").toURI();
+        final Project project = ProjectFactory.load(input);
+        assertEquals(1, project.deliverables.size());
+        assertEquals(2, project.includes.size());
+    }
+
+    @Test
+    public void deserializeJsonProduct() throws IOException, URISyntaxException {
+        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/product.json").toURI();
+        final Project project = ProjectFactory.load(input);
+        assertEquals(1, project.deliverables.size());
+        assertEquals(1, project.publications.size());
+        assertEquals("common-sitePub2", project.deliverables.get(0).publication.id);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deserializeJsonRecursive() throws IOException, URISyntaxException {
+        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/recursive.json").toURI();
+        ProjectFactory.load(input);
     }
 
 }

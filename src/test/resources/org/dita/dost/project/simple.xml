@@ -10,7 +10,7 @@
         <ditaval href="site.ditaval"/>
       </profile>
     </context>
-    <output>./site</output>
+    <output href="./site"/>
     <publication transtype="html5" id="sitePub" name="Site">
       <param name="args.gen.task.lbl" value="YES"/>
       <param name="args.rellinks" value="noparent"/>

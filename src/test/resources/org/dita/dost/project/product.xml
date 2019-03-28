@@ -3,15 +3,8 @@
 <project>
   <include href="common.xml"/>
   <deliverable name="name">
-    <context name="Site" id="site">
-      <inputs>
-        <input href="site.ditamap"/>
-      </inputs>
-      <profile>
-        <ditaval href="site.ditaval"/>
-      </profile>
-    </context>
-    <output>./site</output>
+    <context idref="site"/>
+    <output href="./site"/>
     <publication idref="common-sitePub2"/>
   </deliverable>
 </project>

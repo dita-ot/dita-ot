@@ -1,0 +1,226 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2019 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
+ */
+
+package org.dita.dost.project;
+
+import com.thaiopensource.relaxng.jaxp.CompactSyntaxSchemaFactory;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.dita.dost.util.XMLUtils.*;
+
+public class XmlReader {
+
+    public static final String ATTR_HREF = "href";
+    public static final String ATTR_ID = "id";
+    public static final String ATTR_IDREF = "idref";
+    public static final String ATTR_NAME = "name";
+    public static final String ATTR_TRANSTYPE = "transtype";
+    public static final String ATTR_VALUE = "value";
+    public static final String ELEM_CONTEXT = "context";
+    public static final String ELEM_DELIVERABLE = "deliverable";
+    public static final String ELEM_DITAVAL = "ditaval";
+    public static final String ELEM_INCLUDE = "include";
+    public static final String ELEM_INPUT = "input";
+    public static final String ELEM_INPUTS = "inputs";
+    public static final String ELEM_OUTPUT = "output";
+    public static final String ELEM_PARAM = "param";
+    public static final String ELEM_PROFILE = "profile";
+    public static final String ELEM_PUBLICATION = "publication";
+
+    private final Validator validator;
+    private final DocumentBuilder documentBuilder;
+    private final SAXTransformerFactory saxTransformerFactory;
+
+    public XmlReader() {
+        try {
+            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        saxTransformerFactory = (SAXTransformerFactory) TransformerFactory.newInstance();
+        final SchemaFactory f = new CompactSyntaxSchemaFactory();
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("project.rnc")) {
+            validator = f.newSchema(new StreamSource(in)).newValidator();
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException("Failed to read project schema: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Read and validate project file.
+     *
+     * @param file input project file
+     * @return project
+     */
+    public Project read(final URI file) throws IOException {
+        try (InputStream in = file.toURL().openStream()) {
+            return read(in, file);
+        }
+    }
+
+    /**
+     * Read and validate project file.
+     *
+     * @param in   input project file stream
+     * @param file input project file URI, may be {@code null}
+     * @return project
+     */
+    public Project read(final InputStream in, final URI file) throws IOException {
+        try {
+            final Document document = readDocument(in, file);
+            final Element project = document.getDocumentElement();
+            return new Project(
+                    getChildElements(project, ELEM_DELIVERABLE).stream()
+                            .map(this::readDeliverable)
+                            .collect(Collectors.toList()),
+                    getChildElements(project, ELEM_INCLUDE).stream()
+                            .map(include -> getAttribute(include, ATTR_HREF))
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .map(this::toURI)
+                            .map(include -> new Project.ProjectRef(include))
+                            .collect(Collectors.toList()),
+                    getChildElements(project, ELEM_PUBLICATION).stream()
+                            .map(this::readPublication)
+                            .collect(Collectors.toList()),
+                    getChildElements(project, ELEM_CONTEXT).stream()
+                            .map(this::readContext)
+                            .collect(Collectors.toList())
+            );
+        } catch (SAXException e) {
+            throw new IOException(e);
+        } catch (TransformerConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Read and validate project file.
+     *
+     * @param in   input project file
+     * @param file
+     * @return project file document
+     */
+    private Document readDocument(InputStream in, URI file) throws TransformerConfigurationException, SAXException, IOException {
+        final Document document = documentBuilder.newDocument();
+        if (file != null) {
+            document.setDocumentURI(file.toString());
+        }
+
+        final TransformerHandler domSerializer = saxTransformerFactory.newTransformerHandler();
+        domSerializer.setResult(new DOMResult(document));
+        final InputSource inputSource = new InputSource(in);
+        if (file != null) {
+            inputSource.setSystemId(file.toString());
+        }
+        validator.validate(new SAXSource(inputSource), new SAXResult(domSerializer));
+
+        return document;
+    }
+
+    private Project.Deliverable readDeliverable(final Element deliverable) {
+        final String name = getValue(deliverable, ATTR_NAME);
+        return new Project.Deliverable(
+                name,
+                getChildElement(deliverable, ELEM_CONTEXT)
+                        .map(this::readContext)
+                        .orElse(null),
+                getChildElement(deliverable, ELEM_OUTPUT)
+                        .flatMap(output -> getAttribute(output, ATTR_HREF))
+                        .map(this::toURI)
+                        .orElse(null),
+                getChildElement(deliverable, ELEM_PUBLICATION)
+                        .map(this::readPublication)
+                        .orElse(null)
+        );
+    }
+
+    private Project.Publication readPublication(final Element publication) {
+        return new Project.Publication(
+                getValue(publication, ATTR_NAME),
+                getValue(publication, ATTR_ID),
+                getValue(publication, ATTR_IDREF),
+                getValue(publication, ATTR_TRANSTYPE),
+                getChildElements(publication, ELEM_PARAM).stream()
+                        .map(param -> new Project.Publication.Param(
+                                getValue(param, ATTR_NAME),
+                                getValue(param, ATTR_VALUE),
+                                getAttribute(param, ATTR_HREF).map(this::toURI).orElse(null)
+                        ))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    private Project.Context readContext(final Element context) {
+        return new Project.Context(
+                getValue(context, ATTR_NAME),
+                getValue(context, ATTR_ID),
+                getValue(context, ATTR_IDREF),
+                getChildElement(context, ELEM_INPUTS)
+                        .map(inputs -> getChildElements(inputs, ELEM_INPUT).stream()
+                                .map(input -> getAttribute(input, ATTR_HREF).map(this::toURI))
+                                .filter(Optional::isPresent)
+                                .map(Optional::get)
+                                .map(input -> new Project.Deliverable.Inputs.Input(input))
+                                .collect(Collectors.toList())
+                        )
+                        .map(inputs -> new Project.Deliverable.Inputs(inputs))
+                        .orElse(null),
+                getChildElement(context, ELEM_PROFILE)
+                        .map(inputs -> getChildElements(inputs, ELEM_DITAVAL).stream()
+                                .map(input -> getAttribute(input, ATTR_HREF).map(this::toURI))
+                                .filter(Optional::isPresent)
+                                .map(Optional::get)
+                                .map(input -> new Project.Deliverable.Profile.DitaVal(input))
+                                .collect(Collectors.toList())
+                        )
+                        .map(inputs -> new Project.Deliverable.Profile(inputs))
+                        .orElse(null)
+        );
+    }
+
+    private URI toURI(final String uri) {
+        try {
+            return new URI(uri);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Optional<String> getAttribute(final Element elem, final String attrName) {
+        final Attr attr = elem.getAttributeNode(attrName);
+        if (attr != null && !attr.getValue().isEmpty()) {
+            return Optional.of(attr.getValue());
+        }
+        return Optional.empty();
+    }
+}
