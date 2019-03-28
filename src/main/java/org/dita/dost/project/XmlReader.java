@@ -83,19 +83,20 @@ public class XmlReader {
      */
     public Project read(final URI file) throws IOException {
         try (InputStream in = file.toURL().openStream()) {
-            return read(in);
+            return read(in, file);
         }
     }
 
     /**
      * Read and validate project file.
      *
-     * @param in input project file stream
+     * @param in   input project file stream
+     * @param file input project file URI, may be {@code null}
      * @return project
      */
-    public Project read(final InputStream in) throws IOException {
+    public Project read(final InputStream in, final URI file) throws IOException {
         try {
-            final Document document = readDocument(in);
+            final Document document = readDocument(in, file);
             final Element project = document.getDocumentElement();
             return new Project(
                     getChildElements(project, ELEM_DELIVERABLE).stream()
@@ -125,15 +126,23 @@ public class XmlReader {
     /**
      * Read and validate project file.
      *
-     * @param in input project file
+     * @param in   input project file
+     * @param file
      * @return project file document
      */
-    private Document readDocument(InputStream in) throws TransformerConfigurationException, SAXException, IOException {
+    private Document readDocument(InputStream in, URI file) throws TransformerConfigurationException, SAXException, IOException {
         final Document document = documentBuilder.newDocument();
+        if (file != null) {
+            document.setDocumentURI(file.toString());
+        }
 
         final TransformerHandler domSerializer = saxTransformerFactory.newTransformerHandler();
         domSerializer.setResult(new DOMResult(document));
-        validator.validate(new SAXSource(new InputSource(in)), new SAXResult(domSerializer));
+        final InputSource inputSource = new InputSource(in);
+        if (file != null) {
+            inputSource.setSystemId(file.toString());
+        }
+        validator.validate(new SAXSource(inputSource), new SAXResult(domSerializer));
 
         return document;
     }
