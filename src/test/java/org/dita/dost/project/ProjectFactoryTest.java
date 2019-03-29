@@ -114,6 +114,7 @@ public class ProjectFactoryTest {
         final URI file = getClass().getClassLoader().getResource("org/dita/dost/project/simple.json").toURI();
         final Project project = ProjectFactory.load(file);
         assertEquals(1, project.deliverables.size());
+        assertTrue(project.deliverables.get(0).context.inputs.inputs.get(0).href.isAbsolute());
         assertTrue(project.includes.isEmpty());
     }
 
