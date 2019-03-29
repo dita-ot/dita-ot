@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class ProjectFactory {
 
-    private static final ObjectReader jsonReader = new ObjectMapper().reader().forType(Project.class);
+    private static final ObjectReader jsonReader = new ObjectMapper().reader().forType(ProjectBuilder.class);
     private static final XmlReader xmlReader = new XmlReader();
 
     public static Project load(final URI file) throws IOException {
@@ -75,17 +75,19 @@ public class ProjectFactory {
         if (processed.contains(file)) {
             throw new RuntimeException("Recursive project file import: " + file);
         }
-        final Project project;
+        final ProjectBuilder builder;
         switch (FileUtils.getExtension(file.getPath()).toLowerCase()) {
             case "xml":
-                project = xmlReader.read(file);
+                builder = xmlReader.read(file);
                 break;
             case "json":
-                project = jsonReader.readValue(file.toURL());
+                builder = jsonReader.readValue(file.toURL());
                 break;
             default:
                 throw new RuntimeException("Unrecognized project file format: " + file);
         }
+        final Project project = Project.build(builder);
+
         return resolveIncludes(project, file, ImmutableSet.<URI>builder().addAll(processed).add(file).build());
     }
 

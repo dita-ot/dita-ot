@@ -25,8 +25,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ProjectTest {
 
@@ -38,7 +37,7 @@ public class ProjectTest {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.json")) {
             final Project project = jsonReader.readValue(in);
             assertEquals(1, project.deliverables.size());
-            assertTrue(project.includes.isEmpty());
+            assertNull(project.includes);
         }
     }
 
@@ -46,8 +45,8 @@ public class ProjectTest {
     public void deserializeJsonCommon() throws IOException {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/common.json")) {
             final Project project = jsonReader.readValue(in);
-            assertTrue(project.deliverables.isEmpty());
-            assertTrue(project.includes.isEmpty());
+            assertNull(project.deliverables);
+            assertNull(project.includes);
             assertEquals(1, project.contexts.size());
             assertEquals(1, project.publications.size());
         }
@@ -58,7 +57,7 @@ public class ProjectTest {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/product.json")) {
             final Project project = jsonReader.readValue(input);
             assertEquals(1, project.deliverables.size());
-            assertEquals(0, project.publications.size());
+            assertNull(project.publications);
             assertEquals("common-sitePub2", project.deliverables.get(0).publication.idref);
         }
     }

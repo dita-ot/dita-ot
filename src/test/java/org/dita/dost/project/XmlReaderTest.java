@@ -24,9 +24,9 @@ public class XmlReaderTest {
     @Test
     public void deserializeXmlSimple() throws IOException {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.xml")) {
-            final Project project = xmlReader.read(in, URI.create("classpath:org/dita/dost/project/simple.xml"));
+            final ProjectBuilder project = xmlReader.read(in, URI.create("classpath:org/dita/dost/project/simple.xml"));
             assertEquals(1, project.deliverables.size());
-            final Project.Deliverable deliverable = project.deliverables.get(0);
+            final ProjectBuilder.Deliverable deliverable = project.deliverables.get(0);
             assertEquals("name", deliverable.name);
             assertNotNull(deliverable.context);
             assertEquals("Site", deliverable.context.name);
@@ -35,7 +35,7 @@ public class XmlReaderTest {
             assertEquals(1, deliverable.context.inputs.inputs.size());
             assertEquals(1, deliverable.context.profiles.ditavals.size());
             assertEquals("./site", deliverable.output.toString());
-            final Project.Publication publication = deliverable.publication;
+            final ProjectBuilder.Publication publication = deliverable.publication;
             assertEquals("Site", publication.name);
             assertEquals("sitePub", publication.id);
             assertEquals(null, publication.idref);
@@ -52,7 +52,7 @@ public class XmlReaderTest {
 
     @Test
     public void deserializeXmlCommon() throws IOException, URISyntaxException {
-        final Project project = xmlReader.read(getClass().getClassLoader().getResource("org/dita/dost/project/common.xml").toURI());
+        final ProjectBuilder project = xmlReader.read(getClass().getClassLoader().getResource("org/dita/dost/project/common.xml").toURI());
         assertTrue(project.deliverables.isEmpty());
         assertTrue(project.includes.isEmpty());
         assertEquals(1, project.contexts.size());
@@ -62,7 +62,7 @@ public class XmlReaderTest {
     @Test
     public void deserializeXmlProduct() throws IOException {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/product.xml")) {
-            final Project project = xmlReader.read(input, null);
+            final ProjectBuilder project = xmlReader.read(input, null);
             assertEquals(1, project.deliverables.size());
             assertEquals(0, project.publications.size());
             assertEquals("common-sitePub2", project.deliverables.get(0).publication.idref);
