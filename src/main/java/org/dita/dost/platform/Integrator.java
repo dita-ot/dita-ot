@@ -383,7 +383,7 @@ public final class Integrator {
         final File messagesXmlFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages.xml").toFile();
         if (messagesXmlFile.exists()) {
             try (final InputStream in = new FileInputStream(messagesXmlFile)) {
-                final XMLStreamReader src = XMLInputFactory.newFactory().createXMLStreamReader(new StreamSource(in));
+                final XMLStreamReader src = XMLInputFactory.newInstance().createXMLStreamReader(new StreamSource(in));
                 String id = null;
                 final StringBuilder buf = new StringBuilder();
                 while (src.hasNext()) {
