@@ -18,33 +18,38 @@ import java.util.stream.Stream;
 
 public class Project {
 
-    public static Project build(final ProjectBuilder src) {
-        return new Project(
+    public static Project build(final ProjectBuilder src, final URI base) {
+        final Project project = new Project(
                 toStream(src.deliverables)
                         .map(deliverable -> new Deliverable(
                                 deliverable.name,
-                                build(deliverable.context),
+                                build(deliverable.context, base),
                                 deliverable.output,
-                                build(deliverable.publication)
+                                build(deliverable.publication, base)
                         ))
                         .collect(Collectors.toList()),
                 toStream(src.includes)
-                        .map(include -> new ProjectRef(include.href))
+                        .map(include -> new ProjectRef(resolve(include.href, base)))
                         .collect(Collectors.toList()),
                 toStream(src.publications)
-                        .map(Project::build)
+                        .map(publication -> build(publication, base))
                         .collect(Collectors.toList()),
                 toStream(src.contexts)
-                        .map(Project::build)
+                        .map(context -> build(context, base))
                         .collect(Collectors.toList())
         );
+        return project;
     }
 
     private static <T> Stream<T> toStream(List<T> src) {
         return src != null ? src.stream() : Stream.empty();
     }
 
-    private static Publication build(final ProjectBuilder.Publication publication) {
+    private static URI resolve(final URI file, final URI base) {
+        return file != null && base != null ? base.resolve(file) : file;
+    }
+    
+    private static Publication build(final ProjectBuilder.Publication publication, final URI base) {
         if (publication == null) {
             return null;
         }
@@ -54,12 +59,12 @@ public class Project {
                 publication.idref,
                 publication.transtype,
                 toStream(publication.params)
-                        .map(param -> new Publication.Param(param.name, param.value, param.href))
+                        .map(param -> new Publication.Param(param.name, param.value, resolve(param.href, base)))
                         .collect(Collectors.toList())
         );
     }
 
-    private static Context build(final ProjectBuilder.Context context) {
+    private static Context build(final ProjectBuilder.Context context, final URI base) {
         if (context == null) {
             return null;
         }
@@ -70,14 +75,14 @@ public class Project {
                 context.inputs != null
                         ? new Deliverable.Inputs(
                         context.inputs.inputs.stream()
-                                .map(input -> new Deliverable.Inputs.Input(input.href))
+                                .map(input -> new Deliverable.Inputs.Input(resolve(input.href, base)))
                                 .collect(Collectors.toList())
                 )
                         : null,
                 context.profiles != null
                         ? new Deliverable.Profile(
                         context.profiles.ditavals.stream()
-                                .map(ditaval -> new Deliverable.Profile.DitaVal(ditaval.href))
+                                .map(ditaval -> new Deliverable.Profile.DitaVal(resolve(ditaval.href, base)))
                                 .collect(Collectors.toList())
                 )
                         : null

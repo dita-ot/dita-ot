@@ -86,7 +86,7 @@ public class ProjectFactory {
             default:
                 throw new RuntimeException("Unrecognized project file format: " + file);
         }
-        final Project project = Project.build(builder);
+        final Project project = Project.build(builder, file);
 
         return resolveIncludes(project, file, ImmutableSet.<URI>builder().addAll(processed).add(file).build());
     }
