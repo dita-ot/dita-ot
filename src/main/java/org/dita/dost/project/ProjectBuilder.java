@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProjectBuilder {
 
@@ -54,24 +53,6 @@ public class ProjectBuilder {
             this.publication = publication;
         }
 
-//        public static class Inputs {
-//            public List<Input> inputs;
-//
-//            @JsonCreator
-//            public Inputs(@JsonProperty("inputs") List<Input> inputs) {
-//                this.inputs = inputs;
-//            }
-//
-//            public static class Input {
-//                public URI href;
-//
-//                @JsonCreator
-//                public Input(@JsonProperty("href") URI href) {
-//                    this.href = href;
-//                }
-//            }
-//        }
-
         public static class Profile {
             public List<URI> ditavals;
 
@@ -79,26 +60,8 @@ public class ProjectBuilder {
             public Profile(@JsonProperty("ditavals") List<URI> ditavals) {
                 this.ditavals = ditavals;
             }
-
-//            public static class DitaVal {
-//                public URI href;
-//
-//                @JsonCreator
-//                public DitaVal(@JsonProperty("href") URI href) {
-//                    this.href = href;
-//                }
-//            }
         }
 
-    }
-
-    public static class ProjectRef {
-        public URI href;
-
-        @JsonCreator
-        public ProjectRef(@JsonProperty("href") URI href) {
-            this.href = href;
-        }
     }
 
     public static class Context {
