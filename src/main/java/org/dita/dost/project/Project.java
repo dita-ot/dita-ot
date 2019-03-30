@@ -29,7 +29,7 @@ public class Project {
                         ))
                         .collect(Collectors.toList()),
                 toStream(src.includes)
-                        .map(include -> new ProjectRef(resolve(include.href, base)))
+                        .map(include -> new ProjectRef(resolve(include, base)))
                         .collect(Collectors.toList()),
                 toStream(src.publications)
                         .map(publication -> build(publication, base))
@@ -74,15 +74,15 @@ public class Project {
                 context.idref,
                 context.inputs != null
                         ? new Deliverable.Inputs(
-                        context.inputs.inputs.stream()
-                                .map(input -> new Deliverable.Inputs.Input(resolve(input.href, base)))
+                        context.inputs.stream()
+                                .map(input -> new Deliverable.Inputs.Input(resolve(input, base)))
                                 .collect(Collectors.toList())
                 )
                         : null,
                 context.profiles != null
                         ? new Deliverable.Profile(
                         context.profiles.ditavals.stream()
-                                .map(ditaval -> new Deliverable.Profile.DitaVal(resolve(ditaval.href, base)))
+                                .map(ditaval -> new Deliverable.Profile.DitaVal(resolve(ditaval, base)))
                                 .collect(Collectors.toList())
                 )
                         : null

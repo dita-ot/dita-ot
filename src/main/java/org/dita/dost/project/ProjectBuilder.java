@@ -13,13 +13,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProjectBuilder {
 
     @JsonProperty("deliverables")
     public List<Deliverable> deliverables;
     @JsonProperty("includes")
-    public List<ProjectRef> includes;
+    public List<URI> includes;
     @JsonProperty("publications")
     public List<Publication> publications;
     @JsonProperty("contexts")
@@ -27,7 +28,7 @@ public class ProjectBuilder {
 
     @JsonCreator
     public ProjectBuilder(@JsonProperty("deliverables") List<Deliverable> deliverables,
-                          @JsonProperty("includes") List<ProjectRef> includes,
+                          @JsonProperty("includes") List<URI> includes,
                           @JsonProperty("publications") List<Publication> publications,
                           @JsonProperty("contexts") List<Context> contexts) {
         this.deliverables = deliverables;
@@ -53,40 +54,40 @@ public class ProjectBuilder {
             this.publication = publication;
         }
 
-        public static class Inputs {
-            public List<Input> inputs;
-
-            @JsonCreator
-            public Inputs(@JsonProperty("inputs") List<Input> inputs) {
-                this.inputs = inputs;
-            }
-
-            public static class Input {
-                public URI href;
-
-                @JsonCreator
-                public Input(@JsonProperty("href") URI href) {
-                    this.href = href;
-                }
-            }
-        }
+//        public static class Inputs {
+//            public List<Input> inputs;
+//
+//            @JsonCreator
+//            public Inputs(@JsonProperty("inputs") List<Input> inputs) {
+//                this.inputs = inputs;
+//            }
+//
+//            public static class Input {
+//                public URI href;
+//
+//                @JsonCreator
+//                public Input(@JsonProperty("href") URI href) {
+//                    this.href = href;
+//                }
+//            }
+//        }
 
         public static class Profile {
-            public List<DitaVal> ditavals;
+            public List<URI> ditavals;
 
             @JsonCreator
-            public Profile(@JsonProperty("ditavals") List<DitaVal> ditavals) {
+            public Profile(@JsonProperty("ditavals") List<URI> ditavals) {
                 this.ditavals = ditavals;
             }
 
-            public static class DitaVal {
-                public URI href;
-
-                @JsonCreator
-                public DitaVal(@JsonProperty("href") URI href) {
-                    this.href = href;
-                }
-            }
+//            public static class DitaVal {
+//                public URI href;
+//
+//                @JsonCreator
+//                public DitaVal(@JsonProperty("href") URI href) {
+//                    this.href = href;
+//                }
+//            }
         }
 
     }
@@ -104,14 +105,14 @@ public class ProjectBuilder {
         public String name;
         public String id;
         public String idref;
-        public Deliverable.Inputs inputs;
+        public List<URI> inputs;
         public Deliverable.Profile profiles;
 
         @JsonCreator
         public Context(@JsonProperty("name") String name,
                        @JsonProperty("id") String id,
                        @JsonProperty("idref") String idref,
-                       @JsonProperty("inputs") Deliverable.Inputs inputs,
+                       @JsonProperty("inputs") List<URI> inputs,
                        @JsonProperty("profiles") Deliverable.Profile profiles) {
             this.name = name;
             this.id = id;

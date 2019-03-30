@@ -32,7 +32,7 @@ public class XmlReaderTest {
             assertEquals("Site", deliverable.context.name);
             assertEquals("site", deliverable.context.id);
             assertEquals(null, deliverable.context.idref);
-            assertEquals(1, deliverable.context.inputs.inputs.size());
+            assertEquals(1, deliverable.context.inputs.size());
             assertEquals(1, deliverable.context.profiles.ditavals.size());
             assertEquals("./site", deliverable.output.toString());
             final ProjectBuilder.Publication publication = deliverable.publication;

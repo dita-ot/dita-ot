@@ -29,39 +29,8 @@ import static org.junit.Assert.*;
 
 public class ProjectTest {
 
-    private final ObjectReader jsonReader = new ObjectMapper().readerFor(Project.class);
     private final ObjectWriter jsonWriter = new ObjectMapper().writerFor(Project.class).with(SerializationFeature.INDENT_OUTPUT);
 
-    @Test
-    public void deserializeJsonSimple() throws IOException {
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.json")) {
-            final Project project = jsonReader.readValue(in);
-            assertEquals(1, project.deliverables.size());
-            assertNull(project.includes);
-        }
-    }
-
-    @Test
-    public void deserializeJsonCommon() throws IOException {
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/common.json")) {
-            final Project project = jsonReader.readValue(in);
-            assertNull(project.deliverables);
-            assertNull(project.includes);
-            assertEquals(1, project.contexts.size());
-            assertEquals(1, project.publications.size());
-        }
-    }
-
-    @Test
-    public void deserializeJsonProduct() throws IOException {
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/product.json")) {
-            final Project project = jsonReader.readValue(input);
-            assertEquals(1, project.deliverables.size());
-            assertNull(project.publications);
-            assertEquals("common-sitePub2", project.deliverables.get(0).publication.idref);
-        }
-    }
-    
     @Test
     public void serializeJsonSimple() throws IOException {
         final Project project = getProject();
