@@ -46,6 +46,7 @@ import org.w3c.dom.Element;
 
 import java.io.*;
 import java.net.URI;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -740,11 +741,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
         project.deliverables.forEach(deliverable -> {
             final Context context = deliverable.context;
-            final String input = base.resolve(context.inputs.inputs.get(0).href).toString();
-            definedProps.put("args.input", input);
+            final URI input = base.resolve(context.inputs.inputs.get(0).href);
+            definedProps.put("args.input", input.toString());
             final URI outputDir = new File(definedProps.get("output.dir").toString()).toURI();
-            final String output = Paths.get(outputDir.resolve(deliverable.output)).toString();
-            definedProps.put("output.dir", output);
+            final Path output = deliverable.output != null
+                    ? Paths.get(outputDir.resolve(deliverable.output))
+                    : Paths.get(outputDir);
+            definedProps.put("output.dir", output.toString());
             final Publication publications = deliverable.publication;
             definedProps.put("transtype", publications.transtype);
             publications.params.forEach(param -> {

@@ -103,11 +103,9 @@ public class XmlReader {
                             .map(this::readDeliverable)
                             .collect(Collectors.toList()),
                     getChildElements(project, ELEM_INCLUDE).stream()
-                            .map(include -> getAttribute(include, ATTR_HREF))
+                            .map(this::getHref)
                             .filter(Optional::isPresent)
                             .map(Optional::get)
-                            .map(this::toURI)
-//                            .map(include -> new ProjectBuilder.ProjectRef(include))
                             .collect(Collectors.toList()),
                     getChildElements(project, ELEM_PUBLICATION).stream()
                             .map(this::readPublication)
@@ -155,8 +153,7 @@ public class XmlReader {
                         .map(this::readContext)
                         .orElse(null),
                 getChildElement(deliverable, ELEM_OUTPUT)
-                        .flatMap(output -> getAttribute(output, ATTR_HREF))
-                        .map(this::toURI)
+                        .flatMap(this::getHref)
                         .orElse(null),
                 getChildElement(deliverable, ELEM_PUBLICATION)
                         .map(this::readPublication)
@@ -174,7 +171,7 @@ public class XmlReader {
                         .map(param -> new ProjectBuilder.Publication.Param(
                                 getValue(param, ATTR_NAME),
                                 getValue(param, ATTR_VALUE),
-                                getAttribute(param, ATTR_HREF).map(this::toURI).orElse(null)
+                                getHref(param).orElse(null)
                         ))
                         .collect(Collectors.toList())
         );
@@ -187,23 +184,17 @@ public class XmlReader {
                 getValue(context, ATTR_IDREF),
                 getChildElement(context, ELEM_INPUTS)
                         .map(inputs -> getChildElements(inputs, ELEM_INPUT).stream()
-                                .map(input -> getAttribute(input, ATTR_HREF)
-//                                        .map(this::toURI)
-                                )
+                                .map(this::getHref)
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)
-//                                .map(input -> new ProjectBuilder.Deliverable.Inputs.Input(input))
-                                .map(this::toURI)
                                 .collect(Collectors.toList())
                         )
-//                        .map(ProjectBuilder.Deliverable.Inputs::new)
                         .orElse(null),
                 getChildElement(context, ELEM_PROFILE)
                         .map(inputs -> getChildElements(inputs, ELEM_DITAVAL).stream()
-                                .map(input -> getAttribute(input, ATTR_HREF).map(this::toURI))
+                                .map(this::getHref)
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)
-//                                .map(input -> new ProjectBuilder.Deliverable.Profile.DitaVal(input))
                                 .collect(Collectors.toList())
                         )
                         .map(ProjectBuilder.Deliverable.Profile::new)
@@ -211,12 +202,15 @@ public class XmlReader {
         );
     }
 
-    private URI toURI(final String uri) {
-        try {
-            return new URI(uri);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+    private Optional<URI> getHref(final Element elem) {
+        return getAttribute(elem, ATTR_HREF)
+                .map(uri -> {
+                    try {
+                        return new URI(uri);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     private Optional<String> getAttribute(final Element elem, final String attrName) {
