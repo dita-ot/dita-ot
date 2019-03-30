@@ -10,6 +10,7 @@ package org.dita.dost.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import org.dita.dost.project.Project.Context;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class ProjectFactory {
 
     private static final ObjectReader jsonReader = new ObjectMapper().reader().forType(ProjectBuilder.class);
+    private static final ObjectReader yamlReader = new YAMLMapper().reader().forType(ProjectBuilder.class);
     private static final XmlReader xmlReader = new XmlReader();
 
     public static Project load(final URI file) throws IOException {
@@ -82,6 +84,9 @@ public class ProjectFactory {
                 break;
             case "json":
                 builder = jsonReader.readValue(file.toURL());
+                break;
+            case "yaml":
+                builder = yamlReader.readValue(file.toURL());
                 break;
             default:
                 throw new RuntimeException("Unrecognized project file format: " + file);

@@ -10,55 +10,49 @@ package org.dita.dost.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.dita.dost.project.Project.Context;
-import org.dita.dost.project.Project.Deliverable.Inputs;
-import org.dita.dost.project.Project.Deliverable.Inputs.Input;
-import org.dita.dost.project.Project.Deliverable.Profile;
-import org.dita.dost.project.Project.Deliverable.Profile.DitaVal;
-import org.dita.dost.project.Project.Publication;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+@RunWith(Parameterized.class)
 public class ProjectBuilderTest {
 
+    @Parameters(name = "{0}")
+    public static Collection<String[]> data() {
+        return Arrays.asList(new String[][]{
+                {"simple"}, {"common"}, {"product"}, {"root"}
+        });
+    }
+
+    private final String name;
     private final ObjectReader jsonReader = new ObjectMapper().readerFor(ProjectBuilder.class);
+    private final ObjectReader yamlReader = new YAMLMapper().readerFor(ProjectBuilder.class);
 
-    @Test
-    public void deserializeJsonSimple() throws IOException {
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.json")) {
-            final ProjectBuilder project = jsonReader.readValue(in);
-            assertEquals(1, project.deliverables.size());
-            assertNull(project.includes);
+    public ProjectBuilderTest(final String name) {
+        this.name = name;
+    }
+
+    @Test()
+    public void deserializeJson() throws IOException {
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/" + name + ".json")) {
+            jsonReader.readValue(in);
         }
     }
 
     @Test
-    public void deserializeJsonCommon() throws IOException {
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/common.json")) {
-            final ProjectBuilder project = jsonReader.readValue(in);
-            assertNull(project.deliverables);
-            assertNull(project.includes);
-            assertEquals(1, project.contexts.size());
-            assertEquals(1, project.publications.size());
-        }
-    }
-
-    @Test
-    public void deserializeJsonProduct() throws IOException {
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/product.json")) {
-            final ProjectBuilder project = jsonReader.readValue(input);
-            assertEquals(1, project.deliverables.size());
-            assertNull(project.publications);
-            assertEquals("common-sitePub2", project.deliverables.get(0).publication.idref);
+    public void deserializeYaml() throws IOException {
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/" + name + ".yaml")) {
+            yamlReader.readValue(in);
         }
     }
 }
