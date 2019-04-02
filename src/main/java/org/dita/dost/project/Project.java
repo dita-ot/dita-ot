@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,13 +74,11 @@ public class Project {
                 context.name,
                 context.id,
                 context.idref,
-                context.inputs != null
-                        ? new Deliverable.Inputs(
-                        context.inputs.stream()
-                                .map(input -> new Deliverable.Inputs.Input(resolve(input, base)))
-                                .collect(Collectors.toList())
-                )
-                        : null,
+                Optional.ofNullable(context.input)
+                        .map(input -> new Deliverable.Inputs.Input(resolve(input, base)))
+                        .map(Collections::singletonList)
+                        .map(Deliverable.Inputs::new)
+                        .orElse(null),
                 context.profiles != null
                         ? new Deliverable.Profile(
                         context.profiles.ditavals.stream()
