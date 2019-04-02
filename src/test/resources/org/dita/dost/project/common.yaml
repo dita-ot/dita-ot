@@ -11,8 +11,7 @@ publications:
 contexts:
 - name: "Site"
   id: "site"
-  inputs:
-  - "site.ditamap"
+  input: "site.ditamap"
   profiles:
     ditavals:
     - "site.ditaval"

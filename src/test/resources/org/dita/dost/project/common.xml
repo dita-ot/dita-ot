@@ -6,9 +6,7 @@
     <param name="args.rellinks" value="noparent"/>
   </publication>
   <context name="Site" id="site">
-    <inputs>
-      <input href="site.ditamap"/>
-    </inputs>
+    <input href="site.ditamap"/>
     <profile>
       <ditaval href="site.ditaval"/>
     </profile>
