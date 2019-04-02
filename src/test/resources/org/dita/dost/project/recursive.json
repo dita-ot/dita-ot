@@ -1,7 +1,5 @@
 {
   "includes": [
-    {
-      "href": "recursive.json"
-    }
+    "recursive.json"
   ]
 }

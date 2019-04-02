@@ -1,0 +1,10 @@
+---
+deliverables:
+- name: "name"
+  context:
+    idref: "site"
+  output: "./site"
+  publication:
+    idref: "common-sitePub2"
+includes:
+- "common.json"

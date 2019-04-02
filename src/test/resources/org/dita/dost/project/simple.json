@@ -5,18 +5,12 @@
       "context": {
         "name": "Site",
         "id": "site",
-        "inputs": {
-          "inputs": [
-            {
-              "href": "site.ditamap"
-            }
-          ]
-        },
+        "inputs": [
+          "site.ditamap"
+        ],
         "profiles": {
           "ditavals": [
-            {
-              "href": "site.ditaval"
-            }
+            "site.ditaval"
           ]
         }
       },

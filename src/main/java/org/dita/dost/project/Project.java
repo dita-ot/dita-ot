@@ -12,10 +12,83 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.net.URI;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Project {
+
+    public static Project build(final ProjectBuilder src, final URI base) {
+        final Project project = new Project(
+                toStream(src.deliverables)
+                        .map(deliverable -> new Deliverable(
+                                deliverable.name,
+                                build(deliverable.context, base),
+                                deliverable.output,
+                                build(deliverable.publication, base)
+                        ))
+                        .collect(Collectors.toList()),
+                toStream(src.includes)
+                        .map(include -> new ProjectRef(resolve(include, base)))
+                        .collect(Collectors.toList()),
+                toStream(src.publications)
+                        .map(publication -> build(publication, base))
+                        .collect(Collectors.toList()),
+                toStream(src.contexts)
+                        .map(context -> build(context, base))
+                        .collect(Collectors.toList())
+        );
+        return project;
+    }
+
+    private static <T> Stream<T> toStream(List<T> src) {
+        return src != null ? src.stream() : Stream.empty();
+    }
+
+    private static URI resolve(final URI file, final URI base) {
+        return file != null && base != null ? base.resolve(file) : file;
+    }
+    
+    private static Publication build(final ProjectBuilder.Publication publication, final URI base) {
+        if (publication == null) {
+            return null;
+        }
+        return new Publication(
+                publication.name,
+                publication.id,
+                publication.idref,
+                publication.transtype,
+                toStream(publication.params)
+                        .map(param -> new Publication.Param(param.name, param.value, resolve(param.href, base)))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    private static Context build(final ProjectBuilder.Context context, final URI base) {
+        if (context == null) {
+            return null;
+        }
+        return new Context(
+                context.name,
+                context.id,
+                context.idref,
+                context.inputs != null
+                        ? new Deliverable.Inputs(
+                        context.inputs.stream()
+                                .map(input -> new Deliverable.Inputs.Input(resolve(input, base)))
+                                .collect(Collectors.toList())
+                )
+                        : null,
+                context.profiles != null
+                        ? new Deliverable.Profile(
+                        context.profiles.ditavals.stream()
+                                .map(ditaval -> new Deliverable.Profile.DitaVal(resolve(ditaval, base)))
+                                .collect(Collectors.toList())
+                )
+                        : null
+        );
+    }
+
     public final List<Deliverable> deliverables;
     public final List<ProjectRef> includes;
     public final List<Publication> publications;
@@ -26,10 +99,10 @@ public class Project {
                    @JsonProperty("includes") List<ProjectRef> includes,
                    @JsonProperty("publications") List<Publication> publications,
                    @JsonProperty("contexts") List<Context> contexts) {
-        this.deliverables = deliverables != null ? deliverables : Collections.emptyList();
-        this.includes = includes != null ? includes : Collections.emptyList();
-        this.publications = publications != null ? publications : Collections.emptyList();
-        this.contexts = contexts != null ? contexts : Collections.emptyList();
+        this.deliverables = deliverables;
+        this.includes = includes;
+        this.publications = publications;
+        this.contexts = contexts;
     }
 
     public static class Deliverable {
@@ -54,7 +127,7 @@ public class Project {
 
             @JsonCreator
             public Inputs(@JsonProperty("inputs") List<Input> inputs) {
-                this.inputs = inputs != null ? inputs : Collections.emptyList();
+                this.inputs = inputs;
             }
 
             public static class Input {
@@ -72,7 +145,7 @@ public class Project {
 
             @JsonCreator
             public Profile(@JsonProperty("ditavals") List<DitaVal> ditavals) {
-                this.ditavals = ditavals != null ? ditavals : Collections.emptyList();
+                this.ditavals = ditavals;
             }
 
             public static class DitaVal {
@@ -134,7 +207,7 @@ public class Project {
             this.id = id;
             this.idref = idref;
             this.transtype = transtype;
-            this.params = params != null ? params : Collections.emptyList();
+            this.params = params;
         }
 
         public static class Param {

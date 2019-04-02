@@ -1,8 +1,6 @@
 {
   "includes": [
-    {
-      "href": "common.json"
-    }
+    "common.json"
   ],
   "deliverables": [
     {

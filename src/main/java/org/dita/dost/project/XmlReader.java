@@ -81,7 +81,7 @@ public class XmlReader {
      * @param file input project file
      * @return project
      */
-    public Project read(final URI file) throws IOException {
+    public ProjectBuilder read(final URI file) throws IOException {
         try (InputStream in = file.toURL().openStream()) {
             return read(in, file);
         }
@@ -94,20 +94,18 @@ public class XmlReader {
      * @param file input project file URI, may be {@code null}
      * @return project
      */
-    public Project read(final InputStream in, final URI file) throws IOException {
+    public ProjectBuilder read(final InputStream in, final URI file) throws IOException {
         try {
             final Document document = readDocument(in, file);
             final Element project = document.getDocumentElement();
-            return new Project(
+            return new ProjectBuilder(
                     getChildElements(project, ELEM_DELIVERABLE).stream()
                             .map(this::readDeliverable)
                             .collect(Collectors.toList()),
                     getChildElements(project, ELEM_INCLUDE).stream()
-                            .map(include -> getAttribute(include, ATTR_HREF))
+                            .map(this::getHref)
                             .filter(Optional::isPresent)
                             .map(Optional::get)
-                            .map(this::toURI)
-                            .map(include -> new Project.ProjectRef(include))
                             .collect(Collectors.toList()),
                     getChildElements(project, ELEM_PUBLICATION).stream()
                             .map(this::readPublication)
@@ -147,16 +145,15 @@ public class XmlReader {
         return document;
     }
 
-    private Project.Deliverable readDeliverable(final Element deliverable) {
+    private ProjectBuilder.Deliverable readDeliverable(final Element deliverable) {
         final String name = getValue(deliverable, ATTR_NAME);
-        return new Project.Deliverable(
+        return new ProjectBuilder.Deliverable(
                 name,
                 getChildElement(deliverable, ELEM_CONTEXT)
                         .map(this::readContext)
                         .orElse(null),
                 getChildElement(deliverable, ELEM_OUTPUT)
-                        .flatMap(output -> getAttribute(output, ATTR_HREF))
-                        .map(this::toURI)
+                        .flatMap(this::getHref)
                         .orElse(null),
                 getChildElement(deliverable, ELEM_PUBLICATION)
                         .map(this::readPublication)
@@ -164,56 +161,56 @@ public class XmlReader {
         );
     }
 
-    private Project.Publication readPublication(final Element publication) {
-        return new Project.Publication(
+    private ProjectBuilder.Publication readPublication(final Element publication) {
+        return new ProjectBuilder.Publication(
                 getValue(publication, ATTR_NAME),
                 getValue(publication, ATTR_ID),
                 getValue(publication, ATTR_IDREF),
                 getValue(publication, ATTR_TRANSTYPE),
                 getChildElements(publication, ELEM_PARAM).stream()
-                        .map(param -> new Project.Publication.Param(
+                        .map(param -> new ProjectBuilder.Publication.Param(
                                 getValue(param, ATTR_NAME),
                                 getValue(param, ATTR_VALUE),
-                                getAttribute(param, ATTR_HREF).map(this::toURI).orElse(null)
+                                getHref(param).orElse(null)
                         ))
                         .collect(Collectors.toList())
         );
     }
 
-    private Project.Context readContext(final Element context) {
-        return new Project.Context(
+    private ProjectBuilder.Context readContext(final Element context) {
+        return new ProjectBuilder.Context(
                 getValue(context, ATTR_NAME),
                 getValue(context, ATTR_ID),
                 getValue(context, ATTR_IDREF),
                 getChildElement(context, ELEM_INPUTS)
                         .map(inputs -> getChildElements(inputs, ELEM_INPUT).stream()
-                                .map(input -> getAttribute(input, ATTR_HREF).map(this::toURI))
+                                .map(this::getHref)
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)
-                                .map(input -> new Project.Deliverable.Inputs.Input(input))
                                 .collect(Collectors.toList())
                         )
-                        .map(inputs -> new Project.Deliverable.Inputs(inputs))
                         .orElse(null),
                 getChildElement(context, ELEM_PROFILE)
                         .map(inputs -> getChildElements(inputs, ELEM_DITAVAL).stream()
-                                .map(input -> getAttribute(input, ATTR_HREF).map(this::toURI))
+                                .map(this::getHref)
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)
-                                .map(input -> new Project.Deliverable.Profile.DitaVal(input))
                                 .collect(Collectors.toList())
                         )
-                        .map(inputs -> new Project.Deliverable.Profile(inputs))
+                        .map(ProjectBuilder.Deliverable.Profile::new)
                         .orElse(null)
         );
     }
 
-    private URI toURI(final String uri) {
-        try {
-            return new URI(uri);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+    private Optional<URI> getHref(final Element elem) {
+        return getAttribute(elem, ATTR_HREF)
+                .map(uri -> {
+                    try {
+                        return new URI(uri);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     private Optional<String> getAttribute(final Element elem, final String attrName) {

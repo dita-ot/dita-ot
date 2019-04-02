@@ -1,10 +1,6 @@
 {
   "includes": [
-    {
-      "href": "common.json"
-    },
-    {
-      "href": "simple.json"
-    }
+    "common.json",
+    "simple.json"
   ]
 }
