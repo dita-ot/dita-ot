@@ -21,7 +21,7 @@ context =
   element context {
     attribute name { text }?,
     attribute id { xsd:ID }?,
-    inputs,
+    input,
     profile
   }
 

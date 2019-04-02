@@ -50,7 +50,6 @@ public class XmlReader {
     public static final String ELEM_DITAVAL = "ditaval";
     public static final String ELEM_INCLUDE = "include";
     public static final String ELEM_INPUT = "input";
-    public static final String ELEM_INPUTS = "inputs";
     public static final String ELEM_OUTPUT = "output";
     public static final String ELEM_PARAM = "param";
     public static final String ELEM_PROFILE = "profile";
@@ -182,14 +181,11 @@ public class XmlReader {
                 getValue(context, ATTR_NAME),
                 getValue(context, ATTR_ID),
                 getValue(context, ATTR_IDREF),
-                getChildElement(context, ELEM_INPUTS)
-                        .map(inputs -> getChildElements(inputs, ELEM_INPUT).stream()
-                                .map(this::getHref)
-                                .filter(Optional::isPresent)
-                                .map(Optional::get)
-                                .collect(Collectors.toList())
-                        )
-                        .orElse(null),
+                getChildElements(context, ELEM_INPUT).stream()
+                        .map(this::getHref)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList()),
                 getChildElement(context, ELEM_PROFILE)
                         .map(inputs -> getChildElements(inputs, ELEM_DITAVAL).stream()
                                 .map(this::getHref)
