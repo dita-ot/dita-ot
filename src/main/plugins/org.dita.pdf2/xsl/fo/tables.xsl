@@ -312,7 +312,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" mode="table.title-number">
-    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
+    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()][dita-ot:notExcludedByDraftElement(.)])"/>
   </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tgroup ')]" name="tgroup">

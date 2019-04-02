@@ -914,4 +914,20 @@ See the accompanying LICENSE file for applicable license.
       <xsl:sequence select="$topicType"/>
     </xsl:function>
 
+    <xsl:function name="dita-ot:notExcludedByDraftElement" as="xs:boolean">
+      <xsl:param name="ctx" as="element()"/>
+      <xsl:choose>
+        <xsl:when test="$publishRequiredCleanup='yes' or $DRAFT='yes'">
+            <xsl:sequence select="true()"/>
+        </xsl:when>
+        <xsl:when test="$ctx/ancestor::*[contains(@class,' topic/draft-comment ') or 
+                                         contains(@class,' topic/required-cleanup ')]">
+            <xsl:sequence select="false()"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:sequence select="true()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:function>
+
 </xsl:stylesheet>
