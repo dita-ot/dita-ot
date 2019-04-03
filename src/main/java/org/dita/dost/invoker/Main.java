@@ -199,6 +199,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ARGUMENTS.put("-f", new StringArgument("transtype"));
         ARGUMENTS.put("--format", new StringArgument("transtype"));
         ARGUMENTS.put("--transtype", new StringArgument("transtype"));
+        ARGUMENTS.put("--deliverable", new StringArgument("project.deliverable"));
         ARGUMENTS.put("-i", new FileOrUriArgument("args.input"));
         ARGUMENTS.put("--input", new FileOrUriArgument("args.input"));
         ARGUMENTS.put("-o", new AbsoluteFileArgument("output.dir"));
@@ -341,7 +342,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /**
      * Set of properties that can be used by tasks.
      */
-    private final Map<String, Object> definedProps = new HashMap<>();
+    private List<Map<String, Object>> projectProps;
 
     /**
      * Names of classes to add as listeners to project.
@@ -477,18 +478,23 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
 
         if (additionalUserProperties != null) {
-            for (final Enumeration<Object> e = additionalUserProperties.keys(); e.hasMoreElements(); ) {
-                final String key = (String) e.nextElement();
-                final String property = additionalUserProperties.getProperty(key);
-                definedProps.put(key, property);
+            for (Map<String, Object> props : projectProps) {
+                for (final Enumeration<Object> e = additionalUserProperties.keys(); e.hasMoreElements(); ) {
+                    final String key = (String) e.nextElement();
+                    final String property = additionalUserProperties.getProperty(key);
+                    props.put(key, property);
+                }
             }
         }
+
 
         // expect the worst
         int exitCode = 1;
         try {
             try {
-                runBuild(coreLoader);
+                for (Map<String, Object> props : projectProps) {
+                    runBuild(coreLoader, props);
+                }
                 exitCode = 0;
             } catch (final ExitStatusException ese) {
                 exitCode = ese.getStatus();
@@ -569,6 +575,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         boolean justPrintDeliverables = false;
         useColor = getUseColor();
 
+        final Map<String, Object> definedProps = new HashMap<>();
         final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
         while (!args.isEmpty()) {
             final String arg = args.pop();
@@ -622,9 +629,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             } else if (isLongForm(arg, "-nice")) {
                 handleArgNice(args);
             } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
-                handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+                definedProps.putAll(handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg))));
             } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
-                handleParameterArg(arg, args, getPluginArguments().get(getArgumentName(arg)));
+                definedProps.putAll(handleParameterArg(arg, args, getPluginArguments().get(getArgumentName(arg))));
             } else if (LAUNCH_COMMANDS.contains(arg)) {
                 // catch script/ant mismatch with a meaningful message
                 // we could ignore it, but there are likely to be other
@@ -653,7 +660,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
 
         // Load the property files specified by --propertyfile
-        loadPropertyFiles();
+        definedProps.putAll(loadPropertyFiles());
 
         if (justPrintUsage || justPrintVersion || justPrintDiagnostics || justPrintPlugins || justPrintTranstypes || justPrintDeliverables) {
             if (justPrintVersion) {
@@ -722,9 +729,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         }
 
-        if (projectFile != null) {
-            handleProject();
-        }
+        projectProps = projectFile != null
+                ? handleProject(definedProps)
+                : Collections.singletonList(definedProps);
 
         // make sure buildfile exists
         if (!buildFile.exists() || buildFile.isDirectory()) {
@@ -748,45 +755,59 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         readyToRun = true;
     }
 
-    private void handleProject() {
+    private List<Map<String, Object>> handleProject(Map<String, Object> definedProps) {
         final URI base = projectFile.toURI();
         final org.dita.dost.project.Project project = readProjectFile();
+        final String runDeliverable = (String) definedProps.get("project.deliverable");
 
-        project.deliverables.forEach(deliverable -> {
-            final Context context = deliverable.context;
-            final URI input = base.resolve(context.inputs.inputs.get(0).href);
-            definedProps.put("args.input", input.toString());
-            final URI outputDir = new File(definedProps.get("output.dir").toString()).toURI();
-            final Path output = deliverable.output != null
-                    ? Paths.get(outputDir.resolve(deliverable.output))
-                    : Paths.get(outputDir);
-            definedProps.put("output.dir", output.toString());
-            final Publication publications = deliverable.publication;
-            definedProps.put("transtype", publications.transtype);
-            publications.params.forEach(param -> {
-                if (definedProps.containsKey(param.name)) {
-                    return;
-                }
-                if (param.value != null) {
-                    final Argument argument = getPluginArguments().getOrDefault(param.name, new StringArgument(param.name));
-                    final String value = argument.getValue(param.value);
-                    definedProps.put(param.name, value);
-                } else {
-                    final String value;
-                    final Argument argument = getPluginArguments().get("--" + param.name);
-                    if (argument != null && (argument instanceof FileArgument || argument instanceof AbsoluteFileArgument)) {
-                        value = Paths.get(base.resolve(param.href)).toString();
-                    } else {
-                        value = param.href.toString();
-                    }
-                    definedProps.put(param.name, value);
-                }
-            });
-            final String filters = context.profiles.ditavals.stream()
-                    .map(ditaVal -> Paths.get(base.resolve(ditaVal.href)).toString())
-                    .collect(Collectors.joining(File.pathSeparator));
-            definedProps.put("args.filter", filters);
-        });
+        final List<Map<String, Object>> projectProps = project.deliverables.stream()
+                .filter(deliverable -> runDeliverable != null ? Objects.equals(deliverable.id, runDeliverable) : true)
+                .map(deliverable -> {
+                    final Map<String, Object> props = new HashMap<>(definedProps);
+
+                    final Context context = deliverable.context;
+                    final URI input = base.resolve(context.inputs.inputs.get(0).href);
+                    props.put("args.input", input.toString());
+                    final URI outputDir = new File(props.get("output.dir").toString()).toURI();
+                    final Path output = deliverable.output != null
+                            ? Paths.get(outputDir.resolve(deliverable.output))
+                            : Paths.get(outputDir);
+                    props.put("output.dir", output.toString());
+                    final Publication publications = deliverable.publication;
+                    props.put("transtype", publications.transtype);
+                    publications.params.forEach(param -> {
+                        if (props.containsKey(param.name)) {
+                            return;
+                        }
+                        if (param.value != null) {
+                            final Argument argument = getPluginArguments().getOrDefault(param.name, new StringArgument(param.name));
+                            final String value = argument.getValue(param.value);
+                            props.put(param.name, value);
+                        } else {
+                            final String value;
+                            final Argument argument = getPluginArguments().get("--" + param.name);
+                            if (argument != null && (argument instanceof FileArgument || argument instanceof AbsoluteFileArgument)) {
+                                value = Paths.get(base.resolve(param.href)).toString();
+                            } else {
+                                value = param.href.toString();
+                            }
+                            props.put(param.name, value);
+                        }
+                    });
+                    final String filters = context.profiles.ditavals.stream()
+                            .map(ditaVal -> Paths.get(base.resolve(ditaVal.href)).toString())
+                            .collect(Collectors.joining(File.pathSeparator));
+                    props.put("args.filter", filters);
+
+                    return props;
+                })
+                .collect(Collectors.toList());
+        if (runDeliverable != null && projectProps.isEmpty()) {
+            printErrorMessage("Deliverable " + runDeliverable + " not found");
+            throw new BuildException("");
+        }
+
+        return projectProps;
     }
 
     private org.dita.dost.project.Project readProjectFile() throws BuildException {
@@ -966,7 +987,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /**
      * Handler -D argument
      */
-    private void handleArgDefine(final String arg, final Deque<String> args) {
+    private Map<String, Object> handleArgDefine(final String arg, final Deque<String> args) {
         /*
          * Interestingly enough, we get to here when a user uses -Dname=value.
          * However, in some cases, the OS goes ahead and parses this out to args
@@ -992,13 +1013,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         if (RESERVED_PROPERTIES.containsKey(name)) {
             throw new BuildException("Property " + name + " cannot be set with -D, use " + RESERVED_PROPERTIES.get(name) + " instead");
         }
-        definedProps.put(name, value);
+        return ImmutableMap.of(name, value);
     }
 
     /**
      * Handler parameter argument
      */
-    private void handleParameterArg(final String arg, final Deque<String> args, final Argument argument) {
+    private Map<String, Object> handleParameterArg(final String arg, final Deque<String> args, final Argument argument) {
         String name = arg;
         String value;
         final int posEq = name.indexOf("=");
@@ -1011,8 +1032,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         if (value == null) {
             throw new BuildException("Missing value for property " + name);
         }
-
-        definedProps.put(argument.property, argument.getValue(value));
+        return ImmutableMap.of(argument.property, argument.getValue(value));
     }
 
     /**
@@ -1092,7 +1112,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /**
      * Load the property files specified by --propertyfile
      */
-    private void loadPropertyFiles() {
+    private Map<String, Object> loadPropertyFiles() {
+        final Map<String, Object> definedProps = new HashMap<>();
         for (int propertyFileIndex = 0; propertyFileIndex < propertyFiles.size(); propertyFileIndex++) {
             final String filename = propertyFiles.elementAt(propertyFileIndex);
             final Properties props = new Properties();
@@ -1121,6 +1142,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 }
             }
         }
+        return definedProps;
     }
 
     /**
@@ -1189,9 +1211,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * @param coreLoader The classloader to use to find core classes. May be
      *                   <code>null</code>, in which case the system classloader is
      *                   used.
+     * @param definedProps Set of properties that can be used by tasks.
      * @throws BuildException if the build fails
      */
-    private void runBuild(final ClassLoader coreLoader) throws BuildException {
+    private void runBuild(final ClassLoader coreLoader, Map<String, Object> definedProps) throws BuildException {
 
         if (!readyToRun) {
             return;
@@ -1393,6 +1416,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("   or: dita --uninstall <id>\n");
         msg.append("   or: dita --plugins\n");
         msg.append("   or: dita --transtypes\n");
+        msg.append("   or: dita --deliverables\n");
         msg.append("   or: dita --help\n");
         msg.append("   or: dita --version\n");
         msg.append("Arguments: \n");
@@ -1406,6 +1430,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("  --uninstall <id>            uninstall plug-in with the ID\n");
         msg.append("  --plugins                   print list of installed plug-ins\n");
         msg.append("  --transtypes                print list of installed transtypes\n");
+        msg.append("  --deliverables              print list of deliverables in project\n");
         msg.append("  -h, --help                  print this message\n");
         msg.append("  --version                   print version information and exit\n");
         msg.append("Options: \n");
