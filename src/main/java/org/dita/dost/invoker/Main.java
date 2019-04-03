@@ -26,6 +26,7 @@
 
 package org.dita.dost.invoker;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.apache.tools.ant.*;
@@ -565,6 +566,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         boolean justPrintDiagnostics = false;
         boolean justPrintPlugins = false;
         boolean justPrintTranstypes = false;
+        boolean justPrintDeliverables = false;
         useColor = getUseColor();
 
         final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
@@ -579,6 +581,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 justPrintPlugins = true;
             } else if (isLongForm(arg, "-transtypes")) {
                 justPrintTranstypes = true;
+            } else if (isLongForm(arg, "-deliverables")) {
+                justPrintDeliverables = true;
             } else if (isLongForm(arg, "-install")) {
                 handleArgInstall(arg, args);
             } else if (isLongForm(arg, "-project") || arg.equals("-p")) {
@@ -651,7 +655,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // Load the property files specified by --propertyfile
         loadPropertyFiles();
 
-        if (justPrintUsage || justPrintVersion || justPrintDiagnostics || justPrintPlugins || justPrintTranstypes) {
+        if (justPrintUsage || justPrintVersion || justPrintDiagnostics || justPrintPlugins || justPrintTranstypes || justPrintDeliverables) {
             if (justPrintVersion) {
                 printVersion(msgOutputLevel);
             }
@@ -667,6 +671,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             if (justPrintTranstypes) {
                 printTranstypes();
             }
+            if (justPrintDeliverables) {
+                if (projectFile == null) {
+                    printErrorMessage("Error: Project file not defined");
+                    printUsage();
+                    throw new BuildException("");
+                }
+                printDeliverables();
+            }
+
             return;
         } else if (install) {
             buildFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
@@ -907,6 +920,24 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private void printTranstypes() {
         for (final String transtype : transtypes) {
             System.out.println(transtype);
+        }
+    }
+
+    /**
+     * Handle the --deliverables argument
+     */
+    private void printDeliverables() {
+        final List<Map.Entry<String, String>> pairs = readProjectFile().deliverables.stream()
+                .filter(deliverable -> deliverable.id != null)
+                .map(deliverable -> new AbstractMap.SimpleEntry<String, String>(deliverable.id, deliverable.name))
+                .collect(Collectors.toList());
+        final int length = pairs.stream()
+                .map(p -> p.getKey())
+                .map(String::length)
+                .reduce(Integer::max)
+                .orElse(0);
+        for (Map.Entry<String, String> pair : pairs) {
+            System.out.println(Strings.padEnd(pair.getKey(), length, ' ') + "  " + pair.getValue());
         }
     }
 
