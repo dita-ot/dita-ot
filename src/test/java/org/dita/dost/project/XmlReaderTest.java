@@ -27,7 +27,8 @@ public class XmlReaderTest {
             final ProjectBuilder project = xmlReader.read(in, URI.create("classpath:org/dita/dost/project/simple.xml"));
             assertEquals(1, project.deliverables.size());
             final ProjectBuilder.Deliverable deliverable = project.deliverables.get(0);
-            assertEquals("name", deliverable.name);
+            assertEquals("Name", deliverable.name);
+            assertEquals("site", deliverable.id);
             assertNotNull(deliverable.context);
             assertEquals("Site", deliverable.context.name);
             assertEquals("site", deliverable.context.id);

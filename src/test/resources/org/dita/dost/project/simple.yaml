@@ -1,6 +1,7 @@
 ---
 deliverables:
-- name: "name"
+- name: "Name"
+  id: "site"
   context:
     name: "Site"
     id: "site"

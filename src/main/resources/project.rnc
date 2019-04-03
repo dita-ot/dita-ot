@@ -12,6 +12,7 @@ includes =
 deliverable =
   element deliverable {
     attribute name { text }?,
+    attribute id { text }?,
     # (inputs* & output & profile* & publication*)
     ((context | context-ref), output, (publication | publication-ref))
   }

@@ -145,9 +145,9 @@ public class XmlReader {
     }
 
     private ProjectBuilder.Deliverable readDeliverable(final Element deliverable) {
-        final String name = getValue(deliverable, ATTR_NAME);
         return new ProjectBuilder.Deliverable(
-                name,
+                getValue(deliverable, ATTR_NAME),
+                getValue(deliverable, ATTR_ID),
                 getChildElement(deliverable, ELEM_CONTEXT)
                         .map(this::readContext)
                         .orElse(null),

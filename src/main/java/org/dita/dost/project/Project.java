@@ -25,6 +25,7 @@ public class Project {
                 toStream(src.deliverables)
                         .map(deliverable -> new Deliverable(
                                 deliverable.name,
+                                deliverable.id,
                                 build(deliverable.context, base),
                                 deliverable.output,
                                 build(deliverable.publication, base)
@@ -107,16 +108,19 @@ public class Project {
 
     public static class Deliverable {
         public final String name;
+        public final String id;
         public final Context context;
         public final URI output;
         public final Publication publication;
 
         @JsonCreator
         public Deliverable(@JsonProperty("name") String name,
+                           @JsonProperty("id") String id,
                            @JsonProperty("context") Context context,
                            @JsonProperty("output") URI output,
                            @JsonProperty("publication") Publication publication) {
             this.name = name;
+            this.id = id;
             this.context = context;
             this.output = output;
             this.publication = publication;
