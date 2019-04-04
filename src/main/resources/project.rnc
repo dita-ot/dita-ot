@@ -1,3 +1,5 @@
+default namespace = "https://www.dita-ot.org/project"
+
 
 ## Publication project
 project = element project { includes* & deliverable? & publication* & context* }
@@ -12,7 +14,7 @@ includes =
 deliverable =
   element deliverable {
     attribute name { text }?,
-    attribute id { text }?,
+    attribute id { xsd:NCName }?,
     # (inputs* & output & profile* & publication*)
     ((context | context-ref), output, (publication | publication-ref))
   }
@@ -21,7 +23,7 @@ deliverable =
 context =
   element context {
     attribute name { text }?,
-    attribute id { xsd:ID }?,
+    attribute id { xsd:NCName }?,
     input,
     profile
   }
@@ -29,7 +31,7 @@ context =
 ## Publication reference
 context-ref =
   element context {
-    attribute idref { xsd:ID }
+    attribute idref { xsd:NCName }
   }
 
 ## Input resources
@@ -75,7 +77,7 @@ prop =
 publication =
   element publication {
     attribute name { text }?,
-    attribute id { xsd:ID }?,
+    attribute id { xsd:NCName }?,
     attribute transtype { text },
     param*
   }
@@ -83,7 +85,7 @@ publication =
 ## Publication reference
 publication-ref =
   element publication {
-    attribute idref { xsd:ID }
+    attribute idref { xsd:NCName }
   }
 param =
   element param {
@@ -100,4 +102,5 @@ profile-set = element profile-set { profile* }
 
 ## Publication set
 publication-set = element publication-set { publication* }
+
 start = project
