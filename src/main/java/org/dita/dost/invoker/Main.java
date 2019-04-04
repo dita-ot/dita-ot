@@ -457,7 +457,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      */
     @Override
     public void startAnt(final String[] args, final Properties additionalUserProperties, final ClassLoader coreLoader) {
-
         try {
             processArgs(args);
         } catch (final BuildException exc) {
@@ -474,6 +473,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             handleLogfile();
             printMessage(exc);
             exit(1);
+            return;
+        }
+
+        if (!readyToRun) {
             return;
         }
 
@@ -958,7 +961,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 .reduce(Integer::max)
                 .orElse(0);
         for (Map.Entry<String, String> pair : pairs) {
-            System.out.println(Strings.padEnd(pair.getKey(), length, ' ') + "  " + pair.getValue());
+            System.out.println(Strings.padEnd(pair.getKey(), length, ' ')
+                    + (pair.getValue() != null ? ("  " + pair.getValue()) : ""));
         }
     }
 
@@ -1208,18 +1212,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Executes the build. If the constructor for this instance failed (e.g.
      * returned after issuing a warning), this method returns immediately.
      *
-     * @param coreLoader The classloader to use to find core classes. May be
-     *                   <code>null</code>, in which case the system classloader is
-     *                   used.
+     * @param coreLoader   The classloader to use to find core classes. May be
+     *                     <code>null</code>, in which case the system classloader is
+     *                     used.
      * @param definedProps Set of properties that can be used by tasks.
      * @throws BuildException if the build fails
      */
     private void runBuild(final ClassLoader coreLoader, Map<String, Object> definedProps) throws BuildException {
-
-        if (!readyToRun) {
-            return;
-        }
-
         final Project project = new Project();
         project.setCoreLoader(coreLoader);
 
