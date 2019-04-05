@@ -113,15 +113,16 @@ public final class XMLUtils {
      * Get first child element by element name.
      *
      * @param elem root element
+     * @param ns namespace URI, {@code null} for empty namespace
      * @param name element name to match element
      * @return matching element
      */
-    public static Optional<Element> getChildElement(final Element elem, final String name) {
+    public static Optional<Element> getChildElement(final Element elem, final String ns, final String name) {
         final NodeList children = elem.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
             if (child.getNodeType() == Node.ELEMENT_NODE) {
-                if (name.equals(child.getNodeName()) || name.equals(child.getLocalName())) {
+                if (Objects.equals(child.getNamespaceURI(), ns) && name.equals(child.getLocalName())) {
                     return Optional.of((Element) child);
                 }
             }
@@ -150,17 +151,18 @@ public final class XMLUtils {
     /**
      * List child elements by element name.
      *
+     * @param ns namespace URL, {@code null} for empty namespace
      * @param elem root element
-     * @param name element name to match elements
+     * @param name element local name to match elements
      * @return list of matching elements
      */
-    public static List<Element> getChildElements(final Element elem, final String name) {
+    public static List<Element> getChildElements(final Element elem, final String ns, final String name) {
         final NodeList children =  elem.getChildNodes();
         final List<Element> res = new ArrayList<>(children.getLength());
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
             if (child.getNodeType() == Node.ELEMENT_NODE) {
-                if (name.equals(child.getLocalName()) || name.equals(child.getNodeName())) {
+                if (Objects.equals(child.getNamespaceURI(), ns) && name.equals(child.getLocalName())) {
                     res.add((Element) child);
                 }
             }
