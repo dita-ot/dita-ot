@@ -797,10 +797,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                             props.put(param.name, value);
                         }
                     });
-                    final String filters = context.profiles.ditavals.stream()
-                            .map(ditaVal -> Paths.get(base.resolve(ditaVal.href)).toString())
-                            .collect(Collectors.joining(File.pathSeparator));
-                    props.put("args.filter", filters);
+                    if (!context.profiles.ditavals.isEmpty()) {
+                        final String filters = context.profiles.ditavals.stream()
+                                .map(ditaVal -> Paths.get(base.resolve(ditaVal.href)).toString())
+                                .collect(Collectors.joining(File.pathSeparator));
+                        props.put("args.filter", filters);
+                    }
 
                     return props;
                 })
