@@ -30,7 +30,7 @@ public class ProjectBuilderTest {
     @Parameters(name = "{0}")
     public static Collection<String[]> data() {
         return Arrays.asList(new String[][]{
-                {"simple"}, {"common"}, {"product"}, {"root"}
+                {"simple"}, {"common"}, {"product"}, {"root"}, {"minimal"}
         });
     }
 

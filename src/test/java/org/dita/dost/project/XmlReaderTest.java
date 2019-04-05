@@ -69,4 +69,12 @@ public class XmlReaderTest {
             assertEquals("common-sitePub2", project.deliverables.get(0).publication.idref);
         }
     }
+
+    @Test
+    public void deserializeXmlMinimal() throws IOException {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/minimal.xml")) {
+            final ProjectBuilder project = xmlReader.read(input, null);
+            assertEquals(1, project.deliverables.size());
+        }
+    }
 }

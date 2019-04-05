@@ -24,7 +24,7 @@ context =
     attribute name { text }?,
     attribute id { xsd:NCName }?,
     input,
-    profile
+    profile?
   }
 
 ## Publication reference
