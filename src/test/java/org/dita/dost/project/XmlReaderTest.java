@@ -27,7 +27,8 @@ public class XmlReaderTest {
             final ProjectBuilder project = xmlReader.read(in, URI.create("classpath:org/dita/dost/project/simple.xml"));
             assertEquals(1, project.deliverables.size());
             final ProjectBuilder.Deliverable deliverable = project.deliverables.get(0);
-            assertEquals("name", deliverable.name);
+            assertEquals("Name", deliverable.name);
+            assertEquals("site", deliverable.id);
             assertNotNull(deliverable.context);
             assertEquals("Site", deliverable.context.name);
             assertEquals("site", deliverable.context.id);
@@ -66,6 +67,14 @@ public class XmlReaderTest {
             assertEquals(1, project.deliverables.size());
             assertEquals(0, project.publications.size());
             assertEquals("common-sitePub2", project.deliverables.get(0).publication.idref);
+        }
+    }
+
+    @Test
+    public void deserializeXmlMinimal() throws IOException {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/minimal.xml")) {
+            final ProjectBuilder project = xmlReader.read(input, null);
+            assertEquals(1, project.deliverables.size());
         }
     }
 }

@@ -1,0 +1,7 @@
+---
+deliverables:
+- context:
+    input: "site.ditamap"
+  output: "./site"
+  publication:
+    transtype: "html5"

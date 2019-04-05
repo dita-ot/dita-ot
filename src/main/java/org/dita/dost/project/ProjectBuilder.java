@@ -38,16 +38,19 @@ public class ProjectBuilder {
 
     public static class Deliverable {
         public String name;
+        public String id;
         public Context context;
         public URI output;
         public Publication publication;
 
         @JsonCreator
         public Deliverable(@JsonProperty("name") String name,
+                           @JsonProperty("id") String id,
                            @JsonProperty("context") Context context,
                            @JsonProperty("output") URI output,
                            @JsonProperty("publication") Publication publication) {
             this.name = name;
+            this.id = id;
             this.context = context;
             this.output = output;
             this.publication = publication;

@@ -45,6 +45,7 @@ public class ProjectFactory {
                         src.deliverables.stream()
                                 .map(deliverable -> new Deliverable(
                                         deliverable.name,
+                                        deliverable.id,
                                         Optional.ofNullable(deliverable.context)
                                                 .flatMap(context -> Optional.ofNullable(context.idref))
                                                 .map(idref -> {

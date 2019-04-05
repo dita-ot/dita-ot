@@ -32,6 +32,7 @@ public class ProjectFactoryTest {
                                 null,
                                 null,
                                 null,
+                                null,
                                 new Publication(
                                         null,
                                         null,
@@ -59,6 +60,7 @@ public class ProjectFactoryTest {
         final Project src = new Project(
                 singletonList(
                         new Deliverable(
+                                null,
                                 null,
                                 new Context(
                                         null,
@@ -89,6 +91,7 @@ public class ProjectFactoryTest {
         final Project src = new Project(
                 singletonList(
                         new Deliverable(
+                                null,
                                 null,
                                 null,
                                 null,

@@ -1,6 +1,8 @@
+default namespace = "https://www.dita-ot.org/project"
+
 
 ## Publication project
-project = element project { includes* & deliverable? & publication* & context* }
+project = element project { (includes | deliverable | publication | context)* }
 
 ## Include project file
 includes =
@@ -12,7 +14,7 @@ includes =
 deliverable =
   element deliverable {
     attribute name { text }?,
-    # (inputs* & output & profile* & publication*)
+    attribute id { xsd:NCName }?,
     ((context | context-ref), output, (publication | publication-ref))
   }
 
@@ -20,23 +22,15 @@ deliverable =
 context =
   element context {
     attribute name { text }?,
-    attribute id { xsd:ID }?,
+    attribute id { xsd:NCName }?,
     input,
-    profile
+    profile?
   }
 
 ## Publication reference
 context-ref =
   element context {
-    attribute idref { xsd:ID }
-  }
-
-## Input resources
-inputs =
-  element inputs {
-    # (attribute ref { text }
-    # | attribute name { text })?,
-    input*
+    attribute idref { xsd:NCName }
   }
 
 ## Input resource
@@ -52,29 +46,20 @@ output =
   }
 
 ## Filter and highligh profile
-profile =
-  element profile {
-    # (attribute ref { text }
-    # | attribute name { text })?,
-    (ditaval | prop)*
-  }
+profile = element profile { ditaval+ }
+
+## DITAVAL profile resource
 ditaval =
   element ditaval {
     attribute href { xsd:anyURI }?,
     text
-  }
-prop =
-  element prop {
-    attribute val { text }?,
-    attribute action { text }?,
-    attribute att { text }?
   }
 
 ## Publication
 publication =
   element publication {
     attribute name { text }?,
-    attribute id { xsd:ID }?,
+    attribute id { xsd:NCName }?,
     attribute transtype { text },
     param*
   }
@@ -82,21 +67,14 @@ publication =
 ## Publication reference
 publication-ref =
   element publication {
-    attribute idref { xsd:ID }
+    attribute idref { xsd:NCName }
   }
+
+## Publication parameter
 param =
   element param {
     attribute name { text }?,
     (attribute href { xsd:anyURI }
      | attribute value { text })
   }
-
-## Input set
-input-set = element input-set { inputs* }
-
-## Profile set 
-profile-set = element profile-set { profile* }
-
-## Publication set
-publication-set = element publication-set { publication* }
 start = project

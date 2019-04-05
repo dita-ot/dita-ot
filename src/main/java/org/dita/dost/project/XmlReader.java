@@ -9,6 +9,7 @@
 package org.dita.dost.project;
 
 import com.thaiopensource.relaxng.jaxp.CompactSyntaxSchemaFactory;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,10 +35,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.getValue;
 
 public class XmlReader {
+
+    public static final String NS = "https://www.dita-ot.org/project";
 
     public static final String ATTR_HREF = "href";
     public static final String ATTR_ID = "id";
@@ -61,7 +65,9 @@ public class XmlReader {
 
     public XmlReader() {
         try {
-            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            documentBuilder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
@@ -98,18 +104,18 @@ public class XmlReader {
             final Document document = readDocument(in, file);
             final Element project = document.getDocumentElement();
             return new ProjectBuilder(
-                    getChildElements(project, ELEM_DELIVERABLE).stream()
+                    getChildren(project, ELEM_DELIVERABLE)
                             .map(this::readDeliverable)
                             .collect(Collectors.toList()),
-                    getChildElements(project, ELEM_INCLUDE).stream()
+                    getChildren(project, ELEM_INCLUDE)
                             .map(this::getHref)
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .collect(Collectors.toList()),
-                    getChildElements(project, ELEM_PUBLICATION).stream()
+                    getChildren(project, ELEM_PUBLICATION)
                             .map(this::readPublication)
                             .collect(Collectors.toList()),
-                    getChildElements(project, ELEM_CONTEXT).stream()
+                    getChildren(project, ELEM_CONTEXT)
                             .map(this::readContext)
                             .collect(Collectors.toList())
             );
@@ -145,16 +151,16 @@ public class XmlReader {
     }
 
     private ProjectBuilder.Deliverable readDeliverable(final Element deliverable) {
-        final String name = getValue(deliverable, ATTR_NAME);
         return new ProjectBuilder.Deliverable(
-                name,
-                getChildElement(deliverable, ELEM_CONTEXT)
+                getValue(deliverable, ATTR_NAME),
+                getValue(deliverable, ATTR_ID),
+                getChild(deliverable, ELEM_CONTEXT)
                         .map(this::readContext)
                         .orElse(null),
-                getChildElement(deliverable, ELEM_OUTPUT)
+                getChild(deliverable, ELEM_OUTPUT)
                         .flatMap(this::getHref)
                         .orElse(null),
-                getChildElement(deliverable, ELEM_PUBLICATION)
+                getChild(deliverable, ELEM_PUBLICATION)
                         .map(this::readPublication)
                         .orElse(null)
         );
@@ -166,7 +172,7 @@ public class XmlReader {
                 getValue(publication, ATTR_ID),
                 getValue(publication, ATTR_IDREF),
                 getValue(publication, ATTR_TRANSTYPE),
-                getChildElements(publication, ELEM_PARAM).stream()
+                getChildren(publication, ELEM_PARAM)
                         .map(param -> new ProjectBuilder.Publication.Param(
                                 getValue(param, ATTR_NAME),
                                 getValue(param, ATTR_VALUE),
@@ -181,11 +187,11 @@ public class XmlReader {
                 getValue(context, ATTR_NAME),
                 getValue(context, ATTR_ID),
                 getValue(context, ATTR_IDREF),
-                getChildElement(context, ELEM_INPUT)
+                getChild(context, ELEM_INPUT)
                         .flatMap(this::getHref)
                         .orElse(null),
-                getChildElement(context, ELEM_PROFILE)
-                        .map(inputs -> getChildElements(inputs, ELEM_DITAVAL).stream()
+                getChild(context, ELEM_PROFILE)
+                        .map(inputs -> getChildren(inputs, ELEM_DITAVAL)
                                 .map(this::getHref)
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)
@@ -194,6 +200,14 @@ public class XmlReader {
                         .map(ProjectBuilder.Deliverable.Profile::new)
                         .orElse(null)
         );
+    }
+
+    private Optional<Element> getChild(final Element project, String localName) {
+        return XMLUtils.getChildElement(project, NS, localName);
+    }
+
+    private Stream<Element> getChildren(final Element project, String localName) {
+        return XMLUtils.getChildElements(project, NS, localName).stream();
     }
 
     private Optional<URI> getHref(final Element elem) {

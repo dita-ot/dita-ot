@@ -46,6 +46,7 @@ public class ProjectTest {
     private Project getProject() {
         return new Project(Arrays.asList(new Project.Deliverable(
                 "name",
+                "id",
                 new Context("Site", "site", null,
                         new Inputs(//"inputs-name",
 //                        "inputs-ref",
