@@ -21,27 +21,31 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:variable name="tableset">
     <xsl:for-each select="//*[contains (@class, ' topic/table ')][*[contains(@class, ' topic/title ' )]]">
-      <xsl:copy>
-        <xsl:copy-of select="@*"/>
-        <xsl:if test="not(@id)">
-          <xsl:attribute name="id">
-            <xsl:call-template name="get-id"/>
-          </xsl:attribute>
-        </xsl:if>
-      </xsl:copy>
+      <xsl:if test="dita-ot:notExcludedByDraftElement(.)">
+        <xsl:copy>
+          <xsl:copy-of select="@*"/>
+          <xsl:if test="not(@id)">
+            <xsl:attribute name="id">
+              <xsl:call-template name="get-id"/>
+            </xsl:attribute>
+          </xsl:if>
+        </xsl:copy>
+      </xsl:if>
     </xsl:for-each>
   </xsl:variable>
   
   <xsl:variable name="figureset">
     <xsl:for-each select="//*[contains (@class, ' topic/fig ')][*[contains(@class, ' topic/title ' )]]">
-      <xsl:copy>
-        <xsl:copy-of select="@*"/>
-        <xsl:if test="not(@id)">
-          <xsl:attribute name="id">
-            <xsl:call-template name="get-id"/>
-          </xsl:attribute>
-        </xsl:if>
-      </xsl:copy>
+      <xsl:if test="dita-ot:notExcludedByDraftElement(.)">
+        <xsl:copy>
+          <xsl:copy-of select="@*"/>
+          <xsl:if test="not(@id)">
+            <xsl:attribute name="id">
+              <xsl:call-template name="get-id"/>
+            </xsl:attribute>
+          </xsl:if>
+        </xsl:copy>
+      </xsl:if>
     </xsl:for-each>
   </xsl:variable>
   
@@ -57,7 +61,10 @@ See the accompanying LICENSE file for applicable license.
           <fo:block start-indent="0in">
             <xsl:call-template name="createLOTHeader"/>
             
-            <xsl:apply-templates select="//*[contains (@class, ' topic/table ')][child::*[contains(@class, ' topic/title ' )]]" mode="list.of.tables"/>
+            <xsl:apply-templates select="//*[contains (@class, ' topic/table ')]
+                                            [child::*[contains(@class, ' topic/title ' )]]
+                                            [dita-ot:notExcludedByDraftElement(.)]"
+                                 mode="list.of.tables"/>
           </fo:block>
         </fo:flow>
         
@@ -143,7 +150,10 @@ See the accompanying LICENSE file for applicable license.
             <fo:block start-indent="0in">
               <xsl:call-template name="createLOFHeader"/>
 
-              <xsl:apply-templates select="//*[contains (@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ' )]]" mode="list.of.figures"/>
+              <xsl:apply-templates select="//*[contains (@class, ' topic/fig ')]
+                                              [child::*[contains(@class, ' topic/title ' )]]
+                                              [dita-ot:notExcludedByDraftElement(.)]"
+                                   mode="list.of.figures"/>
             </fo:block>
           </fo:flow>
 
