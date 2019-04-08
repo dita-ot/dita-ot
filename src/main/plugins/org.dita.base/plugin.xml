@@ -140,7 +140,7 @@ See the accompanying LICENSE file for applicable license.
     </param>
     <param name="output.dir" desc="Specifies the name and location of the output directory." type="dir"/>
     <param name="root-chunk-override" desc="Override for map chunk attribute value." type="string"/>
-    <param name="transtype" desc="Specifies the output format (transformation type)." type="file" required="true"/>
+    <param name="transtype" desc="Specifies the output format (transformation type)." type="string" required="true"/>
     <param name="validate" desc="Specifies whether DITA-OT validates the content." type="enum">
       <val default="true">true</val>
       <val>false</val>

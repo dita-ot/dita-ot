@@ -353,7 +353,9 @@ See the accompanying LICENSE file for applicable license.
                            <xsl:with-param name="original-attributes" select="$original-attributes"/>
                          </xsl:apply-templates>
                          <xsl:if test="$target[2]">
-                           <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
+                           <xsl:for-each select="$current-element">
+                             <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
+                           </xsl:for-each>
                          </xsl:if>
                         </xsl:otherwise>
                       </xsl:choose>
