@@ -149,7 +149,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
         final Source source = new StreamSource(tmp.toString());
         logger.info("Reading " + tmp);
         try {
-            final XMLStreamReader in = XMLInputFactory.newFactory().createXMLStreamReader(source);
+            final XMLStreamReader in = XMLInputFactory.newInstance().createXMLStreamReader(source);
             while (in.hasNext()) {
                 int eventType = in.next();
                 switch (eventType) {

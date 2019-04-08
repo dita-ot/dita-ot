@@ -156,6 +156,42 @@ public class ConkeyrefFilterTest {
     }
 
     @Test
+    public void testRelativePathsWithUplevels_flat() throws SAXException, IOException {
+        job.setInputDir(new File(".").getCanonicalFile().toURI());
+        job.add(new Job.FileInfo.Builder()
+                .src(srcDir.resolve("maps/root.map"))
+                .uri(URI.create("ROOT.map"))
+                .format(ATTR_FORMAT_VALUE_DITAMAP)
+                .isInput(true)
+                .build());
+        job.add(new Job.FileInfo.Builder()
+                .src(srcDir.resolve("product/topic.dita"))
+                .uri(URI.create("THIS.dita"))
+                .format(ATTR_FORMAT_VALUE_DITA)
+                .hasConref(true)
+                .build());
+        job.add(new Job.FileInfo.Builder()
+                .src(srcDir.resolve("common/library.dita"))
+                .uri(URI.create("LIBRARY.dita"))
+                .format(ATTR_FORMAT_VALUE_DITA)
+                .build());
+
+        final ConkeyrefFilter f = getConkeyrefFilter();
+        f.setCurrentFile(job.tempDirURI.resolve("topic.dita"));
+        f.setKeyDefinitions(createKeyScope(toMap(new KeyDef("foo", URI.create("LIBRARY.dita"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, URI.create("main.ditamap"), null))));
+        f.setContentHandler(new DefaultHandler() {
+            @Override
+            public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+                assertEquals("LIBRARY.dita", atts.getValue(ATTRIBUTE_NAME_CONREF));
+            }
+        });
+
+            f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CONKEYREF, "foo")
+                .build());
+    }
+
+    @Test
     public void testMissingKey() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
         f.setKeyDefinitions(createKeyScope(Collections.emptyMap()));
