@@ -220,9 +220,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         return schemeRelationGraph;
     }
 
+    @Deprecated
     public void setPrimaryDitamap(final URI primaryDitamap) {
         assert primaryDitamap.isAbsolute();
         this.rootDir = primaryDitamap.resolve(".");
+    }
+
+    public void setRootDir(final URI rootDir) {
+        assert rootDir.isAbsolute();
+        this.rootDir = rootDir;
     }
 
     /**

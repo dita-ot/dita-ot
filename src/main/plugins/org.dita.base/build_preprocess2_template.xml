@@ -24,6 +24,7 @@ See the accompanying LICENSE file for applicable license.
                   map-clean-map,
                   clean-preprocess,
                   copy-files2,
+                  preprocess.post,
                   {depend.preprocess.post}">
     <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
@@ -72,6 +73,7 @@ See the accompanying LICENSE file for applicable license.
 
                   clean-preprocess,
                   copy-files2,
+                  preprocess.post,
                   {depend.preprocess.post}">
     <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
@@ -89,7 +91,6 @@ See the accompanying LICENSE file for applicable license.
       </condition>
     </dita-ot-fail>
 
-    <property name="clean-preprocess.use-result-filename" value="true"/>
     <!-- First input file -->
     <local name="input.first"/>
     <pathconvert property="input.first">
@@ -109,7 +110,11 @@ See the accompanying LICENSE file for applicable license.
       </chainedmapper>
     </pathconvert>
     <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>
-    
+
+    <property name="clean-preprocess.use-result-filename" value="true"/>
+
+    <!--property name="args.inputs" value="${args.input}"/-->
+
     <echo level="info">*****************************************************************</echo>
     <echo level="info" if:set="args.input">* input = ${args.input}</echo>
     <echo level="info" if:set="args.inputs">* inputs = ${args.inputs}</echo>
@@ -274,11 +279,12 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="topic-reader"
     description="Generate file list">
-    <pipeline message="Generate topics" taskname="topic-reader"
-              inputmap="${args.input}">
+    <pipeline message="Generate list." taskname="topic-reader"
+              inputmap="${args.inputs}">
       <module class="org.dita.dost.module.reader.TopicReaderModule">
         <param name="resources" value="${args.resources}" if:set="args.resources"/>
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
+        <param name="inputs" value="${args.inputs}" if:set="args.inputs"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
