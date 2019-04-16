@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.dita.dost.util.Constants.*;
+import java.util.*;
 
 /**
  * Corrects the URLs.
@@ -820,5 +821,36 @@ public final class URLUtils {
         } else {
             return setPath(src, src.getPath() + suffix);
         }
+    }
+
+    /**
+     * Get common base path
+     *
+     * @return longest shared base path, {code null} if not found
+     */
+    public static URI getBase(final URI left, final URI right) {
+        if (!Objects.equals(left.getScheme(), right.getScheme())) {
+            return null;
+        }
+        if (!Objects.equals(left.getHost(), right.getHost())) {
+            return null;
+        }
+        if (Objects.equals(left.getPath(), right.getPath())) {
+            return left;
+        }
+        final String[] ls = left.getPath().split("/");
+        final String[] rs = right.getPath().split("/");
+        final StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < ls.length && i < rs.length; i++) {
+            if (Objects.equals(ls[i], rs[i])) {
+                buf.append(ls[i]).append("/");
+            } else {
+                break;
+            }
+        }
+        if (buf.length() != 0) {
+            return setPath(left, buf.toString());
+        }
+        return null;
     }
 }

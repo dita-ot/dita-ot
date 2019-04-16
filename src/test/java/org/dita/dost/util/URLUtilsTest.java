@@ -290,6 +290,7 @@ public class URLUtilsTest {
     }
 
     @Test
+
     public void setQuery() {
         assertEquals(URI.create("foo"), URLUtils.setQuery(URI.create("foo"), null));
         assertEquals(URI.create("foo?baz"), URLUtils.setQuery(URI.create("foo"), "baz"));
@@ -306,5 +307,13 @@ public class URLUtilsTest {
     public void addSuffixToPath() {
         assertEquals(URI.create("file:/foo/barquz.baz"), URLUtils.addSuffixToPath(URI.create("file:/foo/bar.baz"), "quz"));
         assertEquals(URI.create("file:/foo/barquz"), URLUtils.addSuffixToPath(URI.create("file:/foo/bar"), "quz"));
+    }
+
+    public void getBase() {
+        assertEquals(URI.create("/foo/bar/baz"), URLUtils.getBase(URI.create("/foo/bar/baz"), URI.create("/foo/bar/baz")));
+        assertEquals(URI.create("/foo/bar/"), URLUtils.getBase(URI.create("/foo/bar/baz"), URI.create("/foo/bar")));
+        assertEquals(URI.create("/foo/bar/"), URLUtils.getBase(URI.create("/foo/bar"), URI.create("/foo/bar/baz")));
+        assertEquals(null, URLUtils.getBase(URI.create("/foo/bar"), URI.create("/")));
+        assertEquals(null, URLUtils.getBase(URI.create("/foo/bar"), URI.create("/")));
     }
 }
