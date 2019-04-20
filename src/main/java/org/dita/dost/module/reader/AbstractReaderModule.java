@@ -789,6 +789,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                     throw new RuntimeException("Unable to set input file to job configuration");
                 }
                 job.add(new FileInfo.Builder(root)
+                        .src(rootFile)
                         .uri(rootTemp)
                         .format(ATTR_FORMAT_VALUE_DITAMAP)
                         .isInput(true)
