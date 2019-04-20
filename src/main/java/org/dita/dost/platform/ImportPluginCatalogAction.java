@@ -7,7 +7,6 @@
  */
 package org.dita.dost.platform;
 
-import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
@@ -55,11 +54,11 @@ final class ImportPluginCatalogAction extends ImportAction {
             if (location.length() > 0 && !location.substring(location.length() - 1).equals(UNIX_SEPARATOR)) {
                 location.append(UNIX_SEPARATOR);
             }
-            buf.startElement(NULL_NS_URI, "rewriteURI", "rewriteURI", new AttributesBuilder()
+            buf.startElement(OASIS_CATALOG_NAMESPACE, "rewriteURI", "rewriteURI", new AttributesBuilder()
                 .add("uriStartString", name)
                 .add("rewritePrefix", location.toString())
                 .build());
-            buf.endElement(NULL_NS_URI, "rewriteURI", "rewriteURI");
+            buf.endElement(OASIS_CATALOG_NAMESPACE, "rewriteURI", "rewriteURI");
         }
     }
 

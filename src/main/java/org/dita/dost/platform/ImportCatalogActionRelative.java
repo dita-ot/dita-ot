@@ -7,6 +7,8 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.OASIS_CATALOG_NAMESPACE;
+
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.ContentHandler;
@@ -24,10 +26,10 @@ final class ImportCatalogActionRelative extends ImportAction {
     public void getResult(final ContentHandler buf) throws SAXException {
         final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
         for (final Value value: valueSet) {
-            buf.startElement("urn:oasis:names:tc:entity:xmlns:xml:catalog", "nextCatalog", "nextCatalog", new AttributesBuilder()
+            buf.startElement(OASIS_CATALOG_NAMESPACE, "nextCatalog", "nextCatalog", new AttributesBuilder()
                 .add("catalog", FileUtils.getRelativeUnixPath(templateFilePath, value.value))
                 .build());
-            buf.endElement("urn:oasis:names:tc:entity:xmlns:xml:catalog", "nextCatalog", "nextCatalog");
+            buf.endElement(OASIS_CATALOG_NAMESPACE, "nextCatalog", "nextCatalog");
         }
     }
 
