@@ -137,18 +137,6 @@ See the accompanying LICENSE file for applicable license.
       </module>
     </pipeline>
   </target>
-  
-  <target name="input-merge"
-    dita:depends="{depend.preprocess.input-merge.pre}"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    description="Merge input files into temporary file">
-    <pipeline message="Preprocess and merge input files" taskname="input-merge" if:set="args.inputs">
-      <module class="org.dita.dost.module.MergeInputModule">
-        <param name="inputs" value="${args.inputs}"/>
-        <param name="ditadir" location="${dita.dir}"/>
-      </module>
-    </pipeline>
-  </target>
 
   <!-- gen-list
       Create the manifest files listing which files are referenced by the input file (even indirectly). -->
