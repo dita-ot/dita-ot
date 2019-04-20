@@ -282,17 +282,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             rootFiles = Arrays.stream(input.getAttribute("inputs").split(File.pathSeparator))
                     .map(in -> Paths.get(in).toUri())
                     .collect(Collectors.toList());
-//            URI ditaInput = toURI();
-//            ditaInput = ditaInput != null ? ditaInput : job.getInputFile();
-//            if (ditaInput.isAbsolute()) {
-//                rootFile = ditaInput;
-//            } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
-//                rootFile = setScheme(ditaInput, "file");
-//            } else if (baseInputDir != null) {
-//                rootFile = baseInputDir.resolve(ditaInput);
-//            } else {
-//                rootFile = basedir.toURI().resolve(ditaInput);
-//            }
             if (baseInputDir == null) {
                 baseInputDir = rootFiles.stream()
                         .map(f -> f.resolve("."))
@@ -313,6 +302,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             } else {
                 rootFile = basedir.toURI().resolve(ditaInput);
             }
+            assert rootFile.isAbsolute();
             rootFiles = Collections.singletonList(rootFile);
             job.setInputFile(rootFile);
 
