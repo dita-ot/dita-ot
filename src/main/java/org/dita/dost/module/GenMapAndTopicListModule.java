@@ -13,6 +13,7 @@ import com.google.common.collect.SetMultimap;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.reader.ReaderUtils;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -23,22 +24,12 @@ import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.ProfilingFilter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Paths;
@@ -263,44 +254,12 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      * @throws DITAOTException if writing output fails
      */
     private void combine() throws DITAOTException {
-        final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
-        if (rootFiles.size() > 1) {
-            final URI rootTempAbs = job.tempDirURI.resolve(rootTemp);
-            logger.info("Writing " + rootTempAbs);
-            try {
-                final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                dbf.setNamespaceAware(true);
-                final Document doc = dbf.newDocumentBuilder().newDocument();
+        final ReaderUtils utils = new ReaderUtils();
+        utils.setJob(job);
+        utils.setLogger(logger);
+        utils.setTempFileNameScheme(tempFileNameScheme);
 
-                doc.appendChild(doc.createProcessingInstruction(PI_WORKDIR_TARGET_URI, job.tempDirURI.toString()));
-                doc.appendChild(doc.createProcessingInstruction(PI_PATH2PROJ_TARGET_URI, "./"));
-                doc.appendChild(doc.createProcessingInstruction(PI_PATH2ROOTMAP_TARGET_URI, "./"));
-
-                final Element root = doc.createElement(MAP_MAP.localName);
-                root.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_MAP.toString());
-                root.setAttribute(ATTRIBUTE_NAME_DOMAINS, "(map mapgroup-d)");
-                root.setAttributeNS(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
-                for (final URI file : rootFiles) {
-                    final Job.FileInfo fi = job.getFileInfo(file);
-                    final URI hrefTempAbs = job.tempDirURI.resolve(fi.uri);
-                    final URI href = rootTempAbs.resolve(".").relativize(hrefTempAbs);
-
-                    final Element ref = doc.createElement(MAP_TOPICREF.localName);
-                    ref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
-                    ref.setAttribute(ATTRIBUTE_NAME_FORMAT, fi.format);
-                    ref.setAttribute(ATTRIBUTE_NAME_HREF, href.toString());
-                    root.appendChild(ref);
-                }
-                doc.appendChild(root);
-
-                final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-                serializer.transform(new DOMSource(doc), new StreamResult(rootTempAbs.toString()));
-            } catch (ParserConfigurationException | TransformerConfigurationException e) {
-                throw new RuntimeException(e);
-            } catch (TransformerException e) {
-                throw new DITAOTException("Failed to serialize root file: " + e.getMessage(), e);
-            }
-        }
+        utils.combine(rootFile, rootFiles);
     }
 
     /**
@@ -384,7 +343,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
                         .map(f -> f.resolve("."))
                         .reduce(rootFiles.get(0).resolve("."), (left, right) -> URLUtils.getBase(left, right));
             }
-            rootFile = baseInputDir.resolve("_dummy.ditamap");
+            rootFile = baseInputDir.resolve(ReaderUtils.GEN_MAP);
             job.setInputFile(rootFile);
             job.setInputDir(baseInputDir);
         } else {

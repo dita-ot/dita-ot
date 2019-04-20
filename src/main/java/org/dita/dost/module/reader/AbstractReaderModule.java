@@ -287,7 +287,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                         .map(f -> f.resolve("."))
                         .reduce(rootFiles.get(0).resolve("."), (left, right) -> URLUtils.getBase(left, right));
             }
-            rootFile = baseInputDir.resolve("_dummy.ditamap");
+            rootFile = baseInputDir.resolve(ReaderUtils.GEN_MAP);
             job.setInputFile(rootFile);
             job.setInputDir(baseInputDir);
         } else {
