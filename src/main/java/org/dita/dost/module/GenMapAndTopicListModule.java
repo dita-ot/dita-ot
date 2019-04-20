@@ -31,6 +31,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.*;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -136,8 +137,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private TempFileNameScheme tempFileNameScheme;
 
     /** Absolute path to input file. */
+    @Deprecated
     private URI rootFile;
     private List<URI> resources;
+    List<URI> rootFiles;
     /** File currently being processed */
     private URI currentFile;
     /** Subject scheme key map. Key is key value, value is key definition. */
@@ -235,7 +238,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
 
     private void readStartFile() throws DITAOTException {
-        addToWaitList(new Reference(rootFile));
+        for (final URI root : rootFiles) {
+            addToWaitList(new Reference(root));
+        }
     }
 
     /**
@@ -310,22 +315,47 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             resources = Collections.emptyList();
         }
 
-        final URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
-        if (ditaInput.isAbsolute()) {
-            rootFile = ditaInput;
-        } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
-            rootFile = setScheme(ditaInput, "file");
-        } else if (baseInputDir != null) {
-            rootFile = baseInputDir.resolve(ditaInput);
+        if (input.getAttribute("inputs") != null) {
+            rootFiles = Arrays.stream(input.getAttribute("inputs").split(File.pathSeparator))
+                    .map(in -> Paths.get(in).toUri())
+                    .collect(Collectors.toList());
+//            URI ditaInput = toURI();
+//            ditaInput = ditaInput != null ? ditaInput : job.getInputFile();
+//            if (ditaInput.isAbsolute()) {
+//                rootFile = ditaInput;
+//            } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
+//                rootFile = setScheme(ditaInput, "file");
+//            } else if (baseInputDir != null) {
+//                rootFile = baseInputDir.resolve(ditaInput);
+//            } else {
+//                rootFile = basedir.toURI().resolve(ditaInput);
+//            }
+            if (baseInputDir == null) {
+                baseInputDir = rootFiles.stream()
+                        .map(f -> f.resolve("."))
+                        .reduce(rootFiles.get(0).resolve("."), (left, right) -> URLUtils.getBase(left, right));
+            }
+            rootFile = baseInputDir.resolve("_dummy.ditamap");
+            job.setInputFile(rootFile);
+            job.setInputDir(baseInputDir);
         } else {
-            rootFile = basedir.toURI().resolve(ditaInput);
-        }
-        assert rootFile.isAbsolute();
+            final URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
+            if (ditaInput.isAbsolute()) {
+                rootFile = ditaInput;
+            } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
+                rootFile = setScheme(ditaInput, "file");
+            } else if (baseInputDir != null) {
+                rootFile = baseInputDir.resolve(ditaInput);
+            } else {
+                rootFile = basedir.toURI().resolve(ditaInput);
+            }
+            assert rootFile.isAbsolute();
 
-        if (baseInputDir == null) {
-            baseInputDir = rootFile.resolve(".");
+            if (baseInputDir == null) {
+                baseInputDir = rootFile.resolve(".");
+            }
+            assert baseInputDir.isAbsolute();
         }
-        assert baseInputDir.isAbsolute();
 
         profilingEnabled = true;
         if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {
@@ -408,7 +438,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             if (listFilter.isValidInput()) {
                 processParseResult(currentFile);
                 categorizeCurrentFile(ref);
-            } else if (!currentFile.equals(rootFile)) {
+            } else if (!rootFiles.contains(currentFile)) {
                 logger.error(MessageUtils.getMessage("DOTJ021E", params).toString());
                 failureList.add(currentFile);
             }
@@ -419,7 +449,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             if (inner != null && inner instanceof DITAOTException) {
                 throw (DITAOTException) inner;
             }
-            if (currentFile.equals(rootFile)) {
+            if (rootFiles.contains(currentFile)) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage(), sax);
             } else if (processingMode == Mode.STRICT) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
@@ -429,14 +459,14 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             failureList.add(currentFile);
         } catch (final FileNotFoundException e) {
             if (!exists(currentFile)) {
-                if (currentFile.equals(rootFile)) {
+                if (rootFiles.contains(currentFile)) {
                     throw new DITAOTException(MessageUtils.getMessage("DOTA069F", params).toString(), e);
                 } else if (processingMode == Mode.STRICT) {
                     throw new DITAOTException(MessageUtils.getMessage("DOTX008E", params).toString(), e);
                 } else {
                     logger.error(MessageUtils.getMessage("DOTX008E", params).toString());
                 }
-            } else if (currentFile.equals(rootFile)) {
+            } else if (rootFiles.contains(currentFile)) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ078F", params).toString() + " Cannot load file: " + e.getMessage(), e);
             } else if (processingMode == Mode.STRICT) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ079E", params).toString() + " Cannot load file: " + e.getMessage(), e);
@@ -445,7 +475,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             }
             failureList.add(currentFile);
         } catch (final Exception e) {
-            if (currentFile.equals(rootFile)) {
+            if (rootFiles.contains(currentFile)) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(),  e);
             } else if (processingMode == Mode.STRICT) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
@@ -455,7 +485,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             failureList.add(currentFile);
         }
 
-        if (!listFilter.isValidInput() && currentFile.equals(rootFile)) {
+        if (!listFilter.isValidInput() && rootFiles.contains(currentFile)) {
             if (validate) {
                 // stop the build if all content in the input file was filtered out.
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ022F", params).toString());
@@ -865,13 +895,19 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             job.add(fi);
         }
 
-        final FileInfo root = job.getFileInfo(rootFile);
-        if (root == null) {
-            throw new RuntimeException("Unable to set input file to job configuration");
+        if (rootFiles.size() == 1) {
+            final FileInfo root = job.getFileInfo(rootTemp);
+            job.add(new FileInfo.Builder(root)
+                    .isInput(true)
+                    .build());
+        } else {
+            job.add(new FileInfo.Builder()
+                    .src(rootFile)
+                    .uri(rootTemp)
+                    .format(ATTR_FORMAT_VALUE_DITAMAP)
+                    .isInput(true)
+                    .build());
         }
-        job.add(new FileInfo.Builder(root)
-                .isInput(true)
-                .build());
 
         try {
             logger.info("Serializing job specification");
