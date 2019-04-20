@@ -1100,6 +1100,10 @@ public final class Constants {
     public static final String ANT_REFERENCE_JOB = "job";
     /** Temporary directory Ant property name. */
     public static final String ANT_TEMP_DIR = "dita.temp.dir";
+
+    /** OASIS catalog file namespace. */
+    public static final String OASIS_CATALOG_NAMESPACE = "urn:oasis:names:tc:entity:xmlns:xml:catalog";
+    
     /** Deprecated since 2.3 */
     @Deprecated
     public static final String PI_PATH2PROJ_TARGET = "path2project";
