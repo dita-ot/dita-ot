@@ -55,6 +55,7 @@ See the accompanying LICENSE file for applicable license.
         </and>
       </condition>
     </dita-ot-fail>
+
     <property name="args.inputs" value="${args.input}"/>
 
     <condition property="clean-preprocess.use-result-filename" value="true">
@@ -86,7 +87,7 @@ See the accompanying LICENSE file for applicable license.
     <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/>
 
     <echo level="info">*****************************************************************</echo>
-    <echo level="info" if:set="args.input">* input = ${args.input}</echo>
+    <echo level="info" if:set="args.input" unless:set="args.inputs">* input = ${args.input}</echo>
     <echo level="info" if:set="args.inputs">* inputs = ${args.inputs}</echo>
     <echo level="info">* resources = ${args.resources}</echo>
     <echo level="info">*****************************************************************</echo>
@@ -97,7 +98,7 @@ See the accompanying LICENSE file for applicable license.
     <local name="input.first"/>
     <pathconvert property="input.first">
       <first>
-        <!--<path path="${args.input}" if:set="args.input"/>-->
+        <path path="${args.input}" if:set="args.input" unless:set="args.inputs"/>
         <path path="${args.inputs}" if:set="args.inputs"/>
       </first>
     </pathconvert>
@@ -145,7 +146,7 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Generate file list">
     <pipeline message="Generate list." taskname="gen-list"
-      inputmap="${args.inputs}">
+      inputmap="${args.input}">
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
         <param name="resources" value="${args.resources}" if:set="args.resources"/>
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>

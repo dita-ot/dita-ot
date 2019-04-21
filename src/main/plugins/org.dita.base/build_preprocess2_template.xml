@@ -95,7 +95,7 @@ See the accompanying LICENSE file for applicable license.
     <local name="input.first"/>
     <pathconvert property="input.first">
       <first>
-        <path path="${args.input}" if:set="args.input"/>
+        <path path="${args.input}" if:set="args.input" unless:set="args.inputs"/>
         <path path="${args.inputs}" if:set="args.inputs"/>
       </first>
     </pathconvert>
@@ -116,7 +116,7 @@ See the accompanying LICENSE file for applicable license.
     <!--property name="args.inputs" value="${args.input}"/-->
 
     <echo level="info">*****************************************************************</echo>
-    <echo level="info" if:set="args.input">* input = ${args.input}</echo>
+    <echo level="info" if:set="args.input" unless:set="args.inputs">* input = ${args.input}</echo>
     <echo level="info" if:set="args.inputs">* inputs = ${args.inputs}</echo>
     <echo level="info">* resources = ${args.resources}</echo>
     <echo level="info">*****************************************************************</echo>
@@ -280,7 +280,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="topic-reader"
     description="Generate file list">
     <pipeline message="Generate list." taskname="topic-reader"
-              inputmap="${args.inputs}">
+              inputmap="${args.input}">
       <module class="org.dita.dost.module.reader.TopicReaderModule">
         <param name="resources" value="${args.resources}" if:set="args.resources"/>
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
