@@ -15,6 +15,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class ProjectBuilderTest {
     @Parameters(name = "{0}")
     public static Collection<String[]> data() {
         return Arrays.asList(new String[][]{
-                {"simple"}, {"common"}, {"product"}, {"root"}, {"minimal"}
+                {"simple"}, {"common"}, {"product"}, {"root"}, {"minimal"}, {"multiple"}
         });
     }
 

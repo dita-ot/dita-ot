@@ -122,6 +122,16 @@ public class ProjectFactoryTest {
     }
 
     @Test
+    public void readMultiple() throws IOException, URISyntaxException {
+        final URI file = getClass().getClassLoader().getResource("org/dita/dost/project/multiple.json").toURI();
+        final Project project = ProjectFactory.load(file);
+        assertEquals(1, project.deliverables.size());
+        assertTrue(project.deliverables.get(0).context.inputs.inputs.get(0).href.isAbsolute());
+        assertTrue(project.includes.isEmpty());
+    }
+
+
+    @Test
     public void deserializeJsonRoot() throws IOException, URISyntaxException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/root.json").toURI();
         final Project project = ProjectFactory.load(input);
