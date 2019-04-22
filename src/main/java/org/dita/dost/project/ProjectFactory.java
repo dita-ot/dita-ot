@@ -8,6 +8,7 @@
 
 package org.dita.dost.project;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
@@ -26,8 +27,12 @@ import java.util.stream.Collectors;
 
 public class ProjectFactory {
 
-    private static final ObjectReader jsonReader = new ObjectMapper().reader().forType(ProjectBuilder.class);
-    private static final ObjectReader yamlReader = new YAMLMapper().reader().forType(ProjectBuilder.class);
+    private static final ObjectReader jsonReader = new ObjectMapper().reader()
+            .forType(ProjectBuilder.class)
+            .with(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+    private static final ObjectReader yamlReader = new YAMLMapper().reader()
+            .forType(ProjectBuilder.class)
+            .with(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
     private static final XmlReader xmlReader = new XmlReader();
 
     public static Project load(final URI file) throws IOException {

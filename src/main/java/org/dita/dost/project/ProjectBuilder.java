@@ -71,14 +71,14 @@ public class ProjectBuilder {
         public String name;
         public String id;
         public String idref;
-        public URI input;
+        public List<URI> input;
         public Deliverable.Profile profiles;
 
         @JsonCreator
         public Context(@JsonProperty("name") String name,
                        @JsonProperty("id") String id,
                        @JsonProperty("idref") String idref,
-                       @JsonProperty("input") URI input,
+                       @JsonProperty("input") List<URI> input,
                        @JsonProperty("profiles") Deliverable.Profile profiles) {
             this.name = name;
             this.id = id;
