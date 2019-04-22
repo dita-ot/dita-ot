@@ -207,7 +207,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "plugins/**/.gradle"
         exclude ".*"
         exclude "local.properties"
-        exclude "build_demo.xml"
         include "*.*"
         include "bin/dita"
         include "bin/dita.bat"
