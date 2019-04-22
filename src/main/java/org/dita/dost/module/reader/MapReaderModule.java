@@ -71,12 +71,14 @@ public final class MapReaderModule extends AbstractReaderModule {
      * @throws DITAOTException if writing output fails
      */
     private void combine() throws DITAOTException {
-        final ReaderUtils utils = new ReaderUtils();
-        utils.setJob(job);
-        utils.setLogger(logger);
-        utils.setTempFileNameScheme(tempFileNameScheme);
+        if (rootFiles.size() > 1) {
+            final ReaderUtils utils = new ReaderUtils();
+            utils.setJob(job);
+            utils.setLogger(logger);
+            utils.setTempFileNameScheme(tempFileNameScheme);
 
-        utils.combine(rootFile, rootFiles);
+            utils.combine(rootFile, rootFiles);
+        }
     }
 
     @Override
