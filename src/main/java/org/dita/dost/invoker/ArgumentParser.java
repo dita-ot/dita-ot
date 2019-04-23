@@ -326,7 +326,9 @@ final class ArgumentParser {
                 targets.addElement(arg);
             }
         }
-        definedProps.put("args.input", inputs.get(0));
+        if (!inputs.isEmpty()) {
+            definedProps.put("args.input", inputs.get(0));
+        }
 
         if (install && msgOutputLevel < Project.MSG_INFO) {
             emacsMode = true;
