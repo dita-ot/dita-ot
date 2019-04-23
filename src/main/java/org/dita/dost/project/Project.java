@@ -9,6 +9,7 @@
 package org.dita.dost.project;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -76,14 +77,14 @@ public class Project {
                                 .map(input -> new Deliverable.Inputs.Input(resolve(input, base)))
                                 .collect(Collectors.toList())
                 )
-                        : null,
+                        : new Deliverable.Inputs(Collections.emptyList()),
                 context.profiles != null
                         ? new Deliverable.Profile(
                         context.profiles.ditavals.stream()
                                 .map(ditaval -> new Deliverable.Profile.DitaVal(resolve(ditaval, base)))
                                 .collect(Collectors.toList())
                 )
-                        : null
+                        : new Deliverable.Profile(Collections.emptyList())
         );
     }
 
