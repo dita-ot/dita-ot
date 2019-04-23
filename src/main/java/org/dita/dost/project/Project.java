@@ -8,9 +8,6 @@
 
 package org.dita.dost.project;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -95,11 +92,10 @@ public class Project {
     public final List<Publication> publications;
     public final List<Context> contexts;
 
-    @JsonCreator
-    public Project(@JsonProperty("deliverables") List<Deliverable> deliverables,
-                   @JsonProperty("includes") List<ProjectRef> includes,
-                   @JsonProperty("publications") List<Publication> publications,
-                   @JsonProperty("contexts") List<Context> contexts) {
+    public Project(List<Deliverable> deliverables,
+                   List<ProjectRef> includes,
+                   List<Publication> publications,
+                   List<Context> contexts) {
         this.deliverables = deliverables;
         this.includes = includes;
         this.publications = publications;
@@ -113,12 +109,11 @@ public class Project {
         public final URI output;
         public final Publication publication;
 
-        @JsonCreator
-        public Deliverable(@JsonProperty("name") String name,
-                           @JsonProperty("id") String id,
-                           @JsonProperty("context") Context context,
-                           @JsonProperty("output") URI output,
-                           @JsonProperty("publication") Publication publication) {
+        public Deliverable(String name,
+                           String id,
+                           Context context,
+                           URI output,
+                           Publication publication) {
             this.name = name;
             this.id = id;
             this.context = context;
@@ -129,16 +124,14 @@ public class Project {
         public static class Inputs {
             public final List<Input> inputs;
 
-            @JsonCreator
-            public Inputs(@JsonProperty("inputs") List<Input> inputs) {
+            public Inputs(List<Input> inputs) {
                 this.inputs = inputs;
             }
 
             public static class Input {
                 public final URI href;
 
-                @JsonCreator
-                public Input(@JsonProperty("href") URI href) {
+                public Input(URI href) {
                     this.href = href;
                 }
             }
@@ -147,16 +140,14 @@ public class Project {
         public static class Profile {
             public final List<DitaVal> ditavals;
 
-            @JsonCreator
-            public Profile(@JsonProperty("ditavals") List<DitaVal> ditavals) {
+            public Profile(List<DitaVal> ditavals) {
                 this.ditavals = ditavals;
             }
 
             public static class DitaVal {
                 public final URI href;
 
-                @JsonCreator
-                public DitaVal(@JsonProperty("href") URI href) {
+                public DitaVal(URI href) {
                     this.href = href;
                 }
             }
@@ -167,8 +158,7 @@ public class Project {
     public static class ProjectRef {
         public final URI href;
 
-        @JsonCreator
-        public ProjectRef(@JsonProperty("href") URI href) {
+        public ProjectRef(URI href) {
             this.href = href;
         }
     }
@@ -180,12 +170,11 @@ public class Project {
         public final Deliverable.Inputs inputs;
         public final Deliverable.Profile profiles;
 
-        @JsonCreator
-        public Context(@JsonProperty("name") String name,
-                       @JsonProperty("id") String id,
-                       @JsonProperty("idref") String idref,
-                       @JsonProperty("inputs") Deliverable.Inputs inputs,
-                       @JsonProperty("profiles") Deliverable.Profile profiles) {
+        public Context(String name,
+                       String id,
+                       String idref,
+                       Deliverable.Inputs inputs,
+                       Deliverable.Profile profiles) {
             this.name = name;
             this.id = id;
             this.idref = idref;
@@ -201,12 +190,11 @@ public class Project {
         public final String transtype;
         public final List<Param> params;
 
-        @JsonCreator
-        public Publication(@JsonProperty("name") String name,
-                           @JsonProperty("id") String id,
-                           @JsonProperty("idref") String idref,
-                           @JsonProperty("transtype") String transtype,
-                           @JsonProperty("params") List<Param> params) {
+        public Publication(String name,
+                           String id,
+                           String idref,
+                           String transtype,
+                           List<Param> params) {
             this.name = name;
             this.id = id;
             this.idref = idref;
@@ -219,11 +207,10 @@ public class Project {
             public final String value;
             public final URI href;
 
-            @JsonCreator
             public Param(
-                    @JsonProperty("name") String name,
-                    @JsonProperty("value") String value,
-                    @JsonProperty("href") URI href) {
+                    String name,
+                    String value,
+                    URI href) {
                 this.name = name;
                 this.value = value;
                 this.href = href;
