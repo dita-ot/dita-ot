@@ -5,9 +5,11 @@ deliverables:
   context:
     name: "Site"
     id: "site"
-    input: "site.ditamap"
+    input:
+    - "site.ditamap"
     profiles:
-      ditavals: "site.ditaval"
+      ditavals:
+      - "site.ditaval"
   output: "./site"
   publication:
     name: "Site"

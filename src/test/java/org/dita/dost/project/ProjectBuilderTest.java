@@ -8,12 +8,14 @@
 
 package org.dita.dost.project;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 import java.io.IOException;
@@ -30,13 +32,17 @@ public class ProjectBuilderTest {
     @Parameters(name = "{0}")
     public static Collection<String[]> data() {
         return Arrays.asList(new String[][]{
-                {"simple"}, {"common"}, {"product"}, {"root"}, {"minimal"}
+                {"simple"}, {"common"}, {"product"}, {"root"}, {"minimal"}, {"multiple"}
         });
     }
 
     private final String name;
-    private final ObjectReader jsonReader = new ObjectMapper().readerFor(ProjectBuilder.class);
-    private final ObjectReader yamlReader = new YAMLMapper().readerFor(ProjectBuilder.class);
+    private final ObjectReader jsonReader = new ObjectMapper()
+            .readerFor(ProjectBuilder.class)
+            .with(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+    private final ObjectReader yamlReader = new YAMLMapper()
+            .readerFor(ProjectBuilder.class)
+            .with(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
     public ProjectBuilderTest(final String name) {
         this.name = name;

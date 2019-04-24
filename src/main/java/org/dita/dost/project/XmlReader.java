@@ -187,9 +187,11 @@ public class XmlReader {
                 getValue(context, ATTR_NAME),
                 getValue(context, ATTR_ID),
                 getValue(context, ATTR_IDREF),
-                getChild(context, ELEM_INPUT)
-                        .flatMap(this::getHref)
-                        .orElse(null),
+                getChildren(context, ELEM_INPUT)
+                        .map(this::getHref)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList()),
                 getChild(context, ELEM_PROFILE)
                         .map(inputs -> getChildren(inputs, ELEM_DITAVAL)
                                 .map(this::getHref)
