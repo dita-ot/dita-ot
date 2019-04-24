@@ -10,8 +10,7 @@ package org.dita.dost.module.reader;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.GenMapAndTopicListModule;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,6 +32,7 @@ import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 public class ReaderUtils {
 
     public static final String GEN_MAP = "_dummy.ditamap";
+    public static final DitaClass GENMAP = new DitaClass("+ map/map ditaot-d/genmap ");
 
     private Job job;
     private DITAOTLogger logger;
@@ -57,9 +57,9 @@ public class ReaderUtils {
                 doc.appendChild(doc.createProcessingInstruction(PI_PATH2PROJ_TARGET_URI, "./"));
                 doc.appendChild(doc.createProcessingInstruction(PI_PATH2ROOTMAP_TARGET_URI, "./"));
 
-                final Element root = doc.createElement(MAP_MAP.localName);
-                root.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_MAP.toString());
-                root.setAttribute(ATTRIBUTE_NAME_DOMAINS, "(map mapgroup-d)");
+                final Element root = doc.createElement(GENMAP.localName);
+                root.setAttribute(ATTRIBUTE_NAME_CLASS, GENMAP.toString());
+                root.setAttribute(ATTRIBUTE_NAME_DOMAINS, "(map ditaot-d)");
                 root.setAttributeNS(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
                 for (final URI file : rootFiles) {
                     final Job.FileInfo fi = job.getFileInfo(file);
