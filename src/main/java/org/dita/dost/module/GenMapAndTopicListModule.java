@@ -337,8 +337,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
 
         if (input.getAttribute("inputs") != null) {
-            rootFiles = Arrays.stream(input.getAttribute("inputs").split(File.pathSeparator))
-                    .map(in -> Paths.get(in).toUri())
+            rootFiles = Arrays.stream(input.getAttribute("inputs").split(" "))
+                    .map(in -> URI.create(in))
                     .collect(Collectors.toList());
             if (baseInputDir == null) {
                 baseInputDir = rootFiles.stream()

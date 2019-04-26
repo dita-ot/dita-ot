@@ -169,7 +169,7 @@ public class ConversionArguments extends Arguments {
         if (inputs.size() == 1) {
             definedProps.put("args.input", inputs.get(0));
         } else if (inputs.size() > 1) {
-            definedProps.put("args.inputs", String.join(File.pathSeparator, inputs));
+            definedProps.put("args.inputs", String.join(" ", inputs));
         }
         if (!resources.isEmpty()) {
             definedProps.put("args.resources", String.join(File.pathSeparator, resources));
