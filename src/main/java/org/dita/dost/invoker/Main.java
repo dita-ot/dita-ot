@@ -40,6 +40,7 @@ import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Publication;
 import org.dita.dost.project.ProjectFactory;
 import org.dita.dost.util.Configuration;
+import org.dita.dost.util.URLUtils;
 
 import java.io.*;
 import java.net.URI;
@@ -58,6 +59,14 @@ import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
  * It then assembles and executes an Ant project.
  */
 public class Main extends org.apache.tools.ant.Main implements AntMain {
+
+    static final String ANT_ARGS_INPUT = "args.input";
+    static final String ANT_ARGS_INPUTS = "args.inputs";
+    static final String ANT_OUTPUT_DIR = "output.dir";
+    static final String ANT_BASE_TEMP_DIR = "base.temp.dir";
+    static final String ANT_TRANSTYPE = "transtype";
+    static final String ANT_PLUGIN_FILE = "plugin.file";
+    static final String ANT_PLUGIN_ID = "plugin.id";
 
     /**
      * File that we are using for configuration.
@@ -292,25 +301,25 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 targets.add("install");
                 final File f = new File(args.installFile.replace('/', File.separatorChar)).getAbsoluteFile();
                 if (f.exists()) {
-                    definedProps.put("plugin.file", f.getAbsolutePath());
+                    definedProps.put(ANT_PLUGIN_FILE, f.getAbsolutePath());
                 } else {
-                    definedProps.put("plugin.file", args.installFile);
+                    definedProps.put(ANT_PLUGIN_FILE, args.installFile);
                 }
             } else if (args.uninstallId != null) {
                 targets.add("uninstall");
-                definedProps.put("plugin.id", args.uninstallId);
+                definedProps.put(ANT_PLUGIN_ID, args.uninstallId);
             } else {
                 targets.add("integrate");
             }
         } else {
             if (args.projectFile == null) {
-                if (!definedProps.containsKey("transtype")) {
+                if (!definedProps.containsKey(ANT_TRANSTYPE)) {
                     printErrorMessage("Error: Transformation type not defined");
                     printUsage();
                     throw new BuildException("");
                     //justPrintUsage = true;
                 }
-                if (!definedProps.containsKey("args.input")) {
+                if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
                     printErrorMessage("Error: Input file not defined");
                     printUsage();
                     throw new BuildException("");
@@ -318,11 +327,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 }
             }
             // default values
-            if (!definedProps.containsKey("output.dir")) {
-                definedProps.put("output.dir", new File(new File("."), "out").getAbsolutePath());
+            if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
+                definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());
             }
-            if (!definedProps.containsKey("base.temp.dir") && !definedProps.containsKey(ANT_TEMP_DIR)) {
-                definedProps.put("base.temp.dir", new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
+            if (!definedProps.containsKey(ANT_BASE_TEMP_DIR) && !definedProps.containsKey(ANT_TEMP_DIR)) {
+                definedProps.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
             }
         }
 
@@ -371,12 +380,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
                     final Context context = deliverable.context;
                     final URI input = base.resolve(context.inputs.inputs.get(0).href);
-                    props.put("args.input", input.toString());
-                    final URI outputDir = new File(props.get("output.dir").toString()).toURI();
+                    props.put(ANT_ARGS_INPUT, input.toString());
+                    URI outputDir = new File(props.get(ANT_OUTPUT_DIR).toString()).toURI();
+                    outputDir = outputDir.getPath().endsWith("/")
+                            ? outputDir
+                            : URLUtils.setPath(outputDir, outputDir.getPath() + "/");
                     final Path output = deliverable.output != null
                             ? Paths.get(outputDir.resolve(deliverable.output))
                             : Paths.get(outputDir);
-                    props.put("output.dir", output.toString());
+                    props.put(ANT_OUTPUT_DIR, output.toString());
                     final Publication publications = deliverable.publication;
                     props.put("transtype", publications.transtype);
                     publications.params.forEach(param -> {
