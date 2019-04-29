@@ -128,7 +128,7 @@ public final class PluginInstallTask extends Task {
                         throw new BuildException(new IllegalStateException(String.format("Plug-in %s already installed: %s", name, pluginDir)));
                     }
                 }
-                FileUtils.moveDirectory(tempPluginDir, pluginDir);
+                FileUtils.copyDirectory(tempPluginDir, pluginDir);
             }
         } catch (IOException e) {
             throw new BuildException(e.getMessage(), e);
@@ -211,7 +211,7 @@ public final class PluginInstallTask extends Task {
             }
         }
         if (res == null) {
-            throw new BuildException("Unable to find plugin " + pluginFile);
+            throw new BuildException("Unable to find plugin " + pluginFile + " in any configured registry.");
         }
 
         Set<Registry> results = new HashSet<>();
