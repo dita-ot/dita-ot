@@ -194,12 +194,11 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         final List<String> exp = Arrays.asList(
                 "main/novice.ditaval", "main/advanced.ditaval",
                 "main/kiddo.dita", "main/kiddodefault.dita", "main/parent.dita", "main/parentdefault.dita",
-                "main/parentdefault-1.dita", "main/parent-novice.dita", "main/PREFIX-parent-advanced.dita",
-                "main/PREFIX-weechild-advanced.dita", "main/subdirkiddo.dita", "main/subdirkiddodefault.dita",
-                "main/testuplevels.ditamap", "main/weechilddefault-1.dita", "main/weechild-novice.dita",
-                "main/subdir/PREFIX-weechild-advanced.dita", "main/subdir/weechilddefault-1.dita", "main/subdir/weechild-novice.dita",
+                "main/parentdefault-1.dita",
+                "main/subdirkiddo.dita", "main/subdirkiddodefault.dita",
+                "main/testuplevels.ditamap", "main/weechilddefault-1.dita", 
+                "main/subdir/weechilddefault-1.dita",
                 "peer/peerkiddo.dita", "peer/peerkiddodefault.dita", "peer/peerkiddodefault-1.dita",
-                "peer/peerkiddo-novice.dita", "peer/PREFIX-peerkiddo-advanced.dita",
                 "main/weechild.dita", "main/subdir/weechilddefault.dita",
                 "main/subdir/weechild.dita", "main/weechilddefault.dita");
         
