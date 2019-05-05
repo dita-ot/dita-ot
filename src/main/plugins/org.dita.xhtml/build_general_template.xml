@@ -65,11 +65,7 @@ See the accompanying LICENSE file for applicable license.
         <isset property="args.csspath.absolute" />
       </or>
     </condition>
-    <condition property="user.csspath" value="${args.csspath}/">
-      <not>
-        <isset property="user.csspath" />
-      </not>
-    </condition>
+    <property name="user.csspath" value="${args.csspath}/"/>
     <condition property="args.css.real" value="${args.cssroot}${file.separator}${args.css}">
       <isset property="args.cssroot" />
     </condition>
@@ -87,27 +83,13 @@ See the accompanying LICENSE file for applicable license.
       </or>
     </condition>
     <!-- end to check and init css relevant parameters -->
-    <condition property="out.ext" value=".html">
-      <not>
-        <isset property="out.ext" />
-      </not>
-    </condition>
-    <condition property="html-version" value="xhtml">
-      <not>
-        <isset property="html-version"/>
-      </not>
-    </condition>
-    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2${html-version}.xsl">
-      <not>
-        <isset property="args.xsl" />
-      </not>
-    </condition>
+    <property name="out.ext" value=".html"/>
+    <property name="html-version" value="xhtml"/>
+    <property name="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2${html-version}.xsl"/>
     <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <!-- Set to "true" if you get out-of-memory errors during preprocess
     while processing very large (thousands of files) document sets. -->
-    <condition property="dita.xhtml.reloadstylesheet" value="false">
-      <not><isset property="dita.xhtml.reloadstylesheet"/></not>
-    </condition>
+    <property name="dita.xhtml.reloadstylesheet" value="false"/>
     <antcall target="output-css-warn-message"/>
   </target>
   

@@ -102,9 +102,7 @@ See the accompanying LICENSE file for applicable license.
     </condition>
     
     <!-- default output format -->
-    <condition property="xep.formatter.output-format" value="PDF">
-      <not><isset property="xep.formatter.output-format"/></not>
-    </condition>
+    <property name="xep.formatter.output-format" value="PDF"/>
     <!-- output file extension -->
     <condition property="xsl.formatter.ext" value=".ps">
       <and>
@@ -182,9 +180,7 @@ See the accompanying LICENSE file for applicable license.
 
     <property name="xep.failOnError" value="true"/>
     
-    <condition property="outputFile" value="${dita.output.dir}/${outputFile.base}${xsl.formatter.ext}">
-      <not><isset property="outputFile"/></not>
-    </condition>
+    <property name="outputFile" value="${dita.output.dir}/${outputFile.base}${xsl.formatter.ext}"/>
     <mkdir dir="${dita.output.dir}"/>
     
     <echo level="info" taskname="xep">Processing ${pdf2.temp.dir}/topic.fo to ${outputFile}</echo>
