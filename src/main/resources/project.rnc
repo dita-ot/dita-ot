@@ -75,6 +75,7 @@ param =
   element param {
     attribute name { text }?,
     (attribute href { xsd:anyURI }
+     | attribute file { xsd:anyURI }
      | attribute value { text })
   }
 start = project
