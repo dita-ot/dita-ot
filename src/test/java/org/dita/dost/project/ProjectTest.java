@@ -64,8 +64,8 @@ public class ProjectTest {
                                 ),
                                 URI.create("./site"),
                                 new Publication("Site", "site", null, "html5", Arrays.asList(
-                                        new Publication.Param("args.gen.task.lbl", "YES", null),
-                                        new Publication.Param("args.rellinks", "noparent", null)
+                                        new Publication.Param("args.gen.task.lbl", "YES", null, null),
+                                        new Publication.Param("args.rellinks", "noparent", null, null)
                                 ))
                         )
                 ),

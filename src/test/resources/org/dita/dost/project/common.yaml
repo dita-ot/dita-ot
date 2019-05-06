@@ -8,6 +8,8 @@ publications:
     value: "YES"
   - name: "args.rellinks"
     value: "noparent"
+  - name: "args.cssroot"
+    file: "../../resources"
 contexts:
 - name: "Site"
   id: "site"

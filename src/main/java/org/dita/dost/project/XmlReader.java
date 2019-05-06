@@ -44,6 +44,7 @@ public class XmlReader {
     public static final String NS = "https://www.dita-ot.org/project";
 
     public static final String ATTR_HREF = "href";
+    public static final String ATTR_FILE = "file";
     public static final String ATTR_ID = "id";
     public static final String ATTR_IDREF = "idref";
     public static final String ATTR_NAME = "name";
@@ -133,7 +134,7 @@ public class XmlReader {
      * @param file
      * @return project file document
      */
-    private Document readDocument(InputStream in, URI file) throws TransformerConfigurationException, SAXException, IOException {
+    private Document readDocument(final InputStream in, final URI file) throws TransformerConfigurationException, SAXException, IOException {
         final Document document = documentBuilder.newDocument();
         if (file != null) {
             document.setDocumentURI(file.toString());
@@ -176,7 +177,8 @@ public class XmlReader {
                         .map(param -> new ProjectBuilder.Publication.Param(
                                 getValue(param, ATTR_NAME),
                                 getValue(param, ATTR_VALUE),
-                                getHref(param).orElse(null)
+                                getHref(param).orElse(null),
+                                getFile(param).orElse(null)
                         ))
                         .collect(Collectors.toList())
         );
@@ -204,23 +206,20 @@ public class XmlReader {
         );
     }
 
-    private Optional<Element> getChild(final Element project, String localName) {
+    private Optional<Element> getChild(final Element project, final String localName) {
         return XMLUtils.getChildElement(project, NS, localName);
     }
 
-    private Stream<Element> getChildren(final Element project, String localName) {
+    private Stream<Element> getChildren(final Element project, final String localName) {
         return XMLUtils.getChildElements(project, NS, localName).stream();
     }
 
     private Optional<URI> getHref(final Element elem) {
-        return getAttribute(elem, ATTR_HREF)
-                .map(uri -> {
-                    try {
-                        return new URI(uri);
-                    } catch (URISyntaxException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        return getAttribute(elem, ATTR_HREF).map(this::toUri);
+    }
+
+    private Optional<URI> getFile(final Element elem) {
+        return getAttribute(elem, ATTR_FILE).map(this::toUri);
     }
 
     private Optional<String> getAttribute(final Element elem, final String attrName) {
@@ -230,4 +229,13 @@ public class XmlReader {
         }
         return Optional.empty();
     }
+
+    private URI toUri(final String uri) {
+        try {
+            return new URI(uri);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

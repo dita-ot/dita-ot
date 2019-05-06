@@ -9,8 +9,11 @@
 package org.dita.dost.project;
 
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,7 +31,7 @@ public class Project {
                         ))
                         .collect(Collectors.toList()),
                 toStream(src.includes)
-                        .map(include -> new ProjectRef(resolve(include, base)))
+                        .map(include -> new ProjectRef(resolveURI(include, base)))
                         .collect(Collectors.toList()),
                 toStream(src.publications)
                         .map(publication -> build(publication, base))
@@ -44,8 +47,18 @@ public class Project {
         return src != null ? src.stream() : Stream.empty();
     }
 
-    private static URI resolve(final URI file, final URI base) {
-        return file != null && base != null ? base.resolve(file) : file;
+    private static URI resolveURI(final URI file, final URI base) {
+        if (file == null) {
+            return null;
+        }
+        return base != null ? base.resolve(file) : file;
+    }
+
+    private static Path resolvePath(final URI file, final URI base) {
+        if (file == null) {
+            return null;
+        }
+        return base != null ? Paths.get(base.resolve(file)) : Paths.get(file);
     }
 
     private static Publication build(final ProjectBuilder.Publication publication, final URI base) {
@@ -58,7 +71,12 @@ public class Project {
                 publication.idref,
                 publication.transtype,
                 toStream(publication.params)
-                        .map(param -> new Publication.Param(param.name, param.value, resolve(param.href, base)))
+                        .map(param -> new Publication.Param(
+                                param.name,
+                                param.value,
+                                resolveURI(param.href, base),
+                                resolvePath(param.file, base))
+                        )
                         .collect(Collectors.toList())
         );
     }
@@ -74,14 +92,14 @@ public class Project {
                 context.input != null
                         ? new Deliverable.Inputs(
                         context.input.stream()
-                                .map(input -> new Deliverable.Inputs.Input(resolve(input, base)))
+                                .map(input -> new Deliverable.Inputs.Input(resolveURI(input, base)))
                                 .collect(Collectors.toList())
                 )
                         : new Deliverable.Inputs(Collections.emptyList()),
                 context.profiles != null
                         ? new Deliverable.Profile(
                         context.profiles.ditavals.stream()
-                                .map(ditaval -> new Deliverable.Profile.DitaVal(resolve(ditaval, base)))
+                                .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
                                 .collect(Collectors.toList())
                 )
                         : new Deliverable.Profile(Collections.emptyList())
@@ -207,14 +225,20 @@ public class Project {
             public final String name;
             public final String value;
             public final URI href;
+            public final Path file;
 
             public Param(
                     String name,
                     String value,
-                    URI href) {
-                this.name = name;
+                    URI href,
+                    Path file) {
+                this.name = Objects.requireNonNull(name);
+                if (value == null && href == null && file == null) {
+                    throw new NullPointerException();
+                }
                 this.value = value;
                 this.href = href;
+                this.file = file;
             }
         }
     }

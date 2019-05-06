@@ -4,6 +4,7 @@
   <publication transtype="html5" id="common-sitePub2" name="Site">
     <param name="args.gen.task.lbl" value="YES"/>
     <param name="args.rellinks" value="noparent"/>
+    <param name="args.cssroot" file="../../resources"/>
   </publication>
   <context name="Site" id="site">
     <input href="site.ditamap"/>
