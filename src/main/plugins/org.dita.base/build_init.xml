@@ -88,11 +88,7 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- begin to init required parameters -->
     
-    <condition property="filter-stage" value="early">
-      <not>
-        <isset property="filter-stage"/>
-      </not>
-    </condition>
+    <property name="filter-stage" value="early"/>
     <condition property="filter-on-parse" value="true">
       <and>
         <equals arg1="${filter-stage}" arg2="early"/>
@@ -115,19 +111,8 @@ See the accompanying LICENSE file for applicable license.
       </and>
     </condition>
 
-    <condition property="args.grammar.cache"
-          value="yes">
-            <not>
-              <isset property="args.grammar.cache" />
-            </not>
-    </condition>
-
-    <condition property="args.xml.systemid.set"
-          value="yes">
-            <not>
-              <isset property="args.xml.systemid.set" />
-            </not>
-    </condition>
+    <property name="args.grammar.cache" value="yes"/>
+    <property name="args.xml.systemid.set" value="yes"/>    
     <!-- end to init required parameters -->
 
     <!-- create required directories -->
@@ -135,18 +120,10 @@ See the accompanying LICENSE file for applicable license.
     <delete dir="${dita.temp.dir}" quiet="false"/>
     <mkdir dir="${dita.temp.dir}" />
 
-    <condition property="args.logdir" value="${output.dir}">
-      <not>
-        <isset property="args.logdir" />
-      </not>
-    </condition>
+    <property name="args.logdir" value="${output.dir}"/>
 
     <!-- Validate the xml file or not,default is validation(true)-->
-    <condition property="validate" value="true">
-       <not>
-       <isset property="validate" />
-       </not>
-    </condition>
+    <property name="validate" value="true"/>
     
     <!-- Related links to output: none, all, nofamily -->
     <condition property="include.rellinks" value="">
@@ -169,17 +146,9 @@ See the accompanying LICENSE file for applicable license.
     </condition>
 
     <!--solution for the output control-->
-    <condition property="generate.copy.outer" value="1">
-       <not>
-       <isset property="generate.copy.outer" />
-       </not>
-    </condition>
+    <property name="generate.copy.outer" value="1"/>
 
-    <condition property="onlytopic.in.map" value="false">
-       <not>
-       <isset property="onlytopic.in.map" />
-       </not>
-  </condition>
+    <property name="onlytopic.in.map" value="false"/>
 
     <property name="link-crawl" value="topic"/>
     
@@ -189,11 +158,7 @@ See the accompanying LICENSE file for applicable license.
   warn  :1b) Complete if files will be generated/copied outside, but log a warning
   quiet  :1c) Quietly finish with only those files (no warning or error)
     -->
-    <condition property="outer.control" value="warn">
-       <not>
-       <isset property="outer.control" />
-       </not>
-    </condition>
+    <property name="outer.control" value="warn"/>
 
     <condition property="inner.transform">
         <equals arg1="${generate.copy.outer}" arg2="1"/>
@@ -203,9 +168,7 @@ See the accompanying LICENSE file for applicable license.
       <equals arg1="${generate.copy.outer}" arg2="3"></equals>
     </condition>
     
-    <condition property="conserve-memory" value="false">
-      <not><isset property="conserve-memory"/></not>
-    </condition>
+    <property name="conserve-memory" value="false"/>
   </target>
   
   <target name="log-arg">

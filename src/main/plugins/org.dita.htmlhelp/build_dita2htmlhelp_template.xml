@@ -71,11 +71,7 @@ See the accompanying LICENSE file for applicable license.
                    compile.HTML.Help"/> 
 
   <target name="dita.map.htmlhelp.init" description="Init properties for HTMLHelp">
-    <condition property="out.ext" value=".html">
-      <not>
-        <isset property="out.ext"/>
-      </not>
-    </condition>
+    <property name="out.ext" value=".html"/>
     <property name="args.output.base" value="${dita.map.filename.root}"/>
   </target>
 

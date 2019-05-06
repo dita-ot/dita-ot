@@ -60,9 +60,7 @@ with those set forth herein.
       <isfalse value="${org.dita.pdf2.chunk.enabled}"/>
     </condition>
     
-    <condition property="args.rellinks" value="nofamily">
-      <not><isset property="args.rellinks"/></not>
-    </condition>
+    <property name="args.rellinks" value="nofamily"/>
   </target>
 
   <target name="dita2pdf" depends="dita2pdf2"/>
@@ -104,9 +102,7 @@ with those set forth herein.
       <os family="unix"/>
     </condition>
     
-    <condition property="file.protocol.prefix" value="file:/">
-      <not><isset property="file.protocol.prefix"/></not>
-    </condition>
+    <property name="file.protocol.prefix" value="file:/"/>
     
     <path id="xml.catalog.path">
       <pathelement location="${customization.dir}/catalog.xml"/>
@@ -204,29 +200,19 @@ with those set forth herein.
       <available file="${variable.file}" />
     </condition>
 
-    <condition property="document.locale" value="${default.locale}">
-      <not><isset property="document.locale"/></not>
-    </condition>
+    <property name="document.locale" value="${default.locale}"/>
 
     <!-- WS runtime properties -->
     <property file="${cfg.common.dir}/properties/${document.locale}.properties"/>
 
-    <condition property="document.language" value="${default.language}">
-      <not><isset property="document.language"/></not>
-    </condition>
+    <property name="document.language" value="${default.language}"/>
     <echo level="info">Using document.locale=${document.locale}</echo>
 
-    <condition property="args.bookmark.style" value="">
-      <not><isset property="args.bookmark.style"/></not>
-    </condition>
+    <property name="args.bookmark.style" value=""/>
 
-    <condition property="args.chapter.layout" value="">
-      <not><isset property="args.chapter.layout"/></not>
-    </condition>
+    <property name="args.chapter.layout" value=""/>
 
-    <condition property="args.draft" value="no">
-      <not><isset property="args.draft"/></not>
-    </condition>
+    <property name="args.draft" value="no"/>
 
     <condition property="publish.required.cleanup" value="${args.draft}">
       <and>
@@ -235,9 +221,7 @@ with those set forth herein.
       </and>
     </condition>
 
-    <condition property="args.gen.task.lbl" value="">
-      <not><isset property="args.gen.task.lbl"/></not>
-    </condition>
+    <property name="args.gen.task.lbl" value=""/>
     <!-- use customized xsl file for pdf transform.-->
     <condition property="temp.transformation.file" value="${args.xsl.pdf}">
       <and>
@@ -252,16 +236,9 @@ with those set forth herein.
       </and>
     </condition>
     
-    <condition property="args.bookmap-order" value="discard">
-      <not><isset property="args.bookmap-order"/></not>
-    </condition>
-
-    <condition property="args.figurelink.style" value="NUMTITLE">
-        <not><isset property="args.figurelink.style"/></not>
-    </condition>
-    <condition property="args.tablelink.style" value="NUMTITLE">
-        <not><isset property="args.tablelink.style"/></not>
-    </condition>
+    <property name="args.bookmap-order" value="discard"/>
+    <property name="args.figurelink.style" value="NUMTITLE"/>
+    <property name="args.tablelink.style" value="NUMTITLE"/>
   </target>
 
   <target name="transform.topic2fo.index">
@@ -292,9 +269,7 @@ with those set forth herein.
         <available file="${cfg.dir}/common/index/${document.language}.xml"/>
       </and>
     </condition>
-    <condition property="index.config.file" value="${cfg.dir}/common/index/${default.language}.xml">
-      <not><isset property="index.config.file"/></not>
-    </condition>
+    <property name="index.config.file" value="${cfg.dir}/common/index/${default.language}.xml"/>
 
     <index-preprocess input="${inputFile.url}" output="${dita.temp.dir}/stage1.xml"
                       indexConfig="${index.config.file}" locale="${document.locale}"
@@ -372,9 +347,7 @@ with those set forth herein.
         <available file="${cfg.fo.dir}/i18n/${document.language}.xml"/>
       </and>
     </condition>
-    <condition property="i18n.config.file" value="${cfg.fo.dir}/i18n/${default.language}.xml">
-      <not><isset property="i18n.config.file"/></not>
-    </condition>
+    <property name="i18n.config.file" value="${cfg.fo.dir}/i18n/${default.language}.xml"/>
 
     <i18n-preprocess input="${dita.temp.dir}/stage2.fo" output="${pdf2.temp.dir}/topic.fo"
                      config="${i18n.config.file}"

@@ -20,11 +20,7 @@ See the accompanying LICENSE file for applicable license.
                    html5.css"/>
 
   <target name="html5.init">
-    <condition property="args.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/dita2html5.xsl">
-      <not>
-        <isset property="args.xsl"/>
-      </not>
-    </condition>
+    <property name="args.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/dita2html5.xsl"/>
     <condition property="html5.nav-toc" value="${nav-toc}" else="none">
       <isset property="nav-toc"/>
     </condition>
@@ -104,11 +100,7 @@ See the accompanying LICENSE file for applicable license.
     </condition>
     <!-- Set to "true" if you get out-of-memory errors during preprocess
     while processing very large (thousands of files) document sets. -->
-    <condition property="dita.html5.reloadstylesheet" value="false">
-      <not>
-        <isset property="dita.html5.reloadstylesheet"/>
-      </not>
-    </condition>
+    <property name="dita.html5.reloadstylesheet" value="false"/>
   </target>
 
   <target name="html5.topic"
@@ -155,16 +147,8 @@ See the accompanying LICENSE file for applicable license.
                    html5.map.toc"/>
 
   <target name="html5.map.init" unless="noMap">
-    <condition property="args.html5.toc.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/map2html5-cover.xsl">
-      <not>
-        <isset property="args.html5.toc.xsl"/>
-      </not>
-    </condition>
-    <condition property="args.html5.toc" value="index">
-      <not>
-        <isset property="args.html5.toc"/>
-      </not>
-    </condition>
+    <property name="args.html5.toc.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/map2html5-cover.xsl"/>
+    <property name="args.html5.toc" value="index"/>
   </target>
 
   <target name="html5.map.toc" unless="noMap" description="Build HTML5 TOC file">

@@ -28,16 +28,8 @@ See the accompanying LICENSE file for applicable license.
             depends="dita.map.xhtml.init, dita.map.xhtml.toc" />
 
     <target name="dita.map.xhtml.init" unless="noMap">
-      <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/map2${html-version}-cover.xsl">
-        <not>
-          <isset property="args.xhtml.toc.xsl" />
-        </not>
-      </condition>
-        <condition property="args.xhtml.toc" value="index">
-            <not>
-                <isset property="args.xhtml.toc" />
-            </not>
-        </condition>
+      <property name="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/map2${html-version}-cover.xsl"/>
+      <property name="args.xhtml.toc" value="index"/>
     </target>
     
 

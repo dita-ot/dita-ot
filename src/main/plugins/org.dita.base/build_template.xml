@@ -25,9 +25,7 @@ See the accompanying LICENSE file for applicable license.
       </condition>
       <param name="1" value="${transtype}"/>
     </dita-ot-fail>
-    <condition property="clean.temp" value="true">
-      <not><isset property="clean.temp"/></not>
-    </condition>
+    <property name="clean.temp" value="true"/>
     <condition property="clean-temp.skip">
       <isfalse value="${clean.temp}"/>
     </condition>
