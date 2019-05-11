@@ -41,7 +41,7 @@ public class XmlReaderTest {
             assertEquals("sitePub", publication.id);
             assertEquals(null, publication.idref);
             assertEquals("html5", publication.transtype);
-            assertEquals(2, publication.params.size());
+            assertEquals(4, publication.params.size());
             assertEquals("args.gen.task.lbl", publication.params.get(0).name);
             assertEquals("YES", publication.params.get(0).value);
             assertEquals(null, publication.params.get(0).href);

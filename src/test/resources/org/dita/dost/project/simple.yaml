@@ -18,3 +18,7 @@ deliverables:
       value: "YES"
     - name: "args.rellinks"
       value: "noparent"
+    - name: "args.uri"
+      href: "foo%20bar"
+    - name: "args.path"
+      path: "baz+qux"

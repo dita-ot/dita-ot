@@ -406,13 +406,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                                 if (param.href != null) {
                                     value = Paths.get(base.resolve(param.href)).toString();
                                 } else {
-                                    value = Paths.get(base).resolve(param.file).toString();
+                                    value = Paths.get(base).resolve(param.path).toString();
                                 }
                             } else {
                                 if (param.href != null) {
                                     value = param.href.toString();
                                 } else {
-                                    value = URLUtils.toFile(param.file.toString()).toString();
+                                    value = URLUtils.toFile(param.path.toString()).toString();
                                 }
                             }
                             props.put(param.name, value);

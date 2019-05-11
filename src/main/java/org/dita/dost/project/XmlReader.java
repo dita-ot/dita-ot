@@ -44,7 +44,7 @@ public class XmlReader {
     public static final String NS = "https://www.dita-ot.org/project";
 
     public static final String ATTR_HREF = "href";
-    public static final String ATTR_FILE = "file";
+    public static final String ATTR_PATH = "path";
     public static final String ATTR_ID = "id";
     public static final String ATTR_IDREF = "idref";
     public static final String ATTR_NAME = "name";
@@ -219,7 +219,7 @@ public class XmlReader {
     }
 
     private Optional<URI> getFile(final Element elem) {
-        return getAttribute(elem, ATTR_FILE).map(this::toUri);
+        return getAttribute(elem, ATTR_PATH).map(this::toUri);
     }
 
     private Optional<String> getAttribute(final Element elem, final String attrName) {
