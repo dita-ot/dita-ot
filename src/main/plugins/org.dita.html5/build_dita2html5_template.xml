@@ -116,7 +116,7 @@ See the accompanying LICENSE file for applicable license.
       </filterchain>
     </loadfile>
     <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}"/>
-    <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>    
+    <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
   </target>
 
   <target name="html5.image-metadata"
@@ -146,12 +146,19 @@ See the accompanying LICENSE file for applicable license.
           depends="html5.map.init,
                    html5.map.toc"/>
 
-  <target name="html5.map.init" unless="noMap">
+  <target name="html5.map.init">
     <property name="args.html5.toc.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/map2html5-cover.xsl"/>
     <property name="args.html5.toc" value="index"/>
+
+    <condition property="_html5.toc.skip" value="true">
+      <or>
+        <isset property="noMap"/>
+        <istrue value="${html5.toc.skip}"/>
+      </or>
+    </condition>
   </target>
 
-  <target name="html5.map.toc" unless="noMap" description="Build HTML5 TOC file">
+  <target name="html5.map.toc" unless="_html5.toc.skip" description="Build HTML5 TOC file">
     <html5.map>
       <dita:extension id="dita.conductor.html5.toc.param" behavior="org.dita.dost.platform.InsertAction"/>
     </html5.map>

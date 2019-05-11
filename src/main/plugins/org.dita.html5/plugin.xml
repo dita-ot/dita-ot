@@ -45,6 +45,10 @@ See the accompanying LICENSE file for applicable license.
     <param name="args.html5.contenttarget" desc="Specifies the value of the @target attribute on the &lt;base&gt; element in the TOC file." type="string">
       <val default="true">contentwin</val>
     </param>
+    <param name="html5.toc.skip" desc="Disable TOC generation from DITA map." type="enum">
+      <val>yes</val>
+      <val default="true">no</val>
+    </param>
     <param name="args.html5.toc" desc="Specifies the base name of the TOC file." type="string">
       <val default="true">index</val>
     </param>
