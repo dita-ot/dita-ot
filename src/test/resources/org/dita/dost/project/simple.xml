@@ -12,6 +12,8 @@
     <publication transtype="html5" id="sitePub" name="Site">
       <param name="args.gen.task.lbl" value="YES"/>
       <param name="args.rellinks" value="noparent"/>
+      <param name="args.uri" href="foo%20bar"/>
+      <param name="args.path" path="baz+qux"/>
     </publication>
   </deliverable>
 </project>

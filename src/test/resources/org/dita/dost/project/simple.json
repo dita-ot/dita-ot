@@ -26,6 +26,14 @@
             "name": "args.rellinks",
             "value": "noparent",
             "href": null
+          },
+          {
+            "name": "args.uri",
+            "href": "foo%20bar"
+          },
+          {
+            "name": "args.rellinks",
+            "path": "baz+qux"
           }
         ]
       }

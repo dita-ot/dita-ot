@@ -75,7 +75,7 @@ public class Project {
                                 param.name,
                                 param.value,
                                 resolveURI(param.href, base),
-                                resolvePath(param.file, base))
+                                resolvePath(param.path, base))
                         )
                         .collect(Collectors.toList())
         );
@@ -225,20 +225,20 @@ public class Project {
             public final String name;
             public final String value;
             public final URI href;
-            public final Path file;
+            public final Path path;
 
             public Param(
                     String name,
                     String value,
                     URI href,
-                    Path file) {
+                    Path path) {
                 this.name = Objects.requireNonNull(name);
-                if (value == null && href == null && file == null) {
+                if (value == null && href == null && path == null) {
                     throw new NullPointerException();
                 }
                 this.value = value;
                 this.href = href;
-                this.file = file;
+                this.path = path;
             }
         }
     }

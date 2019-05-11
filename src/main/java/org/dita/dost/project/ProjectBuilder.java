@@ -113,18 +113,18 @@ public class ProjectBuilder {
             public String name;
             public String value;
             public URI href;
-            public URI file;
+            public URI path;
 
             @JsonCreator
             public Param(
                     @JsonProperty("name") String name,
                     @JsonProperty("value") String value,
                     @JsonProperty("href") URI href,
-                    @JsonProperty("file") URI file) {
+                    @JsonProperty("file") URI path) {
                 this.name = name;
                 this.value = value;
                 this.href = href;
-                this.file = file;
+                this.path = path;
             }
         }
     }
