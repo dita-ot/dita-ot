@@ -933,7 +933,10 @@ See the accompanying LICENSE file for applicable license.
                         <fo:table-row>
                                 <fo:table-cell xsl:use-attribute-sets="note__image__entry">
                                     <fo:block>
-                                        <fo:external-graphic src="url('{concat($artworkPrefix, $noteImagePath)}')" xsl:use-attribute-sets="image"/>
+                                        <fo:external-graphic src="url('{concat($artworkPrefix, $noteImagePath)}')" 
+                                                             content-height="2em" padding-right="3pt"
+                                                             vertical-align="middle"
+                                                             baseline-shift="baseline"/>
                                     </fo:block>
                                 </fo:table-cell>
                                 <fo:table-cell xsl:use-attribute-sets="note__text__entry">
