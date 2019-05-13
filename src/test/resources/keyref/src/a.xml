@@ -32,6 +32,8 @@
       </dlentry>
     </dl>
     <lq keyref="lq"></lq>
+    <object datakeyref="object"/>
+    <object data="https://example.com/fake-media-link"><desc>Link to youtube or similar</desc></object>
   </body>
   <related-links>
     <link keyref="link"/>

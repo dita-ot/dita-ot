@@ -30,6 +30,8 @@
       </dlentry>
     </dl>
     <lq keyref="lq" class="- topic/lq " href="b.xml" scope="peer"><keyword class="- topic/keyword ">lq keyword</keyword></lq>
+    <object class="- topic/object " datakeyref="object" data="https://example.com" format="html" scope="external"/>
+    <object class="- topic/object " data="https://example.com/fake-media-link"><desc class="- topic/desc ">Link to youtube or similar</desc></object>
   </body>
   <related-links class="- topic/related-links ">
     <link keyref="link" class="- topic/link " href="b.xml" scope="peer"><?ditaot usertext?><linktext class="- topic/linktext "><keyword class="- topic/keyword ">link keyword</keyword></linktext></link>

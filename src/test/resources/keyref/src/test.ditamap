@@ -157,4 +157,9 @@
       </keywords>
     </topicmeta>
   </keydef>
+  <keydef keys="object" href="https://example.com" scope="external" format="html">
+    <topicmeta>
+      <navtitle>Object test</navtitle>
+    </topicmeta>
+  </keydef>
 </map>
