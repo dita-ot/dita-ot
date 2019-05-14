@@ -1001,6 +1001,8 @@ public final class Constants {
     public static final String ATTR_FORMAT_VALUE_DITAVAL = "ditaval";
     public static final String ATTR_FORMAT_VALUE_IMAGE = "image";
     public static final String ATTR_FORMAT_VALUE_HTML = "html";
+    /** ATTR_FORMAT_VALUE_NONDITA = format unknown, but not DITA **/
+    public static final String ATTR_FORMAT_VALUE_NONDITA = "nondita";
     /**ATTRIBUTE_NAME_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_NAME_DITAARCHVERSION = "DITAArchVersion";
     /**ATTRIBUTE_PREFIX_DITAARCHVERSION.*/
