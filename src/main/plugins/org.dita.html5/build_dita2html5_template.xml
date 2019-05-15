@@ -149,11 +149,11 @@ See the accompanying LICENSE file for applicable license.
   <target name="html5.map.init">
     <property name="args.html5.toc.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/map2html5-cover.xsl"/>
     <property name="args.html5.toc" value="index"/>
-
+    <property name="html5.toc.generate" value="true"/>
     <condition property="_html5.toc.skip" value="true">
       <or>
         <isset property="noMap"/>
-        <istrue value="${html5.toc.skip}"/>
+        <isfalse value="${html5.toc.generate}"/>
       </or>
     </condition>
   </target>
