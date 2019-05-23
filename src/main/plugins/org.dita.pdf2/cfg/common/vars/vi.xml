@@ -10,7 +10,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Preface odd header"><param ref-name="prodname"/> | Lời nói đầu | <param ref-name="pagenum"/></variable>
   <variable id="Preface even header"><param ref-name="pagenum"/> | Lời nói đầu | <param ref-name="prodname"/></variable>
   <variable id="Table of Contents">Nội dung</variable>
-  <variable id="Index Continued String"></variable>
+  <variable id="Index Continued String">tiếp tục</variable>
   <variable id="Index See String">, xem </variable>
   <variable id="Index See Also String">Xem thêm </variable>
   <variable id="Table of Contents Chapter">Chương <param ref-name="number"/>: </variable>

@@ -10,7 +10,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Preface odd header"><param ref-name="prodname"/> | Predgovor | <param ref-name="pagenum"/></variable>
   <variable id="Preface even header"><param ref-name="pagenum"/> | Predgovor | <param ref-name="prodname"/></variable>
   <variable id="Table of Contents">Sadržaj</variable>
-  <variable id="Index Continued String">continued</variable>
+  <variable id="Index Continued String">nastavak</variable>
   <variable id="Index See String">, Vidi </variable>
   <variable id="Index See Also String">Vidi takođe </variable>
   <variable id="Table of Contents Chapter">Poglavlje <param ref-name="number"/>: </variable>
