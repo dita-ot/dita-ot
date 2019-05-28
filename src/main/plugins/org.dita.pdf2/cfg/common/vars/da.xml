@@ -10,7 +10,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Preface odd header"><param ref-name="prodname"/> | Forord | <param ref-name="pagenum"/></variable>
   <variable id="Preface even header"><param ref-name="pagenum"/> | Forord | <param ref-name="prodname"/></variable>
   <variable id="Table of Contents">Indholdsfortegnelse</variable>
-  <variable id="Index Continued String"></variable>
+  <variable id="Index Continued String">fortsat</variable>
   <variable id="Index See String">, Se </variable>
   <variable id="Index See Also String">Se også </variable>
   <variable id="Table of Contents Chapter">Kapitel <param ref-name="number"/>: </variable>

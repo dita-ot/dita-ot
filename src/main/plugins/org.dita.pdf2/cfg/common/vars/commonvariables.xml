@@ -117,13 +117,13 @@ See the accompanying LICENSE file for applicable license.
   <!-- Image path to use for a note of "notice" type. -->
   <variable id="notice Note Image Path"></variable>
   <!-- Image path to use for a note of "attention" type. -->
-  <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</variable>
   <!-- Image path to use for a note of "caution" type. -->
-  <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</variable>
   <!-- Image path to use for a note of "danger" type. -->
-  <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</variable>
   <!-- Image path to use for a note of "warning" type. -->
-  <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</variable>
   <!-- Image path to use for a note of "fastpath" type. -->
   <variable id="fastpath Note Image Path"></variable>
   <!-- Image path to use for a note of "important" type. -->
@@ -135,7 +135,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Image path to use for a note of "tip" type. -->
   <variable id="tip Note Image Path"></variable>
   <!-- Image path to use for a note of "troubleshooting" type. -->
-  <variable id="trouble Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="trouble Note Image Path">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</variable>
   <!-- Image path to use for a note of "other" type. -->
   <variable id="other Note Image Path"></variable>
 
