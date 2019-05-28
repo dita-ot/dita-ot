@@ -211,4 +211,10 @@
       </keywords>
     </topicmeta>
   </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="object" href="https://example.com" scope="external" format="html" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Object test</navtitle>
+      <linktext class="- map/linktext ">Object test</linktext>
+    </topicmeta>
+  </keydef>
 </map>

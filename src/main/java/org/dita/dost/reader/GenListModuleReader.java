@@ -482,7 +482,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     private void parseObject(final Attributes atts) {
         URI attrValue = toURI(atts.getValue(ATTRIBUTE_NAME_DATA));
-        if (attrValue == null) {
+        if (attrValue == null || attrValue.isAbsolute()) {
             return;
         }
 
@@ -500,7 +500,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         filename = stripFragment(filename);
         assert filename.isAbsolute();
 
-        nonConrefCopytoTargets.add(new Reference(filename, ATTR_FORMAT_VALUE_HTML));
+        nonConrefCopytoTargets.add(new Reference(filename, ATTR_FORMAT_VALUE_NONDITA));
     }
 
     private void handleSubjectScheme(final Attributes atts) {
