@@ -328,7 +328,8 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="number($startCurrentRow) > number($endMatchRow)"/>
       <!-- Otherwise, the column-1 cell is aligned with the tbody cell, so save the ID and continue -->
       <xsl:otherwise>
-        <xsl:value-of select="generate-id(.)"/><xsl:text> </xsl:text>
+        <xsl:value-of select="if(@id) then dita-ot:generate-html-id(.) else generate-id(.)"/>
+        <xsl:text> </xsl:text>
         <!-- If we are not at the end of the tbody cell, and more rows exist, continue testing column 1 -->
         <xsl:if test="number($endCurrentRow) &lt; number($endMatchRow) and
                       parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]">
