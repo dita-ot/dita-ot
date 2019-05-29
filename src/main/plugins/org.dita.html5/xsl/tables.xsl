@@ -272,11 +272,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="startmatch" select="1"/>  <!-- start column of the tbody cell -->
     <xsl:param name="endmatch" select="1"/>    <!-- end column of the tbody cell -->
     <xsl:variable name="entrystartpos" select="@dita-ot:x"/>         <!-- start column of this thead cell -->
-    <xsl:variable name="entryendpos">           <!-- end column of this thead cell -->
-      <xsl:call-template name="find-entry-end-position">
+    <xsl:variable name="entryendpos" select="table:find-entry-end-column(.)"/>           <!-- end column of this thead cell -->
+      <!--<xsl:call-template name="find-entry-end-position">
         <xsl:with-param name="startposition" select="$entrystartpos"/>
-      </xsl:call-template>
-    </xsl:variable>
+      </xsl:call-template>-->
+    <!--</xsl:variable>-->
     <!-- The test cell can be any of the following:
          * completely before the header range (ignore id)
          * completely after the header range (ignore id)
@@ -349,42 +349,52 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="entrystartpos" select="@dita-ot:x">
     </xsl:variable>
     <!-- Determine the end column for the current cell -->
-    <xsl:variable name="entryendpos">
-      <xsl:call-template name="find-entry-end-position">
-        <xsl:with-param name="startposition" select="$entrystartpos"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <!-- Find the IDs of headers that are aligned above this cell. This is done by applying
-         templates on all headers, using mode=findmatch; matching IDs are returned. -->
+    <xsl:variable name="entryendpos" select="table:find-entry-end-column(.)"/>
+    <!-- Find the IDs of all headers that are aligned above this cell. May contain duplicates due to spanning cells. -->
+    <xsl:variable name="all-thead-headers" select="table:get-matching-thead-headers(.)" as="xs:string*"/>
     <xsl:variable name="hdrattr">
+      <xsl:for-each select="distinct-values($all-thead-headers)">
+        <xsl:value-of select="concat(.,' ')"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <!-- Row header should be 0 or 1 today, but future updates may allow multiple -->
+    <xsl:variable name="all-row-headers" select="table:get-matching-row-headers(.)" as="xs:string*"/>
+    <xsl:variable name="rowheader">
+      <xsl:for-each select="distinct-values($all-row-headers)">
+        <xsl:value-of select="concat(.,' ')"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <!--<xsl:variable name="hdrattr">
       <xsl:apply-templates select="../../../*[contains(@class, ' topic/thead ')]/
                                             *[contains(@class, ' topic/row ')]/
                                             *[contains(@class, ' topic/entry ')]" mode="findmatch">
         <xsl:with-param name="startmatch" select="$entrystartpos"/>
         <xsl:with-param name="endmatch" select="$entryendpos"/>
       </xsl:apply-templates>
-    </xsl:variable>
-    <!-- Find the IDs of headers in the first column, which are aligned with this cell -->
-    <xsl:variable name="rowheader">
-      <!-- If this entry is not in the first column or in thead, and @rowheader=firstcol on table -->
+    </xsl:variable>-->
+    <!-- Find the ID of header in the first column, which is aligned with this cell -->
+    <!--<xsl:variable name="rowheader">
+      <!-\- If this entry is not in the first column or in thead, and @rowheader=firstcol on table -\->
       <xsl:if test="not(number($entrystartpos) = 1) and
                     not(parent::*/parent::*[contains(@class, ' topic/thead ')]) and
                     ../../../../@rowheader = 'firstcol'">
-        <!-- Find the start row for this entry -->
-        <xsl:variable name="startrow" select="number(count(parent::*/preceding-sibling::*[contains(@class, ' topic/row ')])+1)"/>
-        <!-- Find the end row for this entry -->
+        <xsl:value-of select="table:get-matching-row-headers(.)"/>
+        <xsl:text> </xsl:text>
+        <!-\- Find the start row for this entry -\->
+        <!-\-<xsl:variable name="startrow" select="number(count(parent::*/preceding-sibling::*[contains(@class, ' topic/row ')])+1)"/>
+        <!-\\- Find the end row for this entry -\\->
         <xsl:variable name="endrow">
           <xsl:if test="@morerows"><xsl:value-of select="number($startrow) + number(@morerows)"/></xsl:if>
           <xsl:if test="not(@morerows)"><xsl:value-of select="$startrow"/></xsl:if>
         </xsl:variable>
-        <!-- Scan first-column entries for ones that align with this cell, starting with
-             the first entry in the first row -->
+        <!-\\- Scan first-column entries for ones that align with this cell, starting with
+             the first entry in the first row -\\->
         <xsl:apply-templates select="../../*[contains(@class, ' topic/row ')][1]/*[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
           <xsl:with-param name="startMatchRow" select="$startrow"/>
           <xsl:with-param name="endMatchRow" select="$endrow"/>
-        </xsl:apply-templates>
+        </xsl:apply-templates>-\->
       </xsl:if>
-    </xsl:variable>
+    </xsl:variable>-->
      <xsl:if test="string-length($rowheader) > 0 or string-length($hdrattr) > 0">
       <xsl:attribute name="headers" select="concat($rowheader, $hdrattr)"/>
     </xsl:if>
