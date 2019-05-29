@@ -574,6 +574,9 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <xsl:template match="*[table:is-tbody-entry(.)]" mode="headers">
+    <xsl:if test="table:is-row-header(.)">
+      <xsl:attribute name="id" select="dita-ot:generate-html-id(.)"/>
+    </xsl:if>
     <xsl:call-template name="add-headers-attribute"/>
   </xsl:template>
 
