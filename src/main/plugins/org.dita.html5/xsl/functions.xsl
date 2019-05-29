@@ -151,7 +151,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="ctx" as="element()"/>
     <xsl:choose>
       <xsl:when test="$ctx/@nameend">
-        <xsl:value-of select="xs:integer(count(table:get-ending-colspec($ctx)/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
+        <xsl:value-of select="xs:integer(table:get-ending-colspec($ctx)/@colnum)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="xs:integer($ctx/@dita-ot:x)"/>
