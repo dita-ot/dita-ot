@@ -105,6 +105,15 @@ See the accompanying LICENSE file for applicable license.
       [@colname eq $entry/@colname]
     "/>
   </xsl:function>
+  
+  <xsl:function name="table:get-ending-colspec" as="element()?">
+    <xsl:param name="entry" as="element()"/>
+    
+    <xsl:sequence select="
+      table:get-current-tgroup($entry)/*[contains(@class, ' topic/colspec ')]
+      [@colname eq $entry/@nameend]
+      "/>
+  </xsl:function>
 
   <xsl:function name="table:get-entry-align" as="attribute(align)?">
     <xsl:param name="el" as="element()"/>
