@@ -246,14 +246,16 @@ public final class DitaValReader implements AbstractReader {
         if (children.getLength() != 0) {
             final Element img = (Element) children.item(0);
             URI absolute = null;
+            URI imageref = null;
             if (!img.getAttribute(ATTRIBUTE_NAME_IMAGEREF).isEmpty()) {
                 absolute = URLUtils.toURI(img.getAttribute(ATTRIBUTE_NAME_IMAGEREF));
+                imageref = absolute;
                 URI relative;
                 if (absolute.isAbsolute()) {
                     relative = getRelativePath(ditaVal, absolute);
                 } else if (!img.getAttributeNS(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI).isEmpty()) {
-                    absolute = URI.create(img.getAttributeNS(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI));
                     relative = absolute;
+                    absolute = URI.create(img.getAttributeNS(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI));
                 } else {
                     relative = absolute;
                     absolute = ditaVal.resolve(absolute);
@@ -278,7 +280,7 @@ public final class DitaValReader implements AbstractReader {
             }
 
             if (absolute != null || altText != null) {
-                return new FlagImage(absolute, altText);
+                return new FlagImage(absolute, imageref, altText);
             }
         }
         return null;

@@ -733,7 +733,7 @@ public final class FilterUtils {
             final Job.FileInfo flagFi = job.getFileInfo(img.href);
             if (flagFi != null) {
                 final Job.FileInfo current = job.getFileInfo(currentFile);
-                final URI flag = job.tempDirURI.resolve(flagFi.uri);
+                final URI flag = img.imageref != null ? job.tempDirURI.resolve(img.imageref) : job.tempDirURI.resolve(flagFi.uri);
                 final URI curr = job.tempDirURI.resolve(current.uri);
                 rel = URLUtils.getRelativePath(curr, flag);
             } else {
@@ -948,14 +948,23 @@ public final class FilterUtils {
 
         public static class FlagImage {
             public final URI href;
+            public final URI imageref;
             public final String alt;
 
             public FlagImage(URI href, String alt) {
                 this.href = href;
+                this.imageref = href;
+                this.alt = alt;
+            }
+            
+            public FlagImage(URI href, URI imageref, String alt) {
+                this.href = href;
+                this.imageref = imageref;
                 this.alt = alt;
             }
 
             private void writeFlag(final ContentHandler contentHandler, final String tag) throws SAXException {
+            	System.out.println("WRITING A START FLAG! HREF IS: " + href);
                 final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
                 final URI abs = href;
                 if (abs != null) {
@@ -996,6 +1005,7 @@ public final class FilterUtils {
             public String toString() {
                 return "FlagImage{" +
                         "href=" + href +
+                        ", imageref='" + imageref + '\'' +
                         ", alt='" + alt + '\'' +
                         '}';
             }
