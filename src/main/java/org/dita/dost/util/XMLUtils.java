@@ -1048,4 +1048,39 @@ public final class XMLUtils {
         }
         return builder.build();
     }
+
+    /**
+     * Insert fragment before reference element
+     * @param ref node to insert before
+     * @param fragment content to insert
+     */
+    public static void insertBefore(final Node ref, final DocumentFragment fragment) {
+        final Document doc = ref.getOwnerDocument();
+        final Node parent = ref.getParentNode();
+        final List<Node> children = toList(fragment.getChildNodes());
+        for (final Node child : children) {
+            parent.insertBefore(doc.importNode(child, true), ref);
+        }
+    }
+
+    /**
+     * Insert fragment after reference element
+     * @param ref node to insert after
+     * @param fragment content to insert
+     */
+    public static  void insertAfter(final Node ref, final DocumentFragment fragment) {
+        final Document doc = ref.getOwnerDocument();
+        final Node parent = ref.getParentNode();
+        final List<Node> children = toList(fragment.getChildNodes());
+        final Node nextSibling = ref.getNextSibling();
+        if (nextSibling != null) {
+            for (final Node child : children) {
+                parent.insertBefore(doc.importNode(child, true), nextSibling);
+            }
+        } else {
+            for (final Node child : children) {
+                parent.appendChild(doc.importNode(child, true));
+            }
+        }
+    }
 }
