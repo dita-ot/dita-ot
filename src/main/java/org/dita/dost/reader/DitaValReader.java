@@ -73,6 +73,9 @@ public final class DitaValReader implements AbstractReader {
     private Map<QName, Map<String, Set<Element>>> bindingMap;
     /** List of relative flagging image paths. */
     private final List<URI> relFlagImageList;
+    
+    /** Map of flag images with absolute URI, relative URI **/
+    private Map<URI, URI> flagImagesMap;
 
     /**
      * Default constructor of DitaValReader class.
@@ -82,6 +85,7 @@ public final class DitaValReader implements AbstractReader {
         filterMap = new HashMap<>();
         imageList = new ArrayList<>(256);
         relFlagImageList = new ArrayList<>(256);
+        flagImagesMap = new HashMap<>();
 
         try {
             final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -262,6 +266,7 @@ public final class DitaValReader implements AbstractReader {
                 }
                 imageList.add(absolute);
                 relFlagImageList.add(relative);
+                flagImagesMap.put(absolute, relative);
 
                 if (tempFileNameScheme != null && job.getFileInfo(absolute) == null) {
                     final URI dstTemp = tempFileNameScheme.generateTempFileName(absolute);
@@ -384,7 +389,7 @@ public final class DitaValReader implements AbstractReader {
 
 
     /**
-     * Insert action into filetermap if key not present in the map
+     * Insert action into filterMap if key not present in the map
      */
     private void insertAction(final Action action, final FilterKey key) {
         if (filterMap.get(key) == null) {
@@ -392,6 +397,14 @@ public final class DitaValReader implements AbstractReader {
         } else {
             logger.info(MessageUtils.getMessage("DOTJ007I", key.toString()).toString());
         }
+    }
+
+    /**
+     * Return the image set.
+     * @return image set
+     */
+    public Map<URI, URI> getFlagImageMap() {
+    	return Collections.unmodifiableMap(flagImagesMap);
     }
 
     /**

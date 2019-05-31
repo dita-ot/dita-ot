@@ -80,7 +80,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     /** Set of all images used for flagging */
     private final Set<URI> flagImageSet;
-
+    
+    /** Map of flag images URIs absolute + relative to DITAVAL **/ 
+    private final Map<URI, URI> flagImagesMap;
+    
     /** Set of all HTML and other non-DITA or non-image files */
     private final SetMultimap<String, URI> htmlSet;
 
@@ -164,6 +167,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         conrefSet = new HashSet<>(128);
         formatSet = new HashSet<>();
         flagImageSet = new LinkedHashSet<>(128);
+        flagImagesMap = new HashMap<>();
         htmlSet = SetMultimapBuilder.hashKeys().hashSetValues().build();
         hrefTargetSet = new HashSet<>(128);
         coderefTargetSet = new HashSet<>(16);
@@ -653,6 +657,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             ditaValReader.read(ditavalFile.toURI());
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
+            flagImagesMap.putAll(ditaValReader.getFlagImageMap());
             filterUtils = new FilterUtils(printTranstype.contains(transtype), ditaValReader.getFilterMap(),
                     ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         } else {
@@ -748,7 +753,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             getOrCreateFileInfo(fileinfos, file.filename).format = file.format;
         }
         for (final URI file: flagImageSet) {
-            final FileInfo f = getOrCreateFileInfo(fileinfos, file);
+  		  final FileInfo f = getOrCreateFlagImageFileInfo(fileinfos, file, flagImagesMap.get(file));
             f.isFlagImage = true;
             f.format = ATTR_FORMAT_VALUE_IMAGE;
         }
@@ -897,6 +902,28 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             b = new FileInfo.Builder().src(file);
         }
         b = b.uri(tempFileNameScheme.generateTempFileName(file));
+        final FileInfo i = b.build();
+        fileInfos.put(i.src, i);
+        return i;
+    }
+    
+    /** Flag images need a result URI that is relative to the DITAVAL in the temp dir, 
+     *  not a path relative to the original source location.
+     * @param fileInfos
+     * @param file
+     * @param file
+     * @return
+     */
+    private FileInfo getOrCreateFlagImageFileInfo(final Map<URI, FileInfo> fileInfos, final URI file, final URI relpath) {
+        assert file.getFragment() == null;
+        final URI f = file.normalize();
+        FileInfo.Builder b;
+        if (fileInfos.containsKey(f)) {
+            b = new FileInfo.Builder(fileInfos.get(f));
+        } else {
+            b = new FileInfo.Builder().src(file);
+        }
+        b = b.uri(tempFileNameScheme.generateTempFileName(relpath));
         final FileInfo i = b.build();
         fileInfos.put(i.src, i);
         return i;
