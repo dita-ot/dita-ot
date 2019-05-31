@@ -112,7 +112,7 @@ public class TestConrefPushParser {
 //            content.setValue(entry.getValue());
 //            parser.setContent(content);
             parser.setMoveTable(entry.getValue());
-            parser.write(entry.getKey());
+            parser.read(entry.getKey());
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
             final Document document = builder.parse(entry.getKey());
@@ -140,7 +140,7 @@ public class TestConrefPushParser {
                         while(node.getNodeType() != Node.ELEMENT_NODE){
                             node = node.getPreviousSibling();
                         }
-                        assertEquals("<li class=\"- topic/li task/step \" xmlns:dita-ot=\"http://dita-ot.sourceforge.net/ns/201007/dita-ot\"><ph class=\"- topic/ph task/cmd \">before</ph></li>", nodeToString((Element)node));
+                        assertEquals("<li class=\"- topic/li task/step \"><ph class=\"- topic/ph task/cmd \">before</ph></li>", nodeToString((Element)node));
                     }else if(element.getAttributes().getNamedItem("id")!=null && element.getAttributes().getNamedItem("id").getNodeValue().equals("B")){
                         // get node of after
                         node = element.getNextSibling();
