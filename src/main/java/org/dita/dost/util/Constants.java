@@ -903,6 +903,8 @@ public final class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_VALIDATE = "validate";
     /**Constants for extensive params used in ant invoker(outputdir).*/
     public static final String ANT_INVOKER_EXT_PARAM_OUTPUTDIR = "outputdir";
+    /**Constants for extensive params used in ant invoker(outputdir).*/
+    public static final String ANT_INVOKER_EXT_PARAM_DITAOUTPUTDIR = "ditaoutputdir";
     /**Constants for extensive params used in ant invoker(gramcache).*/
     public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE = "gramcache";
     public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID = "setsystemid";

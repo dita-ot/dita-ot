@@ -589,9 +589,11 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-flag.skip"
     description="Copy flag files">
-    <property name="flagimagefile" value="flagimage.list"/>
-    <job-helper file="flagimage.list" property="flagimagelist"/>
-    <dita-ot-copy todir="${dita.output.dir}" includesfile="${dita.temp.dir}/${flagimagefile}" relativepaths="${relflagimagelist}" />
+    <pipeline message="Copy ditaval flags" taskname="copy-flag-images" if:set="args.filter">
+      <module class="org.dita.dost.module.CopyFlagModule">
+        <param name="ditaoutputdir" value="${dita.output.dir}"/>
+      </module>
+    </pipeline>
   </target>
   
   <target name="copy-flag-check">

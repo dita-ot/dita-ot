@@ -22,6 +22,7 @@ See the accompanying LICENSE file for applicable license.
   <taskdef name="pipeline" classname="org.dita.dost.ant.ExtensibleAntInvoker"/>
   <taskdef name="dita-ot-echo" classname="org.dita.dost.ant.DITAOTEchoTask"/>
   <taskdef name="dita-ot-fail" classname="org.dita.dost.ant.DITAOTFailTask"/>
+  <!-- DEPRECATED: dita-ot-copy replaced with org.dita.dost.module.CopyFlagModule -->
   <taskdef name="dita-ot-copy" classname="org.dita.dost.ant.DITAOTCopy"/>
   <taskdef name="job-property" classname="org.dita.dost.ant.JobPropertyTask"/>
   <typedef name="isabsolute" classname="org.dita.dost.ant.IsAbsolute"/>
