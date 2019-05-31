@@ -907,8 +907,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         return i;
     }
     
-    /** Flag images need a result URI that is relative to the DITAVAL in the temp dir, 
-     *  not a path relative to the original source location.
+    /** Treat flag image references as if they are relative to the input dir.
      * @param fileInfos
      * @param file
      * @param file
@@ -923,7 +922,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         } else {
             b = new FileInfo.Builder().src(file);
         }
-        b = b.uri(tempFileNameScheme.generateTempFileName(relpath));
+                b = b.uri(tempFileNameScheme.generateTempFileName(baseInputDir.resolve(relpath)));
         final FileInfo i = b.build();
         fileInfos.put(i.src, i);
         return i;
