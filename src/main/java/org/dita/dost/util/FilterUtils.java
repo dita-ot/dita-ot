@@ -964,7 +964,6 @@ public final class FilterUtils {
             }
 
             private void writeFlag(final ContentHandler contentHandler, final String tag) throws SAXException {
-            	System.out.println("WRITING A START FLAG! HREF IS: " + href);
                 final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
                 final URI abs = href;
                 if (abs != null) {
