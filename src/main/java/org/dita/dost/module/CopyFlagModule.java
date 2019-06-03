@@ -50,8 +50,8 @@ final class CopyFlagModule extends AbstractPipelineModuleImpl {
                 }
             } catch (final IOException e) {
                     throw new BuildException(e.getMessage(), e);
-                }
             }
+        }
         return null;
     }
 
