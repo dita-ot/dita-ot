@@ -285,6 +285,10 @@ public final class DitaValReader implements AbstractReader {
             }
 
             if (absolute != null || altText != null) {
+                //For imageref relative path, use generated temp file scheme (if available), otherwise original path from ditaval
+                if (tempFileNameScheme != null) {
+                    return new FlagImage(absolute, tempFileNameScheme.generateTempFileName(absolute), altText);
+                }
                 return new FlagImage(absolute, imageref, altText);
             }
         }
