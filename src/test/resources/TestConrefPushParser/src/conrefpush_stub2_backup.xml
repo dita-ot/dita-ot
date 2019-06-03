@@ -1,9 +1,0 @@
-<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " id="X" ditaarch:DITAArchVersion="1.2">
-<body class="- topic/body ">
-<ol class="- topic/ol ">
-<li class="- topic/li " id="A" dita-ot:orig-foobar="foo.dita#bar/buzz" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot">A</li>
-<li class="- topic/li " id="B">B</li>
-<li class="- topic/li " id="C">C</li>
-</ol>
-</body>
-</topic>
