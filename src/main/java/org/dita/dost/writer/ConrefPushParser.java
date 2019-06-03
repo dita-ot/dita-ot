@@ -8,6 +8,7 @@
  */
 package org.dita.dost.writer;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job.FileInfo;
@@ -43,7 +44,7 @@ public final class ConrefPushParser extends AbstractDomFilter {
     }
 
     @Override
-    public void read(final File filename) {
+    public void read(final File filename) throws DITAOTException {
         hasConref = false;
         hasKeyref = false;
 

@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import java.io.File;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
 
@@ -26,7 +27,7 @@ public interface AbstractReader {
      *
      * @param filename absolute filename
      */
-    void read(File filename);
+    void read(File filename) throws DITAOTException;
 
     /**
      * Set logger for module.

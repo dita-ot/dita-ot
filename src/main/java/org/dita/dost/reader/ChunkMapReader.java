@@ -8,6 +8,7 @@
  */
 package org.dita.dost.reader;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
@@ -111,7 +112,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * @param inputFile filename
      */
     @Override
-    public void read(final File inputFile) {
+    public void read(final File inputFile) throws DITAOTException {
         this.currentFile = inputFile.toURI();
 
         super.read(inputFile);

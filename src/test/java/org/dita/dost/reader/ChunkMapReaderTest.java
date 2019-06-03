@@ -46,7 +46,7 @@ public class ChunkMapReaderTest {
     }
 
     @Test
-    public void testRead() throws IOException {
+    public void testRead() throws Exception {
         final Job job = new Job(tempDir);
         job.setInputDir(srcDir.toURI());
         job.setInputMap(URI.create("maps/gen.ditamap"));
@@ -77,7 +77,7 @@ public class ChunkMapReaderTest {
     }
 
     @Test
-    public void testMissingSource() throws IOException, URISyntaxException {
+    public void testMissingSource() throws Exception {
         final Job job = createJob("missing.ditamap", "2.dita");
 
         final ChunkMapReader mapReader = new ChunkMapReader();
@@ -96,7 +96,7 @@ public class ChunkMapReaderTest {
     }
 
     @Test
-    public void testChunkFullMap() throws IOException {
+    public void testChunkFullMap() throws Exception {
         final Job job = createJob("map.ditamap", "1.dita", "2.dita", "3.dita");
 
         final ChunkMapReader mapReader = new ChunkMapReader();
@@ -123,7 +123,7 @@ public class ChunkMapReaderTest {
     }
 
     @Test
-    public void testExistingGeneratedFile() throws IOException, URISyntaxException {
+    public void testExistingGeneratedFile() throws Exception {
         final Job job = createJob("conflict.ditamap", "2.dita", "Chunk0.dita");
 
         final ChunkMapReader mapReader = new ChunkMapReader();

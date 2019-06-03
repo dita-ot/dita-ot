@@ -29,8 +29,7 @@ import org.w3c.dom.DocumentFragment;
 final class ConrefPushModule extends AbstractPipelineModuleImpl {
 
     @Override
-    public AbstractPipelineOutput execute(final AbstractPipelineInput input)
-            throws DITAOTException {
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) {
         final Collection<FileInfo> fis = job.getFileInfo(fileInfoFilter).stream()
                 .filter(f -> f.isConrefPush)
                 .collect(Collectors.toList());
@@ -54,12 +53,11 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
                 //pass the tempdir to ConrefPushParser
                 parser.setTempDir(job.tempDir);
                 //FIXME:This writer creates and renames files, have to
-//                try {
-//                    parser.read(entry.getKey());
-//                } catch (final DITAOTException e) {
-//                    logger.error("Failed to process push conref: " + e.getMessage(), e);
-//                }
-                parser.read(entry.getKey());
+                try {
+                    parser.read(entry.getKey());
+                } catch (final DITAOTException e) {
+                    logger.error("Failed to process push conref: " + e.getMessage(), e);
+                }
             }
         }
         return null;
