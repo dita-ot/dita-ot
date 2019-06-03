@@ -33,25 +33,25 @@ final class CopyFlagModule extends AbstractPipelineModuleImpl {
             throws DITAOTException {
         final Collection<FileInfo> fis = job.getFileInfo(f -> f.isFlagImage);
         if (!fis.isEmpty()) {
-        	try {
-        		final FileUtils fileUtils = FileUtils.newFileUtils();
-        		final File outputDirFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITAOUTPUTDIR));
-        		if (!outputDirFile.exists()) {
-        			outputDirFile.mkdir();
-        		}
-        		
-        		final URI outputDirURI = URLUtils.toURI(outputDirFile);
-        		for (final FileInfo f: fis) {
-        			final File srcFile = new File(f.src);
-        			final File destFile = new File(outputDirURI.resolve(f.uri));
-        			if (srcFile.exists() && destFile != null && !destFile.exists()) {
-        				fileUtils.copyFile(srcFile, destFile);
-        			}
-        		}
-        	} catch (final IOException e) {
-                throw new BuildException(e.getMessage(), e);
+            try {
+                final FileUtils fileUtils = FileUtils.newFileUtils();
+                final File outputDirFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITAOUTPUTDIR));
+                if (!outputDirFile.exists()) {
+                    outputDirFile.mkdir();
+                }
+
+                final URI outputDirURI = URLUtils.toURI(outputDirFile);
+                for (final FileInfo f: fis) {
+                    final File srcFile = new File(f.src);
+                    final File destFile = new File(outputDirURI.resolve(f.uri));
+                    if (srcFile.exists() && destFile != null && !destFile.exists()) {
+                        fileUtils.copyFile(srcFile, destFile);
+                    }
+                }
+            } catch (final IOException e) {
+                    throw new BuildException(e.getMessage(), e);
+                }
             }
-        }
         return null;
     }
 

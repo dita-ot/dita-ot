@@ -753,7 +753,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             getOrCreateFileInfo(fileinfos, file.filename).format = file.format;
         }
         for (final URI file: flagImageSet) {
-  		  final FileInfo f = getOrCreateFlagImageFileInfo(fileinfos, file, flagImagesMap.get(file));
+            final FileInfo f = getOrCreateFlagImageFileInfo(fileinfos, file, flagImagesMap.get(file));
             f.isFlagImage = true;
             f.format = ATTR_FORMAT_VALUE_IMAGE;
         }

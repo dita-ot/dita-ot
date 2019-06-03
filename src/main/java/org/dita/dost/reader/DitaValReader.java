@@ -408,7 +408,7 @@ public final class DitaValReader implements AbstractReader {
      * @return image set
      */
     public Map<URI, URI> getFlagImageMap() {
-    	return Collections.unmodifiableMap(flagImagesMap);
+        return Collections.unmodifiableMap(flagImagesMap);
     }
 
     /**
