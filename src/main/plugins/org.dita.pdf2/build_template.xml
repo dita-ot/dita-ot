@@ -55,6 +55,7 @@ with those set forth herein.
     </dita-ot-fail>
     
     <property name="preprocess.copy-image.skip" value="true"/>
+    <property name="preprocess.copy-flag.skip" value="true"/>
     <property name="clean-preprocess.use-result-filename" value="false"/>
     <condition property="preprocess.chunk.skip" value="true">
       <isfalse value="${org.dita.pdf2.chunk.enabled}"/>
