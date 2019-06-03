@@ -922,7 +922,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         } else {
             b = new FileInfo.Builder().src(file);
         }
-                b = b.uri(tempFileNameScheme.generateTempFileName(baseInputDir.resolve(relpath)));
+        b = b.uri(tempFileNameScheme.generateTempFileName(rootFile.resolve(relpath)));
         final FileInfo i = b.build();
         fileInfos.put(i.src, i);
         return i;

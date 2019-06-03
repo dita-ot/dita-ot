@@ -733,7 +733,10 @@ public final class FilterUtils {
             final Job.FileInfo flagFi = job.getFileInfo(img.href);
             if (flagFi != null) {
                 final Job.FileInfo current = job.getFileInfo(currentFile);
-                final URI flag = img.imageref != null ? job.tempDirURI.resolve(img.imageref) : job.tempDirURI.resolve(flagFi.uri);
+                //URI curr is absolute path to current file in temp dir; flag value is relative path against map.
+                //To get relative path from curr to flag, get path from curr to map to image.
+                final URI mapInTemp = job.tempDirURI.resolve(job.getFileInfo(job.getInputFile()).uri);
+                final URI flag = img.imageref != null ? mapInTemp.resolve(img.imageref) : job.tempDirURI.resolve(flagFi.uri);
                 final URI curr = job.tempDirURI.resolve(current.uri);
                 rel = URLUtils.getRelativePath(curr, flag);
             } else {
