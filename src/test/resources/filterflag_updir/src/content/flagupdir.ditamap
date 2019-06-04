@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+ <title>Flag from ditaval in peer directory, with updir</title>
+<topicref href="flagup-outer.dita" platform="A">
+<topicref href="subdirtest/flagup-middle.dita" platform="B">
+<topicref href="flagup-inner.dita" platform="C"/>
+</topicref>
+</topicref>
+<topicref href="../peerdir/flagup-peerdir.dita"/>
+<reltable>
+<relrow>
+<relcell>
+<topicref href="flagup-outer.dita" platform="A"/>
+<topicref href="subdirtest/flagup-middle.dita" platform="B"/>
+<topicref href="flagup-inner.dita" platform="C"/>
+</relcell>
+<relcell>
+<topicref href="../peerdir/flagup-peerdir.dita"/>
+</relcell>
+</relrow>
+</reltable>
+</map>

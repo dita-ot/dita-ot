@@ -826,6 +826,24 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .put("clean.temp", "no")
                 .test();
     }
+    
+    @Test
+    public void testfilterflag_updir() throws Throwable {
+        final Path testDir = Paths.get("src", "test", "resources", "filterflag_updir", "src");
+        final String filters = asList(
+                Paths.get("content", "revs.ditaval"),
+                Paths.get("flags", "flags.ditaval"))
+                .stream()
+                .map(path -> testDir.resolve(path).toAbsolutePath().toString())
+                .collect(Collectors.joining(File.pathSeparator));
+        builder().name("filterflag_updir")
+                .transtype(XHTML)
+                .input(Paths.get("content", "flagupdir.ditamap"))
+                .put("args.filter", filters)
+                .put("clean.temp", "no")
+                .warnCount(2)
+                .test();
+    }
 
     @Test
     public void testuplevels1() throws Throwable {

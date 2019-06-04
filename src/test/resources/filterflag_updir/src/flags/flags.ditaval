@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<val>
+<prop action="flag" att="platform" val="A">
+ <startflag imageref="startpuffA.jpg"><alt-text>Start the AAAA</alt-text></startflag></prop>
+<prop action="flag" att="platform" val="B">
+ <startflag imageref="startpuffB.jpg"><alt-text>Start the BBBB</alt-text></startflag></prop>
+<prop action="flag" att="platform" val="C">
+ <startflag imageref="subdir/startpuffC.jpg"><alt-text>Start the CCCC</alt-text></startflag></prop>
+</val>
