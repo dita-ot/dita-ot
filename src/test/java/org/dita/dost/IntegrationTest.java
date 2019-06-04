@@ -809,6 +809,23 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .errorCount(1)
                 .test();
     }
+    
+    @Test
+    public void testfilterflag_peer() throws Throwable {
+        final Path testDir = Paths.get("src", "test", "resources", "filterflag_peer", "src");
+        final String filters = asList(
+                Paths.get("revisions", "revs.ditaval"),
+                Paths.get("flags", "flags.ditaval"))
+                .stream()
+                .map(path -> testDir.resolve(path).toAbsolutePath().toString())
+                .collect(Collectors.joining(File.pathSeparator));
+        builder().name("filterflag_peer")
+                .transtype(XHTML)
+                .input(Paths.get("content", "flagpeer.ditamap"))
+                .put("args.filter", filters)
+                .put("clean.temp", "no")
+                .test();
+    }
 
     @Test
     public void testuplevels1() throws Throwable {

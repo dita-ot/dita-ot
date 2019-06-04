@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<val>
+<revprop action="flag" val="flags" changebar="solid">
+ <startflag imageref="startpuff.png"><alt-text>this starts the rev</alt-text></startflag>
+ <endflag imageref="endpuff.png"><alt-text>this ends the rev</alt-text></endflag></revprop>
+</val>

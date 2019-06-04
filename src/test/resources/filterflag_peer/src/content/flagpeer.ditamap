@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+ <title>Flag from ditaval in peer directory</title>
+<topicref href="flagpeer-outer.dita" platform="A">
+ <topicref href="subdirtest/flagpeer-middle.dita" platform="B">
+  <topicref href="flagpeer-inner.dita" platform="C"/>
+ </topicref>
+</topicref>
+</map>

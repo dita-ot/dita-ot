@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="outer">
+<title>Outer topic</title>
+<body>
+<p>content with no flags at all</p>
+<p rev="flags">Revised paragraph</p>
+<p platform="A">Paragraph with platform A</p>
+<p platform="B">Paragraph with platform B</p>
+<p platform="C">Paragraph with platform C</p>
+<p>content with no flags at all</p>
+</body>
+</topic>
