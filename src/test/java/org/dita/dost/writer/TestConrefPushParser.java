@@ -19,31 +19,20 @@ import org.w3c.dom.DocumentFragment;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
 
 import static org.apache.commons.io.FileUtils.copyFile;
+import static org.dita.dost.TestUtils.buildControlDocument;
 
 public class TestConrefPushParser {
 
     private static final File resourceDir = TestUtils.getResourceDir(TestConrefPushParser.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
-    private final DocumentBuilderFactory factory;
-    private final DocumentBuilder builder;
     private File tempDir;
     private File targetFile;
-
-    public TestConrefPushParser() throws ParserConfigurationException {
-        factory = DocumentBuilderFactory.newInstance();
-        builder = factory.newDocumentBuilder();
-    }
 
     @Before
     public void setUp() throws IOException {
@@ -74,13 +63,11 @@ public class TestConrefPushParser {
         );
     }
 
-    private DocumentFragment getFragment(final String text) throws IOException, SAXException {
-        try (final ByteArrayInputStream in = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));) {
-            final Document doc = builder.parse(in);
-            final DocumentFragment fragment = doc.createDocumentFragment();
-            fragment.appendChild(doc.removeChild(doc.getDocumentElement()));
-            return fragment;
-        }
+    private DocumentFragment getFragment(final String text) {
+        final Document doc = buildControlDocument(text);
+        final DocumentFragment fragment = doc.createDocumentFragment();
+        fragment.appendChild(doc.removeChild(doc.getDocumentElement()));
+        return fragment;
     }
 
     @After
