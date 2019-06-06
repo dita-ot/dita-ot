@@ -596,9 +596,9 @@ See the accompanying LICENSE file for applicable license.
     </xsl:if>
   </xsl:template>
   
-  <xsl:template match="@*|*|text()" mode="add-props-to-link">
+  <xsl:template match="@*|node()" mode="add-props-to-link">
     <xsl:copy>
-      <xsl:apply-templates select="@*|*|text()" mode="add-props-to-link"/>
+      <xsl:apply-templates select="@*|node()" mode="add-props-to-link"/>
     </xsl:copy>
   </xsl:template>
   <xsl:template match="@imageref" mode="add-props-to-link">
