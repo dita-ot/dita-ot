@@ -81,6 +81,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:param name="links" as="node()*"/>
         <xsl:if test="exists($links)">
           <linklist class="- topic/linklist " outputclass="relinfo relref">
+            <xsl:sequence select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
             <xsl:sequence select="$links"/>
           </linklist>
         </xsl:if>
