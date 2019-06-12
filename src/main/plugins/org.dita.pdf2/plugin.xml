@@ -64,7 +64,6 @@ See the accompanying LICENSE file for applicable license.
   <feature extension="dita.specialization.catalog.relative" file="cfg/catalog.xml"/>
   <template file="build_template.xml"/>
   <template file="cfg/catalog_template.xml"/>
-  <template file="xsl/fo/flagging-preprocess_template.xsl"/>
   <template file="xsl/fo/i18n-postprocess_template.xsl"/>
   <template file="xsl/fo/topic2fo_shell_template.xsl"/>
   <template file="xsl/common/topicmerge_template.xsl"/>
