@@ -39,6 +39,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Caution">АБАЙЛАҢЫЗ</str>
   <str name="Danger">ҚАУІП</str>
   <str name="Remember">Есте сақтаңыз</str>
+  <str name="Trouble">Қиындық</str>
   <str name="Warning">Ескерту</str>
   <str name="Restriction">Шектеу</str>
   <str name="Contents">Мазмұны</str>

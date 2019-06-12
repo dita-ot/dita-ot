@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">ОПАСНОСТ</str>
   <str name="Remember">Запаметете</str>
   <str name="Restriction">Ограничување</str>
+  <str name="Trouble">Проблем</str>
   <str name="Warning">Предупредување</str>
   <str name="Contents">Содржина</str>
   <str name="Related concepts">Сродни концепти</str>

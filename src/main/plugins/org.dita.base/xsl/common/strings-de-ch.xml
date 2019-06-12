@@ -40,7 +40,8 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">GEFAHR</str>
   <str name="Remember">Hinweis</str>
   <str name="Restriction">Einschränkung</str>
-  <str name="Warning">Warnung</str>
+  <str name="Trouble">Problem</str>
+<str name="Warning">Warnung</str>
   <str name="Contents">Inhaltsverzeichnis</str>
   <str name="Related concepts">Zugehörige Konzepte</str>
   <str name="Related tasks">Zugehörige Tasks</str>
