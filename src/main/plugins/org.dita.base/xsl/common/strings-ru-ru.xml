@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">ОПАСНО</str>
   <str name="Remember">Напоминание</str>
   <str name="Restriction">Ограничение</str>
+  <str name="Trouble">Неполадка</str>
   <str name="Warning">Внимание</str>
   <str name="Contents">Содержание</str>
   <str name="Related concepts">Понятия, связанные с данным</str>

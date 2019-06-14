@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">위험</str>
   <str name="Remember">알아두기</str>
   <str name="Restriction">제한사항</str>
+  <str name="Trouble">문제점</str>
   <str name="Warning">경고</str>
   <str name="Contents">목차</str>
   <str name="Related concepts">관련 개념</str>

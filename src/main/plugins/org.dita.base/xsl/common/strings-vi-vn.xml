@@ -39,7 +39,7 @@ This file is part of the DITA Open Toolkit project.
   <str name="Remember">Ghi nhớ</str>
   <str name="Warning">Cảnh báo</str>
   <str name="Restriction">Hạn chế</str>
-  <str name="Trouble">Trouble</str>
+  <str name="Trouble">sự cố or vấn đề</str>
   <str name="Contents">Nội dung</str>
   <str name="Related concepts">Các khái niệm liên quan</str>
   <str name="Related tasks">Các tác vụ liên quan</str>

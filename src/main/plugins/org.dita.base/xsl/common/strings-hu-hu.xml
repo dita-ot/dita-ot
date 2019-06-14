@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">VESZÉLY!</str>
   <str name="Remember">Ne feledje</str>
   <str name="Restriction">Korlátozás</str>
+  <str name="Trouble">Hiba</str>
   <str name="Warning">Figyelmeztetés</str>
   <str name="Contents">Tartalom</str>
   <str name="Related concepts">Kapcsolódó fogalmak</str>

@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">Fare!</str>
   <str name="Remember">Husk</str>
   <str name="Restriction">Begrænsning</str>
+  <str name="Trouble">Problem</str>
   <str name="Warning">Advarsel</str>
   <str name="Contents">Indholdsfortegnelse</str>
   <str name="Related concepts">Beslægtede begreber</str>

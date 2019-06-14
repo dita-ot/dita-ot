@@ -41,6 +41,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">PELIGRO</str>
   <str name="Remember">Recuerde</str>
   <str name="Restriction">Restricción</str>
+  <str name="Trouble">Problema</str>
   <str name="Warning">Aviso</str>
   <str name="Contents">Contenido</str>
   <str name="Related concepts">Conceptos relacionados</str>

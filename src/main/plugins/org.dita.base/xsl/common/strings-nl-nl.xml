@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">Gevaar!</str>
   <str name="Remember">Let op</str>
   <str name="Restriction">Beperking</str>
+  <str name="Trouble">Probleem</str>
   <str name="Warning">Attentie</str>
   <str name="Contents">Inhoudsopgave</str>
   <str name="Related concepts">Verwante onderwerpen</str>
