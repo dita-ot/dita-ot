@@ -239,6 +239,35 @@ with those set forth herein.
     <property name="args.bookmap-order" value="discard"/>
     <property name="args.figurelink.style" value="NUMTITLE"/>
     <property name="args.tablelink.style" value="NUMTITLE"/>
+     <!-- Check for valid values -->
+     <dita-ot-fail id="DOTA015F">
+      <condition>
+        <not>
+          <matches pattern="^(retain|discard)$" string="${args.bookmap-order}"/>
+        </not>
+      </condition>
+      <param name="1" value="args.bookmap-order"/>
+      <param name="2" value="retain,discard"/>
+    </dita-ot-fail>
+
+    <dita-ot-fail id="DOTA015F">
+      <condition>
+        <not>
+          <matches pattern="^(NUMBER|TITLE|NUMTITLE)$" string="${args.figurelink.style}"/>
+        </not>
+      </condition>
+      <param name="1" value="args.figurelink.style"/>
+      <param name="2" value="NUMBER,TITLE,NUMTITLE"/>
+    </dita-ot-fail>
+    <dita-ot-fail id="DOTA015F">
+      <condition>
+        <not>
+          <matches pattern="^(NUMBER|TITLE|NUMTITLE)$" string="${args.tablelink.style}"/>
+        </not>
+      </condition>
+      <param name="1" value="args.tablelink.style"/>
+      <param name="2" value="NUMBER,TITLE,NUMTITLE"/>
+    </dita-ot-fail>
   </target>
 
   <target name="transform.topic2fo.index">
