@@ -293,7 +293,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="exists($links)">
       <linklist class="- topic/linklist " outputclass="relinfo">
-        <xsl:sequence select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
+        <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
         <title class="- topic/title ">
           <xsl:call-template name="getVariable">
             <xsl:with-param name="id" select="'Related information'"/>
