@@ -126,7 +126,7 @@ Copied from HTML5 plugin to make table and simpletable functions available to XH
     <xsl:param name="entryend" as="xs:integer"/>
     <xsl:param name="headerstart" as="xs:integer"/>
     <xsl:param name="headerend" as="xs:integer"/>
-    <xsl:sequence select="if ($entryend lt $headerstart or $entrystart gt $headerend) then (false()) else (true())"/>
+    <xsl:sequence select="not($entryend lt $headerstart or $entrystart gt $headerend)"/>
   </xsl:function>
   
   <xsl:function name="table:get-matching-thead-headers" as="xs:string*">

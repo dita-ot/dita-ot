@@ -151,10 +151,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="ctx" as="element()"/>
     <xsl:choose>
       <xsl:when test="$ctx/@nameend">
-        <xsl:value-of select="xs:integer(table:get-ending-colspec($ctx)/@colnum)"/>
+        <xsl:sequence select="xs:integer(table:get-ending-colspec($ctx)/@colnum)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="xs:integer($ctx/@dita-ot:x)"/>
+        <xsl:sequence select="xs:integer($ctx/@dita-ot:x)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
@@ -166,7 +166,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="entryend" as="xs:integer"/>
     <xsl:param name="headerstart" as="xs:integer"/>
     <xsl:param name="headerend" as="xs:integer"/>
-    <xsl:sequence select="if ($entryend lt $headerstart or $entrystart gt $headerend) then (false()) else (true())"/>
+    <xsl:sequence select="not($entryend lt $headerstart or $entrystart gt $headerend)"/>
   </xsl:function>
   
   <xsl:function name="table:get-matching-thead-headers" as="xs:string*">

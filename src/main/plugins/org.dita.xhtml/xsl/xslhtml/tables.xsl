@@ -554,7 +554,7 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- Find the end column of a cell. If the cell does not span any columns,
      the end position is the same as the start position. -->
-<!-- DEPRECATED: use table:find-entry-end-column -->  
+<!-- DEPRECATED since 3.3: use table:find-entry-end-column -->  
 <xsl:template name="find-entry-end-position">
   <xsl:param name="startposition" select="0"/>
   <xsl:choose>
@@ -568,7 +568,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <!-- Check <thead> entries, and return IDs for those which match the desired column -->
-<!-- DEPRECATED: use table:get-matching-thead-headers -->
+<!-- DEPRECATED since 3.3: use table:get-matching-thead-headers -->
 <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="findmatch">
   <xsl:param name="startmatch" select="1"/>  <!-- start column of the tbody cell -->
   <xsl:param name="endmatch" select="1"/>    <!-- end column of the tbody cell -->
@@ -602,7 +602,7 @@ See the accompanying LICENSE file for applicable license.
      Any entries that line up need to have the header saved. This template is first
      called with the first entry of the first row in <tbody>. It is called from here
      on the next cell in column one.            -->
-<!-- DEPRECATED: use table:get-matching-row-headers -->
+<!-- DEPRECATED since 3.3: use table:get-matching-row-headers -->
 <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="check-first-column">
   <xsl:param name="startMatchRow" select="1"/>   <!-- First row of the tbody cell we are matching -->
   <xsl:param name="endMatchRow" select="1"/>     <!-- Last row of the tbody cell we are matching -->
