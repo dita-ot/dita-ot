@@ -96,7 +96,6 @@
   <topicref class="- map/topicref " href="b.xml">
     <topicmeta class="- map/topicmeta ">
       <searchtitle class="- map/searchtitle ">topicref searchtitle</searchtitle>
-      <pluf/>
       <author class="- topic/author ">topicref author</author>
       <author class="- topic/author ">map author</author>
       <source class="- topic/source ">topicref source</source>
