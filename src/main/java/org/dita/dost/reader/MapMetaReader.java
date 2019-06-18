@@ -47,7 +47,6 @@ public final class MapMetaReader extends AbstractDomFilter {
     private static final Set<String> cascadeSet = Collections.unmodifiableSet(new HashSet<>(asList(
             TOPIC_AUDIENCE.matcher,
             TOPIC_AUTHOR.matcher,
-            TOPIC_SOURCE.matcher,
             TOPIC_CATEGORY.matcher,
             TOPIC_COPYRIGHT.matcher,
             TOPIC_CRITDATES.matcher,
