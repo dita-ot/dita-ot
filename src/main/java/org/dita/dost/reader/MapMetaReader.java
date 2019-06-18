@@ -45,13 +45,12 @@ public final class MapMetaReader extends AbstractDomFilter {
     private static final Set<String> cascadeSet = Collections.unmodifiableSet(new HashSet<>(asList(
             TOPIC_AUDIENCE.matcher,
             TOPIC_AUTHOR.matcher,
-            TOPIC_SOURCE.matcher,
             TOPIC_CATEGORY.matcher,
             TOPIC_COPYRIGHT.matcher,
             TOPIC_CRITDATES.matcher,
+            TOPIC_METADATA.matcher,
             TOPIC_PERMISSIONS.matcher,
             TOPIC_PRODINFO.matcher,
-            TOPIC_OTHERMETA.matcher,
             TOPIC_PUBLISHER.matcher
     )));
     private static final Set<String> metaSet = Collections.unmodifiableSet(new HashSet<>(asList(
@@ -309,7 +308,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                     } else {
                         if (TOPIC_NAVTITLE.matches(classValue)) {
                             //Add locktitle value to navtitle so we know whether it should be pushed to topics
-                            final String locktitleAttr =  ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE) != null ? 
+                            final String locktitleAttr =  ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE) != null ?
                                                           ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE).getNodeValue() : "no";
                             elem.setAttributeNS(DITA_OT_NS, DITA_OT_NS_PREFIX + ":" + ATTRIBUTE_NAME_LOCKTITLE, locktitleAttr);
                         }

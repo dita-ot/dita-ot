@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="batcaring" xml:lang="en-us" ditaarch:DITAArchVersion="1.3" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                          (topic ut-d) (topic indexing-d)" class="- topic/topic ">
   <title class="- topic/title ">batcaring</title>
-  <prolog class="- topic/prolog ">
-    <source class="- topic/source ">
-    source2
-  </source>
-  </prolog>
   <body class="- topic/body ">
     <p class="- topic/p ">The ANT tasks are refactored so that developers can easily find the targets
       they need and make their own extensions. Developers can still use Java Command
