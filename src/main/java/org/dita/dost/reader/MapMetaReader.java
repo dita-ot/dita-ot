@@ -50,6 +50,7 @@ public final class MapMetaReader extends AbstractDomFilter {
             TOPIC_CATEGORY.matcher,
             TOPIC_COPYRIGHT.matcher,
             TOPIC_CRITDATES.matcher,
+            TOPIC_METADATA.matcher,
             TOPIC_PERMISSIONS.matcher,
             TOPIC_PRODINFO.matcher,
             TOPIC_PUBLISHER.matcher
