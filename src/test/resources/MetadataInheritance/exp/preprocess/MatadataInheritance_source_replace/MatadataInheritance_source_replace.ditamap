@@ -19,9 +19,6 @@
         <navtitle class="- topic/navtitle ">batcaring</navtitle>
         <?ditaot gentext?>
         <linktext class="- map/linktext ">batcaring</linktext>
-        <source class="- topic/source ">
-    source2
-  </source>
       </topicmeta>
     </topicref>
   </topicref>
@@ -30,9 +27,6 @@
       <navtitle class="- topic/navtitle ">Programming elements</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">Programming elements</linktext>
-      <source class="- topic/source ">
-    source
-  </source>
     </topicmeta>
   </topicref>
 </map>
