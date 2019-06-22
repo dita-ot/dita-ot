@@ -18,6 +18,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractDomFilter;
@@ -122,7 +123,7 @@ public final class MapMetaReader extends AbstractDomFilter {
      * @param filename filename
      */
     @Override
-    public void read(final File filename) {
+    public void read(final File filename) throws DITAOTException {
         filePath = filename;
 
         //clear the history on global metadata table
