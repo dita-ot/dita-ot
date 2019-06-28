@@ -5,6 +5,8 @@ This file is part of the DITA Open Toolkit project.
 Copyright 2016 Eero Helenius
 
 See the accompanying LICENSE file for applicable license.
+
+Copied from HTML5 plugin to make table and simpletable functions available to XHTML.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -13,48 +15,6 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable"
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot table">
-
-  <xsl:variable name="HTML_ID_SEPARATOR" select="'__'"/>
-
-  <xsl:function name="dita-ot:generate-html-id" as="xs:string">
-    <xsl:param name="element" as="element()"/>
-    
-    <xsl:sequence
-      select="if (exists($element/@id))
-              then dita-ot:get-prefixed-id($element, $element/@id)
-              else dita-ot:generate-stable-id($element)"/>
-  </xsl:function>
-  
-  <xsl:function name="dita-ot:generate-id" as="xs:string">
-    <xsl:param name="topic" as="xs:string?"/>
-    <xsl:param name="element" as="xs:string?"/>
-    
-    <xsl:value-of select="string-join(($topic, $element), $HTML_ID_SEPARATOR)"/>
-  </xsl:function>
-
-  <xsl:function name="dita-ot:get-prefixed-id" as="xs:string">
-    <xsl:param name="element" as="element()"/>
-    <xsl:param name="id" as="xs:string"/>
-    <xsl:choose>
-      <xsl:when test="contains($element/@class, ' topic/topic')">
-        <xsl:value-of select="$element/@id"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:sequence select="dita-ot:generate-id($element/ancestor::*[contains(@class, ' topic/topic ')][1]/@id, $id)"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:function>
-
-  <xsl:function name="dita-ot:generate-stable-id" as="xs:string">
-    <xsl:param name="element" as="element()"/>
-    
-    <xsl:variable name="topic" select="$element/ancestor-or-self::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
-    <xsl:variable name="parent-element" select="$element/ancestor-or-self::*[@id][1][not(. is $topic)]" as="element()?"/>
-    <xsl:variable name="closest" select="($parent-element, $topic)[1]" as="element()"/>
-    <xsl:variable name="index" select="count($closest/descendant::*[local-name() = local-name($element)][. &lt;&lt; $element]) + 1" as="xs:integer"/>
-    
-    <xsl:sequence select="dita-ot:generate-id($topic/@id, string-join(($parent-element/@id, local-name($element), string($index)), $HTML_ID_SEPARATOR))"/>
-  </xsl:function>
 
   <xsl:function name="table:is-tbody-entry" as="xs:boolean">
     <xsl:param name="el" as="element()"/>
@@ -151,10 +111,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="ctx" as="element()"/>
     <xsl:choose>
       <xsl:when test="$ctx/@nameend">
-        <xsl:sequence select="xs:integer(table:get-ending-colspec($ctx)/@colnum)"/>
+        <xsl:value-of select="xs:integer(table:get-ending-colspec($ctx)/@colnum)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:sequence select="xs:integer($ctx/@dita-ot:x)"/>
+        <xsl:value-of select="xs:integer($ctx/@dita-ot:x)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
@@ -240,11 +200,6 @@ See the accompanying LICENSE file for applicable license.
     <xsl:sequence select="
       $table/@keycol and xs:integer($table/@keycol) eq count($entry/preceding-sibling::*) + 1
     "/>
-  </xsl:function>
-  
-  <xsl:function name="dita-ot:normalize-href" as="xs:string?">
-    <xsl:param name="href" as="xs:string"/>
-    <xsl:value-of select="replace(translate($href, '\', '/'), ' ', '%20')"/>
   </xsl:function>
 
 </xsl:stylesheet>
