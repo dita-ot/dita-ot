@@ -31,12 +31,13 @@ See the accompanying LICENSE file for applicable license.
         <xsl:param name="links" as="node()*"/>
         <xsl:if test="normalize-space(string-join($links, ''))">
           <linklist class="- topic/linklist " outputclass="relinfo relconcepts">
+            <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
             <title class="- topic/title ">
-                  <xsl:call-template name="getVariable">
-                      <xsl:with-param name="id" select="'Related concepts'"/>
-                  </xsl:call-template>
-              </title>
-              <xsl:copy-of select="$links"/>
+              <xsl:call-template name="getVariable">
+                <xsl:with-param name="id" select="'Related concepts'"/>
+              </xsl:call-template>
+            </title>
+            <xsl:copy-of select="$links"/>
           </linklist>
         </xsl:if>
     </xsl:template>
