@@ -1718,13 +1718,35 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="." mode="set-output-class">
       <xsl:with-param name="default" select="$default-output-class"/>
     </xsl:apply-templates>
-    <xsl:if test="exists($passthrough-attrs)">
-      <xsl:for-each select="@*">
-        <xsl:if test="$passthrough-attrs[@att = name(current()) and (empty(@val) or (some $v in tokenize(current(), '\s+') satisfies $v = @val))]">
+    <xsl:choose>
+      <xsl:when test="exists($passthrough-attrs[empty(@att) and empty(@value)])">
+        <xsl:variable name="specializations" as="xs:string*">
+          <xsl:for-each select="ancestor-or-self::*[@domains][1]/@domains">
+            <xsl:analyze-string select="normalize-space(.)" regex="a\(props (.+?)\)">
+              <xsl:matching-substring>
+                <xsl:sequence select="tokenize(regex-group(1), '\s+')"/>
+              </xsl:matching-substring>
+            </xsl:analyze-string>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:for-each select="@props |
+                              @audience |
+                              @platform |
+                              @product |
+                              @otherprops |
+                              @deliveryTarget |
+                              @*[local-name() = $specializations]">
           <xsl:attribute name="data-{name()}" select="."/>
-        </xsl:if>
-      </xsl:for-each>
-    </xsl:if>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:when test="exists($passthrough-attrs)">
+        <xsl:for-each select="@*">
+          <xsl:if test="$passthrough-attrs[@att = name(current()) and (empty(@val) or (some $v in tokenize(current(), '\s+') satisfies $v = @val))]">
+            <xsl:attribute name="data-{name()}" select="."/>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
   
   <!-- Set the class attribute on the resulting output element. The default for a class of elements
