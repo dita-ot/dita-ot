@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">DANGER</str>
   <str name="Remember">Remember</str>
   <str name="Restriction">Restriction</str>
+  <str name="Trouble">Trouble</str>
   <str name="Warning">Warning</str>
   <str name="Contents">Contents</str>
   <str name="Related concepts">Related concepts</str>

@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">Pericolo</str>
   <str name="Remember">Attenzione</str>
   <str name="Restriction">Limitazione</str>
+  <str name="Trouble">Problema</str>
   <str name="Warning">Avvertenza</str>
   <str name="Contents">Indice</str>
   <str name="Related concepts">Concetti correlati</str>

@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">危險</str>
   <str name="Remember">記住</str>
   <str name="Restriction">限制</str>
+  <str name="Trouble">問題描述</str>
   <str name="Warning">警告</str>
   <str name="Contents">目錄</str>
   <str name="Related concepts">相關概念</str>

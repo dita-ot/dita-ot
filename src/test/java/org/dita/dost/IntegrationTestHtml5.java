@@ -86,4 +86,16 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
                 .test();
     }
 
+    @Test
+    public void html5_ditaval_passthrough_all() throws Throwable {
+        final File srcDir = new File(resourceDir, "html5_ditaval" + File.separator + "src");
+        builder().name("html5_ditaval")
+                .transtype(HTML5)
+                .input(Paths.get("all.ditamap"))
+                .put("validate", "no")
+                .put("dita.input.valfile", new File(srcDir, "all.ditaval").getAbsolutePath())
+                .warnCount(1)
+                .test();
+    }
+
 }

@@ -575,6 +575,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:attribute name="otherrole" select="$otherrole"/>
         </xsl:if>
         <!--figure out the linktext and desc-->
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="add-props-to-link"/>
         <xsl:if test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
           <!--Do not output linktext when The final output type is PDF or IDD
             The target of the HREF is a local DITA file
@@ -590,8 +591,19 @@ See the accompanying LICENSE file for applicable license.
           <!-- add desc node and text -->
           <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
         </xsl:if>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="add-props-to-link"/>
       </link>
     </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="@*|node()" mode="add-props-to-link">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()" mode="add-props-to-link"/>
+    </xsl:copy>
+  </xsl:template>
+  <xsl:template match="@imageref" mode="add-props-to-link">
+    <xsl:param name="pathBackToMapDirectory" as="xs:string" tunnel="yes"/>
+    <xsl:attribute name="imageref" select="concat($pathBackToMapDirectory,.)"/>    
   </xsl:template>
   
   <!-- create a template to get child nodes and text -->

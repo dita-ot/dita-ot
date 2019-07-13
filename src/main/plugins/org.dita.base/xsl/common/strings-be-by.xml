@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">НЕБЯСПЕКА</str> 
   <str name="Remember">Напамін</str> 
   <str name="Restriction">Абмежаванне</str> 
+  <str name="Trouble">Непаладка</str>
   <str name="Warning">Папярэджанне</str>  
   <str name="Contents">Змест</str> 
   <str name="Related concepts">Адпаведныя канцэпцыі</str> 
