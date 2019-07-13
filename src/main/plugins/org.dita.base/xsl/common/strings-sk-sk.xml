@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">NEBEZPEČENSTVO</str>
   <str name="Remember">Zapamätajte si</str>
   <str name="Restriction">Obmedzenie</str>
+  <str name="Trouble">Problém</str>
   <str name="Warning">Varovanie</str>
   <str name="Contents">Obsah</str>
   <str name="Related concepts">Súvisiace koncepty</str>

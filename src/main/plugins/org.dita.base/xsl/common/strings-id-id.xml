@@ -39,6 +39,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Caution">PERINGATAN</str>
   <str name="Danger">BAHAYA</str>
   <str name="Remember">Ingat</str>
+  <str name="Trouble">Masalah</str>
   <str name="Warning">Peringatan</str>
   <str name="Restriction">Pembatasan</str>
   <str name="Contents">Isi</str>

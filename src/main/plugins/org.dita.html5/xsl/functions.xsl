@@ -105,6 +105,15 @@ See the accompanying LICENSE file for applicable license.
       [@colname eq $entry/@colname]
     "/>
   </xsl:function>
+  
+  <xsl:function name="table:get-ending-colspec" as="element()?">
+    <xsl:param name="entry" as="element()"/>
+    
+    <xsl:sequence select="
+      table:get-current-tgroup($entry)/*[contains(@class, ' topic/colspec ')]
+      [@colname eq $entry/@nameend]
+      "/>
+  </xsl:function>
 
   <xsl:function name="table:get-entry-align" as="attribute(align)?">
     <xsl:param name="el" as="element()"/>
@@ -136,6 +145,66 @@ See the accompanying LICENSE file for applicable license.
        table:get-current-table($el)/@rowsep,
        table:get-current-tgroup($el)/@rowsep)[1]
     "/>
+  </xsl:function>
+  
+  <xsl:function name="table:find-entry-end-column" as="xs:integer">
+    <xsl:param name="ctx" as="element()"/>
+    <xsl:choose>
+      <xsl:when test="$ctx/@nameend">
+        <xsl:sequence select="xs:integer(table:get-ending-colspec($ctx)/@colnum)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="xs:integer($ctx/@dita-ot:x)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+  
+  <!-- Return true if an entry is entirely within the X or Y span of the header.
+       If entry ends before the header, or starts after the header, no match, otherwise there is overlap. -->
+  <xsl:function name="table:entry-within-range" as="xs:boolean">
+    <xsl:param name="entrystart" as="xs:integer"/>
+    <xsl:param name="entryend" as="xs:integer"/>
+    <xsl:param name="headerstart" as="xs:integer"/>
+    <xsl:param name="headerend" as="xs:integer"/>
+    <xsl:sequence select="not($entryend lt $headerstart or $entrystart gt $headerend)"/>
+  </xsl:function>
+  
+  <xsl:function name="table:get-matching-thead-headers" as="xs:string*">
+    <xsl:param name="ctx" as="element()"/>
+    <xsl:variable name="startposition" select="xs:integer($ctx/@dita-ot:x)"/>
+    <xsl:variable name="endposition" select="table:find-entry-end-column($ctx)"/>
+    <xsl:for-each select="$ctx/../../../*[contains(@class,' topic/thead ')]/*[contains(@class,' topic/row ')]/*[contains(@class,' topic/entry ')]">
+      <xsl:variable name="headstart" select="xs:integer(@dita-ot:x)"/>
+      <xsl:variable name="headend" select="table:find-entry-end-column(.)"/>
+      <xsl:if test="table:entry-within-range($startposition, $endposition, $headstart, $headend)">
+        <xsl:value-of select="dita-ot:generate-html-id(.)"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:function>
+  
+  <xsl:function name="table:get-matching-row-headers" as="xs:string*">
+    <xsl:param name="ctx" as="element()"/>
+    <xsl:if test="table:get-current-table($ctx)/@rowheader='firstcol' and 
+      $ctx/@dita-ot:x != '1' and
+      not(table:is-thead-entry($ctx))">
+      <xsl:variable name="startposition" select="xs:integer($ctx/@dita-ot:y)"/>
+      <xsl:variable name="endposition" select="if ($ctx/@morerows) then ($startposition + xs:integer($ctx/@morerows)) else $startposition"/>
+      <xsl:choose>
+        <xsl:when test="($startposition = $endposition) and $ctx/preceding-sibling::*[contains(@class,' topic/entry ')][@dita-ot:x = '1']">
+          <!-- Quick result for common simplest case: no spanning and first-col row header is in this row -->
+          <xsl:value-of select="dita-ot:generate-html-id($ctx/preceding-sibling::*[contains(@class,' topic/entry ')][@dita-ot:x ='1'])"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:for-each select="$ctx/../../*[contains(@class,' topic/row ')]/*[contains(@class,' topic/entry ')][@dita-ot:x='1']">
+            <xsl:variable name="headstart" select="xs:integer(@dita-ot:y)"/>
+            <xsl:variable name="headend" select="if (@morerows) then ($headstart + xs:integer(@morerows)) else $headstart"/>
+            <xsl:if test="table:entry-within-range($startposition, $endposition, $headstart, $headend)">
+              <xsl:value-of select="dita-ot:generate-html-id(.)"/>
+            </xsl:if>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
   </xsl:function>
 
   <xsl:function name="simpletable:is-body-entry" as="xs:boolean">

@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">Varning - livsfara</str>
   <str name="Remember">Glöm inte</str>
   <str name="Restriction">Begränsning</str>
+  <str name="Trouble">Problem</str>
   <str name="Warning">Varning - risk för maskinskada</str>
   <str name="Contents">Innehåll</str>
   <str name="Related concepts">Närliggande begrepp</str>

@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">อันตราย</str>
   <str name="Remember">เตือนความจำ</str>
   <str name="Restriction">ข้อจำกัด</str>
+  <str name="Trouble">ปัญหา</str>
   <str name="Warning">คำเตือน</str>
   <str name="Contents">สารบัญ</str>
   <str name="Related concepts">หลักการที่เกี่ยวข้อง</str>

@@ -293,6 +293,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="exists($links)">
       <linklist class="- topic/linklist " outputclass="relinfo">
+        <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
         <title class="- topic/title ">
           <xsl:call-template name="getVariable">
             <xsl:with-param name="id" select="'Related information'"/>
@@ -600,6 +601,12 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
   </xsl:template>
 
   <!--linklists-->
+  <xsl:template match="*[contains(@class, ' topic/linklist ')]/@xml:lang" priority="100">
+    <xsl:if test="(empty(parent::*/ancestor::*[@xml:lang][1]/@xml:lang) and .!=$DEFAULTLANG) or
+      .!=parent::*/ancestor::*[@xml:lang][1]/@xml:lang">
+      <xsl:next-match/>
+    </xsl:if>
+  </xsl:template>
   <xsl:template match="*[contains(@class, ' topic/linklist ')]" name="topic.linklist">
     <xsl:value-of select="$newline"/>
     <xsl:choose>

@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
   <str name="Danger">ΚΙΝΔΥΝΟΣ</str>
   <str name="Remember">Υπενθύμιση</str>
   <str name="Restriction">Περιορισμός</str>
+  <str name="Trouble">πρόβλημα</str>
   <str name="Warning">Προειδοποίηση</str>
   <str name="Contents">Περιεχόμενα</str>
   <str name="Related concepts">Συναφείς έννοιες</str>
