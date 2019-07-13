@@ -107,8 +107,12 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 }
 
                 t.transform(source, result);
+            } catch (final RuntimeException e) {
+                throw e;
             } catch (final TransformerConfigurationException e) {
                 throw new RuntimeException("Failed to compile stylesheet '" + styleFile.toURI() + "': " + e.getMessage(), e);
+            } catch (final TransformerException e) {
+                throw new DITAOTException("Failed to transform document: " + e.getMessageAndLocation(), e);
             } catch (final Exception e) {
                 throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
             } finally {

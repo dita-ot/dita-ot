@@ -168,7 +168,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
                 saxToDomTransformer.transform(source, result);
             }
         } catch (TransformerException e) {
-            throw new SAXException("Failed to serialize DOM node to SAX: " + e.getMessage(), e);
+            throw new SAXException("Failed to serialize DOM node to SAX: " + e.getMessageAndLocation(), e);
         }
     }
 

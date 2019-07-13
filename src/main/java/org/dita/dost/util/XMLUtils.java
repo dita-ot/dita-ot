@@ -518,6 +518,8 @@ public final class XMLUtils {
             transformer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessage(), e);
         }
@@ -565,6 +567,8 @@ public final class XMLUtils {
             transformer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to transform " + input + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + input + ": " + e.getMessage(), e);
         } finally {

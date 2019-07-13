@@ -192,6 +192,10 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             }
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            logger.error("Failed to transform document: " + e.getMessageAndLocation(), e);
+            logger.debug("Remove " + tmp.getAbsolutePath());
+            FileUtils.delete(tmp);
         } catch (final Exception e) {
             logger.error("Failed to transform document: " + e.getMessage(), e);
             logger.debug("Remove " + tmp.getAbsolutePath());
