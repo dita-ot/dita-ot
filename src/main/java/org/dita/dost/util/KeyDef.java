@@ -38,7 +38,8 @@ public class KeyDef {
 
     /** Space delimited list of key names */
     public final String keys;
-    public final URI href;
+    //Allow href to be set.
+    public URI href;
     public final String scope;
     public final URI source;
     public final Element element;
