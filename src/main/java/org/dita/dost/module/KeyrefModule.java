@@ -283,6 +283,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                         final Integer used = usage.get(fi.uri);
                         if (used > 1) {
                             final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                            //Fix the key definitions to point to the proper href.
+                            fixKeyDefRefs(s, fi.uri, value);
                             hrefNode.setValue(value.toString());
                         }
                     }
@@ -293,6 +295,30 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         }
     }
+    
+   private void fixKeyDefRefs(KeyScope s, URI original, URI renamed) {
+    	Map<String, KeyDef> keyDefs = s.keyDefinition;
+    	Iterator<String> iter = keyDefs.keySet().iterator();
+    	while(iter.hasNext()) {
+    		String key = iter.next();
+    		KeyDef keyDef = keyDefs.get(key);
+    		if(keyDef != null) {
+    			if(keyDef.href != null && keyDef.href.equals(original) && keyDef.keys != null) {
+    				boolean startsWithCurrentScope = false;
+    				StringTokenizer st = new StringTokenizer(keyDef.keys);
+    				while(st.hasMoreTokens()) {
+    					String k = st.nextToken();
+    					if(k.startsWith(s.name + ".")) {
+    						startsWithCurrentScope = true;
+    					}
+    				}
+    				if(startsWithCurrentScope) {
+    					keyDef.href = renamed;
+    				}
+    			}
+    		}
+    	}
+	}
 
     private boolean isResourceOnly(final Element elem) {
         Node curr = elem;
