@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?workdir /C:\jira119\content\temp\content?>
+<?workdir-uri file:/C:/jira119/content/temp/content/?>
+<?path2project?>
+<?path2project-uri ./?>
+<?path2rootmap-uri ./?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" xml:lang="en-us" xtrc="map:1;3:23" xtrf="file:/C:/jira119/content/uplevel-in-topic.ditamap">
+    <title class="- topic/title " xtrc="title:1;3:30" xtrf="file:/C:/jira119/content/uplevel-in-topic.ditamap">Topic has up and over, map does not</title>
+<topicref class="- map/topicref " xtrc="topicref:1;4:33" xtrf="file:/C:/jira119/content/uplevel-in-topic.ditamap" href="justthis.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Just this topic</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">Just this topic</linktext>
+    </topicmeta>
+</topicref>
+</map>
