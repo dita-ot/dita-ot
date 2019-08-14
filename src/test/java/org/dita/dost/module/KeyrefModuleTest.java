@@ -8,7 +8,28 @@
 
 package org.dita.dost.module;
 
-import com.google.common.collect.ImmutableMap;
+import static java.net.URI.create;
+import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.TestUtils.createTempDir;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.module.KeyrefModule.ResolveTask;
@@ -22,21 +43,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static java.net.URI.create;
-import static java.util.Collections.*;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.TestUtils.createTempDir;
-import static org.junit.Assert.assertEquals;
+import com.google.common.collect.ImmutableMap;
 
 public class KeyrefModuleTest {
 
@@ -160,4 +167,51 @@ public class KeyrefModuleTest {
         assertXMLEqual(exp, act);
     }
 
+	@Test
+	public void testWalkMapAndRewriteKeydefHref() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
+	    final DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+	    File mapFile = new File(baseDir, "src" + File.separator + "test2.ditamap");
+	    URI inputMap = mapFile.toURI();
+	    final Document act = b.parse(mapFile);
+	    final KeyScope childScope1 = new KeyScope("A", "A",
+	    		ImmutableMap.of(
+	    				"VAR", new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMap, null),
+	    				"A.VAR", new KeyDef("A.VAR", new URI("topic.dita"), "local", "dita", inputMap, null)
+	    				),
+	    		EMPTY_LIST
+	    		);
+	    final KeyScope childScope2 = new KeyScope("B", "B",
+	    		ImmutableMap.of(
+	    				"VAR", new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMap, null),
+	    				"B.VAR", new KeyDef("B.VAR", new URI("topic.dita"), "local", "dita", inputMap, null)
+	    				),
+	    		EMPTY_LIST
+	    		);
+	    final KeyScope keyScope =
+	            new KeyScope("#root", null, new HashMap<String, KeyDef>(), 
+	                        Arrays.asList(new KeyScope[] {childScope1, childScope2})
+	    );
+	    final List<ResolveTask> res = new ArrayList<>();
+	    module.walkMap(act.getDocumentElement(), keyScope, res);
+
+	    ResolveTask task = res.get(0);
+	    assertEquals("topic.dita", task.in.file.toString());
+	    assertEquals(null, task.scope.name);
+	    
+	    task = res.get(1);
+	    assertEquals("topic.dita", task.in.file.toString());
+	    assertEquals("A", task.scope.name);
+	    KeyDef keyDef = task.scope.keyDefinition.get("VAR");
+	    assertEquals(new URI("topic.dita"), keyDef.href);
+	    keyDef = task.scope.keyDefinition.get("A.VAR");
+	    assertEquals(new URI("topic-1.dita"), keyDef.href);
+	    
+	    task = res.get(2);
+	    assertEquals("topic.dita", task.in.file.toString());
+	    assertEquals("B", task.scope.name);
+	    keyDef = task.scope.keyDefinition.get("VAR");
+	    assertEquals(new URI("topic.dita"), keyDef.href);
+	    keyDef = task.scope.keyDefinition.get("B.VAR");
+	    assertEquals(new URI("topic-2.dita"), keyDef.href);
+	}
 }

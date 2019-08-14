@@ -306,10 +306,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     			if(keyDef.href != null && keyDef.href.equals(original) && keyDef.keys != null) {
     				boolean startsWithCurrentScope = false;
     				StringTokenizer st = new StringTokenizer(keyDef.keys);
+    			
     				while(st.hasMoreTokens()) {
     					String k = st.nextToken();
     					if(k.startsWith(s.name + ".")) {
     						startsWithCurrentScope = true;
+    						break;
     					}
     				}
     				if(startsWithCurrentScope) {
