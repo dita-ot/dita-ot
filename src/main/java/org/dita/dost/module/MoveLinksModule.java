@@ -22,6 +22,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.stream.StreamSource;
@@ -75,6 +76,8 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             transformer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to read links from " + inputFile + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to read links from " + inputFile + ": " + e.getMessage(), e);
         } finally {

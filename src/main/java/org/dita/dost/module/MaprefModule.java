@@ -104,6 +104,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
             transformer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to merge map " + inputFile + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to merge map " + inputFile + ": " + e.getMessage(), e);
         }
@@ -117,6 +119,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
             serializer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to serialize map " + inputFile + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to serialize map " + inputFile + ": " + e.getMessage(), e);
         }

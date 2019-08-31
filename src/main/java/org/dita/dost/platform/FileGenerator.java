@@ -17,10 +17,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
@@ -98,6 +95,8 @@ final class FileGenerator extends XMLFilterImpl {
             transformer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            logger.error("Failed to transform " + fileName + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             logger.error("Failed to transform " + fileName + ": " + e.getMessage(), e);
         }

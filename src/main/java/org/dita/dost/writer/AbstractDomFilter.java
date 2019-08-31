@@ -14,6 +14,7 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -64,6 +65,8 @@ public abstract class AbstractDomFilter implements AbstractReader {
                 tf.transform(ds, res);
             } catch (final RuntimeException e) {
                 throw e;
+            } catch (final TransformerException e) {
+                throw new DITAOTException("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessageAndLocation(), e);
             } catch (final Exception e) {
                 throw new DITAOTException("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
             } finally {
