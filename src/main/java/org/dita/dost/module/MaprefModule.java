@@ -49,12 +49,12 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     }
 
     private void init(final AbstractPipelineInput input) {
+        final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
         try {
-            final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
             templates = transformerFactory.newTemplates(new StreamSource(styleFile));
             serializer = transformerFactory.newTransformer();
         } catch (TransformerConfigurationException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to compile " + styleFile + ": " + e.getMessageAndLocation(), e);
         }
 
         if (fileInfoFilter == null) {
