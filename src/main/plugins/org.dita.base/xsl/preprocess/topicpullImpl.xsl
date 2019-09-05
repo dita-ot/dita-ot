@@ -298,6 +298,17 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:sequence select="$result"/>
   </xsl:function>
   
+  <xsl:function name="dita-ot:textNodesHaveContent" as="xs:boolean">
+    <xsl:param name="ctx" as="element()"/>
+    <xsl:variable name="textNodes" as="text()*">
+      <xsl:for-each select="$ctx/text()"><xsl:value-of select="normalize-space(.)"/></xsl:for-each>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$textNodes!=''"><xsl:sequence select="true()"/></xsl:when>
+      <xsl:otherwise><xsl:sequence select="false()"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+  
   
   <!-- ========================
        Templates
@@ -720,7 +731,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="targetElement" as="element()"/>
     
     <xsl:choose>
-      <xsl:when test="dita-ot:is-link(.) and (normalize-space(text()) != '' or *[not(contains(@class, ' topic/desc ') or contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop '))])">
+      <xsl:when test="dita-ot:is-link(.) and 
+                      (dita-ot:textNodesHaveContent(.) or 
+                       *[not(contains(@class, ' topic/desc ') or contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop '))])">
         <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>          
         <xsl:apply-templates select="text()|*[not(contains(@class, ' topic/desc '))]|comment()|processing-instruction()"/>
       </xsl:when>
@@ -734,8 +747,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:if test="exists($linktext) and dita-ot:is-link(.)">
           <xsl:apply-templates select="." mode="topicpull:add-gentext-PI"/>
           <xsl:sequence select="$linktext"/>
-          <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]"/>
         </xsl:if>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
