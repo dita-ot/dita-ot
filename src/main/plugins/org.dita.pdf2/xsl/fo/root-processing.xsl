@@ -163,7 +163,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:apply-templates select="$authorinformation/descendant::*[contains(@class, ' xnal-d/organizationname ')]" mode="dita-ot:text-only"/>
         </xsl:value-of>
       </xsl:when>
-      <xsl:when test="exists($map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/author ')])">
+      <xsl:when test="exists($map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/author ') and not(contains(@class,' xnal-d/authorinformation '))])">
         <xsl:value-of>
           <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/author ')]" mode="dita-ot:text-only"/>
         </xsl:value-of>
