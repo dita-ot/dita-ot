@@ -831,6 +831,25 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
     
     @Test
+    public void testuplevelslink() throws Throwable {
+        builder().name("uplevelslink")
+                .transtype(PREPROCESS)
+                .input(Paths.get("main/uplevel-in-topic.ditamap"))
+                .put("outer.control", "quiet")
+                .test();
+    }
+    
+    @Test
+    public void testuplevelslinkOnlytopic() throws Throwable {
+        builder().name("uplevelslink")
+                .transtype(PREPROCESS)
+                .input(Paths.get("main/uplevel-in-topic.ditamap"))
+                .put("outer.control", "quiet")
+                .put("onlytopic.in.map", "true")
+                .test();
+    }
+    
+    @Test
     public void testmappull_topicid() throws Throwable {
         builder().name("mappull-topicid")
                 .transtype(PREPROCESS)

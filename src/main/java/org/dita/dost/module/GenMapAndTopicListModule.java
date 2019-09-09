@@ -469,6 +469,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             updateUplevels(target);
 
         }
+        for (final URI file: listFilter.getNonTopicrefReferenceSet()) {
+            updateUplevels(file);
+        }
         schemeSet.addAll(listFilter.getSchemeRefSet());
 
         // collect key definitions

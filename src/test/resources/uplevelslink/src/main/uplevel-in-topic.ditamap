@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en-us">
+    <title>Topic has up and over, map does not</title>
+    <!--Addresses: https://github.com/dita-ot/dita-ot/issues/3333-->
+    <topicref href="justthis.dita"/>
+</map>

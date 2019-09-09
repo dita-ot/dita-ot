@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="justthis">
+    <title>Just this topic</title>
+    <body>
+        <p>But link up and over: <xref href="../peer/upandover.dita"/></p>
+    </body>
+</topic>

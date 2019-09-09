@@ -213,10 +213,12 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*" mode="insertTopicHeaderMarker">
     <xsl:param name="marker-class-name" as="xs:string">current-header</xsl:param>
-
-    <fo:marker marker-class-name="{$marker-class-name}">
-      <xsl:apply-templates select="." mode="insertTopicHeaderMarkerContents"/>
-    </fo:marker>
+      <xsl:variable name="headerContent" as="node()*">
+        <xsl:apply-templates select="." mode="insertTopicHeaderMarkerContents"/>
+      </xsl:variable>
+      <fo:marker marker-class-name="{$marker-class-name}">
+        <xsl:apply-templates select="$headerContent" mode="dropCopiedIds"/>
+      </fo:marker>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="insertTopicHeaderMarkerContents">
