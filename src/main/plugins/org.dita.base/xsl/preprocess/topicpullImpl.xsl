@@ -300,13 +300,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   
   <xsl:function name="dita-ot:textNodesHaveContent" as="xs:boolean">
     <xsl:param name="ctx" as="element()"/>
-    <xsl:variable name="textNodes" as="text()*">
-      <xsl:for-each select="$ctx/text()"><xsl:value-of select="normalize-space(.)"/></xsl:for-each>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$textNodes!=''"><xsl:sequence select="true()"/></xsl:when>
-      <xsl:otherwise><xsl:sequence select="false()"/></xsl:otherwise>
-    </xsl:choose>
+    <xsl:sequence select="some $t in $ctx/text() satisfies normalize-space($t)"/>
   </xsl:function>
   
   
