@@ -153,8 +153,11 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="$ctx/@nameend">
         <xsl:sequence select="xs:integer(table:get-ending-colspec($ctx)/@colnum)"/>
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="$ctx/@dita-ot:x">
         <xsl:sequence select="xs:integer($ctx/@dita-ot:x)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="count($ctx/preceding-sibling::*[contains(@class,' topic/entry ')])+1"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
@@ -171,10 +174,16 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:function name="table:get-matching-thead-headers" as="xs:string*">
     <xsl:param name="ctx" as="element()"/>
-    <xsl:variable name="startposition" select="xs:integer($ctx/@dita-ot:x)"/>
+    <xsl:variable name="startposition"
+                  select="if ($ctx/@dita-ot:x)
+                          then xs:integer($ctx/@dita-ot:x)
+                          else count($ctx/preceding-sibling::*[contains(@class,' topic/entry ')]) + 1"/>
     <xsl:variable name="endposition" select="table:find-entry-end-column($ctx)"/>
     <xsl:for-each select="$ctx/../../../*[contains(@class,' topic/thead ')]/*[contains(@class,' topic/row ')]/*[contains(@class,' topic/entry ')]">
-      <xsl:variable name="headstart" select="xs:integer(@dita-ot:x)"/>
+      <xsl:variable name="headstart"
+                    select="if (@dita-ot:x)
+                            then xs:integer(@dita-ot:x)
+                            else count(preceding-sibling::*[contains(@class,' topic/entry ')]) + 1"/>
       <xsl:variable name="headend" select="table:find-entry-end-column(.)"/>
       <xsl:if test="table:entry-within-range($startposition, $endposition, $headstart, $headend)">
         <xsl:value-of select="dita-ot:generate-html-id(.)"/>
@@ -185,10 +194,16 @@ See the accompanying LICENSE file for applicable license.
   <xsl:function name="table:get-matching-row-headers" as="xs:string*">
     <xsl:param name="ctx" as="element()"/>
     <xsl:if test="table:get-current-table($ctx)/@rowheader='firstcol' and 
-      $ctx/@dita-ot:x != '1' and
-      not(table:is-thead-entry($ctx))">
-      <xsl:variable name="startposition" select="xs:integer($ctx/@dita-ot:y)"/>
-      <xsl:variable name="endposition" select="if ($ctx/@morerows) then ($startposition + xs:integer($ctx/@morerows)) else $startposition"/>
+                  $ctx/@dita-ot:x != '1' and
+                  not(table:is-thead-entry($ctx))">
+      <xsl:variable name="startposition"
+                    select="if ($ctx/@dita-ot:y)
+                            then xs:integer($ctx/@dita-ot:y)
+                            else count($ctx/parent::*/preceding-sibling::*[contains(@class,' topic/row ')]) + 1"/>
+      <xsl:variable name="endposition"
+                    select="if ($ctx/@morerows)
+                            then ($startposition + xs:integer($ctx/@morerows))
+                            else $startposition"/>
       <xsl:choose>
         <xsl:when test="($startposition = $endposition) and $ctx/preceding-sibling::*[contains(@class,' topic/entry ')][@dita-ot:x = '1']">
           <!-- Quick result for common simplest case: no spanning and first-col row header is in this row -->

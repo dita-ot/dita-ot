@@ -300,6 +300,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:sequence select="$result"/>
   </xsl:function>
   
+  <xsl:function name="dita-ot:textNodesHaveContent" as="xs:boolean">
+    <xsl:param name="ctx" as="element()"/>
+    <xsl:sequence select="some $t in $ctx/text() satisfies normalize-space($t)"/>
+  </xsl:function>
+  
   
   <!-- ========================
        Templates
@@ -720,37 +725,57 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                          contains(@class,' topic/indextermref ')]"
                 mode="topicpull:get-stuff_get-shortdesc" priority="10"/>
 
-  <!-- Get the link text for a link or cross reference. If specified locally, use that. Otherwise,
-       work with the target to get the text. -->
+  <!-- Get the link text for a cross reference (not a link element). If specified locally, use that.
+       Otherwise, work with the target to get the text. -->
   <xsl:template match="*" mode="topicpull:get-stuff_get-linktext">
     <xsl:param name="targetElement" as="element()"/>
     
     <xsl:choose>
-      <xsl:when test="contains(@class,' topic/link ') and *[not(contains(@class, ' topic/desc '))]">
-        <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
-        <xsl:apply-templates select="*[not(contains(@class, ' topic/desc '))]|comment()|processing-instruction()"/>
-      </xsl:when>
-      <xsl:when test="dita-ot:is-link(.) and (normalize-space(.) != '' or *[not(contains(@class, ' topic/desc '))])">
+      <xsl:when test="dita-ot:is-link(.) and 
+                      (dita-ot:textNodesHaveContent(.) or 
+                       *[not(contains(@class, ' topic/desc ') or contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop '))])">
         <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>          
         <xsl:apply-templates select="text()|*[not(contains(@class, ' topic/desc '))]|comment()|processing-instruction()"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:variable name="linktext">
+        <xsl:variable name="linktext" as="node()*">
           <xsl:apply-templates select="." mode="topicpull:getlinktext">
             <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
           </xsl:apply-templates>
         </xsl:variable>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
         <xsl:if test="exists($linktext) and dita-ot:is-link(.)">
           <xsl:apply-templates select="." mode="topicpull:add-gentext-PI"/>
-          <!-- FIXME: need to avoid flattening complex markup here-->
-          <xsl:value-of select="$linktext"/>
+          <xsl:sequence select="$linktext"/>
         </xsl:if>
-        <xsl:if test="exists($linktext) and contains(@class, ' topic/link ')">
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <!-- Get the link text for a link element. If specified locally, use that. Otherwise,
+       work with the target to get the text. -->
+  <xsl:template match="*[contains(@class,' topic/link ')]" mode="topicpull:get-stuff_get-linktext">
+    <xsl:param name="targetElement" as="element()"/>
+    
+    <xsl:choose>
+      <xsl:when test="*[contains(@class, ' topic/linktext ')]">
+        <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
+        <xsl:apply-templates select="*[not(contains(@class, ' topic/desc '))]|comment()|processing-instruction()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="linktext" as="node()*">
+          <xsl:apply-templates select="." mode="topicpull:getlinktext">
+            <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
+          </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:if test="exists($linktext)">
           <xsl:apply-templates select="." mode="topicpull:add-gentext-PI"/>
-          <!-- FIXME: need to avoid flattening complex markup here-->
+          <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]"/>
           <linktext class="- topic/linktext ">
-            <xsl:value-of select="$linktext"/>
+            <xsl:sequence select="$linktext"/>
           </linktext>
+          <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]"/>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
@@ -1117,11 +1142,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <a name="fnsrc_{$fnid}" href="#fntarg_{$fnid}">
-      <sup>
-        <xsl:value-of select="$convergedcallout"/>
-      </sup>
-    </a>
+    <sup class="+ topic/ph hi-d/sup ">
+      <xsl:value-of select="$convergedcallout"/>
+    </sup>
   </xsl:template>
 
   <!-- Getting text from a dlentry target: use the contents of the term -->
