@@ -12,6 +12,8 @@ stages:
     if: repo = dita-ot/dita-ot AND branch = develop AND type != pull_request
   - name: release
     if: repo = dita-ot/dita-ot AND tag IS present AND type != pull_request
+  - name: deploy
+    if: repo = dita-ot/dita-ot AND tag IS present AND type != pull_request
 jobs:
   include:
     # Test
@@ -88,6 +90,20 @@ jobs:
         - provider: script
           script: bash .travis/registry.sh
           skip_cleanup: true
+          on:
+            tags: true
+            repo: dita-ot/dita-ot
+    # Deployment
+    - state: deploy
+      name: "Deploy Docker"
+      install: skip
+      script: skip
+      deploy:
+        - provider: script
+          script: |-
+            docker login docker.pkg.github.com -u $GITHUB_USER -p $GITHUB_PACKAGE_REGISTRY
+            TAG=${TRAVIS_TAG} docker build -t docker.pkg.github.com/dita-ot/dita-ot/dita-ot:${TRAVIS_TAG} --build-arg VERSION=${TRAVIS_TAG} .
+            TAG=${TRAVIS_TAG} docker push docker.pkg.github.com/dita-ot/dita-ot/dita-ot:${TRAVIS_TAG}
           on:
             tags: true
             repo: dita-ot/dita-ot
