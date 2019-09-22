@@ -231,7 +231,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * @since Ant 1.6
      */
     private void handleLogfile() {
-        if (args.logFile != null) {
+        if (args != null && args.logFile != null) {
             FileUtils.close(out);
             FileUtils.close(err);
         }
