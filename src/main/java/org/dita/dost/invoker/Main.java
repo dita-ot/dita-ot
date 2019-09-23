@@ -115,7 +115,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
 
     private void printErrorMessage(final String msg) {
-        if (args.useColor) {
+        if (args != null && args.useColor) {
             System.err.print(DefaultLogger.ANSI_RED);
             System.err.print("Error: " + msg);
             System.err.println(DefaultLogger.ANSI_RESET);

@@ -288,7 +288,7 @@ final class ArgumentParser {
             } else if (isLongForm(arg, "-listener")) {
                 handleArgListener(args);
             } else if (arg.startsWith("-D")) {
-                handleArgDefine(arg, args);
+                definedProps.putAll(handleArgDefine(arg, args));
             } else if (isLongForm(arg, "-logger")) {
                 handleArgLogger(args);
             } else if (isLongForm(arg, "-inputhandler")) {
