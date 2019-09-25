@@ -102,13 +102,15 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:when test="$map//*[contains(@class,' bookmap/toc ')][@href]"/>
                 <xsl:when test="$map//*[contains(@class,' bookmap/toc ')]
                               | /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
-                    <fo:bookmark internal-destination="{$id.toc}">
-                        <fo:bookmark-title>
-                            <xsl:call-template name="getVariable">
-                                <xsl:with-param name="id" select="'Table of Contents'"/>
-                            </xsl:call-template>
-                        </fo:bookmark-title>
-                    </fo:bookmark>
+                    <xsl:if test="$generate-toc">
+                        <fo:bookmark internal-destination="{$id.toc}">
+                            <fo:bookmark-title>
+                                <xsl:call-template name="getVariable">
+                                    <xsl:with-param name="id" select="'Table of Contents'"/>
+                                </xsl:call-template>
+                            </fo:bookmark-title>
+                        </fo:bookmark>
+                    </xsl:if>
                 </xsl:when>
             </xsl:choose>
             <xsl:for-each select="/*/*[contains(@class, ' topic/topic ')] |
