@@ -108,10 +108,15 @@ See the accompanying LICENSE file for applicable license.
     <response>Check and see whether all prerequisite plug-ins are installed in toolkit.</response>
   </message>
   
-  <!-- 2012-06-12: Still need to reproduce and edit this message -->
+  <!-- Message DOTJ021W deprecated in 3.4, replaced with DOTJ021E -->
   <message id="DOTJ021W" type="WARN">
     <reason>File '%1' will not generate output since it is invalid or all of its content has been filtered out by the ditaval file.</reason>
     <response>Please check the file '%1' and the ditaval file to see if this is the intended result.</response>
+  </message>
+  
+  <message id="DOTJ021E" type="ERROR">
+    <reason>File '%1' will not generate output because because all content has been filtered out by DITAVAL "exclude" conditions, or because the file is not valid DITA.</reason>
+    <response></response>
   </message>
   
   <message id="DOTJ022F" type="FATAL">
