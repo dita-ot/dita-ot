@@ -429,7 +429,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="copy-image2"
           unless="preprocess.copy-image.skip"
           description="Copy image files">
-    <copy todir="${dita.output.dir}" failonerror="false">
+    <copy todir="${dita.output.dir}" failonerror="false" overwrite="true">
       <ditafileset format="image" />
     </copy>
   </target>
