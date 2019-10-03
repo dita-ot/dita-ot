@@ -427,6 +427,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (!(cls != null && cls.isValid()) && !ELEMENT_NAME_DITA.equals(localName)) {
             if (nonDitaContext(classes)) {
                 // Normal case for bad class: in non DITA context, no message
+                if (Objects.equals(uri, SVG_NS) && Objects.equals(localName, "image")) {
+                    parseSvgImageHref(atts);
+                }
             } else if (atts.getValue(ATTRIBUTE_NAME_CLASS) == null) { // Missing @class
                 logger.info(MessageUtils.getMessage("DOTJ030I", localName).setLocation(atts).toString());
             } else { // Invalid DITA @class
@@ -454,6 +457,18 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         getContentHandler().startElement(uri, localName, qName, atts);
+    }
+
+    private void parseSvgImageHref(final Attributes atts) {
+        final URI attrValue = toURI(atts.getValue(XLINK_NS, "href"));
+        if (attrValue == null) {
+            return;
+        }
+        if (followLinks() && canFollow(attrValue)) {
+            final URI filename = stripFragment(attrValue.isAbsolute() ? attrValue : currentDir.resolve(attrValue));
+            assert filename.isAbsolute();
+            nonConrefCopytoTargets.add(new Reference(filename, ATTR_FORMAT_VALUE_IMAGE));
+        }
     }
 
     private void parseCoderef(final Attributes atts) {

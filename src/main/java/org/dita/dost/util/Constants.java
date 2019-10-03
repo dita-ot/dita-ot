@@ -1024,7 +1024,8 @@ public final class Constants {
     public static final String DITA_OT_NS = "http://dita-ot.sourceforge.net/ns/201007/dita-ot";
     /**dita-ot:orig-href.*/
     public static final String ATTRIBUTE_NAME_DITA_OT_ORIG_HREF = DITA_OT_NS_PREFIX + ":" + "orig-href";
-
+    public static final String SVG_NS = "http://www.w3.org/2000/svg";
+    public static final String XLINK_NS = "http://www.w3.org/1999/xlink";
 
     /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE. Deprecated since 3.0 */
     @Deprecated
