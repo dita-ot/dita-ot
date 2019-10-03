@@ -40,7 +40,8 @@ See the accompanying LICENSE file for applicable license.
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     exclude-result-prefixes="xs opentopic-index comparer opentopic-func ot-placeholder">
 
-  <xsl:variable name="index.continued-enabled" select="true()"/>
+  <xsl:variable name="index.continued-enabled" select="true()" as="xs:boolean"/>
+  <xsl:variable name="index.allow-link-with-subterm" select="true()" as="xs:boolean"/>
 
     <!-- *************************************************************** -->
     <!-- Create index templates                                          -->
@@ -220,16 +221,16 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="opentopic-index:index.entry[not(opentopic-index:index.entry)]" mode="index-postprocess" priority="1">
         <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
-    <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
+        <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
         <xsl:variable name="value" select="@value"/>
         <xsl:variable name="refID" select="opentopic-index:refID/@value"/>
 
         <xsl:if test="opentopic-func:getIndexEntry($value,$refID)">
             <xsl:apply-templates select="." mode="make-index-ref">
-        <xsl:with-param name="idxs" select="opentopic-index:refID"/>
-        <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
-        <xsl:with-param name="no-page" select="$isNoPage"/>
-      </xsl:apply-templates>
+                <xsl:with-param name="idxs" select="opentopic-index:refID"/>
+                <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
+                <xsl:with-param name="no-page" select="$isNoPage"/>
+            </xsl:apply-templates>
         </xsl:if>
     </xsl:template>
 
@@ -371,6 +372,9 @@ See the accompanying LICENSE file for applicable license.
                         </xsl:variable>
                         <xsl:if test="contains($isNormalChilds,'true ')">
                           <xsl:apply-templates select="." mode="make-index-ref">
+                            <xsl:with-param name="idxs" select="if ($index.allow-link-with-subterm) 
+                              then (opentopic-index:refID)
+                              else ()"/>
                             <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                             <xsl:with-param name="no-page" select="$isNoPage"/>
                           </xsl:apply-templates>
