@@ -130,6 +130,11 @@ public final class TopicRefWriter extends AbstractXMLFilter {
             formatValue = ATTR_FORMAT_VALUE_DITA;
         }
 
+        if (atts.getIndex(XLINK_NS, ATTRIBUTE_NAME_HREF) != -1) {
+            System.err.println("Found xlink:href");
+            return true;
+        }
+
         return scopeValue.equals(ATTR_SCOPE_VALUE_LOCAL) && formatValue.equals(ATTR_FORMAT_VALUE_DITA);
 
     }
@@ -146,6 +151,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
         // FIXME should be URI
         String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
         if (hrefValue == null) {
+            hrefValue = atts.getValue(XLINK_NS, ATTRIBUTE_NAME_HREF);
             return null;
         }
         if (fixpath != null && hrefValue.startsWith(fixpath)) {
