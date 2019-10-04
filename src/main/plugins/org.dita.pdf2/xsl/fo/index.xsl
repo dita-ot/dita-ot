@@ -59,6 +59,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="warn-enabled" select="true()"/>
 
   <xsl:key name="index-key" match="opentopic-index:index.entry" use="@value"/>
+  <xsl:key name="index-leaves"
+    match="opentopic-index:index.entry
+              [empty(opentopic-index:index.entry|opentopic-index:see-childs)]
+              [not(ancestor::opentopic-index:index.group)]" 
+    use="@value"/>
 
   <xsl:variable name="index-entries">
             <xsl:apply-templates select="/" mode="index-entries"/>
@@ -180,9 +185,11 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="opentopic-index:index.entry">
-      <xsl:for-each select="opentopic-index:refID[last()]">
-          <fo:inline index-key="{@indexid}"/>
-      </xsl:for-each>
+      <xsl:if test="empty(opentopic-index:index.entry|opentopic-index:see-childs)">
+          <xsl:for-each select="opentopic-index:refID[last()]">
+              <fo:inline index-key="{@indexid}"/>
+          </xsl:for-each>
+      </xsl:if>
       <xsl:apply-templates/>
   </xsl:template>
 
@@ -372,7 +379,7 @@ See the accompanying LICENSE file for applicable license.
                         </xsl:variable>
                         <xsl:if test="contains($isNormalChilds,'true ')">
                           <xsl:apply-templates select="." mode="make-index-ref">
-                            <xsl:with-param name="idxs" select="if ($index.allow-link-with-subterm) 
+                            <xsl:with-param name="idxs" select="if ($index.allow-link-with-subterm and exists(key('index-leaves',@value))) 
                               then (opentopic-index:refID)
                               else ()"/>
                             <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
