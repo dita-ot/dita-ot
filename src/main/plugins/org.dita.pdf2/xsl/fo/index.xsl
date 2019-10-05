@@ -249,12 +249,17 @@ See the accompanying LICENSE file for applicable license.
                         <xsl:with-param name="id" select="'Index See String'"/>
                     </xsl:call-template>
                 </fo:inline>
-                <fo:basic-link>
-                    <xsl:attribute name="internal-destination">
-                        <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
-                    </xsl:attribute>
-                    <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
-                </fo:basic-link>
+                <xsl:for-each select="opentopic-index:index.entry">
+                    <xsl:if test="not(position() eq 1)">
+                        <xsl:text>, </xsl:text>
+                    </xsl:if>
+                    <fo:basic-link>
+                        <xsl:attribute name="internal-destination">
+                            <xsl:apply-templates select="." mode="get-see-destination"/>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="." mode="get-see-value"/>
+                    </fo:basic-link>
+                </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="output-message">
@@ -271,12 +276,17 @@ See the accompanying LICENSE file for applicable license.
                             <xsl:with-param name="id" select="'Index See Also String'"/>
                         </xsl:call-template>
                     </fo:inline>
-                    <fo:basic-link>
-                        <xsl:attribute name="internal-destination">
-                            <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
-                        </xsl:attribute>
-                        <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
-                    </fo:basic-link>
+                    <xsl:for-each select="opentopic-index:index.entry">
+                        <xsl:if test="not(position() eq 1)">
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                        <fo:basic-link>
+                            <xsl:attribute name="internal-destination">
+                                <xsl:apply-templates select="." mode="get-see-destination"/>
+                            </xsl:attribute>
+                            <xsl:apply-templates select="." mode="get-see-value"/>
+                        </fo:basic-link>
+                    </xsl:for-each>
                 </fo:block>
             </xsl:otherwise>
         </xsl:choose>
@@ -306,8 +316,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="opentopic-index:index.entry" mode="get-see-value">
         <fo:inline>
             <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
-            <xsl:text> </xsl:text>
-            <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+            <xsl:if test="opentopic-index:index.entry[1]">
+              <xsl:text> </xsl:text>
+              <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+            </xsl:if>
         </fo:inline>
     </xsl:template>
 
@@ -318,12 +330,17 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:with-param name="id" select="'Index See Also String'"/>
                 </xsl:call-template>
             </fo:inline>
-            <fo:basic-link>
-                <xsl:attribute name="internal-destination">
-                    <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
-                </xsl:attribute>
-                <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
-            </fo:basic-link>
+            <xsl:for-each select="opentopic-index:index.entry">
+                <xsl:if test="not(position() eq 1)">
+                    <xsl:text>, </xsl:text>
+                </xsl:if>
+                <fo:basic-link>
+                    <xsl:attribute name="internal-destination">
+                        <xsl:apply-templates select="." mode="get-see-destination"/>
+                    </xsl:attribute>
+                   <xsl:apply-templates select="." mode="get-see-value"/>
+                </fo:basic-link>
+            </xsl:for-each>
         </fo:block>
     </xsl:template>
 
