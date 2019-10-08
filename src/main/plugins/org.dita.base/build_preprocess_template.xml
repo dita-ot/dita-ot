@@ -550,7 +550,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="copy-image.todir" value="${_dita.map.output.dir}/${uplevels}" else="${dita.output.dir}">
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
-    <copy todir="${copy-image.todir}" failonerror="false">
+    <copy todir="${copy-image.todir}" failonerror="false" overwrite="true">
       <ditafileset format="image" />
     </copy>
   </target>
@@ -563,7 +563,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="copy-html.todir" value="${_dita.map.output.dir}/${uplevels}" else="${dita.output.dir}">
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
-    <copy todir="${copy-html.todir}" failonerror="false">
+    <copy todir="${copy-html.todir}" failonerror="false" overwrite="true">
       <ditafileset>
         <excludes format="dita"/>
         <excludes format="ditamap"/>
