@@ -11,7 +11,7 @@ stages:
   - name: snapshot
     if: repo = dita-ot/dita-ot AND branch = develop AND type != pull_request
   - name: release
-    if: repo = dita-ot/dita-ot AND tag IS present
+    if: repo = dita-ot/dita-ot AND tag IS present AND type != pull_request
 jobs:
   include:
     # Test
