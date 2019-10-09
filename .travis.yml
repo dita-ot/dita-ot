@@ -81,8 +81,8 @@ jobs:
           on:
             tags: true
             repo: dita-ot/dita-ot
-    - install: "./gradlew"
-      name: "Plug-in registry pull-request"
+    - name: "Plug-in registry pull-request"
+      install: "./gradlew"
       script: skip
       deploy:
         - provider: script
