@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:jdk-11.0.4_11-slim
+FROM adoptopenjdk:11-jre-hotspot
 
 RUN apt-get update \
     && apt-get install -y unzip \
