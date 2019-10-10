@@ -40,7 +40,8 @@ See the accompanying LICENSE file for applicable license.
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     exclude-result-prefixes="xs opentopic-index comparer opentopic-func ot-placeholder">
 
-  <xsl:variable name="index.continued-enabled" select="true()"/>
+  <xsl:variable name="index.continued-enabled" select="true()" as="xs:boolean"/>
+  <xsl:variable name="index.allow-link-with-subterm" select="true()" as="xs:boolean"/>
 
     <!-- *************************************************************** -->
     <!-- Create index templates                                          -->
@@ -58,6 +59,12 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="warn-enabled" select="true()"/>
 
   <xsl:key name="index-key" match="opentopic-index:index.entry" use="@value"/>
+  <xsl:key name="index-leaves"
+    match="opentopic-index:index.entry
+              [empty(opentopic-index:index.entry|opentopic-index:see-childs)]
+              [empty(ancestor::opentopic-index:see-also-childs|ancestor::opentopic-index:see-childs)]
+              [empty(ancestor::opentopic-index:index.group)]" 
+    use="@value"/>
 
   <xsl:variable name="index-entries">
             <xsl:apply-templates select="/" mode="index-entries"/>
@@ -179,9 +186,17 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="opentopic-index:index.entry">
-      <xsl:for-each select="opentopic-index:refID[last()]">
-          <fo:inline index-key="{@indexid}"/>
-      </xsl:for-each>
+      <!-- Do not create page link anchor for the index if:
+        * there is a subterm
+        * there is a child <index-see> redirect
+        * this entry is itself the "see" or "see also" reference -->
+      <xsl:if test="empty(opentopic-index:index.entry|
+        opentopic-index:see-childs|
+        ancestor::opentopic-index:see-also-childs|ancestor::opentopic-index:see-childs)">
+          <xsl:for-each select="opentopic-index:refID[last()]">
+              <fo:inline index-key="{@indexid}"/>
+          </xsl:for-each>
+      </xsl:if>
       <xsl:apply-templates/>
   </xsl:template>
 
@@ -220,16 +235,16 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="opentopic-index:index.entry[not(opentopic-index:index.entry)]" mode="index-postprocess" priority="1">
         <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
-    <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
+        <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
         <xsl:variable name="value" select="@value"/>
         <xsl:variable name="refID" select="opentopic-index:refID/@value"/>
 
         <xsl:if test="opentopic-func:getIndexEntry($value,$refID)">
             <xsl:apply-templates select="." mode="make-index-ref">
-        <xsl:with-param name="idxs" select="opentopic-index:refID"/>
-        <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
-        <xsl:with-param name="no-page" select="$isNoPage"/>
-      </xsl:apply-templates>
+                <xsl:with-param name="idxs" select="opentopic-index:refID"/>
+                <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
+                <xsl:with-param name="no-page" select="$isNoPage"/>
+            </xsl:apply-templates>
         </xsl:if>
     </xsl:template>
 
@@ -241,12 +256,17 @@ See the accompanying LICENSE file for applicable license.
                         <xsl:with-param name="id" select="'Index See String'"/>
                     </xsl:call-template>
                 </fo:inline>
-                <fo:basic-link>
-                    <xsl:attribute name="internal-destination">
-                        <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
-                    </xsl:attribute>
-                    <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
-                </fo:basic-link>
+                <xsl:for-each select="opentopic-index:index.entry">
+                    <xsl:if test="position() ne 1">
+                        <xsl:text>, </xsl:text>
+                    </xsl:if>
+                    <fo:basic-link>
+                        <xsl:attribute name="internal-destination">
+                            <xsl:apply-templates select="." mode="get-see-destination"/>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="." mode="get-see-value"/>
+                    </fo:basic-link>
+                </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="output-message">
@@ -263,12 +283,17 @@ See the accompanying LICENSE file for applicable license.
                             <xsl:with-param name="id" select="'Index See Also String'"/>
                         </xsl:call-template>
                     </fo:inline>
-                    <fo:basic-link>
-                        <xsl:attribute name="internal-destination">
-                            <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
-                        </xsl:attribute>
-                        <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
-                    </fo:basic-link>
+                    <xsl:for-each select="opentopic-index:index.entry">
+                        <xsl:if test="position() ne 1">
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                        <fo:basic-link>
+                            <xsl:attribute name="internal-destination">
+                                <xsl:apply-templates select="." mode="get-see-destination"/>
+                            </xsl:attribute>
+                            <xsl:apply-templates select="." mode="get-see-value"/>
+                        </fo:basic-link>
+                    </xsl:for-each>
                 </fo:block>
             </xsl:otherwise>
         </xsl:choose>
@@ -298,8 +323,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="opentopic-index:index.entry" mode="get-see-value">
         <fo:inline>
             <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
-            <xsl:text> </xsl:text>
-            <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+            <xsl:if test="exists(opentopic-index:index.entry)">
+              <xsl:text> </xsl:text>
+              <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+            </xsl:if>
         </fo:inline>
     </xsl:template>
 
@@ -310,12 +337,17 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:with-param name="id" select="'Index See Also String'"/>
                 </xsl:call-template>
             </fo:inline>
-            <fo:basic-link>
-                <xsl:attribute name="internal-destination">
-                    <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
-                </xsl:attribute>
-                <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
-            </fo:basic-link>
+            <xsl:for-each select="opentopic-index:index.entry">
+                <xsl:if test="position() ne 1">
+                    <xsl:text>, </xsl:text>
+                </xsl:if>
+                <fo:basic-link>
+                    <xsl:attribute name="internal-destination">
+                        <xsl:apply-templates select="." mode="get-see-destination"/>
+                    </xsl:attribute>
+                   <xsl:apply-templates select="." mode="get-see-value"/>
+                </fo:basic-link>
+            </xsl:for-each>
         </fo:block>
     </xsl:template>
 
@@ -371,6 +403,9 @@ See the accompanying LICENSE file for applicable license.
                         </xsl:variable>
                         <xsl:if test="contains($isNormalChilds,'true ')">
                           <xsl:apply-templates select="." mode="make-index-ref">
+                            <xsl:with-param name="idxs" select="if ($index.allow-link-with-subterm and exists(key('index-leaves',@value))) 
+                              then opentopic-index:refID
+                              else ()"/>
                             <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                             <xsl:with-param name="no-page" select="$isNoPage"/>
                           </xsl:apply-templates>
@@ -418,8 +453,8 @@ See the accompanying LICENSE file for applicable license.
           </xsl:if>
           <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
           <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
-            <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
-            <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
+            <xsl:variable name="page-setting" select="(ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
+            <xsl:variable name="isNoPage" select="$page-setting = 'true' and name($page-setting) = 'no-page' "/>
             <xsl:apply-templates select="." mode="make-index-ref">
               <xsl:with-param name="idxs" select="opentopic-index:refID"/>
               <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
