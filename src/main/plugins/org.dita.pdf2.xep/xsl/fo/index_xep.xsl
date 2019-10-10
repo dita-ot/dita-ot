@@ -117,7 +117,7 @@ See the accompanying LICENSE file for applicable license.
                         <xsl:if test="contains($isNormalChilds,'true ')">
                           <xsl:apply-templates select="." mode="make-index-ref">
                             <xsl:with-param name="idxs" select="if ($index.allow-link-with-subterm and exists(key('index-leaves',@value)))
-                              then (opentopic-index:refID)
+                              then opentopic-index:refID
                               else ()"/>
                             <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                             <xsl:with-param name="no-page" select="$isNoPage"/>

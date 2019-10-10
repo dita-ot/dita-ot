@@ -62,7 +62,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:key name="index-leaves"
     match="opentopic-index:index.entry
               [empty(opentopic-index:index.entry|opentopic-index:see-childs)]
-              [not(ancestor::opentopic-index:index.group)]" 
+              [empty(ancestor::opentopic-index:index.group)]" 
     use="@value"/>
 
   <xsl:variable name="index-entries">
@@ -250,7 +250,7 @@ See the accompanying LICENSE file for applicable license.
                     </xsl:call-template>
                 </fo:inline>
                 <xsl:for-each select="opentopic-index:index.entry">
-                    <xsl:if test="not(position() eq 1)">
+                    <xsl:if test="position() ne 1">
                         <xsl:text>, </xsl:text>
                     </xsl:if>
                     <fo:basic-link>
@@ -277,7 +277,7 @@ See the accompanying LICENSE file for applicable license.
                         </xsl:call-template>
                     </fo:inline>
                     <xsl:for-each select="opentopic-index:index.entry">
-                        <xsl:if test="not(position() eq 1)">
+                        <xsl:if test="position() ne 1">
                             <xsl:text>, </xsl:text>
                         </xsl:if>
                         <fo:basic-link>
@@ -316,7 +316,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="opentopic-index:index.entry" mode="get-see-value">
         <fo:inline>
             <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
-            <xsl:if test="opentopic-index:index.entry[1]">
+            <xsl:if test="exists(opentopic-index:index.entry)">
               <xsl:text> </xsl:text>
               <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
             </xsl:if>
@@ -331,7 +331,7 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:call-template>
             </fo:inline>
             <xsl:for-each select="opentopic-index:index.entry">
-                <xsl:if test="not(position() eq 1)">
+                <xsl:if test="position() ne 1">
                     <xsl:text>, </xsl:text>
                 </xsl:if>
                 <fo:basic-link>
@@ -397,7 +397,7 @@ See the accompanying LICENSE file for applicable license.
                         <xsl:if test="contains($isNormalChilds,'true ')">
                           <xsl:apply-templates select="." mode="make-index-ref">
                             <xsl:with-param name="idxs" select="if ($index.allow-link-with-subterm and exists(key('index-leaves',@value))) 
-                              then (opentopic-index:refID)
+                              then opentopic-index:refID
                               else ()"/>
                             <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                             <xsl:with-param name="no-page" select="$isNoPage"/>
@@ -446,8 +446,8 @@ See the accompanying LICENSE file for applicable license.
           </xsl:if>
           <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
           <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
-            <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
-            <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
+            <xsl:variable name="page-setting" select="(ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
+            <xsl:variable name="isNoPage" select="$page-setting = 'true' and name($page-setting) = 'no-page' "/>
             <xsl:apply-templates select="." mode="make-index-ref">
               <xsl:with-param name="idxs" select="opentopic-index:refID"/>
               <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
