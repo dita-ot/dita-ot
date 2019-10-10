@@ -364,7 +364,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 processParseResult(currentFile);
                 categorizeCurrentFile(ref);
             } else if (!currentFile.equals(rootFile)) {
-                logger.warn(MessageUtils.getMessage("DOTJ021W", params).toString());
+                logger.error(MessageUtils.getMessage("DOTJ021E", params).toString());
                 failureList.add(currentFile);
             }
         } catch (final RuntimeException e) {
