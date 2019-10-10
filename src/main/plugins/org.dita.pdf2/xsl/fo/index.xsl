@@ -62,6 +62,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:key name="index-leaves"
     match="opentopic-index:index.entry
               [empty(opentopic-index:index.entry|opentopic-index:see-childs)]
+              [empty(ancestor::opentopic-index:see-also-childs|ancestor::opentopic-index:see-childs)]
               [empty(ancestor::opentopic-index:index.group)]" 
     use="@value"/>
 
@@ -185,7 +186,13 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="opentopic-index:index.entry">
-      <xsl:if test="empty(opentopic-index:index.entry|opentopic-index:see-childs)">
+      <!-- Do not create page link anchor for the index if:
+        * there is a subterm
+        * there is a child <index-see> redirect
+        * this entry is itself the "see" or "see also" reference -->
+      <xsl:if test="empty(opentopic-index:index.entry|
+        opentopic-index:see-childs|
+        ancestor::opentopic-index:see-also-childs|ancestor::opentopic-index:see-childs)">
           <xsl:for-each select="opentopic-index:refID[last()]">
               <fo:inline index-key="{@indexid}"/>
           </xsl:for-each>
