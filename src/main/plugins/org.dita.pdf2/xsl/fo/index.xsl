@@ -194,7 +194,7 @@ See the accompanying LICENSE file for applicable license.
         opentopic-index:see-childs|
         ancestor::opentopic-index:see-also-childs|ancestor::opentopic-index:see-childs)">
           <xsl:for-each select="opentopic-index:refID[last()]">
-              <fo:inline index-key="{@indexid}"/>
+              <fo:wrapper index-key="{@indexid}"/>
           </xsl:for-each>
       </xsl:if>
       <xsl:apply-templates/>
