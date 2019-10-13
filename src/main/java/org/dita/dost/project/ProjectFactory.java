@@ -19,6 +19,7 @@ import org.dita.dost.project.Project.Deliverable;
 import org.dita.dost.project.Project.ProjectRef;
 import org.dita.dost.project.Project.Publication;
 import org.dita.dost.util.FileUtils;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.net.URI;
@@ -33,9 +34,16 @@ public class ProjectFactory {
     private static final ObjectReader yamlReader = new YAMLMapper().reader()
             .forType(ProjectBuilder.class)
             .with(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-    private static final XmlReader xmlReader = new XmlReader();
+    private final XmlReader xmlReader = new XmlReader();
 
-    public static Project load(final URI file) throws IOException {
+    private Logger logger;
+    private boolean lax;
+
+    public static ProjectFactory getInstance() {
+        return new ProjectFactory();
+    }
+
+    public Project load(final URI file) throws IOException {
         try {
             return resolveReferences(load(file, Collections.emptySet()));
         } catch (IOException e) {
@@ -79,13 +87,15 @@ public class ProjectFactory {
                 src.contexts);
     }
 
-    private static Project load(final URI file, final Set<URI> processed) throws IOException {
+    private Project load(final URI file, final Set<URI> processed) throws IOException {
         if (processed.contains(file)) {
             throw new RuntimeException("Recursive project file import: " + file);
         }
         final ProjectBuilder builder;
         switch (FileUtils.getExtension(file.getPath()).toLowerCase()) {
             case "xml":
+                xmlReader.setLogger(logger);
+                xmlReader.setLax(lax);
                 builder = xmlReader.read(file);
                 break;
             case "json":
@@ -102,7 +112,7 @@ public class ProjectFactory {
         return resolveIncludes(project, file, ImmutableSet.<URI>builder().addAll(processed).add(file).build());
     }
 
-    private static Project resolveIncludes(final Project project, final URI base, final Set<URI> processed) throws IOException {
+    private Project resolveIncludes(final Project project, final URI base, final Set<URI> processed) throws IOException {
         if (project.includes == null || project.includes.isEmpty()) {
             return project;
         }
@@ -133,4 +143,11 @@ public class ProjectFactory {
         return new Project(deliverables, project.includes, publications, contexts);
     }
 
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
+    public void setLax(boolean lax) {
+        this.lax = lax;
+    }
 }

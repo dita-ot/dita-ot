@@ -8,6 +8,7 @@
 
 package org.dita.dost.project;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -19,7 +20,12 @@ import static org.junit.Assert.*;
 
 public class XmlReaderTest {
 
-    private final XmlReader xmlReader = new XmlReader();
+    private XmlReader xmlReader;
+
+    @Before
+    public void setUp() {
+        xmlReader = new XmlReader();
+    }
 
     @Test
     public void deserializeXmlSimple() throws IOException {
@@ -75,6 +81,22 @@ public class XmlReaderTest {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/minimal.xml")) {
             final ProjectBuilder project = xmlReader.read(input, null);
             assertEquals(1, project.deliverables.size());
+        }
+    }
+
+    @Test
+    public void deserializeXmlForeign() throws IOException {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/foreign.xml")) {
+            xmlReader.setLax(true);
+            final ProjectBuilder project = xmlReader.read(input, null);
+            assertEquals(1, project.deliverables.size());
+        }
+    }
+
+    @Test(expected = IOException.class)
+    public void deserializeXmlForeignStrict() throws IOException {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/foreign.xml")) {
+            xmlReader.read(input, null);
         }
     }
 }

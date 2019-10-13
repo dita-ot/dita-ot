@@ -9,10 +9,15 @@
 package org.dita.dost.project;
 
 import com.thaiopensource.relaxng.jaxp.CompactSyntaxSchemaFactory;
+import com.thaiopensource.validation.LSInputImpl;
+import org.apache.xerces.util.XMLCatalogResolver;
 import org.dita.dost.util.XMLUtils;
+import org.slf4j.Logger;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.ls.LSInput;
+import org.w3c.dom.ls.LSResourceResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -33,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -58,11 +64,15 @@ public class XmlReader {
     public static final String ELEM_OUTPUT = "output";
     public static final String ELEM_PARAM = "param";
     public static final String ELEM_PROFILE = "profile";
+    public static final String ELEM_PROJECT = "project";
     public static final String ELEM_PUBLICATION = "publication";
 
     private final Validator validator;
+    private final Validator validatorLax;
     private final DocumentBuilder documentBuilder;
     private final SAXTransformerFactory saxTransformerFactory;
+    private Logger logger;
+    private boolean lax;
 
     public XmlReader() {
         try {
@@ -74,11 +84,37 @@ public class XmlReader {
         }
         saxTransformerFactory = (SAXTransformerFactory) TransformerFactory.newInstance();
         final SchemaFactory f = new CompactSyntaxSchemaFactory();
+        final LSResourceResolver resolver = new XMLCatalogResolver();
+        f.setResourceResolver(new LSResourceResolver() {
+            @Override
+            public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
+                final InputStream resource = getClass().getClassLoader().getResourceAsStream(systemId);
+                final LSInput input = new LSInputImpl();
+                input.setByteStream(resource);
+                input.setBaseURI(baseURI);
+                input.setSystemId(systemId);
+                input.setPublicId(publicId);
+                return input;
+            }
+        });
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("project.rnc")) {
             validator = f.newSchema(new StreamSource(in)).newValidator();
         } catch (IOException | SAXException e) {
             throw new RuntimeException("Failed to read project schema: " + e.getMessage(), e);
         }
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("project-lax.rnc")) {
+            validatorLax = f.newSchema(new StreamSource(in)).newValidator();
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException("Failed to read project schema: " + e.getMessage(), e);
+        }
+    }
+
+    public void setLogger(final Logger logger) {
+        this.logger = logger;
+    }
+
+    public void setLax(final boolean lax) {
+        this.lax = lax;
     }
 
     /**
@@ -98,12 +134,18 @@ public class XmlReader {
      *
      * @param in   input project file stream
      * @param file input project file URI, may be {@code null}
-     * @return project
+     * @return project or {@code null} if none found
      */
     public ProjectBuilder read(final InputStream in, final URI file) throws IOException {
         try {
             final Document document = readDocument(in, file);
-            final Element project = document.getDocumentElement();
+            final List<Element> projects = XMLUtils.toList(document.getElementsByTagNameNS(NS, ELEM_PROJECT));
+            if (projects.isEmpty()) {
+                return null;
+            } else if (projects.size() > 1) {
+                logger.warn("Found {} project elements, using first", projects.size());
+            }
+            final Element project = projects.get(0);
             return new ProjectBuilder(
                     getChildren(project, ELEM_DELIVERABLE)
                             .map(this::readDeliverable)
@@ -146,7 +188,11 @@ public class XmlReader {
         if (file != null) {
             inputSource.setSystemId(file.toString());
         }
-        validator.validate(new SAXSource(inputSource), new SAXResult(domSerializer));
+        if (lax) {
+            validatorLax.validate(new SAXSource(inputSource), new SAXResult(domSerializer));
+        } else {
+            validator.validate(new SAXSource(inputSource), new SAXResult(domSerializer));
+        }
 
         return document;
     }
