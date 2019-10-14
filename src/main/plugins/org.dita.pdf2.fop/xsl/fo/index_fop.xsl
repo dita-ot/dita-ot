@@ -38,9 +38,45 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:apply-templates/>
   </xsl:template>
+  
+  <!-- At start of a section, fo:wrapper will add extra line breaks, but fo:block does not.
+          Workaround for FOP issue: https://issues.apache.org/jira/browse/FOP-2016
+  Use fo:block instead of fo:wrapper when:
+  * In a section or example
+  * No preceeding elements in the section other than title, other index terms, or DITAVAL flags
+  * No preceding text nodes with text -->
+  <xsl:function name="opentopic-index:use-block-in-section" as="xs:boolean">
+    <xsl:param name="ctx" as="element()"/>
+    <xsl:variable name="primaryTerm" select="$ctx/ancestor::opentopic-index:index.entry[last()]" as="element()"/>
+    <xsl:choose>
+      <xsl:when test="empty($primaryTerm/
+        parent::*[contains(@class,' topic/section ') or contains(@class,' topic/example ')])">
+        <xsl:sequence select="false()"/>
+      </xsl:when>
+      <xsl:when test="exists($primaryTerm/
+        preceding-sibling::*[not(self::opentopic-index:index.entry or 
+                                 contains(@class,' topic/title ') or 
+                                 contains(@class,' ditaot-d/ditaval-startprop '))])">
+        <xsl:sequence select="false()"/>
+      </xsl:when>
+      <xsl:when test="exists($primaryTerm/preceding-sibling::text()[normalize-space(.)!=''])">
+        <xsl:sequence select="false()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="true()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
 
   <xsl:template match="opentopic-index:refID" mode="make-wrapper">
-    <fo:wrapper id="{opentopic-func:get-unique-refid-value(.)}"/>
+    <xsl:choose>
+      <xsl:when test="opentopic-index:use-block-in-section(.)">
+        <fo:block id="{opentopic-func:get-unique-refid-value(.)}" margin-bottom="0pt" margin-top="0pt" margin-left="0pt" margin-right="0pt" />
+      </xsl:when>
+      <xsl:otherwise>
+        <fo:wrapper id="{opentopic-func:get-unique-refid-value(.)}" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="opentopic-index:index.entry" mode="make-index-ref">
