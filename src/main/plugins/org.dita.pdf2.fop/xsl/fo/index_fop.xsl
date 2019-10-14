@@ -47,16 +47,19 @@ See the accompanying LICENSE file for applicable license.
   * No preceding text nodes with text -->
   <xsl:function name="opentopic-index:use-block-in-section" as="xs:boolean">
     <xsl:param name="ctx" as="element()"/>
+    <xsl:variable name="primaryTerm" select="$ctx/ancestor::opentopic-index:index.entry[last()]" as="element()"/>
     <xsl:choose>
-      <xsl:when test="empty($ctx/ancestor::opentopic-index:index.entry[last()]/
+      <xsl:when test="empty($primaryTerm/
         parent::*[contains(@class,' topic/section ') or contains(@class,' topic/example ')])">
         <xsl:sequence select="false()"/>
       </xsl:when>
-      <xsl:when test="exists($ctx/ancestor::opentopic-index:index.entry[last()]/
-        preceding-sibling::*[not(self::opentopic-index:index.entry or contains(@class,' topic/title ') or contains(@class,' ditaot-d/ditaval-startprop '))])">
+      <xsl:when test="exists($primaryTerm/
+        preceding-sibling::*[not(self::opentopic-index:index.entry or 
+                                 contains(@class,' topic/title ') or 
+                                 contains(@class,' ditaot-d/ditaval-startprop '))])">
         <xsl:sequence select="false()"/>
       </xsl:when>
-      <xsl:when test="exists($ctx/ancestor::opentopic-index:index.entry[last()]/preceding-sibling::text()[normalize-space(.)!=''])">
+      <xsl:when test="exists($primaryTerm/preceding-sibling::text()[normalize-space(.)!=''])">
         <xsl:sequence select="false()"/>
       </xsl:when>
       <xsl:otherwise>
