@@ -442,7 +442,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             throw new BuildException("");
         }
         try {
-            return ProjectFactory.load(args.projectFile.toURI());
+            final ProjectFactory factory = ProjectFactory.getInstance();
+            factory.setLax(true);
+            return factory.load(args.projectFile.toURI());
         } catch (Exception e) {
             printErrorMessage(e.getMessage());
             throw new BuildException("");

@@ -11,6 +11,7 @@ package org.dita.dost.project;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Deliverable;
 import org.dita.dost.project.Project.Publication;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,6 +24,13 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class ProjectFactoryTest {
+
+    private ProjectFactory factory;
+
+    @Before
+    public void setUp() {
+        factory = ProjectFactory.getInstance();
+    }
 
     @Test
     public void resolveReferences_deliverable() {
@@ -115,7 +123,7 @@ public class ProjectFactoryTest {
     @Test
     public void read() throws IOException, URISyntaxException {
         final URI file = getClass().getClassLoader().getResource("org/dita/dost/project/simple.json").toURI();
-        final Project project = ProjectFactory.load(file);
+        final Project project = factory.load(file);
         assertEquals(1, project.deliverables.size());
         assertTrue(project.deliverables.get(0).context.inputs.inputs.get(0).href.isAbsolute());
         assertTrue(project.includes.isEmpty());
@@ -124,7 +132,7 @@ public class ProjectFactoryTest {
     @Test
     public void readMultiple() throws IOException, URISyntaxException {
         final URI file = getClass().getClassLoader().getResource("org/dita/dost/project/multiple.json").toURI();
-        final Project project = ProjectFactory.load(file);
+        final Project project = factory.load(file);
         assertEquals(1, project.deliverables.size());
         assertTrue(project.deliverables.get(0).context.inputs.inputs.get(0).href.isAbsolute());
         assertTrue(project.includes.isEmpty());
@@ -134,7 +142,7 @@ public class ProjectFactoryTest {
     @Test
     public void deserializeJsonRoot() throws IOException, URISyntaxException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/root.json").toURI();
-        final Project project = ProjectFactory.load(input);
+        final Project project = factory.load(input);
         assertEquals(1, project.deliverables.size());
         assertEquals(2, project.includes.size());
     }
@@ -142,7 +150,7 @@ public class ProjectFactoryTest {
     @Test
     public void deserializeJsonProduct() throws IOException, URISyntaxException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/product.json").toURI();
-        final Project project = ProjectFactory.load(input);
+        final Project project = factory.load(input);
         assertEquals(1, project.deliverables.size());
         assertEquals(1, project.publications.size());
         assertEquals("common-sitePub2", project.deliverables.get(0).publication.id);
@@ -151,7 +159,7 @@ public class ProjectFactoryTest {
     @Test(expected = RuntimeException.class)
     public void deserializeJsonRecursive() throws IOException, URISyntaxException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/recursive.json").toURI();
-        ProjectFactory.load(input);
+        factory.load(input);
     }
 
 }

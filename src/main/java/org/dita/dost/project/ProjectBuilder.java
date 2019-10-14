@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.net.URI;
-import java.nio.file.Path;
 import java.util.List;
 
 public class ProjectBuilder {
