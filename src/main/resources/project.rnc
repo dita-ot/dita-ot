@@ -75,7 +75,7 @@ publication-ref =
 param =
   ## Publication parameter
   element param {
-    attribute name { text }?,
+    attribute name { text },
     (attribute href { xsd:anyURI }
      | attribute path { xsd:anyURI }
      | attribute value { text })
