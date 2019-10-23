@@ -15,6 +15,7 @@ See the accompanying LICENSE file for applicable license.
   <extension-point id="depend.org.dita.pdf2.format.pre" name="Formatting pre-target"/>
   <extension-point id="depend.org.dita.pdf2.format" name="Formatting target"/>
   <extension-point id="depend.org.dita.pdf2.format.post" name="Formatting post-target"/>
+  <extension-point id="depend.org.dita.pdf2.index" name="Indexing target"/>
   <extension-point id="org.dita.pdf2.catalog.relative" name="Configuration XML catalog"/>
   <extension-point id="dita.conductor.pdf2.param" name="PDF XSLT parameters"/>
   <extension-point id="dita.conductor.pdf2.formatter.check" name="Formatter check"/>
