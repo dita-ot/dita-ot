@@ -256,7 +256,7 @@ See the accompanying LICENSE file for applicable license.
                         <xsl:with-param name="id" select="'Index See String'"/>
                     </xsl:call-template>
                 </fo:inline>
-                <xsl:for-each select="opentopic-index:index.entry">
+                <xsl:for-each select="opentopic-index:index.entry[opentopic-index:get-see-destination(.)]">
                     <xsl:if test="position() ne 1">
                         <xsl:text>, </xsl:text>
                     </xsl:if>
@@ -283,7 +283,7 @@ See the accompanying LICENSE file for applicable license.
                             <xsl:with-param name="id" select="'Index See Also String'"/>
                         </xsl:call-template>
                     </fo:inline>
-                    <xsl:for-each select="opentopic-index:index.entry">
+                    <xsl:for-each select="opentopic-index:index.entry[opentopic-index:get-see-destination(.)]">
                         <xsl:if test="position() ne 1">
                             <xsl:text>, </xsl:text>
                         </xsl:if>
@@ -302,6 +302,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:key name="opentopic-index:index.entry-def"
              match="opentopic-index:index.groups//opentopic-index:index.entry[empty(ancestor::opentopic-index:see-childs|ancestor::opentopic-index:see-also-childs)]"
              use="opentopic-index:refID/@value"/>
+
+    <xsl:function name="opentopic-index:get-see-destination" as="xs:string?">
+      <xsl:param name="ctx" as="element()"/>
+      <xsl:apply-templates select="$ctx" mode="get-see-destination"/>
+    </xsl:function>
 
     <xsl:template match="opentopic-index:index.entry" mode="get-see-destination">
       <xsl:variable name="id" as="xs:string">
@@ -337,7 +342,7 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:with-param name="id" select="'Index See Also String'"/>
                 </xsl:call-template>
             </fo:inline>
-            <xsl:for-each select="opentopic-index:index.entry">
+            <xsl:for-each select="opentopic-index:index.entry[opentopic-index:get-see-destination(.)]">
                 <xsl:if test="position() ne 1">
                     <xsl:text>, </xsl:text>
                 </xsl:if>
