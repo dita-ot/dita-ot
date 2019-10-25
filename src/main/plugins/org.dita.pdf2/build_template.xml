@@ -244,7 +244,15 @@ with those set forth herein.
     <property name="args.tablelink.style" value="NUMTITLE"/>
   </target>
 
-  <target name="transform.topic2fo.index" unless="pdf2.index.skip">
+  <target name="transform.topic2fo.index.init">
+    <condition property="_pdf2.index.skip" value="true">
+      <istrue value="${pdf2.index.skip}"/>
+    </condition>
+  </target>
+
+  <target name="transform.topic2fo.index"
+          depends="transform.topic2fo.index.init"
+          unless="_pdf2.index.skip">
     <taskdef classname="com.idiominc.ws.opentopic.fo.index2.IndexPreprocessorTask"
              name="index-preprocess" classpathref="project.class.path"/>
     

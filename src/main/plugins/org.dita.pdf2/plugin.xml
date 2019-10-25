@@ -54,6 +54,10 @@ See the accompanying LICENSE file for applicable license.
       <val desc="Enables chunk processing">true</val>
       <val desc="Disables chunk processing" default="true">false</val>
     </param>
+    <param name="pdf2.index.skip" desc="Disable built-in index processing." type="enum">
+      <val>yes</val>
+      <val default="true">no</val>
+    </param>
   </transtype>
   <transtype name="pdf2" extends="pdf" desc="PDF2"/>
   <feature extension="dita.transtype.print" value="pdf"/>
