@@ -172,8 +172,9 @@ with those set forth herein.
   </target>
 
   <target name="transform.topic2fo"
-          depends="transform.topic2fo.init,
-                   transform.topic2fo.index,
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          dita:depends="transform.topic2fo.init,
+                   {depend.org.dita.pdf2.index},
                    transform.topic2fo.main,
                    transform.topic2fo.i18n"/>
     
@@ -242,7 +243,15 @@ with those set forth herein.
     <property name="args.tablelink.style" value="NUMTITLE"/>
   </target>
 
-  <target name="transform.topic2fo.index">
+  <target name="transform.topic2fo.index.init">
+    <condition property="_pdf2.index.skip" value="true">
+      <istrue value="${pdf2.index.skip}"/>
+    </condition>
+  </target>
+
+  <target name="transform.topic2fo.index"
+          depends="transform.topic2fo.index.init"
+          unless="_pdf2.index.skip">
     <taskdef classname="com.idiominc.ws.opentopic.fo.index2.IndexPreprocessorTask"
              name="index-preprocess" classpathref="project.class.path"/>
     
@@ -272,11 +281,12 @@ with those set forth herein.
     </condition>
     <property name="index.config.file" value="${cfg.dir}/common/index/${default.language}.xml"/>
 
+    <echo level="info">Processing ${inputFile} to ${dita.temp.dir}/stage1.xml</echo>
     <index-preprocess input="${inputFile.url}" output="${dita.temp.dir}/stage1.xml"
                       indexConfig="${index.config.file}" locale="${document.locale}"
                       draft="${args.draft}">
       <xmlcatalog refid="xml.catalog"/>
-    </index-preprocess> 
+    </index-preprocess>
   </target>
   
   <target name="transform.topic2fo.main">
