@@ -175,7 +175,6 @@ with those set forth herein.
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
           dita:depends="transform.topic2fo.init,
                    {depend.org.dita.pdf2.index},
-                   transform.topic2fo.index,
                    transform.topic2fo.main,
                    transform.topic2fo.i18n"/>
     
