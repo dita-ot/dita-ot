@@ -6,7 +6,7 @@
     <deliverable>
       <context>
         <example:filter>attr('audience').includes('devops')</example:filter>
-        <input href="site.ditamap" resource="example:site/1/en"/>
+        <input href="site.ditamap" example:resource="example:site/1/en"/>
       </context>
       <output href="./site"/>
       <publication transtype="html5"/>

@@ -13,6 +13,7 @@ import org.dita.dost.project.Project.Deliverable;
 import org.dita.dost.project.Project.Publication;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -121,7 +122,7 @@ public class ProjectFactoryTest {
 
 
     @Test
-    public void read() throws IOException, URISyntaxException {
+    public void read() throws IOException, URISyntaxException, SAXException {
         final URI file = getClass().getClassLoader().getResource("org/dita/dost/project/simple.json").toURI();
         final Project project = factory.load(file);
         assertEquals(1, project.deliverables.size());
@@ -130,7 +131,7 @@ public class ProjectFactoryTest {
     }
 
     @Test
-    public void readMultiple() throws IOException, URISyntaxException {
+    public void readMultiple() throws IOException, URISyntaxException, SAXException {
         final URI file = getClass().getClassLoader().getResource("org/dita/dost/project/multiple.json").toURI();
         final Project project = factory.load(file);
         assertEquals(1, project.deliverables.size());
@@ -140,7 +141,7 @@ public class ProjectFactoryTest {
 
 
     @Test
-    public void deserializeJsonRoot() throws IOException, URISyntaxException {
+    public void deserializeJsonRoot() throws IOException, URISyntaxException, SAXException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/root.json").toURI();
         final Project project = factory.load(input);
         assertEquals(1, project.deliverables.size());
@@ -148,7 +149,7 @@ public class ProjectFactoryTest {
     }
 
     @Test
-    public void deserializeJsonProduct() throws IOException, URISyntaxException {
+    public void deserializeJsonProduct() throws IOException, URISyntaxException, SAXException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/product.json").toURI();
         final Project project = factory.load(input);
         assertEquals(1, project.deliverables.size());
@@ -157,7 +158,7 @@ public class ProjectFactoryTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void deserializeJsonRecursive() throws IOException, URISyntaxException {
+    public void deserializeJsonRecursive() throws IOException, URISyntaxException, SAXException {
         final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/recursive.json").toURI();
         factory.load(input);
     }
