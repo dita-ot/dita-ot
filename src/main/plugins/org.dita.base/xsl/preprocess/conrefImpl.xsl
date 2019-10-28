@@ -476,12 +476,12 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:if test="@id and contains(@class, ' topic/topic ')">
                       <xsl:attribute name="id" select="generate-id(.)"/>
                     </xsl:if>
-                    <xsl:apply-templates select="@href">
+                    <xsl:apply-templates select="@href | @dita-ot:imagerefuri | @dita-ot:original-imageref | @imageref">
                       <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
                       <xsl:with-param name="topicid" select="$topicid"/>
                       <xsl:with-param name="elemid" select="$elemid"/>
                     </xsl:apply-templates>
-                    <xsl:copy-of select="@* except (@id, @href)"/>
+                    <xsl:copy-of select="@* except (@id, @href, @dita-ot:imagerefuri, @dita-ot:original-imageref, @imageref)"/>
                     <xsl:apply-templates select="* | comment() | processing-instruction() | text()">
                       <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
                       <xsl:with-param name="topicid" select="$topicid"/>
@@ -528,6 +528,22 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/state ')]/@value" mode="original-attributes" priority="10"/>
   <!-- topichead is specialized from topicref, and requires @navtitle -->
   <xsl:template match="*[contains(@class, ' mapgroup-d/topichead ')]/@navtitle" mode="original-attributes" priority="10"/>
+
+  <xsl:template match="@dita-ot:imagerefuri | @dita-ot:original-imageref | @imageref">
+    <xsl:param name="current-relative-path" tunnel="yes" as="xs:string"/>
+    <xsl:param name="conref-filename" tunnel="yes" as="xs:string?"/>
+    <xsl:param name="conref-ids" tunnel="yes" as="xs:string*"/>
+    <xsl:attribute name="{name()}">
+      <xsl:choose>
+        <xsl:when test="contains(., '://') or starts-with(., '/')">
+          <xsl:value-of select="."/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat($current-relative-path, .)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+  </xsl:template>
 
   <xsl:template match="@href">
     <xsl:param name="current-relative-path" tunnel="yes" as="xs:string"/>
