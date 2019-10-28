@@ -20,6 +20,7 @@ import org.dita.dost.project.Project.ProjectRef;
 import org.dita.dost.project.Project.Publication;
 import org.dita.dost.util.FileUtils;
 import org.slf4j.Logger;
+import org.xml.sax.SAXParseException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -46,6 +47,12 @@ public class ProjectFactory {
     public Project load(final URI file) throws IOException {
         try {
             return resolveReferences(load(file, Collections.emptySet()));
+        } catch (SAXParseException e) {
+            if (e.getLineNumber() != -1) {
+                throw new IOException(String.format("Failed to read project file %s:%s:%s: %s", file, e.getLineNumber(), e.getColumnNumber(), e.getLocalizedMessage()), e);
+            } else {
+                throw new IOException(String.format("Failed to read project file %s: %s", file, e.getLocalizedMessage()), e);
+            }
         } catch (IOException e) {
             throw new IOException("Failed to read project file: " + e.getMessage(), e);
         }
@@ -87,7 +94,7 @@ public class ProjectFactory {
                 src.contexts);
     }
 
-    private Project load(final URI file, final Set<URI> processed) throws IOException {
+    private Project load(final URI file, final Set<URI> processed) throws IOException, SAXParseException {
         if (processed.contains(file)) {
             throw new RuntimeException("Recursive project file import: " + file);
         }
@@ -112,7 +119,7 @@ public class ProjectFactory {
         return resolveIncludes(project, file, ImmutableSet.<URI>builder().addAll(processed).add(file).build());
     }
 
-    private Project resolveIncludes(final Project project, final URI base, final Set<URI> processed) throws IOException {
+    private Project resolveIncludes(final Project project, final URI base, final Set<URI> processed) throws IOException, SAXParseException {
         if (project.includes == null || project.includes.isEmpty()) {
             return project;
         }

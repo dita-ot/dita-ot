@@ -10,6 +10,7 @@ package org.dita.dost.project;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +29,7 @@ public class XmlReaderTest {
     }
 
     @Test
-    public void deserializeXmlSimple() throws IOException {
+    public void deserializeXmlSimple() throws IOException, SAXException {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/simple.xml")) {
             final ProjectBuilder project = xmlReader.read(in, URI.create("classpath:org/dita/dost/project/simple.xml"));
             assertEquals(1, project.deliverables.size());
@@ -58,7 +59,7 @@ public class XmlReaderTest {
     }
 
     @Test
-    public void deserializeXmlCommon() throws IOException, URISyntaxException {
+    public void deserializeXmlCommon() throws IOException, URISyntaxException, SAXException {
         final ProjectBuilder project = xmlReader.read(getClass().getClassLoader().getResource("org/dita/dost/project/common.xml").toURI());
         assertTrue(project.deliverables.isEmpty());
         assertTrue(project.includes.isEmpty());
@@ -67,7 +68,7 @@ public class XmlReaderTest {
     }
 
     @Test
-    public void deserializeXmlProduct() throws IOException {
+    public void deserializeXmlProduct() throws IOException, SAXException {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/product.xml")) {
             final ProjectBuilder project = xmlReader.read(input, null);
             assertEquals(1, project.deliverables.size());
@@ -77,7 +78,7 @@ public class XmlReaderTest {
     }
 
     @Test
-    public void deserializeXmlMinimal() throws IOException {
+    public void deserializeXmlMinimal() throws IOException, SAXException {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/minimal.xml")) {
             final ProjectBuilder project = xmlReader.read(input, null);
             assertEquals(1, project.deliverables.size());
@@ -85,7 +86,7 @@ public class XmlReaderTest {
     }
 
     @Test
-    public void deserializeXmlForeign() throws IOException {
+    public void deserializeXmlForeign() throws IOException, SAXException {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/foreign.xml")) {
             xmlReader.setLax(true);
             final ProjectBuilder project = xmlReader.read(input, null);
@@ -93,8 +94,8 @@ public class XmlReaderTest {
         }
     }
 
-    @Test(expected = IOException.class)
-    public void deserializeXmlForeignStrict() throws IOException {
+    @Test(expected = SAXException.class)
+    public void deserializeXmlForeignStrict() throws IOException, SAXException {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/foreign.xml")) {
             xmlReader.read(input, null);
         }
