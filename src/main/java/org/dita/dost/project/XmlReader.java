@@ -9,18 +9,14 @@
 package org.dita.dost.project;
 
 import com.thaiopensource.relaxng.jaxp.CompactSyntaxSchemaFactory;
-import com.thaiopensource.resolver.xml.sax.SAX;
-import com.thaiopensource.validation.LSInputImpl;
-import org.apache.xerces.util.XMLCatalogResolver;
 import org.dita.dost.util.XMLUtils;
 import org.slf4j.Logger;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.ls.LSInput;
-import org.w3c.dom.ls.LSResourceResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -90,19 +86,6 @@ public class XmlReader {
         }
         saxTransformerFactory = (SAXTransformerFactory) TransformerFactory.newInstance();
         final SchemaFactory f = new CompactSyntaxSchemaFactory();
-        final LSResourceResolver resolver = new XMLCatalogResolver();
-        f.setResourceResolver(new LSResourceResolver() {
-            @Override
-            public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
-                final InputStream resource = getClass().getClassLoader().getResourceAsStream(systemId);
-                final LSInput input = new LSInputImpl();
-                input.setByteStream(resource);
-                input.setBaseURI(baseURI);
-                input.setSystemId(systemId);
-                input.setPublicId(publicId);
-                return input;
-            }
-        });
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("project.rnc")) {
             validator = f.newSchema(new StreamSource(in)).newValidator();
         } catch (IOException | SAXException e) {
@@ -124,7 +107,7 @@ public class XmlReader {
      * @param file input project file
      * @return project
      */
-    public ProjectBuilder read(final URI file) throws IOException, SAXException {
+    public ProjectBuilder read(final URI file) throws IOException, SAXParseException {
         try (InputStream in = file.toURL().openStream()) {
             return read(in, file);
         }
@@ -137,35 +120,31 @@ public class XmlReader {
      * @param file input project file URI, may be {@code null}
      * @return project or {@code null} if none found
      */
-    public ProjectBuilder read(final InputStream in, final URI file) throws IOException, SAXException {
-        try {
-            final Document document = readDocument(in, file);
-            final List<Element> projects = XMLUtils.toList(document.getElementsByTagNameNS(NS, ELEM_PROJECT));
-            if (projects.isEmpty()) {
-                return null;
-            } else if (projects.size() > 1) {
-                logger.warn("Found {} project elements, using first", projects.size());
-            }
-            final Element project = projects.get(0);
-            return new ProjectBuilder(
-                    getChildren(project, ELEM_DELIVERABLE)
-                            .map(this::readDeliverable)
-                            .collect(Collectors.toList()),
-                    getChildren(project, ELEM_INCLUDE)
-                            .map(this::getHref)
-                            .filter(Optional::isPresent)
-                            .map(Optional::get)
-                            .collect(Collectors.toList()),
-                    getChildren(project, ELEM_PUBLICATION)
-                            .map(this::readPublication)
-                            .collect(Collectors.toList()),
-                    getChildren(project, ELEM_CONTEXT)
-                            .map(this::readContext)
-                            .collect(Collectors.toList())
-            );
-        } catch (TransformerConfigurationException e) {
-            throw new RuntimeException(e);
+    public ProjectBuilder read(final InputStream in, final URI file) throws IOException, SAXParseException {
+        final Document document = readDocument(in, file);
+        final List<Element> projects = XMLUtils.toList(document.getElementsByTagNameNS(NS, ELEM_PROJECT));
+        if (projects.isEmpty()) {
+            return null;
+        } else if (projects.size() > 1) {
+            logger.warn("Found {} project elements, using first", projects.size());
         }
+        final Element project = projects.get(0);
+        return new ProjectBuilder(
+                getChildren(project, ELEM_DELIVERABLE)
+                        .map(this::readDeliverable)
+                        .collect(Collectors.toList()),
+                getChildren(project, ELEM_INCLUDE)
+                        .map(this::getHref)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList()),
+                getChildren(project, ELEM_PUBLICATION)
+                        .map(this::readPublication)
+                        .collect(Collectors.toList()),
+                getChildren(project, ELEM_CONTEXT)
+                        .map(this::readContext)
+                        .collect(Collectors.toList())
+        );
     }
 
     /**
@@ -175,14 +154,19 @@ public class XmlReader {
      * @param file
      * @return project file document
      */
-    private Document readDocument(final InputStream in, final URI file) throws TransformerConfigurationException, SAXException, IOException {
-        final XMLReader reader = lax ? new IgnoringXmlFilter(xmlReader): xmlReader;
+    private Document readDocument(final InputStream in, final URI file) throws SAXParseException, IOException {
+        final XMLReader reader = lax ? new IgnoringXmlFilter(xmlReader) : xmlReader;
         final InputSource inputSource = new InputSource(in);
         if (file != null) {
             inputSource.setSystemId(file.toString());
         }
         final SAXSource source = new SAXSource(reader, inputSource);
-        final TransformerHandler domSerializer = saxTransformerFactory.newTransformerHandler();
+        final TransformerHandler domSerializer;
+        try {
+            domSerializer = saxTransformerFactory.newTransformerHandler();
+        } catch (TransformerConfigurationException e) {
+            throw new RuntimeException(e);
+        }
         final Document document = documentBuilder.newDocument();
         if (file != null) {
             document.setDocumentURI(file.toString());
@@ -190,7 +174,18 @@ public class XmlReader {
         domSerializer.setResult(new DOMResult(document));
         final SAXResult result = new SAXResult(domSerializer);
 
-        validator.validate(source, result);
+        try {
+            validator.validate(source, result);
+        } catch (SAXException e) {
+            if (e instanceof SAXParseException) {
+                throw (SAXParseException) e;
+            } else {
+                throw new SAXParseException(e.getMessage(), null);
+            }
+        }
+        if (document.getDocumentElement() == null) {
+            throw new SAXParseException("No project file elements found", null, file.toString(), -1, -1);
+        }
 
         return document;
     }

@@ -38,11 +38,23 @@ public class IgnoringXmlFilter extends XMLFilterImpl {
     }
 
     private Attributes filterAttributes(final Attributes atts) {
-        if (atts.getLength() == 0) {
+        final int len = atts.getLength();
+        if (len == 0) {
+            return atts;
+        }
+        boolean allLocal = true;
+        for (int i = 0; i < len; i++) {
+            final String ns = atts.getURI(i);
+            if (ns != null && !ns.isEmpty()) {
+                allLocal = false;
+                break;
+            }
+        }
+        if (allLocal) {
             return atts;
         }
         AttributesImpl res = null;
-        for (int i = 0; i < atts.getLength(); i++) {
+        for (int i = 0; i < len; i++) {
             final String ns = atts.getURI(i);
             if (ns == null || ns.isEmpty()) {
                 if (res == null) {
