@@ -67,7 +67,8 @@ See the accompanying LICENSE file for applicable license.
   <feature extension="dita.conductor.pdf2.formatter.check" value="ah"/>
   <feature extension="dita.xsl.strings" file="cfg/common/vars/strings.xml"/>
   <feature extension="dita.specialization.catalog.relative" file="cfg/catalog.xml"/>
-  <feature extension="depend.org.dita.pdf2.index" value="transform.topic2fo.index"/>
+  <!-- Disable deprecated built-in indexing -->
+  <!--<feature extension="depend.org.dita.pdf2.index" value="transform.topic2fo.index"/>-->
   <template file="build_template.xml"/>
   <template file="cfg/catalog_template.xml"/>
   <template file="xsl/fo/i18n-postprocess_template.xsl"/>
