@@ -1,4 +1,4 @@
-<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)" id="test" ditaarch:DITAArchVersion="1.2">
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)" id="test" ditaarch:DITAArchVersion="1.3">
   <title class="- topic/title ">Coderef test</title>
   <body class="- topic/body ">
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;

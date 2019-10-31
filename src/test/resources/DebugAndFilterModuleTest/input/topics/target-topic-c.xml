@@ -1,6 +1,6 @@
 <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
   domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
-  id="topic-1" ditaarch:DITAArchVersion="1.2">
+  id="topic-1" ditaarch:DITAArchVersion="1.3">
   <title class="- topic/title ">Target Topic C</title>
   <body class="- topic/body ">
     <p class="- topic/p ">This is topic C.</p>

@@ -1,13 +1,13 @@
 <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
   domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
-  id="a" ditaarch:DITAArchVersion="1.2">
+  id="a" ditaarch:DITAArchVersion="1.3">
   <title class="- topic/title ">Keyref</title>
   <body class="- topic/body ">
     <p class="- topic/p " id="p">Root paragraph</p>
   </body>
   <topic class="- topic/topic "
     domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
-    id="nolink" ditaarch:DITAArchVersion="1.2">
+    id="nolink" ditaarch:DITAArchVersion="1.3">
     <title class="- topic/title ">Without href</title>
     <body class="- topic/body ">
       <p class="- topic/p " id="p" keyref="invalid-attribute">Keyref not valid on this element, caused failure in #3008</p>

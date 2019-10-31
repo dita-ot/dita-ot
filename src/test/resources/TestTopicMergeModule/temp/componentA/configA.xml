@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?workdir /C:\DITA-OT1.5\SAXONIBMJDK\temp\12008\xhtml\case1\componentA?><?path2project ..\?><task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="configA" domains="(topic shortdescReq-c)" ditaarch:DITAArchVersion="1.2" class="- topic/topic task/task ">
+<?xml version="1.0" encoding="utf-8"?><?workdir /C:\DITA-OT1.5\SAXONIBMJDK\temp\12008\xhtml\case1\componentA?><?path2project ..\?><task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="configA" domains="(topic shortdescReq-c)" ditaarch:DITAArchVersion="1.3" class="- topic/topic task/task ">
   <title class="- topic/title ">ABC</title>
   
   <prolog class="- topic/prolog "><metadata class="- topic/metadata "><exportanchors class="+ topic/keywords delay-d/exportanchors ">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?workdir /C:\DITA-OT1.5\SAXONIBMJDK\temp\12008\xhtml\case1?><?path2project ?><map class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                         " xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+<?workdir /C:\DITA-OT1.5\SAXONIBMJDK\temp\12008\xhtml\case1?><?path2project ?><map class="- map/map " ditaarch:DITAArchVersion="1.3" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                         " xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <title class="- topic/title ">this is a title</title>
   <topicref class="- map/topicref " href="componentA/configA.xml#configA" keys="componentAconfig commonconfig" type="task"><topicmeta class="- map/topicmeta "><navtitle class="- topic/navtitle ">ABC</navtitle><linktext class="- map/linktext ">ABC</linktext><exportanchors class="+ topic/keywords delay-d/exportanchors ">
         <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="commonconfig"></anchorkey>

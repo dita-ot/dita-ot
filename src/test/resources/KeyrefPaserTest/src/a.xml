@@ -1,6 +1,6 @@
 <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
   domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
-  id="a" ditaarch:DITAArchVersion="1.2">
+  id="a" ditaarch:DITAArchVersion="1.3">
   <title class="- topic/title ">Keyref</title>
   <related-links class="- topic/related-links ">
     <link class="- topic/link " href="a.xml" keyref="empty"/>
@@ -22,7 +22,7 @@
   </related-links>
   <topic class="- topic/topic "
     domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
-    id="nolink" ditaarch:DITAArchVersion="1.2">
+    id="nolink" ditaarch:DITAArchVersion="1.3">
     <title class="- topic/title ">Without href</title>
     <prolog class="- topic/prolog ">
       <author class="- topic/author " format="dead" href="dead" keyref="author" scope="external" type="dead"/>
@@ -80,7 +80,7 @@
   </topic>
   <topic class="- topic/topic "
     domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
-    id="link" ditaarch:DITAArchVersion="1.2">
+    id="link" ditaarch:DITAArchVersion="1.3">
     <title class="- topic/title ">With href</title>
     <prolog class="- topic/prolog ">
       <author class="- topic/author " format="dead" href="dead" keyref="author_link" scope="external" type="dead"/>
