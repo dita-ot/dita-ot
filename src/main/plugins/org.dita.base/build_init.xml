@@ -120,8 +120,6 @@ See the accompanying LICENSE file for applicable license.
     <delete dir="${dita.temp.dir}" quiet="false"/>
     <mkdir dir="${dita.temp.dir}" />
 
-    <property name="args.logdir" value="${output.dir}"/>
-
     <!-- Validate the xml file or not,default is validation(true)-->
     <property name="validate" value="true"/>
     
