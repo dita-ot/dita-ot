@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?path2project ?>
-<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(map mapgroup-d) (topic indexing-d)" id="Bats3" title="Bats3">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d) (topic indexing-d)" id="Bats3" title="Bats3">
   <topicmeta class="- map/topicmeta ">
     <unknown class="- topic/unknown ">
 ◎◎◎◎

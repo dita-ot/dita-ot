@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<!-- Copyright IBM Corporation-->
-	<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"  "../../../dtd/technicalContent/dtd/map.dtd">
+	<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.3 Map//EN"  "../../../dtd/technicalContent/dtd/map.dtd">
 <map>
   <title>this is a title</title>
   <topicref href="configA.dita"/>

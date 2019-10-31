@@ -3,7 +3,7 @@
 <?workdir-uri file:/Users/jelovirt/Work/github/dita-ot/src/main/temp/conref_push/preprocess/pushReplace/pushReplace_without_conref/?>
 <?path2project?>
 <?path2project-uri ./?>
-<task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="X" ditaarch:DITAArchVersion="1.2" domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    " class="- topic/topic task/task ">
+<task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="X" ditaarch:DITAArchVersion="1.3" domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    " class="- topic/topic task/task ">
   <title class="- topic/title ">this is a task</title>
   <shortdesc class="- topic/shortdesc ">this is also a reuse function</shortdesc>
   <taskbody class="- topic/body task/taskbody ">

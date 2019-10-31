@@ -2,7 +2,7 @@
 <?path2project?>
 <?path2project-uri ./?>
 <?Pub Inc?>
-<task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="pushfrom" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    " class="- topic/topic task/task ">
+<task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="pushfrom" xml:lang="en-us" ditaarch:DITAArchVersion="1.3" domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    " class="- topic/topic task/task ">
   <title class="- topic/title ">Push from</title>
   <shortdesc class="- topic/shortdesc ">Push from this topic into the other</shortdesc>
   <taskbody class="- topic/body task/taskbody ">

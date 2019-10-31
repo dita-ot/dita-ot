@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?path2project ?>
-<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(map mapgroup-d) (topic indexing-d)" title="Put your title here (Required for Eclipse)">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d) (topic indexing-d)" title="Put your title here (Required for Eclipse)">
   <topicmeta class="- map/topicmeta ">
     <shortdesc class="- map/shortdesc ">this is shortdesc</shortdesc>
   </topicmeta>

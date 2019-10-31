@@ -3,7 +3,7 @@
   Sourceforge.net. See the accompanying LICENSE file for
   applicable licenses.-->
 <!-- Copyright by Comtech Services, Inc -->
-<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.1 Map//EN" "..\..\dtd\map.dtd">
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.3 Map//EN" "..\..\dtd\map.dtd">
 <map id="chapter2" title="chapter2" toc="yes">
 <topicref id="DITAOT-installguide" href="title.xml" linking="none" 
   navtitle="DITA Open Toolkit Installation Guide" type="concept">
