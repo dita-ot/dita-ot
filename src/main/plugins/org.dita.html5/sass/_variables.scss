@@ -41,6 +41,10 @@ $hazard-iso-blue:       #005387;
 // Text color for hazard statements with dark backgrounds: danger (red), note (blue)
 $hazard-heading-light:  #fff;
 
+// Index term colors (when args.indexshow=yes)
+$indexterm-background: #fdf !default;
+$indexterm-border: #000 !default;
+
 //== Scaffolding
 //
 //## Settings for some of the most global styles.
