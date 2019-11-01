@@ -318,7 +318,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ063E" type="ERROR">
-    <reason>The cols attibute is "%1" but number of colspec elements was %2.</reason>
+    <reason>The cols attribute is "%1" but number of colspec elements was %2.</reason>
     <response></response>
   </message>
 
