@@ -349,7 +349,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
     @Test
     public void testconref_to_specialization() throws Throwable {
         builder().name("conref_to_specialization")
-                .transtype(XHTML)
+                .transtype(PREPROCESS)
                 .input(Paths.get("conref_to_specialization.dita"))
                 .put("validate", "false")
                 .warnCount(1)
