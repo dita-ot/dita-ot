@@ -1,0 +1,12 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+       ditaarch:DITAArchVersion="1.3" domains="(topic hi-d)" id="topic" xml:lang="en">
+  <title class="- topic/title ">Conref test for #3264</title>
+  <body class="- topic/body ">
+    <p class="- topic/p " id="test">apiref element (specialization of keyword):
+      <apiref class="+ topic/keyword api-d/apiref " id="apiref">APIREF element</apiref>
+    </p>
+    <p class="- topic/p ">Conref from keyword:
+      <keyword class="- topic/keyword ">APIREF element</keyword>
+    </p>
+  </body>
+</topic>
