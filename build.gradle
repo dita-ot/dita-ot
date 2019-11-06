@@ -24,6 +24,9 @@ targetCompatibility = 1.8
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/"
+    }
 }
 dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
