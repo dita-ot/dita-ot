@@ -9,6 +9,7 @@ def licenses = [
         [name: 'fontbox', title: 'PDFBox', license: ['apache2.txt']],
         [name: 'xmlgraphics-commons', title: 'Apache XML Graphics Commons', license: ['apache2.txt']],
         [name: 'commons-io', title: 'Commons IO', license: ['apache2.txt']],
+        [name: 'commons-logging', title: 'Commons Logging', license: ['apache2.txt']],
         [name: 'xercesImpl', title: 'Xerces2 Java', license: ['apache2.txt']],
         [name: 'xml-apis', title: 'XML Commons External', license: ['apache2.txt', 'LICENSE.dom-documentation.txt', 'LICENSE.dom-software.txt', 'LICENSE.sax.txt']],
         [name: 'xml-resolver', title: 'Resolver', license: ['apache2.txt']],
