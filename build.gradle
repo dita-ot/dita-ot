@@ -167,7 +167,7 @@ def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "develop" :
                    "${cleanVersion}"
 def bundled = [
-        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.3.1/org.lwdita-2.3.1.zip",
+        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.3.2/org.lwdita-2.3.2.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
         "dita11": "https://github.com/dita-ot/org.dita.specialization.dita11/archive/1.1.1.zip",
         "dita12": "https://github.com/dita-ot/org.oasis-open.dita.v1_2/archive/1.2.1.zip",
