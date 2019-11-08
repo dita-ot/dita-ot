@@ -8,6 +8,7 @@
  */
 package org.dita.dost.reader;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
@@ -26,6 +27,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -111,7 +113,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * @param inputFile filename
      */
     @Override
-    public void read(final File inputFile) {
+    public void read(final File inputFile) throws DITAOTException {
         this.currentFile = inputFile.toURI();
 
         super.read(inputFile);
@@ -291,6 +293,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
             t.transform(new DOMSource(doc), result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            logger.error(e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
         } finally {

@@ -347,6 +347,16 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    public void testconref_to_specialization() throws Throwable {
+        builder().name("conref_to_specialization")
+                .transtype(PREPROCESS)
+                .input(Paths.get("conref_to_specialization.dita"))
+                .put("validate", "false")
+                .warnCount(1)
+                .test();
+    }
+
+    @Test
     public void testpushAfter_between_Specialization() throws Throwable {
         builder().name("pushAfter_between_Specialization")
                 .transtype(PREPROCESS)

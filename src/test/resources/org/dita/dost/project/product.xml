@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../../../../main/resources/project.rnc" type="application/relax-ng-compact-syntax"?>
+<project xmlns="https://www.dita-ot.org/project">
+  <include href="common.xml"/>
+  <deliverable name="name">
+    <context idref="site"/>
+    <output href="./site"/>
+    <publication idref="common-sitePub2"/>
+  </deliverable>
+</project>

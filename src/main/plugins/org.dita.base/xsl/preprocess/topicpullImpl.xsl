@@ -162,6 +162,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     -->
   <xsl:function name="dita-ot:getTargetDoc" as="document-node()?">
     <xsl:param name="linkElement" as="element()"/>
+    <xsl:param name="baseContextElement" as="element()?"/>
     
     <xsl:variable name="targetURI" as="xs:string?" select="$linkElement/@href"/>
     <xsl:choose>
@@ -193,7 +194,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:otherwise>
             
             <xsl:variable name="targetDoc" as="document-node()?"
-              select="document($resourcePart, $linkElement)"/>
+              select="document($resourcePart, if(exists($baseContextElement)) then $baseContextElement else $linkElement)"/>
             <xsl:choose>
               <xsl:when test="empty($targetDoc)">
                 <!-- Report the failure to resolve the URI -->
@@ -244,6 +245,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     -->
   <xsl:function name="dita-ot:getTargetElement" as="element()?">
     <xsl:param name="linkElement" as="element()"/>
+    <xsl:param name="baseContextElement" as="element()?"/>
     
     <!--    <xsl:message> + [DEBUG] dita-ot:getTargetElement(): linkElement: 
      type: <xsl:value-of select="name($linkElement)"/>
@@ -256,7 +258,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
          of the current document.
       -->
     <xsl:variable name="doc" 
-      select="dita-ot:getTargetDoc($linkElement)" as="document-node()?"/>
+      select="dita-ot:getTargetDoc($linkElement, $baseContextElement)" as="document-node()?"/>
     
     <xsl:choose>
       <xsl:when test="exists($doc)">
@@ -311,11 +313,12 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Process a link in the related-links section. Retrieve link text, type, and
        description if possible (and not already specified locally). -->
   <xsl:template match="*[contains(@class, ' topic/link ')]">    
+    <xsl:param name="baseContextElement" as="element()*" tunnel="yes"/>
     <xsl:if test="@href=''">
       <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
     </xsl:if>
         
-    <xsl:variable name="targetElement" as="element()?" select="dita-ot:getTargetElement(.)"/>
+    <xsl:variable name="targetElement" as="element()?" select="dita-ot:getTargetElement(., $baseContextElement)"/>
     
     <xsl:choose>
       <xsl:when test="$remove-broken-links = 'true' and empty($targetElement)">
@@ -567,8 +570,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
        If specified locally, use the local value, otherwise retrieve from target. -->
   <xsl:template match="*" mode="topicpull:get-stuff">
     <xsl:param name="localtype" as="xs:string?"/>
+    <xsl:param name="baseContextElement" as="element()*" tunnel="yes"/>
     <xsl:param name="targetElement" as="element()?"
-      select="dita-ot:getTargetElement(.)"/>
+      select="dita-ot:getTargetElement(., $baseContextElement)"/>
     
     <xsl:choose>
       <xsl:when test="exists($targetElement)">
@@ -701,7 +705,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:if test="exists($shortdesc) and not(normalize-space($shortdesc) = '')">
           <xsl:apply-templates select="." mode="topicpull:add-genshortdesc-PI"/>
           <desc class="- topic/desc ">
-            <xsl:apply-templates select="$shortdesc"/>
+            <xsl:apply-templates select="$shortdesc">
+              <xsl:with-param name="baseContextElement" select="." tunnel="yes"/>
+            </xsl:apply-templates>
           </desc>
         </xsl:if>
       </xsl:otherwise>

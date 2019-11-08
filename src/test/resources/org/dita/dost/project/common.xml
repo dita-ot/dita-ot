@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../../../../main/resources/project.rnc" type="application/relax-ng-compact-syntax"?>
+<project xmlns="https://www.dita-ot.org/project">
+  <publication transtype="html5" id="common-sitePub2" name="Site">
+    <param name="args.gen.task.lbl" value="YES"/>
+    <param name="args.rellinks" value="noparent"/>
+    <param name="args.cssroot" path="../../resources"/>
+  </publication>
+  <context name="Site" id="site">
+    <input href="site.ditamap"/>
+    <profile>
+      <ditaval href="site.ditaval"/>
+    </profile>
+  </context>
+</project>

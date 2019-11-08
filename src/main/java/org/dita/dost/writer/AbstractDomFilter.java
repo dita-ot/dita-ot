@@ -14,10 +14,12 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.reader.AbstractReader;
@@ -36,7 +38,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
     protected Job job;
 
     @Override
-    public void read(final File filename) {
+    public void read(final File filename) throws DITAOTException {
         assert filename.isAbsolute();
         logger.info("Processing " + filename.toURI());
         Document doc;
@@ -48,8 +50,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
-            logger.error("Failed to parse " + filename.getAbsolutePath() + ":" + e.getMessage(), e);
-            return;
+            throw new DITAOTException("Failed to parse " + filename.getAbsolutePath() + ":" + e.getMessage(), e);
         }
 
         final Document resDoc = process(doc);
@@ -64,8 +65,10 @@ public abstract class AbstractDomFilter implements AbstractReader {
                 tf.transform(ds, res);
             } catch (final RuntimeException e) {
                 throw e;
+            } catch (final TransformerException e) {
+                throw new DITAOTException("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessageAndLocation(), e);
             } catch (final Exception e) {
-                logger.error("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
+                throw new DITAOTException("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
             } finally {
                 try {
                     close(res);

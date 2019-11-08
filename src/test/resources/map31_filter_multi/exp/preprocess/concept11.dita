@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?path2project?>
 <?path2project-uri ./?>
-<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="concept6" ditaarch:DITAArchVersion="1.2" domains="(topic concept)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic concept/concept ">
+<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="concept6" ditaarch:DITAArchVersion="1.3" domains="(topic concept)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic concept/concept ">
   <title class="- topic/title ">Test product attribute</title>
   <conbody class="- topic/body  concept/conbody ">
     <p class="- topic/p ">

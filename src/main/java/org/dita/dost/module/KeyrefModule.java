@@ -8,23 +8,15 @@
  */
 package org.dita.dost.module;
 
-import static java.util.stream.Collectors.toMap;
-import static org.dita.dost.util.Configuration.configuration;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Job.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.*;
+import org.dita.dost.writer.ConkeyrefFilter;
+import org.dita.dost.writer.KeyrefPaser;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -32,16 +24,26 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLFilter;
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.pipeline.AbstractPipelineInput;
-import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.writer.ConkeyrefFilter;
-import org.dita.dost.writer.KeyrefPaser;
 
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toMap;
+import static org.dita.dost.util.Configuration.configuration;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.FileInfo;
+import static org.dita.dost.util.Job.KEYDEF_LIST_FILE;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.close;
+import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
  * Keyref ModuleElem.
@@ -283,6 +285,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                         final Integer used = usage.get(fi.uri);
                         if (used > 1) {
                             final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                            fixKeyDefRefs(s, fi.uri, value);
                             hrefNode.setValue(value.toString());
                         }
                     }
@@ -290,6 +293,25 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
             for (final Element child : getChildElements(elem, MAP_TOPICREF)) {
                 walkMap(child, s, res);
+            }
+        }
+    }
+
+    /**
+     * Fix the key definitions to point to the proper href.
+     */
+    private void fixKeyDefRefs(final KeyScope scope, final URI original, final URI renamed) {
+        for (final KeyDef keyDef : scope.keyDefinition.values()) {
+            if (keyDef != null
+                    && Objects.equals(keyDef.href, original)
+                    && keyDef.keys != null) {
+                final String prefix = scope.name + ".";
+                for (final String key : keyDef.keys.split("\\s")) {
+                    if (key.startsWith(prefix)) {
+                        keyDef.href = renamed;
+                        break;
+                    }
+                }
             }
         }
     }

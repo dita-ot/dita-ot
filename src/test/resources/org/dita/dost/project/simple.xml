@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../../../../main/resources/project.rnc" type="application/relax-ng-compact-syntax"?>
+<project xmlns="https://www.dita-ot.org/project">
+  <deliverable name="Name" id="site">
+    <context name="Site" id="site">
+      <input href="site.ditamap"/>
+      <profile>
+        <ditaval href="site.ditaval"/>
+      </profile>
+    </context>
+    <output href="./site"/>
+    <publication transtype="html5" id="sitePub" name="Site">
+      <param name="args.gen.task.lbl" value="YES"/>
+      <param name="args.rellinks" value="noparent"/>
+      <param name="args.uri" href="foo%20bar"/>
+      <param name="args.path" path="baz+qux"/>
+    </publication>
+  </deliverable>
+</project>

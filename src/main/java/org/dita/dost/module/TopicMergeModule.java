@@ -17,6 +17,7 @@ import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job.FileInfo;
 
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -102,6 +103,8 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
             }
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to process merged topics: " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to process merged topics: " + e.getMessage(), e);
         }

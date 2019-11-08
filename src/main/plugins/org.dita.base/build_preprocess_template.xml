@@ -194,7 +194,7 @@ See the accompanying LICENSE file for applicable license.
               inputmap="${args.input}">
       <module class="org.dita.dost.module.FilterModule">
         <ditafileset format="dita"/>
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
         <!--param name="ditadir" location="${dita.dir}"/-->
         <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
         <!--param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/-->
@@ -240,7 +240,7 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
         <ditafileset format="dita"/>
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
       </module>
     </pipeline>
     <job-helper file="conref.list" property="conreflist"/>
@@ -271,9 +271,7 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.conref.skip"
     description="Resolve conref in input files">
-    <condition property="dita.preprocess.reloadstylesheet.conref" value="${dita.preprocess.reloadstylesheet}">
-      <not><isset property="dita.preprocess.reloadstylesheet.conref"/></not>
-    </condition>
+    <property name="dita.preprocess.reloadstylesheet.conref" value="${dita.preprocess.reloadstylesheet}"/>
     <makeurl property="exportfile.url" file="${dita.temp.dir}/export.xml" validate="false"/>
     <pipeline message="Resolve conref in input files" taskname="conref">
       <xslt basedir="${dita.temp.dir}"
@@ -326,9 +324,7 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.mapref.skip"
     description="Resolve mapref in ditamap">
-    <condition property="dita.preprocess.reloadstylesheet.mapref" value="${dita.preprocess.reloadstylesheet}">
-      <not><isset property="dita.preprocess.reloadstylesheet.mapref"/></not>
-    </condition>
+    <property name="dita.preprocess.reloadstylesheet.mapref" value="${dita.preprocess.reloadstylesheet}"/>
     <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
       <module class="org.dita.dost.module.MaprefModule">
@@ -362,7 +358,7 @@ See the accompanying LICENSE file for applicable license.
             reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
             filenameparameter="file-being-processed">
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
         <param name="TRANSTYPE" expression="${transtype}" />
         <param name="child-topicref-warning" expression="false"/>
         <param name="keep-submap-href" expression="false"/>
@@ -437,9 +433,7 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.maplink.skip"
     description="Find and generate related link information">
-    <condition property="dita.preprocess.reloadstylesheet.maplink" value="${dita.preprocess.reloadstylesheet}">
-      <not><isset property="dita.preprocess.reloadstylesheet.maplink"/></not>
-    </condition>
+    <property name="dita.preprocess.reloadstylesheet.maplink" value="${dita.preprocess.reloadstylesheet}"/>
     <pipeline message="Move related links" taskname="maplink"
               inputmap="${user.input.file}">
       <module class="org.dita.dost.module.MoveLinksModule">
@@ -463,9 +457,7 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.topicpull.skip"
     description="Pull metadata for link and xref element">
-    <condition property="dita.preprocess.reloadstylesheet.topicpull" value="${dita.preprocess.reloadstylesheet}">
-      <not><isset property="dita.preprocess.reloadstylesheet.topicpull"/></not>
-    </condition>
+    <property name="dita.preprocess.reloadstylesheet.topicpull" value="${dita.preprocess.reloadstylesheet}"/>
     <pipeline message="Pull metadata for link and xref element" taskname="topicpull">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
@@ -494,14 +486,12 @@ See the accompanying LICENSE file for applicable license.
           depends="clean-map-check"
           unless="preprocess.clean-map-check.skip"
           description="Clean ditamap">
-    <condition property="dita.preprocess.reloadstylesheet.clean-map" value="${dita.preprocess.reloadstylesheet}">
-      <not><isset property="dita.preprocess.reloadstylesheet.clean-map"/></not>
-    </condition>
+    <property name="dita.preprocess.reloadstylesheet.clean-map" value="${dita.preprocess.reloadstylesheet}"/>
     <pipeline message="Clean ditamap" taskname="clean-map">
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
@@ -560,7 +550,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="copy-image.todir" value="${_dita.map.output.dir}/${uplevels}" else="${dita.output.dir}">
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
-    <copy todir="${copy-image.todir}" failonerror="false">
+    <copy todir="${copy-image.todir}" failonerror="false" overwrite="true">
       <ditafileset format="image" />
     </copy>
   </target>
@@ -573,7 +563,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="copy-html.todir" value="${_dita.map.output.dir}/${uplevels}" else="${dita.output.dir}">
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
-    <copy todir="${copy-html.todir}" failonerror="false">
+    <copy todir="${copy-html.todir}" failonerror="false" overwrite="true">
       <ditafileset>
         <excludes format="dita"/>
         <excludes format="ditamap"/>

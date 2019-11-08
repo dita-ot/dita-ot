@@ -107,8 +107,12 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 }
 
                 t.transform(source, result);
+            } catch (final RuntimeException e) {
+                throw e;
             } catch (final TransformerConfigurationException e) {
                 throw new RuntimeException("Failed to compile stylesheet '" + styleFile.toURI() + "': " + e.getMessage(), e);
+            } catch (final TransformerException e) {
+                throw new DITAOTException("Failed to transform document: " + e.getMessageAndLocation(), e);
             } catch (final Exception e) {
                 throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
             } finally {
@@ -162,7 +166,11 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                     mapInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
                         logger.info("Processing " + targetFileName);
-                        mapInserter.read(toFile(targetFileName));
+                        try {
+                            mapInserter.read(toFile(targetFileName));
+                        } catch (DITAOTException e) {
+                            logger.error("Failed to read " + targetFileName + ": " + e.getMessage(), e);
+                        }
                     } else {
                         logger.error("File " + targetFileName + " does not exist");
                     }
@@ -187,7 +195,11 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                     topicInserter.setTopicId(topicid);
                     topicInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
-                        topicInserter.read(toFile(targetFileName));
+                        try {
+                            topicInserter.read(toFile(targetFileName));
+                        } catch (DITAOTException e) {
+                            logger.error("Failed to read " + targetFileName + ": " + e.getMessage(), e);
+                        }
                     } else {
                         logger.error("File " + targetFileName + " does not exist");
                     }
@@ -207,7 +219,11 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         for (final FileInfo f : fis) {
             final File mapFile = new File(job.tempDir, f.file.getPath());
             //FIXME: this reader gets the parent path of input file
-            metaReader.read(mapFile);
+            try {
+                metaReader.read(mapFile);
+            } catch (DITAOTException e) {
+                logger.error("Failed to read " + mapFile + ": " + e.getMessage(), e);
+            }
         }
         return metaReader.getMapping();
     }

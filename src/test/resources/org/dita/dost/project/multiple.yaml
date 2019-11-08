@@ -1,0 +1,22 @@
+---
+deliverables:
+- name: "Name"
+  id: "site"
+  context:
+    name: "Site"
+    id: "site"
+    input:
+    - "site.ditamap"
+    profiles:
+      ditavals:
+      - "site.ditaval"
+  output: "./site"
+  publication:
+    name: "Site"
+    id: "sitePub"
+    transtype: "html5"
+    params:
+    - name: "args.gen.task.lbl"
+      value: "YES"
+    - name: "args.rellinks"
+      value: "noparent"

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../../../../main/resources/project.rnc" type="application/relax-ng-compact-syntax"?>
+<project xmlns="https://www.dita-ot.org/project">
+  <deliverable>
+    <context>
+      <input href="site.ditamap"/>
+    </context>
+    <output href="./site"/>
+    <publication transtype="html5"/>
+  </deliverable>
+</project>

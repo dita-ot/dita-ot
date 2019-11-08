@@ -1,0 +1,37 @@
+{
+  "publications": [
+    {
+      "transtype": "html5",
+      "id": "common-sitePub2",
+      "name": "common-Site",
+      "params": [
+        {
+          "name": "args.gen.task.lbl",
+          "value": "YES",
+          "href": null
+        },
+        {
+          "name": "args.rellinks",
+          "value": "noparent",
+          "href": null
+        },
+        {
+          "name": "args.cssroot",
+          "file": "../../resources"
+        }
+      ]
+    }
+  ],
+  "contexts": [
+    {
+      "name": "Site",
+      "id": "site",
+      "input": "site.ditamap",
+      "profiles": {
+        "ditavals": [
+          "site.ditaval"
+        ]
+      }
+    }
+  ]
+}

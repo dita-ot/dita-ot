@@ -23,10 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -269,6 +266,10 @@ public final class DelayConrefUtils {
             out = new FileOutputStream(outputFile);
             final StreamResult sr = new StreamResult(out);
             t.transform(doms, sr);
+        } catch (final RuntimeException e) {
+            throw e;
+        } catch (final TransformerException e) {
+            logger.error("Failed to process map: " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             logger.error("Failed to process map: " + e.getMessage(), e);
         } finally {

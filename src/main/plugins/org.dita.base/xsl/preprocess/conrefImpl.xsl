@@ -212,6 +212,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:variable name="topicid" select="dita-ot:get-topic-id(@conref)" as="xs:string?"/>
     <xsl:variable name="elemid" select="dita-ot:get-element-id(@conref)" as="xs:string?"/>
+    <xsl:variable name="lastClassToken" select="concat(' ', tokenize(normalize-space(@class), ' ')[last()], ' ')" as="xs:string"/>
 
     <xsl:choose>
       <!-- exportanchors defined in topicmeta-->
@@ -293,22 +294,22 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:variable name="target" as="element()*">
                     <xsl:choose>
                       <xsl:when test="exists($elemid)">
-                        <xsl:sequence select="key('id', $elemid)[local-name() = $element][ancestor::*[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
+                        <xsl:sequence select="key('id', $elemid)[contains(@class, $lastClassToken)][ancestor::*[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
                       </xsl:when>
                       <xsl:when test="exists($topicid) and contains($current-element/@class, ' topic/topic ')">
-                        <xsl:sequence select="key('id', $topicid)[contains(@class, ' topic/topic ')][local-name() = $element]"/>
+                        <xsl:sequence select="key('id', $topicid)[contains(@class, ' topic/topic ')][contains(@class, $lastClassToken)]"/>
                       </xsl:when>
                       <xsl:when test="exists($topicid) and contains($current-element/@class, ' map/topicref ')">
-                        <xsl:sequence select="key('id', $topicid)[contains(@class, ' map/topicref ')][local-name() = $element]"/>  
+                        <xsl:sequence select="key('id', $topicid)[contains(@class, ' map/topicref ')][contains(@class, $lastClassToken)]"/>  
                       </xsl:when>
                       <xsl:when test="exists($topicid) and contains(root($current-element)/*/@class, ' map/map ')">
-                        <xsl:sequence select="key('id', $topicid)[local-name() = $element]"/>
+                        <xsl:sequence select="key('id', $topicid)[contains(@class, $lastClassToken)]"/>
                       </xsl:when>
                       <xsl:when test="exists($topicid)">
-                        <xsl:sequence select="key('id', $topicid)[local-name() = $element]"/>
+                        <xsl:sequence select="key('id', $topicid)[contains(@class, $lastClassToken)]"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:sequence select="//*[contains(@class, ' topic/topic ')][1][local-name() = $element]"/>
+                        <xsl:sequence select="//*[contains(@class, ' topic/topic ')][1][contains(@class, $lastClassToken)]"/>
                       </xsl:otherwise>
                     </xsl:choose>
                   </xsl:variable>
@@ -476,12 +477,12 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:if test="@id and contains(@class, ' topic/topic ')">
                       <xsl:attribute name="id" select="generate-id(.)"/>
                     </xsl:if>
-                    <xsl:apply-templates select="@href">
+                    <xsl:apply-templates select="@href | @dita-ot:imagerefuri | @dita-ot:original-imageref | @imageref">
                       <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
                       <xsl:with-param name="topicid" select="$topicid"/>
                       <xsl:with-param name="elemid" select="$elemid"/>
                     </xsl:apply-templates>
-                    <xsl:copy-of select="@* except (@id, @href)"/>
+                    <xsl:copy-of select="@* except (@id, @href, @dita-ot:imagerefuri, @dita-ot:original-imageref, @imageref)"/>
                     <xsl:apply-templates select="* | comment() | processing-instruction() | text()">
                       <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
                       <xsl:with-param name="topicid" select="$topicid"/>
@@ -528,6 +529,22 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/state ')]/@value" mode="original-attributes" priority="10"/>
   <!-- topichead is specialized from topicref, and requires @navtitle -->
   <xsl:template match="*[contains(@class, ' mapgroup-d/topichead ')]/@navtitle" mode="original-attributes" priority="10"/>
+
+  <xsl:template match="@dita-ot:imagerefuri | @dita-ot:original-imageref | @imageref">
+    <xsl:param name="current-relative-path" tunnel="yes" as="xs:string"/>
+    <xsl:param name="conref-filename" tunnel="yes" as="xs:string?"/>
+    <xsl:param name="conref-ids" tunnel="yes" as="xs:string*"/>
+    <xsl:attribute name="{name()}">
+      <xsl:choose>
+        <xsl:when test="contains(., '://') or starts-with(., '/')">
+          <xsl:value-of select="."/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat($current-relative-path, .)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+  </xsl:template>
 
   <xsl:template match="@href">
     <xsl:param name="current-relative-path" tunnel="yes" as="xs:string"/>

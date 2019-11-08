@@ -1,0 +1,83 @@
+default namespace = "https://www.dita-ot.org/project"
+
+
+project = 
+## Publication project
+element project { (includes | deliverable | publication | context)* }
+
+includes =
+  ## Include project file
+  element include {
+    attribute href { xsd:anyURI }
+  }
+
+deliverable =
+  ## Project deliverable
+  element deliverable {
+    attribute name { text }?,
+    attribute id { xsd:NCName }?,
+    ((context | context-ref), output, (publication | publication-ref))
+  }
+
+context =
+  ## Context
+  element context {
+    attribute name { text }?,
+    attribute id { xsd:NCName }?,
+    input,
+    profile?
+  }
+
+context-ref =
+  ## Publication reference
+  element context {
+    attribute idref { xsd:NCName }
+  }
+
+input =
+  ## Input resource
+  element input {
+    attribute href { xsd:anyURI }
+  }
+
+## Output directory
+output =
+  element output {
+    attribute href { xsd:anyURI }
+  }
+
+profile = 
+## Filter and highligh profile
+element profile { ditaval+ }
+
+ditaval =
+  ## DITAVAL profile resource
+  element ditaval {
+    attribute href { xsd:anyURI }?,
+    text
+  }
+
+publication =
+  ## Publication
+  element publication {
+    attribute name { text }?,
+    attribute id { xsd:NCName }?,
+    attribute transtype { text },
+    param*
+  }
+
+publication-ref =
+  ## Publication reference
+  element publication {
+    attribute idref { xsd:NCName }
+  }
+
+param =
+  ## Publication parameter
+  element param {
+    attribute name { text },
+    (attribute href { xsd:anyURI }
+     | attribute path { xsd:anyURI }
+     | attribute value { text })
+  }
+start = project

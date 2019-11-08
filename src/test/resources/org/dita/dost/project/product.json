@@ -1,0 +1,17 @@
+{
+  "includes": [
+    "common.json"
+  ],
+  "deliverables": [
+    {
+      "name": "name",
+      "context": {
+        "idref": "site"
+      },
+      "output": "./site",
+      "publication": {
+        "idref": "common-sitePub2"
+      }
+    }
+  ]
+}

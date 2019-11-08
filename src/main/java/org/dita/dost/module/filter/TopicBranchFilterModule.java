@@ -117,7 +117,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         } catch (final TransformerConfigurationException | TransformerFactoryConfigurationError e) {
             throw new RuntimeException(e);
         } catch (final TransformerException e) {
-            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
+            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessageAndLocation(), e);
         } finally {
             try {
                 close(result);

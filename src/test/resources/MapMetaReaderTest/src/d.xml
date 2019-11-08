@@ -1,6 +1,6 @@
 <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
   domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
-  id="d" ditaarch:DITAArchVersion="1.2">
+  id="d" ditaarch:DITAArchVersion="1.3">
   <title class="- topic/title ">d</title>
   <prolog class="- topic/prolog ">
     <author class="- topic/author ">topic author</author>

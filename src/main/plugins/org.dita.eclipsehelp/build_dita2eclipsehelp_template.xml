@@ -10,20 +10,14 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="dita.eclipsehelp.init">
     <property name="html-version" value="xhtml"/>
-    <condition property="args.xsl" value="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/dita2xhtml_eclipsehelp.xsl">
-      <not>
-        <isset property="args.xsl" />
-      </not>
-    </condition>
+    <property name="args.xsl" value="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/dita2xhtml_eclipsehelp.xsl"/>
     <condition property="temp.output.dir.name" value="temp_jar_dir">
       <isset property="args.eclipsehelp.jar.name"/>
     </condition>
   </target>
 
      <target name="dita.index.eclipsehelp.init">
-        <condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter">
-            <not><isset property="dita.eclipsehelp.index.class"></isset></not>
-        </condition>
+       <property name="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"/>
      </target>
 
 
@@ -51,11 +45,7 @@ See the accompanying LICENSE file for applicable license.
 
     <target name="dita.map.eclipse.plugin.init"
             description="Init properties for EclipseHelp">
-        <condition property="out.ext" value=".html">
-            <not>
-                <isset property="out.ext" />
-            </not>
-        </condition>
+      <property name="out.ext" value=".html"/>
         <condition property="noPlugin">
             <equals arg1="${dita.eclipse.plugin}" arg2="no" />
         </condition>
@@ -94,11 +84,7 @@ See the accompanying LICENSE file for applicable license.
           </not>
         </and>
       </condition>
-      <condition property="args.eclipsehelp.indexsee" value="false">
-          <not>
-            <isset property="args.eclipsehelp.indexsee"></isset>
-          </not>
-      </condition>
+      <property name="args.eclipsehelp.indexsee" value="false"/>
     </target>
 
     <target name="dita.map.eclipse.toc" unless="noMap"

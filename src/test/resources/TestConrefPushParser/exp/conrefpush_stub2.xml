@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+       ditaarch:DITAArchVersion="1.3"
+       domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+       id="X">
+  <body class="- topic/body ">
+    <ol class="- topic/ol ">
+      <li class="- topic/li task/step ">
+        <ph class="- topic/ph task/cmd ">before</ph>
+      </li>
+      <li xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" class="- topic/li "
+          dita-ot:orig-foobar="foo.dita#bar/buzz" id="A">A
+      </li>
+      <li class="- topic/li " id="B">B</li>
+      <li class="- topic/li task/step ">
+        <ph class="- topic/ph task/cmd ">after</ph>
+      </li>
+      <li class="- topic/li task/step " id="C">
+        <ph class="- topic/ph task/cmd ">replace</ph>
+      </li>
+    </ol>
+  </body>
+</topic>

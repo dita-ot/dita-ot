@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.*;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -90,6 +91,10 @@ public final class VariableFileTask extends Task {
             }
 
             TransformerFactory.newInstance().newTransformer().transform(new DOMSource(d), new StreamResult(file));
+        } catch (final RuntimeException e) {
+            throw e;
+        } catch (final TransformerException e) {
+            throw new BuildException("Failed to write output file: " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new BuildException("Failed to write output file: " + e.getMessage(), e);
         } finally {

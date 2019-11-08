@@ -4,7 +4,7 @@
 <concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
   class="- topic/topic concept/concept "
   domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
-  id="unique_2" oid="topic" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
+  id="unique_2" oid="topic" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
   <title class="- topic/title ">Test</title>
   <conbody class="- topic/body  concept/conbody ">
     <p class="- topic/p ">&lt;&amp;</p>
@@ -26,7 +26,7 @@
   </conbody>
   <concept class="- topic/topic concept/concept "
     domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
-    id="unique_3" oid="topic2" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
+    id="unique_3" oid="topic2" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
     <title class="- topic/title ">Test 2</title>
     <conbody class="- topic/body  concept/conbody ">
       <p class="- topic/p " id="a">A</p>
@@ -34,12 +34,12 @@
   </concept>
   <concept class="- topic/topic concept/concept "
     domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
-    id="unique_3" oid="topic2" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
+    id="unique_3" oid="topic2" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
     <title class="- topic/title ">Test 2</title>
   </concept>
   <concept class="- topic/topic concept/concept "
     domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
-    id="unique_6" oid="åäö" ditaarch:DITAArchVersion="1.2" xml:lang="en-us"><!-- non-ASCII ID -->
+    id="unique_6" oid="åäö" ditaarch:DITAArchVersion="1.3" xml:lang="en-us"><!-- non-ASCII ID -->
     <title class="- topic/title ">Unicode</title>
   </concept>
   <related-links class="- topic/related-link ">

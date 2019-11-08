@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../../../../main/resources/project-lax.rnc" type="application/relax-ng-compact-syntax"?>
+<example:export xmlns:example="https://example.com">
+  <project xmlns="https://www.dita-ot.org/project" example:id="GUID1234">
+    <example:authorization user="usr1234"/>
+    <deliverable>
+      <context>
+        <example:filter>attr('audience').includes('devops')</example:filter>
+        <input href="site.ditamap" example:resource="example:site/1/en"/>
+      </context>
+      <output href="./site"/>
+      <publication transtype="html5"/>
+    </deliverable>
+  </project>
+</example:export>

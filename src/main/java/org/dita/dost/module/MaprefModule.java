@@ -49,12 +49,12 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     }
 
     private void init(final AbstractPipelineInput input) {
+        final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
         try {
-            final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
             templates = transformerFactory.newTemplates(new StreamSource(styleFile));
             serializer = transformerFactory.newTransformer();
         } catch (TransformerConfigurationException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to compile " + styleFile + ": " + e.getMessageAndLocation(), e);
         }
 
         if (fileInfoFilter == null) {
@@ -104,6 +104,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
             transformer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to merge map " + inputFile + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to merge map " + inputFile + ": " + e.getMessage(), e);
         }
@@ -117,6 +119,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
             serializer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to serialize map " + inputFile + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to serialize map " + inputFile + ": " + e.getMessage(), e);
         }

@@ -110,6 +110,27 @@ public final class XMLUtils {
     }
 
     /**
+     * Get first child element by element name.
+     *
+     * @param elem root element
+     * @param ns namespace URI, {@code null} for empty namespace
+     * @param name element name to match element
+     * @return matching element
+     */
+    public static Optional<Element> getChildElement(final Element elem, final String ns, final String name) {
+        final NodeList children = elem.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                if (Objects.equals(child.getNamespaceURI(), ns) && name.equals(child.getLocalName())) {
+                    return Optional.of((Element) child);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
      * Get first child element by DITA class.
      *
      * @param elem root element
@@ -127,6 +148,27 @@ public final class XMLUtils {
         return Optional.empty();
     }
 
+    /**
+     * List child elements by element name.
+     *
+     * @param ns namespace URL, {@code null} for empty namespace
+     * @param elem root element
+     * @param name element local name to match elements
+     * @return list of matching elements
+     */
+    public static List<Element> getChildElements(final Element elem, final String ns, final String name) {
+        final NodeList children =  elem.getChildNodes();
+        final List<Element> res = new ArrayList<>(children.getLength());
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                if (Objects.equals(child.getNamespaceURI(), ns) && name.equals(child.getLocalName())) {
+                    res.add((Element) child);
+                }
+            }
+        }
+        return res;
+    }
 
     /**
      * List child elements by DITA class.
@@ -476,6 +518,8 @@ public final class XMLUtils {
             transformer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessage(), e);
         }
@@ -523,6 +567,8 @@ public final class XMLUtils {
             transformer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to transform " + input + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + input + ": " + e.getMessage(), e);
         } finally {
@@ -1005,5 +1051,40 @@ public final class XMLUtils {
             }
         }
         return builder.build();
+    }
+
+    /**
+     * Insert fragment before reference element
+     * @param ref node to insert before
+     * @param fragment content to insert
+     */
+    public static void insertBefore(final Node ref, final DocumentFragment fragment) {
+        final Document doc = ref.getOwnerDocument();
+        final Node parent = ref.getParentNode();
+        final List<Node> children = toList(fragment.getChildNodes());
+        for (final Node child : children) {
+            parent.insertBefore(doc.importNode(child, true), ref);
+        }
+    }
+
+    /**
+     * Insert fragment after reference element
+     * @param ref node to insert after
+     * @param fragment content to insert
+     */
+    public static  void insertAfter(final Node ref, final DocumentFragment fragment) {
+        final Document doc = ref.getOwnerDocument();
+        final Node parent = ref.getParentNode();
+        final List<Node> children = toList(fragment.getChildNodes());
+        final Node nextSibling = ref.getNextSibling();
+        if (nextSibling != null) {
+            for (final Node child : children) {
+                parent.insertBefore(doc.importNode(child, true), nextSibling);
+            }
+        } else {
+            for (final Node child : children) {
+                parent.appendChild(doc.importNode(child, true));
+            }
+        }
     }
 }

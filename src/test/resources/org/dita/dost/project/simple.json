@@ -1,0 +1,42 @@
+{
+  "deliverables": [
+    {
+      "name": "Name",
+      "id": "site",
+      "context": {
+        "name": "Site",
+        "id": "site",
+        "input": "site.ditamap",
+        "profiles": {
+          "ditavals": "site.ditaval"
+        }
+      },
+      "output": "./site",
+      "publication": {
+        "transtype": "html5",
+        "id": "sitePub",
+        "name": "Site",
+        "params": [
+          {
+            "name": "args.gen.task.lbl",
+            "value": "YES",
+            "href": null
+          },
+          {
+            "name": "args.rellinks",
+            "value": "noparent",
+            "href": null
+          },
+          {
+            "name": "args.uri",
+            "href": "foo%20bar"
+          },
+          {
+            "name": "args.rellinks",
+            "path": "baz+qux"
+          }
+        ]
+      }
+    }
+  ]
+}

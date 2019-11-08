@@ -149,10 +149,12 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             Transformer serializer = TransformerFactory.newInstance().newTransformer();
             result = new StreamResult(currentFile.toString());
             serializer.transform(new DOMSource(doc), result);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final TransformerConfigurationException | TransformerFactoryConfigurationError e) {
             throw new RuntimeException(e);
         } catch (final TransformerException e) {
-            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
+            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessageAndLocation(), e);
         } finally {
             try {
                 close(result);
