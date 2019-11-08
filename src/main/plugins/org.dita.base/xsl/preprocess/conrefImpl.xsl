@@ -212,6 +212,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:variable name="topicid" select="dita-ot:get-topic-id(@conref)" as="xs:string?"/>
     <xsl:variable name="elemid" select="dita-ot:get-element-id(@conref)" as="xs:string?"/>
+    <xsl:variable name="lastClassToken" select="concat(' ', tokenize(normalize-space(@class), ' ')[last()], ' ')" as="xs:string"/>
 
     <xsl:choose>
       <!-- exportanchors defined in topicmeta-->
@@ -293,22 +294,22 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:variable name="target" as="element()*">
                     <xsl:choose>
                       <xsl:when test="exists($elemid)">
-                        <xsl:sequence select="key('id', $elemid)[local-name() = $element][ancestor::*[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
+                        <xsl:sequence select="key('id', $elemid)[contains(@class, $lastClassToken)][ancestor::*[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
                       </xsl:when>
                       <xsl:when test="exists($topicid) and contains($current-element/@class, ' topic/topic ')">
-                        <xsl:sequence select="key('id', $topicid)[contains(@class, ' topic/topic ')][local-name() = $element]"/>
+                        <xsl:sequence select="key('id', $topicid)[contains(@class, ' topic/topic ')][contains(@class, $lastClassToken)]"/>
                       </xsl:when>
                       <xsl:when test="exists($topicid) and contains($current-element/@class, ' map/topicref ')">
-                        <xsl:sequence select="key('id', $topicid)[contains(@class, ' map/topicref ')][local-name() = $element]"/>  
+                        <xsl:sequence select="key('id', $topicid)[contains(@class, ' map/topicref ')][contains(@class, $lastClassToken)]"/>  
                       </xsl:when>
                       <xsl:when test="exists($topicid) and contains(root($current-element)/*/@class, ' map/map ')">
-                        <xsl:sequence select="key('id', $topicid)[local-name() = $element]"/>
+                        <xsl:sequence select="key('id', $topicid)[contains(@class, $lastClassToken)]"/>
                       </xsl:when>
                       <xsl:when test="exists($topicid)">
-                        <xsl:sequence select="key('id', $topicid)[local-name() = $element]"/>
+                        <xsl:sequence select="key('id', $topicid)[contains(@class, $lastClassToken)]"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:sequence select="//*[contains(@class, ' topic/topic ')][1][local-name() = $element]"/>
+                        <xsl:sequence select="//*[contains(@class, ' topic/topic ')][1][contains(@class, $lastClassToken)]"/>
                       </xsl:otherwise>
                     </xsl:choose>
                   </xsl:variable>

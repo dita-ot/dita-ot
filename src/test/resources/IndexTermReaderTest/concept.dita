@@ -1,4 +1,4 @@
-<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic concept/concept " domains="(topic concept)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " id="concept" ditaarch:DITAArchVersion="1.2">
+<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic concept/concept " domains="(topic concept)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " id="concept" ditaarch:DITAArchVersion="1.3">
   <title class="- topic/title ">Index test</title>
   <conbody class="- topic/body  concept/conbody ">
     <p class="- topic/p ">
@@ -20,7 +20,7 @@
           <indexterm class="- topic/indexterm ">  Tertiary  unnormalized  </indexterm></indexterm></indexterm>
     </p>
   </conbody>
-  <concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic concept/concept " domains="(topic concept)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " id="error" ditaarch:DITAArchVersion="1.2">
+  <concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic concept/concept " domains="(topic concept)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " id="error" ditaarch:DITAArchVersion="1.3">
     <title class="- topic/title "><indexterm class="- topic/indexterm ">Test empty title</indexterm></title>
   </concept>
 </concept>

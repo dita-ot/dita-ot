@@ -2,7 +2,7 @@
 <dita-merge xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <?workdir /C:\DITA-OT1.5\SAXONIBMJDK\temp\12008\xhtml\case1?>
   <?path2project?>
-  <map class="- map/map " ditaarch:DITAArchVersion="1.2"
+  <map class="- map/map " ditaarch:DITAArchVersion="1.3"
     domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                         "
     xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
     <title class="- topic/title "
@@ -32,7 +32,7 @@
   <?workdir /C:\DITA-OT1.5\SAXONIBMJDK\temp\12008\xhtml\case1\componentA?>
   <?path2project ..\?>
   <task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" oid="configA" id="unique_1"
-    domains="(topic shortdescReq-c)" ditaarch:DITAArchVersion="1.2" class="- topic/topic task/task "
+    domains="(topic shortdescReq-c)" ditaarch:DITAArchVersion="1.3" class="- topic/topic task/task "
    >
     <title class="- topic/title "
      >ABC</title>
@@ -82,7 +82,7 @@
   <?workdir /C:\DITA-OT1.5\SAXONIBMJDK\temp\12008\xhtml\case1?>
   <?path2project?>
   <task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" oid="test1" id="unique_2"
-    domains="(topic)" xml:lang="en-us" ditaarch:DITAArchVersion="1.2"
+    domains="(topic)" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
     class="- topic/topic task/task "
    >
     <title class="- topic/title "
@@ -119,7 +119,7 @@
         </step>
       </steps>
     </taskbody>
-    <task oid="b" id="unique_3" ditaarch:DITAArchVersion="1.2"
+    <task oid="b" id="unique_3" ditaarch:DITAArchVersion="1.3"
       domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    "
       class="- topic/topic task/task "
      >

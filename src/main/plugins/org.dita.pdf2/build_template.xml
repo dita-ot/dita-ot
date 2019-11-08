@@ -290,6 +290,10 @@ with those set forth herein.
   </target>
   
   <target name="transform.topic2fo.main">
+    <local name="_stage1.exists"/>
+    <available property="_stage1.exists" file="${dita.temp.dir}/stage1.xml"/>
+    <copy file="${inputFile}" tofile="${dita.temp.dir}/stage1.xml" unless:set="_stage1.exists"/>
+
     <!--makeurl seems to output file:/C: style instead of file:///C:, but xep, fop, and ah all accept it.-->
     <makeurl property="artworkPrefixUrl" file="${artworkPrefix}"/>
     <makeurl property="dita.map.output.dir.url" file="${pdf2.temp.dir}" validate="no"/>

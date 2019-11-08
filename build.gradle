@@ -24,6 +24,9 @@ targetCompatibility = 1.8
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/"
+    }
 }
 dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
@@ -154,16 +157,22 @@ task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":ax
 // Distribution
 
 ext.distTempDir = file("${buildDir}/tmp/dist")
+def cleanVersion = project.version.split('\\.').toList()[2] == "0" ?
+        project.version.split('\\.').toList().subList(0, 2).join('.').toString() :
+        project.version
 def distVersion = project.hasProperty("commit") && (!project.hasProperty("tag") || tag.empty) ?
                   "${project.version}+${commit.substring(0, 7)}" :
-                  "${project.version}"
+                  "${cleanVersion}"
 def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "develop" :
-                   "${project.version}"
+                   "${cleanVersion}"
 def bundled = [
-        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.3.1/org.lwdita-2.3.1.zip",
+        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.3.2/org.lwdita-2.3.2.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
-        "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.2.2/org.oasis-open.xdita.v0_2_2.zip"
+        "dita11": "https://github.com/dita-ot/org.dita.specialization.dita11/archive/1.1.1.zip",
+        "dita12": "https://github.com/dita-ot/org.oasis-open.dita.v1_2/archive/1.2.1.zip",
+        "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.2.2/org.oasis-open.xdita.v0_2_2.zip",
+        "index": "https://github.com/dita-ot/org.dita.index/releases/download/1.0.0/org.dita.index-1.0.0.zip"
 ]
 
 apply from: 'gradle/dist.gradle'

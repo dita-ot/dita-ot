@@ -1,0 +1,13 @@
+// This file is part of the DITA Open Toolkit project.
+//
+// Copyright 2019 Roger Sheen
+//
+// See the accompanying LICENSE file for applicable license.
+
+// Sass partial for index term styles (hardcoded in `topic.xsl` prior to DITA-OT 3.4)
+
+.indexterm {
+  background-color: $indexterm-background;
+  border: 1pt $indexterm-border solid;
+  margin: 1pt;
+}
