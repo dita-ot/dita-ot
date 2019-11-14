@@ -60,6 +60,8 @@ final class ArgumentParser {
         ARGUMENTS.put("--deliverable", new StringArgument("project.deliverable"));
         ARGUMENTS.put("-i", new FileOrUriArgument("args.input"));
         ARGUMENTS.put("--input", new FileOrUriArgument("args.input"));
+        ARGUMENTS.put("-r", new FileOrUriArgument("args.resources"));
+        ARGUMENTS.put("--resource", new FileOrUriArgument("args.resources"));
         ARGUMENTS.put("-o", new AbsoluteFileArgument("output.dir"));
         ARGUMENTS.put("--output", new AbsoluteFileArgument("output.dir"));
         ARGUMENTS.put("--filter", new AbsoluteFileListArgument("args.filter"));
@@ -178,6 +180,7 @@ final class ArgumentParser {
     private String uninstallId;
 
     private List<String> inputs = new ArrayList<>();
+    private List<String> resources = new ArrayList<>();
 
     /**
      * The build targets.
@@ -303,6 +306,8 @@ final class ArgumentParser {
                 handleArgNice(args);
             } else if (isLongForm(arg, "-input") || arg.equals("-i")) {
                 handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+            } else if (isLongForm(arg, "-resource") || arg.equals("-r")) {
+                handleArgResource(arg, args, ARGUMENTS.get(getArgumentName(arg)));
             } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
                 definedProps.putAll(handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg))));
             } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
@@ -329,6 +334,9 @@ final class ArgumentParser {
         if (!inputs.isEmpty()) {
             definedProps.put("args.input", inputs.get(0));
         }
+        if (!resources.isEmpty()) {
+            definedProps.put("args.resources", String.join(File.pathSeparator, resources));
+        }
 
         if (install && msgOutputLevel < Project.MSG_INFO) {
             emacsMode = true;
@@ -340,7 +348,7 @@ final class ArgumentParser {
                 inputs, targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
                 inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
                 justPrintDiagnostics, justPrintPlugins, justPrintTranstypes, justPrintDeliverables, logFile,
-                definedProps);
+                definedProps, resources);
     }
 
     private boolean getUseColor() {
@@ -491,6 +499,14 @@ final class ArgumentParser {
             throw new BuildException("Missing value for input " + entry.getKey());
         }
         inputs.add(argument.getValue((String) entry.getValue()));
+    }
+
+    private void handleArgResource(final String arg, final Deque<String> args, final Argument argument) {
+        final Map.Entry<String, String> entry = parse(arg, args);
+        if (entry.getValue() == null) {
+            throw new BuildException("Missing value for resource " + entry.getKey());
+        }
+        resources.add(argument.getValue(entry.getValue()));
     }
 
     /**
