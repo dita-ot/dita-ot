@@ -256,6 +256,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "temp"
         include "config/**"
         include "resources/plugin.rnc"
+        include "resources/project.rnc"
         // legacy build scripts
         include "startcmd.*"
         include "bin/ant"
