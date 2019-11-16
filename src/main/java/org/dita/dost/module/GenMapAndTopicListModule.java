@@ -26,6 +26,7 @@ import org.dita.dost.util.*;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.ProfilingFilter;
+import org.dita.dost.writer.ResourceInsertFilter;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLFilter;
@@ -36,6 +37,7 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Configuration.Mode;
@@ -137,6 +139,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     /** Absolute path to input file. */
     private URI rootFile;
+    private List<URI> resources;
     /** File currently being processed */
     private URI currentFile;
     /** Subject scheme key map. Key is key value, value is key definition. */
@@ -197,6 +200,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             initXmlReader();
 
             addToWaitList(new Reference(rootFile));
+            for (URI resource : resources) {
+                addToWaitList(new Reference(resource));
+            }
             processWaitList();
 
             updateBaseDirectory();
@@ -282,6 +288,14 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
                 baseInputDir = basedir.toURI().resolve(ditaInputDir);
             }
             assert baseInputDir.isAbsolute();
+        }
+
+        if (input.getAttribute(ANT_INVOKER_PARAM_RESOURCES) != null) {
+            resources = Stream.of(input.getAttribute(ANT_INVOKER_PARAM_RESOURCES).split(File.pathSeparator))
+                    .map(resource -> new File(resource).toURI())
+                    .collect(Collectors.toList());
+        } else {
+            resources = Collections.emptyList();
         }
 
         final URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
@@ -703,7 +717,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         job.setInputDir(baseInputDir);
         job.setInputMap(rootTemp);
-        
+
         //If root input file is marked resource only due to conref or other feature, remove that designation
         if (resourceOnlySet.contains(rootFile)) {
             resourceOnlySet.remove(rootFile);
@@ -716,6 +730,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
         job.setProperty("uplevels", getLevelsPath(rootTemp));
 
+        resourceOnlySet.addAll(resources);
         resourceOnlySet.addAll(listFilter.getResourceOnlySet());
 
         if (job.getOnlyTopicInMap() || !job.crawlTopics()) {
@@ -788,6 +803,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
         for (final URI file: resourceOnlySet) {
             getOrCreateFileInfo(fileinfos, file).isResourceOnly = true;
+        }
+        for (final URI resource : resources) {
+            getOrCreateFileInfo(fileinfos, resource).isInputResource = true;
         }
 
         addFlagImagesSetToProperties(job, relFlagImagesSet);

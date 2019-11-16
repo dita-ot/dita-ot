@@ -105,18 +105,37 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             tempFileNameScheme.setBaseDir(job.getInputDir());
             initFilters();
 
-            final Document doc = readMap();
-
+            // Read start map
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
             final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final URI mapFile = in.uri;
+            final Document doc = readMap(in);
             logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
             reader.read(job.tempDirURI.resolve(mapFile), doc);
 
-            final KeyScope rootScope = reader.getKeyDefinition();
-            final List<ResolveTask> jobs = collectProcessingTopics(fis, rootScope, doc);
-            writeMap(doc);
+            final KeyScope startScope = reader.getKeyDefinition();
+            writeMap(in, doc);
+
+            // Read resources maps
+            final Collection<FileInfo> resourceFis = job.getFileInfo(fi -> fi.isInputResource);
+            final KeyScope rootScope = resourceFis.stream()
+                    .map(fi -> {
+                        try {
+                            final Document d = readMap(fi);
+                            logger.info("Reading " + job.tempDirURI.resolve(fi.uri).toString());
+                            final KeyrefReader r = new KeyrefReader();
+                            r.setLogger(logger);
+                            r.read(job.tempDirURI.resolve(fi.uri), d);
+                            final KeyScope s = r.getKeyDefinition();
+                            writeMap(fi, d);
+                            return s;
+                        } catch (DITAOTException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .reduce(startScope, KeyScope::merge);
+            final List<ResolveTask> jobs = collectProcessingTopics(resourceFis, rootScope, doc);
 
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
@@ -411,10 +430,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    private Document readMap() throws DITAOTException {
+    private Document readMap(final FileInfo input) throws DITAOTException {
         InputSource in = null;
         try {
-            final FileInfo input = job.getFileInfo(fi -> fi.isInput).iterator().next();
             in = new InputSource(job.tempDirURI.resolve(input.uri).toString());
             return XMLUtils.getDocumentBuilder().parse(in);
         } catch (final Exception e) {
@@ -428,11 +446,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    private void writeMap(final Document doc) throws DITAOTException {
+    private void writeMap(final FileInfo in, final Document doc) throws DITAOTException {
         Result out = null;
         try {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             out = new StreamResult(job.tempDirURI.resolve(in.uri).toString());
             transformer.transform(new DOMSource(doc), out);
         } catch (final TransformerConfigurationException e) {

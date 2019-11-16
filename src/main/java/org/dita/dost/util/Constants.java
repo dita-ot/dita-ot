@@ -860,6 +860,7 @@ public final class Constants {
     public static final String ANT_INVOKER_PARAM_BASEDIR = "basedir";
     /**Constants for common params used in ant invoker(inputmap).*/
     public static final String ANT_INVOKER_PARAM_INPUTMAP = "inputmap";
+    public static final String ANT_INVOKER_PARAM_RESOURCES = "resources";
     /**Constants for common params used in ant invoker(ditaval).*/
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";
     /**Constants for common params used in ant invoker(mergedditaval)*/
