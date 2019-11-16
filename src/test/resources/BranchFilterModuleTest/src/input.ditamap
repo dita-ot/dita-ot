@@ -41,6 +41,7 @@
         <dvrKeyscopePrefix class="+ topic/data ditavalref-d/dvrKeyscopePrefix " name="dvrKeyscopePrefix">linux-</dvrKeyscopePrefix>
       </ditavalmeta>
     </ditavalref>
+    <topicref class="- map/topicref " href="exclude.dita" platform="linux"/>
   </topicref>
   <topicref class="- map/topicref " href="install.dita" copy-to="getting-started.dita"/>
 </map>
