@@ -140,14 +140,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     @VisibleForTesting
     URI getBaseDir() {
         final Collection<FileInfo> fis = job.getFileInfo();
-        URI baseDir = null;
+        URI baseDir = job.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
         for (final FileInfo fi : fis) {
             final URI res = fi.result.resolve(".");
-            if (baseDir != null) {
-                baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
-            } else {
-                baseDir = res;
-            }
+            baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
         }
 
         return baseDir;

@@ -37,6 +37,7 @@ public class CleanPreprocessModuleTest {
         job.setInputDir(URI.create("file:/foo/bar/"));
         job.add(new Builder()
                 .uri(create("map.ditamap"))
+                .isInput(true)
                 .result(create("file:/foo/bar/map.ditamap"))
                 .build());
         job.add(new Builder()
@@ -53,6 +54,7 @@ public class CleanPreprocessModuleTest {
         job.setInputDir(URI.create("file:/foo/bar/"));
         job.add(new Builder()
                 .uri(create("map.ditamap"))
+                .isInput(true)
                 .result(create("file:/foo/bar/map.ditamap"))
                 .build());
         job.add(new Builder()
@@ -69,6 +71,7 @@ public class CleanPreprocessModuleTest {
         job.setInputDir(URI.create("file:/foo/bar/maps/"));
         job.add(new Builder()
                 .uri(create("maps/map.ditamap"))
+                .isInput(true)
                 .result(create("file:/foo/bar/maps/map.ditamap"))
                 .build());
         job.add(new Builder()
@@ -85,6 +88,7 @@ public class CleanPreprocessModuleTest {
         job.setInputDir(URI.create("file:/foo/bar/maps/"));
         job.add(new Builder()
                 .uri(create("maps/map.ditamap"))
+                .isInput(true)
                 .result(create("file:/foo/bar/maps/map.ditamap"))
                 .build());
         job.add(new Builder()
