@@ -14,6 +14,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
@@ -57,26 +58,24 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                 .map(Boolean::parseBoolean)
                 .orElse(true);
 
-        final URI base = getBaseDir();
-        final String uplevels = getUplevels(base);
-        job.setProperty("uplevels", uplevels);
-        job.setInputDir(base);
+        final URI base;
 
         if (useResultFilename) {
             init();
-            final Collection<FileInfo> fis = new ArrayList<>(job.getFileInfo());
+            final Collection<FileInfo> fis = rewrite(job.getFileInfo());
+            base = getBaseDir();
             final Collection<FileInfo> res = new ArrayList<>(fis.size());
             for (final FileInfo fi : fis) {
                 try {
-                    final FileInfo.Builder builder = new FileInfo.Builder(fi);
-                    final URI rel = base.relativize(fi.result);
-                    builder.uri(rel);
+                    final FileInfo.Builder builder = FileInfo.builder(fi);
+                    final URI newRelTempUri = base.relativize(fi.result);
+                    builder.uri(newRelTempUri);
                     if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
                         logger.debug("Skip format " + fi.format);
                     } else {
                         final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
                         if (srcFile.exists()) {
-                            final File destFile = new File(job.tempDirURI.resolve(rel));
+                            final File destFile = new File(job.tempDirURI.resolve(newRelTempUri));
                             final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
                             if (!processingPipe.isEmpty()) {
                                 logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
@@ -99,7 +98,12 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
             fis.forEach(fi -> job.remove(fi));
             res.forEach(fi -> job.add(fi));
+        } else {
+            base = getBaseDir();
         }
+
+        job.setProperty("uplevels", getUplevels(base));
+        job.setInputDir(base);
 
         // start map
         final FileInfo start = job.getFileInfo(f -> f.isInput).iterator().next();
@@ -116,6 +120,11 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
+    // XXX Make this extendable or replaceable
+    Collection<FileInfo> rewrite(final Collection<FileInfo> fis) {
+        return fis;
+    }
+
     String getUplevels(final URI base) {
         final URI rel = base.relativize(job.getInputFile());
         final int count = rel.toString().split("/").length - 1;
@@ -130,12 +139,15 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
      */
     @VisibleForTesting
     URI getBaseDir() {
-        URI baseDir = job.getInputDir();
-
         final Collection<FileInfo> fis = job.getFileInfo();
+        URI baseDir = null;
         for (final FileInfo fi : fis) {
             final URI res = fi.result.resolve(".");
-            baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
+            if (baseDir != null) {
+                baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
+            } else {
+                baseDir = res;
+            }
         }
 
         return baseDir;

@@ -694,6 +694,14 @@ public final class Job {
                     isInputResource);
         }
 
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        public static Builder builder(final FileInfo fileInfo) {
+            return new Builder(fileInfo);
+        }
+
         public static class Builder {
 
             private URI src;
