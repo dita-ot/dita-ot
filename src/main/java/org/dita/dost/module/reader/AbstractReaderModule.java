@@ -38,6 +38,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.dita.dost.reader.GenListModuleReader.ROOT_URI;
 import static org.dita.dost.reader.GenListModuleReader.Reference;
@@ -108,6 +109,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     private TempFileNameScheme tempFileNameScheme;
     /** Absolute path to input file. */
     URI rootFile;
+    List<URI> resources;
     /** Subject scheme absolute file paths. */
     private final Set<URI> schemeSet = new HashSet<>(128);
     /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
@@ -254,6 +256,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 baseInputDir = basedir.toURI().resolve(ditaInputDir);
             }
             assert baseInputDir.isAbsolute();
+        }
+
+        if (input.getAttribute(ANT_INVOKER_PARAM_RESOURCES) != null) {
+            resources = Stream.of(input.getAttribute(ANT_INVOKER_PARAM_RESOURCES).split(File.pathSeparator))
+                    .map(resource -> new File(resource).toURI())
+                    .collect(Collectors.toList());
+        } else {
+            resources = Collections.emptyList();
         }
 
         URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
@@ -611,6 +621,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
+        resourceOnlySet.addAll(resources);
         resourceOnlySet.addAll(listFilter.getResourceOnlySet());
 
         for (final URI file: outDitaFilesSet) {
@@ -671,6 +682,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
         for (final URI file: resourceOnlySet) {
             getOrCreateFileInfo(fileinfos, file).isResourceOnly = true;
+        }
+        for (final URI resource : resources) {
+            getOrCreateFileInfo(fileinfos, resource).isInputResource = true;
         }
 
         addFlagImagesSetToProperties(job, relFlagImagesSet);
