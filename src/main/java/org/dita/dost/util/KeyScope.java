@@ -73,13 +73,13 @@ public class KeyScope {
         if (!Objects.equals(scope1.id, scope2.id)) {
             throw new IllegalArgumentException(String.format("Scopes should have the same ID: %s != %s", scope1.id, scope2.id));
         }
+        final Map<String, KeyDef> keyDefinition = new HashMap<>();
+        scope1.keyDefinition.forEach(keyDefinition::putIfAbsent);
+        scope2.keyDefinition.forEach(keyDefinition::putIfAbsent);
         return new KeyScope(
                 scope1.id,
                 scope1.name,
-                ImmutableMap.<String, KeyDef>builder()
-                        .putAll(scope1.keyDefinition)
-                        .putAll(scope2.keyDefinition)
-                        .build(),
+                unmodifiableMap(keyDefinition),
                 ImmutableList.<KeyScope>builder()
                         .addAll(scope1.childScopes)
                         .addAll(scope2.childScopes)

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
+import static org.junit.Assert.fail;
 
 public abstract class IntegrationTest extends AbstractIntegrationTest {
 
@@ -530,6 +531,26 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
         builder().name("rng")
                 .transtype(PREPROCESS)
                 .input(Paths.get("root.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void resource_map() throws Throwable {
+        final Path testDir = Paths.get("src", "test", "resources", "resource", "src");
+        builder().name("resource_map")
+                .transtype(PREPROCESS)
+                .input(Paths.get("map.ditamap"))
+                .put("args.resources", Paths.get("keys.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void resource_topic() throws Throwable {
+        final Path testDir = Paths.get("src", "test", "resources", "resource", "src");
+        builder().name("resource_topic")
+                .transtype(PREPROCESS)
+                .input(Paths.get("topic.dita"))
+                .put("args.resources", Paths.get("keys.ditamap"))
                 .test();
     }
 }
