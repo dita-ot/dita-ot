@@ -118,7 +118,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             writeMap(in, doc);
 
             // Read resources maps
-            final Collection<FileInfo> resourceFis = job.getFileInfo(fi -> fi.isInputResource);
+            final Collection<FileInfo> resourceFis = job.getFileInfo(fi -> fi.isInputResource && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP));
             final KeyScope rootScope = resourceFis.stream()
                     .map(fi -> {
                         try {
