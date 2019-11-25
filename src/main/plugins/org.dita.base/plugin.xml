@@ -98,6 +98,7 @@ See the accompanying LICENSE file for applicable license.
     </param>
     <param name="args.input" desc="Specifies the master file for your documentation project." type="file" required="true"/>
     <param name="args.input.dir" desc="Specifies the base directory for your documentation project." type="dir"/>
+    <param name="args.resources" desc="Specifies resource files." type="file"/>
     <param name="args.output.base" desc="Specifies the name of the output file without file extension." type="string"/>
     <param name="args.tablelink.style" desc="Specifies how cross references to tables are styled." type="enum">
       <val>NUMBER</val>
