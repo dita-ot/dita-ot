@@ -14,7 +14,9 @@ import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -26,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -52,9 +53,34 @@ public class TestGenListModuleReader {
         tempDir = TestUtils.createTempDir(TestGenListModuleReader.class);
     }
 
+    @Before
+    public void setUp() throws IOException {
+        reader = new GenListModuleReader();
+        reader.setLogger(new TestUtils.TestLogger());
+        reader.setJob(new Job(tempDir));
+        reader.setContentHandler(new DefaultHandler());
+        final URI currentFile = new File(inputDir, "root-map-01.ditamap").toURI();
+        reader.setCurrentFile(currentFile);
+        reader.setPrimaryDitamap(currentFile);
+    }
+
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public static void tearDownClass() {
         FileUtils.deleteQuietly(tempDir);
+    }
+
+    @Test
+    public void startDocument() throws SAXException {
+        reader.startDocument();
+    }
+
+    @Test
+    public void startElement() throws SAXException {
+        reader.startDocument();
+        reader.startElement("", "topic", "topic", new AttributesBuilder()
+                .add("class", "- topic/topic ")
+                .add("id", "abc")
+                .build());
     }
 
     @Test
@@ -225,13 +251,8 @@ public class TestGenListModuleReader {
         final File ditaDir = new File("src" + File.separator + "main").getAbsoluteFile();
 
         final boolean validate = false;
-        reader = new GenListModuleReader();
-        reader.setLogger(new TestUtils.TestLogger());
         reader.setCurrentFile(rootFile.toURI());
         reader.setPrimaryDitamap(rootFile.toURI());
-        reader.setJob(new Job(tempDir));
-
-        reader.setContentHandler(new DefaultHandler());
 
         final XMLReader parser = initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalFile());
         parser.setContentHandler(reader);
