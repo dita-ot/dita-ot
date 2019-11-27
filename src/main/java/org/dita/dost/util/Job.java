@@ -974,8 +974,10 @@ public final class Job {
                 .filter(fi -> fi.isInput)
                 .map(fi -> fi.src)
                 .findAny()
-                .orElse(null);
-
+                .orElseGet(() -> Optional.ofNullable((String) prop.get(PROPERTY_INPUT_MAP_URI))
+                        .map(URLUtils::toURI)
+                        .orElse(null)
+                );
     }
 
     /**

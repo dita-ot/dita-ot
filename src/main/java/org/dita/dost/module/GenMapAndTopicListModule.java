@@ -199,10 +199,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             initFilters();
             initXmlReader();
 
-            addToWaitList(new Reference(rootFile));
-            for (URI resource : resources) {
-                addToWaitList(new Reference(resource));
-            }
+            readResourceFiles();
+            readStartFile();
             processWaitList();
 
             updateBaseDirectory();
@@ -215,6 +213,30 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
 
         return null;
+    }
+
+    private void readResourceFiles() throws DITAOTException {
+        if (!resources.isEmpty()) {
+            for (URI resource : resources) {
+                addToWaitList(new Reference(resource));
+            }
+            processWaitList();
+
+            resourceOnlySet.addAll(hrefTargetSet);
+            resourceOnlySet.addAll(conrefTargetSet);
+            resourceOnlySet.addAll(nonConrefCopytoTargetSet);
+            resourceOnlySet.addAll(outDitaFilesSet);
+            resourceOnlySet.addAll(conrefpushSet);
+            resourceOnlySet.addAll(keyrefSet);
+            resourceOnlySet.addAll(resourceOnlySet);
+            resourceOnlySet.addAll(fullTopicSet);
+            resourceOnlySet.addAll(fullMapSet);
+            resourceOnlySet.addAll(conrefSet);
+        }
+    }
+
+    private void readStartFile() throws DITAOTException {
+        addToWaitList(new Reference(rootFile));
     }
 
     /**

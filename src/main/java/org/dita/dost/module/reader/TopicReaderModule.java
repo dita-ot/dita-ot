@@ -67,6 +67,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             parseInputParameters(input);
             init();
 
+            readResourceFiles();
             readStartFile();
             processWaitList();
 

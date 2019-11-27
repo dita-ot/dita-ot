@@ -8,4 +8,28 @@
       </keywords>
     </topicmeta>
   </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="common" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">override</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup " keyscope="scope">
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="key" processing-role="resource-only">
+      <topicmeta class="- map/topicmeta ">
+        <keywords class="- topic/keywords ">
+          <keyword class="- topic/keyword ">scope value</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="common" processing-role="resource-only">
+      <topicmeta class="- map/topicmeta ">
+        <keywords class="- topic/keywords ">
+          <keyword class="- topic/keyword ">override</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+  </topicgroup>
+  <topicref class="+ map/topicref " href="resourceOnly.dita"/>
 </map>

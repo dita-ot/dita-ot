@@ -137,8 +137,33 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     URI currentFile;
     DitaWriterFilter ditaWriterFilter;
     TopicFragmentFilter topicFragmentFilter;
+    /** Files found during additional resource crawl. **/
+    private final Set<URI> additionalResourcesSet = new HashSet<>();
 
     public abstract void readStartFile() throws DITAOTException;
+
+    void readResourceFiles() throws DITAOTException {
+        if (!resources.isEmpty()) {
+            for (URI resource : resources) {
+                additionalResourcesSet.add(resource);
+                addToWaitList(new Reference(resource));
+            }
+            processWaitList();
+
+            additionalResourcesSet.addAll(hrefTargetSet);
+            additionalResourcesSet.addAll(conrefTargetSet);
+            additionalResourcesSet.addAll(nonConrefCopytoTargetSet);
+            additionalResourcesSet.addAll(outDitaFilesSet);
+            additionalResourcesSet.addAll(conrefpushSet);
+            additionalResourcesSet.addAll(keyrefSet);
+            additionalResourcesSet.addAll(resourceOnlySet);
+            additionalResourcesSet.addAll(fullTopicSet);
+            additionalResourcesSet.addAll(fullMapSet);
+            additionalResourcesSet.addAll(conrefSet);
+
+            resourceOnlySet.clear();
+        }
+    }
 
     /**
      * Initialize reusable filters.
@@ -621,7 +646,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
-        resourceOnlySet.addAll(resources);
         resourceOnlySet.addAll(listFilter.getResourceOnlySet());
 
         for (final URI file: outDitaFilesSet) {
@@ -713,6 +737,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             if (formatFilter.test(fi.format)
                     || fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
                 job.add(fi);
+            }
+        }
+
+        for (URI f : additionalResourcesSet) {
+            final FileInfo fi = job.getFileInfo(f);
+            if (!fi.isResourceOnly) {
+                fi.isInputResource = true;
             }
         }
 

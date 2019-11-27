@@ -536,7 +536,6 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void resource_map() throws Throwable {
-        final Path testDir = Paths.get("src", "test", "resources", "resource", "src");
         builder().name("resource_map")
                 .transtype(PREPROCESS)
                 .input(Paths.get("map.ditamap"))
@@ -546,7 +545,6 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void resource_topic() throws Throwable {
-        final Path testDir = Paths.get("src", "test", "resources", "resource", "src");
         builder().name("resource_topic")
                 .transtype(PREPROCESS)
                 .input(Paths.get("topic.dita"))

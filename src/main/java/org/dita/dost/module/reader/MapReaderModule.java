@@ -46,10 +46,8 @@ public final class MapReaderModule extends AbstractReaderModule {
             parseInputParameters(input);
             init();
 
+            readResourceFiles();
             readStartFile();
-            for (URI resource : resources) {
-                addToWaitList(new Reference(resource));
-            }
             processWaitList();
 
             handleConref();
