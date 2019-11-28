@@ -479,7 +479,21 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      */
     void processParseResult(final URI currentFile) {
         // Category non-copyto result
-        for (final Reference file: listFilter.getNonCopytoResult_Computed()) {
+        final Set<Reference> nonCopytoResult = new LinkedHashSet<>(128);
+        nonCopytoResult.addAll(listFilter.getNonConrefCopytoTargets());
+        for (final URI f : listFilter.getConrefTargets()) {
+            nonCopytoResult.add(new Reference(stripFragment(f), listFilter.currentFileFormat()));
+        }
+        for (final URI f : listFilter.getCopytoMap().values()) {
+            nonCopytoResult.add(new Reference(stripFragment(f)));
+        }
+        for (final URI f : listFilter.getIgnoredCopytoSourceSet()) {
+            nonCopytoResult.add(new Reference(stripFragment(f)));
+        }
+        for (final URI filename1 : listFilter.getCoderefTargetSet()) {
+            nonCopytoResult.add(new Reference(stripFragment(filename1)));
+        }
+        for (final Reference file: nonCopytoResult) {
             categorizeReferenceFile(file);
         }
         for (final Map.Entry<URI, URI> e : listFilter.getCopytoMap().entrySet()) {
@@ -491,9 +505,12 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         hrefTargetSet.addAll(listFilter.getHrefTargets());
         conrefTargetSet.addAll(listFilter.getConrefTargets());
-        nonConrefCopytoTargetSet.addAll(listFilter.getNonConrefCopytoTargets_Computed());
+        final Set<URI> nonConrefCopytoTargets = listFilter.getNonConrefCopytoTargets().stream()
+                .map(r -> r.filename)
+                .collect(Collectors.toSet());
+        nonConrefCopytoTargetSet.addAll(nonConrefCopytoTargets);
         coderefTargetSet.addAll(listFilter.getCoderefTargets());
-        outDitaFilesSet.addAll(listFilter.getOutFilesSet());
+        outDitaFilesSet.addAll(listFilter.getOutDitaFilesSet());
 
         // Generate topic-scheme dictionary
         final Set<URI> schemeSet = listFilter.getSchemeSet();
@@ -612,7 +629,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      */
     void handleConref() {
         // Get pure conref targets
-        final Set<URI> pureConrefTargets = new HashSet<>(conrefTargetSet.size());
+        final Set<URI> pureConrefTargets = new HashSet<>();
         for (final URI target: conrefTargetSet) {
             if (!nonConrefCopytoTargetSet.contains(target)) {
                 pureConrefTargets.add(target);
@@ -646,7 +663,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
-        resourceOnlySet.addAll(listFilter.getResourceOnlySet_Computed());
+        final Set<URI> res = new HashSet<>();
+        res.addAll(listFilter.getResourceOnlySet());
+        res.removeAll(listFilter.getNormalProcessingRoleSet());
+        resourceOnlySet.addAll(res);
 
         for (final URI file: outDitaFilesSet) {
             getOrCreateFileInfo(fileinfos, file).isOutDita = true;
@@ -846,7 +866,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         final Map<URI, Set<URI>> res = new HashMap<>();
         for (final Map.Entry<URI, Set<URI>> e: map.entrySet()) {
             final URI key = e.getKey();
-            final Set<URI> newSet = new HashSet<>(e.getValue().size());
+            final Set<URI> newSet = new HashSet<>();
             for (final URI file: e.getValue()) {
                 newSet.add(tempFileNameScheme.generateTempFileName(file));
             }

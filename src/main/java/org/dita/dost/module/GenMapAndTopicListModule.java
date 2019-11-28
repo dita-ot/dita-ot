@@ -493,7 +493,21 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      */
     private void processParseResult(final URI currentFile) {
         // Category non-copyto result and update uplevels accordingly
-        for (final Reference file: listFilter.getNonCopytoResult_Computed()) {
+        final Set<Reference> nonCopytoResult = new LinkedHashSet<>(128);
+        nonCopytoResult.addAll(listFilter.getNonConrefCopytoTargets());
+        for (final URI f : listFilter.getConrefTargets()) {
+            nonCopytoResult.add(new Reference(stripFragment(f), listFilter.currentFileFormat()));
+        }
+        for (final URI f : listFilter.getCopytoMap().values()) {
+            nonCopytoResult.add(new Reference(stripFragment(f)));
+        }
+        for (final URI f : listFilter.getIgnoredCopytoSourceSet()) {
+            nonCopytoResult.add(new Reference(stripFragment(f)));
+        }
+        for (final URI filename1 : listFilter.getCoderefTargetSet()) {
+            nonCopytoResult.add(new Reference(stripFragment(filename1)));
+        }
+        for (final Reference file: nonCopytoResult) {
             categorizeReferenceFile(file);
             updateUplevels(file.filename);
         }
@@ -504,7 +518,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             updateUplevels(target);
 
         }
-        for (final URI file: listFilter.getNonTopicrefReferenceSet_Computed()) {
+        final Set<URI> nonTopicrefReferenceSet = new HashSet<>();
+        nonTopicrefReferenceSet.addAll(listFilter.getNonTopicrefReferenceSet());
+        nonTopicrefReferenceSet.removeAll(listFilter.getNormalProcessingRoleSet());
+        nonTopicrefReferenceSet.removeAll(listFilter.getResourceOnlySet());
+        for (final URI file: nonTopicrefReferenceSet) {
             updateUplevels(file);
         }
         schemeSet.addAll(listFilter.getSchemeRefSet());
@@ -521,9 +539,12 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         hrefTargetSet.addAll(listFilter.getHrefTargets());
         conrefTargetSet.addAll(listFilter.getConrefTargets());
-        nonConrefCopytoTargetSet.addAll(listFilter.getNonConrefCopytoTargets_Computed());
+        final Set<URI> nonConrefCopytoTargets = listFilter.getNonConrefCopytoTargets().stream()
+                .map(r -> r.filename)
+                .collect(Collectors.toSet());
+        nonConrefCopytoTargetSet.addAll(nonConrefCopytoTargets);
         coderefTargetSet.addAll(listFilter.getCoderefTargets());
-        outDitaFilesSet.addAll(listFilter.getOutFilesSet());
+        outDitaFilesSet.addAll(listFilter.getOutDitaFilesSet());
 
         // Generate topic-scheme dictionary
         final Set<URI> schemeSet = listFilter.getSchemeSet();
@@ -705,7 +726,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      */
     private void handleConref() {
         // Get pure conref targets
-        final Set<URI> pureConrefTargets = new HashSet<>(128);
+        final Set<URI> pureConrefTargets = new HashSet<>();
         for (final URI target: conrefTargetSet) {
             if (!nonConrefCopytoTargetSet.contains(target)) {
                 pureConrefTargets.add(target);
@@ -752,10 +773,18 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         job.setProperty("uplevels", getLevelsPath(rootTemp));
 
         resourceOnlySet.addAll(resources);
-        resourceOnlySet.addAll(listFilter.getResourceOnlySet_Computed());
+
+        final Set<URI> res = new HashSet<>();
+        res.addAll(listFilter.getResourceOnlySet());
+        res.removeAll(listFilter.getNormalProcessingRoleSet());
+        resourceOnlySet.addAll(res);
 
         if (job.getOnlyTopicInMap() || !job.crawlTopics()) {
-            resourceOnlySet.addAll(listFilter.getNonTopicrefReferenceSet_Computed());
+            final Set<URI> res1 = new HashSet<>();
+            res1.addAll(listFilter.getNonTopicrefReferenceSet());
+            res1.removeAll(listFilter.getNormalProcessingRoleSet());
+            res1.removeAll(listFilter.getResourceOnlySet());
+            resourceOnlySet.addAll(res1);
         }
 
         for (final URI file: outDitaFilesSet) {
@@ -952,7 +981,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         final Map<URI, Set<URI>> res = new HashMap<>();
         for (final Map.Entry<URI, Set<URI>> e: map.entrySet()) {
             final URI key = e.getKey();
-            final Set<URI> newSet = new HashSet<>(e.getValue().size());
+            final Set<URI> newSet = new HashSet<>();
             for (final URI file: e.getValue()) {
                 newSet.add(tempFileNameScheme.generateTempFileName(file));
             }

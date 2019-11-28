@@ -21,7 +21,6 @@ import org.xml.sax.SAXParseException;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Configuration.ditaFormat;
 import static org.dita.dost.util.Constants.*;
@@ -155,7 +154,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      *
      * @return out file set
      */
-    public Set<URI> getOutFilesSet() {
+    public Set<URI> getOutDitaFilesSet() {
         return outDitaFilesSet;
     }
 
@@ -178,29 +177,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * List of files with "@processing-role=resource-only".
-     *
-     * @return the resource-only set
-     */
-    public Set<URI> getResourceOnlySet_Computed() {
-        final Set<URI> res = new HashSet<>(getResourceOnlySet());
-        res.removeAll(getNormalProcessingRoleSet());
-        return res;
-    }
-
-    /**
-     * List of files referenced by something other than topicref
-     *
-     * @return the resource-only set
-     */
-    public Set<URI> getNonTopicrefReferenceSet_Computed() {
-        final Set<URI> res = new HashSet<>(getNonTopicrefReferenceSet());
-        res.removeAll(getNormalProcessingRoleSet());
-        res.removeAll(getResourceOnlySet());
-        return res;
-    }
-
-    /**
      * Is the processed file a DITA topic.
      *
      * @return {@code true} if DITA topic, otherwise {@code false}
@@ -212,7 +188,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         return rootClass == null || TOPIC_TOPIC.matches(rootClass);
     }
 
-    private String currentFileFormat() {
+    public String currentFileFormat() {
         if (rootClass == null || TOPIC_TOPIC.matches(rootClass)) {
             return ATTR_FORMAT_VALUE_DITA;
         } else if (MAP_MAP.matches(rootClass)) {
@@ -286,31 +262,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * Get all targets except copy-to.
-     *
-     * @return set of target file path with option format after
-     * {@link org.dita.dost.util.Constants#STICK STICK}
-     */
-    public Set<Reference> getNonCopytoResult_Computed() {
-        final Set<Reference> nonCopytoSet = new LinkedHashSet<>(128);
-
-        nonCopytoSet.addAll(getNonConrefCopytoTargets());
-        for (final URI f : getConrefTargets()) {
-            nonCopytoSet.add(new Reference(stripFragment(f), currentFileFormat()));
-        }
-        for (final URI f : getCopytoMap().values()) {
-            nonCopytoSet.add(new Reference(stripFragment(f)));
-        }
-        for (final URI f : getIgnoredCopytoSourceSet()) {
-            nonCopytoSet.add(new Reference(stripFragment(f)));
-        }
-        for (final URI filename : getCoderefTargetSet()) {
-            nonCopytoSet.add(new Reference(stripFragment(filename)));
-        }
-        return nonCopytoSet;
-    }
-
-    /**
      * Get copy-to map.
      *
      * @return map of copy-to target to souce
@@ -344,26 +295,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     public Set<URI> getCoderefTargets() {
         return coderefTargetSet;
-    }
-
-    /**
-     * Get outditafileslist.
-     *
-     * @return Returns the outditafileslist.
-     */
-    public Set<URI> getOutDitaFilesSet() {
-        return outDitaFilesSet;
-    }
-
-    /**
-     * Get non-conref and non-copyto targets.
-     *
-     * @return Returns the nonConrefCopytoTargets.
-     */
-    public Set<URI> getNonConrefCopytoTargets_Computed() {
-        return getNonConrefCopytoTargets().stream()
-                .map(r -> r.filename)
-                .collect(Collectors.toSet());
     }
 
     /**
@@ -418,7 +349,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     public Set<URI> getNonTopicrefReferenceSet() {
         return nonTopicrefReferenceSet;
     }
-
 
     /**
      * Reset the internal variables.
