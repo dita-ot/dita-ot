@@ -26,7 +26,6 @@ import org.dita.dost.util.*;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.ProfilingFilter;
-import org.dita.dost.writer.ResourceInsertFilter;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLFilter;
@@ -494,7 +493,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      */
     private void processParseResult(final URI currentFile) {
         // Category non-copyto result and update uplevels accordingly
-        for (final Reference file: listFilter.getNonCopytoResult()) {
+        for (final Reference file: listFilter.getNonCopytoResult_Computed()) {
             categorizeReferenceFile(file);
             updateUplevels(file.filename);
         }
@@ -505,7 +504,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             updateUplevels(target);
 
         }
-        for (final URI file: listFilter.getNonTopicrefReferenceSet()) {
+        for (final URI file: listFilter.getNonTopicrefReferenceSet_Computed()) {
             updateUplevels(file);
         }
         schemeSet.addAll(listFilter.getSchemeRefSet());
@@ -522,7 +521,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         hrefTargetSet.addAll(listFilter.getHrefTargets());
         conrefTargetSet.addAll(listFilter.getConrefTargets());
-        nonConrefCopytoTargetSet.addAll(listFilter.getNonConrefCopytoTargets());
+        nonConrefCopytoTargetSet.addAll(listFilter.getNonConrefCopytoTargets_Computed());
         coderefTargetSet.addAll(listFilter.getCoderefTargets());
         outDitaFilesSet.addAll(listFilter.getOutFilesSet());
 
@@ -753,10 +752,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         job.setProperty("uplevels", getLevelsPath(rootTemp));
 
         resourceOnlySet.addAll(resources);
-        resourceOnlySet.addAll(listFilter.getResourceOnlySet());
+        resourceOnlySet.addAll(listFilter.getResourceOnlySet_Computed());
 
         if (job.getOnlyTopicInMap() || !job.crawlTopics()) {
-            resourceOnlySet.addAll(listFilter.getNonTopicrefReferenceSet());
+            resourceOnlySet.addAll(listFilter.getNonTopicrefReferenceSet_Computed());
         }
 
         for (final URI file: outDitaFilesSet) {

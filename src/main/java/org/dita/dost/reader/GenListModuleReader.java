@@ -21,6 +21,7 @@ import org.xml.sax.SAXParseException;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Configuration.ditaFormat;
 import static org.dita.dost.util.Constants.*;
@@ -39,54 +40,102 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     public static final URI ROOT_URI = toURI("ROOT");
 
-    /** Output utilities */
+    /**
+     * Output utilities
+     */
     private Job job;
-    /** Absolute basedir of the current parsing file */
+    /**
+     * Absolute basedir of the current parsing file
+     */
     private URI currentDir = null;
-    /** Flag for conref in parsing file */
+    /**
+     * Flag for conref in parsing file
+     */
     private boolean hasConRef = false;
-    /** Flag for href in parsing file */
+    /**
+     * Flag for href in parsing file
+     */
     private boolean hasHref = false;
-    /** Flag for keyref in parsing file */
+    /**
+     * Flag for keyref in parsing file
+     */
     private boolean hasKeyRef = false;
-    /** Flag for whether parsing file contains coderef */
+    /**
+     * Flag for whether parsing file contains coderef
+     */
     private boolean hasCodeRef = false;
-    /** Set of all targets referred in current parsing file except conref and copy-to */
+    /**
+     * Set of all targets referred in current parsing file except conref and copy-to
+     */
     private final Set<Reference> nonConrefCopytoTargets = new LinkedHashSet<>(64);
-    /** Set of conref targets refered in current parsing file */
+    /**
+     * Set of conref targets refered in current parsing file
+     */
     private final Set<URI> conrefTargets = new HashSet<>(32);
-    /** Set of href nonConrefCopytoTargets refered in current parsing file */
+    /**
+     * Set of href nonConrefCopytoTargets refered in current parsing file
+     */
     private final Set<URI> hrefTargets = new HashSet<>(32);
-    /** Set of subject schema files */
+    /**
+     * Set of subject schema files
+     */
     private final Set<URI> schemeSet = new HashSet<>(32);
-    /** Set of coderef or object target files */
+    /**
+     * Set of coderef or object target files
+     */
     private final Set<URI> coderefTargetSet = new HashSet<>(16);
-    /** Set of sources of those copy-to that were ignored */
+    /**
+     * Set of sources of those copy-to that were ignored
+     */
     private final Set<URI> ignoredCopytoSourceSet = new HashSet<>(16);
-    /** Map of copy-to target to souce */
+    /**
+     * Map of copy-to target to souce
+     */
     private final Map<URI, URI> copytoMap = new HashMap<>(16);
-    /** Flag for conrefpush */
+    /**
+     * Flag for conrefpush
+     */
     private boolean hasconaction = false;
-    /** DITA class values for open elements **/
+    /**
+     * DITA class values for open elements
+     **/
     private final Deque<DitaClass> classes = new LinkedList<>();
-    /** Flag used to mark if current file is still valid after filtering */
+    /**
+     * Flag used to mark if current file is still valid after filtering
+     */
     private boolean isValidInput = false;
-    /** Set of outer dita files */
+    /**
+     * Set of outer dita files
+     */
     private final Set<URI> outDitaFilesSet = new HashSet<>(64);
-    /** Absolute system path to input file parent directory */
+    /**
+     * Absolute system path to input file parent directory
+     */
     private URI rootDir = null;
-    /** Stack for @processing-role value */
+    /**
+     * Stack for @processing-role value
+     */
     private final Stack<String> processRoleStack = new Stack<>();
-    /** Topics with processing role of "resource-only" */
+    /**
+     * Topics with processing role of "resource-only"
+     */
     private final Set<URI> resourceOnlySet = new HashSet<>(32);
-    /** Topics with processing role of "normal" */
+    /**
+     * Topics with processing role of "normal"
+     */
     private final Set<URI> normalProcessingRoleSet = new HashSet<>(32);
-    /** Topics referenced from something other than <topicref> */
+    /**
+     * Topics referenced from something other than <topicref>
+     */
     private final Set<URI> nonTopicrefReferenceSet = new HashSet<>(32);
-    /** Subject scheme relative file paths. */
+    /**
+     * Subject scheme relative file paths.
+     */
     private final Set<URI> schemeRefSet = new HashSet<>(32);
-    /** Relationship graph between subject schema. Keys are subject scheme map paths and values
-     * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps. */
+    /**
+     * Relationship graph between subject schema. Keys are subject scheme map paths and values
+     * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps.
+     */
     private final Map<URI, Set<URI>> schemeRelationGraph = new LinkedHashMap<>();
     private boolean isRootElement = true;
     private DitaClass rootClass = null;
@@ -133,9 +182,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      *
      * @return the resource-only set
      */
-    public Set<URI> getResourceOnlySet() {
-        final Set<URI> res = new HashSet<>(resourceOnlySet);
-        res.removeAll(normalProcessingRoleSet);
+    public Set<URI> getResourceOnlySet_Computed() {
+        final Set<URI> res = new HashSet<>(getResourceOnlySet());
+        res.removeAll(getNormalProcessingRoleSet());
         return res;
     }
 
@@ -144,10 +193,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      *
      * @return the resource-only set
      */
-    public Set<URI> getNonTopicrefReferenceSet() {
-        final Set<URI> res = new HashSet<>(nonTopicrefReferenceSet);
-        res.removeAll(normalProcessingRoleSet);
-        res.removeAll(resourceOnlySet);
+    public Set<URI> getNonTopicrefReferenceSet_Computed() {
+        final Set<URI> res = new HashSet<>(getNonTopicrefReferenceSet());
+        res.removeAll(getNormalProcessingRoleSet());
+        res.removeAll(getResourceOnlySet());
         return res;
     }
 
@@ -164,7 +213,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     private String currentFileFormat() {
-        if (rootClass == null ||  TOPIC_TOPIC.matches(rootClass)) {
+        if (rootClass == null || TOPIC_TOPIC.matches(rootClass)) {
             return ATTR_FORMAT_VALUE_DITA;
         } else if (MAP_MAP.matches(rootClass)) {
             return ATTR_FORMAT_VALUE_DITAMAP;
@@ -240,22 +289,22 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * Get all targets except copy-to.
      *
      * @return set of target file path with option format after
-     *         {@link org.dita.dost.util.Constants#STICK STICK}
+     * {@link org.dita.dost.util.Constants#STICK STICK}
      */
-    public Set<Reference> getNonCopytoResult() {
+    public Set<Reference> getNonCopytoResult_Computed() {
         final Set<Reference> nonCopytoSet = new LinkedHashSet<>(128);
 
-        nonCopytoSet.addAll(nonConrefCopytoTargets);
-        for (final URI f : conrefTargets) {
+        nonCopytoSet.addAll(getNonConrefCopytoTargets());
+        for (final URI f : getConrefTargets()) {
             nonCopytoSet.add(new Reference(stripFragment(f), currentFileFormat()));
         }
-        for (final URI f : copytoMap.values()) {
+        for (final URI f : getCopytoMap().values()) {
             nonCopytoSet.add(new Reference(stripFragment(f)));
         }
-        for (final URI f : ignoredCopytoSourceSet) {
+        for (final URI f : getIgnoredCopytoSourceSet()) {
             nonCopytoSet.add(new Reference(stripFragment(f)));
         }
-        for (final URI filename : coderefTargetSet) {
+        for (final URI filename : getCoderefTargetSet()) {
             nonCopytoSet.add(new Reference(stripFragment(filename)));
         }
         return nonCopytoSet;
@@ -311,12 +360,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      *
      * @return Returns the nonConrefCopytoTargets.
      */
-    public Set<URI> getNonConrefCopytoTargets() {
-        final Set<URI> res = new HashSet<>(nonConrefCopytoTargets.size());
-        for (final Reference r : nonConrefCopytoTargets) {
-            res.add(r.filename);
-        }
-        return res;
+    public Set<URI> getNonConrefCopytoTargets_Computed() {
+        return getNonConrefCopytoTargets().stream()
+                .map(r -> r.filename)
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -348,8 +395,32 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         return hasconaction;
     }
 
+    public Set<Reference> getNonConrefCopytoTargets() {
+        return nonConrefCopytoTargets;
+    }
+
+    public Set<URI> getCoderefTargetSet() {
+        return coderefTargetSet;
+    }
+
+    public Set<URI> getIgnoredCopytoSourceSet() {
+        return ignoredCopytoSourceSet;
+    }
+
+    public Set<URI> getResourceOnlySet() {
+        return resourceOnlySet;
+    }
+
+    public Set<URI> getNormalProcessingRoleSet() {
+        return normalProcessingRoleSet;
+    }
+
+    public Set<URI> getNonTopicrefReferenceSet() {
+        return nonTopicrefReferenceSet;
+    }
+
+
     /**
-     *
      * Reset the internal variables.
      */
     public void reset() {
@@ -557,7 +628,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /**
      * Parse the input attributes for needed information.
      *
-     * @param atts all attributes
+     * @param atts     all attributes
      * @param attrName attributes to process
      */
     private void parseAttribute(final Attributes atts, final String attrName) throws SAXException {
@@ -688,7 +759,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
     }
 
-    public final static String[] KEYREF_ATTRS = new String[] {
+    public final static String[] KEYREF_ATTRS = new String[]{
             ATTRIBUTE_NAME_KEYREF,
             ATTRIBUTE_NAME_CONKEYREF,
             ATTRIBUTE_NAME_ARCHIVEKEYREFS,
@@ -698,7 +769,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     };
 
     private void parseKeyrefAttr(final Attributes atts) {
-        for (final String attr: KEYREF_ATTRS) {
+        for (final String attr : KEYREF_ATTRS) {
             if (atts.getValue(attr) != null) {
                 hasKeyRef = true;
                 break;
@@ -725,7 +796,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA)) {
             return true;
         }
-        for (final String f: ditaFormat) {
+        for (final String f : ditaFormat) {
             if (f.equals(attrFormat)) {
                 return true;
             }
@@ -762,7 +833,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     private void toOutFile(final URI filename, final Attributes atts) throws SAXException {
         assert filename.isAbsolute();
-        final String[] prop = { filename.toString(), currentFile.toString() };
+        final String[] prop = {filename.toString(), currentFile.toString()};
         if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
             if (isOutFile(filename)) {
                 if (job.getOutterControl() == Job.OutterControl.FAIL) {
@@ -785,9 +856,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * File reference with path and optional format.
      */
     public static class Reference {
-        /** Absolute URI reference */
+        /**
+         * Absolute URI reference
+         */
         public final URI filename;
-        /** Format of the reference */
+        /**
+         * Format of the reference
+         */
         public final String format;
 
         public Reference(final URI filename, final String format) {

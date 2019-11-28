@@ -479,7 +479,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      */
     void processParseResult(final URI currentFile) {
         // Category non-copyto result
-        for (final Reference file: listFilter.getNonCopytoResult()) {
+        for (final Reference file: listFilter.getNonCopytoResult_Computed()) {
             categorizeReferenceFile(file);
         }
         for (final Map.Entry<URI, URI> e : listFilter.getCopytoMap().entrySet()) {
@@ -491,7 +491,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         hrefTargetSet.addAll(listFilter.getHrefTargets());
         conrefTargetSet.addAll(listFilter.getConrefTargets());
-        nonConrefCopytoTargetSet.addAll(listFilter.getNonConrefCopytoTargets());
+        nonConrefCopytoTargetSet.addAll(listFilter.getNonConrefCopytoTargets_Computed());
         coderefTargetSet.addAll(listFilter.getCoderefTargets());
         outDitaFilesSet.addAll(listFilter.getOutFilesSet());
 
@@ -646,7 +646,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
-        resourceOnlySet.addAll(listFilter.getResourceOnlySet());
+        resourceOnlySet.addAll(listFilter.getResourceOnlySet_Computed());
 
         for (final URI file: outDitaFilesSet) {
             getOrCreateFileInfo(fileinfos, file).isOutDita = true;
