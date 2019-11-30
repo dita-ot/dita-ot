@@ -148,10 +148,10 @@ See the accompanying LICENSE file for applicable license.
     <property name="fullditamapfile" value="fullditamap.list"/>
     <local name="inputMapPath"/>
     <pathconvert property="inputMapPath">
-      <ditafileset format="dita" input="true"/>
+      <ditafileset format="ditamap" input="true"/>
     </pathconvert>
     <condition property="noMap">
-      <available file="${inputMapPath}"/>
+      <equals arg1="${inputMapPath}" arg2=""/>
     </condition>
     <delete file="${dita.temp.dir}/${fullditamapfile}"/>
   </target>

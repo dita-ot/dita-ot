@@ -185,10 +185,12 @@ See the accompanying LICENSE file for applicable license.
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
     <local name="inputMapPath"/>
     <pathconvert property="inputMapPath">
-      <ditafileset format="dita" input="true"/>
+      <ditafileset format="ditamap" input="true"/>
     </pathconvert>
     <condition property="noMap">
-      <available file="${inputMapPath}"/>
+      <not>
+        <available file="${inputMapPath}"/>
+      </not>
     </condition>
   </target>
 
