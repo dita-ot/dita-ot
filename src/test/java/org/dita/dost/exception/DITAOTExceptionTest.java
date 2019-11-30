@@ -31,7 +31,7 @@ public class DITAOTExceptionTest {
 
     @Test
     public void testDITAOTExceptionStringThrowable() {
-        new DITAOTException(null, null);
+        new DITAOTException(null, (Throwable) null);
         new DITAOTException("test", new RuntimeException());
     }
 

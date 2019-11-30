@@ -8,6 +8,8 @@
  */
 package org.dita.dost.platform;
 
+import net.sf.saxon.trans.UncheckedXPathException;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.Attributes;
@@ -93,6 +95,8 @@ final class FileGenerator extends XMLFilterImpl {
             source.setSystemId(fileName.toURI().toString());
             final Result result = new StreamResult(out);
             serializer.transform(source, result);
+        } catch (final UncheckedXPathException e) {
+            logger.error(e.getXPathException().getMessageAndLocation());
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {

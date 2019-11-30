@@ -27,6 +27,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 
@@ -266,6 +267,8 @@ public final class DelayConrefUtils {
             out = new FileOutputStream(outputFile);
             final StreamResult sr = new StreamResult(out);
             t.transform(doms, sr);
+        } catch (final UncheckedXPathException e) {
+            logger.error("Failed to process map: " + e.getXPathException().getMessageAndLocation(), e);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {

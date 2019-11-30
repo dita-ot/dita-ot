@@ -8,6 +8,8 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.trans.UncheckedXPathException;
+import net.sf.saxon.trans.XPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -101,6 +103,8 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
                 output.write(midBuffer.toByteArray());
                 output.flush();
             }
+        } catch (final UncheckedXPathException e) {
+            throw new DITAOTException("Failed to process merged topics", e);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {

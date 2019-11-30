@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
@@ -452,6 +453,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final Transformer serializer = TransformerFactory.newInstance().newTransformer();
             out = new StreamResult(job.tempDirURI.resolve(in.uri).toString());
             serializer.transform(new DOMSource(doc), out);
+        } catch (final UncheckedXPathException e) {
+            throw new DITAOTException("Failed to write map", e);
         } catch (final TransformerConfigurationException e) {
             throw new RuntimeException(e);
         } catch (final TransformerException e) {

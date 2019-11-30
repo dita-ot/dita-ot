@@ -35,6 +35,7 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.module.GenMapAndTopicListModule.*;
@@ -506,6 +507,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             final TransformerFactory tff = TransformerFactory.newInstance();
             final Transformer tf = tff.newTransformer();
             tf.transform(ds, res);
+        } catch (final UncheckedXPathException e) {
+            logger.error(e.getXPathException().getMessageAndLocation());
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {
