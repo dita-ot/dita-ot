@@ -449,9 +449,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     private void writeMap(final FileInfo in, final Document doc) throws DITAOTException {
         Result out = null;
         try {
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
             out = new StreamResult(job.tempDirURI.resolve(in.uri).toString());
-            transformer.transform(new DOMSource(doc), out);
+            serializer.transform(new DOMSource(doc), out);
         } catch (final TransformerConfigurationException e) {
             throw new RuntimeException(e);
         } catch (final TransformerException e) {

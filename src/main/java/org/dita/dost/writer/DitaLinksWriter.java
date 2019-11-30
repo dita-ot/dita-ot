@@ -42,7 +42,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
     /** Stack of topic IDs. */
     private Deque<String> topicIdStack;
     private final ArrayList<String> topicSpecList;
-    private final Transformer saxToDomTransformer;
+    private final Transformer serializer;
     private static final Attributes relatedLinksAtts = new AttributesBuilder()
             .add(ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString())
             .build();
@@ -55,7 +55,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
         super();
         topicSpecList = new ArrayList<>();
         try {
-            saxToDomTransformer = TransformerFactory.newInstance().newTransformer();
+            serializer = TransformerFactory.newInstance().newTransformer();
         } catch (final TransformerConfigurationException e) {
             throw new RuntimeException("Failed to configure DOM to SAX transformer: " + e.getMessage(), e);
         }
@@ -165,7 +165,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
             for (int i = 0; i < children.getLength(); i++) {
                 final Node links = rewriteLinks((Element) children.item(i));
                 final Source source = new DOMSource(links);
-                saxToDomTransformer.transform(source, result);
+                serializer.transform(source, result);
             }
         } catch (TransformerException e) {
             throw new SAXException("Failed to serialize DOM node to SAX: " + e.getMessageAndLocation(), e);

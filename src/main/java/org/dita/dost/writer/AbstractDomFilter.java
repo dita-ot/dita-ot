@@ -60,9 +60,9 @@ public abstract class AbstractDomFilter implements AbstractReader {
             try {
                 res = new StreamResult(new FileOutputStream(filename));
                 final DOMSource ds = new DOMSource(resDoc);
-                final Transformer tf = TransformerFactory.newInstance().newTransformer();
+                final Transformer serializer = TransformerFactory.newInstance().newTransformer();
                 logger.debug("Writing " + filename.toURI());
-                tf.transform(ds, res);
+                serializer.transform(ds, res);
             } catch (final RuntimeException e) {
                 throw e;
             } catch (final TransformerException e) {

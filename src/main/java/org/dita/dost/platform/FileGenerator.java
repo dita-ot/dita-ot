@@ -82,7 +82,7 @@ final class FileGenerator extends XMLFilterImpl {
 
         try (final InputStream in = new BufferedInputStream(new FileInputStream(fileName));
              final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
             final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
             parserFactory.setNamespaceAware(true);
             XMLReader reader = parserFactory.newSAXParser().getXMLReader();
@@ -92,7 +92,7 @@ final class FileGenerator extends XMLFilterImpl {
             final Source source = new SAXSource(reader, new InputSource(in));
             source.setSystemId(fileName.toURI().toString());
             final Result result = new StreamResult(out);
-            transformer.transform(source, result);
+            serializer.transform(source, result);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {

@@ -288,9 +288,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
     private void outputMapFile(final URI file, final Document doc) {
         Result result = null;
         try {
-            final Transformer t = TransformerFactory.newInstance().newTransformer();
+            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
             result = new StreamResult(new FileOutputStream(new File(file)));
-            t.transform(new DOMSource(doc), result);
+            serializer.transform(new DOMSource(doc), result);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {
