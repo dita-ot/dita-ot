@@ -183,8 +183,12 @@ See the accompanying LICENSE file for applicable license.
     <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
+    <local name="inputMapPath"/>
+    <pathconvert property="inputMapPath">
+      <ditafileset format="dita" input="true"/>
+    </pathconvert>
     <condition property="noMap">
-      <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
+      <available file="${inputMapPath}"/>
     </condition>
   </target>
 

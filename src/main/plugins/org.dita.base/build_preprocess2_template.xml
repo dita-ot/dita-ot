@@ -146,8 +146,12 @@ See the accompanying LICENSE file for applicable license.
     <!-- TODO replace with direct resource collection availability test -->
     <job-helper file="fullditamap.list" property="fullditamaplist"/>
     <property name="fullditamapfile" value="fullditamap.list"/>
+    <local name="inputMapPath"/>
+    <pathconvert property="inputMapPath">
+      <ditafileset format="dita" input="true"/>
+    </pathconvert>
     <condition property="noMap">
-      <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
+      <available file="${inputMapPath}"/>
     </condition>
     <delete file="${dita.temp.dir}/${fullditamapfile}"/>
   </target>
