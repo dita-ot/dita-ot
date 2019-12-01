@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/copyto_sametarget/temp/preprocess2?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/copyto_sametarget/temp/preprocess2/?><?path2project?><?path2project-uri?><?path2rootmap-uri?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="test1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic ">
+<title class="- topic/title ">test 1</title>
+<body class="- topic/body ">
+	<p id="content1" class="- topic/p "> content of test1 </p>
+	<p class="- topic/p "> content of test1 </p>
+	<p class="- topic/p "> content of test1 </p>
+	<p class="- topic/p "> content of test2 </p>
+	<p class="- topic/p "> content of test3 </p>
+</body>
+</topic>

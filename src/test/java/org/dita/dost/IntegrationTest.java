@@ -19,7 +19,9 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
-public class IntegrationTest extends AbstractIntegrationTest {
+public abstract class IntegrationTest extends AbstractIntegrationTest {
+
+    public abstract AbstractIntegrationTest builder();
 
     @Test
     public void testlink_parentchild() throws Throwable {

@@ -19,6 +19,15 @@ import static org.junit.Assert.assertTrue;
 
 public class IntegrationTestHtml5 extends AbstractIntegrationTest {
 
+    public AbstractIntegrationTest builder() {
+        return new IntegrationTestHtml5();
+    }
+
+    @Override
+    Transtype getTranstype(Transtype transtype) {
+        return transtype;
+    }
+
     @Test
     public void html5_cssNoCopy() throws Throwable {
         final File srcDir = new File(resourceDir, "html5_css" + File.separator + "src");

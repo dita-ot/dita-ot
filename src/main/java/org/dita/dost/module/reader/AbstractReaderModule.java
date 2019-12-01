@@ -587,6 +587,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         conrefTargetSet = pureConrefTargets;
 
         // Remove pure conref targets from fullTopicSet
+        // XXX: if we remove from fullTopicSet, we don't get format information
         fullTopicSet.removeAll(pureConrefTargets);
     }
 

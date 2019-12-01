@@ -1,0 +1,4 @@
+<?xml version="1.0" ?><val xmlns:dita-ot="http://dita-ot.sourceforge.net">
+    <prop action="exclude" att="platform" val="redhat"></prop>
+
+   </val>
