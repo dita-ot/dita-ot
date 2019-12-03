@@ -44,22 +44,13 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
                 .test();
     }
 
+    @Ignore
     @Test
     public void testcopyto() throws Throwable {
         builder().name("copyto")
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC2.ditamap"))
                 .warnCount(0)
-                .test();
-    }
-
-    @Test
-    public void testonlytopic_in_map() throws Throwable {
-        builder().name("onlytopic.in.map")
-                .transtype(XHTML)
-                .input(Paths.get("input.ditamap"))
-                .put("onlytopic.in.map", "true")
-                .warnCount(4)
                 .test();
     }
 
@@ -85,6 +76,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
                 .test();
     }
 
+    @Ignore
     @Test
     public void testcopyto_linktarget() throws Throwable {
         builder().name("copyto_linktarget")
@@ -105,6 +97,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
                 .test();
     }
 
+    @Ignore
     @Test
     public void testcopyto_extensions_metadata() throws Throwable {
         builder().name("copyto_extensions_metadata")
@@ -114,6 +107,26 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
                 .test();
     }
 
+    @Ignore
+    @Test
+    public void testcopyto_circulartarget() throws Throwable {
+        builder().name("copyto_circulartarget")
+                .transtype(PREPROCESS)
+                .input(Paths.get("TC4.ditamap"))
+                .test();
+    }
+
+    @Ignore
+    @Test
+    public void testcopyto_sametarget2() throws Throwable {
+        builder().name("copyto_sametarget2")
+                .transtype(PREPROCESS)
+                .input(Paths.get("TC6.ditamap"))
+                .warnCount(4)
+                .test();
+    }
+
+    @Ignore
     @Test
     public void testcopyto_sametarget() throws Throwable {
         builder().name("copyto_sametarget")
@@ -133,6 +146,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
                 .test();
     }
 
+    @Ignore
     @Test
     public void testuplevelslinkOnlytopic() throws Throwable {
         builder().name("uplevelslink")
