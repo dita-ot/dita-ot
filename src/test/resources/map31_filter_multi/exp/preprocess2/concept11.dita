@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map31_filter_multi/temp/preprocess2?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map31_filter_multi/temp/preprocess2/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA 1.3 Concept//EN?><?doctype-system file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd?><concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="concept6" ditaarch:DITAArchVersion="1.3" domains="(topic concept) (topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic concept/concept ">
+    <title class="- topic/title ">Test product attribute</title>
+    <conbody class="- topic/body  concept/conbody ">
+        
+        <p class="- topic/p ">
+            <note audience="admin" class="- topic/note ">admin (within note tag)</note>
+            <b audience="pm" class="+ topic/ph hi-d/b ">pm (within b tag)</b>
+            <data audience="user" class="- topic/data ">user (within data tag)</data>
+            <lq audience="audiences" class="- topic/lq ">audiences (within lq tag)</lq>
+            <indexterm audience="admin" class="- topic/indexterm ">admin (within indexterm tag)</indexterm>
+        </p>
+        <pre audience="pm" xml:space="preserve" class="- topic/pre ">audience value is pm within pre tag</pre>
+        <codeblock product="user" audience="" xml:space="preserve" class="+ topic/pre pr-d/codeblock ">audience value is user within codeblock tag</codeblock>
+    </conbody>
+</concept>

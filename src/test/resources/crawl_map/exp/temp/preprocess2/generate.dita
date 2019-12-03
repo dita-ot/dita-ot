@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/crawl_map/temp/preprocess2?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/crawl_map/temp/preprocess2/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system file:/C:/shaoxr/DITA-OT1.3.1/dtd/topic.dtd?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="Id1" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic ">
+<title class="- topic/title ">Title</title>
+<body class="- topic/body ">
+<ul class="- topic/ul ">
+<li class="- topic/li "><xref href="#Id1" class="- topic/xref " type="topic"><?ditaot usertext?>Link to this topic</xref></li>
+<li class="- topic/li "><xref href="dc109fa8e8ca8d068c44c763ae688bc2a6622369.dita" class="- topic/xref "/></li>
+<li class="- topic/li "><xref href="peerditaxref.dita" scope="peer" class="- topic/xref "><?ditaot usertext?>Peer topic, do not get it</xref></li>
+<li class="- topic/li "><xref href="externalditaxref.dita" scope="external" class="- topic/xref "><?ditaot usertext?>External topic, do not get it</xref></li>
+<li class="- topic/li "><xref href="peerhtmlxref.html" scope="peer" format="html" class="- topic/xref "><?ditaot usertext?>Peer HTML xref</xref></li>
+<li class="- topic/li "><xref href="externalhtmlxref.html" scope="external" format="html" class="- topic/xref "><?ditaot usertext?>External HTML xref</xref></li>
+</ul>
+</body>
+<related-links class="- topic/related-links ">
+<link href="d93d199c01bf6b917f208be6b05ada9809f5eb58.dita" class="- topic/link "/>
+<link href="peerditalink.dita" scope="peer" class="- topic/link "><?ditaot usertext?><linktext class="- topic/linktext ">Peer topic link, do not get it</linktext></link>
+<link href="externalditalink.dita" scope="external" class="- topic/link "><?ditaot usertext?><linktext class="- topic/linktext ">External topic link, do not get it</linktext></link>
+<link href="peerhtmllink.html" scope="peer" format="html" class="- topic/link "><?ditaot usertext?><linktext class="- topic/linktext ">Peer html link, do not get it</linktext></link>
+<link href="externalhtmllink.html" scope="external" format="html" class="- topic/link "><?ditaot usertext?><linktext class="- topic/linktext ">External html link, do not get it</linktext></link>
+</related-links>
+</topic>

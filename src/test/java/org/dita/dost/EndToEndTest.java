@@ -10,6 +10,15 @@ import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
 public class EndToEndTest extends AbstractIntegrationTest {
 
+    public AbstractIntegrationTest builder() {
+        return new EndToEndTest();
+    }
+
+    @Override
+    Transtype getTranstype(Transtype transtype) {
+        return transtype;
+    }
+
     @Test
     public void xhtml() throws Throwable {
         builder().name("e2e")

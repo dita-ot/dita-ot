@@ -50,7 +50,7 @@ See the accompanying LICENSE file for applicable license.
                   topic-conrefpush,
                   topic-conref,
                   topic-profile,
-                  topic-fragment,
+                  preprocess2.topic-fragment,
                   topic-chunk,
                   topic-move-meta-entries,
                   topic-maplink,
@@ -67,7 +67,7 @@ See the accompanying LICENSE file for applicable license.
                   topic-conrefpush,
                   topic-conref,
                   topic-profile,
-                  topic-fragment,
+                  preprocess2.topic-fragment,
 
                   topic-move-meta-entries,
                   topic-topicpull,
@@ -336,9 +336,9 @@ See the accompanying LICENSE file for applicable license.
     </condition>
   </target>
 
-  <target name="topic-fragment"
+  <target name="preprocess2.topic-fragment"
           description="Normalize same topic fragment identifiers and table column names, and resolve coderef">
-    <pipeline message="Resolve topic fragment." taskname="topic-fragment">
+    <pipeline message="Resolve topic fragment." taskname="preprocess2.topic-fragment">
       <sax>
         <ditafileset format="dita"/>
         <filter class="org.dita.dost.writer.TopicFragmentFilter">
