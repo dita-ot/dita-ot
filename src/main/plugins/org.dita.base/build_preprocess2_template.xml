@@ -121,7 +121,7 @@ See the accompanying LICENSE file for applicable license.
   
   <target name="map-reader"
     description="Generate lists, debug, and filter input map files">
-    <pipeline message="Generate list." taskname="map-reader"
+    <pipeline message="Generate maps" taskname="map-reader"
               inputmap="${args.input}">
       <module class="org.dita.dost.module.reader.MapReaderModule">
         <param name="resources" value="${args.resources}" if:set="args.resources"/>
@@ -244,7 +244,7 @@ See the accompanying LICENSE file for applicable license.
   
   <target name="topic-reader"
     description="Generate file list">
-    <pipeline message="Generate list." taskname="topic-reader"
+    <pipeline message="Generate topics" taskname="topic-reader"
               inputmap="${args.input}">
       <module class="org.dita.dost.module.reader.TopicReaderModule">
         <param name="resources" value="${args.resources}" if:set="args.resources"/>

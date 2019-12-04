@@ -188,9 +188,7 @@ See the accompanying LICENSE file for applicable license.
       <ditafileset format="ditamap" input="true"/>
     </pathconvert>
     <condition property="noMap">
-      <not>
-        <available file="${inputMapPath}"/>
-      </not>
+      <equals arg1="${inputMapPath}" arg2=""/>
     </condition>
   </target>
 
