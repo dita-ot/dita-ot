@@ -65,6 +65,7 @@
         <xs:group ref="mapgroup-d-topicref"/>
         <xs:group ref="ditavalref-d-topicref"/>
         <xs:group ref="glossref-d-topicref"/>
+        <xs:group ref="classify-d-topicref"/>
       </xs:choice>
     </xs:group>
     <xs:group name="reltable">
