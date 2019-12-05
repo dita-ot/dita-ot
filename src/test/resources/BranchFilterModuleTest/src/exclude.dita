@@ -1,0 +1,8 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+id="testexclude" ditaarch:DITAArchVersion="1.3">
+<title class="- topic/title ">Topic is excluded entirely</title>
+<body class="- topic/body ">
+<p class="- topic/p ">Linux topic in a branch filtered for mac</p>
+</body>
+</topic>
