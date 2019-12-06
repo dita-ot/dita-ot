@@ -11,6 +11,7 @@ import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
+import org.w3c.dom.Document;
 import org.xml.sax.helpers.DefaultHandler;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,9 +27,12 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.dom.DOMResult;
 
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.xml.sax.Attributes;
@@ -183,7 +187,7 @@ public final class Job {
         }
     }
 
-    private final static class JobHandler extends DefaultHandler {
+    public final static class JobHandler extends DefaultHandler {
 
         private final Map<String, Object> prop;
         private final Map<URI, FileInfo> files;
@@ -193,7 +197,7 @@ public final class Job {
         private Set<String> set;
         private Map<String, String> map;
 
-        JobHandler(final Map<String, Object> prop, final Map<URI, FileInfo> files) {
+        public JobHandler(final Map<String, Object> prop, final Map<URI, FileInfo> files) {
             this.prop = prop;
             this.files = files;
         }
@@ -302,72 +306,7 @@ public final class Job {
         try {
             outStream = new FileOutputStream(jobFile);
             out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream, "UTF-8");
-            out.writeStartDocument();
-            out.writeStartElement(ELEMENT_JOB);
-            for (final Map.Entry<String, Object> e: prop.entrySet()) {
-                out.writeStartElement(ELEMENT_PROPERTY);
-                out.writeAttribute(ATTRIBUTE_NAME, e.getKey());
-                if (e.getValue() instanceof String) {
-                    out.writeStartElement(ELEMENT_STRING);
-                    out.writeCharacters(e.getValue().toString());
-                    out.writeEndElement(); //string
-                } else if (e.getValue() instanceof Set) {
-                    out.writeStartElement(ELEMENT_SET);
-                    final Set<?> s = (Set<?>) e.getValue();
-                    for (final Object o: s) {
-                        out.writeStartElement(ELEMENT_STRING);
-                        out.writeCharacters(o.toString());
-                        out.writeEndElement(); //string
-                    }
-                    out.writeEndElement(); //set
-                } else if (e.getValue() instanceof Map) {
-                    out.writeStartElement(ELEMENT_MAP);
-                    final Map<?, ?> s = (Map<?, ?>) e.getValue();
-                    for (final Map.Entry<?, ?> o: s.entrySet()) {
-                        out.writeStartElement(ELEMENT_ENTRY);
-                        out.writeAttribute(ATTRIBUTE_KEY, o.getKey().toString());
-                        out.writeStartElement(ELEMENT_STRING);
-                        out.writeCharacters(o.getValue().toString());
-                        out.writeEndElement(); //string
-                        out.writeEndElement(); //entry
-                    }
-                    out.writeEndElement(); //string
-                } else {
-                    out.writeStartElement(e.getValue().getClass().getName());
-                    out.writeCharacters(e.getValue().toString());
-                    out.writeEndElement(); //string
-                }
-                out.writeEndElement(); //property
-            }
-            out.writeStartElement(ELEMENT_FILES);
-            for (final FileInfo i: files.values()) {
-                out.writeStartElement(ELEMENT_FILE);
-                if (i.src != null) {
-                    out.writeAttribute(ATTRIBUTE_SRC, i.src.toString());
-                }
-                out.writeAttribute(ATTRIBUTE_URI, i.uri.toString());
-                out.writeAttribute(ATTRIBUTE_PATH, i.file.getPath());
-                if (i.result != null) {
-                    out.writeAttribute(ATTRIBUTE_RESULT, i.result.toString());
-                }
-                if (i.format != null) {
-                    out.writeAttribute(ATTRIBUTE_FORMAT, i.format);
-                }
-                try {
-                    for (Map.Entry<String, Field> e: attrToFieldMap.entrySet()) {
-                        final boolean v = e.getValue().getBoolean(i);
-                        if (v) {
-                            out.writeAttribute(e.getKey(), Boolean.TRUE.toString());
-                        }
-                    }
-                } catch (final IllegalAccessException ex) {
-                    throw new RuntimeException(ex);
-                }
-                out.writeEndElement(); //file
-            }
-            out.writeEndElement(); //files
-            out.writeEndElement(); //job
-            out.writeEndDocument();
+            serialize(out, prop, files.values());
         } catch (final IOException e) {
             throw new IOException("Failed to write file: " + e.getMessage());
         } catch (final XMLStreamException e) {
@@ -389,6 +328,87 @@ public final class Job {
             }
         }
         lastModified = jobFile.lastModified();
+    }
+
+    public Document serialize() throws IOException {
+        try {
+            final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            final DOMResult result = new DOMResult(doc);
+            XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(result);
+            serialize(out, prop, files.values());
+            return (Document) result.getNode();
+        } catch (final XMLStreamException | ParserConfigurationException e) {
+            throw new IOException("Failed to serialize job file: " + e.getMessage());
+        }
+    }
+
+    public void serialize(XMLStreamWriter out, Map<String, Object> props, Collection<FileInfo> fs) throws XMLStreamException {
+        out.writeStartDocument();
+        out.writeStartElement(ELEMENT_JOB);
+        for (final Map.Entry<String, Object> e: props.entrySet()) {
+            out.writeStartElement(ELEMENT_PROPERTY);
+            out.writeAttribute(ATTRIBUTE_NAME, e.getKey());
+            if (e.getValue() instanceof String) {
+                out.writeStartElement(ELEMENT_STRING);
+                out.writeCharacters(e.getValue().toString());
+                out.writeEndElement(); //string
+            } else if (e.getValue() instanceof Set) {
+                out.writeStartElement(ELEMENT_SET);
+                final Set<?> s = (Set<?>) e.getValue();
+                for (final Object o: s) {
+                    out.writeStartElement(ELEMENT_STRING);
+                    out.writeCharacters(o.toString());
+                    out.writeEndElement(); //string
+                }
+                out.writeEndElement(); //set
+            } else if (e.getValue() instanceof Map) {
+                out.writeStartElement(ELEMENT_MAP);
+                final Map<?, ?> s = (Map<?, ?>) e.getValue();
+                for (final Map.Entry<?, ?> o: s.entrySet()) {
+                    out.writeStartElement(ELEMENT_ENTRY);
+                    out.writeAttribute(ATTRIBUTE_KEY, o.getKey().toString());
+                    out.writeStartElement(ELEMENT_STRING);
+                    out.writeCharacters(o.getValue().toString());
+                    out.writeEndElement(); //string
+                    out.writeEndElement(); //entry
+                }
+                out.writeEndElement(); //string
+            } else {
+                out.writeStartElement(e.getValue().getClass().getName());
+                out.writeCharacters(e.getValue().toString());
+                out.writeEndElement(); //string
+            }
+            out.writeEndElement(); //property
+        }
+        out.writeStartElement(ELEMENT_FILES);
+        for (final FileInfo i: fs) {
+            out.writeStartElement(ELEMENT_FILE);
+            if (i.src != null) {
+                out.writeAttribute(ATTRIBUTE_SRC, i.src.toString());
+            }
+            out.writeAttribute(ATTRIBUTE_URI, i.uri.toString());
+            out.writeAttribute(ATTRIBUTE_PATH, i.file.getPath());
+            if (i.result != null) {
+                out.writeAttribute(ATTRIBUTE_RESULT, i.result.toString());
+            }
+            if (i.format != null) {
+                out.writeAttribute(ATTRIBUTE_FORMAT, i.format);
+            }
+            try {
+                for (Map.Entry<String, Field> e: attrToFieldMap.entrySet()) {
+                    final boolean v = e.getValue().getBoolean(i);
+                    if (v) {
+                        out.writeAttribute(e.getKey(), Boolean.TRUE.toString());
+                    }
+                }
+            } catch (final IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            }
+            out.writeEndElement(); //file
+        }
+        out.writeEndElement(); //files
+        out.writeEndElement(); //job
+        out.writeEndDocument();
     }
 
     /**
@@ -797,7 +817,7 @@ public final class Job {
             public Builder src(final URI src) { assert src.isAbsolute(); this.src = src; return this; }
             public Builder uri(final URI uri) { this.uri = uri; this.file = null; return this; }
             public Builder file(final File file) { this.file = file; this.uri = null; return this; }
-            public Builder result(final URI result) { assert result.isAbsolute(); this.result = result; return this; }
+            public Builder result(final URI result) { this.result = result; return this; }
             public Builder format(final String format) { this.format = format; return this; }
             public Builder hasConref(final boolean hasConref) { this.hasConref = hasConref; return this; }
             public Builder isChunked(final boolean isChunked) { this.isChunked = isChunked; return this; }
