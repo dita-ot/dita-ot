@@ -16,7 +16,6 @@ import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.reader.*;
 import org.dita.dost.util.*;

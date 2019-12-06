@@ -30,8 +30,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.dita.dost.module.GenMapAndTopicListModule;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -990,7 +989,7 @@ public final class Job {
             final String cls = Optional
                     .ofNullable(getProperty("temp-file-name-scheme"))
                     .orElse(configuration.get("temp-file-name-scheme"));
-            tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) Class.forName(cls).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(cls).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

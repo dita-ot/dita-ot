@@ -10,7 +10,7 @@ package org.dita.dost.module.filter;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
-import org.dita.dost.module.GenMapAndTopicListModule;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.Constants;
@@ -37,7 +37,7 @@ import static org.dita.dost.util.XMLUtils.*;
 public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleImpl {
 
     private final DitaValReader ditaValReader;
-    GenMapAndTopicListModule.TempFileNameScheme tempFileNameScheme;
+    TempFileNameScheme tempFileNameScheme;
     final SubjectSchemeReader subjectSchemeReader;
     private final Map<URI, FilterUtils> filterCache = new HashMap<>();
     /** Absolute URI to map being processed. */
@@ -55,7 +55,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
             final String cls = Optional
                     .ofNullable(job.getProperty("temp-file-name-scheme"))
                     .orElse(configuration.get("temp-file-name-scheme"));
-            tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) Class.forName(cls).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(cls).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

@@ -8,14 +8,12 @@
  */
 package org.dita.dost.module;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.MultimapBuilder.SetMultimapBuilder;
 import com.google.common.collect.SetMultimap;
-import com.google.common.hash.Hashing;
-import org.apache.commons.io.FilenameUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
@@ -986,61 +984,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
 
         prop.setProperty(org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
-    }
-
-    /**
-     * Temporary file name generator.
-     */
-    public interface TempFileNameScheme {
-        /**
-         * Set input base directory.
-         * @param b absolute base directory
-         */
-        default void setBaseDir(final URI b) {}
-        /**
-         * Generate temporary file name.
-         *
-         * @param src absolute source file URI
-         * @return relative temporary file URI
-         */
-        URI generateTempFileName(final URI src);
-    }
-
-    public static class DefaultTempFileScheme implements TempFileNameScheme {
-        URI b;
-        @Override
-        public void setBaseDir(final URI b) {
-            this.b = b;
-        }
-        @Override
-        public URI generateTempFileName(final URI src) {
-            assert src.isAbsolute();
-            //final URI b = baseInputDir.toURI();
-            final URI rel = toURI(b.relativize(src).toString());
-            return rel;
-        }
-    }
-
-    public static class FullPathTempFileScheme implements TempFileNameScheme {
-        @Override
-        public URI generateTempFileName(final URI src) {
-            assert src.isAbsolute();
-            final URI rel = toURI(src.getPath().substring(1));
-            return rel;
-        }
-    }
-
-    public static class HashTempFileScheme implements TempFileNameScheme {
-        @Override
-        public URI generateTempFileName(final URI src) {
-            assert src.isAbsolute();
-            final String ext = FilenameUtils.getExtension(src.getPath());
-            final String path = stripFragment(src.normalize()).toString();
-            final String hash = Hashing.sha1()
-                    .hashString(path, Charsets.UTF_8)
-                    .toString();
-            return toURI(ext.isEmpty() ? hash : (hash + "." + ext));
-        }
     }
 
 }
