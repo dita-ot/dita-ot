@@ -107,7 +107,7 @@ See the accompanying LICENSE file for applicable license.
     <echoxml file="${dita.temp.dir}/.job.xml">
       <job>
         <property name="temp-file-name-scheme">
-          <string>org.dita.dost.module.GenMapAndTopicListModule$HashTempFileScheme</string>
+          <string>org.dita.dost.module.reader.HashTempFileScheme</string>
         </property>
       </job>
     </echoxml>

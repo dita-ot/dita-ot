@@ -8,7 +8,7 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
 import org.xml.sax.Attributes;
