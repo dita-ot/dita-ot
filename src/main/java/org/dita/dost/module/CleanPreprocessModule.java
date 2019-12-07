@@ -14,7 +14,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
@@ -32,7 +31,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.*;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
@@ -73,7 +74,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     private void init(final Map<String, String> input) {
         useResultFilename = Optional.ofNullable(input.get(PARAM_USE_RESULT_FILENAME))
                 .map(Boolean::parseBoolean)
-                .orElse(true);
+                .orElse(false);
         rewriteTransformer = Optional.ofNullable(input.get("result.rewrite-rule.xsl"))
                 .map(file -> URLUtils.toURI(file).toString())
                 .map(f -> {
@@ -100,10 +101,8 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                 })
                 .orElse(null);
 
-        filter.setJob(job);
         filter.setLogger(logger);
 
-        mapFilter.setJob(job);
         mapFilter.setLogger(logger);
     }
 
@@ -112,19 +111,20 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         init(input);
         final URI base = getBaseDir();
         if (useResultFilename) {
-            // relativize result
-            final Collection<FileInfo> relativeResultFis = job.getFileInfo().stream()
+            // collect and relativize result
+            final Collection<FileInfo> original = job.getFileInfo().stream()
                     .map(fi -> FileInfo.builder(fi).result(base.relativize(fi.result)).build())
                     .collect(Collectors.toList());
+            original.forEach(fi -> job.remove(fi));
             // rewrite results
-            final Collection<FileInfo> fis = rewrite(relativeResultFis);
+            final Collection<FileInfo> rewritten = rewrite(original);
             // move temp files and update links
-            final Collection<FileInfo> res = new ArrayList<>(fis.size());
-            for (final FileInfo fi : fis) {
+            final Job tempJob = new Job(job.tempDir, emptyMap(), rewritten);
+            filter.setJob(tempJob);
+            mapFilter.setJob(tempJob);
+            for (final FileInfo fi : rewritten) {
                 try {
-                    final FileInfo.Builder builder = FileInfo.builder(fi);
                     assert !fi.result.isAbsolute();
-                    builder.uri(fi.result);
                     if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
                         logger.debug("Skip format " + fi.format);
                     } else {
@@ -145,16 +145,15 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                             }
                         }
                     }
-                    res.add(builder.build());
+                    final FileInfo res = FileInfo.builder(fi)
+                            .uri(fi.result)
+                            .result(base.resolve(fi.result))
+                            .build();
+                    job.add(res);
                 } catch (final IOException e) {
                     logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
                 }
             }
-
-            fis.forEach(fi -> job.remove(fi));
-            res.forEach(fi -> job.add(FileInfo.builder(fi)
-                    .result(base.resolve(fi.result))
-                    .build()));
         }
 
         job.setProperty("uplevels", getUplevels(base));

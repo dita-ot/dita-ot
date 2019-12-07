@@ -89,6 +89,8 @@ See the accompanying LICENSE file for applicable license.
         <not><isset property="args.input"/></not>
       </condition>
     </dita-ot-fail>
+
+    <property name="clean-preprocess.use-result-filename" value="true"/>
     
     <basename property="dita.input.filename" file="${args.input}" />
     <pathconvert property="dita.map.filename.root">
@@ -438,6 +440,7 @@ See the accompanying LICENSE file for applicable license.
           description="Copy image files">
     <copy todir="${dita.output.dir}" failonerror="false" overwrite="true">
       <ditafileset format="image" />
+      <jobmapper/>
     </copy>
   </target>
   

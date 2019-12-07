@@ -39,6 +39,7 @@ See the accompanying LICENSE file for applicable license.
                   maplink,
                   topicpull,
                   clean-map,
+                  clean-preprocess,
                   copy-files,
                   {depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
@@ -50,7 +51,14 @@ See the accompanying LICENSE file for applicable license.
         <not><isset property="args.input"/></not>
       </condition>
     </dita-ot-fail>
-    
+
+    <condition property="clean-preprocess.use-result-filename" value="true">
+      <or>
+        <isset property="result.rewrite-rule.class"/>
+        <isset property="result.rewrite-rule.xsl"/>
+      </or>
+    </condition>
+
     <basename property="dita.input.filename" file="${args.input}" />
     <pathconvert property="dita.map.filename.root">
       <path path="${dita.input.filename}"/>
@@ -513,7 +521,6 @@ See the accompanying LICENSE file for applicable license.
   <target name="clean-preprocess"
           unless="preprocess.clean-preprocess.skip"
           description="Clean preprocess">
-    <property name="clean-preprocess.use-result-filename" value="true"/>
     <pipeline message="Clean preprocess" taskname="clean-preprocess">
       <param name="use-result-filename" value="${clean-preprocess.use-result-filename}" if:set="clean-preprocess.use-result-filename"/>
       <module class="org.dita.dost.module.CleanPreprocessModule">
@@ -561,6 +568,7 @@ See the accompanying LICENSE file for applicable license.
     </condition>
     <copy todir="${copy-image.todir}" failonerror="false" overwrite="true">
       <ditafileset format="image" />
+      <jobmapper/>
     </copy>
   </target>
   
@@ -580,6 +588,7 @@ See the accompanying LICENSE file for applicable license.
         <excludes format="image"/>
         <excludes format="coderef"/>
       </ditafileset>
+      <jobmapper/>
     </copy>
   </target>
   

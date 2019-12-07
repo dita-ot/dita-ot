@@ -13,5 +13,8 @@ import org.dita.dost.util.Job;
 import java.util.Collection;
 
 public interface RewriteRule {
+    /**
+     * Rewrite {@link org.dita.dost.util.Job.FileInfo#result}.
+     */
     Collection<Job.FileInfo> rewrite(Collection<Job.FileInfo> fis);
 }

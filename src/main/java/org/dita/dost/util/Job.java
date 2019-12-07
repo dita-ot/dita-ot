@@ -24,6 +24,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -127,7 +128,7 @@ public final class Job {
     public final File tempDir;
     public final URI tempDirURI;
     private final File jobFile;
-    private final ConcurrentMap<URI, FileInfo> files = new ConcurrentHashMap<>();
+    private final Map<URI, FileInfo> files = new ConcurrentHashMap<>();
     private long lastModified;
 
     /**
@@ -151,6 +152,14 @@ public final class Job {
                 prop.put(e.getKey(), e.getValue());
             }
         }
+    }
+
+    public Job(final File tempDir, final Map<String, Object> prop, final Collection<FileInfo> files) {
+        this.tempDir = tempDir;
+        this.tempDirURI = tempDir.toURI();
+        this.jobFile = new File(tempDir, JOB_FILE);
+        this.prop = prop;
+        this.files.putAll(files.stream().collect(Collectors.toMap(fi -> fi.uri, Function.identity())));
     }
 
     /**
