@@ -44,6 +44,17 @@ public class CleanPreprocessModuleTest {
                 .uri(create("topics/topic.dita"))
                 .result(create("file:/foo/bar/topics/topic.dita"))
                 .build());
+        job.add(new Builder()
+                .uri(create("topics/null.dita"))
+                .build());
+        job.add(new Builder()
+                .uri(create("topics/task.dita"))
+                .result(create("file:/foo/bar/topics/task.dita"))
+                .build());
+        job.add(new Builder()
+                .uri(create("common/topic.dita"))
+                .result(create("file:/foo/bar/common/topic.dita"))
+                .build());
         module.setJob(job);
         assertEquals(create("file:/foo/bar/"), module.getBaseDir());
     }
