@@ -90,7 +90,7 @@ See the accompanying LICENSE file for applicable license.
       </condition>
     </dita-ot-fail>
     
-    <basename property="dita.input.filename" file="${args.input}" />    
+    <basename property="dita.input.filename" file="${args.input}" />
     <pathconvert property="dita.map.filename.root">
       <path path="${dita.input.filename}"/>
       <chainedmapper>
@@ -102,6 +102,7 @@ See the accompanying LICENSE file for applicable license.
     
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input}</echo>
+    <echo level="info">* resources = ${args.resources}</echo>
     <echo level="info">*****************************************************************</echo>
     
     <echoxml file="${dita.temp.dir}/.job.xml">
@@ -120,9 +121,10 @@ See the accompanying LICENSE file for applicable license.
   
   <target name="map-reader"
     description="Generate lists, debug, and filter input map files">
-    <pipeline message="Generate list." taskname="map-reader"
+    <pipeline message="Generate maps" taskname="map-reader"
               inputmap="${args.input}">
       <module class="org.dita.dost.module.reader.MapReaderModule">
+        <param name="resources" value="${args.resources}" if:set="args.resources"/>
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
         <!--<param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>-->
@@ -144,8 +146,12 @@ See the accompanying LICENSE file for applicable license.
     <!-- TODO replace with direct resource collection availability test -->
     <job-helper file="fullditamap.list" property="fullditamaplist"/>
     <property name="fullditamapfile" value="fullditamap.list"/>
+    <local name="inputMapPath"/>
+    <pathconvert property="inputMapPath">
+      <ditafileset format="ditamap" input="true"/>
+    </pathconvert>
     <condition property="noMap">
-      <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
+      <equals arg1="${inputMapPath}" arg2=""/>
     </condition>
     <delete file="${dita.temp.dir}/${fullditamapfile}"/>
   </target>
@@ -238,9 +244,10 @@ See the accompanying LICENSE file for applicable license.
   
   <target name="topic-reader"
     description="Generate file list">
-    <pipeline message="Generate list." taskname="topic-reader"
+    <pipeline message="Generate topics" taskname="topic-reader"
               inputmap="${args.input}">
       <module class="org.dita.dost.module.reader.TopicReaderModule">
+        <param name="resources" value="${args.resources}" if:set="args.resources"/>
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
         <!--<param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>-->

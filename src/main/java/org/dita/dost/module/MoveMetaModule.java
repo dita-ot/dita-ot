@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
@@ -107,6 +108,8 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 }
 
                 t.transform(source, result);
+            } catch (final UncheckedXPathException e) {
+                throw new DITAOTException("Failed to transform document", e);
             } catch (final RuntimeException e) {
                 throw e;
             } catch (final TransformerConfigurationException e) {

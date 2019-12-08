@@ -63,6 +63,7 @@ See the accompanying LICENSE file for applicable license.
     
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input}</echo>
+    <echo level="info">* resources = ${args.resources}</echo>
     <echo level="info">*****************************************************************</echo>
   </target>
   
@@ -99,6 +100,7 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Generate list." taskname="gen-list"
       inputmap="${args.input}">
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
+        <param name="resources" value="${args.resources}" if:set="args.resources"/>
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
@@ -181,8 +183,12 @@ See the accompanying LICENSE file for applicable license.
     <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
+    <local name="inputMapPath"/>
+    <pathconvert property="inputMapPath">
+      <ditafileset format="ditamap" input="true"/>
+    </pathconvert>
     <condition property="noMap">
-      <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
+      <equals arg1="${inputMapPath}" arg2=""/>
     </condition>
   </target>
 

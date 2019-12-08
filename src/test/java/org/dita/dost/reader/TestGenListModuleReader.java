@@ -14,7 +14,9 @@ import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -26,14 +28,16 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptySet;
 import static org.dita.dost.util.Constants.FEATURE_VALIDATION;
 import static org.dita.dost.util.Constants.FEATURE_VALIDATION_SCHEMA;
+import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.junit.Assert.*;
 
 public class TestGenListModuleReader {
@@ -52,9 +56,34 @@ public class TestGenListModuleReader {
         tempDir = TestUtils.createTempDir(TestGenListModuleReader.class);
     }
 
+    @Before
+    public void setUp() throws IOException {
+        reader = new GenListModuleReader();
+        reader.setLogger(new TestUtils.TestLogger());
+        reader.setJob(new Job(tempDir));
+        reader.setContentHandler(new DefaultHandler());
+        final URI currentFile = new File(inputDir, "root-map-01.ditamap").toURI();
+        reader.setCurrentFile(currentFile);
+        reader.setPrimaryDitamap(currentFile);
+    }
+
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public static void tearDownClass() {
         FileUtils.deleteQuietly(tempDir);
+    }
+
+    @Test
+    public void startDocument() throws SAXException {
+        reader.startDocument();
+    }
+
+    @Test
+    public void startElement() throws SAXException {
+        reader.startDocument();
+        reader.startElement("", "topic", "topic", new AttributesBuilder()
+                .add("class", "- topic/topic ")
+                .add("id", "abc")
+                .build());
     }
 
     @Test
@@ -70,17 +99,34 @@ public class TestGenListModuleReader {
                 srcDirUri.resolve("topics/target-topic-a.xml"))),
                 reader.getHrefTargets());
 
+        final Set<URI> nonConrefCopytoTargets = reader.getNonConrefCopytoTargets().stream()
+                .map(r -> r.filename)
+                .collect(Collectors.toSet());
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("topics/xreffin-topic-1.xml"),
                 srcDirUri.resolve("topics/target-topic-c.xml"),
                 srcDirUri.resolve("topics/target-topic-a.xml"))),
-                reader.getNonConrefCopytoTargets());
+                nonConrefCopytoTargets);
 
+        final Set<Reference> nonCopytoResult = new LinkedHashSet<>(128);
+        nonCopytoResult.addAll(reader.getNonConrefCopytoTargets());
+        for (final URI f : reader.getConrefTargets()) {
+            nonCopytoResult.add(new Reference(stripFragment(f), reader.currentFileFormat()));
+        }
+        for (final URI f : reader.getCopytoMap().values()) {
+            nonCopytoResult.add(new Reference(stripFragment(f)));
+        }
+        for (final URI f : reader.getIgnoredCopytoSourceSet()) {
+            nonCopytoResult.add(new Reference(stripFragment(f)));
+        }
+        for (final URI filename : reader.getCoderefTargetSet()) {
+            nonCopytoResult.add(new Reference(stripFragment(filename)));
+        }
         assertEquals(new HashSet(Arrays.asList(
                 new Reference(srcDirUri.resolve("topics/xreffin-topic-1.xml")),
                 new Reference(srcDirUri.resolve("topics/target-topic-c.xml")),
                 new Reference(srcDirUri.resolve("topics/target-topic-a.xml")))),
-                reader.getNonCopytoResult());
+                nonCopytoResult);
 
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("topics/xreffin-topic-1.xml"),
@@ -92,12 +138,17 @@ public class TestGenListModuleReader {
                 srcDirUri.resolve("topics/xreffin-topic-1.xml"),
                 srcDirUri.resolve("topics/target-topic-c.xml"),
                 srcDirUri.resolve("topics/target-topic-a.xml"))),
-                reader.getOutFilesSet());
+                reader.getOutDitaFilesSet());
 
+        final Set<URI> nonTopicrefReferenceSet = new HashSet<>(reader.getNonTopicrefReferenceSet());
+        nonTopicrefReferenceSet.removeAll(reader.getNormalProcessingRoleSet());
+        nonTopicrefReferenceSet.removeAll(reader.getResourceOnlySet());
         assertEquals(emptySet(),
-                reader.getNonTopicrefReferenceSet());
+                nonTopicrefReferenceSet);
 
-        assertTrue(reader.getResourceOnlySet().isEmpty());
+        final Set<URI> resourceOnlySet = new HashSet<>(reader.getResourceOnlySet());
+        resourceOnlySet.removeAll(reader.getNormalProcessingRoleSet());
+        assertTrue(resourceOnlySet.isEmpty());
 
         assertTrue(reader.getCoderefTargets().isEmpty());
 
@@ -121,24 +172,46 @@ public class TestGenListModuleReader {
                 srcDirUri.resolve("maps/toolbars.dita"))),
                 reader.getHrefTargets());
 
+        final Set<URI> nonConrefCopytoTargets = reader.getNonConrefCopytoTargets().stream()
+                .map(r -> r.filename)
+                .collect(Collectors.toSet());
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("maps/toolbars.dita"))),
-                reader.getNonConrefCopytoTargets());
+                nonConrefCopytoTargets);
 
+        final Set<Reference> nonCopytoResult_computed = new LinkedHashSet<>(128);
+        nonCopytoResult_computed.addAll(reader.getNonConrefCopytoTargets());
+        for (final URI f : reader.getConrefTargets()) {
+            nonCopytoResult_computed.add(new Reference(stripFragment(f), reader.currentFileFormat()));
+        }
+        for (final URI f : reader.getCopytoMap().values()) {
+            nonCopytoResult_computed.add(new Reference(stripFragment(f)));
+        }
+        for (final URI f : reader.getIgnoredCopytoSourceSet()) {
+            nonCopytoResult_computed.add(new Reference(stripFragment(f)));
+        }
+        for (final URI filename : reader.getCoderefTargetSet()) {
+            nonCopytoResult_computed.add(new Reference(stripFragment(filename)));
+        }
         assertEquals(new HashSet(Arrays.asList(
                 new Reference(srcDirUri.resolve("maps/toolbars.dita")))),
-                reader.getNonCopytoResult());
+                nonCopytoResult_computed);
 
         assertTrue(reader.getOutDitaFilesSet().isEmpty());
 
-        assertTrue(reader.getOutFilesSet().isEmpty());
+        assertTrue(reader.getOutDitaFilesSet().isEmpty());
 
-        assertTrue(reader.getResourceOnlySet().isEmpty());
+        final Set<URI> resourceOnlySet = new HashSet<>(reader.getResourceOnlySet());
+        resourceOnlySet.removeAll(reader.getNormalProcessingRoleSet());
+        assertTrue(resourceOnlySet.isEmpty());
 
         assertTrue(reader.getCoderefTargets().isEmpty());
 
+        final Set<URI> nonTopicrefReferenceSet = new HashSet<>(reader.getNonTopicrefReferenceSet());
+        nonTopicrefReferenceSet.removeAll(reader.getNormalProcessingRoleSet());
+        nonTopicrefReferenceSet.removeAll(reader.getResourceOnlySet());
         assertEquals(emptySet(),
-                reader.getNonTopicrefReferenceSet());
+                nonTopicrefReferenceSet);
 
         assertFalse(reader.isDitaTopic());
         assertTrue(reader.isDitaMap());
@@ -169,6 +242,9 @@ public class TestGenListModuleReader {
                         .collect(Collectors.toSet()),
                 reader.getHrefTargets());
 
+        final Set<URI> nonConrefCopytoTargets = reader.getNonConrefCopytoTargets().stream()
+                .map(r -> r.filename)
+                .collect(Collectors.toSet());
         assertEquals(Stream.of(
                 "resourceonly.dita",
                 "link-from-resource-only-ALSORESOURCEONLY.dita",
@@ -178,8 +254,22 @@ public class TestGenListModuleReader {
                 "conref-from-resource-only-ALSORESOURCEONLY.dita")
                         .map(conrefDirUri::resolve)
                         .collect(Collectors.toSet()),
-                reader.getNonConrefCopytoTargets());
+                nonConrefCopytoTargets);
 
+        final Set<Reference> nonCopytoResult = new LinkedHashSet<>(128);
+        nonCopytoResult.addAll(reader.getNonConrefCopytoTargets());
+        for (final URI f1 : reader.getConrefTargets()) {
+            nonCopytoResult.add(new Reference(stripFragment(f1), reader.currentFileFormat()));
+        }
+        for (final URI f1 : reader.getCopytoMap().values()) {
+            nonCopytoResult.add(new Reference(stripFragment(f1)));
+        }
+        for (final URI f1 : reader.getIgnoredCopytoSourceSet()) {
+            nonCopytoResult.add(new Reference(stripFragment(f1)));
+        }
+        for (final URI filename : reader.getCoderefTargetSet()) {
+            nonCopytoResult.add(new Reference(stripFragment(filename)));
+        }
         assertEquals(Stream.of(
                 "resourceonly.dita",
                 "link-from-resource-only-ALSORESOURCEONLY.dita",
@@ -189,14 +279,12 @@ public class TestGenListModuleReader {
                 "conref-from-resource-only-ALSORESOURCEONLY.dita")
                         .map(f -> new Reference(conrefDirUri.resolve(f)))
                         .collect(Collectors.toSet()),
-                reader.getNonCopytoResult());
+                nonCopytoResult);
 
-        assertEquals(emptySet(),
-                reader.getOutDitaFilesSet());
+        assertEquals(emptySet(), reader.getOutDitaFilesSet());
 
-        assertEquals(emptySet(),
-                reader.getOutFilesSet());
-
+        final Set<URI> resourceOnlySet = new HashSet<>(reader.getResourceOnlySet());
+        resourceOnlySet.removeAll(reader.getNormalProcessingRoleSet());
         assertEquals(Stream.of(
                 "resourceonly.dita",
                 "link-from-resource-only-ALSORESOURCEONLY.dita",
@@ -205,12 +293,15 @@ public class TestGenListModuleReader {
                 "conref-from-resource-only-ALSORESOURCEONLY.dita")
                         .map(conrefDirUri::resolve)
                         .collect(Collectors.toSet()),
-                reader.getResourceOnlySet());
+                resourceOnlySet);
 
         assertTrue(reader.getCoderefTargets().isEmpty());
 
+        final Set<URI> nonTopicrefReferenceSet = new HashSet<>(reader.getNonTopicrefReferenceSet());
+        nonTopicrefReferenceSet.removeAll(reader.getNormalProcessingRoleSet());
+        nonTopicrefReferenceSet.removeAll(reader.getResourceOnlySet());
         assertEquals(emptySet(),
-                reader.getNonTopicrefReferenceSet());
+                nonTopicrefReferenceSet);
 
         assertFalse(reader.isDitaTopic());
         assertTrue(reader.isDitaMap());
@@ -225,13 +316,8 @@ public class TestGenListModuleReader {
         final File ditaDir = new File("src" + File.separator + "main").getAbsoluteFile();
 
         final boolean validate = false;
-        reader = new GenListModuleReader();
-        reader.setLogger(new TestUtils.TestLogger());
         reader.setCurrentFile(rootFile.toURI());
         reader.setPrimaryDitamap(rootFile.toURI());
-        reader.setJob(new Job(tempDir));
-
-        reader.setContentHandler(new DefaultHandler());
 
         final XMLReader parser = initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalFile());
         parser.setContentHandler(reader);

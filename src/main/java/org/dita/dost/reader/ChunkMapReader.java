@@ -8,6 +8,7 @@
  */
 package org.dita.dost.reader;
 
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
@@ -288,9 +289,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
     private void outputMapFile(final URI file, final Document doc) {
         Result result = null;
         try {
-            final Transformer t = TransformerFactory.newInstance().newTransformer();
+            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
             result = new StreamResult(new FileOutputStream(new File(file)));
-            t.transform(new DOMSource(doc), result);
+            serializer.transform(new DOMSource(doc), result);
+        } catch (final UncheckedXPathException e) {
+            logger.error(e.getXPathException().getMessageAndLocation(), e);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {

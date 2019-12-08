@@ -618,6 +618,8 @@ public final class Job {
         public boolean isOutDita;
         /** File is input document that is used as processing root. */
         public boolean isInput;
+        /** Additional input resource. */
+        public boolean isInputResource;
 
         FileInfo(final URI src, final URI uri, final File file) {
             if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
@@ -649,6 +651,7 @@ public final class Job {
                     ", isTarget=" + isTarget +
                     ", isConrefPush=" + isConrefPush +
                     ", isInput=" + isInput +
+                    ", isInputResource=" + isInputResource +
                     ", hasKeyref=" + hasKeyref +
                     ", hasCoderef=" + hasCoderef +
                     ", isSubjectScheme=" + isSubjectScheme +
@@ -676,6 +679,7 @@ public final class Job {
                     isFlagImage == fileInfo.isFlagImage &&
                     isOutDita == fileInfo.isOutDita &&
                     isInput == fileInfo.isInput &&
+                    isInputResource == fileInfo.isInputResource &&
                     Objects.equals(src, fileInfo.src) &&
                     Objects.equals(uri, fileInfo.uri) &&
                     Objects.equals(file, fileInfo.file) &&
@@ -686,7 +690,8 @@ public final class Job {
         @Override
         public int hashCode() {
             return Objects.hash(src, uri, file, result, format, hasConref, isChunked, hasLink, isResourceOnly, isTarget,
-                    isConrefPush, hasKeyref, hasCoderef, isSubjectScheme, isSubtarget, isFlagImage, isOutDita, isInput);
+                    isConrefPush, hasKeyref, hasCoderef, isSubjectScheme, isSubtarget, isFlagImage, isOutDita, isInput,
+                    isInputResource);
         }
 
         public static class Builder {
@@ -709,6 +714,7 @@ public final class Job {
             private boolean isFlagImage;
             private boolean isOutDita;
             private boolean isInput;
+            private boolean isInputResource;
 
             public Builder() {}
             public Builder(final FileInfo orig) {
@@ -730,6 +736,7 @@ public final class Job {
                 isFlagImage = orig.isFlagImage;
                 isOutDita = orig.isOutDita;
                 isInput = orig.isInput;
+                isInputResource = orig.isInputResource;
             }
 
             /**
@@ -754,6 +761,7 @@ public final class Job {
                 if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
                 if (orig.isInput) isInput = orig.isInput;
+                if (orig.isInputResource) isInputResource = orig.isInputResource;
                 return this;
             }
 
@@ -796,6 +804,7 @@ public final class Job {
             public Builder isFlagImage(final boolean isFlagImage) { this.isFlagImage = isFlagImage; return this; }
             public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
             public Builder isInput(final boolean isInput) { this.isInput = isInput; return this; }
+            public Builder isInputResource(final boolean isInputResource) { this.isInputResource = isInputResource; return this; }
 
             public FileInfo build() {
                 if (uri == null && file == null) {
@@ -819,6 +828,7 @@ public final class Job {
                 fi.isFlagImage = isFlagImage;
                 fi.isOutDita = isOutDita;
                 fi.isInput = isInput;   
+                fi.isInputResource = isInputResource;
                 return fi;
             }
 
@@ -963,8 +973,10 @@ public final class Job {
                 .filter(fi -> fi.isInput)
                 .map(fi -> fi.src)
                 .findAny()
-                .orElse(null);
-
+                .orElseGet(() -> Optional.ofNullable((String) prop.get(PROPERTY_INPUT_MAP_URI))
+                        .map(URLUtils::toURI)
+                        .orElse(null)
+                );
     }
 
     /**

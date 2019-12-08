@@ -8,6 +8,7 @@
 package org.dita.dost.module;
 
 import com.google.common.io.Files;
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -102,6 +103,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
             transformer.setURIResolver(CatalogUtils.getCatalogResolver());
             transformer.setParameter("file-being-processed", inputFile.getName());
             transformer.transform(source, result);
+        } catch (final UncheckedXPathException e) {
+            throw new DITAOTException("Failed to merge map " + inputFile, e);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {
@@ -117,6 +120,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
             final Source source = new DOMSource(doc);
             final Result result = new StreamResult(out);
             serializer.transform(source, result);
+        } catch (final UncheckedXPathException e) {
+            throw new DITAOTException("Failed to serialize map " + inputFile, e);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {

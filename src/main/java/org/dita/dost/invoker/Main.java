@@ -61,6 +61,7 @@ import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     static final String ANT_ARGS_INPUT = "args.input";
+    static final String ANT_ARGS_RESOURCES = "args.resources";
     static final String ANT_ARGS_INPUTS = "args.inputs";
     static final String ANT_OUTPUT_DIR = "output.dir";
     static final String ANT_BASE_TEMP_DIR = "base.temp.dir";
@@ -758,19 +759,20 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("   or: dita --help\n");
         msg.append("   or: dita --version\n");
         msg.append("Arguments: \n");
-        msg.append("  -i <file>, --input=<file>   input file\n");
-        msg.append("  -f <name>, --format=<name>  output format (transformation type)\n");
-        msg.append("  -p <name>, --project=<name> run project file\n");
-        msg.append("  --install [<file>]          install plug-in from a local ZIP file\n");
-        msg.append("  --install [<url>]           install plug-in from a URL\n");
-        msg.append("  --install [<id>]            install plug-in from plugin registry\n");
-        msg.append("  --install                   reload plug-ins\n");
-        msg.append("  --uninstall <id>            uninstall plug-in with the ID\n");
-        msg.append("  --plugins                   print list of installed plug-ins\n");
-        msg.append("  --transtypes                print list of installed transtypes\n");
-        msg.append("  --deliverables              print list of deliverables in project\n");
-        msg.append("  -h, --help                  print this message\n");
-        msg.append("  --version                   print version information and exit\n");
+        msg.append("  -i <file>, --input=<file>    input file\n");
+        msg.append("  -f <name>, --format=<name>   output format (transformation type)\n");
+        msg.append("  -p <name>, --project=<name>  run project file\n");
+        msg.append("  -r <file>, --resource=<file> resource file\n");
+        msg.append("  --install [<file>]           install plug-in from a local ZIP file\n");
+        msg.append("  --install [<url>]            install plug-in from a URL\n");
+        msg.append("  --install [<id>]             install plug-in from plugin registry\n");
+        msg.append("  --install                    reload plug-ins\n");
+        msg.append("  --uninstall <id>             uninstall plug-in with the ID\n");
+        msg.append("  --plugins                    print list of installed plug-ins\n");
+        msg.append("  --transtypes                 print list of installed transtypes\n");
+        msg.append("  --deliverables               print list of deliverables in project\n");
+        msg.append("  -h, --help                   print this message\n");
+        msg.append("  --version                    print version information and exit\n");
         msg.append("Options: \n");
         msg.append("  -o, --output=<dir>          output directory\n");
         // msg.append("  -diagnostics           print information that might be helpful to"
@@ -778,11 +780,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("                         diagnose or report problems." +
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
-        msg.append("  --filter=<files>            filter and flagging files\n");
-        msg.append("  --force                     force install plug-in\n");
-        msg.append("  -t, --temp=<dir>            temporary directory\n");
-        msg.append("  -v, --verbose               verbose logging\n");
-        msg.append("  -d, --debug                 print debugging information\n");
+        msg.append("  --filter=<files>             filter and flagging files\n");
+        msg.append("  --force                      force install plug-in\n");
+        msg.append("  -t, --temp=<dir>             temporary directory\n");
+        msg.append("  -v, --verbose                verbose logging\n");
+        msg.append("  -d, --debug                  print debugging information\n");
         // msg.append("  -emacs, -e             produce logging information without adornments"
         // + lSep);
         // msg.append("  -lib <path>            specifies a path to search for jars and classes"
@@ -797,8 +799,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("  -buildfile <file>      use given buildfile" + lSep);
         // msg.append("    -file    <file>              ''" + lSep);
         // msg.append("    -f       <file>              ''" + lSep);
-        msg.append("  --<property>=<value>        use value for given property\n");
-        msg.append("  --propertyfile=<name>       load all properties from file\n");
+        msg.append("  --<property>=<value>         use value for given property\n");
+        msg.append("  --propertyfile=<name>        load all properties from file\n");
         // msg.append("  -keep-going, -k        execute all targets that do not depend"
         // + lSep);
         // msg.append("                         on failed target(s)" + lSep);

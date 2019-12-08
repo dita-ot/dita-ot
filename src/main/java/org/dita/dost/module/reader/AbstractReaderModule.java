@@ -37,6 +37,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.dita.dost.reader.GenListModuleReader.ROOT_URI;
 import static org.dita.dost.reader.GenListModuleReader.Reference;
@@ -107,6 +108,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     private TempFileNameScheme tempFileNameScheme;
     /** Absolute path to input file. */
     URI rootFile;
+    List<URI> resources;
     /** Subject scheme absolute file paths. */
     private final Set<URI> schemeSet = new HashSet<>(128);
     /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
@@ -134,8 +136,33 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     URI currentFile;
     DitaWriterFilter ditaWriterFilter;
     TopicFragmentFilter topicFragmentFilter;
+    /** Files found during additional resource crawl. **/
+    private final Set<URI> additionalResourcesSet = new HashSet<>();
 
     public abstract void readStartFile() throws DITAOTException;
+
+    void readResourceFiles() throws DITAOTException {
+        if (!resources.isEmpty()) {
+            for (URI resource : resources) {
+                additionalResourcesSet.add(resource);
+                addToWaitList(new Reference(resource));
+            }
+            processWaitList();
+
+            additionalResourcesSet.addAll(hrefTargetSet);
+            additionalResourcesSet.addAll(conrefTargetSet);
+            additionalResourcesSet.addAll(nonConrefCopytoTargetSet);
+            additionalResourcesSet.addAll(outDitaFilesSet);
+            additionalResourcesSet.addAll(conrefpushSet);
+            additionalResourcesSet.addAll(keyrefSet);
+            additionalResourcesSet.addAll(resourceOnlySet);
+            additionalResourcesSet.addAll(fullTopicSet);
+            additionalResourcesSet.addAll(fullMapSet);
+            additionalResourcesSet.addAll(conrefSet);
+
+            resourceOnlySet.clear();
+        }
+    }
 
     /**
      * Initialize reusable filters.
@@ -253,6 +280,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 baseInputDir = basedir.toURI().resolve(ditaInputDir);
             }
             assert baseInputDir.isAbsolute();
+        }
+
+        if (input.getAttribute(ANT_INVOKER_PARAM_RESOURCES) != null) {
+            resources = Stream.of(input.getAttribute(ANT_INVOKER_PARAM_RESOURCES).split(File.pathSeparator))
+                    .map(resource -> new File(resource).toURI())
+                    .collect(Collectors.toList());
+        } else {
+            resources = Collections.emptyList();
         }
 
         URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
@@ -443,7 +478,21 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      */
     void processParseResult(final URI currentFile) {
         // Category non-copyto result
-        for (final Reference file: listFilter.getNonCopytoResult()) {
+        final Set<Reference> nonCopytoResult = new LinkedHashSet<>(128);
+        nonCopytoResult.addAll(listFilter.getNonConrefCopytoTargets());
+        for (final URI f : listFilter.getConrefTargets()) {
+            nonCopytoResult.add(new Reference(stripFragment(f), listFilter.currentFileFormat()));
+        }
+        for (final URI f : listFilter.getCopytoMap().values()) {
+            nonCopytoResult.add(new Reference(stripFragment(f)));
+        }
+        for (final URI f : listFilter.getIgnoredCopytoSourceSet()) {
+            nonCopytoResult.add(new Reference(stripFragment(f)));
+        }
+        for (final URI filename1 : listFilter.getCoderefTargetSet()) {
+            nonCopytoResult.add(new Reference(stripFragment(filename1)));
+        }
+        for (final Reference file: nonCopytoResult) {
             categorizeReferenceFile(file);
         }
         for (final Map.Entry<URI, URI> e : listFilter.getCopytoMap().entrySet()) {
@@ -455,9 +504,12 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         hrefTargetSet.addAll(listFilter.getHrefTargets());
         conrefTargetSet.addAll(listFilter.getConrefTargets());
-        nonConrefCopytoTargetSet.addAll(listFilter.getNonConrefCopytoTargets());
+        final Set<URI> nonConrefCopytoTargets = listFilter.getNonConrefCopytoTargets().stream()
+                .map(r -> r.filename)
+                .collect(Collectors.toSet());
+        nonConrefCopytoTargetSet.addAll(nonConrefCopytoTargets);
         coderefTargetSet.addAll(listFilter.getCoderefTargets());
-        outDitaFilesSet.addAll(listFilter.getOutFilesSet());
+        outDitaFilesSet.addAll(listFilter.getOutDitaFilesSet());
 
         // Generate topic-scheme dictionary
         final Set<URI> schemeSet = listFilter.getSchemeSet();
@@ -576,7 +628,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      */
     void handleConref() {
         // Get pure conref targets
-        final Set<URI> pureConrefTargets = new HashSet<>(conrefTargetSet.size());
+        final Set<URI> pureConrefTargets = new HashSet<>();
         for (final URI target: conrefTargetSet) {
             if (!nonConrefCopytoTargetSet.contains(target)) {
                 pureConrefTargets.add(target);
@@ -610,7 +662,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
-        resourceOnlySet.addAll(listFilter.getResourceOnlySet());
+        final Set<URI> res = new HashSet<>();
+        res.addAll(listFilter.getResourceOnlySet());
+        res.removeAll(listFilter.getNormalProcessingRoleSet());
+        resourceOnlySet.addAll(res);
 
         for (final URI file: outDitaFilesSet) {
             getOrCreateFileInfo(fileinfos, file).isOutDita = true;
@@ -671,6 +726,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         for (final URI file: resourceOnlySet) {
             getOrCreateFileInfo(fileinfos, file).isResourceOnly = true;
         }
+        for (final URI resource : resources) {
+            getOrCreateFileInfo(fileinfos, resource).isInputResource = true;
+        }
 
         addFlagImagesSetToProperties(job, relFlagImagesSet);
 
@@ -698,6 +756,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             if (formatFilter.test(fi.format)
                     || fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
                 job.add(fi);
+            }
+        }
+
+        for (URI f : additionalResourcesSet) {
+            final FileInfo fi = job.getFileInfo(f);
+            if (!fi.isResourceOnly) {
+                fi.isInputResource = true;
             }
         }
 
@@ -800,7 +865,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         final Map<URI, Set<URI>> res = new HashMap<>();
         for (final Map.Entry<URI, Set<URI>> e: map.entrySet()) {
             final URI key = e.getKey();
-            final Set<URI> newSet = new HashSet<>(e.getValue().size());
+            final Set<URI> newSet = new HashSet<>();
             for (final URI file: e.getValue()) {
                 newSet.add(tempFileNameScheme.generateTempFileName(file));
             }

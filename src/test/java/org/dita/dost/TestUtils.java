@@ -155,17 +155,17 @@ public class TestUtils {
         InputStream in = null;
         try {
             in = new BufferedInputStream(new FileInputStream(file));
-            final Transformer t = TransformerFactory.newInstance().newTransformer();
+            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
             XMLReader p = XMLReaderFactory.createXMLReader();
             p.setEntityResolver(CatalogUtils.getCatalogResolver());
             if (normalize) {
-                t.setOutputProperty(OutputKeys.INDENT, "yes");
+                serializer.setOutputProperty(OutputKeys.INDENT, "yes");
                 p = new NormalizingXMLFilterImpl(p);
             }
             if (clean) {
                 p = new CleaningXMLFilterImpl(p);
             }
-            t.transform(new SAXSource(p, new InputSource(in)),
+            serializer.transform(new SAXSource(p, new InputSource(in)),
                     new StreamResult(std));
         } finally {
             if (in != null) {

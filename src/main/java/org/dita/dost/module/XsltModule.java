@@ -11,6 +11,7 @@ import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.jaxp.SaxonTransformerFactory;
 import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.FileUtils;
@@ -190,6 +191,10 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                     throw new IOException("Failed to to replace input file " + out.getAbsolutePath());
                 }
             }
+        } catch (final UncheckedXPathException e) {
+            logger.error("Failed to transform document: " + e.getXPathException().getMessageAndLocation(), e);
+            logger.debug("Remove " + tmp.getAbsolutePath());
+            FileUtils.delete(tmp);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {

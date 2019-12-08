@@ -49,6 +49,7 @@ final class Arguments {
      */
     final String uninstallId;
     final List<String> inputs;
+    final List<String> resources;
     /**
      * The build targets.
      */
@@ -105,7 +106,7 @@ final class Arguments {
                      String loggerClassname, String inputHandlerClassname, boolean emacsMode, Integer threadPriority,
                      boolean proxy, boolean justPrintUsage, boolean justPrintVersion, boolean justPrintDiagnostics,
                      boolean justPrintPlugins, boolean justPrintTranstypes, boolean justPrintDeliverables,
-                     File logFile, Map<String, Object> definedProps) {
+                     File logFile, Map<String, Object> definedProps, List<String> resources) {
         this.useColor = useColor;
         this.msgOutputLevel = msgOutputLevel;
         this.buildFile = buildFile;
@@ -132,6 +133,7 @@ final class Arguments {
         this.justPrintDeliverables = justPrintDeliverables;
         this.logFile = logFile;
         this.definedProps = definedProps;
+        this.resources = resources;
     }
 
     static abstract class Argument {

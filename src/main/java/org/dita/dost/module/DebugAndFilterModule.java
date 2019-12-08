@@ -21,6 +21,8 @@ import static org.dita.dost.util.XMLUtils.*;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -33,6 +35,7 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -74,6 +77,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     private Map<QName, Map<String, String>> defaultValueMap;
     /** Absolute path to current source file. */
     private URI currentFile;
+    private List<URI> resources;
     private Map<URI, Set<URI>> dic;
     private SubjectSchemeReader subjectSchemeReader;
     private FilterUtils baseFilterUtils;
@@ -256,6 +260,14 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             pipe.add(debugFilter);
         }
 
+//        if (currentFile.equals(rootFile)) {
+//            final ResourceInsertFilter filter = new ResourceInsertFilter();
+//            filter.setLogger(logger);
+//            filter.setResources(resources);
+//            filter.setCurrentFile(currentFile);
+//            pipe.add(filter);
+//        }
+
         if (filterUtils != null) {
             final ProfilingFilter profilingFilter = new ProfilingFilter();
             profilingFilter.setLogger(logger);
@@ -308,6 +320,14 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         genDebugInfo = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR));
         final String mode = input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
         processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
+
+        if (input.getAttribute(ANT_INVOKER_PARAM_RESOURCES) != null) {
+            resources = Stream.of(input.getAttribute(ANT_INVOKER_PARAM_RESOURCES).split(File.pathSeparator))
+                    .map(resource -> new File(resource).toURI())
+                    .collect(Collectors.toList());
+        } else {
+            resources = Collections.emptyList();
+        }
     }
 
 
@@ -487,6 +507,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             final TransformerFactory tff = TransformerFactory.newInstance();
             final Transformer tf = tff.newTransformer();
             tf.transform(ds, res);
+        } catch (final UncheckedXPathException e) {
+            logger.error(e.getXPathException().getMessageAndLocation());
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {

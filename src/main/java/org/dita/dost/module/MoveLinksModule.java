@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -74,6 +75,8 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             source.setSystemId(inputFile.toURI().toString());
             final DOMResult result = new DOMResult(doc);
             transformer.transform(source, result);
+        } catch (final UncheckedXPathException e) {
+            throw new DITAOTException("Failed to read links from " + inputFile, e);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {

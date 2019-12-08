@@ -7,6 +7,10 @@
  */
 package org.dita.dost.util;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
 import java.util.*;
 
 import static java.util.Collections.unmodifiableList;
@@ -18,6 +22,8 @@ import static java.util.Collections.unmodifiableMap;
  * @since 2.2
  */
 public class KeyScope {
+
+    public static final KeyScope EMPTY = new KeyScope(null, null, Collections.emptyMap(), Collections.emptyList());
 
     public final String id;
     public final String name;
@@ -61,5 +67,23 @@ public class KeyScope {
         result = 31 * result + keyDefinition.hashCode();
         result = 31 * result + childScopes.hashCode();
         return result;
+    }
+
+    public static KeyScope merge(final KeyScope scope1, final KeyScope scope2) {
+        if (!Objects.equals(scope1.id, scope2.id)) {
+            throw new IllegalArgumentException(String.format("Scopes should have the same ID: %s != %s", scope1.id, scope2.id));
+        }
+        final Map<String, KeyDef> keyDefinition = new HashMap<>();
+        scope1.keyDefinition.forEach(keyDefinition::putIfAbsent);
+        scope2.keyDefinition.forEach(keyDefinition::putIfAbsent);
+        return new KeyScope(
+                scope1.id,
+                scope1.name,
+                unmodifiableMap(keyDefinition),
+                ImmutableList.<KeyScope>builder()
+                        .addAll(scope1.childScopes)
+                        .addAll(scope2.childScopes)
+                        .build()
+        );
     }
 }

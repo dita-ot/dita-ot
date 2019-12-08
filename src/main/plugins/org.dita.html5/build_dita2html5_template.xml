@@ -210,7 +210,7 @@ See the accompanying LICENSE file for applicable license.
       <pipeline message="Convert DITA map to HTML5" taskname="xslt">
       <xslt destdir="${html5.toc.output.dir}"
             style="${args.html5.toc.xsl}">
-        <ditafileset input="true"/>
+        <ditafileset input="true" format="ditamap"/>
         <param name="FILTERFILE" expression="${dita.input.valfile.url}" if:set="dita.input.valfile"/>
         <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
         <param name="contenttarget" expression="${args.html5.contenttarget}" if:set="args.html5.contenttarget"/>

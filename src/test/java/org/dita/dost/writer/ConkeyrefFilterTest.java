@@ -142,7 +142,7 @@ public class ConkeyrefFilterTest {
 
         final ConkeyrefFilter f = getConkeyrefFilter();
         f.setCurrentFile(job.tempDirURI.resolve("product/topic.dita"));
-        f.setKeyDefinitions(createKeyScope(toMap(new KeyDef("foo", URI.create("../common/library.dita"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, URI.create("main.ditamap"), null))));
+        f.setKeyDefinitions(createKeyScope(toMap(new KeyDef("foo", URI.create("../common/library.dita"), ATTR_SCOPE_VALUE_LOCAL, ATTR_FORMAT_VALUE_DITA, job.tempDirURI.resolve("maps/root.map"), null))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {

@@ -28,6 +28,7 @@ import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.jaxp.TransformerImpl;
 import net.sf.saxon.serialize.MessageWarner;
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.LoggingErrorListener;
@@ -516,6 +517,8 @@ public final class XMLUtils {
             source.setSystemId(inputFile.toURI().toString());
             final Result result = new StreamResult(out);
             transformer.transform(source, result);
+        } catch (final UncheckedXPathException e) {
+            throw new DITAOTException("Failed to transform " + inputFile, e);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {
@@ -565,6 +568,8 @@ public final class XMLUtils {
             final Source source = new SAXSource(reader, src);
             result = new StreamResult(output.toString());
             transformer.transform(source, result);
+        } catch (final UncheckedXPathException e) {
+            throw new DITAOTException("Failed to transform " + input, e);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {

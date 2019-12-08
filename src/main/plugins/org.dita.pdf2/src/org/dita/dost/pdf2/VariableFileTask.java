@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.*;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -90,7 +91,8 @@ public final class VariableFileTask extends Task {
                 root.appendChild(lang);
             }
 
-            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(d), new StreamResult(file));
+            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
+            serializer.transform(new DOMSource(d), new StreamResult(file));
         } catch (final RuntimeException e) {
             throw e;
         } catch (final TransformerException e) {
