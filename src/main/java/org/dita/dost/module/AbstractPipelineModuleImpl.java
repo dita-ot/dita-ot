@@ -37,7 +37,10 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
         this.job = job;
     }
 
-    abstract public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException;
+    @Override
+    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
+        return this.execute(input.getAttributes());
+    }
 
     @Override
     public void setFileInfoFilter(Predicate<FileInfo> fileInfoFilter) {
