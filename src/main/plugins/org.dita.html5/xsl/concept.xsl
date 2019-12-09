@@ -26,12 +26,16 @@ See the accompanying LICENSE file for applicable license.
     <xsl:sequence select="3"/>
   </xsl:template>
   
+  <xsl:attribute-set name="linklist-concept">
+    <xsl:attribute name="outputclass">relconcepts</xsl:attribute>
+  </xsl:attribute-set>
+  
   <!-- Wrapper for concept group: "Related concepts" in a <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group"
           name="related-links:result.concept" as="element()">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
-      <linklist class="- topic/linklist " outputclass="relinfo relconcepts">
+      <linklist class="- topic/linklist " xsl:use-attribute-sets="linklist linklist-concept ">
         <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
         <title class="- topic/title ">
           <xsl:call-template name="getVariable">
