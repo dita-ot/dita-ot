@@ -302,12 +302,16 @@ See the accompanying LICENSE file for applicable license.
     <xsl:sequence select="1"/>
   </xsl:template>
   
+  <xsl:attribute-set name="linklist-reference">
+    <xsl:attribute name="outputclass">relref</xsl:attribute>
+  </xsl:attribute-set>
+  
   <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group"
                 name="related-links:result.reference" as="element()">
     <xsl:param name="links"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
-      <linklist class="- topic/linklist " outputclass="relinfo relref">
+      <linklist class="- topic/linklist " xsl:use-attribute-sets="linklist linklist-reference">
         <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
         <title class="- topic/title ">
           <xsl:call-template name="getVariable">

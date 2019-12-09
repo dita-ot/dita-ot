@@ -673,12 +673,16 @@ See the accompanying LICENSE file for applicable license.
     <xsl:sequence select="2"/>
   </xsl:template>
   
+  <xsl:attribute-set name="linklist-task">
+    <xsl:attribute name="outputclass">reltasks</xsl:attribute>
+  </xsl:attribute-set>
+  
   <!-- Task wrapper for HTML: "Related tasks" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group"
                 name="related-links:result.task" as="element()">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
-      <linklist class="- topic/linklist " outputclass="relinfo reltasks">
+      <linklist class="- topic/linklist " xsl:use-attribute-sets="linklist linklist-task">
         <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
         <title class="- topic/title ">
           <xsl:call-template name="getVariable">
