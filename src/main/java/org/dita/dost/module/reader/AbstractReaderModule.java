@@ -59,13 +59,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** FileInfos keyed by src. */
     private final Map<URI, FileInfo> fileinfos = new HashMap<>();
     /** Set of all topic files */
-    private final Set<URI> fullTopicSet = new HashSet<>(128);
+    final Set<URI> fullTopicSet = new HashSet<>(128);
     /** Set of all map files */
-    private final Set<URI> fullMapSet = new HashSet<>(128);
+    final Set<URI> fullMapSet = new HashSet<>(128);
     /** Set of topic files containing href */
     private final Set<URI> hrefTopicSet = new HashSet<>(128);
     /** Set of dita files containing conref */
-    private final Set<URI> conrefSet = new HashSet<>(128);
+    final Set<URI> conrefSet = new HashSet<>(128);
     /** Set of topic files containing coderef */
     private final Set<URI> coderefSet = new HashSet<>(128);
     /** Set of all images */
@@ -75,9 +75,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Set of all HTML and other non-DITA or non-image files */
     final SetMultimap<String, URI> htmlSet = SetMultimapBuilder.hashKeys().hashSetValues().build();
     /** Set of all the href targets */
-    private final Set<URI> hrefTargetSet = new HashSet<>(128);
+    final Set<URI> hrefTargetSet = new HashSet<>(128);
     /** Set of all the conref targets */
-    private Set<URI> conrefTargetSet = new HashSet<>(128);
+    Set<URI> conrefTargetSet = new HashSet<>(128);
     /** Set of all targets except conref and copy-to */
     final Set<URI> nonConrefCopytoTargetSet = new HashSet<>(128);
     /** Set of subsidiary files */
@@ -91,13 +91,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     final List<URI> doneList = new LinkedList<>();
     final List<URI> failureList = new LinkedList<>();
     /** Set of outer dita files */
-    private final Set<URI> outDitaFilesSet = new HashSet<>(128);
+    final Set<URI> outDitaFilesSet = new HashSet<>(128);
     /** Set of sources of conacion */
-    private final Set<URI> conrefpushSet = new HashSet<>(128);
+    final Set<URI> conrefpushSet = new HashSet<>(128);
     /** Set of files containing keyref */
-    private final Set<URI> keyrefSet = new HashSet<>(128);
+    final Set<URI> keyrefSet = new HashSet<>(128);
     /** Set of files with "@processing-role=resource-only" */
-    private final Set<URI> resourceOnlySet = new HashSet<>(128);
+    final Set<URI> resourceOnlySet = new HashSet<>(128);
     /** Absolute basedir for processing */
     private URI baseInputDir;
     GenListModuleReader listFilter;
@@ -137,7 +137,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     DitaWriterFilter ditaWriterFilter;
     TopicFragmentFilter topicFragmentFilter;
     /** Files found during additional resource crawl. **/
-    private final Set<URI> additionalResourcesSet = new HashSet<>();
+    final Set<URI> additionalResourcesSet = new HashSet<>();
 
     public abstract void readStartFile() throws DITAOTException;
 

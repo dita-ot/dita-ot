@@ -110,6 +110,43 @@ public final class TopicReaderModule extends AbstractReaderModule {
         }
     }
 
+    @Override
+    void readResourceFiles() throws DITAOTException {
+        if (!resources.isEmpty()) {
+            for (URI resource : resources) {
+                additionalResourcesSet.add(resource);
+                final FileInfo fi = job.getFileInfo(resource);
+                if (fi == null) {
+                    addToWaitList(new Reference(resource));
+                } else {
+                    if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+                        getStartDocuments(fi).forEach(this::addToWaitList);
+                    } else {
+                        if (fi.format == null) {
+                            fi.format = ATTR_FORMAT_VALUE_DITA;
+                            job.add(fi);
+                        }
+                        addToWaitList(new Reference(resource, fi.format));
+                    }
+                }
+            }
+            processWaitList();
+
+            additionalResourcesSet.addAll(hrefTargetSet);
+            additionalResourcesSet.addAll(conrefTargetSet);
+            additionalResourcesSet.addAll(nonConrefCopytoTargetSet);
+            additionalResourcesSet.addAll(outDitaFilesSet);
+            additionalResourcesSet.addAll(conrefpushSet);
+            additionalResourcesSet.addAll(keyrefSet);
+            additionalResourcesSet.addAll(resourceOnlySet);
+            additionalResourcesSet.addAll(fullTopicSet);
+            additionalResourcesSet.addAll(fullMapSet);
+            additionalResourcesSet.addAll(conrefSet);
+
+            resourceOnlySet.clear();
+        }
+    }
+
     private Document getMapDocument() throws SAXException {
         final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
         if (fi == null) {
@@ -126,12 +163,12 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
     @Override
     public void readStartFile() throws DITAOTException {
-        FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
+        final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
         if (fi == null) {
             addToWaitList(new Reference(job.getInputFile()));
         } else {
             if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
-                getStartDocuments().forEach(this::addToWaitList);
+                getStartDocuments(fi).forEach(this::addToWaitList);
             } else {
                 if (fi.format == null) {
                     fi.format = ATTR_FORMAT_VALUE_DITA;
@@ -142,9 +179,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
         }
     }
 
-    private List<Reference> getStartDocuments() throws DITAOTException {
+    private List<Reference> getStartDocuments(final FileInfo startFileInfo) throws DITAOTException {
         final List<Reference> res = new ArrayList<>();
-        final FileInfo startFileInfo = job.getFileInfo(f -> f.isInput).iterator().next();
         assert startFileInfo.src != null;
         final URI tmp = job.tempDirURI.resolve(startFileInfo.uri);
         final Source source = new StreamSource(tmp.toString());
