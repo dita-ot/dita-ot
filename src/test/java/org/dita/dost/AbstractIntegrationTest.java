@@ -683,7 +683,7 @@ public abstract class AbstractIntegrationTest {
                     // out.println(event.getMessage());
                     break;
                 default:
-                    err.println(message);
+//                    err.println(message);
             }
 
             messages.add(new TestListener.Message(level, message));
