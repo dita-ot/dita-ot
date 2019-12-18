@@ -845,16 +845,31 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     private FileInfo getOrCreateFileInfo(final Map<URI, FileInfo> fileInfos, final URI file) {
         assert file.getFragment() == null;
         final URI f = file.normalize();
-        FileInfo.Builder b;
+
         if (fileInfos.containsKey(f)) {
-            b = new FileInfo.Builder(fileInfos.get(f));
+            final FileInfo fileInfo = fileInfos.get(f);
+            return fileInfo;
         } else {
-            b = new FileInfo.Builder().src(file);
+            final FileInfo prev = job.getFileInfo(f);
+            final FileInfo i;
+            if (prev != null) {
+                FileInfo.Builder b = new FileInfo.Builder(prev);
+                if (prev.src == null) {
+                    b = b.src(f);
+                }
+                if (prev.uri == null) {
+                    b = b.uri(tempFileNameScheme.generateTempFileName(f));
+                }
+                i = b.build();
+            } else {
+                i = new FileInfo.Builder()
+                        .src(f)
+                        .uri(tempFileNameScheme.generateTempFileName(f))
+                        .build();
+            }
+            fileInfos.put(i.src, i);
+            return i;
         }
-        b = b.uri(tempFileNameScheme.generateTempFileName(file));
-        final FileInfo i = b.build();
-        fileInfos.put(i.src, i);
-        return i;
     }
 
     /**

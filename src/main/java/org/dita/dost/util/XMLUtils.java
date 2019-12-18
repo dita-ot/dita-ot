@@ -20,6 +20,7 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
@@ -49,7 +50,13 @@ public final class XMLUtils {
     private static final DocumentBuilderFactory factory;
     static {
         factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
+        // FIXME: we should always use namespace aware parser
+        factory.setNamespaceAware(false);
+    }
+    private static final SAXParserFactory saxParserFactory;
+    static {
+        saxParserFactory = SAXParserFactory.newInstance();
+        saxParserFactory.setNamespaceAware(true);
     }
     private DITAOTLogger logger;
     private final TransformerFactory transformerFactory;
@@ -690,42 +697,16 @@ public final class XMLUtils {
     /**
      * Get preferred SAX parser.
      *
-     * Preferred XML readers are in order:
-     *
-     * <ol>
-     *   <li>{@link Constants#SAX_DRIVER_DEFAULT_CLASS Xerces}</li>
-     *   <li>{@link Constants#SAX_DRIVER_SUN_HACK_CLASS Sun's Xerces}</li>
-     *   <li>{@link Constants#SAX_DRIVER_CRIMSON_CLASS Crimson}</li>
-     * </ol>
-     *
      * @return XML parser instance.
      * @throws org.xml.sax.SAXException if instantiating XMLReader failed
      */
     public static XMLReader getXMLReader() throws SAXException {
-        XMLReader reader;
-        if (System.getProperty(SAX_DRIVER_PROPERTY) != null) {
-            return XMLReaderFactory.createXMLReader();
-        }
         try {
-            Class.forName(SAX_DRIVER_DEFAULT_CLASS);
-            reader = XMLReaderFactory.createXMLReader(SAX_DRIVER_DEFAULT_CLASS);
-        } catch (final ClassNotFoundException e) {
-            try {
-                Class.forName(SAX_DRIVER_SUN_HACK_CLASS);
-                reader = XMLReaderFactory.createXMLReader(SAX_DRIVER_SUN_HACK_CLASS);
-            } catch (final ClassNotFoundException ex) {
-                try {
-                    Class.forName(SAX_DRIVER_CRIMSON_CLASS);
-                    reader = XMLReaderFactory.createXMLReader(SAX_DRIVER_CRIMSON_CLASS);
-                } catch (final ClassNotFoundException exc) {
-                    reader = XMLReaderFactory.createXMLReader();
-                }
-            }
+            final XMLReader reader = saxParserFactory.newSAXParser().getXMLReader();
+            return Configuration.DEBUG ? new DebugXMLReader(reader) : reader;
+        } catch (ParserConfigurationException e) {
+            throw new SAXException(e);
         }
-        if (Configuration.DEBUG) {
-            reader = new DebugXMLReader(reader);
-        }
-        return reader;
     }
 
     /**

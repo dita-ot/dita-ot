@@ -547,6 +547,7 @@ public final class ExtensibleAntInvoker extends Task {
         private Set<String> formats = Collections.emptySet();
         private Boolean hasConref;
         private Boolean isInput;
+        private Boolean isInputResource;
         private Boolean isResourceOnly;
 
         public void setFormat(final String format) {
@@ -566,6 +567,10 @@ public final class ExtensibleAntInvoker extends Task {
             this.isInput = isInput;
         }
 
+        public void setInputResource(final boolean isInputResource) {
+            this.isInputResource = isInputResource;
+        }
+
         public void setProcessingRole(final String processingRole) {
             this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
         }
@@ -574,6 +579,7 @@ public final class ExtensibleAntInvoker extends Task {
             return f -> (formats.isEmpty() || formats.contains(f.format != null ? f.format : ATTR_FORMAT_VALUE_DITA)) &&
                     (hasConref == null || f.hasConref == hasConref) &&
                     (isInput == null || f.isInput == isInput) &&
+                    (isInputResource == null || f.isInputResource == isInputResource) &&
                     (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
         }
     }

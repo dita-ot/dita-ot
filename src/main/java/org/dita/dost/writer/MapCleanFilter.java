@@ -14,9 +14,7 @@ import org.xml.sax.SAXException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CLASS;
-import static org.dita.dost.util.Constants.MAPGROUP_D_KEYDEF;
-import static org.dita.dost.util.Constants.SUBMAP;
+import static org.dita.dost.util.Constants.*;
 
 public class MapCleanFilter extends AbstractXMLFilter {
 
@@ -46,7 +44,7 @@ public class MapCleanFilter extends AbstractXMLFilter {
             stack.addFirst(Keep.DISCARD_BRANCH);
         } else if (SUBMAP.matches(cls)) {
             stack.addFirst(Keep.DISCARD);
-        } else if (MAPGROUP_D_KEYDEF.matches(cls)) {
+        } else if (DITA_OT_D_KEYDEF.matches(cls)) {
             stack.addFirst(Keep.DISCARD_BRANCH);
         } else {
             stack.addFirst(Keep.RETAIN);
