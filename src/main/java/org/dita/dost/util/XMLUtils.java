@@ -50,8 +50,7 @@ public final class XMLUtils {
     private static final DocumentBuilderFactory factory;
     static {
         factory = DocumentBuilderFactory.newInstance();
-        // FIXME: we should always use namespace aware parser
-        factory.setNamespaceAware(false);
+        factory.setNamespaceAware(true);
     }
     private static final SAXParserFactory saxParserFactory;
     static {
