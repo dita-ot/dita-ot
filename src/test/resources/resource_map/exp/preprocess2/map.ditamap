@@ -12,7 +12,7 @@
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="common" keyscope="scope" processing-role="resource-only">
     <topicmeta class="- map/topicmeta ">
       <keywords class="- topic/keywords ">
-        <keyword class="- topic/keyword ">base</keyword>
+        <keyword class="- topic/keyword ">scope base</keyword>
       </keywords>
     </topicmeta>
   </keydef>

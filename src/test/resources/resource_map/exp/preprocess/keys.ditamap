@@ -41,7 +41,7 @@
       <keydef class="+ map/topicref mapgroup-d/keydef " keys="common" processing-role="resource-only">
         <topicmeta class="- map/topicmeta ">
           <keywords class="- topic/keywords ">
-            <keyword class="- topic/keyword ">override</keyword>
+            <keyword class="- topic/keyword ">scope override</keyword>
           </keywords>
         </topicmeta>
       </keydef>
