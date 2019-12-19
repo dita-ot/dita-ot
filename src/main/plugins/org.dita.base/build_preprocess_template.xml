@@ -350,9 +350,6 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="mapref-check">
-    <condition property="preprocess.mapref.skip">
-      <isset property="noMap"/>
-    </condition>
   </target>
   
   <!-- keyref

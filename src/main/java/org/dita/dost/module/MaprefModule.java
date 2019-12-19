@@ -57,10 +57,6 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         } catch (TransformerConfigurationException e) {
             throw new RuntimeException("Failed to compile " + styleFile + ": " + e.getMessageAndLocation(), e);
         }
-
-        if (fileInfoFilter == null) {
-            fileInfoFilter = fileInfo -> fileInfo.format != null && fileInfo.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
-        }
     }
 
     /**
@@ -70,9 +66,15 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        init(input);
-
+        if (fileInfoFilter == null) {
+            fileInfoFilter = fileInfo -> fileInfo.format != null && fileInfo.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
+        }
         final Collection<FileInfo> fileInfos = job.getFileInfo(fileInfoFilter);
+        if (fileInfos.isEmpty()) {
+            return null;
+        }
+
+        init(input);
         for (FileInfo fileInfo : fileInfos) {
             processMap(fileInfo);
         }
