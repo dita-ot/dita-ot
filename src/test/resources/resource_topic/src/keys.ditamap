@@ -15,8 +15,5 @@
       </keywords>
     </topicmeta>
   </keydef>
-  <topicgroup class="+ map/topicref mapgroup-d/topicgroup " keyscope="scope">
-    <mapref class="+ map/topicref mapgroup-d/mapref " format="ditamap" href="keys-scope.ditamap"/>
-  </topicgroup>
   <topicref class="+ map/topicref " href="resourceOnly.dita"/>
 </map>

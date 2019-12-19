@@ -8,9 +8,5 @@
     </p>
     <p class="- topic/p ">common: <keyword class="- topic/keyword " keyref="common">override</keyword>
     </p>
-    <p class="- topic/p ">scope key: <keyword class="- topic/keyword " keyref="scope.key">scope value</keyword>
-    </p>
-    <p class="- topic/p ">scope common: <keyword class="- topic/keyword " keyref="scope.common">override</keyword>
-    </p>
   </body>
 </topic>
