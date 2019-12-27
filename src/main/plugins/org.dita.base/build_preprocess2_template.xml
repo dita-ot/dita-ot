@@ -142,9 +142,6 @@ See the accompanying LICENSE file for applicable license.
         <dita:extension id="dita.preprocess.map-reader.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
-    <!-- TODO replace with direct resource collection availability test -->
-    <job-helper file="fullditamap.list" property="fullditamaplist"/>
-    <property name="fullditamapfile" value="fullditamap.list"/>
     <local name="inputMapPath"/>
     <pathconvert property="inputMapPath">
       <ditafileset format="ditamap" input="true"/>
@@ -152,7 +149,6 @@ See the accompanying LICENSE file for applicable license.
     <condition property="noMap">
       <equals arg1="${inputMapPath}" arg2=""/>
     </condition>
-    <delete file="${dita.temp.dir}/${fullditamapfile}"/>
   </target>
 
   <target name="map-mapref"
