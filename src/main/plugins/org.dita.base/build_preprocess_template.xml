@@ -159,8 +159,6 @@ See the accompanying LICENSE file for applicable license.
     <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
     <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
     <job-helper file="hreftargets.list" property="hreftargetslist"/>
-    <!-- Deprecated since 2.1 -->
-    <job-helper file="image.list" property="imagelist"/>
     <job-helper file="outditafiles.list" property="outditafileslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>    
@@ -175,8 +173,6 @@ See the accompanying LICENSE file for applicable license.
     <property name="hrefditatopicfile" value="hrefditatopic.list"/>
     <!-- Deprecated since 2.3 -->
     <property name="conreffile" value="conref.list"/>
-    <!-- Deprecated since 2.1 -->
-    <property name="imagefile" value="image.list"/>
     <property name="hreftargetsfile" value="hreftargets.list"/>
     <property name="canditopicsfile" value="canditopics.list"/>
     <property name="subjectschemefile" value="subjectscheme.list"/>
@@ -493,8 +489,6 @@ See the accompanying LICENSE file for applicable license.
     <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
     <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
     <job-helper file="hreftargets.list" property="hreftargetslist"/>
-    <!-- Deprecated since 2.1 -->
-    <job-helper file="image.list" property="imagelist"/>
     <job-helper file="outditafiles.list" property="outditafileslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>    
