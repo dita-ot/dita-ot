@@ -151,7 +151,6 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
     <!-- generate list files -->
     <job-helper file="canditopics.list" property="canditopicslist"/>
-    <job-helper file="conref.list" property="conreflist"/>
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
     <job-helper file="fullditamap.list" property="fullditamaplist"/>
@@ -171,8 +170,6 @@ See the accompanying LICENSE file for applicable license.
     <property name="fullditatopicfile" value="fullditatopic.list"/>
     <property name="fullditamapfile" value="fullditamap.list"/>
     <property name="hrefditatopicfile" value="hrefditatopic.list"/>
-    <!-- Deprecated since 2.3 -->
-    <property name="conreffile" value="conref.list"/>
     <property name="hreftargetsfile" value="hreftargets.list"/>
     <property name="canditopicsfile" value="canditopics.list"/>
     <property name="subjectschemefile" value="subjectscheme.list"/>
@@ -242,7 +239,6 @@ See the accompanying LICENSE file for applicable license.
         <ditafileset format="ditamap" input="true"/>
       </module>
     </pipeline>
-    <job-helper file="conref.list" property="conreflist"/>
   </target>
   
   <!-- move-meta-entries
@@ -481,7 +477,6 @@ See the accompanying LICENSE file for applicable license.
       </module>
     </pipeline>
     <job-helper file="canditopics.list" property="canditopicslist"/>
-    <job-helper file="conref.list" property="conreflist"/>
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
     <job-helper file="fullditamap.list" property="fullditamaplist"/>
