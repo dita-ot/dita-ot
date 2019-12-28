@@ -571,27 +571,4 @@ See the accompanying LICENSE file for applicable license.
     </condition>
   </target>
   
-  <!-- Deprecated since 2.1 -->
-  <target name="copy-subsidiary"
-    dita:depends="{depend.preprocess.copy-subsidiary.pre},copy-subsidiary-check"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.copy-subsidiary.skip"
-    description="Copy subsidiary files">
-    <dita-ot-echo id="DOTX070W"><param name="1" value="copy-subsidiary"/></dita-ot-echo>
-    <copy todir="${dita.temp.dir}">
-      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${subtargetsfile}"/>
-    </copy>
-  </target>
-
-  <!-- Deprecated since 2.1 -->
-  <target name="copy-subsidiary-check">
-    <dita-ot-echo id="DOTX070W"><param name="1" value="copy-subsidiary-check"/></dita-ot-echo>
-    <condition property="preprocess.copy-subsidiary.skip">
-      <or>
-        <isset property="preprocess.copy-files.skip"/>
-        <length file="${dita.temp.dir}/${subtargetsfile}" length="0"/>
-      </or>
-    </condition>
-  </target>
-  
 </project>
