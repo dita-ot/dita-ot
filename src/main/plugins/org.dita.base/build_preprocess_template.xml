@@ -381,24 +381,6 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
   
-  <!-- mappull
-      Pull metadata (such as navtitle) into the map from the referenced topics. -->
-  <!-- Deprecated in 2.2 -->
-  <target name="mappull"
-    dita:depends="{depend.preprocess.mappull.pre},mappull-check"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.mappull.skip"
-    description="Pull the navtitle and topicmeta from topics to ditamap">
-    <echo level="warn">WARN: Mappull target has been merged with move-meta-entries and is deprecated.</echo>
-  </target>
-  
-  <!-- Deprecated in 2.2 -->
-  <target name="mappull-check">
-    <condition property="preprocess.mappull.skip">
-      <isset property="noMap"/>
-    </condition>
-  </target>
-  
   <!-- chunk
       Assemble virtual supertopics based on chunk attribute in map. -->
   <target name="chunk" 
