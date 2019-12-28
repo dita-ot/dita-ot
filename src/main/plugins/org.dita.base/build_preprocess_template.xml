@@ -274,7 +274,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- conref
       Pull elements referenced by conref into their correct place. -->
   <target name="conref" 
-    dita:depends="{depend.preprocess.conref.pre},conref-check"
+    dita:depends="{depend.preprocess.conref.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.conref.skip"
     description="Resolve conref in input files">
@@ -291,10 +291,6 @@ See the accompanying LICENSE file for applicable license.
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
-  </target>
-  
-  <!-- Deprecated since 2.3 -->
-  <target name="conref-check">
   </target>
   
   <target name="topic-fragment"
