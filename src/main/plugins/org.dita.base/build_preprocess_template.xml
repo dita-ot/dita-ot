@@ -292,7 +292,7 @@ See the accompanying LICENSE file for applicable license.
       </xslt>
     </pipeline>
   </target>
-  
+
   <target name="topic-fragment"
           dita:depends="{depend.preprocess.coderef.pre}"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
@@ -310,14 +310,6 @@ See the accompanying LICENSE file for applicable license.
         <filter class="org.dita.dost.writer.NormalizeCodeblock" unless:set="preprocess.normalize-codeblock.skip"/>
       </sax>
     </pipeline>
-  </target>
-  
-  <!-- coderef -->
-  <!-- Deprecated since 2.3 -->
-  <target name="coderef"
-    unless="preprocess.coderef.skip"
-    description="Resolve coderef in input files">
-    <echo level="warn">WARN: Coderef target has been merged with topic-fragment and is deprecated.</echo>
   </target>
   
   <!-- mapref
