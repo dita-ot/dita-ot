@@ -29,8 +29,6 @@ See the accompanying LICENSE file for applicable license.
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
     <property name="uplevels" value=""/>
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
-    <!-- Deprecated since 2.4 -->
-    <property name="user.input.file.listfile" value="usr.input.file.list"/>
   </target>
 
   <target name="preprocess2.maps"
@@ -79,8 +77,6 @@ See the accompanying LICENSE file for applicable license.
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
     <property name="uplevels" value=""/>
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
-    <!-- Deprecated since 2.4 -->
-    <property name="user.input.file.listfile" value="usr.input.file.list"/>
   </target>
   
   <target name="preprocess2.init">
