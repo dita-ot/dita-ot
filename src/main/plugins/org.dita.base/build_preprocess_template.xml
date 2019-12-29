@@ -132,10 +132,10 @@ See the accompanying LICENSE file for applicable license.
       While copying, populate default attributes like @class,
       add @xtrf and @xtrc and filter out elements according to valfile, if any. -->
   <target name="debug-filter"
-    dita:depends="{depend.preprocess.debug-filter.pre}"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.debug-filter.skip"
-    description="Debug and filter input files" >
+          dita:depends="{depend.preprocess.debug-filter.pre}"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          unless="preprocess.debug-filter.skip"
+          description="Debug and filter input files" >
     <pipeline message="Debug and filtering." taskname="filter">
       <module class="org.dita.dost.module.DebugAndFilterModule">
         <param name="ditadir" location="${dita.dir}"/>
@@ -149,34 +149,7 @@ See the accompanying LICENSE file for applicable license.
         <dita:extension id="dita.preprocess.debug-filter.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
-    <!-- generate list files -->
-    <job-helper file="canditopics.list" property="canditopicslist"/>
-    <job-helper file="conreftargets.list" property="conreftargetslist"/>
-    <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-helper file="fullditamap.list" property="fullditamaplist"/>
-    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
-    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
-    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
-    <job-helper file="hreftargets.list" property="hreftargetslist"/>
-    <job-helper file="outditafiles.list" property="outditafileslist"/>
-    <job-helper file="resourceonly.list" property="resourceonlylist"/>
-    <job-helper file="resourceonly.list" property="resourceonlylist"/>    
-    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
-    <job-helper file="subtargets.list" property="subtargetslist"/>
-    <job-helper file="user.input.file.list" property="user.input.file"/>    
     <job-property dir="${dita.temp.dir}"/>
-    <property name="outditafilesfile" value="outditafiles.list"/>
-    <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
-    <property name="fullditatopicfile" value="fullditatopic.list"/>
-    <property name="fullditamapfile" value="fullditamap.list"/>
-    <property name="hrefditatopicfile" value="hrefditatopic.list"/>
-    <property name="hreftargetsfile" value="hreftargets.list"/>
-    <property name="canditopicsfile" value="canditopics.list"/>
-    <property name="subjectschemefile" value="subjectscheme.list"/>
-    <property name="conreftargetsfile" value="conreftargets.list"/>
-    <property name="copytosourcefile" value="copytosource.list"/>
-    <property name="subtargetsfile" value="subtargets.list"/>
-    <property name="resourceonlyfile" value="resourceonly.list"/>
     <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
@@ -202,15 +175,12 @@ See the accompanying LICENSE file for applicable license.
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
-    <!-- update list files -->
-    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
-    <job-helper file="fullditamap.list" property="fullditamaplist"/>
-    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
-    <job-helper file="resourceonly.list" property="resourceonlylist"/>
-    <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-property dir="${dita.temp.dir}"/>
+    <local name="inputTopicPath"/>
+    <pathconvert property="inputTopicPath">
+      <ditafileset format="dita"/>
+    </pathconvert>
     <condition property="noTopic">
-      <length file="${dita.temp.dir}/${fullditatopicfile}" length="0"/>
+      <equals arg1="${inputTopicPath}" arg2=""/>
     </condition>
   </target>
 
@@ -372,14 +342,12 @@ See the accompanying LICENSE file for applicable license.
       </module>
     </pipeline>
     
-    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
-    <job-helper file="fullditamap.list" property="fullditamaplist"/>
-    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
-    <job-helper file="resourceonly.list" property="resourceonlylist"/>
-    <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-property dir="${dita.temp.dir}"/>
+    <local name="inputTopicPath"/>
+    <pathconvert property="inputTopicPath">
+      <ditafileset format="dita"/>
+    </pathconvert>
     <condition property="noTopic">
-        <length file="${dita.temp.dir}/${fullditatopicfile}" length="0"/>
+      <equals arg1="${inputTopicPath}" arg2=""/>
     </condition>
   </target>
 
@@ -476,22 +444,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="result.rewrite-rule.class" value="${result.rewrite-rule.class}" if:set="result.rewrite-rule.class"/>
       </module>
     </pipeline>
-    <job-helper file="canditopics.list" property="canditopicslist"/>
-    <job-helper file="conreftargets.list" property="conreftargetslist"/>
-    <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-helper file="fullditamap.list" property="fullditamaplist"/>
-    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
-    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
-    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
-    <job-helper file="hreftargets.list" property="hreftargetslist"/>
-    <job-helper file="outditafiles.list" property="outditafileslist"/>
-    <job-helper file="resourceonly.list" property="resourceonlylist"/>
-    <job-helper file="resourceonly.list" property="resourceonlylist"/>    
-    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
-    <job-helper file="subtargets.list" property="subtargetslist"/>
-    <job-helper file="user.input.file.list" property="user.input.file"/>
-    <job-helper file="usr.input.file.list" property="user.input.file"/>
-    <job-property dir="${dita.temp.dir}"/>
   </target>
   
   <!-- copy-files
@@ -546,6 +498,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
   
   <target name="copy-flag-check">
+    <job-property dir="${dita.temp.dir}"/>
     <condition property="preprocess.copy-flag.skip">
       <or>
         <isset property="preprocess.copy-files.skip"/>
