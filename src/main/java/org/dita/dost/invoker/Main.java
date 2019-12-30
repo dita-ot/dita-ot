@@ -263,9 +263,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * @since Ant 1.6
      */
     private void processArgs(final String[] arguments) {
-        final File integratorFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
 
         args = argumentParser.processArgs(arguments);
+        System.err.println(args.getClass().getCanonicalName());
         final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
         projectProps = Collections.singletonList(definedProps);
         buildFile = args.buildFile;
@@ -274,13 +274,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             printVersion(args.msgOutputLevel);
             return;
         } else if (args.justPrintUsage) {
-            printUsage();
+            args.printUsage();
             return;
         } else if (args.justPrintDiagnostics) {
             Diagnostics.doReport(System.out, args.msgOutputLevel);
             return;
         }
 
+        final File integratorFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
         if (args instanceof PluginsArguments) {
             printPlugins();
             return;
@@ -291,7 +292,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             final DeliverablesArguments deliverablesArgs = (DeliverablesArguments) args;
             if (deliverablesArgs.projectFile == null) {
                 printErrorMessage("Error: Project file not defined");
-                printUsage();
+                args.printUsage();
                 throw new BuildException("");
             }
             printDeliverables(deliverablesArgs.projectFile);
@@ -309,6 +310,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         } else if (args instanceof UninstallArguments) {
             final UninstallArguments installArgs = (UninstallArguments) args;
+            if (installArgs.uninstallId == null) {
+                throw new BuildException("You must specify plug-in identifier when using the uninstall subcommand");
+            }
             buildFile = integratorFile;
             targets.clear();
             targets.add("uninstall");
@@ -322,13 +326,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             if (conversionArgs.projectFile == null) {
                 if (!definedProps.containsKey(ANT_TRANSTYPE)) {
                     printErrorMessage("Error: Transformation type not defined");
-                    printUsage();
+                    args.printUsage();
                     throw new BuildException("");
                     //justPrintUsage = true;
                 }
                 if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
                     printErrorMessage("Error: Input file not defined");
-                    printUsage();
+                    args.printUsage();
                     throw new BuildException("");
                     //justPrintUsage = true;
                 }
@@ -342,6 +346,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             if (!definedProps.containsKey(ANT_BASE_TEMP_DIR) && !definedProps.containsKey(ANT_TEMP_DIR)) {
                 definedProps.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
             }
+        } else {
+            throw new RuntimeException("Command or subcommand not supported: " + args.getClass().getCanonicalName());
         }
 
         // make sure buildfile exists
@@ -747,94 +753,94 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return logger;
     }
 
-    /**
-     * Prints the usage information for this class to <code>System.out</code>.
-     */
-    private static void printUsage() {
-        final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita -i <file> -f <name> [options]\n");
-        msg.append("   or: dita --project=<file> [options]\n");
-        msg.append("   or: dita --propertyfile=<file> [options]\n");
-        msg.append("   or: dita --install [=<file> | <url> | <id>]\n");
-        msg.append("   or: dita --uninstall <id>\n");
-        msg.append("   or: dita --plugins\n");
-        msg.append("   or: dita --transtypes\n");
-        msg.append("   or: dita --deliverables\n");
-        msg.append("   or: dita --help\n");
-        msg.append("   or: dita --version\n");
-        msg.append("Subcommands: \n");
+//    /**
+//     * Prints the usage information for this class to <code>System.out</code>.
+//     */
+//    private static void printUsage() {
+//        final StringBuilder msg = new StringBuilder();
+//        msg.append("Usage: dita -i <file> -f <name> [options]\n");
 //        msg.append("   or: dita --project=<file> [options]\n");
 //        msg.append("   or: dita --propertyfile=<file> [options]\n");
-        msg.append("   install [=<file> | <url> | <id>]\n");
-        msg.append("   uninstall <id>\n");
-        msg.append("   plugins\n");
-        msg.append("   transtypes\n");
-        msg.append("   deliverables\n");
+//        msg.append("   or: dita --install [=<file> | <url> | <id>]\n");
+//        msg.append("   or: dita --uninstall <id>\n");
+//        msg.append("   or: dita --plugins\n");
+//        msg.append("   or: dita --transtypes\n");
+//        msg.append("   or: dita --deliverables\n");
 //        msg.append("   or: dita --help\n");
 //        msg.append("   or: dita --version\n");
-        msg.append("Arguments: \n");
-        msg.append("  -i <file>, --input=<file>    input file\n");
-        msg.append("  -f <name>, --format=<name>   output format (transformation type)\n");
-        msg.append("  -p <name>, --project=<name>  run project file\n");
-        msg.append("  -r <file>, --resource=<file> resource file\n");
-//        msg.append("  --install [<file>]           install plug-in from a local ZIP file\n");
-//        msg.append("  --install [<url>]            install plug-in from a URL\n");
-//        msg.append("  --install [<id>]             install plug-in from plugin registry\n");
-//        msg.append("  --install                    reload plug-ins\n");
-//        msg.append("  --uninstall <id>             uninstall plug-in with the ID\n");
-//        msg.append("  --plugins                    print list of installed plug-ins\n");
-//        msg.append("  --transtypes                 print list of installed transtypes\n");
-//        msg.append("  --deliverables               print list of deliverables in project\n");
-        msg.append("  -h, --help                   print this message\n");
-        msg.append("  --version                    print version information and exit\n");
-        msg.append("Options: \n");
-        msg.append("  -o, --output=<dir>          output directory\n");
-        // msg.append("  -diagnostics           print information that might be helpful to"
-        // + lSep);
-        // msg.append("                         diagnose or report problems." +
-        // lSep);
-        // msg.append("  -quiet, -q             be extra quiet" + lSep);
-        msg.append("  --filter=<files>             filter and flagging files\n");
-        msg.append("  --force                      force install plug-in\n");
-        msg.append("  -t, --temp=<dir>             temporary directory\n");
-        msg.append("  -v, --verbose                verbose logging\n");
-        msg.append("  -d, --debug                  print debugging information\n");
-        // msg.append("  -emacs, -e             produce logging information without adornments"
-        // + lSep);
-        // msg.append("  -lib <path>            specifies a path to search for jars and classes"
-        // + lSep);
-        msg.append("  -l, --logfile=<file>        use given file for log\n");
-        // msg.append("  -logger <classname>    the class which is to perform logging"
-        // + lSep);
-        // msg.append("  -listener <classname>  add an instance of class as a project listener"
-        // + lSep);
-        // msg.append("  -noinput               do not allow interactive input"
-        // + lSep);
-        // msg.append("  -buildfile <file>      use given buildfile" + lSep);
-        // msg.append("    -file    <file>              ''" + lSep);
-        // msg.append("    -f       <file>              ''" + lSep);
-        msg.append("  --<property>=<value>         use value for given property\n");
-        msg.append("  --propertyfile=<name>        load all properties from file\n");
-        // msg.append("  -keep-going, -k        execute all targets that do not depend"
-        // + lSep);
-        // msg.append("                         on failed target(s)" + lSep);
-        // msg.append("  -inputhandler <class>  the class which will handle input requests"
-        // + lSep);
-        // msg.append("  -nice  number          A niceness value for the main thread:"
-        // + lSep
-        // +
-        // "                         1 (lowest) to 10 (highest); 5 is the default"
-        // + lSep);
-        // msg.append("  -nouserlib             Run ant without using the jar files from"
-        // + lSep
-        // + "                         ${user.home}/.ant/lib" + lSep);
-        // msg.append("  -noclasspath           Run ant without using CLASSPATH"
-        // + lSep);
-        // msg.append("  -autoproxy             Java1.5+: use the OS proxy settings"
-        // + lSep);
-        // msg.append("  -main <class>          override Ant's normal entry point");
-        System.out.println(msg.toString());
-    }
+//        msg.append("Subcommands: \n");
+////        msg.append("   or: dita --project=<file> [options]\n");
+////        msg.append("   or: dita --propertyfile=<file> [options]\n");
+//        msg.append("   install [=<file> | <url> | <id>]\n");
+//        msg.append("   uninstall <id>\n");
+//        msg.append("   plugins\n");
+//        msg.append("   transtypes\n");
+//        msg.append("   deliverables\n");
+////        msg.append("   or: dita --help\n");
+////        msg.append("   or: dita --version\n");
+//        msg.append("Arguments: \n");
+//        msg.append("  -i <file>, --input=<file>    input file\n");
+//        msg.append("  -f <name>, --format=<name>   output format (transformation type)\n");
+//        msg.append("  -p <name>, --project=<name>  run project file\n");
+//        msg.append("  -r <file>, --resource=<file> resource file\n");
+////        msg.append("  --install [<file>]           install plug-in from a local ZIP file\n");
+////        msg.append("  --install [<url>]            install plug-in from a URL\n");
+////        msg.append("  --install [<id>]             install plug-in from plugin registry\n");
+////        msg.append("  --install                    reload plug-ins\n");
+////        msg.append("  --uninstall <id>             uninstall plug-in with the ID\n");
+////        msg.append("  --plugins                    print list of installed plug-ins\n");
+////        msg.append("  --transtypes                 print list of installed transtypes\n");
+////        msg.append("  --deliverables               print list of deliverables in project\n");
+//        msg.append("  -h, --help                   print this message\n");
+//        msg.append("  --version                    print version information and exit\n");
+//        msg.append("Options: \n");
+//        msg.append("  -o, --output=<dir>          output directory\n");
+//        // msg.append("  -diagnostics           print information that might be helpful to"
+//        // + lSep);
+//        // msg.append("                         diagnose or report problems." +
+//        // lSep);
+//        // msg.append("  -quiet, -q             be extra quiet" + lSep);
+//        msg.append("  --filter=<files>             filter and flagging files\n");
+//        msg.append("  --force                      force install plug-in\n");
+//        msg.append("  -t, --temp=<dir>             temporary directory\n");
+//        msg.append("  -v, --verbose                verbose logging\n");
+//        msg.append("  -d, --debug                  print debugging information\n");
+//        // msg.append("  -emacs, -e             produce logging information without adornments"
+//        // + lSep);
+//        // msg.append("  -lib <path>            specifies a path to search for jars and classes"
+//        // + lSep);
+//        msg.append("  -l, --logfile=<file>        use given file for log\n");
+//        // msg.append("  -logger <classname>    the class which is to perform logging"
+//        // + lSep);
+//        // msg.append("  -listener <classname>  add an instance of class as a project listener"
+//        // + lSep);
+//        // msg.append("  -noinput               do not allow interactive input"
+//        // + lSep);
+//        // msg.append("  -buildfile <file>      use given buildfile" + lSep);
+//        // msg.append("    -file    <file>              ''" + lSep);
+//        // msg.append("    -f       <file>              ''" + lSep);
+//        msg.append("  --<property>=<value>         use value for given property\n");
+//        msg.append("  --propertyfile=<name>        load all properties from file\n");
+//        // msg.append("  -keep-going, -k        execute all targets that do not depend"
+//        // + lSep);
+//        // msg.append("                         on failed target(s)" + lSep);
+//        // msg.append("  -inputhandler <class>  the class which will handle input requests"
+//        // + lSep);
+//        // msg.append("  -nice  number          A niceness value for the main thread:"
+//        // + lSep
+//        // +
+//        // "                         1 (lowest) to 10 (highest); 5 is the default"
+//        // + lSep);
+//        // msg.append("  -nouserlib             Run ant without using the jar files from"
+//        // + lSep
+//        // + "                         ${user.home}/.ant/lib" + lSep);
+//        // msg.append("  -noclasspath           Run ant without using CLASSPATH"
+//        // + lSep);
+//        // msg.append("  -autoproxy             Java1.5+: use the OS proxy settings"
+//        // + lSep);
+//        // msg.append("  -main <class>          override Ant's normal entry point");
+//        System.out.println(msg.toString());
+//    }
 
     /**
      * Prints the Ant version information to <code>System.out</code>.

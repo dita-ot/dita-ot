@@ -38,16 +38,6 @@ public class TranstypesArguments extends Arguments {
 //        msg.append("   or: dita --deliverables\n");
 //        msg.append("   or: dita --help\n");
 //        msg.append("   or: dita --version\n");
-        msg.append("Subcommands: \n");
-//        msg.append("   or: dita --project=<file> [options]\n");
-//        msg.append("   or: dita --propertyfile=<file> [options]\n");
-//        msg.append("   install [=<file> | <url> | <id>]\n");
-//        msg.append("   uninstall <id>\n");
-//        msg.append("   plugins\n");
-//        msg.append("   transtypes\n");
-//        msg.append("   deliverables\n");
-//        msg.append("   or: dita --help\n");
-//        msg.append("   or: dita --version\n");
 //        msg.append("Arguments: \n");
 //        msg.append("  -i <file>, --input=<file>    input file\n");
 //        msg.append("  -f <name>, --format=<name>   output format (transformation type)\n");
@@ -61,9 +51,9 @@ public class TranstypesArguments extends Arguments {
 //        msg.append("  --plugins                    print list of installed plug-ins\n");
 //        msg.append("  --transtypes                 print list of installed transtypes\n");
 //        msg.append("  --deliverables               print list of deliverables in project\n");
-        msg.append("  -h, --help                   print this message\n");
 //        msg.append("  --version                    print version information and exit\n");
         msg.append("Options: \n");
+        msg.append("  -h, --help                   print this message\n");
 //        msg.append("  -o, --output=<dir>          output directory\n");
         // msg.append("  -diagnostics           print information that might be helpful to"
         // + lSep);

@@ -262,18 +262,22 @@ final class ArgumentParser {
                 justPrintUsage = true;
             } else if (isLongForm(arg, "-version")) {
                 justPrintVersion = true;
-            } else if (isLongForm(arg, "-plugins")) {
+            } else if (args.equals("plugins") || isLongForm(arg, "-plugins")) {
                 justPrintPlugins = true;
-            } else if (isLongForm(arg, "-transtypes")) {
+            } else if (args.equals("transtypes") || isLongForm(arg, "-transtypes")) {
                 justPrintTranstypes = true;
-            } else if (isLongForm(arg, "-deliverables")) {
+            } else if (args.equals("deliverables") || isLongForm(arg, "-deliverables")) {
                 justPrintDeliverables = true;
+            } else if (arg.equals("install")) {
+                handleSubcommandInstall(arg, args);
             } else if (isLongForm(arg, "-install")) {
                 handleArgInstall(arg, args);
             } else if (isLongForm(arg, "-project") || arg.equals("-p")) {
                 handleArgProject(arg, args);
             } else if (isLongForm(arg, "-force")) {
                 definedProps.put("force", "true");
+            } else if (arg.equals("uninstall")) {
+                handleSubcommandUninstall(arg, args);
             } else if (isLongForm(arg, "-uninstall")) {
                 handleArgUninstall(arg, args);
             } else if (isLongForm(arg, "-diagnostics")) {
@@ -436,6 +440,20 @@ final class ArgumentParser {
         }
     }
 
+    private void handleSubcommandInstall(final String arg, final Deque<String> args) {
+        install = true;
+        String value;
+        value = args.peek();
+        if (value != null && !value.startsWith("-")) {
+            value = args.pop();
+        } else {
+            value = null;
+        }
+        if (value != null) {
+            installFile = value;
+        }
+    }
+
     /**
      * Handle the --project argument
      */
@@ -467,6 +485,18 @@ final class ArgumentParser {
         }
         if (value == null) {
             throw new BuildException("You must specify a installation package when using the --uninstall argument");
+        }
+        uninstallId = value;
+    }
+
+    private void handleSubcommandUninstall(final String arg, final Deque<String> args) {
+        install = true;
+        String value;
+        value = args.peek();
+        if (value != null && !value.startsWith("-")) {
+            value = args.pop();
+        } else {
+            value = null;
         }
         uninstallId = value;
     }
