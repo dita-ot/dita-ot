@@ -22,7 +22,7 @@ public class ArgumentParserTest {
 
     @Test
     public void shortArguments() {
-        final Arguments act = parser.processArgs(new String[]{
+        final ConversionArguments act = (ConversionArguments) parser.processArgs(new String[]{
                 "-i", "src",
                 "-f", "html5",
                 "-t", "tmp",
@@ -39,7 +39,7 @@ public class ArgumentParserTest {
 
     @Test
     public void longArguments() {
-        final Arguments act = parser.processArgs(new String[]{
+        final ConversionArguments act = (ConversionArguments) parser.processArgs(new String[]{
                 "--input=src",
                 "--format=html5",
                 "--temp=tmp",

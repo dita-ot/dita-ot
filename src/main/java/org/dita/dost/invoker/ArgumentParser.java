@@ -344,11 +344,51 @@ final class ArgumentParser {
 
         definedProps.putAll(loadPropertyFiles());
 
-        return new Arguments(useColor, msgOutputLevel, buildFile, install, installFile, projectFile, uninstallId,
-                inputs, targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
-                inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
-                justPrintDiagnostics, justPrintPlugins, justPrintTranstypes, justPrintDeliverables, logFile,
-                definedProps, resources);
+        if (justPrintTranstypes) {
+            return new TranstypesArguments(
+                    useColor, msgOutputLevel, buildFile,
+                    targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                    inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                    justPrintDiagnostics, logFile, definedProps);
+        } else if (justPrintPlugins) {
+            return new PluginsArguments(
+                    useColor, msgOutputLevel, buildFile,
+                    targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                    inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                    justPrintDiagnostics, logFile, definedProps);
+        } else if (justPrintDeliverables) {
+            return new DeliverablesArguments(projectFile,
+                    useColor, msgOutputLevel, buildFile,
+                    targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                    inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                    justPrintDiagnostics, logFile, definedProps);
+        } else if (install) {
+            if (installFile != null) {
+                return new InstallArguments(installFile,
+                        useColor, msgOutputLevel, buildFile,
+                        targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                        inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                        justPrintDiagnostics, logFile, definedProps);
+            } else if (uninstallId != null) {
+                return new UninstallArguments(uninstallId,
+                        useColor, msgOutputLevel, buildFile,
+                        targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                        inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                        justPrintDiagnostics, logFile, definedProps);
+            } else {
+                return new ReinstallArguments(
+                        useColor, msgOutputLevel, buildFile,
+                        targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                        inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                        justPrintDiagnostics, logFile, definedProps);
+            }
+        } else {
+            return new ConversionArguments(projectFile, inputs, resources,
+                    useColor, msgOutputLevel, buildFile,
+                    targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                    inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                    justPrintDiagnostics, logFile, definedProps);
+        }
     }
 
     private boolean getUseColor() {

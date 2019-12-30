@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  *
  * @since 3.4
  */
-final class Arguments {
+abstract class Arguments {
 
     final boolean useColor;
     final File logFile;
@@ -32,24 +32,6 @@ final class Arguments {
      * File that we are using for configuration.
      */
     final File buildFile;
-    /**
-     * Run integrator
-     */
-    final boolean install;
-    /**
-     * Plug-in installation file. May be either a system path or a URL.
-     */
-    final String installFile;
-    /**
-     * Project file
-     */
-    final File projectFile;
-    /**
-     * Plug-in uninstall ID.
-     */
-    final String uninstallId;
-    final List<String> inputs;
-    final List<String> resources;
     /**
      * The build targets.
      */
@@ -95,26 +77,16 @@ final class Arguments {
     final boolean justPrintUsage;
     final boolean justPrintVersion;
     final boolean justPrintDiagnostics;
-    final boolean justPrintPlugins;
-    final boolean justPrintTranstypes;
-    final boolean justPrintDeliverables;
     final Map<String, Object> definedProps;
 
-    public Arguments(boolean useColor, int msgOutputLevel, File buildFile, boolean install, String installFile,
-                     File projectFile, String uninstallId, List<String> inputs, Vector<String> targets,
+    public Arguments(boolean useColor, int msgOutputLevel, File buildFile, Vector<String> targets,
                      Vector<String> listeners, Vector<String> propertyFiles, boolean allowInput, boolean keepGoingMode,
                      String loggerClassname, String inputHandlerClassname, boolean emacsMode, Integer threadPriority,
                      boolean proxy, boolean justPrintUsage, boolean justPrintVersion, boolean justPrintDiagnostics,
-                     boolean justPrintPlugins, boolean justPrintTranstypes, boolean justPrintDeliverables,
-                     File logFile, Map<String, Object> definedProps, List<String> resources) {
+                     File logFile, Map<String, Object> definedProps) {
         this.useColor = useColor;
         this.msgOutputLevel = msgOutputLevel;
         this.buildFile = buildFile;
-        this.install = install;
-        this.installFile = installFile;
-        this.projectFile = projectFile;
-        this.uninstallId = uninstallId;
-        this.inputs = inputs;
         this.targets = targets;
         this.listeners = listeners;
         this.propertyFiles = propertyFiles;
@@ -128,13 +100,11 @@ final class Arguments {
         this.justPrintUsage = justPrintUsage;
         this.justPrintVersion = justPrintVersion;
         this.justPrintDiagnostics = justPrintDiagnostics;
-        this.justPrintPlugins = justPrintPlugins;
-        this.justPrintTranstypes = justPrintTranstypes;
-        this.justPrintDeliverables = justPrintDeliverables;
         this.logFile = logFile;
         this.definedProps = definedProps;
-        this.resources = resources;
     }
+
+    abstract void printUsage();
 
     static abstract class Argument {
         final String property;
