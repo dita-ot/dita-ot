@@ -110,7 +110,6 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
 // End to end test
 
 dependencies {
-    testCompile project(':eclipsehelp')
     testCompile project(':htmlhelp')
     testCompile project(':fo')
     testCompile project(':fop')
@@ -145,7 +144,7 @@ task copyInstall(type: Copy) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":eclipsehelp:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
+task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
     description "Build archives and install all plugins with dependencies"
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/config")
@@ -231,7 +230,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "docsrc/**"
         exclude "plugins/*/plugin.xml"
         include "plugins/org.dita.base/**"
-        include "plugins/org.dita.eclipsehelp/**"
         include "plugins/org.dita.html5/**"
         exclude "plugins/org.dita.html5/build"
         exclude "plugins/org.dita.html5/.sass-cache"
@@ -265,7 +263,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir
@@ -321,7 +319,6 @@ task generateJavadocs(type: Javadoc) {
 generateJavadocs.onlyIf { skipDocs() }
 
 def plugins = [
-        "org.dita.eclipsehelp",
         "org.dita.html5",
         "org.dita.htmlhelp",
         "org.dita.pdf2",
