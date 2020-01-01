@@ -140,6 +140,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="ARTLBL" expression="${args.artlbl}" if:set="args.artlbl" />
         <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if:set="args.gen.task.lbl" />
         <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if:set="args.xhtml.classattr"/>
+        <param name="PRESERVE-DITA-DOMAIN" expression="${args.xhtml.domainattr}" if:set="args.xhtml.domainattr"/>
         <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if:set="args.hide.parent.link"/>
         <param name="include.rellinks" expression="${include.rellinks}"/>
         <param name="INDEXSHOW" expression="${args.indexshow}" if:set="args.indexshow" />
