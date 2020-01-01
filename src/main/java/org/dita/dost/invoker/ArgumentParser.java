@@ -262,11 +262,11 @@ final class ArgumentParser {
                 justPrintUsage = true;
             } else if (isLongForm(arg, "-version")) {
                 justPrintVersion = true;
-            } else if (args.equals("plugins") || isLongForm(arg, "-plugins")) {
+            } else if (arg.equals("plugins") || isLongForm(arg, "-plugins")) {
                 justPrintPlugins = true;
-            } else if (args.equals("transtypes") || isLongForm(arg, "-transtypes")) {
+            } else if (arg.equals("transtypes") || isLongForm(arg, "-transtypes")) {
                 justPrintTranstypes = true;
-            } else if (args.equals("deliverables") || isLongForm(arg, "-deliverables")) {
+            } else if (arg.equals("deliverables") || isLongForm(arg, "-deliverables")) {
                 justPrintDeliverables = true;
             } else if (arg.equals("install")) {
                 handleSubcommandInstall(arg, args);

@@ -21,6 +21,11 @@ public class ArgumentParserTest {
     private final ArgumentParser parser = new ArgumentParser();
 
     @Test
+    public void empty() {
+        final ConversionArguments act = (ConversionArguments) parser.processArgs(new String[0]);
+    }
+
+    @Test
     public void shortArguments() {
         final ConversionArguments act = (ConversionArguments) parser.processArgs(new String[]{
                 "-i", "src",
@@ -53,4 +58,86 @@ public class ArgumentParserTest {
         assertEquals(new File("out").getAbsolutePath(), act.definedProps.get("output.dir"));
         assertEquals(Project.MSG_INFO, act.msgOutputLevel);
     }
+
+    @Test
+    public void installSubcommand() {
+        final InstallArguments act = (InstallArguments) parser.processArgs(new String[]{
+                "install",
+                "org.dita.eclipsehelp"
+        });
+        assertEquals("org.dita.eclipsehelp", act.installFile);
+    }
+
+    @Test
+    public void installSubcommand_optionForm() {
+        final InstallArguments act = (InstallArguments) parser.processArgs(new String[]{
+                "--install=org.dita.eclipsehelp"
+        });
+        assertEquals("org.dita.eclipsehelp", act.installFile);
+    }
+
+    @Test
+    public void uninstallSubcommand() {
+        final UninstallArguments act = (UninstallArguments) parser.processArgs(new String[]{
+                "uninstall",
+                "org.dita.eclipsehelp"
+        });
+        assertEquals("org.dita.eclipsehelp", act.uninstallId);
+    }
+
+    @Test
+    public void uninstallSubcommand_optionForm() {
+        final UninstallArguments act = (UninstallArguments) parser.processArgs(new String[]{
+                "--uninstall=org.dita.eclipsehelp"
+        });
+        assertEquals("org.dita.eclipsehelp", act.uninstallId);
+    }
+
+    @Test
+    public void pluginsSubcommand() {
+        final PluginsArguments act = (PluginsArguments) parser.processArgs(new String[]{
+                "plugins"
+        });
+    }
+
+    @Test
+    public void pluginsSubcommand_optionForm() {
+        final PluginsArguments act = (PluginsArguments) parser.processArgs(new String[]{
+                "--plugins"
+        });
+    }
+
+    @Test
+    public void transtypesSubcommand() {
+        final TranstypesArguments act = (TranstypesArguments) parser.processArgs(new String[]{
+                "transtypes"
+        });
+    }
+
+    @Test
+    public void transtypesSubcommand__optionForm() {
+        final TranstypesArguments act = (TranstypesArguments) parser.processArgs(new String[]{
+                "--transtypes"
+        });
+    }
+
+    @Test
+    public void deliverablesSubcommand() {
+        final DeliverablesArguments act = (DeliverablesArguments) parser.processArgs(new String[]{
+                "deliverables",
+                "-p", "project.json"
+        });
+        assertEquals(new File("project.json").getAbsoluteFile(), act.projectFile);
+    }
+
+    @Test
+    public void deliverablesSubcommand__optionForm() {
+        final DeliverablesArguments act = (DeliverablesArguments) parser.processArgs(new String[]{
+                "--deliverables",
+                "-p", "project.json"
+        });
+        assertEquals(new File("project.json").getAbsoluteFile(), act.projectFile);
+    }
+
+
 }
