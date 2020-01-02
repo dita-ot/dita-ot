@@ -60,6 +60,13 @@ public class ArgumentParserTest {
     }
 
     @Test
+    public void reinstallSubcommand() {
+        final InstallArguments act = (InstallArguments) parser.processArgs(new String[]{
+                "install"
+        });
+    }
+
+    @Test
     public void installSubcommand() {
         final InstallArguments act = (InstallArguments) parser.processArgs(new String[]{
                 "install",

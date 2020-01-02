@@ -299,12 +299,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             final InstallArguments installArgs = (InstallArguments) args;
             buildFile = integratorFile;
             targets.clear();
-            targets.add("install");
-            final File f = new File(installArgs.installFile.replace('/', File.separatorChar)).getAbsoluteFile();
-            if (f.exists()) {
-                definedProps.put(ANT_PLUGIN_FILE, f.getAbsolutePath());
+            if (installArgs.installFile != null) {
+                targets.add("install");
+                final File f = new File(installArgs.installFile.replace('/', File.separatorChar)).getAbsoluteFile();
+                if (f.exists()) {
+                    definedProps.put(ANT_PLUGIN_FILE, f.getAbsolutePath());
+                } else {
+                    definedProps.put(ANT_PLUGIN_FILE, installArgs.installFile);
+                }
             } else {
-                definedProps.put(ANT_PLUGIN_FILE, installArgs.installFile);
+                targets.add("integrate");
             }
         } else if (args instanceof UninstallArguments) {
             final UninstallArguments installArgs = (UninstallArguments) args;
@@ -315,10 +319,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             targets.clear();
             targets.add("uninstall");
             definedProps.put(ANT_PLUGIN_ID, installArgs.uninstallId);
-        } else if (args instanceof ReinstallArguments) {
-            buildFile = integratorFile;
-            targets.clear();
-            targets.add("integrate");
         } else if (args instanceof ConversionArguments) {
             final ConversionArguments conversionArgs = (ConversionArguments) args;
             if (conversionArgs.projectFile == null) {
@@ -405,12 +405,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                             return;
                         }
                         if (param.value != null) {
-                            final Argument argument = argumentParser.getPluginArguments().getOrDefault(param.name, new StringArgument(param.name));
+                            final Argument argument = ArgumentParser.getPluginArguments().getOrDefault(param.name, new StringArgument(param.name));
                             final String value = argument.getValue(param.value);
                             props.put(param.name, value);
                         } else {
                             final String value;
-                            final Argument argument = argumentParser.getPluginArguments().get("--" + param.name);
+                            final Argument argument = ArgumentParser.getPluginArguments().get("--" + param.name);
                             if (argument != null && (argument instanceof FileArgument || argument instanceof AbsoluteFileArgument)) {
                                 if (param.href != null) {
                                     value = Paths.get(base.resolve(param.href)).toString();

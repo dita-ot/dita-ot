@@ -10,6 +10,8 @@
 package org.dita.dost.invoker;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.dita.dost.util.Configuration;
 
 import java.io.File;
 import java.util.*;
@@ -22,89 +24,154 @@ import java.util.stream.Collectors;
  */
 abstract class Arguments {
 
-    final boolean useColor;
-    final File logFile;
+    boolean useColor;
+    File logFile;
     /**
      * Our current message output status. Follows Project.MSG_XXX.
      */
-    final int msgOutputLevel;
+    int msgOutputLevel = Project.MSG_WARN;
     /**
      * File that we are using for configuration.
      */
-    final File buildFile;
-    /**
-     * The build targets.
-     */
-    final Vector<String> targets;
+    File buildFile;
     /**
      * Names of classes to add as listeners to project.
      */
-    final Vector<String> listeners;
-    /**
-     * File names of property files to load on startup.
-     */
-    final Vector<String> propertyFiles;
+    Vector<String> listeners;
     /**
      * Indicates whether this build is to support interactive input
      */
-    final boolean allowInput;
+    boolean allowInput;
     /**
      * keep going mode
      */
-    final boolean keepGoingMode;
+    boolean keepGoingMode;
     /**
      * The Ant logger class. There may be only one logger. It will have the
      * right to use the 'out' PrintStream. The class must implements the
      * BuildLogger interface.
      */
-    final String loggerClassname;
+    String loggerClassname;
     /**
      * The Ant InputHandler class. There may be only one input handler.
      */
-    final String inputHandlerClassname;
+    String inputHandlerClassname;
     /**
      * Whether or not output to the log is to be unadorned.
      */
-    final boolean emacsMode;
+    boolean emacsMode;
     /**
      * optional thread priority
      */
-    final Integer threadPriority;
+    Integer threadPriority;
     /**
      * proxy flag: default is false
      */
-    final boolean proxy;
-    final boolean justPrintUsage;
-    final boolean justPrintVersion;
-    final boolean justPrintDiagnostics;
-    final Map<String, Object> definedProps;
+    boolean proxy;
+    boolean justPrintUsage;
+    boolean justPrintVersion;
+    boolean justPrintDiagnostics;
+    Map<String, Object> definedProps = new HashMap<>();
 
-    public Arguments(boolean useColor, int msgOutputLevel, File buildFile, Vector<String> targets,
-                     Vector<String> listeners, Vector<String> propertyFiles, boolean allowInput, boolean keepGoingMode,
-                     String loggerClassname, String inputHandlerClassname, boolean emacsMode, Integer threadPriority,
-                     boolean proxy, boolean justPrintUsage, boolean justPrintVersion, boolean justPrintDiagnostics,
-                     File logFile, Map<String, Object> definedProps) {
-        this.useColor = useColor;
-        this.msgOutputLevel = msgOutputLevel;
-        this.buildFile = buildFile;
-        this.targets = targets;
-        this.listeners = listeners;
-        this.propertyFiles = propertyFiles;
-        this.allowInput = allowInput;
-        this.keepGoingMode = keepGoingMode;
-        this.loggerClassname = loggerClassname;
-        this.inputHandlerClassname = inputHandlerClassname;
-        this.emacsMode = emacsMode;
-        this.threadPriority = threadPriority;
-        this.proxy = proxy;
-        this.justPrintUsage = justPrintUsage;
-        this.justPrintVersion = justPrintVersion;
-        this.justPrintDiagnostics = justPrintDiagnostics;
-        this.logFile = logFile;
-        this.definedProps = definedProps;
+    public Arguments() {
+        useColor = getUseColor();
     }
 
     abstract void printUsage();
+
+    abstract Arguments parse(String[] arguments);
+
+    boolean getUseColor() {
+        final String os = System.getProperty("os.name");
+        if (os != null && os.startsWith("Windows")) {
+            return false;
+        }
+        return Boolean.parseBoolean(Configuration.configuration.getOrDefault("cli.color", "true"));
+    }
+
+    boolean isLongForm(String arg, String property) {
+        final String name = arg.contains("=") ? arg.substring(0, arg.indexOf('=')) : arg;
+        return name.equals(property) || name.equals("-" + property);
+    }
+
+    void parseCommonOptions(final String arg, final Deque<String> args) {
+        if (isLongForm(arg, "-help") || arg.equals("-h")) {
+            justPrintUsage = true;
+        } else if (isLongForm(arg, "-verbose") || arg.equals("-v")) {
+            msgOutputLevel = Project.MSG_INFO;
+        } else if (isLongForm(arg, "-debug") || arg.equals("-d")) {
+            msgOutputLevel = Project.MSG_VERBOSE;
+        } else if (isLongForm(arg, "-emacs") || arg.equals("-e")) {
+            emacsMode = true;
+        } else if (isLongForm(arg, "-logfile") || arg.equals("-l")) {
+            handleArgLogFile(arg, args);
+        } else if (isLongForm(arg, "-buildfile") || isLongForm(arg, "-file")) {
+            handleArgBuildFile(args);
+        } else if (isLongForm(arg, "-listener")) {
+            handleArgListener(args);
+        } else if (isLongForm(arg, "-logger")) {
+            handleArgLogger(args);
+        } else {
+            throw new BuildException("Unsupported argument: %s", arg);
+        }
+    }
+
+    void handleArgLogFile(String arg, Deque<String> args) {
+        final Map.Entry<String, String> entry = parse(arg, args);
+        if (entry.getValue() == null) {
+            throw new BuildException("Missing value for log file " + entry.getKey());
+        }
+        logFile = new File(entry.getValue());
+        useColor = false;
+    }
+
+    Map.Entry<String, String> parse(final String arg, final Deque<String> args) {
+        String name = arg;
+        String value;
+        final int posEq = name.indexOf("=");
+        if (posEq > 0) {
+            value = name.substring(posEq + 1);
+            name = name.substring(0, posEq);
+        } else {
+            value = args.pop();
+        }
+        return new AbstractMap.SimpleEntry(name, value);
+    }
+
+    /**
+     * Handle the --buildfile, --file, -f argument
+     */
+    void handleArgBuildFile(final Deque<String> args) {
+        final String value = args.pop();
+        if (value == null) {
+            throw new BuildException("You must specify a buildfile when using the --buildfile argument");
+        }
+        buildFile = new File(value.replace('/', File.separatorChar));
+    }
+
+    /**
+     * Handle --listener argument
+     */
+    void handleArgListener(final Deque<String> args) {
+        final String value = args.pop();
+        if (value == null) {
+            throw new BuildException("You must specify a classname when using the --listener argument");
+        }
+        listeners.addElement(value);
+    }
+
+    /**
+     * Handle the --logger argument.
+     */
+    private void handleArgLogger(final Deque<String> args) {
+        if (loggerClassname != null) {
+            throw new BuildException("Only one logger class may be specified.");
+        }
+        loggerClassname = args.pop();
+        if (loggerClassname == null) {
+            throw new BuildException("You must specify a classname when using the -logger argument");
+        }
+    }
 
     static abstract class Argument {
         final String property;
