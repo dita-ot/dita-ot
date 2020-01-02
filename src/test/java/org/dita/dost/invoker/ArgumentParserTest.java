@@ -132,6 +132,15 @@ public class ArgumentParserTest {
     public void deliverablesSubcommand() {
         final DeliverablesArguments act = (DeliverablesArguments) parser.processArgs(new String[]{
                 "deliverables",
+                "project.json"
+        });
+        assertEquals(new File("project.json").getAbsoluteFile(), act.projectFile);
+    }
+
+    @Test
+    public void deliverablesSubcommand__withOption() {
+        final DeliverablesArguments act = (DeliverablesArguments) parser.processArgs(new String[]{
+                "deliverables",
                 "-p", "project.json"
         });
         assertEquals(new File("project.json").getAbsoluteFile(), act.projectFile);

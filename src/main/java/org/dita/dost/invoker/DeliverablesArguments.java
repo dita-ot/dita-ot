@@ -26,7 +26,9 @@ public class DeliverablesArguments extends Arguments {
         final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
         while (!args.isEmpty()) {
             final String arg = args.pop();
-            if (arg.equals("deliverables") || isLongForm(arg, "-deliverables")) {
+            if (arg.equals("deliverables")) {
+                handleSubcommand(arg, args);
+            } else if (isLongForm(arg, "-deliverables")) {
                 // ignore
             } else if (isLongForm(arg, "-project") || arg.equals("-p")) {
                 handleArgProject(arg, args);
@@ -35,6 +37,19 @@ public class DeliverablesArguments extends Arguments {
             }
         }
         return this;
+    }
+
+    private void handleSubcommand(final String arg, final Deque<String> args) {
+        String value;
+        value = args.peek();
+        if (value != null && !value.startsWith("-")) {
+            value = args.pop();
+        } else {
+            value = null;
+        }
+        if (value != null) {
+            projectFile = new File(value).getAbsoluteFile();
+        }
     }
 
     /**
@@ -51,7 +66,9 @@ public class DeliverablesArguments extends Arguments {
     @Override
     void printUsage() {
         final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita deliverables [options]\n");
+        msg.append("Usage: dita deliverables <file> [options]\n");
+        msg.append("Arguments: \n");
+        msg.append("  <file>                       project file\n");
         msg.append("Options: \n");
         msg.append("  -d, --debug                  print debugging information\n");
         msg.append("  -h, --help                   print this message\n");
