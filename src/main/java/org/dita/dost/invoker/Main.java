@@ -263,9 +263,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * @since Ant 1.6
      */
     private void processArgs(final String[] arguments) {
-
         args = argumentParser.processArgs(arguments);
-        System.err.println(args.getClass().getCanonicalName());
         final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
         projectProps = Collections.singletonList(definedProps);
         buildFile = args.buildFile;

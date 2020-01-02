@@ -252,7 +252,187 @@ final class ArgumentParser {
      */
     public Arguments processArgs(final String[] arguments) {
         useColor = getUseColor();
+        if (arguments.length != 0) {
+            final String subcommand = arguments[0];
+            if (subcommand.equals("plugins") || isLongForm(subcommand, "-plugins")) {
+                return parsePlugins(arguments);
+            } else if (subcommand.equals("version") || isLongForm(subcommand, "-version")) {
+                return parseVersion(arguments);
+            } else if (subcommand.equals("transtypes") || isLongForm(subcommand, "-transtypes")) {
+                return parseTranstypes(arguments);
+            } else if (subcommand.equals("deliverables") || isLongForm(subcommand, "-deliverables")) {
+                return parseDeliverables(arguments);
+            } else if (subcommand.equals("install") || isLongForm(subcommand, "-install")) {
+                return parseInstall(arguments);
+            } else if (subcommand.equals("uninstall") || isLongForm(subcommand, "-uninstall")) {
+                return parseUninstall(arguments);
+            } else {
+                return parseConversion(arguments);
+            }
+        } else {
+            return parseConversion(arguments);
+        }
+    }
 
+    private TranstypesArguments parseTranstypes(final String[] arguments) {
+        justPrintTranstypes = true;
+        final Map<String, Object> definedProps = new HashMap<>();
+        final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
+        while (!args.isEmpty()) {
+            final String arg = args.pop();
+
+            if (arg.equals("transtypes") || isLongForm(arg, "-transtypes")) {
+                justPrintTranstypes = true;
+            } else {
+                parseCommonOptions(arg, args);
+            }
+        }
+        return new TranstypesArguments(
+                useColor, msgOutputLevel, buildFile,
+                targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                justPrintDiagnostics, logFile, definedProps);
+    }
+
+    private VersionArguments parseVersion(final String[] arguments) {
+        justPrintVersion = true;
+        final Map<String, Object> definedProps = new HashMap<>();
+        final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
+        while (!args.isEmpty()) {
+            final String arg = args.pop();
+            if (arg.equals("version") || isLongForm(arg, "-version")) {
+                justPrintVersion = true;
+            } else {
+                parseCommonOptions(arg, args);
+            }
+        }
+        return new VersionArguments(
+                useColor, msgOutputLevel, buildFile,
+                targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                justPrintDiagnostics, logFile, definedProps);
+    }
+
+    private PluginsArguments parsePlugins(final String[] arguments) {
+        justPrintPlugins = true;
+        final Map<String, Object> definedProps = new HashMap<>();
+        final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
+        while (!args.isEmpty()) {
+            final String arg = args.pop();
+
+            if (arg.equals("plugins") || isLongForm(arg, "-plugins")) {
+                justPrintPlugins = true;
+            } else {
+                parseCommonOptions(arg, args);
+            }
+        }
+        return new PluginsArguments(
+                useColor, msgOutputLevel, buildFile,
+                targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                justPrintDiagnostics, logFile, definedProps);
+    }
+
+    private DeliverablesArguments parseDeliverables(final String[] arguments) {
+        justPrintDeliverables = true;
+        final Map<String, Object> definedProps = new HashMap<>();
+        final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
+        while (!args.isEmpty()) {
+            final String arg = args.pop();
+            if (arg.equals("deliverables") || isLongForm(arg, "-deliverables")) {
+                justPrintDeliverables = true;
+            } else if (isLongForm(arg, "-project") || arg.equals("-p")) {
+                handleArgProject(arg, args);
+            } else {
+                parseCommonOptions(arg, args);
+            }
+        }
+        return new DeliverablesArguments(projectFile,
+                useColor, msgOutputLevel, buildFile,
+                targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                justPrintDiagnostics, logFile, definedProps);
+    }
+
+    private Arguments parseInstall(final String[] arguments) {
+        install = true;
+        final Map<String, Object> definedProps = new HashMap<>();
+        final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
+        while (!args.isEmpty()) {
+            final String arg = args.pop();
+            if (arg.equals("install")) {
+                handleSubcommandInstall(arg, args);
+            } else if (isLongForm(arg, "-install")) {
+                handleArgInstall(arg, args);
+            } else {
+                parseCommonOptions(arg, args);
+            }
+        }
+        if (msgOutputLevel < Project.MSG_INFO) {
+            emacsMode = true;
+        }
+        if (installFile != null) {
+            return new InstallArguments(installFile,
+                    useColor, msgOutputLevel, buildFile,
+                    targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                    inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                    justPrintDiagnostics, logFile, definedProps);
+        } else {
+            return new ReinstallArguments(
+                    useColor, msgOutputLevel, buildFile,
+                    targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                    inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                    justPrintDiagnostics, logFile, definedProps);
+        }
+    }
+
+    private UninstallArguments parseUninstall(final String[] arguments) {
+        install = true;
+        final Map<String, Object> definedProps = new HashMap<>();
+        final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
+        while (!args.isEmpty()) {
+            final String arg = args.pop();
+            if (arg.equals("uninstall")) {
+                handleSubcommandUninstall(arg, args);
+            } else if (isLongForm(arg, "-uninstall")) {
+                handleArgUninstall(arg, args);
+            } else {
+                parseCommonOptions(arg, args);
+            }
+        }
+        if (msgOutputLevel < Project.MSG_INFO) {
+            emacsMode = true;
+        }
+        return new UninstallArguments(uninstallId,
+                useColor, msgOutputLevel, buildFile,
+                targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                justPrintDiagnostics, logFile, definedProps);
+    }
+
+    private void parseCommonOptions(final String arg, final Deque<String> args) {
+        if (isLongForm(arg, "-help") || arg.equals("-h")) {
+            justPrintUsage = true;
+        } else if (isLongForm(arg, "-verbose") || arg.equals("-v")) {
+            msgOutputLevel = Project.MSG_INFO;
+        } else if (isLongForm(arg, "-debug") || arg.equals("-d")) {
+            msgOutputLevel = Project.MSG_VERBOSE;
+        } else if (isLongForm(arg, "-emacs") || arg.equals("-e")) {
+            emacsMode = true;
+        } else if (isLongForm(arg, "-logfile") || arg.equals("-l")) {
+            handleArgLogFile(arg, args);
+        } else if (isLongForm(arg, "-buildfile") || isLongForm(arg, "-file")) {
+            handleArgBuildFile(args);
+        } else if (isLongForm(arg, "-listener")) {
+            handleArgListener(args);
+        } else if (isLongForm(arg, "-logger")) {
+            handleArgLogger(args);
+        } else {
+            throw new BuildException("Unsupported argument: %s", arg);
+        }
+    }
+
+    private ConversionArguments parseConversion(final String[] arguments) {
         final Map<String, Object> definedProps = new HashMap<>();
         final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
         while (!args.isEmpty()) {
@@ -260,26 +440,26 @@ final class ArgumentParser {
 
             if (isLongForm(arg, "-help") || arg.equals("-h")) {
                 justPrintUsage = true;
-            } else if (isLongForm(arg, "-version")) {
-                justPrintVersion = true;
-            } else if (arg.equals("plugins") || isLongForm(arg, "-plugins")) {
-                justPrintPlugins = true;
-            } else if (arg.equals("transtypes") || isLongForm(arg, "-transtypes")) {
-                justPrintTranstypes = true;
-            } else if (arg.equals("deliverables") || isLongForm(arg, "-deliverables")) {
-                justPrintDeliverables = true;
-            } else if (arg.equals("install")) {
-                handleSubcommandInstall(arg, args);
-            } else if (isLongForm(arg, "-install")) {
-                handleArgInstall(arg, args);
+//            } else if (isLongForm(arg, "-version")) {
+//                justPrintVersion = true;
+//            } else if (arg.equals("plugins") || isLongForm(arg, "-plugins")) {
+//                justPrintPlugins = true;
+//            } else if (arg.equals("transtypes") || isLongForm(arg, "-transtypes")) {
+//                justPrintTranstypes = true;
+//            } else if (arg.equals("deliverables") || isLongForm(arg, "-deliverables")) {
+//                justPrintDeliverables = true;
+//            } else if (arg.equals("install")) {
+//                handleSubcommandInstall(arg, args);
+//            } else if (isLongForm(arg, "-install")) {
+//                handleArgInstall(arg, args);
             } else if (isLongForm(arg, "-project") || arg.equals("-p")) {
                 handleArgProject(arg, args);
             } else if (isLongForm(arg, "-force")) {
                 definedProps.put("force", "true");
-            } else if (arg.equals("uninstall")) {
-                handleSubcommandUninstall(arg, args);
-            } else if (isLongForm(arg, "-uninstall")) {
-                handleArgUninstall(arg, args);
+//            } else if (arg.equals("uninstall")) {
+//                handleSubcommandUninstall(arg, args);
+//            } else if (isLongForm(arg, "-uninstall")) {
+//                handleArgUninstall(arg, args);
             } else if (isLongForm(arg, "-diagnostics")) {
                 justPrintDiagnostics = true;
             } else if (isLongForm(arg, "-verbose") || arg.equals("-v")) {
@@ -341,58 +521,13 @@ final class ArgumentParser {
         if (!resources.isEmpty()) {
             definedProps.put("args.resources", String.join(File.pathSeparator, resources));
         }
-
-        if (install && msgOutputLevel < Project.MSG_INFO) {
-            emacsMode = true;
-        }
-
         definedProps.putAll(loadPropertyFiles());
 
-        if (justPrintTranstypes) {
-            return new TranstypesArguments(
-                    useColor, msgOutputLevel, buildFile,
-                    targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
-                    inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
-                    justPrintDiagnostics, logFile, definedProps);
-        } else if (justPrintPlugins) {
-            return new PluginsArguments(
-                    useColor, msgOutputLevel, buildFile,
-                    targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
-                    inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
-                    justPrintDiagnostics, logFile, definedProps);
-        } else if (justPrintDeliverables) {
-            return new DeliverablesArguments(projectFile,
-                    useColor, msgOutputLevel, buildFile,
-                    targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
-                    inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
-                    justPrintDiagnostics, logFile, definedProps);
-        } else if (install) {
-            if (installFile != null) {
-                return new InstallArguments(installFile,
-                        useColor, msgOutputLevel, buildFile,
-                        targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
-                        inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
-                        justPrintDiagnostics, logFile, definedProps);
-            } else if (uninstallId != null) {
-                return new UninstallArguments(uninstallId,
-                        useColor, msgOutputLevel, buildFile,
-                        targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
-                        inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
-                        justPrintDiagnostics, logFile, definedProps);
-            } else {
-                return new ReinstallArguments(
-                        useColor, msgOutputLevel, buildFile,
-                        targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
-                        inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
-                        justPrintDiagnostics, logFile, definedProps);
-            }
-        } else {
-            return new ConversionArguments(projectFile, inputs, resources,
-                    useColor, msgOutputLevel, buildFile,
-                    targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
-                    inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
-                    justPrintDiagnostics, logFile, definedProps);
-        }
+        return new ConversionArguments(projectFile, inputs, resources,
+                useColor, msgOutputLevel, buildFile,
+                targets, listeners, propertyFiles, allowInput, keepGoingMode, loggerClassname,
+                inputHandlerClassname, emacsMode, threadPriority, proxy, justPrintUsage, justPrintVersion,
+                justPrintDiagnostics, logFile, definedProps);
     }
 
     private boolean getUseColor() {
