@@ -7,12 +7,22 @@ Copyright 2017 IBM Corporation
 See the accompanying LICENSE file for applicable license.
 -->
 <strings xml:lang="">
+
+  <!-- "Figure 1. Figure Title. Description here"
+              ^ ^^            ^^
+              | ||            ||
+              | ||            desc-separator
+              | label-separator
+              figure-number-separator -->
   <str name="figure-number-separator"> </str>
   <str name="label-separator">. </str>
+  <str name="desc-separator">. </str>
+
   <str name="OpenQuote">“</str>
   <str name="CloseQuote">”</str>
   <str name="ColonSymbol">:</str>
   <str name="#menucascade-separator"> &gt; </str>
+
   <!-- Text that goes before a link to a topic -->
   <str name="intro-to-topic-link"></str>
 </strings>

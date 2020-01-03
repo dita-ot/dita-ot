@@ -1000,7 +1000,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="tabletitle"/>
           <xsl:if test="*[contains(@class, ' topic/desc ')]">
             <xsl:call-template name="getVariable">
-              <xsl:with-param name="id" select="'label-separator'"/>
+              <xsl:with-param name="id" select="'desc-separator'"/>
             </xsl:call-template>
           </xsl:if>
         </span>
