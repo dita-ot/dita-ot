@@ -28,7 +28,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:param name="PRESERVE-DITA-CLASS" select="'yes'"/>
   
   <!-- Preserve DITA domain/class ancestry in XHTML output; values are 'yes' or 'no' -->
-  <xsl:param name="PRESERVE-DITA-DOMAIN" select="'yes'"/>
+  <xsl:param name="PRESERVE-DITA-DOMAIN" select="'no'"/>
   
   <!-- the file name containing XHTML to be placed in the HEAD area
        (file name and extension only - no path). -->
