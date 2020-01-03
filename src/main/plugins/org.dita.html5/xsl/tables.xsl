@@ -579,7 +579,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" mode="title-number">
     <xsl:param name="number" as="xs:integer"/>
-    <xsl:sequence select="concat(dita-ot:get-variable(., 'Table'), ' ', $number, '. ')"/>
+    <xsl:sequence select="concat(dita-ot:get-variable(., 'Table'), ' ', $number, dita-ot:get-variable(., 'label-separator'))"/>
   </xsl:template>
 
   <xsl:template mode="title-number" priority="1" match="
@@ -588,7 +588,7 @@ See the accompanying LICENSE file for applicable license.
    /*[contains(@class, ' topic/title ')]
   ">
     <xsl:param name="number" as="xs:integer"/>
-    <xsl:sequence select="concat($number, '. ', dita-ot:get-variable(., 'Table'), ' ')"/>
+    <xsl:sequence select="concat($number, dita-ot:get-variable(., 'label-separator'), dita-ot:get-variable(., 'Table'), ' ')"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" name="topic.table_title">
