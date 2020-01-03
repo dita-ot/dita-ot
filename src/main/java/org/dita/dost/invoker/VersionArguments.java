@@ -12,7 +12,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 
-public class VersionArguments extends Arguments {
+class VersionArguments extends Arguments {
 
     @Override
     VersionArguments parse(final String[] arguments) {

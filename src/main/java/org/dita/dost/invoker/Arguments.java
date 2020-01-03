@@ -71,9 +71,9 @@ abstract class Arguments {
     boolean justPrintUsage;
     boolean justPrintVersion;
     boolean justPrintDiagnostics;
-    Map<String, Object> definedProps = new HashMap<>();
+    final Map<String, Object> definedProps = new HashMap<>();
 
-    public Arguments() {
+    Arguments() {
         useColor = getUseColor();
     }
 
@@ -135,7 +135,7 @@ abstract class Arguments {
         } else {
             value = args.pop();
         }
-        return new AbstractMap.SimpleEntry(name, value);
+        return new AbstractMap.SimpleEntry<>(name, value);
     }
 
     /**

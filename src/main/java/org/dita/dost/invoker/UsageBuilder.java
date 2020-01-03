@@ -21,7 +21,7 @@ public class UsageBuilder {
     private final Map<Key, String> options = new HashMap<>();
     private final Map<Key, String> arguments = new HashMap<>();
 
-    public UsageBuilder() {
+    private UsageBuilder() {
         options("d", "debug", null, "print debugging information");
         options("h", "help", null, "print this message");
         options("v", "verbose", null, "verbose logging");
@@ -51,7 +51,7 @@ public class UsageBuilder {
         return this;
     }
 
-    public String build() {
+    private String build() {
         final String padding = getPadding();
 
         buf.append(ANSI_BOLD).append("Usage").append(ANSI_RESET).append(":\n");
@@ -88,7 +88,7 @@ public class UsageBuilder {
     }
 
     private List<Map.Entry<Key, String>> sort(Map<Key, String> arguments) {
-        final List<Map.Entry<Key, String>> entries = new ArrayList(arguments.entrySet());
+        final List<Map.Entry<Key, String>> entries = new ArrayList<>(arguments.entrySet());
         entries.sort(Comparator.comparing(Map.Entry::getKey));
         return entries;
     }

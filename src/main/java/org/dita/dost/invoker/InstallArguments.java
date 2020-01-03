@@ -43,11 +43,10 @@ public class InstallArguments extends Arguments {
      * Handle the --install argument
      */
     private void handleArgInstall(final String arg, final Deque<String> args) {
-        String name = arg;
-        final int posEq = name.indexOf("=");
+        final int posEq = arg.indexOf("=");
         String value;
         if (posEq != -1) {
-            value = name.substring(posEq + 1);
+            value = arg.substring(posEq + 1);
         } else {
             value = args.peek();
             if (value != null && !value.startsWith("-")) {

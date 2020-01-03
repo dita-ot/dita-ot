@@ -79,8 +79,8 @@ public class ConversionArguments extends Arguments {
      */
     File projectFile;
 
-    public List<String> inputs = new ArrayList<>();
-    private List<String> resources = new ArrayList<>();
+    public final List<String> inputs = new ArrayList<>();
+    private final List<String> resources = new ArrayList<>();
 
     /**
      * The build targets.
@@ -216,7 +216,7 @@ public class ConversionArguments extends Arguments {
         if (entry.getValue() == null) {
             throw new BuildException("Missing value for input " + entry.getKey());
         }
-        inputs.add(argument.getValue((String) entry.getValue()));
+        inputs.add(argument.getValue(entry.getValue()));
     }
 
     private void handleArgResource(final String arg, final Deque<String> args, final Argument argument) {
@@ -381,7 +381,7 @@ public class ConversionArguments extends Arguments {
                     } else if (arg instanceof BooleanArgument) {
                         buf.options(null, arg.property, "yes|no", arg.desc);
                     } else if (arg instanceof EnumArgument) {
-                        buf.options(null, arg.property, ((EnumArgument) arg).values.stream().collect(Collectors.joining("|")), arg.desc);
+                        buf.options(null, arg.property, String.join("|", ((EnumArgument) arg).values), arg.desc);
                     } else {
                         buf.options(null, arg.property, "value", arg.desc);
                     }

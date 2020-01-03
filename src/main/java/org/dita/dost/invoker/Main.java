@@ -60,14 +60,14 @@ import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
  */
 public class Main extends org.apache.tools.ant.Main implements AntMain {
 
-    static final String ANT_ARGS_INPUT = "args.input";
+    private static final String ANT_ARGS_INPUT = "args.input";
     static final String ANT_ARGS_RESOURCES = "args.resources";
     static final String ANT_ARGS_INPUTS = "args.inputs";
-    static final String ANT_OUTPUT_DIR = "output.dir";
-    static final String ANT_BASE_TEMP_DIR = "base.temp.dir";
-    static final String ANT_TRANSTYPE = "transtype";
-    static final String ANT_PLUGIN_FILE = "plugin.file";
-    static final String ANT_PLUGIN_ID = "plugin.id";
+    private static final String ANT_OUTPUT_DIR = "output.dir";
+    private static final String ANT_BASE_TEMP_DIR = "base.temp.dir";
+    private static final String ANT_TRANSTYPE = "transtype";
+    private static final String ANT_PLUGIN_FILE = "plugin.file";
+    private static final String ANT_PLUGIN_ID = "plugin.id";
 
     /**
      * File that we are using for configuration.
@@ -485,10 +485,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private void printDeliverables(final File projectFile) {
         final List<Map.Entry<String, String>> pairs = readProjectFile(projectFile).deliverables.stream()
                 .filter(deliverable -> deliverable.id != null)
-                .map(deliverable -> new AbstractMap.SimpleEntry<String, String>(deliverable.id, deliverable.name))
+                .map(deliverable -> new AbstractMap.SimpleEntry<>(deliverable.id, deliverable.name))
                 .collect(Collectors.toList());
         final int length = pairs.stream()
-                .map(p -> p.getKey())
+                .map(Map.Entry::getKey)
                 .map(String::length)
                 .reduce(Integer::max)
                 .orElse(0);

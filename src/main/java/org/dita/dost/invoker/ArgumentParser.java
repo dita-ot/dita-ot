@@ -30,7 +30,7 @@ import static org.dita.dost.util.XMLUtils.toList;
  */
 final class ArgumentParser {
 
-    static final Map<String, String> TRUTHY_VALUES;
+    private static final Map<String, String> TRUTHY_VALUES;
 
     static {
         TRUTHY_VALUES = ImmutableMap.<String, String>builder()
