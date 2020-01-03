@@ -74,15 +74,10 @@ public class UninstallArguments extends Arguments {
 
     @Override
     void printUsage() {
-        final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita uninstall <id>\n");
-        msg.append("Arguments: \n");
-        msg.append("  <id>                         uninstall plug-in with the ID\n");
-        msg.append("Options: \n");
-        msg.append("  -d, --debug                  print debugging information\n");
-        msg.append("  -h, --help                   print this message\n");
-        msg.append("  -v, --verbose                verbose logging\n");
-        System.out.println(msg.toString());
+        UsageBuilder.builder()
+                .usage("dita uninstall <id>")
+                .arguments(null, null, "id", "uninstall plug-in with the ID")
+                .print();
     }
 
 

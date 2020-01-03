@@ -65,15 +65,10 @@ public class DeliverablesArguments extends Arguments {
 
     @Override
     void printUsage() {
-        final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita deliverables <file> [options]\n");
-        msg.append("Arguments: \n");
-        msg.append("  <file>                       project file\n");
-        msg.append("Options: \n");
-        msg.append("  -d, --debug                  print debugging information\n");
-        msg.append("  -h, --help                   print this message\n");
-        msg.append("  -v, --verbose                verbose logging\n");
-        System.out.println(msg.toString());
+        UsageBuilder.builder()
+                .usage("dita deliverables <file> [options]")
+                .arguments(null, null, "file", "project file")
+                .print();
     }
 
 }

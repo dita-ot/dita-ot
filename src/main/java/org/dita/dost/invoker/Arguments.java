@@ -175,17 +175,19 @@ abstract class Arguments {
 
     static abstract class Argument {
         final String property;
+        final String desc;
 
-        Argument(final String property) {
+        Argument(final String property, final String desc) {
             this.property = property;
+            this.desc = desc;
         }
 
         abstract String getValue(final String value);
     }
 
     static class StringArgument extends Argument {
-        StringArgument(final String property) {
-            super(property);
+        StringArgument(final String property, final String desc) {
+            super(property, desc);
         }
 
         @Override
@@ -198,8 +200,8 @@ abstract class Arguments {
         final String trueValue;
         final String falseValue;
 
-        BooleanArgument(final String property, final String trueValue, final String falseValue) {
-            super(property);
+        BooleanArgument(final String property, final String desc, final String trueValue, final String falseValue) {
+            super(property, desc);
             this.trueValue = trueValue;
             this.falseValue = falseValue;
         }
@@ -221,8 +223,8 @@ abstract class Arguments {
     static class EnumArgument extends Argument {
         final Set<String> values;
 
-        EnumArgument(final String property, final Set<String> values) {
-            super(property);
+        EnumArgument(final String property, final String desc, final Set<String> values) {
+            super(property, desc);
             this.values = values;
         }
 
@@ -236,8 +238,8 @@ abstract class Arguments {
     }
 
     static class FileArgument extends Argument {
-        FileArgument(final String property) {
-            super(property);
+        FileArgument(final String property, final String desc) {
+            super(property, desc);
         }
 
         @Override
@@ -247,8 +249,8 @@ abstract class Arguments {
     }
 
     static class AbsoluteFileArgument extends Argument {
-        AbsoluteFileArgument(final String property) {
-            super(property);
+        AbsoluteFileArgument(final String property, final String desc) {
+            super(property, desc);
         }
 
         @Override
@@ -258,8 +260,8 @@ abstract class Arguments {
     }
 
     static class AbsoluteFileListArgument extends Argument {
-        AbsoluteFileListArgument(final String property) {
-            super(property);
+        AbsoluteFileListArgument(final String property, final String desc) {
+            super(property, desc);
         }
 
         @Override
@@ -271,8 +273,8 @@ abstract class Arguments {
     }
 
     static class FileOrUriArgument extends Argument {
-        FileOrUriArgument(final String property) {
-            super(property);
+        FileOrUriArgument(final String property, final String desc) {
+            super(property, desc);
         }
 
         @Override

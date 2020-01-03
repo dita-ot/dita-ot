@@ -30,7 +30,7 @@ import static org.dita.dost.util.XMLUtils.toList;
  */
 final class ArgumentParser {
 
-    private static final Map<String, String> TRUTHY_VALUES;
+    static final Map<String, String> TRUTHY_VALUES;
 
     static {
         TRUTHY_VALUES = ImmutableMap.<String, String>builder()
@@ -44,24 +44,25 @@ final class ArgumentParser {
                 .build();
     }
 
-    private static Arguments.Argument mergeArguments(final Arguments.Argument a, final Arguments.Argument b) {
+    static Arguments.Argument mergeArguments(final Arguments.Argument a, final Arguments.Argument b) {
         if (a instanceof Arguments.EnumArgument && b instanceof Arguments.EnumArgument) {
             final Set<String> vals = ImmutableSet.<String>builder()
                     .addAll(((Arguments.EnumArgument) a).values)
                     .addAll(((Arguments.EnumArgument) b).values)
                     .build();
-            return new Arguments.EnumArgument(a.property, vals);
+            return new Arguments.EnumArgument(a.property, a.desc, vals);
         } else {
             return a;
         }
     }
 
-    private static Arguments.Argument getArgument(Element param) {
+    static Arguments.Argument getArgument(Element param) {
         final String name = param.getAttribute("name");
         final String type = param.getAttribute("type");
+        final String desc = param.getAttribute("desc");
         switch (type) {
             case "file":
-                return new Arguments.FileArgument(name);
+                return new Arguments.FileArgument(name, desc);
             case "enum":
                 final Set<String> vals = getChildElements(param).stream()
                         .map(XMLUtils::getText)
@@ -69,20 +70,20 @@ final class ArgumentParser {
                 if (vals.size() == 2) {
                     for (Map.Entry<String, String> pair : TRUTHY_VALUES.entrySet()) {
                         if (vals.contains(pair.getKey()) && vals.contains(pair.getValue())) {
-                            return new Arguments.BooleanArgument(name, pair.getKey(), pair.getValue());
+                            return new Arguments.BooleanArgument(name, desc, pair.getKey(), pair.getValue());
                         }
                     }
                 }
-                return new Arguments.EnumArgument(name, vals);
+                return new Arguments.EnumArgument(name, desc, vals);
             default:
-                return new Arguments.StringArgument(name);
+                return new Arguments.StringArgument(name, desc);
         }
     }
 
-    public static Map<String, Arguments.Argument> PLUGIN_ARGUMENTS;
+    private static Map<String, Arguments.Argument> PLUGIN_ARGUMENTS;
 
     // Lazy load parameters
-    public static synchronized Map<String, Arguments.Argument> getPluginArguments() {
+    static synchronized Map<String, Arguments.Argument> getPluginArguments() {
         if (PLUGIN_ARGUMENTS == null) {
             final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
             PLUGIN_ARGUMENTS = params.stream()

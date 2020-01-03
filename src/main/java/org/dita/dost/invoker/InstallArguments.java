@@ -27,6 +27,8 @@ public class InstallArguments extends Arguments {
                 handleSubcommandInstall(arg, args);
             } else if (isLongForm(arg, "-install")) {
                 handleArgInstall(arg, args);
+            } else if (isLongForm(arg, "-force")) {
+                definedProps.put("force", "true");
             } else {
                 parseCommonOptions(arg, args);
             }
@@ -74,17 +76,13 @@ public class InstallArguments extends Arguments {
 
     @Override
     void printUsage() {
-        final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita install [<file> | <url> | <id>]\n");
-        msg.append("Arguments: \n");
-        msg.append("  <file>                       install plug-in from a local ZIP file\n");
-        msg.append("  <url>                        install plug-in from a URL\n");
-        msg.append("  <id>                         install plug-in from plugin registry\n");
-        msg.append("Options: \n");
-        msg.append("  -d, --debug                  print debugging information\n");
-        msg.append("  -h, --help                   print this message\n");
-        msg.append("  -v, --verbose                verbose logging\n");
-        System.out.println(msg.toString());
+        UsageBuilder.builder()
+                .usage("dita install [<file> | <url> | <id>]")
+                .arguments(null, null, "file", "install plug-in from a local ZIP file")
+                .arguments(null, null, "url", "install plug-in from a URL")
+                .arguments(null, null, "id", "install plug-in from plugin registry")
+                .options(null, "force", null, "force install plug-in")
+                .print();
     }
 
 }

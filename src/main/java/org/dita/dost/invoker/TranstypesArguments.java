@@ -30,13 +30,9 @@ public class TranstypesArguments extends Arguments {
 
     @Override
     void printUsage() {
-        final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita transtypes [options]\n");
-        msg.append("Options: \n");
-        msg.append("  -d, --debug                  print debugging information\n");
-        msg.append("  -h, --help                   print this message\n");
-        msg.append("  -v, --verbose                verbose logging\n");
-        System.out.println(msg.toString());
+        UsageBuilder.builder()
+                .usage("dita transtypes [options]")
+                .print();
     }
 
 }

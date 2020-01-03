@@ -13,13 +13,18 @@ import com.google.common.collect.ImmutableSet;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.util.FileUtils;
+import org.dita.dost.platform.Plugins;
+import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
+import static org.dita.dost.util.XMLUtils.toList;
 
 public class ConversionArguments extends Arguments {
 
@@ -39,21 +44,21 @@ public class ConversionArguments extends Arguments {
     private static final Map<String, Argument> ARGUMENTS = new HashMap<>();
 
     static {
-        ARGUMENTS.put("-f", new StringArgument("transtype"));
-        ARGUMENTS.put("--format", new StringArgument("transtype"));
-        ARGUMENTS.put("--transtype", new StringArgument("transtype"));
-        ARGUMENTS.put("--deliverable", new StringArgument("project.deliverable"));
-        ARGUMENTS.put("-i", new FileOrUriArgument("args.input"));
-        ARGUMENTS.put("--input", new FileOrUriArgument("args.input"));
-        ARGUMENTS.put("-r", new FileOrUriArgument("args.resources"));
-        ARGUMENTS.put("--resource", new FileOrUriArgument("args.resources"));
-        ARGUMENTS.put("-o", new AbsoluteFileArgument("output.dir"));
-        ARGUMENTS.put("--output", new AbsoluteFileArgument("output.dir"));
-        ARGUMENTS.put("--filter", new AbsoluteFileListArgument("args.filter"));
-        ARGUMENTS.put("-t", new AbsoluteFileArgument(ANT_TEMP_DIR));
-        ARGUMENTS.put("--temp", new AbsoluteFileArgument(ANT_TEMP_DIR));
-        ARGUMENTS.put("-p", new AbsoluteFileArgument("project.file"));
-        ARGUMENTS.put("--project", new AbsoluteFileArgument("project.file"));
+        ARGUMENTS.put("-f", new StringArgument("transtype", null));
+        ARGUMENTS.put("--format", new StringArgument("transtype", null));
+        ARGUMENTS.put("--transtype", new StringArgument("transtype", null));
+        ARGUMENTS.put("--deliverable", new StringArgument("project.deliverable", null));
+        ARGUMENTS.put("-i", new FileOrUriArgument("args.input", null));
+        ARGUMENTS.put("--input", new FileOrUriArgument("args.input", null));
+        ARGUMENTS.put("-r", new FileOrUriArgument("args.resources", null));
+        ARGUMENTS.put("--resource", new FileOrUriArgument("args.resources", null));
+        ARGUMENTS.put("-o", new AbsoluteFileArgument("output.dir", null));
+        ARGUMENTS.put("--output", new AbsoluteFileArgument("output.dir", null));
+        ARGUMENTS.put("--filter", new AbsoluteFileListArgument("args.filter", null));
+        ARGUMENTS.put("-t", new AbsoluteFileArgument(ANT_TEMP_DIR, null));
+        ARGUMENTS.put("--temp", new AbsoluteFileArgument(ANT_TEMP_DIR, null));
+        ARGUMENTS.put("-p", new AbsoluteFileArgument("project.file", null));
+        ARGUMENTS.put("--project", new AbsoluteFileArgument("project.file", null));
         for (final Map.Entry<String, Argument> e : new HashSet<>(ARGUMENTS.entrySet())) {
             if (e.getKey().startsWith("--")) {
                 ARGUMENTS.put(e.getKey().substring(1), e.getValue());
@@ -98,12 +103,10 @@ public class ConversionArguments extends Arguments {
         while (!args.isEmpty()) {
             final String arg = args.pop();
 
-            if (isLongForm(arg, "-help") || arg.equals("-h")) {
+            if (arg.equals("help") || isLongForm(arg, "-help") || arg.equals("-h")) {
                 justPrintUsage = true;
             } else if (isLongForm(arg, "-project") || arg.equals("-p")) {
                 handleArgProject(arg, args);
-            } else if (isLongForm(arg, "-force")) {
-                definedProps.put("force", "true");
             } else if (isLongForm(arg, "-diagnostics")) {
                 justPrintDiagnostics = true;
             } else if (isLongForm(arg, "-verbose") || arg.equals("-v")) {
@@ -138,8 +141,8 @@ public class ConversionArguments extends Arguments {
                 handleArgResource(arg, args, ARGUMENTS.get(getArgumentName(arg)));
             } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
                 definedProps.putAll(handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg))));
-            } else if (ArgumentParser.getPluginArguments().containsKey(getArgumentName(arg))) {
-                definedProps.putAll(handleParameterArg(arg, args, ArgumentParser.getPluginArguments().get(getArgumentName(arg))));
+            } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
+                definedProps.putAll(handleParameterArg(arg, args, getPluginArguments().get(getArgumentName(arg))));
             } else if (LAUNCH_COMMANDS.contains(arg)) {
                 // catch script/ant mismatch with a meaningful message
                 // we could ignore it, but there are likely to be other
@@ -325,7 +328,7 @@ public class ConversionArguments extends Arguments {
             while (propertyNames.hasMoreElements()) {
                 final String name = propertyNames.nextElement().toString();
                 if (!definedProps.containsKey(name)) {
-                    final Argument arg = ArgumentParser.getPluginArguments().get("--" + name);
+                    final Argument arg = getPluginArguments().get("--" + name);
                     final String value = props.getProperty(name);
                     if (arg != null) {
                         definedProps.put(name, arg.getValue(value));
@@ -340,34 +343,49 @@ public class ConversionArguments extends Arguments {
 
     @Override
     void printUsage() {
-        final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita -i <file> -f <name> [options]\n");
-        msg.append("   or: dita --project=<file> [options]\n");
-        msg.append("   or: dita --propertyfile=<file> [options]\n");
-        msg.append("Subcommands: \n");
-        msg.append("   deliverables\n");
-        msg.append("   install\n");
-        msg.append("   plugins\n");
-        msg.append("   transtypes\n");
-        msg.append("   uninstall\n");
-        msg.append("   version\n");
-        msg.append("Arguments: \n");
-        msg.append("  -i <file>, --input=<file>    input file\n");
-        msg.append("  -f <name>, --format=<name>   output format (transformation type)\n");
-        msg.append("  -p <name>, --project=<name>  run project file\n");
-        msg.append("  -r <file>, --resource=<file> resource file\n");
-        msg.append("  -h, --help                   print this message\n");
-        msg.append("  --version                    print version information and exit\n");
-        msg.append("Options: \n");
-        msg.append("  -d, --debug                  print debugging information\n");
-        msg.append("  --filter=<files>             filter and flagging files\n");
-        msg.append("  --force                      force install plug-in\n");
-        msg.append("  -l, --logfile=<file>         use given file for log\n");
-        msg.append("  -o, --output=<dir>           output directory\n");
-        msg.append("  --<property>=<value>         use value for given property\n");
-        msg.append("  --propertyfile=<name>        load all properties from file\n");
-        msg.append("  -t, --temp=<dir>             temporary directory\n");
-        msg.append("  -v, --verbose                verbose logging\n");
-        System.out.println(msg.toString());
+        final UsageBuilder buf = UsageBuilder.builder()
+                .usage("dita -i <file> -f <name> [options]")
+                .usage("dita --project=<file> [options]")
+//                .usage("dita --propertyfile=<file> [options]")
+                .subcommands("deliverables")
+                .subcommands("install")
+                .subcommands("plugins")
+                .subcommands("transtypes")
+                .subcommands("uninstall")
+                .subcommands("version")
+                .arguments("i", "input", "file", "input file")
+                .arguments("f", "format", "name", "output format (transformation type)")
+                .arguments("p", "project", "name", "run project file")
+                .options("r", "resource", "file", "resource file")
+                .options(null, "filter", "files", "filter and flagging files")
+                .options("l", "logfile", "file", "use given file for log")
+                .options("o", "output", "dir", "output directory")
+//                .options(null, "<property>", "value", "use value for given property")
+                .options(null, "propertyfile", "file", "load all properties from file")
+                .options("t", "temp", "dir", "temporary directory");
+        final Set<String> builtin = ARGUMENTS.values().stream().map(arg -> arg.property).collect(Collectors.toSet());
+        final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
+        params.stream()
+                .map(ArgumentParser::getArgument)
+                .filter(a -> !builtin.contains(a.property))
+                .collect(Collectors.toMap(
+                        arg -> arg.property,
+                        arg -> arg,
+                        ArgumentParser::mergeArguments))
+                .values()
+                .stream()
+                .sorted(Comparator.comparing(o -> o.property))
+                .forEach(arg -> {
+                    if (arg instanceof FileArgument) {
+                        buf.options(null, arg.property, "file", arg.desc);
+                    } else if (arg instanceof BooleanArgument) {
+                        buf.options(null, arg.property, "yes|no", arg.desc);
+                    } else if (arg instanceof EnumArgument) {
+                        buf.options(null, arg.property, ((EnumArgument) arg).values.stream().collect(Collectors.joining("|")), arg.desc);
+                    } else {
+                        buf.options(null, arg.property, "value", arg.desc);
+                    }
+                });
+        buf.print();
     }
 }
