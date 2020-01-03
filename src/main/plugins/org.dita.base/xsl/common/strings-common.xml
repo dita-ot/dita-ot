@@ -8,6 +8,7 @@ See the accompanying LICENSE file for applicable license.
 -->
 <strings xml:lang="">
   <str name="figure-number-separator"> </str>
+  <str name="label-separator">. </str>
   <str name="OpenQuote">“</str>
   <str name="CloseQuote">”</str>
   <str name="ColonSymbol">:</str>

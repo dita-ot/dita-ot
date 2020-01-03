@@ -2728,7 +2728,9 @@ See the accompanying LICENSE file for applicable license.
             <xsl:choose>      <!-- Hungarian: "1. Figure " -->
               <xsl:when test="$ancestorlang = ('hu', 'hu-hu')">
                 <xsl:value-of select="$fig-count-actual"/>
-                <xsl:text>. </xsl:text>
+                <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'label-separator'"/>
+                </xsl:call-template>
                 <xsl:call-template name="getVariable">
                   <xsl:with-param name="id" select="'Figure'"/>
                 </xsl:call-template>
@@ -2740,13 +2742,17 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:call-template>
                 <xsl:text> </xsl:text>
                 <xsl:value-of select="$fig-count-actual"/>
-                <xsl:text>. </xsl:text>
+                <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'label-separator'"/>
+                </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
           </span>
           <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="figtitle"/>
           <xsl:if test="*[contains(@class, ' topic/desc ')]">
-            <xsl:text>. </xsl:text>
+            <xsl:call-template name="getVariable">
+              <xsl:with-param name="id" select="'label-separator'"/>
+            </xsl:call-template>
           </xsl:if>
           <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
             <span class="figdesc">

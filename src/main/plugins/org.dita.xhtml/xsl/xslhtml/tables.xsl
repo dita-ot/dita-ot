@@ -977,7 +977,9 @@ See the accompanying LICENSE file for applicable license.
             <xsl:choose>     <!-- Hungarian: "1. Table " -->
               <xsl:when test="$ancestorlang = ('hu', 'hu-hu')">
                 <xsl:value-of select="$tbl-count-actual"/>
-                <xsl:text>. </xsl:text>
+                <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'label-separator'"/>
+                </xsl:call-template>
                 <xsl:call-template name="getVariable">
                   <xsl:with-param name="id" select="'Table'"/>
                 </xsl:call-template>
@@ -989,13 +991,17 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:call-template>
                 <xsl:text> </xsl:text>
                 <xsl:value-of select="$tbl-count-actual"/>
-                <xsl:text>. </xsl:text>
+                <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'label-separator'"/>
+                </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
           </span>
           <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="tabletitle"/>
           <xsl:if test="*[contains(@class, ' topic/desc ')]">
-            <xsl:text>. </xsl:text>
+            <xsl:call-template name="getVariable">
+              <xsl:with-param name="id" select="'label-separator'"/>
+            </xsl:call-template>
           </xsl:if>
         </span>
         <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
