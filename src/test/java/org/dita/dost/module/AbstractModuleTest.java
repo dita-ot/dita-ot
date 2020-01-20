@@ -122,9 +122,9 @@ public abstract class AbstractModuleTest {
         }
     }
 
-    abstract AbstractPipelineInput getAbstractPipelineInput();
+    protected abstract AbstractPipelineInput getAbstractPipelineInput();
 
-    abstract AbstractPipelineModule getModule(File tempDir);
+    protected abstract AbstractPipelineModule getModule(File tempDir);
 
     private static final Set<String> IGNORE = ImmutableSet.of(".job.xml", ".DS_Store");
 

@@ -5,8 +5,10 @@
  *
  * See the accompanying LICENSE file for applicable license.
  */
-package org.dita.dost.module;
+package org.dita.dost.chunk;
 
+import org.dita.dost.module.AbstractModuleTest;
+import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.junit.Ignore;
