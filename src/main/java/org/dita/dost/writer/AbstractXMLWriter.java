@@ -28,11 +28,11 @@ import org.xml.sax.SAXException;
  * @author Zhang, Yuan Peng
  */
 
-abstract class AbstractXMLWriter implements AbstractWriter,
+public abstract class AbstractXMLWriter implements AbstractWriter,
 ContentHandler, EntityResolver {
 
-    DITAOTLogger logger;
-    Job job;
+    protected DITAOTLogger logger;
+    protected Job job;
 
 
     @Override
