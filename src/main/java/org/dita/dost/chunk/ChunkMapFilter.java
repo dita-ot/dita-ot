@@ -8,12 +8,13 @@
  */
 package org.dita.dost.chunk;
 
+import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.chunk.ChunkOperation.ChunkBuilder;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
-import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
+import org.dita.dost.chunk.ChunkModule.ChunkFilenameGenerator;
+import org.dita.dost.chunk.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
@@ -59,13 +60,13 @@ final class ChunkMapFilter extends AbstractDomFilter {
     public static final String FILE_EXTENSION_CHUNK = ".chunk";
     public static final String ATTR_XTRF_VALUE_GENERATED = "generated_by_chunk";
 
-    public static final String CHUNK_SELECT_BRANCH = "select-branch";
-    public static final String CHUNK_SELECT_TOPIC = "select-topic";
-    public static final String CHUNK_SELECT_DOCUMENT = "select-document";
-    private static final String CHUNK_BY_DOCUMENT = "by-document";
-    private static final String CHUNK_BY_TOPIC = "by-topic";
-    public static final String CHUNK_TO_CONTENT = "to-content";
-    public static final String CHUNK_TO_NAVIGATION = "to-navigation";
+    public static final String CHUNK_SELECT_BRANCH = SELECT_BRANCH.token;
+    public static final String CHUNK_SELECT_TOPIC = SELECT_TOPIC.token;
+    public static final String CHUNK_SELECT_DOCUMENT = SELECT_DOCUMENT.token;
+    private static final String CHUNK_BY_DOCUMENT = BY_DOCUMENT.token;
+    private static final String CHUNK_BY_TOPIC = BY_TOPIC.token;
+    public static final String CHUNK_TO_CONTENT = TO_CONTENT.token;
+    public static final String CHUNK_TO_NAVIGATION = TO_NAVIGATION.token;
     public static final String CHUNK_PREFIX = "Chunk";
 
     private TempFileNameScheme tempFileNameScheme;
@@ -74,7 +75,8 @@ final class ChunkMapFilter extends AbstractDomFilter {
 
     // ChunkTopicParser assumes keys and values are chimera paths, i.e. systems paths with fragments.
     private final LinkedHashMap<URI, URI> changeTable = new LinkedHashMap<>(128);
-    private final List<ChunkOperation> changes = new ArrayList<>();
+    @VisibleForTesting
+    final List<ChunkOperation> changes = new ArrayList<>();
 
     private final Map<URI, URI> conflictTable = new HashMap<>(128);
 
@@ -369,6 +371,7 @@ final class ChunkMapFilter extends AbstractDomFilter {
                 processCombineChunk(topicref, op);
                 changes.add(op.build());
             }
+            processChildTopicref(topicref);
         } else if (chunk.contains(CHUNK_TO_NAVIGATION)
                 && supportToNavigation) {
             processChildTopicref(topicref);
@@ -391,7 +394,7 @@ final class ChunkMapFilter extends AbstractDomFilter {
                 final String processingRole = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                     changeTable.put(currentPath, currentPath);
-                    changes.add(ChunkOperation.builder(BY_DOCUMENT).src(currentPath).dst(currentPath).build());
+//                    changes.add(ChunkOperation.builder(BY_DOCUMENT).src(currentPath).dst(currentPath).build());
                 }
             }
             processChildTopicref(topicref);
@@ -415,8 +418,7 @@ final class ChunkMapFilter extends AbstractDomFilter {
     private ChunkBuilder walkByTopic(final Element topic, final URI src) {
         final String id = topic.getAttribute(ATTRIBUTE_NAME_ID);
         final ChunkBuilder op = ChunkOperation.builder(BY_TOPIC)
-                .src(src)
-                .id(id);
+                .src(setFragment(src, id));
         final List<Element> childTopics = getChildElements(topic, TOPIC_TOPIC);
         for (Element childTopic : childTopics) {
             final ChunkBuilder chunkBuilders = walkByTopic(childTopic, src);
@@ -604,10 +606,11 @@ final class ChunkMapFilter extends AbstractDomFilter {
                 final Collection<String> chunks = split(getValue(currentElem, ATTRIBUTE_NAME_CHUNK));
                 if (parent != null && !chunks.contains(CHUNK_TO_CONTENT)) {
                     URI href = toURI(getValue(currentElem, ATTRIBUTE_NAME_HREF));
-                    if (href == null && !chunks.isEmpty()) {
+                    if (href == null) {
                         href = generateStumpTopic(currentElem);
                     }
-                    final ChunkBuilder ops = ChunkOperation.builder(parent.operation).src(href);
+                    final ChunkBuilder ops = ChunkOperation.builder(null)
+                            .src(currentFile.resolve(href));
                     parent.addChild(ops);
                     createChildTopicrefStubs(getChildElements(currentElem, MAP_TOPICREF), ops);
                 }

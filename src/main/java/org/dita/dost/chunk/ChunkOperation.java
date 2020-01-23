@@ -8,6 +8,8 @@
 
 package org.dita.dost.chunk;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,30 +17,38 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.dita.dost.util.URLUtils.toURI;
-
 class ChunkOperation {
 
     public enum Operation {
-        BY_TOPIC,
-        BY_DOCUMENT,
-        TO_CONTENT
+        SELECT_TOPIC("select-topic"),
+        SELECT_DOCUMENT("select-document"),
+        SELECT_BRANCH("select-branch"),
+        /** Split */
+        BY_TOPIC("by-topic"),
+        BY_DOCUMENT("by-document"),
+        /** Merge */
+        TO_CONTENT("to-content"),
+        TO_NAVIGATION("to-navigation");
+
+        public final String token;
+
+        Operation(final String token) {
+            this.token = token;
+        }
     }
 
     public final Operation operation;
     public final URI src;
-    public final String id;
     public final URI dst;
     public final List<ChunkOperation> children;
 
-    private ChunkOperation(final Operation operation,
-                           final URI src,
-                           final String id,
-                           final URI dst,
-                           final List<ChunkOperation> children) {
+    @VisibleForTesting
+    ChunkOperation(final Operation operation,
+                   final URI src,
+                   final URI dst,
+                   final List<ChunkOperation> children) {
         this.operation = operation;
         this.src = src;
-        this.id = id;
         this.dst = dst;
         this.children = children;
     }
@@ -50,14 +60,23 @@ class ChunkOperation {
         ChunkOperation that = (ChunkOperation) o;
         return operation == that.operation &&
                 Objects.equals(src, that.src) &&
-                id.equals(that.id) &&
                 Objects.equals(dst, that.dst) &&
                 Objects.equals(children, that.children);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(operation, src, id, dst, children);
+        return Objects.hash(operation, src, dst, children);
+    }
+
+    @Override
+    public String toString() {
+        return "ChunkOperation{" +
+                "operation=" + operation +
+                ", src=" + src +
+                ", dst=" + dst +
+                ", children=" + children +
+                '}';
     }
 
     public static ChunkBuilder builder(final Operation operation) {
@@ -65,10 +84,9 @@ class ChunkOperation {
     }
 
     public static class ChunkBuilder {
-        public final Operation operation;
+        private final Operation operation;
         private URI src;
         private URI dst;
-        private String id;
         private List<ChunkBuilder> children = new ArrayList<>();
 
         public ChunkBuilder(final Operation operation) {
@@ -87,21 +105,16 @@ class ChunkOperation {
             return this;
         }
 
-        public ChunkBuilder id(final String id) {
-            this.id = id;
-            return this;
-        }
-
         public ChunkBuilder addChild(final ChunkBuilder child) {
             children.add(child);
             return this;
         }
 
         public ChunkOperation build() {
-            final URI src = this.src != null ? this.src : toURI(id + ".dita");
-            final URI dst = this.dst != null ? this.dst : toURI(id + ".dita");
+            final URI src = this.src;
+            final URI dst = this.dst;
             final List<ChunkOperation> cos = children.stream().map(ChunkBuilder::build).collect(Collectors.toList());
-            return new ChunkOperation(operation, src, id, dst, Collections.unmodifiableList(cos));
+            return new ChunkOperation(operation, src, dst, Collections.unmodifiableList(cos));
         }
     }
 }

@@ -8,7 +8,7 @@
  */
 package org.dita.dost.chunk;
 
-import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
+import org.dita.dost.chunk.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
