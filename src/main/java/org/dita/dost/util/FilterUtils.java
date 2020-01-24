@@ -8,13 +8,28 @@
  */
 package org.dita.dost.util;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.emptySet;
-import static javax.xml.XMLConstants.NULL_NS_URI;
-import static org.dita.dost.util.Constants.*;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.filter.SubjectScheme;
+import org.w3c.dom.*;
+import org.xml.sax.*;
 
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.SAXSource;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -22,23 +37,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.MessageUtils;
-
-import org.dita.dost.module.filter.SubjectScheme;
-import org.w3c.dom.*;
-import org.xml.sax.*;
-
-import javax.xml.namespace.QName;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.sax.SAXSource;
+import static java.lang.String.format;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Utility class used for flagging and filtering.
@@ -54,10 +57,14 @@ public final class FilterUtils {
     private static final String FLAG_STYLE_PREFIX = "flag__style--";
 
     private DITAOTLogger logger;
+    private Job job;
+    
     /** Actions for filter keys. */
     private final Map<FilterKey, Action> filterMap;
+    
     /** Set of filter keys for which an error has already been thrown. */
     private final Set<FilterKey> notMappingRules = new HashSet<>();
+    
     private boolean logMissingAction;
     private final String foregroundConflictColor;
     private final String backgroundConflictColor;
@@ -75,7 +82,7 @@ public final class FilterUtils {
     }
 
     /**
-     * Conveninence constructur that only handles print filtering.
+     * Convenience constructor that only handles print filtering.
      *
      * @param isPrintType transformation output is print-oriented
      */
@@ -120,6 +127,10 @@ public final class FilterUtils {
 
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+    }
+    
+    public void setJob(Job job) {
+    	this.job = job;
     }
 
     @Override
@@ -270,7 +281,22 @@ public final class FilterUtils {
      * Test if element should be excluded based on filter.
      */
     public boolean needExclude(final Element element, final QName[][] props) {
-        final XMLUtils.AttributesBuilder buf = new XMLUtils.AttributesBuilder();
+        Attributes attributes = getAttributes(element);
+		if (needExclude(attributes, props)) {
+			return true;
+		}
+		if (isTopicOrMap(attributes)) {
+			attributes = getAttributes(loadDocument(element));
+			if (needExclude(attributes, props)) {
+				updateFileInfo(element);
+				return true;
+			}
+		}
+		return false;
+    }
+
+	private Attributes getAttributes(final Element element) {
+		final XMLUtils.AttributesBuilder buf = new XMLUtils.AttributesBuilder();
         final NamedNodeMap attrs = element.getAttributes();
         for (int i = 0; i < attrs.getLength() ; i++) {
             final Node attr = attrs.item(i);
@@ -278,8 +304,47 @@ public final class FilterUtils {
                 buf.add((Attr) attr);
             }
         }
-        return needExclude(buf.build(), props);
-    }
+        return buf.build();
+	}
+	
+	private boolean isTopicOrMap(Attributes attributes) {
+		return !DITAVAREF_D_DITAVALREF.matches(attributes) && (MAP_MAP.matches(attributes) || MAP_TOPICREF.matches(attributes));
+	}
+	
+	private Element loadDocument(Element element) {
+		String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
+		if (href !=null && href.trim().length() > 0) {
+			try {
+				String absoluteHref = job.getFileInfo(new URI(href)).src.toString();
+				DocumentBuilder builder = newDocumentBuilder();
+		        Document document = builder.parse(new InputSource(absoluteHref));
+				return document.getDocumentElement();
+			} catch (SAXException | IOException | URISyntaxException | ParserConfigurationException e) {
+				logger.warn(format("Source document could not be loaded for %s. Cannot validate filtering attributes.", href));
+				return element;
+			}
+		}
+		return element;
+	}
+
+	private DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		factory.setValidating(false);
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		builder.setEntityResolver(CatalogUtils.getCatalogResolver());
+		return builder;
+	}
+	
+	private void updateFileInfo(Element element) {
+		String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
+		try {
+			URI fileUri = new URI(href);
+			job.getFileInfo(fileUri).isFiltered=true;
+		} catch (URISyntaxException e) {
+			logger.warn(format("Couldn't update fileinfo %s", href));
+		}
+	}
 
     /**
      * Check if the given Attributes need to be excluded.
