@@ -131,6 +131,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
         final FilterUtils f = new FilterUtils(filterMap, ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         f.setLogger(logger);
+        f.setJob(job);
         return f;
     }
 
