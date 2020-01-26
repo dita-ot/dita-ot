@@ -23,10 +23,10 @@ class ChunkOperation {
         SELECT_TOPIC("select-topic"),
         SELECT_DOCUMENT("select-document"),
         SELECT_BRANCH("select-branch"),
-        /** Split */
+        /** Split, separate */
         BY_TOPIC("by-topic"),
         BY_DOCUMENT("by-document"),
-        /** Merge */
+        /** Merge, combine */
         TO_CONTENT("to-content"),
         TO_NAVIGATION("to-navigation");
 

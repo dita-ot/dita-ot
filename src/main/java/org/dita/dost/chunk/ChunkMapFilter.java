@@ -366,7 +366,7 @@ final class ChunkMapFilter extends AbstractDomFilter {
                     dst = href;
                 }
                 final ChunkBuilder op = ChunkOperation.builder(TO_CONTENT)
-                        .src(currentFile.resolve(href))
+                        .src(href != null ? currentFile.resolve(href) : null)
                         .dst(currentFile.resolve(dst));
                 processCombineChunk(topicref, op);
                 changes.add(op.build());

@@ -10,6 +10,7 @@ package org.dita.dost.chunk;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -272,7 +273,7 @@ final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         assert base.isAbsolute();
         assert base.toString().startsWith(job.tempDirURI.toString());
 
-        final FileInfo srcFi = job.getFileInfo(base);
+        final FileInfo srcFi = job.getFileInfo(URLUtils.stripFragment(base));
         final URI dst;
         if (file != null) {
             dst = srcFi.result.resolve(file);

@@ -10,6 +10,7 @@ package org.dita.dost.chunk;
 
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -149,7 +150,7 @@ final class ChunkTopicParser extends AbstractChunkTopicParser {
                     }
 
                     // Check if there is any conflict
-                    if (new File(outputFileName).exists() && !MAP_MAP.matches(classValue)) {
+                    if (new File(URLUtils.stripFragment(outputFileName)).exists() && !MAP_MAP.matches(classValue)) {
                         final URI t = outputFileName;
                         outputFileName = generateOutputFile(currentFile);
                         conflictTable.put(outputFileName, t);
@@ -203,7 +204,7 @@ final class ChunkTopicParser extends AbstractChunkTopicParser {
                     currentParsingFileTopicIDChangeTable = new HashMap<>();
                     // TODO recursive point
                     logger.info("Processing " + currentParsingFile);
-                    reader.parse(currentParsingFile.toString());
+                        reader.parse(currentParsingFile.toString());
                     if (currentParsingFileTopicIDChangeTable.size() > 0) {
                         final URI href = toURI(topicref.getAttribute(ATTRIBUTE_NAME_HREF));
                         final String pathtoElem = href.getFragment() != null
@@ -312,7 +313,7 @@ final class ChunkTopicParser extends AbstractChunkTopicParser {
 
                 if (conflictTable.get(outputFileName) != null) {
                     final String relativePath = getRelativeUnixPath(new File(currentFile.resolve(".")) + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
-                            new File(conflictTable.get(outputFileName)).getAbsolutePath());
+                            new File(URLUtils.stripFragment(conflictTable.get(outputFileName))).getAbsolutePath());
                     String path2project = getRelativeUnixPath(relativePath);
                     if (null == path2project) {
                         path2project = "";
