@@ -341,6 +341,7 @@ final class ChunkMapFilter extends AbstractDomFilter {
         }
 
         final Collection<String> chunk = split(getValue(topicref, ATTRIBUTE_NAME_CHUNK));
+        final Operation select = getSelect(chunk);
 
         URI href = toURI(getValue(topicref, ATTRIBUTE_NAME_HREF));
         final URI copyTo = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
@@ -366,6 +367,7 @@ final class ChunkMapFilter extends AbstractDomFilter {
                     dst = generateStumpTopic(topicref);
                 }
                 final ChunkBuilder op = ChunkOperation.builder(TO_CONTENT)
+                        .select(select)
                         .src(href != null ? currentFile.resolve(href) : null)
                         .dst(currentFile.resolve(dst));
                 processCombineChunk(topicref, op);

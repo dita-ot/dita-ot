@@ -38,16 +38,19 @@ class ChunkOperation {
     }
 
     public final Operation operation;
+    public final Operation select;
     public final URI src;
     public final URI dst;
     public final List<ChunkOperation> children;
 
     @VisibleForTesting
     ChunkOperation(final Operation operation,
+                   final Operation select,
                    final URI src,
                    final URI dst,
                    final List<ChunkOperation> children) {
         this.operation = operation;
+        this.select = select;
         this.src = src;
         this.dst = dst;
         this.children = children;
@@ -59,6 +62,7 @@ class ChunkOperation {
         if (o == null || getClass() != o.getClass()) return false;
         ChunkOperation that = (ChunkOperation) o;
         return operation == that.operation &&
+                select == that.select &&
                 Objects.equals(src, that.src) &&
                 Objects.equals(dst, that.dst) &&
                 Objects.equals(children, that.children);
@@ -66,13 +70,14 @@ class ChunkOperation {
 
     @Override
     public int hashCode() {
-        return Objects.hash(operation, src, dst, children);
+        return Objects.hash(operation, select, src, dst, children);
     }
 
     @Override
     public String toString() {
         return "ChunkOperation{" +
                 "operation=" + operation +
+                ", select=" + select +
                 ", src=" + src +
                 ", dst=" + dst +
                 ", children=" + children +
@@ -120,7 +125,7 @@ class ChunkOperation {
             final URI src = this.src;
             final URI dst = this.dst;
             final List<ChunkOperation> cos = children.stream().map(ChunkBuilder::build).collect(Collectors.toList());
-            return new ChunkOperation(operation, src, dst, Collections.unmodifiableList(cos));
+            return new ChunkOperation(operation, select, src, dst, Collections.unmodifiableList(cos));
         }
     }
 }

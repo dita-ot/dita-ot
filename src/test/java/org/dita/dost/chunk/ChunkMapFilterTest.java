@@ -23,8 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.dita.dost.chunk.ChunkOperation.Operation.BY_TOPIC;
-import static org.dita.dost.chunk.ChunkOperation.Operation.TO_CONTENT;
+import static org.dita.dost.chunk.ChunkOperation.Operation.*;
 
 public class ChunkMapFilterTest {
 
@@ -44,7 +43,7 @@ public class ChunkMapFilterTest {
                 .map("map1.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent1.dita", "parent1.dita")
+                        chunk(TO_CONTENT, null, "parent1.dita", "parent1.dita")
                 );
     }
 
@@ -54,12 +53,12 @@ public class ChunkMapFilterTest {
                 .map("map10.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "X.dita#X", null),
-                        chunk(BY_TOPIC, "Y.dita#Y", null,
-                                chunk(BY_TOPIC, "Y.dita#Y1", null,
-                                        chunk(BY_TOPIC, "Y.dita#Y1a", null))),
-                        chunk(BY_TOPIC, "Z.dita#Z", null,
-                                chunk(BY_TOPIC, "Z.dita#Z1", null))
+                        chunk(BY_TOPIC, null, "X.dita#X", null),
+                        chunk(BY_TOPIC, null, "Y.dita#Y", null,
+                                chunk(BY_TOPIC, null, "Y.dita#Y1", null,
+                                        chunk(BY_TOPIC, null, "Y.dita#Y1a", null))),
+                        chunk(BY_TOPIC, null, "Z.dita#Z", null,
+                                chunk(BY_TOPIC, null, "Z.dita#Z1", null))
                 );
     }
 
@@ -69,15 +68,15 @@ public class ChunkMapFilterTest {
                 .map("map11.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "X.dita#X", null),
-                        chunk(TO_CONTENT, "Y.dita", "Y.dita",
-                                chunk(null, "Z.dita", null)),
-                        chunk(BY_TOPIC, "Chunk1.dita#", null,
-                                chunk(BY_TOPIC, "Chunk1.dita#Y", null,
-                                        chunk(BY_TOPIC, "Chunk1.dita#Y1", null,
-                                                chunk(BY_TOPIC, "Chunk1.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "Chunk1.dita#Z", null,
-                                                chunk(BY_TOPIC, "Chunk1.dita#Z1", null))))
+                        chunk(BY_TOPIC, null, "X.dita#X", null),
+                        chunk(TO_CONTENT, null, "Y.dita", "Y.dita",
+                                chunk(null, SELECT_DOCUMENT, "Z.dita", null)),
+                        chunk(BY_TOPIC, null, "Chunk1.dita#", null,
+                                chunk(BY_TOPIC, null, "Chunk1.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "Chunk1.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "Chunk1.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "Chunk1.dita#Z", null,
+                                                chunk(BY_TOPIC, null, "Chunk1.dita#Z1", null))))
                 );
     }
 
@@ -87,15 +86,15 @@ public class ChunkMapFilterTest {
                 .map("_map11.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "_X.dita#X", null),
-                        chunk(TO_CONTENT, "_Y.dita", "_Y.dita",
-                                chunk(null, "_Z.dita", null)),
-                        chunk(BY_TOPIC, "Chunk0.dita#", null,
-                                chunk(BY_TOPIC, "Chunk0.dita#Y", null,
-                                        chunk(BY_TOPIC, "Chunk0.dita#Y1", null,
-                                                chunk(BY_TOPIC, "Chunk0.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "Chunk0.dita#Z", null,
-                                                chunk(BY_TOPIC, "Chunk0.dita#Z1", null))))
+                        chunk(BY_TOPIC, null, "_X.dita#X", null),
+                        chunk(TO_CONTENT, null, "_Y.dita", "_Y.dita",
+                                chunk(null, SELECT_DOCUMENT, "_Z.dita", null)),
+                        chunk(BY_TOPIC, null, "Chunk0.dita#", null,
+                                chunk(BY_TOPIC, null, "Chunk0.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "Chunk0.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "Chunk0.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "Chunk0.dita#Z", null,
+                                                chunk(BY_TOPIC, null, "Chunk0.dita#Z1", null))))
                 );
     }
 
@@ -105,8 +104,8 @@ public class ChunkMapFilterTest {
                 .map("map2.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent1.dita", "parent1.dita",
-                                chunk(null, "ditabase.dita#Y1", null))
+                        chunk(TO_CONTENT, null, "parent1.dita", "parent1.dita",
+                                chunk(null, null, "ditabase.dita#Y1", null))
                 );
     }
 
@@ -116,17 +115,17 @@ public class ChunkMapFilterTest {
                 .map("map3.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent1.dita", "parent1.dita",
-                                chunk(null, "ditabase.dita", null)),
-                        chunk(BY_TOPIC, "Chunk0.dita#", null,
-                                chunk(BY_TOPIC, "Chunk0.dita#parent1", null,
-                                        chunk(BY_TOPIC, "Chunk0.dita#X", null),
-                                        chunk(BY_TOPIC, "Chunk0.dita#Y", null,
-                                                chunk(BY_TOPIC, "Chunk0.dita#Y1", null,
-                                                        chunk(BY_TOPIC, "Chunk0.dita#Y1a", null))),
-                                        chunk(BY_TOPIC, "Chunk0.dita#Y2", null),
-                                        chunk(BY_TOPIC, "Chunk0.dita#Z", null,
-                                                chunk(BY_TOPIC, "Chunk0.dita#Z1", null))))
+                        chunk(TO_CONTENT, null, "parent1.dita", "parent1.dita",
+                                chunk(null, null, "ditabase.dita", null)),
+                        chunk(BY_TOPIC, null, "Chunk0.dita#", null,
+                                chunk(BY_TOPIC, null, "Chunk0.dita#parent1", null,
+                                        chunk(BY_TOPIC, null, "Chunk0.dita#X", null),
+                                        chunk(BY_TOPIC, null, "Chunk0.dita#Y", null,
+                                                chunk(BY_TOPIC, null, "Chunk0.dita#Y1", null,
+                                                        chunk(BY_TOPIC, null, "Chunk0.dita#Y1a", null))),
+                                        chunk(BY_TOPIC, null, "Chunk0.dita#Y2", null),
+                                        chunk(BY_TOPIC, null, "Chunk0.dita#Z", null,
+                                                chunk(BY_TOPIC, null, "Chunk0.dita#Z1", null))))
                 );
     }
 
@@ -146,12 +145,12 @@ public class ChunkMapFilterTest {
                 .map("map5.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent1.dita", "parentchunk.dita",
-                                chunk(null, "child1.dita", null),
-                                chunk(null, "child3.dita", null,
-                                        chunk(null, "grandchild3.dita", null))),
-                        chunk(TO_CONTENT, "child2.dita", "child2chunk.dita",
-                                chunk(null, "grandchild2.dita", null))
+                        chunk(TO_CONTENT, null, "parent1.dita", "parentchunk.dita",
+                                chunk(null, null, "child1.dita", null),
+                                chunk(null, null, "child3.dita", null,
+                                        chunk(null, null, "grandchild3.dita", null))),
+                        chunk(TO_CONTENT, null, "child2.dita", "child2chunk.dita",
+                                chunk(null, null, "grandchild2.dita", null))
                 );
     }
 
@@ -161,7 +160,7 @@ public class ChunkMapFilterTest {
                 .map("map6.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "nested1.dita#N1", "nested1.dita#N1")
+                        chunk(TO_CONTENT, SELECT_TOPIC, "nested1.dita#N1", "nestedchunk.dita")
                 );
     }
 
@@ -181,8 +180,8 @@ public class ChunkMapFilterTest {
                 .map("map8.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent1.dita", "parent1.dita",
-                                chunk(null, "ditabase.dita", null))
+                        chunk(TO_CONTENT, null, "parent1.dita", "parent1.dita",
+                                chunk(null, SELECT_BRANCH, "ditabase.dita", null))
                 );
     }
 
@@ -192,8 +191,8 @@ public class ChunkMapFilterTest {
                 .map("map9.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "Y.dita", "Y.dita",
-                                chunk(null, "Z.dita", null))
+                        chunk(TO_CONTENT, null, "Y.dita", "Y.dita",
+                                chunk(null, SELECT_DOCUMENT, "Z.dita", null))
                 );
     }
 
@@ -203,11 +202,11 @@ public class ChunkMapFilterTest {
                 .map("batseparate0.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "battytasks.dita#battytasks", "battytasks.dita#battytasks"),
+                        chunk(TO_CONTENT, null, "battytasks.dita#battytasks", "battytasks.dita#battytasks"),
                         // FIXME this should create a new chunk based on ID
-                        chunk(TO_CONTENT, "battytasks.dita#batcaring", "battytasks.dita#batcaring"),
-                        chunk(TO_CONTENT, "battytasks.dita#batfeeding", "battytasks.dita#batfeeding"),
-                        chunk(TO_CONTENT, "battytasks.dita#batcleaning", "battytasks.dita#batcleaning")
+                        chunk(TO_CONTENT, null, "battytasks.dita#batcaring", "battytasks.dita#batcaring"),
+                        chunk(TO_CONTENT, null, "battytasks.dita#batfeeding", "battytasks.dita#batfeeding"),
+                        chunk(TO_CONTENT, null, "battytasks.dita#batcleaning", "battytasks.dita#batcleaning")
                 );
     }
 
@@ -217,10 +216,10 @@ public class ChunkMapFilterTest {
                 .map("map1.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "nested1.dita#N1", null,
-                                chunk(BY_TOPIC, "nested1.dita#N1a", null)),
-                        chunk(BY_TOPIC, "nested2.dita#N2", null,
-                                chunk(BY_TOPIC, "nested2.dita#N2a", null))
+                        chunk(BY_TOPIC, null, "nested1.dita#N1", null,
+                                chunk(BY_TOPIC, null, "nested1.dita#N1a", null)),
+                        chunk(BY_TOPIC, null, "nested2.dita#N2", null,
+                                chunk(BY_TOPIC, null, "nested2.dita#N2a", null))
                 );
     }
 
@@ -230,8 +229,8 @@ public class ChunkMapFilterTest {
                 .map("map2.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "nested1.dita#N1", null,
-                                chunk(BY_TOPIC, "nested1.dita#N1a", null))
+                        chunk(BY_TOPIC, null, "nested1.dita#N1", null,
+                                chunk(BY_TOPIC, null, "nested1.dita#N1a", null))
                 );
     }
 
@@ -251,8 +250,8 @@ public class ChunkMapFilterTest {
                 .map("map4.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "nested1.dita", "nested1.dita",
-                                chunk(null, "nested2.dita", null))
+                        chunk(TO_CONTENT, null, "nested1.dita", "nested1.dita",
+                                chunk(null, null, "nested2.dita", null))
                 );
     }
 
@@ -262,10 +261,10 @@ public class ChunkMapFilterTest {
                 .map("map5.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "map5.dita", "map5.dita",
-                                chunk(null, "nested1.dita", null)),
-                        chunk(TO_CONTENT, "t1.dita", "map5.dita",
-                                chunk(null, "t2.dita", null))
+                        chunk(TO_CONTENT, null, "map5.dita", "map5.dita",
+                                chunk(null, null, "nested1.dita", null)),
+                        chunk(TO_CONTENT, null, "t1.dita", "map5.dita",
+                                chunk(null, null, "t2.dita", null))
                 );
     }
 
@@ -275,10 +274,10 @@ public class ChunkMapFilterTest {
                 .map("map6.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "nested1.dita", "nested1.dita",
-                                chunk(null, "nested2.dita", null)),
-                        chunk(TO_CONTENT, "t1.dita", "t1.dita",
-                                chunk(null, "nested1.dita#N1a", null))
+                        chunk(TO_CONTENT, null, "nested1.dita", "nested1.dita",
+                                chunk(null, null, "nested2.dita", null)),
+                        chunk(TO_CONTENT, null, "t1.dita", "t1.dita",
+                                chunk(null, null, "nested1.dita#N1a", null))
                 );
     }
 
@@ -288,10 +287,10 @@ public class ChunkMapFilterTest {
                 .map("map7.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "nested1.dita#N1", null,
-                                chunk(BY_TOPIC, "nested1.dita#N1a", null)),
-                        chunk(BY_TOPIC, "nested4.dita#N1", null,
-                                chunk(BY_TOPIC, "nested4.dita#N1a", null))
+                        chunk(BY_TOPIC, null, "nested1.dita#N1", null,
+                                chunk(BY_TOPIC, null, "nested1.dita#N1a", null)),
+                        chunk(BY_TOPIC, null, "nested4.dita#N1", null,
+                                chunk(BY_TOPIC, null, "nested4.dita#N1a", null))
                 );
     }
 
@@ -301,8 +300,8 @@ public class ChunkMapFilterTest {
                 .map("map1.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent1.dita", "parent1.dita",
-                                chunk(null, "ditabase.dita#Y1", null))
+                        chunk(TO_CONTENT, null, "parent1.dita", "parent1.dita",
+                                chunk(null, SELECT_TOPIC, "ditabase.dita#Y1", null))
                 );
     }
 
@@ -312,8 +311,8 @@ public class ChunkMapFilterTest {
                 .map("map2.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent1.dita", "parent1.dita",
-                                chunk(null, "ditabase.dita#Y", null))
+                        chunk(TO_CONTENT, null, "parent1.dita", "parent1.dita",
+                                chunk(null, SELECT_BRANCH, "ditabase.dita#Y", null))
                 );
     }
 
@@ -323,17 +322,17 @@ public class ChunkMapFilterTest {
                 .map("map3.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent1.dita", "parent1.dita",
-                                chunk(null, "ditabase.dita#Y1", null)),
-                        chunk(BY_TOPIC, "Chunk0.dita#", null,
-                                chunk(BY_TOPIC, "Chunk0.dita#P1", null,
-                                        chunk(BY_TOPIC, "Chunk0.dita#X", null),
-                                        chunk(BY_TOPIC, "Chunk0.dita#Y", null,
-                                                chunk(BY_TOPIC, "Chunk0.dita#Y1", null,
-                                                        chunk(BY_TOPIC, "Chunk0.dita#Y1a", null)),
-                                                chunk(BY_TOPIC, "Chunk0.dita#Y2", null)),
-                                        chunk(BY_TOPIC, "Chunk0.dita#Z", null,
-                                                chunk(BY_TOPIC, "Chunk0.dita#Z1", null))))
+                        chunk(TO_CONTENT, null, "parent1.dita", "parent1.dita",
+                                chunk(null, null, "ditabase.dita#Y1", null)),
+                        chunk(BY_TOPIC, null, "Chunk0.dita#", null,
+                                chunk(BY_TOPIC, null, "Chunk0.dita#P1", null,
+                                        chunk(BY_TOPIC, null, "Chunk0.dita#X", null),
+                                        chunk(BY_TOPIC, null, "Chunk0.dita#Y", null,
+                                                chunk(BY_TOPIC, null, "Chunk0.dita#Y1", null,
+                                                        chunk(BY_TOPIC, null, "Chunk0.dita#Y1a", null)),
+                                                chunk(BY_TOPIC, null, "Chunk0.dita#Y2", null)),
+                                        chunk(BY_TOPIC, null, "Chunk0.dita#Z", null,
+                                                chunk(BY_TOPIC, null, "Chunk0.dita#Z1", null))))
                 );
     }
 
@@ -343,8 +342,8 @@ public class ChunkMapFilterTest {
                 .map("map4.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent1.dita", "parent1.dita",
-                                chunk(null, "nested1.dita", null))
+                        chunk(TO_CONTENT, null, "parent1.dita", "parent1.dita",
+                                chunk(null, null, "nested1.dita", null))
                 );
     }
 
@@ -354,12 +353,12 @@ public class ChunkMapFilterTest {
                 .map("map5.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent1.dita", "parentchunk.dita",
-                                chunk(null, "child1.dita", null),
-                                chunk(null, "child3.dita", null,
-                                        chunk(null, "grandchild3.dita", null))),
-                        chunk(TO_CONTENT, "child2.dita", "child2chunk.dita",
-                                chunk(null, "grandchild2.dita", null))
+                        chunk(TO_CONTENT, null, "parent1.dita", "parentchunk.dita",
+                                chunk(null, SELECT_BRANCH, "child1.dita", null),
+                                chunk(null, null, "child3.dita", null,
+                                        chunk(null, SELECT_BRANCH, "grandchild3.dita", null))),
+                        chunk(TO_CONTENT, SELECT_BRANCH, "child2.dita", "child2chunk.dita",
+                                chunk(null, null, "grandchild2.dita", null))
                 );
     }
 
@@ -369,7 +368,7 @@ public class ChunkMapFilterTest {
                 .map("map6.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "nested1.dita#N1", "nested1.dita#N1")
+                        chunk(TO_CONTENT, SELECT_TOPIC, "nested1.dita#N1", "nestedchunk.dita")
                 );
     }
 
@@ -399,9 +398,9 @@ public class ChunkMapFilterTest {
                 .map("map1.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "concept1.dita", "concept1.dita",
-                                chunk(null, "reference1.dita", null),
-                                chunk(null, "task1.dita", null))
+                        chunk(TO_CONTENT, null, "concept1.dita", "concept1.dita",
+                                chunk(null, null, "reference1.dita", null),
+                                chunk(null, null, "task1.dita", null))
                 );
     }
 
@@ -411,10 +410,10 @@ public class ChunkMapFilterTest {
                 .map("map2.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "concept1.dita", "concept1.dita",
-                                chunk(null, "reference1.dita", null)),
-                        chunk(TO_CONTENT, "task1.dita", "task1.dita",
-                                chunk(null, "reference1.dita", null))
+                        chunk(TO_CONTENT, null, "concept1.dita", "concept1.dita",
+                                chunk(null, null, "reference1.dita", null)),
+                        chunk(TO_CONTENT, null, "task1.dita", "task1.dita",
+                                chunk(null, null, "reference1.dita", null))
                 );
     }
 
@@ -424,11 +423,11 @@ public class ChunkMapFilterTest {
                 .map("case1.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "ditabase.dita#one", "ditabase.dita#one"),
+                        chunk(TO_CONTENT, SELECT_TOPIC, "ditabase.dita#one", "ditabase.dita#one"),
                         // FIXME this should dst two.dita
-                        chunk(TO_CONTENT, "ditabase.dita#two", "ditabase.dita#two"),
-                        chunk(TO_CONTENT, "ditabase.dita#four", "ditabase.dita#four"),
-                        chunk(TO_CONTENT, "ditabase.dita#three", "ditabase.dita#three")
+                        chunk(TO_CONTENT, SELECT_TOPIC, "ditabase.dita#two", "ditabase.dita#two"),
+                        chunk(TO_CONTENT, SELECT_TOPIC, "ditabase.dita#four", "ditabase.dita#four"),
+                        chunk(TO_CONTENT, SELECT_TOPIC, "ditabase.dita#three", "ditabase.dita#three")
                 );
     }
 
@@ -438,10 +437,10 @@ public class ChunkMapFilterTest {
                 .map("case2.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "case2.dita", "case2.dita",
-                                chunk(null, "ditabase.dita#one", null,
-                                        chunk(null, null, null,
-                                                chunk(null, "nested.dita", null))))
+                        chunk(TO_CONTENT, null, "case2.dita", "case2.dita",
+                                chunk(null, null, "ditabase.dita#one", null,
+                                        chunk(null, null, null, null,
+                                                chunk(null, null, "nested.dita", null))))
                 );
     }
 
@@ -451,12 +450,12 @@ public class ChunkMapFilterTest {
                 .map("case3.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#one", null),
-                                chunk(BY_TOPIC, "ditabase.dita#two", null),
-                                chunk(BY_TOPIC, "ditabase.dita#three", null),
-                                chunk(BY_TOPIC, "ditabase.dita#four", null),
-                                chunk(BY_TOPIC, "ditabase.dita#five", null))
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#one", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#two", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#three", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#four", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#five", null))
                 );
     }
 
@@ -466,9 +465,9 @@ public class ChunkMapFilterTest {
                 .map("case4.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "Chunk0.dita", "Chunk0.dita",
-                                chunk(null, "case4.dita", null,
-                                        chunk(null, "child.dita", null)))
+                        chunk(TO_CONTENT, null, "Chunk0.dita", "Chunk0.dita",
+                                chunk(null, null, "case4.dita", null,
+                                        chunk(null, null, "child.dita", null)))
                 );
     }
 
@@ -478,30 +477,30 @@ public class ChunkMapFilterTest {
                 .map("case5.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#one", null),
-                                chunk(BY_TOPIC, "ditabase.dita#two", null),
-                                chunk(BY_TOPIC, "ditabase.dita#three", null),
-                                chunk(BY_TOPIC, "ditabase.dita#four", null),
-                                chunk(BY_TOPIC, "ditabase.dita#five", null)),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#one", null),
-                                chunk(BY_TOPIC, "ditabase.dita#two", null),
-                                chunk(BY_TOPIC, "ditabase.dita#three", null),
-                                chunk(BY_TOPIC, "ditabase.dita#four", null),
-                                chunk(BY_TOPIC, "ditabase.dita#five", null)),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#one", null),
-                                chunk(BY_TOPIC, "ditabase.dita#two", null),
-                                chunk(BY_TOPIC, "ditabase.dita#three", null),
-                                chunk(BY_TOPIC, "ditabase.dita#four", null),
-                                chunk(BY_TOPIC, "ditabase.dita#five", null)),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#one", null),
-                                chunk(BY_TOPIC, "ditabase.dita#two", null),
-                                chunk(BY_TOPIC, "ditabase.dita#three", null),
-                                chunk(BY_TOPIC, "ditabase.dita#four", null),
-                                chunk(BY_TOPIC, "ditabase.dita#five", null))
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#one", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#two", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#three", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#four", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#five", null)),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#one", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#two", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#three", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#four", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#five", null)),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#one", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#two", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#three", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#four", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#five", null)),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#one", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#two", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#three", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#four", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#five", null))
                 );
     }
 
@@ -511,30 +510,30 @@ public class ChunkMapFilterTest {
                 .map("case6.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#one", null),
-                                chunk(BY_TOPIC, "ditabase.dita#two", null),
-                                chunk(BY_TOPIC, "ditabase.dita#three", null),
-                                chunk(BY_TOPIC, "ditabase.dita#four", null),
-                                chunk(BY_TOPIC, "ditabase.dita#five", null)),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#one", null),
-                                chunk(BY_TOPIC, "ditabase.dita#two", null),
-                                chunk(BY_TOPIC, "ditabase.dita#three", null),
-                                chunk(BY_TOPIC, "ditabase.dita#four", null),
-                                chunk(BY_TOPIC, "ditabase.dita#five", null)),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#one", null),
-                                chunk(BY_TOPIC, "ditabase.dita#two", null),
-                                chunk(BY_TOPIC, "ditabase.dita#three", null),
-                                chunk(BY_TOPIC, "ditabase.dita#four", null),
-                                chunk(BY_TOPIC, "ditabase.dita#five", null)),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#one", null),
-                                chunk(BY_TOPIC, "ditabase.dita#two", null),
-                                chunk(BY_TOPIC, "ditabase.dita#three", null),
-                                chunk(BY_TOPIC, "ditabase.dita#four", null),
-                                chunk(BY_TOPIC, "ditabase.dita#five", null))
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#one", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#two", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#three", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#four", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#five", null)),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#one", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#two", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#three", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#four", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#five", null)),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#one", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#two", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#three", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#four", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#five", null)),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#one", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#two", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#three", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#four", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#five", null))
                 );
     }
 
@@ -544,10 +543,10 @@ public class ChunkMapFilterTest {
                 .map("case7.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "parent.dita", "parent.dita",
-                                chunk(null, "child.dita", null),
-                                chunk(null, "child2.dita", null),
-                                chunk(null, "http://www.metadita.org", null))
+                        chunk(TO_CONTENT, null, "parent.dita", "parent.dita",
+                                chunk(null, null, "child.dita", null),
+                                chunk(null, null, "child2.dita", null),
+                                chunk(null, null, "http://www.metadita.org", null))
                 );
     }
 
@@ -557,10 +556,10 @@ public class ChunkMapFilterTest {
                 .map("chunk_duplicate.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "dita1.dita", "dita1.dita",
-                                chunk(null, "sub_dita1.dita", null)),
-                        chunk(TO_CONTENT, "dita2.dita", "dita2.dita",
-                                chunk(null, "sub_dita2.dita", null))
+                        chunk(TO_CONTENT, null, "dita1.dita", "dita1.dita",
+                                chunk(null, null, "sub_dita1.dita", null)),
+                        chunk(TO_CONTENT, null, "dita2.dita", "dita2.dita",
+                                chunk(null, null, "sub_dita2.dita", null))
                 );
     }
 
@@ -570,12 +569,12 @@ public class ChunkMapFilterTest {
                 .map("map.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "dita1.dita#AAA", "dita1.dita#AAA",
-                                chunk(null, "sub_dita1.dita", null,
-                                        chunk(null, "sub_dita2.dita", null))),
-                        chunk(TO_CONTENT, "dita1.dita#B", "dita1.dita#B"),
-                        chunk(TO_CONTENT, "dita1.dita#C", "dita1.dita#C"),
-                        chunk(TO_CONTENT, "dita1.dita#D", "dita1.dita#D")
+                        chunk(TO_CONTENT, null, "dita1.dita#AAA", "dita1.dita#AAA",
+                                chunk(null, null, "sub_dita1.dita", null,
+                                        chunk(null, null, "sub_dita2.dita", null))),
+                        chunk(TO_CONTENT, null, "dita1.dita#B", "dita1.dita#B"),
+                        chunk(TO_CONTENT, null, "dita1.dita#C", "dita1.dita#C"),
+                        chunk(TO_CONTENT, null, "dita1.dita#D", "dita1.dita#D")
                 );
     }
 
@@ -585,10 +584,10 @@ public class ChunkMapFilterTest {
                 .map("chunk_map_tocontent/map_chunk_source.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "chunk_map_tocontent/dita1.dita", "chunk_map_tocontent/dita1.dita",
-                                chunk(null, "chunk_map_tocontent/sub_dita1.dita", null)),
-                        chunk(TO_CONTENT, "chunk_map_tocontent/dita2.dita", "chunk_map_tocontent/dita2.dita",
-                                chunk(null, "chunk_map_tocontent/sub_dita2.dita", null))
+                        chunk(TO_CONTENT, null, "chunk_map_tocontent/dita1.dita", "chunk_map_tocontent/dita1.dita",
+                                chunk(null, null, "chunk_map_tocontent/sub_dita1.dita", null)),
+                        chunk(TO_CONTENT, null, "chunk_map_tocontent/dita2.dita", "chunk_map_tocontent/dita2.dita",
+                                chunk(null, null, "chunk_map_tocontent/sub_dita2.dita", null))
                 );
     }
 
@@ -598,12 +597,12 @@ public class ChunkMapFilterTest {
                 .map("chunk_rewrite_topicID.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "dita1.dita", "dita1.dita",
-                                chunk(null, "dita2.dita", null),
-                                chunk(null, "dita3.dita", null)),
-                        chunk(TO_CONTENT, "dita4.dita", "dita4.dita"),
-                        chunk(TO_CONTENT, "dita5.dita", "dita5.dita",
-                                chunk(null, "dita6.dita", null))
+                        chunk(TO_CONTENT, null, "dita1.dita", "dita1.dita",
+                                chunk(null, null, "dita2.dita", null),
+                                chunk(null, null, "dita3.dita", null)),
+                        chunk(TO_CONTENT, null, "dita4.dita", "dita4.dita"),
+                        chunk(TO_CONTENT, null, "dita5.dita", "dita5.dita",
+                                chunk(null, null, "dita6.dita", null))
                 );
     }
 
@@ -613,10 +612,10 @@ public class ChunkMapFilterTest {
                 .map("map1.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "nested1.dita#N1", null,
-                                chunk(BY_TOPIC, "nested1.dita#N1a", null)),
-                        chunk(BY_TOPIC, "nested4.dita#N1", null,
-                                chunk(BY_TOPIC, "nested4.dita#N1a", null))
+                        chunk(BY_TOPIC, null, "nested1.dita#N1", null,
+                                chunk(BY_TOPIC, null, "nested1.dita#N1a", null)),
+                        chunk(BY_TOPIC, null, "nested4.dita#N1", null,
+                                chunk(BY_TOPIC, null, "nested4.dita#N1a", null))
                 );
     }
 
@@ -626,8 +625,8 @@ public class ChunkMapFilterTest {
                 .map("map1.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "t1.dita", "t1.dita",
-                                chunk(null, "t2.dita", null))
+                        chunk(TO_CONTENT, null, "t1.dita", "t1.dita",
+                                chunk(null, null, "t2.dita", null))
                 );
     }
 
@@ -637,10 +636,10 @@ public class ChunkMapFilterTest {
                 .map("map1.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "map1.dita", "map1.dita",
-                                chunk(null, "nested1.dita", null)),
-                        chunk(TO_CONTENT, "t1.dita", "map5.dita",
-                                chunk(null, "t2.dita", null))
+                        chunk(TO_CONTENT, null, "map1.dita", "map1.dita",
+                                chunk(null, null, "nested1.dita", null)),
+                        chunk(TO_CONTENT, null, "t1.dita", "map5.dita",
+                                chunk(null, null, "t2.dita", null))
                 );
     }
 
@@ -650,72 +649,72 @@ public class ChunkMapFilterTest {
                 .map("map1.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(TO_CONTENT, "ditabase.dita#X", "ditabase.dita#X"),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(TO_CONTENT, "ditabase.dita#Z", "ditabase.dita#Z")
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(TO_CONTENT, SELECT_BRANCH, "ditabase.dita#X", "document.dita"),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(TO_CONTENT, SELECT_DOCUMENT, "ditabase.dita#Z", "Z.dita")
                 );
     }
 
@@ -725,54 +724,54 @@ public class ChunkMapFilterTest {
                 .map("map2.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null))),
-                        chunk(BY_TOPIC, "ditabase.dita#", null,
-                                chunk(BY_TOPIC, "ditabase.dita#X", null),
-                                chunk(BY_TOPIC, "ditabase.dita#Y", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Y1", null,
-                                                chunk(BY_TOPIC, "ditabase.dita#Y1a", null)),
-                                        chunk(BY_TOPIC, "ditabase.dita#Y2", null)),
-                                chunk(BY_TOPIC, "ditabase.dita#Z", null,
-                                        chunk(BY_TOPIC, "ditabase.dita#Z1", null)))
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null))),
+                        chunk(BY_TOPIC, null, "ditabase.dita#", null,
+                                chunk(BY_TOPIC, null, "ditabase.dita#X", null),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Y", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y1", null,
+                                                chunk(BY_TOPIC, null, "ditabase.dita#Y1a", null)),
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Y2", null)),
+                                chunk(BY_TOPIC, null, "ditabase.dita#Z", null,
+                                        chunk(BY_TOPIC, null, "ditabase.dita#Z1", null)))
                 );
     }
 
@@ -782,8 +781,8 @@ public class ChunkMapFilterTest {
                 .map("test_chunk.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "dita1.dita#ditatask111", "dita1.dita#ditatask111",
-                                chunk(null, "http://w3.ibm.com/", null))
+                        chunk(TO_CONTENT, null, "dita1.dita#ditatask111", "dita1.dita#ditatask111",
+                                chunk(null, null, "http://w3.ibm.com/", null))
                 );
     }
 
@@ -793,8 +792,8 @@ public class ChunkMapFilterTest {
                 .map("map1.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "t1.dita", "t1.dita",
-                                chunk(null, "ditabase.dita#topic", null))
+                        chunk(TO_CONTENT, null, "t1.dita", "t1.dita",
+                                chunk(null, null, "ditabase.dita#topic", null))
                 );
     }
 
@@ -804,8 +803,8 @@ public class ChunkMapFilterTest {
                 .map("map2.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "t3.dita", "t3.dita",
-                                chunk(null, "ditabase.dita", null))
+                        chunk(TO_CONTENT, null, "t3.dita", "t3.dita",
+                                chunk(null, null, "ditabase.dita", null))
                 );
     }
 
@@ -817,26 +816,26 @@ public class ChunkMapFilterTest {
                 .map("topicgroup_chunk.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "dita1.dita", "dita1.dita"),
-                        chunk(TO_CONTENT, "dita2.dita", "dita2.dita",
-                                chunk(null, "dita3.dita", null,
-                                        chunk(null, "dita4.dita", null,
-                                                chunk(null, "dita5.dita", null,
-                                                        chunk(null, "dita6.dita", null))))),
-                        chunk(TO_CONTENT, "dita1.dita", "dita1.dita"),
-                        chunk(TO_CONTENT, "dita2.dita", "dita2.dita"),
-                        chunk(TO_CONTENT, null, "Chunk0.dita",
-                                chunk(null, "dita7.dita", null)),
-                        chunk(TO_CONTENT, "dita8.dita", "dita8.dita",
-                                chunk(null, "Chunk1.dita", null,
-                                        chunk(null, "dita9.dita", null))),
-                        chunk(TO_CONTENT, "container.dita", "container.dita"),
-                        chunk(TO_CONTENT, null, "Chunk2.dita",
-                                chunk(null, "groupkid.dita", null)),
-                        chunk(TO_CONTENT, null, "Chunk3.dita",
-                                chunk(null, "headkid.dita", null)),
-                        chunk(TO_CONTENT, null, "Chunk4.dita",
-                                chunk(null, "shortkid.dita", null))
+                        chunk(TO_CONTENT, null, "dita1.dita", "dita1.dita"),
+                        chunk(TO_CONTENT, null, "dita2.dita", "dita2.dita",
+                                chunk(null, null, "dita3.dita", null,
+                                        chunk(null, null, "dita4.dita", null,
+                                                chunk(null, null, "dita5.dita", null,
+                                                        chunk(null, null, "dita6.dita", null))))),
+                        chunk(TO_CONTENT, null, "dita1.dita", "dita1.dita"),
+                        chunk(TO_CONTENT, null, "dita2.dita", "dita2.dita"),
+                        chunk(TO_CONTENT, null, null, "Chunk0.dita",
+                                chunk(null, null, "dita7.dita", null)),
+                        chunk(TO_CONTENT, null, "dita8.dita", "dita8.dita",
+                                chunk(null, null, "Chunk1.dita", null,
+                                        chunk(null, null, "dita9.dita", null))),
+                        chunk(TO_CONTENT, null, "container.dita", "container.dita"),
+                        chunk(TO_CONTENT, null, null, "Chunk2.dita",
+                                chunk(null, null, "groupkid.dita", null)),
+                        chunk(TO_CONTENT, null, null, "Chunk3.dita",
+                                chunk(null, null, "headkid.dita", null)),
+                        chunk(TO_CONTENT, null, null, "Chunk4.dita",
+                                chunk(null, null, "shortkid.dita", null))
                 );
     }
 
@@ -846,10 +845,10 @@ public class ChunkMapFilterTest {
                 .map("maplink.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "one.dita", "one.dita",
-                                chunk(null, "one.dita", null,
-                                        chunk(null, "one.dita", null,
-                                                chunk(null, "one.dita", null))))
+                        chunk(TO_CONTENT, null, "one.dita", "one.dita",
+                                chunk(null, null, "one.dita", null,
+                                        chunk(null, null, "one.dita", null,
+                                                chunk(null, null, "one.dita", null))))
                 );
     }
 
@@ -859,10 +858,10 @@ public class ChunkMapFilterTest {
                 .map("maplink.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "one.dita", "one.dita",
-                                chunk(null, "one.dita", null,
-                                        chunk(null, "one.dita", null,
-                                                chunk(null, "one.dita", null))))
+                        chunk(TO_CONTENT, null, "one.dita", "one.dita",
+                                chunk(null, null, "one.dita", null,
+                                        chunk(null, null, "one.dita", null,
+                                                chunk(null, null, "one.dita", null))))
                 );
     }
 
@@ -872,9 +871,9 @@ public class ChunkMapFilterTest {
                 .map("withnondita.ditamap")
                 .run()
                 .assertEquals(
-                        chunk(TO_CONTENT, "withnondita.dita", "withnondita.dita",
-                                chunk(null, "thisisdita.dita", null,
-                                        chunk(null, "thisistext.txt", null)))
+                        chunk(TO_CONTENT, null, "withnondita.dita", "withnondita.dita",
+                                chunk(null, null, "thisisdita.dita", null,
+                                        chunk(null, null, "thisistext.txt", null)))
                 );
     }
 
@@ -959,6 +958,7 @@ public class ChunkMapFilterTest {
             return changes.stream()
                     .map(c -> new ChunkOperation(
                             c.operation,
+                            c.select,
                             c.src != null ? tempDir.relativize(c.src) : null,
                             c.dst != null ? tempDir.relativize(c.dst) : null,
                             simplify(c.children, tempDir)
@@ -987,6 +987,8 @@ public class ChunkMapFilterTest {
                     .append("chunk(")
                     .append(c.operation)
                     .append(", ")
+                    .append(c.select)
+                    .append(", ")
                     .append(c.src != null ? ("\"" + c.src + "\"") : null)
                     .append(", ")
                     .append(c.dst != null ? ("\"" + c.dst + "\"") : null);
@@ -999,11 +1001,13 @@ public class ChunkMapFilterTest {
     }
 
     private ChunkOperation chunk(final ChunkOperation.Operation operation,
+                                 final ChunkOperation.Operation select,
                                  final String src,
                                  final String dst,
                                  final ChunkOperation... children) {
         return new ChunkOperation(
                 operation,
+                select,
                 src != null ? URI.create(src) : null,
                 dst != null ? URI.create(dst) : null,
                 Arrays.asList(children)
