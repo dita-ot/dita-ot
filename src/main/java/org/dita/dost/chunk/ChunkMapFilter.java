@@ -11,15 +11,14 @@ package org.dita.dost.chunk;
 import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.chunk.ChunkOperation.ChunkBuilder;
+import org.dita.dost.chunk.ChunkOperation.Operation;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.chunk.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.chunk.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.reader.TempFileNameScheme;
-import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.Job;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLSerializer;
 import org.dita.dost.writer.AbstractDomFilter;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -32,10 +31,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,6 +39,7 @@ import java.util.stream.Collectors;
 import static java.util.Collections.unmodifiableSet;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.dita.dost.chunk.ChunkOperation.Operation.*;
+import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getFragment;
 import static org.dita.dost.util.FileUtils.replaceExtension;
@@ -360,10 +357,13 @@ final class ChunkMapFilter extends AbstractDomFilter {
                     logger.warn(MessageUtils.getMessage("DOTJ064W").setLocation(topicref).toString());
                 }
                 final URI dst;
-                if (href == null) {
-                    dst = generateStumpTopic(topicref);
-                } else {
+                if (copyTo != null) {
+                    dst = copyTo;
+                } else if (href != null) {
                     dst = href;
+                } else {
+                    // FIXME we should not generate stump yet
+                    dst = generateStumpTopic(topicref);
                 }
                 final ChunkBuilder op = ChunkOperation.builder(TO_CONTENT)
                         .src(href != null ? currentFile.resolve(href) : null)
@@ -590,29 +590,216 @@ final class ChunkMapFilter extends AbstractDomFilter {
     }
 
     private void processCombineChunk(final Element topicref, final ChunkBuilder chunkToContent) {
-        createChildTopicrefStubs(getChildElements(topicref, MAP_TOPICREF), chunkToContent);
+        collectCombineChunk(getChildElements(topicref, MAP_TOPICREF), chunkToContent);
+//        createChildTopicrefStubs(getChildElements(topicref, MAP_TOPICREF), chunkToContent);
 
-        final ChunkTopicParser chunkParser = new ChunkTopicParser();
-        chunkParser.setLogger(logger);
-        chunkParser.setJob(job);
-        chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
-        chunkParser.write(currentFile);
+//        final ChunkTopicParser chunkParser = new ChunkTopicParser();
+//        chunkParser.setLogger(logger);
+//        chunkParser.setJob(job);
+//        chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
+//        chunkParser.write(currentFile);
+//        processChunk(topicref, null);
+    }
+
+    private void processChunk(final Element topicref, final URI outputFile) {
+        final URI hrefValue = toURI(getValue(topicref, ATTRIBUTE_NAME_HREF));
+        final Collection<String> chunkValue = split(getValue(topicref, ATTRIBUTE_NAME_CHUNK));
+        final URI copytoValue = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
+        final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
+        final String classValue = getValue(topicref, ATTRIBUTE_NAME_CLASS);
+        final String processRoleValue = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
+        final String formatValue = getValue(topicref, ATTRIBUTE_NAME_FORMAT);
+
+        URI outputFileName = outputFile;
+        Set<String> tempTopicID = null;
+
+        final URI parseFilePath;
+        if (copytoValue != null) { // && !chunkValue.contains(CHUNK_TO_CONTENT)
+            if (hrefValue.getFragment() != null) {
+                parseFilePath = setFragment(copytoValue, hrefValue.getFragment());
+            } else {
+                parseFilePath = copytoValue;
+            }
+        } else {
+            parseFilePath = hrefValue;
+        }
+
+//        if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue) && isFormatDita(formatValue)) {
+//            // now the path to target file make sense
+//            if (chunkValue.contains(CHUNK_TO_CONTENT)) {
+//                // if current element contains "to-content" in chunk attribute
+//                // we need to create new buffer and flush the buffer to file
+//                // after processing is finished
+////                    tempWriter = output;
+//                tempTopicID = topicID;
+////                    output = new StringWriter();
+//                topicID = new HashSet<>();
+//                if (MAP_MAP.matches(classValue)) {
+//                    // Very special case, we have a map element with href value.
+//                    // This is a map that needs to be chunked to content.
+//                    // No need to parse any file, just generate a stub output.
+//                    outputFileName = currentFile.resolve(parseFilePath);
+//                } else if (copytoValue != null) {
+//                    // use @copy-to value as the new file name
+//                    outputFileName = currentFile.resolve(copytoValue);
+//                } else if (hrefValue != null) {
+//                    // try to use href value as the new file name
+//                    if (chunkValue.contains(CHUNK_SELECT_TOPIC)
+//                            || chunkValue.contains(CHUNK_SELECT_BRANCH)) {
+//                        if (hrefValue.getFragment() != null) {
+//                            // if we have an ID here, use it.
+//                            outputFileName = currentFile.resolve(hrefValue.getFragment() + FILE_EXTENSION_DITA);
+//                        } else {
+//                            // Find the first topic id in target file if any.
+//                            final String firstTopic = getFirstTopicId(new File(stripFragment(currentFile.resolve(hrefValue))));
+//                            if (firstTopic != null) {
+//                                outputFileName = currentFile.resolve(firstTopic + FILE_EXTENSION_DITA);
+//                            } else {
+//                                outputFileName = currentFile.resolve(hrefValue);
+//                            }
+//                        }
+//                    } else {
+//                        // otherwise, use the href value instead
+//                        outputFileName = currentFile.resolve(hrefValue);
+//                    }
+//                } else {
+//                    // use randomly generated file name
+//                    outputFileName = generateOutputFile(currentFile);
+//                }
+//
+//                // Check if there is any conflict
+//                if (new File(URLUtils.stripFragment(outputFileName)).exists() && !MAP_MAP.matches(classValue)) {
+//                    final URI t = outputFileName;
+//                    outputFileName = generateOutputFile(currentFile);
+//                    conflictTable.put(outputFileName, t);
+//                }
+//                // add newly generated file to changTable
+//                // the new entry in changeTable has same key and value
+//                // in order to indicate it is a newly generated file
+//                changeTable.put(outputFileName, outputFileName);
+//
+//                final FileInfo fi = generateFileInfo(outputFileName);
+//                job.add(fi);
+//            }
+//            // "by-topic" couldn't reach here
+//            this.outputFile = outputFileName;
+//
+//            final URI path = currentFile.resolve(parseFilePath);
+//            URI newpath;
+//            if (path.getFragment() != null) {
+//                newpath = setFragment(outputFileName, path.getFragment());
+//            } else {
+//                final String firstTopicID = getFirstTopicId(new File(path));
+//                if (firstTopicID != null) {
+//                    newpath = setFragment(outputFileName, firstTopicID);
+//                } else {
+//                    newpath = outputFileName;
+//                }
+//            }
+//            // add file name changes to changeTable, this will be used in
+//            // TopicRefWriter's updateHref method, very important!!!
+//            changeTable.put(path, newpath);
+//            // update current element's @href value
+//            topicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), newpath).toString());
+//
+//            if (parseFilePath.getFragment() != null) {
+//                targetTopicId = parseFilePath.getFragment();
+//            }
+//
+//            final String s = getChunkByToken(chunkValue, "select-", null);
+//            if (s != null) {
+//                selectMethod = s;
+//                // if the current topic href referred to a entire
+//                // topic file, it will be handled in "document" level.
+//                if (targetTopicId == null) {
+//                    selectMethod = CHUNK_SELECT_DOCUMENT;
+//                }
+//            }
+//            final URI tempPath = currentParsingFile;
+//            currentParsingFile = currentFile.resolve(parseFilePath);
+//
+//            if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
+//                currentParsingFileTopicIDChangeTable = new HashMap<>();
+//                // TODO recursive point
+//                logger.info("Processing " + currentParsingFile);
+//                reader.parse(currentParsingFile.toString());
+//                if (currentParsingFileTopicIDChangeTable.size() > 0) {
+//                    final URI href = toURI(topicref.getAttribute(ATTRIBUTE_NAME_HREF));
+//                    final String pathtoElem = href.getFragment() != null
+//                            ? href.getFragment()
+//                            : "";
+//                    final String old_elementid = pathtoElem.contains(SLASH)
+//                            ? pathtoElem.substring(0, pathtoElem.indexOf(SLASH))
+//                            : pathtoElem;
+//                    if (!old_elementid.isEmpty()) {
+//                        final String new_elementid = currentParsingFileTopicIDChangeTable.get(old_elementid);
+//                        if (new_elementid != null && !new_elementid.isEmpty()) {
+//                            topicref.setAttribute(ATTRIBUTE_NAME_HREF, setFragment(href, new_elementid).toString());
+//                        }
+//                    }
+//                }
+//                currentParsingFileTopicIDChangeTable = null;
+//            }
+//            // restore the currentParsingFile
+//            currentParsingFile = tempPath;
+//        }
+
+        if (topicref.hasChildNodes()) {
+            final List<Element> children = XMLUtils.getChildElements(topicref, MAP_TOPICREF);
+            for (final Element current : children) {
+                processChunk(current, outputFileName);
+            }
+        }
     }
     
-    /** Before combining topics in a branch, ensure any descendant topicref with @chunk and no @href has a stub */
-    private void createChildTopicrefStubs(final List<Element> topicrefs, final ChunkBuilder parent) {
+//    /** Before combining topics in a branch, ensure any descendant topicref with @chunk and no @href has a stub */
+//    private void createChildTopicrefStubs(final List<Element> topicrefs, final ChunkBuilder parent) {
+//        if (!topicrefs.isEmpty()) {
+//            for (final Element currentElem : topicrefs) {
+//                final Collection<String> chunks = split(getValue(currentElem, ATTRIBUTE_NAME_CHUNK));
+//                if (parent != null && !chunks.contains(CHUNK_TO_CONTENT)) {
+//                    URI href = toURI(getValue(currentElem, ATTRIBUTE_NAME_HREF));
+//                    if (href == null) {
+//                        href = generateStumpTopic(currentElem);
+//                    }
+//                    final ChunkBuilder ops = ChunkOperation.builder(null)
+//                            .src(currentFile.resolve(href));
+//                    parent.addChild(ops);
+//                    createChildTopicrefStubs(getChildElements(currentElem, MAP_TOPICREF), ops);
+//                }
+//            }
+//        }
+//    }
+
+    private Operation getSelect(final Collection<String> chunks) {
+        for (String chunk : chunks) {
+            switch (chunk) {
+                case "select-topic":
+                    return SELECT_TOPIC;
+                case "select-document":
+                    return SELECT_DOCUMENT;
+                case "select-branch":
+                    return SELECT_BRANCH;
+            }
+        }
+        return null;
+    }
+
+    private void collectCombineChunk(final List<Element> topicrefs, final ChunkBuilder parent) {
         if (!topicrefs.isEmpty()) {
             for (final Element currentElem : topicrefs) {
                 final Collection<String> chunks = split(getValue(currentElem, ATTRIBUTE_NAME_CHUNK));
                 if (parent != null && !chunks.contains(CHUNK_TO_CONTENT)) {
+                    final Operation select = getSelect(chunks);
                     URI href = toURI(getValue(currentElem, ATTRIBUTE_NAME_HREF));
-                    if (href == null) {
-                        href = generateStumpTopic(currentElem);
-                    }
+//                    if (href == null) {
+//                        href = generateStumpTopic(currentElem);
+//                    }
                     final ChunkBuilder ops = ChunkOperation.builder(null)
-                            .src(currentFile.resolve(href));
+                            .select(select)
+                            .src(href != null ? currentFile.resolve(href) : null);
                     parent.addChild(ops);
-                    createChildTopicrefStubs(getChildElements(currentElem, MAP_TOPICREF), ops);
+                    collectCombineChunk(getChildElements(currentElem, MAP_TOPICREF), ops);
                 }
             }
         }

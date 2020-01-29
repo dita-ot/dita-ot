@@ -23,10 +23,10 @@ class ChunkOperation {
         SELECT_TOPIC("select-topic"),
         SELECT_DOCUMENT("select-document"),
         SELECT_BRANCH("select-branch"),
-        /** Split, separate */
+        /** split */
         BY_TOPIC("by-topic"),
         BY_DOCUMENT("by-document"),
-        /** Merge, combine */
+        /** combine */
         TO_CONTENT("to-content"),
         TO_NAVIGATION("to-navigation");
 
@@ -85,12 +85,18 @@ class ChunkOperation {
 
     public static class ChunkBuilder {
         private final Operation operation;
+        private Operation select;
         private URI src;
         private URI dst;
         private List<ChunkBuilder> children = new ArrayList<>();
 
         public ChunkBuilder(final Operation operation) {
             this.operation = operation;
+        }
+
+        public ChunkBuilder select(final Operation select) {
+            this.select = select;
+            return this;
         }
 
         public ChunkBuilder src(final URI src) {
