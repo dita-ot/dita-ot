@@ -64,6 +64,25 @@ public class TestUtils {
     /**
      * Get test resource directory
      *
+     * @param testName test name
+     * @return resource directory
+     * @throws RuntimeException if retrieving the directory failed
+     */
+    public static File getResourceDir(final String testName) throws RuntimeException {
+        final URL dir = ClassLoader.getSystemResource(testName);
+        if (dir == null) {
+            throw new RuntimeException("Failed to find resource for " + testName);
+        }
+        try {
+            return new File(dir.toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Failed to find resource for " + testName + ":" + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Get test resource directory
+     *
      * @param testClass test class
      * @return resource directory
      * @throws RuntimeException if retrieving the directory failed

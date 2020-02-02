@@ -86,6 +86,11 @@ final class ChunkMapFilter extends AbstractDomFilter {
     private ProcessingInstruction path2rootmapUrl = null;
 
     private final ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
+    /**
+     * Absolute URI to file being processed
+     */
+    private URI currentFile;
+
 
     @Override
     public void setJob(final Job job) {
@@ -101,11 +106,6 @@ final class ChunkMapFilter extends AbstractDomFilter {
     public void setRootChunkOverride(final String chunkValue) {
         rootChunkOverride = split(chunkValue);
     }
-
-    /**
-     * Absolute URI to file being processed
-     */
-    private URI currentFile;
 
     /**
      * read input file.
@@ -136,11 +136,11 @@ final class ChunkMapFilter extends AbstractDomFilter {
         if (rootChunk.contains(CHUNK_TO_CONTENT)) {
             chunkMap(root);
         } else {
-            for (final Element currentElem : getChildElements(root)) {
-                if (MAP_RELTABLE.matches(currentElem)) {
-                    updateReltable(currentElem);
-                } else if (MAP_TOPICREF.matches(currentElem)) {
-                    processTopicref(currentElem);
+            for (final Element child : getChildElements(root)) {
+                if (MAP_RELTABLE.matches(child)) {
+                    updateReltable(child);
+                } else if (MAP_TOPICREF.matches(child)) {
+                    processTopicref(child);
                 }
             }
         }
@@ -353,26 +353,30 @@ final class ChunkMapFilter extends AbstractDomFilter {
                 || (chunk.isEmpty() && href == null)) {
             processChildTopicref(topicref);
         } else if (chunk.contains(CHUNK_TO_CONTENT)) {
-            if (href != null || copyTo != null || topicref.hasChildNodes()) {
-                if (chunk.contains(CHUNK_BY_TOPIC)) {
-                    logger.warn(MessageUtils.getMessage("DOTJ064W").setLocation(topicref).toString());
-                }
-                final URI dst;
-                if (copyTo != null) {
-                    dst = copyTo;
-                } else if (href != null) {
-                    dst = href;
-                } else {
-                    // FIXME we should not generate stump yet
-                    dst = generateStumpTopic(topicref);
-                }
-                final ChunkBuilder op = ChunkOperation.builder(TO_CONTENT)
-                        .select(select)
-                        .src(href != null ? currentFile.resolve(href) : null)
-                        .dst(currentFile.resolve(dst));
-                processCombineChunk(topicref, op);
-                changes.add(op.build());
+//            if (href != null || copyTo != null || topicref.hasChildNodes()) {
+            if (chunk.contains(CHUNK_BY_TOPIC)) {
+                logger.warn(MessageUtils.getMessage("DOTJ064W").setLocation(topicref).toString());
             }
+
+            final ChunkBuilder op = ChunkOperation.builder(TO_CONTENT)
+                    .select(select)
+                    .src(href != null ? currentFile.resolve(href) : null);
+
+            final URI dst;
+            if (copyTo != null) {
+                dst = copyTo;
+            } else if (href != null) {
+                dst = href;
+            } else {
+                // FIXME we should not generate stump yet
+                dst = generateStumpTopic(topicref);
+            }
+            op.dst(currentFile.resolve(dst));
+
+//            processCombineChunk(topicref, op);
+            collectCombineChunk(getChildElements(topicref, MAP_TOPICREF), op);
+            changes.add(op.build());
+//            }
             processChildTopicref(topicref);
         } else if (chunk.contains(CHUNK_TO_NAVIGATION)
                 && supportToNavigation) {
@@ -380,8 +384,10 @@ final class ChunkMapFilter extends AbstractDomFilter {
             processNavitation(topicref);
         } else if (chunkByToken.equals(CHUNK_BY_TOPIC)) {
             if (href != null) {
-                readByTopic(href);
+                readByTopic(href, select);
                 processSeparateChunk(topicref);
+            } else {
+                logger.warn("{} set on topicref without href ", CHUNK_BY_TOPIC);
             }
             processChildTopicref(topicref);
         } else { // chunkByToken.equals(CHUNK_BY_DOCUMENT)
@@ -406,9 +412,9 @@ final class ChunkMapFilter extends AbstractDomFilter {
     /**
      * Read topic to find by-topic chunks.
      */
-    private void readByTopic(final URI href) {
+    private void readByTopic(final URI href, final Operation select) {
         try {
-            final URI file = currentFile.resolve(href);
+            final URI file = URLUtils.stripFragment(currentFile.resolve(href));
             final Document document = getDocumentBuilder().parse(file.toString());
             final ChunkBuilder op = walkByTopic(document.getDocumentElement(), href);
             changes.add(op.build());
@@ -570,17 +576,18 @@ final class ChunkMapFilter extends AbstractDomFilter {
     }
 
     private void processChildTopicref(final Element node) {
-        final List<Element> children = getChildElements(node, MAP_TOPICREF);
-        for (final Element currentElem : children) {
-            final URI href = toURI(getValue(currentElem, ATTRIBUTE_NAME_HREF));
-            final String xtrf = currentElem.getAttribute(ATTRIBUTE_NAME_XTRF);
-            if (href == null) {
-                processTopicref(currentElem);
-            } else if (!ATTR_XTRF_VALUE_GENERATED.equals(xtrf)
-                    && !currentFile.resolve(href).equals(changeTable.get(currentFile.resolve(href)))) {
-                processTopicref(currentElem);
-            }
-        }
+//        final List<Element> children = getChildElements(node, MAP_TOPICREF);
+//        for (final Element currentElem : children) {
+////            final URI href = toURI(getValue(currentElem, ATTRIBUTE_NAME_HREF));
+////            final String xtrf = currentElem.getAttribute(ATTRIBUTE_NAME_XTRF);
+////            if (href == null) {
+////                processTopicref(currentElem);
+////            } else if (!ATTR_XTRF_VALUE_GENERATED.equals(xtrf)
+////                    && !currentFile.resolve(href).equals(changeTable.get(currentFile.resolve(href)))) {
+//            processTopicref(currentElem);
+////            }
+//        }
+        getChildElements(node, MAP_TOPICREF).forEach(this::processTopicref);
     }
 
     private void processSeparateChunk(final Element topicref) {
@@ -591,17 +598,17 @@ final class ChunkMapFilter extends AbstractDomFilter {
         chunkParser.write(currentFile);
     }
 
-    private void processCombineChunk(final Element topicref, final ChunkBuilder chunkToContent) {
-        collectCombineChunk(getChildElements(topicref, MAP_TOPICREF), chunkToContent);
-//        createChildTopicrefStubs(getChildElements(topicref, MAP_TOPICREF), chunkToContent);
-
-//        final ChunkTopicParser chunkParser = new ChunkTopicParser();
-//        chunkParser.setLogger(logger);
-//        chunkParser.setJob(job);
-//        chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
-//        chunkParser.write(currentFile);
-//        processChunk(topicref, null);
-    }
+//    private void processCombineChunk(final Element topicref, final ChunkBuilder chunkToContent) {
+//        collectCombineChunk(getChildElements(topicref, MAP_TOPICREF), chunkToContent);
+////        createChildTopicrefStubs(getChildElements(topicref, MAP_TOPICREF), chunkToContent);
+//
+////        final ChunkTopicParser chunkParser = new ChunkTopicParser();
+////        chunkParser.setLogger(logger);
+////        chunkParser.setJob(job);
+////        chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
+////        chunkParser.write(currentFile);
+////        processChunk(topicref, null);
+//    }
 
     private void processChunk(final Element topicref, final URI outputFile) {
         final URI hrefValue = toURI(getValue(topicref, ATTRIBUTE_NAME_HREF));
@@ -747,7 +754,7 @@ final class ChunkMapFilter extends AbstractDomFilter {
 //        }
 
         if (topicref.hasChildNodes()) {
-            final List<Element> children = XMLUtils.getChildElements(topicref, MAP_TOPICREF);
+            final List<Element> children = getChildElements(topicref, MAP_TOPICREF);
             for (final Element current : children) {
                 processChunk(current, outputFileName);
             }

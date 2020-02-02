@@ -27,7 +27,7 @@ import static org.dita.dost.chunk.ChunkOperation.Operation.*;
 
 public class ChunkMapFilterTest {
 
-    final File resourceDir = TestUtils.getResourceDir(org.dita.dost.module.ChunkModuleTest.class);
+    final File resourceDir = TestUtils.getResourceDir("chunk");
     private File tempBaseDir;
     final File srcBaseDir = new File(resourceDir, "src");
     final File expBaseDir = new File(resourceDir, "exp");
