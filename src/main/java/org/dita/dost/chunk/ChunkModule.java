@@ -59,12 +59,12 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) {
-        final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+//        final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         // change to xml property
         final ChunkMapFilter mapFilter = new ChunkMapFilter();
         mapFilter.setLogger(logger);
         mapFilter.setJob(job);
-        mapFilter.supportToNavigation(INDEX_TYPE_ECLIPSEHELP.equals(transtype));
+//        mapFilter.supportToNavigation(INDEX_TYPE_ECLIPSEHELP.equals(transtype));
         if (input.getAttribute(ROOT_CHUNK_OVERRIDE) != null) {
             mapFilter.setRootChunkOverride(input.getAttribute(ROOT_CHUNK_OVERRIDE));
         }
@@ -72,15 +72,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         try {
             final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final File mapFile = new File(job.tempDirURI.resolve(in.uri));
-            if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile.toURI())) {
-                for (final FileInfo f : job.getFileInfo()) {
-                    if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                        mapFilter.read(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
-                    }
-                }
-            } else {
                 mapFilter.read(mapFile);
-            }
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {

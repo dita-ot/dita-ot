@@ -63,21 +63,17 @@ final class ChunkMapFilter extends AbstractDomFilter {
     private static final String CHUNK_BY_DOCUMENT = BY_DOCUMENT.token;
     private static final String CHUNK_BY_TOPIC = BY_TOPIC.token;
     public static final String CHUNK_TO_CONTENT = TO_CONTENT.token;
-    public static final String CHUNK_TO_NAVIGATION = TO_NAVIGATION.token;
     public static final String CHUNK_PREFIX = "Chunk";
 
     private TempFileNameScheme tempFileNameScheme;
     private Collection<String> rootChunkOverride;
     private String defaultChunkByToken;
 
-    // ChunkTopicParser assumes keys and values are chimera paths, i.e. systems paths with fragments.
     private final LinkedHashMap<URI, URI> changeTable = new LinkedHashMap<>(128);
     @VisibleForTesting
     final List<ChunkOperation> changes = new ArrayList<>();
 
     private final Map<URI, URI> conflictTable = new HashMap<>(128);
-
-    private boolean supportToNavigation;
 
     private ProcessingInstruction workdir = null;
     private ProcessingInstruction workdirUrl = null;
@@ -169,7 +165,6 @@ final class ChunkMapFilter extends AbstractDomFilter {
     private void readLinks(final Element elem, final boolean chunk, final boolean disabled) {
         final boolean c = chunk || elem.getAttributeNode(ATTRIBUTE_NAME_CHUNK) != null;
         final boolean d = disabled
-                || elem.getAttribute(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_NAVIGATION)
                 || (MAPGROUP_D_TOPICGROUP.matches(elem) && !SUBMAP.matches(elem))
                 || MAP_RELTABLE.matches(elem);
         final Attr href = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
@@ -290,29 +285,6 @@ final class ChunkMapFilter extends AbstractDomFilter {
         }
     }
 
-    private void outputMapFile(final URI file, final Document doc) {
-        Result result = null;
-        try {
-            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(new FileOutputStream(new File(file)));
-            serializer.transform(new DOMSource(doc), result);
-        } catch (final UncheckedXPathException e) {
-            logger.error(e.getXPathException().getMessageAndLocation(), e);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final TransformerException e) {
-            logger.error(e.getMessageAndLocation(), e);
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                close(result);
-            } catch (final IOException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
-    }
-
     private Document buildOutputDocument(final Element root) {
         final Document doc = getDocumentBuilder().newDocument();
         if (workdir != null) {
@@ -378,10 +350,6 @@ final class ChunkMapFilter extends AbstractDomFilter {
             changes.add(op.build());
 //            }
             processChildTopicref(topicref);
-        } else if (chunk.contains(CHUNK_TO_NAVIGATION)
-                && supportToNavigation) {
-            processChildTopicref(topicref);
-            processNavitation(topicref);
         } else if (chunkByToken.equals(CHUNK_BY_TOPIC)) {
             if (href != null) {
                 readByTopic(href, select);
@@ -433,26 +401,6 @@ final class ChunkMapFilter extends AbstractDomFilter {
             op.addChild(chunkBuilders);
         }
         return op;
-    }
-
-    /**
-     * Create new map and refer to it with navref.
-     */
-    private void processNavitation(final Element topicref) {
-        // create new map's root element
-        final Element root = (Element) topicref.getOwnerDocument().getDocumentElement().cloneNode(false);
-        // create navref element
-        final Element navref = topicref.getOwnerDocument().createElement(MAP_NAVREF.localName);
-        final String newMapFile = chunkFilenameGenerator.generateFilename("MAPCHUNK", FILE_EXTENSION_DITAMAP);
-        navref.setAttribute(ATTRIBUTE_NAME_MAPREF, newMapFile);
-        navref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_NAVREF.toString());
-        // replace topicref with navref
-        topicref.getParentNode().replaceChild(navref, topicref);
-        root.appendChild(topicref);
-        // generate new file
-        final URI navmap = currentFile.resolve(newMapFile);
-        changeTable.put(stripFragment(navmap), stripFragment(navmap));
-        outputMapFile(navmap, buildOutputDocument(root));
     }
 
     /**
@@ -865,14 +813,4 @@ final class ChunkMapFilter extends AbstractDomFilter {
         }
         return conflictTable;
     }
-
-    /**
-     * Support chunk token to-navigation.
-     *
-     * @param supportToNavigation flag to enable to-navigation support
-     */
-    public void supportToNavigation(final boolean supportToNavigation) {
-        this.supportToNavigation = supportToNavigation;
-    }
-
 }

@@ -27,8 +27,7 @@ class ChunkOperation {
         BY_TOPIC("by-topic"),
         BY_DOCUMENT("by-document"),
         /** combine */
-        TO_CONTENT("to-content"),
-        TO_NAVIGATION("to-navigation");
+        TO_CONTENT("to-content");
 
         public final String token;
 
