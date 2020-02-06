@@ -9,7 +9,9 @@ package org.dita.dost.writer;
 
 import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
+import org.dita.dost.store.Store;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.XMLUtils;
@@ -30,6 +32,8 @@ import java.util.Map;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.FilterUtils.Action.EXCLUDE;
 import static org.dita.dost.util.FilterUtils.Action.INCLUDE;
+import static org.dita.dost.TestUtils.createTempDir;
+import static org.mockito.Mockito.mock;
 
 public class ProfilingFilterTest {
 
@@ -100,6 +104,7 @@ public class ProfilingFilterTest {
         f.setParent(XMLUtils.getXMLReader());
         f.setFilterUtils(filterUtils);
         f.setLogger(new TestUtils.TestLogger());
+        filterUtils.setJob(new Job(createTempDir(KeyrefPaserTest.class), mock(Store.class)));
 
         final Document act = documentBuilder.newDocument();
         try (InputStream src = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/src/" + srcFile)) {

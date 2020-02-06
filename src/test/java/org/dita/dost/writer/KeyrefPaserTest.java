@@ -167,6 +167,8 @@ public class KeyrefPaserTest {
 
     private KeyScope readKeyMap(final Path map) {
         KeyrefReader reader = new KeyrefReader();
+        reader.setJob(new Job(tempDir));
+
         final URI keyMapFile = tempDir.toPath().resolve(map).toUri();
         final XdmNode document = parse(keyMapFile);
 

@@ -55,6 +55,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
             filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
         filterUtils.setLogger(logger);
+        filterUtils.setJob(job);
 
         final ProfilingFilter writer = new ProfilingFilter();
         writer.setLogger(logger);

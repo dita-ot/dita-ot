@@ -18,11 +18,13 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.store.Store;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
+import org.dita.dost.writer.KeyrefPaserTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -42,19 +44,24 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static junit.framework.Assert.assertEquals;
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.TestUtils.createTempDir;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
 
 public class TestKeyrefReader {
 
     private static final File resourceDir = TestUtils.getResourceDir(TestKeyrefReader.class);
     private static final File srcDir = new File(resourceDir, "src");
     private final XMLUtils xmlUtils = new XMLUtils();
-
+    private File tempDir;
     private KeyrefReader keyrefreader;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         keyrefreader = new KeyrefReader();
+        tempDir = createTempDir(KeyrefPaserTest.class);
+        TestUtils.copy(srcDir, tempDir);
+        keyrefreader.setJob(new Job(tempDir, mock(Store.class)));
     }
 
     @Test
@@ -178,7 +185,7 @@ public class TestKeyrefReader {
     // Oberon Technologies' tests
 
     @Test
-    public void testSimpleKeyscope() throws DITAOTException {
+    public void testSimpleKeyscope() throws Exception {
         final File filename = new File(srcDir, "simpleKeyscope.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -244,7 +251,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testQualifiedKeyOverride() throws DITAOTException {
+    public void testQualifiedKeyOverride() throws Exception {
         final File filename = new File(srcDir, "qualifiedKeyOverride.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -296,7 +303,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testMapWithKeyscopes() throws DITAOTException {
+    public void testMapWithKeyscopes() throws Exception {
         final File filename = new File(srcDir, "map-with-keyscopes.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -337,7 +344,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testMaprefKeyscope() throws DITAOTException {
+    public void testMaprefKeyscope() throws Exception {
         final File filename = new File(srcDir, "maprefKeyscope.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -404,7 +411,7 @@ public class TestKeyrefReader {
     // DITA 1.3 specification examples
 
     @Test
-    public void testExample7() throws DITAOTException {
+    public void testExample7() throws Exception {
         final File filename = new File(srcDir, "example7.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -429,7 +436,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testExample8() throws DITAOTException {
+    public void testExample8() throws Exception {
         final File filename = new File(srcDir, "example8.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -456,7 +463,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testKeysAndScope() throws DITAOTException {
+    public void testKeysAndScope() throws Exception {
         final File filename = new File(srcDir, "keysAndScope.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -478,7 +485,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testMultipleValues() throws DITAOTException {
+    public void testMultipleValues() throws Exception {
         final File filename = new File(srcDir, "multipleValues.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -500,7 +507,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testSingleCircular() throws DITAOTException {
+    public void testSingleCircular() throws Exception {
         final File filename = new File(srcDir, "circularSingle.ditamap");
 
         final CachingLogger logger = new CachingLogger();
@@ -513,7 +520,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testCircular() throws DITAOTException {
+    public void testCircular() throws Exception {
         final File filename = new File(srcDir, "circular.ditamap");
 
         final CachingLogger logger = new CachingLogger();
@@ -534,7 +541,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testRootScope() throws DITAOTException {
+    public void testRootScope() throws Exception {
         final File filename = new File(srcDir, "rootScope.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -561,7 +568,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testDuplicateScopeNames() throws DITAOTException {
+    public void testDuplicateScopeNames() throws Exception {
         final File filename = new File(srcDir, "duplicate.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -581,9 +588,9 @@ public class TestKeyrefReader {
         assertEquals("def2", d.get("a").element.attribute("id"));
         assertEquals("def1", d.get("A.a").element.attribute("id"));
     }
-    
+
     @Test
-    public void testCopyto() throws DITAOTException {
+    public void testCopyto() throws Exception {
         final File filename = new File(srcDir, "copyto.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
