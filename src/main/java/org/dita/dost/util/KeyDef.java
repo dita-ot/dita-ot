@@ -25,6 +25,7 @@ public class KeyDef {
     public final URI source;
     public final XdmNode element;
     public final String format;
+    private boolean filtered;
 
     /**
      * Construct new key definition.
@@ -44,6 +45,25 @@ public class KeyDef {
         this.element = element;
     }
 
+    public KeyDef(final String keys, final URI href, final String scope, final String format, final URI source, final XdmNode element, boolean filtered) {
+        //assert href.isAbsolute();
+        this.keys = keys;
+        this.href = href == null || href.toString().isEmpty() ? null : href;
+        this.scope = scope == null ? ATTR_SCOPE_VALUE_LOCAL : scope;
+        this.format = format == null ? ATTR_FORMAT_VALUE_DITA : format;
+        this.source = source;
+        this.element = element;
+        this.filtered = filtered;
+    }
+
+    public void setFiltered(boolean filtered) {
+    	this.filtered = filtered;
+    }
+
+    public boolean isFiltered() {
+		return filtered;
+	}
+
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder().append(keys).append(EQUAL);
@@ -56,6 +76,7 @@ public class KeyDef {
         if (source != null) {
             buf.append(LEFT_BRACKET).append(source.toString()).append(RIGHT_BRACKET);
         }
+        buf.append(isFiltered());
         return buf.toString();
     }
 

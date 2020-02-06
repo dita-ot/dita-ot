@@ -34,8 +34,10 @@ import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.XMLFilter;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -88,6 +90,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
+
         if (fileInfoFilter == null) {
             fileInfoFilter = f -> f.format == null || f.format.equals(ATTR_FORMAT_VALUE_DITA) || f.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
         }
@@ -168,6 +171,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 throw new DITAOTException("Failed to store job state: " + e.getMessage(), e);
             }
         }
+
         return null;
     }
 
@@ -260,7 +264,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             if (href != null && rewrites.containsKey(stripFragment(href))) {
                 href = setFragment(rewrites.get(stripFragment(href)), href.getFragment());
             }
-            final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element);
+            final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element, oldKey.isFiltered());
             newKeys.put(key.getKey(), newKey);
         }
         return new KeyScope(scope.id, scope.name,

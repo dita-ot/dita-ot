@@ -37,7 +37,6 @@ public class KeyScope {
         this.keyDefinition = unmodifiableMap(keyDefinition);
         this.childScopes = unmodifiableList(new ArrayList<>(childScopes));
     }
-
     public KeyDef get(final String key) {
         return keyDefinition.get(key);
     }
