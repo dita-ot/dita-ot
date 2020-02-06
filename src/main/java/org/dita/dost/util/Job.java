@@ -97,7 +97,7 @@ public final class Job {
     private static final String PROPERTY_INPUT_MAP_URI = "InputMapDir.uri";
 
     /** File name for key definition file */
-    public static final String KEYDEF_LIST_FILE = "keydef.xml";
+    public static final String KEYDEF_LIST_FILE = "keydef.json";
     /** File name for key definition file */
     public static final String SUBJECT_SCHEME_KEYDEF_LIST_FILE = "schemekeydef.xml";
     /** File name for temporary input file list file */
