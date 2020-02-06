@@ -203,6 +203,8 @@ public class KeyrefPaserTest {
 
     private KeyScope readKeyMap(final Path map) throws Exception {
         KeyrefReader reader = new KeyrefReader();
+        reader.setJob(new Job(tempDir));
+
         final URI keyMapFile = tempDir.toPath().resolve(map).toUri();
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final InputSource inputSource = new InputSource(keyMapFile.toString());

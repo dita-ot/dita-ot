@@ -446,6 +446,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
             f = new FilterUtils(filterMap, ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
             f.setLogger(logger);
+            f.setJob(job);
             filterCache.put(ditaval, f);
         }
         return f;

@@ -100,7 +100,6 @@ public class KeyDef {
         if (source != null) {
             buf.append(LEFT_BRACKET).append(source.toString()).append(RIGHT_BRACKET);
         }
-        buf.append(isFiltered());
         return buf.toString();
     }
 

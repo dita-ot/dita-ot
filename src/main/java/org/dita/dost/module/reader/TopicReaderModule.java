@@ -88,6 +88,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
         super.init();
 
         if (filterUtils != null) {
+            filterUtils.setJob(job);
             final Document doc = getMapDocument();
             if (doc != null) {
                 final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();

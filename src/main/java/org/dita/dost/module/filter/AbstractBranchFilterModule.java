@@ -97,6 +97,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         return getChildElement(topicref, DITAVAREF_D_DITAVALREF)
                 .map(ditavalRef -> getFilterUtils(ditavalRef).refine(subjectSchemeMap))
                 .map(f -> {
+                    f.setJob(job);
                     final List<FilterUtils> fs = new ArrayList<>(filters.size() + 1);
                     fs.addAll(filters);
                     fs.add(f);

@@ -569,6 +569,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
         filterUtils.setLogger(logger);
+        filterUtils.setJob(job);
         return filterUtils;
     }
 
@@ -873,6 +874,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         initXMLReader(ditaDir, validate);
         initFilters();
+        if (filterUtils != null) {
+        	filterUtils.setJob(job);
+        }
     }
 
 }

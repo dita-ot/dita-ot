@@ -21,6 +21,7 @@ import javax.xml.transform.sax.SAXSource;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,6 +29,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.TestUtils.createTempDir;
 
 public class ProfilingFilterTest {
 
@@ -60,6 +62,7 @@ public class ProfilingFilterTest {
         filterUtils.setLogger(new TestUtils.TestLogger());
         f.setFilterUtils(filterUtils);
         f.setLogger(new TestUtils.TestLogger());
+        filterUtils.setJob(new Job(createTempDir(KeyrefPaserTest.class)));
         final SAXSource s = new SAXSource(f, new InputSource(src));
         final DOMResult d = new DOMResult();
         t.transform(s, d);

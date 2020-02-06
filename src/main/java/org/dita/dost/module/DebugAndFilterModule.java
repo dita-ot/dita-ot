@@ -144,6 +144,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         }
         if (profilingEnabled) {
             filterUtils = baseFilterUtils.refine(subjectSchemeReader.getSubjectSchemeMap());
+            filterUtils.setJob(job);
         }
 
         InputSource in = null;
