@@ -75,18 +75,18 @@ final class ChunkMapFilter extends AbstractDomFilter {
 
     private final Map<URI, URI> conflictTable = new HashMap<>(128);
 
-    private ProcessingInstruction workdir = null;
-    private ProcessingInstruction workdirUrl = null;
-    private ProcessingInstruction path2proj = null;
-    private ProcessingInstruction path2projUrl = null;
-    private ProcessingInstruction path2rootmapUrl = null;
+//    private ProcessingInstruction workdir = null;
+//    private ProcessingInstruction workdirUrl = null;
+//    private ProcessingInstruction path2proj = null;
+//    private ProcessingInstruction path2projUrl = null;
+//    private ProcessingInstruction path2rootmapUrl = null;
 
     private final ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
     /**
      * Absolute URI to file being processed
      */
     private URI currentFile;
-
+    private final Set<URI> chunkTopicSet = new HashSet<>();
 
     @Override
     public void setJob(final Job job) {
@@ -118,7 +118,7 @@ final class ChunkMapFilter extends AbstractDomFilter {
     @Override
     public Document process(final Document doc) {
         readLinks(doc);
-        readProcessingInstructions(doc);
+//        readProcessingInstructions(doc);
 
         final Element root = doc.getDocumentElement();
         if (rootChunkOverride != null) {
@@ -141,10 +141,16 @@ final class ChunkMapFilter extends AbstractDomFilter {
             }
         }
 
+        createToContentChunks();
+
         return buildOutputDocument(root);
     }
 
-    private final Set<URI> chunkTopicSet = new HashSet<>();
+    private void createToContentChunks() {
+        for (final ChunkOperation operation : changes) {
+            getDocumentBuilder().
+        }
+    }
 
     /**
      * @return absolute temporary files
@@ -255,53 +261,53 @@ final class ChunkMapFilter extends AbstractDomFilter {
         }
     }
 
-    /**
-     * Read processing metadata from processing instructions.
-     */
-    private void readProcessingInstructions(final Document doc) {
-        final NodeList docNodes = doc.getChildNodes();
-        for (int i = 0; i < docNodes.getLength(); i++) {
-            final Node node = docNodes.item(i);
-            if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
-                final ProcessingInstruction pi = (ProcessingInstruction) node;
-                switch (pi.getNodeName()) {
-                    case PI_WORKDIR_TARGET:
-                        workdir = pi;
-                        break;
-                    case PI_WORKDIR_TARGET_URI:
-                        workdirUrl = pi;
-                        break;
-                    case PI_PATH2PROJ_TARGET:
-                        path2proj = pi;
-                        break;
-                    case PI_PATH2PROJ_TARGET_URI:
-                        path2projUrl = pi;
-                        break;
-                    case PI_PATH2ROOTMAP_TARGET_URI:
-                        path2rootmapUrl = pi;
-                        break;
-                }
-            }
-        }
-    }
+//    /**
+//     * Read processing metadata from processing instructions.
+//     */
+//    private void readProcessingInstructions(final Document doc) {
+//        final NodeList docNodes = doc.getChildNodes();
+//        for (int i = 0; i < docNodes.getLength(); i++) {
+//            final Node node = docNodes.item(i);
+//            if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
+//                final ProcessingInstruction pi = (ProcessingInstruction) node;
+//                switch (pi.getNodeName()) {
+//                    case PI_WORKDIR_TARGET:
+//                        workdir = pi;
+//                        break;
+//                    case PI_WORKDIR_TARGET_URI:
+//                        workdirUrl = pi;
+//                        break;
+//                    case PI_PATH2PROJ_TARGET:
+//                        path2proj = pi;
+//                        break;
+//                    case PI_PATH2PROJ_TARGET_URI:
+//                        path2projUrl = pi;
+//                        break;
+//                    case PI_PATH2ROOTMAP_TARGET_URI:
+//                        path2rootmapUrl = pi;
+//                        break;
+//                }
+//            }
+//        }
+//    }
 
     private Document buildOutputDocument(final Element root) {
         final Document doc = getDocumentBuilder().newDocument();
-        if (workdir != null) {
-            doc.appendChild(doc.importNode(workdir, true));
-        }
-        if (workdirUrl != null) {
-            doc.appendChild(doc.importNode(workdirUrl, true));
-        }
-        if (path2proj != null) {
-            doc.appendChild(doc.importNode(path2proj, true));
-        }
-        if (path2projUrl != null) {
-            doc.appendChild(doc.importNode(path2projUrl, true));
-        }
-        if (path2rootmapUrl != null) {
-            doc.appendChild(doc.importNode(path2rootmapUrl, true));
-        }
+//        if (workdir != null) {
+//            doc.appendChild(doc.importNode(workdir, true));
+//        }
+//        if (workdirUrl != null) {
+//            doc.appendChild(doc.importNode(workdirUrl, true));
+//        }
+//        if (path2proj != null) {
+//            doc.appendChild(doc.importNode(path2proj, true));
+//        }
+//        if (path2projUrl != null) {
+//            doc.appendChild(doc.importNode(path2projUrl, true));
+//        }
+//        if (path2rootmapUrl != null) {
+//            doc.appendChild(doc.importNode(path2rootmapUrl, true));
+//        }
         doc.appendChild(doc.importNode(root, true));
         return doc;
     }
@@ -332,7 +338,8 @@ final class ChunkMapFilter extends AbstractDomFilter {
 
             final ChunkBuilder op = ChunkOperation.builder(TO_CONTENT)
                     .select(select)
-                    .src(href != null ? currentFile.resolve(href) : null);
+                    .src(href != null ? currentFile.resolve(href) : null)
+                    .topicref(topicref);
 
             final URI dst;
             if (copyTo != null) {
@@ -557,158 +564,158 @@ final class ChunkMapFilter extends AbstractDomFilter {
 ////        chunkParser.write(currentFile);
 ////        processChunk(topicref, null);
 //    }
-
-    private void processChunk(final Element topicref, final URI outputFile) {
-        final URI hrefValue = toURI(getValue(topicref, ATTRIBUTE_NAME_HREF));
-        final Collection<String> chunkValue = split(getValue(topicref, ATTRIBUTE_NAME_CHUNK));
-        final URI copytoValue = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
-        final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
-        final String classValue = getValue(topicref, ATTRIBUTE_NAME_CLASS);
-        final String processRoleValue = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
-        final String formatValue = getValue(topicref, ATTRIBUTE_NAME_FORMAT);
-
-        URI outputFileName = outputFile;
-        Set<String> tempTopicID = null;
-
-        final URI parseFilePath;
-        if (copytoValue != null) { // && !chunkValue.contains(CHUNK_TO_CONTENT)
-            if (hrefValue.getFragment() != null) {
-                parseFilePath = setFragment(copytoValue, hrefValue.getFragment());
-            } else {
-                parseFilePath = copytoValue;
-            }
-        } else {
-            parseFilePath = hrefValue;
-        }
-
-//        if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue) && isFormatDita(formatValue)) {
-//            // now the path to target file make sense
-//            if (chunkValue.contains(CHUNK_TO_CONTENT)) {
-//                // if current element contains "to-content" in chunk attribute
-//                // we need to create new buffer and flush the buffer to file
-//                // after processing is finished
-////                    tempWriter = output;
-//                tempTopicID = topicID;
-////                    output = new StringWriter();
-//                topicID = new HashSet<>();
-//                if (MAP_MAP.matches(classValue)) {
-//                    // Very special case, we have a map element with href value.
-//                    // This is a map that needs to be chunked to content.
-//                    // No need to parse any file, just generate a stub output.
-//                    outputFileName = currentFile.resolve(parseFilePath);
-//                } else if (copytoValue != null) {
-//                    // use @copy-to value as the new file name
-//                    outputFileName = currentFile.resolve(copytoValue);
-//                } else if (hrefValue != null) {
-//                    // try to use href value as the new file name
-//                    if (chunkValue.contains(CHUNK_SELECT_TOPIC)
-//                            || chunkValue.contains(CHUNK_SELECT_BRANCH)) {
-//                        if (hrefValue.getFragment() != null) {
-//                            // if we have an ID here, use it.
-//                            outputFileName = currentFile.resolve(hrefValue.getFragment() + FILE_EXTENSION_DITA);
-//                        } else {
-//                            // Find the first topic id in target file if any.
-//                            final String firstTopic = getFirstTopicId(new File(stripFragment(currentFile.resolve(hrefValue))));
-//                            if (firstTopic != null) {
-//                                outputFileName = currentFile.resolve(firstTopic + FILE_EXTENSION_DITA);
-//                            } else {
-//                                outputFileName = currentFile.resolve(hrefValue);
-//                            }
-//                        }
-//                    } else {
-//                        // otherwise, use the href value instead
-//                        outputFileName = currentFile.resolve(hrefValue);
-//                    }
-//                } else {
-//                    // use randomly generated file name
-//                    outputFileName = generateOutputFile(currentFile);
-//                }
 //
-//                // Check if there is any conflict
-//                if (new File(URLUtils.stripFragment(outputFileName)).exists() && !MAP_MAP.matches(classValue)) {
-//                    final URI t = outputFileName;
-//                    outputFileName = generateOutputFile(currentFile);
-//                    conflictTable.put(outputFileName, t);
-//                }
-//                // add newly generated file to changTable
-//                // the new entry in changeTable has same key and value
-//                // in order to indicate it is a newly generated file
-//                changeTable.put(outputFileName, outputFileName);
+//    private void processChunk(final Element topicref, final URI outputFile) {
+//        final URI hrefValue = toURI(getValue(topicref, ATTRIBUTE_NAME_HREF));
+//        final Collection<String> chunkValue = split(getValue(topicref, ATTRIBUTE_NAME_CHUNK));
+//        final URI copytoValue = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
+//        final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
+//        final String classValue = getValue(topicref, ATTRIBUTE_NAME_CLASS);
+//        final String processRoleValue = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
+//        final String formatValue = getValue(topicref, ATTRIBUTE_NAME_FORMAT);
 //
-//                final FileInfo fi = generateFileInfo(outputFileName);
-//                job.add(fi);
-//            }
-//            // "by-topic" couldn't reach here
-//            this.outputFile = outputFileName;
+//        URI outputFileName = outputFile;
+//        Set<String> tempTopicID = null;
 //
-//            final URI path = currentFile.resolve(parseFilePath);
-//            URI newpath;
-//            if (path.getFragment() != null) {
-//                newpath = setFragment(outputFileName, path.getFragment());
+//        final URI parseFilePath;
+//        if (copytoValue != null) { // && !chunkValue.contains(CHUNK_TO_CONTENT)
+//            if (hrefValue.getFragment() != null) {
+//                parseFilePath = setFragment(copytoValue, hrefValue.getFragment());
 //            } else {
-//                final String firstTopicID = getFirstTopicId(new File(path));
-//                if (firstTopicID != null) {
-//                    newpath = setFragment(outputFileName, firstTopicID);
-//                } else {
-//                    newpath = outputFileName;
-//                }
+//                parseFilePath = copytoValue;
 //            }
-//            // add file name changes to changeTable, this will be used in
-//            // TopicRefWriter's updateHref method, very important!!!
-//            changeTable.put(path, newpath);
-//            // update current element's @href value
-//            topicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), newpath).toString());
-//
-//            if (parseFilePath.getFragment() != null) {
-//                targetTopicId = parseFilePath.getFragment();
-//            }
-//
-//            final String s = getChunkByToken(chunkValue, "select-", null);
-//            if (s != null) {
-//                selectMethod = s;
-//                // if the current topic href referred to a entire
-//                // topic file, it will be handled in "document" level.
-//                if (targetTopicId == null) {
-//                    selectMethod = CHUNK_SELECT_DOCUMENT;
-//                }
-//            }
-//            final URI tempPath = currentParsingFile;
-//            currentParsingFile = currentFile.resolve(parseFilePath);
-//
-//            if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
-//                currentParsingFileTopicIDChangeTable = new HashMap<>();
-//                // TODO recursive point
-//                logger.info("Processing " + currentParsingFile);
-//                reader.parse(currentParsingFile.toString());
-//                if (currentParsingFileTopicIDChangeTable.size() > 0) {
-//                    final URI href = toURI(topicref.getAttribute(ATTRIBUTE_NAME_HREF));
-//                    final String pathtoElem = href.getFragment() != null
-//                            ? href.getFragment()
-//                            : "";
-//                    final String old_elementid = pathtoElem.contains(SLASH)
-//                            ? pathtoElem.substring(0, pathtoElem.indexOf(SLASH))
-//                            : pathtoElem;
-//                    if (!old_elementid.isEmpty()) {
-//                        final String new_elementid = currentParsingFileTopicIDChangeTable.get(old_elementid);
-//                        if (new_elementid != null && !new_elementid.isEmpty()) {
-//                            topicref.setAttribute(ATTRIBUTE_NAME_HREF, setFragment(href, new_elementid).toString());
-//                        }
-//                    }
-//                }
-//                currentParsingFileTopicIDChangeTable = null;
-//            }
-//            // restore the currentParsingFile
-//            currentParsingFile = tempPath;
+//        } else {
+//            parseFilePath = hrefValue;
 //        }
-
-        if (topicref.hasChildNodes()) {
-            final List<Element> children = getChildElements(topicref, MAP_TOPICREF);
-            for (final Element current : children) {
-                processChunk(current, outputFileName);
-            }
-        }
-    }
-    
+//
+////        if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue) && isFormatDita(formatValue)) {
+////            // now the path to target file make sense
+////            if (chunkValue.contains(CHUNK_TO_CONTENT)) {
+////                // if current element contains "to-content" in chunk attribute
+////                // we need to create new buffer and flush the buffer to file
+////                // after processing is finished
+//////                    tempWriter = output;
+////                tempTopicID = topicID;
+//////                    output = new StringWriter();
+////                topicID = new HashSet<>();
+////                if (MAP_MAP.matches(classValue)) {
+////                    // Very special case, we have a map element with href value.
+////                    // This is a map that needs to be chunked to content.
+////                    // No need to parse any file, just generate a stub output.
+////                    outputFileName = currentFile.resolve(parseFilePath);
+////                } else if (copytoValue != null) {
+////                    // use @copy-to value as the new file name
+////                    outputFileName = currentFile.resolve(copytoValue);
+////                } else if (hrefValue != null) {
+////                    // try to use href value as the new file name
+////                    if (chunkValue.contains(CHUNK_SELECT_TOPIC)
+////                            || chunkValue.contains(CHUNK_SELECT_BRANCH)) {
+////                        if (hrefValue.getFragment() != null) {
+////                            // if we have an ID here, use it.
+////                            outputFileName = currentFile.resolve(hrefValue.getFragment() + FILE_EXTENSION_DITA);
+////                        } else {
+////                            // Find the first topic id in target file if any.
+////                            final String firstTopic = getFirstTopicId(new File(stripFragment(currentFile.resolve(hrefValue))));
+////                            if (firstTopic != null) {
+////                                outputFileName = currentFile.resolve(firstTopic + FILE_EXTENSION_DITA);
+////                            } else {
+////                                outputFileName = currentFile.resolve(hrefValue);
+////                            }
+////                        }
+////                    } else {
+////                        // otherwise, use the href value instead
+////                        outputFileName = currentFile.resolve(hrefValue);
+////                    }
+////                } else {
+////                    // use randomly generated file name
+////                    outputFileName = generateOutputFile(currentFile);
+////                }
+////
+////                // Check if there is any conflict
+////                if (new File(URLUtils.stripFragment(outputFileName)).exists() && !MAP_MAP.matches(classValue)) {
+////                    final URI t = outputFileName;
+////                    outputFileName = generateOutputFile(currentFile);
+////                    conflictTable.put(outputFileName, t);
+////                }
+////                // add newly generated file to changTable
+////                // the new entry in changeTable has same key and value
+////                // in order to indicate it is a newly generated file
+////                changeTable.put(outputFileName, outputFileName);
+////
+////                final FileInfo fi = generateFileInfo(outputFileName);
+////                job.add(fi);
+////            }
+////            // "by-topic" couldn't reach here
+////            this.outputFile = outputFileName;
+////
+////            final URI path = currentFile.resolve(parseFilePath);
+////            URI newpath;
+////            if (path.getFragment() != null) {
+////                newpath = setFragment(outputFileName, path.getFragment());
+////            } else {
+////                final String firstTopicID = getFirstTopicId(new File(path));
+////                if (firstTopicID != null) {
+////                    newpath = setFragment(outputFileName, firstTopicID);
+////                } else {
+////                    newpath = outputFileName;
+////                }
+////            }
+////            // add file name changes to changeTable, this will be used in
+////            // TopicRefWriter's updateHref method, very important!!!
+////            changeTable.put(path, newpath);
+////            // update current element's @href value
+////            topicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), newpath).toString());
+////
+////            if (parseFilePath.getFragment() != null) {
+////                targetTopicId = parseFilePath.getFragment();
+////            }
+////
+////            final String s = getChunkByToken(chunkValue, "select-", null);
+////            if (s != null) {
+////                selectMethod = s;
+////                // if the current topic href referred to a entire
+////                // topic file, it will be handled in "document" level.
+////                if (targetTopicId == null) {
+////                    selectMethod = CHUNK_SELECT_DOCUMENT;
+////                }
+////            }
+////            final URI tempPath = currentParsingFile;
+////            currentParsingFile = currentFile.resolve(parseFilePath);
+////
+////            if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
+////                currentParsingFileTopicIDChangeTable = new HashMap<>();
+////                // TODO recursive point
+////                logger.info("Processing " + currentParsingFile);
+////                reader.parse(currentParsingFile.toString());
+////                if (currentParsingFileTopicIDChangeTable.size() > 0) {
+////                    final URI href = toURI(topicref.getAttribute(ATTRIBUTE_NAME_HREF));
+////                    final String pathtoElem = href.getFragment() != null
+////                            ? href.getFragment()
+////                            : "";
+////                    final String old_elementid = pathtoElem.contains(SLASH)
+////                            ? pathtoElem.substring(0, pathtoElem.indexOf(SLASH))
+////                            : pathtoElem;
+////                    if (!old_elementid.isEmpty()) {
+////                        final String new_elementid = currentParsingFileTopicIDChangeTable.get(old_elementid);
+////                        if (new_elementid != null && !new_elementid.isEmpty()) {
+////                            topicref.setAttribute(ATTRIBUTE_NAME_HREF, setFragment(href, new_elementid).toString());
+////                        }
+////                    }
+////                }
+////                currentParsingFileTopicIDChangeTable = null;
+////            }
+////            // restore the currentParsingFile
+////            currentParsingFile = tempPath;
+////        }
+//
+//        if (topicref.hasChildNodes()) {
+//            final List<Element> children = getChildElements(topicref, MAP_TOPICREF);
+//            for (final Element current : children) {
+//                processChunk(current, outputFileName);
+//            }
+//        }
+//    }
+//
 //    /** Before combining topics in a branch, ensure any descendant topicref with @chunk and no @href has a stub */
 //    private void createChildTopicrefStubs(final List<Element> topicrefs, final ChunkBuilder parent) {
 //        if (!topicrefs.isEmpty()) {
@@ -754,7 +761,8 @@ final class ChunkMapFilter extends AbstractDomFilter {
 //                    }
                     final ChunkBuilder ops = ChunkOperation.builder(null)
                             .select(select)
-                            .src(href != null ? currentFile.resolve(href) : null);
+                            .src(href != null ? currentFile.resolve(href) : null)
+                            .topicref(currentElem);
                     parent.addChild(ops);
                     collectCombineChunk(getChildElements(currentElem, MAP_TOPICREF), ops);
                 }

@@ -9,6 +9,7 @@
 package org.dita.dost.chunk;
 
 import com.google.common.annotations.VisibleForTesting;
+import org.w3c.dom.Element;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ class ChunkOperation {
     public final Operation select;
     public final URI src;
     public final URI dst;
+    public final Element topicref;
     public final List<ChunkOperation> children;
 
     @VisibleForTesting
@@ -47,11 +49,13 @@ class ChunkOperation {
                    final Operation select,
                    final URI src,
                    final URI dst,
+                   final Element topicref,
                    final List<ChunkOperation> children) {
         this.operation = operation;
         this.select = select;
         this.src = src;
         this.dst = dst;
+        this.topicref = topicref;
         this.children = children;
     }
 
@@ -64,12 +68,13 @@ class ChunkOperation {
                 select == that.select &&
                 Objects.equals(src, that.src) &&
                 Objects.equals(dst, that.dst) &&
+                Objects.equals(topicref, that.topicref) &&
                 Objects.equals(children, that.children);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(operation, select, src, dst, children);
+        return Objects.hash(operation, select, src, dst, topicref, children);
     }
 
     @Override
@@ -92,6 +97,7 @@ class ChunkOperation {
         private Operation select;
         private URI src;
         private URI dst;
+        private Element topicref;
         private List<ChunkBuilder> children = new ArrayList<>();
 
         public ChunkBuilder(final Operation operation) {
@@ -115,6 +121,11 @@ class ChunkOperation {
             return this;
         }
 
+        public ChunkBuilder topicref(final Element topicref) {
+            this.topicref = topicref;
+            return this;
+        }
+
         public ChunkBuilder addChild(final ChunkBuilder child) {
             children.add(child);
             return this;
@@ -123,8 +134,10 @@ class ChunkOperation {
         public ChunkOperation build() {
             final URI src = this.src;
             final URI dst = this.dst;
-            final List<ChunkOperation> cos = children.stream().map(ChunkBuilder::build).collect(Collectors.toList());
-            return new ChunkOperation(operation, select, src, dst, Collections.unmodifiableList(cos));
+            final List<ChunkOperation> cos = children.stream()
+                    .map(ChunkBuilder::build)
+                    .collect(Collectors.toList());
+            return new ChunkOperation(operation, select, src, dst, topicref, Collections.unmodifiableList(cos));
         }
     }
 }

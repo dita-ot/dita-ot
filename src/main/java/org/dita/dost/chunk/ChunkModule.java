@@ -72,7 +72,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         try {
             final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final File mapFile = new File(job.tempDirURI.resolve(in.uri));
-                mapFilter.read(mapFile);
+            mapFilter.read(mapFile);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
