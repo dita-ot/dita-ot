@@ -81,6 +81,10 @@ public final class Job {
     private static final String ATTRIBUTE_FLAG_IMAGE_LIST = "flag-image";
     private static final String ATTRIBUTE_SUBSIDIARY_TARGET_LIST = "subtarget";
     private static final String ATTRIBUTE_FILTERED = "filtered";
+    private static final String ELEMENT_FILTERED_KEYDEFS = "filteredkeydefs";
+    private static final String ELEMENT_FILTERED_KEYDEF = "keydef";
+    private static final String ATTRIBUTE_KEYS = "keys";
+    private static final String ATTRIBUTE_HREF = "href";
 
     private static final String PROPERTY_OUTER_CONTROL = ANT_INVOKER_EXT_PARAM_OUTTERCONTROL;
     private static final String PROPERTY_ONLY_TOPIC_IN_MAP = ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP;
@@ -127,6 +131,7 @@ public final class Job {
     public final URI tempDirURI;
     private final File jobFile;
     private final ConcurrentMap<URI, FileInfo> files = new ConcurrentHashMap<>();
+    private final List<FilteredKeydef> filteredKeydefs = new ArrayList<>();
     private long lastModified;
 
     /**
@@ -184,6 +189,20 @@ public final class Job {
             prop.put(PROPERTY_ONLY_TOPIC_IN_MAP, Boolean.toString(false));
             prop.put(PROPERTY_OUTER_CONTROL, OutterControl.WARN.toString());
         }
+    }
+
+    public boolean isKeydefFiltered(String keyName) {
+        if (keyName == null || keyName.trim().length()==0) {
+            return false;
+        }
+
+        for (FilteredKeydef keydef : filteredKeydefs) {
+            if (keyName.equals(keydef.keys)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private final static class JobHandler extends DefaultHandler {
@@ -307,68 +326,9 @@ public final class Job {
             out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream, "UTF-8");
             out.writeStartDocument();
             out.writeStartElement(ELEMENT_JOB);
-            for (final Map.Entry<String, Object> e: prop.entrySet()) {
-                out.writeStartElement(ELEMENT_PROPERTY);
-                out.writeAttribute(ATTRIBUTE_NAME, e.getKey());
-                if (e.getValue() instanceof String) {
-                    out.writeStartElement(ELEMENT_STRING);
-                    out.writeCharacters(e.getValue().toString());
-                    out.writeEndElement(); //string
-                } else if (e.getValue() instanceof Set) {
-                    out.writeStartElement(ELEMENT_SET);
-                    final Set<?> s = (Set<?>) e.getValue();
-                    for (final Object o: s) {
-                        out.writeStartElement(ELEMENT_STRING);
-                        out.writeCharacters(o.toString());
-                        out.writeEndElement(); //string
-                    }
-                    out.writeEndElement(); //set
-                } else if (e.getValue() instanceof Map) {
-                    out.writeStartElement(ELEMENT_MAP);
-                    final Map<?, ?> s = (Map<?, ?>) e.getValue();
-                    for (final Map.Entry<?, ?> o: s.entrySet()) {
-                        out.writeStartElement(ELEMENT_ENTRY);
-                        out.writeAttribute(ATTRIBUTE_KEY, o.getKey().toString());
-                        out.writeStartElement(ELEMENT_STRING);
-                        out.writeCharacters(o.getValue().toString());
-                        out.writeEndElement(); //string
-                        out.writeEndElement(); //entry
-                    }
-                    out.writeEndElement(); //string
-                } else {
-                    out.writeStartElement(e.getValue().getClass().getName());
-                    out.writeCharacters(e.getValue().toString());
-                    out.writeEndElement(); //string
-                }
-                out.writeEndElement(); //property
-            }
-            out.writeStartElement(ELEMENT_FILES);
-            for (final FileInfo i: files.values()) {
-                out.writeStartElement(ELEMENT_FILE);
-                if (i.src != null) {
-                    out.writeAttribute(ATTRIBUTE_SRC, i.src.toString());
-                }
-                out.writeAttribute(ATTRIBUTE_URI, i.uri.toString());
-                out.writeAttribute(ATTRIBUTE_PATH, i.file.getPath());
-                if (i.result != null) {
-                    out.writeAttribute(ATTRIBUTE_RESULT, i.result.toString());
-                }
-                if (i.format != null) {
-                    out.writeAttribute(ATTRIBUTE_FORMAT, i.format);
-                }
-                try {
-                    for (Map.Entry<String, Field> e: attrToFieldMap.entrySet()) {
-                        final boolean v = e.getValue().getBoolean(i);
-                        if (v) {
-                            out.writeAttribute(e.getKey(), Boolean.TRUE.toString());
-                        }
-                    }
-                } catch (final IllegalAccessException ex) {
-                    throw new RuntimeException(ex);
-                }
-                out.writeEndElement(); //file
-            }
-            out.writeEndElement(); //files
+            writeProperties(out);
+            writeFiles(out);
+            writeFilteredKeydefs(out);
             out.writeEndElement(); //job
             out.writeEndDocument();
         } catch (final IOException e) {
@@ -392,6 +352,85 @@ public final class Job {
             }
         }
         lastModified = jobFile.lastModified();
+    }
+
+    private void writeProperties(XMLStreamWriter out) throws XMLStreamException {
+        for (final Map.Entry<String, Object> e: prop.entrySet()) {
+            out.writeStartElement(ELEMENT_PROPERTY);
+            out.writeAttribute(ATTRIBUTE_NAME, e.getKey());
+            if (e.getValue() instanceof String) {
+                out.writeStartElement(ELEMENT_STRING);
+                out.writeCharacters(e.getValue().toString());
+                out.writeEndElement(); //string
+            } else if (e.getValue() instanceof Set) {
+                out.writeStartElement(ELEMENT_SET);
+                final Set<?> s = (Set<?>) e.getValue();
+                for (final Object o: s) {
+                    out.writeStartElement(ELEMENT_STRING);
+                    out.writeCharacters(o.toString());
+                    out.writeEndElement(); //string
+                }
+                out.writeEndElement(); //set
+            } else if (e.getValue() instanceof Map) {
+                out.writeStartElement(ELEMENT_MAP);
+                final Map<?, ?> s = (Map<?, ?>) e.getValue();
+                for (final Map.Entry<?, ?> o: s.entrySet()) {
+                    out.writeStartElement(ELEMENT_ENTRY);
+                    out.writeAttribute(ATTRIBUTE_KEY, o.getKey().toString());
+                    out.writeStartElement(ELEMENT_STRING);
+                    out.writeCharacters(o.getValue().toString());
+                    out.writeEndElement(); //string
+                    out.writeEndElement(); //entry
+                }
+                out.writeEndElement(); //string
+            } else {
+                out.writeStartElement(e.getValue().getClass().getName());
+                out.writeCharacters(e.getValue().toString());
+                out.writeEndElement(); //string
+            }
+            out.writeEndElement(); //property
+        }
+    }
+
+    private void writeFiles(XMLStreamWriter out) throws XMLStreamException {
+        out.writeStartElement(ELEMENT_FILES);
+        for (final FileInfo i: files.values()) {
+            out.writeStartElement(ELEMENT_FILE);
+            if (i.src != null) {
+                out.writeAttribute(ATTRIBUTE_SRC, i.src.toString());
+            }
+            out.writeAttribute(ATTRIBUTE_URI, i.uri.toString());
+            out.writeAttribute(ATTRIBUTE_PATH, i.file.getPath());
+            if (i.result != null) {
+                out.writeAttribute(ATTRIBUTE_RESULT, i.result.toString());
+            }
+            if (i.format != null) {
+                out.writeAttribute(ATTRIBUTE_FORMAT, i.format);
+            }
+            try {
+                for (Map.Entry<String, Field> e: attrToFieldMap.entrySet()) {
+                    final boolean v = e.getValue().getBoolean(i);
+                    if (v) {
+                        out.writeAttribute(e.getKey(), Boolean.TRUE.toString());
+                    }
+                }
+            } catch (final IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            }
+            out.writeEndElement(); //file
+        }
+        out.writeEndElement(); //files
+    }
+
+    private void writeFilteredKeydefs(XMLStreamWriter out) throws XMLStreamException {
+        out.writeStartElement(ELEMENT_FILTERED_KEYDEFS);
+        for (FilteredKeydef keydef : filteredKeydefs) {
+            out.writeStartElement(ELEMENT_FILTERED_KEYDEF);
+            out.writeAttribute(ATTRIBUTE_KEYS, keydef.keys);
+            out.writeAttribute(ATTRIBUTE_HREF, keydef.href);
+            out.writeEndElement();
+        }
+        out.writeEndElement();
     }
 
     /**
@@ -577,6 +616,20 @@ public final class Job {
     public void addAll(final Collection<FileInfo> fs) {
         for (final FileInfo f: fs) {
             add(f);
+        }
+    }
+
+    public static final class FilteredKeydef {
+        public String keys;
+        public String href;
+
+        public FilteredKeydef() {
+
+        }
+
+        public FilteredKeydef(String keys, String href) {
+            this.keys = keys;
+            this.href = href;
         }
     }
 
@@ -1007,6 +1060,10 @@ public final class Job {
         }
         tempFileNameScheme.setBaseDir(getInputDir());
         return tempFileNameScheme;
+    }
+
+    public void addFilteredKey(String keys, String href) {
+        filteredKeydefs.add(new FilteredKeydef(keys,href));
     }
 
 }
