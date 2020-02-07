@@ -44,14 +44,6 @@ public class EndToEndTest extends AbstractIntegrationTest {
                 .run();
     }
 
-    @Test
-    public void eclipsehelp() throws Throwable {
-        builder().name("e2e")
-                .transtype(ECLIPSEHELP)
-                .input(Paths.get("root.ditamap"))
-                .run();
-    }
-
     @Ignore
     @Test
     public void htmlhelp() throws Throwable {
