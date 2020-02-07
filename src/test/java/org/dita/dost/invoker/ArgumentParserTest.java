@@ -84,6 +84,15 @@ public class ArgumentParserTest {
     }
 
     @Test
+    public void installSubcommand_optionForm_globalArgument() {
+        final InstallArguments act = (InstallArguments) parser.processArgs(new String[]{
+                "-v",
+                "--install=org.dita.eclipsehelp"
+        });
+        assertEquals("org.dita.eclipsehelp", act.installFile);
+    }
+
+    @Test
     public void uninstallSubcommand() {
         final UninstallArguments act = (UninstallArguments) parser.processArgs(new String[]{
                 "uninstall",

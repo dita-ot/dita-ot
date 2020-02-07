@@ -104,30 +104,28 @@ final class ArgumentParser {
      * @since Ant 1.6
      */
     public Arguments processArgs(final String[] arguments) {
-        if (arguments.length != 0) {
-            final String subcommand = arguments[0];
-            if (subcommand.equals("plugins") || isLongForm(subcommand, "-plugins")) {
-                return new PluginsArguments().parse(arguments);
-            } else if (subcommand.equals("version") || isLongForm(subcommand, "-version")) {
-                return new VersionArguments().parse(arguments);
-            } else if (subcommand.equals("transtypes") || isLongForm(subcommand, "-transtypes")) {
-                return new TranstypesArguments().parse(arguments);
-            } else if (subcommand.equals("deliverables") || isLongForm(subcommand, "-deliverables")) {
-                return new DeliverablesArguments().parse(arguments);
-            } else if (subcommand.equals("install") || isLongForm(subcommand, "-install")) {
-                return new InstallArguments().parse(arguments);
-            } else if (subcommand.equals("uninstall") || isLongForm(subcommand, "-uninstall")) {
-                return new UninstallArguments().parse(arguments);
-            } else {
-                return new ConversionArguments().parse(arguments);
+        for (final String subcommand : arguments) {
+            switch (getName(subcommand)) {
+                case "plugins":
+                    return new PluginsArguments().parse(arguments);
+                case "version":
+                    return new VersionArguments().parse(arguments);
+                case "transtypes":
+                    return new TranstypesArguments().parse(arguments);
+                case "deliverables":
+                    return new DeliverablesArguments().parse(arguments);
+                case "install":
+                    return new InstallArguments().parse(arguments);
+                case "uninstall":
+                    return new UninstallArguments().parse(arguments);
             }
-        } else {
-            return new ConversionArguments().parse(arguments);
         }
+        return new ConversionArguments().parse(arguments);
     }
 
-    private boolean isLongForm(String arg, String property) {
-        final String name = arg.contains("=") ? arg.substring(0, arg.indexOf('=')) : arg;
-        return name.equals(property) || name.equals("-" + property);
+    private String getName(final String subcommand) {
+        final int start = subcommand.startsWith("--") ? 2 : (subcommand.startsWith("-") ? 1 : 0);
+        final int end = subcommand.indexOf('=');
+        return subcommand.substring(start, end != -1 ? end :subcommand.length());
     }
 }
