@@ -705,6 +705,8 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_LOCKTITLE_VALUE_YES = "yes";
     /**format attribute.*/
     public static final String ATTRIBUTE_NAME_FORMAT = "format";
+    public static final String ATTRIBUTE_NAME_ENCODING = "encoding";
+    public static final String ATTRIBUTE_NAME_PARSE = "parse";
     /**charset attribute.*/
     public static final String ATTRIBUTE_NAME_CHARSET = "charset";
     /**lang attribute.*/

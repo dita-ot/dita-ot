@@ -17,13 +17,14 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
+import org.dita.dost.util.XMLUtils;
+import org.xml.sax.*;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
  * Coderef element resolver filter.
@@ -87,21 +88,41 @@ public final class CoderefResolver extends AbstractXMLFilter {
             return;
         }
 
-        if (PR_D_CODEREF.matches(atts)) {
+        if (PR_D_CODEREF.matches(atts) || TOPIC_INCLUDE.matches(atts)) {
             ignoreDepth++;
             try {
                 final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
                 if (hrefValue != null) {
                     final File codeFile = getFile(hrefValue);
                     if (codeFile != null && codeFile.exists()) {
-                        logger.debug("Resolve coderef " + codeFile);
-                        final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT));
-                        final Range range = getRange(hrefValue);
-                        try (BufferedReader codeReader = new BufferedReader(
-                                new InputStreamReader(new FileInputStream(codeFile), charset))) {
-                            range.copyLines(codeReader);
-                        } catch (final Exception e) {
-                            logger.error("Failed to process code reference " + codeFile, e);
+                        logger.debug("Resolve " + localName + " " + codeFile);
+                        final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT), atts.getValue(ATTRIBUTE_NAME_ENCODING));
+                        final String parse = getParse(atts.getValue(ATTRIBUTE_NAME_PARSE));
+                        switch (parse) {
+                            case "text":
+                                final Range range = getRange(hrefValue);
+                                try (BufferedReader codeReader = new BufferedReader(
+                                        new InputStreamReader(new FileInputStream(codeFile), charset))) {
+                                    range.copyLines(codeReader);
+                                } catch (final Exception e) {
+                                    logger.error("Failed to process include " + codeFile, e);
+                                }
+                                break;
+                            case "xml":
+                                final XMLReader reader = xmlUtils.getXMLReader();
+                                reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+                                final XMLReader filter = new IncludeFilter(reader);
+                                filter.setContentHandler(getContentHandler());
+                                try (InputStream in = new FileInputStream(codeFile)) {
+                                    final InputSource inputSource = new InputSource(in);
+                                    inputSource.setSystemId(hrefValue.toString());
+                                    filter.parse(inputSource);
+                                } catch (final Exception e) {
+                                    logger.error("Failed to process include " + codeFile, e);
+                                }
+                                break;
+                            default:
+                                logger.error("Unsupported include parse " + parse);
                         }
                     } else {
                         logger.warn(MessageUtils.getMessage("DOTJ051E", hrefValue.toString()).setLocation(atts).toString());
@@ -115,6 +136,13 @@ public final class CoderefResolver extends AbstractXMLFilter {
         } else {
             super.startElement(uri, localName, name, atts);
         }
+    }
+
+    private String getParse(final String value) {
+        if (value == null) {
+            return "text";
+        }
+        return value;
     }
 
     private File getFile(URI hrefValue) {
@@ -305,20 +333,23 @@ public final class CoderefResolver extends AbstractXMLFilter {
     /**
      * Get code file charset.
      *
-     * @param value format attribute value, may be {@code null}
+     * @param format format attribute value, may be {@code null}
+     * @param encoding encoding attribute balue, may be {@code null}
      * @return charset if set, otherwise default charset
      */
-    private Charset getCharset(final String value) {
+    private Charset getCharset(final String format, final String encoding) {
         Charset c = null;
-        if (value != null) {
-            final String[] tokens = value.trim().split("[;=]");
-            if (tokens.length >= 3 && tokens[1].trim().equals("charset")) {
-                try {
+        try {
+            if (encoding != null) {
+                c = Charset.forName(encoding);
+            } else if (format != null) {
+                final String[] tokens = format.trim().split("[;=]");
+                if (tokens.length >= 3 && tokens[1].trim().equals(ATTRIBUTE_NAME_CHARSET)) {
                     c = Charset.forName(tokens[2].trim());
-                } catch (final RuntimeException e) {
-                    logger.error(MessageUtils.getMessage("DOTJ052E", tokens[2].trim()).toString());
                 }
             }
+        } catch (final RuntimeException e) {
+            logger.error(MessageUtils.getMessage("DOTJ052E", encoding).toString());
         }
         if (c == null) {
             final String defaultCharset = Configuration.configuration.get("default.coderef-charset");
@@ -331,4 +362,16 @@ public final class CoderefResolver extends AbstractXMLFilter {
         return c;
     }
 
+    private static class IncludeFilter extends XMLFilterImpl {
+        public IncludeFilter(final XMLReader parent) {
+            super(parent);
+        }
+        public void startDocument() throws SAXException {
+            // Ignore
+        }
+
+        public void endDocument() throws SAXException {
+            // Ignore
+        }
+    }
 }
