@@ -7,7 +7,6 @@
  */
 package org.dita.dost.util;
 
-
 import static javax.xml.XMLConstants.*;
 import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
@@ -15,7 +14,6 @@ import static org.dita.dost.util.Constants.*;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import javax.xml.namespace.QName;
@@ -29,7 +27,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import net.sf.saxon.event.ProxyReceiver;
-import net.sf.saxon.event.Receiver;
 import net.sf.saxon.jaxp.TransformerImpl;
 import net.sf.saxon.serialize.Emitter;
 import net.sf.saxon.serialize.MessageWarner;
@@ -88,31 +85,26 @@ public final class XMLUtils {
     public static Transformer withLogger(final Transformer transformer, final DITAOTLogger logger) {
         transformer.setErrorListener(new LoggingErrorListener(logger));
         if (transformer instanceof TransformerImpl) {
-        	final Emitter receiver = new MessageWarner();
-        	XsltController controller = ((TransformerImpl) transformer).getUnderlyingController();
-        	receiver.setPipelineConfiguration(controller.makePipelineConfiguration());
-        	if (receiver.getOutputProperties() == null) {
-        		try {
-        			Properties props = new Properties();
-        			props.setProperty(OutputKeys.METHOD, "xml");
-        			props.setProperty(OutputKeys.INDENT, "yes");
-        			props.setProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-        			((Emitter) receiver).setOutputProperties(props);
-        		} catch (XPathException e) {
-        			// no action
-        		}
-        	}
-
-        	controller.setMessageFactory(new Supplier<Receiver>() {
-        		@Override
-        		public Receiver get() {
-        			return new ProxyReceiver(receiver) {
-        				@Override
-        				public void close() {
-        				}
-        			};
-        		}
-        	});
+            final Emitter receiver = new MessageWarner();
+            final XsltController controller = ((TransformerImpl) transformer).getUnderlyingController();
+            receiver.setPipelineConfiguration(controller.makePipelineConfiguration());
+            if (receiver.getOutputProperties() == null) {
+                try {
+                    final Properties props = new Properties();
+                    props.setProperty(OutputKeys.METHOD, "xml");
+                    props.setProperty(OutputKeys.INDENT, "yes");
+                    props.setProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+                    receiver.setOutputProperties(props);
+                } catch (XPathException e) {
+                    // no action
+                }
+            }
+            controller.setMessageFactory(() -> new ProxyReceiver(receiver) {
+                @Override
+                public void close() {
+                    // Ignore close
+                }
+            });
         }
         return transformer;
     }

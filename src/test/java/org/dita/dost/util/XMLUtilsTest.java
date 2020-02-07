@@ -10,10 +10,20 @@ package org.dita.dost.util;
 import static javax.xml.XMLConstants.*;
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.dita.dost.TestUtils.CachingLogger;
+import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import org.w3c.dom.DOMImplementation;
@@ -215,6 +225,30 @@ public class XMLUtilsTest {
         assertTrue(XMLUtils.nonDitaContext(classes));
         classes.addFirst(null);
         assertTrue(XMLUtils.nonDitaContext(classes));
+    }
+
+    @Test
+    public void withLogger() throws TransformerException {
+        final String file = "<xsl:stylesheet version=\"2.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n" +
+                "  <xsl:template match='/'>\n" +
+                "    <xsl:message>info</xsl:message>\n" +
+                "    <xsl:message><info/></xsl:message>\n" +
+                "  </xsl:template>\n" +
+                "</xsl:stylesheet>";
+        final Transformer base = TransformerFactory.newInstance().newTransformer(
+                new StreamSource(new StringReader(file)));
+        final CachingLogger logger = new CachingLogger();
+
+        XMLUtils.withLogger(base, logger)
+                .transform(
+                        new StreamSource(new StringReader(file)),
+                        new StreamResult(new ByteArrayOutputStream()));
+
+        assertEquals(Arrays.asList(
+                    new Message(Message.Level.WARN, "info", null),
+                    new Message(Message.Level.WARN, "<info/>", null)
+                ),
+                logger.getMessages());
     }
 
 }
