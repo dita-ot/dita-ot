@@ -166,6 +166,7 @@ def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "develop" :
                    "${cleanVersion}"
 def bundled = [
+        "eclipsehelp": "https://github.com/dita-ot/org.dita.eclipsehelp/releases/download/3.4/org.dita.eclipsehelp-3.4.0.zip",
         "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.3.2/org.lwdita-2.3.2.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
         "dita11": "https://github.com/dita-ot/org.dita.specialization.dita11/archive/1.1.1.zip",
