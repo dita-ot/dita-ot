@@ -556,6 +556,7 @@ public final class Constants {
     public static final DitaClass TOPIC_FN = new DitaClass("- topic/fn ");
     public static final DitaClass TOPIC_FOREIGN = new DitaClass("- topic/foreign ");
     public static final DitaClass TOPIC_IMAGE = new DitaClass("- topic/image ");
+    public static final DitaClass TOPIC_INCLUDE = new DitaClass("- topic/include ");
     public static final DitaClass TOPIC_INDEX_BASE = new DitaClass("- topic/index-base ");
     public static final DitaClass TOPIC_INDEXTERM = new DitaClass("- topic/indexterm ");
     public static final DitaClass TOPIC_INDEXTERMREF = new DitaClass("- topic/indextermref ");
