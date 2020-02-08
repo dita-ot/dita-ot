@@ -3,11 +3,6 @@
   id="test" ditaarch:DITAArchVersion="2.0">
   <title class="- topic/title ">Coderef test</title>
   <body class="- topic/body ">
-    <foreign class="- topic/foreign "><foo>
-  amp: &amp; less-than: &lt;
-</foo></foreign>
-    <foreign class="- topic/foreign "><foo>
-  copyright sign: ©; em-dash: —
-</foo></foreign>
+    <foreign class="- topic/foreign "><schema default="value"/></foreign>
   </body>
 </topic>

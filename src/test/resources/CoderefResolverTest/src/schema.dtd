@@ -1,0 +1,2 @@
+<!ELEMENT schema EMPTY>
+<!ATTLIST schema default (value) "value">

@@ -8,8 +8,13 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.util.Job;
+import org.xml.sax.*;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 import java.io.*;
 import java.net.URI;
@@ -17,14 +22,8 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
-import org.xml.sax.*;
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.MessageUtils;
-import org.xml.sax.helpers.XMLFilterImpl;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 /**
  * Coderef element resolver filter.
@@ -55,7 +54,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
 
     // Constants ---------------------------------------------------------------
 
-    private static final char[] XML_NEWLINE = { '\n' };
+    private static final char[] XML_NEWLINE = {'\n'};
 
     // Variables ---------------------------------------------------------------
 
@@ -82,7 +81,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
 
     @Override
     public void startElement(final String uri, final String localName, final String name,
-            final Attributes atts) throws SAXException {
+                             final Attributes atts) throws SAXException {
         if (ignoreDepth > 0) {
             ignoreDepth++;
             return;
@@ -96,10 +95,10 @@ public final class CoderefResolver extends AbstractXMLFilter {
                     final File codeFile = getFile(hrefValue);
                     if (codeFile != null && codeFile.exists()) {
                         logger.debug("Resolve " + localName + " " + codeFile);
-                        final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT), atts.getValue(ATTRIBUTE_NAME_ENCODING));
                         final String parse = getParse(atts.getValue(ATTRIBUTE_NAME_PARSE));
                         switch (parse) {
                             case "text":
+                                final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT), atts.getValue(ATTRIBUTE_NAME_ENCODING));
                                 final Range range = getRange(hrefValue);
                                 try (BufferedReader codeReader = new BufferedReader(
                                         new InputStreamReader(new FileInputStream(codeFile), charset))) {
@@ -115,7 +114,10 @@ public final class CoderefResolver extends AbstractXMLFilter {
                                 filter.setContentHandler(getContentHandler());
                                 try (InputStream in = new FileInputStream(codeFile)) {
                                     final InputSource inputSource = new InputSource(in);
-                                    inputSource.setSystemId(hrefValue.toString());
+                                    final Job.FileInfo fileInfo = job.getFileInfo(currentFile.resolve(hrefValue));
+                                    if (fileInfo.src != null) {
+                                        inputSource.setSystemId(fileInfo.src.toString());
+                                    }
                                     filter.parse(inputSource);
                                 } catch (final Exception e) {
                                     logger.error("Failed to process include " + codeFile, e);
@@ -131,7 +133,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                     //logger.logDebug("Code reference target not defined");
                 }
             } catch (final Exception e) {
-                logger.error(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e);
             }
         } else {
             super.startElement(uri, localName, name, atts);
@@ -231,6 +233,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
          * @param codeReader line reader
          */
         void copyLines(final BufferedReader codeReader) throws IOException, SAXException;
+
         /**
          * Set target handler
          */
@@ -333,7 +336,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
     /**
      * Get code file charset.
      *
-     * @param format format attribute value, may be {@code null}
+     * @param format   format attribute value, may be {@code null}
      * @param encoding encoding attribute balue, may be {@code null}
      * @return charset if set, otherwise default charset
      */
@@ -366,6 +369,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
         public IncludeFilter(final XMLReader parent) {
             super(parent);
         }
+
         public void startDocument() throws SAXException {
             // Ignore
         }
