@@ -11,11 +11,9 @@ package org.dita.dost.writer;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.*;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLFilterImpl;
 
@@ -32,8 +30,10 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.dita.dost.util.CatalogUtils.getCatalogResolver;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.getDocumentBuilder;
 
 /**
  * Coderef element resolver filter.
@@ -127,15 +127,23 @@ public final class CoderefResolver extends AbstractXMLFilter {
 
     private void includeXml(final Attributes atts) throws SAXException, IOException, TransformerException {
         final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-        final Job.FileInfo fileInfo = job.getFileInfo(currentFile.resolve(hrefValue));
-        final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
-        builder.setEntityResolver(CatalogUtils.getCatalogResolver());
+        final Job.FileInfo fileInfo = job.getFileInfo(stripFragment(currentFile.resolve(hrefValue)));
+        final DocumentBuilder builder = getDocumentBuilder();
+        builder.setEntityResolver(getCatalogResolver());
         builder.setErrorHandler(new DITAOTXMLErrorHandler(fileInfo.src.toString(), logger));
 
         final Document doc = builder.parse(fileInfo.src.toString());
-
+        Node src = null;
+        if (hrefValue.getFragment() != null) {
+            src = doc.getElementById(hrefValue.getFragment());
+        }
+        if (src == null) {
+            src = doc;
+        }
         final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-        serializer.transform(new DOMSource(doc), new SAXResult(new IncludeFilter(getContentHandler())));
+        final DOMSource source = new DOMSource(src);
+        final SAXResult result = new SAXResult(new IncludeFilter(getContentHandler()));
+        serializer.transform(source, result);
     }
 
     private void includeText(final Attributes atts) {

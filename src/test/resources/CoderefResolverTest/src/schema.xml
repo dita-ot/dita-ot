@@ -1,2 +1,4 @@
 <!DOCTYPE schema SYSTEM "schema.dtd">
-<schema/>
+<schema>
+  <p id="fragment">fragment</p>
+</schema>
