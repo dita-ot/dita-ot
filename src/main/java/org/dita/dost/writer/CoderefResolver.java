@@ -92,51 +92,56 @@ public final class CoderefResolver extends AbstractXMLFilter {
             try {
                 final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
                 if (hrefValue != null) {
-                    final File codeFile = getFile(hrefValue);
-                    if (codeFile != null && codeFile.exists()) {
-                        logger.debug("Resolve " + localName + " " + codeFile);
-                        final String parse = getParse(atts.getValue(ATTRIBUTE_NAME_PARSE));
-                        switch (parse) {
-                            case "text":
-                                final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT), atts.getValue(ATTRIBUTE_NAME_ENCODING));
-                                final Range range = getRange(hrefValue);
-                                try (BufferedReader codeReader = new BufferedReader(
-                                        new InputStreamReader(new FileInputStream(codeFile), charset))) {
-                                    range.copyLines(codeReader);
-                                } catch (final Exception e) {
-                                    logger.error("Failed to process include " + codeFile, e);
-                                }
-                                break;
-                            case "xml":
-                                final XMLReader reader = xmlUtils.getXMLReader();
-                                reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-                                final XMLReader filter = new IncludeFilter(reader);
-                                filter.setContentHandler(getContentHandler());
-                                try (InputStream in = new FileInputStream(codeFile)) {
-                                    final InputSource inputSource = new InputSource(in);
-                                    final Job.FileInfo fileInfo = job.getFileInfo(currentFile.resolve(hrefValue));
-                                    if (fileInfo.src != null) {
-                                        inputSource.setSystemId(fileInfo.src.toString());
-                                    }
-                                    filter.parse(inputSource);
-                                } catch (final Exception e) {
-                                    logger.error("Failed to process include " + codeFile, e);
-                                }
-                                break;
-                            default:
-                                logger.error("Unsupported include parse " + parse);
-                        }
-                    } else {
-                        logger.warn(MessageUtils.getMessage("DOTJ051E", hrefValue.toString()).setLocation(atts).toString());
+                    logger.debug("Resolve " + localName + " " + currentFile.resolve(hrefValue));
+                    final String parse = getParse(atts.getValue(ATTRIBUTE_NAME_PARSE));
+                    switch (parse) {
+                        case "text":
+                            includeText(atts);
+                            break;
+                        case "xml":
+                            includeXml(atts);
+                            break;
+                        default:
+                            logger.error("Unsupported include parse " + parse);
                     }
-                } else {
-                    //logger.logDebug("Code reference target not defined");
                 }
             } catch (final Exception e) {
                 logger.error(e.getMessage(), e);
             }
         } else {
             super.startElement(uri, localName, name, atts);
+        }
+    }
+
+    private void includeXml(final Attributes atts) throws SAXException {
+        final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+        final XMLReader reader = xmlUtils.getXMLReader();
+        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+        final XMLReader filter = new IncludeFilter(reader);
+        filter.setContentHandler(getContentHandler());
+        final File codeFile = getFile(hrefValue);
+        try (InputStream in = new FileInputStream(codeFile)) {
+            final InputSource inputSource = new InputSource(in);
+            final Job.FileInfo fileInfo = job.getFileInfo(currentFile.resolve(hrefValue));
+            if (fileInfo.src != null) {
+                inputSource.setSystemId(fileInfo.src.toString());
+            }
+            filter.parse(inputSource);
+        } catch (final Exception e) {
+            logger.error("Failed to process include " + codeFile, e);
+        }
+    }
+
+    private void includeText(final Attributes atts) {
+        final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+        final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT), atts.getValue(ATTRIBUTE_NAME_ENCODING));
+        final Range range = getRange(hrefValue);
+        final File codeFile = getFile(hrefValue);
+        try (BufferedReader codeReader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(codeFile), charset))) {
+            range.copyLines(codeReader);
+        } catch (final Exception e) {
+            logger.error("Failed to process include " + codeFile, e);
         }
     }
 
