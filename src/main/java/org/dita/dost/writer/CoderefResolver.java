@@ -9,13 +9,23 @@
 package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Document;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLFilterImpl;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXResult;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -105,6 +115,8 @@ public final class CoderefResolver extends AbstractXMLFilter {
                             logger.error("Unsupported include parse " + parse);
                     }
                 }
+            } catch (final RuntimeException e) {
+                throw e;
             } catch (final Exception e) {
                 logger.error(e.getMessage(), e);
             }
@@ -113,23 +125,17 @@ public final class CoderefResolver extends AbstractXMLFilter {
         }
     }
 
-    private void includeXml(final Attributes atts) throws SAXException {
+    private void includeXml(final Attributes atts) throws SAXException, IOException, TransformerException {
         final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-        final XMLReader reader = xmlUtils.getXMLReader();
-        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-        final XMLReader filter = new IncludeFilter(reader);
-        filter.setContentHandler(getContentHandler());
-        final File codeFile = getFile(hrefValue);
-        try (InputStream in = new FileInputStream(codeFile)) {
-            final InputSource inputSource = new InputSource(in);
-            final Job.FileInfo fileInfo = job.getFileInfo(currentFile.resolve(hrefValue));
-            if (fileInfo.src != null) {
-                inputSource.setSystemId(fileInfo.src.toString());
-            }
-            filter.parse(inputSource);
-        } catch (final Exception e) {
-            logger.error("Failed to process include " + codeFile, e);
-        }
+        final Job.FileInfo fileInfo = job.getFileInfo(currentFile.resolve(hrefValue));
+        final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
+        builder.setEntityResolver(CatalogUtils.getCatalogResolver());
+        builder.setErrorHandler(new DITAOTXMLErrorHandler(fileInfo.src.toString(), logger));
+
+        final Document doc = builder.parse(fileInfo.src.toString());
+
+        final Transformer serializer = TransformerFactory.newInstance().newTransformer();
+        serializer.transform(new DOMSource(doc), new SAXResult(new IncludeFilter(getContentHandler())));
     }
 
     private void includeText(final Attributes atts) {
@@ -371,8 +377,9 @@ public final class CoderefResolver extends AbstractXMLFilter {
     }
 
     private static class IncludeFilter extends XMLFilterImpl {
-        public IncludeFilter(final XMLReader parent) {
-            super(parent);
+        public IncludeFilter(final ContentHandler handler) {
+            super();
+            setContentHandler(handler);
         }
 
         public void startDocument() throws SAXException {
