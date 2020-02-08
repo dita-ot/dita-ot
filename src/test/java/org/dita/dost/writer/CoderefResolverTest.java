@@ -44,6 +44,7 @@ public class CoderefResolverTest {
         copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));
         copyFile(new File(srcDir, "include_text.dita"), new File(tempDir, "include_text.dita"));
         copyFile(new File(srcDir, "include_xml.dita"), new File(tempDir, "include_xml.dita"));
+        copyFile(new File(srcDir, "include_dita.dita"), new File(tempDir, "include_dita.dita"));
         Files.write("dummy", new File(tempDir, "topic.dita"), Charset.forName("UTF-8"));
         copyFile(new File(srcDir, "code.xml"), new File(tempDir, "code.xml"));
         copyFile(new File(srcDir, "utf-8.xml"), new File(tempDir, "utf-8.xml"));
@@ -53,7 +54,7 @@ public class CoderefResolverTest {
         filter = new CoderefResolver();
         filter.setLogger(new TestUtils.TestLogger());
         final Job job = new Job(tempDir);
-        job.addAll(Stream.of("test.dita", "topic.dita", "include_text.dita", "include_xml.dita")
+        job.addAll(Stream.of("test.dita", "topic.dita", "include_text.dita", "include_xml.dita", "include_dita.dita")
                 .map(p -> new Builder()
                         .uri(create(p))
                         .src(new File(srcDir, p).toURI())
@@ -97,6 +98,17 @@ public class CoderefResolverTest {
         filter.write(f.getAbsoluteFile());
 
         assertXMLEqual(new InputSource(new File(expDir, "include_xml.dita").toURI().toString()),
+                new InputSource(f.toURI().toString()));
+    }
+
+    @Ignore
+    @Test
+    public void include_dita() throws DITAOTException {
+        final File f = new File(tempDir, "include_dita.dita");
+
+        filter.write(f.getAbsoluteFile());
+
+        assertXMLEqual(new InputSource(new File(expDir, "include_dita.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
     }
 
