@@ -273,7 +273,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
         boolean exclude = false;
         for (final FilterUtils f: fs) {
-            exclude = f.needExclude(elem, props);
+            exclude = f.needsExclusion(elem, props);
             if (exclude) {
                 break;
             }

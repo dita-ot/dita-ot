@@ -436,6 +436,10 @@ public final class Job {
         return files.remove(fileInfo.uri);
     }
 
+    public FileInfo removeFileInfo(URI fileUri) {
+        return files.remove(fileUri);
+    }
+
     /**
      * Searches for the property with the specified key in this property list.
      *
