@@ -440,6 +440,10 @@ public final class Job {
         return files.remove(fileUri);
     }
 
+    public void removeFiltered() {
+        files.entrySet().removeIf(entry -> entry.getValue().isFiltered);
+    }
+
     /**
      * Searches for the property with the specified key in this property list.
      *
@@ -653,6 +657,8 @@ public final class Job {
         public boolean isInput;
         /** Additional input resource. */
         public boolean isInputResource;
+        /** True, if the whole file is filtered by a profiling attribute */
+        public boolean isFiltered;
 
         FileInfo(final URI src, final URI uri, final File file) {
             if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
@@ -756,6 +762,7 @@ public final class Job {
             private boolean isOutDita;
             private boolean isInput;
             private boolean isInputResource;
+            private boolean isFiltered;
 
             public Builder() {}
             public Builder(final FileInfo orig) {
@@ -778,6 +785,7 @@ public final class Job {
                 isOutDita = orig.isOutDita;
                 isInput = orig.isInput;
                 isInputResource = orig.isInputResource;
+                isFiltered = orig.isFiltered;
             }
 
             /**
@@ -803,6 +811,7 @@ public final class Job {
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
                 if (orig.isInput) isInput = orig.isInput;
                 if (orig.isInputResource) isInputResource = orig.isInputResource;
+                if (orig.isFiltered) isFiltered = orig.isFiltered;
                 return this;
             }
 
@@ -846,6 +855,7 @@ public final class Job {
             public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
             public Builder isInput(final boolean isInput) { this.isInput = isInput; return this; }
             public Builder isInputResource(final boolean isInputResource) { this.isInputResource = isInputResource; return this; }
+            public Builder isFiltered(final boolean isFiltered) { this.isFiltered = isFiltered; return this; }
 
             public FileInfo build() {
                 if (uri == null && file == null) {
@@ -870,6 +880,7 @@ public final class Job {
                 fi.isOutDita = isOutDita;
                 fi.isInput = isInput;   
                 fi.isInputResource = isInputResource;
+                fi.isFiltered = isFiltered;
                 return fi;
             }
 

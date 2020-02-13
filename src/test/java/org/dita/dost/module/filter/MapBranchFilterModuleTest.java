@@ -33,6 +33,7 @@ import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
@@ -69,6 +70,14 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
                     .build());
         }
         return job;
+    }
+
+    private void addFileInfo(Job job, String fileName) {
+        job.add(new FileInfo.Builder()
+                .src(new File(tempDir, fileName).toURI())
+                .uri(URI.create(fileName))
+                .format(ATTR_FORMAT_VALUE_DITAMAP)
+                .build());
     }
 
     @After
@@ -138,22 +147,9 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
         }
 
         final List<String> filesExp = Arrays.asList(
-//                "install.dita",
                 "configure.dita",
+                "configureFiltered.dita",
                 "perform-install.dita",
-//                "configure-novice.dita",
-//                "configure-admin.dita",
-//                "install-mac.dita",
-//                "perform-install-mac.dita",
-//                "installation-procedure-mac.dita",
-//                "configure-novice-mac.dita",
-//                "configure-admin-mac.dita",
-//                "install-win.dita",
-//                "perform-install-win.dita",
-//                "installation-procedure-win.dita",
-//                "configure-novice-win.dita",
-//                "configure-admin-win.dita",
-//                "install-linux.dita",
                 "install.dita"
         );
         Collections.sort(filesExp);
@@ -236,6 +232,26 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
                     .build());
         }
         return res;
+    }
+
+    @Test
+    public void testFilterWholeTopic() throws Exception {
+        // given
+        Job job = getJob();
+        addFileInfo(job,"input-filtered-root.ditamap");
+        addFileInfo(job,"configureFiltered.dita");
+
+        MapBranchFilterModule module = new MapBranchFilterModule();
+        module.setJob(job);
+        module.setLogger(new CachingLogger());
+
+        // when
+        module.processMap(job.getFileInfo(URI.create("input-filtered-root.ditamap")));
+
+        // then
+        assertEquals(1, job.getFileInfo(fileInfo -> fileInfo.isFiltered).size());
+        assertXMLEqual(new InputSource(new File(expDir, "input.ditamap").toURI().toString()),
+                new InputSource(new File(tempDir, "input-filtered-root.ditamap").toURI().toString()));
     }
 
 }

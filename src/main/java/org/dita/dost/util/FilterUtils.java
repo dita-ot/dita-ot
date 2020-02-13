@@ -20,6 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -283,6 +284,7 @@ public final class FilterUtils {
     public boolean needsExclusion(final Element element, final QName[][] properties) {
         Attributes attributes = getAttributes(element);
         if (needExclude(attributes, properties)) {
+            updateJob(element,attributes);
             return true;
         }
         if (isTopicOrMap(attributes)) {
@@ -293,6 +295,12 @@ public final class FilterUtils {
             }
         }
         return false;
+    }
+
+    private void updateJob(Element element, Attributes attributes) {
+        if (isTopicOrMap(attributes)){
+            updateFileInfo(element);
+        }
     }
 
     private boolean isTopicOrMap(Attributes attributes) {
@@ -327,7 +335,7 @@ public final class FilterUtils {
     private void updateFileInfo(Element element) {
         String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
         try {
-            job.removeFileInfo(new URI(href));
+            job.getFileInfo(new URI(href)).isFiltered = true;
         } catch (URISyntaxException e) {
             logger.warn(format("Couldn't remove fileinfo %s", href));
         }
@@ -398,6 +406,40 @@ public final class FilterUtils {
             }
         }
         return false;
+    }
+
+    public boolean extendedExclusionCheck(final Attributes attributes, final QName[][] extProps) {
+        if (needExclude(attributes, extProps)) {
+            return true;
+        }
+
+        return targetsFilteredFile(attributes);
+    }
+
+    private boolean targetsFilteredFile(Attributes attributes) {
+        String href = attributes.getValue(ATTRIBUTE_NAME_HREF);
+        if (job == null || !isMapTopicRef(attributes) || attributes.getValue(ATTRIBUTE_NAME_HREF) == null) {
+            return false;
+        }
+
+        Matcher matcher = Pattern.compile("(.*?)#.*").matcher(href);
+        if (matcher.find()) {
+            Predicate<Job.FileInfo> isFiltered = fileInfo -> (fileInfo.src.toString().endsWith(matcher.group(1)) && fileInfo.isFiltered);
+            if (job.getFileInfo(isFiltered) != null && job.getFileInfo(isFiltered).size() > 0) {
+                return true;
+            }
+        }
+
+        Predicate<Job.FileInfo> isFiltered = fileInfo -> (fileInfo.uri.toString().equals(href) && fileInfo.isFiltered);
+        return job.getFileInfo(isFiltered) != null && job.getFileInfo(isFiltered).size() > 0;
+    }
+
+    private boolean isMapTopicRef(Attributes attributes) {
+        String clss = attributes.getValue(ATTRIBUTE_NAME_CLASS);
+        if (clss==null) {
+            return false;
+        }
+        return MAP_TOPICREF.equals(new DitaClass(clss));
     }
 
     private final Pattern groupPattern = Pattern.compile("(\\w+)\\((.*?)\\)");

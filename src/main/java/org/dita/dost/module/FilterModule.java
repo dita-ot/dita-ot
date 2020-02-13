@@ -55,6 +55,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
             filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
         filterUtils.setLogger(logger);
+        filterUtils.setJob(job);
 
         final ProfilingFilter writer = new ProfilingFilter();
         writer.setLogger(logger);
@@ -100,6 +101,8 @@ final class FilterModule extends AbstractPipelineModuleImpl {
                 logger.error("Failed to profile " + file.getAbsolutePath() + ": " + e.getMessage());
             }
         }
+
+        job.removeFiltered();
 
         try {
             job.write();

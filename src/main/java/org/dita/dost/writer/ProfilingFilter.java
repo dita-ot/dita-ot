@@ -107,7 +107,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             // If it is the start of a child of an excluded tag, level increase
             level++;
         } else { // exclude shows whether it's excluded by filtering
-            if (cls.isValid() && filterUtils.stream().anyMatch(f -> f.needExclude(atts, props))) {
+            if (cls.isValid() && filterUtils.stream().anyMatch(f -> f.extendedExclusionCheck(atts, props))) {
                 exclude = true;
                 level = 0;
             } else {

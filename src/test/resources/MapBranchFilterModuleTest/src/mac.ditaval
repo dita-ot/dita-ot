@@ -3,4 +3,5 @@
   <prop action="include" att="platform" val="mac" />
   <prop action="exclude" att="platform" val="win" />
   <prop action="exclude" att="platform" val="linux" />
+  <prop action="exclude" att="audience" val="novice" />
 </val>
