@@ -158,7 +158,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
                 // verify format is correct
                 if (isFormatDita(format) && (scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
                     attValue = ATTR_FORMAT_VALUE_DITA;
-                    if (!format.equals(ATTR_FORMAT_VALUE_DITA)) {
+                    if (format != null && !ATTR_FORMAT_VALUE_DITA.equals(format)) {
                         XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT, DITA_OT_NS_PREFIX + ":" + ATTRIBUTE_NAME_ORIG_FORMAT, "CDATA", format);
                     }
                 }
