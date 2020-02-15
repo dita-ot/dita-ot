@@ -155,10 +155,10 @@ public class IncludeResolver extends AbstractXMLFilter {
                         final String parse = getParse(atts.getValue(ATTRIBUTE_NAME_PARSE));
                         switch (parse) {
                             case "text":
-                                include = includeText(atts);
+                                include = new IncludeText(job, currentFile, getContentHandler(), logger).include(atts);
                                 break;
                             case "xml":
-                                include = includeXml(atts);
+                                include = new IncludeXml(job, currentFile, getContentHandler(), logger).include(atts);
                                 break;
                             default:
                                 logger.error("Unsupported include parse " + parse);
@@ -243,48 +243,8 @@ public class IncludeResolver extends AbstractXMLFilter {
 
     // Private methods ---------------------------------------------------------
 
-    private boolean includeXml(final Attributes atts) {
-        final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-        final Job.FileInfo fileInfo = job.getFileInfo(stripFragment(currentFile.resolve(hrefValue)));
-        final DocumentBuilder builder = getDocumentBuilder();
-        builder.setEntityResolver(getCatalogResolver());
-        builder.setErrorHandler(new DITAOTXMLErrorHandler(fileInfo.src.toString(), logger));
-        try {
-            final Document doc = builder.parse(fileInfo.src.toString());
-            Node src = null;
-            if (hrefValue.getFragment() != null) {
-                src = doc.getElementById(hrefValue.getFragment());
-            }
-            if (src == null) {
-                src = doc;
-            }
 
-            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            final DOMSource source = new DOMSource(src);
-            final SAXResult result = new SAXResult(new IncludeFilter(getContentHandler()));
-            serializer.transform(source, result);
-        } catch (SAXException | IOException | TransformerException e) {
-            logger.error("Failed to process include {}", fileInfo.src, e);
-            return false;
-        }
-        return true;
-    }
 
-    private boolean includeText(final Attributes atts) {
-        final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-        final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT), atts.getValue(ATTRIBUTE_NAME_ENCODING));
-        final Range range = getRange(hrefValue);
-        final File codeFile = getFile(hrefValue);
-        if (codeFile != null) {
-            try (BufferedReader codeReader = Files.newBufferedReader(codeFile.toPath(), charset)) {
-                range.copyLines(codeReader);
-            } catch (final Exception e) {
-                logger.error("Failed to process include {}", codeFile, e);
-                return false;
-            }
-        }
-        return true;
-    }
 
     private String getParse(final String value) {
         if (value == null) {
@@ -292,103 +252,4 @@ public class IncludeResolver extends AbstractXMLFilter {
         }
         return value;
     }
-
-    private File getFile(URI hrefValue) {
-        final File tempFile = toFile(stripFragment(currentFile.resolve(hrefValue))).getAbsoluteFile();
-        final URI rel = job.tempDirURI.relativize(tempFile.toURI());
-        final Job.FileInfo fi = job.getFileInfo(rel);
-
-//        if (tempFile.exists() && fi != null && PR_D_CODEREF.localName.equals(fi.format)) {
-//            return tempFile;
-//        }
-        if (fi != null && "file".equals(fi.src.getScheme())) {
-            return new File(fi.src);
-        }
-        return null;
-    }
-
-    /**
-     * Factory method for Range implementation
-     */
-    private Range getRange(final URI uri) {
-        int start = 0;
-        int end = Integer.MAX_VALUE;
-        String startId = null;
-        String endId = null;
-
-        final String fragment = uri.getFragment();
-        if (fragment != null) {
-            // RFC 5147
-            final Matcher m = Pattern.compile("^line=(?:(\\d+)|(\\d+)?,(\\d+)?)$").matcher(fragment);
-            if (m.matches()) {
-                if (m.group(1) != null) {
-                    start = Integer.parseInt(m.group(1));
-                    end = start;
-                } else {
-                    if (m.group(2) != null) {
-                        start = Integer.parseInt(m.group(2));
-                    }
-                    if (m.group(3) != null) {
-                        end = Integer.parseInt(m.group(3)) - 1;
-                    }
-                }
-                return new LineNumberRange(start, end).handler(this);
-            } else {
-                final Matcher mc = Pattern.compile("^line-range\\((\\d+)(?:,\\s*(\\d+))?\\)$").matcher(fragment);
-                if (mc.matches()) {
-                    start = Integer.parseInt(mc.group(1)) - 1;
-                    if (mc.group(2) != null) {
-                        end = Integer.parseInt(mc.group(2)) - 1;
-                    }
-                    return new LineNumberRange(start, end).handler(this);
-                } else {
-                    final Matcher mi = Pattern.compile("^token=([^,\\s)]*)(?:,\\s*([^,\\s)]+))?$").matcher(fragment);
-                    if (mi.matches()) {
-                        if (mi.group(1) != null && mi.group(1).length() != 0) {
-                            startId = mi.group(1);
-                        }
-                        if (mi.group(2) != null) {
-                            endId = mi.group(2);
-                        }
-                        return new AnchorRange(startId, endId).handler(this);
-                    }
-                }
-            }
-        }
-
-        return new AllRange().handler(this);
-    }
-
-    /**
-     * Get code file charset.
-     *
-     * @param format   format attribute value, may be {@code null}
-     * @param encoding encoding attribute balue, may be {@code null}
-     * @return charset if set, otherwise default charset
-     */
-    private Charset getCharset(final String format, final String encoding) {
-        Charset c = null;
-        try {
-            if (encoding != null) {
-                c = Charset.forName(encoding);
-            } else if (format != null) {
-                final String[] tokens = format.trim().split("[;=]");
-                if (tokens.length >= 3 && tokens[1].trim().equals(ATTRIBUTE_NAME_CHARSET)) {
-                    c = Charset.forName(tokens[2].trim());
-                }
-            }
-        } catch (final RuntimeException e) {
-            logger.error(MessageUtils.getMessage("DOTJ052E", encoding).toString());
-        }
-        if (c == null) {
-            final String defaultCharset = Configuration.configuration.get("default.coderef-charset");
-            if (defaultCharset != null) {
-                c = Charset.forName(defaultCharset);
-            } else {
-                c = Charset.defaultCharset();
-            }
-        }
-        return c;
-    }
-
 }
