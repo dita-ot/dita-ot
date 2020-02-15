@@ -550,6 +550,7 @@ public final class Constants {
     public static final DitaClass TOPIC_DTHD = new DitaClass("- topic/dthd ");
     public static final DitaClass TOPIC_ENTRY = new DitaClass("- topic/entry ");
     public static final DitaClass TOPIC_EXAMPLE = new DitaClass("- topic/example ");
+    public static final DitaClass TOPIC_FALLBACK = new DitaClass("- topic/fallback ");
     public static final DitaClass TOPIC_FEATNUM = new DitaClass("- topic/featnum ");
     public static final DitaClass TOPIC_FIG = new DitaClass("- topic/fig ");
     public static final DitaClass TOPIC_FIGGROUP = new DitaClass("- topic/figgroup ");

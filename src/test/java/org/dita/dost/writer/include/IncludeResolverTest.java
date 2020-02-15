@@ -1,20 +1,20 @@
 /*
  * This file is part of the DITA Open Toolkit project.
  *
- * Copyright 2011 Jarno Elovirta
+ * Copyright 2020 Jarno Elovirta
  *
  * See the accompanying LICENSE file for applicable license.
  */
-package org.dita.dost.writer;
+package org.dita.dost.writer.include;
 
 import com.google.common.io.Files;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo.Builder;
+import org.dita.dost.writer.CoderefResolver;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -24,7 +24,6 @@ import org.xml.sax.InputSource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -38,15 +37,18 @@ import static org.dita.dost.util.Constants.PR_D_CODEREF;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class CoderefResolverTest {
-    private static final File resourceDir = TestUtils.getResourceDir(CoderefResolverTest.class);
+public class IncludeResolverTest {
+    private static final File resourceDir = TestUtils.getResourceDir(IncludeResolverTest.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
 
     @Parameters(name = "{0}")
     public static Collection<Object[]> parameters() {
         return Arrays.asList(new Object[][]{
-                {"coderef.dita"}, {"include_text.dita"}, {"include_xml.dita"}, {"include_xml_schema.dita"}
+                {"coderef.dita"},
+                {"include_text.dita"},
+                {"include_xml.dita"},
+                {"include_xml_schema.dita"}
         });
     }
 
@@ -54,13 +56,13 @@ public class CoderefResolverTest {
     private CoderefResolver filter;
     private final String test;
 
-    public CoderefResolverTest(final String test) {
+    public IncludeResolverTest(final String test) {
         this.test = test;
     }
 
     @Before
     public void setup() throws IOException {
-        tempDir = TestUtils.createTempDir(CoderefResolverTest.class);
+        tempDir = TestUtils.createTempDir(IncludeResolverTest.class);
 
         copyFile(new File(srcDir, test), new File(tempDir, test));
         Files.write("dummy", new File(tempDir, "topic.dita"), Charset.forName("UTF-8"));

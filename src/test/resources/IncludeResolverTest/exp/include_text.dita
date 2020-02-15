@@ -55,5 +55,8 @@ fourth</codeblock>
     &lt;p&gt;amp: &amp;amp; less-than: &amp;lt;&lt;/p&gt;
   &lt;/body&gt;
 &lt;/topic&gt;</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">
+      <b class="+ topic/ph hi-d/b ">fallback</b>
+    </codeblock>
   </body>
 </topic>

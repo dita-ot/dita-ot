@@ -18,5 +18,10 @@
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="range.txt#token=START-B,END-B"/></codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="range.txt#token=,END-A"/></codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="topic.dita"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="missing.xml">
+      <fallback class="- topic/fallback ">
+        <b class="+ topic/ph hi-d/b ">fallback</b>
+      </fallback>
+    </include></codeblock>
   </body>
 </topic>
