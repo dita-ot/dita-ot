@@ -284,7 +284,6 @@ public final class FilterUtils {
     public boolean needsExclusion(final Element element, final QName[][] properties) {
         Attributes attributes = getAttributes(element);
         if (needExclude(attributes, properties)) {
-            updateJob(element,attributes);
             return true;
         }
         if (isTopicOrMap(attributes)) {
@@ -295,12 +294,6 @@ public final class FilterUtils {
             }
         }
         return false;
-    }
-
-    private void updateJob(Element element, Attributes attributes) {
-        if (isTopicOrMap(attributes)){
-            updateFileInfo(element);
-        }
     }
 
     private boolean isTopicOrMap(Attributes attributes) {
