@@ -111,7 +111,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private void printMessage(final Throwable t) {
         final String message = t.getMessage();
         if (message != null && !message.trim().isEmpty()) {
-            printErrorMessage("Error: " + message);
+            printErrorMessage("" + message);
         }
     }
 
@@ -289,7 +289,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         } else if (args instanceof DeliverablesArguments) {
             final DeliverablesArguments deliverablesArgs = (DeliverablesArguments) args;
             if (deliverablesArgs.projectFile == null) {
-                printErrorMessage("Error: Project file not defined");
+                printErrorMessage("Project file not defined");
                 args.printUsage();
                 throw new BuildException("");
             }
@@ -313,7 +313,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         } else if (args instanceof UninstallArguments) {
             final UninstallArguments installArgs = (UninstallArguments) args;
             if (installArgs.uninstallId == null) {
-                throw new BuildException("You must specify plug-in identifier when using the uninstall subcommand");
+                printErrorMessage("You must specify plug-in identifier when using the uninstall subcommand");
+                args.printUsage();
+                throw new BuildException("");
             }
             buildFile = integratorFile;
             targets.clear();
@@ -323,13 +325,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             final ConversionArguments conversionArgs = (ConversionArguments) args;
             if (conversionArgs.projectFile == null) {
                 if (!definedProps.containsKey(ANT_TRANSTYPE)) {
-                    printErrorMessage("Error: Transformation type not defined");
+                    printErrorMessage("Transformation type not defined");
                     args.printUsage();
                     throw new BuildException("");
                     //justPrintUsage = true;
                 }
                 if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
-                    printErrorMessage("Error: Input file not defined");
+                    printErrorMessage("Input file not defined");
                     args.printUsage();
                     throw new BuildException("");
                     //justPrintUsage = true;
@@ -687,14 +689,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // Add the default listener
         project.addBuildListener(createLogger());
 
-        final int count = args.listeners.size();
-        for (int i = 0; i < count; i++) {
-            final String className = args.listeners.elementAt(i);
-            final BuildListener listener = ClasspathUtils.newInstance(className,
-                    Main.class.getClassLoader(), BuildListener.class);
-            project.setProjectReference(listener);
-
-            project.addBuildListener(listener);
+        if (args.listeners != null) {
+            for (String className : args.listeners) {
+                final BuildListener listener = ClasspathUtils.newInstance(className,
+                        Main.class.getClassLoader(), BuildListener.class);
+                project.setProjectReference(listener);
+                project.addBuildListener(listener);
+            }
         }
     }
 
