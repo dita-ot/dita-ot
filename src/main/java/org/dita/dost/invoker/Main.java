@@ -60,14 +60,14 @@ import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
  */
 public class Main extends org.apache.tools.ant.Main implements AntMain {
 
-    static final String ANT_ARGS_INPUT = "args.input";
+    private static final String ANT_ARGS_INPUT = "args.input";
     static final String ANT_ARGS_RESOURCES = "args.resources";
     static final String ANT_ARGS_INPUTS = "args.inputs";
-    static final String ANT_OUTPUT_DIR = "output.dir";
-    static final String ANT_BASE_TEMP_DIR = "base.temp.dir";
-    static final String ANT_TRANSTYPE = "transtype";
-    static final String ANT_PLUGIN_FILE = "plugin.file";
-    static final String ANT_PLUGIN_ID = "plugin.id";
+    private static final String ANT_OUTPUT_DIR = "output.dir";
+    private static final String ANT_BASE_TEMP_DIR = "base.temp.dir";
+    private static final String ANT_TRANSTYPE = "transtype";
+    private static final String ANT_PLUGIN_FILE = "plugin.file";
+    private static final String ANT_PLUGIN_ID = "plugin.id";
 
     /**
      * File that we are using for configuration.
@@ -111,7 +111,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private void printMessage(final Throwable t) {
         final String message = t.getMessage();
         if (message != null && !message.trim().isEmpty()) {
-            printErrorMessage("Error: " + message);
+            printErrorMessage("" + message);
         }
     }
 
@@ -265,67 +265,79 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private void processArgs(final String[] arguments) {
         args = argumentParser.processArgs(arguments);
         final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
+        projectProps = Collections.singletonList(definedProps);
         buildFile = args.buildFile;
 
-        if (args.justPrintUsage || args.justPrintVersion || args.justPrintDiagnostics || args.justPrintPlugins || args.justPrintTranstypes || args.justPrintDeliverables) {
-            if (args.justPrintVersion) {
-                printVersion(args.msgOutputLevel);
-            }
-            if (args.justPrintUsage) {
-                printUsage();
-            }
-            if (args.justPrintDiagnostics) {
-                Diagnostics.doReport(System.out, args.msgOutputLevel);
-            }
-            if (args.justPrintPlugins) {
-                printPlugins();
-            }
-            if (args.justPrintTranstypes) {
-                printTranstypes();
-            }
-            if (args.justPrintDeliverables) {
-                if (args.projectFile == null) {
-                    printErrorMessage("Error: Project file not defined");
-                    printUsage();
-                    throw new BuildException("");
-                }
-                printDeliverables();
-            }
-
+        if (args.justPrintUsage) {
+            args.printUsage();
+            return;
+        } else if (args.justPrintDiagnostics) {
+            Diagnostics.doReport(System.out, args.msgOutputLevel);
             return;
         }
 
-        if (args.install) {
-            buildFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
+        final File integratorFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
+        if (args instanceof PluginsArguments) {
+            printPlugins();
+            return;
+        } else if (args instanceof VersionArguments) {
+            printVersion();
+            return;
+        } else if (args instanceof TranstypesArguments) {
+            printTranstypes();
+            return;
+        } else if (args instanceof DeliverablesArguments) {
+            final DeliverablesArguments deliverablesArgs = (DeliverablesArguments) args;
+            if (deliverablesArgs.projectFile == null) {
+                printErrorMessage("Project file not defined");
+                args.printUsage();
+                throw new BuildException("");
+            }
+            printDeliverables(deliverablesArgs.projectFile);
+            return;
+        } else if (args instanceof InstallArguments) {
+            final InstallArguments installArgs = (InstallArguments) args;
+            buildFile = integratorFile;
             targets.clear();
-            if (args.installFile != null) {
+            if (installArgs.installFile != null) {
                 targets.add("install");
-                final File f = new File(args.installFile.replace('/', File.separatorChar)).getAbsoluteFile();
+                final File f = new File(installArgs.installFile.replace('/', File.separatorChar)).getAbsoluteFile();
                 if (f.exists()) {
                     definedProps.put(ANT_PLUGIN_FILE, f.getAbsolutePath());
                 } else {
-                    definedProps.put(ANT_PLUGIN_FILE, args.installFile);
+                    definedProps.put(ANT_PLUGIN_FILE, installArgs.installFile);
                 }
-            } else if (args.uninstallId != null) {
-                targets.add("uninstall");
-                definedProps.put(ANT_PLUGIN_ID, args.uninstallId);
             } else {
                 targets.add("integrate");
             }
-        } else {
-            if (args.projectFile == null) {
+        } else if (args instanceof UninstallArguments) {
+            final UninstallArguments installArgs = (UninstallArguments) args;
+            if (installArgs.uninstallId == null) {
+                printErrorMessage("You must specify plug-in identifier when using the uninstall subcommand");
+                args.printUsage();
+                throw new BuildException("");
+            }
+            buildFile = integratorFile;
+            targets.clear();
+            targets.add("uninstall");
+            definedProps.put(ANT_PLUGIN_ID, installArgs.uninstallId);
+        } else if (args instanceof ConversionArguments) {
+            final ConversionArguments conversionArgs = (ConversionArguments) args;
+            if (conversionArgs.projectFile == null) {
                 if (!definedProps.containsKey(ANT_TRANSTYPE)) {
-                    printErrorMessage("Error: Transformation type not defined");
-                    printUsage();
+                    printErrorMessage("Transformation type not defined");
+                    args.printUsage();
                     throw new BuildException("");
                     //justPrintUsage = true;
                 }
                 if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
-                    printErrorMessage("Error: Input file not defined");
-                    printUsage();
+                    printErrorMessage("Input file not defined");
+                    args.printUsage();
                     throw new BuildException("");
                     //justPrintUsage = true;
                 }
+            } else {
+                projectProps = handleProject(conversionArgs.projectFile, definedProps);
             }
             // default values
             if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
@@ -334,11 +346,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             if (!definedProps.containsKey(ANT_BASE_TEMP_DIR) && !definedProps.containsKey(ANT_TEMP_DIR)) {
                 definedProps.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
             }
+        } else {
+            throw new RuntimeException("Command or subcommand not supported: " + args.getClass().getCanonicalName());
         }
-
-        projectProps = args.projectFile != null
-                ? handleProject(definedProps)
-                : Collections.singletonList(definedProps);
 
         // make sure buildfile exists
         if (!args.buildFile.exists() || buildFile.isDirectory()) {
@@ -369,9 +379,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         readyToRun = true;
     }
 
-    private List<Map<String, Object>> handleProject(Map<String, Object> definedProps) {
-        final URI base = args.projectFile.toURI();
-        final org.dita.dost.project.Project project = readProjectFile();
+    private List<Map<String, Object>> handleProject(final File projectFile, final Map<String, Object> definedProps) {
+        final URI base = projectFile.toURI();
+        final org.dita.dost.project.Project project = readProjectFile(projectFile);
         final String runDeliverable = (String) definedProps.get("project.deliverable");
 
         final List<Map<String, Object>> projectProps = project.deliverables.stream()
@@ -397,12 +407,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                             return;
                         }
                         if (param.value != null) {
-                            final Argument argument = argumentParser.getPluginArguments().getOrDefault(param.name, new StringArgument(param.name));
+                            final Argument argument = ArgumentParser.getPluginArguments().getOrDefault(param.name, new StringArgument(param.name, null));
                             final String value = argument.getValue(param.value);
                             props.put(param.name, value);
                         } else {
                             final String value;
-                            final Argument argument = argumentParser.getPluginArguments().get("--" + param.name);
+                            final Argument argument = ArgumentParser.getPluginArguments().get("--" + param.name);
                             if (argument != null && (argument instanceof FileArgument || argument instanceof AbsoluteFileArgument)) {
                                 if (param.href != null) {
                                     value = Paths.get(base.resolve(param.href)).toString();
@@ -437,15 +447,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return projectProps;
     }
 
-    private org.dita.dost.project.Project readProjectFile() throws BuildException {
-        if (!args.projectFile.exists()) {
-            printErrorMessage("Project file " + args.projectFile + " does not exist");
+    private org.dita.dost.project.Project readProjectFile(final File projectFile) throws BuildException {
+        if (!projectFile.exists()) {
+            printErrorMessage("Project file " + projectFile + " does not exist");
             throw new BuildException("");
         }
         try {
             final ProjectFactory factory = ProjectFactory.getInstance();
             factory.setLax(true);
-            return factory.load(args.projectFile.toURI());
+            return factory.load(projectFile.toURI());
         } catch (Exception e) {
             printErrorMessage(e.getMessage());
             throw new BuildException("");
@@ -474,13 +484,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /**
      * Handle the --deliverables argument
      */
-    private void printDeliverables() {
-        final List<Map.Entry<String, String>> pairs = readProjectFile().deliverables.stream()
+    private void printDeliverables(final File projectFile) {
+        final List<Map.Entry<String, String>> pairs = readProjectFile(projectFile).deliverables.stream()
                 .filter(deliverable -> deliverable.id != null)
-                .map(deliverable -> new AbstractMap.SimpleEntry<String, String>(deliverable.id, deliverable.name))
+                .map(deliverable -> new AbstractMap.SimpleEntry<>(deliverable.id, deliverable.name))
                 .collect(Collectors.toList());
         final int length = pairs.stream()
-                .map(p -> p.getKey())
+                .map(Map.Entry::getKey)
                 .map(String::length)
                 .reduce(Integer::max)
                 .orElse(0);
@@ -679,14 +689,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // Add the default listener
         project.addBuildListener(createLogger());
 
-        final int count = args.listeners.size();
-        for (int i = 0; i < count; i++) {
-            final String className = args.listeners.elementAt(i);
-            final BuildListener listener = ClasspathUtils.newInstance(className,
-                    Main.class.getClassLoader(), BuildListener.class);
-            project.setProjectReference(listener);
-
-            project.addBuildListener(listener);
+        if (args.listeners != null) {
+            for (String className : args.listeners) {
+                final BuildListener listener = ClasspathUtils.newInstance(className,
+                        Main.class.getClassLoader(), BuildListener.class);
+                project.setProjectReference(listener);
+                project.addBuildListener(listener);
+            }
         }
     }
 
@@ -744,91 +753,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
 
     /**
-     * Prints the usage information for this class to <code>System.out</code>.
-     */
-    private static void printUsage() {
-        final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita -i <file> -f <name> [options]\n");
-        msg.append("   or: dita --project=<file> [options]\n");
-        msg.append("   or: dita --propertyfile=<file> [options]\n");
-        msg.append("   or: dita --install [=<file> | <url> | <id>]\n");
-        msg.append("   or: dita --uninstall <id>\n");
-        msg.append("   or: dita --plugins\n");
-        msg.append("   or: dita --transtypes\n");
-        msg.append("   or: dita --deliverables\n");
-        msg.append("   or: dita --help\n");
-        msg.append("   or: dita --version\n");
-        msg.append("Arguments: \n");
-        msg.append("  -i <file>, --input=<file>    input file\n");
-        msg.append("  -f <name>, --format=<name>   output format (transformation type)\n");
-        msg.append("  -p <name>, --project=<name>  run project file\n");
-        msg.append("  -r <file>, --resource=<file> resource file\n");
-        msg.append("  --install [<file>]           install plug-in from a local ZIP file\n");
-        msg.append("  --install [<url>]            install plug-in from a URL\n");
-        msg.append("  --install [<id>]             install plug-in from plugin registry\n");
-        msg.append("  --install                    reload plug-ins\n");
-        msg.append("  --uninstall <id>             uninstall plug-in with the ID\n");
-        msg.append("  --plugins                    print list of installed plug-ins\n");
-        msg.append("  --transtypes                 print list of installed transtypes\n");
-        msg.append("  --deliverables               print list of deliverables in project\n");
-        msg.append("  -h, --help                   print this message\n");
-        msg.append("  --version                    print version information and exit\n");
-        msg.append("Options: \n");
-        msg.append("  -o, --output=<dir>          output directory\n");
-        // msg.append("  -diagnostics           print information that might be helpful to"
-        // + lSep);
-        // msg.append("                         diagnose or report problems." +
-        // lSep);
-        // msg.append("  -quiet, -q             be extra quiet" + lSep);
-        msg.append("  --filter=<files>             filter and flagging files\n");
-        msg.append("  --force                      force install plug-in\n");
-        msg.append("  -t, --temp=<dir>             temporary directory\n");
-        msg.append("  -v, --verbose                verbose logging\n");
-        msg.append("  -d, --debug                  print debugging information\n");
-        // msg.append("  -emacs, -e             produce logging information without adornments"
-        // + lSep);
-        // msg.append("  -lib <path>            specifies a path to search for jars and classes"
-        // + lSep);
-        msg.append("  -l, --logfile=<file>        use given file for log\n");
-        // msg.append("  -logger <classname>    the class which is to perform logging"
-        // + lSep);
-        // msg.append("  -listener <classname>  add an instance of class as a project listener"
-        // + lSep);
-        // msg.append("  -noinput               do not allow interactive input"
-        // + lSep);
-        // msg.append("  -buildfile <file>      use given buildfile" + lSep);
-        // msg.append("    -file    <file>              ''" + lSep);
-        // msg.append("    -f       <file>              ''" + lSep);
-        msg.append("  --<property>=<value>         use value for given property\n");
-        msg.append("  --propertyfile=<name>        load all properties from file\n");
-        // msg.append("  -keep-going, -k        execute all targets that do not depend"
-        // + lSep);
-        // msg.append("                         on failed target(s)" + lSep);
-        // msg.append("  -inputhandler <class>  the class which will handle input requests"
-        // + lSep);
-        // msg.append("  -nice  number          A niceness value for the main thread:"
-        // + lSep
-        // +
-        // "                         1 (lowest) to 10 (highest); 5 is the default"
-        // + lSep);
-        // msg.append("  -nouserlib             Run ant without using the jar files from"
-        // + lSep
-        // + "                         ${user.home}/.ant/lib" + lSep);
-        // msg.append("  -noclasspath           Run ant without using CLASSPATH"
-        // + lSep);
-        // msg.append("  -autoproxy             Java1.5+: use the OS proxy settings"
-        // + lSep);
-        // msg.append("  -main <class>          override Ant's normal entry point");
-        System.out.println(msg.toString());
-    }
-
-    /**
      * Prints the Ant version information to <code>System.out</code>.
      *
      * @throws BuildException if the version information is unavailable
      */
-    private static void printVersion(final int logLevel) throws BuildException {
+    private static void printVersion() throws BuildException {
         System.out.println("DITA-OT version " + Configuration.configuration.get("otversion"));
-        // System.out.println(getAntVersion());
     }
 }
