@@ -33,6 +33,8 @@ import static org.dita.dost.TestUtils.createTempDir;
 
 public class ProfilingFilterTest {
 
+    private Job job;
+
     @BeforeClass
     public static void setUp() {
     }
@@ -62,7 +64,7 @@ public class ProfilingFilterTest {
         filterUtils.setLogger(new TestUtils.TestLogger());
         f.setFilterUtils(filterUtils);
         f.setLogger(new TestUtils.TestLogger());
-        filterUtils.setJob(new Job(createTempDir(KeyrefPaserTest.class)));
+        job = new Job(createTempDir(KeyrefPaserTest.class));
         final SAXSource s = new SAXSource(f, new InputSource(src));
         final DOMResult d = new DOMResult();
         t.transform(s, d);

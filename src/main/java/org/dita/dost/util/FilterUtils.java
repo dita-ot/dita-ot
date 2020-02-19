@@ -62,8 +62,7 @@ public final class FilterUtils {
     public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
     private DITAOTLogger logger;
-    private Job job;
-    
+
     /** Actions for filter keys. */
     private final Map<FilterKey, Action> filterMap;
     
@@ -134,10 +133,6 @@ public final class FilterUtils {
         this.logger = logger;
     }
     
-    public void setJob(Job job) {
-    	this.job = job;
-    }
-
     @Override
     public String toString() {
         return filterMap.toString();
@@ -340,6 +335,7 @@ public final class FilterUtils {
         String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
         if (notEmpty(href)) {
             try {
+                Job job = Job.instance;
                 String absoluteHref = job.getFileInfo(new URI(href)).src.toString();
                 DocumentBuilder builder = newDocumentBuilder();
                 Document document = builder.parse(new InputSource(absoluteHref));
@@ -363,7 +359,7 @@ public final class FilterUtils {
 
 	private void updateJob(Element element, Attributes attributes) {
         if (MAPGROUP_D_KEYDEF.matches(attributes)) {
-            job.addFilteredKey(attributes.getValue(ATTRIBUTE_NAME_KEYS),attributes.getValue(ATTRIBUTE_NAME_HREF));
+            Job.instance.addFilteredKey(attributes.getValue(ATTRIBUTE_NAME_KEYS), attributes.getValue(ATTRIBUTE_NAME_HREF));
         }
     }
 
@@ -371,7 +367,7 @@ public final class FilterUtils {
 		String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
 		try {
 			URI fileUri = new URI(href);
-			job.getFileInfo(fileUri).isFiltered=true;
+            Job.instance.getFileInfo(fileUri).isFiltered=true;
 		} catch (URISyntaxException e) {
 			logger.warn(format("Couldn't update fileinfo %s", href));
 		}
@@ -438,6 +434,7 @@ public final class FilterUtils {
             return false;
         }
 
+        final Job job = Job.instance;
         final String fileName = matchFileName(link);
         if (notEmpty(fileName)) {
             Predicate<FileInfo> isFiltered = fileInfo -> (
@@ -720,7 +717,6 @@ public final class FilterUtils {
             }
             final FilterUtils filterUtils = new FilterUtils(buf, foregroundConflictColor, backgroundConflictColor);
             filterUtils.setLogger(logger);
-            filterUtils.setJob(job);
             filterUtils.logMissingAction = logMissingAction;
             return filterUtils;
         } else {

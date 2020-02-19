@@ -46,6 +46,8 @@ import org.xml.sax.XMLReader;
  */
 public final class Job {
 
+    public static Job instance;
+
     private static final String JOB_FILE = ".job.xml";
 
     private static final String ELEMENT_JOB = "job";
@@ -142,6 +144,7 @@ public final class Job {
         tempDir = null;
         tempDirURI = null;
         jobFile = null;
+        instance = this;
     }
 
     /**
@@ -165,6 +168,7 @@ public final class Job {
                 prop.put(e.getKey(), e.getValue());
             }
         }
+        instance = this;
     }
 
     /**

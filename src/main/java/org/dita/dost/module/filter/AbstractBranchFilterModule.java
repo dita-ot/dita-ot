@@ -97,7 +97,6 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         return getChildElement(topicref, DITAVAREF_D_DITAVALREF)
                 .map(ditavalRef -> getFilterUtils(ditavalRef).refine(subjectSchemeMap))
                 .map(f -> {
-                    f.setJob(job);
                     final List<FilterUtils> fs = new ArrayList<>(filters.size() + 1);
                     fs.addAll(filters);
                     fs.add(f);
@@ -132,7 +131,6 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
         final FilterUtils f = new FilterUtils(filterMap, ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         f.setLogger(logger);
-        f.setJob(job);
         return f;
     }
 

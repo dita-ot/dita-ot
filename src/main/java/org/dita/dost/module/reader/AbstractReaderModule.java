@@ -105,7 +105,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     ExportAnchorsFilter exportAnchorsFilter;
     boolean validate = true;
     ContentHandler nullHandler;
-    protected TempFileNameScheme tempFileNameScheme;
+    private TempFileNameScheme tempFileNameScheme;
     /** Absolute path to input file. */
     URI rootFile;
     /** Subject scheme absolute file paths. */
@@ -569,7 +569,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
         filterUtils.setLogger(logger);
-        filterUtils.setJob(job);
         return filterUtils;
     }
 
@@ -779,7 +778,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         return res;
     }
 
-    protected FileInfo getOrCreateFileInfo(final Map<URI, FileInfo> fileInfos, final URI file) {
+    private FileInfo getOrCreateFileInfo(final Map<URI, FileInfo> fileInfos, final URI file) {
         assert file.getFragment() == null;
         final URI f = file.normalize();
         FileInfo.Builder b;
@@ -875,9 +874,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         initXMLReader(ditaDir, validate);
         initFilters();
-        if (filterUtils != null) {
-        	filterUtils.setJob(job);
-        }
     }
 
 }
