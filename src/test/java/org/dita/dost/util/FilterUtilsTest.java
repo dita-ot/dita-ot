@@ -573,7 +573,6 @@ public class FilterUtilsTest {
         fileInfo.isFiltered = true;
         job.add(fileInfo);
         FilterUtils filterUtils = new FilterUtils(false);
-        filterUtils.setJob(job);
         Attributes attributes = mock(Attributes.class);
         doReturn("topic4.xml").when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_HREF));
 
@@ -593,7 +592,6 @@ public class FilterUtilsTest {
         fileInfo.isFiltered = false;
         job.add(fileInfo);
         FilterUtils filterUtils = new FilterUtils(false);
-        filterUtils.setJob(job);
         Attributes attributes = mock(Attributes.class);
         doReturn("topic4.xml").when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_HREF));
 

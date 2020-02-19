@@ -43,6 +43,8 @@ import static org.dita.dost.util.URLUtils.*;
  */
 public final class Job {
 
+    public static Job instance;
+
     private static final String JOB_FILE = ".job.xml";
 
     private static final String ELEMENT_JOB = "job";
@@ -152,6 +154,7 @@ public final class Job {
                 prop.put(e.getKey(), e.getValue());
             }
         }
+        instance = this;
     }
 
     public Job(final Job job, final Map<String, Object> prop, final Collection<FileInfo> files) {

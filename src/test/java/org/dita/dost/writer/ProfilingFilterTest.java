@@ -37,10 +37,11 @@ import static org.mockito.Mockito.mock;
 
 public class ProfilingFilterTest {
 
+    private Job job;
     private final DocumentBuilder documentBuilder;
     private final TransformerFactory transformerFactory;
 
-    public ProfilingFilterTest() throws ParserConfigurationException {
+    public ProfilingFilterTest() throws Exception {
         final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         builderFactory.setIgnoringComments(true);
@@ -104,7 +105,6 @@ public class ProfilingFilterTest {
         f.setParent(XMLUtils.getXMLReader());
         f.setFilterUtils(filterUtils);
         f.setLogger(new TestUtils.TestLogger());
-        filterUtils.setJob(new Job(createTempDir(KeyrefPaserTest.class), mock(Store.class)));
 
         final Document act = documentBuilder.newDocument();
         try (InputStream src = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/src/" + srcFile)) {

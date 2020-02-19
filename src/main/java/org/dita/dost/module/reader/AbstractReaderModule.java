@@ -103,7 +103,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     ExportAnchorsFilter exportAnchorsFilter;
     boolean validate = true;
     ContentHandler nullHandler;
-    protected TempFileNameScheme tempFileNameScheme;
+    private TempFileNameScheme tempFileNameScheme;
     /** Absolute path to input file. */
     URI rootFile;
     List<URI> resources;
@@ -595,7 +595,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
         filterUtils.setLogger(logger);
-        filterUtils.setJob(job);
         return filterUtils;
     }
 
@@ -949,9 +948,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         initXMLReader(validate);
         initFilters();
-        if (filterUtils != null) {
-        	filterUtils.setJob(job);
-        }
     }
 
 }

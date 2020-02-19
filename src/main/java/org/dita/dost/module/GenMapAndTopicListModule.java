@@ -716,7 +716,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
         filterUtils.setLogger(logger);
-        filterUtils.setJob(job);
         return filterUtils;
     }
 
