@@ -93,9 +93,6 @@ public final class Job {
     private static final String PROPERTY_INPUT_MAP = "InputMapDir";
     private static final String PROPERTY_INPUT_MAP_URI = "InputMapDir.uri";
 
-    /** File name for key definition file */
-    public static final String KEYDEF_LIST_FILE = "keydef.json";
-
     /** File name for temporary input file list file */
     public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
@@ -456,8 +453,22 @@ public final class Job {
      * Add file info. If file info with the same file already exists, it will be replaced.
      */
     public void add(final FileInfo fileInfo) {
+            files.put(fileInfo.uri, fileInfo);
+    }
+
+    /**
+     * Add file info. If file info with the same file already exists, it will be replaced but the filtered state
+     * from the existing file info will be carried over.
+     */
+    public void addButRetainFilteredState(FileInfo fileInfo) {
+        if (files.get(fileInfo.uri) != null) {
+            FileInfo existing = files.get(fileInfo.uri);
+            fileInfo.isFiltered = existing.isFiltered;
+        }
+
         files.put(fileInfo.uri, fileInfo);
     }
+
 
     /**
      * Remove file info.

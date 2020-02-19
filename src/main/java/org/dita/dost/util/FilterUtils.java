@@ -8,6 +8,25 @@
  */
 package org.dita.dost.util;
 
+import static java.lang.String.format;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.StringUtils.isEmptyString;
+import static org.dita.dost.util.StringUtils.notEmpty;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -296,6 +315,7 @@ public final class FilterUtils {
             updateJob(element,attributes);
 			return true;
 		}
+
 		if (isTopicOrMap(attributes)) {
 			Attributes referencedAttributes = getAttributes(loadDocument(element));
 			if (needExclude(referencedAttributes, properties)) {
@@ -303,6 +323,7 @@ public final class FilterUtils {
 				return isNotKeydef(attributes);
 			}
 		}
+
 		return false;
     }
 
@@ -326,21 +347,25 @@ public final class FilterUtils {
 		return !MAPGROUP_D_KEYDEF.matches(attributes);
 	}
 
-	private Element loadDocument(Element element) {
-		String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
-		if (href !=null && href.trim().length() > 0) {
-			try {
-				String absoluteHref = job.getFileInfo(new URI(href)).src.toString();
-				DocumentBuilder builder = newDocumentBuilder();
-		        Document document = builder.parse(new InputSource(absoluteHref));
-				return document.getDocumentElement();
-			} catch (NullPointerException | SAXException | IOException | URISyntaxException | ParserConfigurationException e) {
-				logger.warn(format("Source document could not be loaded for %s. Cannot validate filtering attributes.", href));
-				return element;
-			}
-		}
-		return element;
-	}
+    /**
+     * @return Loads and returns the document defined by the provided elements href attribute value.
+     * If the document cannot be loaded the provided element is returned instead.
+     */
+    private Element loadDocument(Element element) {
+        String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
+        if (notEmpty(href)) {
+            try {
+                String absoluteHref = job.getFileInfo(new URI(href)).src.toString();
+                DocumentBuilder builder = newDocumentBuilder();
+                Document document = builder.parse(new InputSource(absoluteHref));
+                return document.getDocumentElement();
+            } catch (NullPointerException | SAXException | IOException | URISyntaxException | ParserConfigurationException e) {
+                logger.warn(format("Source document could not be loaded for %s. Cannot validate filtering attributes.", href));
+                return element;
+            }
+        }
+        return element;
+    }
 
 	private DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -354,8 +379,6 @@ public final class FilterUtils {
 	private void updateJob(Element element, Attributes attributes) {
         if (MAPGROUP_D_KEYDEF.matches(attributes)) {
             job.addFilteredKey(attributes.getValue(ATTRIBUTE_NAME_KEYS),attributes.getValue(ATTRIBUTE_NAME_HREF));
-        } else if (isTopicOrMap(attributes)){
-            updateFileInfo(element);
         }
     }
 
@@ -420,28 +443,50 @@ public final class FilterUtils {
     	if (needExclude(attributes, extProps)) {
     		return true;
     	}
-    	// TODO how to check if a key (or its target) is filterd out?
-    	return targetsFilteredFile(attributes.getValue(ATTRIBUTE_NAME_HREF));
+
+    	return targetsFilteredFile(attributes);
     }
 
-	private boolean targetsFilteredFile(String href) {
-		if (href == null) {
+	boolean targetsFilteredFile(Attributes attributes) {
+        final String link = getLinkingAttribute(attributes);
+        if (isEmptyString(link)) {
 			return false;
 		}
 
-		Matcher matcher = Pattern.compile("(.*?)#.*").matcher(href);
-		if (matcher.find()) {
-			if(matcher.groupCount()>0 && matcher.group(1).length()>0) {
-				Predicate<Job.FileInfo> isFiltered = fileInfo -> (fileInfo.src.toString().endsWith(matcher.group(1)) && fileInfo.isFiltered);
-				if (job.getFileInfo(isFiltered) != null && job.getFileInfo(isFiltered).size() > 0) {
-					return true;
-				}
-			}
-		}
+        final String fileName = matchFileName(link);
+        if (notEmpty(fileName)) {
+            Predicate<Job.FileInfo> isFiltered = fileInfo -> (
+                    fileInfo.src != null && fileInfo.src.toString().endsWith(fileName) && fileInfo.isFiltered);
 
-		Predicate<Job.FileInfo> isFiltered = fileInfo -> (fileInfo.uri.toString().equals(href) && fileInfo.isFiltered);
+				if (job.getFileInfo(isFiltered) != null && job.getFileInfo(isFiltered).size() > 0) {
+                return true;
+            }
+        }
+
+		Predicate<Job.FileInfo> isFiltered = fileInfo -> (fileInfo.uri.toString().equals(link) && fileInfo.isFiltered);
 		return job.getFileInfo(isFiltered) != null && job.getFileInfo(isFiltered).size() > 0;
 	}
+
+	String matchFileName(String link) {
+        String matchAllBeforeHashOrAll = "(.*?)(?=#|$)";
+        Matcher matcher = Pattern.compile(matchAllBeforeHashOrAll).matcher(link);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
+    /**
+     *
+     * @return href value if it is not empty otherwise the conref attribute value, can be null
+     */
+	String getLinkingAttribute(Attributes attributes) {
+        if (notEmpty(attributes.getValue(ATTRIBUTE_NAME_HREF))) {
+            return attributes.getValue(ATTRIBUTE_NAME_HREF);
+        }
+
+        return attributes.getValue(ATTRIBUTE_NAME_CONREF);
+    }
 
     private final Pattern groupPattern = Pattern.compile("(\\w+)\\((.*?)\\)");
 
