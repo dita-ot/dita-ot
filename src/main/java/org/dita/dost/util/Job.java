@@ -135,6 +135,16 @@ public final class Job {
     private long lastModified;
 
     /**
+     * only for junit testing
+     */
+    public Job() {
+        prop = new HashMap<>();
+        tempDir = null;
+        tempDirURI = null;
+        jobFile = null;
+    }
+
+    /**
      * Create new job configuration instance. Initialise by reading temporary configuration files.
      *
      * @param tempDir temporary directory
@@ -437,8 +447,22 @@ public final class Job {
      * Add file info. If file info with the same file already exists, it will be replaced.
      */
     public void add(final FileInfo fileInfo) {
+            files.put(fileInfo.uri, fileInfo);
+    }
+
+    /**
+     * Add file info. If file info with the same file already exists, it will be replaced but the filtered state
+     * from the existing file info will be carried over.
+     */
+    public void addButRetainFilteredState(FileInfo fileInfo) {
+        if (files.get(fileInfo.uri) != null) {
+            FileInfo existing = files.get(fileInfo.uri);
+            fileInfo.isFiltered = existing.isFiltered;
+        }
+
         files.put(fileInfo.uri, fileInfo);
     }
+
 
     /**
      * Remove file info.

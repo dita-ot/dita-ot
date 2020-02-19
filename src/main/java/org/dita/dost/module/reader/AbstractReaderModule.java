@@ -105,7 +105,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     ExportAnchorsFilter exportAnchorsFilter;
     boolean validate = true;
     ContentHandler nullHandler;
-    private TempFileNameScheme tempFileNameScheme;
+    protected TempFileNameScheme tempFileNameScheme;
     /** Absolute path to input file. */
     URI rootFile;
     /** Subject scheme absolute file paths. */
@@ -683,9 +683,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 // correct copy-to
                 if (src != null) {
                     final FileInfo corr = new FileInfo.Builder(fs).src(src).build();
-                    job.add(corr);
+                    addToJob(corr);
                 } else {
-                    job.add(fs);
+                    addToJob(fs);
                 }
             }
         }
@@ -696,9 +696,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                     .result(target)
                     .uri(tmp).build();
             // FIXME: what's the correct value for this? Accept all?
-            if (formatFilter.test(fi.format)
-                    || fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
-                job.add(fi);
+            if (formatFilter.test(fi.format) || fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+                addToJob(fi);
             }
         }
 
@@ -706,9 +705,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         if (root == null) {
             throw new RuntimeException("Unable to set input file to job configuration");
         }
-        job.add(new FileInfo.Builder(root)
-                .isInput(true)
-                .build());
+        addToJob(new FileInfo.Builder(root).isInput(true).build());
 
         try {
             logger.info("Serializing job specification");
@@ -734,6 +731,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap());
             delayConrefUtils.writeExportAnchors(exportAnchorsFilter, tempFileNameScheme);
         }
+    }
+
+    protected void addToJob(FileInfo fileInfo) {
+        job.add(fileInfo);
     }
 
     /** Filter copy-to where target is used directly. */
@@ -778,7 +779,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         return res;
     }
 
-    private FileInfo getOrCreateFileInfo(final Map<URI, FileInfo> fileInfos, final URI file) {
+    protected FileInfo getOrCreateFileInfo(final Map<URI, FileInfo> fileInfos, final URI file) {
         assert file.getFragment() == null;
         final URI f = file.normalize();
         FileInfo.Builder b;
