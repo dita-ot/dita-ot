@@ -1,0 +1,62 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " specializations="@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product" id="test" ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/title ">Coderef test</title>
+  <body class="- topic/body ">
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;foo&gt;
+  amp: &amp;amp; less-than: &amp;lt;
+&lt;/foo&gt;</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;foo&gt;
+  copyright sign: ©; em-dash: —
+&lt;/foo&gt;</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">first
+second
+third
+fourth
+fifth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">third
+fourth
+fifth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">second
+third</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">first
+second
+third
+fourth
+fifth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">third
+fourth
+fifth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">second
+third</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">second</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">second
+third
+fourth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">second
+third
+fourth
+# END-A
+fifth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">fifth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"># START-B
+# END-B
+first
+# START-A
+second
+third
+fourth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE topic PUBLIC &quot;-//OASIS//DTD DITA Topic//EN&quot; &quot;topic.dtd&quot;&gt;
+&lt;topic id=&quot;topic&quot;&gt;
+  &lt;title&gt;Coderef topic test&lt;/title&gt;
+  &lt;body&gt;
+    &lt;p&gt;amp: &amp;amp; less-than: &amp;lt;&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/topic&gt;</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">
+      <b class="+ topic/ph hi-d/b ">fallback</b>
+    </codeblock>
+  </body>
+</topic>

@@ -1,0 +1,27 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  specializations="@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product"
+  id="test" ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/title ">Coderef test</title>
+  <body class="- topic/body ">
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="code.xml"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="utf-8.xml" encoding="UTF-8"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="plain.txt#line-range(1,5)"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="plain.txt#line-range(3)"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="plain.txt#line-range(2,3)"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="plain.txt#line=0,5"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="plain.txt#line=2,"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="plain.txt#line=1,3"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="plain.txt#line=1"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="range.txt#token=START-A,END-A"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="range.txt#token=START-A"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="range.txt#token=END-A,START-A"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="range.txt#token=START-B,END-B"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="range.txt#token=,END-A"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="topic.dita"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><include class="- topic/include " parse="text" href="missing.xml">
+      <fallback class="- topic/fallback ">
+        <b class="+ topic/ph hi-d/b ">fallback</b>
+      </fallback>
+    </include></codeblock>
+  </body>
+</topic>

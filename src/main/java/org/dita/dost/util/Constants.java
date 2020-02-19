@@ -550,12 +550,14 @@ public final class Constants {
     public static final DitaClass TOPIC_DTHD = new DitaClass("- topic/dthd ");
     public static final DitaClass TOPIC_ENTRY = new DitaClass("- topic/entry ");
     public static final DitaClass TOPIC_EXAMPLE = new DitaClass("- topic/example ");
+    public static final DitaClass TOPIC_FALLBACK = new DitaClass("- topic/fallback ");
     public static final DitaClass TOPIC_FEATNUM = new DitaClass("- topic/featnum ");
     public static final DitaClass TOPIC_FIG = new DitaClass("- topic/fig ");
     public static final DitaClass TOPIC_FIGGROUP = new DitaClass("- topic/figgroup ");
     public static final DitaClass TOPIC_FN = new DitaClass("- topic/fn ");
     public static final DitaClass TOPIC_FOREIGN = new DitaClass("- topic/foreign ");
     public static final DitaClass TOPIC_IMAGE = new DitaClass("- topic/image ");
+    public static final DitaClass TOPIC_INCLUDE = new DitaClass("- topic/include ");
     public static final DitaClass TOPIC_INDEX_BASE = new DitaClass("- topic/index-base ");
     public static final DitaClass TOPIC_INDEXTERM = new DitaClass("- topic/indexterm ");
     public static final DitaClass TOPIC_INDEXTERMREF = new DitaClass("- topic/indextermref ");
@@ -704,6 +706,8 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_LOCKTITLE_VALUE_YES = "yes";
     /**format attribute.*/
     public static final String ATTRIBUTE_NAME_FORMAT = "format";
+    public static final String ATTRIBUTE_NAME_ENCODING = "encoding";
+    public static final String ATTRIBUTE_NAME_PARSE = "parse";
     /**charset attribute.*/
     public static final String ATTRIBUTE_NAME_CHARSET = "charset";
     /**lang attribute.*/
