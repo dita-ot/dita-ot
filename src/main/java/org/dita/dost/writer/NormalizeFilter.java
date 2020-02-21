@@ -13,7 +13,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
@@ -70,10 +72,33 @@ public final class NormalizeFilter extends AbstractXMLFilter {
                     res = new AttributesImpl(atts);
                 }
                 XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_DOMAINS, normalized);
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_SPECIALIZATIONS, domainsToSpecializations(normalized));
+            }
+            final String specializations = atts.getValue(ATTRIBUTE_NAME_SPECIALIZATIONS);
+            if (specializations != null) {
+                final String normalized = whitespace.matcher(specializations.trim()).replaceAll(" ");
+                if (res == null) {
+                    res = new AttributesImpl(atts);
+                }
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_SPECIALIZATIONS, normalized);
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_DOMAINS, specializationsToDomains(normalized));
             }
         }
 
         getContentHandler().startElement(uri, localName, qName, res != null ? res : atts);
+    }
+
+    private String domainsToSpecializations(final String domains) {
+        return Arrays.stream(domains.trim().replaceAll("(\\))\\s+(a?\\()", "$1\n$2").split("\n"))
+                .filter(token -> token.startsWith("a("))
+                .map(token -> "@" + token.substring(2, token.length() - 1).replace(' ', '/'))
+                .collect(Collectors.joining(" "));
+    }
+
+    private String specializationsToDomains(final String specializations) {
+        return Arrays.stream(specializations.trim().split("\\s+"))
+                .map(token -> token.replaceAll("^@(.+)/(.+)$", "a($1 $2)"))
+                .collect(Collectors.joining(" "));
     }
 
     @Override

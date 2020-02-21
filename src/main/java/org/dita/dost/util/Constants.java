@@ -732,6 +732,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_XML_LANG = "xml:lang";
     /**domains attribute.*/
     public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
+    public static final String ATTRIBUTE_NAME_SPECIALIZATIONS = "specializations";
     /**props attribute.*/
     public static final String ATTRIBUTE_NAME_PROPS = "props";
     /**audience attribute.*/
