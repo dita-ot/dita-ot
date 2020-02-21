@@ -433,14 +433,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 logger.info(MessageUtils.getMessage("DOTJ070I", atts.getValue(ATTRIBUTE_NAME_CLASS), localName).setLocation(atts).toString());
             }
         } else {
-
-            if (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls)) {
-                final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
-                if (domains == null) {
-                    logger.info(MessageUtils.getMessage("DOTJ029I", localName).setLocation(atts).toString());
-                }
-            }
-
             if ((MAP_MAP.matches(cls)) || (TOPIC_TITLE.matches(cls))) {
                 isValidInput = true;
             }

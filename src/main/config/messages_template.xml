@@ -143,7 +143,8 @@ See the accompanying LICENSE file for applicable license.
     <reason>No format attribute was found on a reference to file '%1', which does not appear to be a DITA file.</reason>
     <response>If this is not a DITA file, set the format attribute to an appropriate value, otherwise set the format attribute to "dita".</response>
   </message>
-  
+
+  <!-- Deprecated since 3.5 -->
   <message id="DOTJ029I" type="INFO">
     <reason>No 'domains' attribute was found for element '&lt;%1&gt;'.</reason>
     <response>This generally indicates that your DTD or Schema was not developed properly according to the DITA specification.</response>
