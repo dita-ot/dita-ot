@@ -136,6 +136,24 @@ public final class StringUtils {
     }
 
     /**
+     * Parse {@code props} attribute specializations
+     *
+     * @param specializations input domain
+     * @return list of {@code props} attribute specializations
+     */
+    public static QName[][] getExtPropsFromSpecializations(final String specializations) {
+        // FIXME Dont' mix arrays and collections
+        return Arrays.stream(specializations.trim().split("\\s+"))
+                .map(token -> Arrays.stream(token.substring(1).split("/"))
+                            .map(QName::valueOf)
+                            .collect(Collectors.toList())
+                            .toArray(new QName[0])
+                )
+                .collect(Collectors.toList())
+                .toArray(new QName[0][]);
+    }
+
+    /**
      * Break down a string separated by <code>delim</code> into a string set.
      * @param s String to be splitted
      * @param delim Delimiter to be used.

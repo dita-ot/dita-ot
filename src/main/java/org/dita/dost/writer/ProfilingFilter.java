@@ -98,6 +98,11 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains != null) {
                 props = StringUtils.getExtProps(domains);
+            } else {
+                final String specializations = atts.getValue(ATTRIBUTE_NAME_SPECIALIZATIONS);
+                if (specializations != null) {
+                    props = StringUtils.getExtPropsFromSpecializations(specializations);
+                }
             }
         }
 
