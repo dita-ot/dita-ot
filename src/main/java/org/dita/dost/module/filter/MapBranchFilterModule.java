@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
+import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.close;
@@ -253,7 +254,11 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     /** Filter map and remove excluded content. */
     private void filterBranches(final Element root) {
-        final QName[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
+        final String domains = root.getAttribute(ATTRIBUTE_NAME_DOMAINS);
+        final String specializations = root.getAttribute(ATTRIBUTE_NAME_SPECIALIZATIONS);
+        final QName[][] props = !domains.isEmpty()
+                ? getExtProps(domains)
+                : getExtPropsFromSpecializations(specializations);
         final SubjectScheme subjectSchemeMap = getSubjectScheme(root);
         final List<FilterUtils> baseFilter = getBaseFilter(subjectSchemeMap);
         filterBranches(root, baseFilter, props, subjectSchemeMap);
