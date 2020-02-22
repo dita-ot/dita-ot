@@ -56,6 +56,15 @@ public class TestStringUtils {
     }
 
     @Test
+    public void getExtPropsFromSpecializations() {
+        final QName props = QName.valueOf("props");
+        assertArrayEquals(new QName[][] {{props, QName.valueOf("foo")}, {props, QName.valueOf("bar")}},
+                          StringUtils.getExtPropsFromSpecializations("@props/foo @props/bar"));
+        assertArrayEquals(new QName[][] {{props, QName.valueOf("foo")}},
+                          StringUtils.getExtPropsFromSpecializations("  @props/foo   "));
+    }
+
+    @Test
     public void testIsEmptyString() {
         assertTrue(StringUtils.isEmptyString(null));
         assertTrue(StringUtils.isEmptyString(""));

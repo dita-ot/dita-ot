@@ -463,6 +463,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 serializer.writeAttribute(ATTRIBUTE_NAME_ID, id);
                 serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString());
                 serializer.writeAttribute(ATTRIBUTE_NAME_DOMAINS, "");
+                serializer.writeAttribute(ATTRIBUTE_NAME_SPECIALIZATIONS, "");
                 serializer.writeStartElement(TOPIC_TITLE.localName);
                 serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TITLE.toString());
                 if (title != null) {

@@ -533,6 +533,8 @@ public abstract class AbstractIntegrationTest {
             // remove DITA version and domains attributes
             e.removeAttributeNS(DITA_NAMESPACE, ATTRIBUTE_NAME_DITAARCHVERSION);
             e.removeAttribute(ATTRIBUTE_NAME_DOMAINS);
+            e.removeAttribute(ATTRIBUTE_NAME_SPECIALIZATIONS);
+            e.removeAttributeNS(DITA_OT_NS, "submap-specializations");
             // remove workdir processing instructions
             removeWorkdirProcessingInstruction(e);
         }

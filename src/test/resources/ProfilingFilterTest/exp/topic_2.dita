@@ -1,0 +1,35 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+       specializations="@props/hardware-platform"
+       id="topic_zzt_wwn_l3" ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/title ">Topic title</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">No audience</p>
+    <p audience="" class="- topic/p ">Empty audience</p>
+    <p audience="expert" class="- topic/p ">Expert audience</p>
+    <p audience="novice" class="- topic/p ">Novice audience</p>
+    <p audience="expert novice" class="- topic/p ">Expert and novice audience</p>
+    <p class="- topic/p ">No platform</p>
+    <p class="- topic/p " platform="windows">Windows platform</p>
+    <p class="- topic/p " platform="osx">OS X platform</p>
+    <p class="- topic/p " platform="windows osx">Windows and OS X platform</p>
+    <foreign class="- topic/foreign ">
+      <para platform="windows">non-DITA para, should not filter</para>
+      <para class="notdita" platform="windows">another non-DITA para, should not filter</para>
+      <p class="- topic/p " platform="windows">Foreign Windows</p>
+    </foreign>
+    <p hardware-platform="" class="- topic/p ">Empty hardware-platform</p>
+    <p hardware-platform="arm" class="- topic/p ">ARM hardware-platform</p>
+  </body>
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+         specializations="@props/hardware-platform"
+         id="topic_zzt_wwn_l4" ditaarch:DITAArchVersion="2.0"
+         platform="windows">
+    <title class="- topic/title ">Windows</title>
+  </topic>
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+         specializations="@props/hardware-platform"
+         id="topic_zzt_wwn_l5" ditaarch:DITAArchVersion="2.0"
+         platform="osx">
+    <title class="- topic/title ">OS X</title>
+  </topic>
+</topic>

@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
+import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
@@ -286,7 +287,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     /** Filter map and remove excluded content. */
     private void filterBranches(final Element root) {
-        final QName[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
+        final String domains = root.getAttribute(ATTRIBUTE_NAME_DOMAINS);
+        final String specializations = root.getAttribute(ATTRIBUTE_NAME_SPECIALIZATIONS);
+        final QName[][] props = !domains.isEmpty()
+                ? getExtProps(domains)
+                : getExtPropsFromSpecializations(specializations);
         filterBranches(root, Collections.emptyList(), props);
     }
 
