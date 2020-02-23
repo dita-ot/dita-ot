@@ -169,8 +169,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="spec-title"/>
     <table>
       <xsl:apply-templates select="." mode="table:common"/>
+      <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
       <xsl:call-template name="dita2html:simpletable-cols"/>
-
       <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]"/>
       <xsl:apply-templates select="." mode="generate-table-header"/>
 
@@ -184,6 +184,28 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="css-class">
     <xsl:apply-templates select="@frame, @expanse, @scale" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/simpletable ')]/*[contains(@class, ' topic/title ')]">
+    <caption>
+      <xsl:apply-templates select="." mode="label"/>
+      <xsl:apply-templates/>
+    </caption>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/simpletable ')]/*[contains(@class, ' topic/title ')]" mode="label">
+    <span class="table--title-label">
+      <xsl:apply-templates select="." mode="title-number">
+        <xsl:with-param name="number" as="xs:integer"
+          select="count((key('enumerableByClass', 'topic/table') | key('enumerableByClass', 'topic/simpletable'))            
+                        [. &lt;&lt; current()])"/>
+      </xsl:apply-templates>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/simpletable ')]/*[contains(@class, ' topic/title ')]" mode="title-number">
+    <xsl:param name="number" as="xs:integer"/>
+    <xsl:sequence select="concat(dita-ot:get-variable(., 'Table'), ' ', $number, '. ')"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/strow ')]" name="topic.strow">
