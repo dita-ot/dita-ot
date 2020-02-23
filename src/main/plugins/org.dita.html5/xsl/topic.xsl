@@ -27,6 +27,9 @@ See the accompanying LICENSE file for applicable license.
   <!-- Preserve DITA class ancestry in XHTML output; values are 'yes' or 'no' -->
   <xsl:param name="PRESERVE-DITA-CLASS" select="'yes'"/>
   
+  <!-- Preserve DITA domain/class ancestry in XHTML output; values are 'yes' or 'no' -->
+  <xsl:param name="PRESERVE-DITA-DOMAIN" select="'no'"/>
+ 
   <!-- the file name containing XHTML to be placed in the HEAD area
        (file name and extension only - no path). -->
   <xsl:param name="HDF"/>
@@ -1780,6 +1783,15 @@ See the accompanying LICENSE file for applicable license.
         </xsl:value-of>
       </xsl:if>
     </xsl:variable>
+    <xsl:variable name="domainancestry" as="xs:string?">
+      <xsl:if test="$PRESERVE-DITA-DOMAIN = 'yes'">
+        <xsl:value-of>
+          <xsl:apply-templates select="." mode="get-element-ancestry">
+            <xsl:with-param name="includedomain" select="'yes'"/>
+          </xsl:apply-templates>
+        </xsl:value-of>
+      </xsl:if>
+    </xsl:variable>
     <xsl:variable name="outputclass-attribute" as="xs:string">
       <xsl:value-of>
         <xsl:apply-templates select="@outputclass" mode="get-value-for-class"/>
@@ -1789,6 +1801,7 @@ See the accompanying LICENSE file for applicable license.
          combine user output class with element default, giving priority to the user value. -->
     <xsl:variable name="classes" as="xs:string*"
                   select="tokenize($ancestry, '\s+'),
+                          tokenize($domainancestry, '/s+'),
                           $using-output-class,
                           $draft-revs, 
                           tokenize($outputclass-attribute, '\s+')"/>
@@ -1813,6 +1826,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Get the ancestry of the current element (name only, not module) -->
   <xsl:template match="*" mode="get-element-ancestry">
     <xsl:param name="checkclass" select="@class"/>
+    <xsl:param name="includedomain" select="'no'"/>
     <xsl:if test="contains($checkclass, '/')">
       <xsl:variable name="lastpair">
         <xsl:call-template name="get-last-class-pair">
@@ -1823,10 +1837,18 @@ See the accompanying LICENSE file for applicable license.
       <xsl:if test="contains(substring-before($checkclass, $lastpair), '/')">
         <xsl:apply-templates select="." mode="get-element-ancestry">
           <xsl:with-param name="checkclass" select="substring-before($checkclass, $lastpair)"/>
+          <xsl:with-param name="includedomain" select="$includedomain"/>
         </xsl:apply-templates>
         <xsl:text> </xsl:text>
       </xsl:if>
-      <xsl:value-of select="substring-after($lastpair, '/')"/>
+      <xsl:choose>
+        <xsl:when test="$includedomain='no'">
+          <xsl:value-of select="substring-after($lastpair, '/')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$lastpair"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
   </xsl:template>
   

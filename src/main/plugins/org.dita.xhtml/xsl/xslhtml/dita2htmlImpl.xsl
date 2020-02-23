@@ -49,6 +49,9 @@ See the accompanying LICENSE file for applicable license.
 <!-- Preserve DITA class ancestry in XHTML output; values are 'yes' or 'no' -->
 <xsl:param name="PRESERVE-DITA-CLASS" select="'yes'"/>
 
+<!-- Preserve DITA domain/class ancestry in XHTML output; values are 'yes' or 'no' -->
+<xsl:param name="PRESERVE-DITA-DOMAIN" select="'no'"/>
+
 <!-- the file name containing XHTML to be placed in the HEAD area
      (file name and extension only - no path). -->
 <xsl:param name="HDF"/>
@@ -1953,21 +1956,25 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="." mode="get-element-ancestry"/>
     </xsl:if>
   </xsl:variable>
+  <xsl:variable name="domainancestry">
+    <xsl:if test="$PRESERVE-DITA-DOMAIN = 'yes'">
+      <xsl:apply-templates select="." mode="get-element-ancestry">
+        <xsl:with-param name="includedomain" select="'yes'"/>
+      </xsl:apply-templates>
+    </xsl:if>
+  </xsl:variable>
   <xsl:variable name="outputclass-attribute">
     <xsl:apply-templates select="@outputclass" mode="get-value-for-class"/>
   </xsl:variable>
   <!-- Revised design with DITA-OT 1.5: include class ancestry if requested; 
        combine user output class with element default, giving priority to the user value. -->
-  <xsl:if test="string-length(normalize-space(concat($outputclass-attribute, $using-output-class, $ancestry))) > 0">
-    <xsl:attribute name="class">
-      <xsl:value-of select="$ancestry"/>
-      <xsl:if test="string-length(normalize-space($ancestry)) > 0 and 
-                    string-length(normalize-space($using-output-class)) > 0"><xsl:text> </xsl:text></xsl:if>
-      <xsl:value-of select="normalize-space($using-output-class)"/>
-      <xsl:if test="string-length(normalize-space(concat($ancestry, $using-output-class))) > 0 and
-                    string-length(normalize-space($outputclass-attribute)) > 0"><xsl:text> </xsl:text></xsl:if>
-      <xsl:value-of select="$outputclass-attribute"/>
-    </xsl:attribute>
+  <xsl:variable name="classes" as="xs:string*"
+                select="tokenize($ancestry, '\s+'),
+                        tokenize($domainancestry, '/s+'),
+                        $using-output-class,
+                        tokenize($outputclass-attribute, '\s+')"/>
+  <xsl:if test="exists($classes)">
+    <xsl:attribute name="class" select="string-join(distinct-values($classes), ' ')"/>
   </xsl:if>
 </xsl:template>
   
@@ -1987,6 +1994,7 @@ See the accompanying LICENSE file for applicable license.
 <!-- Get the ancestry of the current element (name only, not module) -->
 <xsl:template match="*" mode="get-element-ancestry">
   <xsl:param name="checkclass" select="@class"/>
+  <xsl:param name="includedomain" select="'no'"/>
   <xsl:if test="contains($checkclass, '/')">
     <xsl:variable name="lastpair">
       <xsl:call-template name="get-last-class-pair">
@@ -1997,10 +2005,18 @@ See the accompanying LICENSE file for applicable license.
     <xsl:if test="contains(substring-before($checkclass, $lastpair), '/')">
       <xsl:apply-templates select="." mode="get-element-ancestry">
         <xsl:with-param name="checkclass" select="substring-before($checkclass, $lastpair)"/>
+        <xsl:with-param name="includedomain" select="$includedomain"/>
       </xsl:apply-templates>
       <xsl:text> </xsl:text>
     </xsl:if>
-    <xsl:value-of select="substring-after($lastpair, '/')"/>
+    <xsl:choose>
+      <xsl:when test="$includedomain='no'">
+        <xsl:value-of select="substring-after($lastpair, '/')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$lastpair"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:if>
 </xsl:template>
 

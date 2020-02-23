@@ -185,6 +185,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="ARTLBL" expression="${args.artlbl}" if:set="args.artlbl"/>
         <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if:set="args.gen.task.lbl"/>
         <param name="PRESERVE-DITA-CLASS" expression="${args.html5.classattr}" if:set="args.html5.classattr"/>
+        <param name="PRESERVE-DITA-DOMAIN" expression="${args.html5.domainattr}" if:set="args.html5.domainattr"/>
         <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if:set="args.hide.parent.link"/>
         <param name="include.rellinks" expression="${include.rellinks}"/>
         <param name="INDEXSHOW" expression="${args.indexshow}" if:set="args.indexshow"/>
