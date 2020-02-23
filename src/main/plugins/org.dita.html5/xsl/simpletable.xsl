@@ -223,6 +223,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/stentry ')]" mode="simpletable:entry">
     <xsl:apply-templates select="." mode="table:common"/>
     <xsl:apply-templates select="." mode="headers"/>
+    <xsl:apply-templates select="@colspan | @rowspan"/>
     <xsl:choose>
       <xsl:when test="*|text()|processing-instruction()">
         <xsl:apply-templates/>
@@ -232,7 +233,11 @@ See the accompanying LICENSE file for applicable license.
       </xsl:when>
     </xsl:choose>
   </xsl:template>
-
+  
+  <xsl:template match="@colspan | @rowspan">
+    <xsl:copy/>
+  </xsl:template>
+  
   <xsl:template match="*[simpletable:is-head-entry(.)]" mode="headers">
     <xsl:attribute name="scope" select="'col'"/>
   </xsl:template>
