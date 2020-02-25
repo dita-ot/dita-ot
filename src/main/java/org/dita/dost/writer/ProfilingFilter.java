@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.*;
@@ -42,6 +43,9 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     private boolean lastElementExcluded = false;
     private final Deque<Set<Flag>> flagStack = new LinkedList<>();
     private final boolean doFlag;
+
+    /** Don't filter root elements */
+    private final AtomicBoolean isFirstElement = new AtomicBoolean(true);
 
     /**
      * Create new profiling filter.
@@ -107,7 +111,8 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             // If it is the start of a child of an excluded tag, level increase
             level++;
         } else { // exclude shows whether it's excluded by filtering
-            if (cls.isValid() && filterUtils.stream().anyMatch(f -> f.extendedExclusionCheck(atts, props))) {
+            if (!isFirstElement.getAndSet(false) && cls.isValid()
+                    && filterUtils.stream().anyMatch(f -> f.extendedExclusionCheck(atts, props))) {
                 exclude = true;
                 level = 0;
             } else {

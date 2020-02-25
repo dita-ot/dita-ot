@@ -421,7 +421,7 @@ public class FilterUtils {
         }
         return false;
     }
-    
+
     public boolean extendedExclusionCheck(final Attributes attributes, final QName[][] extProps) {
     	if (needExclude(attributes, extProps)) {
     		return true;
