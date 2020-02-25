@@ -15,7 +15,10 @@ import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.io.File;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -30,6 +33,7 @@ import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -600,6 +604,68 @@ public class FilterUtilsTest {
 
         // then
         assertFalse(filtered);
+    }
+
+    private Attributes mockAttributesForFilteredKeydef(Path topicPath) {
+        Attributes attributes = mock(Attributes.class);
+        doReturn("+ map/topicref mapgroup-d/keydef ").when(attributes).getValue("class");
+        doReturn(topicPath.toString()).when(attributes).getValue("href");
+        doReturn("ktopic4").when(attributes).getValue("keys");
+        doReturn("resource-only").when(attributes).getValue("processing-role");
+        doReturn("internal").when(attributes).getValue("audience");
+        return attributes;
+    }
+
+    @Test
+    public void needsExclusion_filteredKeydef() throws Exception {
+        // given
+        Element element = mock(Element.class);
+        QName[][] properties = null;
+
+        Path topic = Paths.get(TestUtils.getResourceDir(FilterUtilsTest.class).toString(), "topic4.xml");
+        doReturn(topic.toUri().toString()).when(element).getAttribute(ATTRIBUTE_NAME_HREF);
+        FilterUtils filterUtils = spy(new FilterUtils(false));
+        Job job = new Job();
+        Attributes attributes = mockAttributesForFilteredKeydef(topic);
+        doReturn(attributes).when(filterUtils).getAttributes(eq(element));
+        doReturn(true).when(filterUtils).needExclude(eq(attributes), eq(properties));
+        Job.FileInfo fileInfo = new Job.FileInfo(topic.toUri());
+        fileInfo.src = topic.toUri();
+        Job.instance.add(fileInfo);
+
+        // when
+        boolean needsExclusion = filterUtils.needsExclusion(element, properties);
+
+        // then
+        assertTrue(needsExclusion);
+        assertTrue(Job.instance.isKeydefFiltered("ktopic4"));
+        assertFalse(Job.instance.getFileInfo(topic.toUri()).isFiltered);
+    }
+
+    @Test
+    public void needsExclusion_filteredKeydef_filteredTopic() throws Exception {
+        // given
+        Element element = mock(Element.class);
+        QName[][] properties = null;
+
+        Path topic = Paths.get(TestUtils.getResourceDir(FilterUtilsTest.class).toString(), "topic4filtered.xml");
+        doReturn(topic.toUri().toString()).when(element).getAttribute(ATTRIBUTE_NAME_HREF);
+        FilterUtils filterUtils = spy(new FilterUtils(false));
+        Job job = new Job();
+        Attributes attributes = mockAttributesForFilteredKeydef(topic);
+        doReturn(attributes).when(filterUtils).getAttributes(eq(element));
+        doReturn(true).when(filterUtils).needExclude(any(Attributes.class), eq(properties));
+        Job.FileInfo fileInfo = new Job.FileInfo(topic.toUri());
+        fileInfo.src = topic.toUri();
+        Job.instance.add(fileInfo);
+
+        // when
+        boolean needsExclusion = filterUtils.needsExclusion(element, properties);
+
+        // then
+        assertTrue(needsExclusion);
+        assertTrue(Job.instance.isKeydefFiltered("ktopic4"));
+        assertTrue(Job.instance.getFileInfo(topic.toUri()).isFiltered);
     }
 
 }

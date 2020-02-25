@@ -55,7 +55,7 @@ import javax.xml.transform.sax.SAXSource;
  *
  * @author Wu, Zhi Qiang
  */
-public final class FilterUtils {
+public class FilterUtils {
 
     /** Subject scheme file extension */
     public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
@@ -286,28 +286,38 @@ public final class FilterUtils {
     }
     
     /***
-     * Tests whether topicrefs or maprefs should be filtered out. 
+     * Tests whether elements of maps/topics should be filtered out.
      * Filtered Keydefs are listed in the <code>.job.xml</code> file.
      */
     public boolean needsExclusion(final Element element, final QName[][] properties) {
         Attributes attributes = getAttributes(element);
 		if (needExclude(attributes, properties)) {
-            updateJob(element,attributes);
+            updateJobIfKeyFiltered(attributes);
+            excludeReferencedTopic(element, properties, attributes);
 			return true;
 		}
 
-		if (isTopicOrMap(attributes)) {
-			Attributes referencedAttributes = getAttributes(loadDocument(element));
-			if (needExclude(referencedAttributes, properties)) {
-				updateFileInfo(element);
-				return isNotKeydef(attributes);
-			}
-		}
-
-		return false;    	
+		return excludeReferencedTopic(element, properties, attributes);
     }
 
-	private Attributes getAttributes(final Element element) {
+    private boolean excludeReferencedTopic(Element element, QName[][] properties, Attributes attributes) {
+        String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
+        if (isMapTopicRef(attributes) && notEmpty(href)) {
+            Optional<Element> referencedDocument = loadDocument(href);
+            if (!referencedDocument.isPresent()) {
+                return false;
+            }
+
+            Attributes referencedAttributes = getAttributes(referencedDocument.get());
+            if (needExclude(referencedAttributes, properties)) {
+                updateFileInfo(href);
+                return isNotKeydef(attributes);
+            }
+        }
+        return false;
+    }
+
+	Attributes getAttributes(final Element element) {
 		final XMLUtils.AttributesBuilder builder = new XMLUtils.AttributesBuilder();
         final NamedNodeMap attrs = element.getAttributes();
         for (int i = 0; i < attrs.getLength() ; i++) {
@@ -319,7 +329,7 @@ public final class FilterUtils {
         return builder.build();
 	}
 	
-	private boolean isTopicOrMap(Attributes attributes) {
+	private boolean isMapTopicRef(Attributes attributes) {
 		return !DITAVAREF_D_DITAVALREF.matches(attributes) && (MAP_MAP.matches(attributes) || MAP_TOPICREF.matches(attributes));
 	}
 	
@@ -327,25 +337,17 @@ public final class FilterUtils {
 		return !MAPGROUP_D_KEYDEF.matches(attributes);
 	}
 
-    /**
-     * @return Loads and returns the document defined by the provided elements href attribute value.
-     * If the document cannot be loaded the provided element is returned instead.
-     */
-    private Element loadDocument(Element element) {
-        String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
-        if (notEmpty(href)) {
-            try {
-                Job job = Job.instance;
-                String absoluteHref = job.getFileInfo(new URI(href)).src.toString();
-                DocumentBuilder builder = newDocumentBuilder();
-                Document document = builder.parse(new InputSource(absoluteHref));
-                return document.getDocumentElement();
-            } catch (NullPointerException | SAXException | IOException | URISyntaxException | ParserConfigurationException e) {
-                logger.warn(format("Source document could not be loaded for %s. Cannot validate filtering attributes.", href));
-                return element;
-            }
+    private Optional<Element> loadDocument(String href) {
+        try {
+            Job job = Job.instance;
+            String absoluteHref = job.getFileInfo(new URI(href)).src.toString();
+            DocumentBuilder builder = newDocumentBuilder();
+            Document document = builder.parse(new InputSource(absoluteHref));
+            return Optional.of(document.getDocumentElement());
+        } catch (NullPointerException | SAXException | IOException | URISyntaxException | ParserConfigurationException e) {
+            logger.warn(format("Source document could not be loaded for %s. Cannot validate filtering attributes.", href));
         }
-        return element;
+        return Optional.empty();
     }
 
 	private DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
@@ -357,18 +359,18 @@ public final class FilterUtils {
 		return builder;
 	}
 
-	private void updateJob(Element element, Attributes attributes) {
+	private void updateJobIfKeyFiltered(Attributes attributes) {
         if (MAPGROUP_D_KEYDEF.matches(attributes)) {
             Job.instance.addFilteredKey(attributes.getValue(ATTRIBUTE_NAME_KEYS), attributes.getValue(ATTRIBUTE_NAME_HREF));
         }
     }
 
-	private void updateFileInfo(Element element) {
-		String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
+	private void updateFileInfo(String href) {
 		try {
 			URI fileUri = new URI(href);
-            Job.instance.getFileInfo(fileUri).isFiltered=true;
-		} catch (URISyntaxException e) {
+            FileInfo fileInfo = Job.instance.getFileInfo(fileUri);
+            fileInfo.isFiltered=true;
+		} catch (URISyntaxException | NullPointerException e) {
 			logger.warn(format("Couldn't update fileinfo %s", href));
 		}
 	}
