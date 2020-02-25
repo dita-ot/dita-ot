@@ -26,7 +26,7 @@ import static org.dita.dost.util.Constants.*;
  *   <li>Rewrite table column names to {@code "col" num}, where {@code num} is the column number, and add column name to every entry.</li>
  * </ul>
  */
-public final class NormalizeTableFilter extends AbstractXMLFilter {
+public class NormalizeTableFilter extends AbstractXMLFilter {
 
     private static final String ATTRIBUTE_NAME_COLNAME = "colname";
     private static final String ATTRIBUTE_NAME_COLNUM = "colnum";
