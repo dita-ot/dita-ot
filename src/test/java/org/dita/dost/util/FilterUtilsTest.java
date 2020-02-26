@@ -13,8 +13,14 @@ import static javax.xml.XMLConstants.XML_NS_PREFIX;
 import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
+import java.io.File;
+import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
@@ -25,6 +31,9 @@ import org.dita.dost.util.FilterUtils.FilterKey;
 
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -419,4 +428,244 @@ public class FilterUtilsTest {
                 singleton(flagBlue),
                 f.getFlags(attr(PROPS, "   os(   windows   )   "), new QName[][] {{PROPS, OS}}));
     }
+
+    @Test
+    public void getLinkingAttribute_hrefNotEmpty() throws Exception {
+        // given
+        FilterUtils filterUtils = new FilterUtils(false);
+        Attributes attributes = mock(Attributes.class);
+        doReturn("link").when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_HREF));
+
+        // when
+        String link = filterUtils.getLinkingAttribute(attributes);
+
+        // then
+        assertEquals("link", link);
+    }
+
+    @Test
+    public void getLinkingAttribute_fallbackToConref_hrefEmptyString() throws Exception {
+        // given
+        FilterUtils filterUtils = new FilterUtils(false);
+        Attributes attributes = mock(Attributes.class);
+        doReturn("").when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_HREF));
+        doReturn("conref").when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_CONREF));
+
+        // when
+        String link = filterUtils.getLinkingAttribute(attributes);
+
+        // then
+        assertEquals("conref", link);
+    }
+
+    @Test
+    public void getLinkingAttribute_fallbackToConref_hrefNull() throws Exception {
+        // given
+        FilterUtils filterUtils = new FilterUtils(false);
+        Attributes attributes = mock(Attributes.class);
+        doReturn(null).when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_HREF));
+        doReturn("conref").when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_CONREF));
+
+        // when
+        String link = filterUtils.getLinkingAttribute(attributes);
+
+        // then
+        assertEquals("conref", link);
+    }
+
+    @Test
+    public void getLinkingAttribute_hrefNull_conrefNull() throws Exception {
+        // given
+        FilterUtils filterUtils = new FilterUtils(false);
+        Attributes attributes = mock(Attributes.class);
+        doReturn(null).when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_HREF));
+        doReturn(null).when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_CONREF));
+
+        // when
+        String link = filterUtils.getLinkingAttribute(attributes);
+
+        // then
+        assertNull(link);
+    }
+
+    @Test
+    public void matchFileName_emptyString() throws Exception {
+        // given
+        FilterUtils filterUtils = new FilterUtils(false);
+
+        // when
+        String fileName = filterUtils.matchFileName("");
+
+        // then
+        assertEquals("", fileName);
+    }
+
+    @Test
+    public void matchFileName_noFragment() throws Exception {
+        // given
+        FilterUtils filterUtils = new FilterUtils(false);
+
+        // when
+        String fileName = filterUtils.matchFileName("topic4.xml");
+
+        // then
+        assertEquals("topic4.xml", fileName);
+    }
+
+    @Test
+    public void matchFileName_withFragment() throws Exception {
+        // given
+        FilterUtils filterUtils = new FilterUtils(false);
+
+        // when
+        String fileName = filterUtils.matchFileName("topic4.xml#bla");
+
+        // then
+        assertEquals("topic4.xml", fileName);
+    }
+
+    @Test
+    public void matchFileName_fragmentOnly() throws Exception {
+        // given
+        FilterUtils filterUtils = new FilterUtils(false);
+
+        // when
+        String fileName = filterUtils.matchFileName("#bla");
+
+        // then
+        assertEquals("", fileName);
+    }
+
+
+
+    @Test
+    public void targetsFilteredFile_linkNull() throws Exception {
+        // given
+        FilterUtils filterUtils = new FilterUtils(false);
+        Attributes attributes = mock(Attributes.class);
+        doReturn(null).when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_HREF));
+        doReturn(null).when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_CONREF));
+
+        // when
+        boolean filteredFile = filterUtils.targetsFilteredFile(attributes);
+
+        // then
+        assertFalse(filteredFile);
+    }
+
+    @Test
+    public void targetsFilteredFile_linkEmpty() throws Exception {
+        // given
+        FilterUtils filterUtils = new FilterUtils(false);
+        Attributes attributes = mock(Attributes.class);
+        doReturn("").when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_HREF));
+        doReturn("").when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_CONREF));
+
+        // when
+        boolean filteredFile = filterUtils.targetsFilteredFile(attributes);
+
+        // then
+        assertFalse(filteredFile);
+    }
+
+    @Test
+    public void targetsFilteredFile_filtered() throws Exception {
+        // given
+        Job job = new Job();
+        Job.FileInfo fileInfo = new Job.FileInfo(new URI("topic4.xml"));
+        fileInfo.src = new URI("topic4.xml");
+        fileInfo.isFiltered = true;
+        job.add(fileInfo);
+        FilterUtils filterUtils = new FilterUtils(false);
+        Attributes attributes = mock(Attributes.class);
+        doReturn("topic4.xml").when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_HREF));
+
+        // when
+        boolean filtered = filterUtils.targetsFilteredFile(attributes);
+
+        // then
+        assertTrue(filtered);
+    }
+
+    @Test
+    public void targetsFilteredFile_notFiltered() throws Exception {
+        // given
+        Job job = new Job();
+        Job.FileInfo fileInfo = new Job.FileInfo(new URI("topic4.xml"));
+        fileInfo.src = new URI("topic4.xml");
+        fileInfo.isFiltered = false;
+        job.add(fileInfo);
+        FilterUtils filterUtils = new FilterUtils(false);
+        Attributes attributes = mock(Attributes.class);
+        doReturn("topic4.xml").when(attributes).getValue(ArgumentMatchers.eq(ATTRIBUTE_NAME_HREF));
+
+        // when
+        boolean filtered = filterUtils.targetsFilteredFile(attributes);
+
+        // then
+        assertFalse(filtered);
+    }
+
+    private Attributes mockAttributesForFilteredKeydef(Path topicPath) {
+        Attributes attributes = mock(Attributes.class);
+        doReturn("+ map/topicref mapgroup-d/keydef ").when(attributes).getValue("class");
+        doReturn(topicPath.toString()).when(attributes).getValue("href");
+        doReturn("ktopic4").when(attributes).getValue("keys");
+        doReturn("resource-only").when(attributes).getValue("processing-role");
+        doReturn("internal").when(attributes).getValue("audience");
+        return attributes;
+    }
+
+    @Test
+    public void needsExclusion_filteredKeydef() throws Exception {
+        // given
+        Element element = mock(Element.class);
+        QName[][] properties = null;
+
+        Path topic = Paths.get(TestUtils.getResourceDir(FilterUtilsTest.class).toString(), "topic4.xml");
+        doReturn(topic.toUri().toString()).when(element).getAttribute(ATTRIBUTE_NAME_HREF);
+        FilterUtils filterUtils = spy(new FilterUtils(false));
+        Job job = new Job();
+        Attributes attributes = mockAttributesForFilteredKeydef(topic);
+        doReturn(attributes).when(filterUtils).getAttributes(eq(element));
+        doReturn(true).when(filterUtils).needExclude(eq(attributes), eq(properties));
+        Job.FileInfo fileInfo = new Job.FileInfo(topic.toUri());
+        fileInfo.src = topic.toUri();
+        Job.instance.add(fileInfo);
+
+        // when
+        boolean needsExclusion = filterUtils.needsExclusion(element, properties);
+
+        // then
+        assertTrue(needsExclusion);
+        assertTrue(Job.instance.isKeydefFiltered("ktopic4"));
+        assertFalse(Job.instance.getFileInfo(topic.toUri()).isFiltered);
+    }
+
+    @Test
+    public void needsExclusion_filteredKeydef_filteredTopic() throws Exception {
+        // given
+        Element element = mock(Element.class);
+        QName[][] properties = null;
+
+        Path topic = Paths.get(TestUtils.getResourceDir(FilterUtilsTest.class).toString(), "topic4filtered.xml");
+        doReturn(topic.toUri().toString()).when(element).getAttribute(ATTRIBUTE_NAME_HREF);
+        FilterUtils filterUtils = spy(new FilterUtils(false));
+        Job job = new Job();
+        Attributes attributes = mockAttributesForFilteredKeydef(topic);
+        doReturn(attributes).when(filterUtils).getAttributes(eq(element));
+        doReturn(true).when(filterUtils).needExclude(any(Attributes.class), eq(properties));
+        Job.FileInfo fileInfo = new Job.FileInfo(topic.toUri());
+        fileInfo.src = topic.toUri();
+        Job.instance.add(fileInfo);
+
+        // when
+        boolean needsExclusion = filterUtils.needsExclusion(element, properties);
+
+        // then
+        assertTrue(needsExclusion);
+        assertTrue(Job.instance.isKeydefFiltered("ktopic4"));
+        assertTrue(Job.instance.getFileInfo(topic.toUri()).isFiltered);
+    }
+
 }

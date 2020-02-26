@@ -8,15 +8,20 @@
  */
 package org.dita.dost.util;
 
+import static java.lang.String.format;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.StringUtils.isEmptyString;
+import static org.dita.dost.util.StringUtils.notEmpty;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -25,14 +30,19 @@ import java.util.stream.Stream;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
 import org.dita.dost.module.filter.SubjectScheme;
+import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -45,17 +55,20 @@ import javax.xml.transform.sax.SAXSource;
  *
  * @author Wu, Zhi Qiang
  */
-public final class FilterUtils {
+public class FilterUtils {
 
     /** Subject scheme file extension */
     public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
     public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
     private DITAOTLogger logger;
+
     /** Actions for filter keys. */
     private final Map<FilterKey, Action> filterMap;
+    
     /** Set of filter keys for which an error has already been thrown. */
     private final Set<FilterKey> notMappingRules = new HashSet<>();
+    
     private boolean logMissingAction;
     private final String foregroundConflictColor;
     private final String backgroundConflictColor;
@@ -73,7 +86,7 @@ public final class FilterUtils {
     }
 
     /**
-     * Conveninence constructur that only handles print filtering.
+     * Convenience constructor that only handles print filtering.
      *
      * @param isPrintType transformation output is print-oriented
      */
@@ -119,7 +132,7 @@ public final class FilterUtils {
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-
+    
     @Override
     public String toString() {
         return filterMap.toString();
@@ -268,16 +281,99 @@ public final class FilterUtils {
      * Test if element should be excluded based on filter.
      */
     public boolean needExclude(final Element element, final QName[][] props) {
-        final XMLUtils.AttributesBuilder buf = new XMLUtils.AttributesBuilder();
+        Attributes attributes = getAttributes(element);
+		return needExclude(attributes, props);
+    }
+    
+    /***
+     * Tests whether elements of maps/topics should be filtered out.
+     * Filtered Keydefs are listed in the <code>.job.xml</code> file.
+     */
+    public boolean needsExclusion(final Element element, final QName[][] properties) {
+        Attributes attributes = getAttributes(element);
+		if (needExclude(attributes, properties)) {
+            updateJobIfKeyFiltered(attributes);
+            excludeReferencedTopic(element, properties, attributes);
+			return true;
+		}
+
+		return excludeReferencedTopic(element, properties, attributes);
+    }
+
+    private boolean excludeReferencedTopic(Element element, QName[][] properties, Attributes attributes) {
+        String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
+        if (isMapTopicRef(attributes) && notEmpty(href)) {
+            Optional<Element> referencedDocument = loadDocument(href);
+            if (!referencedDocument.isPresent()) {
+                return false;
+            }
+
+            Attributes referencedAttributes = getAttributes(referencedDocument.get());
+            if (needExclude(referencedAttributes, properties)) {
+                updateFileInfo(href);
+                return isNotKeydef(attributes);
+            }
+        }
+        return false;
+    }
+
+	Attributes getAttributes(final Element element) {
+		final XMLUtils.AttributesBuilder builder = new XMLUtils.AttributesBuilder();
         final NamedNodeMap attrs = element.getAttributes();
         for (int i = 0; i < attrs.getLength() ; i++) {
             final Node attr = attrs.item(i);
             if (attr.getNodeType() == Node.ATTRIBUTE_NODE) {
-                buf.add((Attr) attr);
+                builder.add((Attr) attr);
             }
         }
-        return needExclude(buf.build(), props);
+        return builder.build();
+	}
+	
+	private boolean isMapTopicRef(Attributes attributes) {
+		return !DITAVAREF_D_DITAVALREF.matches(attributes) && (MAP_MAP.matches(attributes) || MAP_TOPICREF.matches(attributes));
+	}
+	
+	private boolean isNotKeydef(Attributes attributes) {
+		return !MAPGROUP_D_KEYDEF.matches(attributes);
+	}
+
+    private Optional<Element> loadDocument(String href) {
+        try {
+            Job job = Job.instance;
+            String absoluteHref = job.getFileInfo(new URI(href)).src.toString();
+            DocumentBuilder builder = newDocumentBuilder();
+            Document document = builder.parse(new InputSource(absoluteHref));
+            return Optional.of(document.getDocumentElement());
+        } catch (NullPointerException | SAXException | IOException | URISyntaxException | ParserConfigurationException e) {
+            logger.warn(format("Source document could not be loaded for %s. Cannot validate filtering attributes.", href));
+        }
+        return Optional.empty();
     }
+
+	private DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		factory.setValidating(false);
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		builder.setEntityResolver(CatalogUtils.getCatalogResolver());
+		return builder;
+	}
+
+	private void updateJobIfKeyFiltered(Attributes attributes) {
+        if (MAPGROUP_D_KEYDEF.matches(attributes)) {
+            Job.instance.addFilteredKey(attributes.getValue(ATTRIBUTE_NAME_KEYS), attributes.getValue(ATTRIBUTE_NAME_HREF));
+        }
+    }
+
+	private void updateFileInfo(String href) {
+		try {
+			URI fileUri = new URI(href);
+            FileInfo fileInfo = Job.instance.getFileInfo(fileUri);
+            fileInfo.isFiltered=true;
+		} catch (URISyntaxException | NullPointerException e) {
+			logger.warn(format("Couldn't update fileinfo %s", href));
+		}
+	}
 
     /**
      * Check if the given Attributes need to be excluded.
@@ -326,6 +422,55 @@ public final class FilterUtils {
         return false;
     }
 
+    public boolean extendedExclusionCheck(final Attributes attributes, final QName[][] extProps) {
+    	if (needExclude(attributes, extProps)) {
+    		return true;
+    	}
+    	
+    	return targetsFilteredFile(attributes);
+    }
+    
+	boolean targetsFilteredFile(Attributes attributes) {
+        final String link = getLinkingAttribute(attributes);
+        if (isEmptyString(link)) {
+            return false;
+        }
+
+        final Job job = Job.instance;
+        final String fileName = matchFileName(link);
+        if (notEmpty(fileName)) {
+            Predicate<FileInfo> isFiltered = fileInfo -> (
+                    fileInfo.src != null && fileInfo.src.toString().endsWith(fileName) && fileInfo.isFiltered);
+            if (job.getFileInfo(isFiltered) != null && job.getFileInfo(isFiltered).size() > 0) {
+                return true;
+            }
+        }
+
+		Predicate<FileInfo> isFiltered = fileInfo -> (fileInfo.uri.toString().equals(link) && fileInfo.isFiltered);
+		return job.getFileInfo(isFiltered) != null && job.getFileInfo(isFiltered).size() > 0;
+	}
+
+	String matchFileName(String link) {
+        String matchAllBeforeHashOrAll = "(.*?)(?=#|$)";
+        Matcher matcher = Pattern.compile(matchAllBeforeHashOrAll).matcher(link);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
+    /**
+     *
+     * @return href value if it is not empty otherwise the conref attribute value, can be null
+     */
+	String getLinkingAttribute(Attributes attributes) {
+        if (notEmpty(attributes.getValue(ATTRIBUTE_NAME_HREF))) {
+            return attributes.getValue(ATTRIBUTE_NAME_HREF);
+        }
+
+        return attributes.getValue(ATTRIBUTE_NAME_CONREF);
+    }
+	
     private final Pattern groupPattern = Pattern.compile("(\\w+)\\((.*?)\\)");
 
     /**

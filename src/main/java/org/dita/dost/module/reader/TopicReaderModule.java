@@ -84,6 +84,11 @@ public final class TopicReaderModule extends AbstractReaderModule {
     }
 
     @Override
+    protected void addToJob(FileInfo fileInfo) {
+        job.addButRetainFilteredState(fileInfo);
+    }
+
+    @Override
     void init() throws SAXException {
         super.init();
 

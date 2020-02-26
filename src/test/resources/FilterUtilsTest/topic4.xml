@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<concept id="topic4" xml:lang="en-us">
+	<title>Topic4</title>
+	<shortdesc>Topic4 shordesc</shortdesc>
+	<conbody>
+		<p id="body">Topic4 body</p>
+	</conbody>
+</concept>

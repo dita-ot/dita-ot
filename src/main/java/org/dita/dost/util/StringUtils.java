@@ -168,6 +168,10 @@ public final class StringUtils {
         return (s == null || s.trim().length() == 0);
     }
 
+    public static boolean notEmpty(final String s) {
+        return !isEmptyString(s);
+    }
+
     /**
      * If target is null, return the value; else append value to target.
      * If withSpace is true, insert a blank between them.

@@ -16,14 +16,19 @@ import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.w3c.dom.Attr;
@@ -85,6 +90,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
+
         if (fileInfoFilter == null) {
             fileInfoFilter = f -> f.format == null || f.format.equals(ATTR_FORMAT_VALUE_DITA) || f.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
         }
@@ -104,15 +110,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             initFilters();
 
             final Document doc = readMap();
-
-            final KeyrefReader reader = new KeyrefReader();
-            reader.setLogger(logger);
-            final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-            final URI mapFile = in.uri;
-            logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
-            reader.read(job.tempDirURI.resolve(mapFile), doc);
-
-            final KeyScope rootScope = reader.getKeyDefinition();
+            final KeyScope rootScope = buildKeyScopes(doc);
             final List<ResolveTask> jobs = collectProcessingTopics(fis, rootScope, doc);
             writeMap(doc);
 
@@ -140,11 +138,36 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
             try {
                 job.write();
+                serializeKeyDefinitions(rootScope);
             } catch (final IOException e) {
                 throw new DITAOTException("Failed to store job state: " + e.getMessage(), e);
             }
         }
+
         return null;
+    }
+
+    private KeyScope buildKeyScopes(Document document) throws DITAOTException {
+        if (Files.exists((new File(job.tempDir, KEYDEF_LIST_FILE)).toPath())) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                SimpleModule module = new SimpleModule();
+                module.addDeserializer(KeyDef.class, new KeyDefDeserializer());
+                objectMapper.registerModule(module);
+                return objectMapper.readValue(new FileInputStream(new File(job.tempDir, KEYDEF_LIST_FILE)),KeyScope.class);
+            } catch (IOException e) {
+                throw new DITAOTException("Couldn't build keyscope", e);
+            }
+        }
+
+        final KeyrefReader reader = new KeyrefReader();
+        reader.setLogger(logger);
+        reader.setJob(job);
+        final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+        final URI mapFile = in.uri;
+        logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
+        reader.read(job.tempDirURI.resolve(mapFile), document);
+        return reader.getKeyDefinition();
     }
 
     private void initFilters() {
@@ -220,7 +243,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             if (href != null && rewrites.containsKey(stripFragment(href))) {
                 href = setFragment(rewrites.get(stripFragment(href)), href.getFragment());
             }
-            final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element);
+            final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element, oldKey.isFiltered());
             newKeys.put(key.getKey(), newKey);
         }
         return new KeyScope(scope.id, scope.name,
@@ -387,6 +410,11 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         } catch (final DITAOTException e) {
             logger.error("Failed to write key definition file: " + e.getMessage(), e);
         }
+    }
+
+    private void serializeKeyDefinitions(KeyScope rootScope) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(new File(job.tempDir, KEYDEF_LIST_FILE), rootScope);
     }
 
     private Document readMap() throws DITAOTException {

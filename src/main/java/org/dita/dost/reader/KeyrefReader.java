@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import static java.util.Arrays.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
@@ -21,10 +22,7 @@ import javax.xml.parsers.DocumentBuilder;
 
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.KeyScope;
-import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.*;
 import org.w3c.dom.*;
 import org.dita.dost.log.DITAOTLogger;
 
@@ -216,6 +214,9 @@ public final class KeyrefReader implements AbstractReader {
                     final String f = copy.getAttribute(ATTRIBUTE_NAME_FORMAT);
                     final String format = f.isEmpty() ? null : f;
                     final KeyDef keyDef = new KeyDef(key, href, scope, format, currentFile, copy);
+                    if (job.getFileInfo(href) != null) {
+                        keyDef.setFiltered(job.getFileInfo(href).isFiltered);
+                    }
                     keyDefs.put(key, keyDef);
                 }
             }

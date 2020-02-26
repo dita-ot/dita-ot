@@ -11,9 +11,12 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
+import org.dita.dost.writer.KeyrefPaserTest;
+import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -22,10 +25,12 @@ import javax.xml.parsers.DocumentBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static junit.framework.Assert.assertEquals;
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.TestUtils.createTempDir;
 import static org.dita.dost.util.XMLUtils.close;
 import static org.junit.Assert.assertNull;
 
@@ -33,6 +38,14 @@ public class TestKeyrefReader {
 
     private static final File resourceDir = TestUtils.getResourceDir(TestKeyrefReader.class);
     private static final File srcDir = new File(resourceDir, "src");
+
+    private File tempDir;
+
+    @Before
+    public void setUp() throws Exception {
+        tempDir = createTempDir(KeyrefPaserTest.class);
+        TestUtils.copy(srcDir, tempDir);
+    }
 
     @Test
     public void testKeyrefReader() throws Exception {
@@ -47,6 +60,7 @@ public class TestKeyrefReader {
 //        set.add("top");
 //        set.add("nested");
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
 //        keyrefreader.setKeys(set);
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope act = keyrefreader.getKeyDefinition();
@@ -73,6 +87,7 @@ public class TestKeyrefReader {
         final File filename = new File(srcDir, "merged.xml");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope act = keyrefreader.getKeyDefinition();
 
@@ -98,10 +113,11 @@ public class TestKeyrefReader {
     // Oberon Technologies' tests
 
     @Test
-    public void testSimpleKeyscope() throws DITAOTException {
+    public void testSimpleKeyscope() throws Exception {
         final File filename = new File(srcDir, "simpleKeyscope.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope act = keyrefreader.getKeyDefinition();
 
@@ -165,10 +181,11 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testQualifiedKeyOverride() throws DITAOTException {
+    public void testQualifiedKeyOverride() throws Exception {
         final File filename = new File(srcDir, "qualifiedKeyOverride.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope act = keyrefreader.getKeyDefinition();
 
@@ -218,10 +235,11 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testMapWithKeyscopes() throws DITAOTException {
+    public void testMapWithKeyscopes() throws Exception {
         final File filename = new File(srcDir, "map-with-keyscopes.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
@@ -260,10 +278,11 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testMaprefKeyscope() throws DITAOTException {
+    public void testMaprefKeyscope() throws Exception {
         final File filename = new File(srcDir, "maprefKeyscope.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope act = keyrefreader.getKeyDefinition();
 
@@ -328,10 +347,11 @@ public class TestKeyrefReader {
     // DITA 1.3 specification examples
 
     @Test
-    public void testExample7() throws DITAOTException {
+    public void testExample7() throws Exception {
         final File filename = new File(srcDir, "example7.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
@@ -354,10 +374,11 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testExample8() throws DITAOTException {
+    public void testExample8() throws Exception {
         final File filename = new File(srcDir, "example8.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
@@ -385,10 +406,11 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testKeysAndScope() throws DITAOTException {
+    public void testKeysAndScope() throws Exception {
         final File filename = new File(srcDir, "keysAndScope.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
@@ -408,10 +430,11 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testMultipleValues() throws DITAOTException {
+    public void testMultipleValues() throws Exception {
         final File filename = new File(srcDir, "multipleValues.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
@@ -431,10 +454,11 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testSingleCircular() throws DITAOTException {
+    public void testSingleCircular() throws Exception {
         final File filename = new File(srcDir, "circularSingle.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         final CachingLogger logger = new CachingLogger();
         keyrefreader.setLogger(logger);
 
@@ -445,10 +469,11 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testCircular() throws DITAOTException {
+    public void testCircular() throws Exception {
         final File filename = new File(srcDir, "circular.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         final CachingLogger logger = new CachingLogger();
         keyrefreader.setLogger(logger);
 
@@ -467,10 +492,11 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testRootScope() throws DITAOTException {
+    public void testRootScope() throws Exception {
         final File filename = new File(srcDir, "rootScope.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
@@ -493,10 +519,11 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testDuplicateScopeNames() throws DITAOTException {
+    public void testDuplicateScopeNames() throws Exception {
         final File filename = new File(srcDir, "duplicate.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
@@ -514,12 +541,13 @@ public class TestKeyrefReader {
         assertEquals("def2", d.get("a").element.getAttribute("id"));
         assertEquals("def1", d.get("A.a").element.getAttribute("id"));
     }
-    
+
     @Test
-    public void testCopyto() throws DITAOTException {
+    public void testCopyto() throws Exception {
         final File filename = new File(srcDir, "copyto.ditamap");
 
         final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.setJob(new Job(tempDir));
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
