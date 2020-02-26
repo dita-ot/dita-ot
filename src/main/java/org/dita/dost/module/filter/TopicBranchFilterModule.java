@@ -13,6 +13,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.Attr;
@@ -202,7 +203,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
             logger.info("Filtering " + srcAbsUri);
             try {
-                xmlUtils.transform(srcAbsUri, pipe);
+            	xmlUtils.transform(URLUtils.stripFragment(srcAbsUri), pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }
