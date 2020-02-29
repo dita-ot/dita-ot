@@ -43,4 +43,25 @@
     <xsl:copy-of select="@id"/>
   </xsl:template>
   
+  <xsl:function name="dita-ot:generate-stable-id" as="xs:string">
+    <xsl:param name="element" as="element()"/>
+    
+    <xsl:value-of>
+      <xsl:for-each select="$element/ancestor-or-self::*">
+        <xsl:if test="position() ne 1">_</xsl:if>
+        <xsl:value-of select="name()"/>
+        <xsl:text>-</xsl:text>
+        <xsl:number/>
+      </xsl:for-each>
+    </xsl:value-of>
+    <!--
+    <xsl:variable name="topic" select="$element/ancestor-or-self::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
+    <xsl:variable name="parent-element" select="$element/ancestor-or-self::*[@id][1][not(. is $topic)]" as="element()?"/>
+    <xsl:variable name="closest" select="($parent-element, $topic)[1]" as="element()"/>
+    <xsl:variable name="index" select="count($closest/descendant::*[local-name() = local-name($element)][. &lt;&lt; $element]) + 1" as="xs:integer"/>
+    
+    <xsl:sequence select="dita-ot:generate-id($topic/@id, string-join(($parent-element/@id, local-name($element), string($index)), $HTML_ID_SEPARATOR))"/>
+    -->
+  </xsl:function>
+  
 </xsl:stylesheet>

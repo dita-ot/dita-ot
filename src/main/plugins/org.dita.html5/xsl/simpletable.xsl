@@ -244,7 +244,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' topic/stentry ')]" mode="simpletable:entry">
     <xsl:apply-templates select="." mode="table:common"/>
-    <xsl:apply-templates select="." mode="headers"/>
+    <xsl:apply-templates select="." mode="simpletable:headers"/>
     <xsl:apply-templates select="@colspan | @rowspan"/>
     <xsl:choose>
       <xsl:when test="*|text()|processing-instruction()">
@@ -255,20 +255,73 @@ See the accompanying LICENSE file for applicable license.
       </xsl:when>
     </xsl:choose>
   </xsl:template>
-  
+
+<!--  <xsl:template match="*[table:is-thead-entry(.)]" mode="simpletable:headers">-->
+<!--    <xsl:attribute name="id" select="dita-ot:generate-html-id(.)"/>-->
+<!--  </xsl:template>-->
+
+<!--  <xsl:template match="*[table:is-tbody-entry(.)]" mode="simpletable:headers">-->
+<!--    &lt;!&ndash;    <xsl:if test="table:is-row-header(.)">&ndash;&gt;-->
+<!--    &lt;!&ndash;      <xsl:attribute name="id" select="dita-ot:generate-html-id(.)"/>&ndash;&gt;-->
+<!--    &lt;!&ndash;    </xsl:if>&ndash;&gt;-->
+<!--    <xsl:call-template name="simpletable:add-headers-attribute"/>-->
+<!--  </xsl:template>-->
+
   <xsl:template match="@colspan | @rowspan">
     <xsl:copy/>
   </xsl:template>
   
-  <xsl:template match="*[simpletable:is-head-entry(.)]" mode="headers">
+  <xsl:template match="*[simpletable:is-head-entry(.)]" mode="simpletable:headers">
     <xsl:attribute name="scope" select="'col'"/>
+    <xsl:attribute name="id" select="dita-ot:generate-html-id(.)"/>
   </xsl:template>
 
-  <xsl:template match="*[simpletable:is-body-entry(.)]" mode="headers">
+  <xsl:template match="*[simpletable:is-body-entry(.)]" mode="simpletable:headers">
     <xsl:if test="simpletable:is-keycol-entry(.)">
       <xsl:attribute name="scope" select="'row'"/>
     </xsl:if>
+    <xsl:variable name="xs" as="xs:integer+"
+                  select="if (@colspan)
+                          then xs:integer(@dita-ot:x) to (xs:integer(@dita-ot:x) + xs:integer(@colspan) - 1)
+                          else xs:integer(@dita-ot:x)"/>
+<!--    <xsl:attribute name="xs">-->
+<!--      <xsl:for-each select="$xs">-->
+<!--        <xsl:text> </xsl:text>-->
+<!--        <xsl:value-of select="."/>-->
+<!--      </xsl:for-each>-->
+<!--    </xsl:attribute>-->
+    <xsl:variable name="stentry" as="element()*"
+                  select="../../*[contains(@class, ' topic/sthead ')]/*[contains(@class, ' topic/stentry ')]
+                                                                       [xs:integer(@dita-ot:x) = $xs]"/>
+    <xsl:if test="exists($stentry)">
+      <xsl:variable name="ids" as="xs:string*" select="$stentry/dita-ot:generate-html-id(.)" />
+      <xsl:attribute name="headers" select="$ids" separator=" "/>
+      <xsl:choose>
+        <xsl:when test="@headers">
+
+        </xsl:when>
+        <xsl:otherwise>
+
+        </xsl:otherwise>
+
+      </xsl:choose>
+      <xsl:call-template name="simpletable:add-headers-attribute"/>
+    </xsl:if>
   </xsl:template>
+
+
+  <xsl:template name="simpletable:add-headers-attribute">
+    <!--    &lt;!&ndash; Find the IDs of all headers that are aligned above this cell. May contain duplicates due to spanning cells. &ndash;&gt;-->
+    <!--    <xsl:variable name="all-thead-headers" select="table:get-matching-thead-headers(.)" as="xs:string*"/>-->
+    <!--    &lt;!&ndash; Row header should be 0 or 1 today, but future updates may allow multiple &ndash;&gt;-->
+    <!--    <xsl:variable name="all-row-headers" select="table:get-matching-row-headers(.)" as="xs:string*"/>-->
+    <!--    <xsl:if test="exists($all-row-headers) or exists($all-thead-headers)">-->
+    <!--      <xsl:attribute name="headers"-->
+    <!--                     select="distinct-values($all-row-headers), distinct-values($all-thead-headers)"-->
+    <!--                     separator=" "/>-->
+    <!--    </xsl:if>-->
+  </xsl:template>
+
 
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="generate-table-header" priority="10">
     <xsl:variable name="gen" as="element(gen)">
