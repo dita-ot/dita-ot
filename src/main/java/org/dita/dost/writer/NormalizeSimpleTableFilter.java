@@ -20,7 +20,7 @@ import static org.dita.dost.util.Constants.*;
  * Normalize simpletable content.
  *
  * <ul>
- *   <li>Rewrite table column names to {@code "col" num}, where {@code num} is the column number, and add column name to every entry.</li>
+ *   <li>Add column coordinates to entries</li>
  * </ul>
  */
 public final class NormalizeSimpleTableFilter extends NormalizeTableFilter {

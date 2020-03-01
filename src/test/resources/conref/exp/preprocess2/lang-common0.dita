@@ -130,8 +130,8 @@
           <cmd class="- topic/ph task/cmd ">step 4</cmd>
           <choicetable class="- topic/simpletable task/choicetable " keycol="1">
             <chrow class="- topic/strow task/chrow ">
-              <choption class="- topic/stentry task/choption ">option</choption>
-              <chdesc class="- topic/stentry task/chdesc ">description</chdesc>
+              <choption class="- topic/stentry task/choption " dita-ot:x="1" dita-ot:y="1">option</choption>
+              <chdesc class="- topic/stentry task/chdesc " dita-ot:x="2" dita-ot:y="1">description</chdesc>
             </chrow>
           </choicetable>
         </step>
@@ -149,9 +149,9 @@
     <refbody class="- topic/body        reference/refbody ">
       <properties class="- topic/simpletable reference/properties ">
         <property class="- topic/strow       reference/property ">
-          <proptype class="- topic/stentry     reference/proptype ">Type</proptype>
-          <propvalue class="- topic/stentry     reference/propvalue ">Value</propvalue>
-          <propdesc class="- topic/stentry     reference/propdesc ">Description</propdesc>
+          <proptype class="- topic/stentry     reference/proptype " dita-ot:x="1" dita-ot:y="1">Type</proptype>
+          <propvalue class="- topic/stentry     reference/propvalue " dita-ot:x="2" dita-ot:y="1">Value</propvalue>
+          <propdesc class="- topic/stentry     reference/propdesc " dita-ot:x="3" dita-ot:y="1">Description</propdesc>
         </property>
       </properties>
     </refbody>
