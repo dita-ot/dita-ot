@@ -174,7 +174,7 @@
       </table>
     </x:expect>
   </x:scenario>
-  
+
   <x:scenario label="headers">
     <x:context select="/simpletable">
       <simpletable class="- topic/simpletable ">
@@ -228,5 +228,90 @@
     </x:expect>
   </x:scenario>
 
+  <x:scenario label="keycol">
+    <x:context select="/simpletable">
+      <simpletable class="- topic/simpletable " keycol="1">
+        <sthead class="- topic/sthead ">
+          <stentry class="- topic/stentry " dita-ot:x="1" dita-ot:y="1">1 1</stentry>
+          <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="1">2 1</stentry>
+        </sthead>
+        <strow class="- topic/strow ">
+          <stentry class="- topic/stentry " dita-ot:x="1" dita-ot:y="2">1 2</stentry>
+          <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="2">2 2</stentry>
+        </strow>
+        <strow class="- topic/strow ">
+          <stentry class="- topic/stentry " dita-ot:x="1" dita-ot:y="3">1 3</stentry>
+          <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="3">2 3</stentry>
+        </strow>
+      </simpletable>
+    </x:context>
+    <x:expect label="has th column">
+      <table>
+        <colgroup>
+          <col style="width:50%"/>
+          <col style="width:50%"/>
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col" id="simpletable-1_sthead-1_stentry-1">1 1</th>
+            <th scope="col" id="simpletable-1_sthead-1_stentry-2">2 1</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" headers="simpletable-1_sthead-1_stentry-1">1 2</th>
+            <td headers="simpletable-1_sthead-1_stentry-2">2 2</td>
+          </tr>
+          <tr>
+            <th scope="row" headers="simpletable-1_sthead-1_stentry-1">1 3</th>
+            <td headers="simpletable-1_sthead-1_stentry-2">2 3</td>
+          </tr>
+        </tbody>
+      </table>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="scope">
+    <x:context select="/simpletable">
+      <simpletable class="- topic/simpletable ">
+        <sthead class="- topic/sthead ">
+          <stentry class="- topic/stentry " dita-ot:x="1" dita-ot:y="1">1 1</stentry>
+          <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="1">2 1</stentry>
+        </sthead>
+        <strow class="- topic/strow ">
+          <stentry class="- topic/stentry " dita-ot:x="1" dita-ot:y="2" scope="row">1 2</stentry>
+          <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="2">2 2</stentry>
+        </strow>
+        <strow class="- topic/strow ">
+          <stentry class="- topic/stentry " dita-ot:x="1" dita-ot:y="3">1 3</stentry>
+          <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="3">2 3</stentry>
+        </strow>
+      </simpletable>
+    </x:context>
+    <x:expect label="has th column">
+      <table>
+        <colgroup>
+          <col style="width:50%"/>
+          <col style="width:50%"/>
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col" id="simpletable-1_sthead-1_stentry-1">1 1</th>
+            <th scope="col" id="simpletable-1_sthead-1_stentry-2">2 1</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" headers="simpletable-1_sthead-1_stentry-1">1 2</th>
+            <td headers="simpletable-1_sthead-1_stentry-2">2 2</td>
+          </tr>
+          <tr>
+            <td headers="simpletable-1_sthead-1_stentry-1">1 3</td>
+            <td headers="simpletable-1_sthead-1_stentry-2">2 3</td>
+          </tr>
+        </tbody>
+      </table>
+    </x:expect>
+  </x:scenario>
 
 </x:description>
