@@ -7,14 +7,23 @@
  */
 package org.dita.dost.util;
 
-import static javax.xml.XMLConstants.*;
-import static org.apache.commons.io.FileUtils.*;
-import static org.dita.dost.util.Constants.*;
-
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Stream;
+import net.sf.saxon.event.ProxyReceiver;
+import net.sf.saxon.jaxp.TransformerImpl;
+import net.sf.saxon.lib.Logger;
+import net.sf.saxon.lib.StandardErrorListener;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.serialize.Emitter;
+import net.sf.saxon.serialize.MessageWarner;
+import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.trans.XsltController;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.LoggingErrorListener;
+import org.w3c.dom.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.AttributesImpl;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -22,27 +31,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.*;
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Stream;
 
-import net.sf.saxon.event.ProxyReceiver;
-import net.sf.saxon.jaxp.TransformerImpl;
-import net.sf.saxon.lib.StandardErrorListener;
-import net.sf.saxon.serialize.Emitter;
-import net.sf.saxon.lib.Logger;
-import net.sf.saxon.serialize.MessageWarner;
-import net.sf.saxon.trans.UncheckedXPathException;
-import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.trans.XsltController;
-
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.LoggingErrorListener;
-import org.w3c.dom.*;
-
-import org.xml.sax.*;
-import org.xml.sax.helpers.AttributesImpl;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.apache.commons.io.FileUtils.deleteQuietly;
+import static org.apache.commons.io.FileUtils.moveFile;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * XML utility methods.
@@ -63,12 +63,16 @@ public final class XMLUtils {
         saxParserFactory.setNamespaceAware(true);
     }
     private DITAOTLogger logger;
-    private final TransformerFactory transformerFactory;
+    private final Processor processor;
+    private final XsltCompiler xsltCompiler;
 
     public static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl();
 
     public XMLUtils() {
-        transformerFactory = TransformerFactory.newInstance();
+        final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
+        config.setURIResolver(CatalogUtils.getCatalogResolver());
+        processor = new Processor(config);
+        xsltCompiler = processor.newXsltCompiler();
     }
 
     public void setLogger(final DITAOTLogger logger) {
@@ -563,10 +567,6 @@ public final class XMLUtils {
 
         try (final InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
              final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-            Transformer transformer = transformerFactory.newTransformer();
-            if (logger != null) {
-                transformer = withLogger(transformer, logger);
-            }
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
@@ -575,16 +575,17 @@ public final class XMLUtils {
                 filter.setParent(reader);
                 reader = filter;
             }
-            final Source source = new SAXSource(reader, new InputSource(in));
-            source.setSystemId(inputFile.toURI().toString());
-            final Result result = new StreamResult(out);
-            transformer.transform(source, result);
-        } catch (final UncheckedXPathException e) {
-            throw new DITAOTException("Failed to transform " + inputFile, e);
+
+            final Serializer result = processor.newSerializer(out);
+            final ContentHandler serializer = result.getContentHandler();
+            reader.setContentHandler(serializer);
+
+            final InputSource inputSource = new InputSource(in);
+            inputSource.setSystemId(inputFile.toURI().toString());
+
+            reader.parse(inputSource);
         } catch (final RuntimeException e) {
             throw e;
-        } catch (final TransformerException e) {
-            throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessage(), e);
         }
@@ -611,13 +612,7 @@ public final class XMLUtils {
             throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
         }
 
-        InputSource src = null;
-        StreamResult result = null;
         try {
-            Transformer transformer = transformerFactory.newTransformer();
-            if (logger != null) {
-                transformer = withLogger(transformer, logger);
-            }
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
@@ -626,29 +621,18 @@ public final class XMLUtils {
                 filter.setParent(reader);
                 reader = filter;
             }
-            src = new InputSource(input.toString());
-            final Source source = new SAXSource(reader, src);
-            result = new StreamResult(output.toString());
-            transformer.transform(source, result);
-        } catch (final UncheckedXPathException e) {
-            throw new DITAOTException("Failed to transform " + input, e);
+
+            final Serializer result = processor.newSerializer(outputFile);
+            final ContentHandler serializer = result.getContentHandler();
+            reader.setContentHandler(serializer);
+
+            final InputSource inputSource = new InputSource(input.toString());
+
+            reader.parse(inputSource);
         } catch (final RuntimeException e) {
             throw e;
-        } catch (final TransformerException e) {
-            throw new DITAOTException("Failed to transform " + input + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + input + ": " + e.getMessage(), e);
-        } finally {
-            try {
-                close(src);
-            } catch (final IOException e) {
-                // NOOP
-            }
-            try {
-                close(result);
-            } catch (final IOException e) {
-                // NOOP
-            }
         }
     }
 

@@ -22,7 +22,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.util.Collection;
@@ -42,15 +41,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
 
     private Processor processor;
     private XsltExecutable templates;
-//    private XsltExecutable serializer;
 
     private void init(final AbstractPipelineInput input) {
-//        final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
-//        try {
-//            templates = transformerFactory.newTemplates(new StreamSource(styleFile));
-//            serializer = transformerFactory.newTransformer();
-//        } catch (TransformerConfigurationException e) {
-//            throw new RuntimeException("Failed to compile " + styleFile + ": " + e.getMessageAndLocation(), e);
         final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
         config.setURIResolver(CatalogUtils.getCatalogResolver());
         processor = new Processor(config);
@@ -61,7 +53,6 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         final File style = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
         try {
             templates = xsltCompiler.compile(new StreamSource(style));
-//            serializer = xsltCompiler. transformerFactory.newTransformer();
         } catch (SaxonApiException e) {
             throw new RuntimeException("Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(), e);
         }
