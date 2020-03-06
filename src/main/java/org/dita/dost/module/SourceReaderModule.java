@@ -7,7 +7,9 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.s9api.Processor;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.XMLUtils;
@@ -50,6 +52,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
      * Absolute DITA-OT base path.
      */
     File ditaDir;
+    Processor processor;
 
     /**
      * Get reader for input format
@@ -125,7 +128,12 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
         }
 
         CatalogUtils.setDitaDir(ditaDir);
-        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
+        reader.setEntityResolver(catalogResolver);
+
+        final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
+        config.setURIResolver(catalogResolver);
+        processor = new Processor(config);
     }
 
     /**
