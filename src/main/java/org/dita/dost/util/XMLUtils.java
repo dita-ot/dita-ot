@@ -8,16 +8,16 @@
 package org.dita.dost.util;
 
 import net.sf.saxon.event.ProxyReceiver;
+import net.sf.saxon.event.Sender;
 import net.sf.saxon.jaxp.TransformerImpl;
 import net.sf.saxon.lib.Logger;
 import net.sf.saxon.lib.StandardErrorListener;
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.s9api.*;
 import net.sf.saxon.serialize.Emitter;
 import net.sf.saxon.serialize.MessageWarner;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.trans.XsltController;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.LoggingErrorListener;
@@ -63,16 +63,19 @@ public final class XMLUtils {
         saxParserFactory.setNamespaceAware(true);
     }
     private DITAOTLogger logger;
+    private final CatalogResolver catalogResolver;
     private final Processor processor;
     private final XsltCompiler xsltCompiler;
 
     public static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl();
 
     public XMLUtils() {
+        catalogResolver = CatalogUtils.getCatalogResolver();
         final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
-        config.setURIResolver(CatalogUtils.getCatalogResolver());
+        config.setURIResolver(catalogResolver);
         processor = new Processor(config);
         xsltCompiler = processor.newXsltCompiler();
+        xsltCompiler.setURIResolver(catalogResolver);
     }
 
     public void setLogger(final DITAOTLogger logger) {
@@ -765,6 +768,40 @@ public final class XMLUtils {
             builder = new DebugDocumentBuilder(builder);
         }
         return builder;
+    }
+
+    /**
+     * Write DOM document to file.
+     *
+     * @param doc document to store
+     * @param dst absolute destination file URI
+     * @throws IOException if serializing file fails
+     */
+    public void writeDocument(final Document doc, final URI dst) throws IOException {
+        try {
+            final Serializer serializer = processor.newSerializer(new File(dst));
+            final XdmNode source = processor.newDocumentBuilder().wrap(doc);
+            serializer.serializeNode(source);
+        } catch (SaxonApiException e) {
+            throw new IOException(e);
+        }
+    }
+
+    /**
+     * Write DOM document to SAX pipe.
+     *
+     * @param doc document to store
+     * @param dst SAX pipe
+     * @throws IOException if serializing file fails
+     */
+    public void writeDocument(final Node doc, final ContentHandler dst) throws IOException {
+        try {
+            final SAXDestination destination = new SAXDestination(dst);
+            final XdmNode source = processor.newDocumentBuilder().wrap(doc);
+            processor.writeXdmValue(source, destination);
+        } catch (SaxonApiException e) {
+            throw new IOException(e);
+        }
     }
 
     /**

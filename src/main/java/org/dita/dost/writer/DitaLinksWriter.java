@@ -11,18 +11,22 @@ package org.dita.dost.writer;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
-import org.w3c.dom.*;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLFilterImpl;
 
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXResult;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Map;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
@@ -42,7 +46,6 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
     /** Stack of topic IDs. */
     private Deque<String> topicIdStack;
     private final ArrayList<String> topicSpecList;
-    private final Transformer serializer;
     private static final Attributes relatedLinksAtts = new AttributesBuilder()
             .add(ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString())
             .build();
@@ -54,11 +57,6 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
     public DitaLinksWriter() {
         super();
         topicSpecList = new ArrayList<>();
-        try {
-            serializer = TransformerFactory.newInstance().newTransformer();
-        } catch (final TransformerConfigurationException e) {
-            throw new RuntimeException("Failed to configure DOM to SAX transformer: " + e.getMessage(), e);
-        }
     }
 
     @Override
@@ -160,15 +158,14 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
 
     private void domToSax(final Node root) throws SAXException {
         try {
-            final Result result = new SAXResult(new FilterHandler(getContentHandler()));
+            final FilterHandler handler = new FilterHandler(getContentHandler());
             final NodeList children = root.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 final Node links = rewriteLinks((Element) children.item(i));
-                final Source source = new DOMSource(links);
-                serializer.transform(source, result);
+                xmlUtils.writeDocument(links, handler);
             }
-        } catch (TransformerException e) {
-            throw new SAXException("Failed to serialize DOM node to SAX: " + e.getMessageAndLocation(), e);
+        } catch (IOException e) {
+            throw new SAXException("Failed to serialize DOM node to SAX: " + e.getMessage(), e);
         }
     }
 

@@ -23,17 +23,17 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
  * Branch filter module for topics.
@@ -109,21 +109,10 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         filterTopics(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
 
         logger.debug("Writing " + currentFile);
-        Result result = null;
         try {
-            Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(currentFile.toString());
-            serializer.transform(new DOMSource(doc), result);
-        } catch (final TransformerConfigurationException | TransformerFactoryConfigurationError e) {
-            throw new RuntimeException(e);
-        } catch (final TransformerException e) {
-            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessageAndLocation(), e);
-        } finally {
-            try {
-                close(result);
-            } catch (final IOException e) {
-                logger.error("Failed to close result stream for " + map.toString() + ": " + e.getMessage(), e);
-            }
+            xmlUtils.writeDocument(doc, currentFile);
+        } catch (final IOException e) {
+            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
         }
     }
 

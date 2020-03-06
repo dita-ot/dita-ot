@@ -8,9 +8,7 @@
  */
 package org.dita.dost.module;
 
-import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -489,15 +487,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             throw new DITAOTException("Failed to make directory " + p.getAbsolutePath());
         }
         try {
-            final Serializer serializer = processor.newSerializer(filename);
-            final XdmNode source = processor.newDocumentBuilder().wrap(root);
-            serializer.serializeNode(source);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final SaxonApiException e) {
-            logger.error(e.getMessage(), e) ;
-            throw new DITAOTException(e);
-        } catch (final Exception e) {
+            xmlUtils.writeDocument(root, filename.toURI());
+        } catch (final IOException e) {
             logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);
         }

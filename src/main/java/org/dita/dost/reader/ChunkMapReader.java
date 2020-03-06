@@ -287,25 +287,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private void outputMapFile(final URI file, final Document doc) {
-        Result result = null;
         try {
-            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(new FileOutputStream(new File(file)));
-            serializer.transform(new DOMSource(doc), result);
-        } catch (final UncheckedXPathException e) {
-            logger.error(e.getXPathException().getMessageAndLocation(), e);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final TransformerException e) {
-            logger.error(e.getMessageAndLocation(), e);
-        } catch (final Exception e) {
+            xmlUtils.writeDocument(doc, file);
+        } catch (final IOException e) {
             logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                close(result);
-            } catch (final IOException e) {
-                logger.error(e.getMessage(), e);
-            }
         }
     }
 

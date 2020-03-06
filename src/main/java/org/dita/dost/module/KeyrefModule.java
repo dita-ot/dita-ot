@@ -8,7 +8,6 @@
  */
 package org.dita.dost.module;
 
-import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -26,9 +25,6 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLFilter;
 
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -447,23 +443,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     private void writeMap(final FileInfo in, final Document doc) throws DITAOTException {
-        Result out = null;
         try {
-            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            out = new StreamResult(job.tempDirURI.resolve(in.uri).toString());
-            serializer.transform(new DOMSource(doc), out);
-        } catch (final UncheckedXPathException e) {
-            throw new DITAOTException("Failed to write map", e);
-        } catch (final TransformerConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (final TransformerException e) {
-            throw new DITAOTException("Failed to write map: " + e.getMessageAndLocation(), e);
-        } finally {
-            try {
-                close(out);
-            } catch (IOException e) {
-                logger.error("Failed to close result: " + e.getMessage(), e);
-            }
+            xmlUtils.writeDocument(doc, job.tempDirURI.resolve(in.uri));
+        } catch (final IOException e) {
+            throw new DITAOTException("Failed to write map: " + e.getMessage(), e);
         }
     }
 

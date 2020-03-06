@@ -7,18 +7,6 @@
  */
 package org.dita.dost.writer;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.Result;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
@@ -27,15 +15,22 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
-import static org.dita.dost.util.XMLUtils.close;
+import javax.xml.parsers.DocumentBuilder;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Reads XML into DOM, modifies it, and serializes back into XML.
  */
 public abstract class AbstractDomFilter implements AbstractReader {
 
+    protected final XMLUtils xmlUtils;
     protected DITAOTLogger logger;
     protected Job job;
+
+    public AbstractDomFilter() {
+        xmlUtils = new XMLUtils();
+    }
 
     @Override
     public void read(final File filename) throws DITAOTException {
@@ -43,7 +38,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
         logger.info("Processing " + filename.toURI());
         Document doc;
         try {
-            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
+            final DocumentBuilder builder = xmlUtils.getDocumentBuilder();
             builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
             logger.debug("Reading " + filename.toURI());
             doc = builder.parse(filename);
@@ -56,25 +51,11 @@ public abstract class AbstractDomFilter implements AbstractReader {
         final Document resDoc = process(doc);
 
         if (resDoc != null) {
-            Result res = null;
             try {
-                res = new StreamResult(new FileOutputStream(filename));
-                final DOMSource ds = new DOMSource(resDoc);
-                final Transformer serializer = TransformerFactory.newInstance().newTransformer();
                 logger.debug("Writing " + filename.toURI());
-                serializer.transform(ds, res);
-            } catch (final RuntimeException e) {
-                throw e;
-            } catch (final TransformerException e) {
-                throw new DITAOTException("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessageAndLocation(), e);
-            } catch (final Exception e) {
+                xmlUtils.writeDocument(resDoc, filename.toURI());
+            } catch (final IOException e) {
                 throw new DITAOTException("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
-            } finally {
-                try {
-                    close(res);
-                } catch (final IOException e) {
-                    logger.error("Failed to close result: " + e.getMessage(), e);
-                }
             }
         }
     }
