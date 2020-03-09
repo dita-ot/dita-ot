@@ -18,11 +18,8 @@ import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
-import javax.xml.parsers.DocumentBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -52,15 +49,9 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
     private final XMLUtils xmlUtils = new XMLUtils();
-    private final DocumentBuilder builder;
     /** Current map being processed, relative to temporary directory */
     private URI map;
     private final Set<URI> filtered = new HashSet<>();
-
-    public TopicBranchFilterModule() {
-        super();
-        builder = XMLUtils.getDocumentBuilder();
-    }
 
     @Override
     public void setLogger(final DITAOTLogger logger) {
@@ -96,8 +87,8 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = builder.parse(new InputSource(currentFile.toString()));
-        } catch (final SAXException | IOException e) {
+            doc = xmlUtils.getDocument(currentFile);
+        } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
         }

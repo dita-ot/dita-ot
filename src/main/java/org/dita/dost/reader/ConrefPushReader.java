@@ -8,36 +8,26 @@
  */
 package org.dita.dost.reader;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
-import java.io.File;
-import java.net.URI;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.dom.DOMResult;
+import java.io.File;
+import java.net.URI;
+import java.util.*;
 
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * Class for reading conref push content.
@@ -133,8 +123,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
 
-        final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
-        pushDocument = documentBuilder.newDocument();
+        pushDocument = XMLUtils.getDocumentBuilder().newDocument();
     }
 
     @Override

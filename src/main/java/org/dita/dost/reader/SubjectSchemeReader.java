@@ -8,16 +8,6 @@
 
 package org.dita.dost.reader;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-
-import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.util.Job;
@@ -27,6 +17,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.namespace.QName;
+import java.io.*;
+import java.net.URI;
+import java.util.*;
+
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * Subject scheme reader.
@@ -169,8 +167,8 @@ public class SubjectSchemeReader {
         logger.debug("Load subject scheme " + scheme);
 
         try {
-            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
-            final Document doc = builder.parse(scheme);
+            final XMLUtils xmlUtils = new XMLUtils();
+            final Document doc = xmlUtils.getDocument(scheme.toURI());
             final Element schemeRoot = doc.getDocumentElement();
             if (schemeRoot == null) {
                 return;

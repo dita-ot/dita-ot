@@ -18,11 +18,8 @@ import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -54,7 +51,6 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
-    private final DocumentBuilder builder;
     private final XMLUtils xmlUtils;
 
     /** Current map being processed, relative to temporary directory */
@@ -65,7 +61,6 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     public MapBranchFilterModule() {
         super();
         xmlUtils = new XMLUtils();
-        builder = xmlUtils.getDocumentBuilder();
     }
 
     @Override
@@ -100,8 +95,8 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = builder.parse(new InputSource(currentFile.toString()));
-        } catch (final SAXException | IOException e) {
+            doc = xmlUtils.getDocument(currentFile);
+        } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
         }

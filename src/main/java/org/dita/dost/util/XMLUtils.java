@@ -815,7 +815,22 @@ public final class XMLUtils {
         if (Configuration.DEBUG) {
             builder = new DebugDocumentBuilder(builder);
         }
+        builder.setEntityResolver(CatalogUtils.getCatalogResolver());
         return builder;
+    }
+
+    /**
+     * Get DOM document for file. Convenience method.
+     *
+     * @param path temporary file URI, absolute or relative
+     * @throws java.io.FileNotFoundException if file does not exist or cannot be read
+     */
+    public Document getDocument(final URI path) throws IOException {
+        try {
+            return getDocumentBuilder().parse(path.toString());
+        } catch (final IOException | SAXException e) {
+            throw new IOException("Failed to read document: " + e.getMessage(), e);
+        }
     }
 
     /**

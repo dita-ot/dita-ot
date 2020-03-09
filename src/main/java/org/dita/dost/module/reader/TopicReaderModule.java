@@ -24,7 +24,6 @@ import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
@@ -42,9 +41,7 @@ import java.util.Objects;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.exists;
-import static org.dita.dost.util.URLUtils.stripFragment;
-import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.ancestors;
 import static org.dita.dost.util.XMLUtils.toList;
 import static org.dita.dost.writer.DitaWriterFilter.ATTRIBUTE_NAME_ORIG_FORMAT;
@@ -155,8 +152,9 @@ public final class TopicReaderModule extends AbstractReaderModule {
         final URI currentFile = job.tempDirURI.resolve(fi.uri);
         try {
             logger.debug("Reading " + currentFile);
-            return XMLUtils.getDocumentBuilder().parse(new InputSource(currentFile.toString()));
-        } catch (final SAXException | IOException e) {
+            final XMLUtils xmlUtils = new XMLUtils();
+            return xmlUtils.getDocument(currentFile);
+        } catch (final IOException e) {
             throw new SAXException("Failed to parse " + currentFile, e);
         }
     }

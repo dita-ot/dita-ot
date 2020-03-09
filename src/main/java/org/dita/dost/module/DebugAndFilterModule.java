@@ -26,7 +26,6 @@ import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -329,9 +328,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             final Queue<URI> queue = new LinkedList<>(graph.keySet());
             final Set<URI> visitedSet = new HashSet<>();
 
-            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
-            builder.setEntityResolver(CatalogUtils.getCatalogResolver());
-
             while (!queue.isEmpty()) {
                 final URI parent = queue.poll();
                 final Set<URI> children = graph.get(parent);
@@ -347,13 +343,13 @@ public final class DebugAndFilterModule extends SourceReaderModule {
                 final Document parentRoot;
                 if (!tmprel.exists()) {
                     final URI src = job.getFileInfo(parent).src;
-                    parentRoot = builder.parse(src.toString());
+                    parentRoot = xmlUtils.getDocument(src);
                 } else {
-                    parentRoot = builder.parse(tmprel);
+                    parentRoot = xmlUtils.getDocument(tmprel.toURI());
                 }
                 if (children != null) {
                     for (final URI childpath: children) {
-                        final Document childRoot = builder.parse(job.getInputFile().resolve(childpath.getPath()).toString());
+                        final Document childRoot = xmlUtils.getDocument(job.getInputFile().resolve(childpath.getPath()));
                         mergeScheme(parentRoot, childRoot);
                         generateScheme(new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION), childRoot);
                     }

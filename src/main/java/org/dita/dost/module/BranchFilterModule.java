@@ -23,12 +23,9 @@ import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -64,7 +61,6 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
     private final XMLUtils xmlUtils;
-    private final DocumentBuilder builder;
     private final DitaValReader ditaValReader;
     private TempFileNameScheme tempFileNameScheme;
     private final Map<URI, FilterUtils> filterCache = new HashMap<>();
@@ -75,7 +71,6 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     private final Set<URI> filtered = new HashSet<>();
 
     public BranchFilterModule() {
-        builder = XMLUtils.getDocumentBuilder();
         ditaValReader = new DitaValReader();
         xmlUtils = new XMLUtils();
     }
@@ -127,8 +122,8 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = builder.parse(new InputSource(currentFile.toString()));
-        } catch (final SAXException | IOException e) {
+            doc = xmlUtils.getDocument(currentFile);
+        } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
         }

@@ -22,7 +22,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
 import org.xml.sax.XMLFilter;
 
 import java.io.File;
@@ -38,7 +37,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.KEYDEF_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.close;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
@@ -427,18 +425,11 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     private Document readMap(final FileInfo input) throws DITAOTException {
-        InputSource in = null;
         try {
-            in = new InputSource(job.tempDirURI.resolve(input.uri).toString());
-            return XMLUtils.getDocumentBuilder().parse(in);
+            final URI in = job.tempDirURI.resolve(input.uri);
+            return xmlUtils.getDocument(in);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to parse map: " + e.getMessage(), e);
-        } finally {
-            try {
-                close(in);
-            } catch (IOException e) {
-                logger.error("Failed to close input: " + e.getMessage(), e);
-            }
         }
     }
 

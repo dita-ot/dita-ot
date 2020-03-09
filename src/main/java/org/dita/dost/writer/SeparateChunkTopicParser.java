@@ -10,6 +10,7 @@ package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,7 +20,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
-import javax.xml.parsers.DocumentBuilder;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -258,11 +258,11 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
      * @return element.
      */
     private Element getTopicDoc(final URI absolutePathToFile) {
-        final DocumentBuilder builder = getDocumentBuilder();
+        final XMLUtils xmlUtils = new XMLUtils();
         try {
-            final Document doc = builder.parse(absolutePathToFile.toString());
+            final Document doc = xmlUtils.getDocument(absolutePathToFile);
             return doc.getDocumentElement();
-        } catch (final SAXException | IOException e) {
+        } catch (final IOException e) {
             logger.error("Failed to parse " + absolutePathToFile + ": " + e.getMessage(), e);
         }
         return null;
