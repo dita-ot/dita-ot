@@ -11,6 +11,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -50,9 +51,7 @@ public class MapMetaReaderTest {
 
     @Test
     public void testRead() throws DITAOTException, SAXException, IOException, ParserConfigurationException{
-        final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-        builderFactory.setNamespaceAware(true);
-        final DocumentBuilder db = builderFactory.newDocumentBuilder();
+        final DocumentBuilder db = XMLUtils.getDocumentBuilder();
         db.setEntityResolver(CatalogUtils.getCatalogResolver());
 
         assertXMLEqual(db.parse(new File(expDir, "test.ditamap")),

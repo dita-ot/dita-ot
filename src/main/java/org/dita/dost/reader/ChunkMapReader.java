@@ -8,7 +8,6 @@
  */
 package org.dita.dost.reader;
 
-import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
@@ -26,12 +25,6 @@ import org.xml.sax.SAXException;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Result;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -287,25 +280,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private void outputMapFile(final URI file, final Document doc) {
-        Result result = null;
         try {
-            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(new FileOutputStream(new File(file)));
-            serializer.transform(new DOMSource(doc), result);
-        } catch (final UncheckedXPathException e) {
-            logger.error(e.getXPathException().getMessageAndLocation(), e);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final TransformerException e) {
-            logger.error(e.getMessageAndLocation(), e);
-        } catch (final Exception e) {
+            xmlUtils.writeDocument(doc, file);
+        } catch (final IOException e) {
             logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                close(result);
-            } catch (final IOException e) {
-                logger.error(e.getMessage(), e);
-            }
         }
     }
 

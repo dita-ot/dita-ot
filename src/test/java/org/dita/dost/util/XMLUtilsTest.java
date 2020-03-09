@@ -7,32 +7,55 @@
  */
 package org.dita.dost.util;
 
-import static javax.xml.XMLConstants.*;
-import static org.junit.Assert.*;
+import net.sf.saxon.Configuration;
+import net.sf.saxon.lib.CollationURIResolver;
+import net.sf.saxon.om.StructuredQName;
+import net.sf.saxon.trans.SymbolicName;
+import org.dita.dost.TestUtils.CachingLogger;
+import org.dita.dost.TestUtils.CachingLogger.Message;
+import org.dita.dost.module.DelegatingCollationUriResolverTest;
+import org.junit.Test;
+import org.w3c.dom.Attr;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.AttributesImpl;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
-import org.dita.dost.TestUtils.CachingLogger;
-import org.dita.dost.TestUtils.CachingLogger.Message;
-import org.w3c.dom.Element;
-import org.w3c.dom.Document;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Attr;
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.AttributesImpl;
-import org.junit.Test;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.junit.Assert.*;
 
 public class XMLUtilsTest {
+
+    @Test
+    public void configureCollationResolvers() {
+        final net.sf.saxon.Configuration configuration = new Configuration();
+        XMLUtils.configureSaxonCollationResolvers(configuration);
+        final CollationURIResolver collationURIResolver = configuration.getCollationURIResolver();
+        assertTrue(collationURIResolver.getClass().isAssignableFrom(DelegatingCollationUriResolverTest.class));
+    }
+
+    @Test
+    public void configureExtensions() {
+        final net.sf.saxon.Configuration configuration = new Configuration();
+        XMLUtils.configureSaxonExtensions(configuration);
+        final SymbolicName.F functionName = new SymbolicName.F(new StructuredQName("x", "y", "z"), 0);
+        assertTrue(configuration.getIntegratedFunctionLibrary().isAvailable(functionName));
+    }
 
     @Test
     public void testGetPrefix() {

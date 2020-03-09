@@ -30,17 +30,11 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.Map.Entry;
@@ -815,9 +809,8 @@ public final class Integrator {
         final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml");
         logger.debug("Writing " + plugins);
         try {
-            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            serializer.transform(new DOMSource(pluginsDoc), new StreamResult(plugins));
-        } catch (final TransformerConfigurationException e) {
+            new XMLUtils().writeDocument(pluginsDoc, plugins);
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }

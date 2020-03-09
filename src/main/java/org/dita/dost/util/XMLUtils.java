@@ -7,14 +7,26 @@
  */
 package org.dita.dost.util;
 
-import static javax.xml.XMLConstants.*;
-import static org.apache.commons.io.FileUtils.*;
-import static org.dita.dost.util.Constants.*;
-
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Stream;
+import com.google.common.annotations.VisibleForTesting;
+import net.sf.saxon.event.ProxyReceiver;
+import net.sf.saxon.jaxp.TransformerImpl;
+import net.sf.saxon.lib.CollationURIResolver;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import net.sf.saxon.lib.Logger;
+import net.sf.saxon.lib.StandardErrorListener;
+import net.sf.saxon.s9api.*;
+import net.sf.saxon.serialize.Emitter;
+import net.sf.saxon.serialize.MessageWarner;
+import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.trans.XsltController;
+import org.apache.xml.resolver.tools.CatalogResolver;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.LoggingErrorListener;
+import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
+import org.w3c.dom.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.AttributesImpl;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -22,25 +34,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.*;
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Stream;
 
-import net.sf.saxon.event.ProxyReceiver;
-import net.sf.saxon.jaxp.TransformerImpl;
-import net.sf.saxon.serialize.Emitter;
-import net.sf.saxon.serialize.MessageWarner;
-import net.sf.saxon.trans.UncheckedXPathException;
-import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.trans.XsltController;
-
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.LoggingErrorListener;
-import org.w3c.dom.*;
-
-import org.xml.sax.*;
-import org.xml.sax.helpers.AttributesImpl;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.apache.commons.io.FileUtils.deleteQuietly;
+import static org.apache.commons.io.FileUtils.moveFile;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * XML utility methods.
@@ -61,12 +66,64 @@ public final class XMLUtils {
         saxParserFactory.setNamespaceAware(true);
     }
     private DITAOTLogger logger;
-    private final TransformerFactory transformerFactory;
+    private final CatalogResolver catalogResolver;
+    private final Processor processor;
+    private final XsltCompiler xsltCompiler;
 
     public static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl();
 
     public XMLUtils() {
-        transformerFactory = TransformerFactory.newInstance();
+        catalogResolver = CatalogUtils.getCatalogResolver();
+        final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
+        config.setURIResolver(catalogResolver);
+        configureSaxonExtensions(config);
+        configureSaxonCollationResolvers(config);
+        processor = new Processor(config);
+        xsltCompiler = processor.newXsltCompiler();
+        xsltCompiler.setURIResolver(catalogResolver);
+    }
+
+    /**
+     * Registers Saxon full integrated function definitions.
+     *
+     * The intgrated function should be an instance of net.sf.saxon.lib.ExtensionFunctionDefinition abstract class.
+     * @see <a href="https://www.saxonica.com/html/documentation/extensibility/integratedfunctions/ext-full-J.html">Saxon
+     *      Java extension functions: full interface</a>
+     */
+    @VisibleForTesting
+    static void configureSaxonExtensions(final net.sf.saxon.Configuration conf) {
+        for (ExtensionFunctionDefinition def : ServiceLoader.load(ExtensionFunctionDefinition.class)) {
+            try {
+                conf.registerExtensionFunction(def.getClass().newInstance());
+            } catch (InstantiationException e) {
+                throw new RuntimeException("Failed to register " + def.getFunctionQName().getDisplayName()
+                        + ". Cannot create instance of " + def.getClass().getName() + ": " + e.getMessage(), e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * Registers collation URI resolvers.
+     */
+    @VisibleForTesting
+    static void configureSaxonCollationResolvers(final net.sf.saxon.Configuration conf) {
+        for (DelegatingCollationUriResolver resolver : ServiceLoader.load(DelegatingCollationUriResolver.class)) {
+            try {
+                final DelegatingCollationUriResolver newResolver = resolver.getClass().newInstance();
+                final CollationURIResolver currentResolver = conf.getCollationURIResolver();
+                if (currentResolver != null) {
+                    newResolver.setBaseResolver(currentResolver);
+                }
+                conf.setCollationURIResolver(newResolver);
+            } catch (InstantiationException e) {
+                throw new RuntimeException("Failed to register " + resolver.getClass().getSimpleName()
+                        + ". Cannot create instance of " + resolver.getClass().getName() + ": " + e.getMessage(), e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void setLogger(final DITAOTLogger logger) {
@@ -107,6 +164,39 @@ public final class XMLUtils {
             });
         }
         return transformer;
+    }
+
+    public static ErrorListener toErrorListener(final DITAOTLogger logger) {
+        final StandardErrorListener listener = new StandardErrorListener();
+        listener.setLogger(toSaxonLogger(logger));
+        return listener;
+    }
+
+    public static Logger toSaxonLogger(final DITAOTLogger logger) {
+        return new Logger() {
+            @Override
+            public void println(String message, int severity) {
+                switch(severity) {
+                    case Logger.INFO:
+                        logger.info(message);
+                        break;
+                    case Logger.WARNING:
+                        logger.warn(message);
+                        break;
+                    case Logger.ERROR:
+                        logger.error(message);
+                        break;
+                    case Logger.DISASTER:
+                        throw new RuntimeException(message);
+                    default:
+                        throw new IllegalArgumentException();
+                }
+            }
+            @Override
+            public StreamResult asStreamResult() {
+                return null;
+            }
+        };
     }
 
     /**
@@ -528,10 +618,6 @@ public final class XMLUtils {
 
         try (final InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
              final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-            Transformer transformer = transformerFactory.newTransformer();
-            if (logger != null) {
-                transformer = withLogger(transformer, logger);
-            }
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
@@ -540,16 +626,17 @@ public final class XMLUtils {
                 filter.setParent(reader);
                 reader = filter;
             }
-            final Source source = new SAXSource(reader, new InputSource(in));
-            source.setSystemId(inputFile.toURI().toString());
-            final Result result = new StreamResult(out);
-            transformer.transform(source, result);
-        } catch (final UncheckedXPathException e) {
-            throw new DITAOTException("Failed to transform " + inputFile, e);
+
+            final Serializer result = processor.newSerializer(out);
+            final ContentHandler serializer = result.getContentHandler();
+            reader.setContentHandler(serializer);
+
+            final InputSource inputSource = new InputSource(in);
+            inputSource.setSystemId(inputFile.toURI().toString());
+
+            reader.parse(inputSource);
         } catch (final RuntimeException e) {
             throw e;
-        } catch (final TransformerException e) {
-            throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessage(), e);
         }
@@ -576,13 +663,7 @@ public final class XMLUtils {
             throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
         }
 
-        InputSource src = null;
-        StreamResult result = null;
         try {
-            Transformer transformer = transformerFactory.newTransformer();
-            if (logger != null) {
-                transformer = withLogger(transformer, logger);
-            }
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
@@ -591,29 +672,18 @@ public final class XMLUtils {
                 filter.setParent(reader);
                 reader = filter;
             }
-            src = new InputSource(input.toString());
-            final Source source = new SAXSource(reader, src);
-            result = new StreamResult(output.toString());
-            transformer.transform(source, result);
-        } catch (final UncheckedXPathException e) {
-            throw new DITAOTException("Failed to transform " + input, e);
+
+            final Serializer result = processor.newSerializer(outputFile);
+            final ContentHandler serializer = result.getContentHandler();
+            reader.setContentHandler(serializer);
+
+            final InputSource inputSource = new InputSource(input.toString());
+
+            reader.parse(inputSource);
         } catch (final RuntimeException e) {
             throw e;
-        } catch (final TransformerException e) {
-            throw new DITAOTException("Failed to transform " + input + ": " + e.getMessageAndLocation(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + input + ": " + e.getMessage(), e);
-        } finally {
-            try {
-                close(src);
-            } catch (final IOException e) {
-                // NOOP
-            }
-            try {
-                close(result);
-            } catch (final IOException e) {
-                // NOOP
-            }
         }
     }
 
@@ -746,6 +816,58 @@ public final class XMLUtils {
             builder = new DebugDocumentBuilder(builder);
         }
         return builder;
+    }
+
+    /**
+     * Write DOM document to file.
+     *
+     * @param doc document to store
+     * @param dst absolute destination file
+     * @throws IOException if serializing file fails
+     */
+    public void writeDocument(final Document doc, final File dst) throws IOException {
+        try {
+            final Serializer serializer = processor.newSerializer(dst);
+            final XdmNode source = processor.newDocumentBuilder().wrap(doc);
+            serializer.serializeNode(source);
+        } catch (SaxonApiException e) {
+            throw new IOException(e);
+        }
+    }
+
+    /**
+     * Write DOM document to file.
+     *
+     * @param doc document to store
+     * @param dst absolute destination file URI
+     * @throws IOException if serializing file fails
+     */
+    public void writeDocument(final Document doc, final URI dst) throws IOException {
+        writeDocument(doc, new File(dst));
+    }
+
+    /**
+     * Write DOM document to SAX pipe.
+     *
+     * @param doc document to store
+     * @param dst SAX pipe
+     * @throws IOException if serializing file fails
+     */
+    public void writeDocument(final Node doc, final ContentHandler dst) throws IOException {
+        try {
+            final SAXDestination destination = new SAXDestination(dst);
+            final XdmNode source = processor.newDocumentBuilder().wrap(doc);
+            processor.writeXdmValue(source, destination);
+        } catch (SaxonApiException e) {
+            throw new IOException(e);
+        }
+    }
+
+    /**
+     * Get common S9API processor.
+     */
+    public Processor getProcessor() {
+        return processor;
     }
 
     /**

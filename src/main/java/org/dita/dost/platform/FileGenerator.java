@@ -9,7 +9,6 @@
 package org.dita.dost.platform;
 
 import net.sf.saxon.trans.UncheckedXPathException;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.Attributes;

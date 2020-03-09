@@ -9,6 +9,7 @@
 package org.dita.dost.module;
 
 import com.google.common.annotations.VisibleForTesting;
+import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.commons.io.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -31,12 +32,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -47,6 +46,7 @@ import java.util.stream.IntStream;
 import static java.util.Collections.emptyMap;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
+import static org.dita.dost.util.XMLUtils.toErrorListener;
 
 /**
  * Move temporary files not based on output URI to match output URI structure.
@@ -62,7 +62,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     private final XMLUtils xmlUtils = new XMLUtils();
 
     private boolean useResultFilename;
-    private Transformer rewriteTransformer;
+    private XsltTransformer rewriteTransformer;
     private RewriteRule rewriteClass;
 
     @Override
@@ -75,17 +75,25 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         useResultFilename = Optional.ofNullable(input.get(PARAM_USE_RESULT_FILENAME))
                 .map(Boolean::parseBoolean)
                 .orElse(false);
+        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
         rewriteTransformer = Optional.ofNullable(input.get("result.rewrite-rule.xsl"))
-                .map(file -> URLUtils.toURI(file).toString())
+                .map(file -> {
+                    try {
+                        return catalogResolver.resolve(URLUtils.toURI(file).toString(), null);
+                    } catch (TransformerException e) {
+                        throw new RuntimeException(e.getMessage(), e);
+                    }
+                })
                 .map(f -> {
                     try {
-                        final TransformerFactory factory = TransformerFactory.newInstance();
-                        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
-                        factory.setURIResolver(catalogResolver);
-                        return factory.newTransformer(catalogResolver.resolve(f, null));
+                        final Processor processor = xmlUtils.getProcessor();
+                        final XsltCompiler xsltCompiler = processor.newXsltCompiler();
+                        xsltCompiler.setErrorListener(toErrorListener(logger));
+                        final XsltExecutable xsltExecutable = xsltCompiler.compile(new StreamSource(f.toString()));
+                        return xsltExecutable.load();
                     } catch (UncheckedXPathException e) {
                         throw new RuntimeException("Failed to compile XSLT: " + e.getXPathException().getMessageAndLocation(), e);
-                    } catch (TransformerException e) {
+                    } catch (SaxonApiException e) {
                         throw new RuntimeException("Failed to compile XSLT: " + e.getMessage(), e);
                     }
                 })
@@ -183,10 +191,12 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             try {
                 final DOMSource source = new DOMSource(serialize(fis));
                 final Map<URI, FileInfo> files = new HashMap<>();
-                final SAXResult result = new SAXResult(new Job.JobHandler(new HashMap<>(), files));
-                rewriteTransformer.transform(source, result);
+                final Destination result = new SAXDestination(new Job.JobHandler(new HashMap<>(), files));
+                rewriteTransformer.setSource(source);
+                rewriteTransformer.setDestination(result);
+                rewriteTransformer.transform();
                 return files.values();
-            } catch (IOException | TransformerException e) {
+            } catch (IOException | SaxonApiException e) {
                 throw new DITAOTException(e);
             }
         }

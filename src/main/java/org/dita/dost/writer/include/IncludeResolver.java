@@ -9,37 +9,17 @@
 package org.dita.dost.writer.include;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.Job;
 import org.dita.dost.writer.AbstractXMLFilter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXResult;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static org.dita.dost.util.CatalogUtils.getCatalogResolver;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.getDocumentBuilder;
+import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * Include element resolver filter.

@@ -8,34 +8,7 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.reader.GenListModuleReader.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.getRelativePath;
-import static org.dita.dost.util.FileUtils.resolve;
-import static org.dita.dost.util.Job.*;
-import static org.dita.dost.util.Configuration.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FilterUtils.*;
-import static org.dita.dost.util.XMLUtils.*;
-
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.Result;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
-
-import net.sf.saxon.trans.UncheckedXPathException;
+import net.sf.saxon.s9api.Serializer;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -51,6 +24,28 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
+
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.dita.dost.reader.GenListModuleReader.ROOT_URI;
+import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
+import static org.dita.dost.util.Configuration.Mode;
+import static org.dita.dost.util.Configuration.printTranstype;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.getRelativePath;
+import static org.dita.dost.util.FileUtils.resolve;
+import static org.dita.dost.util.FilterUtils.SUBJECT_SCHEME_EXTENSION;
+import static org.dita.dost.util.Job.FileInfo;
+import static org.dita.dost.util.URLUtils.exists;
+import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.XMLUtils.close;
 
 
 /**
@@ -152,13 +147,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         }
 
         InputSource in = null;
-        Result out = null;
         try {
             reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger));
-
-            final TransformerFactory tf = TransformerFactory.newInstance();
-            final SAXTransformerFactory stf = (SAXTransformerFactory) tf;
-            final TransformerHandler serializer = stf.newTransformerHandler();
 
             XMLReader parser = getXmlReader(f.format);
             XMLReader xmlSource = parser;
@@ -177,20 +167,16 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             } catch (final SAXNotRecognizedException e) {}
 
             in = new InputSource(f.src.toString());
-            out = new StreamResult(new FileOutputStream(outputFile));
-            serializer.setResult(out);
-            xmlSource.setContentHandler(serializer);
-            xmlSource.parse(new InputSource(f.src.toString()));
+
+            final Serializer result = processor.newSerializer(outputFile);
+
+            xmlSource.setContentHandler(result.getContentHandler());
+            xmlSource.parse(in);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         } finally {
-            try {
-                close(out);
-            } catch (final Exception e) {
-                logger.error(e.getMessage(), e) ;
-            }
             try {
                 close(in);
             } catch (final IOException e) {
@@ -204,6 +190,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     }
 
     private void init() throws IOException, DITAOTException, SAXException {
+        initXmlReader();
+
         // Output subject schemas
         outputSubjectScheme();
         subjectSchemeReader = new SubjectSchemeReader();
@@ -224,8 +212,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             }
             baseFilterUtils.setLogger(logger);
         }
-
-        initXmlReader();
 
         initFilters();
     }
@@ -500,29 +486,11 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         if (!p.exists() && !p.mkdirs()) {
             throw new DITAOTException("Failed to make directory " + p.getAbsolutePath());
         }
-        Result res = null;
         try {
-            res = new StreamResult(new FileOutputStream(filename));
-            final DOMSource ds = new DOMSource(root);
-            final TransformerFactory tff = TransformerFactory.newInstance();
-            final Transformer tf = tff.newTransformer();
-            tf.transform(ds, res);
-        } catch (final UncheckedXPathException e) {
-            logger.error(e.getXPathException().getMessageAndLocation());
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final TransformerException e) {
-            logger.error(e.getMessageAndLocation(), e) ;
-            throw new DITAOTException(e);
-        } catch (final Exception e) {
+            xmlUtils.writeDocument(root, filename);
+        } catch (final IOException e) {
             logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);
-        } finally {
-            try {
-                close(res);
-            } catch (IOException e) {
-                throw new DITAOTException(e);
-            }
         }
     }
 

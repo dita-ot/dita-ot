@@ -8,11 +8,11 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DitaLinksWriter;
@@ -22,19 +22,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.*;
+import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.withLogger;
+import static org.dita.dost.util.XMLUtils.toErrorListener;
 
 /**
  * MoveLinksModule implements move links step in preprocess. It reads the map links
@@ -59,38 +55,33 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
 
         Document doc;
-        InputStream in = null;
         try {
-            doc = XMLUtils.getDocumentBuilder().newDocument();
-            final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            transformerFactory.setURIResolver(CatalogUtils.getCatalogResolver());
-            final Transformer transformer = withLogger(transformerFactory.newTransformer(new StreamSource(styleFile)), logger);
-            transformer.setURIResolver(CatalogUtils.getCatalogResolver());
+            final XsltCompiler xsltCompiler = new XMLUtils().getProcessor().newXsltCompiler();
+
+            final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(styleFile)).load();
+            transformer.setErrorListener(toErrorListener(logger));
             if (input.getAttribute("include.rellinks") != null) {
-                transformer.setParameter("include.rellinks", input.getAttribute("include.rellinks"));
+                transformer.setParameter(new QName("include.rellinks"),
+                        XdmItem.makeValue(input.getAttribute("include.rellinks")));
             }
-            transformer.setParameter("INPUTMAP", job.getInputMap());
-            in = new BufferedInputStream(new FileInputStream(inputFile));
-            final Source source = new StreamSource(in);
-            source.setSystemId(inputFile.toURI().toString());
-            final DOMResult result = new DOMResult(doc);
-            transformer.transform(source, result);
+            transformer.setParameter(new QName("INPUTMAP"), XdmItem.makeValue(job.getInputMap()));
+
+            final Source source = new StreamSource(inputFile);
+            doc = XMLUtils.getDocumentBuilder().newDocument();
+            final DOMDestination result = new DOMDestination(doc);
+
+            transformer.setSource(source);
+            transformer.setDestination(result);
+
+            transformer.transform();
         } catch (final UncheckedXPathException e) {
             throw new DITAOTException("Failed to read links from " + inputFile, e);
         } catch (final RuntimeException e) {
             throw e;
-        } catch (final TransformerException e) {
-            throw new DITAOTException("Failed to read links from " + inputFile + ": " + e.getMessageAndLocation(), e);
+        } catch (final SaxonApiException e) {
+            throw new DITAOTException("Failed to read links from " + inputFile + ": " + e.getMessage(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to read links from " + inputFile + ": " + e.getMessage(), e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    logger.error("Failed to close input stream: " + e.getMessage(), e);
-                }
-            }
         }
 
         final Map<File, Map<String, Element>> mapSet = getMapping(doc);

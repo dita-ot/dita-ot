@@ -157,6 +157,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      * Create a new instance and do the initialization.
      */
     public GenMapAndTopicListModule() {
+        super();
         fullTopicSet = new HashSet<>(128);
         fullMapSet = new HashSet<>(128);
         hrefTopicSet = new HashSet<>(128);

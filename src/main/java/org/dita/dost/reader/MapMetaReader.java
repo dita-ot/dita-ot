@@ -8,25 +8,21 @@
  */
 package org.dita.dost.reader;
 
-import static java.util.Arrays.asList;
-import static org.dita.dost.module.GenMapAndTopicListModule.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
+import org.dita.dost.writer.AbstractDomFilter;
+import org.w3c.dom.*;
 
 import java.io.File;
 import java.net.URI;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
-import org.dita.dost.writer.AbstractDomFilter;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import static java.util.Arrays.asList;
+import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.stripFragment;
 
 /**
  * Cascade map metadata to child topic references and collect metadata for topics.

@@ -11,6 +11,7 @@ package org.dita.dost.writer.include;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
@@ -18,11 +19,6 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXResult;
 import java.io.IOException;
 import java.net.URI;
 
@@ -37,12 +33,15 @@ final class IncludeXml {
     private final URI currentFile;
     private final ContentHandler contentHandler;
     private final DITAOTLogger logger;
+    private final XMLUtils xmlUtils;
 
     IncludeXml(Job job, URI currentFile, ContentHandler contentHandler, DITAOTLogger logger) {
         this.job = job;
         this.currentFile = currentFile;
         this.contentHandler = contentHandler;
         this.logger = logger;
+        this.xmlUtils = new XMLUtils();
+        xmlUtils.setLogger(logger);
     }
 
     boolean include(final Attributes atts) {
@@ -61,11 +60,8 @@ final class IncludeXml {
                 src = doc;
             }
 
-            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            final DOMSource source = new DOMSource(src);
-            final SAXResult result = new SAXResult(new IncludeFilter(contentHandler));
-            serializer.transform(source, result);
-        } catch (SAXException | IOException | TransformerException e) {
+            xmlUtils.writeDocument(src, new IncludeFilter(contentHandler));
+        } catch (SAXException | IOException e) {
             logger.error("Failed to process include {}", fileInfo.src, e);
             return false;
         }

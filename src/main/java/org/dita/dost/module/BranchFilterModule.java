@@ -29,9 +29,6 @@ import org.xml.sax.XMLFilter;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -42,7 +39,8 @@ import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
-import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**
@@ -147,23 +145,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         filterTopics(doc.getDocumentElement(), Collections.emptyList());
 
         logger.debug("Writing " + currentFile);
-        Result result = null;
+
         try {
-            Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(currentFile.toString());
-            serializer.transform(new DOMSource(doc), result);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final TransformerConfigurationException | TransformerFactoryConfigurationError e) {
-            throw new RuntimeException(e);
-        } catch (final TransformerException e) {
-            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessageAndLocation(), e);
-        } finally {
-            try {
-                close(result);
-            } catch (final IOException e) {
-                logger.error("Failed to close result stream for " + map.toString() + ": " + e.getMessage(), e);
-            }
+            xmlUtils.writeDocument(doc, currentFile);
+        } catch (final IOException e) {
+            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
         }
     }
 
