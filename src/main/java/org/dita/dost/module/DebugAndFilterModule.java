@@ -487,7 +487,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             throw new DITAOTException("Failed to make directory " + p.getAbsolutePath());
         }
         try {
-            xmlUtils.writeDocument(root, filename.toURI());
+            xmlUtils.writeDocument(root, filename);
         } catch (final IOException e) {
             logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);

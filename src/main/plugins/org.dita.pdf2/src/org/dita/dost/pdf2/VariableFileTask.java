@@ -87,7 +87,7 @@ public final class VariableFileTask extends Task {
                 root.appendChild(lang);
             }
 
-            new XMLUtils().writeDocument(d, file.toURI());
+            new XMLUtils().writeDocument(d, file);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final SAXException | IOException e) {

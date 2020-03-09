@@ -774,17 +774,28 @@ public final class XMLUtils {
      * Write DOM document to file.
      *
      * @param doc document to store
-     * @param dst absolute destination file URI
+     * @param dst absolute destination file
      * @throws IOException if serializing file fails
      */
-    public void writeDocument(final Document doc, final URI dst) throws IOException {
+    public void writeDocument(final Document doc, final File dst) throws IOException {
         try {
-            final Serializer serializer = processor.newSerializer(new File(dst));
+            final Serializer serializer = processor.newSerializer(dst);
             final XdmNode source = processor.newDocumentBuilder().wrap(doc);
             serializer.serializeNode(source);
         } catch (SaxonApiException e) {
             throw new IOException(e);
         }
+    }
+
+    /**
+     * Write DOM document to file.
+     *
+     * @param doc document to store
+     * @param dst absolute destination file URI
+     * @throws IOException if serializing file fails
+     */
+    public void writeDocument(final Document doc, final URI dst) throws IOException {
+        writeDocument(doc, new File(dst));
     }
 
     /**
@@ -802,6 +813,13 @@ public final class XMLUtils {
         } catch (SaxonApiException e) {
             throw new IOException(e);
         }
+    }
+
+    /**
+     * Get common S9API processor.
+     */
+    public Processor getProcessor() {
+        return processor;
     }
 
     /**

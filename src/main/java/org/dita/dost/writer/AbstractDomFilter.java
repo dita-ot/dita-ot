@@ -53,7 +53,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
         if (resDoc != null) {
             try {
                 logger.debug("Writing " + filename.toURI());
-                xmlUtils.writeDocument(resDoc, filename.toURI());
+                xmlUtils.writeDocument(resDoc, filename);
             } catch (final IOException e) {
                 throw new DITAOTException("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
             }
