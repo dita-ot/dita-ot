@@ -23,26 +23,5 @@ import static org.junit.Assert.*;
 
 public class XsltModuleTest {
 
-    private XsltModule xsltModule;
-    private Configuration configuration;
 
-    @Before
-    public void setUp() {
-        xsltModule = new XsltModule();
-        configuration = new Configuration();
-    }
-
-    @Test
-    public void configureCollationResolvers() {
-        xsltModule.configureSaxonCollationResolvers(configuration);
-        final CollationURIResolver collationURIResolver = configuration.getCollationURIResolver();
-        assertTrue(collationURIResolver.getClass().isAssignableFrom(DelegatingCollationUriResolverTest.class));
-    }
-
-    @Test
-    public void configureExtensions() {
-        xsltModule.configureSaxonExtensions(configuration);
-        final SymbolicName.F functionName = new SymbolicName.F(new StructuredQName("x", "y", "z"), 0);
-        assertTrue(configuration.getIntegratedFunctionLibrary().isAvailable(functionName));
-    }
 }

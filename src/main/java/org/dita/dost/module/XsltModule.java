@@ -7,18 +7,14 @@
  */
 package org.dita.dost.module;
 
-import com.google.common.annotations.VisibleForTesting;
-import net.sf.saxon.lib.CollationURIResolver;
-import net.sf.saxon.lib.ExtensionFunctionDefinition;
-import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.s9api.*;
+import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
@@ -101,14 +97,8 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         if (destDir != null) {
             logger.info("Transforming into " + destDir.getAbsolutePath());
         }
-//        final TransformerFactory tf = TransformerFactory.newInstance();
-//        tf.setURIResolver(uriResolver);
-        final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
-        config.setURIResolver(uriResolver);
-        configureSaxonExtensions(config);
-        configureSaxonCollationResolvers(config);
-
-        processor = new Processor(config);
+        final XMLUtils xmlUtils = new XMLUtils();
+        processor = xmlUtils.getProcessor();
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
         xsltCompiler.setErrorListener(toErrorListener(logger));
         try {
@@ -284,48 +274,4 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     public void setExtension(final String extension) {
         this.extension = extension.startsWith(".") ? extension : ("." + extension);
     }
-
-    /**
-     * Registers Saxon full integrated function definitions.
-     *
-     * The intgrated function should be an instance of net.sf.saxon.lib.ExtensionFunctionDefinition abstract class.
-     * @see <a href="https://www.saxonica.com/html/documentation/extensibility/integratedfunctions/ext-full-J.html">Saxon
-     *      Java extension functions: full interface</a>
-     */
-    @VisibleForTesting
-    void configureSaxonExtensions(final net.sf.saxon.Configuration conf) {
-        for (ExtensionFunctionDefinition def : ServiceLoader.load(ExtensionFunctionDefinition.class)) {
-            try {
-                conf.registerExtensionFunction(def.getClass().newInstance());
-            } catch (InstantiationException e) {
-                throw new RuntimeException("Failed to register " + def.getFunctionQName().getDisplayName()
-                        + ". Cannot create instance of " + def.getClass().getName() + ": " + e.getMessage(), e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    /**
-     * Registers collation URI resolvers.
-     */
-    @VisibleForTesting
-    void configureSaxonCollationResolvers(final net.sf.saxon.Configuration conf) {
-        for (DelegatingCollationUriResolver resolver : ServiceLoader.load(DelegatingCollationUriResolver.class)) {
-            try {
-                final DelegatingCollationUriResolver newResolver = resolver.getClass().newInstance();
-                final CollationURIResolver currentResolver = conf.getCollationURIResolver();
-                if (currentResolver != null) {
-                    newResolver.setBaseResolver(currentResolver);
-                }
-                conf.setCollationURIResolver(newResolver);
-            } catch (InstantiationException e) {
-                throw new RuntimeException("Failed to register " + resolver.getClass().getSimpleName()
-                        + ". Cannot create instance of " + resolver.getClass().getName() + ": " + e.getMessage(), e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
 }

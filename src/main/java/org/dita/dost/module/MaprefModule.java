@@ -8,9 +8,8 @@
 package org.dita.dost.module;
 
 import com.google.common.io.Files;
-import net.sf.saxon.trans.UncheckedXPathException;
-import net.sf.saxon.lib.StandardErrorListener;
 import net.sf.saxon.s9api.*;
+import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -30,7 +29,6 @@ import java.util.List;
 import static org.dita.dost.reader.GenListModuleReader.KEYREF_ATTRS;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.toErrorListener;
-import static org.dita.dost.util.XMLUtils.toSaxonLogger;
 
 /**
  * Recursively inline map references in maps.
@@ -43,13 +41,10 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     private XsltExecutable templates;
 
     private void init(final AbstractPipelineInput input) {
-        final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
-        config.setURIResolver(CatalogUtils.getCatalogResolver());
-        processor = new Processor(config);
+        final XMLUtils xmlUtils = new XMLUtils();
+        processor = xmlUtils.getProcessor();
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
-        final StandardErrorListener listener = new StandardErrorListener();
-        listener.setLogger(toSaxonLogger(logger));
-        xsltCompiler.setErrorListener(listener);
+        xsltCompiler.setErrorListener(toErrorListener(logger));
         final File style = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
         try {
             templates = xsltCompiler.compile(new StreamSource(style));

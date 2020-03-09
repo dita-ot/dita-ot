@@ -8,13 +8,11 @@
  */
 package org.dita.dost.module;
 
-import net.sf.saxon.lib.StandardErrorListener;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DitaLinksWriter;
@@ -32,7 +30,7 @@ import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.toErrorListener;
 
 /**
  * MoveLinksModule implements move links step in preprocess. It reads the map links

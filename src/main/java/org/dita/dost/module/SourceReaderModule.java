@@ -143,9 +143,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
         final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
         reader.setEntityResolver(catalogResolver);
 
-        final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
-        config.setURIResolver(catalogResolver);
-        processor = new Processor(config);
+        processor = xmlUtils.getProcessor();
     }
 
     /**

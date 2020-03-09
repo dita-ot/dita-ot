@@ -86,9 +86,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                 })
                 .map(f -> {
                     try {
-                        final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
-                        config.setURIResolver(catalogResolver);
-                        final Processor processor = new Processor(config);
+                        final Processor processor = xmlUtils.getProcessor();
                         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
                         xsltCompiler.setErrorListener(toErrorListener(logger));
                         final XsltExecutable xsltExecutable = xsltCompiler.compile(new StreamSource(f.toString()));

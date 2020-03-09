@@ -7,9 +7,11 @@
  */
 package org.dita.dost.util;
 
+import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.event.ProxyReceiver;
-import net.sf.saxon.event.Sender;
 import net.sf.saxon.jaxp.TransformerImpl;
+import net.sf.saxon.lib.CollationURIResolver;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.lib.Logger;
 import net.sf.saxon.lib.StandardErrorListener;
 import net.sf.saxon.s9api.*;
@@ -21,6 +23,7 @@ import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.LoggingErrorListener;
+import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
@@ -73,9 +76,54 @@ public final class XMLUtils {
         catalogResolver = CatalogUtils.getCatalogResolver();
         final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
         config.setURIResolver(catalogResolver);
+        configureSaxonExtensions(config);
+        configureSaxonCollationResolvers(config);
         processor = new Processor(config);
         xsltCompiler = processor.newXsltCompiler();
         xsltCompiler.setURIResolver(catalogResolver);
+    }
+
+    /**
+     * Registers Saxon full integrated function definitions.
+     *
+     * The intgrated function should be an instance of net.sf.saxon.lib.ExtensionFunctionDefinition abstract class.
+     * @see <a href="https://www.saxonica.com/html/documentation/extensibility/integratedfunctions/ext-full-J.html">Saxon
+     *      Java extension functions: full interface</a>
+     */
+    @VisibleForTesting
+    static void configureSaxonExtensions(final net.sf.saxon.Configuration conf) {
+        for (ExtensionFunctionDefinition def : ServiceLoader.load(ExtensionFunctionDefinition.class)) {
+            try {
+                conf.registerExtensionFunction(def.getClass().newInstance());
+            } catch (InstantiationException e) {
+                throw new RuntimeException("Failed to register " + def.getFunctionQName().getDisplayName()
+                        + ". Cannot create instance of " + def.getClass().getName() + ": " + e.getMessage(), e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * Registers collation URI resolvers.
+     */
+    @VisibleForTesting
+    static void configureSaxonCollationResolvers(final net.sf.saxon.Configuration conf) {
+        for (DelegatingCollationUriResolver resolver : ServiceLoader.load(DelegatingCollationUriResolver.class)) {
+            try {
+                final DelegatingCollationUriResolver newResolver = resolver.getClass().newInstance();
+                final CollationURIResolver currentResolver = conf.getCollationURIResolver();
+                if (currentResolver != null) {
+                    newResolver.setBaseResolver(currentResolver);
+                }
+                conf.setCollationURIResolver(newResolver);
+            } catch (InstantiationException e) {
+                throw new RuntimeException("Failed to register " + resolver.getClass().getSimpleName()
+                        + ". Cannot create instance of " + resolver.getClass().getName() + ": " + e.getMessage(), e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void setLogger(final DITAOTLogger logger) {
