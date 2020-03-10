@@ -8,7 +8,6 @@
  */
 package org.dita.dost.util;
 
-import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -21,9 +20,6 @@ import org.w3c.dom.NodeList;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,7 +28,6 @@ import java.util.*;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toFile;
-import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**
  *
@@ -47,7 +42,6 @@ public final class DelayConrefUtils {
 
     private DITAOTLogger logger;
     private Job job;
-    private XMLUtils xmlUtils;
 
     /**
      * Constructor.
@@ -64,10 +58,6 @@ public final class DelayConrefUtils {
 
     public void setJob(final Job job) {
         this.job = job;
-    }
-
-    public void setXmlUtils(final XMLUtils xmlUtils) {
-        this.xmlUtils = xmlUtils;
     }
 
     /**

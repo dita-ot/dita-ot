@@ -64,7 +64,6 @@ final class FilterModule extends AbstractPipelineModuleImpl {
         final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
         subjectSchemeReader.setJob(job);
-        subjectSchemeReader.setXmlUtils(xmlUtils);
         Map<URI, Set<URI>> dic;
         try {
             dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));

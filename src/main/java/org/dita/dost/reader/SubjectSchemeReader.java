@@ -35,7 +35,6 @@ public class SubjectSchemeReader {
 
     private DITAOTLogger logger;
     private Job job;
-    private XMLUtils xmlUtils;
     private final Map<QName, Map<String, Set<Element>>> bindingMap;
     private final Map<QName, Map<String, Set<String>>> validValuesMap;
     private final Map<QName, Map<String, String>> defaultValueMap;
@@ -97,10 +96,6 @@ public class SubjectSchemeReader {
 
     public void setJob(final Job job) {
         this.job = job;
-    }
-
-    public void setXmlUtils(final XMLUtils xmlUtils) {
-        this.xmlUtils = xmlUtils;
     }
 
     /**

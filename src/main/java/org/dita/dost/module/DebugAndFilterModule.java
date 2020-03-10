@@ -196,7 +196,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
         subjectSchemeReader.setJob(job);
-        subjectSchemeReader.setXmlUtils(xmlUtils);
         dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
 
         if (profilingEnabled) {

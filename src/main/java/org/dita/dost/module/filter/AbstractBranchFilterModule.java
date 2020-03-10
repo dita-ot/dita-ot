@@ -67,12 +67,6 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         subjectSchemeReader.setLogger(logger);
     }
 
-    @Override
-    public void setXmlUtils(final XMLUtils xmlUtils) {
-        super.setXmlUtils(xmlUtils);
-        subjectSchemeReader.setXmlUtils(xmlUtils);
-    }
-
     /**
      * Read subject scheme definitions.
      */

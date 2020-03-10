@@ -787,7 +787,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
             delayConrefUtils.setLogger(logger);
             delayConrefUtils.setJob(job);
-            delayConrefUtils.setXmlUtils(xmlUtils);
             delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap());
             delayConrefUtils.writeExportAnchors(exportAnchorsFilter, tempFileNameScheme);
         }

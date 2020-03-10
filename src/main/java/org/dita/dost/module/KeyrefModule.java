@@ -131,7 +131,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 delayConrefUtils = new DelayConrefUtils();
                 delayConrefUtils.setJob(job);
                 delayConrefUtils.setLogger(logger);
-                delayConrefUtils.setXmlUtils(xmlUtils);
             } else {
                 delayConrefUtils = null;
             }
