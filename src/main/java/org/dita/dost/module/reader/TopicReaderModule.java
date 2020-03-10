@@ -153,7 +153,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
         final URI currentFile = job.tempDirURI.resolve(fi.uri);
         try {
             logger.debug("Reading " + currentFile);
-            return xmlUtils.getDocument(currentFile);
+            return job.getStore().getDocument(currentFile);
         } catch (final IOException e) {
             throw new SAXException("Failed to parse " + currentFile, e);
         }

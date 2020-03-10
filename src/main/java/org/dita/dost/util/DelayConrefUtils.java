@@ -83,7 +83,7 @@ public final class DelayConrefUtils {
         }
         try {
             //load the file
-            final Document root = xmlUtils.getDocument(absolutePathToFile.toURI());
+            final Document root = job.getStore().getDocument(absolutePathToFile.toURI());
 
             //get root element
             final Element doc = root.getDocumentElement();
@@ -132,7 +132,7 @@ public final class DelayConrefUtils {
         try {
             //load export.xml only once
             if (root == null) {
-                root = xmlUtils.getDocument(exportFile.toURI());
+                root = job.getStore().getDocument(exportFile.toURI());
             }
             //get file node which contains the export node
             final Element fileNode = searchForKey(root.getDocumentElement(), href, "file");

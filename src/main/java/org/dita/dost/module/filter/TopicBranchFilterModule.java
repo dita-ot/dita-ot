@@ -78,7 +78,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = xmlUtils.getDocument(currentFile);
+            doc = job.getStore().getDocument(currentFile);
         } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
@@ -92,7 +92,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
         logger.debug("Writing " + currentFile);
         try {
-            xmlUtils.writeDocument(doc, currentFile);
+            job.getStore().writeDocument(doc, currentFile);
         } catch (final IOException e) {
             logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
         }

@@ -38,7 +38,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
         logger.info("Processing " + filename.toURI());
         Document doc;
         try {
-            final DocumentBuilder builder = xmlUtils.getDocumentBuilder();
+            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
             logger.debug("Reading " + filename.toURI());
             doc = builder.parse(filename);
@@ -53,7 +53,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
         if (resDoc != null) {
             try {
                 logger.debug("Writing " + filename.toURI());
-                xmlUtils.writeDocument(resDoc, filename);
+                job.getStore().writeDocument(resDoc, filename.toURI());
             } catch (final IOException e) {
                 throw new DITAOTException("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
             }

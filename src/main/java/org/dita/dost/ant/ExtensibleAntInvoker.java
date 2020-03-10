@@ -23,6 +23,7 @@ import org.dita.dost.module.XmlFilterModule;
 import org.dita.dost.module.XmlFilterModule.FilterPair;
 import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.store.Store;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -294,6 +295,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @return job configuration
      */
     public static Job getJob(final File tempDir, final Project project) {
+        final Store store = project.getReference(ANT_REFERENCE_STORE);
         Job job = project.getReference(ANT_REFERENCE_JOB);
         if (job != null && job.isStale()) {
             project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
@@ -301,7 +303,7 @@ public final class ExtensibleAntInvoker extends Task {
         }
         if (job == null) {
             try {
-                job = new Job(tempDir);
+                job = new Job(tempDir, store);
             } catch (final IOException ioe) {
                 throw new BuildException(ioe);
             }

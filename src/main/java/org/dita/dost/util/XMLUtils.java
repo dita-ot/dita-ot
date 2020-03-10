@@ -819,19 +819,20 @@ public final class XMLUtils {
         return builder;
     }
 
-    /**
-     * Get DOM document for file. Convenience method.
-     *
-     * @param path temporary file URI, absolute or relative
-     * @throws java.io.FileNotFoundException if file does not exist or cannot be read
-     */
-    public Document getDocument(final URI path) throws IOException {
-        try {
-            return getDocumentBuilder().parse(path.toString());
-        } catch (final IOException | SAXException e) {
-            throw new IOException("Failed to read document: " + e.getMessage(), e);
-        }
-    }
+//    /**
+//     * Get DOM document for file. Convenience method.
+//     *
+//     * @param path temporary file URI, absolute or relative
+//     * @throws java.io.FileNotFoundException if file does not exist or cannot be read
+//     */
+//    @Override
+//    public Document getDocument(final URI path) throws IOException {
+//        try {
+//            return getDocumentBuilder().parse(path.toString());
+//        } catch (final IOException | SAXException e) {
+//            throw new IOException("Failed to read document: " + e.getMessage(), e);
+//        }
+//    }
 
     /**
      * Write DOM document to file.
@@ -840,6 +841,7 @@ public final class XMLUtils {
      * @param dst absolute destination file
      * @throws IOException if serializing file fails
      */
+    @Deprecated
     public void writeDocument(final Document doc, final File dst) throws IOException {
         try {
             final Serializer serializer = processor.newSerializer(dst);
@@ -857,6 +859,7 @@ public final class XMLUtils {
      * @param dst absolute destination file URI
      * @throws IOException if serializing file fails
      */
+    @Deprecated
     public void writeDocument(final Document doc, final URI dst) throws IOException {
         writeDocument(doc, new File(dst));
     }

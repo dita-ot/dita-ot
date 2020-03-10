@@ -11,6 +11,9 @@ import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
+import com.google.common.annotations.VisibleForTesting;
+import org.dita.dost.store.Store;
+import org.dita.dost.store.StreamStore;
 import org.w3c.dom.Document;
 import org.xml.sax.helpers.DefaultHandler;
 import java.io.File;
@@ -130,19 +133,22 @@ public final class Job {
     private final File jobFile;
     private final Map<URI, FileInfo> files = new ConcurrentHashMap<>();
     private long lastModified;
+    private final Store store;
 
     /**
      * Create new job configuration instance. Initialise by reading temporary configuration files.
      *
      * @param tempDir temporary directory
+     * @param store IO store
      * @throws IOException if reading configuration files failed
      * @throws IllegalStateException if configuration files are missing
      */
-    public Job(final File tempDir) throws IOException {
+    public Job(final File tempDir, final Store store) throws IOException {
         if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
         this.tempDir = tempDir;
+        this.store = store;
         tempDirURI = tempDir.toURI();
         jobFile = new File(tempDir, JOB_FILE);
         prop = new HashMap<>();
@@ -154,12 +160,22 @@ public final class Job {
         }
     }
 
-    public Job(final File tempDir, final Map<String, Object> prop, final Collection<FileInfo> files) {
-        this.tempDir = tempDir;
+    @VisibleForTesting
+    public Job(final File tempDir) throws IOException {
+        this(tempDir, new StreamStore(new XMLUtils()));
+    }
+
+    public Job(final Job job, final Map<String, Object> prop, final Collection<FileInfo> files) {
+        this.tempDir = job.tempDir;
+        this.store = job.store;
         this.tempDirURI = tempDir.toURI();
         this.jobFile = new File(tempDir, JOB_FILE);
         this.prop = prop;
         this.files.putAll(files.stream().collect(Collectors.toMap(fi -> fi.uri, Function.identity())));
+    }
+
+    public Store getStore() {
+        return store;
     }
 
     /**

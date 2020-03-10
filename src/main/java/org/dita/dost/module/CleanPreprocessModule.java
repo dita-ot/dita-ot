@@ -119,7 +119,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             // rewrite results
             final Collection<FileInfo> rewritten = rewrite(original);
             // move temp files and update links
-            final Job tempJob = new Job(job.tempDir, emptyMap(), rewritten);
+            final Job tempJob = new Job(job, emptyMap(), rewritten);
             filter.setJob(tempJob);
             mapFilter.setJob(tempJob);
             for (final FileInfo fi : rewritten) {

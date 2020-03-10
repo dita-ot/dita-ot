@@ -342,13 +342,13 @@ public final class DebugAndFilterModule extends SourceReaderModule {
                 final Document parentRoot;
                 if (!tmprel.exists()) {
                     final URI src = job.getFileInfo(parent).src;
-                    parentRoot = xmlUtils.getDocument(src);
+                    parentRoot = job.getStore().getDocument(src);
                 } else {
-                    parentRoot = xmlUtils.getDocument(tmprel.toURI());
+                    parentRoot = job.getStore().getDocument(tmprel.toURI());
                 }
                 if (children != null) {
                     for (final URI childpath: children) {
-                        final Document childRoot = xmlUtils.getDocument(job.getInputFile().resolve(childpath.getPath()));
+                        final Document childRoot = job.getStore().getDocument(job.getInputFile().resolve(childpath.getPath()));
                         mergeScheme(parentRoot, childRoot);
                         generateScheme(new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION), childRoot);
                     }
@@ -482,7 +482,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             throw new DITAOTException("Failed to make directory " + p.getAbsolutePath());
         }
         try {
-            xmlUtils.writeDocument(root, filename);
+            job.getStore().writeDocument(root, filename.toURI());
         } catch (final IOException e) {
             logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);

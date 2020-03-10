@@ -281,7 +281,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     private void outputMapFile(final URI file, final Document doc) {
         try {
-            xmlUtils.writeDocument(doc, file);
+            job.getStore().writeDocument(doc, file);
         } catch (final IOException e) {
             logger.error(e.getMessage(), e);
         }

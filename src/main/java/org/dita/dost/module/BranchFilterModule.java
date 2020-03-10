@@ -123,7 +123,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = xmlUtils.getDocument(currentFile);
+            doc = job.getStore().getDocument(currentFile);
         } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
@@ -145,7 +145,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         logger.debug("Writing " + currentFile);
 
         try {
-            xmlUtils.writeDocument(doc, currentFile);
+            job.getStore().writeDocument(doc, currentFile);
         } catch (final IOException e) {
             logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
         }
