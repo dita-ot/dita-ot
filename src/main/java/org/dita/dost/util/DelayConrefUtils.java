@@ -47,6 +47,7 @@ public final class DelayConrefUtils {
 
     private DITAOTLogger logger;
     private Job job;
+    private XMLUtils xmlUtils;
 
     /**
      * Constructor.
@@ -65,6 +66,9 @@ public final class DelayConrefUtils {
         this.job = job;
     }
 
+    public void setXmlUtils(final XMLUtils xmlUtils) {
+        this.xmlUtils = xmlUtils;
+    }
 
     /**
      * Find whether an id is refer to a topic in a dita file.
@@ -79,7 +83,6 @@ public final class DelayConrefUtils {
         }
         try {
             //load the file
-            final XMLUtils xmlUtils = new XMLUtils();
             final Document root = xmlUtils.getDocument(absolutePathToFile.toURI());
 
             //get root element
@@ -129,7 +132,6 @@ public final class DelayConrefUtils {
         try {
             //load export.xml only once
             if (root == null) {
-                final XMLUtils xmlUtils = new XMLUtils();
                 root = xmlUtils.getDocument(exportFile.toURI());
             }
             //get file node which contains the export node

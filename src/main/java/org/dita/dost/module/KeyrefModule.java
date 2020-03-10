@@ -127,7 +127,14 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final List<ResolveTask> jobs = collectProcessingTopics(resourceFis, rootScope, doc);
 
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-            delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
+            if (transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
+                delayConrefUtils = new DelayConrefUtils();
+                delayConrefUtils.setJob(job);
+                delayConrefUtils.setLogger(logger);
+                delayConrefUtils.setXmlUtils(xmlUtils);
+            } else {
+                delayConrefUtils = null;
+            }
             for (final ResolveTask r: jobs) {
                 if (r.out != null) {
                     processFile(r);

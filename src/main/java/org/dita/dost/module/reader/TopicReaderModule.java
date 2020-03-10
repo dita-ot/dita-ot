@@ -89,6 +89,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
             if (doc != null) {
                 final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
                 subjectSchemeReader.setLogger(logger);
+                subjectSchemeReader.setJob(job);
+                subjectSchemeReader.setXmlUtils(xmlUtils);
                 logger.debug("Loading subject schemes");
                 final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
                 subjectSchemes.stream()
