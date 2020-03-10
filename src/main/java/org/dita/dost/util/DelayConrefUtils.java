@@ -245,38 +245,11 @@ public final class DelayConrefUtils {
             entry.setAttribute("key", key);
             entry.appendChild(doc.createTextNode(prop.getProperty(key)));
         }
-        final TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer t;
+
         try {
-            t = withLogger(tf.newTransformer(), logger);
-            t.setOutputProperty(OutputKeys.INDENT, "yes");
-            t.setOutputProperty(OutputKeys.METHOD, "xml");
-            t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        } catch (final TransformerConfigurationException tce) {
-            throw new RuntimeException(tce);
-        }
-        final DOMSource doms = new DOMSource(doc);
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(outputFile);
-            final StreamResult sr = new StreamResult(out);
-            t.transform(doms, sr);
-        } catch (final UncheckedXPathException e) {
-            logger.error("Failed to process map: " + e.getXPathException().getMessageAndLocation(), e);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final TransformerException e) {
-            logger.error("Failed to process map: " + e.getMessageAndLocation(), e);
-        } catch (final Exception e) {
+            job.getStore().writeDocument(doc, outputFile.toURI());
+        } catch (final IOException e) {
             logger.error("Failed to process map: " + e.getMessage(), e);
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (final IOException e) {
-                    logger.error("Failed to close output stream: " + e.getMessage());
-                }
-            }
         }
     }
 

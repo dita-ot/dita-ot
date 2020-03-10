@@ -181,7 +181,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
         final List<Reference> res = new ArrayList<>();
         assert startFileInfo.src != null;
         final URI tmp = job.tempDirURI.resolve(startFileInfo.uri);
-        final Source source = new StreamSource(tmp.toString());
+        final Source source = job.getStore().getSource(tmp);
         logger.info("Reading " + tmp);
         try {
             final XMLStreamReader in = XMLInputFactory.newInstance().createXMLStreamReader(source);

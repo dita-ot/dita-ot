@@ -381,7 +381,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             } catch (final SAXNotRecognizedException e) {}
 
 //            in = new InputSource(src.toString());
-            out = new StreamResult(new FileOutputStream(outputFile));
+            out = job.getStore().getResult(outputFile.toURI());
             serializer.setResult(out);
             xmlSource.setContentHandler(serializer);
             xmlSource.parse(src.toString());

@@ -91,9 +91,9 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
 
         logger.info("Processing " + inputFile.toURI());
         Document doc;
-        try (InputStream in = new BufferedInputStream(new FileInputStream(inputFile))) {
+        try {
             doc = XMLUtils.getDocumentBuilder().newDocument();
-            final Source source = new StreamSource(in, inputFile.toURI().toString());
+            final Source source = job.getStore().getSource(inputFile.toURI());
             final Destination serializer = new DOMDestination(doc);
             final XsltTransformer transformer = templates.load();
             transformer.setErrorListener(toErrorListener(logger));

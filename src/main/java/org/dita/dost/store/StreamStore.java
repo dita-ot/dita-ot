@@ -8,6 +8,7 @@
 
 package org.dita.dost.store;
 
+import net.sf.saxon.s9api.Destination;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
@@ -221,5 +222,10 @@ public class StreamStore implements Store {
     @Override
     public Result getResult(URI path) {
         return new StreamResult(path.toString());
+    }
+
+    @Override
+    public Destination getDestination(URI path) {
+        return xmlUtils.getProcessor().newSerializer(new File(path));
     }
 }

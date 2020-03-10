@@ -8,6 +8,7 @@
 
 package org.dita.dost.store;
 
+import net.sf.saxon.s9api.Destination;
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Document;
 import org.xml.sax.XMLFilter;
@@ -71,5 +72,13 @@ public interface Store {
      * @return result for temporary file
      */
     Result getResult(URI path);
+
+    /**
+     * Get temporary file destination
+     *
+     * @param path temporary file URI, absolute or relative
+     * @return destination for temporary file
+     */
+    Destination getDestination(URI path);
 
 }
