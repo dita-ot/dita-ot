@@ -16,7 +16,6 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MergeMapParser;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
@@ -88,7 +87,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         }
         try (final OutputStream output = new BufferedOutputStream(new FileOutputStream(out))) {
             if (style != null) {
-                final Processor processor = new XMLUtils().getProcessor();
+                final Processor processor = xmlUtils.getProcessor();
                 final XsltCompiler xsltCompiler = processor.newXsltCompiler();
                 final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(style)).load();
                 transformer.setErrorListener(toErrorListener(logger));

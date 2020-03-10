@@ -17,7 +17,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.NormalizeFilter;
 import org.dita.dost.writer.ProfilingFilter;
@@ -152,7 +151,6 @@ public final class TopicReaderModule extends AbstractReaderModule {
         final URI currentFile = job.tempDirURI.resolve(fi.uri);
         try {
             logger.debug("Reading " + currentFile);
-            final XMLUtils xmlUtils = new XMLUtils();
             return xmlUtils.getDocument(currentFile);
         } catch (final IOException e) {
             throw new SAXException("Failed to parse " + currentFile, e);

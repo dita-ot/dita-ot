@@ -1107,6 +1107,8 @@ public final class Constants {
 
     /** Project reference name for job configuration object. */
     public static final String ANT_REFERENCE_JOB = "job";
+    /** Project reference name for XML utils object. */
+    public static final String ANT_REFERENCE_XML_UTILS = "xmlutils";
     /** Temporary directory Ant property name. */
     public static final String ANT_TEMP_DIR = "dita.temp.dir";
 

@@ -9,12 +9,14 @@
 package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.util.*;
+import org.dita.dost.util.DelayConrefUtils;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyDef;
+import org.dita.dost.util.KeyScope;
 import org.dita.dost.writer.ConkeyrefFilter;
 import org.dita.dost.writer.KeyrefPaser;
 import org.dita.dost.writer.TopicFragmentFilter;
@@ -52,7 +54,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
     private TopicFragmentFilter topicFragmentFilter;
-    private final XMLUtils xmlUtils = new XMLUtils();
 
     @Override
     public void setJob(final Job job) {
@@ -63,12 +64,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             throw new RuntimeException(e);
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
     }
 
     /**

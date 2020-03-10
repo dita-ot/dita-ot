@@ -26,6 +26,7 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 
 import java.io.BufferedReader;
@@ -167,6 +168,8 @@ public final class ExtensibleAntInvoker extends Task {
         initialize();
 
         final Job job = getJob(tempDir, getProject());
+        final XMLUtils xmlUtils = getXmlUtils();
+
         try {
             for (final ModuleElem m : modules) {
                 m.setProject(getProject());
@@ -179,6 +182,7 @@ public final class ExtensibleAntInvoker extends Task {
                 long start = System.currentTimeMillis();
                 mod.setLogger(logger);
                 mod.setJob(job);
+                mod.setXmlUtils(xmlUtils);
                 mod.execute(pipelineInput);
                 long end = System.currentTimeMillis();
                 logger.debug("{0} processing took {1} ms", mod.getClass().getSimpleName(), end - start);
@@ -304,6 +308,21 @@ public final class ExtensibleAntInvoker extends Task {
             project.addReference(ANT_REFERENCE_JOB, job);
         }
         return job;
+    }
+
+    /**
+     * Get XML utils from Ant project reference or create new.
+     *
+     * @return XML utils
+     */
+    public XMLUtils getXmlUtils() {
+        XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
+        if (xmlUtils == null) {
+            xmlUtils = new XMLUtils();
+            xmlUtils.setLogger(logger);
+            getProject().addReference(ANT_REFERENCE_XML_UTILS, xmlUtils);
+        }
+        return xmlUtils;
     }
 
     private Set<File> readListFile(final List<IncludesFileElem> includes, final DITAOTAntLogger logger) {

@@ -8,11 +8,9 @@
 package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.XMLFilter;
 
@@ -27,14 +25,6 @@ import java.util.function.Predicate;
  * {@code startDocument} event.
  */
 public final class XmlFilterModule extends AbstractPipelineModuleImpl {
-
-    private final XMLUtils xmlUtils = new XMLUtils();
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
-    }
 
     /**
      * Filter files through XML filters.

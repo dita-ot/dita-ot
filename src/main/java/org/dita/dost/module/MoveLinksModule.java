@@ -56,7 +56,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
 
         Document doc;
         try {
-            final XsltCompiler xsltCompiler = new XMLUtils().getProcessor().newXsltCompiler();
+            final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
 
             final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(styleFile)).load();
             transformer.setErrorListener(toErrorListener(logger));

@@ -41,7 +41,6 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     private XsltExecutable templates;
 
     private void init(final AbstractPipelineInput input) {
-        final XMLUtils xmlUtils = new XMLUtils();
         processor = xmlUtils.getProcessor();
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
         xsltCompiler.setErrorListener(toErrorListener(logger));

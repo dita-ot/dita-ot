@@ -16,7 +16,6 @@ import org.dita.dost.util.Configuration;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.TopicRefWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -120,7 +119,6 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if reading ditamap fails
      */
     private boolean isEclipseMap(final URI mapFile) throws DITAOTException {
-        final XMLUtils xmlUtils = new XMLUtils();
         Document doc;
         try {
             doc = xmlUtils.getDocument(mapFile);

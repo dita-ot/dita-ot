@@ -12,6 +12,7 @@ import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,6 +98,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
         m.setJob(job);
         final CachingLogger logger = new CachingLogger();
         m.setLogger(logger);
+        m.setXmlUtils(new XMLUtils());
 
         final FileInfo fi = new FileInfo.Builder()
                 .uri(URI.create("input.ditamap"))
@@ -196,6 +198,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
         m.setJob(job);
         final CachingLogger logger = new CachingLogger();
         m.setLogger(logger);
+        m.setXmlUtils(new XMLUtils());
 
         m.processMap(job.getFileInfo(URI.create("test.ditamap")));
 

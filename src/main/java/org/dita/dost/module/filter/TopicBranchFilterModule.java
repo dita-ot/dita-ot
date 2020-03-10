@@ -8,12 +8,10 @@
 package org.dita.dost.module.filter;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -48,16 +46,9 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
-    private final XMLUtils xmlUtils = new XMLUtils();
     /** Current map being processed, relative to temporary directory */
     private URI map;
     private final Set<URI> filtered = new HashSet<>();
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
-    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {

@@ -51,17 +51,10 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
-    private final XMLUtils xmlUtils;
-
     /** Current map being processed, relative to temporary directory */
     private URI map;
     /** Absolute path for filter file. */
     private URI ditavalFile;
-
-    public MapBranchFilterModule() {
-        super();
-        xmlUtils = new XMLUtils();
-    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {

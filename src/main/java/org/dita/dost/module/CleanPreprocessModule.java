@@ -14,13 +14,11 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.commons.io.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
@@ -59,17 +57,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     private final LinkFilter filter = new LinkFilter();
     private final MapCleanFilter mapFilter = new MapCleanFilter();
-    private final XMLUtils xmlUtils = new XMLUtils();
 
     private boolean useResultFilename;
     private XsltTransformer rewriteTransformer;
     private RewriteRule rewriteClass;
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
-    }
 
     private void init(final Map<String, String> input) {
         useResultFilename = Optional.ofNullable(input.get(PARAM_USE_RESULT_FILENAME))
