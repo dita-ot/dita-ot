@@ -88,7 +88,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
 
         final List<XMLFilter> pipe = getProcessingPipe(in);
 
-        xmlUtils.transform(in, pipe);
+        job.getStore().transform(in, pipe);
     }
 
     /**
@@ -203,7 +203,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
 
         logger.info("Processing " + src + " to " + target);
         try {
-            xmlUtils.transform(src, target, Collections.singletonList(filter));
+            job.getStore().transform(src, target, Collections.singletonList(filter));
         } catch (final DITAOTException e) {
             logger.error("Failed to write copy-to file: " + e.getMessage(), e);
         }

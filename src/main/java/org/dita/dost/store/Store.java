@@ -8,12 +8,43 @@
 
 package org.dita.dost.store;
 
+import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Document;
+import org.xml.sax.XMLFilter;
 
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 public interface Store {
+
+    /**
+     * Transform file with XML filters.
+     *
+     * @param src file to transform and replace
+     * @param filters XML filters to transform file with, may be an empty list
+     */
+    void transform(final URI src, final List<XMLFilter> filters) throws DITAOTException;
+
+    /**
+     * Transform file with XML filters.
+     *
+     * @param src input file
+     * @param dst output file
+     * @param filters XML filters to transform file with, may be an empty list
+     */
+    void transform(final URI src, final URI dst, final List<XMLFilter> filters) throws DITAOTException;
+
+    /**
+     * Get temporary file source
+     *
+     * @param path temporary file URI, absolute or relative
+     * @return source for temporary file
+     */
+    Source getSource(URI path);
 
     /**
      * Get DOM document for file. Convenience method.
@@ -32,5 +63,13 @@ public interface Store {
      * @throws IOException if serializing file fails
      */
     void writeDocument(Document doc, URI dst) throws IOException;
+
+    /**
+     * Get temporary file result
+     *
+     * @param path temporary file URI, absolute or relative
+     * @return result for temporary file
+     */
+    Result getResult(URI path);
 
 }

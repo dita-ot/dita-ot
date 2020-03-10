@@ -40,7 +40,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
             final URI file = job.tempDirURI.resolve(f.uri);
             logger.info("Processing " + file);
             try {
-                xmlUtils.transform(file, getProcessingPipe(f));
+                job.getStore().transform(file, getProcessingPipe(f));
             } catch (final DITAOTException e) {
                 logger.error("Failed to process XML filter: " + e.getMessage(), e);
             }

@@ -379,9 +379,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                     logger.error("Failed to create directory " + dstDirUri);
                 }
                 try {
-                    xmlUtils.transform(srcAbsUri,
-                                       dstAbsUri,
-                                       pipe);
+                    job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
                 } catch (final DITAOTException e) {
                     logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
                 }
@@ -440,7 +438,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
             logger.info("Filtering " + srcAbsUri);
             try {
-                xmlUtils.transform(srcAbsUri, pipe);
+                job.getStore().transform(srcAbsUri, pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }

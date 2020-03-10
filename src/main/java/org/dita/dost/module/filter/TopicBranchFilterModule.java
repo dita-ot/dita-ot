@@ -132,9 +132,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
                     logger.error("Failed to create directory " + dstDirUri);
                 }
                 try {
-                    xmlUtils.transform(srcAbsUri,
-                                       dstAbsUri,
-                                       pipe);
+                    job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
                 } catch (final DITAOTException e) {
                     logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
                 }
@@ -173,7 +171,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
             logger.info("Filtering " + srcAbsUri);
             try {
-                xmlUtils.transform(srcAbsUri, pipe);
+                job.getStore().transform(srcAbsUri, pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }

@@ -399,12 +399,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             if (r.out != null) {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
                         " to " + job.tempDirURI.resolve(r.out.uri));
-                xmlUtils.transform(new File(job.tempDir, r.in.file.getPath()),
-                                   new File(job.tempDir, r.out.file.getPath()),
-                                   filters);
+                job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
+                                         new File(job.tempDir, r.out.file.getPath()).toURI(),
+                                         filters);
             } else {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
-                xmlUtils.transform(new File(job.tempDir, r.in.file.getPath()), filters);
+                job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
+                                         filters);
             }
             // validate resource-only list
             normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());

@@ -134,7 +134,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                             final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
                             if (!processingPipe.isEmpty()) {
                                 logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
-                                xmlUtils.transform(srcFile.toURI(), destFile.toURI(), processingPipe);
+                                job.getStore().transform(srcFile.toURI(), destFile.toURI(), processingPipe);
                                 if (!srcFile.equals(destFile)) {
                                     logger.debug("Deleting " + srcFile.toURI());
                                     FileUtils.deleteQuietly(srcFile);
