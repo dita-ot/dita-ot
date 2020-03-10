@@ -122,8 +122,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Profiling is enabled. */
     private boolean profilingEnabled;
     String transtype;
-    /** Absolute DITA-OT base path. */
-    File ditaDir;
     private File ditavalFile;
     FilterUtils filterUtils;
     /** Absolute path to current destination file. */
@@ -205,11 +203,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /**
      * Init xml reader used for pipeline parsing.
      *
-     * @param ditaDir absolute path to DITA-OT directory
      * @param validate whether validate input file
      * @throws SAXException parsing exception
      */
-    void initXMLReader(final File ditaDir, final boolean validate) throws SAXException {
+    void initXMLReader(final boolean validate) throws SAXException {
         reader = XMLUtils.getXMLReader();
         reader.setFeature(FEATURE_NAMESPACE, true);
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -234,15 +231,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
             }
         }
-        CatalogUtils.setDitaDir(ditaDir);
         reader.setEntityResolver(CatalogUtils.getCatalogResolver());
     }
 
     void parseInputParameters(final AbstractPipelineInput input) {
-        ditaDir = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
-        if (!ditaDir.isAbsolute()) {
-            throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
-        }
         validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
@@ -951,7 +943,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
 
-        initXMLReader(ditaDir, validate);
+        initXMLReader(validate);
         initFilters();
     }
 

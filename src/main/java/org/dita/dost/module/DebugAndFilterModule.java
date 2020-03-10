@@ -289,8 +289,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     }
 
     private void readArguments(AbstractPipelineInput input) {
-        final File baseDir = toFile(input.getAttribute(ANT_INVOKER_PARAM_BASEDIR));
-        ditaDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         profilingEnabled = true;
         if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {

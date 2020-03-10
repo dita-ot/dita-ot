@@ -17,7 +17,6 @@ import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +47,6 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
      * Use grammar pool cache
      */
     boolean gramcache = true;
-    /**
-     * Absolute DITA-OT base path.
-     */
-    File ditaDir;
     Processor processor;
 
     /**
@@ -127,7 +122,6 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        CatalogUtils.setDitaDir(ditaDir);
         final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
         reader.setEntityResolver(catalogResolver);
 

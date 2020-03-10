@@ -17,12 +17,16 @@ import org.dita.dost.util.XMLUtils;
 import java.io.File;
 
 import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
+import static org.dita.dost.util.URLUtils.toFile;
 
 public final class InitializeProjectTask extends Task {
     @Override
     public void execute() throws BuildException {
         log("Initializing project", Project.MSG_INFO);
-        final File ditaDir = new File(getProject().getUserProperty("dita.dir"));
+        final File ditaDir = toFile(getProject().getUserProperty("dita.dir"));
+        if (!ditaDir.isAbsolute()) {
+            throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
+        }
         CatalogUtils.setDitaDir(ditaDir);
         XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
         if (xmlUtils == null) {
