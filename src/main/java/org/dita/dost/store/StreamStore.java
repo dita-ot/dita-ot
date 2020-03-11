@@ -8,10 +8,14 @@
 
 package org.dita.dost.store;
 
+import net.sf.saxon.event.PipelineConfiguration;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.event.ReceivingContentHandler;
 import net.sf.saxon.s9api.Destination;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.serialize.SerializationProperties;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -242,5 +246,23 @@ public class StreamStore implements Store {
     @Override
     public Destination getDestination(URI path) {
         return xmlUtils.getProcessor().newSerializer(new File(path));
+    }
+
+    @Override
+    public ContentHandler getContentHandler(final URI outputFile) throws SaxonApiException {
+        final net.sf.saxon.Configuration configuration = xmlUtils.getProcessor().getUnderlyingConfiguration();
+//        final SerializerFactory sf = configuration.getSerializerFactory();
+        final PipelineConfiguration pipelineConfiguration = configuration.makePipelineConfiguration();
+
+        final Destination dst = getDestination(outputFile);
+        final Receiver receiver = dst.getReceiver(pipelineConfiguration, new SerializationProperties());
+//        final Result out = job.getStore().getResult(outputFile);
+//        final Receiver receiver = sf.getReceiver(out, new SerializationProperties());
+
+        final ReceivingContentHandler receivingContentHandler = new ReceivingContentHandler();
+        receivingContentHandler.setPipelineConfiguration(pipelineConfiguration);
+        receivingContentHandler.setReceiver(receiver);
+
+        return receivingContentHandler;
     }
 }

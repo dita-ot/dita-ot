@@ -9,6 +9,7 @@
 package org.dita.dost.store;
 
 import net.sf.saxon.s9api.Destination;
+import net.sf.saxon.s9api.SaxonApiException;
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Document;
 import org.xml.sax.ContentHandler;
@@ -90,4 +91,12 @@ public interface Store {
      */
     Destination getDestination(URI path);
 
+    /**
+     * Get result content handler.
+     *
+     * @param path temporary file URI, absolute or relative
+     * @return serializer content handler
+     * @throws SaxonApiException if creating serializer fails
+     */
+    ContentHandler getContentHandler(URI path) throws SaxonApiException;
 }

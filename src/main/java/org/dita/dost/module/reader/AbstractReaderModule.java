@@ -27,11 +27,6 @@ import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.namespace.QName;
-import javax.xml.transform.Result;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
@@ -46,7 +41,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.close;
 
 /**
  * Base class for document reader and serializer.
@@ -359,13 +353,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             job.add(stub);
         }
 
-//        InputSource in = null;
-        Result out = null;
         try {
-            final TransformerFactory tf = TransformerFactory.newInstance();
-            final SAXTransformerFactory stf = (SAXTransformerFactory) tf;
-            final TransformerHandler serializer = stf.newTransformerHandler();
-
             XMLReader parser = getXmlReader(ref.format);
             XMLReader xmlSource = parser;
             for (final XMLFilter f: getProcessingPipe(currentFile)) {
@@ -380,9 +368,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 parser.setFeature("http://xml.org/sax/features/lexical-handler", true);
             } catch (final SAXNotRecognizedException e) {}
 
-//            in = new InputSource(src.toString());
-            out = job.getStore().getResult(outputFile.toURI());
-            serializer.setResult(out);
+            final ContentHandler serializer = job.getStore().getContentHandler(outputFile.toURI());
+
             xmlSource.setContentHandler(serializer);
             xmlSource.parse(src.toString());
 
@@ -435,13 +422,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             }
             failureList.add(currentFile);
         } finally {
-            if (out != null) {
-                try {
-                    close(out);
-                } catch (final IOException e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-            }
             if (failureList.contains(currentFile)) {
                 FileUtils.deleteQuietly(outputFile);
             }
@@ -460,7 +440,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         doneList.add(currentFile);
         listFilter.reset();
         keydefFilter.reset();
-
     }
 
     /**
