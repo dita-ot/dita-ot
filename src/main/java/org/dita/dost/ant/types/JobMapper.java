@@ -41,11 +41,7 @@ public class JobMapper implements FileNameMapper {
     private String extension;
 
     public void setProject(Project project) {
-        File tempDir = new File(project.getProperty(ANT_TEMP_DIR));
-        if (!tempDir.isAbsolute()) {
-            tempDir = new File(project.getBaseDir(), tempDir.getPath());
-        }
-        job = ExtensibleAntInvoker.getJob(tempDir, project);
+        job = ExtensibleAntInvoker.getJob(project);
     }
 
     @Override

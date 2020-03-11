@@ -26,7 +26,7 @@ public final class InitializeProjectTask extends Task {
     @Override
     public void execute() throws BuildException {
         log("Initializing project", Project.MSG_INFO);
-        final File ditaDir = toFile(getProject().getUserProperty("dita.dir"));
+        final File ditaDir = toFile(getProject().getProperty("dita.dir"));
         if (!ditaDir.isAbsolute()) {
             throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
         }

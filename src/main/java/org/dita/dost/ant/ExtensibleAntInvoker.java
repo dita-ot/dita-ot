@@ -27,6 +27,7 @@ import org.dita.dost.store.Store;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.supportedImageExtensions;
+import static org.dita.dost.util.URLUtils.toFile;
 
 /**
  * Ant task for executing pipeline modules.
@@ -168,7 +170,7 @@ public final class ExtensibleAntInvoker extends Task {
     public void execute() throws BuildException {
         initialize();
 
-        final Job job = getJob(tempDir, getProject());
+        final Job job = getJob(getProject());
         final XMLUtils xmlUtils = getXmlUtils();
 
         try {
@@ -290,11 +292,17 @@ public final class ExtensibleAntInvoker extends Task {
     /**
      * Get job configuration from Ant project reference or create new.
      *
-     * @param tempDir configuration directory
      * @param project Ant project
      * @return job configuration
      */
-    public static Job getJob(final File tempDir, final Project project) {
+    public static Job getJob(final Project project) {
+        File tempDir = toFile(project.getUserProperty(ANT_TEMP_DIR));
+        if (tempDir == null) {
+            tempDir = toFile(project.getProperty(ANT_TEMP_DIR));
+        }
+        if (tempDir == null) {
+            throw new IllegalStateException(String.format("Ant property %s not set", ANT_TEMP_DIR));
+        }
         final Store store = project.getReference(ANT_REFERENCE_STORE);
         Job job = project.getReference(ANT_REFERENCE_JOB);
         if (job != null && job.isStale()) {
