@@ -29,7 +29,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="clean-temp.skip">
       <isfalse value="${clean.temp}"/>
     </condition>
-    <antcall>
+    <antcall inheritRefs="true">
       <target name="dita2${transtype}"/>
       <target name="clean-temp"/>
     </antcall>

@@ -130,7 +130,7 @@ with those set forth herein.
   </target>
 
   <target name="topic2pdf2" if="noMap">
-    <antcall target="preview.topic.pdf"/>
+    <antcall target="preview.topic.pdf" inheritRefs="true"/>
   </target>
 
   <target name="preview.topic.pdf"
@@ -155,7 +155,7 @@ with those set forth herein.
         <param name="style" location="${dita.plugin.org.dita.pdf2.dir}/xsl/common/topicmerge.xsl"/>
       </module>
     </pipeline>
-    <antcall target="publish.map.pdf"/>
+    <antcall target="publish.map.pdf" inheritRefs="true"/>
   </target>
 
   <target name="publish.map.pdf"
