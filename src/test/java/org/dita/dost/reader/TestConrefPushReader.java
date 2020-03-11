@@ -9,6 +9,7 @@ package org.dita.dost.reader;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.ConrefPushReader.MoveKey;
+import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +25,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.apache.commons.io.FileUtils.copyFile;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.buildControlDocument;
 
@@ -41,12 +43,14 @@ public class TestConrefPushReader {
     @Before
     public void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestConrefPushReader.class);
+        copyFile(new File(srcDir, "conrefpush_stub.xml"), new File(tempDir, "conrefpush_stub.xml"));
     }
 
     @Test
-    public void testRead() {
+    public void testRead() throws IOException {
         final File filename = new File(srcDir, "conrefpush_stub.xml");
         final ConrefPushReader pushReader = new ConrefPushReader();
+        pushReader.setJob(new Job(tempDir));
         pushReader.read(filename.getAbsoluteFile());
 
         final Map<File, Hashtable<MoveKey, DocumentFragment>> pushSet = pushReader.getPushMap();

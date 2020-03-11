@@ -88,6 +88,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         }
     }
 
+    @Override
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
         init();
         if ((includes == null || includes.isEmpty()) && (in == null)) {

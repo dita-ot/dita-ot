@@ -81,6 +81,21 @@ public class StreamStore implements Store {
         writeDocument(doc, new File(dst));
     }
 
+    @Override
+    public void transform(final URI input, final ContentHandler contentHandler) throws DITAOTException {
+        assert input.isAbsolute();
+        if (!input.getScheme().equals("file")) {
+            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
+        }
+        try {
+            final XMLReader xmlReader = XMLUtils.getXMLReader();
+            xmlReader.setContentHandler(contentHandler);
+            xmlReader.parse(input.toString());
+        } catch (SAXException | IOException e) {
+            throw new DITAOTException(e);
+        }
+    }
+
     /**
      * Transform file with XML filters. Only file URIs are supported.
      *

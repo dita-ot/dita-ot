@@ -8,14 +8,12 @@
 package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.reader.AbstractReader;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
-import javax.xml.parsers.DocumentBuilder;
 import java.io.File;
 import java.io.IOException;
 
@@ -38,10 +36,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
         logger.info("Processing " + filename.toURI());
         Document doc;
         try {
-            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
-            builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
-            logger.debug("Reading " + filename.toURI());
-            doc = builder.parse(filename);
+            doc = job.getStore().getDocument(filename.toURI());
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {

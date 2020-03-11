@@ -11,6 +11,7 @@ package org.dita.dost.store;
 import net.sf.saxon.s9api.Destination;
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Document;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLFilter;
 
 import javax.xml.transform.Result;
@@ -21,6 +22,14 @@ import java.net.URI;
 import java.util.List;
 
 public interface Store {
+
+    /**
+     * Read XML into SAX pipe.
+     *
+     * @param src file to read
+     * @param contentHandler SAX pipe to read to
+     */
+    void transform(final URI src, final ContentHandler contentHandler) throws DITAOTException;
 
     /**
      * Transform file with XML filters.

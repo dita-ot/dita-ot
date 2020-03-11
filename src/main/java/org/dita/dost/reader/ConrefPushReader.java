@@ -14,7 +14,6 @@ import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
@@ -40,7 +39,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
     /** Document used to construct push table DocumentFragments. */
     private final Document pushDocument;
     /** push table.*/
-    private final XMLReader reader;
 
     /**keep the file path of current file under parse
     filePath is useful to get the absolute path of the target file.*/
@@ -91,12 +89,11 @@ public final class ConrefPushReader extends AbstractXMLReader {
         pushcontentWriter = getXMLStreamWriter();
         pushType = null;
         try {
-            reader.parse(filename.toURI().toString());
+            job.getStore().transform(filename.toURI(), this);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
-            e.printStackTrace();
         }
     }
 
@@ -114,14 +111,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
      */
     public ConrefPushReader() {
         pushtable = new Hashtable<>();
-        try {
-            reader = XMLUtils.getXMLReader();
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, false);
-            reader.setFeature(FEATURE_NAMESPACE, true);
-            reader.setContentHandler(this);
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-        }
 
         pushDocument = XMLUtils.getDocumentBuilder().newDocument();
     }

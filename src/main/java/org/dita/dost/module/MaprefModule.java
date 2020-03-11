@@ -15,6 +15,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.DelegatingURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -121,23 +122,9 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         final FileInfo updated = collectJobInfo(input, doc);
         job.add(updated);
 
-        try (OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-            final Serializer result = processor.newSerializer(out);
-            final XdmNode source = processor.newDocumentBuilder().wrap(doc);
-            result.serializeNode(source);
-        } catch (final UncheckedXPathException e) {
-            throw new DITAOTException("Failed to serialize map " + inputFile, e);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final SaxonApiException e) {
-            try {
-                throw e.getCause();
-            } catch (final XPathException cause) {
-                throw new DITAOTException("Failed to serialize map " + inputFile + ": " + cause.getMessageAndLocation(), e);
-            } catch (Throwable throwable) {
-                throw new DITAOTException("Failed to serialize map " + inputFile + ": " + e.getMessage(), e);
-            }
-        } catch (final Exception e) {
+        try {
+            job.getStore().writeDocument(doc, outputFile.toURI());
+        } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize map " + inputFile + ": " + e.getMessage(), e);
         }
     }

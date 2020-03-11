@@ -22,6 +22,7 @@ import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 
 /**
  * This class is for get the first xml:lang value set in ditamap/topic files
@@ -66,10 +67,8 @@ public final class CheckLang extends Task {
 
         try {
 
-            final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-            final SAXParser saxParser = saxParserFactory.newSAXParser();
             //parse the user input file(usually a map)
-            saxParser.parse(inputmap, parser);
+            job.getStore().transform(new File(inputmap).toURI(), parser);
             String langCode = parser.getLangCode();
             if (!StringUtils.isEmptyString(langCode)) {
                 setActiveProjectProperty("htmlhelp.locale", langCode);
@@ -79,7 +78,7 @@ public final class CheckLang extends Task {
                     if (ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
                         final File topicFile = new File(job.tempDir, f.file.getPath());
                         if (topicFile.exists()) {
-                            saxParser.parse(topicFile, parser);
+                            job.getStore().transform(topicFile.toURI(), parser);
                             langCode = parser.getLangCode();
                             if (!StringUtils.isEmptyString(langCode)) {
                                 setActiveProjectProperty("htmlhelp.locale", langCode);
