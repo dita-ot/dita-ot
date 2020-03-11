@@ -24,6 +24,7 @@ import org.dita.dost.module.XmlFilterModule.FilterPair;
 import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.Store;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -303,13 +304,24 @@ public final class ExtensibleAntInvoker extends Task {
         if (tempDir == null) {
             throw new IllegalStateException(String.format("Ant property %s not set", ANT_TEMP_DIR));
         }
-        final Store store = project.getReference(ANT_REFERENCE_STORE);
         Job job = project.getReference(ANT_REFERENCE_JOB);
-        if (job != null && job.isStale()) {
-            project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
-            job = null;
-        }
-        if (job == null) {
+        if (job != null) {
+            if (job.isStale()) {
+                project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
+                try {
+                    job = new Job(tempDir, job.getStore());
+                } catch (final IOException ioe) {
+                    throw new BuildException(ioe);
+                }
+                project.addReference(ANT_REFERENCE_JOB, job);
+            }
+        } else {
+            Store store = project.getReference(ANT_REFERENCE_STORE);
+            if (store == null) {
+                project.log("Store not found from Ant project reference", Project.MSG_VERBOSE);
+                store = new StreamStore( new XMLUtils());
+            }
+            project.log("Job not found from Ant project reference", Project.MSG_VERBOSE);
             try {
                 job = new Job(tempDir, store);
             } catch (final IOException ioe) {
@@ -318,6 +330,11 @@ public final class ExtensibleAntInvoker extends Task {
             project.addReference(ANT_REFERENCE_JOB, job);
         }
         return job;
+    }
+
+    @Deprecated
+    public static Job getJob(final File tempDir, final Project project) {
+        return getJob(project);
     }
 
     /**
