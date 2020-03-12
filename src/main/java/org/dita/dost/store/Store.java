@@ -58,7 +58,7 @@ public interface Store {
     Source getSource(URI path);
 
     /**
-     * Get DOM document for file. Convenience method.
+     * Get DOM document for file.
      *
      * @param path temporary file URI, absolute or relative
      * @return document or null if not available
@@ -76,20 +76,12 @@ public interface Store {
     void writeDocument(Document doc, URI dst) throws IOException;
 
     /**
-     * Get temporary file result
-     *
-     * @param path temporary file URI, absolute or relative
-     * @return result for temporary file
-     */
-    Result getResult(URI path);
-
-    /**
      * Get temporary file destination
      *
      * @param path temporary file URI, absolute or relative
      * @return destination for temporary file
      */
-    Destination getDestination(URI path);
+    Destination getDestination(URI path) throws IOException;
 
     /**
      * Get result content handler.
@@ -98,5 +90,5 @@ public interface Store {
      * @return serializer content handler
      * @throws SaxonApiException if creating serializer fails
      */
-    ContentHandler getContentHandler(URI path) throws SaxonApiException;
+    ContentHandler getContentHandler(URI path) throws SaxonApiException, IOException;
 }
