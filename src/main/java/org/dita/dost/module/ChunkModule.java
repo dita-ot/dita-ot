@@ -64,7 +64,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(logger);
         mapReader.setJob(job);
-        mapReader.supportToNavigation(INDEX_TYPE_ECLIPSEHELP.equals(transtype));
+        mapReader.supportToNavigation(transtype.contains(INDEX_TYPE_ECLIPSEHELP));
         if (input.getAttribute(ROOT_CHUNK_OVERRIDE) != null) {
             mapReader.setRootChunkOverride(input.getAttribute(ROOT_CHUNK_OVERRIDE));
         }
@@ -72,7 +72,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         try {
             final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final File mapFile = new File(job.tempDirURI.resolve(in.uri));
-            if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile.toURI())) {
+            if (transtype.contains(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile.toURI())) {
                 for (final FileInfo f : job.getFileInfo()) {
                     if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                         mapReader.read(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());

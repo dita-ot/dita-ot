@@ -101,7 +101,7 @@ public final class MapReaderModule extends AbstractReaderModule {
         normalizeFilter.setLogger(logger);
         pipe.add(normalizeFilter);
 
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+        if (transtype.contains(INDEX_TYPE_ECLIPSEHELP)) {
             exportAnchorsFilter.setCurrentFile(fileToParse);
             exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
             pipe.add(exportAnchorsFilter);

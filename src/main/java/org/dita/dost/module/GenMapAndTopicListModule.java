@@ -250,7 +250,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             filterUtils = parseFilterFile();
         }
 
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+        if (transtype.contains(INDEX_TYPE_ECLIPSEHELP)) {
             exportAnchorsFilter = new ExportAnchorsFilter();
             exportAnchorsFilter.setInputFile(rootFile);
         }
@@ -379,7 +379,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             pipe.add(profilingFilter);
         }
 
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+        if (transtype.contains(INDEX_TYPE_ECLIPSEHELP)) {
             exportAnchorsFilter.setCurrentFile(fileToParse);
             exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
             pipe.add(exportAnchorsFilter);
@@ -904,7 +904,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
         }
 
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+        if (transtype.contains(INDEX_TYPE_ECLIPSEHELP)) {
             final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
             delayConrefUtils.setLogger(logger);
             delayConrefUtils.setJob(job);
