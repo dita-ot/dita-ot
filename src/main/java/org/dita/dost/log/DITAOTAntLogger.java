@@ -120,17 +120,32 @@ public final class DITAOTAntLogger extends MarkerIgnoringBase implements DITAOTL
 
     @Override
     public void error(String format, Object arg) {
-        log(MessageFormat.format(format, arg), null, Project.MSG_ERR);
+        if (arg instanceof Throwable) {
+            log(format, (Throwable) arg, Project.MSG_ERR);
+        } else {
+            log(MessageFormat.format(format, arg), null, Project.MSG_ERR);
+        }
     }
 
     @Override
     public void error(String format, Object arg1, Object arg2) {
-        log(MessageFormat.format(format, arg1, arg2), null, Project.MSG_ERR);
+        if (arg2 instanceof Throwable) {
+            log(MessageFormat.format(format, arg1), (Throwable) arg2, Project.MSG_ERR);
+        } else {
+            log(MessageFormat.format(format, arg1, arg2), null, Project.MSG_ERR);
+        }
     }
 
     @Override
     public void error(String format, Object... arguments) {
-        log(MessageFormat.format(format, arguments), null, Project.MSG_ERR);
+        final Object last = arguments[arguments.length - 1];
+        if (last instanceof Throwable) {
+            final Object[] init = new Object[arguments.length - 1];
+            System.arraycopy(arguments, 0, init, 0, init.length);
+            log(MessageFormat.format(format, init), (Throwable) last, Project.MSG_ERR);
+        } else {
+            log(MessageFormat.format(format, arguments), null, Project.MSG_ERR);
+        }
     }
 
     @Override

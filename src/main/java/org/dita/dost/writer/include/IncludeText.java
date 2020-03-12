@@ -49,7 +49,7 @@ final class IncludeText {
             try (BufferedReader codeReader = Files.newBufferedReader(codeFile.toPath(), charset)) {
                 range.copyLines(codeReader);
             } catch (final Exception e) {
-                logger.error("Failed to process include {}", codeFile, e);
+                logger.error("Failed to process include {0}", codeFile, e);
                 return false;
             }
         }
