@@ -22,9 +22,7 @@ import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.*;
 
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +33,11 @@ import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
 
+/**
+ * Stream based XML I/O
+ *
+ * @since 3.5
+ */
 public class StreamStore implements Store {
 
     private final XMLUtils xmlUtils;

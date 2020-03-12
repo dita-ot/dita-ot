@@ -1,7 +1,7 @@
 /*
  * This file is part of the DITA Open Toolkit project.
  *
- * Copyright 2019 Jarno Elovirta
+ * Copyright 2020 Jarno Elovirta
  *
  * See the accompanying LICENSE file for applicable license.
  */
@@ -15,13 +15,16 @@ import org.w3c.dom.Document;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLFilter;
 
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * Abstract XML I/O.
+ *
+ * @since 3.5
+ */
 public interface Store {
 
     /**

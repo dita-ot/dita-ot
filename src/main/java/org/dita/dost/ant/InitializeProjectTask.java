@@ -1,7 +1,7 @@
 /*
  * This file is part of the DITA Open Toolkit project.
  *
- * Copyright 2013 Jarno Elovirta
+ * Copyright 2020 Jarno Elovirta
  *
  * See the accompanying LICENSE file for applicable license.
  */
@@ -22,6 +22,11 @@ import static org.dita.dost.util.Constants.ANT_REFERENCE_STORE;
 import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
 import static org.dita.dost.util.URLUtils.toFile;
 
+/**
+ * Initialize Ant references.
+ *
+ * @since 3.5
+ */
 public final class InitializeProjectTask extends Task {
     @Override
     public void execute() throws BuildException {
