@@ -17,13 +17,17 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v1.6
+      - name: Set download URL
+        run: echo ::set-output name=url::https://github.com/dita-ot/dita-ot/releases/download/${GITHUB_REF:10}/dita-ot-${GITHUB_REF:10}.zip
+        id: download-url
+      - name: Create pull-request
+        uses: mislav/bump-homebrew-formula-action@v1.6
         if: "!contains(github.ref, '-')" # skip prereleases
         with:
           formula-name: dita-ot
           homebrew-tap: Homebrew/homebrew-core
           base-branch: master
-          download-url: https://github.com/dita-ot/dita-ot/releases/download/3.4/dita-ot-3.4.zip
+          download-url: ${{ steps.download-url.outputs.url }}
           commit-message: |
             {{formulaName}} {{version}}
             
