@@ -53,7 +53,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <xsl:template match="opentopic-index:index.entry" mode="index-postprocess">
-    <xsl:variable name="value" select="@value"/>
+    <xsl:variable name="indexid" select="@indexid"/>
     <xsl:choose>
       <xsl:when test="opentopic-index:index.entry">
         <fo:table rx:table-omit-initial-header="true" width="100%">
@@ -64,8 +64,8 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:if test="count(ancestor::opentopic-index:index.entry) > 0">
                     <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
                   </xsl:if>
-                  <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
-                  <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
+                  <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@indexid = $indexid and opentopic-index:refID]"/>
+                  <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@indexid = $indexid]) = 0">
                     <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
                     <fo:inline font-style="italic">
                       <xsl:text> (</xsl:text>
@@ -75,7 +75,7 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:if test="$following-idx">
                       <xsl:text> </xsl:text>
                       <fo:index-page-citation-list>
-                        <fo:index-key-reference ref-index-key="{$following-idx[1]/opentopic-index:refID/@value}"
+                        <fo:index-key-reference ref-index-key="{$following-idx[1]/opentopic-index:refID/@indexid}"
                                                 xsl:use-attribute-sets="__index__page__link"/>
                       </fo:index-page-citation-list>
                     </xsl:if>
@@ -91,13 +91,13 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:if test="count(ancestor::opentopic-index:index.entry) > 0">
                     <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
                   </xsl:if>
-                  <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
-                  <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
+                  <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@indexid = $indexid and opentopic-index:refID]"/>
+                  <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@indexid = $indexid]) = 0">
                     <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
                     <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
-                    <xsl:variable name="refID" select="opentopic-index:refID/@value"/>
+                    <xsl:variable name="refID" select="opentopic-index:refID/@indexid"/>
                     <xsl:choose>
-                      <xsl:when test="opentopic-func:getIndexEntry($value,$refID)">
+                      <xsl:when test="opentopic-func:getIndexEntry($indexid,$refID)">
                         <xsl:apply-templates select="." mode="make-index-ref">
                           <xsl:with-param name="idxs" select="opentopic-index:refID"/>
                           <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
@@ -107,8 +107,8 @@ See the accompanying LICENSE file for applicable license.
                       <xsl:otherwise>
                         <xsl:variable name="isNormalChilds">
                           <xsl:for-each select="descendant::opentopic-index:index.entry">
-                            <xsl:variable name="currValue" select="@value"/>
-                            <xsl:variable name="currRefID" select="opentopic-index:refID/@value"/>
+                            <xsl:variable name="currValue" select="@indexid"/>
+                            <xsl:variable name="currRefID" select="opentopic-index:refID/@indexid"/>
                             <xsl:if test="opentopic-func:getIndexEntry($currValue,$currRefID)">
                               <xsl:text>true </xsl:text>
                             </xsl:if>
@@ -116,7 +116,7 @@ See the accompanying LICENSE file for applicable license.
                         </xsl:variable>
                         <xsl:if test="contains($isNormalChilds,'true ')">
                           <xsl:apply-templates select="." mode="make-index-ref">
-                            <xsl:with-param name="idxs" select="if ($index.allow-link-with-subterm and exists(key('index-leaves',@value)))
+                            <xsl:with-param name="idxs" select="if ($index.allow-link-with-subterm and exists(key('index-leaves',@indexid)))
                               then opentopic-index:refID
                               else ()"/>
                             <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
@@ -147,8 +147,8 @@ See the accompanying LICENSE file for applicable license.
             <xsl:if test="count(ancestor::opentopic-index:index.entry) > 0">
               <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
             </xsl:if>
-            <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
-            <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
+            <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@indexid = $indexid and opentopic-index:refID]"/>
+            <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@indexid = $indexid]) = 0">
               <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
             <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
               <xsl:apply-templates select="." mode="make-index-ref">
@@ -179,7 +179,7 @@ See the accompanying LICENSE file for applicable license.
       </fo:inline>
       <xsl:if test="$idxs">
         <xsl:for-each select="$idxs">
-          <fo:inline id="{@value}"/>
+          <fo:inline id="{@indexid}"/>
         </xsl:for-each>
       </xsl:if>
       <xsl:if test="not($no-page)">
@@ -188,7 +188,7 @@ See the accompanying LICENSE file for applicable license.
           <fo:inline>
             <fo:index-page-citation-list>
               <xsl:for-each select="$idxs">
-                <fo:index-key-reference ref-index-key="{@value}" xsl:use-attribute-sets="__index__page__link"/>
+                <fo:index-key-reference ref-index-key="{@indexid}" xsl:use-attribute-sets="__index__page__link"/>
               </xsl:for-each>
             </fo:index-page-citation-list>
           </fo:inline>
