@@ -566,7 +566,8 @@ See the accompanying LICENSE file for applicable license.
     <span class="table--title-label">
       <xsl:apply-templates select="." mode="title-number">
         <xsl:with-param name="number" as="xs:integer"
-          select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
+          select="count((key('enumerableByClass', 'topic/table') | key('enumerableByClass', 'topic/simpletable'))
+                        [. &lt;&lt; current()])"/>
       </xsl:apply-templates>
     </span>
   </xsl:template>

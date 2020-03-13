@@ -23,7 +23,7 @@ import java.io.InputStream;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
 
-public class NormalizeTableFilterTest {
+public class NormalizeSimpleTableFilterTest {
 
     @Test
     public void testNoFilter() throws Exception {
@@ -38,13 +38,14 @@ public class NormalizeTableFilterTest {
 
         final Transformer t = TransformerFactory.newInstance().newTransformer();
         final InputStream src = getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/src/" + file);
-        final NormalizeTableFilter f = new NormalizeTableFilter();
+        final NormalizeSimpleTableFilter f = new NormalizeSimpleTableFilter();
         f.setParent(XMLUtils.getXMLReader());
         f.setLogger(new TestUtils.TestLogger());
         final SAXSource s = new SAXSource(f, new InputSource(src));
 
         final Document act = db.newDocument();
         t.transform(s, new DOMResult(act));
+
         assertXMLEqual(db.parse(expStream), act);
     }
 

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
   xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable" stylesheet="../../../../../main/plugins/org.dita.html5/xsl/functions.xsl">
 
@@ -360,8 +359,8 @@
         <x:param name="entry" select="//strow/stentry[1]">
           <simpletable class="- topic/simpletable " keycol="1">
             <strow class="- topic/strow ">
-              <stentry class="- topic/stentry "/>
-              <stentry class="- topic/stentry "/>
+              <stentry class="- topic/stentry " dita-ot:x="1" dita-ot:y="1"/>
+              <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="1"/>
             </strow>
           </simpletable>
         </x:param>
