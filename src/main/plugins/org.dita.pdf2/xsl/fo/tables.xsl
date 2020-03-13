@@ -171,11 +171,11 @@ See the accompanying LICENSE file for applicable license.
          skip to next row. Currently known to match ditaval-startprop when flagging used on simpletable
          as well as suitesol:changebar-start when revision bar used on sthead or stentry. -->
     <xsl:template match="*" mode="count-max-simpletable-cells" as="xs:integer">
-      <xsl:param name="maxcount" select="0" as="xs:integer"/>
-      <xsl:apply-templates select="following-sibling::*[1]" mode="count-max-simpletable-cells">
-        <xsl:with-param name="maxcount" select="$maxcount"/>
-      </xsl:apply-templates>
+      <xsl:variable name="simpletable" select="ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]"/>
+      <xsl:variable name="xs" as="xs:integer+" select="$simpletable//@dita-ot:x/xs:integer(.)"/>
+      <xsl:sequence select="max($xs)"/>
     </xsl:template>
+  
     <!-- Count the max number of cells in any row of a simpletable -->
     <xsl:template match="*[contains(@class, ' topic/sthead ')] | *[contains(@class, ' topic/strow ')]" mode="count-max-simpletable-cells" as="xs:integer">
       <xsl:param name="maxcount" select="0" as="xs:integer"/>
@@ -1044,6 +1044,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' topic/strow ')]/*[contains(@class, ' topic/stentry ')]">
         <fo:table-cell xsl:use-attribute-sets="strow.stentry">
             <xsl:call-template name="commonattributes"/>
+            <xsl:call-template name="simpletableApplySpansAttrs"/>
             <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
             <xsl:variable name="frame" as="xs:string" select="(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"/>
 
@@ -1076,6 +1077,15 @@ See the accompanying LICENSE file for applicable license.
             </xsl:choose>
         </fo:table-cell>
     </xsl:template>
+  
+  <xsl:template name="simpletableApplySpansAttrs">
+    <xsl:if test="exists(@rowspan) and xs:integer(@rowspan) gt 1">
+      <xsl:attribute name="number-rows-spanned" select="xs:integer(@rowspan)"/>
+    </xsl:if>
+    <xsl:if test="exists(@colspan) and xs:integer(@colspan) gt 1">
+      <xsl:attribute name="number-columns-spanned" select="xs:integer(@colspan)"/>
+    </xsl:if>
+  </xsl:template>
 
     <xsl:template match="*" mode="simpletableHorizontalBorders">
         <xsl:param name="frame" select="(ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"

@@ -148,13 +148,13 @@
         </fo:table-header>
         <fo:table-body>
           <fo:table-row>
-            <fo:table-cell>
+            <fo:table-cell number-columns-spanned="2">
               <fo:block>1 2</fo:block>
             </fo:table-cell>
             <fo:table-cell>
               <fo:block>3 2</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
+            <fo:table-cell number-columns-spanned="2">
               <fo:block>4 2</fo:block>
             </fo:table-cell>
             <fo:table-cell>
@@ -175,7 +175,7 @@
             <fo:table-cell>
               <fo:block>2 3</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
+            <fo:table-cell number-rows-spanned="2" number-columns-spanned="2">
               <fo:block>3 3</fo:block>
             </fo:table-cell>
             <fo:table-cell>
@@ -191,10 +191,10 @@
             <fo:table-cell>
               <fo:block>1 4</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
+            <fo:table-cell number-rows-spanned="2">
               <fo:block>2 4</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
+            <fo:table-cell number-rows-spanned="3">
               <fo:block>5 4</fo:block>
             </fo:table-cell>
             <fo:table-cell>
@@ -209,10 +209,10 @@
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
-            <fo:table-cell>
+            <fo:table-cell number-rows-spanned="2">
               <fo:block>1 5</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
+            <fo:table-cell number-columns-spanned="2">
               <fo:block>3 5</fo:block>
             </fo:table-cell>
             <fo:table-cell>
@@ -329,10 +329,10 @@
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
-            <fo:table-cell>
+            <fo:table-cell number-columns-spanned="2">
               <fo:block>e1</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
+            <fo:table-cell number-columns-spanned="2">
               <fo:block>e3</fo:block>
             </fo:table-cell>
             <fo:table-cell>
