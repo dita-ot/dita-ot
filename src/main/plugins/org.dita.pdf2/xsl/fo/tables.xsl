@@ -978,7 +978,11 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="commonattributes"/>
             <fo:table-row xsl:use-attribute-sets="sthead__row">
                 <xsl:apply-templates select="*[contains(@class, ' topic/stentry ')]"/>
-                <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])" as="xs:integer"/>
+                <xsl:variable name="row-cell-count" as="xs:integer">
+                  <xsl:variable name="last" select="*[contains(@class, ' topic/stentry ')][last()]"/>
+                  <xsl:variable name="span" select="if (exists($last/@colspan)) then (xs:integer($last/@colspan) - 1) else 0"/>
+                  <xsl:sequence select="xs:integer($last/@dita-ot:x) + $span"/>
+                </xsl:variable>
                 <xsl:if test="$row-cell-count &lt; $number-cells">
                     <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
                         <xsl:with-param name="fill-in-count" select="$number-cells - $row-cell-count"/>
@@ -995,7 +999,11 @@ See the accompanying LICENSE file for applicable license.
         <fo:table-row xsl:use-attribute-sets="strow">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="*[contains(@class, ' topic/stentry ')]"/>
-            <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])" as="xs:integer"/>
+            <xsl:variable name="row-cell-count" as="xs:integer">
+              <xsl:variable name="last" select="*[contains(@class, ' topic/stentry ')][last()]"/>
+              <xsl:variable name="span" select="if (exists($last/@colspan)) then (xs:integer($last/@colspan) - 1) else 0"/>
+              <xsl:sequence select="xs:integer($last/@dita-ot:x) + $span"/>
+            </xsl:variable>
             <xsl:if test="$row-cell-count &lt; $number-cells">
                 <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
                     <xsl:with-param name="fill-in-count" select="$number-cells - $row-cell-count"/>
@@ -1007,6 +1015,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' topic/sthead ')]/*[contains(@class, ' topic/stentry ')]">
         <fo:table-cell xsl:use-attribute-sets="sthead.stentry">
             <xsl:call-template name="commonattributes"/>
+            <xsl:call-template name="simpletableApplySpansAttrs"/>
             <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
             <xsl:variable name="frame" as="xs:string" select="(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"/>
 
