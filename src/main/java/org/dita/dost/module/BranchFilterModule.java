@@ -69,6 +69,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     /** Absolute URI to map being processed. */
     protected URI currentFile;
     private final Set<URI> filtered = new HashSet<>();
+    
+    /* Sets to track what topics are renamed in map, still in map, filtered from map */ 
+    private final Set<URI> renamedTopics = new HashSet<>();
+    private final Set<URI> sameNameTopics = new HashSet<>();
+    private final Set<URI> filteredTopics = new HashSet<>();
 
     public BranchFilterModule() {
         ditaValReader = new DitaValReader();
@@ -136,6 +141,8 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         rewriteDuplicates(doc.getDocumentElement());
         logger.debug("Filter topics and generate copies");
         generateCopies(doc.getDocumentElement(), Collections.emptyList());
+        logger.debug("Remove obsolete references");
+        removeObsoleteReferences();
         logger.debug("Filter existing topics");
         filterTopics(doc.getDocumentElement(), Collections.emptyList());
 
@@ -288,6 +295,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         }
 
         if (exclude) {
+            addToFilteredSet(elem);
             elem.getParentNode().removeChild(elem);
         } else {
             final List<Element> childElements = getChildElements(elem);
@@ -309,6 +317,23 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             for (final Element child : childElements) {
                 filterBranches(child, fs, props);
             }
+        }
+    }
+    
+    /** When a branch is filtered, add references in branch to filtered set **/
+    private void addToFilteredSet(final Element elem) {
+        final String copyTo = elem.getAttribute(BRANCH_COPY_TO);
+        final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
+        if (!copyTo.isEmpty()) {
+            final URI dstUri = map.resolve(copyTo);
+            filteredTopics.add(dstUri);
+        }
+        if (!href.isEmpty()) {
+            final URI srcUri = map.resolve(href);
+            filteredTopics.add(srcUri);
+        }
+        for (final Element child : getChildElements(elem)) {
+            addToFilteredSet(child);
         }
     }
 
@@ -333,10 +358,10 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         final List<FilterUtils> fs = combineFilterUtils(topicref, filters);
 
         final String copyTo = topicref.getAttribute(BRANCH_COPY_TO);
+        final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
         if (!copyTo.isEmpty()) {
             final URI dstUri = map.resolve(copyTo);
             final URI dstAbsUri = job.tempDirURI.resolve(dstUri);
-            final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
             final URI srcUri = map.resolve(href);
             final URI srcAbsUri = job.tempDirURI.resolve(srcUri);
             final FileInfo srcFileInfo = job.getFileInfo(srcUri);
@@ -344,6 +369,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 //                final FileInfo fi = new FileInfo.Builder(srcFileInfo).uri(dstUri).build();
 //                 TODO: Maybe Job should be updated earlier?
 //                job.add(fi);
+                renamedTopics.add(srcUri);
                 logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
                 final ProfilingFilter writer = new ProfilingFilter();
                 writer.setLogger(logger);
@@ -368,12 +394,31 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                 // disable filtering again
                 topicref.setAttribute(SKIP_FILTER, Boolean.TRUE.toString());
             }
+        } else if (!href.isEmpty()) {
+            final URI srcUri = map.resolve(href);
+            sameNameTopics.add(srcUri);
         }
         for (final Element child: getChildElements(topicref, MAP_TOPICREF)) {
             if (DITAVAREF_D_DITAVALREF.matches(child)) {
                 continue;
             }
             generateCopies(child, fs);
+        }
+    }
+    
+    /** Remove files from job if they were renamed and no longer exist with original name **/
+    private void removeObsoleteReferences() {
+        /** If a file was renamed and no longer exists with original name, remove from job **/
+        for (final URI file: renamedTopics) {
+            if (!sameNameTopics.contains(file) && job.getFileInfo(file) != null) {
+                job.remove(job.getFileInfo(file));
+            }
+        }
+        /** If a file reference was filtered from map and no longer exists, remove from job **/
+        for (final URI file: filteredTopics) {
+            if (!sameNameTopics.contains(file) && job.getFileInfo(file) != null) {
+                job.remove(job.getFileInfo(file));
+            }
         }
     }
 

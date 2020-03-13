@@ -46,9 +46,9 @@ dependencies {
     }
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.9'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.1'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.1'
     compile group: 'org.relaxng', name: 'jing', version: '20181222'
     runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.6'
     testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
@@ -257,6 +257,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "temp"
         include "config/**"
         include "resources/plugin.rnc"
+        include "resources/project.rnc"
         // legacy build scripts
         include "startcmd.*"
         include "bin/ant"

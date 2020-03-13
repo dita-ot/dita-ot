@@ -57,7 +57,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
                     .format(ATTR_FORMAT_VALUE_DITAVAL)
                     .build());
         }
-        for (final String uri: Arrays.asList("install.dita", "perform-install.dita", "configure.dita")) {
+        for (final String uri: Arrays.asList("install.dita", "perform-install.dita", "configure.dita", "exclude.dita")) {
             job.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
                     .result(new File(tempDir, uri).toURI())
@@ -144,7 +144,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         final List<String> exp = Arrays.asList(
                 "installation-procedure.dita", "getting-started.dita",
                 //"http://example.com/install.dita",
-                "configure.dita",
+                //"configure.dita",
                 "input.ditamap", "install.dita", "linux.ditaval", "perform-install.dita",
                 "configure-novice.dita", "novice.ditaval", "configure-admin.dita",
                 "advanced.ditaval", "install-mac.dita", "mac.ditaval",
@@ -165,7 +165,8 @@ public class BranchFilterModuleTest extends BranchFilterModule {
                 "configure-admin.dita", "install-mac.dita", "perform-install-mac.dita",
                 "installation-procedure-mac.dita", "configure-novice-mac.dita", "configure-admin-mac.dita",
                 "install-win.dita", "perform-install-win.dita", "installation-procedure-win.dita",
-                "configure-novice-win.dita", "configure-admin-win.dita", "install-linux.dita", "install.dita"
+                "configure-novice-win.dita", "configure-admin-win.dita", "install-linux.dita", "install.dita",
+                "exclude.dita"
 
         );
         Collections.sort(filesExp);
@@ -193,16 +194,14 @@ public class BranchFilterModuleTest extends BranchFilterModule {
 
         final List<String> exp = Arrays.asList(
                 "main/novice.ditaval", "main/advanced.ditaval",
-                "main/kiddo.dita", "main/kiddodefault.dita", "main/parent.dita", "main/parentdefault.dita",
-                "main/parentdefault-1.dita", "main/parent-novice.dita", "main/PREFIX-parent-advanced.dita",
-                "main/PREFIX-weechild-advanced.dita", "main/subdirkiddo.dita", "main/subdirkiddodefault.dita",
-                "main/testuplevels.ditamap", "main/weechilddefault-1.dita", "main/weechild-novice.dita",
-                "main/subdir/PREFIX-weechild-advanced.dita", "main/subdir/weechilddefault-1.dita", "main/subdir/weechild-novice.dita",
-                "peer/peerkiddo.dita", "peer/peerkiddodefault.dita", "peer/peerkiddodefault-1.dita",
-                "peer/peerkiddo-novice.dita", "peer/PREFIX-peerkiddo-advanced.dita",
-                "main/weechild.dita", "main/subdir/weechilddefault.dita",
-                "main/subdir/weechild.dita", "main/weechilddefault.dita");
-        
+                "main/kiddodefault.dita", "main/parentdefault.dita", "main/parentdefault-1.dita", 
+                "main/parent-novice.dita",  "main/PREFIX-parent-advanced.dita", "main/PREFIX-weechild-advanced.dita", 
+                "main/subdirkiddodefault.dita", "main/testuplevels.ditamap", "main/weechilddefault-1.dita", 
+                "main/weechild-novice.dita", "main/subdir/PREFIX-weechild-advanced.dita", 
+                "main/subdir/weechilddefault-1.dita",  "main/subdir/weechild-novice.dita",
+                "peer/peerkiddodefault.dita",  "peer/peerkiddodefault-1.dita",
+                "peer/peerkiddo-novice.dita", "peer/PREFIX-peerkiddo-advanced.dita", "main/weechild.dita", 
+                "main/subdir/weechilddefault.dita", "main/subdir/weechild.dita", "main/weechilddefault.dita");
         assertEquals(exp.size(), job.getFileInfo().size());
         for (final String f : exp) {
             assertNotNull(job.getFileInfo(URI.create(f)));
