@@ -190,11 +190,6 @@
             <fo:table-cell number-columns-spanned="2">
               <fo:block>3 5</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>
-                <fo:inline>&#xA0;</fo:inline>
-              </fo:block>
-            </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
             <fo:table-cell>
@@ -205,11 +200,6 @@
             </fo:table-cell>
             <fo:table-cell>
               <fo:block>4 6</fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>
-                <fo:inline>&#xA0;</fo:inline>
-              </fo:block>
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
