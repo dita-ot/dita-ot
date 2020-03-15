@@ -16,6 +16,7 @@
       </simpletable>
     </x:context>
     <x:expect label="has caption">
+      <fo:block>Table.title 1 foo</fo:block>
       <fo:table>
         <fo:table-body>
           <fo:table-row>

@@ -312,7 +312,9 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" mode="table.title-number">
-    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()][dita-ot:notExcludedByDraftElement(.)])"/>
+    <xsl:value-of select="count((key('enumerableByClass', 'topic/table') | key('enumerableByClass', 'topic/simpletable'))
+                                [. &lt;&lt; current()]
+                                [dita-ot:notExcludedByDraftElement(.)])"/>
   </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tgroup ')]" name="tgroup">
@@ -867,6 +869,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
         </xsl:variable>
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
+        <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
         <fo:table xsl:use-attribute-sets="simpletable">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="globalAtts"/>
@@ -910,6 +913,31 @@ See the accompanying LICENSE file for applicable license.
         </fo:table>
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/simpletable ')]/*[contains(@class, ' topic/title ')]">
+    <fo:block xsl:use-attribute-sets="table.title">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="." mode="customTitleAnchor"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Table.title'"/>
+        <xsl:with-param name="params">
+          <number>
+            <xsl:apply-templates select="." mode="table.title-number"/>
+          </number>
+          <title>
+            <xsl:apply-templates/>
+          </title>
+        </xsl:with-param>
+      </xsl:call-template>
+    </fo:block>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/simpletable ')]/*[contains(@class, ' topic/title ')]" mode="table.title-number">
+    <xsl:value-of select="count((key('enumerableByClass', 'topic/table') | key('enumerableByClass', 'topic/simpletable'))
+                                [. &lt;&lt; current()]
+                                [dita-ot:notExcludedByDraftElement(.)])"/>
+  </xsl:template>
+  
   
     <xsl:template match="*[contains(@class,' topic/simpletable ')]
         [empty(*[contains(@class,' topic/strow ')]/*[contains(@class,' topic/stentry ')])]" priority="10"/>

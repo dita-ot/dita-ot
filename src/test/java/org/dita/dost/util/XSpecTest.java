@@ -7,7 +7,6 @@
  */
 package org.dita.dost.util;
 
-import org.apache.xml.resolver.Catalog;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.junit.BeforeClass;
 import org.junit.Test;
