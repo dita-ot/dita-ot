@@ -8,28 +8,16 @@
  */
 package org.dita.dost.module;
 
-import static java.util.stream.Collectors.toMap;
-import static org.dita.dost.util.Configuration.configuration;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Job.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.*;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
-import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.*;
+import org.dita.dost.writer.ConkeyrefFilter;
+import org.dita.dost.writer.KeyrefPaser;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -37,16 +25,26 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLFilter;
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.pipeline.AbstractPipelineInput;
-import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.writer.ConkeyrefFilter;
-import org.dita.dost.writer.KeyrefPaser;
 
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.nio.file.Files.exists;
+import static java.util.stream.Collectors.toMap;
+import static org.dita.dost.util.Configuration.configuration;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.FileInfo;
+import static org.dita.dost.util.Job.KEYDEF_LIST_FILE;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.close;
+import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
  * Keyref ModuleElem.
@@ -148,18 +146,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     private KeyScope buildKeyScopes(Document document) throws DITAOTException {
-        if (Files.exists((new File(job.tempDir, KEYDEF_LIST_FILE)).toPath())) {
-            try {
-                ObjectMapper objectMapper = new ObjectMapper();
-                SimpleModule module = new SimpleModule();
-                module.addDeserializer(KeyDef.class, new KeyDefDeserializer());
-                objectMapper.registerModule(module);
-                return objectMapper.readValue(new FileInputStream(new File(job.tempDir, KEYDEF_LIST_FILE)),KeyScope.class);
-            } catch (IOException e) {
-                throw new DITAOTException("Couldn't build keyscope", e);
-            }
-        }
-
         final KeyrefReader reader = new KeyrefReader();
         reader.setLogger(logger);
         reader.setJob(job);
@@ -413,8 +399,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     private void serializeKeyDefinitions(KeyScope rootScope) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(new File(job.tempDir, KEYDEF_LIST_FILE), rootScope);
+        if (!exists((new File(job.tempDir, KEYDEF_LIST_FILE)).toPath())) {
+            ObjectWriter objectWriter = new KeydefSerializer().newSerializer();
+            objectWriter.writeValue(new File(job.tempDir, KEYDEF_LIST_FILE), rootScope);
+        }
     }
 
     private Document readMap() throws DITAOTException {
