@@ -34,7 +34,7 @@ public class KeyScope {
                     @JsonProperty("childScopes")final List<KeyScope> childScopes) {
         this.id = id;
         this.name = name;
-        this.keyDefinition = unmodifiableMap(keyDefinition);
+        this.keyDefinition = keyDefinition;
         this.childScopes = unmodifiableList(new ArrayList<>(childScopes));
     }
 

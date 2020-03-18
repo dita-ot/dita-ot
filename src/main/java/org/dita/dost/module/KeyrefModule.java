@@ -8,7 +8,10 @@
  */
 package org.dita.dost.module;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
@@ -30,6 +33,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -146,6 +150,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     private KeyScope buildKeyScopes(Document document) throws DITAOTException {
+    	final KeyScope filteredKeyScope = deserializeDefinitions();
+    	
         final KeyrefReader reader = new KeyrefReader();
         reader.setLogger(logger);
         reader.setJob(job);
@@ -153,7 +159,35 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         final URI mapFile = in.uri;
         logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
         reader.read(job.tempDirURI.resolve(mapFile), document);
-        return reader.getKeyDefinition();
+        return mergeKeyScopes(reader.getKeyDefinition(), filteredKeyScope);
+    }
+    
+    KeyScope mergeKeyScopes(KeyScope rootScope, KeyScope filteredKeyScope) {
+    	logger.info("Merging filtered key defininitions into root keyscope");
+    	final Map<String, Map<String, KeyDef>> filteredKeydef = new HashMap<>();
+    	readFilteredDefinitions(filteredKeyScope, filteredKeydef);
+    	return mergeDefinitions(rootScope, filteredKeydef);
+    }
+    
+    private void readFilteredDefinitions(KeyScope filteredKeyScope, Map<String, Map<String, KeyDef>> filteredKeydef) {
+    	if (filteredKeyScope != null) {
+    		if (!filteredKeyScope.keySet().isEmpty()) {
+        		filteredKeydef.put(filteredKeyScope.id, filteredKeyScope.keyDefinition);
+        	}
+        	
+        	filteredKeyScope.childScopes.stream().forEach(scope -> readFilteredDefinitions(scope, filteredKeydef));
+    	}
+    }
+    
+    private KeyScope mergeDefinitions(KeyScope rootKeyScope, Map<String, Map<String, KeyDef>> filteredKeydef) {
+    	if (filteredKeydef.containsKey(rootKeyScope.id)) {
+    		for (Map.Entry<String, KeyDef> key : filteredKeydef.get(rootKeyScope.id).entrySet()) {
+    			rootKeyScope.keyDefinition.put(key.getKey(), key.getValue());
+        	}
+    	}
+    	
+    	rootKeyScope.childScopes.stream().map(scope -> mergeDefinitions(scope, filteredKeydef)).collect(Collectors.toList());
+    	return rootKeyScope;
     }
 
     private void initFilters() {
@@ -221,6 +255,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         return res;
     }
 
+    /** ORIGINAL CODE
     KeyScope rewriteScopeTargets(KeyScope scope, Map<URI, URI> rewrites) {
         final Map<String, KeyDef> newKeys = new HashMap<>();
         for (Map.Entry<String, KeyDef> key : scope.keyDefinition.entrySet()) {
@@ -237,6 +272,21 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 scope.childScopes.stream()
                         .map(c -> rewriteScopeTargets(c, rewrites))
                         .collect(Collectors.toList()));
+    } */
+    
+    KeyScope rewriteScopeTargets(KeyScope scope, Map<URI, URI> rewrites) {
+        for (Map.Entry<String, KeyDef> key : scope.keyDefinition.entrySet()) {
+            KeyDef oldKey = key.getValue();
+            URI href = oldKey.href;
+            if (href != null && rewrites.containsKey(stripFragment(href))) {
+                href = setFragment(rewrites.get(stripFragment(href)), href.getFragment());
+            }
+
+            oldKey.href = href;
+        }
+
+        scope.childScopes.stream().map(c -> rewriteScopeTargets(c, rewrites)).collect(Collectors.toList());
+        return scope;
     }
 
 
@@ -403,6 +453,25 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             ObjectWriter objectWriter = new KeydefSerializer().newSerializer();
             objectWriter.writeValue(new File(job.tempDir, KEYDEF_LIST_FILE), rootScope);
         }
+    }
+    
+    private KeyScope deserializeDefinitions() throws DITAOTException {
+    	KeyScope filteredKeyScope = null;
+    	if ((new File(job.tempDir, KEYDEF_LIST_FILE)).toPath().toFile().exists()) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                SimpleModule module = new SimpleModule();
+                
+                module.addDeserializer(KeyDef.class, new KeydefDeserializer());
+                objectMapper.registerModule(module);
+               
+                filteredKeyScope = objectMapper.readValue(new FileInputStream(new File(job.tempDir, KEYDEF_LIST_FILE)),KeyScope.class);
+            } catch (IOException e) {
+                throw new DITAOTException("Couldn't build keyscope", e);
+            }
+        }
+    	
+    	return filteredKeyScope;
     }
 
     private Document readMap() throws DITAOTException {
