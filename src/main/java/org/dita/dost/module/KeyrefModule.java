@@ -11,7 +11,6 @@ package org.dita.dost.module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
@@ -40,6 +39,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+import static java.lang.System.currentTimeMillis;
 import static java.nio.file.Files.exists;
 import static java.util.stream.Collectors.toMap;
 import static org.dita.dost.util.Configuration.configuration;
@@ -161,12 +162,16 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         reader.read(job.tempDirURI.resolve(mapFile), document);
         return mergeKeyScopes(reader.getKeyDefinition(), filteredKeyScope);
     }
-    
+
     KeyScope mergeKeyScopes(KeyScope rootScope, KeyScope filteredKeyScope) {
-    	logger.info("Merging filtered key defininitions into root keyscope");
-    	final Map<String, Map<String, KeyDef>> filteredKeydef = new HashMap<>();
-    	readFilteredDefinitions(filteredKeyScope, filteredKeydef);
-    	return mergeDefinitions(rootScope, filteredKeydef);
+        long ref1 = currentTimeMillis();
+        final Map<String, Map<String, KeyDef>> filteredKeydef = new HashMap<>();
+        readFilteredDefinitions(filteredKeyScope, filteredKeydef);
+        long ref2 = currentTimeMillis();
+        KeyScope keyScope = mergeDefinitions(rootScope, filteredKeydef);
+        long ref3 = currentTimeMillis();
+        logger.info(format("Reading filtered definitions: %d ms, merging: %d ms, total %d ms", ref2 - ref1, ref3 - ref2, ref3 - ref1));
+        return keyScope;
     }
     
     private void readFilteredDefinitions(KeyScope filteredKeyScope, Map<String, Map<String, KeyDef>> filteredKeydef) {
@@ -450,8 +455,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
     private void serializeKeyDefinitions(KeyScope rootScope) throws IOException {
         if (!exists((new File(job.tempDir, KEYDEF_LIST_FILE)).toPath())) {
-            ObjectWriter objectWriter = new KeydefSerializer().newSerializer();
+            long ref1 = currentTimeMillis();
+            ObjectWriter objectWriter = new KeyScopeSerializer().newSerializer();
             objectWriter.writeValue(new File(job.tempDir, KEYDEF_LIST_FILE), rootScope);
+            logger.info(format("Serializing filtered keydefs: %d ms", currentTimeMillis()-ref1));
         }
     }
     
@@ -459,6 +466,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     	KeyScope filteredKeyScope = null;
     	if ((new File(job.tempDir, KEYDEF_LIST_FILE)).toPath().toFile().exists()) {
             try {
+                long ref1 = currentTimeMillis();
                 ObjectMapper objectMapper = new ObjectMapper();
                 SimpleModule module = new SimpleModule();
                 
@@ -466,11 +474,11 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 objectMapper.registerModule(module);
                
                 filteredKeyScope = objectMapper.readValue(new FileInputStream(new File(job.tempDir, KEYDEF_LIST_FILE)),KeyScope.class);
+                logger.info(format("Deserializing filtered keydefs: %d ms", currentTimeMillis()-ref1));
             } catch (IOException e) {
                 throw new DITAOTException("Couldn't build keyscope", e);
             }
         }
-    	
     	return filteredKeyScope;
     }
 

@@ -11,20 +11,24 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class KeyScopeTest {
 
-    private KeydefSerializer serializer;
+    private KeyScopeSerializer serializer;
 
     @Before
     public void before() {
-        serializer = new KeydefSerializer();
+        serializer = new KeyScopeSerializer();
     }
 
     private KeyScope buildKeyScope() {
+        return buildKeyScope(new ArrayList<>());
+    }
+    private KeyScope buildKeyScope(List<KeyScope> childScopes) {
         Map<String, KeyDef> keyDefinitions = new HashMap<>();
         KeyDef keyDef = new KeyDef("keys", URI.create("https://www.google.de"),"scope","format",
                 URI.create("https://www.google.de"), null, false);
@@ -35,7 +39,7 @@ public class KeyScopeTest {
         keyDefinitions.put("empty", null);
         String id = "id";
         String name = null;
-        return new KeyScope(id, name, keyDefinitions,new ArrayList<>());
+        return new KeyScope(id, name, keyDefinitions,childScopes);
     }
 
     @Test
@@ -78,6 +82,49 @@ public class KeyScopeTest {
 
         // then
         assertTrue(result.contains("\"name\":null"));
+    }
+
+    @Test
+    public void serialize_emptyChildScope_emptyKeydefs() throws Exception {
+        // given
+        ObjectWriter writer = serializer.newSerializer();
+        StringWriter stringWriter = new StringWriter();
+        List<KeyScope> childScopes = new ArrayList<>();
+        childScopes.add(new KeyScope("child1", "child1", new HashMap<>(), new ArrayList<>()));
+        KeyScope rootScope = buildKeyScope(childScopes);
+
+        // when
+        writer.writeValue(stringWriter, rootScope);
+        String result = stringWriter.toString();
+
+        // then
+        assertEquals("{\"id\":\"id\",\"name\":null,\"keyDefinition\":{\"filtered\":{\"scope\":\"scope\",\"filtered\":true}},\"childScopes\":[]}",result);
+    }
+
+    @Test
+    public void serialize_emptyKeydefs() throws Exception {
+        // given
+        ObjectWriter writer = serializer.newSerializer();
+        StringWriter stringWriter = new StringWriter();
+        List<KeyScope> childScopes = new ArrayList<>();
+        childScopes.add(new KeyScope("child1", "child1", new HashMap<>(), new ArrayList<>()));
+
+        Map<String, KeyDef> childKeyDefinitions = new HashMap<>();
+        KeyDef keyDef = new KeyDef("keys", URI.create("https://www.google.de"),"scope","format",
+                URI.create("https://www.google.de"), null, false);
+        KeyDef filteredKeyDef = new KeyDef("keysFiltered", URI.create("http://www.google.de"),"scope","format",
+                URI.create("http://www.google.de"), null, true);
+        childKeyDefinitions.put("k1", keyDef);
+        childKeyDefinitions.put("k2", filteredKeyDef);
+        childScopes.add(new KeyScope("child2", "child2", childKeyDefinitions, new ArrayList<>()));
+        KeyScope rootScope = buildKeyScope(childScopes);
+
+        // when
+        writer.writeValue(stringWriter, rootScope);
+        String result = stringWriter.toString();
+
+        // then
+        assertEquals("{\"id\":\"id\",\"name\":null,\"keyDefinition\":{\"filtered\":{\"scope\":\"scope\",\"filtered\":true}},\"childScopes\":[{\"id\":\"child2\",\"name\":\"child2\",\"keyDefinition\":{\"k2\":{\"scope\":\"scope\",\"filtered\":true}},\"childScopes\":[]}]}",result);
     }
 
     @Test
