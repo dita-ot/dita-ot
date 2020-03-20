@@ -30,11 +30,11 @@ public class KeyScope {
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public KeyScope(@JsonProperty("id")final String id, @JsonProperty("name")final String name,
-                    @JsonProperty("keyDefinition")final Map<String, KeyDef> keyDefinition,
+                    @JsonProperty("keyDefinition") final Map<String, KeyDef> keyDefinition,
                     @JsonProperty("childScopes")final List<KeyScope> childScopes) {
         this.id = id;
         this.name = name;
-        this.keyDefinition = unmodifiableMap(keyDefinition);
+        this.keyDefinition = keyDefinition;
         this.childScopes = unmodifiableList(new ArrayList<>(childScopes));
     }
 
@@ -69,4 +69,5 @@ public class KeyScope {
         result = 31 * result + childScopes.hashCode();
         return result;
     }
+
 }

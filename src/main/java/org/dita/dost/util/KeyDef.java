@@ -7,8 +7,12 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
+import org.dita.dost.exception.DITAOTException;
+import org.w3c.dom.Element;
 
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,14 +20,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.Collection;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.dita.dost.exception.DITAOTException;
-import org.w3c.dom.Element;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Key definition.
@@ -42,7 +39,7 @@ public class KeyDef {
 
     /** Space delimited list of key names */
     public final String keys;
-    public final URI href;
+    public URI href;
     public final String scope;
     public final URI source;
     public final Element element;
@@ -66,11 +63,10 @@ public class KeyDef {
         this.element = element;
     }
 
-    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public KeyDef(@JsonProperty("keys")final String keys, @JsonProperty("href")final URI href,
-                  @JsonProperty("scope")final String scope, @JsonProperty("format")final String format,
-                  @JsonProperty("source")final URI source, @JsonProperty("element")final Element element,
-                  @JsonProperty("filtered")boolean filtered) {
+    public KeyDef(final String keys, final URI href,
+                  final String scope, final String format,
+                  final URI source, final Element element,
+                  boolean filtered) {
         this.keys = keys;
         this.href = href == null || href.toString().isEmpty() ? null : href;
         this.scope = scope == null ? ATTR_SCOPE_VALUE_LOCAL : scope;
@@ -79,7 +75,7 @@ public class KeyDef {
         this.element = element;
         this.filtered = filtered;
     }
-    
+
     public void setFiltered(boolean filtered) {
     	this.filtered = filtered;
     }
