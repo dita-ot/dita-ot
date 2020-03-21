@@ -572,7 +572,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:attribute>
             <xsl:choose>
               <xsl:when test="@type = 'external'">
-                <xsl:attribute name="target">_blank</xsl:attribute>
+                <xsl:apply-templates select="." mode="external-link"/>
               </xsl:when>
               <xsl:otherwise><!--nop - no target needed for internal or biblio types (OR-should internal force DITA xref-like processing? What is intent? @type is only internal/external/bibliographic) --></xsl:otherwise>
             </xsl:choose>
@@ -590,6 +590,9 @@ See the accompanying LICENSE file for applicable license.
     </blockquote>
   </xsl:template>
   
+  <xsl:template match="node()" mode="external-link" as="attribute()*">
+    <xsl:attribute name="target">_blank</xsl:attribute>
+  </xsl:template>
   
   <!-- =========== SINGLE PART LISTS =========== -->
   

@@ -736,7 +736,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <xsl:template match="*" mode="add-link-target-attribute">
     <xsl:if test="@scope = 'external' or @type = 'external' or ((lower-case(@format) = 'pdf') and not(@scope = 'local'))">
-      <xsl:attribute name="target">_blank</xsl:attribute>
+      <xsl:apply-templates select="." mode="external-link"/>
     </xsl:if>
   </xsl:template>
 
