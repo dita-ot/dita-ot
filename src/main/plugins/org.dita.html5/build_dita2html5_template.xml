@@ -109,14 +109,15 @@ See the accompanying LICENSE file for applicable license.
                    html5.topics.common,
                    html5.topics.common.inner"/>
 
-  <target name="html5.topic.init" unless="noMap">
-    <loadfile property="html5.map" srcfile="${dita.temp.dir}/${user.input.file.listfile}">
+  <target name="html5.topic.init">
+    <local name="html5.map"/>
+    <loadfile property="html5.map" srcfile="${dita.temp.dir}/${user.input.file.listfile}" unless:set="noMap">
       <filterchain>
         <headfilter lines="1"/>
       </filterchain>
     </loadfile>
-    <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}"/>
-    <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
+    <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}" unless:set="noMap"/>
+    <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no" if:set="dita.input.valfile"/>
   </target>
 
   <target name="html5.image-metadata"
