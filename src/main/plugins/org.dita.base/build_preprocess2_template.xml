@@ -29,8 +29,6 @@ See the accompanying LICENSE file for applicable license.
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
     <property name="uplevels" value=""/>
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
-    <!-- Deprecated since 2.4 -->
-    <property name="user.input.file.listfile" value="usr.input.file.list"/>
   </target>
 
   <target name="preprocess2.maps"
@@ -79,8 +77,6 @@ See the accompanying LICENSE file for applicable license.
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
     <property name="uplevels" value=""/>
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
-    <!-- Deprecated since 2.4 -->
-    <property name="user.input.file.listfile" value="usr.input.file.list"/>
   </target>
   
   <target name="preprocess2.init">
@@ -129,12 +125,9 @@ See the accompanying LICENSE file for applicable license.
         <param name="resources" value="${args.resources}" if:set="args.resources"/>
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
-        <!--<param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>-->
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
-        <!--param name="onlytopicinmap" value="${onlytopic.in.map}"/-->
-        <!--<param name="crawl" value="${link-crawl}"/>-->
         <param name="outputdir" location="${dita.output.dir}"/>
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
@@ -145,9 +138,6 @@ See the accompanying LICENSE file for applicable license.
         <dita:extension id="dita.preprocess.map-reader.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
-    <!-- TODO replace with direct resource collection availability test -->
-    <job-helper file="fullditamap.list" property="fullditamaplist"/>
-    <property name="fullditamapfile" value="fullditamap.list"/>
     <local name="inputMapPath"/>
     <pathconvert property="inputMapPath">
       <ditafileset format="ditamap" input="true"/>
@@ -155,7 +145,6 @@ See the accompanying LICENSE file for applicable license.
     <condition property="noMap">
       <equals arg1="${inputMapPath}" arg2=""/>
     </condition>
-    <delete file="${dita.temp.dir}/${fullditamapfile}"/>
   </target>
 
   <target name="map-mapref"
@@ -258,7 +247,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="resources" value="${args.resources}" if:set="args.resources"/>
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
-        <!--<param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>-->
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
@@ -271,8 +259,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="profiling.enable" value="${topic.filter-on-parse}" unless:set="topic.filter-on-parse"/>
         <param name="generate-debug-attributes" value="${generate-debug-attributes}" if:set="generate-debug-attributes"/>
         <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
-        <!-- Not needed for topics -->
-        <!--param name="force-unique" value="${force-unique}" if:set="force-unique"/-->
         <dita:extension id="dita.preprocess.topic-reader.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
@@ -400,7 +386,6 @@ See the accompanying LICENSE file for applicable license.
       <module class="org.dita.dost.module.MoveLinksModule">
         <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl"/>
         <param name="include.rellinks" expression="${include.rellinks}" if:set="include.rellinks"/>
-        <!--dita:extension id="dita.preprocess.maplink.param" behavior="org.dita.dost.platform.InsertAction"/-->
       </module>
     </pipeline>
   </target>
