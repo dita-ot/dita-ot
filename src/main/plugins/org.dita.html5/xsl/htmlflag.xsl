@@ -18,7 +18,9 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style">
     <!-- Add the pre-calculated CSS style for this element -->
+    <!--
     <xsl:attribute name="style"><xsl:value-of select="."/></xsl:attribute>
+    -->
   </xsl:template>
 
   <!-- By default, process flags where encountered: at the start and end of the element content. -->

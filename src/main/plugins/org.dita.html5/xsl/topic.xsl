@@ -703,8 +703,7 @@ See the accompanying LICENSE file for applicable license.
          Maintain that for now, though may want to update in the future to keep a wrapper in all cases.
          Considering using div instead of span, with a default inline CSS style. -->
     <xsl:choose>
-      <xsl:when test="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop |
-                      *[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass">
+      <xsl:when test="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop">
         <span>
           <xsl:call-template name="commonattributes"/>
           <xsl:apply-templates/>
@@ -755,8 +754,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:variable>
     <dt>
       <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
-      <xsl:apply-templates select="../@xml:lang"/> 
-      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:apply-templates select="../@xml:lang"/>
       <xsl:for-each select="..">
         <xsl:call-template name="commonattributes"/>
       </xsl:for-each>
@@ -1715,10 +1713,9 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- Process standard attributes that may appear anywhere. Previously this was "setclass" -->
   <xsl:template name="commonattributes">
-    <xsl:param name="default-output-class"/>
+    <xsl:param name="default-output-class" select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass"/>
     <xsl:apply-templates select="@xml:lang"/>
     <xsl:apply-templates select="@dir"/>
-    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
     <xsl:apply-templates select="." mode="set-output-class">
       <xsl:with-param name="default" select="$default-output-class"/>
     </xsl:apply-templates>
