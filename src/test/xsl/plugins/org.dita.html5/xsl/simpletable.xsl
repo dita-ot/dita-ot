@@ -10,6 +10,8 @@
   <xsl:import href="../../../../../main/plugins/org.dita.html5/xsl/functions.xsl"/>
   <xsl:import href="../../../../../main/plugins/org.dita.html5/xsl/simpletable.xsl"/>
 
+  <!-- Mocks -->
+
   <xsl:key name="enumerableByClass"
     match="
       *[contains(@class, ' topic/fig ')][*[contains(@class, ' topic/title ')]] |
