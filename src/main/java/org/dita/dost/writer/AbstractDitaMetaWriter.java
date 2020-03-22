@@ -29,7 +29,8 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
             TOPIC_PERMISSIONS,
             TOPIC_PUBLISHER,
             TOPIC_SOURCE,
-            MAP_SEARCHTITLE
+            MAP_SEARCHTITLE,
+            TOPIC_SEARCHTITLE
     )));
 
     private Map<String, Element> metaTable;

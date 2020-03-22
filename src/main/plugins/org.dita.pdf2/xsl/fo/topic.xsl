@@ -502,10 +502,7 @@ See the accompanying LICENSE file for applicable license.
         </fo:block>
     </xsl:template>
 
-    <!-- Map uses map/searchtitle, topic uses topic/searchtitle. This will likely be changed
-         to a single value in DITA 2.0, but for now, recognize both. -->
-    <xsl:template match="*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')] |
-                         *[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]">
+    <xsl:template match="*[contains(@class,' topic/titlealts ')]/*[dita-ot:matches-searchtitle-class(@class)]">
         <fo:block xsl:use-attribute-sets="searchtitle">
             <xsl:call-template name="commonattributes"/>
             <fo:inline xsl:use-attribute-sets="searchtitle__label">
@@ -595,7 +592,8 @@ See the accompanying LICENSE file for applicable license.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' map/shortdesc ')]">
+    <!-- Short description not as child of topic -->
+    <xsl:template match="*[dita-ot:matches-shortdesc-class(@class)]">
         <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
     </xsl:template>
 

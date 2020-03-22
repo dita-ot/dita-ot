@@ -182,9 +182,9 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="/" mode="dita-ot:subject-metadata" as="xs:string?">
     <xsl:choose>
-      <xsl:when test="exists($map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' map/shortdesc ')])">
+      <xsl:when test="exists($map/*[contains(@class, ' bookmap/bookmeta ')]/*[dita-ot:matches-shortdesc-class(@class)])">
         <xsl:value-of>
-          <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' map/shortdesc ')]" mode="dita-ot:text-only"/>
+          <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[dita-ot:matches-shortdesc-class(@class)]" mode="dita-ot:text-only"/>
         </xsl:value-of>
       </xsl:when>
       <xsl:when test="exists($map/*[contains(@class, ' topic/shortdesc ')])">
