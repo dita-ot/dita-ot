@@ -21,6 +21,10 @@ See the accompanying LICENSE file for applicable license.
          until OASIS provides a standard mechanism for setting. -->
   </xsl:template>
   
+  <xsl:template match="*[contains(@class, ' topic/simpletable ') ]" mode="table:common">
+    <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
+    <xsl:next-match/>
+  </xsl:template>
   
   <xsl:template name="dita2html:simpletable-cols">
     <xsl:variable name="col-count" as="xs:integer">
