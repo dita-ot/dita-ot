@@ -84,7 +84,7 @@ See the accompanying LICENSE file for applicable license.
                   </xsl:choose>
                 </xsl:attribute>
                 <xsl:if test="@scope = 'external' or not(not(@format) or @format = 'dita' or @format = 'ditamap')">
-                  <xsl:attribute name="target">_blank</xsl:attribute>
+                  <xsl:apply-templates select="." mode="external-link"/>
                 </xsl:if>
                 <xsl:value-of select="$title"/>
               </a>
