@@ -592,6 +592,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="node()" mode="external-link" as="attribute()*">
     <xsl:attribute name="target">_blank</xsl:attribute>
+    <xsl:attribute name="rel">external noopener</xsl:attribute>
   </xsl:template>
   
   <!-- =========== SINGLE PART LISTS =========== -->
