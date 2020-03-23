@@ -8,12 +8,10 @@
 package org.dita.dost.module.filter;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -48,16 +46,9 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
-    private final XMLUtils xmlUtils = new XMLUtils();
     /** Current map being processed, relative to temporary directory */
     private URI map;
     private final Set<URI> filtered = new HashSet<>();
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
-    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -87,7 +78,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = xmlUtils.getDocument(currentFile);
+            doc = job.getStore().getDocument(currentFile);
         } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
@@ -101,7 +92,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
         logger.debug("Writing " + currentFile);
         try {
-            xmlUtils.writeDocument(doc, currentFile);
+            job.getStore().writeDocument(doc, currentFile);
         } catch (final IOException e) {
             logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
         }
@@ -141,9 +132,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
                     logger.error("Failed to create directory " + dstDirUri);
                 }
                 try {
-                    xmlUtils.transform(srcAbsUri,
-                                       dstAbsUri,
-                                       pipe);
+                    job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
                 } catch (final DITAOTException e) {
                     logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
                 }
@@ -182,7 +171,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
             logger.info("Filtering " + srcAbsUri);
             try {
-                xmlUtils.transform(srcAbsUri, pipe);
+                job.getStore().transform(srcAbsUri, pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }

@@ -264,10 +264,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
 
     private void parseInputParameters(final AbstractPipelineInput input) {
-        ditaDir = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
-        if (!ditaDir.isAbsolute()) {
-            throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
-        }
         ditavalFile = new File(job.tempDir, FILE_NAME_MERGED_DITAVAL);
         validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
         if (!validate) {

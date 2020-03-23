@@ -56,7 +56,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
 
         Document doc;
         try {
-            final XsltCompiler xsltCompiler = new XMLUtils().getProcessor().newXsltCompiler();
+            final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
 
             final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(styleFile)).load();
             transformer.setErrorListener(toErrorListener(logger));
@@ -66,7 +66,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             }
             transformer.setParameter(new QName("INPUTMAP"), XdmItem.makeValue(job.getInputMap()));
 
-            final Source source = new StreamSource(inputFile);
+            final Source source = job.getStore().getSource(inputFile.toURI());
             doc = XMLUtils.getDocumentBuilder().newDocument();
             final DOMDestination result = new DOMDestination(doc);
 

@@ -20,7 +20,7 @@ See the accompanying LICENSE file for applicable license.
                    htmlhelp.topics,
                    htmlhelp.copy-image,
                    copy-css">
-    <antcall target="dita.map.htmlhelp"/>
+    <antcall target="dita.map.htmlhelp" inheritRefs="true"/>
   </target>
 
   <target name="dita2htmlhelp.init">

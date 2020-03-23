@@ -43,7 +43,7 @@ final class IncludeXml {
         final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         final Job.FileInfo fileInfo = job.getFileInfo(stripFragment(currentFile.resolve(hrefValue)));
         try {
-            final Document doc = xmlUtils.getDocument(fileInfo.src);
+            final Document doc = job.getStore().getDocument(fileInfo.src);
             Node src = null;
             if (hrefValue.getFragment() != null) {
                 src = doc.getElementById(hrefValue.getFragment());

@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -37,6 +38,7 @@ import java.util.Map.Entry;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.XMLUtils.toErrorListener;
 import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**
@@ -75,6 +77,14 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
     private void pullTopicMetadata(final AbstractPipelineInput input, final Collection<FileInfo> fis) throws DITAOTException {
         // Pull metadata (such as navtitle) into the map from the referenced topics
         final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
+        logger.info("Loading stylesheet " + styleFile);
+        final XsltExecutable xsltExecutable;
+        try {
+            xsltExecutable = xmlUtils.getProcessor().newXsltCompiler().compile(new StreamSource(styleFile));
+        } catch (SaxonApiException e) {
+            throw new RuntimeException("Failed to compile stylesheet '" + styleFile.toURI() + "': " + e.getMessage(), e);
+        }
+
         for (final FileInfo f : fis) {
             final File inputFile = new File(job.tempDir, f.file.getPath());
             final File tmp = new File(inputFile.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis()));
@@ -84,51 +94,28 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
             logger.info("Processing " + inputFile.toURI());
             logger.debug("Processing " + inputFile.toURI() + " to " + tmp.toURI());
 
-            Source source = null;
-            Result result = null;
             try {
-                source = new StreamSource(inputFile.toURI().toString());
-                result = new StreamResult(tmp);
+                final XsltTransformer transformer = xsltExecutable.load();
+                transformer.setErrorListener(toErrorListener(logger));
 
-                logger.info("Loading stylesheet " + styleFile);
-                final TransformerFactory tf = TransformerFactory.newInstance();
-                final CatalogResolver xmlCatalog = CatalogUtils.getCatalogResolver();
-                tf.setURIResolver(xmlCatalog);
-                final Transformer t = withLogger(tf.newTransformer(new StreamSource(styleFile)), logger);
-                final URIResolver resolver;
-                if (Configuration.DEBUG) {
-                    resolver = new DebugURIResolver(xmlCatalog);
-                } else {
-                    resolver = xmlCatalog;
-                }
-                t.setURIResolver(resolver);
                 for (Entry<String, String> e : input.getAttributes().entrySet()) {
                     logger.debug("Set parameter " + e.getKey() + " to '" + e.getValue() + "'");
-                    t.setParameter(e.getKey(), e.getValue());
+                    transformer.setParameter(new QName(e.getKey()), XdmItem.makeValue(e.getValue()));
                 }
 
-                t.transform(source, result);
+                final Source source = job.getStore().getSource(inputFile.toURI());
+                transformer.setSource(source);
+                final Destination result = job.getStore().getDestination(tmp.toURI());
+                transformer.setDestination(result);
+                transformer.transform();
             } catch (final UncheckedXPathException e) {
                 throw new DITAOTException("Failed to transform document", e);
             } catch (final RuntimeException e) {
                 throw e;
-            } catch (final TransformerConfigurationException e) {
-                throw new RuntimeException("Failed to compile stylesheet '" + styleFile.toURI() + "': " + e.getMessage(), e);
-            } catch (final TransformerException e) {
-                throw new DITAOTException("Failed to transform document: " + e.getMessageAndLocation(), e);
+            } catch (final SaxonApiException e) {
+                throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
             } catch (final Exception e) {
                 throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
-            } finally {
-                try {
-                    XMLUtils.close(source);
-                } catch (final IOException e) {
-                    // NOOP
-                }
-                try {
-                    XMLUtils.close(result);
-                } catch (final IOException e) {
-                    // NOOP
-                }
             }
             try {
                 logger.debug("Moving " + tmp.toURI() + " to " + inputFile.toURI());

@@ -8,7 +8,6 @@
 package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -43,7 +42,6 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
     private boolean forceUnique;
     private ForceUniqueFilter forceUniqueFilter;
     private final CopyToReader reader = new CopyToReader();
-    private final XMLUtils xmlUtils = new XMLUtils();
 
     @Override
     public void setJob(final Job job) {
@@ -54,12 +52,6 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             throw new RuntimeException(e);
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
     }
 
     @Override
@@ -96,7 +88,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
 
         final List<XMLFilter> pipe = getProcessingPipe(in);
 
-        xmlUtils.transform(in, pipe);
+        job.getStore().transform(in, pipe);
     }
 
     /**
@@ -211,7 +203,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
 
         logger.info("Processing " + src + " to " + target);
         try {
-            xmlUtils.transform(src, target, Collections.singletonList(filter));
+            job.getStore().transform(src, target, Collections.singletonList(filter));
         } catch (final DITAOTException e) {
             logger.error("Failed to write copy-to file: " + e.getMessage(), e);
         }

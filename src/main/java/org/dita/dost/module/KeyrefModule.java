@@ -9,12 +9,14 @@
 package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.util.*;
+import org.dita.dost.util.DelayConrefUtils;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyDef;
+import org.dita.dost.util.KeyScope;
 import org.dita.dost.writer.ConkeyrefFilter;
 import org.dita.dost.writer.KeyrefPaser;
 import org.dita.dost.writer.TopicFragmentFilter;
@@ -52,7 +54,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
     private TopicFragmentFilter topicFragmentFilter;
-    private final XMLUtils xmlUtils = new XMLUtils();
 
     @Override
     public void setJob(final Job job) {
@@ -63,12 +64,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             throw new RuntimeException(e);
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
     }
 
     /**
@@ -132,7 +127,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final List<ResolveTask> jobs = collectProcessingTopics(resourceFis, rootScope, doc);
 
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-            delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
+            if (transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
+                delayConrefUtils = new DelayConrefUtils();
+                delayConrefUtils.setJob(job);
+                delayConrefUtils.setLogger(logger);
+            } else {
+                delayConrefUtils = null;
+            }
             for (final ResolveTask r: jobs) {
                 if (r.out != null) {
                     processFile(r);
@@ -397,12 +398,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             if (r.out != null) {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
                         " to " + job.tempDirURI.resolve(r.out.uri));
-                xmlUtils.transform(new File(job.tempDir, r.in.file.getPath()),
-                                   new File(job.tempDir, r.out.file.getPath()),
-                                   filters);
+                job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
+                                         new File(job.tempDir, r.out.file.getPath()).toURI(),
+                                         filters);
             } else {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
-                xmlUtils.transform(new File(job.tempDir, r.in.file.getPath()), filters);
+                job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
+                                         filters);
             }
             // validate resource-only list
             normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
@@ -427,7 +429,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     private Document readMap(final FileInfo input) throws DITAOTException {
         try {
             final URI in = job.tempDirURI.resolve(input.uri);
-            return xmlUtils.getDocument(in);
+            return job.getStore().getDocument(in);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to parse map: " + e.getMessage(), e);
         }
@@ -436,7 +438,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     private void writeMap(final FileInfo in, final Document doc) throws DITAOTException {
         try {
             final URI file = job.tempDirURI.resolve(in.uri);
-            xmlUtils.writeDocument(doc, file);
+            job.getStore().writeDocument(doc, file);
         } catch (final IOException e) {
             throw new DITAOTException("Failed to write map: " + e.getMessage(), e);
         }

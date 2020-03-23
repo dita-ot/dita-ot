@@ -167,8 +167,7 @@ public class SubjectSchemeReader {
         logger.debug("Load subject scheme " + scheme);
 
         try {
-            final XMLUtils xmlUtils = new XMLUtils();
-            final Document doc = xmlUtils.getDocument(scheme.toURI());
+            final Document doc = job.getStore().getDocument(scheme.toURI());
             final Element schemeRoot = doc.getDocumentElement();
             if (schemeRoot == null) {
                 return;

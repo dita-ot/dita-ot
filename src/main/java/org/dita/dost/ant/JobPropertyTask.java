@@ -21,11 +21,9 @@ import org.dita.dost.util.Job;
  */
 public final class JobPropertyTask extends Task {
 
-    private File dir;
-
     @Override
     public void execute() throws BuildException {
-        final Job job = getJob(dir, getProject());
+        final Job job = getJob(getProject());
         for (final Map.Entry<String, String> e: job.getProperties().entrySet()) {
             getProject().setProperty(e.getKey(), e.getValue());
         }
@@ -34,8 +32,9 @@ public final class JobPropertyTask extends Task {
     /**
      * Set directory where to read job configuration
      */
+    @Deprecated
     public void setDir(final File dir) {
-        this.dir = dir;
+        // NOOP
     }
 
 }

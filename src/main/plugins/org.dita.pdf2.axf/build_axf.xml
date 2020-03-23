@@ -190,8 +190,8 @@ See the accompanying LICENSE file for applicable license.
     <property name="outputFile" value="${dita.output.dir}/${outputFile.base}${xsl.formatter.ext}"/>
     <mkdir dir="${dita.output.dir}"/>
     
-    <antcall target="transform.fo2pdf.ah.nooption"/>
-    <antcall target="transform.fo2pdf.ah.hasoption"/>
+    <antcall target="transform.fo2pdf.ah.nooption" inheritRefs="true"/>
+    <antcall target="transform.fo2pdf.ah.hasoption" inheritRefs="true"/>
   </target>
 
   <target name="transform.fo2pdf.ah.nooption" unless="axf.opt">

@@ -37,7 +37,7 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
     @Override
     public void write(final File filename) throws DITAOTException {
         assert filename.isAbsolute();
-        xmlUtils.transform(filename, Collections.singletonList(this));
+        job.getStore().transform(filename.toURI(), Collections.singletonList(this));
     }
 
     @Override

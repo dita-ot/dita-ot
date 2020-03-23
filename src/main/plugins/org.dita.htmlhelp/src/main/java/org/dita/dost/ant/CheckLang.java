@@ -22,6 +22,7 @@ import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 
 /**
  * This class is for get the first xml:lang value set in ditamap/topic files
@@ -33,8 +34,6 @@ import org.dita.dost.util.StringUtils;
 public final class CheckLang extends Task {
 
     private File basedir;
-
-    private File tempdir;
 
     private File outputdir;
 
@@ -52,30 +51,24 @@ public final class CheckLang extends Task {
         logger = new DITAOTAntLogger(getProject());
         logger.info(message);
 
-        new Properties();
-        //ensure tempdir is absolute
-        if (!tempdir.isAbsolute()) {
-            tempdir = new File(basedir, tempdir.getPath()).getAbsoluteFile();
-        }
+        final Job job = getJob(getProject());
+
         //ensure outdir is absolute
         if (!outputdir.isAbsolute()) {
             outputdir = new File(basedir, outputdir.getPath()).getAbsoluteFile();
         }
         //ensure inputmap is absolute
         if (!new File(inputmap).isAbsolute()) {
-            inputmap = new File(tempdir, inputmap).getAbsolutePath();
+            inputmap = new File(job.tempDir, inputmap).getAbsolutePath();
         }
 
-        final Job job = getJob(tempdir, getProject());
 
         final LangParser parser = new LangParser();
 
         try {
 
-            final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-            final SAXParser saxParser = saxParserFactory.newSAXParser();
             //parse the user input file(usually a map)
-            saxParser.parse(inputmap, parser);
+            job.getStore().transform(new File(inputmap).toURI(), parser);
             String langCode = parser.getLangCode();
             if (!StringUtils.isEmptyString(langCode)) {
                 setActiveProjectProperty("htmlhelp.locale", langCode);
@@ -83,9 +76,9 @@ public final class CheckLang extends Task {
                 //parse topic files
                 for (final FileInfo f: job.getFileInfo()) {
                     if (ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
-                        final File topicFile = new File(tempdir, f.file.getPath());
+                        final File topicFile = new File(job.tempDir, f.file.getPath());
                         if (topicFile.exists()) {
-                            saxParser.parse(topicFile, parser);
+                            job.getStore().transform(topicFile.toURI(), parser);
                             langCode = parser.getLangCode();
                             if (!StringUtils.isEmptyString(langCode)) {
                                 setActiveProjectProperty("htmlhelp.locale", langCode);
@@ -131,8 +124,9 @@ public final class CheckLang extends Task {
         this.basedir = basedir;
     }
 
+    @Deprecated
     public void setTempdir(final File tempdir) {
-        this.tempdir = tempdir;
+        // NOOP
     }
 
     public void setInputmap(final String inputmap) {

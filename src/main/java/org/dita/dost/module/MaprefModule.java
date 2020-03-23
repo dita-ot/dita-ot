@@ -41,7 +41,6 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     private XsltExecutable templates;
 
     private void init(final AbstractPipelineInput input) {
-        final XMLUtils xmlUtils = new XMLUtils();
         processor = xmlUtils.getProcessor();
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
         xsltCompiler.setErrorListener(toErrorListener(logger));
@@ -92,9 +91,9 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
 
         logger.info("Processing " + inputFile.toURI());
         Document doc;
-        try (InputStream in = new BufferedInputStream(new FileInputStream(inputFile))) {
+        try {
             doc = XMLUtils.getDocumentBuilder().newDocument();
-            final Source source = new StreamSource(in, inputFile.toURI().toString());
+            final Source source = job.getStore().getSource(inputFile.toURI());
             final Destination serializer = new DOMDestination(doc);
             final XsltTransformer transformer = templates.load();
             transformer.setErrorListener(toErrorListener(logger));
@@ -122,23 +121,9 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         final FileInfo updated = collectJobInfo(input, doc);
         job.add(updated);
 
-        try (OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-            final Serializer result = processor.newSerializer(out);
-            final XdmNode source = processor.newDocumentBuilder().wrap(doc);
-            result.serializeNode(source);
-        } catch (final UncheckedXPathException e) {
-            throw new DITAOTException("Failed to serialize map " + inputFile, e);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final SaxonApiException e) {
-            try {
-                throw e.getCause();
-            } catch (final XPathException cause) {
-                throw new DITAOTException("Failed to serialize map " + inputFile + ": " + cause.getMessageAndLocation(), e);
-            } catch (Throwable throwable) {
-                throw new DITAOTException("Failed to serialize map " + inputFile + ": " + e.getMessage(), e);
-            }
-        } catch (final Exception e) {
+        try {
+            job.getStore().writeDocument(doc, outputFile.toURI());
+        } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize map " + inputFile + ": " + e.getMessage(), e);
         }
     }

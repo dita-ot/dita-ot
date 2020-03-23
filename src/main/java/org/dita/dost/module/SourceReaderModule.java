@@ -10,15 +10,13 @@ package org.dita.dost.module;
 import net.sf.saxon.s9api.Processor;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.apache.xml.resolver.tools.CatalogResolver;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.XMLUtils;
-import org.dita.dost.writer.*;
+import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +35,6 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
 
     private static final String FEATURE_GRAMMAR_POOL = "http://apache.org/xml/properties/internal/grammar-pool";
 
-    final XMLUtils xmlUtils;
     /**
      * XMLReader instance for parsing dita file
      */
@@ -50,21 +47,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
      * Use grammar pool cache
      */
     boolean gramcache = true;
-    /**
-     * Absolute DITA-OT base path.
-     */
-    File ditaDir;
     Processor processor;
-
-    public SourceReaderModule() {
-        xmlUtils = new XMLUtils();
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
-    }
 
     /**
      * Get reader for input format
@@ -139,7 +122,6 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        CatalogUtils.setDitaDir(ditaDir);
         final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
         reader.setEntityResolver(catalogResolver);
 

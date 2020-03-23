@@ -90,7 +90,7 @@ See the accompanying LICENSE file for applicable license.
     <!-- Set to "true" if you get out-of-memory errors during preprocess
     while processing very large (thousands of files) document sets. -->
     <property name="dita.xhtml.reloadstylesheet" value="false"/>
-    <antcall target="output-css-warn-message"/>
+    <antcall target="output-css-warn-message" inheritRefs="true"/>
   </target>
   
   <target name="output-css-warn-message" if="args.csspath.absolute">

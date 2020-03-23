@@ -239,7 +239,7 @@ See the accompanying LICENSE file for applicable license.
       <fileset dir="${dita.plugin.org.dita.html5.dir}/css" includes="*.css"/>
     </copy>
     <!-- Copy user specify css file when required -->
-    <antcall target="html5.copy-css-user"/>
+    <antcall target="html5.copy-css-user" inheritRefs="true"/>
   </target>
 
   <target name="html5.copy-css-user" if="user.copycss.yes">

@@ -567,7 +567,9 @@ public final class XMLUtils {
      *
      * @param input absolute URI to transform and replace
      * @param filters XML filters to transform file with, may be an empty list
+     * @deprecated since 3.5
      */
+    @Deprecated
     public void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
         assert input.isAbsolute();
         if (!input.getScheme().equals("file")) {
@@ -582,7 +584,9 @@ public final class XMLUtils {
      *
      * @param inputFile file to transform and replace
      * @param filters XML filters to transform file with, may be an empty list
+     * @deprecated since 3.5
      */
+    @Deprecated
     public void transform(final File inputFile, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
         transformFile(inputFile, outputFile, filters);
@@ -602,7 +606,9 @@ public final class XMLUtils {
      * @param inputFile input file
      * @param outputFile output file
      * @param filters XML filters to transform file with, may be an empty list
+     * @deprecated since 3.5
      */
+    @Deprecated
     public void transform(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
         if (inputFile.equals(outputFile)) {
             transform(inputFile, filters);
@@ -611,6 +617,10 @@ public final class XMLUtils {
         }
     }
 
+    /**
+     * @deprecated since 3.5
+     */
+    @Deprecated
     private void transformFile(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
         if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
             throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
@@ -648,7 +658,9 @@ public final class XMLUtils {
      * @param input input file
      * @param output output file
      * @param filters XML filters to transform file with, may be an empty list
+     * @deprecated since 3.5
      */
+    @Deprecated
     public void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
         if (input.equals(output)) {
             transform(input, filters);
@@ -657,6 +669,10 @@ public final class XMLUtils {
         }
     }
 
+    /**
+     * @deprecated since 3.5
+     */
+    @Deprecated
     private void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(output);
         if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
@@ -820,20 +836,6 @@ public final class XMLUtils {
     }
 
     /**
-     * Get DOM document for file. Convenience method.
-     *
-     * @param path temporary file URI, absolute or relative
-     * @throws java.io.FileNotFoundException if file does not exist or cannot be read
-     */
-    public Document getDocument(final URI path) throws IOException {
-        try {
-            return getDocumentBuilder().parse(path.toString());
-        } catch (final IOException | SAXException e) {
-            throw new IOException("Failed to read document: " + e.getMessage(), e);
-        }
-    }
-
-    /**
      * Write DOM document to file.
      *
      * @param doc document to store
@@ -848,17 +850,6 @@ public final class XMLUtils {
         } catch (SaxonApiException e) {
             throw new IOException(e);
         }
-    }
-
-    /**
-     * Write DOM document to file.
-     *
-     * @param doc document to store
-     * @param dst absolute destination file URI
-     * @throws IOException if serializing file fails
-     */
-    public void writeDocument(final Document doc, final URI dst) throws IOException {
-        writeDocument(doc, new File(dst));
     }
 
     /**

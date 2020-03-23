@@ -89,14 +89,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
     @VisibleForTesting
     Job getJob() {
-        String tempDir = getProject().getUserProperty(ANT_TEMP_DIR);
-        if (tempDir == null) {
-            tempDir = getProject().getProperty(ANT_TEMP_DIR);
-        }
-        if (tempDir == null) {
-            throw new IllegalStateException();
-        }
-        final Job job = ExtensibleAntInvoker.getJob(new File(tempDir), getProject());
+        final Job job = ExtensibleAntInvoker.getJob(getProject());
         if (job == null) {
             throw new IllegalStateException();
         }

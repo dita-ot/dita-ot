@@ -16,7 +16,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 
 import javax.xml.namespace.QName;
@@ -51,17 +50,10 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
-    private final XMLUtils xmlUtils;
-
     /** Current map being processed, relative to temporary directory */
     private URI map;
     /** Absolute path for filter file. */
     private URI ditavalFile;
-
-    public MapBranchFilterModule() {
-        super();
-        xmlUtils = new XMLUtils();
-    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -95,7 +87,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = xmlUtils.getDocument(currentFile);
+            doc = job.getStore().getDocument(currentFile);
         } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
@@ -110,7 +102,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
         logger.debug("Writing " + currentFile);
         try {
-            xmlUtils.writeDocument(doc, currentFile);
+            job.getStore().writeDocument(doc, currentFile);
         } catch (final IOException e) {
             logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
         }

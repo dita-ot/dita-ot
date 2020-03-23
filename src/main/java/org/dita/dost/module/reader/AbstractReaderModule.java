@@ -27,11 +27,6 @@ import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.namespace.QName;
-import javax.xml.transform.Result;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
@@ -46,7 +41,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.close;
 
 /**
  * Base class for document reader and serializer.
@@ -122,8 +116,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Profiling is enabled. */
     private boolean profilingEnabled;
     String transtype;
-    /** Absolute DITA-OT base path. */
-    File ditaDir;
     private File ditavalFile;
     FilterUtils filterUtils;
     /** Absolute path to current destination file. */
@@ -205,11 +197,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /**
      * Init xml reader used for pipeline parsing.
      *
-     * @param ditaDir absolute path to DITA-OT directory
      * @param validate whether validate input file
      * @throws SAXException parsing exception
      */
-    void initXMLReader(final File ditaDir, final boolean validate) throws SAXException {
+    void initXMLReader(final boolean validate) throws SAXException {
         reader = XMLUtils.getXMLReader();
         reader.setFeature(FEATURE_NAMESPACE, true);
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -234,15 +225,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
             }
         }
-        CatalogUtils.setDitaDir(ditaDir);
         reader.setEntityResolver(CatalogUtils.getCatalogResolver());
     }
 
     void parseInputParameters(final AbstractPipelineInput input) {
-        ditaDir = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
-        if (!ditaDir.isAbsolute()) {
-            throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
-        }
         validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
@@ -367,13 +353,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             job.add(stub);
         }
 
-//        InputSource in = null;
-        Result out = null;
         try {
-            final TransformerFactory tf = TransformerFactory.newInstance();
-            final SAXTransformerFactory stf = (SAXTransformerFactory) tf;
-            final TransformerHandler serializer = stf.newTransformerHandler();
-
             XMLReader parser = getXmlReader(ref.format);
             XMLReader xmlSource = parser;
             for (final XMLFilter f: getProcessingPipe(currentFile)) {
@@ -388,9 +368,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 parser.setFeature("http://xml.org/sax/features/lexical-handler", true);
             } catch (final SAXNotRecognizedException e) {}
 
-//            in = new InputSource(src.toString());
-            out = new StreamResult(new FileOutputStream(outputFile));
-            serializer.setResult(out);
+            final ContentHandler serializer = job.getStore().getContentHandler(outputFile.toURI());
+
             xmlSource.setContentHandler(serializer);
             xmlSource.parse(src.toString());
 
@@ -443,13 +422,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             }
             failureList.add(currentFile);
         } finally {
-            if (out != null) {
-                try {
-                    close(out);
-                } catch (final IOException e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-            }
             if (failureList.contains(currentFile)) {
                 FileUtils.deleteQuietly(outputFile);
             }
@@ -468,7 +440,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         doneList.add(currentFile);
         listFilter.reset();
         keydefFilter.reset();
-
     }
 
     /**
@@ -951,7 +922,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
 
-        initXMLReader(ditaDir, validate);
+        initXMLReader(validate);
         initFilters();
     }
 

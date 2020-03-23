@@ -20,7 +20,6 @@ import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.*;
 import org.xml.sax.XMLFilter;
@@ -60,7 +59,6 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
-    private final XMLUtils xmlUtils;
     private final DitaValReader ditaValReader;
     private TempFileNameScheme tempFileNameScheme;
     private final Map<URI, FilterUtils> filterCache = new HashMap<>();
@@ -77,14 +75,12 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     public BranchFilterModule() {
         ditaValReader = new DitaValReader();
-        xmlUtils = new XMLUtils();
     }
 
     @Override
     public void setLogger(final DITAOTLogger logger) {
         super.setLogger(logger);
         ditaValReader.setLogger(logger);
-        xmlUtils.setLogger(logger);
     }
 
     @Override
@@ -127,7 +123,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = xmlUtils.getDocument(currentFile);
+            doc = job.getStore().getDocument(currentFile);
         } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
@@ -149,7 +145,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         logger.debug("Writing " + currentFile);
 
         try {
-            xmlUtils.writeDocument(doc, currentFile);
+            job.getStore().writeDocument(doc, currentFile);
         } catch (final IOException e) {
             logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
         }
@@ -383,9 +379,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                     logger.error("Failed to create directory " + dstDirUri);
                 }
                 try {
-                    xmlUtils.transform(srcAbsUri,
-                                       dstAbsUri,
-                                       pipe);
+                    job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
                 } catch (final DITAOTException e) {
                     logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
                 }
@@ -444,7 +438,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
             logger.info("Filtering " + srcAbsUri);
             try {
-                xmlUtils.transform(srcAbsUri, pipe);
+                job.getStore().transform(srcAbsUri, pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }

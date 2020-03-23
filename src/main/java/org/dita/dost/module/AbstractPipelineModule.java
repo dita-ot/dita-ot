@@ -15,6 +15,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,8 @@ public interface AbstractPipelineModule {
     void setLogger(DITAOTLogger logger);
 
     void setJob(Job job);
+
+    void setXmlUtils(XMLUtils xmlUtils);
 
     void setFileInfoFilter(Predicate<FileInfo> fileInfoFilter);
 

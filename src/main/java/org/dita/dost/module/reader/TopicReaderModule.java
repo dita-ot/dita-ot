@@ -17,7 +17,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.NormalizeFilter;
 import org.dita.dost.writer.ProfilingFilter;
@@ -90,6 +89,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             if (doc != null) {
                 final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
                 subjectSchemeReader.setLogger(logger);
+                subjectSchemeReader.setJob(job);
                 logger.debug("Loading subject schemes");
                 final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
                 subjectSchemes.stream()
@@ -152,8 +152,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
         final URI currentFile = job.tempDirURI.resolve(fi.uri);
         try {
             logger.debug("Reading " + currentFile);
-            final XMLUtils xmlUtils = new XMLUtils();
-            return xmlUtils.getDocument(currentFile);
+            return job.getStore().getDocument(currentFile);
         } catch (final IOException e) {
             throw new SAXException("Failed to parse " + currentFile, e);
         }
@@ -181,7 +180,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
         final List<Reference> res = new ArrayList<>();
         assert startFileInfo.src != null;
         final URI tmp = job.tempDirURI.resolve(startFileInfo.uri);
-        final Source source = new StreamSource(tmp.toString());
+        final Source source = job.getStore().getSource(tmp);
         logger.info("Reading " + tmp);
         try {
             final XMLStreamReader in = XMLInputFactory.newInstance().createXMLStreamReader(source);

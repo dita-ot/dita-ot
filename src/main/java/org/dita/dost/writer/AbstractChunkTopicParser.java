@@ -21,7 +21,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.*;
@@ -421,9 +420,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         final StringBuilder firstTopicId = new StringBuilder();
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
         try {
-            final XMLReader reader = getXMLReader();
-            reader.setContentHandler(parser);
-            reader.parse(ditaTopicFile.toURI().toString());
+            job.getStore().transform(ditaTopicFile.toURI(), parser);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {

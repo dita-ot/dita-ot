@@ -88,6 +88,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         }
     }
 
+    @Override
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
         init();
         if ((includes == null || includes.isEmpty()) && (in == null)) {
@@ -97,7 +98,6 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         if (destDir != null) {
             logger.info("Transforming into " + destDir.getAbsolutePath());
         }
-        final XMLUtils xmlUtils = new XMLUtils();
         processor = xmlUtils.getProcessor();
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
         xsltCompiler.setErrorListener(toErrorListener(logger));
