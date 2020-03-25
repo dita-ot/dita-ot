@@ -242,7 +242,7 @@ See the accompanying LICENSE file for applicable license.
        <!-- Do not reset xml:lang if it is already set on <html> -->
        <!-- Moved outputclass to the body tag -->
        <!-- Keep ditaval based styling at this point (replace DITA-OT 1.6 and earlier call to gen-style) -->
-       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
      </xsl:when>
      <xsl:otherwise>
        <xsl:call-template name="commonattributes">
@@ -828,7 +828,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/dthd ')]" name="topic.dthd">
     <dt>
       <!-- Get ditaval style and xml:lang from DLHEAD, then override with local -->
-      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
       <xsl:apply-templates select="../@xml:lang"/>
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="setidaname"/>
@@ -844,7 +844,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/ddhd ')]" name="topic.ddhd">
     <dd>
       <!-- Get ditaval style and xml:lang from DLHEAD, then override with local -->
-      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
       <xsl:apply-templates select="../@xml:lang"/>
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="setidaname"/>
@@ -1716,6 +1716,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="default-output-class" select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass"/>
     <xsl:apply-templates select="@xml:lang"/>
     <xsl:apply-templates select="@dir"/>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <xsl:apply-templates select="." mode="set-output-class">
       <xsl:with-param name="default" select="$default-output-class"/>
     </xsl:apply-templates>
@@ -2401,7 +2402,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Add all attributes. To add your own additional attributes, use mode="addAttributesToBody". -->
   <xsl:template match="*" mode="addAttributesToHtmlBodyElement">
     <!-- Already put xml:lang on <html>; do not copy to body with commonattributes -->
-    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <!--output parent or first "topic" tag's outputclass as class -->
     <xsl:if test="@outputclass">
       <xsl:attribute name="class" select="@outputclass"/>

@@ -41,7 +41,7 @@ See the accompanying LICENSE file for applicable license.
           <!-- Combine TT style with style from ditaval, if present -->
           <xsl:attribute name="style">
             <xsl:text>font-family: monospace; </xsl:text>
-            <xsl:value-of select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass"/>
+            <xsl:value-of select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@style"/>
           </xsl:attribute>
         <xsl:call-template name="setidaname"/>
         <xsl:apply-templates/>
