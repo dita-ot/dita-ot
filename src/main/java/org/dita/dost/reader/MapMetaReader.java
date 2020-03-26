@@ -39,7 +39,8 @@ public final class MapMetaReader extends AbstractDomFilter {
             TOPIC_PERMISSIONS.matcher,
             TOPIC_PUBLISHER.matcher,
             TOPIC_SOURCE.matcher,
-            MAP_SEARCHTITLE.matcher
+            MAP_SEARCHTITLE.matcher,
+            TOPIC_SEARCHTITLE.matcher
     )));
     private static final Set<String> cascadeSet = Collections.unmodifiableSet(new HashSet<>(asList(
             TOPIC_AUDIENCE.matcher,
@@ -55,6 +56,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     )));
     private static final Set<String> metaSet = Collections.unmodifiableSet(new HashSet<>(asList(
             MAP_SEARCHTITLE.matcher,
+            TOPIC_SEARCHTITLE.matcher,
             TOPIC_AUTHOR.matcher,
             TOPIC_SOURCE.matcher,
             TOPIC_PUBLISHER.matcher,
@@ -74,6 +76,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     )));
     private static final List<String> metaPos = Collections.unmodifiableList(asList(
             MAP_SEARCHTITLE.matcher,
+            TOPIC_SEARCHTITLE.matcher,
             TOPIC_AUTHOR.matcher,
             TOPIC_SOURCE.matcher,
             TOPIC_PUBLISHER.matcher,
@@ -91,7 +94,9 @@ public final class MapMetaReader extends AbstractDomFilter {
             TOPIC_FOREIGN.matcher,
             TOPIC_UNKNOWN.matcher,
             MAP_LINKTEXT.matcher,
+            TOPIC_LINKTEXT.matcher,
             MAP_SHORTDESC.matcher,
+            TOPIC_SHORTDESC.matcher,
             TOPIC_NAVTITLE.matcher,
             TOPIC_METADATA.matcher,
             DELAY_D_EXPORTANCHORS.matcher

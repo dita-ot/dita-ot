@@ -13,6 +13,23 @@ See the accompanying LICENSE file for applicable license.
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   exclude-result-prefixes="xs dita-ot">
+  
+  <!-- DITA 1.3 and 2.0 compatibility -->
+  
+  <xsl:function name="dita-ot:matches-linktext-class" as="xs:boolean">
+    <xsl:param name="class" as="attribute(class)"/>
+    <xsl:sequence select="contains($class, ' topic/linktext ') or contains($class, ' map/linktext ')"/>
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:matches-shortdesc-class" as="xs:boolean">
+    <xsl:param name="class" as="attribute(class)"/>
+    <xsl:sequence select="contains($class, ' topic/shortdesc ') or contains($class, ' map/shortdesc ')"/>
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:matches-searchtitle-class" as="xs:boolean">
+    <xsl:param name="class" as="attribute(class)"/>
+    <xsl:sequence select="contains($class, ' topic/searchtitle ') or contains($class, ' map/searchtitle ')"/>
+  </xsl:function>
 
   <!-- href -->
 

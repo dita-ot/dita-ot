@@ -576,20 +576,20 @@ See the accompanying LICENSE file for applicable license.
         </xsl:if>
         <!--figure out the linktext and desc-->
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="add-props-to-link"/>
-        <xsl:if test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+        <xsl:if test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]">
           <!--Do not output linktext when The final output type is PDF or IDD
             The target of the HREF is a local DITA file
             The user has not specified locktitle to override the title -->
           <xsl:if test="not(($FINALOUTPUTTYPE = 'PDF' or $FINALOUTPUTTYPE = 'IDD') and (not(@scope) or @scope = 'local') and (not(@format) or @format = 'dita') and (not(@locktitle) or @locktitle = 'no'))">
             <linktext class="- topic/linktext ">
               <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']"/>
-              <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]/node()"/>
+              <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]/node()"/>
             </linktext>
           </xsl:if>
         </xsl:if>
-        <xsl:if test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]">
+        <xsl:if test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-shortdesc-class(@class)]">
           <!-- add desc node and text -->
-          <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
+          <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-shortdesc-class(@class)]"/>
         </xsl:if>
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="add-props-to-link"/>
       </link>
@@ -607,7 +607,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <!-- create a template to get child nodes and text -->
-  <xsl:template match="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]" name="node">
+  <xsl:template match="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-shortdesc-class(@class)]" name="node">
     <xsl:copy-of select="../processing-instruction()[name() = 'ditaot'][. = 'usershortdesc' or . = 'genshortdesc']"/>
     <desc class="- topic/desc ">
       <!-- get child node and text -->
@@ -816,7 +816,7 @@ See the accompanying LICENSE file for applicable license.
       select="
         (
           ($el/@href and not($el/@href = '')) or
-          $el/*/*[contains(@class, ' map/linktext ') or contains(@class, ' topic/linktext ')]
+          $el/*/*[dita-ot:matches-linktext-class(@class)]
         ) and
         not($el/@linking = ('none', 'sourceonly'))"
     />

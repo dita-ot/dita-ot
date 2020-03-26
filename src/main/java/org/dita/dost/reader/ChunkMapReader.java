@@ -406,7 +406,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
         if (navtitle == null) {
             navtitle = getValue(topicref, ATTRIBUTE_NAME_NAVTITLE);
         }
-        final String shortDesc = getChildElementValueOfTopicmeta(topicref, MAP_SHORTDESC);
+        String shortDesc = getChildElementValueOfTopicmeta(topicref, TOPIC_SHORTDESC);
+        if (shortDesc == null) {
+            shortDesc = getChildElementValueOfTopicmeta(topicref, MAP_SHORTDESC);
+        }
 
         writeChunk(absTemp, name, navtitle, shortDesc);
 
