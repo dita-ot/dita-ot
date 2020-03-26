@@ -246,7 +246,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:template match="*[contains(@class, ' topic/thead ')]" name="topic.thead">
   <thead>
     <!-- Get style from parent tgroup, then override with thead if specified locally -->
-    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <xsl:call-template name="commonattributes"/>
     
     
@@ -282,7 +282,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:template match="*[contains(@class, ' topic/tbody ')]" name="topic.tbody">
   <tbody>
     <!-- Get style from parent tgroup, then override with thead if specified locally -->
-    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="style">
       <xsl:with-param name="contents">

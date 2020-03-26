@@ -755,6 +755,7 @@ See the accompanying LICENSE file for applicable license.
     <dt>
       <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
       <xsl:apply-templates select="../@xml:lang"/>
+      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
       <xsl:for-each select="..">
         <xsl:call-template name="commonattributes"/>
       </xsl:for-each>
