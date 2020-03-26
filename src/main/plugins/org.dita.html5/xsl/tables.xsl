@@ -431,6 +431,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/desc ')]" mode="get-output-class">tabledesc</xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/table ') ]" mode="table:common">
+    <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
+    <xsl:next-match/>
+  </xsl:template>
 
   <xsl:template match="*" mode="table:common">
     <xsl:call-template name="commonattributes"/>
