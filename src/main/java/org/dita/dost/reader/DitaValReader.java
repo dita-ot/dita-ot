@@ -238,7 +238,8 @@ public final class DitaValReader implements AbstractReader {
                 style != null ? style.trim().split("\\s+") : null,
                 getValue(elem, ATTRIBUTE_NAME_CHANGEBAR),
                 readFlagImage(elem, "startflag"),
-                readFlagImage(elem, "endflag"));
+                readFlagImage(elem, "endflag"),
+                getValue(elem, ATTRIBUTE_NAME_OUTPUTCLASS));
     }
 
     private FlagImage readFlagImage(final Element elem, final String name) {
