@@ -1904,7 +1904,7 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- Process standard attributes that may appear anywhere. Previously this was "setclass" -->
 <xsl:template name="commonattributes">
-  <xsl:param name="default-output-class" select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass"/>
+  <xsl:param name="default-output-class"/>
   <xsl:apply-templates select="@xml:lang"/>
   <xsl:apply-templates select="@dir"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
@@ -1937,6 +1937,8 @@ See the accompanying LICENSE file for applicable license.
       </xsl:for-each>
     </xsl:if>
   </xsl:variable>
+  <xsl:variable name="flag-outputclass" as="xs:string*"
+                select="tokenize(normalize-space(*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass), '\s+')"/>
   <xsl:variable name="using-output-class">
     <xsl:choose>
       <xsl:when test="string-length(normalize-space($output-class)) > 0"><xsl:value-of select="$output-class"/></xsl:when>
@@ -1957,16 +1959,13 @@ See the accompanying LICENSE file for applicable license.
   </xsl:variable>
   <!-- Revised design with DITA-OT 1.5: include class ancestry if requested; 
        combine user output class with element default, giving priority to the user value. -->
-  <xsl:if test="string-length(normalize-space(concat($outputclass-attribute, $using-output-class, $ancestry))) > 0">
-    <xsl:attribute name="class">
-      <xsl:value-of select="$ancestry"/>
-      <xsl:if test="string-length(normalize-space($ancestry)) > 0 and 
-                    string-length(normalize-space($using-output-class)) > 0"><xsl:text> </xsl:text></xsl:if>
-      <xsl:value-of select="normalize-space($using-output-class)"/>
-      <xsl:if test="string-length(normalize-space(concat($ancestry, $using-output-class))) > 0 and
-                    string-length(normalize-space($outputclass-attribute)) > 0"><xsl:text> </xsl:text></xsl:if>
-      <xsl:value-of select="$outputclass-attribute"/>
-    </xsl:attribute>
+  <xsl:variable name="classes" as="xs:string*"
+    select="tokenize($ancestry, '\s+'),
+            tokenize(normalize-space($using-output-class), '\s+'),
+            tokenize($outputclass-attribute, '\s+'),
+            $flag-outputclass"/>
+  <xsl:if test="exists($classes)">
+    <xsl:attribute name="class" select="distinct-values($classes)" separator=" "/>
   </xsl:if>
 </xsl:template>
   

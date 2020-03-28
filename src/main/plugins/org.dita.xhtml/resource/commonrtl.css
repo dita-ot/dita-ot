@@ -418,18 +418,18 @@ pre.codeblock {
 
 /* flagging styles */
 
-.italics {
+.flag__style--italics {
   font-style: italic;
 }
-.bold {
+.flag__style--bold {
   font-weight: bold;
 }
-.underline {
+.flag__style--underline {
   text-decoration: underline;
 }
-.double-underline {
+.flag__style--double-underline {
   text-decoration: double-underline;
 }
-.overline {
+.flag__style--overline {
   text-decoration: overline;
 }
