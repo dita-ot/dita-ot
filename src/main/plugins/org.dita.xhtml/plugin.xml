@@ -30,7 +30,7 @@ See the accompanying LICENSE file for applicable license.
     <param name="args.dita.locale" desc="Specifies the language locale file to use for sorting index entries." type="string"/>
     <param name="args.ftr" desc="Specifies an XML file that contains content for a running footer." type="file"/>
     <param name="args.gen.default.meta"
-      desc="Specifies whether to generate extra metadata that targets parental control scanners, meta elements with name=&#34;security&#34; and name=&#34;Robots&#34;." type="enum">
+      desc="Generate metadata for parental control scanners, meta elements with name=&#34;security&#34; and name=&#34;Robots&#34;." type="enum">
       <val>yes</val>
       <val default="true">no</val>
     </param>
