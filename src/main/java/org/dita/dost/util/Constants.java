@@ -679,6 +679,8 @@ public final class Constants {
 
     public static final DitaClass SUBMAP = new DitaClass("+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ");
     public static final DitaClass DITA_OT_D_KEYDEF = new DitaClass("+ map/topicref mapgroup-d/keydef ditaot-d/keydef ");
+    public static final DitaClass DITA_OT_D_DITAVAL_STARTPROP = new DitaClass("+ topic/foreign ditaot-d/ditaval-startprop ");
+    public static final DitaClass DITA_OT_D_DITAVAL_ENDPROP = new DitaClass("+ topic/foreign ditaot-d/ditaval-endprop ");
 
     /**maplinks element.*/
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";

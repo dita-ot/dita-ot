@@ -13,3 +13,27 @@
 .p {
   margin-top: 1em;
 }
+
+/* flagging styles */
+
+.flag__style {
+  &--italics {
+    font-style: italic;
+  }
+
+  &--bold {
+    font-weight: bold;
+  }
+
+  &--underline {
+    text-decoration: underline;
+  }
+
+  &--double-underline {
+    text-decoration: double-underline;
+  }
+
+  &--overline {
+    text-decoration: overline;
+  }
+}

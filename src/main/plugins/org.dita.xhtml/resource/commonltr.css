@@ -411,3 +411,21 @@ samp.codeph,
 pre.codeblock {
   font-family: monospace;
 }
+
+/* flagging styles */
+
+.flag__style--italics {
+  font-style: italic;
+}
+.flag__style--bold {
+  font-weight: bold;
+}
+.flag__style--underline {
+  text-decoration: underline;
+}
+.flag__style--double-underline {
+  text-decoration: double-underline;
+}
+.flag__style--overline {
+  text-decoration: overline;
+}
