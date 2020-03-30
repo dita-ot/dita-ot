@@ -153,7 +153,7 @@ See the accompanying LICENSE file for applicable license.
       <val desc="When an error is encountered, DITA-OT attempts to recover from it" default="true">lax</val>
       <val desc="When an error is encountered, DITA-OT continues processing but does not attempt error recovery">skip</val>
     </param>
-    <param name="conserve-memory" desc="Conserve memory at the expense of processing speed" type="enum">
+    <param name="conserve-memory" desc="Conserve memory at the expense of processing speed." type="enum">
       <val>true</val>
       <val default="true">false</val>
     </param>
@@ -162,8 +162,8 @@ See the accompanying LICENSE file for applicable license.
       <val>true</val>
       <val default="true">false</val>
     </param>
-    <param name="result.rewrite-rule.xsl" desc="Specifies the name of the XSLT file used to rewrite filenames" type="string"/>
-    <param name="result.rewrite-rule.class" desc="Specifies the name of the Java class used to rewrite filenames" type="string"/>
+    <param name="result.rewrite-rule.xsl" desc="Specifies the name of the XSLT file used to rewrite filenames." type="string"/>
+    <param name="result.rewrite-rule.class" desc="Specifies the name of the Java class used to rewrite filenames." type="string"/>
   </transtype>
   <feature extension="dita.image.extensions" value=".gif"/>
   <feature extension="dita.image.extensions" value=".eps"/>
