@@ -152,6 +152,9 @@ public class UsageBuilder {
                     buf.append("=<").append(value).append(">");
                 }
             }
+            if (shortKey == null && longKey == null & value != null) {
+                buf.append("<").append(value).append(">");
+            }
             string = buf.toString();
         }
 
