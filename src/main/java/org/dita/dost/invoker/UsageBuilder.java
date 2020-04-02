@@ -17,7 +17,7 @@ public class UsageBuilder {
 
     private final StringBuilder buf = new StringBuilder();
     private final List<String> usages = new ArrayList<>();
-    private final List<String> subcommands = new ArrayList<>();
+    private final Map<String, String> subcommands = new HashMap<>();
     private final Map<Key, String> options = new HashMap<>();
     private final Map<Key, String> arguments = new HashMap<>();
 
@@ -36,8 +36,8 @@ public class UsageBuilder {
         return this;
     }
 
-    public UsageBuilder subcommands(final String subcommand) {
-        subcommands.add(subcommand);
+    public UsageBuilder subcommands(final String subcommand, final String desc) {
+        subcommands.put(subcommand, desc);
         return this;
     }
 
@@ -60,9 +60,14 @@ public class UsageBuilder {
         }
         if (!subcommands.isEmpty()) {
             buf.append(ANSI_BOLD).append("Subcommands").append(ANSI_RESET).append(":\n");
-            for (String subcommand : subcommands) {
-                buf.append("  ").append(subcommand).append("\n");
+            for (Map.Entry<String, String> subcommand : sortSubCommands(subcommands)) {
+                buf.append("  ")
+                        .append(subcommand.getKey())
+                        .append(padding.substring(subcommand.getKey().length()))
+                        .append(subcommand.getValue())
+                        .append("\n");
             }
+            buf.append("\n  See 'dita <subcommand> --help' for details about a specific subcommand.\n");
         }
         if (!arguments.isEmpty()) {
             buf.append(ANSI_BOLD).append("Arguments").append(ANSI_RESET).append(":\n");
@@ -93,8 +98,17 @@ public class UsageBuilder {
         return entries;
     }
 
+    private List<Map.Entry<String, String>> sortSubCommands(Map<String, String> arguments) {
+        final List<Map.Entry<String, String>> entries = new ArrayList<>(arguments.entrySet());
+        entries.sort(Comparator.comparing(Map.Entry::getKey));
+        return entries;
+    }
+
     private String getPadding() {
         int max = 0;
+        for (String key : subcommands.keySet()) {
+            max = Math.max(max, key.length());
+        }
         for (Key key : options.keySet()) {
             max = Math.max(max, key.toString().length());
         }
@@ -150,8 +164,6 @@ public class UsageBuilder {
                     Objects.equals(longKey, key.longKey) &&
                     Objects.equals(value, key.value);
         }
-
-
 
         @Override
         public int hashCode() {
