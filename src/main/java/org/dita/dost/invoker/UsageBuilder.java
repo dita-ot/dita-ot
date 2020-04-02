@@ -59,7 +59,7 @@ public class UsageBuilder {
             buf.append("  ").append(usage).append("\n");
         }
         if (!subcommands.isEmpty()) {
-            buf.append(ANSI_BOLD).append("Subcommands").append(ANSI_RESET).append(":\n");
+            buf.append("\n").append(ANSI_BOLD).append("Subcommands").append(ANSI_RESET).append(":\n");
             for (Map.Entry<String, String> subcommand : sortSubCommands(subcommands)) {
                 buf.append("  ")
                         .append(subcommand.getKey())
@@ -70,7 +70,7 @@ public class UsageBuilder {
             buf.append("\n  See 'dita <subcommand> --help' for details about a specific subcommand.\n");
         }
         if (!arguments.isEmpty()) {
-            buf.append(ANSI_BOLD).append("Arguments").append(ANSI_RESET).append(":\n");
+            buf.append("\n").append(ANSI_BOLD).append("Arguments").append(ANSI_RESET).append(":\n");
             for (Map.Entry<Key, String> argument : sort(arguments)) {
                 buf.append("  ")
                         .append(argument.getKey())
@@ -80,7 +80,7 @@ public class UsageBuilder {
             }
         }
         if (!options.isEmpty()) {
-            buf.append(ANSI_BOLD).append("Options").append(ANSI_RESET).append(":\n");
+            buf.append("\n").append(ANSI_BOLD).append("Options").append(ANSI_RESET).append(":\n");
             for (Map.Entry<Key, String> option : sort(options)) {
                 buf.append("  ")
                         .append(option.getKey())
