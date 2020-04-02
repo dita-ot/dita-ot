@@ -75,7 +75,7 @@ public class InstallArguments extends Arguments {
 
     @Override
     void printUsage(final boolean compact) {
-        UsageBuilder.builder()
+        UsageBuilder.builder(compact)
                 .usage("dita install [<file> | <url> | <id>]")
                 .arguments(null, null, "file", "Install plug-in from a local ZIP file")
                 .arguments(null, null, "url", "Install plug-in from a URL")

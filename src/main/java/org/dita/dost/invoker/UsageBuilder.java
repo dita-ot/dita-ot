@@ -18,18 +18,20 @@ public class UsageBuilder {
     private final StringBuilder buf = new StringBuilder();
     private final List<String> usages = new ArrayList<>();
     private final Map<String, String> subcommands = new HashMap<>();
-    private final Map<Key, String> options = new HashMap<>();
+    private final Map<Key, String> options = new LinkedHashMap<>();
     private final Map<Key, String> arguments = new HashMap<>();
     private final List<String> footers = new ArrayList<>();
 
-    private UsageBuilder() {
-        options("d", "debug", null, "Print debugging information");
-        options("h", "help", null, "Print this message");
-        options("v", "verbose", null, "Enable verbose logging");
+    private UsageBuilder(final boolean compact) {
+        options("h", "help", null, "Print help information");
+        if (!compact) {
+            options("d", "debug", null, "Enable debug logging");
+            options("v", "verbose", null, "Enable verbose logging");
+        }
     }
 
-    public static UsageBuilder builder() {
-        return new UsageBuilder();
+    public static UsageBuilder builder(final boolean compact) {
+        return new UsageBuilder(compact);
     }
 
     public UsageBuilder usage(final String usage) {
@@ -77,7 +79,7 @@ public class UsageBuilder {
         }
         if (!arguments.isEmpty()) {
             buf.append("\n").append(ANSI_BOLD).append("Arguments").append(ANSI_RESET).append(":\n");
-            for (Map.Entry<Key, String> argument : sort(arguments)) {
+            for (Map.Entry<Key, String> argument : arguments.entrySet()) {
                 buf.append("  ")
                         .append(argument.getKey())
                         .append(padding.substring(argument.getKey().toString().length()))

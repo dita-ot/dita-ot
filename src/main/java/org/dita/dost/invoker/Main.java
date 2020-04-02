@@ -123,6 +123,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         } else {
             System.err.println("Error: " + msg);
         }
+        System.err.println();
     }
 
     /**
