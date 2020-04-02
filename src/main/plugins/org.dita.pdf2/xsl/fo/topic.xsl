@@ -554,7 +554,7 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- For SF Bug 2879171: modify so that shortdesc is inline when inside
          abstract with only other text or inline markup. -->
-    <xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+    <xsl:template match="*[not(contains(@class, ' topic/topic '))]/*[@class][dita-ot:matches-shortdesc-class(@class)]">
         <xsl:variable name="format-as-block" as="xs:boolean" select="dita-ot:formatShortdescAsBlock(.)"/>
         <xsl:choose>
             <xsl:when test="$format-as-block">
@@ -592,11 +592,7 @@ See the accompanying LICENSE file for applicable license.
         </fo:inline>
     </xsl:template>
 
-    <!-- Short description not as child of topic -->
-    <xsl:template match="*[dita-ot:matches-shortdesc-class(@class)]">
-        <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
-    </xsl:template>
-
+    <!-- Short description as child of topic -->
     <xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class,' topic/shortdesc ')]" priority="1">
         <xsl:variable name="topicType" as="xs:string">
             <xsl:call-template name="determineTopicType"/>
