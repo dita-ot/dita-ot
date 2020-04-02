@@ -269,7 +269,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         buildFile = args.buildFile;
 
         if (args.justPrintUsage) {
-            args.printUsage();
+            args.printUsage(false);
             return;
         } else if (args.justPrintDiagnostics) {
             Diagnostics.doReport(System.out, args.msgOutputLevel);
@@ -290,7 +290,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             final DeliverablesArguments deliverablesArgs = (DeliverablesArguments) args;
             if (deliverablesArgs.projectFile == null) {
                 printErrorMessage("Project file not defined");
-                args.printUsage();
+                args.printUsage(true);
                 throw new BuildException("");
             }
             printDeliverables(deliverablesArgs.projectFile);
@@ -314,7 +314,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             final UninstallArguments installArgs = (UninstallArguments) args;
             if (installArgs.uninstallId == null) {
                 printErrorMessage("You must specify plug-in identifier when using the uninstall subcommand");
-                args.printUsage();
+                args.printUsage(true);
                 throw new BuildException("");
             }
             buildFile = integratorFile;
@@ -326,13 +326,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             if (conversionArgs.projectFile == null) {
                 if (!definedProps.containsKey(ANT_TRANSTYPE)) {
                     printErrorMessage("Transformation type not defined");
-                    args.printUsage();
+                    args.printUsage(true);
                     throw new BuildException("");
                     //justPrintUsage = true;
                 }
                 if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
                     printErrorMessage("Input file not defined");
-                    args.printUsage();
+                    args.printUsage(true);
                     throw new BuildException("");
                     //justPrintUsage = true;
                 }

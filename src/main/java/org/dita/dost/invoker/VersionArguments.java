@@ -29,7 +29,7 @@ class VersionArguments extends Arguments {
     }
 
     @Override
-    void printUsage() {
+    void printUsage(final boolean compact) {
         UsageBuilder.builder()
                 .usage("dita version [options]")
                 .print();

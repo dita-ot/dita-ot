@@ -20,6 +20,7 @@ public class UsageBuilder {
     private final Map<String, String> subcommands = new HashMap<>();
     private final Map<Key, String> options = new HashMap<>();
     private final Map<Key, String> arguments = new HashMap<>();
+    private final List<String> footers = new ArrayList<>();
 
     private UsageBuilder() {
         options("d", "debug", null, "Print debugging information");
@@ -48,6 +49,11 @@ public class UsageBuilder {
 
     public UsageBuilder arguments(final String shortKey, final String longKey, final String value, final String desc) {
         arguments.put(new Key(shortKey, longKey, value), desc);
+        return this;
+    }
+
+    public UsageBuilder footer(final String desc) {
+        footers.add(desc);
         return this;
     }
 
@@ -87,6 +93,12 @@ public class UsageBuilder {
                         .append(padding.substring(option.getKey().toString().length()))
                         .append(option.getValue())
                         .append("\n");
+            }
+        }
+        if (!footers.isEmpty()) {
+            buf.append("\n");
+            for (String footer : footers) {
+                buf.append(footer).append("\n");
             }
         }
         return buf.toString();

@@ -64,7 +64,7 @@ public class DeliverablesArguments extends Arguments {
     }
 
     @Override
-    void printUsage() {
+    void printUsage(final boolean compact) {
         UsageBuilder.builder()
                 .usage("dita deliverables <file> [options]")
                 .arguments(null, null, "file", "Project file")

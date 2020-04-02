@@ -342,7 +342,7 @@ public class ConversionArguments extends Arguments {
     }
 
     @Override
-    void printUsage() {
+    void printUsage(final boolean compact) {
         final UsageBuilder buf = UsageBuilder.builder()
                 .usage("dita -i <file> -f <name> [options]")
                 .usage("dita --project=<file> [options]")
@@ -363,29 +363,33 @@ public class ConversionArguments extends Arguments {
 //                .options(null, "<property>", "value", "use value for given property")
                 .options(null, "propertyfile", "file", "Load all properties from file")
                 .options("t", "temp", "dir", "Temporary directory");
-        final Set<String> builtin = ARGUMENTS.values().stream().map(arg -> arg.property).collect(Collectors.toSet());
-        final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
-        params.stream()
-                .map(ArgumentParser::getArgument)
-                .filter(a -> !builtin.contains(a.property))
-                .collect(Collectors.toMap(
-                        arg -> arg.property,
-                        arg -> arg,
-                        ArgumentParser::mergeArguments))
-                .values()
-                .stream()
-                .sorted(Comparator.comparing(o -> o.property))
-                .forEach(arg -> {
-                    if (arg instanceof FileArgument) {
-                        buf.options(null, arg.property, "file", arg.desc);
-                    } else if (arg instanceof BooleanArgument) {
-                        buf.options(null, arg.property, "yes|no", arg.desc);
-                    } else if (arg instanceof EnumArgument) {
-                        buf.options(null, arg.property, String.join("|", ((EnumArgument) arg).values), arg.desc);
-                    } else {
-                        buf.options(null, arg.property, "value", arg.desc);
-                    }
-                });
+        if (!compact) {
+            final Set<String> builtin = ARGUMENTS.values().stream().map(arg -> arg.property).collect(Collectors.toSet());
+            final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
+            params.stream()
+                    .map(ArgumentParser::getArgument)
+                    .filter(a -> !builtin.contains(a.property))
+                    .collect(Collectors.toMap(
+                            arg -> arg.property,
+                            arg -> arg,
+                            ArgumentParser::mergeArguments))
+                    .values()
+                    .stream()
+                    .sorted(Comparator.comparing(o -> o.property))
+                    .forEach(arg -> {
+                        if (arg instanceof FileArgument) {
+                            buf.options(null, arg.property, "file", arg.desc);
+                        } else if (arg instanceof BooleanArgument) {
+                            buf.options(null, arg.property, "yes|no", arg.desc);
+                        } else if (arg instanceof EnumArgument) {
+                            buf.options(null, arg.property, String.join("|", ((EnumArgument) arg).values), arg.desc);
+                        } else {
+                            buf.options(null, arg.property, "value", arg.desc);
+                        }
+                    });
+        } else {
+            buf.footer("See 'dita --help' for full list of options.");
+        }
         buf.print();
     }
 }

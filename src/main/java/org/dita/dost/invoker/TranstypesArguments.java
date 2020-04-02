@@ -29,7 +29,7 @@ public class TranstypesArguments extends Arguments {
     }
 
     @Override
-    void printUsage() {
+    void printUsage(final boolean compact) {
         UsageBuilder.builder()
                 .usage("dita transtypes [options]")
                 .print();

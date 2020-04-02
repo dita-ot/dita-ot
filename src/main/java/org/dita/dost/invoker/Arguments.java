@@ -77,7 +77,7 @@ abstract class Arguments {
         useColor = getUseColor();
     }
 
-    abstract void printUsage();
+    abstract void printUsage(boolean compact);
 
     abstract Arguments parse(String[] arguments);
 
