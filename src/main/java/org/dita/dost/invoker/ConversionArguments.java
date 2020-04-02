@@ -353,16 +353,16 @@ public class ConversionArguments extends Arguments {
                 .subcommands("transtypes")
                 .subcommands("uninstall")
                 .subcommands("version")
-                .arguments("i", "input", "file", "input file")
-                .arguments("f", "format", "name", "output format (transformation type)")
-                .arguments("p", "project", "name", "run project file")
-                .options("r", "resource", "file", "resource file")
-                .options(null, "filter", "files", "filter and flagging files")
-                .options("l", "logfile", "file", "use given file for log")
-                .options("o", "output", "dir", "output directory")
+                .arguments("i", "input", "file", "Input file")
+                .arguments("f", "format", "name", "Output format (transformation type)")
+                .arguments("p", "project", "name", "Publish a project file with multiple deliverables")
+                .options("r", "resource", "file", "Additional input resources")
+                .options(null, "filter", "files", "Filter and flagging files")
+                .options("l", "logfile", "file", "Write log messages to file")
+                .options("o", "output", "dir", "Output directory")
 //                .options(null, "<property>", "value", "use value for given property")
-                .options(null, "propertyfile", "file", "load all properties from file")
-                .options("t", "temp", "dir", "temporary directory");
+                .options(null, "propertyfile", "file", "Load all properties from file")
+                .options("t", "temp", "dir", "Temporary directory");
         final Set<String> builtin = ARGUMENTS.values().stream().map(arg -> arg.property).collect(Collectors.toSet());
         final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
         params.stream()

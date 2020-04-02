@@ -67,7 +67,7 @@ public class DeliverablesArguments extends Arguments {
     void printUsage() {
         UsageBuilder.builder()
                 .usage("dita deliverables <file> [options]")
-                .arguments(null, null, "file", "project file")
+                .arguments(null, null, "file", "Project file")
                 .print();
     }
 

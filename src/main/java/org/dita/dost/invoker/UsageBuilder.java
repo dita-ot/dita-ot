@@ -22,9 +22,9 @@ public class UsageBuilder {
     private final Map<Key, String> arguments = new HashMap<>();
 
     private UsageBuilder() {
-        options("d", "debug", null, "print debugging information");
-        options("h", "help", null, "print this message");
-        options("v", "verbose", null, "verbose logging");
+        options("d", "debug", null, "Print debugging information");
+        options("h", "help", null, "Print this message");
+        options("v", "verbose", null, "Enable verbose logging");
     }
 
     public static UsageBuilder builder() {

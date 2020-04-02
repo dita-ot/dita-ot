@@ -124,7 +124,7 @@ See the accompanying LICENSE file for applicable license.
       <val>true</val>
       <val default="true">false</val>
     </param>
-    <param name="generate.copy.outer" desc="Specifies whether to generate output files for content that is not located in or beneath the directory containing the DITA map file." type="enum">
+    <param name="generate.copy.outer" desc="Adjust how output is generated for content that is located outside the directory containing the DITA map." type="enum">
       <val desc="Do not generate output for content that is located outside the DITA map directory." default="true">1</val>
       <val desc="Shift the output directory so that it contains all output for the publication.">3</val>
     </param>
@@ -132,7 +132,7 @@ See the accompanying LICENSE file for applicable license.
       <val>true</val>
       <val default="true">false</val>
     </param>
-    <param name="outer.control" desc="Specifies how DITA-OT handles content files that are not located in or below the directory containing the master DITA map." type="enum">
+    <param name="outer.control" desc="Specifies whether to warn or fail if content is located outside the directory containing the DITA map." type="enum">
       <val desc="Fail quickly if files are going to be generated or copied outside of the directory.">fail</val>
       <val desc="Complete the operation if files will be generated or copied outside of the directory, but log a warning." default="true">warn</val>
       <val desc="Quietly finish without generating warnings or errors.">quiet</val>
@@ -153,7 +153,7 @@ See the accompanying LICENSE file for applicable license.
       <val desc="When an error is encountered, DITA-OT attempts to recover from it" default="true">lax</val>
       <val desc="When an error is encountered, DITA-OT continues processing but does not attempt error recovery">skip</val>
     </param>
-    <param name="conserve-memory" desc="Conserve memory at the expense of processing speed" type="enum">
+    <param name="conserve-memory" desc="Conserve memory at the expense of processing speed." type="enum">
       <val>true</val>
       <val default="true">false</val>
     </param>
@@ -162,8 +162,8 @@ See the accompanying LICENSE file for applicable license.
       <val>true</val>
       <val default="true">false</val>
     </param>
-    <param name="result.rewrite-rule.xsl" desc="Specifies the name of the XSLT file used to rewrite filenames" type="string"/>
-    <param name="result.rewrite-rule.class" desc="Specifies the name of the Java class used to rewrite filenames" type="string"/>
+    <param name="result.rewrite-rule.xsl" desc="Specifies the name of the XSLT file used to rewrite filenames." type="string"/>
+    <param name="result.rewrite-rule.class" desc="Specifies the name of the Java class used to rewrite filenames." type="string"/>
   </transtype>
   <feature extension="dita.image.extensions" value=".gif"/>
   <feature extension="dita.image.extensions" value=".eps"/>
