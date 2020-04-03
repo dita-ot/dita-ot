@@ -17,18 +17,21 @@ public class UsageBuilder {
 
     private final StringBuilder buf = new StringBuilder();
     private final List<String> usages = new ArrayList<>();
-    private final List<String> subcommands = new ArrayList<>();
+    private final Map<String, String> subcommands = new HashMap<>();
     private final Map<Key, String> options = new HashMap<>();
-    private final Map<Key, String> arguments = new HashMap<>();
+    private final Map<Key, String> arguments = new LinkedHashMap<>();
+    private final List<String> footers = new ArrayList<>();
 
-    private UsageBuilder() {
-        options("d", "debug", null, "Print debugging information");
-        options("h", "help", null, "Print this message");
-        options("v", "verbose", null, "Enable verbose logging");
+    private UsageBuilder(final boolean compact) {
+        options("h", "help", null, "Print help information");
+        if (!compact) {
+            options("d", "debug", null, "Enable debug logging");
+            options("v", "verbose", null, "Enable verbose logging");
+        }
     }
 
-    public static UsageBuilder builder() {
-        return new UsageBuilder();
+    public static UsageBuilder builder(final boolean compact) {
+        return new UsageBuilder(compact);
     }
 
     public UsageBuilder usage(final String usage) {
@@ -36,8 +39,8 @@ public class UsageBuilder {
         return this;
     }
 
-    public UsageBuilder subcommands(final String subcommand) {
-        subcommands.add(subcommand);
+    public UsageBuilder subcommands(final String subcommand, final String desc) {
+        subcommands.put(subcommand, desc);
         return this;
     }
 
@@ -51,6 +54,11 @@ public class UsageBuilder {
         return this;
     }
 
+    public UsageBuilder footer(final String desc) {
+        footers.add(desc);
+        return this;
+    }
+
     private String build() {
         final String padding = getPadding();
 
@@ -59,14 +67,19 @@ public class UsageBuilder {
             buf.append("  ").append(usage).append("\n");
         }
         if (!subcommands.isEmpty()) {
-            buf.append(ANSI_BOLD).append("Subcommands").append(ANSI_RESET).append(":\n");
-            for (String subcommand : subcommands) {
-                buf.append("  ").append(subcommand).append("\n");
+            buf.append("\n").append(ANSI_BOLD).append("Subcommands").append(ANSI_RESET).append(":\n");
+            for (Map.Entry<String, String> subcommand : sortSubCommands(subcommands)) {
+                buf.append("  ")
+                        .append(subcommand.getKey())
+                        .append(padding.substring(subcommand.getKey().length()))
+                        .append(subcommand.getValue())
+                        .append("\n");
             }
+            buf.append("\n  See 'dita <subcommand> --help' for details about a specific subcommand.\n");
         }
         if (!arguments.isEmpty()) {
-            buf.append(ANSI_BOLD).append("Arguments").append(ANSI_RESET).append(":\n");
-            for (Map.Entry<Key, String> argument : sort(arguments)) {
+            buf.append("\n").append(ANSI_BOLD).append("Arguments").append(ANSI_RESET).append(":\n");
+            for (Map.Entry<Key, String> argument : arguments.entrySet()) {
                 buf.append("  ")
                         .append(argument.getKey())
                         .append(padding.substring(argument.getKey().toString().length()))
@@ -75,13 +88,19 @@ public class UsageBuilder {
             }
         }
         if (!options.isEmpty()) {
-            buf.append(ANSI_BOLD).append("Options").append(ANSI_RESET).append(":\n");
+            buf.append("\n").append(ANSI_BOLD).append("Options").append(ANSI_RESET).append(":\n");
             for (Map.Entry<Key, String> option : sort(options)) {
                 buf.append("  ")
                         .append(option.getKey())
                         .append(padding.substring(option.getKey().toString().length()))
                         .append(option.getValue())
                         .append("\n");
+            }
+        }
+        if (!footers.isEmpty()) {
+            buf.append("\n");
+            for (String footer : footers) {
+                buf.append(footer).append("\n");
             }
         }
         return buf.toString();
@@ -93,8 +112,17 @@ public class UsageBuilder {
         return entries;
     }
 
+    private List<Map.Entry<String, String>> sortSubCommands(Map<String, String> arguments) {
+        final List<Map.Entry<String, String>> entries = new ArrayList<>(arguments.entrySet());
+        entries.sort(Comparator.comparing(Map.Entry::getKey));
+        return entries;
+    }
+
     private String getPadding() {
         int max = 0;
+        for (String key : subcommands.keySet()) {
+            max = Math.max(max, key.length());
+        }
         for (Key key : options.keySet()) {
             max = Math.max(max, key.toString().length());
         }
@@ -138,6 +166,9 @@ public class UsageBuilder {
                     buf.append("=<").append(value).append(">");
                 }
             }
+            if (shortKey == null && longKey == null & value != null) {
+                buf.append("<").append(value).append(">");
+            }
             string = buf.toString();
         }
 
@@ -150,8 +181,6 @@ public class UsageBuilder {
                     Objects.equals(longKey, key.longKey) &&
                     Objects.equals(value, key.value);
         }
-
-
 
         @Override
         public int hashCode() {

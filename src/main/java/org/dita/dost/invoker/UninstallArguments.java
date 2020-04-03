@@ -72,8 +72,8 @@ public class UninstallArguments extends Arguments {
     }
 
     @Override
-    void printUsage() {
-        UsageBuilder.builder()
+    void printUsage(final boolean compact) {
+        UsageBuilder.builder(compact)
                 .usage("dita uninstall <id>")
                 .arguments(null, null, "id", "Uninstall plug-in with the specified ID")
                 .print();

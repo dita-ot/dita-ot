@@ -342,50 +342,54 @@ public class ConversionArguments extends Arguments {
     }
 
     @Override
-    void printUsage() {
-        final UsageBuilder buf = UsageBuilder.builder()
+    void printUsage(final boolean compact) {
+        final UsageBuilder buf = UsageBuilder.builder(compact)
                 .usage("dita -i <file> -f <name> [options]")
                 .usage("dita --project=<file> [options]")
 //                .usage("dita --propertyfile=<file> [options]")
-                .subcommands("deliverables")
-                .subcommands("install")
-                .subcommands("plugins")
-                .subcommands("transtypes")
-                .subcommands("uninstall")
-                .subcommands("version")
+                .subcommands("deliverables", "Print list of deliverables in project file")
+                .subcommands("install", "Install or reload plug-ins")
+                .subcommands("plugins", "Print list of installed plug-ins")
+                .subcommands("transtypes", "Print list of installed transformation types (output formats)")
+                .subcommands("uninstall", "Remove and delete plug-in")
+                .subcommands("version", "Print version information and exit")
                 .arguments("i", "input", "file", "Input file")
                 .arguments("f", "format", "name", "Output format (transformation type)")
-                .arguments("p", "project", "name", "Publish a project file with multiple deliverables")
+                .arguments("p", "project", "file", "Publish a project file with multiple deliverables")
                 .options("r", "resource", "file", "Additional input resources")
                 .options(null, "filter", "files", "Filter and flagging files")
-                .options("l", "logfile", "file", "Write log messages to file")
-                .options("o", "output", "dir", "Output directory")
-//                .options(null, "<property>", "value", "use value for given property")
-                .options(null, "propertyfile", "file", "Load all properties from file")
-                .options("t", "temp", "dir", "Temporary directory");
-        final Set<String> builtin = ARGUMENTS.values().stream().map(arg -> arg.property).collect(Collectors.toSet());
-        final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
-        params.stream()
-                .map(ArgumentParser::getArgument)
-                .filter(a -> !builtin.contains(a.property))
-                .collect(Collectors.toMap(
-                        arg -> arg.property,
-                        arg -> arg,
-                        ArgumentParser::mergeArguments))
-                .values()
-                .stream()
-                .sorted(Comparator.comparing(o -> o.property))
-                .forEach(arg -> {
-                    if (arg instanceof FileArgument) {
-                        buf.options(null, arg.property, "file", arg.desc);
-                    } else if (arg instanceof BooleanArgument) {
-                        buf.options(null, arg.property, "yes|no", arg.desc);
-                    } else if (arg instanceof EnumArgument) {
-                        buf.options(null, arg.property, String.join("|", ((EnumArgument) arg).values), arg.desc);
-                    } else {
-                        buf.options(null, arg.property, "value", arg.desc);
-                    }
-                });
+                .options("o", "output", "dir", "Output directory");
+        if (!compact) {
+            buf
+                    .options("l", "logfile", "file", "Write log messages to file")
+                    .options(null, "propertyfile", "file", "Load all properties from file")
+                    .options("t", "temp", "dir", "Temporary directory");;
+            final Set<String> builtin = ARGUMENTS.values().stream().map(arg -> arg.property).collect(Collectors.toSet());
+            final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
+            params.stream()
+                    .map(ArgumentParser::getArgument)
+                    .filter(a -> !builtin.contains(a.property))
+                    .collect(Collectors.toMap(
+                            arg -> arg.property,
+                            arg -> arg,
+                            ArgumentParser::mergeArguments))
+                    .values()
+                    .stream()
+                    .sorted(Comparator.comparing(o -> o.property))
+                    .forEach(arg -> {
+                        if (arg instanceof FileArgument) {
+                            buf.options(null, arg.property, "file", arg.desc);
+                        } else if (arg instanceof BooleanArgument) {
+                            buf.options(null, arg.property, "yes|no", arg.desc);
+                        } else if (arg instanceof EnumArgument) {
+                            buf.options(null, arg.property, String.join("|", ((EnumArgument) arg).values), arg.desc);
+                        } else {
+                            buf.options(null, arg.property, "value", arg.desc);
+                        }
+                    });
+        } else {
+            buf.footer("See 'dita --help' for full list of options.");
+        }
         buf.print();
     }
 }
