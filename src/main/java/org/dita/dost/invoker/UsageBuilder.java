@@ -18,8 +18,8 @@ public class UsageBuilder {
     private final StringBuilder buf = new StringBuilder();
     private final List<String> usages = new ArrayList<>();
     private final Map<String, String> subcommands = new HashMap<>();
-    private final Map<Key, String> options = new LinkedHashMap<>();
-    private final Map<Key, String> arguments = new HashMap<>();
+    private final Map<Key, String> options = new HashMap<>();
+    private final Map<Key, String> arguments = new LinkedHashMap<>();
     private final List<String> footers = new ArrayList<>();
 
     private UsageBuilder(final boolean compact) {
