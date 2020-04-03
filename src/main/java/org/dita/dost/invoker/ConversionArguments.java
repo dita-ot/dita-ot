@@ -355,7 +355,7 @@ public class ConversionArguments extends Arguments {
                 .subcommands("version", "Print version information and exit")
                 .arguments("i", "input", "file", "Input file")
                 .arguments("f", "format", "name", "Output format (transformation type)")
-                .arguments("p", "project", "name", "Publish a project file with multiple deliverables")
+                .arguments("p", "project", "file", "Publish a project file with multiple deliverables")
                 .options("r", "resource", "file", "Additional input resources")
                 .options(null, "filter", "files", "Filter and flagging files")
                 .options("o", "output", "dir", "Output directory");
