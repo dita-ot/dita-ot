@@ -325,17 +325,18 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         } else if (args instanceof ConversionArguments) {
             final ConversionArguments conversionArgs = (ConversionArguments) args;
             if (conversionArgs.projectFile == null) {
-                if (!definedProps.containsKey(ANT_TRANSTYPE)) {
-                    printErrorMessage("Transformation type not defined");
-                    args.printUsage(true);
-                    throw new BuildException("");
-                    //justPrintUsage = true;
+                String err = null;
+                if (!definedProps.containsKey(ANT_TRANSTYPE) && !definedProps.containsKey(ANT_ARGS_INPUT)) {
+                    err = "Input file and transformation type not defined";
+                } else if (!definedProps.containsKey(ANT_TRANSTYPE)) {
+                    err = "Transformation type not defined";
+                } else if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
+                    err = "Input file not defined";
                 }
-                if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
-                    printErrorMessage("Input file not defined");
+                if (err != null) {
+                    printErrorMessage(err);
                     args.printUsage(true);
                     throw new BuildException("");
-                    //justPrintUsage = true;
                 }
             } else {
                 projectProps = handleProject(conversionArgs.projectFile, definedProps);
@@ -353,7 +354,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
         // make sure buildfile exists
         if (!args.buildFile.exists() || buildFile.isDirectory()) {
-            System.out.println("Buildfile: " + buildFile + " does not exist!");
+            System.out.println("Buildfile " + buildFile + " does not exist!");
             throw new BuildException("Build failed");
         }
 
@@ -361,7 +362,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         buildFile = FileUtils.getFileUtils().normalize(buildFile.getAbsolutePath());
 
         if (args.msgOutputLevel >= Project.MSG_VERBOSE) {
-            System.out.println("Buildfile: " + buildFile);
+            System.out.println("Buildfile " + buildFile);
         }
 
         if (args.logFile != null) {
