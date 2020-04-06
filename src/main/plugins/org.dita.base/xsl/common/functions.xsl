@@ -48,9 +48,12 @@ See the accompanying LICENSE file for applicable license.
   <xsl:function name="dita-ot:retrieve-href-target" as="node()?">
     <xsl:param name="href" as="attribute(href)"/>
 
-    <xsl:variable name="doc" as="document-node()"
-      select="doc(dita-ot:resolve-href-path($href))"/>
-
+    <xsl:variable name="resolved-href-path" select="dita-ot:resolve-href-path($href)" as="xs:anyURI"/>
+    <xsl:variable name="doc" as="document-node()?"
+      select="if (doc-available($resolved-href-path))
+      then (doc(dita-ot:resolve-href-path($href)))
+      else ()"/>
+    
     <xsl:sequence select="
         if (dita-ot:has-element-id($href))
       then $doc/key('id', dita-ot:get-element-id($href))
