@@ -6,7 +6,9 @@
   <shortdesc>Shortdesc.</shortdesc>
   <taskbody>
     <context>
-      <p>Paragraph.</p>
+      <p>Paragraph.<mathml>
+          <math xmlns="http://www.w3.org/1998/Math/MathML"/>
+        </mathml></p>
     </context>
   </taskbody>
 </task>
