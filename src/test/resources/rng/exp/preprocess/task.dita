@@ -6,7 +6,9 @@
   <shortdesc class="- topic/shortdesc ">Shortdesc.</shortdesc>
   <taskbody class="- topic/body task/taskbody ">
     <context class="- topic/section task/context ">
-      <p class="- topic/p ">Paragraph.</p>
+      <p class="- topic/p ">Paragraph.<mathml class="+ topic/foreign mathml-d/mathml ">
+          <math xmlns="http://www.w3.org/1998/Math/MathML"/>
+        </mathml></p>
     </context>
   </taskbody>
 </task>
