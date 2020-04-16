@@ -246,7 +246,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final PipelineConfiguration pipe = doc.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
             final Receiver receiver = new NamespaceReducer(destination.getReceiver(pipe, new SerializationProperties()));
             receiver.open();
-            walkMap(map, doc, Collections.singletonList(rootScope), res, receiver);
+            final List<String> scopeUriList = new ArrayList<>();
+            walkMap(map, doc, Collections.singletonList(rootScope), res, receiver, scopeUriList);
             receiver.close();
         } catch (final IOException | SaxonApiException | XPathException e) {
             throw new DITAOTException("Failed to write map: " + e.getMessage(), e);
@@ -259,31 +260,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        final List<ResolveTask> deduped = removeDuplicateResolveTargets(res);
         if (fileInfoFilter != null) {
-            return adjustResourceRenames(deduped.stream()
+            return adjustResourceRenames(res.stream()
                     .filter(rs -> fileInfoFilter.test(rs.in))
                     .collect(Collectors.toList()));
         } else {
-            return adjustResourceRenames(deduped);
+        	return adjustResourceRenames(res);
         }
-    }
-
-    /**
-     * Remove duplicate sources within the same scope
-     */
-    private List<ResolveTask> removeDuplicateResolveTargets(List<ResolveTask> renames) {
-        return renames.stream()
-                .collect(Collectors.groupingBy(
-                        rt -> rt.scope,
-                        Collectors.toMap(
-                                rt -> rt.in.uri,
-                                Function.identity(),
-                                (rt1, rt2) -> rt1
-                        )
-                )).values().stream()
-                .flatMap(m -> m.values().stream())
-                .collect(Collectors.toList());
     }
 
     /**
@@ -376,7 +359,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                  final XdmNode node,
                  final List<KeyScope> scope,
                  final List<ResolveTask> res,
-                 final Receiver receiver) throws XPathException {
+                 final Receiver receiver,
+                 final List<String> scopeUriList) throws XPathException {
+
         switch (node.getNodeKind()) {
             case ELEMENT:
                 final NodeInfo ni = node.getUnderlyingNode();
@@ -404,7 +389,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                                     if (fi != null && fi.hasKeyref) {
                                         final int count = usage.getOrDefault(fi.uri, 0);
                                         final Optional<ResolveTask> existing = res.stream()
-                                                .filter(rt -> rt.scope.equals(s) && rt.in.uri.equals(fi.uri))
+                                                .filter(rt -> rt.in!=null && rt.scope!=null && rt.scope.equals(s) && rt.in.uri.equals(fi.uri))
                                                 .findAny();
                                         if (count != 0 && existing.isPresent()) {
                                             final ResolveTask resolveTask = existing.get();
@@ -414,7 +399,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                                             }
                                         } else {
                                             final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly);
-                                            res.add(resolveTask);
+                                            if(!scopeUriList.contains(resolveTask.scope.id+resolveTask.in.uri.toString())) {
+                                                scopeUriList.add(resolveTask.scope.id+resolveTask.in.uri.toString());
+                                                res.add(resolveTask);
+                                            }
                                             final Integer used = usage.get(fi.uri);
                                             if (used > 1) {
                                                 final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
@@ -440,7 +428,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                         }
                     });
                     for (final XdmNode c : node.children()) {
-                        walkMap(map, c, ss, res, receiver);
+                        walkMap(map, c, ss, res, receiver, scopeUriList);
                     }
                 } else {
                     node.select(attribute()).forEach(attr -> {
@@ -451,7 +439,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                         }
                     });
                     for (final XdmNode c : node.children()) {
-                        walkMap(map, c, scope, res, receiver);
+                        walkMap(map, c, scope, res, receiver, scopeUriList);
                     }
                 }
                 receiver.endElement();
@@ -459,7 +447,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             case DOCUMENT:
                 receiver.startDocument(0);
                 for (final XdmNode c : node.children()) {
-                    walkMap(map, c, scope, res, receiver);
+                    walkMap(map, c, scope, res, receiver, scopeUriList);
                 }
                 receiver.endDocument();
                 break;

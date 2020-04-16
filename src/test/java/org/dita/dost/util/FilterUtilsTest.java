@@ -17,6 +17,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -26,6 +27,7 @@ import java.util.stream.Stream;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.dita.dost.TestUtils;
+import org.dita.dost.store.Store;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 
@@ -571,7 +573,8 @@ public class FilterUtilsTest {
     @Test
     public void targetsFilteredFile_filtered() throws Exception {
         // given
-        Job job = new Job();
+        Path tempDirWithPrefix = Files.createTempDirectory("needsExclusion");
+        Job job = new Job(tempDirWithPrefix.toFile(), mock(Store.class));
         Job.FileInfo fileInfo = new Job.FileInfo(new URI("topic4.xml"));
         fileInfo.src = new URI("topic4.xml");
         fileInfo.isFiltered = true;
@@ -590,7 +593,8 @@ public class FilterUtilsTest {
     @Test
     public void targetsFilteredFile_notFiltered() throws Exception {
         // given
-        Job job = new Job();
+        Path tempDirWithPrefix = Files.createTempDirectory("needsExclusion");
+        Job job = new Job(tempDirWithPrefix.toFile(), mock(Store.class));
         Job.FileInfo fileInfo = new Job.FileInfo(new URI("topic4.xml"));
         fileInfo.src = new URI("topic4.xml");
         fileInfo.isFiltered = false;
@@ -619,13 +623,14 @@ public class FilterUtilsTest {
     @Test
     public void needsExclusion_filteredKeydef() throws Exception {
         // given
+        Path tempDirWithPrefix = Files.createTempDirectory("needsExclusion");
         Element element = mock(Element.class);
         QName[][] properties = null;
 
         Path topic = Paths.get(TestUtils.getResourceDir(FilterUtilsTest.class).toString(), "topic4.xml");
         doReturn(topic.toUri().toString()).when(element).getAttribute(ATTRIBUTE_NAME_HREF);
         FilterUtils filterUtils = spy(new FilterUtils(false));
-        Job job = new Job();
+        Job job = new Job(tempDirWithPrefix.toFile(), mock(Store.class));
         Attributes attributes = mockAttributesForFilteredKeydef(topic);
         doReturn(attributes).when(filterUtils).getAttributes(eq(element));
         doReturn(true).when(filterUtils).needExclude(eq(attributes), eq(properties));
@@ -645,13 +650,14 @@ public class FilterUtilsTest {
     @Test
     public void needsExclusion_filteredKeydef_filteredTopic() throws Exception {
         // given
+        Path tempDirWithPrefix = Files.createTempDirectory("needsExclusion");
         Element element = mock(Element.class);
         QName[][] properties = null;
 
         Path topic = Paths.get(TestUtils.getResourceDir(FilterUtilsTest.class).toString(), "topic4filtered.xml");
         doReturn(topic.toUri().toString()).when(element).getAttribute(ATTRIBUTE_NAME_HREF);
         FilterUtils filterUtils = spy(new FilterUtils(false));
-        Job job = new Job();
+        Job job = new Job(tempDirWithPrefix.toFile(), mock(Store.class));
         Attributes attributes = mockAttributesForFilteredKeydef(topic);
         doReturn(attributes).when(filterUtils).getAttributes(eq(element));
         doReturn(true).when(filterUtils).needExclude(any(Attributes.class), eq(properties));

@@ -34,9 +34,9 @@ public class KeyDefTest {
     @Test
     public void testKeyDefToString() {
         final KeyDef k = new KeyDef("foo", toURI("bar"), "scope","dita", toURI("baz"), null);
-        assertEquals("foo=bar(scope)(baz)", k.toString());
+        assertEquals("foo=bar(scope)(baz)false", k.toString());
         final KeyDef n = new KeyDef("foo", (URI) null, null, null, (URI) null, null);
-        assertEquals("foo=(local)", n.toString());
+        assertEquals("foo=(local)false", n.toString());
     }
 
 }

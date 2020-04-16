@@ -99,7 +99,8 @@ public class KeyrefModuleTest {
     }
 
     @Test
-    public void testAdjustResourceRenames() {
+    public void adjustResourceRenames() {
+    	//given
         final KeyScope scope = new KeyScope("scope", "scope",
                 ImmutableMap.<String, KeyDef>builder()
                         .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
@@ -110,19 +111,22 @@ public class KeyrefModuleTest {
                         scope,
                         new Builder().uri(create("target.dita")).build(),
                         new Builder().uri(create("target-1.dita")).build()));
+        final KeyScope exp = new KeyScope("scope", "scope",
+        		ImmutableMap.<String, KeyDef>builder()
+        		.put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
+        		.build(),
+        		emptyList());
+
+        //when
         final List<ResolveTask> act = module.adjustResourceRenames(src);
 
-        final KeyScope exp = new KeyScope("scope", "scope",
-                ImmutableMap.<String, KeyDef>builder()
-                        .put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
-                        .build(),
-                emptyList());
-
+        //then
         assertEquals(exp, act.get(0).scope);
     }
 
     @Test
-    public void testRewriteScopeTargets() {
+    public void rewriteScopeTargets() {
+    	//given
         final KeyScope src = new KeyScope("scope", "scope",
                 ImmutableMap.<String, KeyDef>builder()
                         .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
@@ -132,20 +136,24 @@ public class KeyrefModuleTest {
         final Map<URI, URI> rewrites = ImmutableMap.<URI, URI>builder()
                 .put(create("target.dita"), create("target-1.dita"))
                 .build();
+        final KeyScope exp = new KeyScope("scope", "scope",
+        		ImmutableMap.<String, KeyDef>builder()
+        		.put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
+        		.put("element", new KeyDef("element", create("target-1.dita#target/element"), null, null, null, null))
+        		.build(),
+        		emptyList());
+
+
+        //when
         final KeyScope act = module.rewriteScopeTargets(src, rewrites);
 
-        final KeyScope exp = new KeyScope("scope", "scope",
-                ImmutableMap.<String, KeyDef>builder()
-                        .put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
-                        .put("element", new KeyDef("element", create("target-1.dita#target/element"), null, null, null, null))
-                        .build(),
-                emptyList());
-
+        //then
         assertEquals(exp, act);
     }
 
     @Test
     public void testWalkMap() throws IOException, SAXException, XPathException {
+
         inputMapFileInfo = new Builder()
                 .uri(create("test.ditamap"))
                 .src(new File(baseDir, "src" + File.separator + "test.ditamap").toURI())
@@ -177,7 +185,8 @@ public class KeyrefModuleTest {
                 xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
                 new SerializationProperties());
         receiver.open();
-        module.walkMap(inputMapFileInfo, src, singletonList(keyScope), res, receiver);
+        final List<String> scopeURIList = new ArrayList<>();
+        module.walkMap(inputMapFileInfo, src, singletonList(keyScope), res, receiver, scopeURIList);
         receiver.close();
 
         final Document exp = b.parse(new File(baseDir, "exp" + File.separator + "test.ditamap"));
@@ -225,7 +234,8 @@ public class KeyrefModuleTest {
                 xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
                 new SerializationProperties());
         receiver.open();
-        module.walkMap(inputMapFileInfo, act, singletonList(keyScope), res, receiver);
+        final List<String> scopeURIList = new ArrayList<>();
+        module.walkMap(inputMapFileInfo, act, singletonList(keyScope), res, receiver,scopeURIList);
         receiver.close();
 
 	    ResolveTask task = res.get(0);
