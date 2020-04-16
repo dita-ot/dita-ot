@@ -60,6 +60,13 @@ See the accompanying LICENSE file for applicable license.
            else $doc
     "/>
   </xsl:function>
+  
+  <!-- $href (might be @href or @copy-to) has absolute or external value that should not be changed -->
+  <xsl:function name="dita-ot:is-external" as="xs:boolean">
+    <xsl:param name="href" as="attribute()"/>
+    <xsl:sequence select="contains($href,'://') or 
+        $href/../@scope = 'external'"></xsl:sequence>
+  </xsl:function>
 
   <!-- ID -->
 
