@@ -490,6 +490,9 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="@type = 'trouble'">
         <xsl:apply-templates select="." mode="process.note.trouble"/>
       </xsl:when>
+      <xsl:when test="@type = 'notice'">
+        <xsl:apply-templates select="." mode="process.note.notice"/>
+      </xsl:when>
       <xsl:when test="@type = 'other'">
         <xsl:apply-templates select="." mode="process.note.other"/>
       </xsl:when>
@@ -539,6 +542,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="." mode="process.note.common-processing"/>
   </xsl:template>
   
+  <xsl:template match="*" mode="process.note.notice">
+    <xsl:apply-templates select="." mode="process.note.common-processing"/>
+  </xsl:template>
+
   <xsl:template match="*" mode="process.note.other">
     <xsl:choose>
       <xsl:when test="@othertype">
