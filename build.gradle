@@ -436,7 +436,7 @@ publishing {
                         developer {
                             id = 'robander'
                             name = 'Robert D Anderson'
-                            email = 'robander@us.ibm.com'
+                            email = 'gorodki@gmail.com'
                         }
                         developer {
                             id = 'jelovirt'
