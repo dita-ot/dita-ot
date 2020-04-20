@@ -227,7 +227,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         final URI t = job.tempDirURI.relativize(output);
         final URI result = job.getInputDir().resolve(t);
         final URI temp = tempFileNameScheme.generateTempFileName(result);
-        final FileInfo.Builder b = currentParsingFile != null
+        final FileInfo.Builder b = (currentParsingFile != null && job.getFileInfo(stripFragment(currentParsingFile)) != null)
                 ? new FileInfo.Builder(job.getFileInfo(stripFragment(currentParsingFile)))
                 : new FileInfo.Builder();
         final FileInfo fi = b
