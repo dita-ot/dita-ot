@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -17,8 +18,6 @@ import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.TopicRefWriter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +25,8 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static net.sf.saxon.s9api.streams.Steps.attribute;
+import static net.sf.saxon.s9api.streams.Steps.child;
 import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.util.Constants.*;
@@ -119,14 +120,15 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if reading ditamap fails
      */
     private boolean isEclipseMap(final URI mapFile) throws DITAOTException {
-        Document doc;
+        XdmNode doc;
         try {
-            doc = job.getStore().getDocument(mapFile);
+            doc = job.getStore().getImmutableNode(mapFile);
         } catch (final IOException e) {
             throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
         }
-        final Element root = doc.getDocumentElement();
-        return ECLIPSEMAP_PLUGIN.matches(root);
+        return doc
+                .select(child().first().then(attribute(ATTRIBUTE_NAME_CLASS)))
+                .anyMatch(xdmItems -> ECLIPSEMAP_PLUGIN.matches(xdmItems.getStringValue()));
     }
 
     /**

@@ -860,9 +860,19 @@ public final class XMLUtils {
      * @throws IOException if serializing file fails
      */
     public void writeDocument(final Node doc, final ContentHandler dst) throws IOException {
+        writeDocument(processor.newDocumentBuilder().wrap(doc), dst);
+    }
+
+    /**
+     * Write XdmNode to SAX pipe.
+     *
+     * @param source XdmNode to store
+     * @param dst SAX pipe
+     * @throws IOException if serializing file fails
+     */
+    public void writeDocument(final XdmNode source, final ContentHandler dst) throws IOException {
         try {
             final SAXDestination destination = new SAXDestination(dst);
-            final XdmNode source = processor.newDocumentBuilder().wrap(doc);
             processor.writeXdmValue(source, destination);
         } catch (SaxonApiException e) {
             throw new IOException(e);
