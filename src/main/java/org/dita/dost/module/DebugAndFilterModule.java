@@ -347,7 +347,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
                 }
                 if (children != null) {
                     for (final URI childpath: children) {
-                        final Document childRoot = job.getStore().getDocument(job.getInputFile().resolve(childpath.getPath()));
+                        final Document childRoot = job.getStore().getImmutableDocument(job.getInputFile().resolve(childpath.getPath()));
                         mergeScheme(parentRoot, childRoot);
                         generateScheme(new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION), childRoot);
                     }

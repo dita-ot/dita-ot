@@ -8,17 +8,20 @@
 
 package org.dita.dost.writer.include;
 
+import net.sf.saxon.s9api.XdmAtomicValue;
+import net.sf.saxon.s9api.XdmItem;
+import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.stream.Stream;
 
+import static net.sf.saxon.s9api.streams.Steps.id;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -43,12 +46,13 @@ final class IncludeXml {
         final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         final Job.FileInfo fileInfo = job.getFileInfo(stripFragment(currentFile.resolve(hrefValue)));
         try {
-            final Document doc = job.getStore().getDocument(fileInfo.src);
-            Node src = null;
+            final XdmNode doc = job.getStore().getImmutableNode(fileInfo.src);
+            final XdmNode src;
             if (hrefValue.getFragment() != null) {
-                src = doc.getElementById(hrefValue.getFragment());
-            }
-            if (src == null) {
+                final XdmItem id = XdmAtomicValue.makeAtomicValue(hrefValue.getFragment());
+                final Stream<XdmNode> idStream = (Stream<XdmNode>) id(doc).apply(id);
+                src = idStream.findAny().orElse(doc);
+            } else {
                 src = doc;
             }
 

@@ -47,6 +47,21 @@ public class StreamStore implements Store {
     }
 
     @Override
+    public Document getImmutableDocument(final URI path) throws IOException {
+//        return (Document) NodeOverNodeInfo.wrap(getImmutableNode(path).getUnderlyingNode());
+        return getDocument(path);
+    }
+
+    @Override
+    public XdmNode getImmutableNode(final URI path) throws IOException {
+        try {
+            return xmlUtils.getProcessor().newDocumentBuilder().build(new StreamSource(path.toString()));
+        } catch (SaxonApiException e) {
+            throw new IOException(e);
+        }
+    }
+
+    @Override
     public Document getDocument(final URI path) throws IOException {
         try {
             return XMLUtils.getDocumentBuilder().parse(path.toString());
@@ -57,10 +72,15 @@ public class StreamStore implements Store {
 
     @Override
     public void writeDocument(final Document doc, final URI dst) throws IOException {
+        final XdmNode source = xmlUtils.getProcessor().newDocumentBuilder().wrap(doc);
+        writeDocument(source, dst);
+    }
+
+    @Override
+    public void writeDocument(final XdmNode node, final URI dst) throws IOException {
         try {
             final Serializer serializer = getSerializer(dst);
-            final XdmNode source = xmlUtils.getProcessor().newDocumentBuilder().wrap(doc);
-            serializer.serializeNode(source);
+            serializer.serializeNode(node);
         } catch (SaxonApiException e) {
             throw new IOException(e);
         }
