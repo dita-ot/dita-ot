@@ -171,6 +171,7 @@ See the accompanying LICENSE file for applicable license.
       <module class="org.dita.dost.module.FilterModule">
         <ditafileset format="dita"/>
         <ditafileset format="ditamap" input="true"/>
+        <ditafileset format="ditamap" inputResource="true"/>
         <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
         <param name="transtype" value="${transtype}"/>
       </module>
@@ -283,7 +284,8 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
       <module class="org.dita.dost.module.MaprefModule">
         <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
+        <ditafileset format="ditamap" inputResource="true"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>

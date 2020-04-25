@@ -295,7 +295,7 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
         <ditafileset format="dita"/>
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
       </module>
     </pipeline>
   </target>
@@ -310,7 +310,7 @@ See the accompanying LICENSE file for applicable license.
             reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
         <ditafileset conref="true" format="dita"/>
-        <ditafileset conref="true" format="ditamap"/>
+        <ditafileset conref="true" format="ditamap" input="true"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -417,7 +417,7 @@ See the accompanying LICENSE file for applicable license.
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
-        <ditafileset format="ditamap"/>
+        <ditafileset format="ditamap" input="true"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
