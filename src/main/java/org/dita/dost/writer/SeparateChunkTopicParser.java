@@ -8,7 +8,6 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -16,10 +15,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
-import javax.xml.parsers.DocumentBuilder;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +40,6 @@ import static org.dita.dost.util.XMLUtils.*;
  */
 public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
 
-    private final XMLReader reader;
     // stub is used as the anchor to mark where to insert generated child
     // topicref inside current topicref
     private Element stub;
@@ -55,20 +51,6 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     final Deque<Writer> outputStack = new ArrayDeque<>();
     final Deque<Element> stubStack = new ArrayDeque<>();
     final Deque<String> lang = new LinkedList<>();
-
-    /**
-     * Constructor.
-     */
-    public SeparateChunkTopicParser() {
-        super();
-        try {
-            reader = getXMLReader();
-            reader.setContentHandler(this);
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-        }
-    }
 
     @Override
     public void write(final URI currentFile) {
@@ -188,9 +170,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 rootTopicref.getParentNode().appendChild(siblingStub);
             }
 
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile.getPath(), logger));
             logger.info("Processing " + currentParsingFile);
-            reader.parse(currentParsingFile.toString());
+            job.getStore().transform(currentParsingFile, this);
             output.flush();
 
             removeStubElements();
@@ -258,11 +239,10 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
      * @return element.
      */
     private Element getTopicDoc(final URI absolutePathToFile) {
-        final DocumentBuilder builder = getDocumentBuilder();
         try {
-            final Document doc = builder.parse(absolutePathToFile.toString());
+            final Document doc = job.getStore().getDocument(absolutePathToFile);
             return doc.getDocumentElement();
-        } catch (final SAXException | IOException e) {
+        } catch (final IOException e) {
             logger.error("Failed to parse " + absolutePathToFile + ": " + e.getMessage(), e);
         }
         return null;

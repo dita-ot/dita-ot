@@ -11,7 +11,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
@@ -20,18 +20,11 @@ import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -41,7 +34,9 @@ import java.util.stream.Collectors;
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
-import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
+import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**
@@ -64,8 +59,6 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
-    private final XMLUtils xmlUtils;
-    private final DocumentBuilder builder;
     private final DitaValReader ditaValReader;
     private TempFileNameScheme tempFileNameScheme;
     private final Map<URI, FilterUtils> filterCache = new HashMap<>();
@@ -81,16 +74,13 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     private final Set<URI> filteredTopics = new HashSet<>();
 
     public BranchFilterModule() {
-        builder = XMLUtils.getDocumentBuilder();
         ditaValReader = new DitaValReader();
-        xmlUtils = new XMLUtils();
     }
 
     @Override
     public void setLogger(final DITAOTLogger logger) {
         super.setLogger(logger);
         ditaValReader.setLogger(logger);
-        xmlUtils.setLogger(logger);
     }
 
     @Override
@@ -107,8 +97,10 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-        processMap(in.uri);
+        final Collection<FileInfo> fis = job.getFileInfo(fi -> fi.isInput || fi.isInputResource);
+        for (FileInfo fi : fis) {
+            processMap(fi.uri);
+        }
 
         try {
             job.write();
@@ -131,8 +123,8 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = builder.parse(new InputSource(currentFile.toString()));
-        } catch (final SAXException | IOException e) {
+            doc = job.getStore().getDocument(currentFile);
+        } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
         }
@@ -151,23 +143,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         filterTopics(doc.getDocumentElement(), Collections.emptyList());
 
         logger.debug("Writing " + currentFile);
-        Result result = null;
+
         try {
-            Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(currentFile.toString());
-            serializer.transform(new DOMSource(doc), result);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final TransformerConfigurationException | TransformerFactoryConfigurationError e) {
-            throw new RuntimeException(e);
-        } catch (final TransformerException e) {
-            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessageAndLocation(), e);
-        } finally {
-            try {
-                close(result);
-            } catch (final IOException e) {
-                logger.error("Failed to close result stream for " + map.toString() + ": " + e.getMessage(), e);
-            }
+            job.getStore().writeDocument(doc, currentFile);
+        } catch (final IOException e) {
+            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
         }
     }
 
@@ -291,7 +271,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     /** Filter map and remove excluded content. */
     private void filterBranches(final Element root) {
-        final QName[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
+        final String domains = root.getAttribute(ATTRIBUTE_NAME_DOMAINS);
+        final String specializations = root.getAttribute(ATTRIBUTE_NAME_SPECIALIZATIONS);
+        final QName[][] props = !domains.isEmpty()
+                ? getExtProps(domains)
+                : getExtPropsFromSpecializations(specializations);
         filterBranches(root, Collections.emptyList(), props);
     }
 
@@ -395,9 +379,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                     logger.error("Failed to create directory " + dstDirUri);
                 }
                 try {
-                    xmlUtils.transform(srcAbsUri,
-                                       dstAbsUri,
-                                       pipe);
+                    job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
                 } catch (final DITAOTException e) {
                     logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
                 }
@@ -456,7 +438,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
             logger.info("Filtering " + srcAbsUri);
             try {
-                xmlUtils.transform(srcAbsUri, pipe);
+                job.getStore().transform(srcAbsUri, pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }

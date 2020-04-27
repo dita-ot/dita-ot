@@ -672,4 +672,120 @@
     </x:scenario>
   </x:scenario>
   
+  <x:scenario label="dita-ot:is-external">
+    <x:scenario label="simple https uri">
+      <x:call function="dita-ot:is-external">
+        <x:param name="href" select="/foo/@href">
+          <foo href="https://www.dita-ot.org"/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    <x:scenario label="https with proper scope">
+      <x:call function="dita-ot:is-external">
+        <x:param name="href" select="/foo/@href">
+          <foo href="https://www.dita-ot.org" scope="external"/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    <x:scenario label="External absolute path">
+      <x:call function="dita-ot:is-external">
+        <x:param name="href" select="/foo/@href">
+          <foo href="/absolute/server/path" scope="external"/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    <x:scenario label="Local relative path">
+      <x:call function="dita-ot:is-external">
+        <x:param name="href" select="/foo/@href">
+          <foo href="path/to/file.dita"/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="dita-ot:matches-linktext-class">
+    <x:scenario label="DITA 1.3 class">
+      <x:call function="dita-ot:matches-linktext-class">
+        <x:param name="class" select="/foobar/@class">
+          <foobar class="- map/linktext foo/foobar "/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    <x:scenario label="DITA 2.0 class">
+      <x:call function="dita-ot:matches-linktext-class">
+        <x:param name="class" select="/foobar/@class">
+          <foobar class="- topic/linktext foo/foobar "/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    <x:scenario label="Test fail condition">
+      <x:call function="dita-ot:matches-linktext-class">
+        <x:param name="class" select="/foobar/@class">
+          <foobar class="- topic/title foo/foobar "/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="dita-ot:matches-shortdesc-class">
+    <x:scenario label="DITA 1.3 class">
+      <x:call function="dita-ot:matches-shortdesc-class">
+        <x:param name="class" select="/foobar/@class">
+          <foobar class="- map/shortdesc foo/foobar "/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    <x:scenario label="DITA 2.0 class">
+      <x:call function="dita-ot:matches-shortdesc-class">
+        <x:param name="class" select="/foobar/@class">
+          <foobar class="- topic/shortdesc foo/foobar "/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    <x:scenario label="Test fail condition">
+      <x:call function="dita-ot:matches-shortdesc-class">
+        <x:param name="class" select="/foobar/@class">
+          <foobar class="- topic/title foo/foobar "/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="dita-ot:matches-searchtitle-class">
+    <x:scenario label="DITA 1.3 class">
+      <x:call function="dita-ot:matches-searchtitle-class">
+        <x:param name="class" select="/foobar/@class">
+          <foobar class="- map/searchtitle foo/foobar "/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    <x:scenario label="DITA 2.0 class">
+      <x:call function="dita-ot:matches-searchtitle-class">
+        <x:param name="class" select="/foobar/@class">
+          <foobar class="- topic/searchtitle foo/foobar "/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="true()"/>
+    </x:scenario>
+    <x:scenario label="Test fail condition">
+      <x:call function="dita-ot:matches-searchtitle-class">
+        <x:param name="class" select="/foobar/@class">
+          <foobar class="- topic/title foo/foobar "/>
+        </x:param>
+      </x:call>
+      <x:expect label="" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+  
 </x:description>

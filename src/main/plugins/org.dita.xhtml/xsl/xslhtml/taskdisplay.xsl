@@ -434,7 +434,7 @@ See the accompanying LICENSE file for applicable license.
   <thead>
     <tr>
       <xsl:call-template name="commonattributes"/>
-      <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
       <xsl:apply-templates select="*[contains(@class,' task/choptionhd ')]"/>
       <xsl:apply-templates select="*[contains(@class,' task/chdeschd ')]"/>
     </tr>

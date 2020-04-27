@@ -37,11 +37,23 @@ public class CleanPreprocessModuleTest {
         job.setInputDir(URI.create("file:/foo/bar/"));
         job.add(new Builder()
                 .uri(create("map.ditamap"))
+                .isInput(true)
                 .result(create("file:/foo/bar/map.ditamap"))
                 .build());
         job.add(new Builder()
                 .uri(create("topics/topic.dita"))
                 .result(create("file:/foo/bar/topics/topic.dita"))
+                .build());
+        job.add(new Builder()
+                .uri(create("topics/null.dita"))
+                .build());
+        job.add(new Builder()
+                .uri(create("topics/task.dita"))
+                .result(create("file:/foo/bar/topics/task.dita"))
+                .build());
+        job.add(new Builder()
+                .uri(create("common/topic.dita"))
+                .result(create("file:/foo/bar/common/topic.dita"))
                 .build());
         module.setJob(job);
         assertEquals(create("file:/foo/bar/"), module.getBaseDir());
@@ -53,6 +65,7 @@ public class CleanPreprocessModuleTest {
         job.setInputDir(URI.create("file:/foo/bar/"));
         job.add(new Builder()
                 .uri(create("map.ditamap"))
+                .isInput(true)
                 .result(create("file:/foo/bar/map.ditamap"))
                 .build());
         job.add(new Builder()
@@ -69,6 +82,7 @@ public class CleanPreprocessModuleTest {
         job.setInputDir(URI.create("file:/foo/bar/maps/"));
         job.add(new Builder()
                 .uri(create("maps/map.ditamap"))
+                .isInput(true)
                 .result(create("file:/foo/bar/maps/map.ditamap"))
                 .build());
         job.add(new Builder()
@@ -85,6 +99,7 @@ public class CleanPreprocessModuleTest {
         job.setInputDir(URI.create("file:/foo/bar/maps/"));
         job.add(new Builder()
                 .uri(create("maps/map.ditamap"))
+                .isInput(true)
                 .result(create("file:/foo/bar/maps/map.ditamap"))
                 .build());
         job.add(new Builder()

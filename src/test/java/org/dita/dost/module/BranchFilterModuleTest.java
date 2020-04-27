@@ -10,6 +10,7 @@ package org.dita.dost.module;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -136,6 +137,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         m.setJob(job);
         final CachingLogger logger = new CachingLogger();
         m.setLogger(logger);
+        m.setXmlUtils(new XMLUtils());
         
         m.processMap(URI.create("input.ditamap"));
         assertXMLEqual(new InputSource(new File(expDir, "input.ditamap").toURI().toString()),
@@ -187,6 +189,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         m.setJob(job);
         final CachingLogger logger = new CachingLogger();
         m.setLogger(logger);
+        m.setXmlUtils(new XMLUtils());
         
         m.processMap(URI.create("main/testuplevels.ditamap"));
         assertXMLEqual(new InputSource(new File(uplevelsExpDir, "main/testuplevels.ditamap").toURI().toString()),
@@ -273,6 +276,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         m.setJob(job);
         final CachingLogger logger = new CachingLogger();
         m.setLogger(logger);
+        m.setXmlUtils(new XMLUtils());
 
         m.processMap(URI.create("test.ditamap"));
 

@@ -40,20 +40,20 @@ import static org.dita.dost.util.XMLUtils.*;
  */
 public final class ChunkTopicParser extends AbstractChunkTopicParser {
 
-    private final XMLReader reader;
+//    private final XMLReader reader;
 
     /**
      * Constructor.
      */
     public ChunkTopicParser() {
         super();
-        try {
-            reader = getXMLReader();
-            reader.setContentHandler(this);
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-        }
+//        try {
+//            reader = getXMLReader();
+//            reader.setContentHandler(this);
+//            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+//        } catch (final Exception e) {
+//            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
+//        }
     }
 
     @Override
@@ -203,7 +203,8 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     currentParsingFileTopicIDChangeTable = new HashMap<>();
                     // TODO recursive point
                     logger.info("Processing " + currentParsingFile);
-                    reader.parse(currentParsingFile.toString());
+                    job.getStore().transform(currentParsingFile, this);
+//                    reader.parse(currentParsingFile.toString());
                     if (currentParsingFileTopicIDChangeTable.size() > 0) {
                         final URI href = toURI(topicref.getAttribute(ATTRIBUTE_NAME_HREF));
                         final String pathtoElem = href.getFragment() != null

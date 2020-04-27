@@ -9,8 +9,8 @@ package org.dita.dost.writer;
 
 import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
-import org.dita.dost.module.GenMapAndTopicListModule;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.module.reader.DefaultTempFileScheme;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
@@ -71,7 +71,7 @@ public class ForceUniqueFilterTest {
                 .uri(URI.create("test2.dita"))
                 .result(srcDir.toURI().resolve("test2.dita"))
                 .build());
-        tempFileNameScheme = new GenMapAndTopicListModule.DefaultTempFileScheme();
+        tempFileNameScheme = new DefaultTempFileScheme();
         tempFileNameScheme.setBaseDir(srcDir.toURI());
     }
 

@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="bats" xml:lang="en-us" ditaarch:DITAArchVersion="1.3" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                          (topic ut-d) (topic indexing-d)" class="- topic/topic ">
   <title class="- topic/title ">Programming elements</title>
-  <prolog class="- topic/prolog ">
-    <source class="- topic/source ">
-    source
-  </source>
-  </prolog>
   <body class="- topic/body ">
     <section class="- topic/section ">
       <p class="- topic/p ">The programming domains elements are used to define the syntax and to give

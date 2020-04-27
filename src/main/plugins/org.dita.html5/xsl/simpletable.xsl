@@ -21,6 +21,10 @@ See the accompanying LICENSE file for applicable license.
          until OASIS provides a standard mechanism for setting. -->
   </xsl:template>
   
+  <xsl:template match="*[contains(@class, ' topic/simpletable ') ]" mode="table:common">
+    <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
+    <xsl:next-match/>
+  </xsl:template>
   
   <xsl:template name="dita2html:simpletable-cols">
     <xsl:variable name="col-count" as="xs:integer">
@@ -169,8 +173,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="spec-title"/>
     <table>
       <xsl:apply-templates select="." mode="table:common"/>
+      <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
       <xsl:call-template name="dita2html:simpletable-cols"/>
-
       <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]"/>
       <xsl:apply-templates select="." mode="generate-table-header"/>
 
@@ -184,6 +188,28 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="css-class">
     <xsl:apply-templates select="@frame, @expanse, @scale" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/simpletable ')]/*[contains(@class, ' topic/title ')]">
+    <caption>
+      <xsl:apply-templates select="." mode="label"/>
+      <xsl:apply-templates/>
+    </caption>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/simpletable ')]/*[contains(@class, ' topic/title ')]" mode="label">
+    <span class="table--title-label">
+      <xsl:apply-templates select="." mode="title-number">
+        <xsl:with-param name="number" as="xs:integer"
+          select="count((key('enumerableByClass', 'topic/table') | key('enumerableByClass', 'topic/simpletable'))            
+                        [. &lt;&lt; current()])"/>
+      </xsl:apply-templates>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/simpletable ')]/*[contains(@class, ' topic/title ')]" mode="title-number">
+    <xsl:param name="number" as="xs:integer"/>
+    <xsl:sequence select="concat(dita-ot:get-variable(., 'Table'), ' ', $number, '. ')"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/strow ')]" name="topic.strow">
@@ -202,27 +228,24 @@ See the accompanying LICENSE file for applicable license.
     </thead>
   </xsl:template>
 
-  <xsl:template match="*[simpletable:is-head-entry(.)]">
-    <th>
-      <xsl:apply-templates select="." mode="simpletable:entry"/>
-    </th>
-  </xsl:template>
-
-  <xsl:template match="*[simpletable:is-body-entry(.)][simpletable:is-keycol-entry(.)]">
-    <th scope="row">
-      <xsl:apply-templates select="." mode="simpletable:entry"/>
-    </th>
-  </xsl:template>
-
-  <xsl:template match="*[simpletable:is-body-entry(.)][not(simpletable:is-keycol-entry(.))]" name="topic.stentry">
+  <xsl:template match="*[simpletable:is-body-entry(.)]" name="topic.stentry">
     <td>
       <xsl:apply-templates select="." mode="simpletable:entry"/>
     </td>
   </xsl:template>
 
+  <xsl:template match="*[simpletable:is-head-entry(.)]
+                     | *[simpletable:is-body-entry(.)][simpletable:is-keycol-entry(.) or @scope]"
+                priority="2">
+    <th>
+      <xsl:apply-templates select="." mode="simpletable:entry"/>
+    </th>
+  </xsl:template>
+
   <xsl:template match="*[contains(@class, ' topic/stentry ')]" mode="simpletable:entry">
     <xsl:apply-templates select="." mode="table:common"/>
-    <xsl:apply-templates select="." mode="headers"/>
+    <xsl:apply-templates select="." mode="simpletable:headers"/>
+    <xsl:apply-templates select="@colspan | @rowspan | @scope"/>
     <xsl:choose>
       <xsl:when test="*|text()|processing-instruction()">
         <xsl:apply-templates/>
@@ -233,13 +256,29 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="*[simpletable:is-head-entry(.)]" mode="headers">
+  <xsl:template match="@colspan | @rowspan | @scope">
+    <xsl:copy/>
+  </xsl:template>
+  
+  <xsl:template match="*[simpletable:is-head-entry(.)]" mode="simpletable:headers">
     <xsl:attribute name="scope" select="'col'"/>
+    <xsl:attribute name="id" select="dita-ot:generate-html-id(.)"/>
   </xsl:template>
 
-  <xsl:template match="*[simpletable:is-body-entry(.)]" mode="headers">
+  <xsl:template match="*[simpletable:is-body-entry(.)]" mode="simpletable:headers">
     <xsl:if test="simpletable:is-keycol-entry(.)">
       <xsl:attribute name="scope" select="'row'"/>
+    </xsl:if>
+    <xsl:variable name="xs" as="xs:integer+"
+                  select="if (@colspan)
+                          then xs:integer(@dita-ot:x) to (xs:integer(@dita-ot:x) + xs:integer(@colspan) - 1)
+                          else xs:integer(@dita-ot:x)"/>
+    <xsl:variable name="stentry" as="element()*"
+                  select="../../*[contains(@class, ' topic/sthead ')]/*[contains(@class, ' topic/stentry ')]
+                                                                       [xs:integer(@dita-ot:x) = $xs]"/>
+    <xsl:if test="exists($stentry)">
+      <xsl:variable name="ids" as="xs:string*" select="$stentry/dita-ot:generate-html-id(.)" />
+      <xsl:attribute name="headers" select="$ids" separator=" "/>
     </xsl:if>
   </xsl:template>
 

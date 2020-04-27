@@ -12,10 +12,13 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -34,9 +37,23 @@ public interface AbstractPipelineModule {
      * @param input input
      * @return output
      * @throws DITAOTException DITAOTException
+     * @deprecated implement {@link #execute(Map)} instead.
      */
-    AbstractPipelineOutput execute(AbstractPipelineInput input)
-            throws DITAOTException;
+    @Deprecated
+    AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException;
+
+    /**
+     * Start the process of this module with the input.
+     *
+     * <p>{@link #setLogger(DITAOTLogger)} must be called before calling this method.</p>
+     *
+     * @param input input
+     * @return output
+     * @throws DITAOTException DITAOTException
+     */
+    default AbstractPipelineOutput execute(Map<String, String> input) throws DITAOTException {
+        return execute(new PipelineHashIO(input));
+    }
 
     /**
      * Set logger for module.
@@ -46,6 +63,8 @@ public interface AbstractPipelineModule {
     void setLogger(DITAOTLogger logger);
 
     void setJob(Job job);
+
+    void setXmlUtils(XMLUtils xmlUtils);
 
     void setFileInfoFilter(Predicate<FileInfo> fileInfoFilter);
 

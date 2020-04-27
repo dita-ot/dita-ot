@@ -550,12 +550,14 @@ public final class Constants {
     public static final DitaClass TOPIC_DTHD = new DitaClass("- topic/dthd ");
     public static final DitaClass TOPIC_ENTRY = new DitaClass("- topic/entry ");
     public static final DitaClass TOPIC_EXAMPLE = new DitaClass("- topic/example ");
+    public static final DitaClass TOPIC_FALLBACK = new DitaClass("- topic/fallback ");
     public static final DitaClass TOPIC_FEATNUM = new DitaClass("- topic/featnum ");
     public static final DitaClass TOPIC_FIG = new DitaClass("- topic/fig ");
     public static final DitaClass TOPIC_FIGGROUP = new DitaClass("- topic/figgroup ");
     public static final DitaClass TOPIC_FN = new DitaClass("- topic/fn ");
     public static final DitaClass TOPIC_FOREIGN = new DitaClass("- topic/foreign ");
     public static final DitaClass TOPIC_IMAGE = new DitaClass("- topic/image ");
+    public static final DitaClass TOPIC_INCLUDE = new DitaClass("- topic/include ");
     public static final DitaClass TOPIC_INDEX_BASE = new DitaClass("- topic/index-base ");
     public static final DitaClass TOPIC_INDEXTERM = new DitaClass("- topic/indexterm ");
     public static final DitaClass TOPIC_INDEXTERMREF = new DitaClass("- topic/indextermref ");
@@ -676,6 +678,9 @@ public final class Constants {
     public static final DitaClass XNAL_D_URLS = new DitaClass("+ topic/data xnal-d/urls ");
 
     public static final DitaClass SUBMAP = new DitaClass("+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ");
+    public static final DitaClass DITA_OT_D_KEYDEF = new DitaClass("+ map/topicref mapgroup-d/keydef ditaot-d/keydef ");
+    public static final DitaClass DITA_OT_D_DITAVAL_STARTPROP = new DitaClass("+ topic/foreign ditaot-d/ditaval-startprop ");
+    public static final DitaClass DITA_OT_D_DITAVAL_ENDPROP = new DitaClass("+ topic/foreign ditaot-d/ditaval-endprop ");
 
     /**maplinks element.*/
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
@@ -703,6 +708,8 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_LOCKTITLE_VALUE_YES = "yes";
     /**format attribute.*/
     public static final String ATTRIBUTE_NAME_FORMAT = "format";
+    public static final String ATTRIBUTE_NAME_ENCODING = "encoding";
+    public static final String ATTRIBUTE_NAME_PARSE = "parse";
     /**charset attribute.*/
     public static final String ATTRIBUTE_NAME_CHARSET = "charset";
     /**lang attribute.*/
@@ -727,6 +734,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_XML_LANG = "xml:lang";
     /**domains attribute.*/
     public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
+    public static final String ATTRIBUTE_NAME_SPECIALIZATIONS = "specializations";
     /**props attribute.*/
     public static final String ATTRIBUTE_NAME_PROPS = "props";
     /**audience attribute.*/
@@ -860,6 +868,7 @@ public final class Constants {
     public static final String ANT_INVOKER_PARAM_BASEDIR = "basedir";
     /**Constants for common params used in ant invoker(inputmap).*/
     public static final String ANT_INVOKER_PARAM_INPUTMAP = "inputmap";
+    public static final String ANT_INVOKER_PARAM_RESOURCES = "resources";
     /**Constants for common params used in ant invoker(ditaval).*/
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";
     /**Constants for common params used in ant invoker(mergedditaval)*/
@@ -1100,6 +1109,9 @@ public final class Constants {
 
     /** Project reference name for job configuration object. */
     public static final String ANT_REFERENCE_JOB = "job";
+    /** Project reference name for XML utils object. */
+    public static final String ANT_REFERENCE_XML_UTILS = "xmlutils";
+    public static final String ANT_REFERENCE_STORE = "store";
     /** Temporary directory Ant property name. */
     public static final String ANT_TEMP_DIR = "dita.temp.dir";
 

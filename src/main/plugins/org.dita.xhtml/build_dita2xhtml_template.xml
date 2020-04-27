@@ -52,7 +52,7 @@ See the accompanying LICENSE file for applicable license.
       <pipeline>
       <xslt destdir="${xhtml.toc.output.dir}"
             style="${args.xhtml.toc.xsl}">
-        <ditafileset input="true"/>
+        <ditafileset input="true" format="ditamap"/>
         <param name="OUTEXT" expression="${out.ext}" if:set="out.ext" />
         <param name="contenttarget" expression="${args.xhtml.contenttarget}" if:set="args.xhtml.contenttarget"/>
         <param name="CSS" expression="${args.css.file}" if:set="args.css.file" />
@@ -109,7 +109,7 @@ See the accompanying LICENSE file for applicable license.
       <fileset dir="${dita.plugin.org.dita.xhtml.dir}/resource" includes="*.css"/>
     </copy>
     <!-- Copy user specify css file when required -->
-    <antcall target="copy-css-user"/>
+    <antcall target="copy-css-user" inheritRefs="true"/>
   </target>
 
   <target name="copy-css-user" if="user.copycss.yes">

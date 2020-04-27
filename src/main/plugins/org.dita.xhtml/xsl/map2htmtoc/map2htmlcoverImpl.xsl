@@ -18,7 +18,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="chapterBody">
     <body>
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
       <xsl:if test="@outputclass">
         <xsl:attribute name="class" select="@outputclass"/>
       </xsl:if>

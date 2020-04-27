@@ -502,10 +502,7 @@ See the accompanying LICENSE file for applicable license.
         </fo:block>
     </xsl:template>
 
-    <!-- Map uses map/searchtitle, topic uses topic/searchtitle. This will likely be changed
-         to a single value in DITA 2.0, but for now, recognize both. -->
-    <xsl:template match="*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')] |
-                         *[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]">
+    <xsl:template match="*[contains(@class,' topic/titlealts ')]/*[dita-ot:matches-searchtitle-class(@class)]">
         <fo:block xsl:use-attribute-sets="searchtitle">
             <xsl:call-template name="commonattributes"/>
             <fo:inline xsl:use-attribute-sets="searchtitle__label">
@@ -557,7 +554,7 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- For SF Bug 2879171: modify so that shortdesc is inline when inside
          abstract with only other text or inline markup. -->
-    <xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+    <xsl:template match="*[not(contains(@class, ' topic/topic '))]/*[@class][dita-ot:matches-shortdesc-class(@class)]">
         <xsl:variable name="format-as-block" as="xs:boolean" select="dita-ot:formatShortdescAsBlock(.)"/>
         <xsl:choose>
             <xsl:when test="$format-as-block">
@@ -595,10 +592,7 @@ See the accompanying LICENSE file for applicable license.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' map/shortdesc ')]">
-        <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
-    </xsl:template>
-
+    <!-- Short description as child of topic -->
     <xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class,' topic/shortdesc ')]" priority="1">
         <xsl:variable name="topicType" as="xs:string">
             <xsl:call-template name="determineTopicType"/>

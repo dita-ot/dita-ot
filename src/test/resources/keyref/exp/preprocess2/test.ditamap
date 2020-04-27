@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/keyref/temp/preprocess2?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/keyref/temp/preprocess2/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="nomerge" class="- map/map "
+  ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+  id="test" title="Key reference test">
+  <topicref class="- map/topicref " keys="scope-local" href="a.xml" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">a</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">a</linktext>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " keys="scope-peer" navtitle="b" scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">b</linktext>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " format="html" keys="scope-external" scope="external" href="http://www.example.com/">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">http://www.example.com/</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">http://www.example.com/</linktext>
+    </topicmeta>
+  </topicref>
+
+  <topicref class="- map/topicref " keyref="topicref" navtitle="b" scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot usertext?>
+      <linktext class="- map/linktext ">topicref linktext</linktext>
+      <?ditaot usershortdesc?>
+      <shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </topicref>
+  <navref class="- map/navref " keyref="navref" mapref="b.xml" scope="peer"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<keydef class="+ map/topicref mapgroup-d/keydef " keys="author" navtitle="b" processing-role="resource-only"
+    scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">b</linktext>
+      <author class="- topic/author ">author author</author>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">author keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="data" navtitle="b" processing-role="resource-only"
+    scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">b</linktext>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">data keyword</keyword>
+      </keywords>
+      <data class="- topic/data ">data data</data>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="data-about" navtitle="b" processing-role="resource-only"
+    scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">b</linktext>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">data-about keyword</keyword>
+      </keywords>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">data-about data-about</data>
+      </data-about>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " format="gif" keys="image" navtitle="b"
+    processing-role="resource-only" href="delta.gif">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle "/>
+      <?ditaot usertext?>
+      <linktext class="- map/linktext ">image linktext</linktext>
+      <?ditaot usershortdesc?>
+      <shortdesc class="- map/shortdesc ">image shortdesc</shortdesc>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">image keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="link" navtitle="b" processing-role="resource-only"
+    scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot usertext?>
+      <linktext class="- map/linktext ">link linktext</linktext>
+      <?ditaot usershortdesc?>
+      <shortdesc class="- map/shortdesc ">link shortdesc</shortdesc>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">link keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="lq" navtitle="b" processing-role="resource-only" scope="peer"
+    href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">b</linktext>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">lq keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="navref" navtitle="b" processing-role="resource-only"
+    scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">b</linktext>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">navref keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="publisher" navtitle="b" processing-role="resource-only"
+    scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">b</linktext>
+      <publisher class="- topic/publisher ">publisher publisher</publisher>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">publisher keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="source" navtitle="b" processing-role="resource-only"
+    scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">b</linktext>
+      <source class="- topic/source ">source source</source>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">source keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="topicref" navtitle="b" processing-role="resource-only"
+    scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot usertext?>
+      <linktext class="- map/linktext ">topicref linktext</linktext>
+      <?ditaot usershortdesc?>
+      <shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="xref" navtitle="b" processing-role="resource-only"
+    scope="peer" href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot usertext?>
+      <linktext class="- map/linktext ">xref linktext</linktext>
+      <?ditaot usershortdesc?>
+      <shortdesc class="- map/shortdesc ">xref shortdesc</shortdesc>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">xref keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="cite" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">cite keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="dt" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">dt keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="keyword" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">keyword keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="term" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">term keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="ph" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">ph keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="indexterm" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">indexterm keyword</keyword>
+        <indexterm class="- topic/indexterm ">indexterm indexterm</indexterm>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="index-base" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">index-base keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="indextermref" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">indextermref keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " format="html" keys="object" processing-role="resource-only"
+    scope="external" href="https://example.com">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Object test</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Object test</linktext>
+    </topicmeta>
+  </keydef>
+</map>

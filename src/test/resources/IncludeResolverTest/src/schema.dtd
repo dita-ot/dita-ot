@@ -1,0 +1,4 @@
+<!ELEMENT schema (p*)>
+<!ATTLIST schema default (value) "value">
+<!ELEMENT p (#PCDATA)>
+<!ATTLIST p id ID #IMPLIED>

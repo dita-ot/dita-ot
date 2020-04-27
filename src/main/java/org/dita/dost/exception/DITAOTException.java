@@ -8,6 +8,8 @@
  */
 package org.dita.dost.exception;
 
+import net.sf.saxon.trans.UncheckedXPathException;
+import net.sf.saxon.trans.XPathException;
 import org.dita.dost.log.MessageBean;
 
 /**
@@ -29,7 +31,7 @@ public final class DITAOTException extends Exception {
      * as its detail message.
      */
     public DITAOTException() {
-        this(null, null);
+        this(null, (Throwable) null);
     }
 
     /**
@@ -38,7 +40,7 @@ public final class DITAOTException extends Exception {
      * @param message the detail message
      */
     public DITAOTException(final String message) {
-        this(message, null);
+        this(message, (Throwable) null);
     }
 
     /**
@@ -59,6 +61,26 @@ public final class DITAOTException extends Exception {
      */
     public DITAOTException(final String message, final Throwable cause) {
         super(message, cause);
+    }
+
+    /**
+     * Constructs a new exception with cause, using location information from a root {@link XPathException}
+     *
+     * @param cause the cause
+     */
+    public DITAOTException(final UncheckedXPathException cause) {
+        super(cause.getXPathException().getMessageAndLocation(), cause.getXPathException());
+    }
+
+    /**
+     * Constructs a new exception with the specified detail message and
+     * cause, using location information from a root {@link XPathException}
+     *
+     * @param message the detail message.
+     * @param cause the cause
+     */
+    public DITAOTException(final String message, final UncheckedXPathException cause) {
+        super(message + ": " + cause.getXPathException().getMessageAndLocation(), cause.getXPathException());
     }
 
     /**

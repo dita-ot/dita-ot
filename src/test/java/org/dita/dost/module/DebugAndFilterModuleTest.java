@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -93,6 +94,7 @@ public class DebugAndFilterModuleTest {
         final DebugAndFilterModule module = new DebugAndFilterModule();
         module.setLogger(new TestUtils.TestLogger());
         module.setJob(job);
+        module.setXmlUtils(new XMLUtils());
         module.setProcessingPipe(Collections.emptyList());
         
         module.execute(pipelineInput);

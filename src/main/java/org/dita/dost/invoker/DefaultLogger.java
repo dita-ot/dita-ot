@@ -55,6 +55,7 @@ class DefaultLogger implements BuildLogger {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String ANSI_BOLD = "\u001b[1m";
 
     /**
      * Size of left-hand column for right-justified task name.
@@ -403,4 +404,5 @@ class DefaultLogger implements BuildLogger {
         final Project project = event.getProject();
         return (project != null) ? project.getName() : null;
     }
+
 }

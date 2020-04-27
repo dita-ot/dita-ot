@@ -10,6 +10,15 @@ import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
 public class EndToEndTest extends AbstractIntegrationTest {
 
+    public AbstractIntegrationTest builder() {
+        return new EndToEndTest();
+    }
+
+    @Override
+    Transtype getTranstype(Transtype transtype) {
+        return transtype;
+    }
+
     @Test
     public void xhtml() throws Throwable {
         builder().name("e2e")
@@ -32,14 +41,6 @@ public class EndToEndTest extends AbstractIntegrationTest {
                 .transtype(PDF)
                 .input(Paths.get("root.ditamap"))
                 .put("args.fo.userconfig", new File(resourceDir, "e2e" + File.separator + "fop.xconf").getAbsolutePath())
-                .run();
-    }
-
-    @Test
-    public void eclipsehelp() throws Throwable {
-        builder().name("e2e")
-                .transtype(ECLIPSEHELP)
-                .input(Paths.get("root.ditamap"))
                 .run();
     }
 

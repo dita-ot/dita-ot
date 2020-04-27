@@ -8,14 +8,6 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.*;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
@@ -28,10 +20,14 @@ import org.dita.dost.reader.IndexTermReader;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.XMLUtils;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.dita.dost.util.Constants.*;
 
 /**
  * This class extends AbstractPipelineModule, used to extract indexterm from
@@ -129,89 +125,57 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
     }
 
     private void extractIndexTerm() throws SAXException {
-        FileInputStream inputStream = null;
-        XMLReader xmlReader;
         final IndexTermReader handler = new IndexTermReader(indexTermCollection);
         handler.setLogger(logger);
         final DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
         ditamapIndexTermReader.setLogger(logger);
 
-        xmlReader = XMLUtils.getXMLReader();
+        final FileInfo fileInfo = job.getFileInfo(f -> f.isInput).iterator().next();
+        final URI tempInputMap = job.tempDirURI.resolve(fileInfo.uri);
+        for (final URI aTopicList : topicList) {
+            URI target;
+            String targetPathFromMap;
+            String targetPathFromMapWithoutExt;
+            handler.reset();
+            target = aTopicList;
+            targetPathFromMap = FileUtils.getRelativeUnixPath(
+                    tempInputMap.toString(),
+                    target.toString());
+            targetPathFromMapWithoutExt = targetPathFromMap
+                    .substring(0, targetPathFromMap.lastIndexOf("."));
+            handler.setTargetFile(targetPathFromMapWithoutExt + targetExt);
 
-        try {
-            xmlReader.setContentHandler(handler);
+            try {
+                job.getStore().transform(target, handler);
+            } catch (final RuntimeException e) {
+                throw e;
+            } catch (final Exception e) {
+                final StringBuilder buff = new StringBuilder();
+                String msg;
+                msg = MessageUtils.getMessage("DOTJ013E", target.toString()).toString();
+                logger.error(buff.append(msg).append(e.getMessage()).toString());
+            }
+        }
 
-            final FileInfo fileInfo = job.getFileInfo(f -> f.isInput).iterator().next();
-            final URI tempInputMap = job.tempDirURI.resolve(fileInfo.uri);
-            for (final URI aTopicList : topicList) {
-                URI target;
-                String targetPathFromMap;
-                String targetPathFromMapWithoutExt;
-                handler.reset();
-                target = aTopicList;
-                targetPathFromMap = FileUtils.getRelativeUnixPath(
-                        tempInputMap.toString(),
-                        target.toString());
-                targetPathFromMapWithoutExt = targetPathFromMap
-                        .substring(0, targetPathFromMap.lastIndexOf("."));
-                handler.setTargetFile(targetPathFromMapWithoutExt + targetExt);
+        for (final URI ditamap : ditamapList) {
+            final String currentMapPathName = FileUtils.getRelativeUnixPath(
+                    tempInputMap.toString(), ditamap.toString());
+            String mapPathFromInputMap = "";
 
-                try {
-                    /*if(!new File(job.tempDir, target).exists()) {
-                        logger.logWarn("Cannot find file "+ target);
-                        continue;
-                    }*/
-                    inputStream = new FileInputStream(
-                            new File(target));
-                    xmlReader.parse(new InputSource(inputStream));
-                    inputStream.close();
-                } catch (final RuntimeException e) {
-                    throw e;
-                } catch (final Exception e) {
-                    final StringBuilder buff = new StringBuilder();
-                    String msg;
-                    msg = MessageUtils.getMessage("DOTJ013E", target.toString()).toString();
-                    logger.error(buff.append(msg).append(e.getMessage()).toString());
-                }
+            if (currentMapPathName.lastIndexOf(SLASH) != -1) {
+                mapPathFromInputMap = currentMapPathName.substring(0,
+                        currentMapPathName.lastIndexOf(SLASH));
             }
 
-            xmlReader.setContentHandler(ditamapIndexTermReader);
-
-            for (final URI ditamap : ditamapList) {
-                final String currentMapPathName = FileUtils.getRelativeUnixPath(
-                        tempInputMap.toString(), ditamap.toString());
-                String mapPathFromInputMap = "";
-
-                if (currentMapPathName.lastIndexOf(SLASH) != -1) {
-                    mapPathFromInputMap = currentMapPathName.substring(0,
-                            currentMapPathName.lastIndexOf(SLASH));
-                }
-
-                ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
-                try {
-                    /*if(!new File(job.tempDir, ditamap).exists()) {
-                        logger.logWarn("Cannot find file "+ ditamap);
-                        continue;
-                    }*/
-                    inputStream = new FileInputStream(new File(ditamap));
-                    xmlReader.parse(new InputSource(inputStream));
-                    inputStream.close();
-                } catch (final RuntimeException e) {
-                    throw e;
-                } catch (final Exception e) {
-                    String msg;
-                    msg = MessageUtils.getMessage("DOTJ013E", ditamap.toString()).toString();
-                    logger.error(msg, e);
-                }
-            }
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (final IOException e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-
+            ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
+            try {
+                job.getStore().transform(ditamap, ditamapIndexTermReader);
+            } catch (final RuntimeException e) {
+                throw e;
+            } catch (final Exception e) {
+                String msg;
+                msg = MessageUtils.getMessage("DOTJ013E", ditamap.toString()).toString();
+                logger.error(msg, e);
             }
         }
     }

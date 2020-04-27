@@ -273,12 +273,16 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     </xsl:for-each>
   </xsl:template>
 
+  
+  <xsl:attribute-set name="linklist">
+    <xsl:attribute name="outputclass">relinfo</xsl:attribute>
+  </xsl:attribute-set>
   <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <linklist>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result."
                 as="element()">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="exists($links)">
-      <linklist class="- topic/linklist " outputclass="relinfo">
+      <linklist class="- topic/linklist " xsl:use-attribute-sets="linklist">
         <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
         <title class="- topic/title ">
           <xsl:call-template name="getVariable">
@@ -732,7 +736,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <xsl:template match="*" mode="add-link-target-attribute">
     <xsl:if test="@scope = 'external' or @type = 'external' or ((lower-case(@format) = 'pdf') and not(@scope = 'local'))">
-      <xsl:attribute name="target">_blank</xsl:attribute>
+      <xsl:apply-templates select="." mode="external-link"/>
     </xsl:if>
   </xsl:template>
 

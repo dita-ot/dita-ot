@@ -8,25 +8,22 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.s9api.*;
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MergeMapParser;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job.FileInfo;
 
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.withLogger;
+import static org.dita.dost.util.XMLUtils.toErrorListener;
 
 /**
  * The module handles topic merge in issues as PDF.
@@ -90,22 +87,24 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         }
         try (final OutputStream output = new BufferedOutputStream(new FileOutputStream(out))) {
             if (style != null) {
-                final TransformerFactory factory = TransformerFactory.newInstance();
-                factory.setURIResolver(CatalogUtils.getCatalogResolver());
-                final StreamSource styleSource = new StreamSource(style);
-                final Transformer transformer = withLogger(factory.newTransformer(styleSource), logger);
+                final Processor processor = xmlUtils.getProcessor();
+                final XsltCompiler xsltCompiler = processor.newXsltCompiler();
+                final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(style)).load();
+                transformer.setErrorListener(toErrorListener(logger));
                 final StreamSource source = new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray()));
-                final StreamResult result = new StreamResult(output);
-                transformer.transform(source, result);
+                final Destination result = processor.newSerializer(output);
+                transformer.setSource(source);
+                transformer.setDestination(result);
+                transformer.transform();
             } else {
                 output.write(midBuffer.toByteArray());
                 output.flush();
             }
+        } catch (final UncheckedXPathException e) {
+            throw new DITAOTException("Failed to process merged topics", e);
         } catch (final RuntimeException e) {
             throw e;
-        } catch (final TransformerException e) {
-            throw new DITAOTException("Failed to process merged topics: " + e.getMessageAndLocation(), e);
-        } catch (final Exception e) {
+        } catch (final IOException | SaxonApiException e) {
             throw new DITAOTException("Failed to process merged topics: " + e.getMessage(), e);
         }
 

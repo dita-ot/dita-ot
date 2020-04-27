@@ -10,7 +10,7 @@ package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.TopicIdParser;
@@ -21,7 +21,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.*;
@@ -228,7 +227,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         final URI t = job.tempDirURI.relativize(output);
         final URI result = job.getInputDir().resolve(t);
         final URI temp = tempFileNameScheme.generateTempFileName(result);
-        final FileInfo.Builder b = currentParsingFile != null
+        final FileInfo.Builder b = (currentParsingFile != null && job.getFileInfo(stripFragment(currentParsingFile)) != null)
                 ? new FileInfo.Builder(job.getFileInfo(stripFragment(currentParsingFile)))
                 : new FileInfo.Builder();
         final FileInfo fi = b
@@ -421,9 +420,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         final StringBuilder firstTopicId = new StringBuilder();
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
         try {
-            final XMLReader reader = getXMLReader();
-            reader.setContentHandler(parser);
-            reader.parse(ditaTopicFile.toURI().toString());
+            job.getStore().transform(ditaTopicFile.toURI(), parser);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {

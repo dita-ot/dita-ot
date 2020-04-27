@@ -242,7 +242,7 @@ See the accompanying LICENSE file for applicable license.
        <!-- Do not reset xml:lang if it is already set on <html> -->
        <!-- Moved outputclass to the body tag -->
        <!-- Keep ditaval based styling at this point (replace DITA-OT 1.6 and earlier call to gen-style) -->
-       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
      </xsl:when>
      <xsl:otherwise>
        <xsl:call-template name="commonattributes">
@@ -490,6 +490,9 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="@type = 'trouble'">
         <xsl:apply-templates select="." mode="process.note.trouble"/>
       </xsl:when>
+      <xsl:when test="@type = 'notice'">
+        <xsl:apply-templates select="." mode="process.note.notice"/>
+      </xsl:when>
       <xsl:when test="@type = 'other'">
         <xsl:apply-templates select="." mode="process.note.other"/>
       </xsl:when>
@@ -539,6 +542,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="." mode="process.note.common-processing"/>
   </xsl:template>
   
+  <xsl:template match="*" mode="process.note.notice">
+    <xsl:apply-templates select="." mode="process.note.common-processing"/>
+  </xsl:template>
+
   <xsl:template match="*" mode="process.note.other">
     <xsl:choose>
       <xsl:when test="@othertype">
@@ -572,7 +579,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:attribute>
             <xsl:choose>
               <xsl:when test="@type = 'external'">
-                <xsl:attribute name="target">_blank</xsl:attribute>
+                <xsl:apply-templates select="." mode="external-link"/>
               </xsl:when>
               <xsl:otherwise><!--nop - no target needed for internal or biblio types (OR-should internal force DITA xref-like processing? What is intent? @type is only internal/external/bibliographic) --></xsl:otherwise>
             </xsl:choose>
@@ -590,6 +597,10 @@ See the accompanying LICENSE file for applicable license.
     </blockquote>
   </xsl:template>
   
+  <xsl:template match="node()" mode="external-link" as="attribute()*">
+    <xsl:attribute name="target">_blank</xsl:attribute>
+    <xsl:attribute name="rel">external noopener</xsl:attribute>
+  </xsl:template>
   
   <!-- =========== SINGLE PART LISTS =========== -->
   
@@ -699,8 +710,7 @@ See the accompanying LICENSE file for applicable license.
          Maintain that for now, though may want to update in the future to keep a wrapper in all cases.
          Considering using div instead of span, with a default inline CSS style. -->
     <xsl:choose>
-      <xsl:when test="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop |
-                      *[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass">
+      <xsl:when test="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop">
         <span>
           <xsl:call-template name="commonattributes"/>
           <xsl:apply-templates/>
@@ -751,8 +761,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:variable>
     <dt>
       <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
-      <xsl:apply-templates select="../@xml:lang"/> 
-      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:apply-templates select="../@xml:lang"/>
+      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
       <xsl:for-each select="..">
         <xsl:call-template name="commonattributes"/>
       </xsl:for-each>
@@ -826,7 +836,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/dthd ')]" name="topic.dthd">
     <dt>
       <!-- Get ditaval style and xml:lang from DLHEAD, then override with local -->
-      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
       <xsl:apply-templates select="../@xml:lang"/>
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="setidaname"/>
@@ -842,7 +852,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/ddhd ')]" name="topic.ddhd">
     <dd>
       <!-- Get ditaval style and xml:lang from DLHEAD, then override with local -->
-      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
       <xsl:apply-templates select="../@xml:lang"/>
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="setidaname"/>
@@ -1714,7 +1724,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="default-output-class"/>
     <xsl:apply-templates select="@xml:lang"/>
     <xsl:apply-templates select="@dir"/>
-    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <xsl:apply-templates select="." mode="set-output-class">
       <xsl:with-param name="default" select="$default-output-class"/>
     </xsl:apply-templates>
@@ -1763,6 +1773,8 @@ See the accompanying LICENSE file for applicable license.
         <xsl:sequence select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop/@val"/>
       </xsl:if>
     </xsl:variable>
+    <xsl:variable name="flag-outputclass" as="xs:string*"
+      select="tokenize(normalize-space(*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass), '\s+')"/>
     <xsl:variable name="using-output-class" as="xs:string*">
      <xsl:choose>
        <xsl:when test="string-length(normalize-space($output-class)) > 0">
@@ -1791,9 +1803,10 @@ See the accompanying LICENSE file for applicable license.
                   select="tokenize($ancestry, '\s+'),
                           $using-output-class,
                           $draft-revs, 
-                          tokenize($outputclass-attribute, '\s+')"/>
+                          tokenize($outputclass-attribute, '\s+'),
+                          $flag-outputclass"/>
     <xsl:if test="exists($classes)">
-      <xsl:attribute name="class" select="string-join(distinct-values($classes), ' ')"/>
+      <xsl:attribute name="class" select="distinct-values($classes)" separator=" "/>
     </xsl:if>
   </xsl:template>
     
@@ -2400,7 +2413,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Add all attributes. To add your own additional attributes, use mode="addAttributesToBody". -->
   <xsl:template match="*" mode="addAttributesToHtmlBodyElement">
     <!-- Already put xml:lang on <html>; do not copy to body with commonattributes -->
-    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <!--output parent or first "topic" tag's outputclass as class -->
     <xsl:if test="@outputclass">
       <xsl:attribute name="class" select="@outputclass"/>
@@ -2653,6 +2666,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:key name="enumerableByClass"
     match="*[contains(@class, ' topic/fig ')][*[contains(@class, ' topic/title ')]] |
     *[contains(@class, ' topic/table ')][*[contains(@class, ' topic/title ')]] |
+    *[contains(@class, ' topic/simpletable ')][*[contains(@class, ' topic/title ')]] |
     *[contains(@class,' topic/fn ') and empty(@callout)]"
     use="tokenize(@class, '\s+')"/>
   

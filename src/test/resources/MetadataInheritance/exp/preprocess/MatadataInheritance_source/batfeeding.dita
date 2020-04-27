@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="batfeeding" xml:lang="en-us" ditaarch:DITAArchVersion="1.3" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                          (topic ut-d) (topic indexing-d)" class="- topic/topic ">
   <title class="- topic/title ">batfeeding</title>
-  <prolog class="- topic/prolog ">
-    <source class="- topic/source ">
-    source
-  </source>
-  </prolog>
   <body class="- topic/body ">
     <p class="- topic/p ">In DITA 1.1, you can use new element, &lt;data&gt;. This element and the content
       inside it is ignored in the transformation process of DITA files.<note rev="r5" class="- topic/note "><ul class="- topic/ul "><li class="- topic/li ">Because OASIS DITA 1.1 is not yet an approved standard as of the release

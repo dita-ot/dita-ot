@@ -23,9 +23,13 @@ import org.dita.dost.module.XmlFilterModule;
 import org.dita.dost.module.XmlFilterModule.FilterPair;
 import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.store.Store;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 
 import java.io.BufferedReader;
@@ -39,6 +43,7 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.supportedImageExtensions;
+import static org.dita.dost.util.URLUtils.toFile;
 
 /**
  * Ant task for executing pipeline modules.
@@ -166,7 +171,9 @@ public final class ExtensibleAntInvoker extends Task {
     public void execute() throws BuildException {
         initialize();
 
-        final Job job = getJob(tempDir, getProject());
+        final Job job = getJob(getProject());
+        final XMLUtils xmlUtils = getXmlUtils();
+
         try {
             for (final ModuleElem m : modules) {
                 m.setProject(getProject());
@@ -179,6 +186,7 @@ public final class ExtensibleAntInvoker extends Task {
                 long start = System.currentTimeMillis();
                 mod.setLogger(logger);
                 mod.setJob(job);
+                mod.setXmlUtils(xmlUtils);
                 mod.execute(pipelineInput);
                 long end = System.currentTimeMillis();
                 logger.debug("{0} processing took {1} ms", mod.getClass().getSimpleName(), end - start);
@@ -285,25 +293,63 @@ public final class ExtensibleAntInvoker extends Task {
     /**
      * Get job configuration from Ant project reference or create new.
      *
-     * @param tempDir configuration directory
      * @param project Ant project
      * @return job configuration
      */
-    public static Job getJob(final File tempDir, final Project project) {
-        Job job = project.getReference(ANT_REFERENCE_JOB);
-        if (job != null && job.isStale()) {
-            project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
-            job = null;
+    public static Job getJob(final Project project) {
+        File tempDir = toFile(project.getUserProperty(ANT_TEMP_DIR));
+        if (tempDir == null) {
+            tempDir = toFile(project.getProperty(ANT_TEMP_DIR));
         }
-        if (job == null) {
+        if (tempDir == null) {
+            throw new IllegalStateException(String.format("Ant property %s not set", ANT_TEMP_DIR));
+        }
+        Job job = project.getReference(ANT_REFERENCE_JOB);
+        if (job != null) {
+            if (job.isStale()) {
+                project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
+                try {
+                    job = new Job(tempDir, job.getStore());
+                } catch (final IOException ioe) {
+                    throw new BuildException(ioe);
+                }
+                project.addReference(ANT_REFERENCE_JOB, job);
+            }
+        } else {
+            Store store = project.getReference(ANT_REFERENCE_STORE);
+            if (store == null) {
+                project.log("Store not found from Ant project reference", Project.MSG_VERBOSE);
+                store = new StreamStore( new XMLUtils());
+            }
+            project.log("Job not found from Ant project reference", Project.MSG_VERBOSE);
             try {
-                job = new Job(tempDir);
+                job = new Job(tempDir, store);
             } catch (final IOException ioe) {
                 throw new BuildException(ioe);
             }
             project.addReference(ANT_REFERENCE_JOB, job);
         }
         return job;
+    }
+
+    @Deprecated
+    public static Job getJob(final File tempDir, final Project project) {
+        return getJob(project);
+    }
+
+    /**
+     * Get XML utils from Ant project reference or create new.
+     *
+     * @return XML utils
+     */
+    public XMLUtils getXmlUtils() {
+        XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
+        if (xmlUtils == null) {
+            xmlUtils = new XMLUtils();
+            xmlUtils.setLogger(logger);
+            getProject().addReference(ANT_REFERENCE_XML_UTILS, xmlUtils);
+        }
+        return xmlUtils;
     }
 
     private Set<File> readListFile(final List<IncludesFileElem> includes, final DITAOTAntLogger logger) {
@@ -547,6 +593,7 @@ public final class ExtensibleAntInvoker extends Task {
         private Set<String> formats = Collections.emptySet();
         private Boolean hasConref;
         private Boolean isInput;
+        private Boolean isInputResource;
         private Boolean isResourceOnly;
 
         public void setFormat(final String format) {
@@ -566,14 +613,19 @@ public final class ExtensibleAntInvoker extends Task {
             this.isInput = isInput;
         }
 
+        public void setInputResource(final boolean isInputResource) {
+            this.isInputResource = isInputResource;
+        }
+
         public void setProcessingRole(final String processingRole) {
             this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
         }
 
         public Predicate<FileInfo> toFilter() {
-            return f -> (formats.isEmpty() || formats.contains(f.format)) &&
+            return f -> (formats.isEmpty() || formats.contains(f.format != null ? f.format : ATTR_FORMAT_VALUE_DITA)) &&
                     (hasConref == null || f.hasConref == hasConref) &&
                     (isInput == null || f.isInput == isInput) &&
+                    (isInputResource == null || f.isInputResource == isInputResource) &&
                     (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
         }
     }

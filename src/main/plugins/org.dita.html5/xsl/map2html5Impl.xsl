@@ -81,7 +81,7 @@ See the accompanying LICENSE file for applicable license.
                   </xsl:choose>
                 </xsl:attribute>
                 <xsl:if test="@scope = 'external' or not(not(@format) or @format = 'dita' or @format = 'ditamap')">
-                  <xsl:attribute name="target">_blank</xsl:attribute>
+                  <xsl:apply-templates select="." mode="external-link"/>
                 </xsl:if>
                 <xsl:value-of select="$title"/>
               </a>
@@ -134,8 +134,8 @@ See the accompanying LICENSE file for applicable license.
         <xsl:value-of select="@navtitle"/>
       </xsl:when>
       <!-- If there is no title and none can be retrieved, check for <linktext> -->
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
-        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]">
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]"
                              mode="dita-ot:text-only"/>
       </xsl:when>
       <!-- No local title, and not targeting a DITA file. Could be just a container setting

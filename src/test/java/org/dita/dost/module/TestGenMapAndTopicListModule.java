@@ -11,6 +11,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,6 +63,7 @@ public class TestGenMapAndTopicListModule {
         module.setLogger(new TestUtils.TestLogger());
         final Job job = new Job(tempDir);
         module.setJob(job);
+        module.setXmlUtils(new XMLUtils());
         module.execute(pipelineInput);
 
         return job;

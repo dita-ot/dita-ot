@@ -8,25 +8,21 @@
  */
 package org.dita.dost.reader;
 
-import static java.util.Arrays.asList;
-import static org.dita.dost.module.GenMapAndTopicListModule.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
+import org.dita.dost.writer.AbstractDomFilter;
+import org.w3c.dom.*;
 
 import java.io.File;
 import java.net.URI;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
-import org.dita.dost.writer.AbstractDomFilter;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import static java.util.Arrays.asList;
+import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.stripFragment;
 
 /**
  * Cascade map metadata to child topic references and collect metadata for topics.
@@ -43,22 +39,23 @@ public final class MapMetaReader extends AbstractDomFilter {
             TOPIC_PERMISSIONS.matcher,
             TOPIC_PUBLISHER.matcher,
             TOPIC_SOURCE.matcher,
-            MAP_SEARCHTITLE.matcher
+            MAP_SEARCHTITLE.matcher,
+            TOPIC_SEARCHTITLE.matcher
     )));
     private static final Set<String> cascadeSet = Collections.unmodifiableSet(new HashSet<>(asList(
             TOPIC_AUDIENCE.matcher,
             TOPIC_AUTHOR.matcher,
-            TOPIC_SOURCE.matcher,
             TOPIC_CATEGORY.matcher,
             TOPIC_COPYRIGHT.matcher,
             TOPIC_CRITDATES.matcher,
+            TOPIC_METADATA.matcher,
             TOPIC_PERMISSIONS.matcher,
             TOPIC_PRODINFO.matcher,
-            TOPIC_OTHERMETA.matcher,
             TOPIC_PUBLISHER.matcher
     )));
     private static final Set<String> metaSet = Collections.unmodifiableSet(new HashSet<>(asList(
             MAP_SEARCHTITLE.matcher,
+            TOPIC_SEARCHTITLE.matcher,
             TOPIC_AUTHOR.matcher,
             TOPIC_SOURCE.matcher,
             TOPIC_PUBLISHER.matcher,
@@ -78,6 +75,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     )));
     private static final List<String> metaPos = Collections.unmodifiableList(asList(
             MAP_SEARCHTITLE.matcher,
+            TOPIC_SEARCHTITLE.matcher,
             TOPIC_AUTHOR.matcher,
             TOPIC_SOURCE.matcher,
             TOPIC_PUBLISHER.matcher,
@@ -95,7 +93,9 @@ public final class MapMetaReader extends AbstractDomFilter {
             TOPIC_FOREIGN.matcher,
             TOPIC_UNKNOWN.matcher,
             MAP_LINKTEXT.matcher,
+            TOPIC_LINKTEXT.matcher,
             MAP_SHORTDESC.matcher,
+            TOPIC_SHORTDESC.matcher,
             TOPIC_NAVTITLE.matcher,
             TOPIC_METADATA.matcher,
             DELAY_D_EXPORTANCHORS.matcher
@@ -308,7 +308,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                     } else {
                         if (TOPIC_NAVTITLE.matches(classValue)) {
                             //Add locktitle value to navtitle so we know whether it should be pushed to topics
-                            final String locktitleAttr =  ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE) != null ? 
+                            final String locktitleAttr =  ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE) != null ?
                                                           ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE).getNodeValue() : "no";
                             elem.setAttributeNS(DITA_OT_NS, DITA_OT_NS_PREFIX + ":" + ATTRIBUTE_NAME_LOCKTITLE, locktitleAttr);
                         }

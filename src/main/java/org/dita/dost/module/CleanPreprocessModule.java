@@ -9,19 +9,31 @@
 package org.dita.dost.module;
 
 import com.google.common.annotations.VisibleForTesting;
+import net.sf.saxon.s9api.*;
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.commons.io.FileUtils;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
+import org.w3c.dom.Document;
 import org.xml.sax.XMLFilter;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -29,8 +41,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.util.Collections.emptyMap;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
+import static org.dita.dost.util.XMLUtils.toErrorListener;
 
 /**
  * Move temporary files not based on output URI to match output URI structure.
@@ -43,44 +57,84 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     private final LinkFilter filter = new LinkFilter();
     private final MapCleanFilter mapFilter = new MapCleanFilter();
-    private final XMLUtils xmlUtils = new XMLUtils();
 
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
+    private boolean useResultFilename;
+    private XsltTransformer rewriteTransformer;
+    private RewriteRule rewriteClass;
+
+    private void init(final Map<String, String> input) {
+        useResultFilename = Optional.ofNullable(input.get(PARAM_USE_RESULT_FILENAME))
+                .map(Boolean::parseBoolean)
+                .orElse(false);
+        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
+        rewriteTransformer = Optional.ofNullable(input.get("result.rewrite-rule.xsl"))
+                .map(file -> {
+                    try {
+                        return catalogResolver.resolve(URLUtils.toURI(file).toString(), null);
+                    } catch (TransformerException e) {
+                        throw new RuntimeException(e.getMessage(), e);
+                    }
+                })
+                .map(f -> {
+                    try {
+                        final Processor processor = xmlUtils.getProcessor();
+                        final XsltCompiler xsltCompiler = processor.newXsltCompiler();
+                        xsltCompiler.setErrorListener(toErrorListener(logger));
+                        final XsltExecutable xsltExecutable = xsltCompiler.compile(new StreamSource(f.toString()));
+                        return xsltExecutable.load();
+                    } catch (UncheckedXPathException e) {
+                        throw new RuntimeException("Failed to compile XSLT: " + e.getXPathException().getMessageAndLocation(), e);
+                    } catch (SaxonApiException e) {
+                        throw new RuntimeException("Failed to compile XSLT: " + e.getMessage(), e);
+                    }
+                })
+                .orElse(null);
+        rewriteClass = Optional.ofNullable(input.get("result.rewrite-rule.class"))
+                .map(c -> {
+                    try {
+                        final Class<RewriteRule> cls = (Class<RewriteRule>) Class.forName(c);
+                        return cls.newInstance();
+                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .orElse(null);
+
+        filter.setLogger(logger);
+
+        mapFilter.setLogger(logger);
     }
 
     @Override
-    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        final boolean useResultFilename = Optional.ofNullable(input.getAttribute(PARAM_USE_RESULT_FILENAME))
-                .map(Boolean::parseBoolean)
-                .orElse(true);
-
+    public AbstractPipelineOutput execute(final Map<String, String> input) throws DITAOTException {
+        init(input);
         final URI base = getBaseDir();
-        final String uplevels = getUplevels(base);
-        job.setProperty("uplevels", uplevels);
-        job.setInputDir(base);
-
         if (useResultFilename) {
-            init();
-            final Collection<FileInfo> fis = new ArrayList<>(job.getFileInfo());
-            final Collection<FileInfo> res = new ArrayList<>(fis.size());
-            for (final FileInfo fi : fis) {
+            // collect and relativize result
+            final Collection<FileInfo> original = job.getFileInfo().stream()
+                    .filter(fi -> fi.result != null)
+                    .map(fi -> FileInfo.builder(fi).result(base.relativize(fi.result)).build())
+                    .collect(Collectors.toList());
+            original.forEach(fi -> job.remove(fi));
+            // rewrite results
+            final Collection<FileInfo> rewritten = rewrite(original);
+            // move temp files and update links
+            final Job tempJob = new Job(job, emptyMap(), rewritten);
+            filter.setJob(tempJob);
+            mapFilter.setJob(tempJob);
+            for (final FileInfo fi : rewritten) {
                 try {
-                    final FileInfo.Builder builder = new FileInfo.Builder(fi);
-                    final URI rel = base.relativize(fi.result);
-                    builder.uri(rel);
+                    assert !fi.result.isAbsolute();
                     if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
                         logger.debug("Skip format " + fi.format);
                     } else {
                         final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
                         if (srcFile.exists()) {
-                            final File destFile = new File(job.tempDirURI.resolve(rel));
+                            final File destFile = new File(job.tempDirURI.resolve(fi.result));
                             final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
                             if (!processingPipe.isEmpty()) {
                                 logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
-                                xmlUtils.transform(srcFile.toURI(), destFile.toURI(), processingPipe);
+                                job.getStore().transform(srcFile.toURI(), destFile.toURI(), processingPipe);
                                 if (!srcFile.equals(destFile)) {
                                     logger.debug("Deleting " + srcFile.toURI());
                                     FileUtils.deleteQuietly(srcFile);
@@ -91,15 +145,19 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                             }
                         }
                     }
-                    res.add(builder.build());
+                    final FileInfo res = FileInfo.builder(fi)
+                            .uri(fi.result)
+                            .result(base.resolve(fi.result))
+                            .build();
+                    job.add(res);
                 } catch (final IOException e) {
                     logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
                 }
             }
-
-            fis.forEach(fi -> job.remove(fi));
-            res.forEach(fi -> job.add(fi));
         }
+
+        job.setProperty("uplevels", getUplevels(base));
+        job.setInputDir(base);
 
         // start map
         final FileInfo start = job.getFileInfo(f -> f.isInput).iterator().next();
@@ -116,6 +174,39 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
+    private Collection<FileInfo> rewrite(final Collection<FileInfo> fis) throws DITAOTException {
+        if (rewriteClass != null) {
+            return rewriteClass.rewrite(fis);
+        }
+        if (rewriteTransformer != null) {
+            try {
+                final DOMSource source = new DOMSource(serialize(fis));
+                final Map<URI, FileInfo> files = new HashMap<>();
+                final Destination result = new SAXDestination(new Job.JobHandler(new HashMap<>(), files));
+                rewriteTransformer.setSource(source);
+                rewriteTransformer.setDestination(result);
+                rewriteTransformer.transform();
+                return files.values();
+            } catch (IOException | SaxonApiException e) {
+                throw new DITAOTException(e);
+            }
+        }
+        return fis;
+    }
+
+    private Document serialize(final Collection<FileInfo> fis) throws IOException {
+        try {
+            final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            final DOMResult result = new DOMResult(doc);
+            XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(result);
+            job.serialize(out, emptyMap(), fis);
+            return (Document) result.getNode();
+        } catch (final XMLStreamException | ParserConfigurationException e) {
+            throw new IOException("Failed to serialize job file: " + e.getMessage());
+        }
+    }
+
+
     String getUplevels(final URI base) {
         final URI rel = base.relativize(job.getInputFile());
         final int count = rel.toString().split("/").length - 1;
@@ -130,12 +221,13 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
      */
     @VisibleForTesting
     URI getBaseDir() {
-        URI baseDir = job.getInputDir();
-
         final Collection<FileInfo> fis = job.getFileInfo();
+        URI baseDir = job.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
         for (final FileInfo fi : fis) {
-            final URI res = fi.result.resolve(".");
-            baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
+            if (fi.result != null) {
+                final URI res = fi.result.resolve(".");
+                baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
+            }
         }
 
         return baseDir;

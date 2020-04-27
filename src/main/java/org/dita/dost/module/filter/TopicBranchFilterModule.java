@@ -8,32 +8,27 @@
 package org.dita.dost.module.filter;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
  * Branch filter module for topics.
@@ -51,22 +46,9 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
-    private final XMLUtils xmlUtils = new XMLUtils();
-    private final DocumentBuilder builder;
     /** Current map being processed, relative to temporary directory */
     private URI map;
     private final Set<URI> filtered = new HashSet<>();
-
-    public TopicBranchFilterModule() {
-        super();
-        builder = XMLUtils.getDocumentBuilder();
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
-    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -96,8 +78,8 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = builder.parse(new InputSource(currentFile.toString()));
-        } catch (final SAXException | IOException e) {
+            doc = job.getStore().getDocument(currentFile);
+        } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
         }
@@ -109,21 +91,10 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         filterTopics(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
 
         logger.debug("Writing " + currentFile);
-        Result result = null;
         try {
-            Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(currentFile.toString());
-            serializer.transform(new DOMSource(doc), result);
-        } catch (final TransformerConfigurationException | TransformerFactoryConfigurationError e) {
-            throw new RuntimeException(e);
-        } catch (final TransformerException e) {
-            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessageAndLocation(), e);
-        } finally {
-            try {
-                close(result);
-            } catch (final IOException e) {
-                logger.error("Failed to close result stream for " + map.toString() + ": " + e.getMessage(), e);
-            }
+            job.getStore().writeDocument(doc, currentFile);
+        } catch (final IOException e) {
+            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
         }
     }
 
@@ -161,9 +132,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
                     logger.error("Failed to create directory " + dstDirUri);
                 }
                 try {
-                    xmlUtils.transform(srcAbsUri,
-                                       dstAbsUri,
-                                       pipe);
+                    job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
                 } catch (final DITAOTException e) {
                     logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
                 }
@@ -202,7 +171,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
             logger.info("Filtering " + srcAbsUri);
             try {
-                xmlUtils.transform(srcAbsUri, pipe);
+                job.getStore().transform(srcAbsUri, pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }

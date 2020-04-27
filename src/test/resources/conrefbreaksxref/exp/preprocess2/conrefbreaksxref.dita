@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/conrefbreaksxref/temp/preprocess2?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/conrefbreaksxref/temp/preprocess2/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" class="- topic/topic " ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" id="conrefbreaksxref" xml:lang="en-us">
+<title class="- topic/title ">conrefbreaksxref source</title>
+<shortdesc class="- topic/shortdesc ">This topic conrefs to another, which uses xref internally.</shortdesc>
+<body class="- topic/body ">
+<section class="- topic/section "><title class="- topic/title ">Section that is pulled to another topic.</title><p class="- topic/p ">Look
+as the figure in this section: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#this-target/fig" type="fig"><?ditaot gentext?>Figure 1</xref>.</p><p class="- topic/p ">Look
+at a figure in this topic, outside of this section: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#this-target/out" type="fig"><?ditaot gentext?>Figure 2</xref></p><p class="- topic/p ">Now
+look at this topic: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#this-target" type="topic"><?ditaot gentext?>conrefbreaksxref target<?ditaot genshortdesc?><desc class="- topic/desc ">This topic is referenced by another, and has some internal linking.</desc></xref></p>
+<p class="- topic/p ">Now look at "current topic" with #. syntax: <xref class="- topic/xref " href="#conrefbreaksxref" type="topic"><?ditaot gentext?>conrefbreaksxref source<?ditaot genshortdesc?><desc class="- topic/desc ">This topic conrefs to another, which uses xref internally.</desc></xref></p>
+<p class="- topic/p ">Now look at "fig in current topic" with #./fig syntax: <xref class="- topic/xref " href="#conrefbreaksxref/fig" type="fig"><?ditaot gentext?>Figure 3</xref></p><p class="- topic/p ">Now
+look at the topic below: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#sub" type="topic"><?ditaot gentext?>Sub-topic in the reusable file</xref>.</p><p class="- topic/p ">Now look at a figure
+in the topic below: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#sub/fig" type="fig"><?ditaot gentext?>Figure 3</xref></p><fig class="- topic/fig " id="d7e48"><title class="- topic/title ">Figure In My Section</title>
+<p class="- topic/p ">This is a figure here.</p>
+</fig></section>
+<section class="- topic/section "><title class="- topic/title ">Topic in the subdir</title><p class="- topic/p ">Look at the figure
+in this section: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdir/subfig" type="fig"><?ditaot gentext?>Figure 1</xref>.</p><p class="- topic/p ">Look at the figure
+in this topic, outside the section: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdir/outfig" type="fig"><?ditaot gentext?>Figure 2</xref></p><p class="- topic/p ">Look
+at this topic: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdir" type="topic"><?ditaot gentext?>conrefbreaksxref: target in the subdir<?ditaot genshortdesc?><desc class="- topic/desc ">Pull in a section, from a topic in the subdir.</desc></xref></p><p class="- topic/p ">Look at a figure in a sub-topic: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdirsubfig/nestfig" type="fig"><?ditaot gentext?>Figure 3</xref></p><p class="- topic/p ">Look at the subtopic: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdirsubfig" type="topic"><?ditaot gentext?>Subdir Subfig</xref></p><fig class="- topic/fig " id="d8e39"><title class="- topic/title ">This iz me fig</title>
+<p class="- topic/p ">here's a figure. Go figure.</p>
+</fig></section>
+<fig class="- topic/fig " id="fig">
+<title class="- topic/title ">Figure in the <b class="+ topic/ph hi-d/b ">referencing</b> topic</title>
+<p class="- topic/p ">Links pulled in with #./fig syntax should go here</p>
+</fig>
+</body>
+</topic>

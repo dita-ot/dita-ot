@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<topic id="table" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" domains="(topic)" class="- topic/topic ">
+<topic id="table" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" domains="(topic)" class="- topic/topic ">
  <title class="- topic/title ">Use the topic ID in the topic</title>
  <body class="- topic/body ">
   <simpletable  class="- topic/simpletable " id="table">
-   <strow  class="- topic/strow "><stentry class="- topic/stentry ">table entry</stentry></strow>
+   <strow  class="- topic/strow "><stentry class="- topic/stentry " dita-ot:x="1" dita-ot:y="1">table entry</stentry></strow>
   </simpletable>
  </body>
 </topic>

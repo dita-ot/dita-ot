@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map33_filter2/temp/preprocess2?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map33_filter2/temp/preprocess2/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA 1.3 Map//EN?><?doctype-system file:/C:/SAXONIBMJDK/dtd/technicalContent/dtd/map.dtd?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- map/map " cascade="nomerge">
+    <title class="- topic/title ">map1:correct values of platform</title>
+    <topicref href="baseOSNavtitle.ditamap" format="ditamap" processing-role="resource-only" type="subjectScheme" class="- map/topicref "/>
+    <topicref href="topic1.dita" class="- map/topicref "/>
+
+</map>

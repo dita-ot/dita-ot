@@ -7,32 +7,41 @@
  */
 package org.dita.dost.writer;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.Collections;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.sax.SAXSource;
-
+import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
-import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.FilterUtils.Action;
+import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.XMLUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.SAXSource;
+import java.io.InputStream;
+import java.util.Map;
+
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.FilterUtils.Action.EXCLUDE;
+import static org.dita.dost.util.FilterUtils.Action.INCLUDE;
 
 public class ProfilingFilterTest {
 
-    @BeforeClass
-    public static void setUp() {
+    private final DocumentBuilder documentBuilder;
+    private final TransformerFactory transformerFactory;
+
+    public ProfilingFilterTest() throws ParserConfigurationException {
+        final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setNamespaceAware(true);
+        builderFactory.setIgnoringComments(true);
+        documentBuilder = builderFactory.newDocumentBuilder();
+        transformerFactory = TransformerFactory.newInstance();
     }
 
     @Test
@@ -42,36 +51,65 @@ public class ProfilingFilterTest {
 
     @Test
     public void testFilter() throws Exception {
-        final DitaValReader filterReader = new DitaValReader();
-        filterReader.read(new File(getClass().getClassLoader().getResource("ProfilingFilterTest/src/topic1.ditaval").toURI()).getAbsoluteFile());
-        final FilterUtils filterUtils = new FilterUtils(false, filterReader.getFilterMap(), null, null);
-        filterUtils.setLogger(new TestUtils.TestLogger());
-        test(filterUtils, "topic.dita", "topic1.dita");
+        final Map<FilterKey, Action> filterMap = ImmutableMap.of(
+                new FilterKey(QName.valueOf("platform"), null), INCLUDE,
+                new FilterKey(QName.valueOf("default"), null), EXCLUDE,
+                new FilterKey(QName.valueOf("audience"), null), EXCLUDE,
+                new FilterKey(QName.valueOf("audience"), "novice"), INCLUDE,
+                new FilterKey(QName.valueOf("platform"), "windows"), EXCLUDE
+        );
+        final FilterUtils filterUtils = new FilterUtils(false, filterMap, null, null);
 
+        test(filterUtils, "topic.dita", "topic1.dita");
+    }
+
+    @Test
+    public void testNoFilter_dita2() throws Exception {
+        test(new FilterUtils(false), "topic_2.dita", "topic_2.dita");
+    }
+
+    @Test
+    public void testFilter_dita2() throws Exception {
+        final Map<FilterKey, Action> filterMap = ImmutableMap.of(
+                new FilterKey(QName.valueOf("platform"), null), INCLUDE,
+                new FilterKey(QName.valueOf("default"), null), EXCLUDE,
+                new FilterKey(QName.valueOf("audience"), null), EXCLUDE,
+                new FilterKey(QName.valueOf("audience"), "novice"), INCLUDE,
+                new FilterKey(QName.valueOf("platform"), "windows"), EXCLUDE
+        );
+        final FilterUtils filterUtils = new FilterUtils(false, filterMap, null, null);
+
+        test(filterUtils, "topic_2.dita", "topic1_2.dita");
+    }
+
+
+    @Test
+    public void testFilter_xhtml() throws Exception {
         test(new FilterUtils(false), "map.ditamap", "map_xhtml.ditamap");
+    }
+
+    @Test
+    public void testFilter_pdf() throws Exception {
         test(new FilterUtils(true), "map.ditamap", "map_pdf.ditamap");
     }
 
     private void test(final FilterUtils filterUtils, final String srcFile, final String expFile) throws Exception {
-        final Transformer t = TransformerFactory.newInstance().newTransformer();
-        final InputStream src = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/src/" + srcFile);
+        filterUtils.setLogger(new TestUtils.TestLogger());
+
         final ProfilingFilter f = new ProfilingFilter();
         f.setParent(XMLUtils.getXMLReader());
-        filterUtils.setLogger(new TestUtils.TestLogger());
         f.setFilterUtils(filterUtils);
         f.setLogger(new TestUtils.TestLogger());
-        final SAXSource s = new SAXSource(f, new InputSource(src));
-        final DOMResult d = new DOMResult();
-        t.transform(s, d);
 
-        final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-        builderFactory.setNamespaceAware(true);
-        builderFactory.setIgnoringComments(true);
-        final DocumentBuilder db = builderFactory.newDocumentBuilder();
+        final Document act = documentBuilder.newDocument();
+        try (InputStream src = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/src/" + srcFile)) {
+            final SAXSource s = new SAXSource(f, new InputSource(src));
+            final DOMResult d = new DOMResult(act);
+            transformerFactory.newTransformer().transform(s, d);
+        }
+
         try (final InputStream exp = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/exp/" + expFile)) {
-            assertXMLEqual(db.parse(exp), (Document) d.getNode());
+            assertXMLEqual(documentBuilder.parse(exp), act);
         }
     }
-
-
 }

@@ -14,7 +14,7 @@ apply plugin: 'signing'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
-version = '3.4.1'
+version = '3.5.0'
 
 description = """DITA Open Toolkit"""
 
@@ -33,7 +33,7 @@ dependencies {
     compile group: 'xerces', name: 'xercesImpl', version:'2.12.0'
     compile group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
     compile group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
-    compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.9.1-4'
+    compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.9.1-7'
     compile group: 'com.ibm.icu', name: 'icu4j', version:'61.1'
     compile group: 'org.apache.ant', name: 'ant', version:'1.10.6'
     compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.6'
@@ -110,7 +110,6 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
 // End to end test
 
 dependencies {
-    testCompile project(':eclipsehelp')
     testCompile project(':htmlhelp')
     testCompile project(':fo')
     testCompile project(':fop')
@@ -145,7 +144,7 @@ task copyInstall(type: Copy) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":eclipsehelp:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
+task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
     description "Build archives and install all plugins with dependencies"
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/config")
@@ -167,10 +166,13 @@ def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "develop" :
                    "${cleanVersion}"
 def bundled = [
+        "eclipsehelp": "https://github.com/dita-ot/org.dita.eclipsehelp/releases/download/3.4/org.dita.eclipsehelp-3.4.0.zip",
         "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.3.2/org.lwdita-2.3.2.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
         "dita11": "https://github.com/dita-ot/org.dita.specialization.dita11/archive/1.1.1.zip",
         "dita12": "https://github.com/dita-ot/org.oasis-open.dita.v1_2/archive/1.2.1.zip",
+        "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20200417/org.oasis-open.dita.v2_0.zip",
+        "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20200417/org.oasis-open.dita.techcomm.v2_0.zip",
         "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.2.2/org.oasis-open.xdita.v0_2_2.zip",
         "index": "https://github.com/dita-ot/org.dita.index/releases/download/1.0.0/org.dita.index-1.0.0.zip"
 ]
@@ -231,7 +233,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "docsrc/**"
         exclude "plugins/*/plugin.xml"
         include "plugins/org.dita.base/**"
-        include "plugins/org.dita.eclipsehelp/**"
         include "plugins/org.dita.html5/**"
         exclude "plugins/org.dita.html5/build"
         exclude "plugins/org.dita.html5/.sass-cache"
@@ -266,7 +267,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":eclipsehelp:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir
@@ -322,7 +323,6 @@ task generateJavadocs(type: Javadoc) {
 generateJavadocs.onlyIf { skipDocs() }
 
 def plugins = [
-        "org.dita.eclipsehelp",
         "org.dita.html5",
         "org.dita.htmlhelp",
         "org.dita.pdf2",
@@ -436,7 +436,7 @@ publishing {
                         developer {
                             id = 'robander'
                             name = 'Robert D Anderson'
-                            email = 'robander@us.ibm.com'
+                            email = 'gorodki@gmail.com'
                         }
                         developer {
                             id = 'jelovirt'

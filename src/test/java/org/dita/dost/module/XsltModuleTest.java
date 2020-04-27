@@ -8,6 +8,7 @@
 
 package org.dita.dost.module;
 
+import net.sf.saxon.Configuration;
 import net.sf.saxon.functions.FunctionLibraryList;
 import net.sf.saxon.jaxp.SaxonTransformerFactory;
 import net.sf.saxon.lib.CollationURIResolver;
@@ -22,26 +23,5 @@ import static org.junit.Assert.*;
 
 public class XsltModuleTest {
 
-    private XsltModule xsltModule;
-    private SaxonTransformerFactory tf;
 
-    @Before
-    public void setUp() {
-        xsltModule = new XsltModule();
-        tf = (SaxonTransformerFactory) TransformerFactory.newInstance("net.sf.saxon.jaxp.SaxonTransformerFactory", getClass().getClassLoader());
-    }
-
-    @Test
-    public void configureCollationResolvers() {
-        xsltModule.configureCollationResolvers(tf);
-        final CollationURIResolver collationURIResolver = tf.getConfiguration().getCollationURIResolver();
-        assertTrue(collationURIResolver.getClass().isAssignableFrom(DelegatingCollationUriResolverTest.class));
-    }
-
-    @Test
-    public void configureExtensions() {
-        xsltModule.configureExtensions(tf);
-        final SymbolicName.F functionName = new SymbolicName.F(new StructuredQName("x", "y", "z"), 0);
-        assertTrue(tf.getConfiguration().getIntegratedFunctionLibrary().isAvailable(functionName));
-    }
 }

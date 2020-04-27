@@ -7,22 +7,55 @@
  */
 package org.dita.dost.util;
 
-import static javax.xml.XMLConstants.*;
-import static org.junit.Assert.*;
-
-import java.util.Deque;
-import java.util.LinkedList;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Element;
-import org.w3c.dom.Document;
-import org.w3c.dom.DOMImplementation;
+import net.sf.saxon.Configuration;
+import net.sf.saxon.lib.CollationURIResolver;
+import net.sf.saxon.om.StructuredQName;
+import net.sf.saxon.trans.SymbolicName;
+import org.dita.dost.TestUtils.CachingLogger;
+import org.dita.dost.TestUtils.CachingLogger.Message;
+import org.dita.dost.module.DelegatingCollationUriResolverTest;
+import org.junit.Test;
 import org.w3c.dom.Attr;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
-import org.junit.Test;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
+
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.junit.Assert.*;
 
 public class XMLUtilsTest {
+
+    @Test
+    public void configureCollationResolvers() {
+        final net.sf.saxon.Configuration configuration = new Configuration();
+        XMLUtils.configureSaxonCollationResolvers(configuration);
+        final CollationURIResolver collationURIResolver = configuration.getCollationURIResolver();
+        assertTrue(collationURIResolver.getClass().isAssignableFrom(DelegatingCollationUriResolverTest.class));
+    }
+
+    @Test
+    public void configureExtensions() {
+        final net.sf.saxon.Configuration configuration = new Configuration();
+        XMLUtils.configureSaxonExtensions(configuration);
+        final SymbolicName.F functionName = new SymbolicName.F(new StructuredQName("x", "y", "z"), 0);
+        assertTrue(configuration.getIntegratedFunctionLibrary().isAvailable(functionName));
+    }
 
     @Test
     public void testGetPrefix() {
@@ -215,6 +248,30 @@ public class XMLUtilsTest {
         assertTrue(XMLUtils.nonDitaContext(classes));
         classes.addFirst(null);
         assertTrue(XMLUtils.nonDitaContext(classes));
+    }
+
+    @Test
+    public void withLogger() throws TransformerException {
+        final String file = "<xsl:stylesheet version=\"2.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n" +
+                "  <xsl:template match='/'>\n" +
+                "    <xsl:message>info</xsl:message>\n" +
+                "    <xsl:message><info/></xsl:message>\n" +
+                "  </xsl:template>\n" +
+                "</xsl:stylesheet>";
+        final Transformer base = TransformerFactory.newInstance().newTransformer(
+                new StreamSource(new StringReader(file)));
+        final CachingLogger logger = new CachingLogger();
+
+        XMLUtils.withLogger(base, logger)
+                .transform(
+                        new StreamSource(new StringReader(file)),
+                        new StreamResult(new ByteArrayOutputStream()));
+
+        assertEquals(Arrays.asList(
+                    new Message(Message.Level.WARN, "info", null),
+                    new Message(Message.Level.WARN, "<info/>", null)
+                ),
+                logger.getMessages());
     }
 
 }

@@ -8,11 +8,17 @@
  */
 package org.dita.dost.module;
 
-import static org.apache.commons.io.FileUtils.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FileUtils.*;
-import static org.dita.dost.util.XMLUtils.getDocumentBuilder;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.reader.ChunkMapReader;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.util.DitaClass;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.writer.TopicRefWriter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,18 +26,12 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.xml.parsers.DocumentBuilder;
-
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.pipeline.AbstractPipelineInput;
-import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.reader.ChunkMapReader;
-import org.dita.dost.util.*;
-import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.writer.TopicRefWriter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
+import static org.apache.commons.io.FileUtils.deleteQuietly;
+import static org.apache.commons.io.FileUtils.moveFile;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.getExtension;
+import static org.dita.dost.util.URLUtils.getRelativePath;
+import static org.dita.dost.util.URLUtils.stripFragment;
 
 /**
  * The chunking module class.
@@ -119,11 +119,10 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if reading ditamap fails
      */
     private boolean isEclipseMap(final URI mapFile) throws DITAOTException {
-        final DocumentBuilder builder = getDocumentBuilder();
         Document doc;
         try {
-            doc = builder.parse(mapFile.toString());
-        } catch (final SAXException | IOException e) {
+            doc = job.getStore().getDocument(mapFile);
+        } catch (final IOException e) {
             throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
         }
         final Element root = doc.getDocumentElement();

@@ -9,12 +9,14 @@
 package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.util.*;
+import org.dita.dost.util.DelayConrefUtils;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyDef;
+import org.dita.dost.util.KeyScope;
 import org.dita.dost.writer.ConkeyrefFilter;
 import org.dita.dost.writer.KeyrefPaser;
 import org.dita.dost.writer.TopicFragmentFilter;
@@ -22,19 +24,14 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
 import org.xml.sax.XMLFilter;
 
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 import static org.dita.dost.util.Configuration.configuration;
@@ -42,7 +39,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.KEYDEF_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.close;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
@@ -58,7 +54,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
     private TopicFragmentFilter topicFragmentFilter;
-    private final XMLUtils xmlUtils = new XMLUtils();
 
     @Override
     public void setJob(final Job job) {
@@ -69,12 +64,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             throw new RuntimeException(e);
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        super.setLogger(logger);
-        xmlUtils.setLogger(logger);
     }
 
     /**
@@ -98,28 +87,53 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 final String cls = Optional
                         .ofNullable(job.getProperty("temp-file-name-scheme"))
                         .orElse(configuration.get("temp-file-name-scheme"));
-                tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) Class.forName(cls).newInstance();
+                tempFileNameScheme = (TempFileNameScheme) Class.forName(cls).newInstance();
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
             tempFileNameScheme.setBaseDir(job.getInputDir());
             initFilters();
 
-            final Document doc = readMap();
-
+            // Read start map
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
             final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final URI mapFile = in.uri;
+            final Document doc = readMap(in);
             logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
             reader.read(job.tempDirURI.resolve(mapFile), doc);
 
-            final KeyScope rootScope = reader.getKeyDefinition();
-            final List<ResolveTask> jobs = collectProcessingTopics(fis, rootScope, doc);
-            writeMap(doc);
+            final KeyScope startScope = reader.getKeyDefinition();
+            writeMap(in, doc);
+
+            // Read resources maps
+            final Collection<FileInfo> resourceFis = job.getFileInfo(fi -> fi.isInputResource && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP));
+            final KeyScope rootScope = resourceFis.stream()
+                    .map(fi -> {
+                        try {
+                            final Document d = readMap(fi);
+                            logger.info("Reading " + job.tempDirURI.resolve(fi.uri).toString());
+                            final KeyrefReader r = new KeyrefReader();
+                            r.setLogger(logger);
+                            r.read(job.tempDirURI.resolve(fi.uri), d);
+                            final KeyScope s = r.getKeyDefinition();
+                            writeMap(fi, d);
+                            return s;
+                        } catch (DITAOTException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .reduce(startScope, KeyScope::merge);
+            final List<ResolveTask> jobs = collectProcessingTopics(resourceFis, rootScope, doc);
 
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-            delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
+            if (transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
+                delayConrefUtils = new DelayConrefUtils();
+                delayConrefUtils.setJob(job);
+                delayConrefUtils.setLogger(logger);
+            } else {
+                delayConrefUtils = null;
+            }
             for (final ResolveTask r: jobs) {
                 if (r.out != null) {
                     processFile(r);
@@ -384,12 +398,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             if (r.out != null) {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
                         " to " + job.tempDirURI.resolve(r.out.uri));
-                xmlUtils.transform(new File(job.tempDir, r.in.file.getPath()),
-                                   new File(job.tempDir, r.out.file.getPath()),
-                                   filters);
+                job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
+                                         new File(job.tempDir, r.out.file.getPath()).toURI(),
+                                         filters);
             } else {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
-                xmlUtils.transform(new File(job.tempDir, r.in.file.getPath()), filters);
+                job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
+                                         filters);
             }
             // validate resource-only list
             normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
@@ -411,40 +426,21 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    private Document readMap() throws DITAOTException {
-        InputSource in = null;
+    private Document readMap(final FileInfo input) throws DITAOTException {
         try {
-            final FileInfo input = job.getFileInfo(fi -> fi.isInput).iterator().next();
-            in = new InputSource(job.tempDirURI.resolve(input.uri).toString());
-            return XMLUtils.getDocumentBuilder().parse(in);
+            final URI in = job.tempDirURI.resolve(input.uri);
+            return job.getStore().getDocument(in);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to parse map: " + e.getMessage(), e);
-        } finally {
-            try {
-                close(in);
-            } catch (IOException e) {
-                logger.error("Failed to close input: " + e.getMessage(), e);
-            }
         }
     }
 
-    private void writeMap(final Document doc) throws DITAOTException {
-        Result out = null;
+    private void writeMap(final FileInfo in, final Document doc) throws DITAOTException {
         try {
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-            out = new StreamResult(job.tempDirURI.resolve(in.uri).toString());
-            transformer.transform(new DOMSource(doc), out);
-        } catch (final TransformerConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (final TransformerException e) {
-            throw new DITAOTException("Failed to write map: " + e.getMessageAndLocation(), e);
-        } finally {
-            try {
-                close(out);
-            } catch (IOException e) {
-                logger.error("Failed to close result: " + e.getMessage(), e);
-            }
+            final URI file = job.tempDirURI.resolve(in.uri);
+            job.getStore().writeDocument(doc, file);
+        } catch (final IOException e) {
+            throw new DITAOTException("Failed to write map: " + e.getMessage(), e);
         }
     }
 

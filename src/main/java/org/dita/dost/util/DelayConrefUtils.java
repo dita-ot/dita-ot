@@ -8,35 +8,26 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toFile;
-import static org.dita.dost.util.XMLUtils.withLogger;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.*;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.writer.ExportAnchorsFilter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
+
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.*;
+
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toFile;
 
 /**
  *
@@ -69,7 +60,6 @@ public final class DelayConrefUtils {
         this.job = job;
     }
 
-
     /**
      * Find whether an id is refer to a topic in a dita file.
      * @param absolutePathToFile the absolute path of dita file
@@ -83,9 +73,7 @@ public final class DelayConrefUtils {
         }
         try {
             //load the file
-            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
-            builder.setEntityResolver(CatalogUtils.getCatalogResolver());
-            final Document root = builder.parse(new InputSource(new FileInputStream(absolutePathToFile)));
+            final Document root = job.getStore().getDocument(absolutePathToFile.toURI());
 
             //get root element
             final Element doc = root.getDocumentElement();
@@ -134,9 +122,7 @@ public final class DelayConrefUtils {
         try {
             //load export.xml only once
             if (root == null) {
-                final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
-                builder.setEntityResolver(CatalogUtils.getCatalogResolver());
-                root = builder.parse(new InputSource(new FileInputStream(exportFile)));
+                root = job.getStore().getDocument(exportFile.toURI());
             }
             //get file node which contains the export node
             final Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
@@ -237,8 +223,7 @@ public final class DelayConrefUtils {
         }
         //File outputFile = new File(tempDir, filename);
 
-        final DocumentBuilder db = XMLUtils.getDocumentBuilder();
-        final Document doc = db.newDocument();
+        final Document doc = XMLUtils.getDocumentBuilder().newDocument();
         final Element properties = (Element) doc.appendChild(doc
                 .createElement("properties"));
 
@@ -250,36 +235,11 @@ public final class DelayConrefUtils {
             entry.setAttribute("key", key);
             entry.appendChild(doc.createTextNode(prop.getProperty(key)));
         }
-        final TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer t;
+
         try {
-            t = withLogger(tf.newTransformer(), logger);
-            t.setOutputProperty(OutputKeys.INDENT, "yes");
-            t.setOutputProperty(OutputKeys.METHOD, "xml");
-            t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        } catch (final TransformerConfigurationException tce) {
-            throw new RuntimeException(tce);
-        }
-        final DOMSource doms = new DOMSource(doc);
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(outputFile);
-            final StreamResult sr = new StreamResult(out);
-            t.transform(doms, sr);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final TransformerException e) {
-            logger.error("Failed to process map: " + e.getMessageAndLocation(), e);
-        } catch (final Exception e) {
+            job.getStore().writeDocument(doc, outputFile.toURI());
+        } catch (final IOException e) {
             logger.error("Failed to process map: " + e.getMessage(), e);
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (final IOException e) {
-                    logger.error("Failed to close output stream: " + e.getMessage());
-                }
-            }
         }
     }
 

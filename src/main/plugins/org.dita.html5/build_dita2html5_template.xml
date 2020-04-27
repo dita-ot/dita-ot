@@ -109,14 +109,15 @@ See the accompanying LICENSE file for applicable license.
                    html5.topics.common,
                    html5.topics.common.inner"/>
 
-  <target name="html5.topic.init" unless="noMap">
-    <loadfile property="html5.map" srcfile="${dita.temp.dir}/${user.input.file.listfile}">
+  <target name="html5.topic.init">
+    <local name="html5.map"/>
+    <loadfile property="html5.map" srcfile="${dita.temp.dir}/${user.input.file.listfile}" unless:set="noMap">
       <filterchain>
         <headfilter lines="1"/>
       </filterchain>
     </loadfile>
-    <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}"/>
-    <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
+    <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}" unless:set="noMap"/>
+    <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no" if:set="dita.input.valfile"/>
   </target>
 
   <target name="html5.image-metadata"
@@ -210,7 +211,7 @@ See the accompanying LICENSE file for applicable license.
       <pipeline message="Convert DITA map to HTML5" taskname="xslt">
       <xslt destdir="${html5.toc.output.dir}"
             style="${args.html5.toc.xsl}">
-        <ditafileset input="true"/>
+        <ditafileset input="true" format="ditamap"/>
         <param name="FILTERFILE" expression="${dita.input.valfile.url}" if:set="dita.input.valfile"/>
         <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
         <param name="contenttarget" expression="${args.html5.contenttarget}" if:set="args.html5.contenttarget"/>
@@ -239,7 +240,7 @@ See the accompanying LICENSE file for applicable license.
       <fileset dir="${dita.plugin.org.dita.html5.dir}/css" includes="*.css"/>
     </copy>
     <!-- Copy user specify css file when required -->
-    <antcall target="html5.copy-css-user"/>
+    <antcall target="html5.copy-css-user" inheritRefs="true"/>
   </target>
 
   <target name="html5.copy-css-user" if="user.copycss.yes">

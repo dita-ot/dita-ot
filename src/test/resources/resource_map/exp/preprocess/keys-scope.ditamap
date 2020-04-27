@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/resource_map/temp/preprocess2?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/resource_map/temp/preprocess2/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?>
+<!--
+  ~ This file is part of the DITA Open Toolkit project.
+  ~
+  ~ Copyright 2019 Jarno Elovirta
+  ~
+  ~ See the accompanying LICENSE file for applicable license.
+  -->
+
+<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map "
+  ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)">
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="key" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">scope value</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="common" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">scope override</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+</map>

@@ -1,0 +1,11 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  specializations="@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product"
+  id="test" ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/title ">Coderef test</title>
+  <body class="- topic/body ">
+    <foreign class="- topic/foreign "><schema default="value">
+  <p id="fragment">fragment</p>
+</schema></foreign>
+    <foreign class="- topic/foreign "><p id="fragment">fragment</p></foreign>
+  </body>
+</topic>

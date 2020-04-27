@@ -7,19 +7,6 @@
  */
 package org.dita.dost.pdf2;
 
-import static javax.xml.XMLConstants.*;
-
-import java.io.*;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.*;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
@@ -31,6 +18,16 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.xml.XMLConstants.XML_NS_URI;
 
 /**
  * Generate list of variable files.
@@ -90,12 +87,10 @@ public final class VariableFileTask extends Task {
                 root.appendChild(lang);
             }
 
-            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(d), new StreamResult(file));
+            new XMLUtils().writeDocument(d, file);
         } catch (final RuntimeException e) {
             throw e;
-        } catch (final TransformerException e) {
-            throw new BuildException("Failed to write output file: " + e.getMessageAndLocation(), e);
-        } catch (final Exception e) {
+        } catch (final SAXException | IOException e) {
             throw new BuildException("Failed to write output file: " + e.getMessage(), e);
         } finally {
             if (out != null) {

@@ -51,6 +51,8 @@ public final class FilterUtils {
     public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
     public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
+    private static final String FLAG_STYLE_PREFIX = "flag__style--";
+
     private DITAOTLogger logger;
     /** Actions for filter keys. */
     private final Map<FilterKey, Action> filterMap;
@@ -223,7 +225,7 @@ public final class FilterUtils {
             return res.stream()
                     .map(f -> new Flag(ELEMENT_NAME_PROP, conflictColor ? foregroundConflictColor : f.color,
                             conflictBackcolor ? backgroundConflictColor : f.backcolor,
-                            f.style, f.changebar, f.startflag, f.endflag))
+                            f.style, f.changebar, f.startflag, f.endflag, f.outputClass))
                     .collect(Collectors.toSet());
         } else {
             return res;
@@ -707,9 +709,10 @@ public final class FilterUtils {
         public final String changebar;
         public final FlagImage startflag;
         public final FlagImage endflag;
+        public final String outputClass;
 
         public Flag(String proptype, String color, String backcolor, String[] style, String changebar,
-                FlagImage startflag, FlagImage endflag) {
+                FlagImage startflag, FlagImage endflag, String outputClass) {
             this.proptype = proptype;
             this.color = color;
             this.backcolor = backcolor;
@@ -717,12 +720,14 @@ public final class FilterUtils {
             this.changebar = changebar;
             this.startflag = startflag;
             this.endflag = endflag;
+            this.outputClass = outputClass;
         }
 
         public Flag adjustPath(final URI currentFile, final Job job) {
             return new Flag(proptype, color, backcolor, style, changebar,
                     adjustPath(startflag, currentFile, job),
-                    adjustPath(endflag, currentFile, job));
+                    adjustPath(endflag, currentFile, job),
+                    outputClass);
         }
 
         private FlagImage adjustPath(final FlagImage img, final URI currentFile, final Job job) {
@@ -743,51 +748,44 @@ public final class FilterUtils {
         }
 
         public void writeStartFlag(final ContentHandler contentHandler) throws SAXException {
-            final StringBuilder outputclass = new StringBuilder();
+            final StringJoiner outputClassAttr = new StringJoiner(" ");
+            final StringBuilder styleAttr = new StringBuilder();
             if (color != null) {
-                outputclass.append("color:").append(color).append(";");
+                styleAttr.append("color:").append(color).append(";");
             }
             if (backcolor != null) {
-                outputclass.append("background-color:").append(backcolor).append(";");
+                styleAttr.append("background-color:").append(backcolor).append(";");
+            }
+            if (outputClass != null) {
+                outputClassAttr.add(outputClass);
             }
             if (style != null) {
                 for (final String style : style) {
-                    switch (style) {
-                        case "italics":
-                            outputclass.append("font-style:italic;");
-                            break;
-                        case "bold":
-                            outputclass.append("font-weight:bold;");
-                            break;
-                        case "underline":
-                        case "double-underline":
-                            outputclass.append("text-decoration:").append(style).append(";");
-                            break;
-                        case "overline":
-                            outputclass.append("text-decoration:overline;");
-                            break;
-                    }
+                    outputClassAttr.add(FLAG_STYLE_PREFIX + style);
                 }
             }
 
             final XMLUtils.AttributesBuilder atts = new XMLUtils.AttributesBuilder()
-                    .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-startprop ");
-            if (outputclass.length() != 0) {
-                atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputclass.toString());
+                    .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_STARTPROP.toString());
+            if (outputClassAttr.length() != 0) {
+                atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputClassAttr.toString());
             }
-            contentHandler.startElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop",
+            if (styleAttr.length() != 0) {
+                atts.add(ATTRIBUTE_NAME_STYLE, styleAttr.toString());
+            }
+            contentHandler.startElement(NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName,
                     atts.build());
             writeProp(contentHandler, true);
-            contentHandler.endElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop");
+            contentHandler.endElement(NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName);
         }
 
         public void writeEndFlag(final ContentHandler contentHandler) throws SAXException {
-            contentHandler.startElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop",
+            contentHandler.startElement(NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName,
                     new XMLUtils.AttributesBuilder()
-                            .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-endprop ")
+                            .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_ENDPROP.toString())
                             .build());
             writeProp(contentHandler, false);
-            contentHandler.endElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop");
+            contentHandler.endElement(NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName);
         }
 
         private void writeProp(final ContentHandler contentHandler, final boolean isStart) throws SAXException {
@@ -800,6 +798,9 @@ public final class FilterUtils {
             }
             if (style != null) {
                 propAtts.add("style", Stream.of(style).collect(Collectors.joining(" ")));
+            }
+            if (outputClass != null) {
+                propAtts.add("outputclass", outputClass);
             }
             if (changebar != null) {
                 propAtts.add("changebar", changebar);
@@ -913,6 +914,7 @@ public final class FilterUtils {
                     "color='" + color + '\'' +
                     ", backcolor='" + backcolor + '\'' +
                     ", style=" + Arrays.toString(style) +
+                    ", outputclass=" + outputClass +
                     ", changebar='" + changebar + '\'' +
                     ", startflag=" + startflag +
                     ", endflag=" + endflag +
@@ -930,6 +932,7 @@ public final class FilterUtils {
             if (!Objects.equals(backcolor, flag.backcolor)) return false;
             // Probably incorrect - comparing Object[] arrays with Arrays.equals
             if (!Arrays.equals(style, flag.style)) return false;
+            if (!Objects.equals(outputClass, flag.outputClass)) return false;
             if (!Objects.equals(changebar, flag.changebar)) return false;
             if (!Objects.equals(startflag, flag.startflag)) return false;
             return Objects.equals(endflag, flag.endflag);
@@ -941,6 +944,7 @@ public final class FilterUtils {
             result = 31 * result + (backcolor != null ? backcolor.hashCode() : 0);
             result = 31 * result + Arrays.hashCode(style);
             result = 31 * result + (changebar != null ? changebar.hashCode() : 0);
+            result = 31 * result + (outputClass != null ? outputClass.hashCode() : 0);
             result = 31 * result + (startflag != null ? startflag.hashCode() : 0);
             result = 31 * result + (endflag != null ? endflag.hashCode() : 0);
             return result;

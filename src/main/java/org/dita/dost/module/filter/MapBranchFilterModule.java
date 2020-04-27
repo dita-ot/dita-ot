@@ -16,16 +16,9 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -35,9 +28,9 @@ import java.util.stream.Collectors;
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
+import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
-import static org.dita.dost.util.XMLUtils.close;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
@@ -57,17 +50,10 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
-    private final DocumentBuilder builder;
-
     /** Current map being processed, relative to temporary directory */
     private URI map;
     /** Absolute path for filter file. */
     private URI ditavalFile;
-
-    public MapBranchFilterModule() {
-        super();
-        builder = XMLUtils.getDocumentBuilder();
-    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -101,8 +87,8 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         final Document doc;
         try {
             logger.debug("Reading " + currentFile);
-            doc = builder.parse(new InputSource(currentFile.toString()));
-        } catch (final SAXException | IOException e) {
+            doc = job.getStore().getDocument(currentFile);
+        } catch (final IOException e) {
             logger.error("Failed to parse " + currentFile, e);
             return;
         }
@@ -115,21 +101,10 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         rewriteDuplicates(doc.getDocumentElement());
 
         logger.debug("Writing " + currentFile);
-        Result result = null;
         try {
-            Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(currentFile.toString());
-            serializer.transform(new DOMSource(doc), result);
-        } catch (final TransformerConfigurationException | TransformerFactoryConfigurationError e) {
-            throw new RuntimeException(e);
-        } catch (final TransformerException e) {
-            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessageAndLocation(), e);
-        } finally {
-            try {
-                close(result);
-            } catch (final IOException e) {
-                logger.error("Failed to close result stream for " + map.toString() + ": " + e.getMessage(), e);
-            }
+            job.getStore().writeDocument(doc, currentFile);
+        } catch (final IOException e) {
+            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
         }
     }
 
@@ -253,7 +228,11 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     /** Filter map and remove excluded content. */
     private void filterBranches(final Element root) {
-        final QName[][] props = getExtProps(root.getAttribute(ATTRIBUTE_NAME_DOMAINS));
+        final String domains = root.getAttribute(ATTRIBUTE_NAME_DOMAINS);
+        final String specializations = root.getAttribute(ATTRIBUTE_NAME_SPECIALIZATIONS);
+        final QName[][] props = !domains.isEmpty()
+                ? getExtProps(domains)
+                : getExtPropsFromSpecializations(specializations);
         final SubjectScheme subjectSchemeMap = getSubjectScheme(root);
         final List<FilterUtils> baseFilter = getBaseFilter(subjectSchemeMap);
         filterBranches(root, baseFilter, props, subjectSchemeMap);

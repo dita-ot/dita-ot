@@ -9,7 +9,6 @@ package org.dita.dost.writer;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.XMLUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -25,10 +24,6 @@ import java.io.InputStream;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 
 public class NormalizeTableFilterTest {
-
-    @BeforeClass
-    public static void setUp() {
-    }
 
     @Test
     public void testNoFilter() throws Exception {

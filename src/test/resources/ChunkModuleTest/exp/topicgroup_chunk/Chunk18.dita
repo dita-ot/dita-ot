@@ -10,7 +10,7 @@
 <?path2project-uri ./?>
 <topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
 ditaarch:DITAArchVersion="1.3"
-domains=""
+domains="" specializations=""
 class="- topic/topic " id="Chunk18">
 <title class="- topic/title ">Navigation title in a topichead</title>
 <topic

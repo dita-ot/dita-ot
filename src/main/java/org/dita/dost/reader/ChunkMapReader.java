@@ -12,7 +12,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -25,12 +25,6 @@ import org.xml.sax.SAXException;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Result;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -286,23 +280,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private void outputMapFile(final URI file, final Document doc) {
-        Result result = null;
         try {
-            final Transformer t = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(new FileOutputStream(new File(file)));
-            t.transform(new DOMSource(doc), result);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final TransformerException e) {
-            logger.error(e.getMessageAndLocation(), e);
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                close(result);
-            } catch (final IOException e) {
-                logger.error(e.getMessage(), e);
-            }
+            job.getStore().writeDocument(doc, file);
+        } catch (final IOException e) {
+            logger.error("Failed to serialize map: " + e.getMessage(), e);
         }
     }
 
@@ -425,7 +406,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
         if (navtitle == null) {
             navtitle = getValue(topicref, ATTRIBUTE_NAME_NAVTITLE);
         }
-        final String shortDesc = getChildElementValueOfTopicmeta(topicref, MAP_SHORTDESC);
+        String shortDesc = getChildElementValueOfTopicmeta(topicref, TOPIC_SHORTDESC);
+        if (shortDesc == null) {
+            shortDesc = getChildElementValueOfTopicmeta(topicref, MAP_SHORTDESC);
+        }
 
         writeChunk(absTemp, name, navtitle, shortDesc);
 
@@ -460,6 +444,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 serializer.writeAttribute(ATTRIBUTE_NAME_ID, id);
                 serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString());
                 serializer.writeAttribute(ATTRIBUTE_NAME_DOMAINS, "");
+                serializer.writeAttribute(ATTRIBUTE_NAME_SPECIALIZATIONS, "");
                 serializer.writeStartElement(TOPIC_TITLE.localName);
                 serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TITLE.toString());
                 if (title != null) {

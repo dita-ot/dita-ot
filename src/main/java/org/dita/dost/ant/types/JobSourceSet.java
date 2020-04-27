@@ -89,14 +89,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
     @VisibleForTesting
     Job getJob() {
-        String tempDir = getProject().getUserProperty(ANT_TEMP_DIR);
-        if (tempDir == null) {
-            tempDir = getProject().getProperty(ANT_TEMP_DIR);
-        }
-        if (tempDir == null) {
-            throw new IllegalStateException();
-        }
-        final Job job = ExtensibleAntInvoker.getJob(new File(tempDir), getProject());
+        final Job job = ExtensibleAntInvoker.getJob(getProject());
         if (job == null) {
             throw new IllegalStateException();
         }
@@ -129,6 +122,10 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
     public void setInput(final boolean isInput) {
         include.setInput(isInput);
+    }
+
+    public void setInputResource(final boolean isInputResource) {
+        include.setInputResource(isInputResource);
     }
 
     public void setProcessingRole(final String processingRole) {
@@ -167,6 +164,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         return (incl.formats.isEmpty() || (incl.formats.contains(format))) &&
                 (incl.hasConref == null || f.hasConref == incl.hasConref) &&
                 (incl.isInput == null || f.isInput == incl.isInput) &&
+                (incl.isInputResource == null || f.isInputResource == incl.isInputResource) &&
                 (incl.isResourceOnly == null || f.isResourceOnly == incl.isResourceOnly);
     }
 
@@ -196,15 +194,18 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         private Set<String> formats = Collections.emptySet();
         private Boolean hasConref;
         private Boolean isInput;
+        private Boolean isInputResource;
         private Boolean isResourceOnly;
 
         public SelectorElem() {
         }
 
-        public SelectorElem(Set<String> formats, Boolean hasConref, Boolean isInput, Boolean isResourceOnly) {
+        public SelectorElem(Set<String> formats, Boolean hasConref, Boolean isInput,
+                            Boolean isInputResource, Boolean isResourceOnly) {
             this.formats = formats != null ? formats : Collections.emptySet();
             this.hasConref = hasConref;
             this.isInput = isInput;
+            this.isInputResource = isInputResource;
             this.isResourceOnly = isResourceOnly;
         }
 
@@ -224,12 +225,20 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
             this.isInput = isInput;
         }
 
+        public void setInputResource(final boolean isInputResource) {
+            this.isInputResource = isInputResource;
+        }
+
         public void setProcessingRole(final String processingRole) {
             this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
         }
 
         public boolean isEmpty() {
-            return formats.isEmpty() && hasConref == null && isInput == null && isResourceOnly == null;
+            return formats.isEmpty() &&
+                    hasConref == null &&
+                    isInput == null &&
+                    isInputResource == null &&
+                    isResourceOnly == null;
         }
     }
 }

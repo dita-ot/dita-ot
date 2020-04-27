@@ -17,14 +17,12 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.NormalizeFilter;
 import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
@@ -42,9 +40,7 @@ import java.util.Objects;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.exists;
-import static org.dita.dost.util.URLUtils.stripFragment;
-import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.ancestors;
 import static org.dita.dost.util.XMLUtils.toList;
 import static org.dita.dost.writer.DitaWriterFilter.ATTRIBUTE_NAME_ORIG_FORMAT;
@@ -67,6 +63,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             parseInputParameters(input);
             init();
 
+            readResourceFiles();
             readStartFile();
             processWaitList();
 
@@ -92,6 +89,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             if (doc != null) {
                 final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
                 subjectSchemeReader.setLogger(logger);
+                subjectSchemeReader.setJob(job);
                 logger.debug("Loading subject schemes");
                 final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
                 subjectSchemes.stream()
@@ -109,6 +107,43 @@ public final class TopicReaderModule extends AbstractReaderModule {
         }
     }
 
+    @Override
+    void readResourceFiles() throws DITAOTException {
+        if (!resources.isEmpty()) {
+            for (URI resource : resources) {
+                additionalResourcesSet.add(resource);
+                final FileInfo fi = job.getFileInfo(resource);
+                if (fi == null) {
+                    addToWaitList(new Reference(resource));
+                } else {
+                    if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+                        getStartDocuments(fi).forEach(this::addToWaitList);
+                    } else {
+                        if (fi.format == null) {
+                            fi.format = ATTR_FORMAT_VALUE_DITA;
+                            job.add(fi);
+                        }
+                        addToWaitList(new Reference(resource, fi.format));
+                    }
+                }
+            }
+            processWaitList();
+
+            additionalResourcesSet.addAll(hrefTargetSet);
+            additionalResourcesSet.addAll(conrefTargetSet);
+            additionalResourcesSet.addAll(nonConrefCopytoTargetSet);
+            additionalResourcesSet.addAll(outDitaFilesSet);
+            additionalResourcesSet.addAll(conrefpushSet);
+            additionalResourcesSet.addAll(keyrefSet);
+            additionalResourcesSet.addAll(resourceOnlySet);
+            additionalResourcesSet.addAll(fullTopicSet);
+            additionalResourcesSet.addAll(fullMapSet);
+            additionalResourcesSet.addAll(conrefSet);
+
+            resourceOnlySet.clear();
+        }
+    }
+
     private Document getMapDocument() throws SAXException {
         final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
         if (fi == null) {
@@ -117,20 +152,20 @@ public final class TopicReaderModule extends AbstractReaderModule {
         final URI currentFile = job.tempDirURI.resolve(fi.uri);
         try {
             logger.debug("Reading " + currentFile);
-            return XMLUtils.getDocumentBuilder().parse(new InputSource(currentFile.toString()));
-        } catch (final SAXException | IOException e) {
+            return job.getStore().getDocument(currentFile);
+        } catch (final IOException e) {
             throw new SAXException("Failed to parse " + currentFile, e);
         }
     }
 
     @Override
     public void readStartFile() throws DITAOTException {
-        FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
+        final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
         if (fi == null) {
             addToWaitList(new Reference(job.getInputFile()));
         } else {
             if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
-                getStartDocuments().forEach(this::addToWaitList);
+                getStartDocuments(fi).forEach(this::addToWaitList);
             } else {
                 if (fi.format == null) {
                     fi.format = ATTR_FORMAT_VALUE_DITA;
@@ -141,12 +176,11 @@ public final class TopicReaderModule extends AbstractReaderModule {
         }
     }
 
-    private List<Reference> getStartDocuments() throws DITAOTException {
+    private List<Reference> getStartDocuments(final FileInfo startFileInfo) throws DITAOTException {
         final List<Reference> res = new ArrayList<>();
-        final FileInfo startFileInfo = job.getFileInfo(f -> f.isInput).iterator().next();
         assert startFileInfo.src != null;
         final URI tmp = job.tempDirURI.resolve(startFileInfo.uri);
-        final Source source = new StreamSource(tmp.toString());
+        final Source source = job.getStore().getSource(tmp);
         logger.info("Reading " + tmp);
         try {
             final XMLStreamReader in = XMLInputFactory.newInstance().createXMLStreamReader(source);

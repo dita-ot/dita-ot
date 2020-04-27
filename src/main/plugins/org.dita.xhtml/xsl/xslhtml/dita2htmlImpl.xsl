@@ -310,7 +310,7 @@ See the accompanying LICENSE file for applicable license.
      <!-- Do not reset xml:lang if it is already set on <html> -->
      <!-- Moved outputclass to the body tag -->
      <!-- Keep ditaval based styling at this point (replace DITA-OT 1.6 and earlier call to gen-style) -->
-     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
    </xsl:when>
    <xsl:otherwise>
      <xsl:call-template name="commonattributes">
@@ -857,8 +857,7 @@ See the accompanying LICENSE file for applicable license.
        Maintain that for now, though may want to update in the future to keep a wrapper in all cases.
        Considering using div instead of span, with a default inline CSS style. -->
   <xsl:choose>
-    <xsl:when test="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop |
-                    *[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass">
+    <xsl:when test="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop">
       <span>
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
@@ -911,7 +910,7 @@ See the accompanying LICENSE file for applicable license.
   <dt>
     <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
     <xsl:apply-templates select="../@xml:lang"/> 
-    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <xsl:for-each select="..">
       <xsl:call-template name="commonattributes"/>
     </xsl:for-each>
@@ -987,7 +986,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:template match="*[contains(@class, ' topic/dthd ')]" name="topic.dthd">
   <dt>
     <!-- Get ditaval style and xml:lang from DLHEAD, then override with local -->
-    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <xsl:apply-templates select="../@xml:lang"/>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
@@ -1003,7 +1002,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:template match="*[contains(@class, ' topic/ddhd ')]" name="topic.ddhd">
   <dd>
     <!-- Get ditaval style and xml:lang from DLHEAD, then override with local -->
-    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <xsl:apply-templates select="../@xml:lang"/>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
@@ -1908,7 +1907,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:param name="default-output-class"/>
   <xsl:apply-templates select="@xml:lang"/>
   <xsl:apply-templates select="@dir"/>
-  <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+  <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
   <xsl:apply-templates select="." mode="set-output-class">
     <xsl:with-param name="default" select="$default-output-class"/>
   </xsl:apply-templates>
@@ -1938,6 +1937,8 @@ See the accompanying LICENSE file for applicable license.
       </xsl:for-each>
     </xsl:if>
   </xsl:variable>
+  <xsl:variable name="flag-outputclass" as="xs:string*"
+                select="tokenize(normalize-space(*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass), '\s+')"/>
   <xsl:variable name="using-output-class">
     <xsl:choose>
       <xsl:when test="string-length(normalize-space($output-class)) > 0"><xsl:value-of select="$output-class"/></xsl:when>
@@ -1958,16 +1959,13 @@ See the accompanying LICENSE file for applicable license.
   </xsl:variable>
   <!-- Revised design with DITA-OT 1.5: include class ancestry if requested; 
        combine user output class with element default, giving priority to the user value. -->
-  <xsl:if test="string-length(normalize-space(concat($outputclass-attribute, $using-output-class, $ancestry))) > 0">
-    <xsl:attribute name="class">
-      <xsl:value-of select="$ancestry"/>
-      <xsl:if test="string-length(normalize-space($ancestry)) > 0 and 
-                    string-length(normalize-space($using-output-class)) > 0"><xsl:text> </xsl:text></xsl:if>
-      <xsl:value-of select="normalize-space($using-output-class)"/>
-      <xsl:if test="string-length(normalize-space(concat($ancestry, $using-output-class))) > 0 and
-                    string-length(normalize-space($outputclass-attribute)) > 0"><xsl:text> </xsl:text></xsl:if>
-      <xsl:value-of select="$outputclass-attribute"/>
-    </xsl:attribute>
+  <xsl:variable name="classes" as="xs:string*"
+    select="tokenize($ancestry, '\s+'),
+            tokenize(normalize-space($using-output-class), '\s+'),
+            tokenize($outputclass-attribute, '\s+'),
+            $flag-outputclass"/>
+  <xsl:if test="exists($classes)">
+    <xsl:attribute name="class" select="distinct-values($classes)" separator=" "/>
   </xsl:if>
 </xsl:template>
   
@@ -2726,7 +2724,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Add all attributes. To add your own additional attributes, use mode="addAttributesToBody". -->
   <xsl:template match="*" mode="addAttributesToHtmlBodyElement">
     <!-- Already put xml:lang on <html>; do not copy to body with commonattributes -->
-    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <!--output parent or first "topic" tag's outputclass as class -->
     <xsl:if test="@outputclass">
       <xsl:attribute name="class" select="@outputclass"/>

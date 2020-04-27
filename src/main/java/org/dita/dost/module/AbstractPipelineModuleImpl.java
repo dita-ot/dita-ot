@@ -13,6 +13,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -24,6 +25,7 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
 
     protected DITAOTLogger logger;
     protected Job job;
+    protected XMLUtils xmlUtils;
     Predicate<FileInfo> fileInfoFilter;
     List<XmlFilterModule.FilterPair> filters;
 
@@ -37,7 +39,15 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
         this.job = job;
     }
 
-    abstract public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException;
+    @Override
+    public void setXmlUtils(final XMLUtils xmlUtils) {
+        this.xmlUtils = xmlUtils;
+    }
+
+    @Override
+    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
+        return this.execute(input.getAttributes());
+    }
 
     @Override
     public void setFileInfoFilter(Predicate<FileInfo> fileInfoFilter) {

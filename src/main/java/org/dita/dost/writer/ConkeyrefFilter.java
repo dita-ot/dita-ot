@@ -12,6 +12,7 @@ import static org.dita.dost.util.URLUtils.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.*;
@@ -63,7 +64,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_CONKEYREF);
                 final KeyDef k = keys.get(key);
                 if (k.href != null && (k.scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
-                    URI target = getRelativePath(k.href);
+                    URI target = getRelativePath(keyDef.source, k.href);
                     final String keyFragment = k.href.getFragment();
                     if (id != null && keyFragment != null) {
                         target = setFragment(target, keyFragment + SLASH + id);
@@ -86,15 +87,15 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
     /**
      * Update href URI.
      *
+     * @param keyMap key definition map URI
      * @param href href URI
      * @return updated href URI
      */
-    private URI getRelativePath(final URI href) {
-        final URI keyValue;
-        final URI inputMap = job.getFileInfo(fi -> fi.isInput).stream()
+    private URI getRelativePath(final URI keyMap, final URI href) {
+        final URI inputMap = Optional.ofNullable(job.getFileInfo(keyMap))
                 .map(fi -> fi.uri)
-                .findFirst()
                 .orElse(null);
+        final URI keyValue;
         if (inputMap != null) {
             final URI tmpMap = job.tempDirURI.resolve(inputMap);
             keyValue = tmpMap.resolve(stripFragment(href));

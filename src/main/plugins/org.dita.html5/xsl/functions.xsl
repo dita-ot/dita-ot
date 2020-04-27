@@ -249,12 +249,10 @@ See the accompanying LICENSE file for applicable license.
   <xsl:function name="simpletable:is-keycol-entry" as="xs:boolean">
     <xsl:param name="entry" as="element()"/>
 
-    <xsl:variable name="table" as="element()"
-      select="simpletable:get-current-table($entry)"/>
+    <xsl:variable name="keycol" as="xs:integer?"
+      select="simpletable:get-current-table($entry)/@keycol/xs:integer(.)"/>
 
-    <xsl:sequence select="
-      $table/@keycol and xs:integer($table/@keycol) eq count($entry/preceding-sibling::*) + 1
-    "/>
+    <xsl:sequence select="$keycol = $entry/@dita-ot:x/xs:integer(.)"/>
   </xsl:function>
   
   <xsl:function name="dita-ot:normalize-href" as="xs:string?">

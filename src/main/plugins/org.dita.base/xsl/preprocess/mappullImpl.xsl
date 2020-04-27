@@ -589,8 +589,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
             <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
           </xsl:when>
-          <xsl:when test="*/*[contains(@class,' map/linktext ')]">
-            <xsl:value-of select="*/*[contains(@class,' map/linktext ')]"/>
+          <xsl:when test="*/*[dita-ot:matches-linktext-class(@class)]">
+            <xsl:value-of select="*/*[dita-ot:matches-linktext-class(@class)]"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="@href"/>
@@ -606,8 +606,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="@navtitle">
             <xsl:value-of select="@navtitle"/>
           </xsl:when>
-          <xsl:when test="*/*[contains(@class,' map/linktext ')]">
-            <xsl:value-of select="*/*[contains(@class,' map/linktext ')]"/>
+          <xsl:when test="*/*[dita-ot:matches-linktext-class(@class)]">
+            <xsl:value-of select="*/*[dita-ot:matches-linktext-class(@class)]"/>
           </xsl:when>
           <xsl:otherwise>#none#</xsl:otherwise>
         </xsl:choose>
@@ -620,8 +620,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="@navtitle">
             <xsl:value-of select="@navtitle"/>
           </xsl:when>
-          <xsl:when test="*/*[contains(@class,' map/linktext ')]">
-            <xsl:value-of select="*/*[contains(@class,' map/linktext ')]"/>
+          <xsl:when test="*/*[dita-ot:matches-linktext-class(@class)]">
+            <xsl:value-of select="*/*[dita-ot:matches-linktext-class(@class)]"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text>#none#</xsl:text>
@@ -809,8 +809,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:template match="*" mode="mappull:navtitle-fallback" as="xs:string?">
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
-      <xsl:when test="*/*[contains(@class,' map/linktext ')]">
-        <xsl:value-of select="*/*[contains(@class,' map/linktext ')]"/>
+      <xsl:when test="*/*[dita-ot:matches-linktext-class(@class)]">
+        <xsl:value-of select="*/*[dita-ot:matches-linktext-class(@class)]"/>
         <xsl:apply-templates select="." mode="ditamsg:using-linktext-for-navtitle"/>
       </xsl:when>
       <xsl:otherwise>
@@ -863,9 +863,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="doc" as="document-node()?"/>
     <xsl:choose>
       <!-- If linktext is already specified, use that -->
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]">
         <xsl:apply-templates select="." mode="mappull:add-usertext-PI"/>
-        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/>
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="linktext" as="xs:string?">
@@ -988,10 +988,10 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="doc" as="document-node()?"/>
     <xsl:variable name="map-uri" as="xs:anyURI" select="base-uri(.)"/>
     <xsl:choose>
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]">
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-shortdesc-class(@class)]">
         <xsl:apply-templates select="." mode="mappull:add-usershortdesc-PI"/>
         <xsl:apply-templates
-          select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
+          select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-shortdesc-class(@class)]"/>
       </xsl:when>
       <xsl:when
         test="$scope='external' or $scope='peer' or not($format='#none#' or $format='dita')">
@@ -1083,7 +1083,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:apply-templates>
     <!--metadata to be written - if we add logic at some point to pull metadata from topics into the map-->
     <xsl:apply-templates
-      select="*[contains(@class, ' map/topicmeta ')]/*[not(contains(@class, ' map/linktext '))][not(contains(@class, ' map/shortdesc '))][not(contains(@class, ' topic/navtitle '))]|
+      select="*[contains(@class, ' map/topicmeta ')]/*[not(dita-ot:matches-linktext-class(@class))][not(dita-ot:matches-shortdesc-class(@class))][not(contains(@class, ' topic/navtitle '))]|
       *[contains(@class, ' map/topicmeta ')]/processing-instruction()"
     />
   </xsl:template>

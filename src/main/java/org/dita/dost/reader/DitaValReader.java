@@ -13,7 +13,7 @@ import com.google.common.collect.Sets;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
@@ -238,7 +238,8 @@ public final class DitaValReader implements AbstractReader {
                 style != null ? style.trim().split("\\s+") : null,
                 getValue(elem, ATTRIBUTE_NAME_CHANGEBAR),
                 readFlagImage(elem, "startflag"),
-                readFlagImage(elem, "endflag"));
+                readFlagImage(elem, "endflag"),
+                getValue(elem, ATTRIBUTE_NAME_OUTPUTCLASS));
     }
 
     private FlagImage readFlagImage(final Element elem, final String name) {

@@ -74,11 +74,16 @@ public final class ValidationFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
-        String d = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
+        final String d = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
         if (d != null) {
             domains.addFirst(StringUtils.getExtProps(d));
         } else {
-            domains.addFirst(domains.peekFirst());
+            final String s = atts.getValue(ATTRIBUTE_NAME_SPECIALIZATIONS);
+            if (s != null) {
+                domains.addFirst(StringUtils.getExtPropsFromSpecializations(s));
+            } else {
+                domains.addFirst(domains.peekFirst());
+            }
         }
         AttributesImpl modified;
         modified = validateLang(atts, null);

@@ -200,7 +200,7 @@ public class FilterUtilsTest {
 
     @Test
     public void testgetFlagsDefaultFlag() {
-        final Flag flag = new Flag("prop", "red", null, null, null, null, null);
+        final Flag flag = new Flag("prop", "red", null, null, null, null, null, null);
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(PLATFORM, null), flag)
@@ -217,8 +217,8 @@ public class FilterUtilsTest {
 
     @Test
     public void testGetFlags() {
-        final Flag flag = new Flag("prop", "red", null, null, null, null, null);
-        final Flag revflag = new Flag("revprop", null, null, null, "solid", null, null);
+        final Flag flag = new Flag("prop", "red", null, null, null, null, null, null);
+        final Flag revflag = new Flag("revprop", null, null, null, "solid", null, null, null);
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(PLATFORM, "unix"), flag)
@@ -364,8 +364,8 @@ public class FilterUtilsTest {
 
     @Test
     public void testGetFlagLabel() {
-        final Flag flagRed = new Flag("prop", "red", null, null, null, null, null);
-        final Flag flagBlue = new Flag("prop", "blue", null, null, null, null, null);
+        final Flag flagRed = new Flag("prop", "red", null, null, null, null, null, null);
+        final Flag flagBlue = new Flag("prop", "blue", null, null, null, null, null, null);
         
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
@@ -393,8 +393,8 @@ public class FilterUtilsTest {
 
     @Test
     public void testConflict() {
-        final Flag flagRed = new Flag("prop", "red", null, null, null, null, null);
-        final Flag flagBlue = new Flag("prop", "blue", null, null, null, null, null);
+        final Flag flagRed = new Flag("prop", "red", null, null, null, null, null, null);
+        final Flag flagBlue = new Flag("prop", "blue", null, null, null, null, null, null);
         final FilterUtils f = new FilterUtils(false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(OS, "amiga"), flagRed)
@@ -402,7 +402,7 @@ public class FilterUtilsTest {
                         .build(), "yellow", "green");
         f.setLogger(new TestUtils.TestLogger());
 
-        final Flag flagYellow = new Flag("prop", "yellow", null, null, null, null, null);
+        final Flag flagYellow = new Flag("prop", "yellow", null, null, null, null, null, null);
         assertEquals(
                 singleton(flagYellow),
                 f.getFlags(attr(PROPS, "os(amiga unix windows)"), new QName[][] {{PROPS, OS}}));

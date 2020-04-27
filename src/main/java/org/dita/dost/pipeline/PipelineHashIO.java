@@ -34,6 +34,15 @@ AbstractPipelineOutput {
     }
 
     /**
+     * Copy contructor of PipelineHashIO class.
+     */
+    public PipelineHashIO(Map<String, String> hash) {
+        super();
+        this.hash = new HashMap<>(hash);
+    }
+
+
+    /**
      * Set the attribute vale with name into hash map.
      *
      * @param name name

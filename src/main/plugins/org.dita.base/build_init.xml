@@ -19,6 +19,7 @@ See the accompanying LICENSE file for applicable license.
     <catalogpath path="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
   </xmlcatalog>
 
+  <taskdef name="init-project" classname="org.dita.dost.ant.InitializeProjectTask"/>
   <taskdef name="pipeline" classname="org.dita.dost.ant.ExtensibleAntInvoker"/>
   <taskdef name="dita-ot-echo" classname="org.dita.dost.ant.DITAOTEchoTask"/>
   <taskdef name="dita-ot-fail" classname="org.dita.dost.ant.DITAOTFailTask"/>
@@ -49,6 +50,7 @@ See the accompanying LICENSE file for applicable license.
                    log-arg"/>
 
   <target name="init-properties">
+    <init-project/>
     <property name="default.language" value="en"/>
     <property name="generate-debug-attributes" value="true"/>
     <property name="processing-mode" value="lax"/>

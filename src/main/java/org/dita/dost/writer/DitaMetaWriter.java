@@ -25,7 +25,8 @@ public final class DitaMetaWriter extends AbstractDitaMetaWriter {
     ));
     private static final List<DitaClass> titlealtsOrder = Collections.unmodifiableList(Arrays.asList(
             TOPIC_NAVTITLE,
-            MAP_SEARCHTITLE
+            MAP_SEARCHTITLE,
+            TOPIC_SEARCHTITLE
     ));
     private static final List<DitaClass> prologPosition = Collections.unmodifiableList(Arrays.asList(
             TOPIC_TITLE,

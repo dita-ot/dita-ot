@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/reltableTextlink/temp/preprocess2?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/reltableTextlink/temp/preprocess2/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="nomerge" class="- map/map "
+  ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+  xml:lang="en">
+  <title class="- topic/title ">Test text-only ref</title>
+  <topicref class="- map/topicref " href="booklist.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Good books</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Good books</linktext>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="booklist2.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">More good books</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">More good books</linktext>
+    </topicmeta>
+  </topicref>
+
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="resolved" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <linktext class="- map/linktext ">
+        <ph class="- topic/ph "><cite class="- topic/cite ">What if?</cite> by Randall Munroe</ph>
+      </linktext>
+      <shortdesc class="- map/shortdesc ">Adding text-only link via keyref</shortdesc>
+    </topicmeta>
+  </keydef>
+  <reltable class="- map/reltable " toc="no">
+    <relrow class="- map/relrow ">
+      <relcell class="- map/relcell " toc="no">
+        <topicref class="- map/topicref " href="booklist.dita" toc="no" type="topic">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Good books</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">Good books</linktext>
+          </topicmeta>
+        </topicref>
+      </relcell>
+      <relcell class="- map/relcell " toc="no">
+        <topicref class="- map/topicref " toc="no">
+          <topicmeta class="- map/topicmeta ">
+            <linktext class="- map/linktext ">
+              <ph class="- topic/ph "><cite class="- topic/cite ">American Gods</cite> by Neil Gaiman</ph>
+            </linktext>
+            <shortdesc class="- map/shortdesc ">I often list this as my favorite book</shortdesc>
+          </topicmeta>
+        </topicref>
+        <topicref class="- map/topicref " format="html" scope="external" href="https://en.wikipedia.org/wiki/Discworld"
+          toc="no">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Pretty much anything from Discworld</navtitle>
+            <?ditaot usertext?>
+            <linktext class="- map/linktext ">Pretty much anything from Discworld</linktext>
+            <?ditaot usershortdesc?>
+            <shortdesc class="- map/shortdesc ">Terry Pratchett is awesome</shortdesc>
+          </topicmeta>
+        </topicref>
+      </relcell>
+    </relrow>
+    <relrow class="- map/relrow ">
+      <relcell class="- map/relcell " toc="no">
+        <topicref class="- map/topicref " href="booklist2.dita" toc="no" type="topic">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">More good books</navtitle>
+            <?ditaot gentext?>
+            <linktext class="- map/linktext ">More good books</linktext>
+          </topicmeta>
+        </topicref>
+      </relcell>
+      <relcell class="- map/relcell " toc="no">
+        <topicref class="- map/topicref " toc="no">
+          <topicmeta class="- map/topicmeta ">
+            <linktext class="- map/linktext ">
+              <ph class="- topic/ph "><cite class="- topic/cite ">Good Omens</cite> by Neil Gaiman and Terry
+                Pratchett</ph>
+            </linktext>
+          </topicmeta>
+        </topicref>
+      </relcell>
+    </relrow>
+  </reltable>
+</map>

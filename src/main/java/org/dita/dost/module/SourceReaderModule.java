@@ -7,15 +7,16 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.s9api.Processor;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.XMLUtils;
-import org.dita.dost.writer.*;
+import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +47,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
      * Use grammar pool cache
      */
     boolean gramcache = true;
-    /**
-     * Absolute DITA-OT base path.
-     */
-    File ditaDir;
+    Processor processor;
 
     /**
      * Get reader for input format
@@ -124,8 +122,10 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        CatalogUtils.setDitaDir(ditaDir);
-        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
+        reader.setEntityResolver(catalogResolver);
+
+        processor = xmlUtils.getProcessor();
     }
 
     /**

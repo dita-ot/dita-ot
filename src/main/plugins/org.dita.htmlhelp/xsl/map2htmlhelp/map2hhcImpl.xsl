@@ -107,7 +107,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:when>
     <!-- If this this a container (no href or href='', no title), just process children -->
     <xsl:when test="(not(@href) or @href='') and not(@navtitle) and not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]) and
-                    not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])">
+                    not(*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)])">
       <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))][not(@processing-role='resource-only')]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:apply-templates>
@@ -198,8 +198,8 @@ See the accompanying LICENSE file for applicable license.
              <xsl:choose>
                <xsl:when test="not($TargetFile)">   <!-- DITA file does not exist -->
                  <xsl:choose>
-                   <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">  <!-- attempt to recover by using linktext -->
-                     <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
+                   <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]">  <!-- attempt to recover by using linktext -->
+                     <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]" mode="dita-ot:text-only"/>
                    </xsl:when>
                    <xsl:otherwise>
                      <xsl:call-template name="output-message">
@@ -226,8 +226,8 @@ See the accompanying LICENSE file for applicable license.
                  <xsl:apply-templates select="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" mode="dita-ot:text-only"/>
                </xsl:when>
                <!-- Last choice: use the linktext specified within the topicref -->
-               <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
-                 <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
+               <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]">
+                 <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]" mode="dita-ot:text-only"/>
                </xsl:when>
                <xsl:otherwise>
                  <xsl:call-template name="output-message">
@@ -240,8 +240,8 @@ See the accompanying LICENSE file for applicable license.
            </xsl:when>
 
            <!-- If there is no title and none can be retrieved, check for <linktext> -->
-           <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
-             <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
+           <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]">
+             <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]" mode="dita-ot:text-only"/>
            </xsl:when>
 
            <!-- No local title, and not targeting a DITA file. Could be just a container setting

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+  id="topic_rdr_hgq_sjb" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Topic</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">key: <keyword class="- topic/keyword " keyref="key">value</keyword>
+    </p>
+    <p class="- topic/p ">common: <keyword class="- topic/keyword " keyref="common">base</keyword>
+    </p>
+    <p class="- topic/p ">scope key: <keyword class="- topic/keyword " keyref="scope.key">scope value</keyword>
+    </p>
+    <p class="- topic/p ">scope common: <keyword class="- topic/keyword " keyref="scope.common" keyscope="scope"
+        >scope base</keyword>
+    </p>
+  </body>
+</topic>
