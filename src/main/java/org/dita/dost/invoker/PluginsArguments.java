@@ -29,8 +29,8 @@ public class PluginsArguments extends Arguments {
     }
 
     @Override
-    void printUsage() {
-        UsageBuilder.builder()
+    void printUsage(final boolean compact) {
+        UsageBuilder.builder(compact)
                 .usage("dita plugins [options]")
                 .print();
     }

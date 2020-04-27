@@ -55,7 +55,7 @@ public class UninstallArguments extends Arguments {
             }
         }
         if (value == null) {
-            throw new BuildException("You must specify a installation package when using the --uninstall argument");
+            throw new BuildException("You must specify an installation package when using the --uninstall argument");
         }
         uninstallId = value;
     }
@@ -72,10 +72,10 @@ public class UninstallArguments extends Arguments {
     }
 
     @Override
-    void printUsage() {
-        UsageBuilder.builder()
+    void printUsage(final boolean compact) {
+        UsageBuilder.builder(compact)
                 .usage("dita uninstall <id>")
-                .arguments(null, null, "id", "uninstall plug-in with the ID")
+                .arguments(null, null, "id", "Uninstall plug-in with the specified ID")
                 .print();
     }
 

@@ -263,7 +263,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:for-each select="@href | @copy-to">
         <xsl:choose>
           <xsl:when test=". = ''"/>
-          <xsl:when test="$relative-path = '#none#' or contains(.,'://')">
+          <xsl:when test="$relative-path = '#none#' or dita-ot:is-external(.)">
             <xsl:attribute name="{name()}">
               <xsl:value-of select="."/>
             </xsl:attribute>
@@ -468,11 +468,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
     <xsl:attribute name="{name()}">
       <xsl:choose>
-        <xsl:when test="not(contains(.,'://') or ../@scope = 'external' or $relative-path = ('#none#', ''))">
-          <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
+        <xsl:when test="dita-ot:is-external(.) or $relative-path = ('#none#', '')">
+          <xsl:value-of select="."/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="."/>
+          <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>

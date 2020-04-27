@@ -490,6 +490,9 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="@type = 'trouble'">
         <xsl:apply-templates select="." mode="process.note.trouble"/>
       </xsl:when>
+      <xsl:when test="@type = 'notice'">
+        <xsl:apply-templates select="." mode="process.note.notice"/>
+      </xsl:when>
       <xsl:when test="@type = 'other'">
         <xsl:apply-templates select="." mode="process.note.other"/>
       </xsl:when>
@@ -539,6 +542,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="." mode="process.note.common-processing"/>
   </xsl:template>
   
+  <xsl:template match="*" mode="process.note.notice">
+    <xsl:apply-templates select="." mode="process.note.common-processing"/>
+  </xsl:template>
+
   <xsl:template match="*" mode="process.note.other">
     <xsl:choose>
       <xsl:when test="@othertype">
@@ -1714,7 +1721,7 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- Process standard attributes that may appear anywhere. Previously this was "setclass" -->
   <xsl:template name="commonattributes">
-    <xsl:param name="default-output-class" select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass"/>
+    <xsl:param name="default-output-class"/>
     <xsl:apply-templates select="@xml:lang"/>
     <xsl:apply-templates select="@dir"/>
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
@@ -1766,6 +1773,8 @@ See the accompanying LICENSE file for applicable license.
         <xsl:sequence select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop/@val"/>
       </xsl:if>
     </xsl:variable>
+    <xsl:variable name="flag-outputclass" as="xs:string*"
+      select="tokenize(normalize-space(*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass), '\s+')"/>
     <xsl:variable name="using-output-class" as="xs:string*">
      <xsl:choose>
        <xsl:when test="string-length(normalize-space($output-class)) > 0">
@@ -1794,9 +1803,10 @@ See the accompanying LICENSE file for applicable license.
                   select="tokenize($ancestry, '\s+'),
                           $using-output-class,
                           $draft-revs, 
-                          tokenize($outputclass-attribute, '\s+')"/>
+                          tokenize($outputclass-attribute, '\s+'),
+                          $flag-outputclass"/>
     <xsl:if test="exists($classes)">
-      <xsl:attribute name="class" select="string-join(distinct-values($classes), ' ')"/>
+      <xsl:attribute name="class" select="distinct-values($classes)" separator=" "/>
     </xsl:if>
   </xsl:template>
     

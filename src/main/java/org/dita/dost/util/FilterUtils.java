@@ -51,6 +51,8 @@ public final class FilterUtils {
     public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
     public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
+    private static final String FLAG_STYLE_PREFIX = "flag__style--";
+
     private DITAOTLogger logger;
     /** Actions for filter keys. */
     private final Map<FilterKey, Action> filterMap;
@@ -746,7 +748,7 @@ public final class FilterUtils {
         }
 
         public void writeStartFlag(final ContentHandler contentHandler) throws SAXException {
-            final StringBuilder outputClassAttr = new StringBuilder();
+            final StringJoiner outputClassAttr = new StringJoiner(" ");
             final StringBuilder styleAttr = new StringBuilder();
             if (color != null) {
                 styleAttr.append("color:").append(color).append(";");
@@ -755,35 +757,35 @@ public final class FilterUtils {
                 styleAttr.append("background-color:").append(backcolor).append(";");
             }
             if (outputClass != null) {
-                outputClassAttr.append(outputClass).append(" ");
+                outputClassAttr.add(outputClass);
             }
             if (style != null) {
                 for (final String style : style) {
-                    outputClassAttr.append(style).append(" ");
+                    outputClassAttr.add(FLAG_STYLE_PREFIX + style);
                 }
             }
 
             final XMLUtils.AttributesBuilder atts = new XMLUtils.AttributesBuilder()
-                    .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-startprop ");
+                    .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_STARTPROP.toString());
             if (outputClassAttr.length() != 0) {
-                atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputClassAttr.toString().trim());
+                atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputClassAttr.toString());
             }
             if (styleAttr.length() != 0) {
-                atts.add(ATTRIBUTE_NAME_STYLE, styleAttr.toString().trim());
+                atts.add(ATTRIBUTE_NAME_STYLE, styleAttr.toString());
             }
-            contentHandler.startElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop",
+            contentHandler.startElement(NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName,
                     atts.build());
             writeProp(contentHandler, true);
-            contentHandler.endElement(NULL_NS_URI, "ditaval-startprop", "ditaval-startprop");
+            contentHandler.endElement(NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName);
         }
 
         public void writeEndFlag(final ContentHandler contentHandler) throws SAXException {
-            contentHandler.startElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop",
+            contentHandler.startElement(NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName,
                     new XMLUtils.AttributesBuilder()
-                            .add(ATTRIBUTE_NAME_CLASS, "+ topic/foreign ditaot-d/ditaval-endprop ")
+                            .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_ENDPROP.toString())
                             .build());
             writeProp(contentHandler, false);
-            contentHandler.endElement(NULL_NS_URI, "ditaval-endprop", "ditaval-endprop");
+            contentHandler.endElement(NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName);
         }
 
         private void writeProp(final ContentHandler contentHandler, final boolean isStart) throws SAXException {

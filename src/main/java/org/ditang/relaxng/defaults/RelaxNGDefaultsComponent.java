@@ -202,9 +202,6 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
    */
   public void startElement(QName name, XMLAttributes atts, Augmentations aug)
       throws XNIException {
-    if (defaults != null) {
-      context.pushContext();
-    }
     onStartElement(name, atts);
     if (documentHandler != null) {
       documentHandler.startElement(name, atts, aug);
@@ -635,15 +632,9 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
    */
   public void emptyElement(QName name, XMLAttributes atts, Augmentations arg2)
       throws XNIException {
-    if (defaults != null) {
-      context.pushContext();
-    }
     onStartElement(name, atts);
     if (documentHandler != null) {
       documentHandler.emptyElement(name, atts, arg2);
-    }
-    if (defaults != null) {
-      context.popContext();
     }
   }
 
@@ -710,9 +701,6 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
   public void endElement(QName arg0, Augmentations arg1) throws XNIException {
     if (documentHandler != null) {
       documentHandler.endElement(arg0, arg1);
-    }
-    if(defaults != null) {
-      context.popContext();
     }
   }
 
