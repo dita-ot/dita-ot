@@ -79,6 +79,10 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:call-template name="href"/><!--use href text-->
+                  <xsl:call-template name="output-message">
+                    <xsl:with-param name="id" select="'DOTX032E'"/>
+                    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
+                  </xsl:call-template>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:otherwise>
