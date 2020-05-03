@@ -79,10 +79,7 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:call-template name="href"/><!--use href text-->
-                  <xsl:call-template name="output-message">
-                    <xsl:with-param name="id" select="'DOTX032E'"/>
-                    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
-                  </xsl:call-template>
+                  <xsl:apply-templates select="." mode="ditamsg:missing-title-in-link"/>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:otherwise>
@@ -744,6 +741,13 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX043I'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/>;%2=<xsl:value-of select="$outfile"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="*" mode="ditamsg:missing-title-in-link">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="id" select="'DOTX032E'"/>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
