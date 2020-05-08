@@ -14,6 +14,9 @@ import org.apache.tools.ant.Project;
 import org.dita.dost.util.Configuration;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -244,7 +247,7 @@ abstract class Arguments {
 
         @Override
         String getValue(final String value) {
-            return new File(value).getPath();
+            return Paths.get(value).normalize().toString();
         }
     }
 
@@ -255,7 +258,7 @@ abstract class Arguments {
 
         @Override
         String getValue(final String value) {
-            return new File(value).getAbsolutePath();
+            return Paths.get(value).toAbsolutePath().normalize().toString();
         }
     }
 
@@ -279,9 +282,9 @@ abstract class Arguments {
 
         @Override
         String getValue(final String value) {
-            final File f = new File(value);
-            if (f.exists()) {
-                return f.getAbsolutePath();
+            final Path f = Paths.get(value).toAbsolutePath().normalize();
+            if (Files.exists(f)) {
+                return f.toString();
             } else {
                 return value;
             }
