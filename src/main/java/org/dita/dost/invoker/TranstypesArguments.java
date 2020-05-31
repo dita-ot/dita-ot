@@ -12,6 +12,8 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 
+import static org.dita.dost.invoker.Main.locale;
+
 public class TranstypesArguments extends Arguments {
 
     @Override
@@ -31,7 +33,7 @@ public class TranstypesArguments extends Arguments {
     @Override
     void printUsage(final boolean compact) {
         UsageBuilder.builder(compact)
-                .usage("dita transtypes [options]")
+                .usage(locale.getString("transtypes.usage"))
                 .print();
     }
 

@@ -12,6 +12,7 @@ import java.util.*;
 
 import static org.dita.dost.invoker.DefaultLogger.ANSI_BOLD;
 import static org.dita.dost.invoker.DefaultLogger.ANSI_RESET;
+import static org.dita.dost.invoker.Main.locale;
 
 public class UsageBuilder {
 
@@ -23,10 +24,10 @@ public class UsageBuilder {
     private final List<String> footers = new ArrayList<>();
 
     private UsageBuilder(final boolean compact) {
-        options("h", "help", null, "Print help information");
+        options("h", "help", null, locale.getString("help.option.help"));
         if (!compact) {
-            options("d", "debug", null, "Enable debug logging");
-            options("v", "verbose", null, "Enable verbose logging");
+            options("d", "debug", null, locale.getString("help.option.debug"));
+            options("v", "verbose", null, locale.getString("help.option.verbose"));
         }
     }
 

@@ -14,6 +14,8 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 
+import static org.dita.dost.invoker.Main.locale;
+
 public class InstallArguments extends Arguments {
 
     String installFile;
@@ -76,11 +78,11 @@ public class InstallArguments extends Arguments {
     @Override
     void printUsage(final boolean compact) {
         UsageBuilder.builder(compact)
-                .usage("dita install [<id> | <url> | <file>]")
-                .arguments(null, null, "id", "Install specified plug-in ID from registry")
-                .arguments(null, null, "url", "Install plug-in from a URL")
-                .arguments(null, null, "file", "Install plug-in from a local ZIP file")
-                .options(null, "force", null, "Force-install plug-in (overwrite existing version)")
+                .usage(locale.getString("install.usage"))
+                .arguments(null, null, "id", locale.getString("install.argument.id"))
+                .arguments(null, null, "url", locale.getString("install.argument.url"))
+                .arguments(null, null, "file", locale.getString("install.argument.file"))
+                .options(null, "force", null, locale.getString("install.option.force"))
                 .print();
     }
 

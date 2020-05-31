@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.Map;
 
+import static org.dita.dost.invoker.Main.locale;
+
 public class DeliverablesArguments extends Arguments {
 
     File projectFile;
@@ -66,8 +68,8 @@ public class DeliverablesArguments extends Arguments {
     @Override
     void printUsage(final boolean compact) {
         UsageBuilder.builder(compact)
-                .usage("dita deliverables <file> [options]")
-                .arguments(null, null, "file", "Project file")
+                .usage(locale.getString("deliverables.usage"))
+                .arguments(null, null, "file", locale.getString("deliverables.argument.file"))
                 .print();
     }
 
