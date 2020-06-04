@@ -100,6 +100,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         }
         processor = xmlUtils.getProcessor();
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
+        xsltCompiler.setURIResolver(uriResolver);
         xsltCompiler.setErrorListener(toErrorListener(logger));
         try {
             templates = xsltCompiler.compile(new StreamSource(style));
