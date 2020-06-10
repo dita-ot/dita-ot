@@ -39,6 +39,12 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static java.lang.Runtime.getRuntime;
+import static java.lang.String.format;
+import static java.lang.System.getProperty;
+import static java.time.Instant.ofEpochMilli;
+import static java.time.ZoneId.systemDefault;
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static java.util.Arrays.asList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.supportedImageExtensions;
@@ -175,6 +181,8 @@ public final class ExtensibleAntInvoker extends Task {
 
         try {
             for (final ModuleElem m : modules) {
+                new DumpTempDirectory(logger, getTaskName(), tempDir).dump();
+
                 m.setProject(getProject());
                 m.setLocation(getLocation());
                 final PipelineHashIO pipelineInput = new PipelineHashIO();
@@ -188,11 +196,37 @@ public final class ExtensibleAntInvoker extends Task {
                 mod.setXmlUtils(xmlUtils);
                 mod.execute(pipelineInput);
                 long end = System.currentTimeMillis();
+
+                if (getProperty("runtimeLogging") != null && "true".equalsIgnoreCase(getProperty("runtimeLogging").trim())) {
+                    logger.info("task {0}, class {1}, started at {2}, Runtime: {3}ms", getTaskName(), mod.getClass().getSimpleName(), ofEpochMilli(start).atZone(systemDefault()).toLocalDateTime().format(ISO_DATE_TIME), end-start);
+                }
                 logger.debug("{0} processing took {1} ms", mod.getClass().getSimpleName(), end - start);
             }
+            logMemory();
         } catch (final DITAOTException e) {
             throw new BuildException("Failed to run pipeline: " + e.getMessage(), e);
         }
+    }
+
+    private void logMemory() {
+        if (getProperty("runtimeLogging") == null || !"true".equalsIgnoreCase(getProperty("runtimeLogging").trim())) {
+            return;
+        }
+
+        long maxMemory = getRuntime().maxMemory();
+        long totalMemory = getRuntime().totalMemory();
+        long freeMemory = getRuntime().freeMemory();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(format("Heap Info:%n"));
+        sb.append(format("\tDesignated, i.e. total available memory to the JVM: %d mb%n", maxMemory / 1024 / 1024));
+        sb.append(format("\tTotal allocated memory reserved: %d mb%n", totalMemory / 1024 / 1024));
+        sb.append(format("\tFree allocated memory ready for new objects: %d mb%n", freeMemory / 1024 / 1024));
+        sb.append(format("\tUsed memory: %d mb%n", (totalMemory - freeMemory) / 1024 / 1024));
+        sb.append(format("\tUnallocated memory: %d mb%n", (maxMemory - totalMemory) / 1024 / 1024));
+        sb.append(format("\tTotal free memory: %d mb", (maxMemory - totalMemory + freeMemory) / 1024 / 1024));
+
+        logger.info(sb.toString());
     }
 
     private AbstractPipelineModule getPipelineModule(final ModuleElem m, final PipelineHashIO pipelineInput) throws DITAOTException {
