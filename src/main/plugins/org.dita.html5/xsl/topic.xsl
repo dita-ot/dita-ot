@@ -2322,14 +2322,17 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- Generate links to CSS files -->
   <xsl:template name="generateCssLinks">
-    <xsl:variable name="childlang">
-      <xsl:choose>
-        <!-- Update with DITA 1.2: /dita can have xml:lang -->
-        <xsl:when test="self::dita[not(@xml:lang)]">
-          <xsl:for-each select="*[1]"><xsl:call-template name="getLowerCaseLang"/></xsl:for-each>
-        </xsl:when>
-        <xsl:otherwise><xsl:call-template name="getLowerCaseLang"/></xsl:otherwise>
-      </xsl:choose>
+    <xsl:variable name="childlang" as="xs:string">
+      <xsl:variable name="lang">
+        <xsl:choose>
+          <!-- Update with DITA 1.2: /dita can have xml:lang -->
+          <xsl:when test="self::dita[not(@xml:lang)]">
+            <xsl:for-each select="*[1]"><xsl:call-template name="getLowerCaseLang"/></xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise><xsl:call-template name="getLowerCaseLang"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:sequence select="($lang, $DEFAULTLANG)[normalize-space(.)][1]"/>
     </xsl:variable>
     <xsl:variable name="direction">
       <xsl:apply-templates select="." mode="get-render-direction">
