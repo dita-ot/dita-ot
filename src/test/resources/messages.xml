@@ -478,6 +478,11 @@
     <response></response>
   </message>
 
+  <message id="DOTJ082E" type="ERROR">
+    <reason>Resource %1 is referenced with incorrect path capitalization</reason>
+    <response/>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  
