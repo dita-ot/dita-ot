@@ -104,11 +104,7 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
             if (tableState.columnNumberEnd < tableState.cols && tableState.cols != -1) {
                 final int length = tableState.cols - tableState.totalColumns;
                 for (int i = 0; i < length; i++) {
-                    final AttributesImpl colspecAtts = new AttributesImpl();
-                    XMLUtils.addOrSetAttribute(colspecAtts, ATTRIBUTE_NAME_CLASS, TOPIC_COLSPEC.toString());
-                    processColspec(colspecAtts);
-                    getContentHandler().startElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName, colspecAtts);
-                    getContentHandler().endElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName);
+                    generateColSpec();
                 }
             }
         } else if (TOPIC_ROW.matches(cls)) {
@@ -125,6 +121,14 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
         }
 
         getContentHandler().startElement(uri, localName, qName, res);
+    }
+
+    private void generateColSpec() throws SAXException {
+        final AttributesImpl attr = new AttributesImpl();
+        XMLUtils.addOrSetAttribute(attr, ATTRIBUTE_NAME_CLASS, TOPIC_COLSPEC.toString());
+        processColspec(attr);
+        getContentHandler().startElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName, attr);
+        getContentHandler().endElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName);
     }
 
     private void processEntry(AttributesImpl res) {
