@@ -9,11 +9,23 @@
         <colspec class="- topic/colspec " colname="col3"/>
         <tbody class="- topic/tbody ">
           <row class="- topic/row ">
-            <entry class="- topic/entry " morerows="1">s1</entry>
+            <entry class="- topic/entry " morerows="3">s1</entry>
             <entry class="- topic/entry ">s2</entry>
             <entry class="- topic/entry ">s3</entry>
           </row>
           <row class="- topic/row ">
+            <entry class="- topic/entry " morerows="1">e2</entry>
+            <entry class="- topic/entry ">e3</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">e3</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">e2</entry>
+            <entry class="- topic/entry ">e3</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">e1</entry>
             <entry class="- topic/entry ">e2</entry>
             <entry class="- topic/entry ">e3</entry>
           </row>

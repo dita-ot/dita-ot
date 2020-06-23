@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
@@ -112,9 +113,19 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
             tableState.columnNumber = 1; // initialize the column number
             tableState.columnNumberEnd = 0;
             tableState.rowNumber++;
-            tableState.currentRow = tableState.previousRow != null
-                    ? new ArrayList<>(Arrays.asList(new Span[tableState.previousRow.size()]))
-                    : new ArrayList<>();
+            if (tableState.previousRow != null) {
+                final List<Span> fromPrew = tableState.previousRow.stream()
+                        .map(s -> {
+                            if (s == null) {
+                                return null;
+                            }
+                            return s.y > 1 ? new Span(s.x, s.y - 1) : null;
+                        })
+                        .collect(Collectors.toList());
+                tableState.currentRow = new ArrayList<>(fromPrew);
+            } else {
+                tableState.currentRow = new ArrayList<>();
+            }
             tableState.currentColumn = 0;
         } else if (TOPIC_ENTRY.matches(cls)) {
             processEntry(res);
@@ -135,10 +146,9 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
         tableState.columnNumber = getStartNumber(res, tableState.columnNumberEnd);
         final int colspan = getColSpan(res);
         final int rowspan = getRowSpan(res);
-        final Span prev;
+        Span prev;
         if (tableState.previousRow != null) {
-            prev = tableState.previousRow.get(tableState.currentColumn);
-            if (prev != null && prev.y > 1) {
+            for (prev = tableState.previousRow.get(tableState.currentColumn); prev != null && prev.y > 1; prev = tableState.previousRow.get(tableState.currentColumn)) {
                 for (int i = 0; i < prev.x; i++) {
                     tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
                     grow(tableState.currentRow, tableState.currentColumn + 1);
