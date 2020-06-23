@@ -14,8 +14,8 @@
             <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="1">s3</entry>
           </row>
           <row class="- topic/row ">
-            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="2">e2</entry>
-            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="2">e3</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="2">e2</entry>
+            <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="2">e3</entry>
           </row>
         </tbody>
       </tgroup>
