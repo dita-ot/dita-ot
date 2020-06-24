@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.*;
 
@@ -73,51 +74,51 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
             tableStack.addFirst(tableState);
         } else if (TOPIC_STROW.matches(cls) || TOPIC_STHEAD.matches(cls)) {
             tableState.rowNumber++;
-            tableState.currentRow = tableState.previousRow != null ? new ArrayList<>(Arrays.asList(new Span[tableState.previousRow.size()])) : new ArrayList<>();
+            if (tableState.previousRow != null) {
+                final List<Span> fromPrew = tableState.previousRow.stream()
+                        .map(s -> {
+                            if (s == null) {
+                                return null;
+                            }
+                            return s.y > 1 ? new Span(s.x, s.y - 1) : null;
+                        })
+                        .collect(Collectors.toList());
+                tableState.currentRow = new ArrayList<>(fromPrew);
+            } else {
+                tableState.currentRow = new ArrayList<>();
+            }
             tableState.currentColumn = 0;
         } else if (TOPIC_STENTRY.matches(cls)) {
-            final int colspan = getSpan(atts, ATTRIBUTE_NAME_COLSPAN);
-            final int rowspan = getSpan(atts, ATTRIBUTE_NAME_ROWSPAN);
-            final Span prev;
-            if (tableState.previousRow != null) {
-                prev = tableState.previousRow.get(tableState.currentColumn);
-                if (prev != null && prev.y > 1) {
-                    for (int i = 0; i < prev.x; i++) {
-                        tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
-                        grow(tableState.currentRow, tableState.currentColumn + 1);
-                        tableState.currentRow.set(tableState.currentColumn, null);
-                    }
-                }
-            } else {
-                prev = new Span(1, 1);
-            }
-            grow(tableState.currentRow, tableState.currentColumn + colspan);
-            final Span span = new Span(colspan, rowspan);
-
-            tableState.currentRow.set(tableState.currentColumn, span);
-
-            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(tableState.currentColumn + 1));
-            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(tableState.rowNumber));
-
-            tableState.currentColumn = tableState.currentColumn + colspan;
+            processEntry(res);
         }
 
         getContentHandler().startElement(uri, localName, qName, res);
     }
 
-    private void grow(final ArrayList<?> array, final int size) {
-        while (array.size() < size) {
-            array.add(null);
-        }
-    }
-
-    private int getSpan(final Attributes atts, final String name) {
-        final String span = atts.getValue(name);
-        if (span != null) {
-            return Integer.parseInt(span);
+    private void processEntry(AttributesImpl res) {
+        final int colspan = getColSpan(res);
+        final int rowspan = getRowSpan(res);
+        Span prev;
+        if (tableState.previousRow != null) {
+            for (prev = tableState.previousRow.get(tableState.currentColumn); prev != null && prev.y > 1; prev = tableState.previousRow.get(tableState.currentColumn)) {
+                for (int i = 0; i < prev.x; i++) {
+                    tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
+                    grow(tableState.currentRow, tableState.currentColumn + 1);
+                    tableState.currentRow.set(tableState.currentColumn, null);
+                }
+            }
         } else {
-            return 1;
+            prev = new Span(1, 1);
         }
+        grow(tableState.currentRow, tableState.currentColumn + colspan);
+        final Span span = new Span(colspan, rowspan);
+
+        tableState.currentRow.set(tableState.currentColumn, span);
+
+        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(tableState.currentColumn + 1));
+        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(tableState.rowNumber));
+
+        tableState.currentColumn = tableState.currentColumn + colspan;
     }
 
     @Override
@@ -137,6 +138,30 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
             endPrefixMapping(DITA_OT_NS_PREFIX);
         }
         depth--;
+    }
+
+    private void grow(final List<?> array, final int size) {
+        while (array.size() < size) {
+            array.add(null);
+        }
+    }
+
+    private int getColSpan(final Attributes atts) {
+        final String span = atts.getValue(ATTRIBUTE_NAME_COLSPAN);
+        if (span != null) {
+            return Integer.parseInt(span);
+        } else {
+            return 1;
+        }
+    }
+
+    private int getRowSpan(final Attributes atts) {
+        final String span = atts.getValue(ATTRIBUTE_NAME_ROWSPAN);
+        if (span != null) {
+            return Integer.parseInt(span);
+        } else {
+            return 1;
+        }
     }
 
     private static class Span {
