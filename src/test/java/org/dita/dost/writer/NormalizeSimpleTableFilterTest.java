@@ -25,18 +25,30 @@ import static org.dita.dost.TestUtils.assertXMLEqual;
 
 public class NormalizeSimpleTableFilterTest {
 
+    private final DocumentBuilderFactory dbf;
+    private final TransformerFactory tf;
+
+    public NormalizeSimpleTableFilterTest() {
+        dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        tf = TransformerFactory.newInstance();
+    }
+
     @Test
-    public void testNoFilter() throws Exception {
+    public void simple() throws Exception {
+        test("simple.dita");
+    }
+
+    @Test
+    public void topic() throws Exception {
         test("topic.dita");
     }
 
     private void test(final String file) throws Exception {
-        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
         final DocumentBuilder db = dbf.newDocumentBuilder();
         final InputStream expStream = getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/exp/" + file);
 
-        final Transformer t = TransformerFactory.newInstance().newTransformer();
+        final Transformer t = tf.newTransformer();
         final InputStream src = getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/src/" + file);
         final NormalizeSimpleTableFilter f = new NormalizeSimpleTableFilter();
         f.setParent(XMLUtils.getXMLReader());
@@ -45,7 +57,6 @@ public class NormalizeSimpleTableFilterTest {
 
         final Document act = db.newDocument();
         t.transform(s, new DOMResult(act));
-
         assertXMLEqual(db.parse(expStream), act);
     }
 
