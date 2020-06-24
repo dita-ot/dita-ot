@@ -23,17 +23,19 @@ import static org.dita.dost.util.Constants.*;
  *   <li>Add column coordinates to entries</li>
  * </ul>
  */
-public final class NormalizeSimpleTableFilter extends NormalizeTableFilter {
+public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
 
     private static final String ATTRIBUTE_NAME_COLSPAN = "colspan";
     private static final String ATTRIBUTE_NAME_ROWSPAN = "rowspan";
     private static final String ATTR_X = "x";
     private static final String ATTR_Y = "y";
 
+    /** DITA class stack */
     private final Deque<String> classStack = new LinkedList<>();
     private int depth;
     private final Map<String, String> ns = new HashMap<>();
 
+    /** Store row number */
     private int rowNumber;
     private ArrayList<Span> previousRow;
     private ArrayList<Span> currentRow;
@@ -41,6 +43,7 @@ public final class NormalizeSimpleTableFilter extends NormalizeTableFilter {
 
     public NormalizeSimpleTableFilter() {
         super();
+        rowNumber = 0;
         depth = 0;
     }
 
@@ -61,7 +64,7 @@ public final class NormalizeSimpleTableFilter extends NormalizeTableFilter {
             throws SAXException {
         depth++;
         if (depth == 1 && !ns.containsKey(DITA_OT_NS_PREFIX)) {
-            super.startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
+            startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
         }
 
         final AttributesImpl res = new AttributesImpl(atts);
@@ -132,7 +135,7 @@ public final class NormalizeSimpleTableFilter extends NormalizeTableFilter {
         }
 
         if (depth == 1) {
-            super.endPrefixMapping(DITA_OT_NS_PREFIX);
+            endPrefixMapping(DITA_OT_NS_PREFIX);
         }
         depth--;
     }
