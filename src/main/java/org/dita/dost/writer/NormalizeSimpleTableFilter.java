@@ -35,15 +35,12 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
     private int depth;
     private final Map<String, String> ns = new HashMap<>();
 
-    /** Store row number */
-    private int rowNumber;
-    private ArrayList<Span> previousRow;
-    private ArrayList<Span> currentRow;
-    private int currentColumn;
+    private final Deque<TableState> tableStack = new LinkedList<>();
+    /** Cached table stack head */
+    private TableState tableState;
 
     public NormalizeSimpleTableFilter() {
         super();
-        rowNumber = 0;
         depth = 0;
     }
 
@@ -72,38 +69,37 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
         classStack.addFirst(cls);
 
         if (TOPIC_SIMPLETABLE.matches(cls)) {
-            rowNumber = 0;
-            previousRow = null;
-            currentRow = null;
+            tableState = new TableState();
+            tableStack.addFirst(tableState);
         } else if (TOPIC_STROW.matches(cls) || TOPIC_STHEAD.matches(cls)) {
-            rowNumber++;
-            currentRow = previousRow != null ? new ArrayList<>(Arrays.asList(new Span[previousRow.size()])) : new ArrayList<>();
-            currentColumn = 0;
+            tableState.rowNumber++;
+            tableState.currentRow = tableState.previousRow != null ? new ArrayList<>(Arrays.asList(new Span[tableState.previousRow.size()])) : new ArrayList<>();
+            tableState.currentColumn = 0;
         } else if (TOPIC_STENTRY.matches(cls)) {
             final int colspan = getSpan(atts, ATTRIBUTE_NAME_COLSPAN);
             final int rowspan = getSpan(atts, ATTRIBUTE_NAME_ROWSPAN);
             final Span prev;
-            if (previousRow != null) {
-                prev = previousRow.get(currentColumn);
+            if (tableState.previousRow != null) {
+                prev = tableState.previousRow.get(tableState.currentColumn);
                 if (prev != null && prev.y > 1) {
                     for (int i = 0; i < prev.x; i++) {
-                        currentColumn = currentColumn + 1; //prev.x - 1;
-                        grow(currentRow, currentColumn + 1);
-                        currentRow.set(currentColumn, null);
+                        tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
+                        grow(tableState.currentRow, tableState.currentColumn + 1);
+                        tableState.currentRow.set(tableState.currentColumn, null);
                     }
                 }
             } else {
                 prev = new Span(1, 1);
             }
-            grow(currentRow, currentColumn + colspan);
+            grow(tableState.currentRow, tableState.currentColumn + colspan);
             final Span span = new Span(colspan, rowspan);
 
-            currentRow.set(currentColumn, span);
+            tableState.currentRow.set(tableState.currentColumn, span);
 
-            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(currentColumn + 1));
-            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(rowNumber));
+            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(tableState.currentColumn + 1));
+            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(tableState.rowNumber));
 
-            currentColumn = currentColumn + colspan;
+            tableState.currentColumn = tableState.currentColumn + colspan;
         }
 
         getContentHandler().startElement(uri, localName, qName, res);
@@ -128,10 +124,13 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         getContentHandler().endElement(uri, localName, qName);
         final String cls = classStack.removeFirst();
-        if (TOPIC_STROW.matches(cls) || TOPIC_STHEAD.matches(cls)) {
-            previousRow = currentRow;
-            currentRow = null;
-            currentColumn = -1;
+        if (TOPIC_SIMPLETABLE.matches(cls)) {
+            tableStack.removeFirst();
+            tableState = tableStack.peekFirst();
+        } else if (TOPIC_STROW.matches(cls) || TOPIC_STHEAD.matches(cls)) {
+            tableState.previousRow = tableState.currentRow;
+            tableState.currentRow = null;
+            tableState.currentColumn = -1;
         }
 
         if (depth == 1) {
@@ -148,5 +147,13 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
             this.x = x;
             this.y = y;
         }
+    }
+
+    private static class TableState {
+        /** Store row number */
+        public int rowNumber = 0;
+        public ArrayList<Span> previousRow;
+        public ArrayList<Span> currentRow;
+        public int currentColumn;
     }
 }

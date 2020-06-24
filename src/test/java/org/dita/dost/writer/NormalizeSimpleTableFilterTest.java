@@ -44,6 +44,11 @@ public class NormalizeSimpleTableFilterTest {
         test("topic.dita");
     }
 
+    @Test
+    public void nested() throws Exception {
+        test("nested.dita");
+    }
+
     private void test(final String file) throws Exception {
         final DocumentBuilder db = dbf.newDocumentBuilder();
         final InputStream expStream = getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/exp/" + file);
