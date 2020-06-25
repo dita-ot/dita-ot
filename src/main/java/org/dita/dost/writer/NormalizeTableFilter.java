@@ -152,7 +152,7 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
                 for (int i = 0; i < prev.x; i++) {
                     tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
                     grow(tableState.currentRow, tableState.currentColumn + 1);
-                    tableState.currentRow.set(tableState.currentColumn, null);
+//                    tableState.currentRow.set(tableState.currentColumn, null);
                 }
             }
         } else {
