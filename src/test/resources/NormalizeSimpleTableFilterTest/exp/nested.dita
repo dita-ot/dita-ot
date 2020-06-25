@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
-       xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" class="- topic/topic "
-       ditaarch:DITAArchVersion="2.0" id="topic1" specializations="" xml:lang="en-us">
-  <title class="- topic/title ">Topic 1</title>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" class="- topic/topic " ditaarch:DITAArchVersion="2.0" id="topic1" specializations="">
+  <title class="- topic/title "/>
   <body class="- topic/body ">
     <simpletable class="- topic/simpletable ">
       <sthead class="- topic/sthead ">

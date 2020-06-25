@@ -1,7 +1,6 @@
-<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
-  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
-  id="topic1" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
-  <title class="- topic/title ">Topic 1</title>
+<?xml version="1.0" encoding="utf-8"?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="" id="topic1" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title "/>
   <body class="- topic/body ">
     <table class="- topic/table ">
       <title class="- topic/title ">Mapping sequence index to number of resampler output samples</title>
@@ -9,7 +8,6 @@
         <colspec class="- topic/colspec " colname="col1" colnum="1"/>
         <colspec class="- topic/colspec " colname="col2" colnum="2"/>
         <colspec class="- topic/colspec " colname="col3" colnum="3"/>
-
         <tbody class="- topic/tbody ">
           <row class="- topic/row ">
             <entry class="- topic/entry " morerows="3">A1</entry>
