@@ -797,6 +797,9 @@ See the accompanying LICENSE file for applicable license.
   <!-- Do nothing when meet the title -->
   <xsl:template match="*[contains(@class, ' topic/title ')]"/>
   
+  <!-- Ignore foreign content -->
+  <xsl:template match="*[contains(@class, ' topic/foreign ')]"/>
+  
   <xsl:template name="get-file-uri">
     <xsl:param name="href" as="xs:string"/>
     <xsl:param name="file-prefix" as="xs:string"/>
