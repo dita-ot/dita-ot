@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " ditaarch:DITAArchVersion="2.0" specializations="" id="topic1">
+  <title class="- topic/title "/>
+  <body class="- topic/body ">
+    <simpletable class="- topic/simpletable ">
+      <strow class="- topic/strow ">
+        <stentry class="- topic/stentry " dita-ot:x="1" dita-ot:y="1" rowspan="4">s1</stentry>
+        <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="1">s2</stentry>
+        <stentry class="- topic/stentry " dita-ot:x="3" dita-ot:y="1">s3</stentry>
+      </strow>
+      <strow class="- topic/strow ">
+        <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="2" rowspan="2">e2</stentry>
+        <stentry class="- topic/stentry " dita-ot:x="3" dita-ot:y="2">e3</stentry>
+      </strow>
+      <strow class="- topic/strow ">
+        <stentry class="- topic/stentry " dita-ot:x="3" dita-ot:y="3">e3</stentry>
+      </strow>
+      <strow class="- topic/strow ">
+        <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="4">e2</stentry>
+        <stentry class="- topic/stentry " dita-ot:x="3" dita-ot:y="4">e3</stentry>
+      </strow>
+      <strow class="- topic/strow ">
+        <stentry class="- topic/stentry " dita-ot:x="1" dita-ot:y="5">e1</stentry>
+        <stentry class="- topic/stentry " dita-ot:x="2" dita-ot:y="5">e2</stentry>
+        <stentry class="- topic/stentry " dita-ot:x="3" dita-ot:y="5">e3</stentry>
+      </strow>
+    </simpletable>
+  </body>
+</topic>

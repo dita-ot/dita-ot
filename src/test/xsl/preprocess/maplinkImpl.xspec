@@ -248,4 +248,41 @@
     </x:scenario>
   </x:scenario>
 
+  <x:scenario label="Flagged topicref">
+    <x:context>
+      <map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+        xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="merge" class="- map/map "
+        ditaarch:DITAArchVersion="1.3" domains="(topic ditaot-d/)" specializations="@props/deliveryTarget">
+        <topicref class="- map/topicref " platform="mac" href="topic.dita" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Ant</navtitle>
+          </topicmeta>
+          <ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop " style="color:red;">
+            <prop action="flag" color="red"/>
+          </ditaval-startprop>
+          <ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
+            <prop action="flag" color="red"/>
+          </ditaval-endprop>
+        </topicref>
+      </map>
+    </x:context>
+    <x:expect label="should not throw errors">
+      <map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+        xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="merge" class="- map/map "
+        ditaarch:DITAArchVersion="1.3" domains="(topic ditaot-d/)" specializations="@props/deliveryTarget">
+        <topicref class="- map/topicref " platform="mac" href="topic.dita" type="concept">
+          <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">Ant</navtitle>
+          </topicmeta>
+          <ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop " style="color:red;">
+            <prop action="flag" color="red"/>
+          </ditaval-startprop>
+          <ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
+            <prop action="flag" color="red"/>
+          </ditaval-endprop>
+        </topicref>
+      </map>
+    </x:expect>
+  </x:scenario>
+
 </x:description>

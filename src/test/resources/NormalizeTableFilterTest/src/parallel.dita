@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="" id="topic1" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title "/>
+  <body class="- topic/body ">
+    <table class="- topic/table ">
+      <title class="- topic/title ">Mapping sequence index to number of resampler output samples</title>
+      <tgroup class="- topic/tgroup " cols="3">
+        <colspec class="- topic/colspec " colname="col1" colnum="1"/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2"/>
+        <colspec class="- topic/colspec " colname="col3" colnum="3"/>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry " morerows="3">A1</entry>
+            <entry class="- topic/entry " morerows="3">B2</entry>
+            <entry class="- topic/entry ">C1</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">C2</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">C3</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">C4</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </body>
+</topic>

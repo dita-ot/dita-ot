@@ -26,6 +26,7 @@
 
 package org.dita.dost.invoker;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.input.DefaultInputHandler;
@@ -64,7 +65,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static final String ANT_ARGS_INPUT = "args.input";
     static final String ANT_ARGS_RESOURCES = "args.resources";
     static final String ANT_ARGS_INPUTS = "args.inputs";
-    private static final String ANT_OUTPUT_DIR = "output.dir";
+    protected static final String ANT_OUTPUT_DIR = "output.dir";
     private static final String ANT_BASE_TEMP_DIR = "base.temp.dir";
     private static final String ANT_TRANSTYPE = "transtype";
     private static final String ANT_PLUGIN_FILE = "plugin.file";
@@ -396,13 +397,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     final Context context = deliverable.context;
                     final URI input = base.resolve(context.inputs.inputs.get(0).href);
                     props.put(ANT_ARGS_INPUT, input.toString());
-                    URI outputDir = new File(props.get(ANT_OUTPUT_DIR).toString()).toURI();
-                    outputDir = outputDir.getPath().endsWith("/")
-                            ? outputDir
-                            : URLUtils.setPath(outputDir, outputDir.getPath() + "/");
-                    final Path output = deliverable.output != null
-                            ? Paths.get(outputDir.resolve(deliverable.output))
-                            : Paths.get(outputDir);
+                    final Path output = getOutputDir(deliverable, props);
                     props.put(ANT_OUTPUT_DIR, output.toString());
                     final Publication publications = deliverable.publication;
                     props.put("transtype", publications.transtype);
@@ -449,6 +444,19 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
 
         return projectProps;
+    }
+
+    @VisibleForTesting
+    protected Path getOutputDir(final org.dita.dost.project.Project.Deliverable deliverable,
+                                final Map<String, Object> props) {
+        URI outputDir = new File(props.getOrDefault(ANT_OUTPUT_DIR, "out").toString())
+                .getAbsoluteFile().toURI();
+        outputDir = outputDir.getPath().endsWith("/")
+                ? outputDir
+                : URLUtils.setPath(outputDir, outputDir.getPath() + "/");
+        return Paths.get(deliverable.output != null
+                ? outputDir.resolve(deliverable.output)
+                : outputDir);
     }
 
     private org.dita.dost.project.Project readProjectFile(final File projectFile) throws BuildException {

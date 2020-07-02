@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " ditaarch:DITAArchVersion="2.0" specializations="" id="topic1">
+  <title class="- topic/title "/>
+  <body class="- topic/body ">
+    <simpletable class="- topic/simpletable " id="tab_foo3">
+      <title class="- topic/title ">foo</title>
+      <sthead class="- topic/sthead ">
+        <stentry class="- topic/stentry ">s1</stentry>
+        <stentry class="- topic/stentry ">s2</stentry>
+        <stentry class="- topic/stentry ">s3</stentry>
+      </sthead>
+      <strow class="- topic/strow ">
+        <stentry class="- topic/stentry ">e1</stentry>
+        <stentry class="- topic/stentry ">e2</stentry>
+        <stentry class="- topic/stentry ">e3</stentry>
+      </strow>
+    </simpletable>
+  </body>
+</topic>

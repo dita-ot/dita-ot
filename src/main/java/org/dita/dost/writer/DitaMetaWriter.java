@@ -65,7 +65,10 @@ public final class DitaMetaWriter extends AbstractDitaMetaWriter {
     ));
 
     public Document process(final Document doc) {
-        Element root = getMatchingTopicElement(doc.getDocumentElement());
+        final Element root = getMatchingTopicElement(doc.getDocumentElement());
+        if (root == null) {
+            return doc;
+        }
         if (hasMetadata(titlealtsOrder)) {
             final Element titlealts = findMetadataContainer(root, titlealtsPosition, TOPIC_TITLEALTS);
             processMetadata(titlealts, titlealtsOrder);

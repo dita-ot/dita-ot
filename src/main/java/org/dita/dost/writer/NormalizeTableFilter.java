@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
@@ -24,6 +25,7 @@ import static org.dita.dost.util.Constants.*;
  *
  * <ul>
  *   <li>Rewrite table column names to {@code "col" num}, where {@code num} is the column number, and add column name to every entry.</li>
+ *   <li>Add column coordinates to entries</li>
  * </ul>
  */
 public class NormalizeTableFilter extends AbstractXMLFilter {
@@ -36,58 +38,18 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
     private static final String ATTR_X = "x";
     private static final String ATTR_Y = "y";
 
-    private Configuration.Mode processingMode;
-
-    private List<String> colSpec;
-    /** ColumnNumber is used to adjust column name */
-    private int columnNumber; //
-    /** columnNumberEnd is the end value for current entry */
-    private int columnNumberEnd;
-    /** Stack to store colspec list */
-    private final Deque<List<String>> colSpecStack;
-    /** Stack to store rowNum */
-    private final Deque<Integer> rowNumStack;
-    /** Stack to store columnNumber */
-    private final Deque<Integer> columnNumberStack;
-    /** Stack to store columnNumberEnd */
-    private final Deque<Integer> columnNumberEndStack;
-    /** Stack to store rowsMap */
-    private final Deque<Map<String, Integer>> rowsMapStack;
-    /** Stack to store colSpanMap */
-    private final Deque<Map<String, Integer>> colSpanMapStack;
-    /** Store row number */
-    private int rowNumber;
-    /** Store total column count */
-    private int totalColumns;
-    /** store morerows attribute */
-    private Map<String, Integer> rowsMap;
-    private Map<String, Integer> colSpanMap;
-    /** DITA class stack */
     private final Deque<String> classStack = new LinkedList<>();
-    /** Number of cols in tgroup */
-    private int cols;
-    private int depth;
+    /** DITA class stack */
     private final Map<String, String> ns = new HashMap<>();
+    private int depth;
+
+    private final Deque<TableState> tableStack = new LinkedList<>();
+    /** Cached table stack head */
+    private TableState tableState;
+    private Configuration.Mode processingMode;
 
     public NormalizeTableFilter() {
         super();
-        columnNumber = 1;
-        columnNumberEnd = 0;
-        // initialize row number
-        rowNumber = 0;
-        // initialize total column count
-        totalColumns = 0;
-        // initialize the map
-        rowsMap = new HashMap<>();
-        colSpanMap = new HashMap<>();
-        colSpec = null;
-        // initial the stack
-        colSpecStack = new ArrayDeque<>();
-        rowNumStack = new ArrayDeque<>();
-        columnNumberStack = new ArrayDeque<>();
-        columnNumberEndStack = new ArrayDeque<>();
-        rowsMapStack = new ArrayDeque<>();
-        colSpanMapStack = new ArrayDeque<>();
         depth = 0;
     }
 
@@ -124,128 +86,177 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
             throws SAXException {
         depth++;
         if (depth == 1 && !ns.containsKey(DITA_OT_NS_PREFIX)) {
-            super.startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
+            startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
         }
 
         final AttributesImpl res = new AttributesImpl(atts);
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
         classStack.addFirst(cls);
-        if (TOPIC_TGROUP.matches(cls)) {
-            // push into the stack.
-            if (colSpec != null) {
-                colSpecStack.addFirst(colSpec);
-                rowNumStack.addFirst(rowNumber);
-                columnNumberStack.addFirst(columnNumber);
-                columnNumberEndStack.addFirst(columnNumberEnd);
-                rowsMapStack.addFirst(rowsMap);
-                colSpanMapStack.addFirst(colSpanMap);
-            }
-            columnNumber = 1; // initialize the column number
-            columnNumberEnd = 0;// totally columns
-            rowsMap = new HashMap<>();
-            colSpanMap = new HashMap<>();
-            // new table initialize the col list
-            colSpec = new ArrayList<>(16);
-            // new table initialize the col list
-            rowNumber = 0;
-            final String c = atts.getValue(ATTRIBUTE_NAME_COLS).trim();
-            try {
-                cols = Integer.parseInt(c);
-            } catch (final NumberFormatException e) {
-                if (processingMode == Configuration.Mode.STRICT) {
-                    throw new SAXException(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
-                } else {
-                    logger.error(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
-                }
-                cols = -1;
-            }
-        } else if (TOPIC_ROW.matches(cls)) {
-            columnNumber = 1; // initialize the column number
-            columnNumberEnd = 0;
-            // store the row number
-            rowNumber++;
+
+        if (TOPIC_TABLE.matches(cls)) {
+            tableState = new TableState();
+            tableStack.addFirst(tableState);
+        } else if (TOPIC_TGROUP.matches(cls)) {
+            tableState.cols = getColCount(atts);
+            tableState.colSpec = new ArrayList<>();
         } else if (TOPIC_COLSPEC.matches(cls)) {
             processColspec(res);
-        } else if (TOPIC_THEAD.matches(cls) || TOPIC_TBODY.matches(cls)) {
-            if (columnNumberEnd < cols && cols != -1) {
-                final int length = cols - totalColumns;
+        } else if (TOPIC_TBODY.matches(cls) || TOPIC_THEAD.matches(cls)) {
+            if (tableState.columnNumberEnd < tableState.cols && tableState.cols != -1) {
+                final int length = tableState.cols - tableState.totalColumns;
                 for (int i = 0; i < length; i++) {
-                    final AttributesImpl colspecAtts = new AttributesImpl();
-                    XMLUtils.addOrSetAttribute(colspecAtts, ATTRIBUTE_NAME_CLASS, TOPIC_COLSPEC.toString());
-                    processColspec(colspecAtts);
-                    getContentHandler().startElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName, colspecAtts);
-                    getContentHandler().endElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName);
+                    generateColSpec();
                 }
             }
-        } else if (TOPIC_ENTRY.matches(cls)) {
-            columnNumber = getStartNumber(atts, columnNumberEnd);
-            if (columnNumber > columnNumberEnd) {
-                if (rowNumber != 1) {
-                    int offset = 0;
-                    int currentCol = columnNumber;
-                    while (currentCol <= totalColumns) {
-                        int previous_offset = offset;
-                        // search from first row
-                        for (int row = 1; row < rowNumber; row++) {
-                            final String pos = Integer.toString(row) + "-" + Integer.toString(currentCol);
-                            if (rowsMap.containsKey(pos)) {
-                                // get total span rows
-                                final int totalSpanRows = rowsMap.get(pos);
-                                if (rowNumber <= totalSpanRows) {
-                                    offset += colSpanMap.get(pos);
-                                }
+        } else if (TOPIC_ROW.matches(cls)) {
+            // TODO: Inline me to (currentColumn + 1)
+            tableState.columnNumber = 1; // initialize the column number
+            tableState.columnNumberEnd = 0;
+            tableState.rowNumber++;
+            if (tableState.previousRow != null) {
+                final List<Span> fromPrew = tableState.previousRow.stream()
+                        .map(s -> {
+                            if (s == null) {
+                                return null;
                             }
-                        }
-                        if (offset > previous_offset) {
-                            currentCol = columnNumber + offset;
-                            previous_offset = offset;
-                        } else {
-                            break;
-                        }
-                    }
-                    columnNumber = columnNumber + offset;
-                    // if has morerows attribute
-                    if (atts.getValue(ATTRIBUTE_NAME_MOREROWS) != null) {
-                        final String pos = Integer.toString(rowNumber) + "-" + Integer.toString(columnNumber);
-                        // total span rows
-                        rowsMap.put(pos, Integer.parseInt(atts.getValue(ATTRIBUTE_NAME_MOREROWS)) + rowNumber);
-                        colSpanMap.put(pos, getColumnSpan(atts));
-                    }
-                }
-                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
-                if (atts.getValue(ATTRIBUTE_NAME_NAMEST) != null) {
-                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + columnNumber);
-                }
-                if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null) {
-                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(atts, columnNumber));
-                    XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_MORECOLS, DITA_OT_NS_PREFIX + ":" + ATTR_MORECOLS, "CDATA", Integer.toString(getEndNumber(atts, columnNumber) - columnNumber));
-                }
-                // Add extensions
-                XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(columnNumber));
-                XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(rowNumber));
+                            return s.y > 1 ? new Span(s.x, s.y - 1) : null;
+                        })
+                        .collect(Collectors.toList());
+                tableState.currentRow = new ArrayList<>(fromPrew);
+            } else {
+                tableState.currentRow = new ArrayList<>();
             }
-            columnNumberEnd = getEndNumber(atts, columnNumber);
+            tableState.currentColumn = 0;
+        } else if (TOPIC_ENTRY.matches(cls)) {
+            processEntry(res);
         }
 
         getContentHandler().startElement(uri, localName, qName, res);
     }
 
-    private void processColspec(final AttributesImpl res) {
-        columnNumber = columnNumberEnd + 1;
-        if (res.getValue(ATTRIBUTE_NAME_COLNAME) != null) {
-            colSpec.add(res.getValue(ATTRIBUTE_NAME_COLNAME));
+    private void generateColSpec() throws SAXException {
+        final AttributesImpl attr = new AttributesImpl();
+        XMLUtils.addOrSetAttribute(attr, ATTRIBUTE_NAME_CLASS, TOPIC_COLSPEC.toString());
+        processColspec(attr);
+        getContentHandler().startElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName, attr);
+        getContentHandler().endElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName);
+    }
+
+    private void processEntry(AttributesImpl res) {
+        tableState.columnNumber = getStartNumber(res, tableState.columnNumberEnd);
+        final int colspan = getColSpan(res);
+        final int rowspan = getRowSpan(res);
+        Span prev;
+        if (tableState.previousRow != null) {
+            for (prev = tableState.previousRow.get(tableState.currentColumn); prev != null && prev.y > 1; prev = tableState.previousRow.get(tableState.currentColumn)) {
+                for (int i = 0; i < prev.x; i++) {
+                    tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
+                    grow(tableState.currentRow, tableState.currentColumn + 1);
+//                    tableState.currentRow.set(tableState.currentColumn, null);
+                }
+            }
         } else {
-            colSpec.add(COLUMN_NAME_COL + columnNumber);
+            prev = new Span(1, 1);
         }
+        grow(tableState.currentRow, tableState.currentColumn + colspan);
+        final Span span = new Span(colspan, rowspan);
+
+        tableState.currentRow.set(tableState.currentColumn, span);
+
+        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + (tableState.currentColumn + 1));
+        if (res.getValue(ATTRIBUTE_NAME_NAMEST) != null) {
+            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + tableState.columnNumber);
+        }
+        if (res.getValue(ATTRIBUTE_NAME_NAMEEND) != null) {
+            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(res, tableState.columnNumber));
+            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_MORECOLS, DITA_OT_NS_PREFIX + ":" + ATTR_MORECOLS, "CDATA", Integer.toString(span.x - 1));
+        }
+        // Add extensions
+        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(tableState.currentColumn + 1));
+        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(tableState.rowNumber));
+
+        tableState.currentColumn = tableState.currentColumn + colspan;
+        tableState.columnNumberEnd = getEndNumber(res, tableState.columnNumber);
+    }
+
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+        getContentHandler().endElement(uri, localName, qName);
+        final String cls = classStack.removeFirst();
+        if (TOPIC_TABLE.matches(cls)) {
+            tableStack.removeFirst();
+            tableState = tableStack.peekFirst();
+        } else if (TOPIC_ROW.matches(cls)) {
+            tableState.previousRow = tableState.currentRow;
+            tableState.currentRow = null;
+            tableState.currentColumn = -1;
+        }
+
+        if (depth == 1) {
+            endPrefixMapping(DITA_OT_NS_PREFIX);
+        }
+        depth--;
+    }
+
+    private void grow(final List<?> array, final int size) {
+        while (array.size() < size) {
+            array.add(null);
+        }
+    }
+
+    private int getColSpan(final Attributes atts) {
+        final String start = atts.getValue(ATTRIBUTE_NAME_NAMEST);
+        final String end = atts.getValue(ATTRIBUTE_NAME_NAMEEND);
+        if (start != null && end != null) {
+            final int colnumStart = tableState.colSpec.indexOf(start);
+            final int colnumEnd = tableState.colSpec.indexOf(end);
+            // TODO: handle missing column definition
+            final int ret = colnumEnd - colnumStart + 1;
+            return ret <= 0 ? 1 : ret;
+        } else {
+            return 1;
+        }
+    }
+
+    private int getRowSpan(final Attributes atts) {
+        final String span = atts.getValue(ATTRIBUTE_NAME_MOREROWS);
+        if (span != null) {
+            return Integer.parseInt(span) + 1;
+        } else {
+            return 1;
+        }
+    }
+
+    private int getColCount(final Attributes atts) throws SAXException {
+        final String c = atts.getValue(ATTRIBUTE_NAME_COLS).trim();
+        try {
+            return Integer.parseInt(c);
+        } catch (final NumberFormatException e) {
+            if (processingMode == Configuration.Mode.STRICT) {
+                throw new SAXException(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
+            } else {
+                logger.error(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
+            }
+            return -1;
+        }
+    }
+
+    private void processColspec(final AttributesImpl res) {
+        tableState.columnNumber = tableState.columnNumberEnd + 1;
+        final String colName = res.getValue(ATTRIBUTE_NAME_COLNAME) != null ? res.getValue(ATTRIBUTE_NAME_COLNAME) : COLUMN_NAME_COL + tableState.columnNumber;
+        grow(tableState.colSpec, tableState.columnNumber);
+        tableState.colSpec.set(tableState.columnNumber - 1, colName);
+
         final String colNum = res.getValue(ATTRIBUTE_NAME_COLNUM);
         if (colNum == null || colNum.isEmpty()) {
-            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNUM, Integer.toString(columnNumber));
+            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNUM, Integer.toString(tableState.columnNumber));
         }
-        columnNumberEnd = columnNumber;
+
+        tableState.columnNumberEnd = tableState.columnNumber;
         // change the col name of colspec
-        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
+        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + tableState.columnNumber);
         // total columns count
-        totalColumns = columnNumberEnd;
+        tableState.totalColumns = tableState.columnNumberEnd;
         final String colWidth = res.getValue(ATTRIBUTE_NAME_COLWIDTH);
         // OASIS Table Model defaults to 1*, but that will disables automatic column layout
         if (colWidth == null) {
@@ -257,66 +268,12 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
         }
     }
 
-
-    @Override
-    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-        getContentHandler().endElement(uri, localName, qName);
-        if (TOPIC_TGROUP.matches(classStack.removeFirst())) {
-            // has tgroup tag
-            if (!colSpecStack.isEmpty()) {
-                colSpec = colSpecStack.peekFirst();
-                rowNumber = rowNumStack.peekFirst();
-                columnNumber = columnNumberStack.peekFirst();
-                columnNumberEnd = columnNumberEndStack.peekFirst();
-                rowsMap = rowsMapStack.peekFirst();
-                colSpanMap = colSpanMapStack.peekFirst();
-                colSpecStack.removeFirst();
-                rowNumStack.removeFirst();
-                columnNumberStack.removeFirst();
-                columnNumberEndStack.removeFirst();
-                rowsMapStack.removeFirst();
-                colSpanMapStack.removeFirst();
-            } else {
-                // no more tgroup tag
-                colSpec = null;
-                rowNumber = 0;
-                columnNumber = 1;
-                columnNumberEnd = 0;
-                rowsMap = null;
-                colSpanMap = null;
-            }
-            totalColumns = 0;
-        }
-
-        if (depth == 1) {
-            super.endPrefixMapping(DITA_OT_NS_PREFIX);
-        }
-        depth--;
-    }
-
-    // Private methods
-
-    private int getColumnSpan(final Attributes atts) {
-        final String start = atts.getValue(ATTRIBUTE_NAME_NAMEST);
-        final String end = atts.getValue(ATTRIBUTE_NAME_NAMEEND);
-        if (start == null || end == null) {
-            return 1;
-        } else {
-            final int ret = colSpec.indexOf(end) - colSpec.indexOf(start) + 1;
-            if (ret <= 0) {
-                return 1;
-            }
-            return ret;
-        }
-    }
-
     private int getEndNumber(final Attributes atts, final int columnStart) {
         final String end = atts.getValue(ATTRIBUTE_NAME_NAMEEND);
-        int ret;
         if (end == null) {
             return columnStart;
         } else {
-            ret = colSpec.indexOf(end) + 1;
+            int ret = tableState.colSpec.indexOf(end) + 1;
             if (ret == 0) {
                 return columnStart;
             }
@@ -331,13 +288,13 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
         if (num != null) {
             return Integer.parseInt(num);
         } else if (start != null) {
-            final int ret = colSpec.indexOf(start) + 1;
+            final int ret = tableState.colSpec.indexOf(start) + 1;
             if (ret == 0) {
                 return previousEnd + 1;
             }
             return ret;
         } else if (name != null) {
-            final int ret = colSpec.indexOf(name) + 1;
+            final int ret = tableState.colSpec.indexOf(name) + 1;
             if (ret == 0) {
                 return previousEnd + 1;
             }
@@ -347,4 +304,29 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
         }
     }
 
+    private static class Span {
+        public final int x;
+        public final int y;
+
+        private Span(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    private static class TableState {
+        public List<String> colSpec;
+        public int rowNumber = 0;
+        public ArrayList<Span> previousRow;
+        public ArrayList<Span> currentRow;
+        public int currentColumn;
+        /** ColumnNumber is used to adjust column name */
+        public int columnNumber = 1;
+        /** columnNumberEnd is the end value for current entry */
+        public int columnNumberEnd = 0;
+        /** Store total column count */
+        public int totalColumns = 0;
+        /** Number of cols in tgroup */
+        public int cols;
+    }
 }
