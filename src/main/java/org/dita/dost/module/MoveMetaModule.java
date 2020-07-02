@@ -155,7 +155,6 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 if (fi.format != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
                     mapInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
-                        logger.info("Processing " + targetFileName);
                         try {
                             mapInserter.read(toFile(targetFileName));
                         } catch (DITAOTException e) {

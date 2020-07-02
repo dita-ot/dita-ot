@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " specializations="" id="topic1" ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/title "/>
+  <body class="- topic/body ">
+    <simpletable class="- topic/simpletable ">
+      <strow class="- topic/strow ">
+        <stentry class="- topic/stentry " rowspan="4">A1</stentry>
+        <stentry class="- topic/stentry " rowspan="4">B2</stentry>
+        <stentry class="- topic/stentry ">C1</stentry>
+      </strow>
+      <strow class="- topic/strow ">
+        <stentry class="- topic/stentry ">C2</stentry>
+      </strow>
+      <strow class="- topic/strow ">
+        <stentry class="- topic/stentry ">C3</stentry>
+      </strow>
+      <strow class="- topic/strow ">
+        <stentry class="- topic/stentry ">C4</stentry>
+      </strow>
+    </simpletable>
+  </body>
+</topic>

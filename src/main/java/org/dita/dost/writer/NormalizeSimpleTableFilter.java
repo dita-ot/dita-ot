@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.*;
 
@@ -23,21 +24,21 @@ import static org.dita.dost.util.Constants.*;
  *   <li>Add column coordinates to entries</li>
  * </ul>
  */
-public final class NormalizeSimpleTableFilter extends NormalizeTableFilter {
+public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
 
     private static final String ATTRIBUTE_NAME_COLSPAN = "colspan";
     private static final String ATTRIBUTE_NAME_ROWSPAN = "rowspan";
     private static final String ATTR_X = "x";
     private static final String ATTR_Y = "y";
 
+    /** DITA class stack */
     private final Deque<String> classStack = new LinkedList<>();
     private int depth;
     private final Map<String, String> ns = new HashMap<>();
 
-    private int rowNumber;
-    private ArrayList<Span> previousRow;
-    private ArrayList<Span> currentRow;
-    private int currentColumn;
+    private final Deque<TableState> tableStack = new LinkedList<>();
+    /** Cached table stack head */
+    private TableState tableState;
 
     public NormalizeSimpleTableFilter() {
         super();
@@ -61,7 +62,7 @@ public final class NormalizeSimpleTableFilter extends NormalizeTableFilter {
             throws SAXException {
         depth++;
         if (depth == 1 && !ns.containsKey(DITA_OT_NS_PREFIX)) {
-            super.startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
+            startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
         }
 
         final AttributesImpl res = new AttributesImpl(atts);
@@ -69,51 +70,83 @@ public final class NormalizeSimpleTableFilter extends NormalizeTableFilter {
         classStack.addFirst(cls);
 
         if (TOPIC_SIMPLETABLE.matches(cls)) {
-            rowNumber = 0;
-            previousRow = null;
-            currentRow = null;
+            tableState = new TableState();
+            tableStack.addFirst(tableState);
         } else if (TOPIC_STROW.matches(cls) || TOPIC_STHEAD.matches(cls)) {
-            rowNumber++;
-            currentRow = previousRow != null ? new ArrayList<>(Arrays.asList(new Span[previousRow.size()])) : new ArrayList<>();
-            currentColumn = 0;
-        } else if (TOPIC_STENTRY.matches(cls)) {
-            final int colspan = getSpan(atts, ATTRIBUTE_NAME_COLSPAN);
-            final int rowspan = getSpan(atts, ATTRIBUTE_NAME_ROWSPAN);
-            final Span prev;
-            if (previousRow != null) {
-                prev = previousRow.get(currentColumn);
-                if (prev != null && prev.y > 1) {
-                    for (int i = 0; i < prev.x; i++) {
-                        currentColumn = currentColumn + 1; //prev.x - 1;
-                        grow(currentRow, currentColumn + 1);
-                        currentRow.set(currentColumn, null);
-                    }
-                }
+            tableState.rowNumber++;
+            if (tableState.previousRow != null) {
+                final List<Span> fromPrew = tableState.previousRow.stream()
+                        .map(s -> {
+                            if (s == null) {
+                                return null;
+                            }
+                            return s.y > 1 ? new Span(s.x, s.y - 1) : null;
+                        })
+                        .collect(Collectors.toList());
+                tableState.currentRow = new ArrayList<>(fromPrew);
             } else {
-                prev = new Span(1, 1);
+                tableState.currentRow = new ArrayList<>();
             }
-            grow(currentRow, currentColumn + colspan);
-            final Span span = new Span(colspan, rowspan);
-
-            currentRow.set(currentColumn, span);
-
-            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(currentColumn + 1));
-            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(rowNumber));
-
-            currentColumn = currentColumn + colspan;
+            tableState.currentColumn = 0;
+        } else if (TOPIC_STENTRY.matches(cls)) {
+            processEntry(res);
         }
 
         getContentHandler().startElement(uri, localName, qName, res);
     }
 
-    private void grow(final ArrayList<?> array, final int size) {
+    private void processEntry(AttributesImpl res) {
+        final int colspan = getColSpan(res);
+        final int rowspan = getRowSpan(res);
+        Span prev;
+        if (tableState.previousRow != null) {
+            for (prev = tableState.previousRow.get(tableState.currentColumn); prev != null && prev.y > 1; prev = tableState.previousRow.get(tableState.currentColumn)) {
+                for (int i = 0; i < prev.x; i++) {
+                    tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
+                    grow(tableState.currentRow, tableState.currentColumn + 1);
+                }
+            }
+        } else {
+            prev = new Span(1, 1);
+        }
+        grow(tableState.currentRow, tableState.currentColumn + colspan);
+        final Span span = new Span(colspan, rowspan);
+
+        tableState.currentRow.set(tableState.currentColumn, span);
+
+        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(tableState.currentColumn + 1));
+        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(tableState.rowNumber));
+
+        tableState.currentColumn = tableState.currentColumn + colspan;
+    }
+
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+        getContentHandler().endElement(uri, localName, qName);
+        final String cls = classStack.removeFirst();
+        if (TOPIC_SIMPLETABLE.matches(cls)) {
+            tableStack.removeFirst();
+            tableState = tableStack.peekFirst();
+        } else if (TOPIC_STROW.matches(cls) || TOPIC_STHEAD.matches(cls)) {
+            tableState.previousRow = tableState.currentRow;
+            tableState.currentRow = null;
+            tableState.currentColumn = -1;
+        }
+
+        if (depth == 1) {
+            endPrefixMapping(DITA_OT_NS_PREFIX);
+        }
+        depth--;
+    }
+
+    private void grow(final List<?> array, final int size) {
         while (array.size() < size) {
             array.add(null);
         }
     }
 
-    private int getSpan(final Attributes atts, final String name) {
-        final String span = atts.getValue(name);
+    private int getColSpan(final Attributes atts) {
+        final String span = atts.getValue(ATTRIBUTE_NAME_COLSPAN);
         if (span != null) {
             return Integer.parseInt(span);
         } else {
@@ -121,20 +154,13 @@ public final class NormalizeSimpleTableFilter extends NormalizeTableFilter {
         }
     }
 
-    @Override
-    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-        getContentHandler().endElement(uri, localName, qName);
-        final String cls = classStack.removeFirst();
-        if (TOPIC_STROW.matches(cls) || TOPIC_STHEAD.matches(cls)) {
-            previousRow = currentRow;
-            currentRow = null;
-            currentColumn = -1;
+    private int getRowSpan(final Attributes atts) {
+        final String span = atts.getValue(ATTRIBUTE_NAME_ROWSPAN);
+        if (span != null) {
+            return Integer.parseInt(span);
+        } else {
+            return 1;
         }
-
-        if (depth == 1) {
-            super.endPrefixMapping(DITA_OT_NS_PREFIX);
-        }
-        depth--;
     }
 
     private static class Span {
@@ -145,5 +171,13 @@ public final class NormalizeSimpleTableFilter extends NormalizeTableFilter {
             this.x = x;
             this.y = y;
         }
+    }
+
+    private static class TableState {
+        /** Store row number */
+        public int rowNumber = 0;
+        public ArrayList<Span> previousRow;
+        public ArrayList<Span> currentRow;
+        public int currentColumn;
     }
 }

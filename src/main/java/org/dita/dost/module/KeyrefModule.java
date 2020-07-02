@@ -104,7 +104,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             reader.read(job.tempDirURI.resolve(mapFile), doc);
 
             final KeyScope startScope = reader.getKeyDefinition();
-            writeMap(in, doc);
 
             // Read resources maps
             final Collection<FileInfo> resourceFis = job.getFileInfo(fi -> fi.isInputResource && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP));
@@ -125,6 +124,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                     })
                     .reduce(startScope, KeyScope::merge);
             final List<ResolveTask> jobs = collectProcessingTopics(resourceFis, rootScope, doc);
+            writeMap(in, doc);
 
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             if (transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
