@@ -261,7 +261,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         if (keyrefLevel != 0 && empty) {
             // If current element is in the scope of key reference element
             // and the element is empty
-            if (!validKeyref.isEmpty() && validKeyref.peek()) {
+            if (!validKeyref.isEmpty() && validKeyref.peek() && keyDef != null) {
                 final XdmNode elem = keyDef.element;
                 // Key reference is valid,
                 // need to pull matching content from the key definition
