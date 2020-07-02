@@ -523,6 +523,13 @@ See the accompanying LICENSE file for applicable license.
     <xsl:sequence select="dita-ot:css-class((), .)"/>
   </xsl:template>
 
+  <xsl:template match="@rotate" mode="css-class">
+    <xsl:if test=". = 1">
+      <xsl:value-of select="name()"/>
+    </xsl:if>
+  </xsl:template>
+  
+
   <xsl:template match="*[contains(@class, ' topic/tgroup ')]/*" mode="css-class">
     <xsl:apply-templates select="@valign" mode="#current"/>
   </xsl:template>
@@ -535,7 +542,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="colsep" as="attribute(colsep)?" select="table:get-entry-colsep(.)"/>
     <xsl:variable name="rowsep" as="attribute(rowsep)?" select="table:get-entry-rowsep(.)"/>
     <xsl:apply-templates mode="#current" select="
-      table:get-entry-align(.), $colsep, $rowsep, @valign
+      table:get-entry-align(.), $colsep, $rowsep, @valign, @rotate
     "/>
   </xsl:template>
 
