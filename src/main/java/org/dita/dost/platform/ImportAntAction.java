@@ -30,11 +30,13 @@ final class ImportAntAction extends ImportAction {
         for (final Value value: valueSet) {
             final String[] tokens = value.value.split("[/\\\\]", 2);
             buf.startElement(NULL_NS_URI, "import", "import", XMLUtils.EMPTY_ATTRIBUTES);
-            buf.startElement(NULL_NS_URI, "fileset", "fileset", new AttributesBuilder()
-                    .add("dir", tokens[0])
+            buf.startElement(NULL_NS_URI, "first", "first", XMLUtils.EMPTY_ATTRIBUTES);
+            buf.startElement(NULL_NS_URI, "multirootfileset", "multirootfileset", new AttributesBuilder()
+                    .add("basedirs", tokens[0])
                     .add("includes", tokens[1])
                     .build());
-            buf.endElement(NULL_NS_URI, "fileset", "fileset");
+            buf.endElement(NULL_NS_URI, "multirootfileset", "multirootfileset");
+            buf.endElement(NULL_NS_URI, "first", "first");
             buf.endElement(NULL_NS_URI, "import", "import");
         }
     }

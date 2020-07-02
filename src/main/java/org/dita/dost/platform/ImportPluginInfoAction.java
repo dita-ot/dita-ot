@@ -36,25 +36,27 @@ final class ImportPluginInfoAction extends ImportAction {
         // plugin properties
         for (final Entry<String, Features> e: featureTable.entrySet()) {
             final Features f = e.getValue();
-            final String name = "dita.plugin."+ e.getKey() + ".dir";
-            final StringBuilder location = new StringBuilder();
+            for (final String suffix : new String[]{"", ".cache"}) {
+                final String name = String.format("dita.plugin.%s%s.dir", e.getKey(), suffix);
+                final StringBuilder location = new StringBuilder();
 
-            final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
-            if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
-                location.append("${dita.dir}");
-            } else if (f.getPluginDir().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
-                location.append("${dita.dir}").append(UNIX_SEPARATOR)
-                .append(FileUtils.getRelativeUnixPath(
-                        new File(f.getDitaDir(), "plugin.xml").getAbsolutePath(),
-                        f.getPluginDir().getAbsolutePath()));
-            } else {
-                location.append(f.getPluginDir().getAbsolutePath());
+                final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
+                if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
+                    location.append(String.format("${dita%s.dir}", suffix));
+                } else if (f.getPluginDir().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
+                    location.append(String.format("${dita%s.dir}", suffix)).append(UNIX_SEPARATOR)
+                            .append(FileUtils.getRelativeUnixPath(
+                                    new File(f.getDitaDir(), "plugin.xml").getAbsolutePath(),
+                                    f.getPluginDir().getAbsolutePath()));
+                } else {
+                    location.append(f.getPluginDir().getAbsolutePath());
+                }
+                buf.startElement(NULL_NS_URI, "property", "property", new AttributesBuilder()
+                        .add("name", name)
+                        .add("location", location.toString())
+                        .build());
+                buf.endElement(NULL_NS_URI, "property", "property");
             }
-            buf.startElement(NULL_NS_URI, "property", "property", new AttributesBuilder()
-                .add("name", name)
-                .add("location", location.toString())
-                .build());
-            buf.endElement(NULL_NS_URI, "property", "property");
         }
     }
 

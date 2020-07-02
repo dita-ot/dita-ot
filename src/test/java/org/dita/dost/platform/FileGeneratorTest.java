@@ -88,9 +88,11 @@ public class FileGeneratorTest {
     }
 
     @Test
-    public void testGenerate() throws IOException, SAXException {
+    public void testGenerate() throws IOException {
         final FileGenerator f = new FileGenerator(features, plugins);
-        f.generate(tempFile);
+        f.setLogger(new TestUtils.TestLogger());
+        f.setWorkspace(tempDir);
+        f.generate(tempDir, "dummy_template.xml");
 
         assertXMLEqual(new InputSource(new File(resourceDir, "exp" + File.separator + "dummy.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "dummy.xml").toURI().toString()));
