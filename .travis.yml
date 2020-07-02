@@ -104,8 +104,8 @@ jobs:
         - provider: script
           skip_cleanup: true
           script: |-
-            docker login docker.pkg.github.com -u $GITHUB_USER -p $GITHUB_PACKAGE_REGISTRY
-            TAG=${TRAVIS_TAG} docker build -t docker.pkg.github.com/dita-ot/dita-ot/dita-ot:${TRAVIS_TAG} --build-arg VERSION=${TRAVIS_TAG} .
+            docker login docker.pkg.github.com --username $GITHUB_USER --password $GITHUB_PACKAGE_REGISTRY
+            TAG=${TRAVIS_TAG} docker build --tag docker.pkg.github.com/dita-ot/dita-ot/dita-ot:${TRAVIS_TAG} --build-arg VERSION=${TRAVIS_TAG} .
             TAG=${TRAVIS_TAG} docker push docker.pkg.github.com/dita-ot/dita-ot/dita-ot:${TRAVIS_TAG}
           on:
             tags: true
