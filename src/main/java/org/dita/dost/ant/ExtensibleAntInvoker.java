@@ -307,7 +307,7 @@ public final class ExtensibleAntInvoker extends Task {
         Job job = project.getReference(ANT_REFERENCE_JOB);
         if (job != null) {
             if (job.isStale()) {
-                project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
+                project.log("Reload stale job configuration reference", Project.MSG_ERR);
                 try {
                     job = new Job(tempDir, job.getStore());
                 } catch (final IOException ioe) {
@@ -316,10 +316,16 @@ public final class ExtensibleAntInvoker extends Task {
                 project.addReference(ANT_REFERENCE_JOB, job);
             }
         } else {
+            XMLUtils xmlUtils = project.getReference(ANT_REFERENCE_XML_UTILS);
+            if (xmlUtils == null) {
+                project.log("XML utils not found from Ant project reference", Project.MSG_ERR);
+                xmlUtils = new XMLUtils();
+                xmlUtils.setLogger(new DITAOTAntLogger(project));
+            }
             Store store = project.getReference(ANT_REFERENCE_STORE);
             if (store == null) {
-                project.log("Store not found from Ant project reference", Project.MSG_VERBOSE);
-                store = new StreamStore( new XMLUtils());
+                project.log("Store not found from Ant project reference", Project.MSG_ERR);
+                store = new StreamStore(job.tempDir, xmlUtils);
             }
             project.log("Job not found from Ant project reference", Project.MSG_VERBOSE);
             try {

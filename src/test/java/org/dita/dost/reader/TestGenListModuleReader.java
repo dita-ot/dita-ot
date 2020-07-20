@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.reader.GenListModuleReader.Reference;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
@@ -60,7 +61,7 @@ public class TestGenListModuleReader {
     public void setUp() throws IOException {
         reader = new GenListModuleReader();
         reader.setLogger(new TestUtils.TestLogger());
-        reader.setJob(new Job(tempDir));
+        reader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         reader.setContentHandler(new DefaultHandler());
         final URI currentFile = new File(inputDir, "root-map-01.ditamap").toURI();
         reader.setCurrentFile(currentFile);

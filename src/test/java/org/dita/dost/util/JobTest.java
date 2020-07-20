@@ -18,6 +18,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.dita.dost.store.StreamStore;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public final class JobTest {
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(JobTest.class);
         TestUtils.copy(srcDir, tempDir);
-        job = new Job(tempDir);
+        job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
     }
 
     @Test

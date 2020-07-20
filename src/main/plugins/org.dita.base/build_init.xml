@@ -50,7 +50,8 @@ See the accompanying LICENSE file for applicable license.
                    log-arg"/>
 
   <target name="init-properties">
-    <init-project/>
+    <property name="store-type" value="file"/>
+    <init-project storeType="${store-type}"/>
     <property name="default.language" value="en"/>
     <property name="generate-debug-attributes" value="true"/>
     <property name="processing-mode" value="lax"/>

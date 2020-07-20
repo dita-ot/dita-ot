@@ -78,7 +78,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
 
     @Override
     public void write(final File filename) throws DITAOTException {
-        if (filename == null || !filename.exists()) {
+        if (filename == null || !job.getStore().exists(filename.toURI())) {
             return;
         }
         curMatchTopic = indexEntries.containsKey(SHARP) ? SHARP : null;
@@ -162,7 +162,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
             final NodeList children = root.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 final Node links = rewriteLinks((Element) children.item(i));
-                xmlUtils.writeDocument(links, handler);
+                job.getStore().writeDocument(links, handler);
             }
         } catch (IOException e) {
             throw new SAXException("Failed to serialize DOM node to SAX: " + e.getMessage(), e);

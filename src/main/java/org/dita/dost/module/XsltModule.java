@@ -12,23 +12,14 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
-import org.apache.tools.ant.util.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.dita.dost.util.*;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
@@ -63,20 +54,19 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     private String filenameparameter;
     private String filedirparameter;
     private boolean reloadstylesheet;
-    private EntityResolver entityResolver;
+    private URIResolver catalog;
     private URIResolver uriResolver;
     private FileNameMapper mapper;
     private String extension;
     private XsltTransformer t;
-    private XMLReader parser;
     private Processor processor;
 
     private void init() {
-        if (entityResolver == null || uriResolver == null) {
+        if (catalog == null) {
             final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
-            entityResolver = catalogResolver;
-            uriResolver = catalogResolver;
+            catalog = catalogResolver;
         }
+        uriResolver = new DelegatingURIResolver(catalog, job.getStore());
 
         if (fileInfoFilter != null) {
             final Collection<Job.FileInfo> res = job.getFileInfo(fileInfoFilter);
@@ -108,13 +98,6 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             throw new RuntimeException("Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(), e);
         }
 
-        try {
-            parser = XMLUtils.getXMLReader();
-        } catch (final SAXException e) {
-            throw new RuntimeException("Failed to create XML reader: " + e.getMessage(), e);
-        }
-        parser.setEntityResolver(entityResolver);
-
         if (in != null) {
             transform(in, out);
         } else {
@@ -144,17 +127,16 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             logger.info("Loading stylesheet " + style.getAbsolutePath());
             try {
                 t = templates.load();
-                final URIResolver resolver = Configuration.DEBUG
-                        ? new XMLUtils.DebugURIResolver(uriResolver)
-                        : uriResolver;
+//                final URIResolver resolver = Configuration.DEBUG
+//                        ? new XMLUtils.DebugURIResolver(uriResolver)
+//                        : uriResolver;
                 t.setErrorListener(toErrorListener(logger));
-                t.setURIResolver(resolver);
+                t.setURIResolver(uriResolver);
             } catch (final Exception e) {
                 throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
             }
         }
         final boolean same = in.getAbsolutePath().equals(out.getAbsolutePath());
-        final File tmp = same ? new File(out.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis())) : out;
         for (Map.Entry<String, String> e: params.entrySet()) {
             logger.debug("Set parameter " + e.getKey() + " to '" + e.getValue() + "'");
             t.setParameter(new QName(e.getKey()), new XdmAtomicValue(e.getValue()));
@@ -169,37 +151,58 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             logger.debug("Set parameter " + filedirparameter + " to '" + v + "'");
             t.setParameter(new QName(filedirparameter), new XdmAtomicValue(v));
         }
+
+        if (properties.isEmpty()) {
+            try {
+                if (same) {
+                    job.getStore().transform(in.toURI(), t);
+                } else {
+                    job.getStore().transform(in.toURI(), out.toURI(), t);
+                }
+            } catch (final UncheckedXPathException e) {
+                logger.error("Failed to transform document: " + e.getXPathException().getMessageAndLocation(), e);
+            } catch (final RuntimeException e) {
+                throw e;
+            } catch (final Exception e) {
+                logger.error("Failed to transform document: " + e.getMessage(), e);
+            }
+            return;
+        }
+
+        final File tmp = same ? new File(out.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis())) : out;
         if (same) {
             logger.info("Processing " + in.getAbsolutePath());
             logger.debug("Processing " + in.getAbsolutePath() + " to " + tmp.getAbsolutePath());
         } else {
             logger.info("Processing " + in.getAbsolutePath() + " to " + tmp.getAbsolutePath());
         }
-        final Source source = new SAXSource(parser, new InputSource(in.toURI().toString()));
         try {
-            if (!tmp.getParentFile().exists() && !tmp.getParentFile().mkdirs()) {
-                throw new IOException("Failed to create directory " + tmp.getParent());
-            }
+            final Source source = job.getStore().getSource(in.toURI());
             t.setSource(source);
-            final Serializer serializer = processor.newSerializer(tmp);
-            for (final String key: properties.stringPropertyNames()) {
-                serializer.setOutputProperty(new QName(key), properties.getProperty(key));
+            final Destination destination = job.getStore().getDestination(tmp.toURI());
+            if (same) {
+                destination.setDestinationBaseURI(out.toURI());
             }
-            t.setDestination(serializer);
+            if (destination instanceof Serializer) {
+                final Serializer serializer = (Serializer) destination;
+                for (final String key : properties.stringPropertyNames()) {
+                    serializer.setOutputProperty(new QName(key), properties.getProperty(key));
+                }
+            }
+            t.setDestination(destination);
             t.transform();
             if (same) {
                 logger.debug("Moving " + tmp.getAbsolutePath() + " to " + out.getAbsolutePath());
-                if (!out.delete()) {
-                    throw new IOException("Failed to to delete input file " + out.getAbsolutePath());
-                }
-                if (!tmp.renameTo(out)) {
-                    throw new IOException("Failed to to replace input file " + out.getAbsolutePath());
-                }
+                job.getStore().move(tmp.toURI(), out.toURI());
             }
         } catch (final UncheckedXPathException e) {
             logger.error("Failed to transform document: " + e.getXPathException().getMessageAndLocation(), e);
             logger.debug("Remove " + tmp.getAbsolutePath());
-            FileUtils.delete(tmp);
+            try {
+                job.getStore().delete(tmp.toURI());
+            } catch (final IOException e1) {
+                logger.error("Failed to clean up after failed transformation: " + e1, e1);
+            }
         } catch (final RuntimeException e) {
             throw e;
         } catch (final SaxonApiException e) {
@@ -211,11 +214,19 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 logger.error("Failed to transform document: " + e.getMessage(), e);
             }
             logger.debug("Remove " + tmp.getAbsolutePath());
-            FileUtils.delete(tmp);
+            try {
+                job.getStore().delete(tmp.toURI());
+            } catch (final IOException e1) {
+                logger.error("Failed to clean up after failed transformation: " + e1, e1);
+            }
         } catch (final Exception e) {
             logger.error("Failed to transform document: " + e.getMessage(), e);
             logger.debug("Remove " + tmp.getAbsolutePath());
-            FileUtils.delete(tmp);
+            try {
+                job.getStore().delete(tmp.toURI());
+            } catch (final IOException e1) {
+                logger.error("Failed to clean up after failed transformation: " + e1, e1);
+            }
         }
     }
 
@@ -264,8 +275,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     }
 
     public void setXMLCatalog(final XMLCatalog xmlcatalog) {
-        this.entityResolver = xmlcatalog;
-        this.uriResolver = xmlcatalog;
+        this.catalog = xmlcatalog;
     }
 
     public void setMapper(final FileNameMapper mapper) {

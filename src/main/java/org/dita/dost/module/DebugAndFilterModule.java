@@ -8,7 +8,6 @@
  */
 package org.dita.dost.module;
 
-import net.sf.saxon.s9api.Serializer;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -121,11 +120,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             return;
         }
         outputFile = new File(job.tempDir, f.file.getPath());
-        final File outputDir = outputFile.getParentFile();
-        if (!outputDir.exists() && !outputDir.mkdirs()) {
-            logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
-            return;
-        }
         logger.info("Processing " + f.src + " to " + outputFile.toURI());
 
         final Set<URI> schemaSet = dic.get(f.uri);
@@ -167,9 +161,9 @@ public final class DebugAndFilterModule extends SourceReaderModule {
 
             in = new InputSource(f.src.toString());
 
-            final Serializer result = processor.newSerializer(outputFile);
+            final ContentHandler result = job.getStore().getContentHandler(outputFile.toURI());
 
-            xmlSource.setContentHandler(result.getContentHandler());
+            xmlSource.setContentHandler(result);
             xmlSource.parse(in);
         } catch (final RuntimeException e) {
             throw e;
@@ -476,10 +470,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
      * @throws DITAOTException if generation fails
      */
     private void generateScheme(final File filename, final Document root) throws DITAOTException {
-        final File p = filename.getParentFile();
-        if (!p.exists() && !p.mkdirs()) {
-            throw new DITAOTException("Failed to make directory " + p.getAbsolutePath());
-        }
         try {
             job.getStore().writeDocument(root, filename.toURI());
         } catch (final IOException e) {

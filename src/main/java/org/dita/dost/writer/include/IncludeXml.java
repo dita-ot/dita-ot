@@ -31,15 +31,12 @@ final class IncludeXml {
     private final URI currentFile;
     private final ContentHandler contentHandler;
     private final DITAOTLogger logger;
-    private final XMLUtils xmlUtils;
 
     IncludeXml(Job job, URI currentFile, ContentHandler contentHandler, DITAOTLogger logger) {
         this.job = job;
         this.currentFile = currentFile;
         this.contentHandler = contentHandler;
         this.logger = logger;
-        this.xmlUtils = new XMLUtils();
-        xmlUtils.setLogger(logger);
     }
 
     boolean include(final Attributes atts) {
@@ -56,7 +53,7 @@ final class IncludeXml {
                 src = doc;
             }
 
-            xmlUtils.writeDocument(src, new IncludeFilter(contentHandler));
+            job.getStore().writeDocument(src, new IncludeFilter(contentHandler));
         } catch (IOException e) {
             logger.error("Failed to process include {}", fileInfo.src, e);
             return false;

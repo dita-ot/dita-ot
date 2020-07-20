@@ -33,10 +33,8 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import org.apache.commons.io.IOUtils;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.KeyScope;
+import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,7 +72,7 @@ public class KeyrefPaserTest {
     public void testTopicWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File(tempDir, "a.xml").toURI());
         parser.write(new File(tempDir, "a.xml"));
@@ -87,7 +85,7 @@ public class KeyrefPaserTest {
     public void testTopicWriteSubdir() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         parser.setKeyDefinition(keyDefinition);
         final String tempSubDir = tempDir + File.separator + "subdir";
         parser.setCurrentFile(new File(tempSubDir, "subdirtopic.xml").toURI());
@@ -101,7 +99,7 @@ public class KeyrefPaserTest {
     public void testFragment() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File(tempDir, "id.xml").toURI());
         parser.write(new File(tempDir, "id.xml"));
@@ -114,7 +112,7 @@ public class KeyrefPaserTest {
     public void testFallback() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File(tempDir, "fallback.xml").toURI());
         parser.write(new File(tempDir, "fallback.xml"));
@@ -127,7 +125,7 @@ public class KeyrefPaserTest {
     public void testMapWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File(tempDir, "b.ditamap").toURI());
         parser.write(new File(tempDir, "b.ditamap"));
@@ -140,7 +138,7 @@ public class KeyrefPaserTest {
     public void testUpLevelMapWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         parser.setKeyDefinition(readKeyMap(Paths.get("subdir", "c.ditamap")));
         parser.setCurrentFile(new File(tempDir, "subdir"+ File.separator +"c.ditamap").toURI());
         parser.write(new File(tempDir, "subdir"+ File.separator +"c.ditamap"));
@@ -153,7 +151,7 @@ public class KeyrefPaserTest {
     public void testMapWithKeyScopes() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File(tempDir, "d.ditamap").toURI());
         parser.write(new File(tempDir, "d.ditamap"));

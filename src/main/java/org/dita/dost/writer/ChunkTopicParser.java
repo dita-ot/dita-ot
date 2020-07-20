@@ -15,7 +15,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.*;
@@ -39,8 +38,6 @@ import static org.dita.dost.util.XMLUtils.*;
  * Not reusable and not thread-safe.
  */
 public final class ChunkTopicParser extends AbstractChunkTopicParser {
-
-//    private final XMLReader reader;
 
     /**
      * Constructor.
@@ -149,7 +146,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     }
 
                     // Check if there is any conflict
-                    if (new File(outputFileName).exists() && !MAP_MAP.matches(classValue)) {
+                    if (job.getStore().exists(outputFileName) && !MAP_MAP.matches(classValue)) {
                         final URI t = outputFileName;
                         outputFileName = generateOutputFile(currentFile);
                         conflictTable.put(outputFileName, t);
@@ -295,7 +292,8 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     private void writeToContentChunk(final String tmpContent, final URI outputFileName, final boolean needWriteDitaTag) throws IOException {
         assert outputFileName.isAbsolute();
         logger.info("Writing " + outputFileName);
-        try (OutputStreamWriter ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), StandardCharsets.UTF_8)) {
+        try (OutputStream out = job.getStore().getOutputStream(outputFileName);
+             OutputStreamWriter ditaFileOutput = new OutputStreamWriter(out, StandardCharsets.UTF_8)) {
             if (outputFileName.equals(changeTable.get(outputFileName))) {
                 // if the output file is newly generated file
                 // write the xml header and workdir PI into new file

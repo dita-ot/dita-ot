@@ -26,7 +26,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.AttributesImpl;
 
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.FileUtils;
@@ -37,7 +36,6 @@ import org.dita.dost.util.XMLUtils;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 /**
  * MergeMapParser reads the ditamap file after preprocessing and merges
@@ -50,7 +48,6 @@ public final class MergeMapParser extends XMLFilterImpl {
     public static final String ATTRIBUTE_NAME_OHREF = "ohref";
     public static final String ATTRIBUTE_NAME_OID = "oid";
 
-    private final XMLReader reader;
     private final MergeTopicParser topicParser;
     private final MergeUtils util;
     private File dirPath = null;
@@ -74,10 +71,6 @@ public final class MergeMapParser extends XMLFilterImpl {
         topicParser = new MergeTopicParser(util);
         topicBuffer = new ByteArrayOutputStream();
         try {
-            reader = XMLUtils.getXMLReader();
-            reader.setContentHandler(this);
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-
             final TransformerFactory tf = TransformerFactory.newInstance();
             if (!tf.getFeature(SAXTransformerFactory.FEATURE)) {
                 throw new RuntimeException("SAX transformation factory not supported");
@@ -96,11 +89,14 @@ public final class MergeMapParser extends XMLFilterImpl {
 
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+        util.setLogger(logger);
         topicParser.setLogger(logger);
     }
 
     public final void setJob(final Job job) {
         this.job = job;
+        util.setJob(job);
+        topicParser.setJob(job);
     }
 
     /**
@@ -135,10 +131,11 @@ public final class MergeMapParser extends XMLFilterImpl {
             s.setResult(new StreamResult(output));
             setContentHandler(s);
             dirPath = filename.getParentFile();
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getAbsolutePath(), logger));
             topicParser.getContentHandler().startDocument();
-            logger.info("Processing " + filename.getAbsolutePath());
-            reader.parse(filename.toURI().toString());
+            logger.info("Processing " + filename.toURI());
+
+            job.getStore().transform(filename.toURI(), this);
+
             topicParser.getContentHandler().endDocument();
             output.write(topicBuffer.toByteArray());
         } catch (final RuntimeException e) {
@@ -210,7 +207,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                         final URI p = stripFragment(attValue).normalize();
                         util.visit(absTarget);
                         final File f = new File(stripFragment(absTarget));
-                        if (f.exists()) {
+                        if (job.getStore().exists(f.toURI())) {
                             topicParser.parse(toFile(p).getPath(), dirPath);
                             final String fileId = topicParser.getFirstTopicId();
                             if (util.getIdValue(absTarget) == null) {
@@ -257,7 +254,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                         if (!f.isResourceOnly) {
                             //ensure the file exists
                             final File file = new File(dirPath, element);
-                            if (file.exists()) {
+                            if (job.getStore().exists(file.toURI())) {
                                 topicParser.parse(element, dirPath);
                             } else {
                                 final String fileName = file.getAbsolutePath();

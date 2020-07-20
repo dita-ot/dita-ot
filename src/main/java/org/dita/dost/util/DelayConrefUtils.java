@@ -67,8 +67,7 @@ public final class DelayConrefUtils {
      * @return true if id find and false otherwise
      */
     public boolean findTopicId(final File absolutePathToFile, final String id) {
-
-        if (!absolutePathToFile.exists()) {
+        if (!job.getStore().exists(absolutePathToFile.toURI())) {
             return false;
         }
         try {

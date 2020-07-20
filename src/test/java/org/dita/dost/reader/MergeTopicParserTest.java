@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 
@@ -25,6 +26,10 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
+import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -40,9 +45,10 @@ public class MergeTopicParserTest {
     private final File expDir = new File(resourceDir, "exp");
 
     private static SAXTransformerFactory stf;
+    private MergeTopicParser parser;
     
     @BeforeClass
-    public static void setup() {
+    public static void setupClass() {
         final TransformerFactory tf = TransformerFactory.newInstance();
         if (!tf.getFeature(SAXTransformerFactory.FEATURE)) {
             throw new RuntimeException("SAX transformation factory not supported");
@@ -50,9 +56,20 @@ public class MergeTopicParserTest {
         stf = (SAXTransformerFactory) tf;
     }
 
+    @Before
+    public void setUp() throws IOException {
+        final Job job = new Job(srcDir, new StreamStore(srcDir, new XMLUtils()));
+        final TestUtils.TestLogger logger = new TestUtils.TestLogger();
+        final MergeUtils util = new MergeUtils();
+        util.setLogger(logger);
+        util.setJob(job);
+        parser = new MergeTopicParser(util);
+        parser.setLogger(logger);
+        parser.setJob(job);
+    }
+
     @Test
     public void testParse() throws Exception {
-        final MergeTopicParser parser = new MergeTopicParser(new MergeUtils());
         parse(parser, "test.xml");
 
         final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", URI.class);
@@ -62,7 +79,7 @@ public class MergeTopicParserTest {
 
     @Test
     public void testParseSubdir() throws Exception {
-        parse(new MergeTopicParser(new MergeUtils()), "subdir/test3.xml");
+        parse(parser, "subdir/test3.xml");
     }
 
     public void parse(MergeTopicParser parser, String file) throws Exception {
@@ -85,9 +102,7 @@ public class MergeTopicParserTest {
 
     @Test
     public void testHandleLocalHref() throws Exception {
-        final MergeTopicParser parser = new MergeTopicParser(new MergeUtils());
         parser.setContentHandler(new DefaultHandler());
-        parser.setLogger(new TestUtils.TestLogger());
         parser.setOutput(new File(srcDir, "test.xml"));
         parser.parse("test.xml", srcDir.getAbsoluteFile());
         final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", URI.class);

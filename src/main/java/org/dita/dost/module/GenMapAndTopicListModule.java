@@ -885,9 +885,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         try {
             logger.info("Serializing job specification");
-            if (!job.tempDir.exists() && !job.tempDir.mkdirs()) {
-                throw new DITAOTException("Failed to create " + job.tempDir + " directory");
-            }
             job.write();
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);

@@ -11,8 +11,10 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo.Builder;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ImageMetadataFilterTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -48,7 +50,7 @@ public class ImageMetadataModuleTest {
         final File f = new File(tempDir, "test.dita");
         copyFile(new File(srcDir, "test.dita"), f);
 
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setProperty("uplevels", "");
         job.setInputDir(srcDir.toURI());
         job.addAll(asList("img.xxx", "img.png", "img.gif", "img.jpg").stream()

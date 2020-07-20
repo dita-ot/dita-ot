@@ -10,7 +10,9 @@ package org.dita.dost.reader;
 import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +49,7 @@ public class ChunkMapReaderTest {
 
     @Test
     public void testRead() throws Exception {
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(srcDir.toURI());
         job.setInputMap(URI.create("maps/gen.ditamap"));
 
@@ -150,7 +152,7 @@ public class ChunkMapReaderTest {
     }
 
     private Job createJob(final String map, final String... topics) throws IOException {
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(srcDir.toURI());
         job.setInputMap(URI.create(map));
 

@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class KeydefFilterTest {
         reader.setLogger(new TestUtils.TestLogger());
         reader.setCurrentFile(rootFile.toURI());
         reader.setCurrentDir(inputDir.toURI());
-        reader.setJob(new Job(tempDir));
+        reader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         
         reader.setContentHandler(new DefaultHandler());
         

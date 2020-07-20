@@ -27,8 +27,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.child;
-import static org.apache.commons.io.FileUtils.deleteQuietly;
-import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.URLUtils.getRelativePath;
@@ -233,10 +231,14 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
         // removed extra topic files
         for (final URI s : oldTopicList) {
-            final File f = new File(job.tempDirURI.resolve(s));
-            logger.debug("Delete " + f.toURI());
-            if (f.exists() && !f.delete()) {
-                logger.error("Failed to delete " + f.getAbsolutePath());
+            final URI f = job.tempDirURI.resolve(s);
+            if (job.getStore().exists(f)) {
+                logger.debug("Delete " + f);
+                try {
+                    job.getStore().delete(f);
+                } catch (IOException e) {
+                    logger.error("Failed to delete " + f);
+                }
             }
         }
 
@@ -252,7 +254,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 final URI targetPath = conflictTable.get(oldFile);
                 if (targetPath != null) {
                     final URI target = targetPath;
-                    if (!new File(target).exists()) {
+                    if (!job.getStore().exists(target)) {
                         // newly chunked file
                         URI relativePath = getRelativePath(xmlDitalist, from);
                         final URI relativeTargetPath = getRelativePath(xmlDitalist, target);
@@ -262,10 +264,12 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         }
                         // ensure the newly chunked file to the old one
                         try {
-                            logger.debug("Delete " + target);
-                            deleteQuietly(new File(target));
+                            if (job.getStore().exists(target)) {
+                                logger.debug("Delete " + target);
+                                job.getStore().delete(target);
+                            }
                             logger.debug("Move " + from + " to " + target);
-                            moveFile(new File(from), new File(target));
+                            job.getStore().move(from, target);
                             final FileInfo fi = job.getFileInfo(from);
                             if (fi != null) {
                                 job.remove(fi);

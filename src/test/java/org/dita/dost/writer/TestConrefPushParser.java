@@ -10,7 +10,9 @@ package org.dita.dost.writer;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.reader.ConrefPushReader.MoveKey;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +55,7 @@ public class TestConrefPushParser {
 
         final ConrefPushParser parser = new ConrefPushParser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir));
+        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         parser.setMoveTable(pushActions);
         parser.read(targetFile);
 

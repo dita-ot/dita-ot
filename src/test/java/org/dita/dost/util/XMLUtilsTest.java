@@ -11,9 +11,12 @@ import net.sf.saxon.Configuration;
 import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.trans.SymbolicName;
+import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.module.DelegatingCollationUriResolverTest;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMImplementation;
@@ -30,6 +33,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Deque;
@@ -40,6 +45,17 @@ import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.junit.Assert.*;
 
 public class XMLUtilsTest {
+
+    private static final File resourceDir = TestUtils.getResourceDir(XMLUtilsTest.class);
+    private static final File srcDir = new File(resourceDir, "src");
+    private static final File expDir = new File(resourceDir, "exp");
+    private static File tempDir;
+
+
+    @BeforeClass
+    public static void setUp() throws IOException {
+        tempDir = TestUtils.createTempDir(XMLUtilsTest.class);
+    }
 
     @Test
     public void configureCollationResolvers() {
@@ -268,10 +284,83 @@ public class XMLUtilsTest {
                         new StreamResult(new ByteArrayOutputStream()));
 
         assertEquals(Arrays.asList(
-                    new Message(Message.Level.WARN, "info", null),
-                    new Message(Message.Level.WARN, "<info/>", null)
+                new Message(Message.Level.WARN, "info", null),
+                new Message(Message.Level.WARN, "<info/>", null)
                 ),
                 logger.getMessages());
+    }
+
+//    @Test
+//    public void transform() throws Exception {
+//        copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));
+//        final Job job = new Job(tempDir);
+//        final URI src = new File(tempDir, "test.dita").toURI();
+//
+//        // two filters that assume processing order
+//        final URI act = new File(tempDir, "order.dita").toURI();
+//        job.transform(src, act, Arrays.asList(
+//            (XMLFilter) new XMLFilterImpl() {
+//                @Override
+//                public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+//                    getContentHandler().startElement(uri, localName + "_x", qName + "_x", atts);
+//                }
+//                @Override
+//                public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+//                    getContentHandler().endElement(uri, localName + "_x", qName + "_x");
+//                }
+//            },
+//            (XMLFilter) new XMLFilterImpl() {
+//                @Override
+//                public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+//                    getContentHandler().startElement(uri, localName + "_y", qName + "_y", atts);
+//                }
+//                @Override
+//                public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+//                    getContentHandler().endElement(uri, localName + "_y", qName + "_y");
+//                }
+//            }));
+//        TestUtils.assertXMLEqual(new InputSource(new File(expDir, "order.dita").toURI().toString()),
+//                new InputSource(new File(tempDir, "order.dita").toURI().toString()));
+//    }
+//
+//    @Test
+//    public void transform_single() throws Exception {
+//        copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));
+//        final Job job = new Job(tempDir);
+//        final URI src = new File(tempDir, "test.dita").toURI();
+//
+//        // single filter that prefixes each element name
+//        final URI act = new File(tempDir, "single.dita").toURI();
+//        job.transform(src, act, Arrays.asList((XMLFilter) new XMLFilterImpl() {
+//            @Override
+//            public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+//                getContentHandler().startElement(uri, localName + "_x", qName + "_x", atts);
+//            }
+//            @Override
+//            public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+//                getContentHandler().endElement(uri, localName + "_x", qName + "_x");
+//            }
+//        }));
+//        TestUtils.assertXMLEqual(new InputSource(new File(expDir, "single.dita").toURI().toString()),
+//                       new InputSource(new File(tempDir, "single.dita").toURI().toString()));
+//    }
+//
+//    @Test
+//    public void transform_empty() throws Exception {
+//        copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));
+//        final Job job = new Job(tempDir);
+//        final URI src = new File(tempDir, "test.dita").toURI();
+//
+//        // identity without a filter
+//        final URI act = new File(tempDir, "identity.dita").toURI();
+//        job.transform(src, act, Collections.EMPTY_LIST);
+//        TestUtils.assertXMLEqual(new InputSource(new File(expDir, "identity.dita").toURI().toString()),
+//                       new InputSource(new File(tempDir, "identity.dita").toURI().toString()));
+//    }
+
+    @AfterClass
+    public static void tearDown() throws IOException {
+        TestUtils.forceDelete(tempDir);
     }
 
 }

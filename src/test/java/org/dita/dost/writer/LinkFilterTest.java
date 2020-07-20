@@ -8,7 +8,9 @@
 
 package org.dita.dost.writer;
 
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,7 +50,7 @@ public class LinkFilterTest {
 
     private Job getJob() {
         try {
-            final Job job = new Job(new File(tempDir));
+            final Job job = new Job(new File(tempDir), new StreamStore(new File(tempDir), new XMLUtils()));
             job.add(new Job.FileInfo.Builder()
                     .uri(URI.create("abc.dita"))
                     .src(srcDir.resolve("topics/topic.dita"))
