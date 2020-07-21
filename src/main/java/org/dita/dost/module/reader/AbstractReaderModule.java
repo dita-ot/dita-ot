@@ -821,7 +821,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             final FileInfo fileInfo = fileInfos.get(f);
             return fileInfo;
         } else {
-            final FileInfo prev = job.getFileInfo(f);
+            final FileInfo prev = job.getFileInfo(fi -> Objects.equals(fi.src, f) && Objects.equals(fi.result, f))
+                    .stream()
+                    .findFirst()
+                    .orElseGet(() -> job.getFileInfo(f));
             final FileInfo i;
             if (prev != null) {
                 FileInfo.Builder b = new FileInfo.Builder(prev);
