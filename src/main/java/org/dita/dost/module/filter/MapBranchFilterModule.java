@@ -25,6 +25,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.EMPTY_LIST;
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
@@ -52,6 +53,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     /** Current map being processed, relative to temporary directory */
     private URI map;
+
     /** Absolute path for filter file. */
     private URI ditavalFile;
 
@@ -76,12 +78,9 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
      * Process map for branch replication.
      */
     protected void processMap(final FileInfo fi) {
-        this.map = fi.uri;
+        map = fi.uri;
         currentFile = job.tempDirURI.resolve(map);
-        ditavalFile = Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))
-                .filter(File::exists)
-                .map(File::toURI)
-                .orElse(null);
+        ditavalFile = Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL)).filter(File::exists).map(File::toURI).orElse(null);
 
         logger.info("Processing " + currentFile);
         final Document doc;
@@ -93,13 +92,34 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
             return;
         }
 
+        splitBranches(doc);
+        filterBranches(doc);
+        rewriteDuplicates(doc);
+        writeDocumentToDisk(doc);
+    }
+
+    private void splitBranches(Document doc) {
+        long ref = System.currentTimeMillis();
         logger.debug("Split branches and generate copy-to");
         splitBranches(doc.getDocumentElement(), Branch.EMPTY);
+        logger.info("Runtime branch splitting: {0}ms", System.currentTimeMillis()-ref);
+    }
+
+    private void filterBranches(Document doc) {
+        long ref = System.currentTimeMillis();
         logger.debug("Filter map");
         filterBranches(doc.getDocumentElement());
+        logger.info("Runtime filter branches: {0}ms", System.currentTimeMillis()-ref);
+    }
+
+    private void rewriteDuplicates(Document doc) {
+        long ref = System.currentTimeMillis();
         logger.debug("Rewrite duplicate topic references");
         rewriteDuplicates(doc.getDocumentElement());
+        logger.info("Runtime rewrite duplicates: {0}ms", System.currentTimeMillis()-ref);
+    }
 
+    private void writeDocumentToDisk(Document doc) {
         logger.debug("Writing " + currentFile);
         try {
             job.getStore().writeDocument(doc, currentFile);
@@ -109,71 +129,86 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     }
 
     /** Rewrite href or copy-to if duplicates exist. */
-    private void rewriteDuplicates(final Element root) {
-        // collect href and copy-to
-        final Map<URI, Map<Set<URI>, List<Attr>>> refs = new HashMap<>();
-        for (final Element e: getTopicrefs(root)) {
-            Attr attr = e.getAttributeNode(BRANCH_COPY_TO);
+    private void rewriteDuplicates(final Element documentElement) {
+        Map<URI, Map<Set<URI>, List<Attr>>> topicrefs = collectCopyToOrHref(documentElement);
+
+        // check and rewrite
+        topicrefs.entrySet().parallelStream().forEach(topicref -> {
+            Map<Set<URI>, List<Attr>> branchFilterMap = topicref.getValue();
+
+            if (branchFilterMap.size()<=1) {
+                return;
+            }
+
+            if (branchFilterMap.containsKey(EMPTY_LIST)) {
+                branchFilterMap.remove(EMPTY_LIST);
+            } else {
+                Set<URI> first = branchFilterMap.keySet().iterator().next();
+                branchFilterMap.remove(first);
+            }
+
+            int i = 1;
+            for (final Map.Entry<Set<URI>, List<Attr>> attrsMap: branchFilterMap.entrySet()) {
+                String suffix = "-" + i;
+
+                for (Attr attr: attrsMap.getValue()) {
+                    String gen = addSuffix(attr.getValue(), suffix);
+                    logger.info(MessageUtils.getMessage("DOTJ065I", attr.getValue(), gen).setLocation(attr.getOwnerElement()).toString());
+
+                    if (attr.getName().equals(BRANCH_COPY_TO)) {
+                        attr.setValue(gen);
+                    } else {
+                        attr.getOwnerElement().setAttribute(BRANCH_COPY_TO, gen);
+                    }
+
+                    URI dstUri = map.resolve(gen);
+                    if (dstUri != null) {
+                        final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(attr.getValue()));
+                        if (hrefFileInfo != null) {
+                            URI newResult = addSuffix(hrefFileInfo.result, suffix);
+                            FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo).uri(dstUri).result(newResult);
+                            if (hrefFileInfo.format == null) {
+                                dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
+                            }
+                            job.add(dstBuilder.build());
+                        }
+                    }
+                }
+                i++;
+            }
+        });
+    }
+
+    /**
+     * key: topicref's link (either filter-copy-to or copy-to or href)
+     * value: map: set of ditaval hrefs -> topicref's link attribute node
+     */
+    private Map<URI, Map<Set<URI>, List<Attr>>> collectCopyToOrHref(Element documentElement) {
+        Map<URI, Map<Set<URI>, List<Attr>>> refs = new HashMap<>();
+
+        for (Element topicRef: getTopicrefs(documentElement)) {
+            Attr attr = topicRef.getAttributeNode(BRANCH_COPY_TO);
             if (attr == null) {
-                attr = e.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+                attr = topicRef.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
                 if (attr == null) {
-                    attr = e.getAttributeNode(ATTRIBUTE_NAME_HREF);
+                    attr = topicRef.getAttributeNode(ATTRIBUTE_NAME_HREF);
                 }
             }
             if (attr != null) {
-                final URI h = stripFragment(map.resolve(attr.getValue()));
-                Map<Set<URI>, List<Attr>> attrsMap = refs.computeIfAbsent(h, k -> new HashMap<>());
-                final Set<URI> currentFilter = getBranchFilters(e);
+                URI href = stripFragment(map.resolve(attr.getValue()));
+                Map<Set<URI>, List<Attr>> attrsMap = refs.computeIfAbsent(href, k -> new HashMap<>());
+                Set<URI> currentFilter = getBranchFilters(topicRef);
                 List<Attr> attrs = attrsMap.computeIfAbsent(currentFilter, k -> new ArrayList<>());
                 attrs.add(attr);
             }
         }
-        // check and rewrite
-        for (final Map.Entry<URI, Map<Set<URI>, List<Attr>>> ref: refs.entrySet()) {
-            final Map<Set<URI>, List<Attr>> attrsMaps = ref.getValue();
-            if (attrsMaps.size() > 1) {
-                if (attrsMaps.containsKey(Collections.EMPTY_LIST)) {
-                    attrsMaps.remove(Collections.EMPTY_LIST);
-                } else {
-                    Set<URI> first = attrsMaps.keySet().iterator().next();
-                    attrsMaps.remove(first);
-                }
-                int i = 1;
-                for (final Map.Entry<Set<URI>, List<Attr>> attrsMap: attrsMaps.entrySet()) {
-                    final String suffix = "-" + i;
-                    final List<Attr> attrs = attrsMap.getValue();
-                    for (final Attr attr: attrs) {
-                        final String gen = addSuffix(attr.getValue(), suffix);
-                        logger.info(MessageUtils.getMessage("DOTJ065I", attr.getValue(), gen)
-                                .setLocation(attr.getOwnerElement()).toString());
-                        if (attr.getName().equals(BRANCH_COPY_TO)) {
-                            attr.setValue(gen);
-                        } else {
-                            attr.getOwnerElement().setAttribute(BRANCH_COPY_TO, gen);
-                        }
-
-                        final URI dstUri = map.resolve(gen);
-                        if (dstUri != null) {
-                            final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(attr.getValue()));
-                            if (hrefFileInfo != null) {
-                                final URI newResult = addSuffix(hrefFileInfo.result, suffix);
-                                final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
-                                        .uri(dstUri)
-                                        .result(newResult);
-                                if (hrefFileInfo.format == null) {
-                                    dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
-                                }
-                                final FileInfo dstFileInfo = dstBuilder.build();
-                                job.add(dstFileInfo);
-                            }
-                        }
-                    }
-                    i++;
-                }
-            }
-        }
+        return refs;
     }
 
+    /**
+     * Collects ditavalref's hrefs for current element up to the root element, i.e. ancestor-or-self axis
+     * @param e current element
+     */
     private Set<URI> getBranchFilters(final Element e) {
         final Set<URI> res = new HashSet<>();
         Element current = e;
