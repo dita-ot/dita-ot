@@ -28,7 +28,7 @@ jobs:
         if: "!contains(github.ref, '-')" # skip prereleases
         with:
           formula-name: dita-ot
-          homebrew-tap: Homebrew/homebrew-core
+          homebrew-tap: jelovirt/homebrew-core
           base-branch: master
           download-url: ${{ steps.download-url.outputs.url }}
           commit-message: |
