@@ -123,7 +123,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                         }
                     })
                     .reduce(startScope, KeyScope::merge);
-            final List<ResolveTask> jobs = collectProcessingTopics(resourceFis, rootScope, doc);
+            final List<ResolveTask> jobs = collectProcessingTopics(in, resourceFis, rootScope, doc);
             writeMap(in, doc);
 
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
@@ -168,12 +168,14 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     /** Collect topics for key reference processing and modify map to reflect new file names. */
-    private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) {
+    private List<ResolveTask> collectProcessingTopics(final FileInfo map,
+                                                      final Collection<FileInfo> fis,
+                                                      final KeyScope rootScope,
+                                                      final Document doc) {
         final List<ResolveTask> res = new ArrayList<>();
-        final FileInfo input = job.getFileInfo(fi -> fi.isInput).iterator().next();
-        res.add(new ResolveTask(rootScope, input, null));
+        res.add(new ResolveTask(rootScope, map, null));
         // Collect topics from map and rewrite topicrefs for duplicates
-        walkMap(doc.getDocumentElement(), rootScope, res);
+        walkMap(map, doc.getDocumentElement(), rootScope, res);
         // Collect topics not in map and map itself
         for (final FileInfo f: fis) {
             if (!usage.containsKey(f.uri)) {
@@ -262,7 +264,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     /** Recursively walk map and process topics that have keyrefs. */
-    void walkMap(final Element elem, final KeyScope scope, final List<ResolveTask> res) {
+    void walkMap(final FileInfo map, final Element elem, final KeyScope scope, final List<ResolveTask> res) {
         List<KeyScope> ss = Collections.singletonList(scope);
         if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
             ss = new ArrayList<>();
@@ -282,7 +284,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         final boolean isResourceOnly = isResourceOnly(elem);
         for (final KeyScope s: ss) {
             if (hrefNode != null) {
-                final URI href = stripFragment(job.getInputMap().resolve(hrefNode.getValue()));
+                final URI href = stripFragment(map.uri.resolve(hrefNode.getValue()));
                 final FileInfo fi = job.getFileInfo(href);
                 if (fi != null && fi.hasKeyref) {
                     final int count = usage.getOrDefault(fi.uri, 0);
@@ -306,7 +308,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 }
             }
             for (final Element child : getChildElements(elem, MAP_TOPICREF)) {
-                walkMap(child, s, res);
+                walkMap(map, child, s, res);
             }
         }
     }
