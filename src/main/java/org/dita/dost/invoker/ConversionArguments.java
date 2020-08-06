@@ -138,6 +138,8 @@ public class ConversionArguments extends Arguments {
                 handleArgNice(args);
             } else if (isLongForm(arg, "-input") || arg.equals("-i")) {
                 handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+            } else if (isLongForm(arg, "-filter")) {
+                handleArgFilter(arg, args, ARGUMENTS.get(getArgumentName(arg)));
             } else if (isLongForm(arg, "-resource") || arg.equals("-r")) {
                 handleArgResource(arg, args, ARGUMENTS.get(getArgumentName(arg)));
             } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
@@ -218,6 +220,18 @@ public class ConversionArguments extends Arguments {
             throw new BuildException("Missing value for input " + entry.getKey());
         }
         inputs.add(argument.getValue(entry.getValue()));
+    }
+
+    private void handleArgFilter(final String arg, final Deque<String> args, final Argument argument) {
+        final Map.Entry<String, String> entry = parse(arg, args);
+        if (entry.getValue() == null) {
+            throw new BuildException("Missing value for input " + entry.getKey());
+        }
+        final Object prev = definedProps.get(argument.property);
+        final String value = prev != null
+                ? prev + File.pathSeparator + argument.getValue(entry.getValue())
+                : argument.getValue(entry.getValue());
+        definedProps.put(argument.property, value);
     }
 
     private void handleArgResource(final String arg, final Deque<String> args, final Argument argument) {
