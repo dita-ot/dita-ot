@@ -145,6 +145,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         logger.debug("Writing " + currentFile);
 
         try {
+            doc.setDocumentURI(currentFile.toString());
             job.getStore().writeDocument(doc, currentFile);
         } catch (final IOException e) {
             logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
@@ -374,10 +375,6 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                 writer.setCurrentFile(dstAbsUri);
                 final List<XMLFilter> pipe = singletonList(writer);
 
-                final File dstDirUri = new File(dstAbsUri.resolve("."));
-                if (!dstDirUri.exists() && !dstDirUri.mkdirs()) {
-                    logger.error("Failed to create directory " + dstDirUri);
-                }
                 try {
                     job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
                 } catch (final DITAOTException e) {

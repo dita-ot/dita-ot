@@ -193,6 +193,12 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         mergeUtils.setLogger(logger);
     }
 
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        mergeUtils.setJob(job);
+    }
+
     public void setKeyDefinition(final KeyScope definitionMap) {
         this.definitionMaps.push(definitionMap);
     }

@@ -11,7 +11,9 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.FilenameUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.ChunkMapReader;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -1136,7 +1138,7 @@ public class ChunkMapReaderTest {
             final ChunkMapReader mapReader = new ChunkMapReader();
             final TestUtils.CachingLogger logger = new TestUtils.CachingLogger(true);
             mapReader.setLogger(logger);
-            final Job job = new Job(tempDir);
+            final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
             mapReader.setJob(job);
             mapReader.supportToNavigation(false);
 

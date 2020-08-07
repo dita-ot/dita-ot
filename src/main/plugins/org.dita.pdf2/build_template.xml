@@ -295,7 +295,7 @@ with those set forth herein.
     <copy file="${inputFile}" tofile="${dita.temp.dir}/stage1.xml" unless:set="_stage1.exists"/>
 
     <!--makeurl seems to output file:/C: style instead of file:///C:, but xep, fop, and ah all accept it.-->
-    <makeurl property="artworkPrefixUrl" file="${artworkPrefix}"/>
+    <makeurl property="artworkPrefixUrl" file="${artworkPrefix}" validate="no"/>
     <makeurl property="dita.map.output.dir.url" file="${pdf2.temp.dir}" validate="no"/>
     <makeurl property="work.dir.url" file="${dita.temp.dir}" validate="no"/>
     <makeurl property="customization.dir.url" file="${customization.dir}" validate="no"/>

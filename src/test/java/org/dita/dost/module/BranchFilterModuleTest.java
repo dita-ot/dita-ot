@@ -9,6 +9,7 @@ package org.dita.dost.module;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
@@ -42,7 +43,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
     }
 
     private Job getJob() throws IOException {
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(tempDir.toURI());
         job.add(new Job.FileInfo.Builder()
                 .src(new File(tempDir, "input.ditamap").toURI())
@@ -76,7 +77,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
     }
     
     private Job getUplevelsJob(File uplevelsTempDir) throws IOException {
-        final Job job = new Job(uplevelsTempDir);
+        final Job job = new Job(uplevelsTempDir, new StreamStore(uplevelsTempDir, new XMLUtils()));
         job.setInputDir(uplevelsTempDir.toURI());
         job.add(new Job.FileInfo.Builder()
                 .src(new File(uplevelsTempDir, "main/testuplevels.ditamap").toURI())
@@ -270,7 +271,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
     @Test
     public void testDuplicateTopic() throws IOException, SAXException {
         final BranchFilterModule m = new BranchFilterModule();
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(tempDir.toURI());
         job.addAll(getDuplicateTopicFileInfos());
         m.setJob(job);

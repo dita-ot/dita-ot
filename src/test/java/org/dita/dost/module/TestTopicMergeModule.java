@@ -22,7 +22,9 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.TopicMergeModule;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,7 +59,7 @@ public class TestTopicMergeModule {
         srcDir.mkdirs();
         TestUtils.copy(new File(resourceDir, "temp"), temporaryDir);
 
-        job = new Job(temporaryDir);
+        job = new Job(temporaryDir, new StreamStore(temporaryDir, new XMLUtils()));
         job.setInputMap(URI.create("test.ditamap"));
         job.add(new Job.FileInfo.Builder()
                 .src(new File(srcDir, "test.ditamap").toURI())

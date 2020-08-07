@@ -16,7 +16,9 @@ import static org.junit.Assert.fail;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.dita.dost.store.StreamStore;
 import org.junit.After;
 
 import org.dita.dost.TestUtils;
@@ -33,8 +35,9 @@ public class TestMergeUtils {
     public static MergeUtils mergeUtils;
 
     @BeforeClass
-    public static void setUp() {
+    public static void setUp() throws IOException {
         mergeUtils = new MergeUtils();
+        mergeUtils.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
     }
 
     @After
@@ -98,7 +101,6 @@ public class TestMergeUtils {
 
     @Test
     public void testGetFirstTopicId() {
-        final MergeUtils mergeUtils = new MergeUtils();
         //assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
         assertEquals("task", mergeUtils.getFirstTopicId(srcDir.toURI().resolve("stub.xml"), false));
         assertEquals("task", mergeUtils.getFirstTopicId(srcDir.toURI().resolve("stub.xml"), true));

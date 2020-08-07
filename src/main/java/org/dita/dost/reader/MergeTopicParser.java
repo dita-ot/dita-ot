@@ -17,13 +17,12 @@ import static org.dita.dost.util.URLUtils.*;
 import java.io.File;
 import java.net.URI;
 
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 
@@ -39,10 +38,10 @@ public final class MergeTopicParser extends XMLFilterImpl {
     private String filePath = null;
     private String rootLang = null;
 
-    private final XMLReader reader;
     /** ID of the first topic */
     private String firstTopicId = null;
     private final MergeUtils util;
+    private Job job;
     private DITAOTLogger logger;
     private File output;
     private final String GENERATED_DITA_ELEMENT_ID = "GENERATED-DITA-ID";
@@ -54,20 +53,13 @@ public final class MergeTopicParser extends XMLFilterImpl {
      */
     public MergeTopicParser(final MergeUtils util) {
         this.util = util;
-        try {
-            reader = XMLUtils.getXMLReader();
-            reader.setContentHandler(this);
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-        }
     }
 
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
+
+    public final void setJob(final Job job) { this.job = job; }
 
     /**
      * Set merge output file
@@ -179,10 +171,9 @@ public final class MergeTopicParser extends XMLFilterImpl {
         filePath = stripFragment(filename);
         dirPath = dir;
         try {
-            final File f = new File(dir, filePath);
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(f.getAbsolutePath(), logger));
-            logger.info("Processing " + f.getAbsolutePath());
-            reader.parse(f.toURI().toString());
+            final URI f = new File(dir, filePath).getAbsoluteFile().toURI();
+            logger.info("Processing " + f);
+            job.getStore().transform(f, this);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {

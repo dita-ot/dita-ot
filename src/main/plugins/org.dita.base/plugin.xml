@@ -164,6 +164,10 @@ See the accompanying LICENSE file for applicable license.
     </param>
     <param name="result.rewrite-rule.xsl" desc="Specifies the name of the XSLT file used to rewrite filenames." type="string"/>
     <param name="result.rewrite-rule.class" desc="Specifies the name of the Java class used to rewrite filenames." type="string"/>
+    <param name="store-type" deprecated="Temporary file store type" type="enum">
+      <val default="true">file</val>
+      <val>memory</val>
+    </param>
   </transtype>
   <feature extension="dita.image.extensions" value=".gif"/>
   <feature extension="dita.image.extensions" value=".eps"/>

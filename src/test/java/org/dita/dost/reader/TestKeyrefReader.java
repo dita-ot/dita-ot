@@ -11,6 +11,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
@@ -49,7 +50,7 @@ public class TestKeyrefReader {
 //        set.add("nested");
         final KeyrefReader keyrefreader = new KeyrefReader();
         keyrefreader.setLogger(new TestUtils.TestLogger());
-        keyrefreader.setJob(new Job(srcDir));
+        keyrefreader.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
 //        keyrefreader.setKeys(set);
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope act = keyrefreader.getKeyDefinition();

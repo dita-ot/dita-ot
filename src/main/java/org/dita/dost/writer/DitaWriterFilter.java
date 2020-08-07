@@ -104,7 +104,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             getContentHandler().processingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + outputFile.getParentFile().getAbsolutePath());
         }
         getContentHandler().ignorableWhitespace(new char[]{'\n'}, 0, 1);
-        getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, outputFile.getParentFile().toURI().toASCIIString());
+        getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, outputFile.toURI().resolve(".").toString());
         getContentHandler().ignorableWhitespace(new char[]{'\n'}, 0, 1);
         if (path2Project != null) {
             getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project.getPath() + File.separator);

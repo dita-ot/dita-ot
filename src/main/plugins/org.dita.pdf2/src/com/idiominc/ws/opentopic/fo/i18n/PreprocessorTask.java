@@ -1,10 +1,13 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
+import net.sf.saxon.s9api.XsltExecutable;
+import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.XMLCatalog;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
@@ -18,6 +21,10 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.URI;
+
+import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
+import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -51,53 +58,43 @@ See the accompanying LICENSE file for applicable license.
  */
 public class PreprocessorTask extends Task {
      private File config = null;
-     private File input = null;
-     private File output = null;
-     private File style = null;
+     private URI input = null;
+     private URI output = null;
+     private URI style = null;
      private XMLCatalog xmlcatalog;
 
      @Override
      public void execute()
              throws BuildException {
+         final Job job = getProject().getReference(ANT_REFERENCE_JOB);
+         final XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
+
          checkParameters();
 
          log("Processing " + input + " to " + output, Project.MSG_INFO);
-         OutputStream out = null;
          try {
              final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
              documentBuilder.setEntityResolver(xmlcatalog);
 
-             final Document doc = documentBuilder.parse(input);
+             final Document doc = job.getStore().getDocument(input);
              final Document conf = documentBuilder.parse(config);
              final MultilanguagePreprocessor preprocessor = new MultilanguagePreprocessor(new Configuration(conf));
              final Document document = preprocessor.process(doc);
 
-             final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-             transformerFactory.setURIResolver(xmlcatalog);
-             final Transformer transformer;
              if (style != null) {
                  log("Loading stylesheet " + style, Project.MSG_INFO);
-                 transformer = transformerFactory.newTransformer(new StreamSource(style));
+                 final XsltExecutable compile = xmlUtils.getProcessor().newXsltCompiler().compile(job.getStore().getSource(style));
+                 final XsltTransformer t = compile.load();
+                 t.setSource(new DOMSource(document));
+                 t.setDestination(job.getStore().getDestination(output));
+                 t.transform();
              } else {
-                 transformer = transformerFactory.newTransformer();
+                 job.getStore().writeDocument(document, output);
              }
-             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-             transformer.setOutputProperty(OutputKeys.INDENT, "no");
-             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-             if (doc.getDoctype() != null) {
-                 transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, doc.getDoctype().getPublicId());
-                 transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, doc.getDoctype().getSystemId());
-             }
-
-             out = new FileOutputStream(output);
-             final StreamResult streamResult = new StreamResult(out);
-             transformer.transform(new DOMSource(document), streamResult);
          } catch (final RuntimeException e) {
              throw e;
          } catch (final Exception e) {
              throw new BuildException(e);
-         } finally {
-             IOUtils.closeQuietly(out);
          }
      }
 
@@ -116,12 +113,12 @@ public class PreprocessorTask extends Task {
 
 
      public void setInput(final File theInput) {
-         this.input = theInput;
+         this.input = theInput.toURI();
      }
 
 
      public void setOutput(final File theOutput) {
-         this.output = theOutput;
+         this.output = theOutput.toURI();
      }
 
      /** @deprecated since 2.3 */
@@ -131,7 +128,7 @@ public class PreprocessorTask extends Task {
      }
 
     public void setStyle(final File style) {
-        this.style = style;
+        this.style = style.toURI();
     }
 
     public void addConfiguredXmlcatalog(final XMLCatalog xmlcatalog) {

@@ -31,6 +31,7 @@ public final class MergeUtils {
     /** Set of visited topic files. */
     private final Set<URI> visitSet;
     private DITAOTLogger logger;
+    private Job job;
 
     /**
      * Default Constructor
@@ -40,6 +41,10 @@ public final class MergeUtils {
         idMap = new ConcurrentHashMap<>();
         visitSet = Collections.synchronizedSet(new HashSet<>(256));
         index = 0;
+    }
+
+    public void setJob(final Job job) {
+        this.job = job;
     }
 
     public void setLogger(final DITAOTLogger logger) {
@@ -135,18 +140,13 @@ public final class MergeUtils {
      */
     public String getFirstTopicId(final URI file, final boolean useCatalog) {
         assert file.isAbsolute();
-        if (!(new File(file).exists())) {
+        if (!job.getStore().exists(file)) {
             return null;
         }
         final StringBuilder firstTopicId = new StringBuilder();
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
         try {
-            final XMLReader reader = XMLUtils.getXMLReader();
-            reader.setContentHandler(parser);
-            if (useCatalog) {
-                reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-            }
-            reader.parse(file.toString());
+            job.getStore().transform(file, parser);
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }

@@ -12,38 +12,39 @@ import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.ReceivingContentHandler;
-import net.sf.saxon.s9api.Destination;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.*;
 import net.sf.saxon.serialize.SerializationProperties;
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.xml.sax.*;
 
 import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
-import static org.apache.commons.io.FileUtils.deleteQuietly;
-import static org.apache.commons.io.FileUtils.moveFile;
+import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
+import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * Stream based XML I/O
  *
  * @since 3.5
  */
-public class StreamStore implements Store {
+public class StreamStore extends AbstractStore implements Store {
 
-    private final XMLUtils xmlUtils;
-
-    public StreamStore(XMLUtils xmlUtils) {
-        this.xmlUtils = xmlUtils;
+    public StreamStore(final File tempDir, final XMLUtils xmlUtils) {
+        super(tempDir, xmlUtils);
     }
 
     @Override
@@ -65,8 +66,21 @@ public class StreamStore implements Store {
     public Document getDocument(final URI path) throws IOException {
         try {
             return XMLUtils.getDocumentBuilder().parse(path.toString());
-        } catch (final IOException | SAXException e) {
+        } catch (final Exception e) {
             throw new IOException("Failed to read document: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void delete(final URI file) throws IOException {
+        final URI f = getUri(file.normalize());
+        if ("file".equals(f.getScheme())) {
+            final File ff = new File(getUri(f.isAbsolute() ? f : tempDirUri.resolve(f)));
+            if (ff.exists() && !ff.delete()) {
+                throw new IOException("Deleting " + file + " failed");
+            }
+        } else {
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -81,6 +95,22 @@ public class StreamStore implements Store {
         try {
             final Serializer serializer = getSerializer(dst);
             serializer.serializeNode(node);
+        } catch (SaxonApiException e) {
+            throw new IOException(e);
+        }
+    }
+
+    @Override
+    public void writeDocument(final Node doc, final ContentHandler dst) throws IOException {
+        final XdmNode source = xmlUtils.getProcessor().newDocumentBuilder().wrap(doc);
+        writeDocument(source, dst);
+    }
+
+    @Override
+    public void writeDocument(final XdmNode source, final ContentHandler dst) throws IOException {
+        try {
+            final SAXDestination destination = new SAXDestination(dst);
+            xmlUtils.getProcessor().writeXdmValue(source, destination);
         } catch (SaxonApiException e) {
             throw new IOException(e);
         }
@@ -103,33 +133,7 @@ public class StreamStore implements Store {
     }
 
     @Override
-    public void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
-        assert input.isAbsolute();
-        if (!input.getScheme().equals("file")) {
-            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
-        }
-
-        final File inputFile = new File(input);
-        final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
-        transformURI(inputFile.toURI(), outputFile.toURI(), filters);
-        try {
-            deleteQuietly(inputFile);
-            moveFile(outputFile, inputFile);
-        } catch (final IOException e) {
-            throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
-        }
-    }
-
-    @Override
-    public void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
-        if (input.equals(output)) {
-            transform(input, filters);
-        } else {
-            transformURI(input, output, filters);
-        }
-    }
-
-    private void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+    void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(output);
         if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
             throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
@@ -159,24 +163,76 @@ public class StreamStore implements Store {
         }
     }
 
+    @Override
+    public void transform(final URI input, final URI output, final XsltTransformer transformer) throws DITAOTException {
+        final URI src = input.normalize();
+        final URI dst = output.normalize();
+        if (src.equals(dst)) {
+            transform(src, transformer);
+        } else {
+            transformUri(src, dst, transformer);
+        }
+    }
+
+    @Override
+    public void transform(final URI src, final XsltTransformer transformer) throws DITAOTException {
+        final URI dst = toURI(src.toString() + FILE_EXTENSION_TEMP).normalize();
+        transformUri(src, dst, transformer);
+        try {
+            move(dst, src);
+        } catch (final IOException e) {
+            throw new DITAOTException("Failed to replace " + src + ": " + e.getMessage());
+        }
+    }
+
+    @Override
+    void transformUri(final URI src, final URI dst, final XsltTransformer transformer) throws DITAOTException {
+        try {
+            final Source source = getSource(src);
+            transformer.setSource(source);
+            final Destination result = getDestination(dst);
+            transformer.setDestination(result);
+            transformer.transform();
+        } catch (final UncheckedXPathException e) {
+            throw new DITAOTException("Failed to transform document", e);
+        } catch (final RuntimeException e) {
+            throw e;
+        } catch (final SaxonApiException e) {
+            throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
+        } catch (final Exception e) {
+            throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
+        }
+    }
+
     @VisibleForTesting
-    Serializer getSerializer(final URI dst) {
+    Serializer getSerializer(final URI dst) throws IOException {
         final File outputFile = new File(dst);
+        final File dir = outputFile.getParentFile();
+        if (!dir.exists() && !dir.mkdirs()) {
+            throw new IOException("Failed to create directory " + dir.getAbsolutePath());
+        }
         return xmlUtils.getProcessor().newSerializer(outputFile);
     }
 
     @Override
-    public Source getSource(URI path) {
-        return new StreamSource(path.toString());
+    public Source getSource(final URI path) {
+        final URI f = getUri(path);
+        if (isTempFile(f)) {
+            final Source s = new StreamSource(f.toString());
+            s.setSystemId(f.toString());
+            return s;
+        } else {
+            return new StreamSource(path.toString());
+        }
     }
 
     @Override
-    public Destination getDestination(URI path) {
+    public Destination getDestination(URI path) throws IOException {
         return getSerializer(path);
     }
 
     @Override
-    public ContentHandler getContentHandler(final URI outputFile) throws SaxonApiException {
+    public ContentHandler getContentHandler(final URI outputFile) throws SaxonApiException, IOException {
         final net.sf.saxon.Configuration configuration = xmlUtils.getProcessor().getUnderlyingConfiguration();
 //        final SerializerFactory sf = configuration.getSerializerFactory();
         final PipelineConfiguration pipelineConfiguration = configuration.makePipelineConfiguration();
@@ -191,5 +247,61 @@ public class StreamStore implements Store {
         receivingContentHandler.setReceiver(receiver);
 
         return receivingContentHandler;
+    }
+
+    public void copy(final URI src, final URI dst) throws IOException {
+        final File s = new File(getUri((src.isAbsolute() ? src : tempDirUri.resolve(src)).normalize()));
+        final File d = new File(getUri((dst.isAbsolute() ? dst : tempDirUri.resolve(dst)).normalize()));
+        copyFile(s, d);
+    }
+
+    @Override
+    public void move(final URI src, final URI dst) throws IOException {
+        final File s = new File(getUri((src.isAbsolute() ? src : tempDirUri.resolve(src)).normalize()));
+        final File d = new File(getUri((dst.isAbsolute() ? dst : tempDirUri.resolve(dst)).normalize()));
+        if (d.exists()) {
+            forceDelete(d);
+        }
+        moveFile(s, d);
+    }
+
+    @Override
+    public boolean exists(final URI path) {
+        final File d = new File(getUri(URLUtils.setFragment(path, null)));
+        return d.exists();
+    }
+
+    @Override
+    public Source resolve(final String href, final String base) throws TransformerException {
+        final URI h = toURI(href);
+        final URI f = h.isAbsolute() ? h : toURI(base).resolve(h);
+        if (isTempFile(f)) {
+            return new StreamSource(f.toString());
+        }
+        return null;
+    }
+
+    @Override
+    public InputStream getInputStream(final URI path) throws IOException {
+        final URI f = getUri(path);
+        if (isTempFile(f)) {
+            return new FileInputStream(toFile(f));
+        } else if ("file".equals(path.getScheme())) {
+            return new FileInputStream(toFile(path));
+        } else {
+            return f.toURL().openStream();
+        }
+    }
+
+    @Override
+    public OutputStream getOutputStream(final URI path) throws IOException {
+        final URI f = getUri(path);
+        if (isTempFile(f)) {
+            return Files.newOutputStream(Paths.get(f));
+        } else if ("file".equals(path.getScheme())) {
+            return Files.newOutputStream(Paths.get(path));
+        } else {
+            throw new UnsupportedOperationException("Unable to write to " + f);
+        }
     }
 }

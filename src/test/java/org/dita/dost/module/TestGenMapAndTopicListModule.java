@@ -10,6 +10,7 @@ package org.dita.dost.module;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
@@ -61,7 +62,7 @@ public class TestGenMapAndTopicListModule {
 
         final GenMapAndTopicListModule module = new GenMapAndTopicListModule();
         module.setLogger(new TestUtils.TestLogger());
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         module.setJob(job);
         module.setXmlUtils(new XMLUtils());
         module.execute(pipelineInput);
@@ -145,7 +146,7 @@ public class TestGenMapAndTopicListModule {
                     "maps/root-map-01.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
         
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         assertEquals(".." + File.separator, job.getProperty("uplevels"));
 
         assertEquals(5, job.getFileInfo().size());
@@ -246,7 +247,7 @@ public class TestGenMapAndTopicListModule {
                     "root-map-02.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
                 
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         assertEquals("", job.getProperty("uplevels"));
 
         assertEquals(5, job.getFileInfo().size());

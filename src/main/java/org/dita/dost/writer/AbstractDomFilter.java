@@ -22,13 +22,8 @@ import java.io.IOException;
  */
 public abstract class AbstractDomFilter implements AbstractReader {
 
-    protected final XMLUtils xmlUtils;
     protected DITAOTLogger logger;
     protected Job job;
-
-    public AbstractDomFilter() {
-        xmlUtils = new XMLUtils();
-    }
 
     @Override
     public void read(final File filename) throws DITAOTException {
@@ -48,6 +43,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
         if (resDoc != null) {
             try {
                 logger.debug("Writing " + filename.toURI());
+                resDoc.setDocumentURI(filename.toURI().toString());
                 job.getStore().writeDocument(resDoc, filename.toURI());
             } catch (final IOException e) {
                 throw new DITAOTException("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);

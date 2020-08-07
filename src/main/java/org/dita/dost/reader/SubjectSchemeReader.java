@@ -161,7 +161,7 @@ public class SubjectSchemeReader {
      */
     public void loadSubjectScheme(final File scheme) {
         assert scheme.isAbsolute();
-        if (!scheme.exists()) {
+        if (!job.getStore().exists(scheme.toURI())) {
             throw new IllegalStateException();
         }
         logger.debug("Load subject scheme " + scheme);

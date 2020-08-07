@@ -440,6 +440,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     private void writeMap(final FileInfo in, final Document doc) throws DITAOTException {
         try {
             final URI file = job.tempDirURI.resolve(in.uri);
+            doc.setDocumentURI(file.toString());
             job.getStore().writeDocument(doc, file);
         } catch (final IOException e) {
             throw new DITAOTException("Failed to write map: " + e.getMessage(), e);

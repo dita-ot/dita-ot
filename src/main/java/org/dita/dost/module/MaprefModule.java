@@ -7,7 +7,6 @@
  */
 package org.dita.dost.module;
 
-import com.google.common.io.Files;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
@@ -15,6 +14,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.DelegatingURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -22,7 +22,8 @@ import org.w3c.dom.Element;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -93,14 +94,16 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         Document doc;
         try {
             doc = XMLUtils.getDocumentBuilder().newDocument();
-            final Source source = job.getStore().getSource(inputFile.toURI());
-            final Destination serializer = new DOMDestination(doc);
             final XsltTransformer transformer = templates.load();
             transformer.setErrorListener(toErrorListener(logger));
-            transformer.setSource(source);
-            transformer.setDestination(serializer);
-            transformer.setURIResolver(CatalogUtils.getCatalogResolver());
+            transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
             transformer.setParameter(new QName("file-being-processed"), XdmItem.makeValue(inputFile.getName()));
+
+            final Source source = job.getStore().getSource(inputFile.toURI());
+            transformer.setSource(source);
+            final Destination serializer = new DOMDestination(doc);
+            serializer.setDestinationBaseURI(inputFile.toURI());
+            transformer.setDestination(serializer);
             transformer.transform();
         } catch (final UncheckedXPathException e) {
             throw new DITAOTException("Failed to merge map " + inputFile, e);
@@ -122,6 +125,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         job.add(updated);
 
         try {
+            doc.setDocumentURI(outputFile.toURI().toString());
             job.getStore().writeDocument(doc, outputFile.toURI());
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize map " + inputFile + ": " + e.getMessage(), e);
@@ -157,7 +161,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         final File inputFile = new File(job.tempDir, input.file.getPath() + FILE_EXTENSION_TEMP);
         final File outputFile = new File(job.tempDir, input.file.getPath());
         try {
-            Files.move(inputFile, outputFile);
+            job.getStore().move(inputFile.toURI(), outputFile.toURI());
         } catch (final IOException e) {
             throw new DITAOTException("Failed to replace temporary file " + inputFile + ": " + e.getMessage(), e);
         }

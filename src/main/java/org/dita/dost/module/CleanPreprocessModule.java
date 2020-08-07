@@ -19,6 +19,7 @@ import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
@@ -129,7 +130,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                         logger.debug("Skip format " + fi.format);
                     } else {
                         final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
-                        if (srcFile.exists()) {
+                        if (job.getStore().exists(srcFile.toURI())) {
                             final File destFile = new File(job.tempDirURI.resolve(fi.result));
                             final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
                             if (!processingPipe.isEmpty()) {
@@ -196,12 +197,12 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     private Document serialize(final Collection<FileInfo> fis) throws IOException {
         try {
-            final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            final Document doc = XMLUtils.getDocumentBuilder().newDocument();
             final DOMResult result = new DOMResult(doc);
             XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(result);
             job.serialize(out, emptyMap(), fis);
             return (Document) result.getNode();
-        } catch (final XMLStreamException | ParserConfigurationException e) {
+        } catch (final XMLStreamException e) {
             throw new IOException("Failed to serialize job file: " + e.getMessage());
         }
     }

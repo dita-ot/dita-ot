@@ -7,29 +7,14 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Configuration.configuration;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-
-import com.google.common.annotations.VisibleForTesting;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.store.Store;
-import org.dita.dost.store.StreamStore;
 import org.w3c.dom.Document;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.net.URI;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,12 +22,18 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.dom.DOMResult;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.net.URI;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import org.dita.dost.module.reader.TempFileNameScheme;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import static org.dita.dost.util.Configuration.configuration;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 /**
  * Definition of current job.
@@ -158,11 +149,6 @@ public final class Job {
                 prop.put(e.getKey(), e.getValue());
             }
         }
-    }
-
-    @VisibleForTesting
-    public Job(final File tempDir) throws IOException {
-        this(tempDir, new StreamStore(new XMLUtils()));
     }
 
     public Job(final Job job, final Map<String, Object> prop, final Collection<FileInfo> files) {
@@ -326,6 +312,9 @@ public final class Job {
      * @throws IOException if writing configuration files failed
      */
     public void write() throws IOException {
+        if (!tempDir.exists() && !tempDir.mkdirs()) {
+            throw new IOException("Failed to create " + tempDir + " directory");
+        }
         OutputStream outStream = null;
         XMLStreamWriter out = null;
         try {

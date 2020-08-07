@@ -10,6 +10,7 @@ package org.dita.dost.module.filter;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.module.BranchFilterModule.Branch;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -48,7 +49,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
     }
 
     private Job getJob() throws IOException {
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(tempDir.toURI());
         job.add(new FileInfo.Builder()
                 .src(new File(tempDir, "input.ditamap").toURI())
@@ -192,7 +193,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
     @Test
     public void testDuplicateTopic() throws IOException, SAXException {
         final MapBranchFilterModule m = new MapBranchFilterModule();
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(tempDir.toURI());
         job.addAll(getDuplicateTopicFileInfos());
         m.setJob(job);

@@ -20,6 +20,7 @@ import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.URLResource;
 import org.dita.dost.ant.ExtensibleAntInvoker;
+import org.dita.dost.store.ant.types.StoreResource;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
@@ -58,9 +59,9 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
             for (final FileInfo f : job.getFileInfo(this::filter)) {
                 log("Scanning for " + f.file.getPath(), Project.MSG_VERBOSE);
                 final File tempFile = new File(job.tempDir, f.file.getPath());
-                if (tempFile.exists()) {
+                if (job.getStore().exists(tempFile.toURI())) {
                     log("Found temporary directory file " + tempFile, Project.MSG_VERBOSE);
-                    res.add(new FileResource(job.tempDir, f.file.toString()));
+                    res.add(new StoreResource(job, job.tempDirURI.relativize(f.uri)));
                 } else if (f.src.getScheme().equals("file")) {
                     final File srcFile = new File(f.src);
                     if (srcFile.exists()) {

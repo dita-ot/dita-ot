@@ -12,6 +12,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.Before;
@@ -43,7 +44,7 @@ public class CopyToReaderTest {
         logger = new CachingLogger();
 
         reader = new CopyToReader();
-        reader.setJob(new Job(srcDir));
+        reader.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
         reader.setLogger(logger);
         reader.setContentHandler(new DefaultHandler());
 

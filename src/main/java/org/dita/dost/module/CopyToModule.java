@@ -158,7 +158,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             final URI srcFile = job.tempDirURI.resolve(copytoSource);
             final URI targetFile = job.tempDirURI.resolve(copytoTarget);
 
-            if (new File(targetFile).exists()) {
+            if (job.getStore().exists(targetFile)) {
                 logger.warn(MessageUtils.getMessage("DOTX064W", copytoTarget.getPath()).toString());
             } else {
                 final FileInfo input = job.getFileInfo(fi -> fi.isInput).iterator().next();
@@ -193,10 +193,6 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         assert !copytoTargetFilename.isAbsolute();
         assert inputMapInTemp.isAbsolute();
         final File workdir = new File(target).getParentFile();
-        if (!workdir.exists() && !workdir.mkdirs()) {
-            logger.error("Failed to create copy-to target directory " + workdir.toURI());
-            return;
-        }
         final File path2project = getPathtoProject(copytoTargetFilename, target, inputMapInTemp, job);
         final File path2rootmap = getPathtoRootmap(target, inputMapInTemp);
         XMLFilter filter = new CopyToFilter(workdir, path2project, path2rootmap, src, target);

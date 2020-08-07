@@ -84,7 +84,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     @Override
     public void write(final File filename) throws DITAOTException {
         // ignore in-exists file
-        if (filename == null || !filename.exists()) {
+        if (filename == null || !job.getStore().exists(filename.toURI())) {
             return;
         }
         svgMetadataReader.setLogger(logger);

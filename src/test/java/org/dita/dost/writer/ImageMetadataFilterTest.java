@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
+import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.XMLUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -44,7 +46,7 @@ public class ImageMetadataFilterTest {
         final File f = new File(tempDir, "test.dita");
         copyFile(new File(srcDir, "test.dita"), f);
 
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setProperty("uplevels", "");
         final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job);
         filter.setLogger(new TestUtils.TestLogger());
@@ -65,7 +67,7 @@ public class ImageMetadataFilterTest {
         f.getParentFile().mkdirs();
         copyFile(new File(srcDir, "test.dita"), f);
 
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setProperty("uplevels", ".." + File.separator);
         final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job);
         filter.setLogger(new TestUtils.TestLogger());

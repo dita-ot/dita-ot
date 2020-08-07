@@ -116,7 +116,7 @@ See the accompanying LICENSE file for applicable license.
         <headfilter lines="1"/>
       </filterchain>
     </loadfile>
-    <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}" unless:set="noMap"/>
+    <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}" validate="no" unless:set="noMap"/>
     <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no" if:set="dita.input.valfile"/>
   </target>
 

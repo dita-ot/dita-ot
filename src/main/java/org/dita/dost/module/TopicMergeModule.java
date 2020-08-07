@@ -15,6 +15,8 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MergeMapParser;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.DelegatingURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 
 import javax.xml.transform.stream.StreamSource;
@@ -53,7 +55,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         }
         final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
         final File ditaInput = new File(job.tempDirURI.resolve(in.uri));
-        if (!ditaInput.exists()) {
+        if (!job.getStore().exists(ditaInput.toURI())) {
             logger.error(MessageUtils.getMessage("DOTJ025E").toString());
             return null;
         }
@@ -91,6 +93,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
                 final XsltCompiler xsltCompiler = processor.newXsltCompiler();
                 final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(style)).load();
                 transformer.setErrorListener(toErrorListener(logger));
+                transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
                 final StreamSource source = new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray()));
                 final Destination result = processor.newSerializer(output);
                 transformer.setSource(source);
