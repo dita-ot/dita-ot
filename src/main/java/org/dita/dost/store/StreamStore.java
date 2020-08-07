@@ -64,6 +64,7 @@ public class StreamStore extends AbstractStore implements Store {
 
     @Override
     public Document getDocument(final URI path) throws IOException {
+        if (LOG) System.err.println("  getDocument:" + path);
         try {
             return XMLUtils.getDocumentBuilder().parse(path.toString());
         } catch (final Exception e) {
@@ -131,6 +132,33 @@ public class StreamStore extends AbstractStore implements Store {
             throw new DITAOTException(e);
         }
     }
+
+//    @Override
+//    public void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
+//        assert input.isAbsolute();
+//        if (!input.getScheme().equals("file")) {
+//            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
+//        }
+//
+//        final File inputFile = new File(input);
+//        final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
+//        transformURI(inputFile.toURI(), outputFile.toURI(), filters);
+//        try {
+//            deleteQuietly(inputFile);
+//            moveFile(outputFile, inputFile);
+//        } catch (final IOException e) {
+//            throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
+//        }
+//    }
+//
+//    @Override
+//    public void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+//        if (input.equals(output)) {
+//            transform(input, filters);
+//        } else {
+//            transformURI(input, output, filters);
+//        }
+//    }
 
     @Override
     void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
@@ -218,10 +246,12 @@ public class StreamStore extends AbstractStore implements Store {
     public Source getSource(final URI path) {
         final URI f = getUri(path);
         if (isTempFile(f)) {
+            if (LOG) System.err.println("  getSource:" + f);
             final Source s = new StreamSource(f.toString());
             s.setSystemId(f.toString());
             return s;
         } else {
+            if (LOG) System.err.println("  getSource:" + path);
             return new StreamSource(path.toString());
         }
     }
@@ -275,6 +305,7 @@ public class StreamStore extends AbstractStore implements Store {
     public Source resolve(final String href, final String base) throws TransformerException {
         final URI h = toURI(href);
         final URI f = h.isAbsolute() ? h : toURI(base).resolve(h);
+        if (LOG) System.err.println("  resolve: " + f);
         if (isTempFile(f)) {
             return new StreamSource(f.toString());
         }
@@ -285,10 +316,13 @@ public class StreamStore extends AbstractStore implements Store {
     public InputStream getInputStream(final URI path) throws IOException {
         final URI f = getUri(path);
         if (isTempFile(f)) {
+            if (LOG) System.err.println("  getInputStream:" + f);
             return new FileInputStream(toFile(f));
         } else if ("file".equals(path.getScheme())) {
+            if (LOG) System.err.println("  getInputStream:" + path);
             return new FileInputStream(toFile(path));
         } else {
+            if (LOG) System.err.println("  getInputStream:" + f);
             return f.toURL().openStream();
         }
     }
@@ -297,11 +331,15 @@ public class StreamStore extends AbstractStore implements Store {
     public OutputStream getOutputStream(final URI path) throws IOException {
         final URI f = getUri(path);
         if (isTempFile(f)) {
+            if (LOG) System.err.println("  getOutputStream:" + f);
             return Files.newOutputStream(Paths.get(f));
         } else if ("file".equals(path.getScheme())) {
+            if (LOG) System.err.println("  getOutputStream:" + path);
             return Files.newOutputStream(Paths.get(path));
         } else {
+            if (LOG) System.err.println("  getOutputStream:" + f);
             throw new UnsupportedOperationException("Unable to write to " + f);
+//            return f.toURL().openStream();
         }
     }
 }
