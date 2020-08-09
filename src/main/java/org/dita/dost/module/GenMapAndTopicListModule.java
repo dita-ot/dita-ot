@@ -34,7 +34,6 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,7 +42,8 @@ import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Configuration.Mode;
 import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Job.*;
+import static org.dita.dost.util.Job.FileInfo;
+import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
 
 /**
@@ -894,8 +894,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
 
         try {
-            SubjectSchemeReader.writeMapToXML(addMapFilePrefix(listFilter.getRelationshipGrap()), new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
-            SubjectSchemeReader.writeMapToXML(addMapFilePrefix(schemeDictionary), new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+            subjectSchemeReader.setLogger(logger);
+            subjectSchemeReader.setJob(job);
+            subjectSchemeReader.writeMapToXML(addMapFilePrefix(listFilter.getRelationshipGrap()), new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            subjectSchemeReader.writeMapToXML(addMapFilePrefix(schemeDictionary), new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
         }

@@ -190,7 +190,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
         subjectSchemeReader.setJob(job);
-        dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+        dic = subjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
 
         if (profilingEnabled) {
             final DitaValReader filterReader = new DitaValReader();
@@ -315,7 +315,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
      */
     private void outputSubjectScheme() throws DITAOTException {
         try {
-            final Map<URI, Set<URI>> graph = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            final Map<URI, Set<URI>> graph = subjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
 
             final Queue<URI> queue = new LinkedList<>(graph.keySet());
             final Set<URI> visitedSet = new HashSet<>();
