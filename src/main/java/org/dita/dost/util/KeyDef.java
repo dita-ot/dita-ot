@@ -7,22 +7,17 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
+import net.sf.saxon.s9api.XdmNode;
+import org.dita.dost.exception.DITAOTException;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
 import java.util.Collection;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import net.sf.saxon.s9api.XdmNode;
-import org.dita.dost.exception.DITAOTException;
-import org.w3c.dom.Element;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.EMPTY_ATTRIBUTES;
 
 /**
  * Key definition.
@@ -81,43 +76,36 @@ public class KeyDef {
     /**
      * Write key definition XML configuration file
      *
-     * @param keydefFile key definition file
+     * @param handler key definition output resource
      * @param keydefs list of key definitions
      * @throws DITAOTException if writing configuration file failed
      */
-    public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
-        XMLStreamWriter keydef = null;
-        try (OutputStream out = new FileOutputStream(keydefFile)) {
-            keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out, "UTF-8");
-            keydef.writeStartDocument();
-            keydef.writeStartElement(ELEMENT_STUB);
+    public static void writeKeydef(final ContentHandler handler, final Collection<KeyDef> keydefs) throws DITAOTException {
+        try {
+            handler.startDocument();
+            handler.startElement(NULL_NS_URI, ELEMENT_STUB, ELEMENT_STUB, EMPTY_ATTRIBUTES);
             for (final KeyDef k : keydefs) {
-                keydef.writeStartElement(ELEMENT_KEYDEF);
-                keydef.writeAttribute(ATTRIBUTE_KEYS, k.keys);
+                final XMLUtils.AttributesBuilder atts = new XMLUtils.AttributesBuilder();
+                atts.add(ATTRIBUTE_KEYS, k.keys);
                 if (k.href != null) {
-                    keydef.writeAttribute(ATTRIBUTE_HREF, k.href.toString());
+                    atts.add(ATTRIBUTE_HREF, k.href.toString());
                 }
                 if (k.scope != null) {
-                    keydef.writeAttribute(ATTRIBUTE_SCOPE, k.scope);
+                    atts.add(ATTRIBUTE_SCOPE, k.scope);
                 }
                 if (k.format != null) {
-                    keydef.writeAttribute(ATTRIBUTE_FORMAT, k.format);
+                    atts.add(ATTRIBUTE_FORMAT, k.format);
                 }
                 if (k.source != null) {
-                    keydef.writeAttribute(ATTRIBUTE_SOURCE, k.source.toString());
+                    atts.add(ATTRIBUTE_SOURCE, k.source.toString());
                 }
-                keydef.writeEndElement();
+                handler.startElement(NULL_NS_URI, ELEMENT_KEYDEF, ELEMENT_KEYDEF, atts.build());
+                handler.endElement(NULL_NS_URI, ELEMENT_KEYDEF, ELEMENT_KEYDEF);
             }
-            keydef.writeEndDocument();
-        } catch (final XMLStreamException | IOException e) {
-            throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
-        } finally {
-            if (keydef != null) {
-                try {
-                    keydef.close();
-                } catch (final XMLStreamException e) {
-                }
-            }
+            handler.endElement(NULL_NS_URI, ELEMENT_STUB, ELEMENT_STUB);
+            handler.endDocument();
+        } catch (final SAXException e) {
+            throw new DITAOTException("Failed to write key definition file: " + e.getMessage(), e);
         }
     }
 

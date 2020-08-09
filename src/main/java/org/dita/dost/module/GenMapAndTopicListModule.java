@@ -10,6 +10,9 @@ package org.dita.dost.module;
 
 import com.google.common.collect.MultimapBuilder.SetMultimapBuilder;
 import com.google.common.collect.SetMultimap;
+import net.sf.saxon.s9api.Destination;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.SaxonApiUncheckedException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
@@ -894,8 +897,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
 
         try {
-            SubjectSchemeReader.writeMapToXML(addMapFilePrefix(listFilter.getRelationshipGrap()), new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
-            SubjectSchemeReader.writeMapToXML(addMapFilePrefix(schemeDictionary), new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+            subjectSchemeReader.setLogger(logger);
+            subjectSchemeReader.setJob(job);
+            subjectSchemeReader.writeMapToXML(addMapFilePrefix(listFilter.getRelationshipGrap()), new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            subjectSchemeReader.writeMapToXML(addMapFilePrefix(schemeDictionary), new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
         }
@@ -908,7 +914,12 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             delayConrefUtils.writeExportAnchors(exportAnchorsFilter, tempFileNameScheme);
         }
 
-        KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), addFilePrefix(schemekeydefMap.values()));
+        try {
+            final ContentHandler handler = job.getStore().getContentHandler(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE).toURI());
+            KeyDef.writeKeydef(handler, addFilePrefix(schemekeydefMap.values()));
+        } catch (SaxonApiException | IOException e) {
+            throw new DITAOTException("Failed to serialize " + SUBJECT_SCHEME_KEYDEF_LIST_FILE+ ": " + e.getMessage(), e);
+        }
     }
 
     /** Filter copy-to where target is used directly. */
