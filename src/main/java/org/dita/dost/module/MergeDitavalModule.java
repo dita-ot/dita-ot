@@ -105,7 +105,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
         final DocumentBuilder ditavalbuilder = XMLUtils.getDocumentBuilder();
         ditavalbuilder.setEntityResolver(CatalogUtils.getCatalogResolver());
         XMLStreamWriter export = null;
-        try (OutputStream exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))) {
+        try (OutputStream exportStream = job.getStore().getOutputStream(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL).toURI())) {
             export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
             export.writeStartDocument();
             export.writeStartElement("val");

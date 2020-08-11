@@ -186,17 +186,17 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         initXmlReader();
 
         // Output subject schemas
-        outputSubjectScheme();
         subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
         subjectSchemeReader.setJob(job);
+        outputSubjectScheme();
         dic = subjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
 
         if (profilingEnabled) {
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
             filterReader.setJob(job);
-            if (ditavalFile != null && ditavalFile.exists()) {
+            if (job.getStore().exists(ditavalFile.toURI())) {
                 filterReader.read(ditavalFile.getAbsoluteFile());
                 baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterReader.getFilterMap(),
                         filterReader.getForegroundConflictColor(), filterReader.getBackgroundConflictColor());
