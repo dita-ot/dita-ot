@@ -30,7 +30,6 @@ import java.io.*;
 import java.net.URI;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -104,8 +103,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     boolean validate = true;
     ContentHandler nullHandler;
     TempFileNameScheme tempFileNameScheme;
-    /** Absolute path to input file. */
-    URI rootFile;
+//    /** Absolute path to input file. */
+//    URI rootFile;
     List<URI> resources;
     /** List of absolute input files. */
     List<URI> rootFiles;
@@ -170,7 +169,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
-        listFilter.setPrimaryDitamap(rootFile);
+//        listFilter.setPrimaryDitamap(rootFile);
         listFilter.setRootDir(baseInputDir);
         listFilter.setJob(job);
         listFilter.setFormatFilter(formatFilter);
@@ -181,7 +180,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
-        keydefFilter.setCurrentFile(rootFile);
+//        keydefFilter.setCurrentFile(rootFiles);
         keydefFilter.setJob(job);
 
         nullHandler = new DefaultHandler();
@@ -287,14 +286,15 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                         .map(f -> f.resolve("."))
                         .reduce(rootFiles.get(0).resolve("."), (left, right) -> URLUtils.getBase(left, right));
             }
-            rootFile = rootFiles.size() == 1
-                    ? rootFiles.get(0)
-                    : baseInputDir.resolve(ReaderUtils.GEN_MAP);
-            job.setInputFile(rootFile);
+//            rootFile = rootFiles.size() == 1
+//                    ? rootFiles.get(0)
+//                    : baseInputDir.resolve(ReaderUtils.GEN_MAP);
+//            job.setInputFile(rootFile);
             job.setInputDir(baseInputDir);
         } else {
             URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
             ditaInput = ditaInput != null ? ditaInput : job.getInputFile();
+            URI rootFile;
             if (ditaInput.isAbsolute()) {
                 rootFile = ditaInput;
             } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
@@ -306,7 +306,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             }
             assert rootFile.isAbsolute();
             rootFiles = Collections.singletonList(rootFile);
-            job.setInputFile(rootFile);
+//            job.setInputFile(rootFile);
 
             if (baseInputDir == null) {
                 baseInputDir = rootFile.resolve(".");
@@ -647,15 +647,18 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     void outputResult() throws DITAOTException {
         tempFileNameScheme.setBaseDir(baseInputDir);
 
-        final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
-        final File relativeRootFile = toFile(rootTemp);
-
-        job.setInputMap(rootTemp);
+//        job.setInputMap(rootTemp);
 
         job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
         final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);
-        writeListFile(inputfile, relativeRootFile.toString());
+        writeListFile(inputfile,
+                rootFiles.stream()
+                        .map(f -> tempFileNameScheme.generateTempFileName(f))
+                        .map(URI::toString)
+                        .collect(Collectors.toList()));
 
+        // FIXME when multiple maps are supported
+        final File relativeRootFile = toFile(tempFileNameScheme.generateTempFileName(rootFiles.get(0)));
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
         final Set<URI> res = new HashSet<>();
@@ -770,18 +773,20 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
 
         if (rootFiles.size() == 1) {
+            final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFiles.get(0));
             final FileInfo root = job.getFileInfo(rootTemp);
             job.add(new FileInfo.Builder(root)
                     .isInput(true)
                     .build());
         } else {
             for (final URI f : rootFiles) {
+                final URI rootTemp = tempFileNameScheme.generateTempFileName(f);
                 final FileInfo root = job.getFileInfo(f);
                 if (root == null) {
                     throw new RuntimeException("Unable to set input file to job configuration");
                 }
                 job.add(new FileInfo.Builder(root)
-                        .src(rootFile)
+                        .src(f)
                         .uri(rootTemp)
                         .format(ATTR_FORMAT_VALUE_DITAMAP)
                         .isInput(true)
@@ -822,11 +827,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /**
      * Write list file.
      * @param inputfile output list file
-     * @param relativeRootFile list value
+     * @param relativeRootFiles list value
      */
-    private void writeListFile(final File inputfile, final String relativeRootFile) {
+    private void writeListFile(final File inputfile, final List<String> relativeRootFiles) {
         try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(inputfile.toURI())))) {
-            bufferedWriter.write(relativeRootFile);
+            for (String relativeRootFile : relativeRootFiles) {
+                bufferedWriter.write(relativeRootFile);
+                bufferedWriter.write('\n');
+            }
             bufferedWriter.flush();
         } catch (final IOException e) {
             logger.error(e.getMessage(), e);

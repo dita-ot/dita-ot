@@ -31,8 +31,8 @@ import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 
 public class ReaderUtils {
 
-    public static final String GEN_MAP = "_dummy.ditamap";
-    public static final DitaClass GENMAP = new DitaClass("+ map/map ditaot-d/genmap ");
+//    public static final String GEN_MAP = "_dummy.ditamap";
+//    public static final DitaClass GENMAP = new DitaClass("+ map/map ditaot-d/genmap ");
 
     private Job job;
     private DITAOTLogger logger;
@@ -43,46 +43,46 @@ public class ReaderUtils {
      *
      * @throws DITAOTException if writing output fails
      */
-    public void combine(final URI rootFile, final List<URI> rootFiles) throws DITAOTException {
-        final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
-        if (rootFiles.size() > 1) {
-            final URI rootTempAbs = job.tempDirURI.resolve(rootTemp);
-            logger.info("Writing " + rootTempAbs);
-            try {
-                final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                dbf.setNamespaceAware(true);
-                final Document doc = dbf.newDocumentBuilder().newDocument();
-
-                doc.appendChild(doc.createProcessingInstruction(PI_WORKDIR_TARGET_URI, job.tempDirURI.toString()));
-                doc.appendChild(doc.createProcessingInstruction(PI_PATH2PROJ_TARGET_URI, "./"));
-                doc.appendChild(doc.createProcessingInstruction(PI_PATH2ROOTMAP_TARGET_URI, "./"));
-
-                final Element root = doc.createElement(GENMAP.localName);
-                root.setAttribute(ATTRIBUTE_NAME_CLASS, GENMAP.toString());
-                root.setAttribute(ATTRIBUTE_NAME_DOMAINS, "(map ditaot-d)");
-                root.setAttributeNS(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
-                for (final URI file : rootFiles) {
-                    final Job.FileInfo fi = job.getFileInfo(file);
-                    final URI hrefTempAbs = job.tempDirURI.resolve(fi.uri);
-                    final URI href = rootTempAbs.resolve(".").relativize(hrefTempAbs);
-
-                    final Element ref = doc.createElement(MAP_TOPICREF.localName);
-                    ref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
-                    ref.setAttribute(ATTRIBUTE_NAME_FORMAT, fi.format);
-                    ref.setAttribute(ATTRIBUTE_NAME_HREF, href.toString());
-                    root.appendChild(ref);
-                }
-                doc.appendChild(root);
-
-                final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-                serializer.transform(new DOMSource(doc), new StreamResult(rootTempAbs.toString()));
-            } catch (ParserConfigurationException | TransformerConfigurationException e) {
-                throw new RuntimeException(e);
-            } catch (TransformerException e) {
-                throw new DITAOTException("Failed to serialize root file: " + e.getMessage(), e);
-            }
-        }
-    }
+//    public void combine(final URI rootFile, final List<URI> rootFiles) throws DITAOTException {
+//        final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
+//        if (rootFiles.size() > 1) {
+//            final URI rootTempAbs = job.tempDirURI.resolve(rootTemp);
+//            logger.info("Writing " + rootTempAbs);
+//            try {
+//                final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//                dbf.setNamespaceAware(true);
+//                final Document doc = dbf.newDocumentBuilder().newDocument();
+//
+//                doc.appendChild(doc.createProcessingInstruction(PI_WORKDIR_TARGET_URI, job.tempDirURI.toString()));
+//                doc.appendChild(doc.createProcessingInstruction(PI_PATH2PROJ_TARGET_URI, "./"));
+//                doc.appendChild(doc.createProcessingInstruction(PI_PATH2ROOTMAP_TARGET_URI, "./"));
+//
+//                final Element root = doc.createElement(GENMAP.localName);
+//                root.setAttribute(ATTRIBUTE_NAME_CLASS, GENMAP.toString());
+//                root.setAttribute(ATTRIBUTE_NAME_DOMAINS, "(map ditaot-d)");
+//                root.setAttributeNS(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
+//                for (final URI file : rootFiles) {
+//                    final Job.FileInfo fi = job.getFileInfo(file);
+//                    final URI hrefTempAbs = job.tempDirURI.resolve(fi.uri);
+//                    final URI href = rootTempAbs.resolve(".").relativize(hrefTempAbs);
+//
+//                    final Element ref = doc.createElement(MAP_TOPICREF.localName);
+//                    ref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
+//                    ref.setAttribute(ATTRIBUTE_NAME_FORMAT, fi.format);
+//                    ref.setAttribute(ATTRIBUTE_NAME_HREF, href.toString());
+//                    root.appendChild(ref);
+//                }
+//                doc.appendChild(root);
+//
+//                final Transformer serializer = TransformerFactory.newInstance().newTransformer();
+//                serializer.transform(new DOMSource(doc), new StreamResult(rootTempAbs.toString()));
+//            } catch (ParserConfigurationException | TransformerConfigurationException e) {
+//                throw new RuntimeException(e);
+//            } catch (TransformerException e) {
+//                throw new DITAOTException("Failed to serialize root file: " + e.getMessage(), e);
+//            }
+//        }
+//    }
 
     public void setJob(Job job) {
         this.job = job;
