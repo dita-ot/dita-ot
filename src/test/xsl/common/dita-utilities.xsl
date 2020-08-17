@@ -7,6 +7,4 @@
   <xsl:import href="../../../main/plugins/org.dita.base/xsl/common/dita-utilities.xsl"/>
   <xsl:import href="../../../main/plugins/org.dita.base/xsl/common/output-message.xsl"/>
   
-  <xsl:variable name="msgprefix">DOTX</xsl:variable>
-  
 </xsl:stylesheet>

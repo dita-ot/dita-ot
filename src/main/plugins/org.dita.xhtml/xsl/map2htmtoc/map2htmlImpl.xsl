@@ -11,9 +11,6 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg" version="2.0"
                 exclude-result-prefixes="dita-ot ditamsg">
 
-  <!-- Deprecated since 2.3 -->
-  <xsl:variable name="msgprefix">DOTX</xsl:variable>
-
   <xsl:param name="OUTEXT" select="'.html'"/>
   <xsl:param name="WORKDIR">
     <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>

@@ -30,10 +30,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-
-<!-- Set the prefix for error message numbers -->
-<!-- Deprecated since 2.3 -->
-<xsl:variable name="msgprefix">DOTX</xsl:variable>
+sgprefix">DOTX</xsl:variable>
 
 <xsl:variable name="newline"><xsl:text>
 </xsl:text></xsl:variable>

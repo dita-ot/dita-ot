@@ -16,9 +16,6 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
 
-  <!-- Define the error message prefix identifier -->
-  <xsl:variable name="msgprefix" select="'DOTX'"/>
-
   <xsl:param name="EXPORTFILE"/>
   <xsl:param name="TRANSTYPE"/>
   <!-- Deprecated since 2.4 -->
@@ -839,8 +836,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="ditamsg:missing-conrefend-target-error">
     <xsl:param name="conrefend" as="xs:string" tunnel="yes"/>
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">071</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX071E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$conrefend"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
