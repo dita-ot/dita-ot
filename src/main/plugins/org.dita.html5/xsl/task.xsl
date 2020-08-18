@@ -131,9 +131,13 @@ See the accompanying LICENSE file for applicable license.
         <xsl:when test="*[contains(@class,' task/step ')] and not(*[contains(@class,' task/step ')][2])">
           <!-- Single step. Process any stepsection before the step (cannot appear after). -->
           <xsl:apply-templates select="*[contains(@class,' task/stepsection ')]"/>
-          <xsl:apply-templates select="*[contains(@class,' task/step ')]" mode="onestep">
-            <xsl:with-param name="step_expand" select="$step_expand"/>
-          </xsl:apply-templates>
+          <div>
+            <xsl:call-template name="commonattributes"/>
+            <xsl:call-template name="setid"/>
+            <xsl:apply-templates select="*[contains(@class,' task/step ')]" mode="onestep">
+              <xsl:with-param name="step_expand" select="$step_expand"/>
+            </xsl:apply-templates>            
+          </div>
         </xsl:when>
         <xsl:when test="not(*[contains(@class,' task/stepsection ')])">
           <xsl:apply-templates select="." mode="step-elements-with-no-stepsection">
