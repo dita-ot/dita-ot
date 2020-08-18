@@ -24,17 +24,16 @@ jobs:
         run: echo ::set-output name=url::https://github.com/dita-ot/dita-ot/releases/download/${{ github.event.inputs.version }}/dita-ot-${{ github.event.inputs.version }}.zip
         id: download-url
       - name: Create pull-request
-        uses: jelovirt/bump-homebrew-formula-action@2a4990c
-        if: "!contains(github.ref, '-')" # skip prereleases
+        uses: jelovirt/bump-homebrew-formula-action@version-input-debug
+        if: "!contains(github.event.inputs.version, '-')" # skip prereleases
         with:
           formula-name: dita-ot
           formula-version: ${{ github.event.inputs.version }}
-          homebrew-tap: jelovirt/homebrew-core
           base-branch: master
           download-url: ${{ steps.download-url.outputs.url }}
           commit-message: |
             {{formulaName}} {{version}}
         env:
           # Access token added as secret to repo settings
-          COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_COMMITTER_TOKEN }}
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
