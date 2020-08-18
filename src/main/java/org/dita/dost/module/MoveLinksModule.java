@@ -27,6 +27,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.net.URI;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,11 +50,13 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
-        if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+        final Collection<FileInfo> fi = job.getFileInfo(f -> f.isInput && ATTR_FORMAT_VALUE_DITAMAP.equals(f.format));
+        if (fi.isEmpty()) {
             return null;
+        } else if (fi.size() > 1) {
+            throw new DITAOTException("Multiple input maps not supported");
         }
-        final File inputFile = new File(job.tempDirURI.resolve(fi.uri));
+        final File inputFile = new File(job.tempDirURI.resolve(fi.iterator().next().uri));
         final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
 
         Document doc;
