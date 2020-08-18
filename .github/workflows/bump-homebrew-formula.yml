@@ -28,7 +28,7 @@ jobs:
         if: "!contains(github.event.inputs.version, '-')" # skip prereleases
         with:
           formula-name: dita-ot
-          formula-version: ${{ github.event.inputs.version }}
+          tag-name: ${{ github.event.inputs.version }}
           base-branch: master
           download-url: ${{ steps.download-url.outputs.url }}
           commit-message: |
