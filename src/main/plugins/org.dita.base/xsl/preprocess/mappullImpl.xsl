@@ -43,8 +43,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-  <!-- Define the error message prefix identifier -->
-  <xsl:variable name="msgprefix" as="xs:string">DOTX</xsl:variable>
   <!-- If converting to PDF, never try to pull info from targets with print="no" -->
   <xsl:param name="FINALOUTPUTTYPE" select="''" as="xs:string"/>
   <xsl:param name="conserve-memory" select="'false'" as="xs:string"/>

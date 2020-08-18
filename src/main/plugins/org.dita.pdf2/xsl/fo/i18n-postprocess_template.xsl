@@ -51,8 +51,6 @@ See the accompanying LICENSE file for applicable license.
   
 
     <xsl:param name="debug-enabled" select="'false'"/>
-  <!-- Deprecated since 2.3 -->
-  <xsl:variable name="msgprefix" select="'PDFX'"/>
 
     <xsl:variable name="font-mappings" select="document('cfg:fo/font-mappings.xml')/font-mappings"/>
   <xsl:variable name="default-font" select="$font-mappings/font-table/aliases/alias[. = 'Normal']/@name"/>

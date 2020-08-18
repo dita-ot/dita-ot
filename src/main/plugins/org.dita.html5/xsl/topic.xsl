@@ -172,10 +172,6 @@ See the accompanying LICENSE file for applicable license.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    
-  <!-- Define the error message prefix identifier -->
-  <!-- Deprecated since 2.3 -->
-  <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
   <!-- these elements are never processed in a conventional presentation. can be overridden. -->
   <xsl:template match="*[contains(@class, ' topic/no-topic-nesting ')]"/>
