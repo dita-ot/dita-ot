@@ -33,6 +33,8 @@ jobs:
           download-url: ${{ steps.download-url.outputs.url }}
           commit-message: |
             {{formulaName}} {{version}}
+            
+            Created via GitHub Action
         env:
           # Access token added as secret to repo settings
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_COMMITTER_TOKEN }}
