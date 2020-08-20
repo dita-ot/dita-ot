@@ -442,21 +442,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="mapref-id-path" as="xs:string*"/>
     <xsl:param name="parentMaprefKeyscope" tunnel="yes" as="attribute()?"/>
     <xsl:variable name="mapID" select="@id"/>
-    <xsl:choose>
-      <xsl:when test="@keyscope | $parentMaprefKeyscope">
-        <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
-          <xsl:attribute name="keyscope" select="@keyscope, $parentMaprefKeyscope" separator=" "/>
-          <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
-            <xsl:with-param name="relative-path" select="$relative-path" tunnel="yes"/>
-          </xsl:apply-templates>
-        </topicgroup>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
-          <xsl:with-param name="relative-path" select="$relative-path" tunnel="yes"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
+      <xsl:with-param name="relative-path" select="$relative-path" tunnel="yes"/>
+      <xsl:with-param name="keyscope" select="string-join((@keyscope, $parentMaprefKeyscope), ' ')"/>
+    </xsl:apply-templates>
     <!--xsl:copy-of select="*[contains(@class,' map/reltable ')]"/-->
     <xsl:call-template name="gen-reltable">
       <xsl:with-param name="relative-path" select="$relative-path"/>
@@ -481,6 +470,16 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="@*" mode="preserve-submap-attributes"/>
       <xsl:apply-templates select="*|processing-instruction()|text()"/>
     </submap-topicmeta-container>
+  </xsl:template>
+
+  <xsl:template match="*" mode="reltable-copy" priority="10">
+    <xsl:param name="keyscope" as="xs:string?"/>
+    <xsl:copy>
+      <xsl:if test="$keyscope">
+        <xsl:attribute name="keyscope" select="$keyscope"/>
+      </xsl:if>
+      <xsl:apply-templates select="@* | node()" mode="reltable-copy"/>
+    </xsl:copy>
   </xsl:template>
 
   <xsl:template match="@* | node()" mode="reltable-copy">
