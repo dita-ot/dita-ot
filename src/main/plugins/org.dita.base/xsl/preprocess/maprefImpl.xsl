@@ -174,7 +174,17 @@ See the accompanying LICENSE file for applicable license.
             <!-- retain key definition as a separate element -->
             <xsl:if test="@keys">
               <keydef class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef " processing-role="resource-only">
-                <xsl:apply-templates select="@* except (@class | @processing-role)"/>
+                <xsl:apply-templates select="@* except (@class | @processing-role | @href)"/>
+                <xsl:if test="@href">
+                  <xsl:choose>
+                    <xsl:when test="$relative-path != '#none#'">
+                      <xsl:attribute name="href" select="concat($relative-path, @href)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:apply-templates select="@href"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:if>
                 <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]"/>
               </keydef>
             </xsl:if>
@@ -405,6 +415,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:variable name="update-id-path" select="($mapref-id-path, generate-id(.))"/>
         <xsl:variable name="href" select="@href" as="xs:string?"/>
         <xsl:apply-templates select="document($href, /)/*[contains(@class,' map/map ')]" mode="mapref">
+          <xsl:with-param name="parentMaprefKeyscope" select="@keyscope" tunnel="yes"/>
           <xsl:with-param name="relative-path">
             <xsl:choose>
               <xsl:when test="not($relative-path = '#none#' or $relative-path='')">
@@ -429,9 +440,23 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class,' map/map ')]" mode="mapref">
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
-    <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
-      <xsl:with-param name="relative-path" select="$relative-path" tunnel="yes"/>
-    </xsl:apply-templates>
+    <xsl:param name="parentMaprefKeyscope" tunnel="yes" as="attribute()?"/>
+    <xsl:variable name="mapID" select="@id"/>
+    <xsl:choose>
+      <xsl:when test="@keyscope | $parentMaprefKeyscope">
+        <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
+          <xsl:attribute name="keyscope" select="@keyscope, $parentMaprefKeyscope" separator=" "/>
+          <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
+            <xsl:with-param name="relative-path" select="$relative-path" tunnel="yes"/>
+          </xsl:apply-templates>
+        </topicgroup>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
+          <xsl:with-param name="relative-path" select="$relative-path" tunnel="yes"/>
+        </xsl:apply-templates>
+      </xsl:otherwise>
+    </xsl:choose>
     <!--xsl:copy-of select="*[contains(@class,' map/reltable ')]"/-->
     <xsl:call-template name="gen-reltable">
       <xsl:with-param name="relative-path" select="$relative-path"/>
