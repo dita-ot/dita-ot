@@ -266,30 +266,6 @@ public class XMLUtilsTest {
         assertTrue(XMLUtils.nonDitaContext(classes));
     }
 
-    @Test
-    public void withLogger() throws TransformerException {
-        final String file = "<xsl:stylesheet version=\"2.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n" +
-                "  <xsl:template match='/'>\n" +
-                "    <xsl:message>info</xsl:message>\n" +
-                "    <xsl:message><info/></xsl:message>\n" +
-                "  </xsl:template>\n" +
-                "</xsl:stylesheet>";
-        final Transformer base = TransformerFactory.newInstance().newTransformer(
-                new StreamSource(new StringReader(file)));
-        final CachingLogger logger = new CachingLogger();
-
-        XMLUtils.withLogger(base, logger)
-                .transform(
-                        new StreamSource(new StringReader(file)),
-                        new StreamResult(new ByteArrayOutputStream()));
-
-        assertEquals(Arrays.asList(
-                new Message(Message.Level.WARN, "info", null),
-                new Message(Message.Level.WARN, "<info/>", null)
-                ),
-                logger.getMessages());
-    }
-
 //    @Test
 //    public void transform() throws Exception {
 //        copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));

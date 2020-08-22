@@ -9,11 +9,13 @@ package org.dita.dost.util;
 
 import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.event.ProxyReceiver;
+import net.sf.saxon.expr.instruct.TerminationException;
 import net.sf.saxon.jaxp.TransformerImpl;
 import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.lib.Logger;
 import net.sf.saxon.lib.StandardErrorListener;
+import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.serialize.Emitter;
 import net.sf.saxon.serialize.MessageWarner;
@@ -43,6 +45,8 @@ import java.util.stream.Stream;
 
 import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static javax.xml.XMLConstants.NULL_NS_URI;
+import static net.sf.saxon.s9api.streams.Predicates.*;
+import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.util.Constants.*;
@@ -139,37 +143,49 @@ public final class XMLUtils {
         return res;
     }
 
-    public static Transformer withLogger(final Transformer transformer, final DITAOTLogger logger) {
-        transformer.setErrorListener(new LoggingErrorListener(logger));
-        if (transformer instanceof TransformerImpl) {
-            final Emitter receiver = new MessageWarner();
-            final XsltController controller = ((TransformerImpl) transformer).getUnderlyingController();
-            receiver.setPipelineConfiguration(controller.makePipelineConfiguration());
-            if (receiver.getOutputProperties() == null) {
-                try {
-                    final Properties props = new Properties();
-                    props.setProperty(OutputKeys.METHOD, "xml");
-                    props.setProperty(OutputKeys.INDENT, "yes");
-                    props.setProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-                    receiver.setOutputProperties(props);
-                } catch (XPathException e) {
-                    // no action
-                }
-            }
-            controller.setMessageFactory(() -> new ProxyReceiver(receiver) {
-                @Override
-                public void close() {
-                    // Ignore close
-                }
-            });
-        }
-        return transformer;
-    }
-
     public static ErrorListener toErrorListener(final DITAOTLogger logger) {
         final StandardErrorListener listener = new StandardErrorListener();
         listener.setLogger(toSaxonLogger(logger));
         return listener;
+    }
+
+    public static MessageListener toMessageListener(final DITAOTLogger logger) {
+        return new MessageListener() {
+            @Override
+            public void message(XdmNode content, boolean terminate, SourceLocator locator) {
+                final Optional<String> errorCode = content.select(descendant(isProcessingInstruction()).where(hasLocalName("error-code")))
+                        .findAny()
+                        .map(XdmItem::getStringValue);
+                final String level = terminate
+                        ? "FATAL"
+                        : content.select(descendant(isProcessingInstruction()).where(hasLocalName("level")))
+                            .findAny()
+                            .map(XdmItem::getStringValue)
+                            .orElse("INFO");
+                final String msg = content.getStringValue();
+                switch (level) {
+                    case "FATAL":
+                        final TerminationException err = new TerminationException(msg);
+                        errorCode.ifPresent(err::setErrorCode);
+                        throw new SaxonApiUncheckedException(err);
+                    case "ERROR":
+                        logger.error(msg);
+                        break;
+                    case "WARN":
+                        logger.warn(msg);
+                        break;
+                    case "INFO":
+                        logger.info(msg);
+                        break;
+                    case "DEBUG":
+                        logger.debug(msg);
+                        break;
+                    default:
+                        logger.error("Message level " + level + " not supported");
+                        logger.info(msg);
+                }
+            }
+        };
     }
 
     public static Logger toSaxonLogger(final DITAOTLogger logger) {
