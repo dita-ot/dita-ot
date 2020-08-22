@@ -16,7 +16,8 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                exclude-result-prefixes="xs">
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+                exclude-result-prefixes="xs dita-ot">
   
   <xsl:template name="output-message">
     <xsl:param name="ctx" select="." tunnel="yes"/>
@@ -66,11 +67,15 @@ See the accompanying LICENSE file for applicable license.
     <xsl:choose>
       <xsl:when test="$msgseverity='FATAL'">
         <xsl:message terminate="yes">
+          <xsl:processing-instruction name="error-code" select="$id"/>
+          <xsl:processing-instruction name="level" select="$msgseverity"/>
           <xsl:value-of select="$m" separator=""/>
         </xsl:message>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>
+          <xsl:processing-instruction name="error-code" select="$id"/>
+          <xsl:processing-instruction name="level" select="$msgseverity"/>
           <xsl:value-of select="$m" separator=""/>
         </xsl:message>
       </xsl:otherwise>
