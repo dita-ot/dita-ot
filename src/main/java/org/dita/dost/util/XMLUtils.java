@@ -181,7 +181,8 @@ public final class XMLUtils {
                         logger.debug(msg);
                         break;
                     default:
-                        throw new IllegalArgumentException(level);
+                        logger.error("Message level " + level + " not supported");
+                        logger.info(msg);
                 }
             }
         };
