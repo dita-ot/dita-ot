@@ -145,6 +145,19 @@ public final class XMLUtils {
         return listener;
     }
 
+    public static MessageListener toMessageListener(final DITAOTLogger logger) {
+        return new MessageListener() {
+            @Override
+            public void message(XdmNode content, boolean terminate, SourceLocator locator) {
+                if (terminate) {
+                    logger.error(content.getStringValue());
+                } else {
+                    logger.info(content.getStringValue());
+                }
+            }
+        };
+    }
+
     public static Logger toSaxonLogger(final DITAOTLogger logger) {
         return new Logger() {
             @Override

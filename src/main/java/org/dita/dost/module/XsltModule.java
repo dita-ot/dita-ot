@@ -14,6 +14,7 @@ import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.*;
@@ -28,6 +29,7 @@ import java.util.*;
 
 import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.XMLUtils.toErrorListener;
+import static org.dita.dost.util.XMLUtils.toMessageListener;
 
 /**
  * XSLT processing module.
@@ -132,6 +134,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 //                        : uriResolver;
                 t.setErrorListener(toErrorListener(logger));
                 t.setURIResolver(uriResolver);
+                t.setMessageListener(toMessageListener(logger));
             } catch (final Exception e) {
                 throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
             }
