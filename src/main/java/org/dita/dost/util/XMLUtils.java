@@ -139,33 +139,6 @@ public final class XMLUtils {
         return res;
     }
 
-    public static Transformer withLogger(final Transformer transformer, final DITAOTLogger logger) {
-        transformer.setErrorListener(new LoggingErrorListener(logger));
-        if (transformer instanceof TransformerImpl) {
-            final Emitter receiver = new MessageWarner();
-            final XsltController controller = ((TransformerImpl) transformer).getUnderlyingController();
-            receiver.setPipelineConfiguration(controller.makePipelineConfiguration());
-            if (receiver.getOutputProperties() == null) {
-                try {
-                    final Properties props = new Properties();
-                    props.setProperty(OutputKeys.METHOD, "xml");
-                    props.setProperty(OutputKeys.INDENT, "yes");
-                    props.setProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-                    receiver.setOutputProperties(props);
-                } catch (XPathException e) {
-                    // no action
-                }
-            }
-            controller.setMessageFactory(() -> new ProxyReceiver(receiver) {
-                @Override
-                public void close() {
-                    // Ignore close
-                }
-            });
-        }
-        return transformer;
-    }
-
     public static ErrorListener toErrorListener(final DITAOTLogger logger) {
         final StandardErrorListener listener = new StandardErrorListener();
         listener.setLogger(toSaxonLogger(logger));
