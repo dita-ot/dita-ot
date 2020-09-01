@@ -16,9 +16,11 @@ import static org.dita.dost.util.XMLUtils.*;
 import java.io.File;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Job;
@@ -101,11 +103,11 @@ public final class KeyrefReader implements AbstractReader {
         currentFile = filename;
         rootScope = null;
         // TODO: use KeyScope implementation that retains order
-        KeyScope keyScope = readScopes(doc);
-        keyScope = cascadeChildKeys(keyScope);
+        final KeyScope keyScope = readScopes(doc);
+        final KeyScope keyScopeWithChildren = cascadeChildKeys(keyScope);
         // TODO: determine effective key definitions here
-        keyScope = inheritParentKeys(keyScope);
-        rootScope = resolveIntermediate(keyScope);
+        final KeyScope keyScopeWithParents = inheritParentKeys(keyScopeWithChildren);
+        rootScope = resolveIntermediate(keyScopeWithParents);
     }
 
     /** Read keys scopes in map. */
@@ -223,26 +225,26 @@ public final class KeyrefReader implements AbstractReader {
     }
 
     /** Cascade child keys with prefixes to parent key scopes. */
-    private KeyScope cascadeChildKeys(final KeyScope rootScope) {
+    @VisibleForTesting
+    KeyScope cascadeChildKeys(final KeyScope rootScope) {
         final Map<String, KeyDef> res = new HashMap<>(rootScope.keyDefinition);
         cascadeChildKeys(rootScope, res, "");
-        return new KeyScope(rootScope.id, rootScope.name, res, new ArrayList<>(rootScope.childScopes));
+        return new KeyScope(rootScope.id, rootScope.name, res,
+                rootScope.childScopes.stream()
+                        .map(this::cascadeChildKeys)
+                        .collect(Collectors.toList())
+        );
     }
     private void cascadeChildKeys(final KeyScope scope, final Map<String, KeyDef> keys, final String prefix) {
-        final StringBuilder buf = new StringBuilder(prefix);
-        if (scope.name != null) {
-            buf.append(scope.name).append(".");
-        }
-        final String p = buf.toString();
         for (final Map.Entry<String, KeyDef> e: scope.keyDefinition.entrySet()) {
             final KeyDef oldKeyDef = e.getValue();
-            final KeyDef newKeyDef = new KeyDef(p + oldKeyDef.keys, oldKeyDef.href, oldKeyDef.scope, oldKeyDef.format, oldKeyDef.source, oldKeyDef.element);
+            final KeyDef newKeyDef = new KeyDef(prefix + oldKeyDef.keys, oldKeyDef.href, oldKeyDef.scope, oldKeyDef.format, oldKeyDef.source, oldKeyDef.element);
             if (!keys.containsKey(newKeyDef.keys)) {
                 keys.put(newKeyDef.keys, newKeyDef);
             }
         }
         for (final KeyScope child: scope.childScopes) {
-            cascadeChildKeys(child, keys, p);
+            cascadeChildKeys(child, keys, prefix + child.name + ".");
         }
     }
 
