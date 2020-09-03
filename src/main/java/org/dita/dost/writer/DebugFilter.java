@@ -52,7 +52,7 @@ public final class DebugFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
-        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : null;
+        final DitaClass cls = DitaClass.getInstance(atts);
 
         final AttributesImpl res = new AttributesImpl(atts);
         if (cls != null && !ELEMENT_NAME_DITA.equals(localName)) {

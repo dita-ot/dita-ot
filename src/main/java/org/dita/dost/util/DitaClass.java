@@ -9,8 +9,11 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,6 +35,8 @@ public final class DitaClass {
     private static final Pattern VALID_DITA_CLASS = Pattern.compile("(\\+|-)\\s+(topic|map)/\\S+\\s+" +
                                                          "([\\S[^/]]+/\\S+\\s+)*");
 
+    private static final Map<String, DitaClass> cache = new ConcurrentHashMap<>();
+
     /** ModuleElem/type pair for the most specialized type, with a single preceding and following space character. */
     public final String matcher;
     /** Type name, i.e. local element name. */
@@ -44,10 +49,11 @@ public final class DitaClass {
     // Constructors
 
     /**
-     * Constructor
+     * Constructor. Use {@link #getInstance(String)} instead.
      *
      * @param cls DITA specialization hierarchy string
      */
+    @VisibleForTesting
     public DitaClass(final String cls) {
         final String[] tokens = WHITESPACE.split(cls);
         final String last = tokens[tokens.length - 1];
@@ -66,11 +72,11 @@ public final class DitaClass {
      * @param cls DITA class, may be {@code null}
      * @return DITA class, {@code null} if the input was {@code null}
      */
-    private static DitaClass getInstance(final String cls) {
+    public static DitaClass getInstance(final String cls) {
         if (cls == null) {
             return null;
         }
-        return new DitaClass(cls);
+        return cache.computeIfAbsent(cls, DitaClass::new);
     }
 
     /**

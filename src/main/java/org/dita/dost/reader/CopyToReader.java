@@ -93,8 +93,6 @@ public final class CopyToReader extends AbstractXMLFilter {
 
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
-        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
-
         if (chunkLevel > 0) {
             chunkLevel++;
         } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null) {
