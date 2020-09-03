@@ -30,6 +30,9 @@ import javax.xml.namespace.QName;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -52,47 +55,47 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
     Predicate<String> formatFilter;
     /** FileInfos keyed by src. */
-    private final Map<URI, Collection<FileInfo>> fileinfos = new HashMap<>();
+    private final Map<URI, Collection<FileInfo>> fileinfos = new ConcurrentHashMap<>();
     /** Set of all topic files */
-    final Set<URI> fullTopicSet = new HashSet<>(128);
+    final Set<URI> fullTopicSet = ConcurrentHashMap.newKeySet();
     /** Set of all map files */
-    final Set<URI> fullMapSet = new HashSet<>(128);
+    final Set<URI> fullMapSet = ConcurrentHashMap.newKeySet();
     /** Set of topic files containing href */
-    private final Set<URI> hrefTopicSet = new HashSet<>(128);
+    private final Set<URI> hrefTopicSet = ConcurrentHashMap.newKeySet();
     /** Set of dita files containing conref */
-    final Set<URI> conrefSet = new HashSet<>(128);
+    final Set<URI> conrefSet = ConcurrentHashMap.newKeySet();
     /** Set of topic files containing coderef */
-    private final Set<URI> coderefSet = new HashSet<>(128);
+    private final Set<URI> coderefSet = ConcurrentHashMap.newKeySet();
     /** Set of all images */
-    final Set<Reference> formatSet = new HashSet<>();
+    final Set<Reference> formatSet = ConcurrentHashMap.newKeySet();
     /** Set of all images used for flagging */
-    private final Set<URI> flagImageSet = new LinkedHashSet<>(128);
+    private final Set<URI> flagImageSet = ConcurrentHashMap.newKeySet();
     /** Set of all HTML and other non-DITA or non-image files */
     final SetMultimap<String, URI> htmlSet = SetMultimapBuilder.hashKeys().hashSetValues().build();
     /** Set of all the href targets */
-    final Set<URI> hrefTargetSet = new HashSet<>(128);
+    final Set<URI> hrefTargetSet = ConcurrentHashMap.newKeySet();
     /** Set of all the conref targets */
-    Set<URI> conrefTargetSet = new HashSet<>(128);
+    Set<URI> conrefTargetSet = ConcurrentHashMap.newKeySet();
     /** Set of all targets except conref and copy-to */
-    final Set<URI> nonConrefCopytoTargetSet = new HashSet<>(128);
+    final Set<URI> nonConrefCopytoTargetSet = ConcurrentHashMap.newKeySet();
     /** Set of subsidiary files */
-    private final Set<URI> coderefTargetSet = new HashSet<>(16);
+    private final Set<URI> coderefTargetSet = ConcurrentHashMap.newKeySet();
     /** Set of absolute flag image files */
-    private final Set<URI> relFlagImagesSet = new LinkedHashSet<>(128);
+    private final Set<URI> relFlagImagesSet = ConcurrentHashMap.newKeySet();
     /** List of files waiting for parsing. Values are absolute URI references. */
     @VisibleForTesting
-    final Queue<Reference> waitList = new LinkedList<>();
+    final NavigableMap<URI, Reference> waitList = new ConcurrentSkipListMap<>();
     /** List of parsed files */
-    final List<URI> doneList = new LinkedList<>();
-    final List<URI> failureList = new LinkedList<>();
+    final Set<URI> doneList = ConcurrentHashMap.newKeySet();
+    final Set<URI> failureList = ConcurrentHashMap.newKeySet();
     /** Set of outer dita files */
-    final Set<URI> outDitaFilesSet = new HashSet<>(128);
+    final Set<URI> outDitaFilesSet = ConcurrentHashMap.newKeySet();
     /** Set of sources of conacion */
-    final Set<URI> conrefpushSet = new HashSet<>(128);
+    final Set<URI> conrefpushSet = ConcurrentHashMap.newKeySet();
     /** Set of files containing keyref */
-    final Set<URI> keyrefSet = new HashSet<>(128);
+    final Set<URI> keyrefSet = ConcurrentHashMap.newKeySet();
     /** Set of files with "@processing-role=resource-only" */
-    final Set<URI> resourceOnlySet = new HashSet<>(128);
+    final Set<URI> resourceOnlySet = ConcurrentHashMap.newKeySet();
     /** Absolute basedir for processing */
     private URI baseInputDir;
     GenListModuleReader listFilter;
@@ -105,10 +108,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     URI rootFile;
     List<URI> resources;
     /** Subject scheme absolute file paths. */
-    private final Set<URI> schemeSet = new HashSet<>(128);
+    private final Set<URI> schemeSet = ConcurrentHashMap.newKeySet();
     /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
     private final Map<URI, Set<URI>> schemeDictionary = new HashMap<>();
-    private final Map<URI, URI> copyTo = new HashMap<>();
+    private final Map<URI, URI> copyTo = new ConcurrentHashMap<>();
     Mode processingMode;
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     boolean genDebugInfo;
@@ -130,7 +133,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     DitaWriterFilter ditaWriterFilter;
     TopicFragmentFilter topicFragmentFilter;
     /** Files found during additional resource crawl. **/
-    final Set<URI> additionalResourcesSet = new HashSet<>();
+    final Set<URI> additionalResourcesSet = ConcurrentHashMap.newKeySet();
 
     public abstract void readStartFile() throws DITAOTException;
 
@@ -306,8 +309,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     }
 
     void processWaitList() throws DITAOTException {
-        while (!waitList.isEmpty()) {
-            readFile(waitList.remove(), null);
+        for (Map.Entry<URI, Reference> entry = waitList.pollFirstEntry(); entry != null; entry = waitList.pollFirstEntry()) {
+            readFile(entry.getValue(), null);
         }
     }
 
@@ -565,11 +568,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     void addToWaitList(final Reference ref) {
         final URI file = ref.filename;
         assert file.isAbsolute() && file.getFragment() == null;
-        if (doneList.contains(file) || waitList.contains(ref) || file.equals(currentFile)) {
+        if (doneList.contains(file) || waitList.containsKey(ref.filename) || file.equals(currentFile)) {
             return;
         }
 
-        waitList.add(ref);
+        waitList.put(ref.filename, ref);
     }
 
     /**
