@@ -68,7 +68,12 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
             // return -1 for XSD grammar hashcode because we want to disable XSD grammar caching
             return -1;
         } else {
-            return desc.hashCode();
+        	//#3568 Prefer to hash the public ID if available
+        	if(desc.getPublicId() != null) {
+        		return desc.getPublicId().hashCode();
+        	} else {
+        		return desc.hashCode();
+        	}
         }
     }
 
@@ -94,7 +99,12 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
             // always return false for XSD grammar to disable XSD grammar caching
             return false;
         } else {
-            return desc1.equals(desc2);
+        	//#3568 Compare descriptions only by public ID if available.
+        	if(desc1.getPublicId() != null && desc2.getPublicId() != null) {
+        		return desc1.getPublicId().equals(desc2.getPublicId());
+        	} else {
+        		return desc1.equals(desc2);
+        	}
         }
     }
 
