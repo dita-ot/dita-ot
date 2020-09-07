@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+       domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+       id="topic_id" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title "/>
+  <body class="- topic/body ">
+    <table class="- topic/table " colsep="1" frame="all" id="table_id_1" rowsep="1">
+      <title class="- topic/title "/>
+      <tgroup class="- topic/tgroup " cols="2">
+        <colspec class="- topic/colspec " colname="c1" colnum="1" colwidth="1*"/>
+        <colspec class="- topic/colspec " colname="c2" colnum="2" colwidth="1*"/>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">A</entry>
+            <entry class="- topic/entry ">B</entry>
+          </row>
+        </tbody>
+      </tgroup>
+      <tgroup class="- topic/tgroup " cols="3">
+        <colspec class="- topic/colspec " colname="c1" colnum="1" colwidth="1*"/>
+        <colspec class="- topic/colspec " colname="c2" colnum="2" colwidth="1*"/>
+        <colspec class="- topic/colspec " colname="c3" colnum="3" colwidth="1*"/>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">A</entry>
+            <entry class="- topic/entry ">B</entry>
+            <entry class="- topic/entry ">C</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </body>
+</topic>

@@ -64,6 +64,11 @@ public class NormalizeTableFilterTest {
         test("parallel.dita");
     }
 
+    @Test
+    public void multiGroup() throws Exception {
+        test("multiGroup.dita");
+    }
+
     private void test(final String file) throws Exception {
         final DocumentBuilder db = dbf.newDocumentBuilder();
         final InputStream expStream = getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/exp/" + file);
