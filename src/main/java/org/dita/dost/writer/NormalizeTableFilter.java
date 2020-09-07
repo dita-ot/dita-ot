@@ -141,41 +141,49 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
         getContentHandler().endElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName);
     }
 
-    private void processEntry(AttributesImpl res) {
-        tableState.columnNumber = getStartNumber(res, tableState.columnNumberEnd);
-        final int colspan = getColSpan(res);
-        final int rowspan = getRowSpan(res);
-        Span prev;
-        if (tableState.previousRow != null) {
-            for (prev = tableState.previousRow.get(tableState.currentColumn); prev != null && prev.y > 1; prev = tableState.previousRow.get(tableState.currentColumn)) {
-                for (int i = 0; i < prev.x; i++) {
-                    tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
-                    grow(tableState.currentRow, tableState.currentColumn + 1);
-//                    tableState.currentRow.set(tableState.currentColumn, null);
+    private void processEntry(AttributesImpl res) throws SAXException {
+        try {
+            tableState.columnNumber = getStartNumber(res, tableState.columnNumberEnd);
+            final int colspan = getColSpan(res);
+            final int rowspan = getRowSpan(res);
+            Span prev;
+            if (tableState.previousRow != null) {
+                for (prev = tableState.previousRow.get(tableState.currentColumn); prev != null && prev.y > 1; prev = tableState.previousRow.get(tableState.currentColumn)) {
+                    for (int i = 0; i < prev.x; i++) {
+                        tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
+                        grow(tableState.currentRow, tableState.currentColumn + 1);
+//                        tableState.currentRow.set(tableState.currentColumn, null);
+                    }
                 }
+            } else {
+                prev = new Span(1, 1);
             }
-        } else {
-            prev = new Span(1, 1);
-        }
-        grow(tableState.currentRow, tableState.currentColumn + colspan);
-        final Span span = new Span(colspan, rowspan);
+            grow(tableState.currentRow, tableState.currentColumn + colspan);
+            final Span span = new Span(colspan, rowspan);
 
-        tableState.currentRow.set(tableState.currentColumn, span);
+            tableState.currentRow.set(tableState.currentColumn, span);
 
-        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + (tableState.currentColumn + 1));
-        if (res.getValue(ATTRIBUTE_NAME_NAMEST) != null) {
-            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + tableState.columnNumber);
-        }
-        if (res.getValue(ATTRIBUTE_NAME_NAMEEND) != null) {
-            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(res, tableState.columnNumber));
-            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_MORECOLS, DITA_OT_NS_PREFIX + ":" + ATTR_MORECOLS, "CDATA", Integer.toString(span.x - 1));
-        }
-        // Add extensions
-        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(tableState.currentColumn + 1));
-        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(tableState.rowNumber));
+            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + (tableState.currentColumn + 1));
+            if (res.getValue(ATTRIBUTE_NAME_NAMEST) != null) {
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + tableState.columnNumber);
+            }
+            if (res.getValue(ATTRIBUTE_NAME_NAMEEND) != null) {
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(res, tableState.columnNumber));
+                XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_MORECOLS, DITA_OT_NS_PREFIX + ":" + ATTR_MORECOLS, "CDATA", Integer.toString(span.x - 1));
+            }
+            // Add extensions
+            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(tableState.currentColumn + 1));
+            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(tableState.rowNumber));
 
-        tableState.currentColumn = tableState.currentColumn + colspan;
-        tableState.columnNumberEnd = getEndNumber(res, tableState.columnNumber);
+            tableState.currentColumn = tableState.currentColumn + colspan;
+            tableState.columnNumberEnd = getEndNumber(res, tableState.columnNumber);
+        } catch (IndexOutOfBoundsException e) {
+            if (processingMode == Configuration.Mode.STRICT) {
+                throw new SAXException(MessageUtils.getMessage("DOTJ082E").setLocation(res).toString());
+            } else {
+                logger.error(MessageUtils.getMessage("DOTJ082E").setLocation(res).toString());
+            }
+        }
     }
 
     @Override
