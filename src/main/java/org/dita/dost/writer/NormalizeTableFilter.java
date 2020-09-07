@@ -93,10 +93,9 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
         classStack.addFirst(cls);
 
-        if (TOPIC_TABLE.matches(cls)) {
+        if (TOPIC_TGROUP.matches(cls)) {
             tableState = new TableState();
             tableStack.addFirst(tableState);
-        } else if (TOPIC_TGROUP.matches(cls)) {
             tableState.cols = getColCount(atts);
             tableState.colSpec = new ArrayList<>();
         } else if (TOPIC_COLSPEC.matches(cls)) {
@@ -183,7 +182,7 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         getContentHandler().endElement(uri, localName, qName);
         final String cls = classStack.removeFirst();
-        if (TOPIC_TABLE.matches(cls)) {
+        if (TOPIC_TGROUP.matches(cls)) {
             tableStack.removeFirst();
             tableState = tableStack.peekFirst();
         } else if (TOPIC_ROW.matches(cls)) {
