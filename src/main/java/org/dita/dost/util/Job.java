@@ -122,7 +122,9 @@ public final class Job {
     public final File tempDir;
     public final URI tempDirURI;
     private final File jobFile;
-    private final Map<URI, FileInfo> files = new ConcurrentHashMap<>();
+    private final Map<URI, FileInfo> byTemp = new ConcurrentHashMap<>();
+    private final Map<URI, FileInfo> bySrc = new ConcurrentHashMap<>();
+    private final Map<URI, FileInfo> byResult = new ConcurrentHashMap<>();
     private long lastModified;
     private final Store store;
 
@@ -157,7 +159,9 @@ public final class Job {
         this.tempDirURI = tempDir.toURI();
         this.jobFile = new File(tempDir, JOB_FILE);
         this.prop = prop;
-        this.files.putAll(files.stream().collect(Collectors.toMap(fi -> fi.uri, Function.identity())));
+        this.byTemp.putAll(files.stream().collect(Collectors.toMap(fi -> fi.uri, Function.identity())));
+        this.bySrc.putAll(files.stream().collect(Collectors.toMap(fi -> fi.src, Function.identity())));
+        this.byResult.putAll(files.stream().collect(Collectors.toMap(fi -> fi.result, Function.identity())));
     }
 
     public Store getStore() {
@@ -184,7 +188,7 @@ public final class Job {
         if (jobFile.exists()) {
             try (final InputStream in = new FileInputStream(jobFile)) {
                 final XMLReader parser = XMLUtils.getXMLReader();
-                parser.setContentHandler(new JobHandler(prop, files));
+                parser.setContentHandler(new JobHandler(prop, byTemp, bySrc, byResult));
 
                 parser.parse(new InputSource(in));
             } catch (final SAXException e) {
@@ -201,16 +205,23 @@ public final class Job {
     public final static class JobHandler extends DefaultHandler {
 
         private final Map<String, Object> prop;
-        private final Map<URI, FileInfo> files;
+        private final Map<URI, FileInfo> byTemp;
+        private final Map<URI, FileInfo> bySrc;
+        private final Map<URI, FileInfo> byResult;
         private StringBuilder buf;
         private String name;
         private String key;
         private Set<String> set;
         private Map<String, String> map;
 
-        public JobHandler(final Map<String, Object> prop, final Map<URI, FileInfo> files) {
+        public JobHandler(final Map<String, Object> prop,
+                          final Map<URI, FileInfo> byTemp,
+                          final Map<URI, FileInfo> bySrc,
+                          final Map<URI, FileInfo> byResult) {
             this.prop = prop;
-            this.files = files;
+            this.byTemp = byTemp;
+            this.bySrc = bySrc;
+            this.byResult = byResult;
         }
 
         @Override
@@ -268,7 +279,13 @@ public final class Job {
                     } catch (final IllegalAccessException ex) {
                         throw new RuntimeException(ex);
                     }
-                    files.put(i.uri, i);
+                    byTemp.put(i.uri, i);
+                    if (bySrc != null && i.src != null) {
+                        bySrc.put(i.src, i);
+                    }
+                    if (byResult != null && i.result != null) {
+                        byResult.put(i.result, i);
+                    }
                     break;
             }
         }
@@ -320,7 +337,7 @@ public final class Job {
         try {
             outStream = new FileOutputStream(jobFile);
             out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream, "UTF-8");
-            serialize(out, prop, files.values());
+            serialize(out, prop, byTemp.values());
         } catch (final IOException e) {
             throw new IOException("Failed to write file: " + e.getMessage());
         } catch (final XMLStreamException e) {
@@ -349,7 +366,7 @@ public final class Job {
             final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
             final DOMResult result = new DOMResult(doc);
             XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(result);
-            serialize(out, prop, files.values());
+            serialize(out, prop, byTemp.values());
             return (Document) result.getNode();
         } catch (final XMLStreamException | ParserConfigurationException e) {
             throw new IOException("Failed to serialize job file: " + e.getMessage());
@@ -429,7 +446,13 @@ public final class Job {
      * Add file info. If file info with the same file already exists, it will be replaced.
      */
     public void add(final FileInfo fileInfo) {
-        files.put(fileInfo.uri, fileInfo);
+        byTemp.put(fileInfo.uri, fileInfo);
+        if (fileInfo.src != null) {
+            bySrc.put(fileInfo.src, fileInfo);
+        }
+        if (fileInfo.result != null) {
+            byResult.put(fileInfo.result, fileInfo);
+        }
     }
 
     /**
@@ -438,7 +461,13 @@ public final class Job {
      * @return removed file info, {@code null} if not found
      */
     public FileInfo remove(final FileInfo fileInfo) {
-        return files.remove(fileInfo.uri);
+        if (fileInfo.src != null) {
+            bySrc.remove(fileInfo.src);
+        }
+        if (fileInfo.result != null) {
+            byResult.remove(fileInfo.result);
+        }
+        return byTemp.remove(fileInfo.uri);
     }
 
     /**
@@ -484,7 +513,7 @@ public final class Job {
      */
     public URI getInputMap() {
 //       return toURI(getProperty(INPUT_DITAMAP_URI));
-        return files.values().stream()
+        return byTemp.values().stream()
                 .filter(fi -> fi.isInput)
                 .map(fi -> getInputDir().relativize(fi.src))
                 .findAny()
@@ -532,7 +561,7 @@ public final class Job {
      */
     public Map<File, FileInfo> getFileInfoMap() {
         final Map<File, FileInfo> ret = new HashMap<>();
-        for (final Map.Entry<URI, FileInfo> e: files.entrySet()) {
+        for (final Map.Entry<URI, FileInfo> e: byTemp.entrySet()) {
             ret.put(e.getValue().file, e.getValue());
         }
         return Collections.unmodifiableMap(ret);
@@ -544,7 +573,7 @@ public final class Job {
      * @return collection of file info objects, may be empty
      */
     public Collection<FileInfo> getFileInfo() {
-        return Collections.unmodifiableCollection(new ArrayList<>(files.values()));
+        return Collections.unmodifiableCollection(new ArrayList<>(byTemp.values()));
     }
 
     /**
@@ -554,7 +583,7 @@ public final class Job {
      * @return collection of file info objects that pass the filter, may be empty
      */
     public Collection<FileInfo> getFileInfo(final Predicate<FileInfo> filter) {
-        return files.values().stream()
+        return byTemp.values().stream()
                 .filter(filter)
                 .collect(Collectors.toList());
     }
@@ -568,17 +597,26 @@ public final class Job {
     public FileInfo getFileInfo(final URI file) {
         if (file == null) {
             return null;
-        } else if (files.containsKey(file)) {
-            return files.get(file);
-        } else if (file.isAbsolute() && file.toString().startsWith(tempDirURI.toString())) {
-            final URI relative = getRelativePath(jobFile.toURI(), file);
-            return files.get(relative);
-        } else {
-            return files.values().stream()
-                    .filter(fileInfo -> file.equals(fileInfo.src) || file.equals(fileInfo.result))
-                    .findFirst()
-                    .orElse(null);
         }
+        FileInfo res = byTemp.get(file);
+        if (res != null) {
+            return res;
+        }
+        if (file.isAbsolute() && file.toString().startsWith(tempDirURI.toString())) {
+            res = byTemp.get(getRelativePath(jobFile.toURI(), file));
+            if (res != null) {
+                return res;
+            }
+        }
+        res = bySrc.get(file);
+        if (res != null) {
+            return res;
+        }
+        res = byResult.get(file);
+        if (res != null) {
+            return res;
+        }
+        return res;
     }
 
     /**
@@ -1011,7 +1049,7 @@ public final class Job {
 //            return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
 //        }
 //        return null;
-        return files.values().stream()
+        return byTemp.values().stream()
                 .filter(fi -> fi.isInput)
                 .map(fi -> fi.src)
                 .findAny()
