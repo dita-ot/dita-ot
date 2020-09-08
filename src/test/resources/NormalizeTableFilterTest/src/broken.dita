@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reference xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+           class="- topic/topic       reference/reference "
+           domains="(topic reference)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+           id="reference-4922" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Broken</title>
+  <refbody class="- topic/body        reference/refbody ">
+    <section class="- topic/section ">
+      <table class="- topic/table ">
+        <tgroup class="- topic/tgroup " cols="3">
+          <colspec class="- topic/colspec " colname="_0" colnum="0"/>
+          <colspec class="- topic/colspec " colname="_1" colnum="1"/>
+          <colspec class="- topic/colspec " colname="_2" colnum="2"/>
+          <colspec class="- topic/colspec " colname="_3" colnum="3"/>
+          <colspec class="- topic/colspec " colname="_4" colnum="4"/>
+          <colspec class="- topic/colspec " colname="_5" colnum="5"/>
+          <thead class="- topic/thead ">
+            <row class="- topic/row ">
+              <entry class="- topic/entry " colname="ezdnc1"/>
+              <entry class="- topic/entry " colname="c0"/>
+              <entry align="center" class="- topic/entry " nameend="c4" namest="c1">Master</entry>
+            </row>
+            <row class="- topic/row ">
+              <entry class="- topic/entry " colname="ezdnc1"/>
+              <entry class="- topic/entry " colname="c0"/>
+              <entry class="- topic/entry " colname="c1">
+                <p class="- topic/p ">3.x</p>
+                3.x
+              </entry>
+              <entry class="- topic/entry " colname="c2"><p class="- topic/p ">2015.1 through 2017.2</p>4.x
+              </entry>
+              <entry class="- topic/entry " colname="c3"><p class="- topic/p ">2017.3 through 2018.1</p>5.x
+              </entry>
+            </row>
+          </thead>
+          <tbody class="- topic/tbody ">
+            <row class="- topic/row ">
+              <entry class="- topic/entry " colname="ezdnc1" morerows="2">Agent</entry>
+              <entry class="- topic/entry " colname="c0">3.x</entry>
+              <entry class="- topic/entry " colname="c1">✓</entry>
+              <entry class="- topic/entry " colname="c2">✓</entry>
+              <entry class="- topic/entry " colname="c3">✓</entry>
+            </row>
+            <row class="- topic/row ">
+              <entry class="- topic/entry " colname="c0">4.x</entry>
+              <entry class="- topic/entry " colname="c1"/>
+              <entry class="- topic/entry " colname="c2">✓</entry>
+              <entry class="- topic/entry " colname="c3">✓</entry>
+            </row>
+            <row class="- topic/row ">
+              <entry class="- topic/entry " colname="c0">5.x</entry>
+              <entry class="- topic/entry " colname="c1"/>
+              <entry class="- topic/entry " colname="c2"/>
+              <entry class="- topic/entry " colname="c3">✓</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </refbody>
+</reference>
