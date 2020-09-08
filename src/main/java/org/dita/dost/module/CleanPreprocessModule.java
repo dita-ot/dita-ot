@@ -182,12 +182,12 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         if (rewriteTransformer != null) {
             try {
                 final DOMSource source = new DOMSource(serialize(fis));
-                final Map<URI, FileInfo> files = new HashMap<>();
-                final Destination result = new SAXDestination(new Job.JobHandler(new HashMap<>(), files));
+                final Map<URI, FileInfo> byTemp = new HashMap<>();
+                final Destination result = new SAXDestination(new Job.JobHandler(new HashMap<>(), byTemp, null, null));
                 rewriteTransformer.setSource(source);
                 rewriteTransformer.setDestination(result);
                 rewriteTransformer.transform();
-                return files.values();
+                return byTemp.values();
             } catch (IOException | SaxonApiException e) {
                 throw new DITAOTException(e);
             }
