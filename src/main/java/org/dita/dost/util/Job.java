@@ -25,6 +25,8 @@ import javax.xml.transform.dom.DOMResult;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -315,31 +317,24 @@ public final class Job {
         if (!tempDir.exists() && !tempDir.mkdirs()) {
             throw new IOException("Failed to create " + tempDir + " directory");
         }
-        OutputStream outStream = null;
-        XMLStreamWriter out = null;
-        try {
-            outStream = new FileOutputStream(jobFile);
-            out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream, "UTF-8");
-            serialize(out, prop, files.values());
+        try (Writer outStream = Files.newBufferedWriter(jobFile.toPath())) {
+            XMLStreamWriter out = null;
+            try {
+                out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream);
+                serialize(out, prop, files.values());
+            } catch (final XMLStreamException e) {
+                throw new IOException("Failed to serialize job file: " + e.getMessage());
+            } finally {
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (final XMLStreamException e) {
+                        throw new IOException("Failed to close file: " + e.getMessage());
+                    }
+                }
+            }
         } catch (final IOException e) {
             throw new IOException("Failed to write file: " + e.getMessage());
-        } catch (final XMLStreamException e) {
-            throw new IOException("Failed to serialize job file: " + e.getMessage());
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (final XMLStreamException e) {
-                    throw new IOException("Failed to close file: " + e.getMessage());
-                }
-            }
-            if (outStream != null) {
-                try {
-                    outStream.close();
-                } catch (final IOException e) {
-                    throw new IOException("Failed to close file: " + e.getMessage());
-                }
-            }
         }
         lastModified = jobFile.lastModified();
     }
