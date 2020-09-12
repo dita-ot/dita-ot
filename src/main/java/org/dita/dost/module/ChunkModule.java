@@ -40,7 +40,7 @@ import static org.dita.dost.util.URLUtils.stripFragment;
  */
 final public class ChunkModule extends AbstractPipelineModuleImpl {
 
-    private static final DitaClass ECLIPSEMAP_PLUGIN = new DitaClass("- map/map eclipsemap/plugin ");
+    private static final DitaClass ECLIPSEMAP_PLUGIN = DitaClass.getInstance("- map/map eclipsemap/plugin ");
     private static final String ROOT_CHUNK_OVERRIDE = "root-chunk-override";
 
     /**

@@ -103,7 +103,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         stack.addFirst(classValue);
         if (classValue != null) {
             if (rootClass == null) {
-                rootClass = new DitaClass(classValue);
+                rootClass = DitaClass.getInstance(classValue);
             }
             if (TOPIC_TOPIC.matches(classValue)) {
                 topicId = atts.getValue(ATTRIBUTE_NAME_ID);

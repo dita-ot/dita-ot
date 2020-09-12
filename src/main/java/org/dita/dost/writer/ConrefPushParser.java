@@ -101,7 +101,7 @@ public final class ConrefPushParser extends AbstractDomFilter {
                 final Node node = nodeList.item(i);
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     final Element elem = (Element) node;
-                    final DitaClass cls = new DitaClass(elem.getAttribute(ATTRIBUTE_NAME_CLASS));
+                    final DitaClass cls = DitaClass.getInstance(elem);
                     if (cls != null) {
                         return targetClassAttribute.matches(cls);
                     }

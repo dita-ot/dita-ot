@@ -124,8 +124,6 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
                              final Attributes atts) throws SAXException {
-        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
-
         final AttributesImpl res = new AttributesImpl();
         processAttributes(qName, atts, res);
 

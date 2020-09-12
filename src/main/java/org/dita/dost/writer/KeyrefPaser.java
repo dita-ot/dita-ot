@@ -725,7 +725,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * Change map type to topic type.
      */
     private String changeclassValue(final String classValue) {
-        final DitaClass cls = new DitaClass(classValue);
+        final DitaClass cls = DitaClass.getInstance(classValue);
         if (cls.equals(MAP_LINKTEXT)) {
             return TOPIC_LINKTEXT.toString();
         } else if (cls.equals(MAP_SEARCHTITLE)) {

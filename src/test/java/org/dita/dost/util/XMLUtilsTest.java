@@ -42,6 +42,7 @@ import java.util.LinkedList;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.*;
 
 public class XMLUtilsTest {
@@ -240,25 +241,25 @@ public class XMLUtilsTest {
          *    </unknown></ditaInForeign></foreign></body></topic>
          */
         Deque<DitaClass> classes = new LinkedList<>();
-        classes.addFirst(new DitaClass("- topic/topic "));
+        classes.addFirst(TOPIC_TOPIC);
         assertFalse(XMLUtils.nonDitaContext(classes));
-        classes.addFirst(new DitaClass("- topic/body "));
+        classes.addFirst(TOPIC_BODY);
         assertFalse(XMLUtils.nonDitaContext(classes));
-        classes.addFirst(new DitaClass("- topic/foreign "));
+        classes.addFirst(TOPIC_FOREIGN);
         assertFalse(XMLUtils.nonDitaContext(classes));
-        classes.addFirst(new DitaClass("nondita"));
+        classes.addFirst(DitaClass.getInstance("nondita"));
         assertTrue(XMLUtils.nonDitaContext(classes));
-        classes.addFirst(new DitaClass(""));
+        classes.addFirst(DitaClass.getInstance(""));
         assertTrue(XMLUtils.nonDitaContext(classes));
         classes.pop();
         classes.pop();
-        classes.addFirst(new DitaClass("+ topic/xref foreign-d/ditaInForeign "));
+        classes.addFirst(DitaClass.getInstance("+ topic/xref foreign-d/ditaInForeign "));
         assertTrue(XMLUtils.nonDitaContext(classes));
-        classes.addFirst(new DitaClass("+ topic/ph "));
+        classes.addFirst(TOPIC_PH);
         assertFalse(XMLUtils.nonDitaContext(classes));
         classes.pop();
         classes.pop();
-        classes.addFirst(new DitaClass("- topic/unknown "));
+        classes.addFirst(TOPIC_UNKNOWN);
         assertTrue(XMLUtils.nonDitaContext(classes));
         classes.addFirst(null);
         assertTrue(XMLUtils.nonDitaContext(classes));

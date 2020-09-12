@@ -400,7 +400,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
         processRoleStack.push(processingRole);
 
-        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : null;
+        final DitaClass cls = DitaClass.getInstance(atts);
 
         final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
@@ -523,7 +523,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             isRootElement = false;
             final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
             if (classValue != null) {
-                rootClass = new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS));
+                rootClass = DitaClass.getInstance(atts.getValue(ATTRIBUTE_NAME_CLASS));
             }
         }
     }
