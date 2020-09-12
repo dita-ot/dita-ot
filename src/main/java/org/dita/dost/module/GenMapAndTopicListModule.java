@@ -33,6 +33,9 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -99,11 +102,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private final Set<URI> relFlagImagesSet;
 
     /** List of files waiting for parsing. Values are absolute URI references. */
-    private final Queue<Reference> waitList;
+    private final NavigableMap<URI, Reference> waitList;
 
     /** List of parsed files */
-    private final List<URI> doneList;
-    private final List<URI> failureList;
+    private final Set<URI> doneList;
+    private final Set<URI> failureList;
 
     /** Set of outer dita files */
     private final Set<URI> outDitaFilesSet;
@@ -168,9 +171,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         htmlSet = SetMultimapBuilder.hashKeys().hashSetValues().build();
         hrefTargetSet = new HashSet<>(128);
         coderefTargetSet = new HashSet<>(16);
-        waitList = new LinkedList<>();
-        doneList = new LinkedList<>();
-        failureList = new LinkedList<>();
+        waitList = new ConcurrentSkipListMap<>();
+        doneList = ConcurrentHashMap.newKeySet();
+        failureList = ConcurrentHashMap.newKeySet();
         conrefTargetSet = new HashSet<>(128);
         nonConrefCopytoTargetSet = new HashSet<>(128);
         outDitaFilesSet = new HashSet<>(128);
@@ -344,8 +347,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
 
     private void processWaitList() throws DITAOTException {
-        while (!waitList.isEmpty()) {
-            processFile(waitList.remove());
+        for (Map.Entry<URI, Reference> entry = waitList.pollFirstEntry(); entry != null; entry = waitList.pollFirstEntry()) {
+            processFile(entry.getValue());
         }
     }
 
@@ -659,11 +662,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private void addToWaitList(final Reference ref) {
         final URI file = ref.filename;
         assert file.isAbsolute() && file.getFragment() == null;
-        if (doneList.contains(file) || waitList.contains(ref) || file.equals(currentFile)) {
+        if (doneList.contains(file) || waitList.containsKey(ref.filename) || file.equals(currentFile)) {
             return;
         }
 
-        waitList.add(ref);
+        waitList.put(ref.filename, ref);
     }
 
     /**
