@@ -54,7 +54,7 @@ public final class DitaClass {
      * @param cls DITA specialization hierarchy string
      */
     @VisibleForTesting
-    public DitaClass(final String cls) {
+    DitaClass(final String cls) {
         final String[] tokens = WHITESPACE.split(cls);
         final String last = tokens[tokens.length - 1];
         matcher = ' ' + last + ' ';
@@ -76,7 +76,7 @@ public final class DitaClass {
         if (cls == null) {
             return null;
         }
-        return cache.computeIfAbsent(cls, DitaClass::new);
+        return cache.computeIfAbsent(WHITESPACE.matcher(cls).replaceAll(" "), DitaClass::new);
     }
 
     /**
