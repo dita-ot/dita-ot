@@ -20,6 +20,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Element;
 
@@ -41,7 +42,7 @@ public class KeyDef {
     public URI href;
     public final String scope;
     public final URI source;
-    public final Element element;
+    public final XdmNode element;
     public final String format;
 
     /**
@@ -52,7 +53,7 @@ public class KeyDef {
      * @param scope link scope, may be {@code null}
      * @param source key definition source, may be {@code null}
      */
-    public KeyDef(final String keys, final URI href, final String scope, final String format, final URI source, final Element element) {
+    public KeyDef(final String keys, final URI href, final String scope, final String format, final URI source, final XdmNode element) {
         //assert href.isAbsolute();
         this.keys = keys;
         this.href = href == null || href.toString().isEmpty() ? null : href;
