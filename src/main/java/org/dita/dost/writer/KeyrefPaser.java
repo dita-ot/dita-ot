@@ -325,11 +325,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                         writeLinktext(navtitleElement.get(0));
                                     } else {
                                         final String navtitle = elem.attribute(ATTRIBUTE_NAME_NAVTITLE);
-                                        if (!navtitle.trim().isEmpty()) {
+                                        if (navtitle != null && !navtitle.trim().isEmpty()) {
                                             writeLinktext(navtitle);
                                         } else {
                                             final String hrefAtt = elem.attribute(ATTRIBUTE_NAME_HREF);
-                                            if (!hrefAtt.trim().isEmpty()) {
+                                            if (hrefAtt != null && !hrefAtt.trim().isEmpty()) {
                                                 writeLinktext(hrefAtt);
                                             }
                                         }
@@ -347,7 +347,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                         writeAlt(navtitleElement.get(0));
                                     } else {
                                         final String navtitle = elem.attribute(ATTRIBUTE_NAME_NAVTITLE);
-                                        if (!navtitle.trim().isEmpty()) {
+                                        if (navtitle != null && !navtitle.trim().isEmpty()) {
                                             writeAlt(navtitle);
                                         }
                                     }
@@ -362,12 +362,12 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                         domToSax(navtitleElement.get(0), false);
                                     } else {
                                         final String navtitle = elem.attribute(ATTRIBUTE_NAME_NAVTITLE);
-                                        if (!navtitle.trim().isEmpty()) {
+                                        if (navtitle != null && !navtitle.trim().isEmpty()) {
                                             final char[] ch = navtitle.toCharArray();
                                             getContentHandler().characters(ch, 0, ch.length);
                                         } else {
                                             final String hrefAtt = elem.attribute(ATTRIBUTE_NAME_HREF);
-                                            if (!hrefAtt.trim().isEmpty()) {
+                                            if (hrefAtt != null && !hrefAtt.trim().isEmpty()) {
                                                 final char[] ch = hrefAtt.toCharArray();
                                                 getContentHandler().characters(ch, 0, ch.length);
                                             }

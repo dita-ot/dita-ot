@@ -196,10 +196,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final PipelineConfiguration pipe = doc.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
             final Receiver receiver = destination.getReceiver(pipe, new SerializationProperties());
             receiver.open();
+            receiver.startDocument(0);
 
             // Collect topics from map and rewrite topicrefs for duplicates
             walkMap(map, doc.select(Steps.child().first()).asNode(), Collections.singletonList(rootScope), res, receiver);
 
+            receiver.endDocument();
             receiver.close();
 //            job.getStore().writeDocument(destination., file);
         } catch (final IOException | SaxonApiException | XPathException e) {

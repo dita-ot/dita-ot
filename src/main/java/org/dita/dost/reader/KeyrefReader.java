@@ -152,8 +152,8 @@ public final class KeyrefReader implements AbstractReader {
         final Map<String, KeyDef> keyDefs = new HashMap<>();
         readScope(root, keyDefs);
         readChildScopes(root, childScopes);
-        final String keyscope = root.attribute(ATTRIBUTE_NAME_KEYSCOPE).trim();
-        if (keyscope.isEmpty()) {
+        final String keyscope = root.attribute(ATTRIBUTE_NAME_KEYSCOPE);
+        if (keyscope == null || keyscope.trim().isEmpty()) {
             return Collections.singletonList(new KeyScope("#root", null, keyDefs, childScopes));
         } else {
             final List<KeyScope> res = new ArrayList<>();
@@ -171,7 +171,7 @@ public final class KeyrefReader implements AbstractReader {
             res.append(elem.getNodeName()).append('[');
             int position = 0;
             for (XdmNode n = elem; n != null; position++) {
-                n = n.select(Steps.precedingSibling().first()).asNode();
+                n = n.select(Steps.precedingSibling().first()).findFirst().orElse(null);
             }
             res.append(Integer.toString(position)).append(']');
             final XdmNode p = elem.getParent();
@@ -241,19 +241,18 @@ public final class KeyrefReader implements AbstractReader {
 
     private void readKeyDefinition(final XdmNode elem, final Map<String, KeyDef> keyDefs) {
         final String keyName = elem.attribute(ATTRIBUTE_NAME_KEYS);
-        if (!keyName.isEmpty()) {
+        if (keyName != null) {
             for (final String key : keyName.trim().split("\\s+")) {
                 if (!keyDefs.containsKey(key)) {
 //                    final XdmNode d = builder.newDocument();
 //                    final XdmNode copy = (XdmNode) d.importNode(elem, true);
 //                    d.appendChild(copy);
                     final XdmNode copy = elem;
-                    final String h = copy.attribute(ATTRIBUTE_NAME_COPY_TO).isEmpty() ? copy.attribute(ATTRIBUTE_NAME_HREF) : copy.attribute(ATTRIBUTE_NAME_COPY_TO);
-                    final URI href = h.isEmpty() ? null : toURI(h);
-                    final String s = copy.attribute(ATTRIBUTE_NAME_SCOPE);
-                    final String scope = s.isEmpty() ? null : s;
-                    final String f = copy.attribute(ATTRIBUTE_NAME_FORMAT);
-                    final String format = f.isEmpty() ? null : f;
+                    final URI href = toURI(copy.attribute(ATTRIBUTE_NAME_COPY_TO) == null
+                            ? copy.attribute(ATTRIBUTE_NAME_HREF)
+                            : copy.attribute(ATTRIBUTE_NAME_COPY_TO));
+                    final String scope = copy.attribute(ATTRIBUTE_NAME_SCOPE);
+                    final String format = copy.attribute(ATTRIBUTE_NAME_FORMAT);
                     final KeyDef keyDef = new KeyDef(key, href, scope, format, currentFile, copy);
                     keyDefs.put(key, keyDef);
                 }
@@ -330,7 +329,7 @@ public final class KeyrefReader implements AbstractReader {
     private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) {
         final XdmNode elem = keyDef.element;
         final String keyref = elem.attribute(ATTRIBUTE_NAME_KEYREF);
-        if (!keyref.isEmpty() && scope.keyDefinition.containsKey(keyref)) {
+        if (keyref != null && !keyref.trim().isEmpty() && scope.keyDefinition.containsKey(keyref)) {
             KeyDef keyRefDef = scope.keyDefinition.get(keyref);
             if (circularityTracker.contains(keyRefDef)) {
                 handleCircularDefinitionException(circularityTracker);
@@ -375,6 +374,31 @@ public final class KeyrefReader implements AbstractReader {
             receiver.open();
             receiver.startDocument(0);
 
+            final NodeInfo rni = refElem.getUnderlyingNode();
+            receiver.startElement(
+                    new FingerprintedQName(rni.getPrefix(), rni.getURI(), rni.getLocalPart()),
+                    rni.getSchemaType(),
+                    rni.saveLocation(),
+                    0);
+//            refElem.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
+//                try {
+//                    receiver.append(attr.getUnderlyingNode());
+//                } catch (XPathException e) {
+//                    throw new UncheckedXPathException(e);
+//                }
+//            });
+            for (final String attr : ATTS) {
+                if (refElem.attribute(attr) == null) {
+                    defElem.select(attribute(attr)).findAny().ifPresent(a -> {
+                        try {
+                            receiver.append(a.getUnderlyingNode());
+                        } catch (XPathException e) {
+                            throw new UncheckedXPathException(e);
+                        }
+                    });
+                }
+            }
+
             final XdmNode defMeta = getTopicmeta(defElem);
             if (defMeta != null) {
                 final XdmNode resMeta = getTopicmeta(refElem);
@@ -412,19 +436,9 @@ public final class KeyrefReader implements AbstractReader {
                         throw new UncheckedXPathException(e);
                     }
                 });
+                receiver.endElement();
             }
 
-            for (final String attr : ATTS) {
-                if (refElem.attribute(attr) == null) {
-                    defElem.select(attribute(attr)).findAny().ifPresent(a -> {
-                        try {
-                            receiver.append(a.getUnderlyingNode());
-                        } catch (XPathException e) {
-                            throw new UncheckedXPathException(e);
-                        }
-                    });
-                }
-            }
             receiver.endElement();
 
             receiver.endDocument();

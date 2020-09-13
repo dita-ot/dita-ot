@@ -205,11 +205,11 @@ public final class MessageBean {
     public MessageBean setLocation(final XdmNode elem) {
         final MessageBean ret = new MessageBean(this);
         final String xtrf = elem.attribute(ATTRIBUTE_NAME_XTRF);
-        if (!xtrf.isEmpty()) {
+        if (xtrf != null && !xtrf.isEmpty()) {
             ret.srcFile = toURI(xtrf);
         }
         final String xtrc = elem.attribute(ATTRIBUTE_NAME_XTRC);
-        if (!xtrc.isEmpty()) {
+        if (xtrc != null && !xtrc.isEmpty()) {
             final int sep = xtrc.indexOf(';');
             if (sep != -1) {
                 final int delim = xtrc.indexOf(COLON, sep + 1);
