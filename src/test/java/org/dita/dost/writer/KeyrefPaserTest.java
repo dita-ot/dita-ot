@@ -167,45 +167,7 @@ public class KeyrefPaserTest {
                 new InputSource(new File(tempDir, "d.ditamap").toURI().toString()));
     }
 
-    @Ignore
-    @Test
-    public void testDomToSax() throws TransformerConfigurationException, SAXException, IOException, ParserConfigurationException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        final DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        
-        assertXMLEqual(b.parse(new InputSource(new StringReader("<wrapper>bar qux quxx</wrapper>"))),
-                domToSax(b.parse(new InputSource(new StringReader("<foo>bar <baz>qux</baz> quxx</foo>"))), false));
-        assertXMLEqual(b.parse(new InputSource(new StringReader("<wrapper><foo>bar <baz>qux</baz> quxx</foo></wrapper>"))),
-                domToSax(b.parse(new InputSource(new StringReader("<foo>bar <baz>qux</baz> quxx</foo>"))), true));
-        
-        assertXMLEqual(b.parse(new InputSource(new StringReader("<wrapper><foo class='- topic/linktext '>bar <baz class='- topic/linktext '>qux</baz> quxx</foo></wrapper>"))),
-                domToSax(b.parse(new InputSource(new StringReader("<foo class='- map/linktext '>bar <baz class='- map/linktext '>qux</baz> quxx</foo>"))), true));
-        
-        assertXMLEqual(b.parse(new InputSource(new StringReader("<wrapper>bar <baz class='- topic/tm '>qux</baz> quxx</wrapper>"))),
-                domToSax(b.parse(new InputSource(new StringReader("<foo>bar <baz class='- topic/tm '>qux</baz> quxx</foo>"))), false));
-    }
-    
-    private Document domToSax(final Document doc, final boolean retain) throws TransformerConfigurationException, SAXException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        final DOMResult r = new DOMResult();
-        final SAXTransformerFactory f = ((SAXTransformerFactory) TransformerFactory.newInstance());
-        final TransformerHandler h = f.newTransformerHandler();
-        h.setResult(r);
-        
-        final KeyrefPaser parser = new KeyrefPaser();
-        parser.setContentHandler(h);
-        
-        final Method m = KeyrefPaser.class.getDeclaredMethod("domToSax", XdmNode.class, boolean.class);
-        m.setAccessible(true);
-        
-        h.startDocument();
-        h.startElement("", "wrapper", "wrapper", new AttributesImpl());
-        m.invoke(parser, doc.getDocumentElement(), retain);
-        h.endElement("", "wrapper", "wrapper");
-        h.endDocument();
-        
-        return (Document) r.getNode();
-    }
-
-    private KeyScope readKeyMap(final Path map) throws Exception {
+    private KeyScope readKeyMap(final Path map) {
         KeyrefReader reader = new KeyrefReader();
         final URI keyMapFile = tempDir.toPath().resolve(map).toUri();
         final XdmNode document = parse(keyMapFile);
