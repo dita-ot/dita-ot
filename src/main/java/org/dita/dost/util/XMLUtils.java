@@ -14,6 +14,7 @@ import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.lib.Logger;
 import net.sf.saxon.lib.StandardErrorListener;
 import net.sf.saxon.s9api.*;
+import net.sf.saxon.s9api.streams.Step;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -38,6 +39,7 @@ import java.util.stream.Stream;
 import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static net.sf.saxon.s9api.streams.Predicates.*;
+import static net.sf.saxon.s9api.streams.Steps.child;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.moveFile;
@@ -67,6 +69,13 @@ public final class XMLUtils {
     private final XsltCompiler xsltCompiler;
 
     public static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl();
+
+    /**
+     * Get root element from Document node.
+     */
+    public static Step<XdmNode> rootElement() {
+        return child().where(isElement()).first();
+    }
 
     public XMLUtils() {
         catalogResolver = CatalogUtils.getCatalogResolver();

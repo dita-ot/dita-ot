@@ -16,8 +16,6 @@ import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
-import net.sf.saxon.s9api.streams.Predicates;
-import net.sf.saxon.s9api.streams.Steps;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
@@ -40,13 +38,12 @@ import static java.util.Arrays.asList;
 import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
-import static net.sf.saxon.s9api.streams.Predicates.hasLocalName;
-import static net.sf.saxon.s9api.streams.Predicates.not;
-import static net.sf.saxon.s9api.streams.Steps.attribute;
-import static net.sf.saxon.s9api.streams.Steps.child;
+import static net.sf.saxon.s9api.streams.Predicates.*;
+import static net.sf.saxon.s9api.streams.Steps.*;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.rootElement;
 
 /**
  * KeyrefReader class which reads DITA map file to collect key definitions. Instances are reusable but not thread-safe.
@@ -138,7 +135,7 @@ public final class KeyrefReader implements AbstractReader {
      */
     private KeyScope readScopes(final XdmNode doc) {
         assert doc.getNodeKind() == XdmNodeKind.DOCUMENT;
-        final XdmNode root = doc.select(child().first()).asNode();
+        final XdmNode root = doc.select(rootElement()).asNode();
         final List<KeyScope> scopes = readScopesRoot(root);
         if (scopes.size() == 1 && scopes.get(0).name == null) {
             return scopes.get(0);
@@ -171,7 +168,7 @@ public final class KeyrefReader implements AbstractReader {
             res.append(elem.getNodeName()).append('[');
             int position = 0;
             for (XdmNode n = elem; n != null; position++) {
-                n = n.select(Steps.precedingSibling().first()).findFirst().orElse(null);
+                n = n.select(precedingSibling().first()).findFirst().orElse(null);
             }
             res.append(Integer.toString(position)).append(']');
             final XdmNode p = elem.getParent();
@@ -186,7 +183,7 @@ public final class KeyrefReader implements AbstractReader {
     }
 
     private void readChildScopes(final XdmNode elem, final List<KeyScope> childScopes) {
-        elem.select(child(Predicates.isElement())).forEach(child -> {
+        elem.select(child(isElement())).forEach(child -> {
             if (child.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null) {
                 final List<KeyScope> childScope = readScopesRoot(child);
                 childScopes.addAll(childScope);
@@ -202,7 +199,7 @@ public final class KeyrefReader implements AbstractReader {
     private void readScope(final XdmNode scope, final Map<String, KeyDef> keyDefs) {
         final List<XdmNode> maps = new ArrayList<>();
         maps.add(scope);
-        for (final XdmNode child : scope.children(KeyrefReader::isElement)) {
+        for (final XdmNode child : scope.children(isElement())) {
             collectMaps(child, maps);
         }
         for (final XdmNode map : maps) {
@@ -218,7 +215,7 @@ public final class KeyrefReader implements AbstractReader {
         if (MAP_MAP.matches(classValue) || SUBMAP.matches(classValue)) {
             maps.add(elem);
         }
-        for (final XdmNode child : elem.children(KeyrefReader::isElement)) {
+        for (final XdmNode child : elem.children(isElement())) {
             collectMaps(child, maps);
         }
     }
@@ -228,15 +225,11 @@ public final class KeyrefReader implements AbstractReader {
      */
     private void readMap(final XdmNode map, final Map<String, KeyDef> keyDefs) {
         readKeyDefinition(map, keyDefs);
-        for (final XdmNode elem : map.children(KeyrefReader::isElement)) {
+        for (final XdmNode elem : map.children(isElement())) {
             if (!(SUBMAP.matches(elem) || elem.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null)) {
                 readMap(elem, keyDefs);
             }
         }
-    }
-
-    private static boolean isElement(XdmNode n) {
-        return n.getNodeKind() == XdmNodeKind.ELEMENT;
     }
 
     private void readKeyDefinition(final XdmNode elem, final Map<String, KeyDef> keyDefs) {
@@ -443,7 +436,7 @@ public final class KeyrefReader implements AbstractReader {
 
             receiver.endDocument();
             receiver.close();
-            return dst.getXdmNode().select(child().first()).asNode();
+            return dst.getXdmNode().select(rootElement()).asNode();
         } catch (XPathException | UncheckedXPathException e) {
             logger.error("Failed to merge topicmeta: " + e.getMessage(), e);
             return refElem;

@@ -26,11 +26,11 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static net.sf.saxon.s9api.streams.Steps.attribute;
-import static net.sf.saxon.s9api.streams.Steps.child;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.XMLUtils.rootElement;
 
 /**
  * The chunking module class.
@@ -125,7 +125,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
         }
         return doc
-                .select(child().first().then(attribute(ATTRIBUTE_NAME_CLASS)))
+                .select(rootElement().then(attribute(ATTRIBUTE_NAME_CLASS)))
                 .anyMatch(xdmItems -> ECLIPSEMAP_PLUGIN.matches(xdmItems.getStringValue()));
     }
 

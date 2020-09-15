@@ -8,25 +8,10 @@
  */
 package org.dita.dost.writer;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
-import static javax.xml.XMLConstants.NULL_NS_URI;
-import static net.sf.saxon.s9api.streams.Predicates.*;
-import static net.sf.saxon.s9api.streams.Steps.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-
-import java.io.File;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
-import net.sf.saxon.s9api.streams.Predicates;
-import net.sf.saxon.s9api.streams.Steps;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
@@ -35,6 +20,19 @@ import org.dita.dost.util.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
+
+import java.io.File;
+import java.net.URI;
+import java.util.*;
+
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static net.sf.saxon.s9api.streams.Predicates.hasLocalName;
+import static net.sf.saxon.s9api.streams.Predicates.isText;
+import static net.sf.saxon.s9api.streams.Steps.*;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 /**
  * Filter for processing key reference elements in DITA files.
@@ -695,7 +693,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         final String qNameString = getQName(qName);
         if (retainElements) {
             final AttributesImpl atts = new AttributesImpl();
-            elem.select(Steps.attribute()).forEach(a -> {
+            elem.select(attribute()).forEach(a -> {
                 if (Objects.equals(a.getNodeName(), new QName(ATTRIBUTE_NAME_CLASS)) && swapMapClass) {
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, changeclassValue(a.getStringValue()));
                 } else {

@@ -13,7 +13,6 @@ import net.sf.saxon.event.Receiver;
 import net.sf.saxon.om.FingerprintedQName;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.*;
-import net.sf.saxon.s9api.streams.Steps;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
@@ -43,13 +42,13 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toMap;
 import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
 import static net.sf.saxon.s9api.streams.Predicates.*;
-import static net.sf.saxon.s9api.streams.Steps.ancestorOrSelf;
-import static net.sf.saxon.s9api.streams.Steps.attribute;
+import static net.sf.saxon.s9api.streams.Steps.*;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.KEYDEF_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.rootElement;
 
 /**
  * Keyref ModuleElem.
@@ -199,7 +198,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             receiver.startDocument(0);
 
             // Collect topics from map and rewrite topicrefs for duplicates
-            walkMap(map, doc.select(Steps.child().first()).asNode(), Collections.singletonList(rootScope), res, receiver);
+            walkMap(map, doc.select(rootElement()).asNode(), Collections.singletonList(rootScope), res, receiver);
 
             receiver.endDocument();
             receiver.close();
