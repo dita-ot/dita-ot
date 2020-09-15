@@ -12,6 +12,7 @@ import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.om.FingerprintedQName;
+import net.sf.saxon.om.InScopeNamespaces;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static javax.xml.XMLConstants.NULL_NS_URI;
+import static net.sf.saxon.event.ReceiverOptions.REJECT_DUPLICATES;
 import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
 import static net.sf.saxon.s9api.streams.Predicates.*;
 import static net.sf.saxon.s9api.streams.Steps.*;
@@ -368,11 +370,13 @@ public final class KeyrefReader implements AbstractReader {
             receiver.startDocument(0);
 
             final NodeInfo rni = refElem.getUnderlyingNode();
+
             receiver.startElement(
                     new FingerprintedQName(rni.getPrefix(), rni.getURI(), rni.getLocalPart()),
                     rni.getSchemaType(),
                     rni.saveLocation(),
                     0);
+            receiver.namespace(new InScopeNamespaces(refElem.getUnderlyingNode()), REJECT_DUPLICATES);
 //            refElem.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
 //                try {
 //                    receiver.append(attr.getUnderlyingNode());
@@ -409,11 +413,13 @@ public final class KeyrefReader implements AbstractReader {
                             0);
                 } else {
                     final NodeInfo ni = resMeta.getUnderlyingNode();
+
                     receiver.startElement(
                             new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
                             ni.getSchemaType(),
                             ni.saveLocation(),
                             0);
+                    receiver.namespace(new InScopeNamespaces(resMeta.getUnderlyingNode()), REJECT_DUPLICATES);
                     resMeta.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
                         try {
                             receiver.append(attr.getUnderlyingNode());

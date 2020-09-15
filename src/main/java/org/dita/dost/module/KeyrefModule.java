@@ -8,9 +8,11 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.event.NamespaceReducer;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.om.FingerprintedQName;
+import net.sf.saxon.om.InScopeNamespaces;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.serialize.SerializationProperties;
@@ -40,6 +42,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
+import static net.sf.saxon.event.ReceiverOptions.REJECT_DUPLICATES;
 import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
 import static net.sf.saxon.s9api.streams.Predicates.*;
 import static net.sf.saxon.s9api.streams.Steps.*;
@@ -193,7 +196,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final URI file = job.tempDirURI.resolve(map.uri);
             final Destination destination = job.getStore().getDestination(file);
             final PipelineConfiguration pipe = doc.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
-            final Receiver receiver = destination.getReceiver(pipe, new SerializationProperties());
+            final Receiver receiver = new NamespaceReducer(destination.getReceiver(pipe, new SerializationProperties()));
             receiver.open();
             receiver.startDocument(0);
 
@@ -334,13 +337,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                  final Receiver receiver) throws XPathException {
         assert elem.getNodeKind() == XdmNodeKind.ELEMENT;
 
-        final NodeInfo ni = elem.getUnderlyingNode();
-        receiver.startElement(
-                new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
-                ni.getSchemaType(),
-                ni.saveLocation(),
-                0);
-
         final List<KeyScope> ss = elem.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null
                 ? Stream.of(elem.attribute(ATTRIBUTE_NAME_KEYSCOPE).trim().split("\\s+"))
                 .flatMap(keyscope -> scope.stream().map(s -> s.getChildScope(keyscope)))
@@ -348,6 +344,15 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 : scope;
         final QName rewriteAttrName = getReferenceAttribute(elem);
         final boolean isResourceOnly = isResourceOnly(elem);
+
+        final NodeInfo ni = elem.getUnderlyingNode();
+
+        receiver.startElement(
+                new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
+                ni.getSchemaType(),
+                ni.saveLocation(),
+                0);
+        receiver.namespace(new InScopeNamespaces(elem.getUnderlyingNode()), REJECT_DUPLICATES);
 
         elem.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
             try {
