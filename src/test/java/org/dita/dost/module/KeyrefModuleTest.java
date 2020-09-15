@@ -180,7 +180,7 @@ public class KeyrefModuleTest {
                 xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
                 new SerializationProperties());
         receiver.open();
-        module.walkMap(inputMapFileInfo, src.children().iterator().next(), singletonList(keyScope), res, receiver);
+        module.walkMap(inputMapFileInfo, src, singletonList(keyScope), res, receiver);
         receiver.close();
 
         final Document exp = b.parse(new File(baseDir, "exp" + File.separator + "test.ditamap"));
@@ -234,7 +234,7 @@ public class KeyrefModuleTest {
                 xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
                 new SerializationProperties());
         receiver.open();
-        module.walkMap(inputMapFileInfo, act.children().iterator().next(), singletonList(keyScope), res, receiver);
+        module.walkMap(inputMapFileInfo, act, singletonList(keyScope), res, receiver);
         receiver.close();
 
 	    ResolveTask task = res.get(0);
