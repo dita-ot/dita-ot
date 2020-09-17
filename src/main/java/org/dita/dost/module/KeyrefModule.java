@@ -141,7 +141,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                     })
                     .reduce(startScope, KeyScope::merge);
             final List<ResolveTask> jobs = collectProcessingTopics(in, resourceFis, rootScope, doc);
-//            writeMap(in, doc);
 
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             if (transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
@@ -328,29 +327,28 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
      * Recursively walk map collecting topics and rewriting topicrefs for duplicates.
      */
     void walkMap(final FileInfo map,
-                 final XdmNode elem,
+                 final XdmNode node,
                  final List<KeyScope> scope,
                  final List<ResolveTask> res,
                  final Receiver receiver) throws XPathException {
-//        assert elem.getNodeKind() == XdmNodeKind.ELEMENT;
-        switch (elem.getNodeKind()) {
+        switch (node.getNodeKind()) {
             case ELEMENT:
-                final NodeInfo ni = elem.getUnderlyingNode();
+                final NodeInfo ni = node.getUnderlyingNode();
                 receiver.startElement(
                         new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
                         ni.getSchemaType(),
                         ni.saveLocation(),
                         0);
-                receiver.namespace(new InScopeNamespaces(elem.getUnderlyingNode()), REJECT_DUPLICATES);
-                if (MAP_MAP.matches(elem) || MAP_TOPICREF.matches(elem)) {
-                    final List<KeyScope> ss = elem.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null
-                            ? Stream.of(elem.attribute(ATTRIBUTE_NAME_KEYSCOPE).trim().split("\\s+"))
+                receiver.namespace(new InScopeNamespaces(node.getUnderlyingNode()), REJECT_DUPLICATES);
+                if (MAP_MAP.matches(node) || MAP_TOPICREF.matches(node)) {
+                    final List<KeyScope> ss = node.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null
+                            ? Stream.of(node.attribute(ATTRIBUTE_NAME_KEYSCOPE).trim().split("\\s+"))
                             .flatMap(keyscope -> scope.stream().map(s -> s.getChildScope(keyscope)))
                             .collect(Collectors.toList())
                             : scope;
-                    final QName rewriteAttrName = getReferenceAttribute(elem);
-                    final boolean isResourceOnly = isResourceOnly(elem);
-                    elem.select(attribute()).forEach(attr -> {
+                    final QName rewriteAttrName = getReferenceAttribute(node);
+                    final boolean isResourceOnly = isResourceOnly(node);
+                    node.select(attribute()).forEach(attr -> {
                         try {
                             if (Objects.equals(attr.getNodeName(), rewriteAttrName)) {
                                 String hrefNode = attr.getStringValue();
@@ -395,18 +393,18 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                             throw new UncheckedXPathException(e);
                         }
                     });
-                    for (final XdmNode c : elem.children()) {
+                    for (final XdmNode c : node.children()) {
                         walkMap(map, c, ss, res, receiver);
                     }
                 } else {
-                    elem.select(attribute()).forEach(attr -> {
+                    node.select(attribute()).forEach(attr -> {
                         try {
                             receiver.append(attr.getUnderlyingNode());
                         } catch (XPathException e) {
                             throw new UncheckedXPathException(e);
                         }
                     });
-                    for (final XdmNode c : elem.children()) {
+                    for (final XdmNode c : node.children()) {
                         walkMap(map, c, scope, res, receiver);
                     }
                 }
@@ -414,13 +412,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 break;
             case DOCUMENT:
                 receiver.startDocument(0);
-                for (final XdmNode c : elem.children()) {
+                for (final XdmNode c : node.children()) {
                     walkMap(map, c, scope, res, receiver);
                 }
                 receiver.endDocument();
                 break;
             default:
-                receiver.append(elem.getUnderlyingNode());
+                receiver.append(node.getUnderlyingNode());
                 break;
         }
     }

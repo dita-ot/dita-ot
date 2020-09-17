@@ -239,9 +239,6 @@ public final class KeyrefReader implements AbstractReader {
         if (keyName != null) {
             for (final String key : keyName.trim().split("\\s+")) {
                 if (!keyDefs.containsKey(key)) {
-//                    final XdmNode d = builder.newDocument();
-//                    final XdmNode copy = (XdmNode) d.importNode(elem, true);
-//                    d.appendChild(copy);
                     final XdmNode copy = elem;
                     final URI href = toURI(copy.attribute(ATTRIBUTE_NAME_COPY_TO) == null
                             ? copy.attribute(ATTRIBUTE_NAME_HREF)
