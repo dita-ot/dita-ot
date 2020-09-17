@@ -15,6 +15,7 @@ import net.sf.saxon.om.FingerprintedQName;
 import net.sf.saxon.om.InScopeNamespaces;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.*;
+import net.sf.saxon.s9api.streams.Predicates;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
@@ -33,6 +34,7 @@ import org.dita.dost.writer.KeyrefPaser;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.XMLFilter;
 
+import javax.management.openmbean.SimpleType;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -47,6 +49,7 @@ import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
 import static net.sf.saxon.s9api.streams.Predicates.*;
 import static net.sf.saxon.s9api.streams.Steps.ancestorOrSelf;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
+import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
@@ -347,7 +350,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                             : scope;
                     final QName rewriteAttrName = getReferenceAttribute(elem);
                     final boolean isResourceOnly = isResourceOnly(elem);
-                    elem.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
+                    elem.select(attribute()).forEach(attr -> {
                         try {
                             if (Objects.equals(attr.getNodeName(), rewriteAttrName)) {
                                 String hrefNode = attr.getStringValue();
@@ -380,7 +383,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                                 final NodeInfo ani = attr.getUnderlyingNode();
                                 receiver.attribute(
                                         new FingerprintedQName(ani.getPrefix(), ani.getURI(), ani.getLocalPart()),
-                                        BuiltInAtomicType.STRING,
+                                        STRING,
                                         hrefNode,
                                         UNKNOWN_LOCATION,
                                         0
@@ -442,9 +445,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     private boolean isResourceOnly(final XdmNode elem) {
-        return elem.select(ancestorOrSelf().where(attributeEq(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY)))
-                .findAny()
-                .isPresent();
+        return elem.select(ancestorOrSelf(Predicates.hasAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE)).first()
+                    .where(attributeEq(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY)))
+                .exists();
     }
 
     /**

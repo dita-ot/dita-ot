@@ -332,7 +332,7 @@ public final class KeyrefReader implements AbstractReader {
             }
             XdmNode defElem = keyRefDef.element;
             final String defElemKeyref = defElem.attribute(ATTRIBUTE_NAME_KEYREF);
-            if (!defElemKeyref.isEmpty()) {
+            if (defElemKeyref != null && !defElemKeyref.isEmpty()) {
                 // TODO use immutable List
                 final List<KeyDef> ct = new ArrayList<>(circularityTracker.size() + 1);
                 ct.addAll(circularityTracker);
