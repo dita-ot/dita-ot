@@ -479,6 +479,11 @@
   </message>
 
   <message id="DOTJ082E" type="ERROR">
+    <reason>Processing table cell failed.</reason>
+    <response/>
+  </message>
+
+  <message id="DOTJ083E" type="ERROR">
     <reason>Resource %1 is referenced with incorrect path capitalization</reason>
     <response/>
   </message>

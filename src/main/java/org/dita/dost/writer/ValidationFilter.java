@@ -206,9 +206,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
                         if (!Objects.equals(absPath, canPath) && Objects.equals(absPath.toLowerCase(), canPath.toLowerCase())) {
                             switch (processingMode) {
                                 case STRICT:
-                                    throw new RuntimeException(MessageUtils.getMessage("DOTJ082E", abs.toString()).setLocation(locator).toString());
+                                    throw new RuntimeException(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString());
                                 case SKIP:
-                                    logger.error(MessageUtils.getMessage("DOTJ082E", abs.toString()).setLocation(locator).toString() + ", using authored value.");
+                                    logger.error(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() + ", using authored value.");
                                     break;
                                 case LAX:
                                     final URI corrected = URLUtils.setFragment(currentFile.relativize(canFile.toURI()), uri.getFragment());
@@ -216,7 +216,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                                         res = new AttributesImpl(atts);
                                     }
                                     res.setValue(res.getIndex(attrName), currentFile.toString());
-                                    logger.error(MessageUtils.getMessage("DOTJ082E", abs.toString()).setLocation(locator).toString() + ", using " + corrected + ".");
+                                    logger.error(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() + ", using " + corrected + ".");
                                     break;
                             }
                         }

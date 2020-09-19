@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reference xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+           xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+           class="- topic/topic       reference/reference " ditaarch:DITAArchVersion="1.2"
+           domains="(topic reference)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+           id="reference-4922">
+  <title class="- topic/title ">Broken</title>
+  <refbody class="- topic/body        reference/refbody ">
+    <section class="- topic/section ">
+      <table class="- topic/table ">
+        <tgroup class="- topic/tgroup " cols="3">
+          <colspec class="- topic/colspec " colname="col1" colnum="0"/>
+          <colspec class="- topic/colspec " colname="col2" colnum="1"/>
+          <colspec class="- topic/colspec " colname="col3" colnum="2"/>
+          <colspec class="- topic/colspec " colname="col4" colnum="3"/>
+          <colspec class="- topic/colspec " colname="col5" colnum="4"/>
+          <colspec class="- topic/colspec " colname="col6" colnum="5"/>
+          <thead class="- topic/thead ">
+            <row class="- topic/row ">
+              <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1"/>
+              <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="1"/>
+              <entry align="center" class="- topic/entry " colname="col3" dita-ot:morecols="0" dita-ot:x="3"
+                     dita-ot:y="1" nameend="col3" namest="col3">Master
+              </entry>
+            </row>
+            <row class="- topic/row ">
+              <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="2"/>
+              <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="2"/>
+              <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="2">
+                <p class="- topic/p ">3.x</p>
+                3.x
+              </entry>
+              <entry class="- topic/entry " colname="c2"><p class="- topic/p ">2015.1 through 2017.2</p>4.x
+              </entry>
+              <entry class="- topic/entry " colname="c3"><p class="- topic/p ">2017.3 through 2018.1</p>5.x
+              </entry>
+            </row>
+          </thead>
+          <tbody class="- topic/tbody ">
+            <row class="- topic/row ">
+              <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="3" morerows="2">Agent</entry>
+              <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="3">3.x</entry>
+              <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="3">✓</entry>
+              <entry class="- topic/entry " colname="c2">✓</entry>
+              <entry class="- topic/entry " colname="c3">✓</entry>
+            </row>
+            <row class="- topic/row ">
+              <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="4">4.x</entry>
+              <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="4"/>
+              <entry class="- topic/entry " colname="c2">✓</entry>
+              <entry class="- topic/entry " colname="c3">✓</entry>
+            </row>
+            <row class="- topic/row ">
+              <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="5">5.x</entry>
+              <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="5"/>
+              <entry class="- topic/entry " colname="c2"/>
+              <entry class="- topic/entry " colname="c3">✓</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </refbody>
+</reference>
