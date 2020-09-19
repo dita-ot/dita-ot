@@ -8,23 +8,16 @@
 package org.dita.dost.util;
 
 import com.google.common.annotations.VisibleForTesting;
-import net.sf.saxon.event.ProxyReceiver;
 import net.sf.saxon.expr.instruct.TerminationException;
-import net.sf.saxon.jaxp.TransformerImpl;
 import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.lib.Logger;
 import net.sf.saxon.lib.StandardErrorListener;
-import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.*;
-import net.sf.saxon.serialize.Emitter;
-import net.sf.saxon.serialize.MessageWarner;
-import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.trans.XsltController;
+import net.sf.saxon.s9api.streams.Step;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.LoggingErrorListener;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
 import org.w3c.dom.*;
 import org.xml.sax.*;
@@ -46,6 +39,7 @@ import java.util.stream.Stream;
 import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static net.sf.saxon.s9api.streams.Predicates.*;
+import static net.sf.saxon.s9api.streams.Steps.child;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.moveFile;
@@ -75,6 +69,13 @@ public final class XMLUtils {
     private final XsltCompiler xsltCompiler;
 
     public static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl();
+
+    /**
+     * Get root element from Document node.
+     */
+    public static Step<XdmNode> rootElement() {
+        return child().where(isElement()).first();
+    }
 
     public XMLUtils() {
         catalogResolver = CatalogUtils.getCatalogResolver();
@@ -501,7 +502,22 @@ public final class XMLUtils {
      * @param value attribute value
      */
     public static void addOrSetAttribute(final AttributesImpl atts, final QName name, final String value) {
-        addOrSetAttribute(atts, name.getNamespaceURI(), name.getLocalPart(), name.getPrefix()  + ":" + name.getLocalPart(), "CDATA", value);
+        addOrSetAttribute(atts, name.getNamespaceURI(), name.getLocalPart(),
+                name.getPrefix().isEmpty() ? name.getLocalPart() : (name.getPrefix()  + ":" + name.getLocalPart()),
+                "CDATA", value);
+    }
+
+    /**
+     * Add or set attribute. Convenience method for {@link #addOrSetAttribute(AttributesImpl, String, String, String, String, String)}.
+     *
+     * @param atts attributes
+     * @param attr attribute to add
+     */
+    public static void addOrSetAttribute(final AttributesImpl atts, final XdmNode attr) {
+        final net.sf.saxon.s9api.QName name = attr.getNodeName();
+        addOrSetAttribute(atts, name.getNamespaceURI(), name.getLocalName(),
+                name.getPrefix().isEmpty() ? name.getLocalName() : (name.getPrefix()  + ":" + name.getLocalName()),
+                "CDATA", attr.getStringValue());
     }
 
     /**

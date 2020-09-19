@@ -8,6 +8,18 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.event.NamespaceReducer;
+import net.sf.saxon.event.PipelineConfiguration;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.om.FingerprintedQName;
+import net.sf.saxon.om.InScopeNamespaces;
+import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.s9api.*;
+import net.sf.saxon.s9api.streams.Predicates;
+import net.sf.saxon.serialize.SerializationProperties;
+import net.sf.saxon.trans.UncheckedXPathException;
+import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.type.BuiltInAtomicType;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -20,35 +32,39 @@ import org.dita.dost.util.KeyScope;
 import org.dita.dost.writer.ConkeyrefFilter;
 import org.dita.dost.writer.KeyrefPaser;
 import org.dita.dost.writer.TopicFragmentFilter;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.XMLFilter;
 
+import javax.management.openmbean.SimpleType;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
+import static net.sf.saxon.event.ReceiverOptions.REJECT_DUPLICATES;
+import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
+import static net.sf.saxon.s9api.streams.Predicates.*;
+import static net.sf.saxon.s9api.streams.Steps.ancestorOrSelf;
+import static net.sf.saxon.s9api.streams.Steps.attribute;
+import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.KEYDEF_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
  * Keyref ModuleElem.
- *
  */
 final class KeyrefModule extends AbstractPipelineModuleImpl {
 
     private TempFileNameScheme tempFileNameScheme;
-    /** Delayed conref utils. */
+    /**
+     * Delayed conref utils.
+     */
     private DelayConrefUtils delayConrefUtils;
     private String transtype;
     final Set<URI> normalProcessingRole = new HashSet<>();
@@ -97,9 +113,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             // Read start map
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
+            reader.setXmlUtils(xmlUtils);
             final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final URI mapFile = in.uri;
-            final Document doc = readMap(in);
+            final XdmNode doc = readMap(in);
             logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
             reader.read(job.tempDirURI.resolve(mapFile), doc);
 
@@ -110,7 +127,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final KeyScope rootScope = resourceFis.stream()
                     .map(fi -> {
                         try {
-                            final Document d = readMap(fi);
+                            final XdmNode d = readMap(fi);
                             logger.info("Reading " + job.tempDirURI.resolve(fi.uri).toString());
                             final KeyrefReader r = new KeyrefReader();
                             r.setLogger(logger);
@@ -124,7 +141,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                     })
                     .reduce(startScope, KeyScope::merge);
             final List<ResolveTask> jobs = collectProcessingTopics(in, resourceFis, rootScope, doc);
-            writeMap(in, doc);
 
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             if (transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
@@ -134,19 +150,19 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             } else {
                 delayConrefUtils = null;
             }
-            for (final ResolveTask r: jobs) {
+            for (final ResolveTask r : jobs) {
                 if (r.out != null) {
                     processFile(r);
                 }
             }
-            for (final ResolveTask r: jobs) {
+            for (final ResolveTask r : jobs) {
                 if (r.out == null) {
                     processFile(r);
                 }
             }
 
             // Store job configuration updates
-            for (final URI file: normalProcessingRole) {
+            for (final URI file : normalProcessingRole) {
                 final FileInfo f = job.getFileInfo(file);
                 if (f != null) {
                     f.isResourceOnly = false;
@@ -167,17 +183,31 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
     }
 
-    /** Collect topics for key reference processing and modify map to reflect new file names. */
+    /**
+     * Collect topics for key reference processing and modify map to reflect new file names.
+     */
     private List<ResolveTask> collectProcessingTopics(final FileInfo map,
                                                       final Collection<FileInfo> fis,
                                                       final KeyScope rootScope,
-                                                      final Document doc) {
+                                                      final XdmNode doc) throws DITAOTException {
+        assert doc.getNodeKind() == XdmNodeKind.DOCUMENT;
         final List<ResolveTask> res = new ArrayList<>();
         res.add(new ResolveTask(rootScope, map, null));
-        // Collect topics from map and rewrite topicrefs for duplicates
-        walkMap(map, doc.getDocumentElement(), rootScope, res);
+
+        try {
+            final URI file = job.tempDirURI.resolve(map.uri);
+            final Destination destination = job.getStore().getDestination(file);
+            final PipelineConfiguration pipe = doc.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
+            final Receiver receiver = new NamespaceReducer(destination.getReceiver(pipe, new SerializationProperties()));
+            receiver.open();
+            walkMap(map, doc, Collections.singletonList(rootScope), res, receiver);
+            receiver.close();
+        } catch (final IOException | SaxonApiException | XPathException e) {
+            throw new DITAOTException("Failed to write map: " + e.getMessage(), e);
+        }
+
         // Collect topics not in map and map itself
-        for (final FileInfo f: fis) {
+        for (final FileInfo f : fis) {
             if (!usage.containsKey(f.uri)) {
                 res.add(processTopic(f, rootScope, f.isResourceOnly));
             }
@@ -193,7 +223,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    /** Remove duplicate sources within the same scope */
+    /**
+     * Remove duplicate sources within the same scope
+     */
     private List<ResolveTask> removeDuplicateResolveTargets(List<ResolveTask> renames) {
         return renames.stream()
                 .collect(Collectors.groupingBy(
@@ -208,7 +240,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 .collect(Collectors.toList());
     }
 
-    /** Adjust key targets per rewrites */
+    /**
+     * Adjust key targets per rewrites
+     */
     List<ResolveTask> adjustResourceRenames(final List<ResolveTask> renames) {
         final Map<KeyScope, List<ResolveTask>> scopes = renames.stream().collect(Collectors.groupingBy(rt -> rt.scope));
 
@@ -249,11 +283,14 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
 
-    /** Tuple class for key reference processing info. */
+    /**
+     * Tuple class for key reference processing info.
+     */
     static class ResolveTask {
         final KeyScope scope;
         final FileInfo in;
         final FileInfo out;
+
         ResolveTask(final KeyScope scope, final FileInfo in, final FileInfo out) {
             assert scope != null;
             this.scope = scope;
@@ -263,53 +300,126 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    /** Recursively walk map and process topics that have keyrefs. */
-    void walkMap(final FileInfo map, final Element elem, final KeyScope scope, final List<ResolveTask> res) {
-        List<KeyScope> ss = Collections.singletonList(scope);
-        if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
-            ss = new ArrayList<>();
-            for (final String keyscope: elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE).trim().split("\\s+")) {
-                final KeyScope s = scope.getChildScope(keyscope);
-                assert s != null;
-                ss.add(s);
+    private QName getReferenceAttribute(final XdmNode elem) {
+        assert elem.getNodeKind() == XdmNodeKind.ELEMENT;
+
+        QName rewriteAttrName = new QName(ATTRIBUTE_NAME_COPY_TO);
+        if (elem.getAttributeValue(rewriteAttrName) != null) {
+            return rewriteAttrName;
+        }
+
+        rewriteAttrName = new QName(ATTRIBUTE_NAME_HREF);
+        if (elem.getAttributeValue(rewriteAttrName) != null) {
+            return rewriteAttrName;
+        }
+
+        if (SUBMAP.matches(elem)) {
+            rewriteAttrName = new QName(DITA_OT_NS_PREFIX, DITA_OT_NS, "orig-href");
+            if (elem.getAttributeValue(rewriteAttrName) != null) {
+                return rewriteAttrName;
             }
         }
-        Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
-        if (hrefNode == null) {
-            hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
-        }
-        if (hrefNode == null && SUBMAP.matches(elem)) {
-            hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_DITA_OT_ORIG_HREF);
-        }
-        final boolean isResourceOnly = isResourceOnly(elem);
-        for (final KeyScope s: ss) {
-            if (hrefNode != null) {
-                final URI href = stripFragment(map.uri.resolve(hrefNode.getValue()));
-                final FileInfo fi = job.getFileInfo(href);
-                if (fi != null && fi.hasKeyref) {
-                    final int count = usage.getOrDefault(fi.uri, 0);
-                    final Optional<ResolveTask> existing = res.stream().filter(rt -> rt.scope.equals(s) && rt.in.uri.equals(fi.uri)).findAny();
-                    if (count != 0 && existing.isPresent()) {
-                        final ResolveTask resolveTask = existing.get();
-                        if (resolveTask.out != null) {
-                            final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
-                            hrefNode.setValue(value.toString());
+
+        return null;
+    }
+
+    /**
+     * Recursively walk map collecting topics and rewriting topicrefs for duplicates.
+     */
+    void walkMap(final FileInfo map,
+                 final XdmNode node,
+                 final List<KeyScope> scope,
+                 final List<ResolveTask> res,
+                 final Receiver receiver) throws XPathException {
+        switch (node.getNodeKind()) {
+            case ELEMENT:
+                final NodeInfo ni = node.getUnderlyingNode();
+                receiver.startElement(
+                        new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
+                        ni.getSchemaType(),
+                        ni.saveLocation(),
+                        0);
+                receiver.namespace(new InScopeNamespaces(node.getUnderlyingNode()), REJECT_DUPLICATES);
+                if (MAP_MAP.matches(node) || MAP_TOPICREF.matches(node)) {
+                    final List<KeyScope> ss = node.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null
+                            ? Stream.of(node.attribute(ATTRIBUTE_NAME_KEYSCOPE).trim().split("\\s+"))
+                            .flatMap(keyscope -> scope.stream().map(s -> s.getChildScope(keyscope)))
+                            .collect(Collectors.toList())
+                            : scope;
+                    final QName rewriteAttrName = getReferenceAttribute(node);
+                    final boolean isResourceOnly = isResourceOnly(node);
+                    node.select(attribute()).forEach(attr -> {
+                        try {
+                            if (Objects.equals(attr.getNodeName(), rewriteAttrName)) {
+                                String hrefNode = attr.getStringValue();
+                                for (final KeyScope s : ss) {
+                                    final URI href = stripFragment(map.uri.resolve(attr.getStringValue()));
+                                    final FileInfo fi = job.getFileInfo(href);
+                                    if (fi != null && fi.hasKeyref) {
+                                        final int count = usage.getOrDefault(fi.uri, 0);
+                                        final Optional<ResolveTask> existing = res.stream()
+                                                .filter(rt -> rt.scope.equals(s) && rt.in.uri.equals(fi.uri))
+                                                .findAny();
+                                        if (count != 0 && existing.isPresent()) {
+                                            final ResolveTask resolveTask = existing.get();
+                                            if (resolveTask.out != null) {
+                                                final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                                                hrefNode = value.toString();
+                                            }
+                                        } else {
+                                            final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly);
+                                            res.add(resolveTask);
+                                            final Integer used = usage.get(fi.uri);
+                                            if (used > 1) {
+                                                final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                                                fixKeyDefRefs(s, fi.uri, value);
+                                                hrefNode = value.toString();
+                                            }
+                                        }
+                                    }
+                                }
+                                final NodeInfo ani = attr.getUnderlyingNode();
+                                receiver.attribute(
+                                        new FingerprintedQName(ani.getPrefix(), ani.getURI(), ani.getLocalPart()),
+                                        STRING,
+                                        hrefNode,
+                                        UNKNOWN_LOCATION,
+                                        0
+                                );
+                            } else {
+                                receiver.append(attr.getUnderlyingNode());
+                            }
+                        } catch (XPathException e) {
+                            throw new UncheckedXPathException(e);
                         }
-                    } else {
-                        final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly);
-                        res.add(resolveTask);
-                        final Integer used = usage.get(fi.uri);
-                        if (used > 1) {
-                            final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
-                            fixKeyDefRefs(s, fi.uri, value);
-                            hrefNode.setValue(value.toString());
+                    });
+                    for (final XdmNode c : node.children()) {
+                        walkMap(map, c, ss, res, receiver);
+                    }
+                } else {
+                    node.select(attribute()).forEach(attr -> {
+                        try {
+                            receiver.append(attr.getUnderlyingNode());
+                        } catch (XPathException e) {
+                            throw new UncheckedXPathException(e);
                         }
+                    });
+                    for (final XdmNode c : node.children()) {
+                        walkMap(map, c, scope, res, receiver);
                     }
                 }
-            }
-            for (final Element child : getChildElements(elem, MAP_TOPICREF)) {
-                walkMap(map, child, s, res);
-            }
+                receiver.endElement();
+                break;
+            case DOCUMENT:
+                receiver.startDocument(0);
+                for (final XdmNode c : node.children()) {
+                    walkMap(map, c, scope, res, receiver);
+                }
+                receiver.endDocument();
+                break;
+            default:
+                receiver.append(node.getUnderlyingNode());
+                break;
         }
     }
 
@@ -332,18 +442,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    private boolean isResourceOnly(final Element elem) {
-        Node curr = elem;
-        while (curr != null) {
-            if (curr.getNodeType() == Node.ELEMENT_NODE) {
-                final Attr processingRole = ((Element) curr).getAttributeNode(ATTRIBUTE_NAME_PROCESSING_ROLE);
-                if (processingRole != null) {
-                    return processingRole.getValue().equals(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
-                }
-            }
-            curr = curr.getParentNode();
-        }
-        return false;
+    private boolean isResourceOnly(final XdmNode elem) {
+        return elem.select(ancestorOrSelf(Predicates.hasAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE)).first()
+                    .where(attributeEq(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY)))
+                .exists();
     }
 
     /**
@@ -401,12 +503,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
                         " to " + job.tempDirURI.resolve(r.out.uri));
                 job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
-                                         new File(job.tempDir, r.out.file.getPath()).toURI(),
-                                         filters);
+                        new File(job.tempDir, r.out.file.getPath()).toURI(),
+                        filters);
             } else {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
                 job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
-                                         filters);
+                        filters);
             }
             // validate resource-only list
             normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
@@ -428,19 +530,19 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    private Document readMap(final FileInfo input) throws DITAOTException {
+    private XdmNode readMap(final FileInfo input) throws DITAOTException {
         try {
             final URI in = job.tempDirURI.resolve(input.uri);
-            return job.getStore().getDocument(in);
+            return job.getStore().getImmutableNode(in);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to parse map: " + e.getMessage(), e);
         }
     }
 
-    private void writeMap(final FileInfo in, final Document doc) throws DITAOTException {
+    private void writeMap(final FileInfo in, final XdmNode doc) throws DITAOTException {
         try {
             final URI file = job.tempDirURI.resolve(in.uri);
-            doc.setDocumentURI(file.toString());
+//            doc.setDocumentURI(file.toString());
             job.getStore().writeDocument(doc, file);
         } catch (final IOException e) {
             throw new DITAOTException("Failed to write map: " + e.getMessage(), e);

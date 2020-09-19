@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import com.google.common.annotations.VisibleForTesting;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmNodeKind;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -181,6 +183,19 @@ public final class DitaClass {
     public boolean matches(final Node node) {
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             return matches(((Element) node).getAttribute(ATTRIBUTE_NAME_CLASS));
+        }
+        return false;
+    }
+
+    /**
+     * Test if given DITA class string matches this DITA class.
+     *
+     * @param node S9api DITA element
+     * @return {@code true} if given node is an Element and its class matches this class, otherwise {@code false}
+     */
+    public boolean matches(final XdmNode node) {
+        if (node.getNodeKind() == XdmNodeKind.ELEMENT) {
+            return matches(node.attribute(ATTRIBUTE_NAME_CLASS));
         }
         return false;
     }

@@ -8,28 +8,14 @@
 
 package org.dita.dost.module;
 
-import static java.net.URI.create;
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.TestUtils.createTempDir;
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import com.google.common.collect.ImmutableMap;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.s9api.DOMDestination;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmDestination;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.serialize.SerializationProperties;
+import net.sf.saxon.trans.XPathException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.module.KeyrefModule.ResolveTask;
@@ -46,7 +32,25 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import com.google.common.collect.ImmutableMap;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
+
+import static java.net.URI.create;
+import static java.util.Collections.*;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.TestUtils.createTempDir;
+import static org.junit.Assert.assertEquals;
 
 public class KeyrefModuleTest {
 
@@ -58,9 +62,12 @@ public class KeyrefModuleTest {
     private KeyrefModule module;
     private Job job;
     private FileInfo inputMapFileInfo;
+    private final XMLUtils xmlUtils = new XMLUtils();
 
     public KeyrefModuleTest() throws ParserConfigurationException {
-        b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setNamespaceAware(true);
+        b = documentBuilderFactory.newDocumentBuilder();
     }
 
     @Before
@@ -141,7 +148,7 @@ public class KeyrefModuleTest {
     }
 
     @Test
-    public void testWalkMap() throws ParserConfigurationException, IOException, SAXException {
+    public void testWalkMap() throws IOException, SAXException, XPathException {
         inputMapFileInfo = new Builder()
                 .uri(create("test.ditamap"))
                 .src(new File(baseDir, "src" + File.separator + "test.ditamap").toURI())
@@ -151,7 +158,7 @@ public class KeyrefModuleTest {
                 .build();
         job.add(inputMapFileInfo);
 
-        final Document act = b.parse(inputMapFileInfo.src.toString());
+        final XdmNode src = parse(inputMapFileInfo.src);
         final KeyScope childScope = new KeyScope("A", "A",
                             ImmutableMap.of(
                                     "VAR", new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null),
@@ -168,17 +175,31 @@ public class KeyrefModuleTest {
                             singletonList(childScope)
         );
         final List<ResolveTask> res = new ArrayList<>();
-        module.walkMap(inputMapFileInfo, act.getDocumentElement(), keyScope, res);
+        final XdmDestination destination = new XdmDestination();
+        final Receiver receiver = destination.getReceiver(
+                xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
+                new SerializationProperties());
+        receiver.open();
+        module.walkMap(inputMapFileInfo, src, singletonList(keyScope), res, receiver);
+        receiver.close();
+
         final Document exp = b.parse(new File(baseDir, "exp" + File.separator + "test.ditamap"));
 
         final ResolveTask subMapTask = res.stream().filter(r -> r.in.src.equals(subMap)).findFirst().get();
         assertEquals(subMapTask.scope, childScope);
 
+        final Document act = toDocument(destination.getXdmNode());
+        try {
+            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(exp), new StreamResult(System.out));
+            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(act), new StreamResult(System.out));
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
         assertXMLEqual(exp, act);
     }
 
 	@Test
-	public void testWalkMapAndRewriteKeydefHref() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
+	public void testWalkMapAndRewriteKeydefHref() throws ParserConfigurationException, IOException, SAXException, URISyntaxException, XPathException {
         inputMapFileInfo = new Builder()
                 .uri(create("test2.ditamap"))
                 .src(new File(baseDir, "src" + File.separator + "test2.ditamap").toURI())
@@ -188,7 +209,7 @@ public class KeyrefModuleTest {
                 .build();
         job.add(inputMapFileInfo);
 
-	    final Document act = b.parse(inputMapFileInfo.src.toString());
+	    final XdmNode act = parse(inputMapFileInfo.src);
 	    final KeyScope childScope1 = new KeyScope("A", "A",
 	    		ImmutableMap.of(
 	    				"VAR", new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
@@ -208,7 +229,13 @@ public class KeyrefModuleTest {
 	                        Arrays.asList(new KeyScope[] {childScope1, childScope2})
 	    );
 	    final List<ResolveTask> res = new ArrayList<>();
-	    module.walkMap(inputMapFileInfo, act.getDocumentElement(), keyScope, res);
+        final XdmDestination destination = new XdmDestination();
+        final Receiver receiver = destination.getReceiver(
+                xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
+                new SerializationProperties());
+        receiver.open();
+        module.walkMap(inputMapFileInfo, act, singletonList(keyScope), res, receiver);
+        receiver.close();
 
 	    ResolveTask task = res.get(0);
 	    assertEquals("topic.dita", task.in.file.toString());
@@ -230,4 +257,30 @@ public class KeyrefModuleTest {
 	    keyDef = task.scope.keyDefinition.get("B.VAR");
 	    assertEquals(new URI("topic-2.dita"), keyDef.href);
 	}
+
+    private XdmNode parse(final URI in) {
+        try {
+            final StreamSource source = new StreamSource(in.toString());
+            source.setSystemId(in.toString());
+            return xmlUtils.getProcessor().newDocumentBuilder().build(source);
+        } catch (SaxonApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Document toDocument(final XdmNode node) {
+        try {
+            final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setNamespaceAware(true);
+            final Document document = documentBuilderFactory.newDocumentBuilder().newDocument();
+            final DOMDestination destination = new DOMDestination(document);
+            final Receiver receiver = destination.getReceiver(xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(), new SerializationProperties());
+            receiver.open();
+            receiver.append(node.getUnderlyingNode());
+            receiver.close();
+            return document;
+        } catch (XPathException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

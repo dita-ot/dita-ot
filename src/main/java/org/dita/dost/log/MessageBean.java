@@ -8,6 +8,7 @@
  */
 package org.dita.dost.log;
 
+import net.sf.saxon.s9api.XdmNode;
 import org.apache.tools.ant.Location;
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Element;
@@ -184,6 +185,31 @@ public final class MessageBean {
         }
         final String xtrc = elem.getAttribute(ATTRIBUTE_NAME_XTRC);
         if (!xtrc.isEmpty()) {
+            final int sep = xtrc.indexOf(';');
+            if (sep != -1) {
+                final int delim = xtrc.indexOf(COLON, sep + 1);
+                if (delim != -1) {
+                    ret.srcLine = Integer.parseInt(xtrc.substring(sep + 1, delim));
+                    ret.srcColumn = Integer.parseInt(xtrc.substring(delim + 1));
+                }
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Set error location in source document.
+     * @param elem source element.
+     * @return message bean with location set
+     */
+    public MessageBean setLocation(final XdmNode elem) {
+        final MessageBean ret = new MessageBean(this);
+        final String xtrf = elem.attribute(ATTRIBUTE_NAME_XTRF);
+        if (xtrf != null && !xtrf.isEmpty()) {
+            ret.srcFile = toURI(xtrf);
+        }
+        final String xtrc = elem.attribute(ATTRIBUTE_NAME_XTRC);
+        if (xtrc != null && !xtrc.isEmpty()) {
             final int sep = xtrc.indexOf(';');
             if (sep != -1) {
                 final int delim = xtrc.indexOf(COLON, sep + 1);

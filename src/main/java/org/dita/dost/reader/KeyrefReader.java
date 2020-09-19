@@ -8,27 +8,44 @@
  */
 package org.dita.dost.reader;
 
-import static java.util.Arrays.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.*;
-
-import java.io.File;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.xml.parsers.DocumentBuilder;
-
 import com.google.common.annotations.VisibleForTesting;
+import net.sf.saxon.event.PipelineConfiguration;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.om.FingerprintedQName;
+import net.sf.saxon.om.InScopeNamespaces;
+import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.s9api.XdmDestination;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmNodeKind;
+import net.sf.saxon.serialize.SerializationProperties;
+import net.sf.saxon.trans.UncheckedXPathException;
+import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.type.Untyped;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.*;
-import org.dita.dost.log.DITAOTLogger;
+
+import javax.xml.parsers.DocumentBuilder;
+import java.io.File;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static net.sf.saxon.event.ReceiverOptions.REJECT_DUPLICATES;
+import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
+import static net.sf.saxon.s9api.streams.Predicates.*;
+import static net.sf.saxon.s9api.streams.Steps.*;
+import static net.sf.saxon.type.BuiltInAtomicType.STRING;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.rootElement;
 
 /**
  * KeyrefReader class which reads DITA map file to collect key definitions. Instances are reusable but not thread-safe.
@@ -61,6 +78,7 @@ public final class KeyrefReader implements AbstractReader {
     private final DocumentBuilder builder;
     private KeyScope rootScope;
     private URI currentFile;
+    private XMLUtils xmlUtils;
 
     /**
      * Constructor.
@@ -84,6 +102,10 @@ public final class KeyrefReader implements AbstractReader {
         this.job = job;
     }
 
+    public void setXmlUtils(XMLUtils xmlUtils) {
+        this.xmlUtils = xmlUtils;
+    }
+
     /**
      * Get key definitions for root scope. Each key definition Element has a distinct Document.
      *
@@ -97,9 +119,9 @@ public final class KeyrefReader implements AbstractReader {
      * Read key definitions
      *
      * @param filename absolute URI to DITA map with key definitions
-     * @param doc key definition DITA map
+     * @param doc      key definition DITA map
      */
-    public void read(final URI filename, final Document doc) {
+    public void read(final URI filename, final XdmNode doc) {
         currentFile = filename;
         rootScope = null;
         // TODO: use KeyScope implementation that retains order
@@ -110,45 +132,50 @@ public final class KeyrefReader implements AbstractReader {
         rootScope = resolveIntermediate(keyScopeWithParents);
     }
 
-    /** Read keys scopes in map. */
-    private KeyScope readScopes(final Document doc) {
-        final List<KeyScope> scopes = readScopes(doc.getDocumentElement());
+    /**
+     * Read keys scopes in map.
+     */
+    private KeyScope readScopes(final XdmNode doc) {
+        assert doc.getNodeKind() == XdmNodeKind.DOCUMENT;
+        final XdmNode root = doc.select(rootElement()).asNode();
+        final List<KeyScope> scopes = readScopesRoot(root);
         if (scopes.size() == 1 && scopes.get(0).name == null) {
             return scopes.get(0);
         } else {
             return new KeyScope("#root", null, Collections.emptyMap(), scopes);
         }
     }
-    private List<KeyScope> readScopes(final Element root) {
+
+    private List<KeyScope> readScopesRoot(final XdmNode root) {
         final List<KeyScope> childScopes = new ArrayList<>();
         final Map<String, KeyDef> keyDefs = new HashMap<>();
         readScope(root, keyDefs);
         readChildScopes(root, childScopes);
-        final String keyscope = root.getAttribute(ATTRIBUTE_NAME_KEYSCOPE).trim();
-        if (keyscope.isEmpty()) {
+        final String keyscope = root.attribute(ATTRIBUTE_NAME_KEYSCOPE);
+        if (keyscope == null || keyscope.trim().isEmpty()) {
             return Collections.singletonList(new KeyScope("#root", null, keyDefs, childScopes));
         } else {
             final List<KeyScope> res = new ArrayList<>();
-            for (final String scope: keyscope.split("\\s+")) {
+            for (final String scope : keyscope.split("\\s+")) {
                 res.add(new KeyScope(generateId(root, scope), scope, keyDefs, childScopes));
             }
             return res;
         }
     }
 
-    private String generateId(final Element root, final String scope) {
+    private String generateId(final XdmNode root, final String scope) {
         final StringBuilder res = new StringBuilder();
-        Element elem = root;
+        XdmNode elem = root;
         while (elem != null) {
             res.append(elem.getNodeName()).append('[');
             int position = 0;
-            for (Node n = elem; n != null; position++) {
-                n = n.getPreviousSibling();
+            for (XdmNode n = elem; n != null; position++) {
+                n = n.select(precedingSibling().first()).findFirst().orElse(null);
             }
             res.append(Integer.toString(position)).append(']');
-            final Node p = elem.getParentNode();
-            if (p != null && p.getNodeType() == Node.ELEMENT_NODE) {
-                elem = (Element) p;
+            final XdmNode p = elem.getParent();
+            if (p != null && p.getNodeKind() == XdmNodeKind.ELEMENT) {
+                elem = p;
             } else {
                 elem = null;
             }
@@ -157,66 +184,67 @@ public final class KeyrefReader implements AbstractReader {
         return res.toString();
     }
 
-    private void readChildScopes(final Element elem, final List<KeyScope> childScopes) {
-        for (final Element child: getChildElements(elem)) {
-            if (child.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
-                final List<KeyScope> childScope = readScopes(child);
+    private void readChildScopes(final XdmNode elem, final List<KeyScope> childScopes) {
+        elem.select(child(isElement())).forEach(child -> {
+            if (child.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null) {
+                final List<KeyScope> childScope = readScopesRoot(child);
                 childScopes.addAll(childScope);
             } else {
                 readChildScopes(child, childScopes);
             }
-        }
+        });
     }
 
-    /** Read key definitions from a key scope. */
-    private void readScope(final Element scope, final Map<String, KeyDef> keyDefs) {
-        final List<Element> maps = new ArrayList<>();
+    /**
+     * Read key definitions from a key scope.
+     */
+    private void readScope(final XdmNode scope, final Map<String, KeyDef> keyDefs) {
+        final List<XdmNode> maps = new ArrayList<>();
         maps.add(scope);
-        for (final Element child: getChildElements(scope)) {
+        for (final XdmNode child : scope.children(isElement())) {
             collectMaps(child, maps);
         }
-        for (final Element map: maps) {
+        for (final XdmNode map : maps) {
             readMap(map, keyDefs);
         }
     }
 
-    private void collectMaps(final Element elem, final List<Element> maps) {
-        if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
+    private void collectMaps(final XdmNode elem, final List<XdmNode> maps) {
+        if (elem.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null) {
             return;
         }
-        final String classValue = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
+        final String classValue = elem.attribute(ATTRIBUTE_NAME_CLASS);
         if (MAP_MAP.matches(classValue) || SUBMAP.matches(classValue)) {
             maps.add(elem);
         }
-        for (final Element child: getChildElements(elem)) {
+        for (final XdmNode child : elem.children(isElement())) {
             collectMaps(child, maps);
         }
     }
 
-    /** Recursively read key definitions from a single map fragment. */
-    private void readMap(final Element map, final Map<String, KeyDef> keyDefs) {
+    /**
+     * Recursively read key definitions from a single map fragment.
+     */
+    private void readMap(final XdmNode map, final Map<String, KeyDef> keyDefs) {
         readKeyDefinition(map, keyDefs);
-        for (final Element elem: getChildElements(map)) {
-            if (!(SUBMAP.matches(elem) || elem.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null)) {
+        for (final XdmNode elem : map.children(isElement())) {
+            if (!(SUBMAP.matches(elem) || elem.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null)) {
                 readMap(elem, keyDefs);
             }
         }
     }
 
-    private void readKeyDefinition(final Element elem, final Map<String, KeyDef> keyDefs) {
-        final String keyName = elem.getAttribute(ATTRIBUTE_NAME_KEYS);
-        if (!keyName.isEmpty()) {
-            for (final String key: keyName.trim().split("\\s+")) {
+    private void readKeyDefinition(final XdmNode elem, final Map<String, KeyDef> keyDefs) {
+        final String keyName = elem.attribute(ATTRIBUTE_NAME_KEYS);
+        if (keyName != null) {
+            for (final String key : keyName.trim().split("\\s+")) {
                 if (!keyDefs.containsKey(key)) {
-                    final Document d = builder.newDocument();
-                    final Element copy = (Element) d.importNode(elem, true);
-                    d.appendChild(copy);
-                    final String h = copy.getAttribute(ATTRIBUTE_NAME_COPY_TO).isEmpty() ? copy.getAttribute(ATTRIBUTE_NAME_HREF) : copy.getAttribute(ATTRIBUTE_NAME_COPY_TO);
-                    final URI href = h.isEmpty() ? null : toURI(h);
-                    final String s = copy.getAttribute(ATTRIBUTE_NAME_SCOPE);
-                    final String scope = s.isEmpty() ? null : s;
-                    final String f = copy.getAttribute(ATTRIBUTE_NAME_FORMAT);
-                    final String format = f.isEmpty() ? null : f;
+                    final XdmNode copy = elem;
+                    final URI href = toURI(copy.attribute(ATTRIBUTE_NAME_COPY_TO) == null
+                            ? copy.attribute(ATTRIBUTE_NAME_HREF)
+                            : copy.attribute(ATTRIBUTE_NAME_COPY_TO));
+                    final String scope = copy.attribute(ATTRIBUTE_NAME_SCOPE);
+                    final String format = copy.attribute(ATTRIBUTE_NAME_FORMAT);
                     final KeyDef keyDef = new KeyDef(key, href, scope, format, currentFile, copy);
                     keyDefs.put(key, keyDef);
                 }
@@ -235,6 +263,7 @@ public final class KeyrefReader implements AbstractReader {
                         .collect(Collectors.toList())
         );
     }
+
     private void cascadeChildKeys(final KeyScope scope, final Map<String, KeyDef> keys, final String prefix) {
         for (final Map.Entry<String, KeyDef> e: scope.keyDefinition.entrySet()) {
             final KeyDef oldKeyDef = e.getValue();
@@ -249,10 +278,13 @@ public final class KeyrefReader implements AbstractReader {
     }
 
 
-    /** Inherit parent keys to child key scopes. */
+    /**
+     * Inherit parent keys to child key scopes.
+     */
     private KeyScope inheritParentKeys(final KeyScope rootScope) {
         return inheritParentKeys(rootScope, Collections.emptyMap());
     }
+
     private KeyScope inheritParentKeys(final KeyScope current, final Map<String, KeyDef> parent) {
         if (parent.keySet().isEmpty() && current.childScopes.isEmpty()) {
             return current;
@@ -261,7 +293,7 @@ public final class KeyrefReader implements AbstractReader {
             resKeys.putAll(current.keyDefinition);
             resKeys.putAll(parent);
             final List<KeyScope> resChildren = new ArrayList<>();
-            for (final KeyScope child: current.childScopes) {
+            for (final KeyScope child : current.childScopes) {
                 final KeyScope resChild = inheritParentKeys(child, resKeys);
                 resChildren.add(resChild);
             }
@@ -269,15 +301,17 @@ public final class KeyrefReader implements AbstractReader {
         }
     }
 
-    /** Resolve intermediate key references. */
+    /**
+     * Resolve intermediate key references.
+     */
     private KeyScope resolveIntermediate(final KeyScope scope) {
         final Map<String, KeyDef> keys = new HashMap<>(scope.keyDefinition);
-        for (final Map.Entry<String, KeyDef> e: scope.keyDefinition.entrySet()) {
+        for (final Map.Entry<String, KeyDef> e : scope.keyDefinition.entrySet()) {
             final KeyDef res = resolveIntermediate(scope, e.getValue(), Collections.singletonList(e.getValue()));
             keys.put(e.getKey(), res);
         }
         final List<KeyScope> children = new ArrayList<>();
-        for (final KeyScope child: scope.childScopes) {
+        for (final KeyScope child : scope.childScopes) {
             final KeyScope resolvedChild = resolveIntermediate(child);
             children.add(resolvedChild);
         }
@@ -285,25 +319,24 @@ public final class KeyrefReader implements AbstractReader {
     }
 
     private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) {
-        final Element elem = keyDef.element;
-        final String keyref = elem.getAttribute(ATTRIBUTE_NAME_KEYREF);
-        if (!keyref.isEmpty() && scope.keyDefinition.containsKey(keyref)) {
+        final XdmNode elem = keyDef.element;
+        final String keyref = elem.attribute(ATTRIBUTE_NAME_KEYREF);
+        if (keyref != null && !keyref.trim().isEmpty() && scope.keyDefinition.containsKey(keyref)) {
             KeyDef keyRefDef = scope.keyDefinition.get(keyref);
             if (circularityTracker.contains(keyRefDef)) {
                 handleCircularDefinitionException(circularityTracker);
                 return keyDef;
             }
-            Element defElem = keyRefDef.element;
-            final String defElemKeyref = defElem.getAttribute(ATTRIBUTE_NAME_KEYREF);
-            if (!defElemKeyref.isEmpty()) {
+            XdmNode defElem = keyRefDef.element;
+            final String defElemKeyref = defElem.attribute(ATTRIBUTE_NAME_KEYREF);
+            if (defElemKeyref != null && !defElemKeyref.isEmpty()) {
                 // TODO use immutable List
                 final List<KeyDef> ct = new ArrayList<>(circularityTracker.size() + 1);
                 ct.addAll(circularityTracker);
                 ct.add(keyRefDef);
                 keyRefDef = resolveIntermediate(scope, keyRefDef, ct);
             }
-            final Element res = mergeMetadata(keyRefDef.element, elem);
-            res.removeAttribute(ATTRIBUTE_NAME_KEYREF);
+            final XdmNode res = mergeMetadata(keyRefDef.element, elem);
             return new KeyDef(keyDef.keys, keyRefDef.href, keyRefDef.scope, keyRefDef.format, keyRefDef.source, res);
         } else {
             return keyDef;
@@ -313,7 +346,7 @@ public final class KeyrefReader implements AbstractReader {
     private void handleCircularDefinitionException(final List<KeyDef> circularityTracker) {
         final StringBuilder sb = new StringBuilder();
         Collections.reverse(circularityTracker);
-        for (final KeyDef keyDef: circularityTracker) {
+        for (final KeyDef keyDef : circularityTracker) {
             sb.append(keyDef.keys).append(" -> ");
         }
         sb.append(circularityTracker.get(0).keys);
@@ -323,46 +356,101 @@ public final class KeyrefReader implements AbstractReader {
         logger.error(ex.toString(), ex.toException());
     }
 
-    private Element mergeMetadata(final Element defElem, final Element elem) {
-        final Element res = (Element) elem.cloneNode(true);
-        final Document d = res.getOwnerDocument();
-        final Element defMeta = getTopicmeta(defElem);
-        if (defMeta != null) {
-            Element resMeta = getTopicmeta(res);
-            if (resMeta == null) {
-                resMeta = d.createElement(MAP_TOPICMETA.localName);
-                resMeta.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICMETA.toString());
-                res.appendChild(resMeta);
-            }
-            final NodeList cs = defMeta.getChildNodes();
-            for (int i = 0; i < cs.getLength(); i++) {
-                final Node c = cs.item(i);
-                final Node copy = d.importNode(c, true);
-                resMeta.appendChild(copy);
-            }
-        }
+    private XdmNode mergeMetadata(final XdmNode defElem, final XdmNode refElem) {
+        try {
+            final XdmDestination dst = new XdmDestination();
+            dst.setBaseURI(refElem.getBaseURI());
+            dst.setDestinationBaseURI(refElem.getBaseURI());
+            final PipelineConfiguration pipe = refElem.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
+            final Receiver receiver = dst.getReceiver(pipe, new SerializationProperties());
+            receiver.open();
+            receiver.startDocument(0);
 
-        for (final String attr: ATTS) {
-            if (res.getAttributeNode(attr) == null) {
-                final Attr defAttr = defElem.getAttributeNode(attr);
-                if (defAttr != null) {
-                    final Attr copy = (Attr) d.importNode(defAttr, true);
-                    res.setAttributeNode(copy);
+            final NodeInfo rni = refElem.getUnderlyingNode();
+
+            receiver.startElement(
+                    new FingerprintedQName(rni.getPrefix(), rni.getURI(), rni.getLocalPart()),
+                    rni.getSchemaType(),
+                    rni.saveLocation(),
+                    0);
+            receiver.namespace(new InScopeNamespaces(refElem.getUnderlyingNode()), REJECT_DUPLICATES);
+//            refElem.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
+//                try {
+//                    receiver.append(attr.getUnderlyingNode());
+//                } catch (XPathException e) {
+//                    throw new UncheckedXPathException(e);
+//                }
+//            });
+            for (final String attr : ATTS) {
+                if (refElem.attribute(attr) == null) {
+                    defElem.select(attribute(attr)).findAny().ifPresent(a -> {
+                        try {
+                            receiver.append(a.getUnderlyingNode());
+                        } catch (XPathException e) {
+                            throw new UncheckedXPathException(e);
+                        }
+                    });
                 }
             }
+
+            final XdmNode defMeta = getTopicmeta(defElem);
+            if (defMeta != null) {
+                final XdmNode resMeta = getTopicmeta(refElem);
+                if (resMeta == null) {
+                    receiver.startElement(
+                            new FingerprintedQName(DEFAULT_NS_PREFIX, NULL_NS_URI, MAP_TOPICMETA.localName),
+                            Untyped.getInstance(),
+                            UNKNOWN_LOCATION,
+                            0);
+                    receiver.attribute(
+                            new FingerprintedQName(DEFAULT_NS_PREFIX, NULL_NS_URI, ATTRIBUTE_NAME_CLASS),
+                            STRING,
+                            MAP_TOPICMETA.toString(),
+                            UNKNOWN_LOCATION,
+                            0);
+                } else {
+                    final NodeInfo ni = resMeta.getUnderlyingNode();
+
+                    receiver.startElement(
+                            new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
+                            ni.getSchemaType(),
+                            ni.saveLocation(),
+                            0);
+                    receiver.namespace(new InScopeNamespaces(resMeta.getUnderlyingNode()), REJECT_DUPLICATES);
+                    resMeta.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
+                        try {
+                            receiver.append(attr.getUnderlyingNode());
+                        } catch (XPathException e) {
+                            throw new UncheckedXPathException(e);
+                        }
+                    });
+                }
+                resMeta.select(child()).forEach(child -> {
+                    try {
+                        receiver.append(child.getUnderlyingNode());
+                    } catch (XPathException e) {
+                        throw new UncheckedXPathException(e);
+                    }
+                });
+                receiver.endElement();
+            }
+
+            receiver.endElement();
+
+            receiver.endDocument();
+            receiver.close();
+            return dst.getXdmNode().select(rootElement()).asNode();
+        } catch (XPathException | UncheckedXPathException e) {
+            logger.error("Failed to merge topicmeta: " + e.getMessage(), e);
+            return refElem;
         }
-        return res;
     }
 
-    private Element getTopicmeta(final Element topicref) {
-        final NodeList ns = topicref.getChildNodes();
-        for (int i = 0; i < ns.getLength(); i++) {
-            final Node n = ns.item(i);
-            if (MAP_TOPICMETA.matches(n)) {
-                return (Element) n;
-            }
-        }
-        return null;
+    private XdmNode getTopicmeta(final XdmNode topicref) {
+        return topicref
+                .select(child(c -> MAP_TOPICMETA.matches(c)).first())
+                .findAny()
+                .orElse(null);
     }
 
 }
