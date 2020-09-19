@@ -7,7 +7,6 @@
  */
 package org.dita.dost.util;
 
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,8 +76,7 @@ public class XSpecTest {
                 .orElse("src" + File.separator + "main"))
                 .getAbsoluteFile();
         CatalogUtils.setDitaDir(ditaDir);
-        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
-        resolver = new ClassPathResolver(catalogResolver);
+        resolver = new ClassPathResolver(CatalogUtils.getCatalogResolver());
         transformerFactory.setURIResolver(resolver);
         final Source stylesheet = resolver.resolve("classpath:///XSpec/generate-xspec-tests.xsl", "");
         compiler = transformerFactory.newTransformer(stylesheet);

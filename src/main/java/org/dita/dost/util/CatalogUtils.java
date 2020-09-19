@@ -11,9 +11,16 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.Vector;
 
-import org.apache.xml.resolver.CatalogManager;
-import org.apache.xml.resolver.tools.CatalogResolver;
+import org.xml.sax.InputSource;
+import org.xmlresolver.Catalog;
+import org.xmlresolver.CatalogSource;
+import org.xmlresolver.CatalogSource.InputSourceCatalogSource;
+import org.xmlresolver.Resolver;
 
 /**
  * General catalog file resolving utilities.
@@ -24,7 +31,7 @@ import org.apache.xml.resolver.tools.CatalogResolver;
 public final class CatalogUtils {
 
     /**apache catalogResolver.*/
-    private static CatalogResolver catalogResolver = null;
+    private static Resolver catalogResolver = null;
     /** Absolute directory to find catalog-dita.xml.*/
     private static File ditaDir;
     /**
@@ -44,19 +51,23 @@ public final class CatalogUtils {
     }
 
     /**
-     * Get CatalogResolver.
-     * @return CatalogResolver
+     * Get Resolver.
+     * @return Resolver
      */
-    public static synchronized CatalogResolver getCatalogResolver() {
+    public static synchronized Resolver getCatalogResolver() {
         if (catalogResolver == null) {
-            final CatalogManager manager = new CatalogManager();
-            manager.setIgnoreMissingProperties(true);
-            manager.setUseStaticCatalog(false); // We'll use a private catalog.
-            manager.setPreferPublic(true);
+            final Properties properties = new Properties();
+            properties.setProperty("prefer", "public");
+
+            final org.xmlresolver.Configuration configuration = new org.xmlresolver.Configuration(properties, null);
             final File catalogFilePath = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base") + File.separator + FILE_NAME_CATALOG);
-            manager.setCatalogFiles(catalogFilePath.toURI().toASCIIString());
-            //manager.setVerbosity(10);
-            catalogResolver = new CatalogResolver(manager);
+            final InputSource inputSource = new InputSource(catalogFilePath.toURI().toString());
+            final Vector<CatalogSource> catalogs = new Vector<>();
+            catalogs.add(new InputSourceCatalogSource(inputSource));
+
+            final Catalog catalog = new Catalog(configuration, catalogs);
+
+            catalogResolver = new Resolver(catalog);
         }
 
         return catalogResolver;

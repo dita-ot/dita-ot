@@ -9,13 +9,13 @@ package org.dita.dost.module;
 
 import net.sf.saxon.s9api.Processor;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
+import org.xmlresolver.Resolver;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -122,8 +122,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
-        reader.setEntityResolver(catalogResolver);
+        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
 
         processor = xmlUtils.getProcessor();
     }

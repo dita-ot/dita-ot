@@ -21,7 +21,7 @@ import net.sf.saxon.serialize.Emitter;
 import net.sf.saxon.serialize.MessageWarner;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.trans.XsltController;
-import org.apache.xml.resolver.tools.CatalogResolver;
+import org.xmlresolver.Resolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.LoggingErrorListener;
@@ -70,7 +70,7 @@ public final class XMLUtils {
         saxParserFactory.setNamespaceAware(true);
     }
     private DITAOTLogger logger;
-    private final CatalogResolver catalogResolver;
+    private final Resolver catalogResolver;
     private final Processor processor;
     private final XsltCompiler xsltCompiler;
 
