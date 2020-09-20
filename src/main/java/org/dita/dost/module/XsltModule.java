@@ -7,6 +7,7 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.lib.ErrorReporter;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
@@ -15,6 +16,7 @@ import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.UncheckedDITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
@@ -192,7 +194,19 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
     private void transform(final File in, final File out) throws DITAOTException {
         if (reloadstylesheet || t == null) {
-            t = getTransformer();
+            logger.info("Loading stylesheet " + style.getAbsolutePath());
+            try {
+                t = templates.load();
+//                final URIResolver resolver = Configuration.DEBUG
+//                        ? new XMLUtils.DebugURIResolver(uriResolver)
+//                        : uriResolver;
+//                t.setErrorListener(toErrorListener(logger));
+                t.setErrorReporter(toErrorReporter(logger));
+                t.setURIResolver(uriResolver);
+                t.setMessageListener(toMessageListener(logger));
+            } catch (final Exception e) {
+                throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
+            }
         }
         transform(in, out, t);
     }
@@ -292,6 +306,16 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 logger.error("Failed to clean up after failed transformation: " + e1, e1);
             }
         }
+    }
+
+    private ErrorReporter toErrorReporter(final DITAOTLogger logger) {
+        return error -> {
+            if (error.isWarning()) {
+                logger.warn(error.getMessage());
+            } else {
+                logger.error(error.getMessage());
+            }
+        };
     }
 
     public void setStyle(final File style) {
