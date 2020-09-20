@@ -150,10 +150,10 @@ public final class XMLUtils {
         return listener;
     }
 
-    public static MessageListener toMessageListener(final DITAOTLogger logger) {
-        return new MessageListener() {
+    public static MessageListener2 toMessageListener(final DITAOTLogger logger) {
+        return new MessageListener2() {
             @Override
-            public void message(XdmNode content, boolean terminate, SourceLocator locator) {
+            public void message(XdmNode content, net.sf.saxon.s9api.QName code, boolean terminate, SourceLocator locator) {
                 final Optional<String> errorCode = content.select(descendant(isProcessingInstruction()).where(hasLocalName("error-code")))
                         .findAny()
                         .map(XdmItem::getStringValue);
