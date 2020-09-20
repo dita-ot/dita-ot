@@ -11,9 +11,8 @@ package org.dita.dost.reader;
 import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
-import net.sf.saxon.om.FingerprintedQName;
-import net.sf.saxon.om.InScopeNamespaces;
-import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.expr.parser.Loc;
+import net.sf.saxon.om.*;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
@@ -36,12 +35,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
-import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
-import static javax.xml.XMLConstants.NULL_NS_URI;
-import static net.sf.saxon.event.ReceiverOptions.REJECT_DUPLICATES;
-import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
-import static net.sf.saxon.s9api.streams.Predicates.*;
-import static net.sf.saxon.s9api.streams.Steps.*;
+import static net.sf.saxon.s9api.streams.Predicates.isElement;
+import static net.sf.saxon.s9api.streams.Steps.child;
+import static net.sf.saxon.s9api.streams.Steps.precedingSibling;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.KeyScope.ROOT_ID;
@@ -369,62 +365,48 @@ public final class KeyrefReader implements AbstractReader {
 
             final NodeInfo rni = refElem.getUnderlyingNode();
 
+            final AttributeMap atts = new SmallAttributeMap(defElem.getUnderlyingNode().attributes().asList().stream()
+                    // only attributes from ATTS
+                    .filter(attr -> ATTS.contains(attr.getNodeName().getLocalPart()))
+                    // only if refElem doesn't have it.
+                    .filter(attr -> refElem.attribute(attr.getNodeName().getLocalPart()) == null)
+                    .collect(Collectors.toList()));
             receiver.startElement(
-                    new FingerprintedQName(rni.getPrefix(), rni.getURI(), rni.getLocalPart()),
+                    NameOfNode.makeName(rni),
                     rni.getSchemaType(),
+                    atts,
+                    rni.getAllNamespaces(),
                     rni.saveLocation(),
                     0);
-            receiver.namespace(new InScopeNamespaces(refElem.getUnderlyingNode()), REJECT_DUPLICATES);
-//            refElem.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
-//                try {
-//                    receiver.append(attr.getUnderlyingNode());
-//                } catch (XPathException e) {
-//                    throw new UncheckedXPathException(e);
-//                }
-//            });
-            for (final String attr : ATTS) {
-                if (refElem.attribute(attr) == null) {
-                    defElem.select(attribute(attr)).findAny().ifPresent(a -> {
-                        try {
-                            receiver.append(a.getUnderlyingNode());
-                        } catch (XPathException e) {
-                            throw new UncheckedXPathException(e);
-                        }
-                    });
-                }
-            }
 
             final XdmNode defMeta = getTopicmeta(defElem);
             if (defMeta != null) {
                 final XdmNode resMeta = getTopicmeta(refElem);
                 if (resMeta == null) {
-                    receiver.startElement(
-                            new FingerprintedQName(DEFAULT_NS_PREFIX, NULL_NS_URI, MAP_TOPICMETA.localName),
-                            Untyped.getInstance(),
-                            UNKNOWN_LOCATION,
-                            0);
-                    receiver.attribute(
-                            new FingerprintedQName(DEFAULT_NS_PREFIX, NULL_NS_URI, ATTRIBUTE_NAME_CLASS),
+                    final SingletonAttributeMap attrs = SingletonAttributeMap.of(new AttributeInfo(
+                            new NoNamespaceName(ATTRIBUTE_NAME_CLASS),
                             STRING,
                             MAP_TOPICMETA.toString(),
-                            UNKNOWN_LOCATION,
+                            Loc.NONE,
+                            0));
+                    receiver.startElement(
+                            new NoNamespaceName(MAP_TOPICMETA.localName),
+                            Untyped.getInstance(),
+                            attrs,
+                            rni.getAllNamespaces(),
+                            Loc.NONE,
                             0);
                 } else {
                     final NodeInfo ni = resMeta.getUnderlyingNode();
 
                     receiver.startElement(
-                            new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
+                            NameOfNode.makeName(ni),
                             ni.getSchemaType(),
+                            resMeta.getUnderlyingNode().attributes()
+                                    .remove(new NoNamespaceName(ATTRIBUTE_NAME_KEYREF)),
+                            resMeta.getUnderlyingNode().getAllNamespaces(),
                             ni.saveLocation(),
                             0);
-                    receiver.namespace(new InScopeNamespaces(resMeta.getUnderlyingNode()), REJECT_DUPLICATES);
-                    resMeta.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
-                        try {
-                            receiver.append(attr.getUnderlyingNode());
-                        } catch (XPathException e) {
-                            throw new UncheckedXPathException(e);
-                        }
-                    });
                 }
                 defMeta.select(child()).forEach(child -> {
                     try {

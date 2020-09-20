@@ -11,13 +11,12 @@ package org.dita.dost.module;
 import net.sf.saxon.event.NamespaceReducer;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
-import net.sf.saxon.om.FingerprintedQName;
-import net.sf.saxon.om.InScopeNamespaces;
-import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.event.ReceiverOption;
+import net.sf.saxon.expr.parser.Loc;
+import net.sf.saxon.om.*;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.s9api.streams.Predicates;
 import net.sf.saxon.serialize.SerializationProperties;
-import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -42,11 +41,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
-import static net.sf.saxon.event.ReceiverOptions.REJECT_DUPLICATES;
-import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
 import static net.sf.saxon.s9api.streams.Predicates.attributeEq;
 import static net.sf.saxon.s9api.streams.Steps.ancestorOrSelf;
-import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
@@ -321,82 +317,82 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                  final Receiver receiver) throws XPathException {
         switch (node.getNodeKind()) {
             case ELEMENT:
-                final NodeInfo ni = node.getUnderlyingNode();
-                receiver.startElement(
-                        new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
-                        ni.getSchemaType(),
-                        ni.saveLocation(),
-                        0);
-                receiver.namespace(new InScopeNamespaces(node.getUnderlyingNode()), REJECT_DUPLICATES);
                 if (MAP_MAP.matches(node) || MAP_TOPICREF.matches(node)) {
                     final List<KeyScope> ss = node.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null
                             ? Stream.of(node.attribute(ATTRIBUTE_NAME_KEYSCOPE).trim().split("\\s+"))
                             .flatMap(keyscope -> scope.stream().map(s -> s.getChildScope(keyscope)))
                             .collect(Collectors.toList())
                             : scope;
+
+                    final NodeInfo ni = node.getUnderlyingNode();
+                    AttributeMap atts = ni.attributes();
                     final QName rewriteAttrName = getReferenceAttribute(node);
-                    final boolean isResourceOnly = isResourceOnly(node);
-                    node.select(attribute()).forEach(attr -> {
-                        try {
-                            if (Objects.equals(attr.getNodeName(), rewriteAttrName)) {
-                                String hrefNode = attr.getStringValue();
-                                for (final KeyScope s : ss) {
-                                    final URI href = stripFragment(map.uri.resolve(attr.getStringValue()));
-                                    final FileInfo fi = job.getFileInfo(href);
-                                    if (fi != null && fi.hasKeyref) {
-                                        final int count = usage.getOrDefault(fi.uri, 0);
-                                        final Optional<ResolveTask> existing = res.stream()
-                                                .filter(rt -> rt.scope.equals(s) && rt.in.uri.equals(fi.uri))
-                                                .findAny();
-                                        if (count != 0 && existing.isPresent()) {
-                                            final ResolveTask resolveTask = existing.get();
-                                            if (resolveTask.out != null) {
-                                                final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
-                                                hrefNode = value.toString();
-                                            }
-                                        } else {
-                                            final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly);
-                                            res.add(resolveTask);
-                                            final Integer used = usage.get(fi.uri);
-                                            if (used > 1) {
-                                                final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
-                                                fixKeyDefRefs(s, fi.uri, value);
-                                                hrefNode = value.toString();
-                                            }
+                    if (rewriteAttrName != null) {
+                        String referenceValue = node.getAttributeValue(rewriteAttrName);
+                        if (referenceValue != null) {
+                            for (final KeyScope s : ss) {
+                                final URI href = stripFragment(map.uri.resolve(referenceValue));
+                                final FileInfo fi = job.getFileInfo(href);
+                                if (fi != null && fi.hasKeyref) {
+                                    final int count = usage.getOrDefault(fi.uri, 0);
+                                    final Optional<ResolveTask> existing = res.stream()
+                                            .filter(rt -> rt.scope.equals(s) && rt.in.uri.equals(fi.uri))
+                                            .findAny();
+                                    if (count != 0 && existing.isPresent()) {
+                                        final ResolveTask resolveTask = existing.get();
+                                        if (resolveTask.out != null) {
+                                            final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                                            referenceValue = value.toString();
+                                        }
+                                    } else {
+                                        final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly(node));
+                                        res.add(resolveTask);
+                                        final Integer used = usage.get(fi.uri);
+                                        if (used > 1) {
+                                            final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                                            fixKeyDefRefs(s, fi.uri, value);
+                                            referenceValue = value.toString();
                                         }
                                     }
                                 }
-                                final NodeInfo ani = attr.getUnderlyingNode();
-                                receiver.attribute(
-                                        new FingerprintedQName(ani.getPrefix(), ani.getURI(), ani.getLocalPart()),
-                                        STRING,
-                                        hrefNode,
-                                        UNKNOWN_LOCATION,
-                                        0
-                                );
-                            } else {
-                                receiver.append(attr.getUnderlyingNode());
                             }
-                        } catch (XPathException e) {
-                            throw new UncheckedXPathException(e);
+                            atts = atts.put(new AttributeInfo(
+                                    toNodeName(rewriteAttrName),
+                                    STRING,
+                                    referenceValue,
+                                    Loc.NONE,
+                                    ReceiverOption.NONE));
                         }
-                    });
+                    }
+                    receiver.startElement(
+                            NameOfNode.makeName(ni),
+                            ni.getSchemaType(),
+                            atts,
+                            ni.getAllNamespaces(),
+                            ni.saveLocation(),
+                            ReceiverOption.NONE);
+
                     for (final XdmNode c : node.children()) {
                         walkMap(map, c, ss, res, receiver);
                     }
+
+                    receiver.endElement();
                 } else {
-                    node.select(attribute()).forEach(attr -> {
-                        try {
-                            receiver.append(attr.getUnderlyingNode());
-                        } catch (XPathException e) {
-                            throw new UncheckedXPathException(e);
-                        }
-                    });
+                    final NodeInfo ni = node.getUnderlyingNode();
+                    receiver.startElement(
+                            new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
+                            ni.getSchemaType(),
+                            ni.attributes(),
+                            ni.getAllNamespaces(),
+                            ni.saveLocation(),
+                            ReceiverOption.NONE);
+
                     for (final XdmNode c : node.children()) {
                         walkMap(map, c, scope, res, receiver);
                     }
+
+                    receiver.endElement();
                 }
-                receiver.endElement();
                 break;
             case DOCUMENT:
                 receiver.startDocument(0);
@@ -409,6 +405,11 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 receiver.append(node.getUnderlyingNode());
                 break;
         }
+    }
+
+    private NodeName toNodeName(final QName qName) {
+        final StructuredQName structuredQName = qName.getStructuredQName();
+        return new FingerprintedQName(structuredQName.getPrefix(), structuredQName.getURI(), structuredQName.getLocalPart());
     }
 
     /**
@@ -432,7 +433,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
     private boolean isResourceOnly(final XdmNode elem) {
         return elem.select(ancestorOrSelf(Predicates.hasAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE)).first()
-                    .where(attributeEq(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY)))
+                .where(attributeEq(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY)))
                 .exists();
     }
 
