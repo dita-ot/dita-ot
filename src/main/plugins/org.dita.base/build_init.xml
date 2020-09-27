@@ -51,7 +51,6 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="init-properties">
     <property name="store-type" value="file"/>
-    <init-project storeType="${store-type}"/>
     <property name="default.language" value="en"/>
     <property name="generate-debug-attributes" value="true"/>
     <property name="processing-mode" value="lax"/>
@@ -69,6 +68,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="dita.output.dir" value="${dita.temp.dir}${file.separator}${temp.output.dir.name}" else="${output.dir}">
       <isset property="temp.output.dir.name"/>
     </condition>
+    <init-project storeType="${store-type}"/>
     <property environment="env" />
   </target>
 
