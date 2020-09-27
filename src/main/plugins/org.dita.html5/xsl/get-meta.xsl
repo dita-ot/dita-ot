@@ -20,6 +20,8 @@ See the accompanying LICENSE file for applicable license.
      for most data except for attributes on topic, which will be current context.
     -->
   
+    <meta name="generator" content="DITA-OT"/>
+
     <!-- = = = = = = = = = = = CONTENT = = = = = = = = = = = -->
   
     <!-- CONTENT: Type -->
