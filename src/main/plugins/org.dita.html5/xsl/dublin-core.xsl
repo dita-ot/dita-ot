@@ -66,11 +66,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <meta name="DC.relation" scheme="URI">
-          <xsl:attribute name="content">
-            <xsl:value-of select="$linkmeta_ext"/>
-          </xsl:attribute>
-        </meta>
+        <meta name="DC.relation" scheme="URI" content="{$linkmeta_ext}"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -176,6 +172,45 @@ See the accompanying LICENSE file for applicable license.
   <!-- ideally, take the first token of the language attribute value -->
   <xsl:template match="@xml:lang" mode="gen-metadata">
     <meta name="DC.language" content="{.}"/>
+  </xsl:template>
+
+  <xsl:template name="generateDefaultCopyright">
+    <xsl:if test="not(//*[contains(@class, ' topic/copyright ')])">
+      <meta name="copyright">
+        <xsl:attribute name="content">
+          <xsl:text>(C) </xsl:text>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Copyright'"/>
+          </xsl:call-template>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="$YEAR"/>
+        </xsl:attribute>
+      </meta>
+      <meta name="DC.rights.owner">
+        <xsl:attribute name="content">
+          <xsl:text>(C) </xsl:text>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Copyright'"/>
+          </xsl:call-template>
+          <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
+        </xsl:attribute>
+      </meta>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="@* | node()" mode="generateDefaultCopyright">
+    <xsl:if test="empty(//*[contains(@class, ' topic/copyright ')])">
+      <meta name="DC.rights.owner">
+        <xsl:attribute name="content">
+          <xsl:text>(C) </xsl:text>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Copyright'"/>
+          </xsl:call-template>
+          <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
+        </xsl:attribute>
+      </meta>
+    </xsl:if>
+    <xsl:next-match/>
   </xsl:template>
 
 </xsl:stylesheet>

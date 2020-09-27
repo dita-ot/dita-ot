@@ -2270,9 +2270,9 @@ See the accompanying LICENSE file for applicable license.
     <head>
       <!-- initial meta information -->
       <xsl:call-template name="generateCharset"/>   <!-- Set the character set to UTF-8 -->
-      <xsl:call-template name="generateDefaultCopyright"/> <!-- Generate a default copyright, if needed -->
+      <xsl:apply-templates select="." mode="generateDefaultCopyright"/> <!-- Generate a default copyright, if needed -->
       <xsl:call-template name="generateDefaultMeta"/> <!-- Standard meta for security, robots, etc -->
-      <xsl:call-template name="getMeta"/>           <!-- Process metadata from topic prolog -->
+      <xsl:apply-templates select="." mode="getMeta"/> <!-- Process metadata from topic prolog -->
       <xsl:call-template name="copyright"/>         <!-- Generate copyright, if specified manually -->
       <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
       <xsl:call-template name="generateChapterTitle"/> <!-- Generate the <title> element -->
@@ -2282,10 +2282,15 @@ See the accompanying LICENSE file for applicable license.
       <xsl:call-template name="processHDF"/>        <!-- Add user HDF file, if specified -->
     </head>
   </xsl:template>
-    
-  <!-- If there is no copyright in the document, make the standard one -->
+
+  <!-- Deprecated since 3.6 -->
   <xsl:template name="generateDefaultCopyright">
-    <xsl:if test="not(//*[contains(@class, ' topic/copyright ')])">
+    <xsl:apply-templates select="." mode="generateDefaultCopyright"/>
+  </xsl:template>
+
+  <!-- If there is no copyright in the document, make the standard one -->
+  <xsl:template match="@* | node()" mode="generateDefaultCopyright">
+    <xsl:if test="empty(//*[contains(@class, ' topic/copyright ')])">
       <meta name="copyright">
         <xsl:attribute name="content">
           <xsl:text>(C) </xsl:text>
@@ -2294,15 +2299,6 @@ See the accompanying LICENSE file for applicable license.
           </xsl:call-template>
           <xsl:text> </xsl:text>
           <xsl:value-of select="$YEAR"/>
-        </xsl:attribute>
-      </meta>
-      <meta name="DC.rights.owner">
-        <xsl:attribute name="content">
-          <xsl:text>(C) </xsl:text>
-          <xsl:call-template name="getVariable">
-            <xsl:with-param name="id" select="'Copyright'"/>
-          </xsl:call-template>
-          <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
         </xsl:attribute>
       </meta>
     </xsl:if>

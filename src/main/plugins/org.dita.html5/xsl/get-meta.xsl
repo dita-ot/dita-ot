@@ -13,12 +13,12 @@ See the accompanying LICENSE file for applicable license.
        elements (based on keyword) cannot nest. -->
   <xsl:key name="meta-keywords" match="*[ancestor::*[contains(@class,' topic/keywords ')]]" use="text()[1]"/>
 
+  <!-- Deprecated since 3.6 -->
   <xsl:template name="getMeta">
     <xsl:apply-templates select="." mode="getMeta"/>
   </xsl:template>
 
   <xsl:template match="*" mode="getMeta">
-
     <!-- Processing note:
      getMeta is issued from the topic/topic context, therefore it is looking DOWN
      for most data except for attributes on topic, which will be current context.
@@ -156,7 +156,6 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- INSTANTIATION: Language -->
     <xsl:apply-templates select="@xml:lang | self::dita/*[1]/@xml:lang" mode="gen-metadata"/>
-
   </xsl:template>
 
 
@@ -164,6 +163,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="dita" mode="gen-type-metadata">
     <xsl:apply-templates select="*[1]" mode="gen-type-metadata"/>
   </xsl:template>
+
   <xsl:template match="*" mode="gen-type-metadata">
   </xsl:template>
 
@@ -175,12 +175,8 @@ See the accompanying LICENSE file for applicable license.
       </xsl:for-each>
     </xsl:variable>
     <xsl:if test="normalize-space($shortmeta)!=''">
-      <meta name="abstract">
-        <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
-      </meta>
-      <meta name="description">
-        <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
-      </meta>
+      <meta name="abstract" content="{normalize-space($shortmeta)}"/>
+      <meta name="description" content="{normalize-space($shortmeta)}"/>
     </xsl:if>
   </xsl:template>
 
@@ -190,14 +186,16 @@ See the accompanying LICENSE file for applicable license.
       <!-- for each item inside keywords (including nested index terms) -->
       <xsl:for-each select="descendant::*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::*">
         <!-- If this is the first term or keyword with this value -->
-        <xsl:if test="generate-id(key('meta-keywords',text()[1])[1])=generate-id(.)">
-          <xsl:if test="position()>2"><xsl:text>, </xsl:text></xsl:if>
+        <xsl:if test="generate-id(key('meta-keywords',text()[1])[1]) = generate-id(.)">
+          <xsl:if test="position() > 2">
+            <xsl:text>, </xsl:text>
+          </xsl:if>
           <xsl:value-of select="normalize-space(text()[1])"/>
         </xsl:if>
       </xsl:for-each>
     </xsl:variable>
 
-    <xsl:if test="string-length($keywords-content)>0">
+    <xsl:if test="string-length($keywords-content) > 0">
       <meta name="keywords" content="{$keywords-content}"/>
     </xsl:if>
   </xsl:template>
@@ -248,9 +246,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="prodnamemeta">
       <xsl:apply-templates select="*|text()" mode="text-only"/>
     </xsl:variable>
-    <meta name="prodname">
-      <xsl:attribute name="content"><xsl:value-of select="normalize-space($prodnamemeta)"/></xsl:attribute>
-    </meta>
+    <meta name="prodname" content="{normalize-space($prodnamemeta)}"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/vrm ')]/@version" mode="gen-metadata">
@@ -269,54 +265,42 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="brandmeta">
       <xsl:apply-templates select="*|text()" mode="text-only"/>
     </xsl:variable>
-    <meta name="brand">
-      <xsl:attribute name="content"><xsl:value-of select="normalize-space($brandmeta)"/></xsl:attribute>
-    </meta>
+    <meta name="brand" content="{normalize-space($brandmeta)}"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/component ')]" mode="gen-metadata">
     <xsl:variable name="componentmeta">
       <xsl:apply-templates select="*|text()" mode="text-only"/>
     </xsl:variable>
-    <meta name="component">
-      <xsl:attribute name="content"><xsl:value-of select="normalize-space($componentmeta)"/></xsl:attribute>
-    </meta>
+    <meta name="component" content="{normalize-space($componentmeta)}"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/featnum ')]" mode="gen-metadata">
     <xsl:variable name="featnummeta">
       <xsl:apply-templates select="*|text()" mode="text-only"/>
     </xsl:variable>
-    <meta name="featnum">
-      <xsl:attribute name="content"><xsl:value-of select="normalize-space($featnummeta)"/></xsl:attribute>
-    </meta>
+    <meta name="featnum" content="{normalize-space($featnummeta)}"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/prognum ')]" mode="gen-metadata">
     <xsl:variable name="prognummeta">
       <xsl:apply-templates select="*|text()" mode="text-only"/>
     </xsl:variable>
-    <meta name="prognum">
-      <xsl:attribute name="content"><xsl:value-of select="normalize-space($prognummeta)"/></xsl:attribute>
-    </meta>
+    <meta name="prognum" content="{normalize-space($prognummeta)}"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/platform ')]" mode="gen-metadata">
     <xsl:variable name="platformmeta">
       <xsl:apply-templates select="*|text()" mode="text-only"/>
     </xsl:variable>
-    <meta name="platform">
-      <xsl:attribute name="content"><xsl:value-of select="normalize-space($platformmeta)"/></xsl:attribute>
-    </meta>
+    <meta name="platform" content="{normalize-space($platformmeta)}"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/series ')]" mode="gen-metadata">
     <xsl:variable name="seriesmeta">
       <xsl:apply-templates select="*|text()" mode="text-only"/>
     </xsl:variable>
-    <meta name="series">
-      <xsl:attribute name="content"><xsl:value-of select="normalize-space($seriesmeta)"/></xsl:attribute>
-    </meta>
+    <meta name="series" content="{normalize-space($seriesmeta)}"/>
   </xsl:template>
 
   <!-- prolog/metadata/othermeta -->
