@@ -211,6 +211,13 @@ public interface Store extends URIResolver {
     boolean exists(URI path);
 
     /**
+     * Returns the time that the resouce was last modified.
+     * @param path file to test, absolute or relative
+     * @return epoch timestamp or zero
+     */
+    long getLastModified(URI path);
+
+    /**
      * Move temporary file
      *
      * @param src source file, absolute or relative

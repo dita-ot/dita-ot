@@ -302,6 +302,12 @@ public class StreamStore extends AbstractStore implements Store {
     }
 
     @Override
+    public long getLastModified(final URI path) {
+        final File d = new File(getUri(URLUtils.setFragment(path, null)));
+        return d.lastModified();
+    }
+
+    @Override
     public Source resolve(final String href, final String base) throws TransformerException {
         final URI h = toURI(href);
         final URI f = h.isAbsolute() ? h : toURI(base).resolve(h);
