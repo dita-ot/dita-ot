@@ -8,8 +8,6 @@
 
 package org.dita.dost.store;
 
-import net.sf.saxon.dom.DOMNodeWrapper;
-import net.sf.saxon.dom.DocumentWrapper;
 import net.sf.saxon.dom.NodeOverNodeInfo;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
@@ -107,6 +105,15 @@ public class CacheStore extends AbstractStore implements Store {
             return true;
         }
         return fallback.exists(f);
+    }
+
+    @Override
+    public long getLastModified(final URI path) {
+        final URI f = stripFragment(toAbsolute(path)).normalize();
+        if (cache.containsKey(f)) {
+            return cache.get(f).lastModified;
+        }
+        return fallback.getLastModified(f);
     }
 
     @Override
@@ -609,11 +616,17 @@ public class CacheStore extends AbstractStore implements Store {
         private final Document doc;
         private final XdmNode node;
         private final byte[] bytes;
+        private long lastModified;
 
-        private Entry(final Document doc, final XdmNode node, byte[] bytes) {
+        private Entry(final Document doc, final XdmNode node, final byte[] bytes) {
+            this(doc, node, bytes, System.currentTimeMillis());
+        }
+
+        private Entry(final Document doc, final XdmNode node, final byte[] bytes, final long lastModified) {
             this.doc = doc;
             this.node = node;
             this.bytes = bytes;
+            this.lastModified = lastModified;
         }
     }
 }
