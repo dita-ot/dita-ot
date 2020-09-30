@@ -18,7 +18,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="plugin:org.dita.html5:xsl/concept.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/glossdisplay.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/task.xsl"/>
-  <xsl:import href="plugin:org.dita.html5:xsl/reference.xsl"/>  
+  <xsl:import href="plugin:org.dita.html5:xsl/reference.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/ut-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/sw-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/pr-d.xsl"/>
@@ -29,7 +29,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="plugin:org.dita.html5:xsl/xml-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/svg-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/hazard-d.xsl"/>
-  
+
   <xsl:import href="plugin:org.dita.html5:xsl/nav.xsl"/>
   
   <xsl:import href="plugin:org.dita.html5:xsl/htmlflag.xsl"/>
