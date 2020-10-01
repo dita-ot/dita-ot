@@ -6,7 +6,8 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<project name="ditaot-init">
+<project name="ditaot-init"
+         xmlns:if="ant:if">
     
   <!-- Read configuration properties -->
   <loadproperties>
@@ -120,8 +121,12 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- create required directories -->
     <mkdir dir="${output.dir}" />
-    <delete dir="${dita.temp.dir}" quiet="false"/>
-    <mkdir dir="${dita.temp.dir}" />
+    <local name="createTempDir"/>
+    <condition property="createTempDir" value="true">
+      <equals arg1="${store-type}" arg2="file"/>
+    </condition>
+    <delete dir="${dita.temp.dir}" quiet="false" if:true="${createTempDir}"/>
+    <mkdir dir="${dita.temp.dir}" if:true="${createTempDir}" />
 
     <!-- Validate the xml file or not,default is validation(true)-->
     <property name="validate" value="true"/>
