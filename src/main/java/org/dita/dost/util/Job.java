@@ -140,7 +140,8 @@ public final class Job {
         }
         this.tempDir = tempDir;
         this.store = store;
-        tempDirURI = tempDir.toURI();
+        final URI tmpDirUri = tempDir.toURI();
+        tempDirURI = tmpDirUri.toString().endsWith("/") ? tmpDirUri : URI.create(tmpDirUri + "/");
         jobFile = new File(tempDir, JOB_FILE);
         prop = new HashMap<>();
         read();
@@ -309,9 +310,6 @@ public final class Job {
      * @throws IOException if writing configuration files failed
      */
     public void write() throws IOException {
-        if (!tempDir.exists() && !tempDir.mkdirs()) {
-            throw new IOException("Failed to create " + tempDir + " directory");
-        }
         try (Writer outStream = new BufferedWriter(new OutputStreamWriter(getStore().getOutputStream(jobFile.toURI())))) {
             XMLStreamWriter out = null;
             try {
