@@ -482,7 +482,7 @@ public abstract class AbstractIntegrationTest {
     }
 
     final Set<String> compareable = ImmutableSet.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "txt");
-    final Set<String> ignorable = ImmutableSet.of("schemekeydef.xml", "keydef.xml", "subrelation.xml", ".job.xml");
+    final Set<String> ignorable = ImmutableSet.of("keydef.xml", "subrelation.xml", ".job.xml");
 
     private Collection<String> getFiles(File expDir, File actDir) {
         final FileFilter filter = f -> f.isDirectory()

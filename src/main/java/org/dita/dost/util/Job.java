@@ -93,8 +93,6 @@ public final class Job {
 
     /** File name for key definition file */
     public static final String KEYDEF_LIST_FILE = "keydef.xml";
-    /** File name for key definition file */
-    public static final String SUBJECT_SCHEME_KEYDEF_LIST_FILE = "schemekeydef.xml";
     /** File name for temporary input file list file */
     public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
