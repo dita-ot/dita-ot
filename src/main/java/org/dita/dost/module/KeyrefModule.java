@@ -19,7 +19,6 @@ import net.sf.saxon.s9api.streams.Predicates;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.type.BuiltInAtomicType;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -34,7 +33,6 @@ import org.dita.dost.writer.KeyrefPaser;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.XMLFilter;
 
-import javax.management.openmbean.SimpleType;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -46,14 +44,13 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toMap;
 import static net.sf.saxon.event.ReceiverOptions.REJECT_DUPLICATES;
 import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
-import static net.sf.saxon.s9api.streams.Predicates.*;
+import static net.sf.saxon.s9api.streams.Predicates.attributeEq;
 import static net.sf.saxon.s9api.streams.Steps.ancestorOrSelf;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
-import static org.dita.dost.util.Job.KEYDEF_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
 
 /**
@@ -514,19 +511,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
         } catch (final DITAOTException e) {
             logger.error("Failed to process key references: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Add key definition to job configuration
-     *
-     * @param keydefs key defintions to add
-     */
-    private void writeKeyDefinition(final Map<String, KeyDef> keydefs) {
-        try {
-            KeyDef.writeKeydef(new File(job.tempDir, KEYDEF_LIST_FILE), keydefs.values());
-        } catch (final DITAOTException e) {
-            logger.error("Failed to write key definition file: " + e.getMessage(), e);
         }
     }
 
