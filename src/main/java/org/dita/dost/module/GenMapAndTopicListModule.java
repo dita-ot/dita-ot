@@ -907,8 +907,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap());
             delayConrefUtils.writeExportAnchors(exportAnchorsFilter, tempFileNameScheme);
         }
-
-        KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), addFilePrefix(schemekeydefMap.values()));
     }
 
     /** Filter copy-to where target is used directly. */
