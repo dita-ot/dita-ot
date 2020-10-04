@@ -7,14 +7,9 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
+import net.sf.saxon.s9api.XdmNode;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
-import java.util.Collection;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -23,19 +18,12 @@ import javax.xml.stream.XMLStreamWriter;
 import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Element;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Key definition.
  */
 public class KeyDef {
-
-    public static final String ELEMENT_STUB = "stub";
-    private static final String ATTRIBUTE_SOURCE = "source";
-    private static final String ATTRIBUTE_HREF = "href";
-    private static final String ATTRIBUTE_SCOPE = "scope";
-    private static final String ATTRIBUTE_FORMAT = "format";
-    private static final String ATTRIBUTE_KEYS = "keys";
-    private static final String ELEMENT_KEYDEF = "keydef";
 
     /** Space delimited list of key names */
     public final String keys;
@@ -76,49 +64,6 @@ public class KeyDef {
             buf.append(LEFT_BRACKET).append(source.toString()).append(RIGHT_BRACKET);
         }
         return buf.toString();
-    }
-
-    /**
-     * Write key definition XML configuration file
-     *
-     * @param keydefFile key definition file
-     * @param keydefs list of key definitions
-     * @throws DITAOTException if writing configuration file failed
-     */
-    public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
-        XMLStreamWriter keydef = null;
-        try (OutputStream out = new FileOutputStream(keydefFile)) {
-            keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out, "UTF-8");
-            keydef.writeStartDocument();
-            keydef.writeStartElement(ELEMENT_STUB);
-            for (final KeyDef k : keydefs) {
-                keydef.writeStartElement(ELEMENT_KEYDEF);
-                keydef.writeAttribute(ATTRIBUTE_KEYS, k.keys);
-                if (k.href != null) {
-                    keydef.writeAttribute(ATTRIBUTE_HREF, k.href.toString());
-                }
-                if (k.scope != null) {
-                    keydef.writeAttribute(ATTRIBUTE_SCOPE, k.scope);
-                }
-                if (k.format != null) {
-                    keydef.writeAttribute(ATTRIBUTE_FORMAT, k.format);
-                }
-                if (k.source != null) {
-                    keydef.writeAttribute(ATTRIBUTE_SOURCE, k.source.toString());
-                }
-                keydef.writeEndElement();
-            }
-            keydef.writeEndDocument();
-        } catch (final XMLStreamException | IOException e) {
-            throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
-        } finally {
-            if (keydef != null) {
-                try {
-                    keydef.close();
-                } catch (final XMLStreamException e) {
-                }
-            }
-        }
     }
 
     @Override
