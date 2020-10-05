@@ -161,8 +161,6 @@ public class KeyrefPaserTest {
         parser.setCurrentFile(new File(tempDir, "d.ditamap").toURI());
         parser.write(new File(tempDir, "d.ditamap"));
 
-        System.err.println(new File(expDir, "d.ditamap"));
-        System.err.println(new File(tempDir, "d.ditamap"));
         assertXMLEqual(new InputSource(new File(expDir, "d.ditamap").toURI().toString()),
                 new InputSource(new File(tempDir, "d.ditamap").toURI().toString()));
     }
