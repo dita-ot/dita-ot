@@ -88,7 +88,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         if (!outputDir.exists() && !outputDir.mkdirs()) {
             logger.error("Failed to create directory " + outputDir.getAbsolutePath());
         }
-        try (final OutputStream output = new BufferedOutputStream(new FileOutputStream(out))) {
+        try (final OutputStream output = new BufferedOutputStream(job.getStore().getOutputStream(out.toURI()))) {
             if (style != null) {
                 final Processor processor = xmlUtils.getProcessor();
                 final XsltCompiler xsltCompiler = processor.newXsltCompiler();

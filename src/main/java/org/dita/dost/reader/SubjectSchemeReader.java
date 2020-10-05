@@ -109,7 +109,7 @@ public class SubjectSchemeReader {
             return Collections.emptyMap();
         }
         final Properties prop = new Properties();
-        try (FileInputStream in = new FileInputStream(inputFile)) {
+        try (InputStream in = new BufferedInputStream(job.getStore().getInputStream(inputFile.toURI()))) {
             prop.loadFromXML(in);
         } catch (final IOException e) {
             throw new IOException("Failed to read subject scheme graph: " + e.getMessage(), e);
