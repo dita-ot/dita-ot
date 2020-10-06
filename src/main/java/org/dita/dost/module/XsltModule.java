@@ -14,10 +14,12 @@ import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.exception.UncheckedDITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.*;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.DelegatingURIResolver;
+import org.dita.dost.util.Job;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
@@ -62,6 +64,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     private String extension;
     private XsltTransformer t;
     private Processor processor;
+    private boolean parallel;
 
     private void init() {
         if (catalog == null) {
@@ -94,51 +97,88 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
         xsltCompiler.setURIResolver(uriResolver);
         xsltCompiler.setErrorListener(toErrorListener(logger));
+        logger.info("Loading stylesheet " + style.getAbsolutePath());
         try {
             templates = xsltCompiler.compile(new StreamSource(style));
         } catch (SaxonApiException e) {
             throw new RuntimeException("Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(), e);
         }
-
+//        long start = System.currentTimeMillis();
         if (in != null) {
             transform(in, out);
+        } else if (parallel) {
+            try {
+                includes.stream().parallel().forEach(include -> {
+                    try {
+                        final File in = new File(baseDir, include.getPath());
+                        final File out = getOutput(include.getPath());
+                        if (out == null) {
+                            return;
+                        }
+                        final XsltTransformer transformer = getTransformer();
+                        transform(in, out, transformer);
+                    } catch (DITAOTException e) {
+                        throw new UncheckedDITAOTException(e);
+                    }
+                });
+            } catch (UncheckedDITAOTException e) {
+                throw e.getDITAOTException();
+            }
         } else {
             for (final File include : includes) {
                 final File in = new File(baseDir, include.getPath());
-                File out = new File(destDir, include.getPath());
-                if (mapper != null) {
-                    final String[] outs = mapper.mapFileName(include.getPath());
-                    if (outs == null) {
-                        continue;
-                    }
-                    if (outs.length > 1) {
-                        throw new RuntimeException("XSLT module only support one to one output mapping");
-                    }
-                    out = new File(destDir, outs[0]);
-                } else if (extension != null) {
-                    out = new File(replaceExtension(out.getAbsolutePath(), extension));
+                final File out = getOutput(include.getPath());
+                if (out == null) {
+                    continue;
                 }
                 transform(in, out);
             }
         }
+//        long end = System.currentTimeMillis();
+//        logger.info("Processing took " + (end - start) + " ms");
         return null;
+    }
+
+    private File getOutput(final String path) {
+        File out = new File(destDir, path);
+        if (mapper != null) {
+            final String[] outs = mapper.mapFileName(path);
+            if (outs == null) {
+                return null;
+            }
+            if (outs.length > 1) {
+                throw new RuntimeException("XSLT module only support one to one output mapping");
+            }
+            out = new File(destDir, outs[0]);
+        } else if (extension != null) {
+            out = new File(replaceExtension(out.getAbsolutePath(), extension));
+        }
+        return out;
+    }
+
+    private XsltTransformer getTransformer() throws DITAOTException {
+        try {
+            XsltTransformer transformer = templates.load();
+//            final URIResolver resolver = Configuration.DEBUG
+//                    ? new XMLUtils.DebugURIResolver(uriResolver)
+//                    : uriResolver;
+            transformer.setErrorListener(toErrorListener(logger));
+            transformer.setURIResolver(uriResolver);
+            transformer.setMessageListener(toMessageListener(logger));
+            return transformer;
+        } catch (final Exception e) {
+            throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
+        }
     }
 
     private void transform(final File in, final File out) throws DITAOTException {
         if (reloadstylesheet || t == null) {
-            logger.info("Loading stylesheet " + style.getAbsolutePath());
-            try {
-                t = templates.load();
-//                final URIResolver resolver = Configuration.DEBUG
-//                        ? new XMLUtils.DebugURIResolver(uriResolver)
-//                        : uriResolver;
-                t.setErrorListener(toErrorListener(logger));
-                t.setURIResolver(uriResolver);
-                t.setMessageListener(toMessageListener(logger));
-            } catch (final Exception e) {
-                throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
-            }
+            t = getTransformer();
         }
+        transform(in, out, t);
+    }
+
+    private void transform(final File in, final File out, final XsltTransformer t) throws DITAOTException {
         final boolean same = in.getAbsolutePath().equals(out.getAbsolutePath());
         for (Map.Entry<String, String> e: params.entrySet()) {
             logger.debug("Set parameter " + e.getKey() + " to '" + e.getValue() + "'");
@@ -288,4 +328,9 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     public void setExtension(final String extension) {
         this.extension = extension.startsWith(".") ? extension : ("." + extension);
     }
+
+    public void setParallel(final boolean parallel) {
+        this.parallel = parallel;
+    }
+
 }

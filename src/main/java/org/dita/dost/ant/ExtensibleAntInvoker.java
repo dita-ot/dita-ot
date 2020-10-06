@@ -199,6 +199,9 @@ public final class ExtensibleAntInvoker extends Task {
     private AbstractPipelineModule getPipelineModule(final ModuleElem m, final PipelineHashIO pipelineInput) throws DITAOTException {
         if (m instanceof XsltElem) {
             final XsltElem xm = (XsltElem) m;
+            if (xm.reloadstylesheet && xm.parallel) {
+                throw new BuildException("Both reloadstylesheet and parallel cannot be true");
+            }
             final XsltModule module = new XsltModule();
             module.setStyle(xm.style);
             if (xm.in != null) {
@@ -217,6 +220,7 @@ public final class ExtensibleAntInvoker extends Task {
             module.setFilenameParam(xm.filenameparameter);
             module.setFiledirParam(xm.filedirparameter);
             module.setReloadstylesheet(xm.reloadstylesheet);
+            module.setParallel(xm.parallel);
             module.setXMLCatalog(xm.xmlcatalog);
             if (xm.mapper != null) {
                 module.setMapper(xm.mapper.getImplementation());
@@ -487,6 +491,7 @@ public final class ExtensibleAntInvoker extends Task {
         private String filedirparameter;
         private XMLCatalog xmlcatalog;
         private boolean reloadstylesheet;
+        private boolean parallel;
 
         // Ant setters
 
@@ -515,6 +520,10 @@ public final class ExtensibleAntInvoker extends Task {
 
         public void setReloadstylesheet(final boolean reloadstylesheet) {
             this.reloadstylesheet = reloadstylesheet;
+        }
+
+        public void setParallel(final boolean parallel) {
+            this.parallel = parallel;
         }
 
         public void setIn(final File in) {
