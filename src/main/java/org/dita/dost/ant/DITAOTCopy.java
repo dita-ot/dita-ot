@@ -17,10 +17,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.FileUtils;
+import org.dita.dost.util.Job;
 
 /**
  * Class description goes here.
@@ -124,7 +126,12 @@ public final class DITAOTCopy extends Task {
 
     private List<String> getIncludes() throws IOException {
         if (includes == null && includesFile == null) {
-            return Collections.emptyList();
+            final Job job = getProject().getReference(ANT_REFERENCE_JOB);
+            return job
+                    .getFileInfo(fi -> fi.isFlagImage)
+                    .stream()
+                    .map(fi -> fi.file.toString())
+                    .collect(Collectors.toList());
         }
         if (includesFile != null) {
             final List<String> res = new ArrayList<>();

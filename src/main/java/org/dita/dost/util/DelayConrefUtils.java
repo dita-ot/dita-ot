@@ -20,10 +20,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 
 import static org.dita.dost.util.Constants.*;
@@ -246,7 +243,7 @@ public final class DelayConrefUtils {
                                    final TempFileNameScheme tempFileNameScheme)
             throws DITAOTException {
         XMLStreamWriter export = null;
-        try (OutputStream exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML))) {
+        try (OutputStream exportStream = new BufferedOutputStream(job.getStore().getOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML).toURI()))) {
             export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
             export.writeStartDocument();
             export.writeStartElement("stub");

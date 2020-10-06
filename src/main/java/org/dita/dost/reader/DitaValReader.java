@@ -10,7 +10,6 @@ package org.dita.dost.reader;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -25,12 +24,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -64,7 +59,6 @@ public final class DitaValReader implements AbstractReader {
     private String backgroundConflictColor;
 
     private TempFileNameScheme tempFileNameScheme;
-    private final DocumentBuilder builder;
     /** List of absolute flagging image paths. */
     private final List<URI> imageList;
 
@@ -83,13 +77,6 @@ public final class DitaValReader implements AbstractReader {
         imageList = new ArrayList<>(256);
         relFlagImageList = new ArrayList<>(256);
 
-        try {
-            final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            builderFactory.setNamespaceAware(true);
-            builder = builderFactory.newDocumentBuilder();
-        } catch (final ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        }
         filterAttributes = Stream.of(Configuration.configuration.getOrDefault("filter-attributes", "")
                 .trim().split("\\s*,\\s*"))
                 .map(QName::valueOf)
@@ -142,10 +129,9 @@ public final class DitaValReader implements AbstractReader {
         ditaVal = input;
 
         final Document doc;
-        builder.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal.toString(), logger));
         try {
-            doc = builder.parse(input.toString());
-        } catch (SAXException | IOException e) {
+            doc = job.getStore().getDocument(input);
+        } catch (IOException e) {
             logger.error("Failed to read DITAVAL file: " + e.getMessage(), e);
             return;
         }

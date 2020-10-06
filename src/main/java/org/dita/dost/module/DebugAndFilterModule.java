@@ -186,17 +186,17 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         initXmlReader();
 
         // Output subject schemas
-        outputSubjectScheme();
         subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
         subjectSchemeReader.setJob(job);
-        dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+        outputSubjectScheme();
+        dic = subjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
 
         if (profilingEnabled) {
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
             filterReader.setJob(job);
-            if (ditavalFile != null && ditavalFile.exists()) {
+            if (job.getStore().exists(ditavalFile.toURI())) {
                 filterReader.read(ditavalFile.getAbsoluteFile());
                 baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterReader.getFilterMap(),
                         filterReader.getForegroundConflictColor(), filterReader.getBackgroundConflictColor());
@@ -315,7 +315,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
      */
     private void outputSubjectScheme() throws DITAOTException {
         try {
-            final Map<URI, Set<URI>> graph = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            final Map<URI, Set<URI>> graph = subjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
 
             final Queue<URI> queue = new LinkedList<>(graph.keySet());
             final Set<URI> visitedSet = new HashSet<>();

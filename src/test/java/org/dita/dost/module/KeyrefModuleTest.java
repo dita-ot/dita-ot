@@ -35,10 +35,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
@@ -189,12 +185,6 @@ public class KeyrefModuleTest {
         assertEquals(subMapTask.scope, childScope);
 
         final Document act = toDocument(destination.getXdmNode());
-        try {
-            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(exp), new StreamResult(System.out));
-            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(act), new StreamResult(System.out));
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
         assertXMLEqual(exp, act);
     }
 

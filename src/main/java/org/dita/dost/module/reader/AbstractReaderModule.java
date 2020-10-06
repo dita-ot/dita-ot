@@ -758,17 +758,17 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         try {
             logger.info("Serializing job specification");
-            if (!job.tempDir.exists() && !job.tempDir.mkdirs()) {
-                throw new DITAOTException("Failed to create " + job.tempDir + " directory");
-            }
             job.write();
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
         }
 
         try {
-            SubjectSchemeReader.writeMapToXML(addMapFilePrefix(listFilter.getRelationshipGrap()), new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
-            SubjectSchemeReader.writeMapToXML(addMapFilePrefix(schemeDictionary), new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+            subjectSchemeReader.setLogger(logger);
+            subjectSchemeReader.setJob(job);
+            subjectSchemeReader.writeMapToXML(addMapFilePrefix(listFilter.getRelationshipGrap()), new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            subjectSchemeReader.writeMapToXML(addMapFilePrefix(schemeDictionary), new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
         }
@@ -800,7 +800,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      * @param relativeRootFile list value
      */
     private void writeListFile(final File inputfile, final String relativeRootFile) {
-        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)))) {
+        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(inputfile.toURI())))) {
             bufferedWriter.write(relativeRootFile);
             bufferedWriter.flush();
         } catch (final IOException e) {
@@ -905,10 +905,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
 
         // write list attribute to file
-        final String fileKey = Constants.REL_FLAGIMAGE_LIST.substring(0, Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
-        prop.setProperty(fileKey, Constants.REL_FLAGIMAGE_LIST.substring(0, Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
+        final String fileKey = REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
+        prop.setProperty(fileKey, REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
         final File list = new File(job.tempDir, prop.getProperty(fileKey));
-        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)))) {
+        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(list.toURI())))) {
             for (URI aNewSet : newSet) {
                 bufferedWriter.write(aNewSet.getPath());
                 bufferedWriter.write('\n');
@@ -918,7 +918,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             logger.error(e.getMessage(), e) ;
         }
 
-        prop.setProperty(Constants.REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
+        prop.setProperty(REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
     }
 
     private XMLReader getXmlReader(final String format) throws SAXException {

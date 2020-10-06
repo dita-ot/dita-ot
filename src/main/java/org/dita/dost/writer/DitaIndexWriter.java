@@ -306,7 +306,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             hasWritten = false;
             inputFile = new File(file);
             outputFile = new File(file + FILE_EXTENSION_TEMP);
-            output = new OutputStreamWriter(new FileOutputStream(outputFile), StandardCharsets.UTF_8);
+            output = new OutputStreamWriter(job.getStore().getOutputStream(outputFile.toURI()), StandardCharsets.UTF_8);
 
             topicIdList.clear();
             reader.setErrorHandler(new DITAOTXMLErrorHandler(file, logger));

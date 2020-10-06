@@ -103,13 +103,13 @@ public class SubjectSchemeReader {
      *
      * @param inputFile XML properties file absolute path
      */
-    public static Map<URI, Set<URI>> readMapFromXML(final File inputFile) throws IOException {
+    public Map<URI, Set<URI>> readMapFromXML(final File inputFile) throws IOException {
         final Map<URI, Set<URI>> graph = new HashMap<>();
         if (!inputFile.exists()) {
             return Collections.emptyMap();
         }
         final Properties prop = new Properties();
-        try (FileInputStream in = new FileInputStream(inputFile)) {
+        try (InputStream in = new BufferedInputStream(job.getStore().getInputStream(inputFile.toURI()))) {
             prop.loadFromXML(in);
         } catch (final IOException e) {
             throw new IOException("Failed to read subject scheme graph: " + e.getMessage(), e);
@@ -137,7 +137,7 @@ public class SubjectSchemeReader {
      * @param m map to serialize
      * @param outputFile output filename, relative to temporary directory
      */
-    public static void writeMapToXML(final Map<URI, Set<URI>> m, final File outputFile) throws IOException {
+    public void writeMapToXML(final Map<URI, Set<URI>> m, final File outputFile) throws IOException {
         if (m == null) {
             return;
         }
@@ -147,7 +147,7 @@ public class SubjectSchemeReader {
             final String value = StringUtils.join(entry.getValue(), COMMA);
             prop.setProperty(key.getPath(), value);
         }
-        try (OutputStream os = new FileOutputStream(outputFile)) {
+        try (OutputStream os = job.getStore().getOutputStream(outputFile.toURI())) {
             prop.storeToXML(os, null);
         } catch (final IOException e) {
             throw new IOException("Failed to write subject scheme graph: " + e.getMessage(), e);

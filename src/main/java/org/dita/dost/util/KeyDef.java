@@ -11,13 +11,6 @@ import net.sf.saxon.s9api.XdmNode;
 
 import java.net.URI;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import net.sf.saxon.s9api.XdmNode;
-import org.dita.dost.exception.DITAOTException;
-import org.w3c.dom.Element;
 import static org.dita.dost.util.Constants.*;
 
 /**
