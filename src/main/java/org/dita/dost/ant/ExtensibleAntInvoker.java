@@ -28,7 +28,6 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 
@@ -249,11 +248,7 @@ public final class ExtensibleAntInvoker extends Task {
             final List<FileInfoFilterElem> predicates = new ArrayList<>(fm.getFormat());
             predicates.addAll(m.fileInfoFilters);
             module.setFileInfoFilter(combine(predicates));
-            try {
-                module.setProcessingPipe(fm.getFilters());
-            } catch (final InstantiationException | IllegalAccessException e) {
-                throw new BuildException(e);
-            }
+            module.setProcessingPipe(fm.getFilters());
             return module;
         } else {
             for (final ParamElem p : m.params) {
@@ -265,11 +260,7 @@ public final class ExtensibleAntInvoker extends Task {
                 }
             }
             final AbstractPipelineModule module = factory.createModule(m.getImplementation());
-            try {
-                module.setProcessingPipe(m.getFilters());
-            } catch (IllegalAccessException | InstantiationException e) {
-                throw new BuildException(e);
-            }
+            module.setProcessingPipe(m.getFilters());
             if (!m.fileInfoFilters.isEmpty()) {
                 module.setFileInfoFilter(combine(m.fileInfoFilters));
             }
@@ -428,27 +419,25 @@ public final class ExtensibleAntInvoker extends Task {
             filters.add(filter);
         }
 
-        public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
-            final List<FilterPair> res = new ArrayList<>(filters.size());
-            for (final XmlFilterElem f : filters) {
-                if (isValid(getProject(), getLocation(), f.getIf(), f.getUnless())) {
-                    final AbstractXMLFilter fc = f.getImplementation().newInstance();
-                    for (final ParamElem p : f.params) {
-                        if (!p.isValid()) {
-                            throw new BuildException("Incomplete parameter");
-                        }
-                        if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
-                            fc.setParam(p.getName(), p.getValue());
-                        }
-                    }
-                    final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
-//                    predicates.addAll(getFormat());
-//                    assert !predicates.isEmpty();
-                    Predicate<FileInfo> fs = combine(predicates);
-                    res.add(new FilterPair(fc, fs));
-                }
-            }
-            return res;
+        public List<FilterPair> getFilters() {
+            return filters.stream()
+                    .filter(f -> isValid(getProject(), getLocation(), f.getIf(), f.getUnless()))
+                    .map(f -> {
+                        final Map<String, String> params = f.params.stream()
+                                .filter(p -> {
+                                    if (!p.isValid()) {
+                                        throw new IllegalArgumentException(new BuildException("Incomplete parameter"));
+                                    }
+                                    return isValid(getProject(), getLocation(), p.getIf(), p.getUnless());
+                                })
+                                .collect(Collectors.toMap(ParamElem::getName, ParamElem::getValue));
+                        final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
+//                            predicates.addAll(getFormat());
+//                            assert !predicates.isEmpty();
+                        Predicate<FileInfo> fs = combine(predicates);
+                        return new FilterPair(f.getImplementation(), fs, params);
+                    })
+                    .collect(Collectors.toList());
         }
 
         public Class<? extends AbstractPipelineModule> getImplementation() {
@@ -668,27 +657,25 @@ public final class ExtensibleAntInvoker extends Task {
         }
 
         @Override
-        public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
-            final List<FilterPair> res = new ArrayList<>(filters.size());
-            for (final XmlFilterElem f : filters) {
-                if (isValid(getProject(), getLocation(), f.getIf(), f.getUnless())) {
-                    final AbstractXMLFilter fc = f.getImplementation().newInstance();
-                    for (final ParamElem p : f.params) {
-                        if (!p.isValid()) {
-                            throw new BuildException("Incomplete parameter");
-                        }
-                        if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
-                            fc.setParam(p.getName(), p.getValue());
-                        }
-                    }
-                    final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
-                    predicates.addAll(getFormat());
-                    assert !predicates.isEmpty();
-                    Predicate<FileInfo> fs = combine(predicates);
-                    res.add(new FilterPair(fc, fs));
-                }
-            }
-            return res;
+        public List<FilterPair> getFilters() {
+            return filters.stream()
+                    .filter(f -> isValid(getProject(), getLocation(), f.getIf(), f.getUnless()))
+                    .map(f -> {
+                        final Map<String, String> params = f.params.stream()
+                                .filter(p -> {
+                                    if (!p.isValid()) {
+                                        throw new IllegalArgumentException(new BuildException("Incomplete parameter"));
+                                    }
+                                    return isValid(getProject(), getLocation(), p.getIf(), p.getUnless());
+                                })
+                                .collect(Collectors.toMap(ParamElem::getName, ParamElem::getValue));
+                        final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
+                        predicates.addAll(getFormat());
+                        assert !predicates.isEmpty();
+                        Predicate<FileInfo> fs = combine(predicates);
+                        return new FilterPair(f.getImplementation(), fs, params);
+                    })
+                    .collect(Collectors.toList());
         }
 
         public List<FileInfoFilterElem> getFormat() {

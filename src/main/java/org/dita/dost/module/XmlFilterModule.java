@@ -14,10 +14,12 @@ import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.XMLFilter;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -59,7 +61,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
         final List<XMLFilter> res = new ArrayList<>();
         for (final FilterPair p: filters) {
             if (p.predicate.test(fi)) {
-                final AbstractXMLFilter f = p.filter;
+                final AbstractXMLFilter f = p.newInstance();
                 logger.debug("Configure filter " + f.getClass().getCanonicalName());
                 f.setCurrentFile(fileToParse);
                 f.setJob(job);
@@ -74,12 +76,26 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
      * SAX filter with file predicate.
      */
     public static class FilterPair {
-        public final AbstractXMLFilter filter;
+        public final Class<? extends AbstractXMLFilter> filterClass;
         public final Predicate<FileInfo> predicate;
+        public final Map<String, String> params;
 
-        public FilterPair(final AbstractXMLFilter filter, final Predicate<FileInfo> fileInfoFilter) {
-            this.filter = filter;
+        public FilterPair(final Class<? extends AbstractXMLFilter> filterClass,
+                          final Predicate<FileInfo> fileInfoFilter,
+                          final Map<String, String> params) {
+            this.filterClass = filterClass;
             this.predicate = fileInfoFilter;
+            this.params = params;
+        }
+
+        public AbstractXMLFilter newInstance() {
+            try {
+                final AbstractXMLFilter f = filterClass.getDeclaredConstructor().newInstance();
+                params.forEach(f::setParam);
+                return f;
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

@@ -296,7 +296,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
         for (final XmlFilterModule.FilterPair p : filters) {
             if (p.predicate.test(fi)) {
-                final AbstractXMLFilter f = p.filter;
+                final AbstractXMLFilter f = p.newInstance();
                 logger.debug("Configure filter " + f.getClass().getCanonicalName());
                 f.setCurrentFile(srcFile.toURI());
                 f.setJob(job);
