@@ -121,7 +121,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="html5.image-metadata"
           unless="html5.image-metadata.skip" description="Read image metadata">
     <pipeline message="Read image metadata." taskname="image-metadata">
-      <module class="org.dita.dost.module.ImageMetadataModule">
+      <module class="org.dita.dost.module.ImageMetadataModule" parallel="${parallel}">
         <param name="outputdir" location="${dita.output.dir}"/>
       </module>
     </pipeline>
@@ -172,7 +172,8 @@ See the accompanying LICENSE file for applicable license.
             extension="${out.ext}"
             style="${args.xsl}"
             filenameparameter="FILENAME"
-            filedirparameter="FILEDIR">
+            filedirparameter="FILEDIR"
+            parallel="${parallel}">
         <ditafileset format="dita" processingRole="normal"/>
         <param name="FILTERFILE" expression="${dita.input.valfile.url}" if:set="dita.input.valfile"/>
         <param name="CSS" expression="${args.css.file}" if:set="args.css.file"/>

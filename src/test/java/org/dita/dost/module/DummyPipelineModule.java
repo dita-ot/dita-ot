@@ -59,4 +59,8 @@ public class DummyPipelineModule implements AbstractPipelineModule {
         // Noop
     }
 
+    @Override
+    public void setParallel(final boolean parallel) {
+        // Noop
+    }
 }

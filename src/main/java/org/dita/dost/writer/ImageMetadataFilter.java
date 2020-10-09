@@ -54,7 +54,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private final File tempDir;
     private final String uplevels;
     private int depth = 0;
-    private final Map<URI, Attributes> cache = new HashMap<>();
+    private final Map<URI, Attributes> cache;
     private final Job job;
     private final XMLReader reader;
     private final SvgMetadataReader svgMetadataReader;
@@ -64,11 +64,12 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     /**
      * Constructor.
      */
-    public ImageMetadataFilter(final File outputDir, final Job job) {
+    public ImageMetadataFilter(final File outputDir, final Job job, final Map<URI, Attributes> cache) {
         this.outputDir = outputDir;
         this.job = job;
         this.tempDir = job.tempDir;
         this.uplevels = job.getProperty("uplevels");
+        this.cache = cache;
         svgMetadataReader = new SvgMetadataReader();
         try {
             reader = XMLUtils.getXMLReader();
@@ -82,7 +83,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     // AbstractWriter methods --------------------------------------------------
 
     @Override
-    public void write(final File filename) throws DITAOTException {
+    public void write(final File filename) {
         // ignore in-exists file
         if (filename == null || !job.getStore().exists(filename.toURI())) {
             return;
@@ -98,6 +99,11 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         }
     }
 
+    /**
+     * Get list of images.
+     * @deprecated since 3.6
+     */
+    @Deprecated
     public Collection<URI> getImages() {
         return ImmutableList.copyOf(cache.keySet());
     }

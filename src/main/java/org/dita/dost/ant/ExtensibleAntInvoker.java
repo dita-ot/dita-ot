@@ -273,6 +273,7 @@ public final class ExtensibleAntInvoker extends Task {
             if (!m.fileInfoFilters.isEmpty()) {
                 module.setFileInfoFilter(combine(m.fileInfoFilters));
             }
+            module.setParallel(m.parallel);
             return module;
         }
     }
@@ -409,6 +410,7 @@ public final class ExtensibleAntInvoker extends Task {
         public final Collection<FileInfoFilterElem> fileInfoFilters = new ArrayList<>();
         private Project project;
         private Location location;
+        private boolean parallel;
 
         public void setClass(final Class<? extends AbstractPipelineModule> cls) {
             this.cls = cls;
@@ -468,6 +470,11 @@ public final class ExtensibleAntInvoker extends Task {
         public Location getLocation() {
             return location;
         }
+
+        public void setParallel(final boolean parallel) {
+            this.parallel = parallel;
+        }
+
     }
 
     /**

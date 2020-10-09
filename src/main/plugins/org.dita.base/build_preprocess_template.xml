@@ -439,7 +439,7 @@ See the accompanying LICENSE file for applicable license.
           description="Clean preprocess">
     <pipeline message="Clean preprocess" taskname="clean-preprocess">
       <param name="use-result-filename" value="${clean-preprocess.use-result-filename}" if:set="clean-preprocess.use-result-filename"/>
-      <module class="org.dita.dost.module.CleanPreprocessModule">
+      <module class="org.dita.dost.module.CleanPreprocessModule" parallel="${parallel}">
         <param name="result.rewrite-rule.xsl" value="${result.rewrite-rule.xsl}" if:set="result.rewrite-rule.xsl"/>
         <param name="result.rewrite-rule.class" value="${result.rewrite-rule.class}" if:set="result.rewrite-rule.class"/>
       </module>
