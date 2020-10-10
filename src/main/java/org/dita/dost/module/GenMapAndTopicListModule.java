@@ -13,7 +13,6 @@ import com.google.common.collect.SetMultimap;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.reader.ReaderUtils;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -32,7 +31,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.*;
 import java.net.URI;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -270,7 +268,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private void initFilters() {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
-//        listFilter.setPrimaryDitamap(rootFile);
+        rootFiles.stream().reduce(URLUtils::getBase).ifPresent(rootFile -> {
+            listFilter.setRootDir(rootFile.resolve("."));
+        });
         listFilter.setJob(job);
 
         if (profilingEnabled) {
@@ -338,7 +338,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         if (input.getAttribute("inputs") != null) {
             rootFiles = Arrays.stream(input.getAttribute("inputs").split(" "))
-                    .map(in -> URI.create(in))
+                    .map(in -> {
+                        final URI ditaInput = URLUtils.toURI(in);
+                        return getRootFile(basedir, ditaInput);
+                    })
                     .collect(Collectors.toList());
             if (baseInputDir == null) {
                 baseInputDir = rootFiles.stream()
@@ -352,17 +355,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             job.setInputDir(baseInputDir);
         } else {
             final URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
-            final URI rootFile;
-            if (ditaInput.isAbsolute()) {
-                rootFile = ditaInput;
-            } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
-                rootFile = setScheme(ditaInput, "file");
-            } else if (baseInputDir != null) {
-                rootFile = baseInputDir.resolve(ditaInput);
-            } else {
-                rootFile = basedir.toURI().resolve(ditaInput);
-            }
-            assert rootFile.isAbsolute();
+            final URI rootFile = getRootFile(basedir, ditaInput);
             rootFiles = Collections.singletonList(rootFile);
             if (baseInputDir == null) {
                 baseInputDir = rootFile.resolve(".");
@@ -380,6 +373,21 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         // Set the mapDir
 //        job.setInputFile(rootFile);
+    }
+
+    private URI getRootFile(final File basedir, final URI ditaInput) {
+        final URI rootFile;
+        if (ditaInput.isAbsolute()) {
+            rootFile = ditaInput;
+        } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
+            rootFile = setScheme(ditaInput, "file");
+        } else if (baseInputDir != null) {
+            rootFile = baseInputDir.resolve(ditaInput);
+        } else {
+            rootFile = basedir.toURI().resolve(ditaInput);
+        }
+        assert rootFile.isAbsolute();
+        return rootFile;
     }
 
     private void processWaitList() throws DITAOTException {

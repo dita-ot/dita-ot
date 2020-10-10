@@ -169,7 +169,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
-//        listFilter.setPrimaryDitamap(rootFile);
+        rootFiles.stream().reduce(URLUtils::getBase).ifPresent(rootFile -> {
+            listFilter.setRootDir(rootFile.resolve("."));
+        });
         listFilter.setRootDir(baseInputDir);
         listFilter.setJob(job);
         listFilter.setFormatFilter(formatFilter);
