@@ -245,6 +245,7 @@ public final class ExtensibleAntInvoker extends Task {
         } else if (m instanceof SaxPipeElem) {
             final SaxPipeElem fm = (SaxPipeElem) m;
             final XmlFilterModule module = new XmlFilterModule();
+            module.setParallel(fm.parallel);
             final List<FileInfoFilterElem> predicates = new ArrayList<>(fm.getFormat());
             predicates.addAll(m.fileInfoFilters);
             module.setFileInfoFilter(combine(predicates));
@@ -260,6 +261,7 @@ public final class ExtensibleAntInvoker extends Task {
                 }
             }
             final AbstractPipelineModule module = factory.createModule(m.getImplementation());
+            module.setParallel(m.parallel);
             module.setProcessingPipe(m.getFilters());
             if (!m.fileInfoFilters.isEmpty()) {
                 module.setFileInfoFilter(combine(m.fileInfoFilters));
@@ -401,7 +403,7 @@ public final class ExtensibleAntInvoker extends Task {
         public final Collection<FileInfoFilterElem> fileInfoFilters = new ArrayList<>();
         private Project project;
         private Location location;
-        private boolean parallel;
+        protected boolean parallel;
 
         public void setClass(final Class<? extends AbstractPipelineModule> cls) {
             this.cls = cls;

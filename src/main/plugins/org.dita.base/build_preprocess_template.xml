@@ -256,7 +256,7 @@ See the accompanying LICENSE file for applicable license.
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
           description="Normalize same topic fragment identifiers and table column names, and resolve coderef">
     <pipeline message="Resolve topic fragment." taskname="topic-fragment">
-      <sax format="dita" parallel="false"><!--${parallel}-->
+      <sax format="dita" parallel="${parallel}">
         <filter class="org.dita.dost.writer.TopicFragmentFilter">
           <param name="attributes" value="href"/>
         </filter>

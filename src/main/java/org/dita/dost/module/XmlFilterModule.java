@@ -16,11 +16,12 @@ import org.xml.sax.XMLFilter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Map processes topics through XML filters. Filters are reused and should reset internal state on
@@ -38,13 +39,25 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         final Collection<FileInfo> fis = job.getFileInfo(fileInfoFilter);
-        for (final FileInfo f: fis) {
-            final URI file = job.tempDirURI.resolve(f.uri);
-            logger.info("Processing " + file);
-            try {
-                job.getStore().transform(file, getProcessingPipe(f));
-            } catch (final DITAOTException e) {
-                logger.error("Failed to process XML filter: " + e.getMessage(), e);
+        if (parallel) {
+            fis.stream().parallel().forEach(f -> {
+                final URI file = job.tempDirURI.resolve(f.uri);
+                logger.info("Processing " + file);
+                try {
+                    job.getStore().transform(file, getProcessingPipe(f));
+                } catch (final DITAOTException e) {
+                    logger.error("Failed to process XML filter: " + e.getMessage(), e);
+                }
+            });
+        } else {
+            for (final FileInfo f : fis) {
+                final URI file = job.tempDirURI.resolve(f.uri);
+                logger.info("Processing " + file);
+                try {
+                    job.getStore().transform(file, getProcessingPipe(f));
+                } catch (final DITAOTException e) {
+                    logger.error("Failed to process XML filter: " + e.getMessage(), e);
+                }
             }
         }
         return null;
@@ -58,18 +71,17 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
     private List<XMLFilter> getProcessingPipe(final FileInfo fi) {
         final URI fileToParse = job.tempDirURI.resolve(fi.uri);
         assert fileToParse.isAbsolute();
-        final List<XMLFilter> res = new ArrayList<>();
-        for (final FilterPair p: filters) {
-            if (p.predicate.test(fi)) {
-                final AbstractXMLFilter f = p.newInstance();
-                logger.debug("Configure filter " + f.getClass().getCanonicalName());
-                f.setCurrentFile(fileToParse);
-                f.setJob(job);
-                f.setLogger(logger);
-                res.add(f);
-            }
-        }
-        return res;
+        return filters.stream()
+                .filter(p -> p.predicate.test(fi))
+                .map(FilterPair::newInstance)
+                .map(f -> {
+                    logger.debug("Configure filter " + f.getClass().getCanonicalName());
+                    f.setCurrentFile(fileToParse);
+                    f.setJob(job);
+                    f.setLogger(logger);
+                    return f;
+                })
+                .collect(Collectors.toList());
     }
 
     /**
