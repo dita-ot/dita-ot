@@ -97,25 +97,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
             tempFileNameScheme.setBaseDir(job.getInputDir());
 
-            // Read resources maps
-            final Collection<FileInfo> resourceFis = job.getFileInfo(fi -> fi.isInputResource && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP));
-            final KeyScope rootScope = resourceFis.stream()
-                    .map(fi -> {
-                        try {
-                            final XdmNode d = readMap(fi);
-                            logger.info("Reading " + job.tempDirURI.resolve(fi.uri).toString());
-                            final KeyrefReader r = new KeyrefReader();
-                            r.setLogger(logger);
-                            r.read(job.tempDirURI.resolve(fi.uri), d);
-                            final KeyScope s = r.getKeyDefinition();
-                            writeMap(fi, d);
-                            return s;
-                        } catch (DITAOTException e) {
-                            throw new RuntimeException(e);
-                        }
-                    })
-                    .reduce(KeyScope.EMPTY, KeyScope::merge);
-
             // Read start map
             final Collection<FileInfo> startFis = job.getFileInfo(fi -> fi.isInput);
             final Map<FileInfo, XdmNode> documentMap = startFis.stream()
@@ -144,9 +125,28 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                             throw new RuntimeException(e);
                         }
                     })
-                    .reduce(rootScope, KeyScope::merge);
+                    .reduce(KeyScope.EMPTY, KeyScope::merge);
 
-            final List<ResolveTask> jobs = collectProcessingTopics(resourceFis, startScope, documentMap);
+            // Read resources maps
+            final Collection<FileInfo> resourceFis = job.getFileInfo(fi -> fi.isInputResource && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP));
+            final KeyScope rootScope = resourceFis.stream()
+                    .map(fi -> {
+                        try {
+                            final XdmNode d = readMap(fi);
+                            logger.info("Reading " + job.tempDirURI.resolve(fi.uri).toString());
+                            final KeyrefReader r = new KeyrefReader();
+                            r.setLogger(logger);
+                            r.read(job.tempDirURI.resolve(fi.uri), d);
+                            final KeyScope s = r.getKeyDefinition();
+                            writeMap(fi, d);
+                            return s;
+                        } catch (DITAOTException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .reduce(startScope, KeyScope::merge);
+
+            final List<ResolveTask> jobs = collectProcessingTopics(resourceFis, rootScope, documentMap);
             documentMap.forEach((in, doc) -> {
                 try {
                     writeMap(in, doc);
