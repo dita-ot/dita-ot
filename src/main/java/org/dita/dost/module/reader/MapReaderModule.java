@@ -53,8 +53,6 @@ public final class MapReaderModule extends AbstractReaderModule {
             handleConref();
             outputResult();
 
-//            combine();
-
             job.write();
         } catch (final RuntimeException | DITAOTException e) {
             throw e;
@@ -64,22 +62,6 @@ public final class MapReaderModule extends AbstractReaderModule {
 
         return null;
     }
-
-    /**
-     * Combines multiple inputs into a single root map.
-     *
-     * @throws DITAOTException if writing output fails
-     */
-//    private void combine() throws DITAOTException {
-//        if (rootFiles.size() > 1) {
-//            final ReaderUtils utils = new ReaderUtils();
-//            utils.setJob(job);
-//            utils.setLogger(logger);
-//            utils.setTempFileNameScheme(tempFileNameScheme);
-//
-//            utils.combine(rootFile, rootFiles);
-//        }
-//    }
 
     @Override
     public void readStartFile() throws DITAOTException {

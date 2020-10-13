@@ -135,8 +135,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private FilterUtils filterUtils;
     private TempFileNameScheme tempFileNameScheme;
 
-//    /** Absolute path to input file. */
-//    private URI rootFile;
     private List<URI> resources;
     /** List of absolute input files. */
     List<URI> rootFiles;
@@ -208,8 +206,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             handleConref();
             outputResult();
 
-//            combine();
-
             job.write();
         } catch (final DITAOTException e) {
             throw e;
@@ -245,22 +241,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             addToWaitList(new Reference(root));
         }
     }
-
-    /**
-     * Combines multiple inputs into a single root map.
-     *
-     * @throws DITAOTException if writing output fails
-     */
-//    private void combine() throws DITAOTException {
-//        if (rootFiles.size() > 1) {
-//            final ReaderUtils utils = new ReaderUtils();
-//            utils.setJob(job);
-//            utils.setLogger(logger);
-//            utils.setTempFileNameScheme(tempFileNameScheme);
-//
-//            utils.combine(rootFile, rootFiles);
-//        }
-//    }
 
     /**
      * Initialize reusable filters.
@@ -348,10 +328,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
                         .map(f -> f.resolve("."))
                         .reduce(rootFiles.get(0).resolve("."), (left, right) -> URLUtils.getBase(left, right));
             }
-//            rootFile = rootFiles.size() == 1
-//                    ? rootFiles.get(0)
-//                    : baseInputDir.resolve(ReaderUtils.GEN_MAP);
-//            job.setInputFile(rootFile);
             job.setInputDir(baseInputDir);
         } else {
             final URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
