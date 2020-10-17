@@ -1014,7 +1014,6 @@ public final class Job {
      * Set input map path.
      * @param inputFile absolute input map path
      */
-    @Deprecated
     public void setInputFile(final URI inputFile) {
         assert inputFile.isAbsolute();
         prop.put(PROPERTY_INPUT_MAP_URI, inputFile.toString());

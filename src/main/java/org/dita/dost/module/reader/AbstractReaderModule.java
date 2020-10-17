@@ -281,6 +281,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             rootFiles = Arrays.stream(input.getAttribute("inputs").split(" "))
                     .map(in -> URI.create(in))
                     .collect(Collectors.toList());
+            job.setInputFile(rootFiles.get(0));
             if (baseInputDir == null) {
                 baseInputDir = rootFiles.stream()
                         .map(f -> f.resolve("."))
@@ -302,7 +303,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             }
             assert rootFile.isAbsolute();
             rootFiles = Collections.singletonList(rootFile);
-//            job.setInputFile(rootFile);
+            job.setInputFile(rootFile);
 
             if (baseInputDir == null) {
                 baseInputDir = rootFile.resolve(".");
@@ -643,18 +644,19 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     void outputResult() throws DITAOTException {
         tempFileNameScheme.setBaseDir(baseInputDir);
 
-//        job.setInputMap(rootTemp);
+        // assume empty Job
+        final List<URI> rootTemps = rootFiles.stream()
+                .map(f -> tempFileNameScheme.generateTempFileName(f))
+                .collect(Collectors.toList());
+        final URI rootTemp = rootTemps.get(0);
+        final File relativeRootFile = toFile(rootTemp);
+
+        job.setInputMap(rootTemp);
 
         job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
         final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);
-        writeListFile(inputfile,
-                rootFiles.stream()
-                        .map(f -> tempFileNameScheme.generateTempFileName(f))
-                        .map(URI::toString)
-                        .collect(Collectors.toList()));
+        writeListFile(inputfile, rootTemps.stream().map(URI::toString).collect(Collectors.toList()));
 
-        // FIXME when multiple maps are supported
-        final File relativeRootFile = toFile(tempFileNameScheme.generateTempFileName(rootFiles.get(0)));
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
         final Set<URI> res = new HashSet<>();
@@ -769,22 +771,21 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
 
         if (rootFiles.size() == 1) {
-            final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFiles.get(0));
             final FileInfo root = job.getFileInfo(rootTemp);
             job.add(new FileInfo.Builder(root)
                     .isInput(true)
                     .build());
         } else {
             for (final URI f : rootFiles) {
-                final URI rootTemp = tempFileNameScheme.generateTempFileName(f);
+                final URI tempFile = tempFileNameScheme.generateTempFileName(f);
                 final FileInfo root = job.getFileInfo(f);
                 if (root == null) {
                     throw new RuntimeException("Unable to set input file to job configuration");
                 }
                 job.add(new FileInfo.Builder(root)
-                        .src(f)
-                        .uri(rootTemp)
-                        .format(ATTR_FORMAT_VALUE_DITAMAP)
+//                        .src(f)
+//                        .uri(tempFile)
+//                        .format(ATTR_FORMAT_VALUE_DITAMAP)
                         .isInput(true)
                         .build());
             }
