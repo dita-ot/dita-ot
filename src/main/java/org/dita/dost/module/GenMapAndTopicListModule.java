@@ -771,11 +771,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         tempFileNameScheme.setBaseDir(baseInputDir);
 
         // assume empty Job
-//        final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
-//        final File relativeRootFile = toFile(rootTemp);
+        final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFiles.get(0));
+        final File relativeRootFile = toFile(rootTemp);
 
         job.setInputDir(baseInputDir);
-//        job.setInputMap(rootTemp);
+        job.setInputMap(rootTemp);
 
         //If root input file is marked resource only due to conref or other feature, remove that designation
         for (URI rootFile : rootFiles) {
@@ -791,8 +791,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
                 .map(URI::toString)
                 .collect(Collectors.toList()));
 
-        // FIXME when multiple maps are supported
-        final File relativeRootFile = toFile(tempFileNameScheme.generateTempFileName(rootFiles.get(0)));
+
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
         job.setProperty("uplevels", getLevelsPath(rootFiles.stream()
                 .map(rootFile -> tempFileNameScheme.generateTempFileName(rootFile))
@@ -906,23 +905,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             job.add(fi);
         }
 
-        if (rootFiles.size() == 1) {
-            final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFiles.get(0));
-            final FileInfo root = job.getFileInfo(rootTemp);
-            job.add(new FileInfo.Builder(root)
-                    .isInput(true)
-                    .build());
-        } else {
-            for (URI rootFile : rootFiles) {
-                final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
-                job.add(new FileInfo.Builder()
-                        .src(rootFile)
-                        .uri(rootTemp)
-                        .format(ATTR_FORMAT_VALUE_DITAMAP)
-                        .isInput(true)
-                        .build());
-            }
-        }
+        rootFiles.stream()
+                .map(tempFileNameScheme::generateTempFileName)
+                .map(job::getFileInfo)
+                .map(root -> new FileInfo.Builder(root).isInput(true).build())
+                .forEach(job::add);
 
         try {
             logger.info("Serializing job specification");
