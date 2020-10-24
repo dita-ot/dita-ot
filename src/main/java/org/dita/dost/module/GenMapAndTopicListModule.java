@@ -135,9 +135,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private FilterUtils filterUtils;
     private TempFileNameScheme tempFileNameScheme;
 
-    private List<URI> resources;
     /** List of absolute input files. */
     List<URI> rootFiles;
+    private List<URI> resources;
     /** File currently being processed */
     private URI currentFile;
     /** Subject scheme key map. Key is key value, value is key definition. */
@@ -259,7 +259,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
-//        keydefFilter.setCurrentFile(rootFile);
         keydefFilter.setJob(job);
 
         nullHandler = new DefaultHandler();
@@ -318,33 +317,30 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         if (input.getAttribute("inputs") != null) {
             rootFiles = Arrays.stream(input.getAttribute("inputs").split(" "))
-                    .map(in -> {
-                        final URI ditaInput = URLUtils.toURI(in);
-                        return getRootFile(basedir, ditaInput);
-                    })
+                    .map(URLUtils::toURI)
+                    .map(ditaInput -> getRootFile(basedir, ditaInput))
                     .collect(Collectors.toList());
-            job.setInputFile(rootFiles.get(0));
-            if (baseInputDir == null) {
-                baseInputDir = rootFiles.stream()
-                        .map(f -> f.resolve("."))
-                        .reduce(rootFiles.get(0).resolve("."), (left, right) -> URLUtils.getBase(left, right));
-            }
-            job.setInputDir(baseInputDir);
         } else {
             final URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
             final URI rootFile = getRootFile(basedir, ditaInput);
             rootFiles = Collections.singletonList(rootFile);
-            job.setInputFile(rootFile);
-            if (baseInputDir == null) {
-                baseInputDir = rootFile.resolve(".");
-            }
-            assert baseInputDir.isAbsolute();
         }
+        for (URI rootFile : rootFiles) {
+            assert rootFile.isAbsolute();
+        }
+        job.setInputFile(rootFiles.get(0));
+        if (baseInputDir == null) {
+            baseInputDir = rootFiles.stream()
+                    .map(f -> f.resolve("."))
+                    .reduce((left, right) -> URLUtils.getBase(left, right))
+                    .get();
+        }
+        assert baseInputDir.isAbsolute();
+        job.setInputDir(baseInputDir);
 
-        profilingEnabled = true;
-        if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {
-            profilingEnabled = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED));
-        }
+        profilingEnabled = Optional.ofNullable(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED))
+                .map(Boolean::parseBoolean)
+                .orElse(true);
 
         // create the keydef file for scheme files
         schemekeydefMap = new HashMap<>();

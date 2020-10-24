@@ -103,9 +103,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     boolean validate = true;
     ContentHandler nullHandler;
     TempFileNameScheme tempFileNameScheme;
-    List<URI> resources;
     /** List of absolute input files. */
     List<URI> rootFiles;
+    List<URI> resources;
     /** Subject scheme absolute file paths. */
     private final Set<URI> schemeSet = ConcurrentHashMap.newKeySet();
     /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
@@ -180,7 +180,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
-//        keydefFilter.setCurrentFile(rootFiles);
         keydefFilter.setJob(job);
 
         nullHandler = new DefaultHandler();
@@ -279,37 +278,29 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         if (input.getAttribute("inputs") != null) {
             rootFiles = Arrays.stream(input.getAttribute("inputs").split(" "))
-                    .map(in -> URI.create(in))
+                    .map(URLUtils::toURI)
+                    .map(ditaInput -> getRootFile(basedir, ditaInput))
                     .collect(Collectors.toList());
-            job.setInputFile(rootFiles.get(0));
-            if (baseInputDir == null) {
-                baseInputDir = rootFiles.stream()
-                        .map(f -> f.resolve("."))
-                        .reduce(rootFiles.get(0).resolve("."), (left, right) -> URLUtils.getBase(left, right));
-            }
-            job.setInputDir(baseInputDir);
         } else {
             URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
-            ditaInput = ditaInput != null ? ditaInput : job.getInputFile();
-            URI rootFile;
-            if (ditaInput.isAbsolute()) {
-                rootFile = ditaInput;
-            } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
-                rootFile = setScheme(ditaInput, "file");
-            } else if (baseInputDir != null) {
-                rootFile = baseInputDir.resolve(ditaInput);
-            } else {
-                rootFile = basedir.toURI().resolve(ditaInput);
+            if (ditaInput == null) {
+                ditaInput = job.getInputFile();
             }
-            assert rootFile.isAbsolute();
+            final URI rootFile = getRootFile(basedir, ditaInput);
             rootFiles = Collections.singletonList(rootFile);
-            job.setInputFile(rootFile);
-
-            if (baseInputDir == null) {
-                baseInputDir = rootFile.resolve(".");
-            }
-            job.setInputDir(baseInputDir);
         }
+        for (URI rootFile : rootFiles) {
+            assert rootFile.isAbsolute();
+        }
+        job.setInputFile(rootFiles.get(0));
+        if (baseInputDir == null) {
+            baseInputDir = rootFiles.stream()
+                    .map(f -> f.resolve("."))
+                    .reduce((left, right) -> URLUtils.getBase(left, right))
+                    .get();
+        }
+        assert baseInputDir.isAbsolute();
+        job.setInputDir(baseInputDir);
 
         profilingEnabled = Optional.ofNullable(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED))
                 .map(Boolean::parseBoolean)
@@ -319,6 +310,21 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                     .filter(File::exists)
                     .orElse(null);
         }
+    }
+
+    private URI getRootFile(File basedir, URI ditaInput) {
+        URI rootFile;
+        if (ditaInput.isAbsolute()) {
+            rootFile = ditaInput;
+        } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
+            rootFile = setScheme(ditaInput, "file");
+        } else if (baseInputDir != null) {
+            rootFile = baseInputDir.resolve(ditaInput);
+        } else {
+            rootFile = basedir.toURI().resolve(ditaInput);
+        }
+        assert rootFile.isAbsolute();
+        return rootFile;
     }
 
     void processWaitList() throws DITAOTException {
@@ -770,26 +776,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        if (rootFiles.size() == 1) {
-            final FileInfo root = job.getFileInfo(rootTemp);
-            job.add(new FileInfo.Builder(root)
-                    .isInput(true)
-                    .build());
-        } else {
-            for (final URI f : rootFiles) {
-                final URI tempFile = tempFileNameScheme.generateTempFileName(f);
-                final FileInfo root = job.getFileInfo(f);
-                if (root == null) {
-                    throw new RuntimeException("Unable to set input file to job configuration");
-                }
-                job.add(new FileInfo.Builder(root)
-//                        .src(f)
-//                        .uri(tempFile)
-//                        .format(ATTR_FORMAT_VALUE_DITAMAP)
-                        .isInput(true)
-                        .build());
-            }
-        }
+        rootFiles.stream()
+                .map(tempFileNameScheme::generateTempFileName)
+                .map(job::getFileInfo)
+                .map(root -> new FileInfo.Builder(root).isInput(true).build())
+                .forEach(job::add);
 
         try {
             logger.info("Serializing job specification");
