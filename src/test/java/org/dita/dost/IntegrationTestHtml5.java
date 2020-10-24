@@ -107,4 +107,12 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
                 .test();
     }
 
+    @Test
+    public void html5_onlyTopics() throws Throwable {
+        builder().name("html5_multipleInputTopics")
+                .transtype(HTML5)
+                .input(Paths.get("t1.dita"))
+                .input(Paths.get("t2.dita"))
+                .run();
+    }
 }
