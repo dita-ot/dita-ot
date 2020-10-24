@@ -392,7 +392,8 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Pull metadata for link and xref element" taskname="topicpull">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl"
+        parallel="${parallel}">
         <ditafileset format="dita" processingRole="normal"/>
         <param name="TABLELINK" expression="${args.tablelink.style}" if:set="args.tablelink.style" />
         <param name="FIGURELINK" expression="${args.figurelink.style}" if:set="args.figurelink.style" />
