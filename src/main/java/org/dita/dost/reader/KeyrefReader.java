@@ -44,6 +44,7 @@ import static net.sf.saxon.s9api.streams.Predicates.*;
 import static net.sf.saxon.s9api.streams.Steps.*;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.KeyScope.ROOT_ID;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.rootElement;
 
@@ -142,7 +143,7 @@ public final class KeyrefReader implements AbstractReader {
         if (scopes.size() == 1 && scopes.get(0).name == null) {
             return scopes.get(0);
         } else {
-            return new KeyScope("#root", null, Collections.emptyMap(), scopes);
+            return new KeyScope(ROOT_ID, null, Collections.emptyMap(), scopes);
         }
     }
 
@@ -153,7 +154,7 @@ public final class KeyrefReader implements AbstractReader {
         readChildScopes(root, childScopes);
         final String keyscope = root.attribute(ATTRIBUTE_NAME_KEYSCOPE);
         if (keyscope == null || keyscope.trim().isEmpty()) {
-            return Collections.singletonList(new KeyScope("#root", null, keyDefs, childScopes));
+            return Collections.singletonList(new KeyScope(ROOT_ID, null, keyDefs, childScopes));
         } else {
             final List<KeyScope> res = new ArrayList<>();
             for (final String scope : keyscope.split("\\s+")) {
