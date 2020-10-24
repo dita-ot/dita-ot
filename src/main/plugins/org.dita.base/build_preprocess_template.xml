@@ -241,7 +241,9 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref in input files" taskname="conref">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl"
+        filenameparameter="file-being-processed"
+        parallel="${parallel}">
         <ditafileset conref="true"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
