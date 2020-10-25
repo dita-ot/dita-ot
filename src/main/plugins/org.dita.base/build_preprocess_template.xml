@@ -302,7 +302,7 @@ See the accompanying LICENSE file for applicable license.
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
-      <module class="org.dita.dost.module.KeyrefModule">
+      <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>

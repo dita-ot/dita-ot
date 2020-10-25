@@ -174,7 +174,7 @@ See the accompanying LICENSE file for applicable license.
     unless="preprocess.keyref.skip"
     description="Resolve input map files keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
-      <module class="org.dita.dost.module.KeyrefModule">
+      <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
         <param name="transtype" value="${transtype}"/>
@@ -276,7 +276,7 @@ See the accompanying LICENSE file for applicable license.
           unless="preprocess.keyref.skip"
           description="Resolve keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
-      <module class="org.dita.dost.module.KeyrefModule">
+      <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
         <ditafileset format="dita"/>
         <param name="transtype" value="${transtype}"/>
       </module>
