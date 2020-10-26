@@ -95,6 +95,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Set of properties that can be used by tasks.
      */
     private List<Map<String, Object>> projectProps;
+    private int repeat;
 
     /**
      * Whether or not this instance has successfully been constructed and is
@@ -195,15 +196,27 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // expect the worst
         int exitCode = 1;
         try {
-            try {
-                for (Map<String, Object> props : projectProps) {
-                    runBuild(coreLoader, props);
+            final long[] durations = new long[repeat];
+            for (int i = 0; i < repeat; i++) {
+                final long start = System.currentTimeMillis();
+                try {
+                    for (Map<String, Object> props : projectProps) {
+                        runBuild(coreLoader, props);
+                    }
+                    exitCode = 0;
+                } catch (final ExitStatusException ese) {
+                    exitCode = ese.getStatus();
+                    if (exitCode != 0) {
+                        throw ese;
+                    }
                 }
-                exitCode = 0;
-            } catch (final ExitStatusException ese) {
-                exitCode = ese.getStatus();
-                if (exitCode != 0) {
-                    throw ese;
+                final long end = System.currentTimeMillis();
+                durations[i] = end - start;
+            }
+            if (repeat > 1) {
+                for (int i = 0; i < durations.length; i++) {
+                    System.out.println(String.format(locale.getString("conversion.repeatDuration"),
+                            i + 1, durations[i]));
                 }
             }
         } catch (final BuildException be) {
@@ -344,6 +357,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             } else {
                 projectProps = handleProject(conversionArgs.projectFile, definedProps);
             }
+            repeat = conversionArgs.repeat;
             // default values
             if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
                 definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());

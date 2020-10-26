@@ -79,6 +79,7 @@ public class ConversionArguments extends Arguments {
      * Project file
      */
     File projectFile;
+    int repeat = 1;
 
     public final List<String> inputs = new ArrayList<>();
     private final List<String> resources = new ArrayList<>();
@@ -142,6 +143,8 @@ public class ConversionArguments extends Arguments {
                 handleArgFilter(arg, args, ARGUMENTS.get(getArgumentName(arg)));
             } else if (isLongForm(arg, "-resource") || arg.equals("-r")) {
                 handleArgResource(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+            } else if (isLongForm(arg, "-repeat")) {
+                handleArgRepeat(arg, args);
             } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
                 definedProps.putAll(handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg))));
             } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
@@ -301,6 +304,14 @@ public class ConversionArguments extends Arguments {
         propertyFiles.addElement(entry.getValue());
     }
 
+    private void handleArgRepeat(final String arg, final Deque<String> args) {
+        final Map.Entry<String, String> entry = parse(arg.substring(2), args);
+        if (entry.getValue() == null) {
+            throw new BuildException("You must repeat number");
+        }
+        repeat = Integer.parseInt(entry.getValue());
+    }
+
     /**
      * Handle the --nice argument.
      */
@@ -378,6 +389,7 @@ public class ConversionArguments extends Arguments {
             buf
                     .options("l", "logfile", "file", locale.getString("conversion.option.logfile"))
                     .options(null, "propertyfile", "file", locale.getString("conversion.option.propertyfile"))
+                    .options(null, "repeat", "num", locale.getString("conversion.option.repeat"))
                     .options("t", "temp", "dir", locale.getString("conversion.option.temp"));
             final Set<String> builtin = ARGUMENTS.values().stream().map(arg -> arg.property).collect(Collectors.toSet());
             final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
