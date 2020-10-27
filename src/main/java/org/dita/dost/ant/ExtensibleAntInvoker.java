@@ -201,6 +201,9 @@ public final class ExtensibleAntInvoker extends Task {
             if (xm.reloadstylesheet && xm.parallel) {
                 throw new BuildException("Both reloadstylesheet and parallel cannot be true");
             }
+            if (xm.parallel && xm.xmlcatalog != null) {
+                throw new DITAOTException("Pipeline XSLT task with parallel=true cannot be used with Ant's xmlcatalog");
+            }
             final XsltModule module = new XsltModule();
             module.setStyle(xm.style);
             if (xm.in != null) {

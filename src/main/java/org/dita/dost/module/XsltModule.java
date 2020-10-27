@@ -10,6 +10,7 @@ package org.dita.dost.module;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -28,7 +29,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
+import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
 import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.XMLUtils.toErrorListener;
 import static org.dita.dost.util.XMLUtils.toMessageListener;
@@ -72,6 +77,12 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             catalog = catalogResolver;
         }
         uriResolver = new DelegatingURIResolver(catalog, job.getStore());
+//        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
+//        if (catalog == null) {
+//            uriResolver = new DelegatingURIResolver(catalogResolver, job.getStore());
+//        } else {
+//            uriResolver = new DelegatingURIResolver(catalog, catalogResolver, job.getStore());
+//        }
 
         if (fileInfoFilter != null) {
             final Collection<Job.FileInfo> res = job.getFileInfo(fileInfoFilter);
@@ -108,19 +119,37 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             transform(in, out);
         } else if (parallel) {
             try {
-                includes.stream().parallel().forEach(include -> {
+                final List<Entry<File, File>> tmps = includes.stream().parallel()
+                        .map(include -> {
+                            try {
+                                final File in = new File(baseDir, include.getPath());
+                                final File out = getOutput(include.getPath());
+                                if (out == null) {
+                                    return null;
+                                }
+                                final XsltTransformer transformer = getTransformer();
+                                if (in.equals(out)) {
+                                    final File tmp = new File(out.getAbsolutePath() + FILE_EXTENSION_TEMP);
+                                    transform(in, tmp, transformer);
+                                    return new SimpleEntry<>(tmp, out);
+                                } else {
+                                    transform(in, out, transformer);
+                                    return null;
+                                }
+                            } catch (DITAOTException e) {
+                                throw new UncheckedDITAOTException(e);
+                            }
+                        })
+                        .filter(entry -> entry != null)
+                        .collect(Collectors.toList());
+                for (Entry<File, File> entry : tmps) {
                     try {
-                        final File in = new File(baseDir, include.getPath());
-                        final File out = getOutput(include.getPath());
-                        if (out == null) {
-                            return;
-                        }
-                        final XsltTransformer transformer = getTransformer();
-                        transform(in, out, transformer);
-                    } catch (DITAOTException e) {
-                        throw new UncheckedDITAOTException(e);
+                        logger.info("Move " + entry.getKey().toURI() + " to " + entry.getValue().toURI());
+                        job.getStore().move(entry.getKey().toURI(), entry.getValue().toURI());
+                    } catch (IOException e) {
+                        logger.error(String.format("Failed to move %s to %s: %s", entry.getKey().toURI(), entry.getValue().toURI(), e.getMessage()), e);
                     }
-                });
+                }
             } catch (UncheckedDITAOTException e) {
                 throw e.getDITAOTException();
             }
@@ -180,7 +209,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
     private void transform(final File in, final File out, final XsltTransformer t) throws DITAOTException {
         final boolean same = in.getAbsolutePath().equals(out.getAbsolutePath());
-        for (Map.Entry<String, String> e: params.entrySet()) {
+        for (Entry<String, String> e: params.entrySet()) {
             logger.debug("Set parameter " + e.getKey() + " to '" + e.getValue() + "'");
             t.setParameter(new QName(e.getKey()), new XdmAtomicValue(e.getValue()));
         }
@@ -198,8 +227,10 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         if (properties.isEmpty()) {
             try {
                 if (same) {
+                    logger.info("Processing " + in.toURI());
                     job.getStore().transform(in.toURI(), t);
                 } else {
+                    logger.info("Processing " + in.toURI() + " to " + out.toURI());
                     job.getStore().transform(in.toURI(), out.toURI(), t);
                 }
             } catch (final UncheckedXPathException e) {
@@ -214,10 +245,10 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
         final File tmp = same ? new File(out.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis())) : out;
         if (same) {
-            logger.info("Processing " + in.getAbsolutePath());
-            logger.debug("Processing " + in.getAbsolutePath() + " to " + tmp.getAbsolutePath());
+            logger.info("Processing " + in.toURI());
+            logger.debug("Processing " + in.toURI() + " to " + tmp.toURI());
         } else {
-            logger.info("Processing " + in.getAbsolutePath() + " to " + tmp.getAbsolutePath());
+            logger.info("Processing " + in.toURI() + " to " + tmp.toURI());
         }
         try {
             final Source source = job.getStore().getSource(in.toURI());
@@ -240,7 +271,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             }
         } catch (final UncheckedXPathException e) {
             logger.error("Failed to transform document: " + e.getXPathException().getMessageAndLocation(), e);
-            logger.debug("Remove " + tmp.getAbsolutePath());
+            logger.debug("Remove " + tmp.toURI());
             try {
                 job.getStore().delete(tmp.toURI());
             } catch (final IOException e1) {
@@ -256,7 +287,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             } catch (Throwable throwable) {
                 logger.error("Failed to transform document: " + e.getMessage(), e);
             }
-            logger.debug("Remove " + tmp.getAbsolutePath());
+            logger.debug("Remove " + tmp.toURI());
             try {
                 job.getStore().delete(tmp.toURI());
             } catch (final IOException e1) {
@@ -264,7 +295,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             }
         } catch (final Exception e) {
             logger.error("Failed to transform document: " + e.getMessage(), e);
-            logger.debug("Remove " + tmp.getAbsolutePath());
+            logger.debug("Remove " + tmp.toURI());
             try {
                 job.getStore().delete(tmp.toURI());
             } catch (final IOException e1) {
