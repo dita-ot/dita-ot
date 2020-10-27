@@ -217,7 +217,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
+        <!--xmlcatalog refid="dita.catalog"/-->
       </xslt>
     </pipeline>
   </target>
@@ -318,7 +318,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
+        <!--xmlcatalog refid="dita.catalog"/-->
       </xslt>
     </pipeline>
   </target>
@@ -409,7 +409,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if:set="onlytopic.in.map"/>
         <param name="defaultLanguage" expression="${default.language}"/>
         <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
+        <!--xmlcatalog refid="dita.catalog"/-->
       </xslt>
     </pipeline>
   </target>
