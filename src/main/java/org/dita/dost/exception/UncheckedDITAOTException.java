@@ -8,6 +8,11 @@
 
 package org.dita.dost.exception;
 
+/**
+ * Wraps an {@link DITAOTException} with an unchecked exception.
+ *
+ * @since 3.6
+ */
 public class UncheckedDITAOTException extends RuntimeException {
 
     public UncheckedDITAOTException(DITAOTException err) {

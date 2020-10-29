@@ -12,6 +12,12 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
 
+/**
+ *
+ * Simple object pool.
+ *
+ * @since 3.6
+ */
 public class Pool<T> {
 
     private final Queue<T> objects;

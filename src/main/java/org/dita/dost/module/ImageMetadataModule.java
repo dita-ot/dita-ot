@@ -71,8 +71,11 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
                         .map(f -> new File(job.tempDir, f.file.getPath()).getAbsoluteFile())
                         .forEach(filename -> {
                             final ImageMetadataFilter writer = pool.borrowObject();
-                            writer.write(filename);
-                            pool.returnObject(writer);
+                            try {
+                                writer.write(filename);
+                            } finally {
+                                pool.returnObject(writer);
+                            }
                         });
             } else {
                 final ImageMetadataFilter writer = new ImageMetadataFilter(outputDir, job, cache);
