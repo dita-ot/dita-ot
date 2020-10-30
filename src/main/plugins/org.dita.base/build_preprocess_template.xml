@@ -248,7 +248,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <!--xmlcatalog refid="dita.catalog"/-->
       </xslt>
     </pipeline>
   </target>
@@ -403,7 +402,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="defaultLanguage" expression="${default.language}"/>
         <param name="remove-broken-links" expression="${remove-broken-links}" if:set="remove-broken-links"/>
         <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <!--xmlcatalog refid="dita.catalog"/-->
       </xslt>
     </pipeline>
   </target>

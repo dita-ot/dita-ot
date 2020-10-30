@@ -194,7 +194,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="OUTPUTDIR" expression="${dita.output.dir}"/>
         <param name="defaultLanguage" expression="${default.language}"/>
         <params/>
-        <!--xmlcatalog refid="dita.catalog"/-->
       </xslt>
       </pipeline>
     </sequential>
