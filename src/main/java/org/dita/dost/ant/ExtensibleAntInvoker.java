@@ -264,7 +264,6 @@ public final class ExtensibleAntInvoker extends Task {
                 }
             }
             final AbstractPipelineModule module = factory.createModule(m.getImplementation());
-            module.setParallel(m.parallel);
             module.setProcessingPipe(m.getFilters());
             if (!m.fileInfoFilters.isEmpty()) {
                 module.setFileInfoFilter(combine(m.fileInfoFilters));
