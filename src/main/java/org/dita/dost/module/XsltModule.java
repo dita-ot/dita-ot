@@ -10,7 +10,6 @@ package org.dita.dost.module;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
-import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -77,12 +76,6 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             catalog = catalogResolver;
         }
         uriResolver = new DelegatingURIResolver(catalog, job.getStore());
-//        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
-//        if (catalog == null) {
-//            uriResolver = new DelegatingURIResolver(catalogResolver, job.getStore());
-//        } else {
-//            uriResolver = new DelegatingURIResolver(catalog, catalogResolver, job.getStore());
-//        }
 
         if (fileInfoFilter != null) {
             final Collection<Job.FileInfo> res = job.getFileInfo(fileInfoFilter);
@@ -114,7 +107,6 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         } catch (SaxonApiException e) {
             throw new RuntimeException("Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(), e);
         }
-//        long start = System.currentTimeMillis();
         if (in != null) {
             transform(in, out);
         } else if (parallel) {
@@ -163,8 +155,6 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 transform(in, out);
             }
         }
-//        long end = System.currentTimeMillis();
-//        logger.info("Processing took " + (end - start) + " ms");
         return null;
     }
 
