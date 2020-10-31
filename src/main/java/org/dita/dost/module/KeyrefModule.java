@@ -66,7 +66,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     private String transtype;
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
-    private TopicFragmentFilter topicFragmentFilter;
 
     @Override
     public void setJob(final Job job) {
@@ -105,7 +104,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 throw new RuntimeException(e);
             }
             tempFileNameScheme.setBaseDir(job.getInputDir());
-            initFilters();
 
             // Read start map
             final KeyrefReader reader = new KeyrefReader();
@@ -147,16 +145,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             } else {
                 delayConrefUtils = null;
             }
-            for (final ResolveTask r : jobs) {
-                if (r.out != null) {
-                    processFile(r);
-                }
-            }
-            for (final ResolveTask r : jobs) {
-                if (r.out == null) {
-                    processFile(r);
-                }
-            }
+            (parallel ? jobs.stream().parallel() : jobs.stream())
+                    .filter(r -> r.out != null)
+                    .forEach(this::processFile);
+
+            (parallel ? jobs.stream().parallel() : jobs.stream())
+                    .filter(r -> r.out == null)
+                    .forEach(this::processFile);
 
             // Store job configuration updates
             for (final URI file : normalProcessingRole) {
@@ -174,10 +169,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         }
         return null;
-    }
-
-    private void initFilters() {
-        topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
     }
 
     /**
@@ -485,6 +476,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
         filters.add(conkeyrefFilter);
 
+        final TopicFragmentFilter topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
         filters.add(topicFragmentFilter);
 
         final KeyrefPaser parser = new KeyrefPaser();

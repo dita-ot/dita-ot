@@ -13,8 +13,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.dita.dost.store.StreamStore;
@@ -22,6 +26,7 @@ import org.dita.dost.util.XMLUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -48,7 +53,8 @@ public class ImageMetadataFilterTest {
 
         final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setProperty("uplevels", "");
-        final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job);
+        final Map<URI, Attributes> cache = new HashMap<>();
+        final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job, cache);
         filter.setLogger(new TestUtils.TestLogger());
         filter.setJob(job);
         filter.write(f.getAbsoluteFile());
@@ -58,7 +64,7 @@ public class ImageMetadataFilterTest {
         assertEquals(Arrays.asList("img.png", "img.gif", "img.jpg", "img.xxx").stream()
                         .map(img -> new File(srcDir, img).toURI())
                         .collect(Collectors.toSet()),
-                new HashSet(filter.getImages()));
+                cache.keySet());
     }
 
     @Test
@@ -69,7 +75,8 @@ public class ImageMetadataFilterTest {
 
         final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setProperty("uplevels", ".." + File.separator);
-        final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job);
+        final Map<URI, Attributes> cache = new HashMap<>();
+        final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job, cache);
         filter.setLogger(new TestUtils.TestLogger());
         filter.setJob(job);
         filter.write(f.getAbsoluteFile());
@@ -79,7 +86,7 @@ public class ImageMetadataFilterTest {
         assertEquals(Arrays.asList("img.png", "img.gif", "img.jpg", "img.xxx").stream()
                         .map(img -> new File(srcDir, img).toURI())
                         .collect(Collectors.toSet()),
-                new HashSet(filter.getImages()));
+                cache.keySet());
     }
 
     @AfterClass

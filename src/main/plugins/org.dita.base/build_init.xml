@@ -51,6 +51,7 @@ See the accompanying LICENSE file for applicable license.
                    log-arg"/>
 
   <target name="init-properties">
+    <property name="parallel" value="false"/>
     <property name="store-type" value="file"/>
     <property name="default.language" value="en"/>
     <property name="generate-debug-attributes" value="true"/>
