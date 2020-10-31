@@ -270,7 +270,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                     }
                     break;
                 case PI_WORKDIR_TARGET_URI:
-                    d = workdir.toURI().toString();
+                    d = toDirURI(workdir).toString();
                     break;
                 case PI_PATH2PROJ_TARGET:
                     if (path2project != null) {
