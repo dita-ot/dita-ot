@@ -160,7 +160,7 @@ def cleanVersion = project.version.split('\\.').toList()[2] == "0" ?
         project.version.split('\\.').toList().subList(0, 2).join('.').toString() :
         project.version
 def distVersion = project.hasProperty("commit") && (!project.hasProperty("tag") || tag.empty) ?
-                  "${project.version}+${commit.substring(0, 7)}" :
+                  "${project.version}@${commit.substring(0, 7)}" :
                   "${cleanVersion}"
 def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "develop" :
