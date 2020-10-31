@@ -7,14 +7,18 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.URLUtils.toDirURI;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class URLUtilsTest {
 
@@ -251,4 +255,20 @@ public class URLUtilsTest {
         } catch (final NullPointerException e) {}
     }
 
+    @Rule
+    public TemporaryFolder tempDir = new TemporaryFolder();
+
+    @Test
+    public void toDirURI_exists() throws IOException {
+        final File src = tempDir.newFolder();
+        final URI act = toDirURI(src);
+        assertTrue(act.toString().endsWith("/"));
+    }
+
+    @Test
+    public void toDirURI_missing() throws IOException {
+        final File src = new File(tempDir.newFolder(), "missing");
+        final URI act = toDirURI(src);
+        assertTrue(act.toString().endsWith("/"));
+    }
 }
