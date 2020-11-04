@@ -31,6 +31,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
     private Map<URI, URI> changeTable = null;
     private Map<URI, URI> conflictTable = null;
     private File currentFileDir = null;
+    private URI currentFileDirURI = null;
     /** Using for rectify relative path of xml */
     private String fixpath = null;
 
@@ -38,6 +39,8 @@ public final class TopicRefWriter extends AbstractXMLFilter {
     public void write(final File outputFilename) throws DITAOTException {
         setCurrentFile(outputFilename.toURI());
         currentFileDir = outputFilename.getParentFile();
+        currentFileDirURI = outputFilename.toURI().resolve(".");
+        logger.info("Process " + outputFilename.toURI());
         super.write(outputFilename);
     }
 
@@ -159,7 +162,8 @@ public final class TopicRefWriter extends AbstractXMLFilter {
         if (isLocalDita(atts)) {
             // replace the href value if it's referenced topic is extracted.
             final URI rootPathName = currentFile;
-            URI changeTargetkey = stripFragment(currentFileDir.toURI().resolve(hrefValue));
+            URI target = currentFile.resolve(hrefValue);
+            URI changeTargetkey = stripFragment(target);
             URI changeTarget = changeTable.get(changeTargetkey);
 
             final String topicID = getTopicID(toURI(hrefValue));
