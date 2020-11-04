@@ -62,7 +62,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
                 if (job.getStore().exists(tempFile.toURI())) {
                     log("Found temporary directory file " + tempFile, Project.MSG_VERBOSE);
                     res.add(new StoreResource(job, job.tempDirURI.relativize(f.uri)));
-                } else if (f.src.getScheme().equals("file")) {
+                } else if (f.src != null && Objects.equals(f.src.getScheme(), "file")) {
                     final File srcFile = new File(f.src);
                     if (srcFile.exists()) {
                         log("Found source directory file " + srcFile, Project.MSG_VERBOSE);
@@ -71,10 +71,10 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
                     } else {
                         log("File " + f.src + " not found", Project.MSG_ERR);
                     }
-                } else if (f.src.getScheme().equals("data")) {
+                } else if (f.src != null && Objects.equals(f.src.getScheme(), "data")) {
                     log("Ignore data URI", Project.MSG_VERBOSE);
                 } else {
-                    log("Found source URI " + f.src.toString(), Project.MSG_VERBOSE);
+                    log("Found source URI " + f.src, Project.MSG_VERBOSE);
                     try {
                         final JobResource r = new JobResource(job.getInputDir().toURL(), f.uri.toString());
                         res.add(r);
