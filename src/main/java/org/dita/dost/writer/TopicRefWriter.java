@@ -18,8 +18,8 @@ import java.net.URI;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.getFragment;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
 
 /**
@@ -30,16 +30,12 @@ public final class TopicRefWriter extends AbstractXMLFilter {
 
     private Map<URI, URI> changeTable = null;
     private Map<URI, URI> conflictTable = null;
-    private File currentFileDir = null;
-    private URI currentFileDirURI = null;
     /** Using for rectify relative path of xml */
     private String fixpath = null;
 
     @Override
     public void write(final File outputFilename) throws DITAOTException {
         setCurrentFile(outputFilename.toURI());
-        currentFileDir = outputFilename.getParentFile();
-        currentFileDirURI = outputFilename.toURI().resolve(".");
         logger.info("Process " + outputFilename.toURI());
         super.write(outputFilename);
     }
@@ -50,7 +46,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
      * @param conflictTable conflictTable
      */
     public void setup(final Map<URI, URI> conflictTable) {
-        for (final Map.Entry<URI, URI> e: changeTable.entrySet()) {
+        for (final Map.Entry<URI, URI> e: conflictTable.entrySet()) {
             assert e.getKey().isAbsolute();
             assert e.getValue().isAbsolute();
         }
@@ -179,7 +175,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
             final String pathtoElem = getFragment(hrefValue, "");
 
             if (changeTarget == null || changeTarget.toString().isEmpty()) {
-                URI absolutePath = toURI(resolveTopic(currentFileDir, hrefValue));
+                URI absolutePath = currentFile.resolve(hrefValue);
                 absolutePath = setElementID(absolutePath, null);
                 changeTarget = changeTable.get(absolutePath);
             }
