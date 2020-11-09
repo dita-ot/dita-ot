@@ -168,7 +168,7 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">file</val>
       <val>memory</val>
     </param>
-    <param name="parallel" desc="Run processes in parallel when possible" type="enum">
+    <param name="parallel" desc="Run processes in parallel when possible." type="enum">
       <val>true</val>
       <val default="true">false</val>
     </param>
