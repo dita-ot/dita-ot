@@ -569,7 +569,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates/>
       <xsl:choose>
         <xsl:when test="@href">
-          <br/><div style="text-align:right"><a>
+          <br/><div><a>
             <xsl:attribute name="href">
               <xsl:call-template name="href"/>
             </xsl:attribute>
