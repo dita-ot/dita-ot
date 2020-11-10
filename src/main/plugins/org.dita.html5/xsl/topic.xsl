@@ -1224,7 +1224,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Use color to indicate these types for now -->
   <!-- output the tag & it's state -->
   <xsl:template match="*[contains(@class, ' topic/boolean ')]" name="topic.boolean">
-   <span style="color:green">
+   <span>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@state"/>
@@ -1233,7 +1233,7 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- output the tag, it's name & value -->
   <xsl:template match="*[contains(@class, ' topic/state ')]" name="topic.state">
-  <span style="color:red">
+  <span>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@name"/><xsl:text>=</xsl:text><xsl:value-of select="@value"/>
