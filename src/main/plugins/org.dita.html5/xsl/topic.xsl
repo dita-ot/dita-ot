@@ -585,7 +585,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:choose></cite></a></div>
         </xsl:when>
         <xsl:when test="@reftitle"> <!-- Insert citation text -->
-          <br/><div style="text-align:right"><cite><xsl:value-of select="@reftitle"/></cite></div>
+          <br/><div><cite><xsl:value-of select="@reftitle"/></cite></div>
         </xsl:when>
         <xsl:otherwise><!--nop - do nothing--></xsl:otherwise>
       </xsl:choose>
