@@ -569,7 +569,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates/>
       <xsl:choose>
         <xsl:when test="@href">
-          <br/><div style="text-align:right"><a>
+          <br/><div><a>
             <xsl:attribute name="href">
               <xsl:call-template name="href"/>
             </xsl:attribute>
@@ -585,7 +585,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:choose></cite></a></div>
         </xsl:when>
         <xsl:when test="@reftitle"> <!-- Insert citation text -->
-          <br/><div style="text-align:right"><cite><xsl:value-of select="@reftitle"/></cite></div>
+          <br/><div><cite><xsl:value-of select="@reftitle"/></cite></div>
         </xsl:when>
         <xsl:otherwise><!--nop - do nothing--></xsl:otherwise>
       </xsl:choose>
@@ -1224,7 +1224,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Use color to indicate these types for now -->
   <!-- output the tag & it's state -->
   <xsl:template match="*[contains(@class, ' topic/boolean ')]" name="topic.boolean">
-   <span style="color:green">
+   <span>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@state"/>
@@ -1233,7 +1233,7 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- output the tag, it's name & value -->
   <xsl:template match="*[contains(@class, ' topic/state ')]" name="topic.state">
-  <span style="color:red">
+  <span>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@name"/><xsl:text>=</xsl:text><xsl:value-of select="@value"/>

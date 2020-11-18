@@ -141,6 +141,9 @@
 }
 
 .lq {
+  div {
+    text-align: right;
+  }
 }
 
 .metadata {
@@ -277,6 +280,7 @@
 
 // inline
 .boolean {
+  color: green;
 }
 
 .cite {
@@ -304,6 +308,7 @@
 }
 
 .state {
+  color: red;
 }
 
 .term {
