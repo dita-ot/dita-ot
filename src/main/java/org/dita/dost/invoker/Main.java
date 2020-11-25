@@ -284,6 +284,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
         projectProps = Collections.singletonList(definedProps);
         buildFile = args.buildFile;
+        repeat = 1;
 
         if (args.justPrintUsage) {
             args.printUsage(false);
@@ -370,7 +371,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
 
         // make sure buildfile exists
-        if (!args.buildFile.exists() || buildFile.isDirectory()) {
+        if (!buildFile.exists() || buildFile.isDirectory()) {
             System.out.println("Buildfile " + buildFile + " does not exist!");
             throw new BuildException("Build failed");
         }
