@@ -7,7 +7,7 @@ env:
     - JAVA_OPTS="-Xmx2048M"
     - GRADLE_OPTS="-Xmx2048M"
 stages:
-  - name: test
+#  - name: test
   - name: snapshot
     if: repo = dita-ot/dita-ot AND branch = develop AND type != pull_request
   - name: release
@@ -16,14 +16,14 @@ stages:
     if: repo = dita-ot/dita-ot AND tag IS present AND type != pull_request
 jobs:
   include:
-    # Test
-    - stage: test
-      name: "Unit and E2E tests"
-      install: "./gradlew"
-      script: "./gradlew check e2eTest   --info --stacktrace --no-daemon"
-    - install: "./gradlew"
-      name: "Integration tests"
-      script: "./gradlew integrationTest --info --stacktrace --no-daemon"
+#    # Test
+#    - stage: test
+#      name: "Unit and E2E tests"
+#      install: "./gradlew"
+#      script: "./gradlew check e2eTest   --info --stacktrace --no-daemon"
+#    - install: "./gradlew"
+#      name: "Integration tests"
+#      script: "./gradlew integrationTest --info --stacktrace --no-daemon"
     # Snapshot
     - stage: snapshot
       name: "Snapshot distribution package deployment"

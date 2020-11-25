@@ -24,4 +24,5 @@ jobs:
       run: ./gradlew check --info --stacktrace --no-daemon
     - name: Run end to end tests
       run: ./gradlew e2eTest --info --stacktrace --no-daemon
-
+    - name: Run integration tests
+      run: ./gradlew integrationTest --info --stacktrace --no-daemon
