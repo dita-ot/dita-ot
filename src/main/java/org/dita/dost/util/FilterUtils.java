@@ -30,9 +30,12 @@ import java.util.stream.Stream;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import org.apache.commons.io.input.BOMInputStream;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.filter.SubjectScheme;
+import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -40,15 +43,20 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLEventReader;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -62,6 +70,8 @@ import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.StringUtils.isEmptyString;
+import static org.dita.dost.util.StringUtils.notEmpty;
 
 /**
  * Utility class used for flagging and filtering.
@@ -80,10 +90,10 @@ public class FilterUtils {
 
     /** Actions for filter keys. */
     private final Map<FilterKey, Action> filterMap;
-    
+
     /** Set of filter keys for which an error has already been thrown. */
     private final Set<FilterKey> notMappingRules = new HashSet<>();
-    
+
     private boolean logMissingAction;
     private final String foregroundConflictColor;
     private final String backgroundConflictColor;
@@ -147,7 +157,7 @@ public class FilterUtils {
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-    
+
     @Override
     public String toString() {
         return filterMap.toString();
@@ -317,19 +327,34 @@ public class FilterUtils {
 
     private boolean excludeReferencedTopic(Element element, QName[][] properties, Attributes attributes) {
         String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
-        if (isMapTopicRef(attributes) && notEmpty(href)) {
-            Optional<Element> referencedDocument = loadDocument(href);
-            if (!referencedDocument.isPresent()) {
+        if (isValidMapTopicRef(attributes) && notEmpty(href)) {
+            Optional<Attributes> referencedAttributes = loadReferencedAttributes(href);
+            if (!referencedAttributes.isPresent()) {
                 return false;
             }
-
-            Attributes referencedAttributes = getAttributes(referencedDocument.get());
-            if (needExclude(referencedAttributes, properties)) {
+            if (needExclude(referencedAttributes.get(), properties)) {
                 updateFileInfo(href);
                 return isNotKeydef(attributes);
             }
         }
-		return false;
+        return false;
+    }
+
+    Optional<Attributes> loadReferencedAttributes(String href) {
+        XmlStreams xmlStreams = new XmlStreams(logger);
+        BOMInputStream inputStream = null;
+        XMLEventReader eventReader = null;
+        try {
+            Path xmlFile = Paths.get(Job.instance.getFileInfo(new URI(href)).src);
+            inputStream = new BOMInputStream(new FileInputStream(xmlFile.toFile()), false);
+            eventReader = xmlStreams.initializeReader(inputStream);
+            return Optional.of(xmlStreams.collectRootAttributes(eventReader));
+        } catch (Exception e) {
+            logger.warn(format("Source document could not be loaded for %s. Cannot validate filtering attributes. Error message: %s", href, e.getMessage()));
+            return Optional.empty();
+        } finally {
+            xmlStreams.freeResources(eventReader, inputStream);
+        }
     }
 
 	Attributes getAttributes(final Element element) {
@@ -343,11 +368,14 @@ public class FilterUtils {
         }
         return builder.build();
 	}
-	
-	private boolean isMapTopicRef(Attributes attributes) {
-		return !DITAVAREF_D_DITAVALREF.matches(attributes) && (MAP_MAP.matches(attributes) || MAP_TOPICREF.matches(attributes));
+
+    private boolean isValidMapTopicRef(Attributes attributes) {
+        return !DITAVAREF_D_DITAVALREF.matches(attributes)
+                && (MAP_MAP.matches(attributes) || MAP_TOPICREF.matches(attributes))
+                && !"image".equalsIgnoreCase(attributes.getValue(ATTRIBUTE_NAME_FORMAT))
+                && !"external".equalsIgnoreCase(attributes.getValue(ATTRIBUTE_NAME_SCOPE));
 	}
-	
+
 	private boolean isNotKeydef(Attributes attributes) {
 		return !MAPGROUP_D_KEYDEF.matches(attributes);
 	}
