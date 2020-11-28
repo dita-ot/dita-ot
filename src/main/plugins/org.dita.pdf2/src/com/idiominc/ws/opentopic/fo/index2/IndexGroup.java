@@ -36,7 +36,9 @@ See the accompanying LICENSE file for applicable license.
  * Time: 10:38:48
  * <br><br>
  * Respresents index group.
+ * @deprecated since 3.4
  */
+@Deprecated
 public interface IndexGroup {
 
     /**

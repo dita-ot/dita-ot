@@ -42,7 +42,9 @@ See the accompanying LICENSE file for applicable license.
  * <br><br>
  * Respresents the Adobe Framemaker's index entry<br>
  * <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+ * @deprecated since 3.4
  */
+@Deprecated
 public interface IndexEntry {
 
     /**
