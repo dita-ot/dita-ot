@@ -243,12 +243,14 @@ with those set forth herein.
     <property name="args.tablelink.style" value="NUMTITLE"/>
   </target>
 
+  <!-- Deprecated since 3.4 -->
   <target name="transform.topic2fo.index.init">
     <condition property="_pdf2.index.skip" value="true">
       <istrue value="${pdf2.index.skip}"/>
     </condition>
   </target>
 
+  <!-- Deprecated since 3.4 -->
   <target name="transform.topic2fo.index"
           depends="transform.topic2fo.index.init"
           unless="_pdf2.index.skip">

@@ -54,10 +54,14 @@ See the accompanying LICENSE file for applicable license.
       <val desc="Enables chunk processing">true</val>
       <val desc="Disables chunk processing" default="true">false</val>
     </param>
+    <!-- Deprecated since 3.4 -->
+    <!-- Disable deprecated built-in indexing -->
+    <!--
     <param name="pdf2.index.skip" desc="Disable built-in index processing." type="enum">
       <val>yes</val>
       <val default="true">no</val>
     </param>
+    -->
   </transtype>
   <transtype name="pdf2" extends="pdf" desc="PDF2"/>
   <feature extension="dita.transtype.print" value="pdf"/>
@@ -67,6 +71,7 @@ See the accompanying LICENSE file for applicable license.
   <feature extension="dita.conductor.pdf2.formatter.check" value="ah"/>
   <feature extension="dita.xsl.strings" file="cfg/common/vars/strings.xml"/>
   <feature extension="dita.specialization.catalog.relative" file="cfg/catalog.xml"/>
+  <!-- Deprecated since 3.4 -->
   <!-- Disable deprecated built-in indexing -->
   <!--<feature extension="depend.org.dita.pdf2.index" value="transform.topic2fo.index"/>-->
   <template file="build_template.xml"/>
