@@ -238,6 +238,9 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
                     in.close();
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            // Know issue when reading JPEG metadata
+            logger.error("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
