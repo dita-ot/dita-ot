@@ -256,6 +256,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "plugins/org.oasis-open.dita.v1_3/**"
         exclude "temp"
         include "config/**"
+        include "resources/catalog.xml"
         include "resources/plugin.rnc"
         include "resources/project.rnc"
         // legacy build scripts
