@@ -56,7 +56,11 @@ dependencies {
     testCompile group: 'org.xmlunit', name: 'xmlunit-core', version: '2.6.0'
 }
 
-jar.archiveName = "${project.name}.jar"
+jar {
+    archiveName = "${project.name}.jar"
+    exclude "plugin.rnc"
+    exclude "project.rnc"
+}
 
 processResources {
     filter ReplaceTokens, tokens: [
