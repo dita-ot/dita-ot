@@ -59,8 +59,6 @@ dependencies {
 jar {
     archiveName = "${project.name}.jar"
     exclude "catalog.xml"
-    exclude "plugin.rnc"
-    exclude "project.rnc"
 }
 
 processResources {
