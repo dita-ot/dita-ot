@@ -97,7 +97,7 @@ $valign: top bottom middle;
 
 .entry {
   &.rotate {
-     writing-mode: sideways-lr;
+    writing-mode: vertical-rl;
   }
 }
 
