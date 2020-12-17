@@ -39,6 +39,7 @@ def licenses = [
         [name: null, title: 'DITA 1.1 DTDs and Schemas', license: ['oasis-dita11.txt']],
         [name: null, title: 'DITA 1.2 DTDs and Schemas', license: ['oasis-dita12.txt']],
         [name: null, title: 'DITA 1.3 RNGs, DTDs, and Schemas', license: ['oasis-dita13.txt']],
+        [name: null, title: 'DITA 2.0 RNGs and DTDs', license: ['oasis-dita20.txt']],
         [name: null, title: 'Lightweight DITA DTDs and samples', license: ['oasis-lwdita.txt']],
         // org.lwdita plugin
         [name: 'flexmark', title: 'flexmark-java', license: ['bsd-flexmark.txt']],
