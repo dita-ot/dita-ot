@@ -1550,6 +1550,90 @@ See the accompanying LICENSE file for applicable license.
    </span>
   </xsl:template>
   
+  <!-- =========== DITA 2.0 multimedia elements -->
+  <xsl:template match="*[contains(@class,' topic/audio ')]">
+    <audio>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="@autoplay | @controls | @loop | @muted" mode="boolean-media-attribute"/>
+      <xsl:apply-templates select="@tabindex | @href | @format"/>
+      <xsl:call-template name="setid"/>
+      <xsl:apply-templates select="*[contains(@class,' topic/media-source ')],
+        *[contains(@class,' topic/media-track ')]"/>
+      <xsl:apply-templates select="text() | 
+        * except *[contains(@class,' topic/media-source') or contains(@class,' topic/media-track')]"/>
+    </audio>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/video ')]">
+    <video>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="@autoplay | @controls | @loop | @muted" mode="boolean-media-attribute"/>
+      <xsl:apply-templates select="@tabindex | @href | @format"/>
+      <xsl:apply-templates select="@poster"/>
+      <xsl:call-template name="setid"/>
+      <xsl:apply-templates select="*[contains(@class,' topic/media-source ')],
+        *[contains(@class,' topic/media-track ')]"/>
+      <xsl:apply-templates select="text() | 
+        * except *[contains(@class,' topic/media-source') or contains(@class,' topic/media-track')]"/>
+    </video>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/media-source ')]">
+    <source>
+      <xsl:apply-templates select="@href|@format"/>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="setid"/>
+    </source>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/media-track ')]">
+    <xsl:variable name="label" as="xs:string?">
+      <!-- Current definition is #PCDATA but want to be future proof -->
+      <xsl:apply-templates select="." mode="text-only"/>
+    </xsl:variable>
+    <track>
+      <xsl:apply-templates select="@href"/>
+      <xsl:copy-of select="@kind | @srclang"/>
+      <xsl:if test="$label">
+        <xsl:attribute name="label" select="$label"/>
+      </xsl:if>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="setid"/>
+    </track>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/audio ') or 
+    contains(@class,' topic/video ') or 
+    contains(@class,' topic/media-source ')]/@href">
+    <xsl:attribute name="src" select="."/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/audio ') or 
+    contains(@class,' topic/video ') or 
+    contains(@class,' topic/media-source ')]/@format">
+    <xsl:attribute name="type" select="."/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/audio ') or
+    contains(@class,' topic/video ')]/@tabindex">
+    <xsl:attribute name="tabindex" select="."/>
+  </xsl:template>
+  
+  <xsl:template match="@*" mode="boolean-media-attribute">
+    <xsl:if test=". = 'true'">
+      <xsl:attribute name="{name()}" select="'true'"/>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/audio ') or
+    contains(@class,' topic/video ')]/*[contains(@class,' topic/fallback ')]">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/video ')]/@poster">
+    <xsl:attribute name="poster" select="."/>
+  </xsl:template>
+  
   <!-- =========== FOOTNOTE =========== -->
   <xsl:template match="*[contains(@class, ' topic/fn ')]" name="topic.fn">
     <xsl:param name="xref"/>
