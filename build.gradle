@@ -18,8 +18,8 @@ version = '4.0.0-SNAPSHOT'
 
 description = """DITA Open Toolkit"""
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 17
+targetCompatibility = 17
 
 repositories {
     mavenCentral()
