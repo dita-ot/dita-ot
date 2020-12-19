@@ -17,8 +17,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import javax.xml.namespace.QName;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static javax.xml.XMLConstants.XML_NS_URI;
@@ -190,7 +195,35 @@ public final class ValidationFilter extends AbstractXMLFilter {
         final String href = atts.getValue(attrName);
         if (href != null) {
             try {
-                new URI(href);
+                final URI uri = new URI(href);
+                final URI abs = URLUtils.stripFragment(currentFile.resolve(uri)).normalize();
+                if (abs.getScheme() != null && abs.getScheme().equals("file")) {
+                    final File p = new File(abs);
+                    try {
+                        final File canFile = p.getCanonicalFile();
+                        final String absPath = p.getAbsolutePath();
+                        final String canPath = canFile.toString();
+                        if (!Objects.equals(absPath, canPath) && Objects.equals(absPath.toLowerCase(), canPath.toLowerCase())) {
+                            switch (processingMode) {
+                                case STRICT:
+                                    throw new RuntimeException(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString());
+                                case SKIP:
+                                    logger.error(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() + ", using authored value.");
+                                    break;
+                                case LAX:
+                                    final URI corrected = URLUtils.setFragment(currentFile.relativize(canFile.toURI()), uri.getFragment());
+                                    if (res == null) {
+                                        res = new AttributesImpl(atts);
+                                    }
+                                    res.setValue(res.getIndex(attrName), currentFile.toString());
+                                    logger.error(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() + ", using " + corrected + ".");
+                                    break;
+                            }
+                        }
+                    } catch (IOException e) {
+                        logger.debug(String.format("Failed to resolve real path for %s: %s", p, e.getMessage()), e);
+                    }
+                }
             } catch (final URISyntaxException e) {
                 switch (processingMode) {
                 case STRICT:

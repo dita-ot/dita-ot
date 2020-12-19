@@ -9,6 +9,7 @@ package org.dita.dost.reader;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
@@ -43,7 +44,7 @@ public class MapMetaReaderTest {
 
         reader = new MapMetaReader();
         reader.setLogger(new TestUtils.TestLogger());
-        reader.setJob(new Job(tempDir));
+        reader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
 
         final File mapFile = new File(tempDir, "test.ditamap");
         reader.read(mapFile.getAbsoluteFile());

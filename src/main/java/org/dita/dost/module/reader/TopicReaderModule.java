@@ -8,6 +8,8 @@
 
 package org.dita.dost.module.reader;
 
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
@@ -26,18 +28,14 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
-import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
@@ -51,6 +49,12 @@ import static org.dita.dost.writer.DitaWriterFilter.ATTRIBUTE_NAME_ORIG_FORMAT;
  * @since 2.5
  */
 public final class TopicReaderModule extends AbstractReaderModule {
+
+    static final QName QNAME_HREF = new QName(ATTRIBUTE_NAME_HREF);
+    static final QName QNAME_SCOPE = new QName(ATTRIBUTE_NAME_SCOPE);
+    static final QName QNAME_FORMAT = new QName(ATTRIBUTE_NAME_FORMAT);
+    static final QName QNAME_CLASS = new QName(ATTRIBUTE_NAME_CLASS);
+    static final QName QNAME_ORIG_FORMAT = new QName(DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT);
 
     public TopicReaderModule() {
         super();
@@ -180,54 +184,43 @@ public final class TopicReaderModule extends AbstractReaderModule {
         final List<Reference> res = new ArrayList<>();
         assert startFileInfo.src != null;
         final URI tmp = job.tempDirURI.resolve(startFileInfo.uri);
-        final Source source = job.getStore().getSource(tmp);
-        logger.info("Reading " + tmp);
         try {
-            final XMLStreamReader in = XMLInputFactory.newInstance().createXMLStreamReader(source);
-            while (in.hasNext()) {
-                int eventType = in.next();
-                switch (eventType) {
-                    case START_ELEMENT:
-                        final String cls = in.getAttributeValue(null, ATTRIBUTE_NAME_CLASS);
-                        if (!MAP_TOPICREF.matches(cls)) {
-                            break;
-                        }
-                        final URI href = getHref(in);
-                        if (href != null) {
-                            FileInfo fi = job.getFileInfo(startFileInfo.src.resolve(href));
-                            if (fi == null) {
-                                fi = job.getFileInfo(tmp.resolve(href));
-                            }
-                            assert fi != null;
-                            assert fi.src != null;
-                            String format = in.getAttributeValue(DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT);
-                            if (format == null) {
-                                format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
-                            }
-                            res.add(new Reference(fi.src, format));
-                            nonConrefCopytoTargetSet.add(fi.src);
-                        }
-                        break;
-                    default:
-                        break;
+            final XdmNode source = job.getStore().getImmutableNode(tmp);
+            logger.info("Reading " + tmp);
+            final Predicate<? super XdmNode> isTopicref = xdmItem -> MAP_TOPICREF.matches(xdmItem.getAttributeValue(QNAME_CLASS));
+            source.select(descendant(isTopicref)).forEach(xdmItem -> {
+                final URI href = getHref(xdmItem);
+                if (href != null) {
+                    FileInfo fi = job.getFileInfo(startFileInfo.src.resolve(href));
+                    if (fi == null) {
+                        fi = job.getFileInfo(tmp.resolve(href));
+                    }
+                    assert fi != null;
+                    assert fi.src != null;
+                    String format = xdmItem.getAttributeValue(QNAME_ORIG_FORMAT);
+                    if (format == null) {
+                        format = xdmItem.getAttributeValue(QNAME_FORMAT);
+                    }
+                    res.add(new Reference(fi.src, format));
+                    nonConrefCopytoTargetSet.add(fi.src);
                 }
-            }
-        } catch (final XMLStreamException e) {
+            });
+        } catch (final IOException e) {
             throw new DITAOTException(e);
         }
         return res;
     }
 
-    private URI getHref(final XMLStreamReader in) {
-        final URI href = toURI(in.getAttributeValue(null, ATTRIBUTE_NAME_HREF));
+    private URI getHref(final XdmNode in) {
+        final URI href = toURI(in.getAttributeValue(QNAME_HREF));
         if (href == null) {
             return null;
         }
-        final String scope = in.getAttributeValue(null, ATTRIBUTE_NAME_SCOPE);
+        final String scope = in.getAttributeValue(QNAME_SCOPE);
         if (!(scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
             return null;
         }
-        final String format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
+        final String format = in.getAttributeValue(QNAME_FORMAT);
         if (!(format == null || ATTR_FORMAT_VALUE_DITA.equals(format))) {
             return null;
         }

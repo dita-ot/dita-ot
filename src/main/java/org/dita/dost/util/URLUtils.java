@@ -763,4 +763,20 @@ public final class URLUtils {
         }
         return null;
     }
+
+    /**
+     * Convert File for a directory into URI.
+     *
+     * @param dir File for directory path
+     * @return URI representing this directory
+     * @since 3.6
+     */
+    public static URI toDirURI(final File dir) {
+        final URI res = dir.toURI();
+        if (res.getPath().endsWith("/")) {
+            return res;
+        } else {
+            return setPath(res, res.getPath() + "/");
+        }
+    }
 }

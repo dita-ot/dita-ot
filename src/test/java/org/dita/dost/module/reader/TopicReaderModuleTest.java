@@ -11,7 +11,9 @@ package org.dita.dost.module.reader;
 import org.dita.dost.TestUtils;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.GenListModuleReader;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,7 +37,7 @@ public class TopicReaderModuleTest {
     public void setUp() throws SAXException, IOException {
         reader = new TopicReaderModule();
         reader.setLogger(new TestUtils.TestLogger());
-        final Job job = new Job(tempDir.getRoot());
+        final Job job = new Job(tempDir.getRoot(), new StreamStore(tempDir.getRoot(), new XMLUtils()));
         job.setInputFile(URI.create("file:///foo/bar/baz.ditamap"));
         job.setInputMap(URI.create("baz.ditamap"));
         job.setInputDir(URI.create("file:///foo/bar/"));

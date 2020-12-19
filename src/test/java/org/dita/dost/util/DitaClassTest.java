@@ -105,4 +105,18 @@ public class DitaClassTest {
         assertFalse(new DitaClass("- also\\invalid ").isValid());
     }
 
+    @Test
+    public void getInstance_same() {
+        final DitaClass first = DitaClass.getInstance("- foo/bar ");
+        final DitaClass second = DitaClass.getInstance("- foo/bar ");
+        assertTrue(first == second);
+    }
+
+    @Test
+    public void getInstance_differentWhitespace() {
+        final DitaClass first = DitaClass.getInstance("- foo/bar ");
+        final DitaClass second = DitaClass.getInstance("-  foo/bar  ");
+        assertTrue(first == second);
+    }
+
 }

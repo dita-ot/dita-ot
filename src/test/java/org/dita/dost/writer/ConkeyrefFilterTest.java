@@ -9,9 +9,11 @@ package org.dita.dost.writer;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +51,8 @@ public class ConkeyrefFilterTest {
 
     @Before
     public void setUp() throws IOException {
-        job = new Job(new File(System.getProperty("java.io.tmpdir")));
+        final File tempDir = new File(System.getProperty("java.io.tmpdir"));
+        job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         srcDir = new File(".").getCanonicalFile().toURI();
     }
 

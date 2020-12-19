@@ -28,7 +28,6 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 
@@ -199,6 +198,12 @@ public final class ExtensibleAntInvoker extends Task {
     private AbstractPipelineModule getPipelineModule(final ModuleElem m, final PipelineHashIO pipelineInput) throws DITAOTException {
         if (m instanceof XsltElem) {
             final XsltElem xm = (XsltElem) m;
+            if (xm.reloadstylesheet && xm.parallel) {
+                throw new BuildException("Both reloadstylesheet and parallel cannot be true");
+            }
+            if (xm.parallel && xm.xmlcatalog != null) {
+                throw new DITAOTException("Pipeline XSLT task with parallel=true cannot be used with Ant's xmlcatalog");
+            }
             final XsltModule module = new XsltModule();
             module.setStyle(xm.style);
             if (xm.in != null) {
@@ -217,6 +222,7 @@ public final class ExtensibleAntInvoker extends Task {
             module.setFilenameParam(xm.filenameparameter);
             module.setFiledirParam(xm.filedirparameter);
             module.setReloadstylesheet(xm.reloadstylesheet);
+            module.setParallel(xm.parallel);
             module.setXMLCatalog(xm.xmlcatalog);
             if (xm.mapper != null) {
                 module.setMapper(xm.mapper.getImplementation());
@@ -242,14 +248,11 @@ public final class ExtensibleAntInvoker extends Task {
         } else if (m instanceof SaxPipeElem) {
             final SaxPipeElem fm = (SaxPipeElem) m;
             final XmlFilterModule module = new XmlFilterModule();
+            module.setParallel(fm.parallel);
             final List<FileInfoFilterElem> predicates = new ArrayList<>(fm.getFormat());
             predicates.addAll(m.fileInfoFilters);
             module.setFileInfoFilter(combine(predicates));
-            try {
-                module.setProcessingPipe(fm.getFilters());
-            } catch (final InstantiationException | IllegalAccessException e) {
-                throw new BuildException(e);
-            }
+            module.setProcessingPipe(fm.getFilters());
             return module;
         } else {
             for (final ParamElem p : m.params) {
@@ -261,14 +264,11 @@ public final class ExtensibleAntInvoker extends Task {
                 }
             }
             final AbstractPipelineModule module = factory.createModule(m.getImplementation());
-            try {
-                module.setProcessingPipe(m.getFilters());
-            } catch (IllegalAccessException | InstantiationException e) {
-                throw new BuildException(e);
-            }
+            module.setProcessingPipe(m.getFilters());
             if (!m.fileInfoFilters.isEmpty()) {
                 module.setFileInfoFilter(combine(m.fileInfoFilters));
             }
+            module.setParallel(m.parallel);
             return module;
         }
     }
@@ -307,7 +307,7 @@ public final class ExtensibleAntInvoker extends Task {
         Job job = project.getReference(ANT_REFERENCE_JOB);
         if (job != null) {
             if (job.isStale()) {
-                project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
+                project.log("Reload stale job configuration reference", Project.MSG_ERR);
                 try {
                     job = new Job(tempDir, job.getStore());
                 } catch (final IOException ioe) {
@@ -316,10 +316,16 @@ public final class ExtensibleAntInvoker extends Task {
                 project.addReference(ANT_REFERENCE_JOB, job);
             }
         } else {
+            XMLUtils xmlUtils = project.getReference(ANT_REFERENCE_XML_UTILS);
+            if (xmlUtils == null) {
+                project.log("XML utils not found from Ant project reference", Project.MSG_ERR);
+                xmlUtils = new XMLUtils();
+                xmlUtils.setLogger(new DITAOTAntLogger(project));
+            }
             Store store = project.getReference(ANT_REFERENCE_STORE);
             if (store == null) {
-                project.log("Store not found from Ant project reference", Project.MSG_VERBOSE);
-                store = new StreamStore( new XMLUtils());
+                project.log("Store not found from Ant project reference", Project.MSG_ERR);
+                store = new StreamStore(job.tempDir, xmlUtils);
             }
             project.log("Job not found from Ant project reference", Project.MSG_VERBOSE);
             try {
@@ -399,6 +405,7 @@ public final class ExtensibleAntInvoker extends Task {
         public final Collection<FileInfoFilterElem> fileInfoFilters = new ArrayList<>();
         private Project project;
         private Location location;
+        protected boolean parallel;
 
         public void setClass(final Class<? extends AbstractPipelineModule> cls) {
             this.cls = cls;
@@ -416,27 +423,25 @@ public final class ExtensibleAntInvoker extends Task {
             filters.add(filter);
         }
 
-        public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
-            final List<FilterPair> res = new ArrayList<>(filters.size());
-            for (final XmlFilterElem f : filters) {
-                if (isValid(getProject(), getLocation(), f.getIf(), f.getUnless())) {
-                    final AbstractXMLFilter fc = f.getImplementation().newInstance();
-                    for (final ParamElem p : f.params) {
-                        if (!p.isValid()) {
-                            throw new BuildException("Incomplete parameter");
-                        }
-                        if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
-                            fc.setParam(p.getName(), p.getValue());
-                        }
-                    }
-                    final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
-//                    predicates.addAll(getFormat());
-//                    assert !predicates.isEmpty();
-                    Predicate<FileInfo> fs = combine(predicates);
-                    res.add(new FilterPair(fc, fs));
-                }
-            }
-            return res;
+        public List<FilterPair> getFilters() {
+            return filters.stream()
+                    .filter(f -> isValid(getProject(), getLocation(), f.getIf(), f.getUnless()))
+                    .map(f -> {
+                        final Map<String, String> params = f.params.stream()
+                                .filter(p -> {
+                                    if (!p.isValid()) {
+                                        throw new IllegalArgumentException(new BuildException("Incomplete parameter"));
+                                    }
+                                    return isValid(getProject(), getLocation(), p.getIf(), p.getUnless());
+                                })
+                                .collect(Collectors.toMap(ParamElem::getName, ParamElem::getValue));
+                        final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
+//                            predicates.addAll(getFormat());
+//                            assert !predicates.isEmpty();
+                        Predicate<FileInfo> fs = combine(predicates);
+                        return new FilterPair(f.getImplementation(), fs, params);
+                    })
+                    .collect(Collectors.toList());
         }
 
         public Class<? extends AbstractPipelineModule> getImplementation() {
@@ -458,6 +463,11 @@ public final class ExtensibleAntInvoker extends Task {
         public Location getLocation() {
             return location;
         }
+
+        public void setParallel(final boolean parallel) {
+            this.parallel = parallel;
+        }
+
     }
 
     /**
@@ -481,6 +491,7 @@ public final class ExtensibleAntInvoker extends Task {
         private String filedirparameter;
         private XMLCatalog xmlcatalog;
         private boolean reloadstylesheet;
+        private boolean parallel;
 
         // Ant setters
 
@@ -509,6 +520,10 @@ public final class ExtensibleAntInvoker extends Task {
 
         public void setReloadstylesheet(final boolean reloadstylesheet) {
             this.reloadstylesheet = reloadstylesheet;
+        }
+
+        public void setParallel(final boolean parallel) {
+            this.parallel = parallel;
         }
 
         public void setIn(final File in) {
@@ -646,27 +661,25 @@ public final class ExtensibleAntInvoker extends Task {
         }
 
         @Override
-        public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
-            final List<FilterPair> res = new ArrayList<>(filters.size());
-            for (final XmlFilterElem f : filters) {
-                if (isValid(getProject(), getLocation(), f.getIf(), f.getUnless())) {
-                    final AbstractXMLFilter fc = f.getImplementation().newInstance();
-                    for (final ParamElem p : f.params) {
-                        if (!p.isValid()) {
-                            throw new BuildException("Incomplete parameter");
-                        }
-                        if (isValid(getProject(), getLocation(), p.getIf(), p.getUnless())) {
-                            fc.setParam(p.getName(), p.getValue());
-                        }
-                    }
-                    final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
-                    predicates.addAll(getFormat());
-                    assert !predicates.isEmpty();
-                    Predicate<FileInfo> fs = combine(predicates);
-                    res.add(new FilterPair(fc, fs));
-                }
-            }
-            return res;
+        public List<FilterPair> getFilters() {
+            return filters.stream()
+                    .filter(f -> isValid(getProject(), getLocation(), f.getIf(), f.getUnless()))
+                    .map(f -> {
+                        final Map<String, String> params = f.params.stream()
+                                .filter(p -> {
+                                    if (!p.isValid()) {
+                                        throw new IllegalArgumentException(new BuildException("Incomplete parameter"));
+                                    }
+                                    return isValid(getProject(), getLocation(), p.getIf(), p.getUnless());
+                                })
+                                .collect(Collectors.toMap(ParamElem::getName, ParamElem::getValue));
+                        final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
+                        predicates.addAll(getFormat());
+                        assert !predicates.isEmpty();
+                        Predicate<FileInfo> fs = combine(predicates);
+                        return new FilterPair(f.getImplementation(), fs, params);
+                    })
+                    .collect(Collectors.toList());
         }
 
         public List<FileInfoFilterElem> getFormat() {

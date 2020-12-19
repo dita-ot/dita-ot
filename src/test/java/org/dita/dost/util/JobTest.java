@@ -18,8 +18,10 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.dita.dost.store.StreamStore;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.dita.dost.TestUtils;
@@ -35,7 +37,7 @@ public final class JobTest {
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(JobTest.class);
         TestUtils.copy(srcDir, tempDir);
-        job = new Job(tempDir);
+        job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
     }
 
     @Test
@@ -69,6 +71,25 @@ public final class JobTest {
     @Test
     public void testGetValue() throws URISyntaxException {
         assertEquals(new URI("file:/foo/bar"), job.getInputDir());
+    }
+
+    @Test
+    @Ignore
+    public void write_performance_large() throws IOException {
+        for (int i = 0; i < 60_000; i++) {
+            job.add(Job.FileInfo.builder()
+                    .src(new File(tempDir, "topic_" + i + ".dita").toURI())
+                    .uri(new File("topic_" + i + ".dita").toURI())
+                    .result(new File(tempDir, "topic_" + i + ".html").toURI())
+                    .format("dita")
+                    .hasKeyref(true)
+                    .hasLink(true)
+                    .build());
+        }
+        final long start = System.currentTimeMillis();
+        job.write();
+        final long end = System.currentTimeMillis();
+        System.out.println(((end - start)) + " ms");
     }
 
     @AfterClass

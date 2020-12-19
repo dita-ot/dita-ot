@@ -104,7 +104,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             getContentHandler().processingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + outputFile.getParentFile().getAbsolutePath());
         }
         getContentHandler().ignorableWhitespace(new char[]{'\n'}, 0, 1);
-        getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, outputFile.getParentFile().toURI().toASCIIString());
+        getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, outputFile.toURI().resolve(".").toString());
         getContentHandler().ignorableWhitespace(new char[]{'\n'}, 0, 1);
         if (path2Project != null) {
             getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project.getPath() + File.separator);
@@ -124,8 +124,6 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
                              final Attributes atts) throws SAXException {
-        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
-
         final AttributesImpl res = new AttributesImpl();
         processAttributes(qName, atts, res);
 

@@ -110,20 +110,18 @@ See the accompanying LICENSE file for applicable license.
                    html5.topics.common.inner"/>
 
   <target name="html5.topic.init">
-    <local name="html5.map"/>
-    <loadfile property="html5.map" srcfile="${dita.temp.dir}/${user.input.file.listfile}" unless:set="noMap">
-      <filterchain>
-        <headfilter lines="1"/>
-      </filterchain>
-    </loadfile>
-    <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}" unless:set="noMap"/>
+    <pathconvert property="html5.map.url" unless:set="noMap">
+      <first>
+        <ditafileset format="ditamap" input="true"/>
+      </first>
+    </pathconvert>
     <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no" if:set="dita.input.valfile"/>
   </target>
 
   <target name="html5.image-metadata"
           unless="html5.image-metadata.skip" description="Read image metadata">
     <pipeline message="Read image metadata." taskname="image-metadata">
-      <module class="org.dita.dost.module.ImageMetadataModule">
+      <module class="org.dita.dost.module.ImageMetadataModule" parallel="${parallel}">
         <param name="outputdir" location="${dita.output.dir}"/>
       </module>
     </pipeline>
@@ -174,7 +172,8 @@ See the accompanying LICENSE file for applicable license.
             extension="${out.ext}"
             style="${args.xsl}"
             filenameparameter="FILENAME"
-            filedirparameter="FILEDIR">
+            filedirparameter="FILEDIR"
+            parallel="${parallel}">
         <ditafileset format="dita" processingRole="normal"/>
         <param name="FILTERFILE" expression="${dita.input.valfile.url}" if:set="dita.input.valfile"/>
         <param name="CSS" expression="${args.css.file}" if:set="args.css.file"/>
@@ -195,7 +194,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="OUTPUTDIR" expression="${dita.output.dir}"/>
         <param name="defaultLanguage" expression="${default.language}"/>
         <params/>
-        <xmlcatalog refid="dita.catalog"/>
       </xslt>
       </pipeline>
     </sequential>

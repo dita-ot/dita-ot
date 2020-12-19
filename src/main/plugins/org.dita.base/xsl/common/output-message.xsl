@@ -8,44 +8,22 @@ See the accompanying LICENSE file for applicable license.
 -->
 
 <!--
-  Standard error message template for DITA processing in XSL. This
-  file should be included by any XSL program that uses the standard
-  message template. To include this file, you will need the following
-  two commands in your XSL:
-  
-  <xsl:include href="plugin:org.dita.base:xsl/common/output-message.xsl"/>           - Place with other included files
-  
-  <xsl:variable name="msgprefix">DOTX</xsl:variable> - Place with other variables
-  
-  
-  The template takes in the following parameters:
-  - msg    = the message to print in the log; default=***
-  - msgcat = message category, default is read from $msgprefix
-  - msgnum = the message number (3 digits); default=000
-  - msgsev = the severity (I, W, E, or F); default=I (Informational)
+  Standard error message template for DITA processing in XSL. 
+  Call output-message with an ID that corresponds to a declared
+  message in an installed plugin. Additional parameters to
+  the message are optional.
 -->
 <xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                exclude-result-prefixes="xs">
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+                exclude-result-prefixes="xs dita-ot">
   
   <xsl:template name="output-message">
     <xsl:param name="ctx" select="." tunnel="yes"/>
+    <xsl:param name="id" as="xs:string"/>
     <xsl:param name="msg" select="'***'"/>
-    <!-- Deprecated since 2.3 -->
-    <xsl:param name="msgcat" select="$msgprefix"/>
-    <!-- Deprecated since 2.3 -->
-    <xsl:param name="msgnum" select="'000'"/>
-    <!-- Deprecated since 2.3 -->
-    <xsl:param name="msgsev" select="'I'"/>
-    <xsl:param name="msgparams" select="''"/>
-    <xsl:param name="id" as="xs:string">
-      <xsl:call-template name="output-message">
-        <xsl:with-param name="id" select="'DOTX071W'"/>
-        <xsl:with-param name="msgparams">%1=msgnum;%2=output-message;%3=id</xsl:with-param>
-      </xsl:call-template>
-      <xsl:value-of select="concat($msgcat, $msgnum, $msgsev)"/>
-    </xsl:param>
+    <xsl:param name="msgparams" select="''"/>    
     
     <xsl:variable name="msgdoc" select="document('platform:/config/messages.xml')" as="document-node()?"/>
     <xsl:variable name="msgcontent" as="xs:string*">
@@ -61,14 +39,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="msgseverity" as="xs:string*">
-      <xsl:choose>
-        <xsl:when test="$msgsev != 'I'">
-          <xsl:value-of select="$msg"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$msgdoc/messages/message[@id = $id]/@type"/>    
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="$msgdoc/messages/message[@id = $id]/@type"/>    
     </xsl:variable>
     <xsl:variable name="localclass" select="$ctx/@class" as="attribute(class)?"/>
     <xsl:variable name="xtrf" select="$ctx/@xtrf" as="attribute(xtrf)?"/>
@@ -94,13 +65,17 @@ See the accompanying LICENSE file for applicable license.
       <xsl:sequence select="$msgcontent"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$msgsev = 'F' or $msgseverity='FATAL'">
+      <xsl:when test="$msgseverity='FATAL'">
         <xsl:message terminate="yes">
+          <xsl:processing-instruction name="error-code" select="$id"/>
+          <xsl:processing-instruction name="level" select="$msgseverity"/>
           <xsl:value-of select="$m" separator=""/>
         </xsl:message>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>
+          <xsl:processing-instruction name="error-code" select="$id"/>
+          <xsl:processing-instruction name="level" select="$msgseverity"/>
           <xsl:value-of select="$m" separator=""/>
         </xsl:message>
       </xsl:otherwise>

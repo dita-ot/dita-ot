@@ -26,6 +26,7 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
     protected DITAOTLogger logger;
     protected Job job;
     protected XMLUtils xmlUtils;
+    protected boolean parallel;
     Predicate<FileInfo> fileInfoFilter;
     List<XmlFilterModule.FilterPair> filters;
 
@@ -57,5 +58,9 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
     @Override
     public void setProcessingPipe(List<XmlFilterModule.FilterPair> filters) {
         this.filters = filters;
+    }
+
+    public void setParallel(boolean parallel) {
+        this.parallel = parallel;
     }
 }

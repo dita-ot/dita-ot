@@ -14,9 +14,11 @@ See the accompanying LICENSE file for applicable license.
   <dita:extension id="dita.catalog.plugin-info"
     behavior="org.dita.dost.platform.ImportPluginCatalogAction"/>
 
-   <dita:extension id="dita.specialization.catalog"
-                   behavior="org.dita.dost.platform.InsertAction"/>
-   <dita:extension id="dita.specialization.catalog.relative"
-                   behavior="org.dita.dost.platform.ImportCatalogActionRelative"/>
-  
+  <dita:extension id="dita.specialization.catalog"
+                  behavior="org.dita.dost.platform.InsertAction"/>
+  <dita:extension id="dita.specialization.catalog.relative"
+                  behavior="org.dita.dost.platform.ImportCatalogActionRelative"/>
+
+  <nextCatalog catalog="../../resources/catalog.xml"/>
+
 </catalog>

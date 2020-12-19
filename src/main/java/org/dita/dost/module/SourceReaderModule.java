@@ -137,7 +137,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
         final List<XMLFilter> pipe = new ArrayList<>();
 
         for (XmlFilterModule.FilterPair pair : filters) {
-            final AbstractXMLFilter filter = pair.filter;
+            final AbstractXMLFilter filter = pair.newInstance();
             filter.setLogger(logger);
             filter.setJob(job);
             filter.setCurrentFile(fileToParse);

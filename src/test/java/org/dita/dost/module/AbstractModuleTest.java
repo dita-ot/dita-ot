@@ -13,7 +13,9 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.w3c.dom.Document;
@@ -104,7 +106,7 @@ public abstract class AbstractModuleTest {
         final File expDir = new File(expBaseDir, testName);
         try {
             final AbstractPipelineModule chunkModule = getModule(tempDir);
-            final Job job = new Job(tempDir);
+            final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
             chunkModule.setJob(job);
             final CachingLogger logger = new CachingLogger(true);
             chunkModule.setLogger(logger);

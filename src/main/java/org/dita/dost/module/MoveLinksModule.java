@@ -13,6 +13,8 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.DelegatingURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DitaLinksWriter;
@@ -31,6 +33,7 @@ import java.util.Map;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.toErrorListener;
+import static org.dita.dost.util.XMLUtils.toMessageListener;
 
 /**
  * MoveLinksModule implements move links step in preprocess. It reads the map links
@@ -60,6 +63,9 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
 
             final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(styleFile)).load();
             transformer.setErrorListener(toErrorListener(logger));
+            transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
+            transformer.setMessageListener(toMessageListener(logger));
+
             if (input.getAttribute("include.rellinks") != null) {
                 transformer.setParameter(new QName("include.rellinks"),
                         XdmItem.makeValue(input.getAttribute("include.rellinks")));

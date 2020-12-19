@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
+import static org.dita.dost.invoker.Main.locale;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.XMLUtils.toList;
 
@@ -78,6 +79,7 @@ public class ConversionArguments extends Arguments {
      * Project file
      */
     File projectFile;
+    int repeat = 1;
 
     public final List<String> inputs = new ArrayList<>();
     private final List<String> resources = new ArrayList<>();
@@ -137,8 +139,12 @@ public class ConversionArguments extends Arguments {
                 handleArgNice(args);
             } else if (isLongForm(arg, "-input") || arg.equals("-i")) {
                 handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+            } else if (isLongForm(arg, "-filter")) {
+                handleArgFilter(arg, args, ARGUMENTS.get(getArgumentName(arg)));
             } else if (isLongForm(arg, "-resource") || arg.equals("-r")) {
                 handleArgResource(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+            } else if (isLongForm(arg, "-repeat")) {
+                handleArgRepeat(arg, args);
             } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
                 definedProps.putAll(handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg))));
             } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
@@ -219,6 +225,18 @@ public class ConversionArguments extends Arguments {
         inputs.add(argument.getValue(entry.getValue()));
     }
 
+    private void handleArgFilter(final String arg, final Deque<String> args, final Argument argument) {
+        final Map.Entry<String, String> entry = parse(arg, args);
+        if (entry.getValue() == null) {
+            throw new BuildException("Missing value for input " + entry.getKey());
+        }
+        final Object prev = definedProps.get(argument.property);
+        final String value = prev != null
+                ? prev + File.pathSeparator + argument.getValue(entry.getValue())
+                : argument.getValue(entry.getValue());
+        definedProps.put(argument.property, value);
+    }
+
     private void handleArgResource(final String arg, final Deque<String> args, final Argument argument) {
         final Map.Entry<String, String> entry = parse(arg, args);
         if (entry.getValue() == null) {
@@ -286,6 +304,14 @@ public class ConversionArguments extends Arguments {
         propertyFiles.addElement(entry.getValue());
     }
 
+    private void handleArgRepeat(final String arg, final Deque<String> args) {
+        final Map.Entry<String, String> entry = parse(arg.substring(2), args);
+        if (entry.getValue() == null) {
+            throw new BuildException("You must repeat number");
+        }
+        repeat = Integer.parseInt(entry.getValue());
+    }
+
     /**
      * Handle the --nice argument.
      */
@@ -344,26 +370,27 @@ public class ConversionArguments extends Arguments {
     @Override
     void printUsage(final boolean compact) {
         final UsageBuilder buf = UsageBuilder.builder(compact)
-                .usage("dita -i <file> -f <name> [options]")
-                .usage("dita --project=<file> [options]")
+                .usage(locale.getString("conversion.usage.input"))
+                .usage(locale.getString("conversion.usage.project"))
 //                .usage("dita --propertyfile=<file> [options]")
-                .subcommands("deliverables", "Print list of deliverables in project file")
-                .subcommands("install", "Install or reload plug-ins")
-                .subcommands("plugins", "Print list of installed plug-ins")
-                .subcommands("transtypes", "Print list of installed transformation types (output formats)")
-                .subcommands("uninstall", "Remove and delete plug-in")
-                .subcommands("version", "Print version information and exit")
-                .arguments("i", "input", "file", "Input file")
-                .arguments("f", "format", "name", "Output format (transformation type)")
-                .arguments("p", "project", "file", "Publish a project file with multiple deliverables")
-                .options("r", "resource", "file", "Additional input resources")
-                .options(null, "filter", "files", "Filter and flagging files")
-                .options("o", "output", "dir", "Output directory");
+                .subcommands("deliverables", locale.getString("conversion.subcommand.deliverables"))
+                .subcommands("install", locale.getString("conversion.subcommand.install"))
+                .subcommands("plugins", locale.getString("conversion.subcommand.plugins"))
+                .subcommands("transtypes", locale.getString("conversion.subcommand.transtypes"))
+                .subcommands("uninstall", locale.getString("conversion.subcommand.uninstall"))
+                .subcommands("version", locale.getString("conversion.subcommand.version"))
+                .arguments("i", "input", "file", locale.getString("conversion.argument.input"))
+                .arguments("f", "format", "name", locale.getString("conversion.argument.format"))
+                .arguments("p", "project", "file", locale.getString("conversion.argument.project"))
+                .options("r", "resource", "file", locale.getString("conversion.option.resource"))
+                .options(null, "filter", "files", locale.getString("conversion.option.filter"))
+                .options("o", "output", "dir", locale.getString("conversion.option.output"));
         if (!compact) {
             buf
-                    .options("l", "logfile", "file", "Write log messages to file")
-                    .options(null, "propertyfile", "file", "Load all properties from file")
-                    .options("t", "temp", "dir", "Temporary directory");;
+                    .options("l", "logfile", "file", locale.getString("conversion.option.logfile"))
+                    .options(null, "propertyfile", "file", locale.getString("conversion.option.propertyfile"))
+                    .options(null, "repeat", "num", locale.getString("conversion.option.repeat"))
+                    .options("t", "temp", "dir", locale.getString("conversion.option.temp"));
             final Set<String> builtin = ARGUMENTS.values().stream().map(arg -> arg.property).collect(Collectors.toSet());
             final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
             params.stream()
@@ -388,7 +415,7 @@ public class ConversionArguments extends Arguments {
                         }
                     });
         } else {
-            buf.footer("See 'dita --help' for full list of options.");
+            buf.footer(locale.getString("conversion.footer"));
         }
         buf.print();
     }

@@ -8,10 +8,17 @@
 package org.dita.dost.reader;
 
 import com.google.common.collect.ImmutableList;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.s9api.DOMDestination;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.serialize.SerializationProperties;
+import net.sf.saxon.trans.XPathException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
@@ -22,8 +29,10 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.stream.StreamSource;
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.*;
@@ -33,13 +42,13 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static junit.framework.Assert.assertEquals;
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.XMLUtils.close;
 import static org.junit.Assert.assertNull;
 
 public class TestKeyrefReader {
 
     private static final File resourceDir = TestUtils.getResourceDir(TestKeyrefReader.class);
     private static final File srcDir = new File(resourceDir, "src");
+    private final XMLUtils xmlUtils = new XMLUtils();
 
     private KeyrefReader keyrefreader;
 
@@ -118,7 +127,7 @@ public class TestKeyrefReader {
 //        set.add("top");
 //        set.add("nested");
         keyrefreader.setLogger(new TestUtils.TestLogger());
-        keyrefreader.setJob(new Job(srcDir));
+        keyrefreader.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
 //        keyrefreader.setKeys(set);
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope act = keyrefreader.getKeyDefinition();
@@ -135,7 +144,7 @@ public class TestKeyrefReader {
         assertEquals(exp.keySet(), act.keySet());
         for (Map.Entry<String, String> e : exp.entrySet()) {
             final Document ev = keyDefToDoc(e.getValue());
-            final Document av = act.get(e.getKey()).element.getOwnerDocument();
+            final Document av = toDocument(act.get(e.getKey()).element);
             assertXMLEqual(ev, av);
         }
     }
@@ -155,7 +164,7 @@ public class TestKeyrefReader {
         assertEquals(exp.keySet(), act.keySet());
         for (Map.Entry<String, String> e : exp.entrySet()) {
             final Document ev = keyDefToDoc(e.getValue());
-            final Document av = act.get(e.getKey()).element.getOwnerDocument();
+            final Document av = toDocument(act.get(e.getKey()).element);
             assertXMLEqual(ev, av);
         }
     }
@@ -430,20 +439,20 @@ public class TestKeyrefReader {
 
         final KeyScope a2 = root.getChildScope("A").getChildScope("A-2");
         assertEquals(12, a2.keySet().size());
-        assertEquals("a1", a2.get("a").element.getAttribute("id"));
-        assertEquals("d", a2.get("d").element.getAttribute("id"));
-        assertEquals("d", a2.get("A-2.d").element.getAttribute("id"));
+        assertEquals("a1", a2.get("a").element.attribute("id"));
+        assertEquals("d", a2.get("d").element.attribute("id"));
+        assertEquals("d", a2.get("A-2.d").element.attribute("id"));
         assertNull(a2.get("c"));
-        assertEquals("c", a2.get("A-1.c").element.getAttribute("id"));
-        assertEquals("c", a2.get("A.A-1.c").element.getAttribute("id"));
+        assertEquals("c", a2.get("A-1.c").element.attribute("id"));
+        assertEquals("c", a2.get("A.A-1.c").element.attribute("id"));
 
         final KeyScope b = root.getChildScope("B");
         assertEquals(11, b.keySet().size());
-        assertEquals("e", b.get("e").element.getAttribute("id"));
-        assertEquals("a1", b.get("a").element.getAttribute("id"));
-        assertEquals("a2", b.get("B.a").element.getAttribute("id"));
+        assertEquals("e", b.get("e").element.attribute("id"));
+        assertEquals("a1", b.get("a").element.attribute("id"));
+        assertEquals("a2", b.get("B.a").element.attribute("id"));
         assertNull(b.get("g"));
-        assertEquals("g", b.get("B-2.g").element.getAttribute("id"));
+        assertEquals("g", b.get("B-2.g").element.attribute("id"));
     }
 
     @Test
@@ -563,14 +572,14 @@ public class TestKeyrefReader {
         final KeyScope r = root.childScopes.get(0);
         assertEquals("A", r.name);
         assertEquals(2, r.keySet().size());
-        assertEquals("def1", r.get("a").element.getAttribute("id"));
-        assertEquals("def1", r.get("A.a").element.getAttribute("id"));
+        assertEquals("def1", r.get("a").element.attribute("id"));
+        assertEquals("def1", r.get("A.a").element.attribute("id"));
 
         final KeyScope d = root.childScopes.get(1);
         assertEquals("A", d.name);
         assertEquals(2, d.keySet().size());
-        assertEquals("def2", d.get("a").element.getAttribute("id"));
-        assertEquals("def1", d.get("A.a").element.getAttribute("id"));
+        assertEquals("def2", d.get("a").element.attribute("id"));
+        assertEquals("def1", d.get("A.a").element.attribute("id"));
     }
     
     @Test
@@ -594,19 +603,13 @@ public class TestKeyrefReader {
         }
     }
 
-    private Document readMap(final File file) throws DITAOTException {
-        InputSource in = null;
+    private XdmNode readMap(final File file) {
         try {
-            in = new InputSource(file.toURI().toString());
-            return XMLUtils.getDocumentBuilder().parse(in);
-        } catch (final Exception e) {
-            throw new DITAOTException("Failed to parse map: " + e.getMessage(), e);
-        } finally {
-            try {
-                close(in);
-            } catch (IOException e) {
-                // NOOP
-            }
+            final StreamSource source = new StreamSource(file);
+            source.setSystemId(file.toURI().toString());
+            return xmlUtils.getProcessor().newDocumentBuilder().build(source);
+        } catch (SaxonApiException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -624,4 +627,19 @@ public class TestKeyrefReader {
         return keyScope(name, keydefs, emptyList());
     }
 
+    private Document toDocument(final XdmNode node) {
+        try {
+            final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setNamespaceAware(true);
+            final Document document = documentBuilderFactory.newDocumentBuilder().newDocument();
+            final DOMDestination destination = new DOMDestination(document);
+            final Receiver receiver = destination.getReceiver(xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(), new SerializationProperties());
+            receiver.open();
+            receiver.append(node.getUnderlyingNode());
+            receiver.close();
+            return document;
+        } catch (XPathException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

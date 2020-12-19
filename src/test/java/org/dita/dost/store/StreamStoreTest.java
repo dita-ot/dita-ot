@@ -32,8 +32,8 @@ public class StreamStoreTest {
     @Before
     public void setUp() throws Exception {
         xmlUtils = new XMLUtils();
-        store = new StreamStore(xmlUtils);
         tmpDir = Files.createTempDir();
+        store = new StreamStore(tmpDir, xmlUtils);
     }
 
     @Test

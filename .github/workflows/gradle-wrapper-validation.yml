@@ -1,0 +1,12 @@
+# https://github.com/marketplace/actions/gradle-wrapper-validation
+
+name: "Validate Gradle Wrapper"
+on: [pull_request]
+
+jobs:
+  validation:
+    name: "Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1

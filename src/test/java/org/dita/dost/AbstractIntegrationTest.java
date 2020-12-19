@@ -12,7 +12,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.apache.tools.ant.*;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.store.Store;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.w3c.dom.*;
@@ -21,6 +24,9 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -429,6 +435,28 @@ public abstract class AbstractIntegrationTest {
             }
             project.executeTargets(ts);
 
+            final Store store = project.getReference(ANT_REFERENCE_STORE);
+
+            if (store != null && store instanceof CacheStore) {
+                final Job job = new Job(tempDir.getAbsoluteFile(), store);
+                for (Job.FileInfo fileInfo : job.getFileInfo()) {
+                    if (fileInfo.uri != null) {
+                        final URI f = job.tempDirURI.resolve(fileInfo.uri);
+                        if (store.exists(f)) {
+                            final Path dir = Paths.get(f).getParent();
+                            if (!Files.exists(dir)) {
+                                Files.createDirectories(dir);
+                            }
+                            try (final InputStream inputStream = store.getInputStream(f)) {
+                                Files.copy(inputStream, Paths.get(f));
+                            } catch (NoSuchFileException | FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+
             return listener.messages;
         } finally {
             System.setOut(savedOut);
@@ -475,7 +503,7 @@ public abstract class AbstractIntegrationTest {
     }
 
     final Set<String> compareable = ImmutableSet.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "txt");
-    final Set<String> ignorable = ImmutableSet.of("schemekeydef.xml", "keydef.xml", "subrelation.xml", ".job.xml");
+    final Set<String> ignorable = ImmutableSet.of("keydef.xml", "subrelation.xml", ".job.xml");
 
     private Collection<String> getFiles(File expDir, File actDir) {
         final FileFilter filter = f -> f.isDirectory()

@@ -25,8 +25,6 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
 
-import static org.apache.commons.io.FileUtils.deleteQuietly;
-import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
@@ -135,13 +133,15 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 outputFileName = resolve(resolveBase, copytoValue.toString());
             }
 
-            if (new File(outputFileName).exists()) {
+            if (job.getStore().exists(outputFileName)) {
                 final URI t = outputFileName;
                 outputFileName = resolve(resolveBase, generateFilename());
                 conflictTable.put(outputFileName, t);
                 dotchunk = false;
             }
-            output = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), StandardCharsets.UTF_8);
+
+            final OutputStream out = job.getStore().getOutputStream(outputFileName);
+            output = new OutputStreamWriter(out, StandardCharsets.UTF_8);
             outputFile = outputFileName;
 
             if (!dotchunk) {
@@ -185,12 +185,12 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     output.close();
                     output = null;
                     if (dotchunk) {
-                        final File dst = new File(currentParsingFile);
-                        final File src = new File(outputFile);
-                        logger.debug("Delete " + currentParsingFile);
-                        deleteQuietly(dst);
+                        if (job.getStore().exists(currentParsingFile)) {
+                            logger.debug("Delete " + currentParsingFile);
+                            job.getStore().delete(currentParsingFile);
+                        }
                         logger.debug("Move " + outputFile + " to " + currentParsingFile);
-                        moveFile(src, dst);
+                        job.getStore().move(outputFile, currentParsingFile);
                         final FileInfo fi = job.getFileInfo(outputFile);
                         if (fi != null) {
                             job.remove(fi);
@@ -307,7 +307,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     outputFileNameStack.push(outputFile);
 
                     outputFile = generateOutputFilename(id);
-                    output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), StandardCharsets.UTF_8);
+                    final OutputStream out = job.getStore().getOutputStream(outputFile);
+                    output = new OutputStreamWriter(out, StandardCharsets.UTF_8);
 
                     if (atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 && currentLang != null) {
                         attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "CDATA", currentLang );

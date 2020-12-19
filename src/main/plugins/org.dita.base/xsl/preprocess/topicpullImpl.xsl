@@ -56,9 +56,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-  <!-- Define the error message prefix identifier -->
-  <!-- Deprecated since 2.3 -->
-  <xsl:variable name="msgprefix">DOTX</xsl:variable>
   <!-- Deprecated since 2.4 -->
   <xsl:param name="DBG" select="'no'"/>
 
@@ -194,7 +191,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:otherwise>
             
             <xsl:variable name="targetDoc" as="document-node()?"
-              select="document($resourcePart, if(exists($baseContextElement)) then $baseContextElement else $linkElement)"/>
+              select="document($resourcePart, root(if(exists($baseContextElement)) then $baseContextElement else $linkElement))"/>
             <xsl:choose>
               <xsl:when test="empty($targetDoc)">
                 <!-- Report the failure to resolve the URI -->
@@ -310,10 +307,18 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
        Templates
        ======================== -->
   
+  <xsl:template match="/">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()">
+        <xsl:with-param name="baseContextElement" select="*" tunnel="yes"/>
+      </xsl:apply-templates>
+    </xsl:copy>
+  </xsl:template>
+
   <!-- Process a link in the related-links section. Retrieve link text, type, and
        description if possible (and not already specified locally). -->
   <xsl:template match="*[contains(@class, ' topic/link ')]">    
-    <xsl:param name="baseContextElement" as="element()*" tunnel="yes"/>
+    <xsl:param name="baseContextElement" as="element()?" tunnel="yes"/>
     <xsl:if test="@href=''">
       <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
     </xsl:if>
@@ -570,7 +575,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
        If specified locally, use the local value, otherwise retrieve from target. -->
   <xsl:template match="*" mode="topicpull:get-stuff">
     <xsl:param name="localtype" as="xs:string?"/>
-    <xsl:param name="baseContextElement" as="element()*" tunnel="yes"/>
+    <xsl:param name="baseContextElement" as="element()?" tunnel="yes"/>
     <xsl:param name="targetElement" as="element()?"
       select="dita-ot:getTargetElement(., $baseContextElement)"/>
     
@@ -697,12 +702,12 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:when test="empty($targetElement)"/>
       <!--otherwise try pulling shortdesc from target-->
       <xsl:otherwise>
-        <xsl:variable name="shortdesc">
+        <xsl:variable name="shortdesc" as="node()*">
           <xsl:apply-templates select="." mode="topicpull:getshortdesc">
             <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
           </xsl:apply-templates>
         </xsl:variable>
-        <xsl:if test="exists($shortdesc) and not(normalize-space($shortdesc) = '')">
+        <xsl:if test="exists($shortdesc) and not(normalize-space(string-join($shortdesc)) = '')">
           <xsl:apply-templates select="." mode="topicpull:add-genshortdesc-PI"/>
           <desc class="- topic/desc ">
             <xsl:apply-templates select="$shortdesc">

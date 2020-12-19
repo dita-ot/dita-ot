@@ -9,7 +9,9 @@ package org.dita.dost.reader;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.ConrefPushReader.MoveKey;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +52,7 @@ public class TestConrefPushReader {
     public void testRead() throws IOException {
         final File filename = new File(srcDir, "conrefpush_stub.xml");
         final ConrefPushReader pushReader = new ConrefPushReader();
-        pushReader.setJob(new Job(tempDir));
+        pushReader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
         pushReader.read(filename.getAbsoluteFile());
 
         final Map<File, Hashtable<MoveKey, DocumentFragment>> pushSet = pushReader.getPushMap();

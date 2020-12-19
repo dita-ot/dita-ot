@@ -95,6 +95,12 @@ $valign: top bottom middle;
   border-bottom: 1px solid;
 }
 
+.entry {
+  &.rotate {
+    writing-mode: vertical-rl;
+  }
+}
+
 // simpletable
 
 .stentry {

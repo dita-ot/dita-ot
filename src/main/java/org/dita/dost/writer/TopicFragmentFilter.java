@@ -59,7 +59,7 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
             final Attributes atts)
             throws SAXException {
         Attributes res = atts;
-        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : null;
+        final DitaClass cls = DitaClass.getInstance(atts);
         classes.addFirst(cls);
         if (TOPIC_TOPIC.matches(cls)) {
             topics.addFirst(atts.getValue(ATTRIBUTE_NAME_ID));

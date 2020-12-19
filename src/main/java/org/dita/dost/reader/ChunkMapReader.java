@@ -26,7 +26,6 @@ import org.xml.sax.SAXException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -202,7 +201,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         // create the reference to the new file on root element.
         String newFilename = replaceExtension(new File(currentFile).getName(), FILE_EXTENSION_DITA);
         URI newFile = currentFile.resolve(newFilename);
-        if (new File(newFile).exists()) {
+        if (job.getStore().exists(newFile)) {
             final URI oldFile = newFile;
             newFilename = chunkFilenameGenerator.generateFilename(CHUNK_PREFIX, FILE_EXTENSION_DITA);
             newFile = currentFile.resolve(newFilename);
@@ -232,7 +231,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * Create the new topic stump.
      */
     private void createTopicStump(final URI newFile) {
-        try (final OutputStream newFileWriter = new FileOutputStream(new File(newFile))) {
+        try (final OutputStream newFileWriter = job.getStore().getOutputStream(newFile)) {
             final XMLStreamWriter o = XMLOutputFactory.newInstance().createXMLStreamWriter(newFileWriter, UTF8);
             o.writeStartDocument();
             o.writeProcessingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + new File(newFile.resolve(".")).getAbsolutePath());
@@ -322,7 +321,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         final String chunkByToken = getChunkByToken(chunk, "by-", defaultChunkByToken);
 
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)
-                || (href != null && !toFile(currentFile.resolve(href.toString())).exists())
+                || (href != null && !job.getStore().exists(currentFile.resolve(href.toString())))
                 || (chunk.isEmpty() && href == null)) {
             processChildTopicref(topicref);
         } else if (chunk.contains(CHUNK_TO_CONTENT)) {
@@ -430,7 +429,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private void writeChunk(final URI outputFileName, String id, String title, String shortDesc) {
-        try (final OutputStream output = new FileOutputStream(new File(outputFileName))) {
+        try (final OutputStream output = job.getStore().getOutputStream(outputFileName)) {
             final XMLSerializer serializer = XMLSerializer.newInstance(output);
             serializer.writeStartDocument();
             if (title == null && shortDesc == null) {

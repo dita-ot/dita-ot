@@ -1,0 +1,31 @@
+name: Snapshot
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  dist:
+    if: github.repository == 'dita-ot/dita-ot'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build with Gradle
+        run: ./gradlew
+      - name: Snapshot distribution package deployment
+        run: ./gradlew dist -Pcommit=${GITHUB_SHA} -PskipGenerateDocs=true --no-daemon
+      - name: Upload to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'eu-west-1'
+          SOURCE_DIR: 'build/distributions'

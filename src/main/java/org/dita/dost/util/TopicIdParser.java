@@ -18,7 +18,9 @@ import org.xml.sax.SAXException;
 /**
  * SAX Parser that handles topic id identification.
  *
+ * @deprecated use DOM parsing instead
  */
+@Deprecated
 public final class TopicIdParser implements ContentHandler {
     private boolean isFirstId = true;
     private StringBuilder firstId = null;

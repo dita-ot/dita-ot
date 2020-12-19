@@ -36,6 +36,7 @@ import org.apache.tools.ant.property.ResolvePropertyMap;
 import org.apache.tools.ant.util.ClasspathUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.platform.Plugins;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Publication;
@@ -94,6 +95,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Set of properties that can be used by tasks.
      */
     private List<Map<String, Object>> projectProps;
+    private int repeat;
 
     /**
      * Whether or not this instance has successfully been constructed and is
@@ -103,6 +105,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     private final ArgumentParser argumentParser = new ArgumentParser();
     private Arguments args;
+    static final ResourceBundle locale = ResourceBundle.getBundle("cli", new Locale("en", "US"));
 
     /**
      * Prints the message of the Throwable if it (the message) is not {@code null}.
@@ -119,10 +122,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private void printErrorMessage(final String msg) {
         if (args != null && args.useColor) {
             System.err.print(DefaultLogger.ANSI_RED);
-            System.err.print("Error: " + msg);
+            System.err.print(String.format(locale.getString("error_msg"), msg));
             System.err.println(DefaultLogger.ANSI_RESET);
         } else {
-            System.err.println("Error: " + msg);
+            System.err.println(String.format(locale.getString("error_msg"), msg));
         }
         System.err.println();
     }
@@ -193,15 +196,27 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // expect the worst
         int exitCode = 1;
         try {
-            try {
-                for (Map<String, Object> props : projectProps) {
-                    runBuild(coreLoader, props);
+            final long[] durations = new long[repeat];
+            for (int i = 0; i < repeat; i++) {
+                final long start = System.currentTimeMillis();
+                try {
+                    for (Map<String, Object> props : projectProps) {
+                        runBuild(coreLoader, props);
+                    }
+                    exitCode = 0;
+                } catch (final ExitStatusException ese) {
+                    exitCode = ese.getStatus();
+                    if (exitCode != 0) {
+                        throw ese;
+                    }
                 }
-                exitCode = 0;
-            } catch (final ExitStatusException ese) {
-                exitCode = ese.getStatus();
-                if (exitCode != 0) {
-                    throw ese;
+                final long end = System.currentTimeMillis();
+                durations[i] = end - start;
+            }
+            if (repeat > 1) {
+                for (int i = 0; i < durations.length; i++) {
+                    System.out.println(String.format(locale.getString("conversion.repeatDuration"),
+                            i + 1, durations[i]));
                 }
             }
         } catch (final BuildException be) {
@@ -269,6 +284,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
         projectProps = Collections.singletonList(definedProps);
         buildFile = args.buildFile;
+        repeat = 1;
 
         if (args.justPrintUsage) {
             args.printUsage(false);
@@ -291,7 +307,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         } else if (args instanceof DeliverablesArguments) {
             final DeliverablesArguments deliverablesArgs = (DeliverablesArguments) args;
             if (deliverablesArgs.projectFile == null) {
-                printErrorMessage("Project file not defined");
+                printErrorMessage(locale.getString("deliverables.error.project_not_defined"));
                 args.printUsage(true);
                 throw new BuildException("");
             }
@@ -315,7 +331,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         } else if (args instanceof UninstallArguments) {
             final UninstallArguments installArgs = (UninstallArguments) args;
             if (installArgs.uninstallId == null) {
-                printErrorMessage("You must specify plug-in identifier when using the uninstall subcommand");
+                printErrorMessage(locale.getString("uninstall.error.identifier_not_defined"));
                 args.printUsage(true);
                 throw new BuildException("");
             }
@@ -328,11 +344,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             if (conversionArgs.projectFile == null) {
                 String err = null;
                 if (!definedProps.containsKey(ANT_TRANSTYPE) && !definedProps.containsKey(ANT_ARGS_INPUT)) {
-                    err = "Input file and transformation type not defined";
+                    err = locale.getString("conversion.error.input_and_transformation_not_defined");
                 } else if (!definedProps.containsKey(ANT_TRANSTYPE)) {
-                    err = "Transformation type not defined";
+                    err = locale.getString("conversion.error.transformation_not_defined");
                 } else if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
-                    err = "Input file not defined";
+                    err = locale.getString("conversion.error.input_not_defined");
                 }
                 if (err != null) {
                     printErrorMessage(err);
@@ -342,6 +358,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             } else {
                 projectProps = handleProject(conversionArgs.projectFile, definedProps);
             }
+            repeat = conversionArgs.repeat;
             // default values
             if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
                 definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());
@@ -354,7 +371,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
 
         // make sure buildfile exists
-        if (!args.buildFile.exists() || buildFile.isDirectory()) {
+        if (!buildFile.exists() || buildFile.isDirectory()) {
             System.out.println("Buildfile " + buildFile + " does not exist!");
             throw new BuildException("Build failed");
         }
@@ -437,7 +454,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 })
                 .collect(Collectors.toList());
         if (runDeliverable != null && projectProps.isEmpty()) {
-            printErrorMessage("Deliverable " + runDeliverable + " not found");
+            printErrorMessage(String.format(locale.getString("project.error.deliverable_not_found"), runDeliverable));
             throw new BuildException("");
         }
 
@@ -459,7 +476,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     private org.dita.dost.project.Project readProjectFile(final File projectFile) throws BuildException {
         if (!projectFile.exists()) {
-            printErrorMessage("Project file " + projectFile + " does not exist");
+            printErrorMessage(String.format(locale.getString("project.error.project_file_not_found"), projectFile));
             throw new BuildException("");
         }
         try {
@@ -767,7 +784,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      *
      * @throws BuildException if the version information is unavailable
      */
-    private static void printVersion() throws BuildException {
-        System.out.println("DITA-OT version " + Configuration.configuration.get("otversion"));
+    private void printVersion() throws BuildException {
+        System.out.println(String.format(locale.getString("version"), Configuration.configuration.get("otversion")));
     }
 }

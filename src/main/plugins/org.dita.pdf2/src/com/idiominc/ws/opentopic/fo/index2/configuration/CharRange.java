@@ -15,7 +15,9 @@ import com.idiominc.ws.opentopic.fo.index2.IndexCollator;
  * Date: 30/8/2007
  * Time: 18:34:32
  * To change this template use File | Settings | File Templates.
+ * @deprecated since 3.4
  */
+@Deprecated
 public class CharRange {
 
     private final String start;

@@ -39,6 +39,10 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
  */
+/**
+ * @deprecated since 3.4
+ */
+@Deprecated
 class IndexEntryImpl implements IndexEntry {
     
     private final String value;

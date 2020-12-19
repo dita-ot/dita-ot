@@ -108,12 +108,6 @@ See the accompanying LICENSE file for applicable license.
 <!-- Switch to enable or disable the generation of default meta message in html header -->
 <xsl:param name="genDefMeta" select="'no'"/>
 
-<!-- Name of the keyref file that contains key definitions -->
-<!-- Deprecated since 2.1 -->
-<xsl:param name="KEYREF-FILE" select="concat($WORKDIR, $PATH2PROJ, 'keydef.xml')"/>
-<!-- Deprecated since 2.1 -->
-<xsl:variable name="keydefs" select="document($KEYREF-FILE)"/>
-  
 <xsl:param name="BASEDIR"/>
   
 <xsl:param name="OUTPUTDIR"/>
@@ -235,10 +229,6 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:variable>
   
-<!-- Define the error message prefix identifier -->
-<!-- Deprecated since 2.3 -->
-<xsl:variable name="msgprefix">DOTX</xsl:variable>
-
 <!-- Filler for A-name anchors  - was &nbsp;-->
 <xsl:variable name="afill"></xsl:variable>
 
@@ -561,6 +551,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:when test="@type = 'trouble'">
       <xsl:apply-templates select="." mode="process.note.trouble"/>
     </xsl:when>
+    <xsl:when test="@type = 'notice'">
+      <xsl:apply-templates select="." mode="process.note.notice"/>
+    </xsl:when>
     <xsl:when test="@type = 'other'">
       <xsl:apply-templates select="." mode="process.note.other"/>
     </xsl:when>
@@ -642,6 +635,10 @@ See the accompanying LICENSE file for applicable license.
   <xsl:apply-templates select="." mode="process.note.common-processing"/>
 </xsl:template>
 
+<xsl:template match="*" mode="process.note.notice">
+  <xsl:apply-templates select="." mode="process.note.common-processing"/>
+</xsl:template>
+    
 <xsl:template match="*" mode="process.note.other">
   <xsl:choose>
     <xsl:when test="@othertype">
@@ -2887,43 +2884,6 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
 
-  <!-- Deprecated since 2.1 -->
-  <!-- This template pulls in topic/title -->
-  <!-- 20090330: Add error checking to ensre $keys is defined, that the key
-                 is defined in KEYREF-FILE, and that $target != '' -->
-  <xsl:template match="*" mode="pull-in-title">
-    <xsl:param name="type"/>
-    <xsl:param name="displaytext" select="''"/>
-    <xsl:param name="keys" select="@keyref"/>
-    
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="id" select="'DOTX069W'"/>
-      <xsl:with-param name="msgparams">%1=pull-in-title</xsl:with-param>
-    </xsl:call-template>
-    <xsl:choose>
-      <xsl:when test="$displaytext = '' and $keys != ''">
-        <xsl:variable name="target">
-          <xsl:variable name="keydef" select="$keydefs//*[@keys = $keys]"/>
-          <xsl:if test="$keydef">
-            <xsl:choose>
-              <xsl:when test="contains($keydef/@href, '#')">
-                <xsl:value-of select="substring-before($keydef/@href, '#')"/>
-              </xsl:when>
-              <xsl:when test="$keydef/@href">
-                <xsl:value-of select="$keydef/@href"/>
-              </xsl:when>
-            </xsl:choose>
-          </xsl:if>
-        </xsl:variable>
-        <xsl:if test="not($target = '' or contains($target, '://'))">
-          <xsl:value-of select="(document(concat($WORKDIR, $PATH2PROJ, $target))//*[contains(@class, ' topic/title ')][normalize-space(.) != ''])[1]"/>
-        </xsl:if>
-      </xsl:when>
-      <xsl:when test="normalize-space(.) = ''">
-        <xsl:value-of select="$displaytext"/>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
   <!-- This template converts phrase-like elements into links based on keyref. -->
   <!-- 20090331: Update to ensure cite with keyref continues to use <cite>,
                  plus move common code to single template -->

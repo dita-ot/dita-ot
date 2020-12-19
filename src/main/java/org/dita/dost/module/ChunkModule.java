@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -17,8 +18,6 @@ import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.TopicRefWriter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,12 +25,12 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.apache.commons.io.FileUtils.deleteQuietly;
-import static org.apache.commons.io.FileUtils.moveFile;
+import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.XMLUtils.rootElement;
 
 /**
  * The chunking module class.
@@ -41,7 +40,7 @@ import static org.dita.dost.util.URLUtils.stripFragment;
  */
 final public class ChunkModule extends AbstractPipelineModuleImpl {
 
-    private static final DitaClass ECLIPSEMAP_PLUGIN = new DitaClass("- map/map eclipsemap/plugin ");
+    private static final DitaClass ECLIPSEMAP_PLUGIN = DitaClass.getInstance("- map/map eclipsemap/plugin ");
     private static final String ROOT_CHUNK_OVERRIDE = "root-chunk-override";
 
     /**
@@ -119,14 +118,15 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if reading ditamap fails
      */
     private boolean isEclipseMap(final URI mapFile) throws DITAOTException {
-        Document doc;
+        XdmNode doc;
         try {
-            doc = job.getStore().getDocument(mapFile);
+            doc = job.getStore().getImmutableNode(mapFile);
         } catch (final IOException e) {
             throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
         }
-        final Element root = doc.getDocumentElement();
-        return ECLIPSEMAP_PLUGIN.matches(root);
+        return doc
+                .select(rootElement().then(attribute(ATTRIBUTE_NAME_CLASS)))
+                .anyMatch(xdmItems -> ECLIPSEMAP_PLUGIN.matches(xdmItems.getStringValue()));
     }
 
     /**
@@ -231,10 +231,14 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
         // removed extra topic files
         for (final URI s : oldTopicList) {
-            final File f = new File(job.tempDirURI.resolve(s));
-            logger.debug("Delete " + f.toURI());
-            if (f.exists() && !f.delete()) {
-                logger.error("Failed to delete " + f.getAbsolutePath());
+            final URI f = job.tempDirURI.resolve(s);
+            if (job.getStore().exists(f)) {
+                logger.debug("Delete " + f);
+                try {
+                    job.getStore().delete(f);
+                } catch (IOException e) {
+                    logger.error("Failed to delete " + f);
+                }
             }
         }
 
@@ -250,7 +254,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 final URI targetPath = conflictTable.get(oldFile);
                 if (targetPath != null) {
                     final URI target = targetPath;
-                    if (!new File(target).exists()) {
+                    if (!job.getStore().exists(target)) {
                         // newly chunked file
                         URI relativePath = getRelativePath(xmlDitalist, from);
                         final URI relativeTargetPath = getRelativePath(xmlDitalist, target);
@@ -260,10 +264,12 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         }
                         // ensure the newly chunked file to the old one
                         try {
-                            logger.debug("Delete " + target);
-                            deleteQuietly(new File(target));
+                            if (job.getStore().exists(target)) {
+                                logger.debug("Delete " + target);
+                                job.getStore().delete(target);
+                            }
                             logger.debug("Move " + from + " to " + target);
-                            moveFile(new File(from), new File(target));
+                            job.getStore().move(from, target);
                             final FileInfo fi = job.getFileInfo(from);
                             if (fi != null) {
                                 job.remove(fi);

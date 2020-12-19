@@ -15,6 +15,8 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MergeMapParser;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.DelegatingURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 
 import javax.xml.transform.stream.StreamSource;
@@ -24,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.toErrorListener;
+import static org.dita.dost.util.XMLUtils.toMessageListener;
 
 /**
  * The module handles topic merge in issues as PDF.
@@ -53,7 +56,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         }
         final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
         final File ditaInput = new File(job.tempDirURI.resolve(in.uri));
-        if (!ditaInput.exists()) {
+        if (!job.getStore().exists(ditaInput.toURI())) {
             logger.error(MessageUtils.getMessage("DOTJ025E").toString());
             return null;
         }
@@ -85,12 +88,15 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         if (!outputDir.exists() && !outputDir.mkdirs()) {
             logger.error("Failed to create directory " + outputDir.getAbsolutePath());
         }
-        try (final OutputStream output = new BufferedOutputStream(new FileOutputStream(out))) {
+        try (final OutputStream output = new BufferedOutputStream(job.getStore().getOutputStream(out.toURI()))) {
             if (style != null) {
                 final Processor processor = xmlUtils.getProcessor();
                 final XsltCompiler xsltCompiler = processor.newXsltCompiler();
                 final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(style)).load();
                 transformer.setErrorListener(toErrorListener(logger));
+                transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
+                transformer.setMessageListener(toMessageListener(logger));
+
                 final StreamSource source = new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray()));
                 final Destination result = processor.newSerializer(output);
                 transformer.setSource(source);

@@ -12,7 +12,8 @@ See the accompanying LICENSE file for applicable license.
   <!-- Logical containers -->
   
   <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]">
-    <div style="display: block; border: 1 black solid; padding: 2pt; color: maroon; margin-bottom: 6pt;">
+    <div>
+    <xsl:call-template name="commonattributes"/>
     <xsl:apply-templates mode="process-syntaxdiagram"/>
     </div>
   </xsl:template>

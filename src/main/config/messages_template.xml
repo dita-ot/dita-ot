@@ -418,6 +418,11 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <message id="DOTJ083E" type="ERROR">
+    <reason>The resource referenced as %1 is capitalized differently on disk</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

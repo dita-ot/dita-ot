@@ -241,12 +241,13 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref in input files" taskname="conref">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl"
+        filenameparameter="file-being-processed"
+        parallel="${parallel}">
         <ditafileset conref="true"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
   </target>
@@ -256,7 +257,7 @@ See the accompanying LICENSE file for applicable license.
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
           description="Normalize same topic fragment identifiers and table column names, and resolve coderef">
     <pipeline message="Resolve topic fragment." taskname="topic-fragment">
-      <sax format="dita">
+      <sax format="dita" parallel="${parallel}">
         <filter class="org.dita.dost.writer.TopicFragmentFilter">
           <param name="attributes" value="href"/>
         </filter>
@@ -281,7 +282,7 @@ See the accompanying LICENSE file for applicable license.
     <property name="dita.preprocess.reloadstylesheet.mapref" value="${dita.preprocess.reloadstylesheet}"/>
     <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
-      <module class="org.dita.dost.module.MaprefModule">
+      <module class="org.dita.dost.module.MaprefModule" parallel="false">
         <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
         <ditafileset format="ditamap"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -300,7 +301,7 @@ See the accompanying LICENSE file for applicable license.
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
-      <module class="org.dita.dost.module.KeyrefModule">
+      <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
@@ -336,7 +337,7 @@ See the accompanying LICENSE file for applicable license.
     description="Process chunks">
     <pipeline message="Process chunks." taskname="chunk"
       inputmap="${user.input.file}">
-      <module class="org.dita.dost.module.ChunkModule">
+      <module class="org.dita.dost.module.ChunkModule" parallel="false">
         <param name="transtype" value="${transtype}"/>
         <param name="root-chunk-override" value="${root-chunk-override}" if:set="root-chunk-override"/>
       </module>
@@ -391,7 +392,8 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Pull metadata for link and xref element" taskname="topicpull">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl"
+        parallel="${parallel}">
         <ditafileset format="dita" processingRole="normal"/>
         <param name="TABLELINK" expression="${args.tablelink.style}" if:set="args.tablelink.style" />
         <param name="FIGURELINK" expression="${args.figurelink.style}" if:set="args.figurelink.style" />
@@ -400,7 +402,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="defaultLanguage" expression="${default.language}"/>
         <param name="remove-broken-links" expression="${remove-broken-links}" if:set="remove-broken-links"/>
         <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
   </target>
@@ -439,7 +440,7 @@ See the accompanying LICENSE file for applicable license.
           description="Clean preprocess">
     <pipeline message="Clean preprocess" taskname="clean-preprocess">
       <param name="use-result-filename" value="${clean-preprocess.use-result-filename}" if:set="clean-preprocess.use-result-filename"/>
-      <module class="org.dita.dost.module.CleanPreprocessModule">
+      <module class="org.dita.dost.module.CleanPreprocessModule" parallel="${parallel}">
         <param name="result.rewrite-rule.xsl" value="${result.rewrite-rule.xsl}" if:set="result.rewrite-rule.xsl"/>
         <param name="result.rewrite-rule.class" value="${result.rewrite-rule.class}" if:set="result.rewrite-rule.class"/>
       </module>
@@ -492,9 +493,7 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-flag.skip"
     description="Copy flag files">
-    <property name="flagimagefile" value="flagimage.list"/>
-    <job-helper file="flagimage.list" property="flagimagelist"/>
-    <dita-ot-copy todir="${dita.output.dir}" includesfile="${dita.temp.dir}/${flagimagefile}" relativepaths="${relflagimagelist}" />
+    <dita-ot-copy todir="${dita.output.dir}" relativepaths="${relflagimagelist}" />
   </target>
   
   <target name="copy-flag-check">

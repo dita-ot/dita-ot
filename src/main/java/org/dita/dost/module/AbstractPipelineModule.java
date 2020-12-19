@@ -71,4 +71,5 @@ public interface AbstractPipelineModule {
     default void setProcessingPipe(List<XmlFilterModule.FilterPair> pipe) {
     }
 
+    void setParallel(boolean parallel);
 }

@@ -7,42 +7,37 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Configuration.configuration;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-
-import com.google.common.annotations.VisibleForTesting;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.store.Store;
-import org.dita.dost.store.StreamStore;
 import org.w3c.dom.Document;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.net.URI;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.Result;
 import javax.xml.transform.dom.DOMResult;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import org.dita.dost.module.reader.TempFileNameScheme;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import static org.dita.dost.util.Configuration.configuration;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 /**
  * Definition of current job.
@@ -98,10 +93,6 @@ public final class Job {
     private static final String PROPERTY_INPUT_MAP = "InputMapDir";
     private static final String PROPERTY_INPUT_MAP_URI = "InputMapDir.uri";
 
-    /** File name for key definition file */
-    public static final String KEYDEF_LIST_FILE = "keydef.xml";
-    /** File name for key definition file */
-    public static final String SUBJECT_SCHEME_KEYDEF_LIST_FILE = "schemekeydef.xml";
     /** File name for temporary input file list file */
     public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
@@ -149,7 +140,8 @@ public final class Job {
         }
         this.tempDir = tempDir;
         this.store = store;
-        tempDirURI = tempDir.toURI();
+        final URI tmpDirUri = tempDir.toURI();
+        tempDirURI = tmpDirUri.toString().endsWith("/") ? tmpDirUri : URI.create(tmpDirUri + "/");
         jobFile = new File(tempDir, JOB_FILE);
         prop = new HashMap<>();
         read();
@@ -158,11 +150,6 @@ public final class Job {
                 prop.put(e.getKey(), e.getValue());
             }
         }
-    }
-
-    @VisibleForTesting
-    public Job(final File tempDir) throws IOException {
-        this(tempDir, new StreamStore(new XMLUtils()));
     }
 
     public Job(final Job job, final Map<String, Object> prop, final Collection<FileInfo> files) {
@@ -183,7 +170,7 @@ public final class Job {
      * @return {@code true} if configuration file has been update after this object has been created or serialized
      */
     public boolean isStale() {
-        return jobFile.lastModified() > lastModified;
+        return getStore().getLastModified(jobFile.toURI()) > lastModified;
     }
 
     /**
@@ -194,14 +181,11 @@ public final class Job {
      * @throws IllegalStateException if configuration files are missing
      */
     private void read() throws IOException {
-        lastModified = jobFile.lastModified();
-        if (jobFile.exists()) {
+        lastModified = getStore().getLastModified(jobFile.toURI());
+        if (getStore().exists(jobFile.toURI())) {
             try (final InputStream in = new FileInputStream(jobFile)) {
-                final XMLReader parser = XMLUtils.getXMLReader();
-                parser.setContentHandler(new JobHandler(prop, files));
-
-                parser.parse(new InputSource(in));
-            } catch (final SAXException e) {
+                getStore().transform(jobFile.toURI(), new JobHandler(prop, files));
+            } catch (final DITAOTException e) {
                 throw new IOException("Failed to read job file: " + e.getMessage());
             }
         } else {
@@ -326,33 +310,26 @@ public final class Job {
      * @throws IOException if writing configuration files failed
      */
     public void write() throws IOException {
-        OutputStream outStream = null;
-        XMLStreamWriter out = null;
-        try {
-            outStream = new FileOutputStream(jobFile);
-            out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream, "UTF-8");
-            serialize(out, prop, files.values());
+        try (Writer outStream = new BufferedWriter(new OutputStreamWriter(getStore().getOutputStream(jobFile.toURI())))) {
+            XMLStreamWriter out = null;
+            try {
+                out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream);
+                serialize(out, prop, files.values());
+            } catch (final XMLStreamException e) {
+                throw new IOException("Failed to serialize job file: " + e.getMessage());
+            } finally {
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (final XMLStreamException e) {
+                        throw new IOException("Failed to close file: " + e.getMessage());
+                    }
+                }
+            }
         } catch (final IOException e) {
             throw new IOException("Failed to write file: " + e.getMessage());
-        } catch (final XMLStreamException e) {
-            throw new IOException("Failed to serialize job file: " + e.getMessage());
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (final XMLStreamException e) {
-                    throw new IOException("Failed to close file: " + e.getMessage());
-                }
-            }
-            if (outStream != null) {
-                try {
-                    outStream.close();
-                } catch (final IOException e) {
-                    throw new IOException("Failed to close file: " + e.getMessage());
-                }
-            }
         }
-        lastModified = jobFile.lastModified();
+        lastModified = getStore().getLastModified(jobFile.toURI());
     }
 
     public Document serialize() throws IOException {

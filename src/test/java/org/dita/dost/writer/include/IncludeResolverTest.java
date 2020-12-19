@@ -10,8 +10,10 @@ package org.dita.dost.writer.include;
 import com.google.common.io.Files;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo.Builder;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.CoderefResolver;
 import org.junit.After;
 import org.junit.Before;
@@ -72,7 +74,7 @@ public class IncludeResolverTest {
 
         filter = new CoderefResolver();
         filter.setLogger(new TestUtils.TestLogger());
-        final Job job = new Job(tempDir);
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.addAll(Stream.of("topic.dita", test)
                 .map(p -> new Builder()
                         .uri(create(p))

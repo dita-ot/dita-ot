@@ -95,7 +95,7 @@ See the [documentation][docs] for arguments and [options].
 DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 
 [build]: https://travis-ci.org/dita-ot/dita-ot.svg?branch=develop
-[slack]: http://slack.dita-ot.org/badge.svg
+[slack]: https://img.shields.io/badge/Slack-Join%20us!-%234A154B?style=flat&logo=slack
 [site]: https://www.dita-ot.org/
 [dist]: https://www.dita-ot.org/download
 [support]: https://github.com/dita-ot/.github/blob/master/SUPPORT.md

@@ -32,10 +32,6 @@ See the accompanying LICENSE file for applicable license.
 <!-- Include error message template -->
 <xsl:include href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
-<!-- Set the prefix for error message numbers -->
-<!-- Deprecated since 2.3 -->
-<xsl:variable name="msgprefix">DOTX</xsl:variable>
-
 <!-- *************************** Command line parameters *********************** -->
 <xsl:param name="OUTEXT" select="'.html'"/>
 <xsl:param name="WORKDIR" select="'./'"/>

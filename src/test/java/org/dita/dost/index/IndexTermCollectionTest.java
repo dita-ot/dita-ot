@@ -155,8 +155,7 @@ public class IndexTermCollectionTest {
 
     @After
     public void tearDown() throws IOException {
-        System.err.println(tempDir);
-//        TestUtils.forceDelete(tempDir);
+        TestUtils.forceDelete(tempDir);
     }
 
 }

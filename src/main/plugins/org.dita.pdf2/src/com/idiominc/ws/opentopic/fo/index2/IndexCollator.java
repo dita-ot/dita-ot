@@ -32,6 +32,10 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
  */
+/**
+ * @deprecated since 3.4
+ */
+@Deprecated
 public class IndexCollator {
 
     private com.ibm.icu.text.Collator icu4jCollator = null;

@@ -23,7 +23,8 @@ import static java.util.Collections.unmodifiableMap;
  */
 public class KeyScope {
 
-    public static final KeyScope EMPTY = new KeyScope(null, null, Collections.emptyMap(), Collections.emptyList());
+    public static final String ROOT_ID = "#root";
+    public static final KeyScope EMPTY = new KeyScope(ROOT_ID, null, Collections.emptyMap(), Collections.emptyList());
 
     public final String id;
     public final String name;

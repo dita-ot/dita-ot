@@ -20,10 +20,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 
 import static org.dita.dost.util.Constants.*;
@@ -67,13 +64,12 @@ public final class DelayConrefUtils {
      * @return true if id find and false otherwise
      */
     public boolean findTopicId(final File absolutePathToFile, final String id) {
-
-        if (!absolutePathToFile.exists()) {
+        if (!job.getStore().exists(absolutePathToFile.toURI())) {
             return false;
         }
         try {
             //load the file
-            final Document root = job.getStore().getDocument(absolutePathToFile.toURI());
+            final Document root = job.getStore().getImmutableDocument(absolutePathToFile.toURI());
 
             //get root element
             final Element doc = root.getDocumentElement();
@@ -122,7 +118,7 @@ public final class DelayConrefUtils {
         try {
             //load export.xml only once
             if (root == null) {
-                root = job.getStore().getDocument(exportFile.toURI());
+                root = job.getStore().getImmutableDocument(exportFile.toURI());
             }
             //get file node which contains the export node
             final Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
@@ -247,7 +243,7 @@ public final class DelayConrefUtils {
                                    final TempFileNameScheme tempFileNameScheme)
             throws DITAOTException {
         XMLStreamWriter export = null;
-        try (OutputStream exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML))) {
+        try (OutputStream exportStream = new BufferedOutputStream(job.getStore().getOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML).toURI()))) {
             export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
             export.writeStartDocument();
             export.writeStartElement("stub");

@@ -14,7 +14,7 @@ apply plugin: 'signing'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
-version = '3.5.4'
+version = '3.6.0'
 
 description = """DITA Open Toolkit"""
 
@@ -29,14 +29,14 @@ repositories {
     }
 }
 dependencies {
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'commons-io', name: 'commons-io', version: '2.8.0'
     compile group: 'xerces', name: 'xercesImpl', version:'2.12.0'
     compile group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
     compile group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
     compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.9.1-7'
     compile group: 'com.ibm.icu', name: 'icu4j', version:'61.1'
-    compile group: 'org.apache.ant', name: 'ant', version:'1.10.8'
-    compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.8'
+    compile group: 'org.apache.ant', name: 'ant', version:'1.10.9'
+    compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.9'
     compile(group: 'com.google.guava', name: 'guava', version: '25.1-jre') {
         exclude group: 'org.checkerframework', module: 'checker-qual'
         exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
@@ -50,13 +50,16 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.11.0'
     compile group: 'org.relaxng', name: 'jing', version: '20181222'
-    runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.8'
+    runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.9'
     testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'org.xmlunit', name: 'xmlunit-core', version: '2.6.0'
 }
 
-jar.archiveName = "${project.name}.jar"
+jar {
+    archiveName = "${project.name}.jar"
+    exclude "catalog.xml"
+}
 
 processResources {
     filter ReplaceTokens, tokens: [
@@ -160,7 +163,7 @@ def cleanVersion = project.version.split('\\.').toList()[2] == "0" ?
         project.version.split('\\.').toList().subList(0, 2).join('.').toString() :
         project.version
 def distVersion = project.hasProperty("commit") && (!project.hasProperty("tag") || tag.empty) ?
-                  "${project.version}+${commit.substring(0, 7)}" :
+                  "${project.version}@${commit.substring(0, 7)}" :
                   "${cleanVersion}"
 def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "develop" :
@@ -171,8 +174,8 @@ def bundled = [
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
         "dita11": "https://github.com/dita-ot/org.dita.specialization.dita11/archive/1.1.1.zip",
         "dita12": "https://github.com/dita-ot/org.oasis-open.dita.v1_2/archive/1.2.1.zip",
-        "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20200417/org.oasis-open.dita.v2_0.zip",
-        "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20200417/org.oasis-open.dita.techcomm.v2_0.zip",
+        "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20201027/org.oasis-open.dita.v2_0.zip",
+        "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20201027/org.oasis-open.dita.techcomm.v2_0.zip",
         "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.2.2/org.oasis-open.xdita.v0_2_2.zip",
         "index": "https://github.com/dita-ot/org.dita.index/releases/download/1.0.0/org.dita.index-1.0.0.zip"
 ]
@@ -256,6 +259,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "plugins/org.oasis-open.dita.v1_3/**"
         exclude "temp"
         include "config/**"
+        include "resources/catalog.xml"
         include "resources/plugin.rnc"
         include "resources/project.rnc"
         // legacy build scripts

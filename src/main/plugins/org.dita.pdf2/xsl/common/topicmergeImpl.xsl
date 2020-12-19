@@ -43,8 +43,6 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
-  <!-- Deprecated since 2.3 -->
-  <xsl:variable name="msgprefix" select="'PDFX'"/>
   <xsl:variable name="separator" select="'_Connect_42_'"/>
     
   <xsl:variable name="originalMap" as="element()"
@@ -78,11 +76,13 @@ See the accompanying LICENSE file for applicable license.
 
 
     <xsl:template match="dita-merge">
-        <xsl:variable name="map" select="(*[contains(@class,' map/map ')])[1]"/>
-        <xsl:element name="{name($map)}">
-          <xsl:copy-of select="$map/@*"/>
-          <xsl:apply-templates select="$map" mode="build-tree"/>
-        </xsl:element>
+      <xsl:variable name="map" select="(*[contains(@class,' map/map ')])[1]" as="element()?"/>
+      <xsl:for-each select="$map">
+        <xsl:copy>
+            <xsl:copy-of select="@*"/>
+            <xsl:apply-templates select="." mode="build-tree"/>
+        </xsl:copy>
+      </xsl:for-each>
     </xsl:template>
     
     <xsl:template match="*[contains(@class,' map/topicref ')][@first_topic_id]" mode="resolve-root-dita">

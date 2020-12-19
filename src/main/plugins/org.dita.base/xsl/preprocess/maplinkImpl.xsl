@@ -41,9 +41,6 @@ See the accompanying LICENSE file for applicable license.
       <xsl:with-param name="path" select="$PATHTOMAP"/>
     </xsl:call-template>
   </xsl:variable>  
-
-  <!-- Define the error message prefix identifier -->
-  <xsl:variable name="msgprefix" select="'DOTX'"/>
     
   <xsl:template match="/">
     <xsl:variable name="map" as="document-node()">

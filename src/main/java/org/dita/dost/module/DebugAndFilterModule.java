@@ -8,7 +8,6 @@
  */
 package org.dita.dost.module;
 
-import net.sf.saxon.s9api.Serializer;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -121,11 +120,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             return;
         }
         outputFile = new File(job.tempDir, f.file.getPath());
-        final File outputDir = outputFile.getParentFile();
-        if (!outputDir.exists() && !outputDir.mkdirs()) {
-            logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
-            return;
-        }
         logger.info("Processing " + f.src + " to " + outputFile.toURI());
 
         final Set<URI> schemaSet = dic.get(f.uri);
@@ -167,9 +161,9 @@ public final class DebugAndFilterModule extends SourceReaderModule {
 
             in = new InputSource(f.src.toString());
 
-            final Serializer result = processor.newSerializer(outputFile);
+            final ContentHandler result = job.getStore().getContentHandler(outputFile.toURI());
 
-            xmlSource.setContentHandler(result.getContentHandler());
+            xmlSource.setContentHandler(result);
             xmlSource.parse(in);
         } catch (final RuntimeException e) {
             throw e;
@@ -192,17 +186,17 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         initXmlReader();
 
         // Output subject schemas
-        outputSubjectScheme();
         subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
         subjectSchemeReader.setJob(job);
-        dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+        outputSubjectScheme();
+        dic = subjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
 
         if (profilingEnabled) {
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
             filterReader.setJob(job);
-            if (ditavalFile != null && ditavalFile.exists()) {
+            if (job.getStore().exists(ditavalFile.toURI())) {
                 filterReader.read(ditavalFile.getAbsoluteFile());
                 baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterReader.getFilterMap(),
                         filterReader.getForegroundConflictColor(), filterReader.getBackgroundConflictColor());
@@ -321,7 +315,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
      */
     private void outputSubjectScheme() throws DITAOTException {
         try {
-            final Map<URI, Set<URI>> graph = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            final Map<URI, Set<URI>> graph = subjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
 
             final Queue<URI> queue = new LinkedList<>(graph.keySet());
             final Set<URI> visitedSet = new HashSet<>();
@@ -347,7 +341,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
                 }
                 if (children != null) {
                     for (final URI childpath: children) {
-                        final Document childRoot = job.getStore().getDocument(job.getInputFile().resolve(childpath.getPath()));
+                        final Document childRoot = job.getStore().getImmutableDocument(job.getInputFile().resolve(childpath.getPath()));
                         mergeScheme(parentRoot, childRoot);
                         generateScheme(new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION), childRoot);
                     }
@@ -476,10 +470,6 @@ public final class DebugAndFilterModule extends SourceReaderModule {
      * @throws DITAOTException if generation fails
      */
     private void generateScheme(final File filename, final Document root) throws DITAOTException {
-        final File p = filename.getParentFile();
-        if (!p.exists() && !p.mkdirs()) {
-            throw new DITAOTException("Failed to make directory " + p.getAbsolutePath());
-        }
         try {
             job.getStore().writeDocument(root, filename.toURI());
         } catch (final IOException e) {

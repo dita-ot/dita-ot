@@ -33,6 +33,8 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,7 +42,8 @@ import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Configuration.Mode;
 import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Job.*;
+import static org.dita.dost.util.Job.FileInfo;
+import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
 
 /**
@@ -99,11 +102,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private final Set<URI> relFlagImagesSet;
 
     /** List of files waiting for parsing. Values are absolute URI references. */
-    private final Queue<Reference> waitList;
+    private final NavigableMap<URI, Reference> waitList;
 
     /** List of parsed files */
-    private final List<URI> doneList;
-    private final List<URI> failureList;
+    private final Set<URI> doneList;
+    private final Set<URI> failureList;
 
     /** Set of outer dita files */
     private final Set<URI> outDitaFilesSet;
@@ -168,9 +171,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         htmlSet = SetMultimapBuilder.hashKeys().hashSetValues().build();
         hrefTargetSet = new HashSet<>(128);
         coderefTargetSet = new HashSet<>(16);
-        waitList = new LinkedList<>();
-        doneList = new LinkedList<>();
-        failureList = new LinkedList<>();
+        waitList = new ConcurrentSkipListMap<>();
+        doneList = ConcurrentHashMap.newKeySet();
+        failureList = ConcurrentHashMap.newKeySet();
         conrefTargetSet = new HashSet<>(128);
         nonConrefCopytoTargetSet = new HashSet<>(128);
         outDitaFilesSet = new HashSet<>(128);
@@ -344,8 +347,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
 
     private void processWaitList() throws DITAOTException {
-        while (!waitList.isEmpty()) {
-            processFile(waitList.remove());
+        for (Map.Entry<URI, Reference> entry = waitList.pollFirstEntry(); entry != null; entry = waitList.pollFirstEntry()) {
+            processFile(entry.getValue());
         }
     }
 
@@ -659,11 +662,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private void addToWaitList(final Reference ref) {
         final URI file = ref.filename;
         assert file.isAbsolute() && file.getFragment() == null;
-        if (doneList.contains(file) || waitList.contains(ref) || file.equals(currentFile)) {
+        if (doneList.contains(file) || waitList.containsKey(ref.filename) || file.equals(currentFile)) {
             return;
         }
 
-        waitList.add(ref);
+        waitList.put(ref.filename, ref);
     }
 
     /**
@@ -885,17 +888,17 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         try {
             logger.info("Serializing job specification");
-            if (!job.tempDir.exists() && !job.tempDir.mkdirs()) {
-                throw new DITAOTException("Failed to create " + job.tempDir + " directory");
-            }
             job.write();
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
         }
 
         try {
-            SubjectSchemeReader.writeMapToXML(addMapFilePrefix(listFilter.getRelationshipGrap()), new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
-            SubjectSchemeReader.writeMapToXML(addMapFilePrefix(schemeDictionary), new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+            subjectSchemeReader.setLogger(logger);
+            subjectSchemeReader.setJob(job);
+            subjectSchemeReader.writeMapToXML(addMapFilePrefix(listFilter.getRelationshipGrap()), new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            subjectSchemeReader.writeMapToXML(addMapFilePrefix(schemeDictionary), new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
         }
@@ -907,8 +910,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap());
             delayConrefUtils.writeExportAnchors(exportAnchorsFilter, tempFileNameScheme);
         }
-
-        KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), addFilePrefix(schemekeydefMap.values()));
     }
 
     /** Filter copy-to where target is used directly. */
@@ -928,7 +929,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      * @param relativeRootFile list value
      */
     private void writeListFile(final File inputfile, final String relativeRootFile) {
-        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)))) {
+        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(inputfile.toURI())))) {
             bufferedWriter.write(relativeRootFile);
             bufferedWriter.flush();
         } catch (final IOException e) {
@@ -1032,10 +1033,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
 
         // write list attribute to file
-        final String fileKey = org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.substring(0, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
-        prop.setProperty(fileKey, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.substring(0, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
+        final String fileKey = REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
+        prop.setProperty(fileKey, REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
         final File list = new File(job.tempDir, prop.getProperty(fileKey));
-        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)))) {
+        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(list.toURI())))) {
             final Iterator<URI> it = newSet.iterator();
             while (it.hasNext()) {
                 bufferedWriter.write(it.next().getPath());
@@ -1048,7 +1049,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             logger.error(e.getMessage(), e) ;
         }
 
-        prop.setProperty(org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
+        prop.setProperty(REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
     }
 
 }

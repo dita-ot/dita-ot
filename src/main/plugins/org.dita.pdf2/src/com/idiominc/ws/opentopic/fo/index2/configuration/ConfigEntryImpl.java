@@ -34,8 +34,12 @@ with those set forth herein.
 
 This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
- */class ConfigEntryImpl
- implements ConfigEntry {
+ */
+/**
+ * @deprecated since 3.4
+ */
+@Deprecated
+class ConfigEntryImpl implements ConfigEntry {
      private final String label;
      private final String key;
      private final String[] members;

@@ -174,7 +174,7 @@ See the accompanying LICENSE file for applicable license.
     unless="preprocess.keyref.skip"
     description="Resolve input map files keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
-      <module class="org.dita.dost.module.KeyrefModule">
+      <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
         <param name="transtype" value="${transtype}"/>
@@ -209,13 +209,14 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref in input files" taskname="conref">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/map-conref.xsl" filenameparameter="file-being-processed">
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/map-conref.xsl"
+        filenameparameter="file-being-processed"
+        parallel="${parallel}">
         <ditafileset format="ditamap" conref="true" input="true"/>
         <ditafileset format="ditamap" conref="true" inputResource="true"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
   </target>
@@ -274,7 +275,7 @@ See the accompanying LICENSE file for applicable license.
           unless="preprocess.keyref.skip"
           description="Resolve keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
-      <module class="org.dita.dost.module.KeyrefModule">
+      <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
         <ditafileset format="dita"/>
         <param name="transtype" value="${transtype}"/>
       </module>
@@ -308,13 +309,14 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve conref in input files" taskname="conref">
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
+            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl"
+            filenameparameter="file-being-processed"
+            parallel="${parallel}">
         <ditafileset conref="true" format="dita"/>
         <ditafileset conref="true" format="ditamap"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
   </target>
@@ -340,7 +342,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="preprocess2.topic-fragment"
           description="Normalize same topic fragment identifiers and table column names, and resolve coderef">
     <pipeline message="Resolve topic fragment." taskname="preprocess2.topic-fragment">
-      <sax>
+      <sax parallel="${parallel}">
         <ditafileset format="dita"/>
         <filter class="org.dita.dost.writer.TopicFragmentFilter">
           <param name="attributes" value="href"/>
@@ -397,14 +399,14 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Pull metadata for link and xref element" taskname="topicpull">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl"
+        parallel="${parallel}">
         <ditafileset format="dita" processingRole="normal"/>
         <param name="TABLELINK" expression="${args.tablelink.style}" if:set="args.tablelink.style" />
         <param name="FIGURELINK" expression="${args.figurelink.style}" if:set="args.figurelink.style" />
         <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if:set="onlytopic.in.map"/>
         <param name="defaultLanguage" expression="${default.language}"/>
         <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
   </target>
