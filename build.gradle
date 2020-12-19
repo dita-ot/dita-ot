@@ -14,7 +14,7 @@ apply plugin: 'signing'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
-version = '3.6.0-SNAPSHOT'
+version = '3.6.0'
 
 description = """DITA Open Toolkit"""
 
@@ -56,7 +56,10 @@ dependencies {
     testCompile group: 'org.xmlunit', name: 'xmlunit-core', version: '2.6.0'
 }
 
-jar.archiveName = "${project.name}.jar"
+jar {
+    archiveName = "${project.name}.jar"
+    exclude "catalog.xml"
+}
 
 processResources {
     filter ReplaceTokens, tokens: [
@@ -256,6 +259,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "plugins/org.oasis-open.dita.v1_3/**"
         exclude "temp"
         include "config/**"
+        include "resources/catalog.xml"
         include "resources/plugin.rnc"
         include "resources/project.rnc"
         // legacy build scripts
