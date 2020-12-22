@@ -57,7 +57,7 @@ if "%_JAVACMD%" == "" set _JAVACMD=%JAVA_HOME%\bin\java.exe
 if "%_JAVACMD%" == "" set _JAVACMD=java.exe
 
 :runAnt
-"%_JAVACMD%" %ANT_OPTS% -Djava.awt.headless=true -classpath "%DITA_HOME%\lib\ant-launcher.jar;%DITA_HOME%\config" "-Dant.home=%DITA_HOME%"  "-Ddita.dir=%DITA_HOME%" org.apache.tools.ant.launch.Launcher %ANT_ARGS% -cp "%CLASSPATH%" %DITA_CMD_LINE_ARGS% -buildfile "%DITA_HOME%\build.xml" -main "org.dita.dost.invoker.Main"
+"%_JAVACMD%" %ANT_OPTS% -Djava.awt.headless=true -classpath "%DITA_HOME%\lib\ant-launcher.jar;%DITA_HOME%\config" "-Dant.home=%DITA_HOME%"  "-Ddita.dir=%DITA_HOME%" org.apache.tools.ant.launch.Launcher %ANT_ARGS% -cp "%CLASSPATH%" %DITA_CMD_LINE_ARGS% -buildfile "%DITA_HOME%\build.xml" -main "org.dita.dost.invoker.ProxyMain"
 rem Check the error code of the Ant build
 if not "%OS%"=="Windows_NT" goto onError
 set ANT_ERROR=%ERRORLEVEL%
