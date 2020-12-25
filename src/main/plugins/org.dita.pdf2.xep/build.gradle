@@ -6,7 +6,7 @@
  * See the accompanying LICENSE file for applicable license.
  */
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 group = 'org.dita-ot.pdf'
 
@@ -27,16 +27,16 @@ sourceSets {
     }
 }
 
-jar.archiveName = "${project.name}.jar"
+jar.archiveFileName = "${project.name}.jar"
 jar.include "com/idiominc/**"
 
 task copyInstall(type: Copy) {
-    from (configurations.runtime.allArtifacts.files)
+    from (configurations.runtimeClasspath.allArtifacts.files)
     destinationDir = file("lib")
 }
 
 task copyDistTemp(type: Copy) {
-    from (configurations.runtime.allArtifacts.files) {
+    from (configurations.runtimeClasspath.allArtifacts.files) {
         into "plugins/org.dita.pdf2.xep/lib"
     }
     destinationDir = file("${rootProject.buildDir}/tmp/dist")
