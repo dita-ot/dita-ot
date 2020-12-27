@@ -181,8 +181,6 @@ See the accompanying LICENSE file for applicable license.
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
-    <!-- get domains attribute in the target file -->
-    <xsl:variable name="domains" select="(document($file, /)/*/@domains | document($file, /)/dita/*[@domains][1]/@domains)[1]" as="xs:string?"/>
     <!--the file name is useful to href when resolving conref -->
     <xsl:variable name="conref-filename" as="xs:string">
       <xsl:call-template name="replace-blank">
@@ -239,6 +237,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:when>
           </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="domains" select="($target-doc/*/@domains | $target-doc/dita/*[@domains][1]/@domains)[1]" as="xs:string?"/>
         <xsl:choose>
           <xsl:when test="empty($target-doc)">
             <xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/>
