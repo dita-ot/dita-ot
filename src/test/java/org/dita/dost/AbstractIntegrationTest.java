@@ -177,7 +177,7 @@ public abstract class AbstractIntegrationTest {
         db = dbf.newDocumentBuilder();
         htmlb = new HtmlDocumentBuilder();
         final String l = System.getProperty(LOG_LEVEL);
-        level = l != null ? Integer.parseInt(l) : -2;
+        level = l != null ? Integer.parseInt(l) : 1;
     }
 
     private static boolean isWindows() {
@@ -225,6 +225,7 @@ public abstract class AbstractIntegrationTest {
                     countMessages(log, Project.MSG_ERR));
 
             this.actDir = transtype.compareTemp ? tempDir : outDir;
+            outputLog(log);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Throwable e) {

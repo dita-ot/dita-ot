@@ -7,7 +7,6 @@
  */
 package org.dita.dost.module;
 
-import net.sf.saxon.lib.ErrorReporter;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
@@ -36,8 +35,7 @@ import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
 import static org.dita.dost.util.FileUtils.replaceExtension;
-import static org.dita.dost.util.XMLUtils.toErrorListener;
-import static org.dita.dost.util.XMLUtils.toMessageListener;
+import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * XSLT processing module.
@@ -102,7 +100,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         processor = xmlUtils.getProcessor();
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
         xsltCompiler.setURIResolver(uriResolver);
-        xsltCompiler.setErrorListener(toErrorListener(logger));
+        xsltCompiler.setErrorReporter(toErrorReporter(logger));
         logger.info("Loading stylesheet " + style.getAbsolutePath());
         try {
             templates = xsltCompiler.compile(new StreamSource(style));
@@ -183,7 +181,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 //            final URIResolver resolver = Configuration.DEBUG
 //                    ? new XMLUtils.DebugURIResolver(uriResolver)
 //                    : uriResolver;
-            transformer.setErrorListener(toErrorListener(logger));
+            transformer.setErrorReporter(toErrorReporter(logger));
             transformer.setURIResolver(uriResolver);
             transformer.setMessageListener(toMessageListener(logger));
             return transformer;
@@ -200,7 +198,6 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 //                final URIResolver resolver = Configuration.DEBUG
 //                        ? new XMLUtils.DebugURIResolver(uriResolver)
 //                        : uriResolver;
-//                t.setErrorListener(toErrorListener(logger));
                 t.setErrorReporter(toErrorReporter(logger));
                 t.setURIResolver(uriResolver);
                 t.setMessageListener(toMessageListener(logger));
@@ -306,16 +303,6 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 logger.error("Failed to clean up after failed transformation: " + e1, e1);
             }
         }
-    }
-
-    private ErrorReporter toErrorReporter(final DITAOTLogger logger) {
-        return error -> {
-            if (error.isWarning()) {
-                logger.warn(error.getMessage());
-            } else {
-                logger.error(error.getMessage());
-            }
-        };
     }
 
     public void setStyle(final File style) {

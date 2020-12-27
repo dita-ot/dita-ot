@@ -32,8 +32,7 @@ import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.toErrorListener;
-import static org.dita.dost.util.XMLUtils.toMessageListener;
+import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * MoveLinksModule implements move links step in preprocess. It reads the map links
@@ -62,7 +61,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
 
             final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(styleFile)).load();
-            transformer.setErrorListener(toErrorListener(logger));
+            transformer.setErrorReporter(toErrorReporter(logger));
             transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
             transformer.setMessageListener(toMessageListener(logger));
 

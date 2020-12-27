@@ -189,9 +189,14 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:sequence select="root($linkElement)"/>
           </xsl:when>
           <xsl:otherwise>
-            
+            <xsl:variable name="targetDocUrl"
+              select="resolve-uri($resourcePart,
+                                  document-uri(root(if(exists($baseContextElement))
+                                                    then $baseContextElement
+                                                    else $linkElement)))"/>
+            <xsl:message select="targetDocUrl"/>
             <xsl:variable name="targetDoc" as="document-node()?"
-              select="document($resourcePart, root(if(exists($baseContextElement)) then $baseContextElement else $linkElement))"/>
+              select="doc($targetDocUrl)"/>
             <xsl:choose>
               <xsl:when test="empty($targetDoc)">
                 <!-- Report the failure to resolve the URI -->

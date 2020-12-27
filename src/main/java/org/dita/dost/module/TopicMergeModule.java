@@ -25,8 +25,7 @@ import java.nio.charset.StandardCharsets;
 
 import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.toErrorListener;
-import static org.dita.dost.util.XMLUtils.toMessageListener;
+import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * The module handles topic merge in issues as PDF.
@@ -93,7 +92,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
                 final Processor processor = xmlUtils.getProcessor();
                 final XsltCompiler xsltCompiler = processor.newXsltCompiler();
                 final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(style)).load();
-                transformer.setErrorListener(toErrorListener(logger));
+                transformer.setErrorReporter(toErrorReporter(logger));
                 transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
                 transformer.setMessageListener(toMessageListener(logger));
 
