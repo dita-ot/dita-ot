@@ -6,8 +6,6 @@
  * See the accompanying LICENSE file for applicable license.
  */
 
-// https://github.com/EtienneMiret/sass-gradle-plugin
-
 plugins {
     id 'io.miret.etienne.sass' version '1.1.1'
 }
