@@ -1,12 +1,27 @@
-FROM adoptopenjdk:11-jre-hotspot
+ARG VERSION=3.6
+ARG JAVA_VERSION=11-jre-hotspot
 
-RUN apt-get update \
-    && apt-get install -y unzip \
-    && rm -rf /var/lib/apt/lists/*
-
+FROM adoptopenjdk:${JAVA_VERSION}
 ARG VERSION
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+LABEL "maintainer"="DITA Open Toolkit Development Team"
+LABEL "org.opencontainers.image.authors"="Robert D Anderson, Jarno Elovirta, Roger W. Fienhold Sheen"
+LABEL "org.opencontainers.image.documentation"="https://www.dita-ot.org/"
+LABEL "org.opencontainers.image.vendor"="DITA Open Toolkit Development Team"
+LABEL "org.opencontainers.image.licenses"="Apache-2.0"
+LABEL "org.opencontainers.image.title"="DITA Open Toolkit"
+LABEL "org.opencontainers.image.description"="The open-source XML publishing engine for content authored in the Darwin Information Typing Architecture."
+LABEL "org.opencontainers.image.source"="https://github.com/dita-ot/dita-ot"
+
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update -q && \
+    apt-get install -qy --no-install-recommends -y unzip locales tzdata && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN curl -sLo /tmp/dita-ot-$VERSION.zip https://github.com/dita-ot/dita-ot/releases/download/$VERSION/dita-ot-$VERSION.zip && \
-    unzip /tmp/dita-ot-$VERSION.zip -d /tmp/ && \
+    unzip -qq /tmp/dita-ot-$VERSION.zip -d /tmp/ && \
     rm /tmp/dita-ot-$VERSION.zip && \
     mkdir -p /opt/app/ && \
     mv /tmp/dita-ot-$VERSION/bin /opt/app/bin && \
