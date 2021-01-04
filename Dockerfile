@@ -7,7 +7,7 @@ ARG VERSION
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 LABEL "maintainer"="DITA Open Toolkit Development Team"
-LABEL "org.opencontainers.image.authors"="Robert D Anderson, Jarno Elovirta, Roger W. Fienhold Sheen"
+LABEL "org.opencontainers.image.authors"="https://www.dita-ot.org/who_we_are"
 LABEL "org.opencontainers.image.documentation"="https://www.dita-ot.org/"
 LABEL "org.opencontainers.image.vendor"="DITA Open Toolkit Development Team"
 LABEL "org.opencontainers.image.licenses"="Apache-2.0"
