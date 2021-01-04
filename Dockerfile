@@ -1,7 +1,4 @@
-ARG VERSION=3.6
-ARG JAVA_VERSION=11-jre-hotspot
-
-FROM adoptopenjdk:${JAVA_VERSION}
+FROM adoptopenjdk:11-jre-hotspot
 ARG VERSION
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
