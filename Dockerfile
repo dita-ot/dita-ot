@@ -3,10 +3,10 @@ ARG VERSION
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-LABEL "maintainer"="DITA Open Toolkit Development Team"
+LABEL "maintainer"="DITA Open Toolkit project"
 LABEL "org.opencontainers.image.authors"="https://www.dita-ot.org/who_we_are"
 LABEL "org.opencontainers.image.documentation"="https://www.dita-ot.org/"
-LABEL "org.opencontainers.image.vendor"="DITA Open Toolkit Development Team"
+LABEL "org.opencontainers.image.vendor"="DITA Open Toolkit project"
 LABEL "org.opencontainers.image.licenses"="Apache-2.0"
 LABEL "org.opencontainers.image.title"="DITA Open Toolkit"
 LABEL "org.opencontainers.image.description"="Publishing engine for content authored in the Darwin Information Typing Architecture."
