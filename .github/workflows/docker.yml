@@ -17,7 +17,7 @@ jobs:
         run: |
           echo $PAT | docker login ghcr.io --username ditaotbot --password-stdin
         env:
-          PAT: ${{ secrets.COMMITTER_TOKEN }}
+          PAT: ${{ secrets.PACKAGE_REGISTRY }}
       - name: Build image
         run: |
           docker build --tag ghcr.io/dita-ot/dita-ot:${VERSION} --build-arg VERSION=${VERSION} .
