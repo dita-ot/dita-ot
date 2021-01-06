@@ -13,7 +13,9 @@ jobs:
     name: Build and deploy Docker image
     runs-on: ubuntu-latest
     steps:
-      - name: Log in
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Login
         run: |
           echo $PAT | docker login ghcr.io --username ditaotbot --password-stdin
         env:
