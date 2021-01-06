@@ -6,7 +6,7 @@
  * See the accompanying LICENSE file for applicable license.
  */
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 group = 'org.dita-ot.pdf'
 
@@ -18,6 +18,11 @@ repositories {
 }
 dependencies {
     implementation rootProject
+    implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
+    implementation group: 'com.ibm.icu', name: 'icu4j', version:'61.1'
+    implementation group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.9.1-7'
+    implementation group: 'org.apache.ant', name: 'ant', version:'1.10.9'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 }
 sourceSets {
     main {
@@ -27,18 +32,18 @@ sourceSets {
     }
 }
 
-jar.archiveName = "${project.name}.jar"
+jar.archiveFileName = "${project.name}.jar"
 jar.include "com/idiominc/**"
 jar.include "com/suite/**"
 jar.include "org/dita/dost/pdf2/**"
 
 task copyInstall(type: Copy) {
-    from (configurations.runtime.allArtifacts.files)
+    from (configurations.runtimeClasspath.allArtifacts.files)
     destinationDir = file("lib")
 }
 
 task copyDistTemp(type: Copy) {
-    from (configurations.runtime.allArtifacts.files) {
+    from (configurations.runtimeClasspath.allArtifacts.files) {
         into "plugins/org.dita.pdf2/lib"
     }
     destinationDir = file("${rootProject.buildDir}/tmp/dist")

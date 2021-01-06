@@ -29,35 +29,35 @@ repositories {
     }
 }
 dependencies {
-    compile group: 'commons-io', name: 'commons-io', version: '2.8.0'
-    compile group: 'xerces', name: 'xercesImpl', version:'2.12.0'
-    compile group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
-    compile group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
-    compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.9.1-7'
-    compile group: 'com.ibm.icu', name: 'icu4j', version:'61.1'
-    compile group: 'org.apache.ant', name: 'ant', version:'1.10.9'
-    compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.9'
-    compile(group: 'com.google.guava', name: 'guava', version: '25.1-jre') {
+    implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
+    implementation group: 'xerces', name: 'xercesImpl', version:'2.12.0'
+    implementation group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
+    implementation group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
+    implementation group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.9.1-7'
+    implementation group: 'com.ibm.icu', name: 'icu4j', version:'61.1'
+    implementation group: 'org.apache.ant', name: 'ant', version:'1.10.9'
+    implementation group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.9'
+    implementation(group: 'com.google.guava', name: 'guava', version: '25.1-jre') {
         exclude group: 'org.checkerframework', module: 'checker-qual'
         exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
         exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
         exclude group: 'com.google.j2objc', module: 'j2objc-annotations'
     }
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.0'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.11.0'
-    compile group: 'org.relaxng', name: 'jing', version: '20181222'
-    runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.9'
-    testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
-    testCompile group: 'junit', name: 'junit', version:'4.12'
-    testCompile group: 'org.xmlunit', name: 'xmlunit-core', version: '2.6.0'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.11.0'
+    implementation group: 'org.relaxng', name: 'jing', version: '20181222'
+    runtimeOnly group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.9'
+    testImplementation  group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
+    testImplementation  group: 'junit', name: 'junit', version:'4.12'
+    testImplementation  group: 'org.xmlunit', name: 'xmlunit-core', version: '2.6.0'
 }
 
 jar {
-    archiveName = "${project.name}.jar"
+    archiveFileName = "${project.name}.jar"
     exclude "catalog.xml"
 }
 
@@ -113,9 +113,9 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
 // End to end test
 
 dependencies {
-    testCompile project(':htmlhelp')
-    testCompile project(':fo')
-    testCompile project(':fop')
+    testImplementation  project(':htmlhelp')
+    testImplementation  project(':fo')
+    testImplementation  project(':fop')
 }
 
 def e2eTestSystemProperties = [
@@ -140,8 +140,8 @@ task e2eTest(type: Test, dependsOn: 'buildLocal') {
 defaultTasks 'buildLocal'
 
 task copyInstall(type: Copy) {
-    from (configurations.runtime.allArtifacts.files)
-    from (configurations.runtime) {
+    from (configurations.runtimeClasspath.allArtifacts.files)
+    from (configurations.runtimeClasspath) {
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
         rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
     }
@@ -195,7 +195,7 @@ task initDist(dependsOn: [jar, cleanDistTemp]) {
 }
 
 task copyDistTemp(type: Copy, dependsOn: initDist) {
-    from (configurations.runtime.allArtifacts.files) {
+    from (configurations.runtimeClasspath.allArtifacts.files) {
         into "lib"
     }
     from (configurations.runtime) {
@@ -345,7 +345,7 @@ task distPlugins() {
                 exclude "src"
                 exclude "out"
             }
-            archiveName "${name}-${version}.zip"
+            archiveFileName = "${name}-${project.version}.zip"
         }.name
     }
 }
@@ -383,7 +383,7 @@ task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, d
             include "bin/ant.*"
         }
     }
-    archiveName "dita-ot-${distFileName}.zip"
+    archiveFileName = "dita-ot-${distFileName}.zip"
 }
 
 test {
