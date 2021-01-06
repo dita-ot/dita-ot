@@ -1,12 +1,24 @@
 FROM adoptopenjdk:11-jre-hotspot
-
-RUN apt-get update \
-    && apt-get install -y unzip \
-    && rm -rf /var/lib/apt/lists/*
-
 ARG VERSION
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+LABEL "maintainer"="DITA Open Toolkit project"
+LABEL "org.opencontainers.image.authors"="https://www.dita-ot.org/who_we_are"
+LABEL "org.opencontainers.image.documentation"="https://www.dita-ot.org/"
+LABEL "org.opencontainers.image.vendor"="DITA Open Toolkit project"
+LABEL "org.opencontainers.image.licenses"="Apache-2.0"
+LABEL "org.opencontainers.image.title"="DITA Open Toolkit"
+LABEL "org.opencontainers.image.description"="Publishing engine for content authored in the Darwin Information Typing Architecture."
+LABEL "org.opencontainers.image.source"="https://github.com/dita-ot/dita-ot"
+
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update -q && \
+    apt-get install -qy --no-install-recommends -y unzip locales tzdata && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN curl -sLo /tmp/dita-ot-$VERSION.zip https://github.com/dita-ot/dita-ot/releases/download/$VERSION/dita-ot-$VERSION.zip && \
-    unzip /tmp/dita-ot-$VERSION.zip -d /tmp/ && \
+    unzip -qq /tmp/dita-ot-$VERSION.zip -d /tmp/ && \
     rm /tmp/dita-ot-$VERSION.zip && \
     mkdir -p /opt/app/ && \
     mv /tmp/dita-ot-$VERSION/bin /opt/app/bin && \
