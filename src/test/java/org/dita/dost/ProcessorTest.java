@@ -9,6 +9,7 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 import static org.junit.Assert.assertEquals;
@@ -46,10 +47,10 @@ public class ProcessorTest {
 
     @Test
     public void testRun() throws DITAOTException {
-        final File mapFile;
+        final URI mapFile;
         final File out;
         try {
-            mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/test.ditamap").toURI());
+            mapFile = getClass().getClassLoader().getResource("ProcessorTest/test.ditamap").toURI();
             out = tempDirGenerator.newFolder("out");
         } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);

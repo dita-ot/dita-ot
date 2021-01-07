@@ -89,7 +89,7 @@ public abstract class AbstractIntegrationTest {
     private String name;
     private Transtype transtype;
     private String[] targets;
-    private Path input;
+    private List<Path> inputs = new ArrayList<>();
     private Map<String, Object> args = new HashMap<>();
     private int warnCount = 0;
     private int errorCount = 0;
@@ -112,7 +112,7 @@ public abstract class AbstractIntegrationTest {
     }
 
     public AbstractIntegrationTest input(Path input) {
-        this.input = input;
+        this.inputs.add(input);
         return this;
     }
 
@@ -212,7 +212,15 @@ public abstract class AbstractIntegrationTest {
                 throw new IllegalArgumentException();
             }
         });
-        builder.put("args.input", new File(srcDir, input.toFile().toString()).getAbsolutePath());
+        if (inputs.size() == 1) {
+            builder.put("args.input", new File(srcDir, inputs.get(0).toFile().toString()).getAbsolutePath());
+        } else {
+            builder.put("args.inputs", inputs.stream()
+                    .map(input -> new File(srcDir, input.toFile().toString()).getAbsoluteFile())
+                    .map(File::toURI)
+                    .map(URI::toString)
+                    .collect(Collectors.joining(" ")));
+        }
         final Map<String, String> params = builder.build();
 
         try {

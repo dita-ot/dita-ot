@@ -33,8 +33,8 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     private ExportAnchor currentExportAnchor;
     /** Refered topic id */
     private String topicId;
-    /** Absolute path to root file */
-    private URI rootFilePath = null;
+    /** Absolute path to root files */
+    private List<URI> rootFilePaths;
     /** Map to store plugin id */
     private final Map<String, Set<String>> pluginMap = new HashMap<>();
     /** Store the href of topicref tag */
@@ -53,11 +53,13 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     /**
      * Set processing input file absolute path.
      *
-     * @param inputFile absolute path to root file
+     * @param inputFiles absolute path to root files
      */
-    public void setInputFile(final URI inputFile) {
-        assert inputFile.isAbsolute();
-        this.rootFilePath = inputFile;
+    public void setInputFiles(final List<URI> inputFiles) {
+        for (URI inputFile : inputFiles) {
+            assert inputFile.isAbsolute();
+        }
+        this.rootFilePaths = inputFiles;
     }
 
     /**
@@ -117,7 +119,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
             } else if (MAP_TOPICREF.matches(classValue)) {
                 parseAttribute(atts);
             } else if (MAP_MAP.matches(classValue)) {
-                if (rootFilePath.equals(currentFile)) {
+                if (rootFilePaths.contains(currentFile)) {
                     String pluginId = atts.getValue(ATTRIBUTE_NAME_ID);
                     if (pluginId == null) {
                         pluginId = "org.sample.help.doc";

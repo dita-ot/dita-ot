@@ -347,7 +347,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     err = locale.getString("conversion.error.input_and_transformation_not_defined");
                 } else if (!definedProps.containsKey(ANT_TRANSTYPE)) {
                     err = locale.getString("conversion.error.transformation_not_defined");
-                } else if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
+                } else if (!definedProps.containsKey(ANT_ARGS_INPUT) && !definedProps.containsKey(ANT_ARGS_INPUTS)) {
                     err = locale.getString("conversion.error.input_not_defined");
                 }
                 if (err != null) {
