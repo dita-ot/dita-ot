@@ -14,6 +14,16 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 
 public class ChunkModule extends AbstractPipelineModuleImpl {
+    public enum Action {
+        COMBINE("combine"),
+        SPLIT("split");
+        public final String name;
+
+        Action(final String name) {
+            this.name = name;
+        }
+    }
+
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
 
