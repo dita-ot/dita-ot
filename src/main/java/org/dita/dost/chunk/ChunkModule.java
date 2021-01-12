@@ -26,6 +26,13 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-
+        // read modifiable map
+        // walk topicref | map
+        //   if @chunk = COMBINE
+        //     create chunk
+        //     remove contents
+        // for each chunk
+        //   recursively merge chunk topics
+        return null;
     }
 }
