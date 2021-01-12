@@ -19,14 +19,14 @@ import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 public class ChunkModuleTest extends AbstractModuleTest {
 
     @Override
-    AbstractPipelineInput getAbstractPipelineInput() {
+    protected AbstractPipelineInput getAbstractPipelineInput() {
         final AbstractPipelineInput input = new PipelineHashIO();
         input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
         return input;
     }
 
     @Override
-    AbstractPipelineModule getModule(final File tempDir) {
+    protected AbstractPipelineModule getModule(final File tempDir) {
         return new ChunkModule();
     }
 
