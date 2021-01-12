@@ -8,37 +8,25 @@
 
 package org.dita.dost.chunk;
 
+import org.dita.dost.chunk.ChunkOperation.ChunkBuilder;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CHUNK;
-import static org.dita.dost.util.Constants.MAP_TOPICREF;
+import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
 public class ChunkModule extends AbstractPipelineModuleImpl {
-    public enum Action {
-        COMBINE("combine"),
-        SPLIT("split");
-        public final String name;
-
-        Action(final String name) {
-            this.name = name;
-        }
-    }
-
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         try {
@@ -46,9 +34,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final URI mapFile = job.tempDirURI.resolve(in.uri);
             final Document mapDoc = job.getStore().getDocument(mapFile);
-            final List<Element> chunks = new ArrayList<>();
+            final List<ChunkBuilder> chunks = new ArrayList<>();
             // walk topicref | map
-            walk(mapDoc.getDocumentElement(), chunks);
+            walk(mapFile, mapDoc.getDocumentElement(), chunks);
             job.getStore().writeDocument(mapDoc, mapFile);
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,21 +47,35 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
-    private void walk(Element elem, List<Element> chunks) {
+    private void walk(final URI mapFile, final Element elem, final List<ChunkBuilder> chunks) {
         //   if @chunk = COMBINE
-        if (elem.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(Action.COMBINE.name)) {
+        if (elem.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(COMBINE.name)) {
             //     create chunk
-            chunks.add(elem);
+            final URI href = mapFile.resolve(elem.getAttribute(ATTRIBUTE_NAME_HREF));
+            final ChunkBuilder builder = new ChunkBuilder(COMBINE).src(href).topicref(elem);
             //     remove contents
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
+                builder.addChild(collect(mapFile, child));
                 System.out.println("remove " + child);
                 elem.removeChild(child);
             }
+            // remove @chunk
+            elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+            chunks.add(builder);
             return;
         } else {
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
-                walk(child, chunks);
+                walk(mapFile, child, chunks);
             }
         }
+    }
+
+    private ChunkBuilder collect(final URI mapFile, final Element elem) {
+        final URI href = mapFile.resolve(elem.getAttribute(ATTRIBUTE_NAME_HREF));
+        final ChunkBuilder builder = new ChunkBuilder(COMBINE).src(href).topicref(elem);
+        for (Element child : getChildElements(elem, MAP_TOPICREF)) {
+            builder.addChild(collect(mapFile, child));
+        }
+        return builder;
     }
 }
