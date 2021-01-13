@@ -34,20 +34,35 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final URI mapFile = job.tempDirURI.resolve(in.uri);
             final Document mapDoc = job.getStore().getDocument(mapFile);
-            final List<ChunkBuilder> chunks = new ArrayList<>();
+            final List<ChunkOperation> chunks = new ArrayList<>();
             // walk topicref | map
             walk(mapFile, mapDoc.getDocumentElement(), chunks);
             job.getStore().writeDocument(mapDoc, mapFile);
+            // for each chunk
+            for (ChunkOperation chunk : chunks) {
+                //   recursively merge chunk topics
+                final Document chunkDoc = job.getStore().getDocument(chunk.src);
+                merge(chunk, chunkDoc.getDocumentElement());
+                job.getStore().writeDocument(chunkDoc, chunk.src);
+            }
+            // TODO rewrite links to chunk content
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // for each chunk
-        //   recursively merge chunk topics
-        // TODO rewrite links to chunk content
         return null;
     }
 
-    private void walk(final URI mapFile, final Element elem, final List<ChunkBuilder> chunks) {
+    private void merge(final ChunkOperation chunk, final Element root) throws IOException {
+        for (ChunkOperation child : chunk.children) {
+            final Document chunkDoc = job.getStore().getDocument(child.src);
+            final Element topic = chunkDoc.getDocumentElement();
+            final Element imported = (Element) root.getOwnerDocument().importNode(topic, true);
+            final Element added = (Element) root.appendChild(imported);
+            merge(child, added);
+        }
+    }
+
+    private void walk(final URI mapFile, final Element elem, final List<ChunkOperation> chunks) {
         //   if @chunk = COMBINE
         if (elem.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(COMBINE.name)) {
             //     create chunk
@@ -56,12 +71,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             //     remove contents
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
                 builder.addChild(collect(mapFile, child));
-                System.out.println("remove " + child);
                 elem.removeChild(child);
             }
             // remove @chunk
             elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
-            chunks.add(builder);
+            chunks.add(builder.build());
             return;
         } else {
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
