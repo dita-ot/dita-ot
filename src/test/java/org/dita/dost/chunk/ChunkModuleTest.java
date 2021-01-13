@@ -34,4 +34,9 @@ public class ChunkModuleTest extends AbstractModuleTest {
     public void combine() {
         test("combine.ditamap");
     }
+
+    @Test
+    public void link() {
+        test("link.ditamap");
+    }
 }
