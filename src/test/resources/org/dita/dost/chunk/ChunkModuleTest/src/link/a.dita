@@ -1,4 +1,4 @@
-<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="topic_r4k_cyw_g4b"
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="topic_a"
        specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   "
        ditaarch:DITAArchVersion="2.0">
   <title class="- topic/title ">a</title>
@@ -7,5 +7,6 @@
   </body>
   <related-links class="- topic/related-links ">
     <link class="- topic/link " href="b.dita"/>
+    <link class="- topic/link " href="c.dita"/>
   </related-links>
 </topic>
