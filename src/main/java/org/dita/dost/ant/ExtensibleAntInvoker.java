@@ -359,7 +359,7 @@ public final class ExtensibleAntInvoker extends Task {
             Store store = project.getReference(ANT_REFERENCE_STORE);
             if (store == null) {
                 project.log("Store not found from Ant project reference", Project.MSG_ERR);
-                store = new StreamStore(job.tempDir, xmlUtils);
+                store = new StreamStore(tempDir, xmlUtils);
             }
             project.log("Job not found from Ant project reference", Project.MSG_VERBOSE);
             try {
