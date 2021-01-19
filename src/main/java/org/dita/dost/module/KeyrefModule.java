@@ -123,6 +123,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                             logger.info("Reading " + job.tempDirURI.resolve(fi.uri).toString());
                             final KeyrefReader r = new KeyrefReader();
                             r.setLogger(logger);
+                            r.setJob(job);
                             r.read(job.tempDirURI.resolve(fi.uri), d);
                             final KeyScope s = r.getKeyDefinition();
                             writeMap(fi, d);
