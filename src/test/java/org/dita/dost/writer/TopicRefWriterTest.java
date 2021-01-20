@@ -129,7 +129,7 @@ public class TopicRefWriterTest {
 
         reader = new TopicRefWriter();
         reader.setLogger(new TestUtils.TestLogger());
-        reader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
+        reader.setJob(new Job(tempDir.getAbsoluteFile(), new StreamStore(tempDir.getAbsoluteFile(), new XMLUtils())));
         reader.setCurrentFile(create("file:/tmp/dir/bar.dita"));
 
         reader.setup(map(
