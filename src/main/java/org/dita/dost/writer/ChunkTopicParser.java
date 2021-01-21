@@ -356,13 +356,22 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
 
         if (include) {
             includelevel++;
-            final Attributes resAtts = processAttributes(atts);
+
+            AttributesImpl resAtts = new AttributesImpl(checkForNSDeclaration(atts,uri));
             writeStartElement(output, qName, resAtts);
         }
     }
 
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+
+        //pop the namespace level
+        if (uri != "") {
+            if (namespaceMap.containsKey(uri)){
+                decreaseNamespaceLevel(uri);
+            }
+        }
+
         if (skip && skipLevel > 0) {
             skipLevel--;
         } else if (skip) {
@@ -381,6 +390,40 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 include = false;
             }
         }
+    }
+
+
+    private void increaseNamespaceLevel (String uri){
+        namespaceMap.put(uri, namespaceMap.get(uri) + 1);
+
+    }
+
+    private void decreaseNamespaceLevel (String uri){
+        namespaceMap.put(uri, namespaceMap.get(uri) - 1);
+    }
+
+    /**
+     * Check if we need to add 'xmlns' attribute with prefix
+     *
+     * @param atts
+     * @param uri
+     *
+     * @return updated attributes
+     */
+    private Attributes checkForNSDeclaration (Attributes atts, String uri){
+        AttributesImpl resAtts = null;
+
+        if (uri != "") {
+            if (namespaceMap.containsKey(uri)){
+                increaseNamespaceLevel(uri);
+            }else {
+                namespaceMap.put(uri, 1);
+            }
+            resAtts =  new AttributesImpl(processAttributesNS(atts,uri));
+        }else {
+            resAtts = new AttributesImpl(processAttributes(atts));        }
+
+        return resAtts;
     }
 
 }
