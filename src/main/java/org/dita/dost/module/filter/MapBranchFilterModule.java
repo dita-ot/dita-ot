@@ -25,6 +25,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.System.getProperty;
 import static java.util.Collections.EMPTY_LIST;
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
@@ -102,21 +103,32 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         long ref = System.currentTimeMillis();
         logger.debug("Split branches and generate copy-to");
         splitBranches(doc.getDocumentElement(), Branch.EMPTY);
-        logger.info("Runtime branch splitting: {0}ms", System.currentTimeMillis()-ref);
+        if (getProperty("runtimeLogging") != null && "true".equalsIgnoreCase(getProperty("runtimeLogging").trim())) {
+            logger.info("Runtime branch splitting: {0}ms", System.currentTimeMillis()-ref);
+        }
     }
 
     private void filterBranches(Document doc) {
         long ref = System.currentTimeMillis();
         logger.debug("Filter map");
-        filterBranches(doc.getDocumentElement());
-        logger.info("Runtime filter branches: {0}ms", System.currentTimeMillis()-ref);
+        if (getProperty("iterativeAlgorithm") != null && "true".equalsIgnoreCase(getProperty("iterativeAlgorithm").trim())) {
+            new MapBranchFilter(logger, currentFile).filterBranches(doc.getDocumentElement());
+        }
+        else {
+            filterBranches(doc.getDocumentElement());
+        }
+        if (getProperty("runtimeLogging") != null && "true".equalsIgnoreCase(getProperty("runtimeLogging").trim())) {
+            logger.info("Runtime filter branches: {0}ms", System.currentTimeMillis() - ref);
+        }
     }
 
     private void rewriteDuplicates(Document doc) {
         long ref = System.currentTimeMillis();
         logger.debug("Rewrite duplicate topic references");
         rewriteDuplicates(doc.getDocumentElement());
-        logger.info("Runtime rewrite duplicates: {0}ms", System.currentTimeMillis()-ref);
+        if (getProperty("runtimeLogging") != null && "true".equalsIgnoreCase(getProperty("runtimeLogging").trim())) {
+            logger.info("Runtime rewrite duplicates: {0}ms", System.currentTimeMillis() - ref);
+        }
     }
 
     private void writeDocumentToDisk(Document doc) {
