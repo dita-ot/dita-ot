@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.lang.System.getProperty;
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.getChildElements;
@@ -43,7 +44,7 @@ import static org.dita.dost.util.XMLUtils.getChildElements;
  */
 public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
-    private static final String SKIP_FILTER = "skip-filter";
+    public static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
     /** Current map being processed, relative to temporary directory */
@@ -87,8 +88,17 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         final SubjectScheme subjectSchemeMap = getSubjectScheme(doc.getDocumentElement());
         logger.debug("Filter topics and generate copies");
         generateCopies(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
+
         logger.debug("Filter existing topics");
-        filterTopics(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
+        long ref = System.currentTimeMillis();
+        if (getProperty("iterativeAlgorithm") != null && "true".equalsIgnoreCase(getProperty("iterativeAlgorithm").trim())) {
+            new TopicBranchFilter(logger, map).filterTopics(doc.getDocumentElement(), subjectSchemeMap);
+        } else {
+            filterTopics(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
+        }
+        if (getProperty("runtimeLogging") != null && "true".equalsIgnoreCase(getProperty("runtimeLogging").trim())) {
+            logger.info("Runtime topic branch filter: {0}ms", System.currentTimeMillis() - ref);
+        }
 
         logger.debug("Writing " + currentFile);
         try {

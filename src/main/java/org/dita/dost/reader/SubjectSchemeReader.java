@@ -45,6 +45,11 @@ public class SubjectSchemeReader {
         bindingMap = new HashMap<>();
     }
 
+    public SubjectSchemeReader(DITAOTLogger logger) {
+        this();
+        this.logger = logger;
+    }
+
     /**
      * reset.
      */

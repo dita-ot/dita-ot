@@ -111,6 +111,20 @@ public class FilterUtils {
     }
 
     /**
+     * Factory method to create a FilterUtils object for a ditaval
+     */
+    public static FilterUtils newFilterUtils(URI ditaval, DITAOTLogger logger) {
+        logger.info("Reading " + ditaval);
+        DitaValReader ditaValReader = new DitaValReader();
+        ditaValReader.setLogger(logger);
+        ditaValReader.read(ditaval);
+        Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
+        FilterUtils f = new FilterUtils(filterMap, ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
+        f.setLogger(logger);
+        return f;
+    }
+
+    /**
      * Convenience constructor that only handles print filtering.
      *
      * @param isPrintType transformation output is print-oriented

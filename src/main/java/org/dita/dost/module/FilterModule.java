@@ -7,6 +7,7 @@
  */
 package org.dita.dost.module;
 
+import static java.lang.System.getProperty;
 import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FilterUtils.*;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 import org.apache.tools.ant.util.FileUtils;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.module.filter.ParallelFiltering;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
@@ -38,6 +40,15 @@ final class FilterModule extends AbstractPipelineModuleImpl {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
+
+        long ref = System.currentTimeMillis();
+        if (getProperty("parallel") != null && "true".equalsIgnoreCase(getProperty("parallel").trim())) {
+            new ParallelFiltering(logger, input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE)).execute(fileInfoFilter);
+            updateJob();
+            logRuntime(ref);
+            return null;
+        }
+
         final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         final File ditavalFile = Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))
                 .filter(File::exists)
@@ -108,7 +119,22 @@ final class FilterModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException(e);
         }
 
+        logRuntime(ref);
         return null;
+    }
+
+    private void updateJob() throws DITAOTException {
+        try {
+            job.write();
+        } catch (final IOException e) {
+            throw new DITAOTException(e);
+        }
+    }
+
+    private void logRuntime(long ref) {
+        if (getProperty("runtimeLogging") != null && "true".equalsIgnoreCase(getProperty("runtimeLogging").trim())) {
+            logger.info("Runtime filtering: {0}ms", System.currentTimeMillis()-ref);
+        }
     }
 
 }
