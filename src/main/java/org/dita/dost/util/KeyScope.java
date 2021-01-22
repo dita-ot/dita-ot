@@ -11,6 +11,10 @@ import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.*;
 
 import static java.util.Collections.unmodifiableList;
@@ -31,13 +35,15 @@ public class KeyScope {
     public final Map<String, KeyDef> keyDefinition;
     public final List<KeyScope> childScopes;
 
-    public KeyScope(final String id, final String name, final Map<String, KeyDef> keyDefinition, final List<KeyScope> childScopes) {
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    public KeyScope(@JsonProperty("id")final String id, @JsonProperty("name")final String name,
+                    @JsonProperty("keyDefinition") final Map<String, KeyDef> keyDefinition,
+                    @JsonProperty("childScopes")final List<KeyScope> childScopes) {
         this.id = id;
         this.name = name;
-        this.keyDefinition = unmodifiableMap(keyDefinition);
+        this.keyDefinition = keyDefinition;
         this.childScopes = unmodifiableList(new ArrayList<>(childScopes));
     }
-
     public KeyDef get(final String key) {
         return keyDefinition.get(key);
     }

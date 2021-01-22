@@ -7,16 +7,39 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+import org.dita.dost.exception.DITAOTException;
+
 import net.sf.saxon.s9api.XdmNode;
 
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
+import java.util.Collection;
 
-import static org.dita.dost.util.Constants.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.w3c.dom.Element;
 
 /**
  * Key definition.
  */
 public class KeyDef {
+
+    public static final String ELEMENT_STUB = "stub";
+    private static final String ELEMENT_KEYDEF = "keydef";
+    private static final String ATTRIBUTE_SOURCE = "source";
+    private static final String ATTRIBUTE_HREF = "href";
+    private static final String ATTRIBUTE_SCOPE = "scope";
+    private static final String ATTRIBUTE_FORMAT = "format";
+    private static final String ATTRIBUTE_KEYS = "keys";
+    private static final String ATTRIBUTE_FILTERED = "filtered";
+
 
     /** Space delimited list of key names */
     public final String keys;
@@ -25,6 +48,7 @@ public class KeyDef {
     public final URI source;
     public final XdmNode element;
     public final String format;
+    private boolean filtered;
 
     /**
      * Construct new key definition.
@@ -35,7 +59,6 @@ public class KeyDef {
      * @param source key definition source, may be {@code null}
      */
     public KeyDef(final String keys, final URI href, final String scope, final String format, final URI source, final XdmNode element) {
-        //assert href.isAbsolute();
         this.keys = keys;
         this.href = href == null || href.toString().isEmpty() ? null : href;
         this.scope = scope == null ? ATTR_SCOPE_VALUE_LOCAL : scope;
@@ -43,6 +66,28 @@ public class KeyDef {
         this.source = source;
         this.element = element;
     }
+
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    public KeyDef(@JsonProperty("keys")final String keys, @JsonProperty("href")final URI href,
+                  @JsonProperty("scope")final String scope, @JsonProperty("format")final String format,
+                  @JsonProperty("source")final URI source, @JsonProperty("element")final XdmNode element,
+                  @JsonProperty("filtered")boolean filtered) {
+        this.keys = keys;
+        this.href = href == null || href.toString().isEmpty() ? null : href;
+        this.scope = scope == null ? ATTR_SCOPE_VALUE_LOCAL : scope;
+        this.format = format == null ? ATTR_FORMAT_VALUE_DITA : format;
+        this.source = source;
+        this.element = element;
+        this.filtered = filtered;
+    }
+
+    public void setFiltered(boolean filtered) {
+    	this.filtered = filtered;
+    }
+
+    public boolean isFiltered() {
+		return filtered;
+	}
 
     @Override
     public String toString() {
@@ -56,7 +101,52 @@ public class KeyDef {
         if (source != null) {
             buf.append(LEFT_BRACKET).append(source.toString()).append(RIGHT_BRACKET);
         }
+        buf.append(isFiltered());
         return buf.toString();
+    }
+
+    /**
+     * Write key definition XML configuration file
+     *
+     * @param keydefFile key definition file
+     * @param keydefs list of key definitions
+     * @throws DITAOTException if writing configuration file failed
+     */
+    public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
+        XMLStreamWriter writer = null;
+        try (OutputStream out = new FileOutputStream(keydefFile)) {
+            writer = XMLOutputFactory.newInstance().createXMLStreamWriter(out, "UTF-8");
+            writer.writeStartDocument();
+            writer.writeStartElement(ELEMENT_STUB);
+            for (final KeyDef keydef : keydefs) {
+                writer.writeStartElement(ELEMENT_KEYDEF);
+                writer.writeAttribute(ATTRIBUTE_KEYS, keydef.keys);
+                if (keydef.href != null) {
+                    writer.writeAttribute(ATTRIBUTE_HREF, keydef.href.toString());
+                }
+                if (keydef.scope != null) {
+                    writer.writeAttribute(ATTRIBUTE_SCOPE, keydef.scope);
+                }
+                if (keydef.format != null) {
+                    writer.writeAttribute(ATTRIBUTE_FORMAT, keydef.format);
+                }
+                if (keydef.source != null) {
+                    writer.writeAttribute(ATTRIBUTE_SOURCE, keydef.source.toString());
+                }
+                writer.writeAttribute(ATTRIBUTE_FILTERED, Boolean.toString(keydef.filtered));
+                writer.writeEndElement();
+            }
+            writer.writeEndDocument();
+        } catch (final XMLStreamException | IOException e) {
+            throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (final XMLStreamException e) {
+                }
+            }
+        }
     }
 
     @Override

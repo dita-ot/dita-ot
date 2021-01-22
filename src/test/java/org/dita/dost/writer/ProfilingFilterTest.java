@@ -9,7 +9,9 @@ package org.dita.dost.writer;
 
 import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
+import org.dita.dost.store.Store;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.XMLUtils;
@@ -30,13 +32,16 @@ import java.util.Map;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.FilterUtils.Action.EXCLUDE;
 import static org.dita.dost.util.FilterUtils.Action.INCLUDE;
+import static org.dita.dost.TestUtils.createTempDir;
+import static org.mockito.Mockito.mock;
 
 public class ProfilingFilterTest {
 
+    private Job job;
     private final DocumentBuilder documentBuilder;
     private final TransformerFactory transformerFactory;
 
-    public ProfilingFilterTest() throws ParserConfigurationException {
+    public ProfilingFilterTest() throws Exception {
         final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         builderFactory.setIgnoringComments(true);

@@ -46,11 +46,12 @@ import static java.net.URI.create;
 import static java.util.Collections.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.createTempDir;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class KeyrefModuleTest {
 
     private static final File baseDir = TestUtils.getResourceDir(KeyrefModuleTest.class);
+    private static final URI inputMap = new File(baseDir, "xsrc" + File.separator + "test.ditamap").toURI();
     private static final URI subMap = new File(baseDir, "src" + File.separator + "submap.ditamap").toURI();
 
     private final DocumentBuilder b;
@@ -215,7 +216,7 @@ public class KeyrefModuleTest {
 	    		EMPTY_LIST
 	    		);
 	    final KeyScope keyScope =
-	            new KeyScope("#root", null, new HashMap<String, KeyDef>(), 
+	            new KeyScope("#root", null, new HashMap<String, KeyDef>(),
 	                        Arrays.asList(new KeyScope[] {childScope1, childScope2})
 	    );
 	    final List<ResolveTask> res = new ArrayList<>();
@@ -230,7 +231,7 @@ public class KeyrefModuleTest {
 	    ResolveTask task = res.get(0);
 	    assertEquals("topic.dita", task.in.file.toString());
 	    assertEquals(null, task.scope.name);
-	    
+
 	    task = res.get(1);
 	    assertEquals("topic.dita", task.in.file.toString());
 	    assertEquals("A", task.scope.name);
@@ -238,7 +239,7 @@ public class KeyrefModuleTest {
 	    assertEquals(new URI("topic.dita"), keyDef.href);
 	    keyDef = task.scope.keyDefinition.get("A.VAR");
 	    assertEquals(new URI("topic-1.dita"), keyDef.href);
-	    
+
 	    task = res.get(2);
 	    assertEquals("topic.dita", task.in.file.toString());
 	    assertEquals("B", task.scope.name);
@@ -273,4 +274,100 @@ public class KeyrefModuleTest {
             throw new RuntimeException(e);
         }
     }
+    @Test
+    public void mergeKeyScopes_noFilteredKeys() {
+        // given
+        KeyScope rootScope = buildRootScope();
+        KeyScope filteredScope = new KeyScope("#root", null, new HashMap<>(), new ArrayList<>());
+
+        // when
+        module.mergeKeyScopes(rootScope, filteredScope);
+
+        // then
+        assertEquals(1, rootScope.childScopes.size());
+        assertEquals(2, rootScope.childScopes.get(0).keyDefinition.size());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), childKey(rootScope,0,"VAR"));
+        assertFalse(childKey(rootScope,0,"VAR").isFiltered());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), childKey(rootScope,0,"A.VAR"));
+        assertFalse(childKey(rootScope,0,"A.VAR").isFiltered());
+
+        assertEquals(2, rootScope.keyDefinition.size());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), rootScope.keyDefinition.get("VAR"));
+        assertFalse(rootScope.keyDefinition.get("VAR").isFiltered());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), rootScope.keyDefinition.get("VAR"));
+        assertFalse(rootScope.keyDefinition.get("A.VAR").isFiltered());
+    }
+
+    private KeyDef childKey(KeyScope scope, int childScope, String key) {
+        return scope.childScopes.get(childScope).keyDefinition.get(key);
+    }
+
+    private KeyScope buildRootScope() {
+        Map<String, KeyDef> childKeys = new HashMap<>();
+        childKeys.put("VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null));
+        childKeys.put("A.VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null));
+        KeyScope childScope = new KeyScope("A", "A", childKeys, EMPTY_LIST);
+
+        Map<String, KeyDef> keys = new HashMap<>();
+        keys.put("VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null));
+        keys.put("A.VAR", new KeyDef("VAR", null, "local", "dita", inputMap, null));
+
+        return new KeyScope("#root", null, keys, singletonList(childScope));
+    }
+
+    @Test
+    public void mergeKeyScopes_filteredKeys_originalKeyExists() {
+        // given
+        KeyScope rootScope = buildRootScope();
+
+        Map<String, KeyDef> filteredKeys = new HashMap<>();
+        filteredKeys.put("A.VAR",new KeyDef("", null, "local", "", null, null, true));
+        KeyScope filteredScope = new KeyScope("#root", null, filteredKeys, new ArrayList<>());
+
+        // when
+        module.mergeKeyScopes(rootScope, filteredScope);
+
+        // then
+        assertEquals(1, rootScope.childScopes.size());
+        assertEquals(2, rootScope.childScopes.get(0).keyDefinition.size());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), childKey(rootScope,0,"VAR"));
+        assertFalse(childKey(rootScope,0,"VAR").isFiltered());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), childKey(rootScope,0,"A.VAR"));
+        assertFalse(childKey(rootScope,0,"A.VAR").isFiltered());
+
+        assertEquals(2, rootScope.keyDefinition.size());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), rootScope.keyDefinition.get("VAR"));
+        assertFalse(rootScope.keyDefinition.get("VAR").isFiltered());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), rootScope.keyDefinition.get("VAR"));
+        assertTrue(rootScope.keyDefinition.get("A.VAR").isFiltered());
+    }
+
+    @Test
+    public void mergeKeyScopes_filteredKeys_originalKeyLost() {
+        // given
+        KeyScope rootScope = buildRootScope();
+        rootScope.keyDefinition.remove("A.VAR");
+
+        Map<String, KeyDef> filteredKeys = new HashMap<>();
+        filteredKeys.put("A.VAR",new KeyDef("", null, "local", "", null, null, true));
+        KeyScope filteredScope = new KeyScope("#root", null, filteredKeys, new ArrayList<>());
+
+        // when
+        module.mergeKeyScopes(rootScope, filteredScope);
+
+        // then
+        assertEquals(1, rootScope.childScopes.size());
+        assertEquals(2, rootScope.childScopes.get(0).keyDefinition.size());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), childKey(rootScope,0,"VAR"));
+        assertFalse(childKey(rootScope,0,"VAR").isFiltered());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), childKey(rootScope,0,"A.VAR"));
+        assertFalse(childKey(rootScope,0,"A.VAR").isFiltered());
+
+        assertEquals(2, rootScope.keyDefinition.size());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), rootScope.keyDefinition.get("VAR"));
+        assertFalse(rootScope.keyDefinition.get("VAR").isFiltered());
+        assertEquals(new KeyDef("VAR", null, "local", "dita", inputMap, null), rootScope.keyDefinition.get("VAR"));
+        assertTrue(rootScope.keyDefinition.get("A.VAR").isFiltered());
+    }
+
 }

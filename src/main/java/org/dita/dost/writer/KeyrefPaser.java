@@ -13,6 +13,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.DropElementException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
@@ -39,6 +40,8 @@ import static org.dita.dost.util.URLUtils.*;
  * Instances are reusable but not thread-safe.
  */
 public final class KeyrefPaser extends AbstractXMLFilter {
+
+	private int deleteElement = 0;
 
     /**
      * Set of attributes which should not be copied from
@@ -233,6 +236,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
+    	if (deleteElement>0) {
+    		return;
+    	}
+
         if (keyrefLevel != 0 && (length == 0 || new String(ch, start, length).trim().isEmpty())) {
             if (!hasChecked) {
                 empty = true;
@@ -246,6 +253,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
+    	if (deleteElement>0) {
+    		deleteElement--;
+    		return;
+    	}
+
         if (keyrefLevel != 0 && empty) {
             // If current element is in the scope of key reference element
             // and the element is empty
@@ -392,7 +404,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         }
 
         definitionMaps.pop();
-
         getContentHandler().endElement(uri, localName, name);
     }
 
@@ -451,50 +462,63 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String name,
-            final Attributes atts) throws SAXException {
-        final KeyScope childScope = Optional.ofNullable(atts.getValue(ATTRIBUTE_NAME_KEYSCOPE))
-                .flatMap(n -> Optional.ofNullable(definitionMaps.peek().getChildScope(n)))
-                .orElse(definitionMaps.peek());
-        definitionMaps.push(childScope);
+	public void startElement(final String uri, final String localName, final String name, final Attributes atts)
+			throws SAXException {
 
-        currentElement = null;
-        final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        for (final KeyrefInfo k : keyrefInfos) {
-            if (k.type.matches(cls)) {
-                currentElement = k;
-                break;
-            }
-        }
-        Attributes resAtts = atts;
-        hasChecked = false;
-        empty = true;
-        if (!hasKeyref(atts) || currentElement == null) {
-            // If the keyrefLevel doesn't equal 0, it means that current element is under the key reference element;
-            if (keyrefLevel != 0) {
-                keyrefLevel++;
-                hasSubElem.pop();
-                hasSubElem.push(true);
-            }
-        } else {
-            elemName.push(name);
-            if (keyrefLevel != 0) {
-                keyrefLevalStack.push(keyrefLevel);
-                hasSubElem.pop();
-                hasSubElem.push(true);
-            }
-            hasSubElem.push(false);
-            keyrefLevel = 1;
+    	if (deleteElement>0) {
+    		deleteElement++;
+    	}
 
-            resAtts = processElement(atts);
-        }
+		try {
+			final KeyScope childScope = Optional.ofNullable(atts.getValue(ATTRIBUTE_NAME_KEYSCOPE))
+					.flatMap(n -> Optional.ofNullable(definitionMaps.peek().getChildScope(n)))
+					.orElse(definitionMaps.peek());
+			definitionMaps.push(childScope);
 
-        getContentHandler().startElement(uri, localName, name, resAtts);
-    }
+			currentElement = null;
+			final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
+			for (final KeyrefInfo k : keyrefInfos) {
+				if (k.type.matches(cls)) {
+					currentElement = k;
+					break;
+				}
+			}
+			Attributes resAtts = atts;
+			hasChecked = false;
+			empty = true;
+			if (!hasKeyref(atts) || currentElement == null) {
+				// If the keyrefLevel doesn't equal 0, it means that current element is under
+				// the key reference element;
+				if (keyrefLevel != 0) {
+					keyrefLevel++;
+					hasSubElem.pop();
+					hasSubElem.push(true);
+				}
+			} else {
+				elemName.push(name);
+				if (keyrefLevel != 0) {
+					keyrefLevalStack.push(keyrefLevel);
+					hasSubElem.pop();
+					hasSubElem.push(true);
+				}
+				hasSubElem.push(false);
+				keyrefLevel = 1;
 
-    private Attributes processElement(final Attributes atts) {
+				resAtts = processElement(atts);
+			}
+
+			getContentHandler().startElement(uri, localName, name, resAtts);
+		} catch (DropElementException e) {
+			if (deleteElement==0) {
+				deleteElement++;
+			}
+		}
+	}
+
+    private Attributes processElement(final Attributes atts) throws DropElementException {
         final AttributesImpl resAtts = new AttributesImpl(atts);
         boolean valid = false;
+        boolean dropElement = false;
 
         for (final Map.Entry<String, String> attrPair: currentElement.attrs.entrySet()) {
             final String keyrefAttr = attrPair.getKey();
@@ -515,7 +539,12 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
                 // If definition is not null
                 if (keyDef != null) {
-                    if (currentElement != null) {
+                	if (keyDef.isFiltered()) {
+                		validKeyref.push(valid);
+                		throw new DropElementException();
+                	}
+
+                	if (currentElement != null) {
                         final List<XdmNode> attrs = elem.select(attribute()).asList();
                         final URI href = keyDef.href;
 
@@ -618,12 +647,15 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             ? MessageUtils.getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
                             : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMaps.peek().name);
                     logger.info(m.setLocation(atts).toString());
+                    if (job.isKeydefFiltered(keyName)) {
+                        validKeyref.push(valid);
+                        throw new DropElementException();
+                    }
                 }
 
                 validKeyref.push(valid);
             }
         }
-
 
         return resAtts;
     }

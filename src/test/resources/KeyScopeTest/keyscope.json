@@ -1,0 +1,20 @@
+{
+  "id": "#root",
+  "name": null,
+  "keyDefinition": {
+    "ktopic4": {
+      "scope": "local",
+      "filtered": true
+    },
+    "ktopic2": {
+      "keys": "ktopic2",
+      "href": "2b24dadf86cc73da87b664e543e60e4b85790468.xml",
+      "scope": "local",
+      "format": "dita",
+      "source": "file:/C:/git/dita-sample-data/dita-ot-bug/temp/53b4c84dfef5cedebc134001f99d073778a29edb.ditamap",
+      "element": "<?xml version=\"1.0\" encoding=\"UTF-16\"?>\n<keydef class=\"+ map/topicref mapgroup-d/keydef \" href=\"2b24dadf86cc73da87b664e543e60e4b85790468.xml\" keys=\"ktopic2\" processing-role=\"resource-only\"/>",
+      "filtered": false
+    }
+  },
+  "childScopes": []
+}

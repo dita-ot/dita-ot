@@ -12,9 +12,7 @@ import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.store.Store;
 import org.w3c.dom.Document;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,13 +20,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Result;
 import javax.xml.transform.dom.DOMResult;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -47,6 +42,8 @@ import static org.dita.dost.util.URLUtils.*;
  * @since 1.5.4
  */
 public final class Job {
+
+    public static Job instance;
 
     private static final String JOB_FILE = ".job.xml";
 
@@ -82,6 +79,11 @@ public final class Job {
     private static final String ATTRIBUTE_CHUNKED_DITAMAP_LIST = "chunked-ditamap";
     private static final String ATTRIBUTE_FLAG_IMAGE_LIST = "flag-image";
     private static final String ATTRIBUTE_SUBSIDIARY_TARGET_LIST = "subtarget";
+    private static final String ATTRIBUTE_FILTERED = "filtered";
+    private static final String ELEMENT_FILTERED_KEYDEFS = "filteredkeydefs";
+    private static final String ELEMENT_FILTERED_KEYDEF = "keydef";
+    private static final String ATTRIBUTE_KEYS = "keys";
+    private static final String ATTRIBUTE_HREF = "href";
 
     private static final String PROPERTY_OUTER_CONTROL = ANT_INVOKER_EXT_PARAM_OUTTERCONTROL;
     private static final String PROPERTY_ONLY_TOPIC_IN_MAP = ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP;
@@ -93,6 +95,10 @@ public final class Job {
     private static final String PROPERTY_INPUT_MAP = "InputMapDir";
     private static final String PROPERTY_INPUT_MAP_URI = "InputMapDir.uri";
 
+    /** File name for key definition file */
+    public static final String KEYDEF_LIST_FILE = "keydef.json";
+    /** File name for key definition file */
+    public static final String SUBJECT_SCHEME_KEYDEF_LIST_FILE = "schemekeydef.xml";
     /** File name for temporary input file list file */
     public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
@@ -113,6 +119,7 @@ public final class Job {
             attrToFieldMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getField("isOutDita"));
             attrToFieldMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
             attrToFieldMap.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getField("isSubtarget"));
+            attrToFieldMap.put(ATTRIBUTE_FILTERED, FileInfo.class.getField("isFiltered"));
         } catch (final NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
@@ -123,6 +130,7 @@ public final class Job {
     public final URI tempDirURI;
     private final File jobFile;
     private final Map<URI, FileInfo> files = new ConcurrentHashMap<>();
+    private final List<FilteredKeydef> filteredKeydefs = new ArrayList<>();
     private long lastModified;
     private final Store store;
 
@@ -150,6 +158,7 @@ public final class Job {
                 prop.put(e.getKey(), e.getValue());
             }
         }
+        instance = this;
     }
 
     public Job(final Job job, final Map<String, Object> prop, final Collection<FileInfo> files) {
@@ -194,6 +203,20 @@ public final class Job {
             prop.put(PROPERTY_ONLY_TOPIC_IN_MAP, Boolean.toString(false));
             prop.put(PROPERTY_OUTER_CONTROL, OutterControl.WARN.toString());
         }
+    }
+
+    public boolean isKeydefFiltered(String keyName) {
+        if (keyName == null || keyName.trim().length()==0) {
+            return false;
+        }
+
+        for (FilteredKeydef keydef : filteredKeydefs) {
+            if (keyName.equals(keydef.keys)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public final static class JobHandler extends DefaultHandler {
@@ -345,8 +368,16 @@ public final class Job {
     }
 
     public void serialize(XMLStreamWriter out, Map<String, Object> props, Collection<FileInfo> fs) throws XMLStreamException {
-        out.writeStartDocument();
-        out.writeStartElement(ELEMENT_JOB);
+            out.writeStartDocument();
+            out.writeStartElement(ELEMENT_JOB);
+            writeProperties(out, props);
+            writeFiles(out, fs);
+            writeFilteredKeydefs(out);
+            out.writeEndElement(); //job
+            out.writeEndDocument();
+    }
+
+    private void writeProperties(XMLStreamWriter out, Map<String, Object> props) throws XMLStreamException {
         for (final Map.Entry<String, Object> e: props.entrySet()) {
             out.writeStartElement(ELEMENT_PROPERTY);
             out.writeAttribute(ATTRIBUTE_NAME, e.getKey());
@@ -382,6 +413,9 @@ public final class Job {
             }
             out.writeEndElement(); //property
         }
+    }
+
+    private void writeFiles(XMLStreamWriter out, Collection<FileInfo> fs) throws XMLStreamException {
         out.writeStartElement(ELEMENT_FILES);
         for (final FileInfo i: fs) {
             out.writeStartElement(ELEMENT_FILE);
@@ -409,16 +443,39 @@ public final class Job {
             out.writeEndElement(); //file
         }
         out.writeEndElement(); //files
-        out.writeEndElement(); //job
-        out.writeEndDocument();
+    }
+
+    private void writeFilteredKeydefs(XMLStreamWriter out) throws XMLStreamException {
+        out.writeStartElement(ELEMENT_FILTERED_KEYDEFS);
+        for (FilteredKeydef keydef : filteredKeydefs) {
+            out.writeStartElement(ELEMENT_FILTERED_KEYDEF);
+            out.writeAttribute(ATTRIBUTE_KEYS, keydef.keys);
+            out.writeAttribute(ATTRIBUTE_HREF, keydef.href);
+            out.writeEndElement();
+        }
+        out.writeEndElement();
     }
 
     /**
      * Add file info. If file info with the same file already exists, it will be replaced.
      */
     public void add(final FileInfo fileInfo) {
+            files.put(fileInfo.uri, fileInfo);
+    }
+
+    /**
+     * Add file info. If file info with the same file already exists, it will be replaced but the filtered state
+     * from the existing file info will be carried over.
+     */
+    public void addButRetainFilteredState(FileInfo fileInfo) {
+        if (files.get(fileInfo.uri) != null) {
+            FileInfo existing = files.get(fileInfo.uri);
+            fileInfo.isFiltered = existing.isFiltered;
+        }
+
         files.put(fileInfo.uri, fileInfo);
     }
+
 
     /**
      * Remove file info.
@@ -599,6 +656,20 @@ public final class Job {
         }
     }
 
+    public static final class FilteredKeydef {
+        public String keys;
+        public String href;
+
+        public FilteredKeydef() {
+
+        }
+
+        public FilteredKeydef(String keys, String href) {
+            this.keys = keys;
+            this.href = href;
+        }
+    }
+
     /**
      * File info object.
      */
@@ -640,6 +711,8 @@ public final class Job {
         public boolean isOutDita;
         /** File is input document that is used as processing root. */
         public boolean isInput;
+        /** True, if the whole file is filtered by a profiling attribute */
+        public boolean isFiltered;
         /** Additional input resource. */
         public boolean isInputResource;
 
@@ -680,6 +753,7 @@ public final class Job {
                     ", isSubtarget=" + isSubtarget +
                     ", isFlagImage=" + isFlagImage +
                     ", isOutDita=" + isOutDita +
+                    ", isFiltered=" + isFiltered +
                     '}';
         }
 
@@ -701,6 +775,7 @@ public final class Job {
                     isFlagImage == fileInfo.isFlagImage &&
                     isOutDita == fileInfo.isOutDita &&
                     isInput == fileInfo.isInput &&
+                    isFiltered == fileInfo.isFiltered &&
                     isInputResource == fileInfo.isInputResource &&
                     Objects.equals(src, fileInfo.src) &&
                     Objects.equals(uri, fileInfo.uri) &&
@@ -712,7 +787,7 @@ public final class Job {
         @Override
         public int hashCode() {
             return Objects.hash(src, uri, file, result, format, hasConref, isChunked, hasLink, isResourceOnly, isTarget,
-                    isConrefPush, hasKeyref, hasCoderef, isSubjectScheme, isSubtarget, isFlagImage, isOutDita, isInput,
+                    isConrefPush, hasKeyref, hasCoderef, isSubjectScheme, isSubtarget, isFlagImage, isOutDita, isInput, isFiltered,
                     isInputResource);
         }
 
@@ -744,6 +819,7 @@ public final class Job {
             private boolean isFlagImage;
             private boolean isOutDita;
             private boolean isInput;
+            private boolean isFiltered;
             private boolean isInputResource;
 
             public Builder() {}
@@ -766,6 +842,7 @@ public final class Job {
                 isFlagImage = orig.isFlagImage;
                 isOutDita = orig.isOutDita;
                 isInput = orig.isInput;
+                isFiltered = orig.isFiltered;
                 isInputResource = orig.isInputResource;
             }
 
@@ -791,6 +868,7 @@ public final class Job {
                 if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
                 if (orig.isInput) isInput = orig.isInput;
+                if (orig.isFiltered) isFiltered = orig.isFiltered;
                 if (orig.isInputResource) isInputResource = orig.isInputResource;
                 return this;
             }
@@ -834,6 +912,7 @@ public final class Job {
             public Builder isFlagImage(final boolean isFlagImage) { this.isFlagImage = isFlagImage; return this; }
             public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
             public Builder isInput(final boolean isInput) { this.isInput = isInput; return this; }
+            public Builder isFiltered(final boolean isFiltered) { this.isFiltered = isFiltered; return this; }
             public Builder isInputResource(final boolean isInputResource) { this.isInputResource = isInputResource; return this; }
 
             public FileInfo build() {
@@ -858,6 +937,7 @@ public final class Job {
                 fi.isFlagImage = isFlagImage;
                 fi.isOutDita = isOutDita;
                 fi.isInput = isInput;   
+                fi.isFiltered = isFiltered;
                 fi.isInputResource = isInputResource;
                 return fi;
             }
@@ -1037,6 +1117,10 @@ public final class Job {
         }
         tempFileNameScheme.setBaseDir(getInputDir());
         return tempFileNameScheme;
+    }
+
+    public void addFilteredKey(String keys, String href) {
+        filteredKeydefs.add(new FilteredKeydef(keys,href));
     }
 
 }

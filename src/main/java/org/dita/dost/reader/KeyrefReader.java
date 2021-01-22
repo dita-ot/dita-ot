@@ -8,6 +8,14 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
+import java.io.File;
+import java.net.URI;
+import java.util.*;
+
+import javax.xml.parsers.DocumentBuilder;
+
 import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
@@ -28,13 +36,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
-
-import javax.xml.parsers.DocumentBuilder;
-import java.io.File;
-import java.net.URI;
-import java.util.*;
 import java.util.stream.Collectors;
-
 import static java.util.Arrays.asList;
 import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static javax.xml.XMLConstants.NULL_NS_URI;
@@ -43,7 +45,6 @@ import static net.sf.saxon.expr.parser.ExplicitLocation.UNKNOWN_LOCATION;
 import static net.sf.saxon.s9api.streams.Predicates.*;
 import static net.sf.saxon.s9api.streams.Steps.*;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
-import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.KeyScope.ROOT_ID;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.rootElement;
@@ -247,6 +248,9 @@ public final class KeyrefReader implements AbstractReader {
                     final String scope = copy.attribute(ATTRIBUTE_NAME_SCOPE);
                     final String format = copy.attribute(ATTRIBUTE_NAME_FORMAT);
                     final KeyDef keyDef = new KeyDef(key, href, scope, format, currentFile, copy);
+                    if (job.getFileInfo(href) != null) {
+                        keyDef.setFiltered(job.getFileInfo(href).isFiltered);
+                    }
                     keyDefs.put(key, keyDef);
                 }
             }
