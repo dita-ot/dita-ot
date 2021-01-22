@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><?workdir /D:\git\dita-ot\src\test\resources\ChunkModuleTest\src\to_content_with_namespace_mathml\temp\xhtml?><?workdir-uri file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_mathml/temp/xhtml/?><?path2rootmap-uri ./?><?workdir /D:\git\dita-ot\src\test\resources\ChunkModuleTest\src\to_content_with_namespace_mathml\temp\xhtml?><?workdir-uri file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_mathml/temp/xhtml/?>
+<dita>
+    <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+        xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="topic_dhk_slh_m4b"
+        domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+        class="- topic/topic "
+        xtrf="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_mathml/topic_with_mathml.dita"
+        xtrc="topic:1;1:881" specializations="@props/deliveryTarget">
+        <title class="- topic/title "
+            xtrf="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_mathml/topic_with_mathml.dita"
+            xtrc="title:1;2:172"/>
+        <body class="- topic/body "
+            xtrf="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_mathml/topic_with_mathml.dita"
+            xtrc="body:1;3:168">
+            <p class="- topic/p "
+                xtrf="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_mathml/topic_with_mathml.dita"
+                xtrc="p:1;4:163">the streaming operator for particle type <equation-inline
+                    class="+ topic/ph equation-d/equation-inline "
+                    xtrf="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_mathml/topic_with_mathml.dita"
+                    xtrc="equation-inline:1;5:223"><mathml class="+ topic/foreign mathml-d/mathml "
+                        xtrf="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_mathml/topic_with_mathml.dita"
+                        xtrc="mathml:1;5:409">
+                        <m:math xmlns:m="http://www.w3.org/1998/Math/MathML">
+                            <m:mrow>
+                                <m:mi>i</m:mi>
+                            </m:mrow>
+                        </m:math>
+                    </mathml></equation-inline>
+            </p>
+        </body>
+    </topic>
+</dita>

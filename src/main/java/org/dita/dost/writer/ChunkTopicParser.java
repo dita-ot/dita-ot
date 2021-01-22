@@ -413,6 +413,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     private Attributes checkForNSDeclaration (Attributes atts, String uri){
         AttributesImpl resAtts = null;
 
+        //This part is to handle namespace declaration in the content.
         if (uri != "") {
             if (namespaceMap.containsKey(uri)){
                 increaseNamespaceLevel(uri);

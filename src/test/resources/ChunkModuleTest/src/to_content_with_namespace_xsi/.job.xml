@@ -1,0 +1,277 @@
+<?xml version="1.0" ?>
+<job>
+    <property name="user.input.dir">
+        <string>D:\git\dita-ot\src\test\resources\ChunkModuleTest\src\to_content_with_namespace_xsi</string>
+    </property>
+    <property name="plugin.com.oxygenxml.webhelp.common.dir">
+        <string>plugins/com.oxygenxml.webhelp.common</string>
+    </property>
+    <property name="transtypes">
+        <string>pdf;pdf2;docx;metrics-report;metrics-report-xml;webhelp-responsive;exportmap;merged;pdf-css;pdf-css-html5;pdf-css-html5-single-topic;html5;webhelp;webhelp-feedback;webhelpCommons;webhelp-responsive-preprocess2;xhtml;eclipsehelp;htmlhelp;javahelp;dita;troff;indesign;epub;html2;json;kindle;word2dita;markdown;markdown_github;markdown_gitbook</string>
+    </property>
+    <property name="plugin.org.dita4publishers.common.html.dir">
+        <string>plugins/org.dita4publishers.common.html</string>
+    </property>
+    <property name="parser.md">
+        <string>com.elovirta.dita.markdown.MarkdownReader</string>
+    </property>
+    <property name="plugin.org.dita.specialization.dita11.dir">
+        <string>plugins/org.dita.specialization.dita11</string>
+    </property>
+    <property name="crawl">
+        <string>topic</string>
+    </property>
+    <property name="plugin.com.oxygenxml.pdf.custom.dir">
+        <string>plugins/com.oxygenxml.pdf.custom</string>
+    </property>
+    <property name="plugin.com.oxygenxml.image.float.dir">
+        <string>plugins/com.oxygenxml.image.float</string>
+    </property>
+    <property name="parser.hdita">
+        <string>com.elovirta.dita.html.HDitaReader</string>
+    </property>
+    <property name="cli.color">
+        <string>true</string>
+    </property>
+    <property name="user.input.file">
+        <string>to_content_with_namespace_xsi.ditamap</string>
+    </property>
+    <property name="plugin.org.dita-community.common.mapdriven.dir">
+        <string>plugins/org.dita-community.common.mapdriven</string>
+    </property>
+    <property name="plugin.org.dita.pdf2.dir">
+        <string>plugins/org.dita.pdf2</string>
+    </property>
+    <property name="print_transtypes">
+        <string>pdf-css-html5;pdf;pdf2;pdf-css;pdf-css-html5-single-topic;docx</string>
+    </property>
+    <property name="onlytopicinmap">
+        <string>false</string>
+    </property>
+    <property name="supported_resource_extensions">
+        <string>.pdf;.swf</string>
+    </property>
+    <property name="plugin.org.dita.xhtml.dir">
+        <string>plugins/org.dita.xhtml</string>
+    </property>
+    <property name="plugin.org.dita-community.dita13.html.dir">
+        <string>plugins/org.dita-community.dita13.html</string>
+    </property>
+    <property name="plugin.org.dita.index.dir">
+        <string>plugins/org.dita.index</string>
+    </property>
+    <property name="plugin.com.oxygenxml.common.dir">
+        <string>plugins/com.oxygenxml.common</string>
+    </property>
+    <property name="plugin.com.oxygenxml.pdf.review.dir">
+        <string>plugins/com.oxygenxml.pdf.review</string>
+    </property>
+    <property name="plugin.org.dita.javahelp.dir">
+        <string>plugins/org.dita.javahelp</string>
+    </property>
+    <property name="plugin.com.elovirta.ooxml.dir">
+        <string>plugins/com.elovirta.ooxml</string>
+    </property>
+    <property name="relflagimagelist">
+        <string/>
+    </property>
+    <property name="plugin.org.dita-community.preprocess-extensions.dir">
+        <string>plugins/org.dita-community.preprocess-extensions</string>
+    </property>
+    <property name="supported_html_extensions">
+        <string>.html;.htm</string>
+    </property>
+    <property name="plugin.order">
+        <string>org.dita.base org.oasis-open.dita.v1_3 org.oasis-open.dita.v1_2</string>
+    </property>
+    <property name="otrelease">
+        <string>3.5</string>
+    </property>
+    <property name="supported_image_extensions">
+        <string>.gif;.svg;.bmp;.jpg;.tif;.mml;.mathml;.eps;.jpeg;.png;.tiff</string>
+    </property>
+    <property name="plugin.com.oxygenxml.pdf.css.dir">
+        <string>plugins/com.oxygenxml.pdf.css</string>
+    </property>
+    <property name="InputMapDir">
+        <string>D:\git\dita-ot\src\test\resources\ChunkModuleTest\src\to_content_with_namespace_xsi\to_content_with_namespace_xsi.ditamap</string>
+    </property>
+    <property name="plugin.com.oxygenxml.dita.metrics.report.dir">
+        <string>plugins/com.oxygenxml.dita.metrics.report</string>
+    </property>
+    <property name="plugin.org.dita.troff.dir">
+        <string>plugins/org.dita.troff</string>
+    </property>
+    <property name="org.dita.pdf2.i18n.enabled">
+        <string>true</string>
+    </property>
+    <property name="plugin.com.oxygenxml.webhelp.classic.dir">
+        <string>plugins/com.oxygenxml.webhelp.classic</string>
+    </property>
+    <property name="user.input.dir.uri">
+        <string>file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_xsi/</string>
+    </property>
+    <property name="plugin.org.dita.html5.dir">
+        <string>plugins/org.dita.html5</string>
+    </property>
+    <property name="generatecopyouter">
+        <string>NOT_GENERATEOUTTER</string>
+    </property>
+    <property name="default.cascade">
+        <string>merge</string>
+    </property>
+    <property name="plugin.org.dita.eclipsehelp.dir">
+        <string>plugins/org.dita.eclipsehelp</string>
+    </property>
+    <property name="plugin.org.dita-community.adjust-copy-to.dir">
+        <string>plugins/org.dita-community.adjust-copy-to</string>
+    </property>
+    <property name="plugin.org.oasis-open.xdita.v0_2_2.dir">
+        <string>plugins/org.oasis-open.xdita.v0_2_2</string>
+    </property>
+    <property name="outputdir">
+        <string>D:\git\dita-ot\src\test\resources\ChunkModuleTest\src\to_content_with_namespace_xsi\out\xhtml</string>
+    </property>
+    <property name="plugin.org.dita.htmlhelp.dir">
+        <string>plugins/org.dita.htmlhelp</string>
+    </property>
+    <property name="temp-file-name-scheme">
+        <string>org.dita.dost.module.reader.DefaultTempFileScheme</string>
+    </property>
+    <property name="plugin.org.dita.base.dir">
+        <string>plugins/org.dita.base</string>
+    </property>
+    <property name="plugin.org.dita4publishers.html2.dir">
+        <string>plugins/org.dita4publishers.html2</string>
+    </property>
+    <property name="plugin.com.oxygenxml.editlink.dir">
+        <string>plugins/com.oxygenxml.editlink</string>
+    </property>
+    <property name="plugindirs">
+        <string>plugins;demo</string>
+    </property>
+    <property name="parser.mdita">
+        <string>com.elovirta.dita.markdown.MDitaReader</string>
+    </property>
+    <property name="user.input.file.listfile">
+        <string>usr.input.file.list</string>
+    </property>
+    <property name="plugin.org.dita4publishers.json.dir">
+        <string>plugins/org.dita4publishers.json</string>
+    </property>
+    <property name="outercontrol">
+        <string>WARN</string>
+    </property>
+    <property name="plugin.org.dita4publishers.common.mapdriven.dir">
+        <string>plugins/org.dita4publishers.common.mapdriven</string>
+    </property>
+    <property name="plugin.ignores">
+        <string/>
+    </property>
+    <property name="relflagimagefile">
+        <string>relflagimage.list</string>
+    </property>
+    <property name="plugin.org.dita-community.common.xslt.dir">
+        <string>plugins/org.dita-community.common.xslt</string>
+    </property>
+    <property name="user.input.file.uri">
+        <string>to_content_with_namespace_xsi.ditamap</string>
+    </property>
+    <property name="plugin.com.oxygenxml.highlight.dir">
+        <string>plugins/com.oxygenxml.highlight</string>
+    </property>
+    <property name="plugin.org.dita4publishers.dita2indesign.dir">
+        <string>plugins/org.dita4publishers.dita2indesign</string>
+    </property>
+    <property name="plugin.org.dita4publishers.epub.dir">
+        <string>plugins/org.dita4publishers.epub</string>
+    </property>
+    <property name="plugin.org.dita-community.dita13.pdf.dir">
+        <string>plugins/org.dita-community.dita13.pdf</string>
+    </property>
+    <property name="plugin.com.oxygenxml.dost.patches.dir">
+        <string>plugins/com.oxygenxml.dost.patches</string>
+    </property>
+    <property name="plugin.com.oxygenxml.dita-ot.plugin.mathml.dir">
+        <string>plugins/mathml</string>
+    </property>
+    <property name="registry">
+        <string>https://plugins.dita-ot.org/</string>
+    </property>
+    <property name="plugin.org.dita.pdf2.axf.dir">
+        <string>plugins/org.dita.pdf2.axf</string>
+    </property>
+    <property name="plugin.org.dita.normalize.dir">
+        <string>plugins/org.dita.normalize</string>
+    </property>
+    <property name="plugin.org.oasis-open.dita.techcomm.v2_0.dir">
+        <string>plugins/org.oasis-open.dita.techcomm.v2_0</string>
+    </property>
+    <property name="plugin.org.oasis-open.dita.v1_2.dir">
+        <string>plugins/org.oasis-open.dita.v1_2</string>
+    </property>
+    <property name="InputMapDir.uri">
+        <string>file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_xsi/to_content_with_namespace_xsi.ditamap</string>
+    </property>
+    <property name="plugin.com.oxygenxml.export.map.dir">
+        <string>plugins/com.oxygenxml.export.map</string>
+    </property>
+    <property name="plugin.com.oxygenxml.html.embed.dir">
+        <string>plugins/com.oxygenxml.html.embed</string>
+    </property>
+    <property name="plugin.org.dita4publishers.word2dita.dir">
+        <string>plugins/org.dita4publishers.word2dita</string>
+    </property>
+    <property name="plugin.org.dita4publishers.common.xslt.dir">
+        <string>plugins/org.dita4publishers.common.xslt</string>
+    </property>
+    <property name="plugin.org.dita.pdf2.fop.dir">
+        <string>plugins/org.dita.pdf2.fop</string>
+    </property>
+    <property name="plugin.org.lwdita.dir">
+        <string>plugins/org.lwdita</string>
+    </property>
+    <property name="plugin.org.dita.pdf2.xep.dir">
+        <string>plugins/org.dita.pdf2.xep</string>
+    </property>
+    <property name="plugin.com.oxygenxml.media.dir">
+        <string>plugins/com.oxygenxml.media</string>
+    </property>
+    <property name="tempdirToinputmapdir.relative.value">
+        <string/>
+    </property>
+    <property name="plugin.org.dita4publishers.kindle.dir">
+        <string>plugins/org.dita4publishers.kindle</string>
+    </property>
+    <property name="plugin.com.oxygenxml.webhelp.responsive.dir">
+        <string>plugins/com.oxygenxml.webhelp.responsive</string>
+    </property>
+    <property name="plugin.org.oasis-open.dita.v2_0.dir">
+        <string>plugins/org.oasis-open.dita.v2_0</string>
+    </property>
+    <property name="otversion">
+        <string>3.5.4</string>
+    </property>
+    <property name="plugin.org.oasis-open.dita.v1_3.dir">
+        <string>plugins/org.oasis-open.dita.v1_3</string>
+    </property>
+    <property name="plugin.com.oxygenxml.merged.dir">
+        <string>plugins/com.oxygenxml.merged</string>
+    </property>
+    <property name="parser.markdown">
+        <string>com.elovirta.dita.markdown.MarkdownReader</string>
+    </property>
+    <property name="uplevels">
+        <string/>
+    </property>
+    <files>
+        <file
+            src="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_xsi/to_content_with_namespace_xsi.ditamap"
+            uri="to_content_with_namespace_xsi.ditamap" path="to_content_with_namespace_xsi.ditamap"
+            result="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_xsi/to_content_with_namespace_xsi.ditamap"
+            format="ditamap" input="true"/>
+        <file uri="topic_with_xsi.dita" path="topic_with_xsi.dita"
+            result="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_xsi/topic_with_xsi.dita"
+            format="dita"/>
+    </files>
+</job>

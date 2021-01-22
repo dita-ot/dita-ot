@@ -321,6 +321,10 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX) == null) {
             addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX, DITA_OT_NS);
         }
+        //Need to add a check to see if root element of the topic uses schema validation or not.
+        if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(ATTRIBUTE_NAME_NONAMESPACESCHEMALOCATION) != null) {
+            addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_XSI, XML_SCHEMA_NS);
+        }
 
         return resAtts;
     }
@@ -347,6 +351,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                 }
             }
         }
+
         return resAtts;
     }
 

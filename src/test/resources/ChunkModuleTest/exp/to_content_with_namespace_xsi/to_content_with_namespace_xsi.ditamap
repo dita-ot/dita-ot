@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkFixChunkTest/preprocess/map8?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkFixChunkTest/preprocess/map8/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?>
+<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge"
+  chunk="to-content" class="- map/map " ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+  specializations="@props/deliveryTarget" xtrc="map:1;6:690"
+  xtrf="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_xsi/to_content_with_namespace_xsi.ditamap">
+  <topicref class="- map/topicref " xtrc="topicref:1;7:65"
+    xtrf="file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_xsi/to_content_with_namespace_xsi.ditamap"
+    href="to_content_with_namespace_xsi.dita#topic_at4_wmh_m4b">
+  </topicref>
+</map>
