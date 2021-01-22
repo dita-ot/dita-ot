@@ -113,10 +113,11 @@ public class FilterUtils {
     /**
      * Factory method to create a FilterUtils object for a ditaval
      */
-    public static FilterUtils newFilterUtils(URI ditaval, DITAOTLogger logger) {
+    public static FilterUtils newFilterUtils(URI ditaval, DITAOTLogger logger, Job job) {
         logger.info("Reading " + ditaval);
         DitaValReader ditaValReader = new DitaValReader();
         ditaValReader.setLogger(logger);
+        ditaValReader.setJob(job);
         ditaValReader.read(ditaval);
         Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
         FilterUtils f = new FilterUtils(filterMap, ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());

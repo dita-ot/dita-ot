@@ -39,7 +39,7 @@ public class ParallelFiltering {
 
         job.getFileInfo(fileInfoFilter).stream().parallel().forEach(fileInfo -> {
             final ProfilingFilter writer = newProfilingFilter(filterUtils);
-            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader(logger);
+            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader(logger, job);
             final File file = new File(job.tempDir, fileInfo.file.getPath());
             logger.debug("Processing " + file.getAbsolutePath());
             loadSubjectSchemes(dictionary, fileInfo, subjectSchemeReader);
@@ -71,7 +71,7 @@ public class ParallelFiltering {
     private Map<URI, Set<URI>> readSubjectDictionary() throws DITAOTException {
         Map<URI, Set<URI>> dic;
         try {
-            dic = new SubjectSchemeReader().readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+            dic = new SubjectSchemeReader(logger, job).readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
         } catch (final IOException e) {
             throw new DITAOTException(e);
         }

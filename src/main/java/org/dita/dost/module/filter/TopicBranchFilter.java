@@ -135,9 +135,9 @@ public class TopicBranchFilter {
     private FilterUtils getFilterUtils(final Element ditavalRef) {
         final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
         final URI tmp = Job.instance.tempDirURI.resolve(map).resolve(href);
-        final Job.FileInfo fi = Job.instance.getFileInfo(tmp);
+        final Job.FileInfo fi = job.getFileInfo(tmp);
         final URI ditaval = fi.src;
-        return filterCache.computeIfAbsent(ditaval, key -> newFilterUtils(key, logger));
+        return filterCache.computeIfAbsent(ditaval, key -> newFilterUtils(key, logger, job));
     }
 
 }
