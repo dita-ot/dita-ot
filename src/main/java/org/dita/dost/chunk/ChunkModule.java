@@ -51,8 +51,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             for (ChunkOperation chunk : chunks) {
                 //   recursively merge chunk topics
                 final Document chunkDoc = job.getStore().getDocument(chunk.src);
-                merge(chunk, chunk, chunkDoc.getDocumentElement());
+                merge(chunk, chunk, chunkDoc);
                 rewriteLinks(chunkDoc, chunk, rewriteMap);
+                chunkDoc.normalizeDocument();
                 job.getStore().writeDocument(chunkDoc, chunk.src);
             }
         } catch (IOException e) {
@@ -141,6 +142,19 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      */
     private void merge(final ChunkOperation rootChunk,
                        final ChunkOperation chunk,
+                       final Document doc) throws IOException {
+        final Element ditaWrapper = doc.createElement(ELEMENT_NAME_DITA);
+        ditaWrapper.setAttributeNS(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "2.0");
+        final Element dstTopic = (Element) doc.replaceChild(ditaWrapper, doc.getDocumentElement());
+        ditaWrapper.appendChild(dstTopic);
+        mergeTopic(rootChunk, chunk, dstTopic);
+    }
+
+    /**
+     * Merge chunk tree fragment into a single topic.
+     */
+    private void mergeTopic(final ChunkOperation rootChunk,
+                       final ChunkOperation chunk,
                        final Element dstTopic) throws IOException {
         for (ChunkOperation child : chunk.children) {
             final Document chunkDoc = job.getStore().getDocument(child.src);
@@ -148,7 +162,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final Element imported = (Element) dstTopic.getOwnerDocument().importNode(topic, true);
             relativizeLinks(imported, child.src, rootChunk.dst);
             final Element added = (Element) dstTopic.appendChild(imported);
-            merge(rootChunk, child, added);
+            mergeTopic(rootChunk, child, added);
         }
     }
 
