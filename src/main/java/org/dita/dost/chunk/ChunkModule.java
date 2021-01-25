@@ -21,10 +21,7 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
@@ -68,7 +65,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      */
     private void rewriteTopicrefs(final URI mapFile, final List<ChunkOperation> chunks) {
         for (ChunkOperation chunk : chunks) {
-            final URI dst =  mapFile.resolve(".").relativize(chunk.dst);
+            final URI dst = mapFile.resolve(".").relativize(chunk.dst);
             chunk.topicref.setAttribute(ATTRIBUTE_NAME_HREF, dst.toString());
             rewriteTopicrefs(mapFile, chunk.children);
         }
@@ -111,6 +108,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 .topicref(rootChunk.topicref)
                 .src(rootChunk.src);
         final String id = getRootTopicId(rootChunk.src);
+        builder.id(id);
         final URI dst = setFragment(rootChunk.src, id);
         builder.dst(dst);
         rewriteMap.put(rootChunk.src, dst);
@@ -126,10 +124,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         final ChunkBuilder builder = new ChunkBuilder(chunk.operation)
                 .topicref(chunk.topicref)
                 .src(chunk.src);
-        // TODO rewrite dst
-        final String id = getRootTopicId(chunk.src);
-        final URI dst = setFragment(rootChunk.src, id);
-        builder.dst(dst);
+        String id = getRootTopicId(chunk.src);
+        URI dst = setFragment(rootChunk.src, id);
+        final Collection<URI> values = rewriteMap.values();
+        while (values.contains(dst)) {
+            id = "unique_" + 1;
+            dst = setFragment(rootChunk.src, id);
+        }
+        builder.dst(dst).id(id);
         rewriteMap.put(chunk.src, dst);
         for (ChunkOperation child : chunk.children) {
             builder.addChild(rewriteChunkChild(rewriteMap, rootChunk, child));
@@ -167,16 +169,21 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      * Merge chunk tree fragment into a single topic.
      */
     private void mergeTopic(final ChunkOperation rootChunk,
-                       final ChunkOperation chunk,
-                       final Element dstTopic) throws IOException {
+                            final ChunkOperation chunk,
+                            final Element dstTopic) throws IOException {
         for (ChunkOperation child : chunk.children) {
             final Document chunkDoc = job.getStore().getDocument(child.src);
             final Element topic = chunkDoc.getDocumentElement();
             final Element imported = (Element) dstTopic.getOwnerDocument().importNode(topic, true);
+            rewriteTopicId(imported, child.id);
             relativizeLinks(imported, child.src, rootChunk.dst);
             final Element added = (Element) dstTopic.appendChild(imported);
             mergeTopic(rootChunk, child, added);
         }
+    }
+
+    private void rewriteTopicId(final Element topic, final String id) {
+        topic.setAttribute(ATTRIBUTE_NAME_ID, id);
     }
 
     private void relativizeLinks(final Element topic, final URI src, final URI dst) {

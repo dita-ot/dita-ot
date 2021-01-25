@@ -33,6 +33,7 @@ class ChunkOperation {
     public final Operation operation;
     public final URI src;
     public final URI dst;
+    public final String id;
     public final Element topicref;
     public final List<ChunkOperation> children;
 
@@ -40,11 +41,13 @@ class ChunkOperation {
     ChunkOperation(final Operation operation,
                    final URI src,
                    final URI dst,
+                   final String id,
                    final Element topicref,
                    final List<ChunkOperation> children) {
         this.operation = operation;
         this.src = src;
         this.dst = dst;
+        this.id = id;
         this.topicref = topicref;
         this.children = children;
     }
@@ -57,13 +60,14 @@ class ChunkOperation {
         return operation == that.operation &&
                 Objects.equals(src, that.src) &&
                 Objects.equals(dst, that.dst) &&
+                Objects.equals(id, that.id) &&
                 Objects.equals(topicref, that.topicref) &&
                 Objects.equals(children, that.children);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(operation, src, dst, topicref, children);
+        return Objects.hash(operation, src, dst, id, topicref, children);
     }
 
     @Override
@@ -72,6 +76,7 @@ class ChunkOperation {
                 "operation=" + operation +
                 ", src=" + src +
                 ", dst=" + dst +
+                ", id=" + id +
                 ", children=" + children +
                 '}';
     }
@@ -84,6 +89,7 @@ class ChunkOperation {
         private final Operation operation;
         private URI src;
         private URI dst;
+        private String id;
         private Element topicref;
         private List<ChunkBuilder> children = new ArrayList<>();
 
@@ -103,6 +109,11 @@ class ChunkOperation {
             return this;
         }
 
+        public ChunkBuilder id(final String id) {
+            this.id = id;
+            return this;
+        }
+
         public ChunkBuilder topicref(final Element topicref) {
             this.topicref = topicref;
             return this;
@@ -119,7 +130,7 @@ class ChunkOperation {
             final List<ChunkOperation> cos = children.stream()
                     .map(ChunkBuilder::build)
                     .collect(Collectors.toList());
-            return new ChunkOperation(operation, src, dst, topicref, Collections.unmodifiableList(cos));
+            return new ChunkOperation(operation, src, dst, id, topicref, Collections.unmodifiableList(cos));
         }
     }
 }
