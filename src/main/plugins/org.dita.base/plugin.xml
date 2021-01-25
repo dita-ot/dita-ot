@@ -96,7 +96,7 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">yes</val>
       <val>no</val>
     </param>
-    <param name="args.input" desc="Specifies the master file for your documentation project." type="file" required="true"/>
+    <param name="args.input" desc="Specifies the main file for your documentation project." type="file" required="true"/>
     <param name="args.input.dir" desc="Specifies the base directory for your documentation project." type="dir"/>
     <param name="args.resources" desc="Specifies resource files." type="file"/>
     <param name="args.output.base" desc="Specifies the name of the output file without file extension." type="string"/>
