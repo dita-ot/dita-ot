@@ -106,15 +106,16 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         return list;
     }
 
-    private ChunkBuilder rewriteChunk(final Map<URI, URI> rewriteMap, final ChunkOperation chunk) {
-        final ChunkBuilder builder = new ChunkBuilder(chunk.operation)
-                .topicref(chunk.topicref)
-                .src(chunk.src);
-        final URI dst = chunk.src;
+    private ChunkBuilder rewriteChunk(final Map<URI, URI> rewriteMap, final ChunkOperation rootChunk) {
+        final ChunkBuilder builder = new ChunkBuilder(rootChunk.operation)
+                .topicref(rootChunk.topicref)
+                .src(rootChunk.src);
+        final String id = getRootTopicId(rootChunk.src);
+        final URI dst = setFragment(rootChunk.src, id);
         builder.dst(dst);
-        rewriteMap.put(chunk.src, dst);
-        for (ChunkOperation child : chunk.children) {
-            builder.addChild(rewriteChunkChild(rewriteMap, chunk, child));
+        rewriteMap.put(rootChunk.src, dst);
+        for (ChunkOperation child : rootChunk.children) {
+            builder.addChild(rewriteChunkChild(rewriteMap, rootChunk, child));
         }
         return builder;
     }

@@ -18,7 +18,7 @@
         <p class="- topic/p ">b</p>
       </body>
       <related-links class="- topic/related-links ">
-        <link class="- topic/link " href="a.dita"/>
+        <link class="- topic/link " href="a.dita#topic_a"/>
         <link class="- topic/link " href="a.dita#topic_c"/>
       </related-links>
       <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
@@ -29,7 +29,7 @@
           <p class="- topic/p ">c</p>
         </body>
         <related-links class="- topic/related-links ">
-          <link class="- topic/link " href="a.dita"/>
+          <link class="- topic/link " href="a.dita#topic_a"/>
           <link class="- topic/link " href="a.dita#topic_b"/>
         </related-links>
       </topic>
