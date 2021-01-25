@@ -46,6 +46,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             // walk topicref | map
             walk(mapFile, mapDoc.getDocumentElement(), chunks);
             chunks = rewrite(rewriteMap, chunks);
+            rewriteTopicrefs(mapFile, chunks);
             job.getStore().writeDocument(mapDoc, mapFile);
             // for each chunk
             for (ChunkOperation chunk : chunks) {
@@ -60,6 +61,17 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Rewrite topicrefs.
+     */
+    private void rewriteTopicrefs(final URI mapFile, final List<ChunkOperation> chunks) {
+        for (ChunkOperation chunk : chunks) {
+            final URI dst =  mapFile.resolve(".").relativize(chunk.dst);
+            chunk.topicref.setAttribute(ATTRIBUTE_NAME_HREF, dst.toString());
+            rewriteTopicrefs(mapFile, chunk.children);
+        }
     }
 
     /**
@@ -190,7 +202,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             //     remove contents
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
                 builder.addChild(collect(mapFile, child));
-                elem.removeChild(child);
+//                elem.removeChild(child);
             }
             // remove @chunk
             elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
