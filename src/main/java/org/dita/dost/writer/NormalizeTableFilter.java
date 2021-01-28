@@ -127,7 +127,9 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
             }
             tableState.currentColumn = 0;
         } else if (TOPIC_ENTRY.matches(cls)) {
-            processEntry(res);
+            if (tableState != null) {
+                processEntry(res);
+            }
         }
 
         getContentHandler().startElement(uri, localName, qName, res);
