@@ -26,6 +26,7 @@ import java.util.*;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.setFragment;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 import static org.dita.dost.util.XMLUtils.rootElement;
@@ -65,7 +66,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      */
     private void rewriteTopicrefs(final URI mapFile, final List<ChunkOperation> chunks) {
         for (ChunkOperation chunk : chunks) {
-            final URI dst = mapFile.resolve(".").relativize(chunk.dst);
+            final URI dst = getRelativePath(mapFile.resolve("."), chunk.dst);
             chunk.topicref.setAttribute(ATTRIBUTE_NAME_HREF, dst.toString());
             rewriteTopicrefs(mapFile, chunk.children);
         }
@@ -82,10 +83,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final URI abs = chunk.src.resolve(href);
             final URI rewrite = rewriteMap.get(abs);
             if (rewrite != null) {
-                final URI rel = chunk.src.resolve(".").relativize(rewrite);
+                final URI rel = getRelativePath(chunk.src.resolve("."), rewrite);
                 link.setAttribute(ATTRIBUTE_NAME_HREF, rel.toString());
             } else {
-                final URI rel = chunk.src.resolve(".").relativize(abs);
+                final URI rel = getRelativePath(chunk.src.resolve("."), abs);
                 link.setAttribute(ATTRIBUTE_NAME_HREF, rel.toString());
             }
         }
@@ -190,7 +191,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         for (Element link : getChildElements(topic, TOPIC_LINK, true)) {
             final URI href = URLUtils.toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
             final URI abs = src.resolve(href);
-            final URI rel = dst.resolve(".").relativize(abs);
+            final URI rel = getRelativePath(dst.resolve("."), abs);
             link.setAttribute(ATTRIBUTE_NAME_HREF, rel.toString());
         }
     }

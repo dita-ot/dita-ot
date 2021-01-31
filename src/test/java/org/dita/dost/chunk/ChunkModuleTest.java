@@ -39,4 +39,9 @@ public class ChunkModuleTest extends AbstractModuleTest {
     public void link() {
         test("link.ditamap");
     }
+
+    @Test
+    public void uplevels() {
+        test("uplevels.ditamap");
+    }
 }
