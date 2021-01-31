@@ -16,6 +16,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -28,8 +29,7 @@ import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.setFragment;
-import static org.dita.dost.util.XMLUtils.getChildElements;
-import static org.dita.dost.util.XMLUtils.rootElement;
+import static org.dita.dost.util.XMLUtils.*;
 
 public class ChunkModule extends AbstractPipelineModuleImpl {
     @Override
@@ -210,8 +210,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     .topicref(elem);
             //     remove contents
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
-                builder.addChild(collect(mapFile, child));
+                if (isDitaFormat(child)) {
+                    builder.addChild(collect(mapFile, child));
 //                elem.removeChild(child);
+                }
             }
             // remove @chunk
             elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
@@ -231,7 +233,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 //                .dst(URI.create("#" + href.toString().replaceAll("/:#", "_")))
                 .topicref(elem);
         for (Element child : getChildElements(elem, MAP_TOPICREF)) {
-            builder.addChild(collect(mapFile, child));
+            if (isDitaFormat(child)) {
+                builder.addChild(collect(mapFile, child));
+            }
         }
         return builder;
     }
