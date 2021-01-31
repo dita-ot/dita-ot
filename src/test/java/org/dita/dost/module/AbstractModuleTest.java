@@ -134,7 +134,7 @@ public abstract class AbstractModuleTest {
         final File[] exps = expDir.listFiles();
         for (final File exp : exps) {
             if (exp.isDirectory()) {
-                compare(new File(expDir, exp.getName()), new File(actDir, exp.getName()));
+                compare(new File(actDir, exp.getName()), new File(expDir, exp.getName()));
             } else if (IGNORE.contains(exp.getName())) {
                 // skip
             } else {
