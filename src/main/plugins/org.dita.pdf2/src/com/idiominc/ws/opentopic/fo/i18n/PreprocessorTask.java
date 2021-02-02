@@ -85,6 +85,7 @@ public class PreprocessorTask extends Task {
                  log("Loading stylesheet " + style, Project.MSG_INFO);
                  final XsltExecutable compile = xmlUtils.getProcessor().newXsltCompiler().compile(job.getStore().getSource(style));
                  final XsltTransformer t = compile.load();
+                 t.setURIResolver(xmlcatalog);
                  t.setSource(new DOMSource(document));
                  t.setDestination(job.getStore().getDestination(output));
                  t.transform();
