@@ -25,6 +25,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
         input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
         return input;
     }
+
     @Override
     protected AbstractPipelineModule getModule(final File tempDir) {
         return new ChunkModule();
@@ -48,5 +49,10 @@ public class ChunkModuleTest extends AbstractModuleTest {
     @Test
     public void format() {
         test("format.ditamap");
+    }
+
+    @Test
+    public void topicgroup() {
+        test("topicgroup.ditamap");
     }
 }

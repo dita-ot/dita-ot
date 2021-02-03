@@ -17,6 +17,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -43,17 +44,19 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final Map<URI, URI> rewriteMap = new HashMap<>();
             // walk topicref | map
             walk(mapFile, mapDoc.getDocumentElement(), chunks);
-            chunks = rewrite(rewriteMap, chunks);
+            chunks = rewrite(mapFile, rewriteMap, chunks);
             rewriteTopicrefs(mapFile, chunks);
             job.getStore().writeDocument(mapDoc, mapFile);
             // for each chunk
             for (ChunkOperation chunk : chunks) {
                 //   recursively merge chunk topics
-                final Document chunkDoc = job.getStore().getDocument(chunk.src);
+                final Document chunkDoc = chunk.src != null
+                        ? job.getStore().getDocument(chunk.src)
+                        : emptyDocument(chunk.id);
                 merge(chunk, chunk, chunkDoc);
                 rewriteLinks(chunkDoc, chunk, rewriteMap);
                 chunkDoc.normalizeDocument();
-                job.getStore().writeDocument(chunkDoc, chunk.src);
+                job.getStore().writeDocument(chunkDoc, setFragment(chunk.dst, null));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,47 +98,58 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * Rewrite chunks and collect topic moves.
      */
-    private List<ChunkOperation> rewrite(final Map<URI, URI> rewriteMap,
+    private List<ChunkOperation> rewrite(final URI mapFile,
+                                         final Map<URI, URI> rewriteMap,
                                          final List<ChunkOperation> chunks) {
         final List<ChunkOperation> list = new ArrayList<>();
-        for (ChunkOperation chunk : chunks) {
-            list.add(rewriteChunk(rewriteMap, chunk).build());
+        for (ChunkOperation rootChunk : chunks) {
+            list.add(rewriteChunk(mapFile, rewriteMap, rootChunk).build());
         }
         return list;
     }
 
-    private ChunkBuilder rewriteChunk(final Map<URI, URI> rewriteMap, final ChunkOperation rootChunk) {
+    private ChunkBuilder rewriteChunk(final URI mapFile,
+                                      final Map<URI, URI> rewriteMap,
+                                      final ChunkOperation rootChunk) {
+        String id = rootChunk.src != null ? getRootTopicId(rootChunk.src) : null;
+        URI dst = rootChunk.src != null ? setFragment(rootChunk.src, id) : mapFile.resolve("Chunk1.dita");
+        final Collection<URI> values = rewriteMap.values();
+        for (int i = 1; id == null || values.contains(dst); i++) {
+            id = "Chunk" + i;
+            dst = setFragment(rootChunk.src != null
+                    ? setFragment(rootChunk.src, id)
+                    : mapFile.resolve(id + ".dita"), id);
+        }
         final ChunkBuilder builder = new ChunkBuilder(rootChunk.operation)
                 .topicref(rootChunk.topicref)
-                .src(rootChunk.src);
-        final String id = getRootTopicId(rootChunk.src);
-        builder.id(id);
-        final URI dst = setFragment(rootChunk.src, id);
-        builder.dst(dst);
+                .src(rootChunk.src)
+                .dst(dst)
+                .id(id);
         rewriteMap.put(rootChunk.src, dst);
         for (ChunkOperation child : rootChunk.children) {
-            builder.addChild(rewriteChunkChild(rewriteMap, rootChunk, child));
+            builder.addChild(rewriteChunkChild(rewriteMap, rootChunk.src != null ? rootChunk.src : dst, child));
         }
         return builder;
     }
 
     private ChunkBuilder rewriteChunkChild(final Map<URI, URI> rewriteMap,
-                                           final ChunkOperation rootChunk,
+                                           final URI rootChunkSrc,
                                            final ChunkOperation chunk) {
+        String id = chunk.src != null ? getRootTopicId(chunk.src) : null;
+        URI dst = setFragment(rootChunkSrc, id);
+        final Collection<URI> values = rewriteMap.values();
+        for (int i = 1; id == null || values.contains(dst); i++) {
+            id = "unique_" + i;
+            dst = setFragment(rootChunkSrc, id);
+        }
         final ChunkBuilder builder = new ChunkBuilder(chunk.operation)
                 .topicref(chunk.topicref)
-                .src(chunk.src);
-        String id = getRootTopicId(chunk.src);
-        URI dst = setFragment(rootChunk.src, id);
-        final Collection<URI> values = rewriteMap.values();
-        while (values.contains(dst)) {
-            id = "unique_" + 1;
-            dst = setFragment(rootChunk.src, id);
-        }
-        builder.dst(dst).id(id);
+                .src(chunk.src)
+                .dst(dst)
+                .id(id);
         rewriteMap.put(chunk.src, dst);
         for (ChunkOperation child : chunk.children) {
-            builder.addChild(rewriteChunkChild(rewriteMap, rootChunk, child));
+            builder.addChild(rewriteChunkChild(rewriteMap, rootChunkSrc, child));
         }
         return builder;
     }
@@ -173,14 +187,32 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                             final ChunkOperation chunk,
                             final Element dstTopic) throws IOException {
         for (ChunkOperation child : chunk.children) {
-            final Document chunkDoc = job.getStore().getDocument(child.src);
-            final Element topic = chunkDoc.getDocumentElement();
-            final Element imported = (Element) dstTopic.getOwnerDocument().importNode(topic, true);
-            rewriteTopicId(imported, child.id);
-            relativizeLinks(imported, child.src, rootChunk.dst);
+            final Element imported;
+            if (child.src != null) {
+                final Document chunkDoc = job.getStore().getDocument(child.src);
+                final Element topic = chunkDoc.getDocumentElement();
+                imported = (Element) dstTopic.getOwnerDocument().importNode(topic, true);
+                rewriteTopicId(imported, child.id);
+                relativizeLinks(imported, child.src, rootChunk.dst);
+            } else {
+                imported = emptyTopic(dstTopic.getOwnerDocument(), child.id);
+            }
             final Element added = (Element) dstTopic.appendChild(imported);
             mergeTopic(rootChunk, child, added);
         }
+    }
+
+    private Document emptyDocument(final String id) {
+        final Document doc = XMLUtils.getDocumentBuilder().newDocument();
+        doc.appendChild(emptyTopic(doc, id));
+        return doc;
+    }
+
+    private Element emptyTopic(final Document doc, final String id) {
+        final Element imported = doc.createElement(TOPIC_TOPIC.localName);
+        imported.setAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString());
+        imported.setAttribute(ATTRIBUTE_NAME_ID, id);
+        return imported;
     }
 
     private void rewriteTopicId(final Element topic, final String id) {
@@ -203,7 +235,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         //   if @chunk = COMBINE
         if (elem.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(COMBINE.name)) {
             //     create chunk
-            final URI href = mapFile.resolve(elem.getAttribute(ATTRIBUTE_NAME_HREF));
+            final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
+            final URI href = hrefNode != null ? mapFile.resolve(hrefNode.getValue()) : null;
             final ChunkBuilder builder = new ChunkBuilder(COMBINE)
                     .src(href)
 //                    .dst(href)
@@ -227,7 +260,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     }
 
     private ChunkBuilder collect(final URI mapFile, final Element elem) {
-        final URI href = mapFile.resolve(elem.getAttribute(ATTRIBUTE_NAME_HREF));
+        final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
+        final URI href = hrefNode != null ? mapFile.resolve(hrefNode.getValue()) : null;
         final ChunkBuilder builder = new ChunkBuilder(COMBINE)
                 .src(href)
 //                .dst(URI.create("#" + href.toString().replaceAll("/:#", "_")))

@@ -1,0 +1,14 @@
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
+  <!-- FIXME: remove wrapper topic -->
+  <topic class="- topic/topic " id="Chunk1">
+  <topic
+      class="- topic/topic " id="topic_ayt_dyw_g4b"
+      specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   "
+      ditaarch:DITAArchVersion="2.0">
+    <title class="- topic/title ">c</title>
+    <body class="- topic/body ">
+      <p class="- topic/p ">c</p>
+    </body>
+  </topic>
+  </topic>
+</dita>

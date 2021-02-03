@@ -8,9 +8,9 @@
 
 package org.dita.dost.chunk;
 
-import org.dita.dost.module.ChunkModule;
 import org.dita.dost.module.AbstractModuleTest;
 import org.dita.dost.module.AbstractPipelineModule;
+import org.dita.dost.module.ChunkModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.junit.Test;
@@ -26,6 +26,7 @@ public class ChunkModuleOldTest extends AbstractModuleTest {
         input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
         return input;
     }
+
     @Override
     protected AbstractPipelineModule getModule(final File tempDir) {
         return new ChunkModule();
@@ -49,5 +50,10 @@ public class ChunkModuleOldTest extends AbstractModuleTest {
     @Test
     public void format() {
         test("format.ditamap");
+    }
+
+    @Test
+    public void topicgroup() {
+        test("topicgroup.ditamap");
     }
 }

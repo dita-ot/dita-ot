@@ -1,0 +1,14 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map " ditaarch:DITAArchVersion="2.0"
+     specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   ">
+  <topicref class="- map/topicref " href="a.dita#topic_r4k_cyw_g4b">
+    <!-- FIXME: remove href -->
+    <topicgroup class="+ map/topicref mapgroup-d/topicgroup " href="a.dita#unique_1">
+      <topicref class="- map/topicref " href="a.dita#topic_ayt_dyw_g4b"/>
+    </topicgroup>
+  </topicref>
+  <!-- FIXME: rewrite class -->
+  <!-- FIXME: remove href -->
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup " href="Chunk1.dita#Chunk1">
+    <topicref class="- map/topicref " href="Chunk1.dita#topic_ayt_dyw_g4b"/>
+  </topicgroup>
+</map>
