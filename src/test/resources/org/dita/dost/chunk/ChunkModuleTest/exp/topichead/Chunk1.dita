@@ -1,6 +1,6 @@
 <dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
   <topic class="- topic/topic " id="Chunk1">
-    <!--title class="- topic/title ">navtitle</title-->
+    <title class="- topic/title ">navtitle</title>
     <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
            ditaarch:DITAArchVersion="2.0" id="topic_ayt_dyw_g4b"
            specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   ">

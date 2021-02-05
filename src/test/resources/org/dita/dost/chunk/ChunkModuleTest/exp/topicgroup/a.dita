@@ -6,8 +6,6 @@
     <body class="- topic/body ">
       <p class="- topic/p ">a</p>
     </body>
-    <!-- FIXME: remove topic -->
-    <topic class="- topic/topic " id="unique_1">
     <topic class="- topic/topic " id="topic_ayt_dyw_g4b"
            specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   "
            ditaarch:DITAArchVersion="2.0">
@@ -15,7 +13,6 @@
       <body class="- topic/body ">
         <p class="- topic/p ">b</p>
       </body>
-    </topic>
     </topic>
   </topic>
 </dita>
