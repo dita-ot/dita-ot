@@ -73,6 +73,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         for (ChunkOperation chunk : chunks) {
             final URI dst = getRelativePath(mapFile.resolve("."), chunk.dst);
             chunk.topicref.setAttribute(ATTRIBUTE_NAME_HREF, dst.toString());
+            if (MAPGROUP_D_TOPICGROUP.matches(chunk.topicref)) {
+                chunk.topicref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
+            }
             rewriteTopicrefs(mapFile, chunk.children);
         }
     }

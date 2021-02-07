@@ -5,9 +5,7 @@
       <topicref class="- map/topicref " href="a.dita#topic_ayt_dyw_g4b"/>
     </topicgroup>
   </topicref>
-  <!-- FIXME: rewrite class -->
-  <!-- FIXME: remove href -->
-  <topicgroup class="+ map/topicref mapgroup-d/topicgroup " href="Chunk1.dita#Chunk1">
+  <topicgroup class="- map/topicref " href="Chunk1.dita#Chunk1">
     <topicref class="- map/topicref " href="Chunk1.dita#topic_ayt_dyw_g4b"/>
   </topicgroup>
 </map>
