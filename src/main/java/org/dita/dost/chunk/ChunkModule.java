@@ -113,33 +113,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     private ChunkBuilder rewriteChunk(final URI mapFile,
                                       final Map<URI, URI> rewriteMap,
                                       final ChunkOperation rootChunk) {
-
-//        String id = null;
-//        URI dst = null;
-//        if (rootChunk.src != null) {
-//            id = getRootTopicId(rootChunk.src);
-//            dst = setFragment(rootChunk.src, id);
-//            final Collection<URI> values = rewriteMap.values();
-//            for (int i = 1; id == null || values.contains(dst); i++) {
-//                id = "Chunk" + i;
-//                final URI dstFile = rootChunk.src != null
-//                        ? setFragment(rootChunk.src, id)
-//                        : mapFile.resolve(id + ".dita");
-//                dst = setFragment(dstFile, id);
-//            }
-//        } else {
-////            id = null;
-////            dst = mapFile.resolve("Chunk1.dita");
-////            final Collection<URI> values = rewriteMap.values();
-////            for (int i = 1; id == null || values.contains(dst); i++) {
-////                id = "Chunk" + i;
-////                final URI dstFile = rootChunk.src != null
-////                    ? setFragment(rootChunk.src, id)
-////                    : mapFile.resolve(id + ".dita");
-////                dst = setFragment(dstFile, id);
-////            }
-//        }
-
         String id = rootChunk.src != null ? getRootTopicId(rootChunk.src) : null;
         URI dst = rootChunk.src != null ? setFragment(rootChunk.src, id) : mapFile.resolve(GEN_CHUNK_PREFIX + "1.dita");
         final Collection<URI> values = rewriteMap.values();
@@ -220,15 +193,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 final Element topic = createTopic(doc, rootChunk.id);
                 topic.appendChild(createTitle(doc, navtitle));
                 ditaWrapper.appendChild(topic);
-                //            final Element dstTopic = (Element) doc.replaceChild(ditaWrapper, doc.getDocumentElement());
-                //            ditaWrapper.appendChild(dstTopic);
                 mergeTopic(rootChunk, rootChunk, topic);
             } else {
                 doc = getDocumentBuilder().newDocument();
                 final Element ditaWrapper = createDita(doc);
                 doc.appendChild(ditaWrapper);
-                //            final Element dstTopic = (Element) doc.replaceChild(ditaWrapper, doc.getDocumentElement());
-                //            ditaWrapper.appendChild(dstTopic);
                 mergeTopic(rootChunk, rootChunk, ditaWrapper);
             }
         }
@@ -265,22 +234,15 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 imported = (Element) dstTopic.getOwnerDocument().importNode(topic, true);
                 rewriteTopicId(imported, child.id);
                 relativizeLinks(imported, child.src, rootChunk.dst);
-//            } else if (MAPGROUP_D_TOPICHEAD.matches(child.topicref)) {
-//                imported = emptyTopic(dstTopic.getOwnerDocument(), child.id);
             } else {
                 imported = createTopic(dstTopic.getOwnerDocument(), child.id);
                 final Element navtitle = getNavtitle(child.topicref);
                 if (navtitle != null) {
                     imported.appendChild(createTitle(dstTopic.getOwnerDocument(), navtitle));
                 }
-//                imported = null;
             }
-//            if (imported != null) {
             final Element added = (Element) dstTopic.appendChild(imported);
             mergeTopic(rootChunk, child, added);
-//            } else {
-//                mergeTopic(rootChunk, child, dstTopic);
-//            }
         }
     }
 
@@ -340,7 +302,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final URI href = mapFile.resolve(hrefNode.getValue());
             final ChunkBuilder builder = new ChunkBuilder(COMBINE)
                     .src(href)
-//                .dst(URI.create("#" + href.toString().replaceAll("/:#", "_")))
                     .topicref(elem);
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
                 for (ChunkBuilder chunkBuilder : collect(mapFile, child)) {
@@ -350,8 +311,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             return Collections.singletonList(builder);
         } else if (navtitle != null) {
             final ChunkBuilder builder = new ChunkBuilder(COMBINE)
-//                    .src(href)
-//                .dst(URI.create("#" + href.toString().replaceAll("/:#", "_")))
                     .topicref(elem);
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
                 for (ChunkBuilder chunkBuilder : collect(mapFile, child)) {
