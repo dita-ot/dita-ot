@@ -60,4 +60,9 @@ public class ChunkModuleTest extends AbstractModuleTest {
     public void topichead() {
         test("topichead.ditamap");
     }
+
+    @Test
+    public void map() {
+        test("map.ditamap");
+    }
 }

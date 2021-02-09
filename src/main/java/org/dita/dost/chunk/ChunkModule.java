@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.setFragment;
 import static org.dita.dost.util.XMLUtils.*;
@@ -72,7 +73,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     private void rewriteTopicrefs(final URI mapFile, final List<ChunkOperation> chunks) {
         for (ChunkOperation chunk : chunks) {
             final URI dst = getRelativePath(mapFile.resolve("."), chunk.dst);
-            chunk.topicref.setAttribute(ATTRIBUTE_NAME_HREF, dst.toString());
+            if (!MAP_MAP.matches(chunk.topicref)) {
+                chunk.topicref.setAttribute(ATTRIBUTE_NAME_HREF, dst.toString());
+            }
             if (MAPGROUP_D_TOPICGROUP.matches(chunk.topicref)) {
                 chunk.topicref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
             }
@@ -274,7 +277,23 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      */
     private void walk(final URI mapFile, final Element elem, final List<ChunkOperation> chunks) {
         //   if @chunk = COMBINE
-        if (elem.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(COMBINE.name)) {
+        if (MAP_MAP.matches(elem) && elem.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(COMBINE.name)) {
+            //     create chunk
+            final URI href = URI.create(replaceExtension(mapFile.toString(), ".dita"));
+            final ChunkBuilder builder = new ChunkBuilder(COMBINE)
+                    //.src(href)
+                    .dst(href)
+                    .topicref(elem);
+            //     remove contents
+            //                elem.removeChild(child);
+            getChildElements(elem, MAP_TOPICREF).stream()
+                    .flatMap(child -> collect(mapFile, child).stream())
+                    .forEachOrdered(builder::addChild);
+            // remove @chunk
+            elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+            chunks.add(builder.build());
+            return;
+        } else if (elem.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(COMBINE.name)) {
             //     create chunk
             final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
             final URI href = hrefNode != null ? mapFile.resolve(hrefNode.getValue()) : null;
