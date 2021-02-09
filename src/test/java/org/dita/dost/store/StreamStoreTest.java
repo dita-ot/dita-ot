@@ -8,20 +8,24 @@
 
 package org.dita.dost.store;
 
-import com.google.common.io.Files;
-import net.sf.saxon.s9api.Destination;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XdmNode;
-import org.apache.commons.io.FileUtils;
+import static org.junit.Assert.assertFalse;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import java.io.File;
-import java.io.IOException;
+import com.google.common.io.Files;
+
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmNode;
 
 public class StreamStoreTest {
 
@@ -44,6 +48,11 @@ public class StreamStoreTest {
 
         final Serializer serializer = store.getSerializer(tmpDir.toURI().resolve("foo/bar"));
         serializer.serializeNode(source);
+    }
+    
+    @Test
+    public void getExists() throws IOException, SaxonApiException, URISyntaxException {
+    	assertFalse(store.exists(new URI("http://abc/def")));
     }
 
     @After

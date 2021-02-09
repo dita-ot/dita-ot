@@ -297,8 +297,13 @@ public class StreamStore extends AbstractStore implements Store {
 
     @Override
     public boolean exists(final URI path) {
-        final File d = new File(getUri(URLUtils.setFragment(path, null)));
-        return d.exists();
+    	try {
+    		final File d = new File(getUri(URLUtils.setFragment(path, null)));
+    		return d.exists();
+    	} catch(IllegalArgumentException ex) {
+    		//URI does not have file protocol, assume it does not exist
+    		return false;
+    	}
     }
 
     @Override
