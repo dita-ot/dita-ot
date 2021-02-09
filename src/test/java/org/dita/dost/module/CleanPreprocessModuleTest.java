@@ -8,17 +8,23 @@
 
 package org.dita.dost.module;
 
+import static java.net.URI.create;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.dita.dost.TestUtils;
+import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.XMLUtils;
 import org.junit.Test;
-
-import java.io.File;
-import java.net.URI;
-
-import static java.net.URI.create;
-import static org.junit.Assert.assertEquals;
 
 public class CleanPreprocessModuleTest {
 
@@ -116,4 +122,35 @@ public class CleanPreprocessModuleTest {
         assertEquals(create("file:/foo/bar/"), module.getBaseDir());
     }
 
+    @Test
+    public void reviewRewrite() throws Exception {
+        final File tempDir = new File("").getAbsoluteFile();
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+        job.setInputDir(URI.create("file:/foo/bar/"));
+        job.add(new Builder()
+                .uri(create("map.ditamap"))
+                .isInput(true)
+                .result(create("file:/foo/bar/map.ditamap"))
+                .build());
+        job.add(new Builder()
+                .uri(create("topics/topic.dita"))
+                .result(create("file:/foo/bar/topics/topic.dita"))
+                .build());
+        module.setJob(job);
+        module.setXmlUtils(new XMLUtils());
+        TestLogger logger = new TestUtils.TestLogger(false);
+        module.setLogger(logger);
+        Map<String, String> input = new HashMap<>();
+        input.put("use-result-filename", "true");
+        input.put("result.rewrite-rule.xsl", "abc.xsl");
+        String errorMessage = null;
+        try {
+        	module.execute(input);
+        } catch(Exception ex) {
+        	ex.printStackTrace();
+        	errorMessage = ex.getMessage();
+        }
+        assertTrue("Should have properly tried to locate the abc.xsl which does not exist.", 
+        		errorMessage.contains("Failed to compile XSLT") && errorMessage.contains("abc.xsl"));
+    }
 }
