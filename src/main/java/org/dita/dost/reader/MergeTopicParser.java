@@ -13,6 +13,7 @@ import static org.dita.dost.reader.MergeMapParser.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.URLUtils.setFragment;
 
 import java.io.File;
 import java.net.URI;
@@ -20,6 +21,7 @@ import java.net.URI;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.MergeUtils;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -97,7 +99,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         String idValue = atts.getValue(ATTRIBUTE_NAME_ID);
         if (idValue != null) {
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OID, idValue);
-            final URI value = setFragment(dirPath.toURI().resolve(toURI(filePath)), idValue);
+            final URI value = setFragment(URLUtils.toDirURI(dirPath).resolve(toURI(filePath)), idValue);
             if (util.findId(value)) {
                 idValue = util.getIdValue(value);
             } else {
@@ -128,7 +130,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
             final String topicID = getTopicID(attValue.getFragment());
             final int index = attValue.toString().indexOf(SLASH, sharpIndex);
             final String elementId = index != -1 ? attValue.toString().substring(index) : "";
-            final URI pathWithTopicID = setFragment(dirPath.toURI().resolve(pathFromMap), topicID);
+            final URI pathWithTopicID = setFragment(URLUtils.toDirURI(dirPath).resolve(pathFromMap), topicID);
             if (util.findId(pathWithTopicID)) {// topicId found
                 retAttValue = toURI(SHARP + util.getIdValue(pathWithTopicID) + elementId);
             } else {// topicId not found
@@ -136,7 +138,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
             }
         } else { // href value refer to a topic
             pathFromMap = toURI(filePath).resolve(attValue.toString());
-            URI absolutePath = dirPath.toURI().resolve(pathFromMap);
+            URI absolutePath = URLUtils.toDirURI(dirPath).resolve(pathFromMap);
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, pathFromMap.toString());
             if (util.findId(absolutePath)) {
                 retAttValue = toURI(SHARP + util.getIdValue(absolutePath));

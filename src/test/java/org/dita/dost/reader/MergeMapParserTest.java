@@ -8,21 +8,27 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.UTF8;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.dita.dost.TestUtils;
+import org.dita.dost.store.CacheStore;
 import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.Before;
-import org.xml.sax.SAXException;
-import org.xml.sax.InputSource;
-import org.dita.dost.TestUtils;
-import org.dita.dost.util.Job;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class MergeMapParserTest {
 
@@ -89,6 +95,30 @@ public class MergeMapParserTest {
         output.write("</wrapper>".getBytes(UTF8));
 
         assertXMLEqual(new InputSource(new File(expDir, "mergedsub.xml").toURI().toString()),
+                new InputSource(new ByteArrayInputStream(output.toByteArray())));
+    }
+    
+    @Test
+    public void testCacheStore() throws SAXException, IOException, ParserConfigurationException {
+        final MergeMapParser parser = new MergeMapParser();
+        parser.setLogger(new TestUtils.TestLogger());
+        File tmpDir = new File(resourceDir, "tmpRandom");
+        CacheStore store = new CacheStore(tmpDir, new XMLUtils());
+        Job job = new Job(tmpDir, store);
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document doc = builder.parse(new File(srcDir, "test.ditamap"));
+        store.writeDocument(doc, new File(tmpDir, "test.ditamap").toURI());
+        doc = builder.parse(new File(srcDir, "test.xml"));
+        store.writeDocument(doc, new File(tmpDir, "test.xml").toURI());
+        doc = builder.parse(new File(srcDir, "test2.xml"));
+        store.writeDocument(doc, new File(tmpDir, "test2.xml").toURI());
+        parser.setJob(job);
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        output.write("<wrapper>".getBytes(UTF8));
+        parser.setOutputStream(output);
+        parser.read(new File(tmpDir, "test.ditamap").getAbsoluteFile(), srcDir.getAbsoluteFile());
+        output.write("</wrapper>".getBytes(UTF8));
+        assertXMLEqual(new InputSource(new File(expDir, "merged.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
     }
     

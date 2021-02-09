@@ -26,6 +26,7 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
+import org.dita.dost.store.CacheStore;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
@@ -33,6 +34,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.MergeUtils;
@@ -121,6 +123,37 @@ public class MergeTopicParserTest {
         assertEquals(new URI("test.jpg"), method.invoke(parser, new URI("test.jpg")));
         assertEquals(new URI("images/test.jpg"), method.invoke(parser, new URI("images/test.jpg")));
         assertEquals(new URI("../test.jpg"), method.invoke(parser, new URI("../test.jpg")));
+    }
+    
+    @Test
+    public void testHandleLocalHrefCacheStore() throws Exception {
+    	File tmpDir = new File(resourceDir, "tmpRandom");
+    	CacheStore store = new CacheStore(tmpDir, new XMLUtils());
+    	Job job = new Job(srcDir, store);
+        TestUtils.TestLogger logger = new TestUtils.TestLogger();
+    	final MergeUtils util = new MergeUtils();
+    	util.setLogger(logger);
+    	util.setJob(job);
+    	MergeTopicParser parser = new MergeTopicParser(util);
+    	parser.setLogger(logger);
+    	parser.setJob(job);
+    	parser.setContentHandler(new DefaultHandler());
+    	DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document doc = builder.parse(new File(srcDir, "test.xml"));
+        URI uri = new File(tmpDir, "test.xml").toURI();
+        store.writeDocument(doc, uri);
+    	
+    	parser.setOutput(new File(tmpDir, "test.xml"));
+    	final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalDita", URI.class, AttributesImpl.class);
+    	method.setAccessible(true);
+
+    	parser.parse("test.xml", tmpDir.getAbsoluteFile());
+    	AttributesImpl attrs = new AttributesImpl();
+    	URI val = (URI) method.invoke(parser, new URI("test.jpg"), attrs);
+    	String original = attrs.getValue("ohref");
+    	assertEquals("test.jpg", original);
+    	assertEquals("#unique_7", val.toString());
+    	assertEquals("unique_7", util.getIdValue(new File(tmpDir, "test.jpg").toURI()));
     }
     
 }

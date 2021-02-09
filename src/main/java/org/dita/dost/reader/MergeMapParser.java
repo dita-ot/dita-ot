@@ -32,6 +32,7 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.MergeUtils;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 
 import org.xml.sax.Attributes;
@@ -198,7 +199,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                     if (copyToValue != null && !copyToValue.toString().isEmpty()) {
                         attValue = copyToValue;
                     }
-                    final URI absTarget = dirPath.toURI().resolve(attValue);
+                    final URI absTarget = URLUtils.toDirURI(dirPath).resolve(attValue);
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, ohref.toString());
                     if (util.isVisited(absTarget)) {
                         attValue = toURI(SHARP + util.getIdValue(absTarget));
@@ -224,7 +225,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                             }
                             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId.toString());
                         } else {
-                            final URI fileName = dirPath.toURI().resolve(attValue);
+                        	final URI fileName = URLUtils.toDirURI(dirPath).resolve(attValue);
                             logger.error(MessageUtils.getMessage("DOTX008E", fileName.toString()).toString());
                         }
                     }
