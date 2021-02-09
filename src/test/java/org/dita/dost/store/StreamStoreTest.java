@@ -8,20 +8,32 @@
 
 package org.dita.dost.store;
 
-import com.google.common.io.Files;
-import net.sf.saxon.s9api.Destination;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XdmNode;
-import org.apache.commons.io.FileUtils;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
+import org.xml.sax.helpers.XMLFilterImpl;
 
-import java.io.File;
-import java.io.IOException;
+import com.google.common.io.Files;
+
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmNode;
 
 public class StreamStoreTest {
 
@@ -44,6 +56,26 @@ public class StreamStoreTest {
 
         final Serializer serializer = store.getSerializer(tmpDir.toURI().resolve("foo/bar"));
         serializer.serializeNode(source);
+    }
+    
+    @Test
+    public void transformWithAnchorInURIPath() throws IOException, SaxonApiException, DITAOTException, URISyntaxException {
+    	File target = new File(tmpDir, "source.xml");
+    	FileWriter fw = new FileWriter(target);
+    	fw.write("<root/>");
+    	fw.close();
+    	URI uri = new URI(target.toURI().toString() + "#abc");
+    	String[] startAccumulator = new String[1];
+    	List<XMLFilter> filters = new ArrayList<XMLFilter>();
+    	filters.add(new XMLFilterImpl() {
+    		@Override
+    		public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+    			super.startElement(uri, localName, qName, atts);
+    			startAccumulator[0] = localName;
+    		}
+    	});
+    	store.transform(uri, filters);
+    	assertEquals("root", startAccumulator[0]);
     }
 
     @After

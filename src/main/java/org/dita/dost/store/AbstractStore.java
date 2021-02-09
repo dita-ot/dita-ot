@@ -16,6 +16,7 @@ import org.xml.sax.XMLFilter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
@@ -94,11 +95,23 @@ public abstract class AbstractStore implements Store {
     }
 
     @Override
-    public void transform(final URI src, final List<XMLFilter> filters) throws DITAOTException {
+    public void transform(URI src, final List<XMLFilter> filters) throws DITAOTException {
 //        assert input.isAbsolute();
 //        if (!input.getScheme().equals("file")) {
 //            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
 //        }
+    	//Remove anchor from src if any
+    	if(src != null && src.getFragment() != null) {
+    		String str = src.toString();
+        	if(str != null && str.contains("#")) {
+        		str = str.substring(0, str.indexOf("#"));
+        		try {
+					src = new URI(str);
+				} catch (URISyntaxException e) {
+					//Ignore
+				}
+        	}
+    	}
         final URI dst = toURI(src.toString() + FILE_EXTENSION_TEMP).normalize();
         transformURI(src, dst, filters);
         try {
