@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.getName;
 import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.setFragment;
@@ -119,14 +120,32 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     private ChunkBuilder rewriteChunk(final URI mapFile,
                                       final Map<URI, URI> rewriteMap,
                                       final ChunkOperation rootChunk) {
-        String id = rootChunk.src != null ? getRootTopicId(rootChunk.src) : null;
-        URI dst = rootChunk.src != null ? setFragment(rootChunk.src, id) : mapFile.resolve(GEN_CHUNK_PREFIX + "1.dita");
-        final Collection<URI> values = rewriteMap.values();
-        for (int i = 1; id == null || values.contains(dst); i++) {
-            id = GEN_CHUNK_PREFIX + i;
-            dst = setFragment(rootChunk.src != null
-                    ? setFragment(rootChunk.src, id)
-                    : mapFile.resolve(id + ".dita"), id);
+        String id;
+        URI dst;
+        if (MAP_MAP.matches(rootChunk.topicref)) {
+            id = rootChunk.topicref.getAttribute(ATTRIBUTE_NAME_ID);
+            if (id.isEmpty()) {
+                id = replaceExtension(getName(mapFile.getPath()), "");
+            }
+            dst = URI.create(replaceExtension(mapFile.toString(), ".dita"));
+            final Collection<URI> values = rewriteMap.values();
+//            for (int i = 1; values.contains(dst); i++) {
+//                // FIXME
+//                id = GEN_CHUNK_PREFIX + i;
+//                dst = setFragment(rootChunk.src != null
+//                        ? setFragment(rootChunk.src, id)
+//                        : mapFile.resolve(id + ".dita"), id);
+//            }
+        } else {
+            id = rootChunk.src != null ? getRootTopicId(rootChunk.src) : null;
+            dst = rootChunk.src != null ? setFragment(rootChunk.src, id) : mapFile.resolve(GEN_CHUNK_PREFIX + "1.dita");
+            final Collection<URI> values = rewriteMap.values();
+            for (int i = 1; id == null || values.contains(dst); i++) {
+                id = GEN_CHUNK_PREFIX + i;
+                dst = setFragment(rootChunk.src != null
+                        ? setFragment(rootChunk.src, id)
+                        : mapFile.resolve(id + ".dita"), id);
+            }
         }
         final ChunkBuilder builder = new ChunkBuilder(rootChunk.operation)
                 .topicref(rootChunk.topicref)

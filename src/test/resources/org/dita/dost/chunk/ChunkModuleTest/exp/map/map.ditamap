@@ -1,8 +1,8 @@
 <map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map " ditaarch:DITAArchVersion="2.0"
      specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   ">
-  <topicref class="- map/topicref " href="Chunk1.dita#topic_r4k_cyw_g4b">
-    <topicref class="- map/topicref " href="Chunk1.dita#topic_ayt_dyw_g4b">
-      <topicref class="- map/topicref " href="Chunk1.dita#unique_1"/>
+  <topicref class="- map/topicref " href="map.dita#topic_r4k_cyw_g4b">
+    <topicref class="- map/topicref " href="map.dita#topic_ayt_dyw_g4b">
+      <topicref class="- map/topicref " href="map.dita#unique_1"/>
     </topicref>
   </topicref>
 </map>
