@@ -25,18 +25,25 @@
 
 package org.dita.dost.invoker;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import org.apache.tools.ant.launch.AntMain;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
-import org.apache.tools.ant.launch.AntMain;
+import static java.lang.System.getProperty;
+import static java.lang.Thread.currentThread;
+import static java.nio.file.Paths.get;
+import static java.util.Arrays.asList;
 
 /**
  * Command line entry point into DITA-OT. This class is entered via the canonical
@@ -45,55 +52,40 @@ import org.apache.tools.ant.launch.AntMain;
  */
 public class ProxyMain extends org.apache.tools.ant.Main implements AntMain {
 
-    /**
-     * Start Ant
-     *
-     * @param args command line args
-     * @param additionalUserProperties properties to set beyond those that may
-     *            be specified on the args list
-     * @param coreLoader - not used
-     *
-     * @since Ant 1.6
-     */
     @Override
     public void startAnt(final String[] args, final Properties additionalUserProperties, final ClassLoader coreLoader) {
-    	ClassLoader cl = getClassLoaderWithExpandPaths(Thread.currentThread().getContextClassLoader());
-    	    Thread.currentThread().setContextClassLoader(cl);
-    	    try {
-    	      Class<?> mainClass = cl.loadClass("org.dita.dost.invoker.Main");
-    	      Method method = mainClass.getMethod("startAnt", String[].class, Properties.class, ClassLoader.class);
-    	      method.invoke(mainClass.newInstance(), args, null, null);
-    	    } catch (Exception ex) {
-    	      throw new IllegalStateException(ex);
-    	    }
+        try {
+            ClassLoader classLoader = getClassLoaderWithExpandPaths(currentThread().getContextClassLoader());
+            currentThread().setContextClassLoader(classLoader);
+            Class<?> mainClass = classLoader.loadClass("org.dita.dost.invoker.Main");
+            Method startAnt = mainClass.getMethod("startAnt", String[].class, Properties.class, ClassLoader.class);
+            startAnt.invoke(mainClass.newInstance(), args, additionalUserProperties, classLoader);
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
+        }
     }
-    
-    private ClassLoader getClassLoaderWithExpandPaths(ClassLoader ccl) {
-    	List<URL> expandedURLs = new ArrayList<>();
-    	File envFile = new File(System.getProperty("dita.dir")+File.separator+"config", "env.bat");
-    	try {
-    		BufferedReader reader = new BufferedReader(new FileReader(envFile));
-    		String relJars = null;
-    		
-    		while ((relJars = reader.readLine()) != null) {
-    			relJars = relJars.substring(relJars.indexOf("plugins"),relJars.lastIndexOf("\""));
-    			File libFile = new File(System.getProperty("dita.dir")+File.separator+relJars);
-    			expandedURLs.add(libFile.toURI().toURL());
-    		}
-    		
-    		reader.close();
-    	} catch (IOException e1) {
-    		throw new IllegalStateException(e1);
-    	}
-    	
-    	URL[] urls = ((URLClassLoader) ccl).getURLs();
-    	for (URL url : urls) {
-    		expandedURLs.add(url);
-    	}
-    	
-    	ClassLoader cl = new URLClassLoader(expandedURLs.toArray(new URL[0]), ccl.getParent());
-  
-    	return cl;
+
+    private ClassLoader getClassLoaderWithExpandPaths(ClassLoader ccl) throws IOException {
+        List<URL> expandedURLs = new ArrayList<>();
+        expandedURLs.addAll(getUrlsFromEnv());
+        expandedURLs.addAll(asList(((URLClassLoader) ccl).getURLs()));
+        return new URLClassLoader(expandedURLs.toArray(new URL[0]), ccl.getParent());
     }
-    
+
+    private List<URL> getUrlsFromEnv() throws IOException {
+        Path env = get(getProperty("dita.dir"), "config", "env.bat");
+        return Files.lines(env).map(line -> {
+            String filePath = line.substring(line.indexOf("plugins"), line.lastIndexOf("\""));
+            return toUrl(get(getProperty("dita.dir"), filePath).toUri());
+        }).collect(Collectors.toList());
+    }
+
+    private URL toUrl(URI uri) {
+        try {
+            return uri.toURL();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
