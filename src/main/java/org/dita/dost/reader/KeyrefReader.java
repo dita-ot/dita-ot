@@ -426,7 +426,7 @@ public final class KeyrefReader implements AbstractReader {
                         }
                     });
                 }
-                resMeta.select(child()).forEach(child -> {
+                 defMeta.select(child()).forEach(child -> {
                     try {
                         receiver.append(child.getUnderlyingNode());
                     } catch (XPathException e) {
