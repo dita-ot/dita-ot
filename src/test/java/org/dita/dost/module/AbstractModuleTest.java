@@ -18,6 +18,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -28,6 +29,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -40,8 +42,10 @@ public abstract class AbstractModuleTest {
     private final File expBaseDir = new File(resourceDir, "exp");
     private File tempBaseDir;
     private final DocumentBuilder builder;
+    private final String testCase;
 
-    public AbstractModuleTest() {
+    public AbstractModuleTest(final String testCase) {
+        this.testCase = testCase;
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -100,7 +104,8 @@ public abstract class AbstractModuleTest {
         TestUtils.forceDelete(tempBaseDir);
     }
 
-    public void test(final String testCase) {
+    @Test
+    public void test() {
         final String testName = FilenameUtils.getBaseName(testCase);
         final File tempDir = new File(tempBaseDir, testName);
         final File expDir = new File(expBaseDir, testName);

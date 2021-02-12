@@ -12,13 +12,35 @@ import org.dita.dost.module.AbstractModuleTest;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 
+@RunWith(Parameterized.class)
 public class ChunkModuleTest extends AbstractModuleTest {
+    @Parameters(name = "{0}")
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{
+                {"combine.ditamap"},
+                {"link.ditamap"},
+                {"uplevels.ditamap"},
+                {"format.ditamap"},
+                {"topicgroup.ditamap"},
+                {"topichead.ditamap"},
+                {"map.ditamap"}
+        });
+    }
+
+    public ChunkModuleTest(final String testCase) {
+        super(testCase);
+    }
+
     @Override
     protected AbstractPipelineInput getAbstractPipelineInput() {
         final AbstractPipelineInput input = new PipelineHashIO();
@@ -29,40 +51,5 @@ public class ChunkModuleTest extends AbstractModuleTest {
     @Override
     protected AbstractPipelineModule getModule(final File tempDir) {
         return new ChunkModule();
-    }
-
-    @Test
-    public void combine() {
-        test("combine.ditamap");
-    }
-
-    @Test
-    public void link() {
-        test("link.ditamap");
-    }
-
-    @Test
-    public void uplevels() {
-        test("uplevels.ditamap");
-    }
-
-    @Test
-    public void format() {
-        test("format.ditamap");
-    }
-
-    @Test
-    public void topicgroup() {
-        test("topicgroup.ditamap");
-    }
-
-    @Test
-    public void topichead() {
-        test("topichead.ditamap");
-    }
-
-    @Test
-    public void map() {
-        test("map.ditamap");
     }
 }
