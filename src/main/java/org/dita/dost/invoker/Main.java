@@ -598,6 +598,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      */
     private void runBuild(final ClassLoader coreLoader, Map<String, Object> definedProps) throws BuildException {
         final Project project = new Project();
+        project.addBuildListener(new PerformanceTracker());
         project.setCoreLoader(coreLoader);
 
         Throwable error = null;
