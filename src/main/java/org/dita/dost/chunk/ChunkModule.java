@@ -90,16 +90,19 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     private void rewriteLinks(final Document chunkDoc,
                               final ChunkOperation chunk,
                               final Map<URI, URI> rewriteMap) {
-        for (Element link : getChildElements(chunkDoc.getDocumentElement(), TOPIC_LINK, true)) {
-            final URI href = URLUtils.toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
-            final URI abs = chunk.src.resolve(href);
-            final URI rewrite = rewriteMap.get(abs);
-            if (rewrite != null) {
-                final URI rel = getRelativePath(chunk.src.resolve("."), rewrite);
-                link.setAttribute(ATTRIBUTE_NAME_HREF, rel.toString());
-            } else {
-                final URI rel = getRelativePath(chunk.src.resolve("."), abs);
-                link.setAttribute(ATTRIBUTE_NAME_HREF, rel.toString());
+        final List<Element> elements = toList(chunkDoc.getDocumentElement().getElementsByTagName("*"));
+        for (Element link : elements) {
+            if (TOPIC_LINK.matches(link) ||TOPIC_XREF.matches(link)) {
+                final URI href = URLUtils.toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
+                final URI abs = chunk.src.resolve(href);
+                final URI rewrite = rewriteMap.get(abs);
+                if (rewrite != null) {
+                    final URI rel = getRelativePath(chunk.src.resolve("."), rewrite);
+                    link.setAttribute(ATTRIBUTE_NAME_HREF, rel.toString());
+                } else {
+                    final URI rel = getRelativePath(chunk.src.resolve("."), abs);
+                    link.setAttribute(ATTRIBUTE_NAME_HREF, rel.toString());
+                }
             }
         }
     }
