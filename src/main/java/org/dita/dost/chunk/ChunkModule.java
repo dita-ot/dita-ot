@@ -342,7 +342,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     private List<ChunkBuilder> collect(final URI mapFile, final Element elem) {
         final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
         final Element navtitle = getNavtitle(elem);
-        if (hrefNode != null && isDitaFormat(elem)) {
+        if (hrefNode != null && isDitaFormat(elem) && isLocalScope(elem)) {
             final URI href = mapFile.resolve(hrefNode.getValue());
             final ChunkBuilder builder = new ChunkBuilder(COMBINE)
                     .src(href)
@@ -376,5 +376,15 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     .orElse(null);
         }
         return null;
+    }
+
+    public boolean isDitaFormat(final Element elem) {
+        final String format = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
+        return format.isEmpty() || format.equals(ATTR_FORMAT_VALUE_DITA);
+    }
+
+    public static boolean isLocalScope(final Element elem) {
+        final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
+        return scope.isEmpty() || scope.equals(ATTR_SCOPE_VALUE_LOCAL);
     }
 }

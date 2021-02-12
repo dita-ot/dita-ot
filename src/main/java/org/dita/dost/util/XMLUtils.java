@@ -1263,9 +1263,4 @@ public final class XMLUtils {
             }
         }
     }
-
-    public static boolean isDitaFormat(final Element elem) {
-        final String format = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
-        return format.isEmpty() || format.equals(ATTR_FORMAT_VALUE_DITA);
-    }
 }
