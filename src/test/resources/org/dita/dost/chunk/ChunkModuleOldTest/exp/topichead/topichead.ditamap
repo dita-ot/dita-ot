@@ -1,4 +1,4 @@
-<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map " ditaarch:DITAArchVersion="2.0"
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map " ditaarch:DITAArchVersion="1.3"
      specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   ">
   <topicref chunk="to-content" class="- map/topicref " href="a.dita#topic_r4k_cyw_g4b">
     <topichead class="+ map/topicref mapgroup-d/topichead ">

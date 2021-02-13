@@ -1,12 +1,10 @@
 <dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.3">
-  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="topic"
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="topic_c"
          specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   "
          ditaarch:DITAArchVersion="1.3">
-    <title class="- topic/title ">a</title>
+    <title class="- topic/title ">c</title>
     <body class="- topic/body ">
-      <p class="- topic/p ">
-        <xref class="- topic/xref " href="https://example.com/" format="dita" scope="extenal"/>
-      </p>
+      <p class="- topic/p ">c</p>
     </body>
   </topic>
 </dita>
