@@ -147,7 +147,13 @@ public abstract class AbstractModuleTest {
                 final Document actDoc = getDocument(new File(actDir, exp.getName()));
 //                assertXMLEqual("Comparing " + exp + " to " + new File(actDir, exp.getName()) + ":",
 //                        expDoc, actDoc);
-                assertXMLEqual(expDoc, actDoc);
+                try {
+                    assertXMLEqual(expDoc, actDoc);
+                } catch (AssertionError e) {
+                    System.out.println(exp);
+                    Files.copy(new File(actDir, exp.getName()).toPath(), System.out);
+                    throw e;
+                }
             }
         }
     }

@@ -28,6 +28,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 {"combine.ditamap"},
+                {"dita.ditamap"},
                 {"link.ditamap"},
                 {"uplevels.ditamap"},
                 {"format.ditamap"},

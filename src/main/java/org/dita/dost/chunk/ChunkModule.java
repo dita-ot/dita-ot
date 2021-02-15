@@ -9,6 +9,7 @@
 package org.dita.dost.chunk;
 
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Step;
 import org.dita.dost.chunk.ChunkOperation.ChunkBuilder;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
@@ -27,6 +28,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.sf.saxon.s9api.streams.Steps.attribute;
+import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getName;
@@ -55,17 +57,21 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             rewriteTopicrefs(mapFile, chunks);
             job.getStore().writeDocument(mapDoc, mapFile);
             // for each chunk
-            for (ChunkOperation chunk : chunks) {
-                //   recursively merge chunk topics
-                final Document chunkDoc = merge(chunk);
-                rewriteLinks(chunkDoc, chunk, rewriteMap);
-                chunkDoc.normalizeDocument();
-                job.getStore().writeDocument(chunkDoc, setFragment(chunk.dst, null));
-            }
+            generateChunks(chunks, rewriteMap);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void generateChunks(List<ChunkOperation> chunks, Map<URI, URI> rewriteMap) throws IOException {
+        for (ChunkOperation chunk : chunks) {
+            //   recursively merge chunk topics
+            final Document chunkDoc = merge(chunk);
+            rewriteLinks(chunkDoc, chunk, rewriteMap);
+            chunkDoc.normalizeDocument();
+            job.getStore().writeDocument(chunkDoc, setFragment(chunk.dst, null));
+        }
     }
 
     /**
@@ -92,7 +98,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                               final Map<URI, URI> rewriteMap) {
         final List<Element> elements = toList(chunkDoc.getDocumentElement().getElementsByTagName("*"));
         for (Element link : elements) {
-            if (TOPIC_LINK.matches(link) ||TOPIC_XREF.matches(link)) {
+            if (TOPIC_LINK.matches(link) || TOPIC_XREF.matches(link)) {
                 final URI href = URLUtils.toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
                 final URI abs = chunk.src.resolve(href);
                 final URI rewrite = rewriteMap.get(abs);
@@ -194,7 +200,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     private String getRootTopicId(final URI src) {
         try {
             final XdmNode node = job.getStore().getImmutableNode(src);
-            return node.select(rootElement().then(attribute(ATTRIBUTE_NAME_ID))).asString();
+            final Step<XdmNode> firstTopicId = descendant(TOPIC_TOPIC.matcher()).first()
+                    .then(attribute(ATTRIBUTE_NAME_ID));
+            return node.select(firstTopicId).asString();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -208,9 +216,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         final Document doc;
         if (rootChunk.src != null) {
             doc = job.getStore().getDocument(rootChunk.src);
-            final Element ditaWrapper = createDita(doc);
-            final Element dstTopic = (Element) doc.replaceChild(ditaWrapper, doc.getDocumentElement());
-            ditaWrapper.appendChild(dstTopic);
+            Element dstTopic = doc.getDocumentElement();
+            if (dstTopic.getNodeName().equals(ELEMENT_NAME_DITA)) {
+                dstTopic = getLastChildTopic(dstTopic);
+            } else {
+                final Element ditaWrapper = createDita(doc);
+                dstTopic = (Element) doc.replaceChild(ditaWrapper, doc.getDocumentElement());
+                ditaWrapper.appendChild(dstTopic);
+            }
             mergeTopic(rootChunk, rootChunk, dstTopic);
         } else {
             final Element navtitle = getNavtitle(rootChunk.topicref);
@@ -255,23 +268,57 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                             final ChunkOperation chunk,
                             final Element dstTopic) throws IOException {
         for (ChunkOperation child : chunk.children) {
-            final Element imported;
+            Element added;
             if (child.src != null) {
                 final Document chunkDoc = job.getStore().getDocument(child.src);
-                final Element topic = chunkDoc.getDocumentElement();
-                imported = (Element) dstTopic.getOwnerDocument().importNode(topic, true);
-                rewriteTopicId(imported, child.id);
-                relativizeLinks(imported, child.src, rootChunk.dst);
+                final Element root = chunkDoc.getDocumentElement();
+                if (root.getNodeName().equals(ELEMENT_NAME_DITA)) {
+                    final List<Element> rootTopics = getChildElements(root, TOPIC_TOPIC);
+                    int i = 1;
+                    for (final Element topic : rootTopics) {
+                        final Element imported;
+                        imported = (Element) dstTopic.getOwnerDocument().importNode(topic, true);
+                        rewriteTopicId(imported, child.id);
+                        relativizeLinks(imported, child.src, rootChunk.dst);
+                        added = (Element) dstTopic.appendChild(imported);
+//                        if (i++ == rootTopics.size()) {
+//                        }
+                    }
+                    mergeTopic(rootChunk, child, dstTopic);
+                } else {
+                    final Element imported = (Element) dstTopic.getOwnerDocument().importNode(root, true);
+                    rewriteTopicId(imported, child.id);
+                    relativizeLinks(imported, child.src, rootChunk.dst);
+                    added = (Element) dstTopic.appendChild(imported);
+                    mergeTopic(rootChunk, child, added);
+                }
             } else {
-                imported = createTopic(dstTopic.getOwnerDocument(), child.id);
+                final Element imported = createTopic(dstTopic.getOwnerDocument(), child.id);
                 final Element navtitle = getNavtitle(child.topicref);
                 if (navtitle != null) {
                     imported.appendChild(createTitle(dstTopic.getOwnerDocument(), navtitle));
                 }
+                added = (Element) dstTopic.appendChild(imported);
+                mergeTopic(rootChunk, child, added);
             }
-            final Element added = (Element) dstTopic.appendChild(imported);
-            mergeTopic(rootChunk, child, added);
         }
+    }
+
+    private List<Element> getRootTopics(final Document chunkDoc) {
+        final Element root = chunkDoc.getDocumentElement();
+        if (root.getNodeName().equals(ELEMENT_NAME_DITA)) {
+            return getChildElements(root, TOPIC_TOPIC);
+        } else {
+            return Collections.singletonList(root);
+        }
+    }
+
+    private Element getLastChildTopic(final Element dita) {
+        final List<Element> childElements = getChildElements(dita, TOPIC_TOPIC);
+        if (childElements.isEmpty()) {
+            return null;
+        }
+        return childElements.get(childElements.size() - 1);
     }
 
     private Element createTopic(final Document doc, final String id) {
