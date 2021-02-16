@@ -32,6 +32,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
                 {"link.ditamap"},
                 {"uplevels.ditamap"},
                 {"format.ditamap"},
+                {"nested.ditamap"},
                 {"scope.ditamap"},
                 {"topicgroup.ditamap"},
                 {"topichead.ditamap"},

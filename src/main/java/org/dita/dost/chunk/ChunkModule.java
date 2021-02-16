@@ -17,10 +17,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import org.w3c.dom.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -146,7 +143,13 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 //                        : mapFile.resolve(id + ".dita"), id);
 //            }
         } else {
-            id = rootChunk.src != null ? getRootTopicId(rootChunk.src) : null;
+            if (rootChunk.src != null && rootChunk.src.getFragment() != null) {
+                id = rootChunk.src.getFragment();
+            } else if (rootChunk.src != null) {
+                id = getRootTopicId(rootChunk.src);
+            } else {
+                id = null;
+            }
             dst = rootChunk.src != null ? setFragment(rootChunk.src, id) : mapFile.resolve(GEN_CHUNK_PREFIX + "1.dita");
             final Collection<URI> values = rewriteMap.values();
             for (int i = 1; id == null || values.contains(dst); i++) {
@@ -175,7 +178,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     private ChunkBuilder rewriteChunkChild(final Map<URI, URI> rewriteMap,
                                            final URI rootChunkSrc,
                                            final ChunkOperation chunk) {
-        String id = chunk.src != null ? getRootTopicId(chunk.src) : null;
+        String id;
+        if (chunk.src != null && chunk.src.getFragment() != null) {
+            id = chunk.src.getFragment();
+        } else if (chunk.src != null) {
+            id = getRootTopicId(chunk.src);
+        } else {
+            id = null;
+        }
         URI dst = setFragment(rootChunkSrc, id);
         final Collection<URI> values = rewriteMap.values();
         for (int i = 1; id == null || values.contains(dst); i++) {
@@ -215,13 +225,16 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     private Document merge(final ChunkOperation rootChunk) throws IOException {
         final Document doc;
         if (rootChunk.src != null) {
-            doc = job.getStore().getDocument(rootChunk.src);
-            Element dstTopic = doc.getDocumentElement();
+            Element dstTopic = getElement(rootChunk.src);
+            doc = dstTopic.getOwnerDocument();
             if (dstTopic.getNodeName().equals(ELEMENT_NAME_DITA)) {
                 dstTopic = getLastChildTopic(dstTopic);
             } else {
                 final Element ditaWrapper = createDita(doc);
-                dstTopic = (Element) doc.replaceChild(ditaWrapper, doc.getDocumentElement());
+                doc.replaceChild(ditaWrapper, doc.getDocumentElement());
+                if (dstTopic.getParentNode() != null) {
+                    dstTopic = (Element) dstTopic.getParentNode().removeChild(dstTopic);
+                }
                 ditaWrapper.appendChild(dstTopic);
             }
             mergeTopic(rootChunk, rootChunk, dstTopic);
@@ -270,8 +283,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         for (ChunkOperation child : chunk.children) {
             Element added;
             if (child.src != null) {
-                final Document chunkDoc = job.getStore().getDocument(child.src);
-                final Element root = chunkDoc.getDocumentElement();
+                final Element root = getElement(child.src);
                 if (root.getNodeName().equals(ELEMENT_NAME_DITA)) {
                     final List<Element> rootTopics = getChildElements(root, TOPIC_TOPIC);
                     int i = 1;
@@ -301,6 +313,23 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 added = (Element) dstTopic.appendChild(imported);
                 mergeTopic(rootChunk, child, added);
             }
+        }
+    }
+
+    private Element getElement(URI src) throws IOException {
+        final Document chunkDoc = job.getStore().getDocument(src);
+        if (src.getFragment() != null) {
+            final NodeList children = chunkDoc.getElementsByTagName("*") ;
+            for (int i = 0; i < children.getLength(); i++) {
+                final Node child = children.item(i);
+                if (TOPIC_TOPIC.matches(child)
+                        && ((Element)child).getAttribute(ATTRIBUTE_NAME_ID).equals(src.getFragment())) {
+                    return (Element) child;
+                }
+            }
+            return null;
+        } else {
+            return chunkDoc.getDocumentElement();
         }
     }
 
