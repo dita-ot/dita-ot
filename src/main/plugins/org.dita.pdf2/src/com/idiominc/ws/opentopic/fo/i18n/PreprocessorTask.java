@@ -1,27 +1,26 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
-import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
-import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
-
-import java.io.File;
-import java.net.URI;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.dom.DOMSource;
-
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.s9api.XsltExecutable;
+import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.XMLCatalog;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.DelegatingURIResolver;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
-import net.sf.saxon.s9api.XsltExecutable;
-import net.sf.saxon.s9api.XsltTransformer;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.dom.DOMSource;
+import java.io.File;
+import java.net.URI;
+
+import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
+import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -80,25 +79,14 @@ public class PreprocessorTask extends Task {
 
              if (style != null) {
                  log("Loading stylesheet " + style, Project.MSG_INFO);
-                 final XsltExecutable compile = xmlUtils.getProcessor().newXsltCompiler().compile(job.getStore().getSource(style));
+                 final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
+                 final URIResolver resolver = new DelegatingURIResolver(
+                         xmlcatalog != null ? xmlcatalog : CatalogUtils.getCatalogResolver(),
+                         job.getStore());
+                 xsltCompiler.setURIResolver(resolver);
+                 final XsltExecutable compile = xsltCompiler.compile(job.getStore().getSource(style));
                  final XsltTransformer t = compile.load();
-                 if(xmlcatalog != null) {
-                	 URIResolver baseResolver = t.getURIResolver();
-                	 if(baseResolver == null) {
-                		 t.setURIResolver(xmlcatalog);
-                	 } else {
-                		 t.setURIResolver(new URIResolver() {
-                			 @Override
-                			 public Source resolve(String href, String base) throws TransformerException {
-                				 Source src = xmlcatalog.resolve(href, base);
-                				 if(src == null) {
-                					 src = baseResolver.resolve(href, base);
-                				 }
-                				 return src;
-                			 }
-                		 });
-                	 }
-                 }
+                 t.setURIResolver(resolver);
                  t.setSource(new DOMSource(document));
                  t.setDestination(job.getStore().getDestination(output));
                  t.transform();
