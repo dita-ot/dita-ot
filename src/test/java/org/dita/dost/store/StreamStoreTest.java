@@ -11,6 +11,7 @@ package org.dita.dost.store;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.XMLUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,7 +22,12 @@ import org.w3c.dom.Document;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertFalse;
@@ -117,5 +123,13 @@ public class StreamStoreTest {
     @Test(expected = IOException.class)
     public void move_WhenDstIsHttp_ShouldThrowException() throws IOException {
         store.move(tmpDir.toPath().resolve("src.xml").toUri(), URI.create("http://dst.xml"));
+    }
+
+    @Test
+    public void transformWithAnchorInURIPath() throws IOException, DITAOTException, URISyntaxException {
+    	final Path target = Paths.get(tmpDir.getAbsolutePath(), "source.xml");
+        Files.write(target, "<root/>".getBytes(StandardCharsets.UTF_8));
+        final URI uri = new URI(target.toUri().toString() + "#abc");
+    	store.transform(uri, Collections.emptyList());
     }
 }
