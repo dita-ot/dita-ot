@@ -8,9 +8,16 @@
 
 package org.dita.dost.module;
 
-import static java.net.URI.create;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.dita.dost.TestUtils;
+import org.dita.dost.TestUtils.TestLogger;
+import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo.Builder;
+import org.dita.dost.util.XMLUtils;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,17 +25,26 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.dita.dost.TestUtils;
-import org.dita.dost.TestUtils.TestLogger;
-import org.dita.dost.store.StreamStore;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.Job.FileInfo.Builder;
-import org.dita.dost.util.XMLUtils;
-import org.junit.Test;
+import static java.net.URI.create;
+import static org.junit.Assert.assertEquals;
 
 public class CleanPreprocessModuleTest {
 
-    private final CleanPreprocessModule module = new CleanPreprocessModule();
+    private CleanPreprocessModule module;
+    private XMLUtils xmlUtils;
+    private Job job;
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    @Before
+    public void setUp() throws IOException {
+        module = new CleanPreprocessModule();
+        xmlUtils = new XMLUtils();
+        final File tempDir = temporaryFolder.newFolder();
+        job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
+        module.setJob(job);
+    }
 
     @Test
     public void getCommonBase() {
@@ -41,8 +57,6 @@ public class CleanPreprocessModuleTest {
 
     @Test
     public void getBaseDir() throws Exception {
-        final File tempDir = new File("").getAbsoluteFile();
-        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(URI.create("file:/foo/bar/"));
         job.add(new Builder()
                 .uri(create("map.ditamap"))
@@ -64,14 +78,12 @@ public class CleanPreprocessModuleTest {
                 .uri(create("common/topic.dita"))
                 .result(create("file:/foo/bar/common/topic.dita"))
                 .build());
-        module.setJob(job);
+
         assertEquals(create("file:/foo/bar/"), module.getBaseDir());
     }
 
     @Test
     public void getBaseDirExternal() throws Exception {
-        final File tempDir = new File("").getAbsoluteFile();
-        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(URI.create("file:/foo/bar/"));
         job.add(new Builder()
                 .uri(create("map.ditamap"))
@@ -82,14 +94,12 @@ public class CleanPreprocessModuleTest {
                 .uri(create("topics/topic.dita"))
                 .result(create("https://example.com/topics/bar/topics/topic.dita"))
                 .build());
-        module.setJob(job);
+
         assertEquals(create("file:/foo/bar/"), module.getBaseDir());
     }
 
     @Test
     public void getBaseDirSubdir() throws Exception {
-        final File tempDir = new File("").getAbsoluteFile();
-        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(URI.create("file:/foo/bar/maps/"));
         job.add(new Builder()
                 .uri(create("maps/map.ditamap"))
@@ -100,14 +110,12 @@ public class CleanPreprocessModuleTest {
                 .uri(create("topics/topic.dita"))
                 .result(create("file:/foo/bar/topics/topic.dita"))
                 .build());
-        module.setJob(job);
+
         assertEquals(create("file:/foo/bar/"), module.getBaseDir());
     }
 
     @Test
     public void getBaseDirSupdir() throws Exception {
-        final File tempDir = new File("").getAbsoluteFile();
-        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(URI.create("file:/foo/bar/maps/"));
         job.add(new Builder()
                 .uri(create("maps/map.ditamap"))
@@ -118,39 +126,19 @@ public class CleanPreprocessModuleTest {
                 .uri(create("topics/topic.dita"))
                 .result(create("file:/foo/bar/topic.dita"))
                 .build());
-        module.setJob(job);
+
         assertEquals(create("file:/foo/bar/"), module.getBaseDir());
     }
 
-    @Test
-    public void reviewRewrite() throws Exception {
-        final File tempDir = new File("").getAbsoluteFile();
-        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
-        job.setInputDir(URI.create("file:/foo/bar/"));
-        job.add(new Builder()
-                .uri(create("map.ditamap"))
-                .isInput(true)
-                .result(create("file:/foo/bar/map.ditamap"))
-                .build());
-        job.add(new Builder()
-                .uri(create("topics/topic.dita"))
-                .result(create("file:/foo/bar/topics/topic.dita"))
-                .build());
+    @Test(expected = RuntimeException.class)
+    public void RewriteRule_WhenStylesheetNotFound_ShouldThrowException() throws Exception {
         module.setJob(job);
-        module.setXmlUtils(new XMLUtils());
-        TestLogger logger = new TestUtils.TestLogger(false);
+        module.setXmlUtils(xmlUtils);
+        final TestLogger logger = new TestUtils.TestLogger(false);
         module.setLogger(logger);
-        Map<String, String> input = new HashMap<>();
-        input.put("use-result-filename", "true");
+        final Map<String, String> input = new HashMap<>();
         input.put("result.rewrite-rule.xsl", "abc.xsl");
-        String errorMessage = null;
-        try {
-        	module.execute(input);
-        } catch(Exception ex) {
-        	ex.printStackTrace();
-        	errorMessage = ex.getMessage();
-        }
-        assertTrue("Should have properly tried to locate the abc.xsl which does not exist.", 
-        		errorMessage.contains("Failed to compile XSLT") && errorMessage.contains("abc.xsl"));
+
+        module.execute(input);
     }
 }
