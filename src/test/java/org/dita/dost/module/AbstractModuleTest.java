@@ -15,6 +15,7 @@ import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -30,11 +31,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractModuleTest {
 
@@ -155,6 +155,13 @@ public abstract class AbstractModuleTest {
                     throw e;
                 }
             }
+        }
+        if (new File(expDir, ".job.xml").exists()) {
+            final Job expJob = new Job(actDir, new StreamStore(actDir, new XMLUtils()));
+            final Job actJob = new Job(expDir, new StreamStore(expDir, new XMLUtils()));
+            final Collection<FileInfo> expFileInfo = new HashSet(expJob.getFileInfo());
+            final Collection<FileInfo> actFileInfo = new HashSet(actJob.getFileInfo());
+            assertEquals(expFileInfo, actFileInfo);
         }
     }
 

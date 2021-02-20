@@ -22,7 +22,9 @@ import org.w3c.dom.*;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
@@ -55,10 +57,31 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             job.getStore().writeDocument(mapDoc, mapFile);
             // for each chunk
             generateChunks(chunks, rewriteMap);
+            removeChunkSources(chunks);
+            job.write();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void removeChunkSources(List<ChunkOperation> chunks) {
+        final Set<URI> sources = new HashSet<>();
+        collect(chunks, chunk -> chunk.src, sources);
+        final Set<URI> destinations = new HashSet<>();
+        collect(chunks, chunk -> chunk.dst, destinations);
+        final Set<URI> removed = sources.stream().filter(dst -> !destinations.contains(dst)).collect(Collectors.toSet());
+        removed.forEach(tmp -> job.remove(job.getFileInfo(tmp)));
+    }
+
+    private void collect(List<ChunkOperation> chunks, final Function<ChunkOperation, URI> pick, Set<URI> res) {
+        for (ChunkOperation chunk : chunks) {
+            final URI uri = pick.apply(chunk);
+            if (uri != null) {
+                res.add(setFragment(uri, null));
+            }
+            collect(chunk.children, pick, res);
+        }
     }
 
     private void generateChunks(List<ChunkOperation> chunks, Map<URI, URI> rewriteMap) throws IOException {
@@ -68,6 +91,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             rewriteLinks(chunkDoc, chunk, rewriteMap);
             chunkDoc.normalizeDocument();
             job.getStore().writeDocument(chunkDoc, setFragment(chunk.dst, null));
+            // FIXME: Add missing FileInfo to Job
         }
     }
 
