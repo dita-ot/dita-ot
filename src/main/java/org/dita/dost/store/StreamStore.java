@@ -30,6 +30,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 
 import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
@@ -280,36 +281,45 @@ public class StreamStore extends AbstractStore implements Store {
     }
 
     public void copy(final URI src, final URI dst) throws IOException {
-        final File s = new File(getUri((src.isAbsolute() ? src : tempDirUri.resolve(src)).normalize()));
-        final File d = new File(getUri((dst.isAbsolute() ? dst : tempDirUri.resolve(dst)).normalize()));
-        copyFile(s, d);
+        if (Objects.equals(src.getScheme(), "file") && Objects.equals(dst.getScheme(), "file")) {
+            final File s = new File(getUri((src.isAbsolute() ? src : tempDirUri.resolve(src)).normalize()));
+            final File d = new File(getUri((dst.isAbsolute() ? dst : tempDirUri.resolve(dst)).normalize()));
+            copyFile(s, d);
+        } else {
+            throw new IOException(String.format("Unable to copy non-file resource %s to %s", src, dst));
+        }
     }
 
     @Override
     public void move(final URI src, final URI dst) throws IOException {
-        final File s = new File(getUri((src.isAbsolute() ? src : tempDirUri.resolve(src)).normalize()));
-        final File d = new File(getUri((dst.isAbsolute() ? dst : tempDirUri.resolve(dst)).normalize()));
-        if (d.exists()) {
-            forceDelete(d);
+        if (Objects.equals(src.getScheme(), "file") && Objects.equals(dst.getScheme(), "file")) {
+            final File s = new File(getUri((src.isAbsolute() ? src : tempDirUri.resolve(src)).normalize()));
+            final File d = new File(getUri((dst.isAbsolute() ? dst : tempDirUri.resolve(dst)).normalize()));
+            if (d.exists()) {
+                forceDelete(d);
+            }
+            moveFile(s, d);
+        } else {
+            throw new IOException(String.format("Unable to move non-file resource %s to %s", src, dst));
         }
-        moveFile(s, d);
     }
 
     @Override
     public boolean exists(final URI path) {
-    	try {
-    		final File d = new File(getUri(URLUtils.setFragment(path, null)));
-    		return d.exists();
-    	} catch(IllegalArgumentException ex) {
-    		//URI does not have file protocol, assume it does not exist
-    		return false;
-    	}
+        if (Objects.equals(path.getScheme(), "file")) {
+            final File d = new File(getUri(URLUtils.setFragment(path, null)));
+            return d.exists();
+        }
+        return false;
     }
 
     @Override
     public long getLastModified(final URI path) {
-        final File d = new File(getUri(URLUtils.setFragment(path, null)));
-        return d.lastModified();
+        if (Objects.equals(path.getScheme(), "file")) {
+            final File d = new File(getUri(URLUtils.setFragment(path, null)));
+            return d.lastModified();
+        }
+        return -1;
     }
 
     @Override
