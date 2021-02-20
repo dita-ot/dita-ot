@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
+import static org.dita.dost.util.URLUtils.setFragment;
 import static org.dita.dost.util.URLUtils.toURI;
 
 /**
@@ -100,26 +101,15 @@ public abstract class AbstractStore implements Store {
 //        if (!input.getScheme().equals("file")) {
 //            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
 //        }
-    	//Remove anchor from src if any
-    	if(src != null && src.getFragment() != null) {
-    		String str = src.toString();
-        	if(str != null && str.contains("#")) {
-        		str = str.substring(0, str.indexOf("#"));
-        		try {
-					src = new URI(str);
-				} catch (URISyntaxException e) {
-					//Ignore
-				}
-        	}
-    	}
-        final URI dst = toURI(src.toString() + FILE_EXTENSION_TEMP).normalize();
-        transformURI(src, dst, filters);
+        final URI srcFile = setFragment(src, null);
+        final URI dst = toURI(srcFile.toString() + FILE_EXTENSION_TEMP).normalize();
+        transformURI(srcFile, dst, filters);
         try {
-            move(dst, src);
+            move(dst, srcFile);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final IOException e) {
-            throw new DITAOTException("Failed to replace " + src + ": " + e.getMessage());
+            throw new DITAOTException("Failed to replace " + srcFile + ": " + e.getMessage());
         }
     }
 
