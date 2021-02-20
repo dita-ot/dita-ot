@@ -8,12 +8,11 @@
 
 package org.dita.dost.store;
 
-import com.google.common.io.Files;
-import net.sf.saxon.s9api.Destination;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
 import org.apache.commons.io.FileUtils;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -22,6 +21,13 @@ import org.w3c.dom.Document;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 
 public class StreamStoreTest {
 
@@ -32,7 +38,7 @@ public class StreamStoreTest {
     @Before
     public void setUp() throws Exception {
         xmlUtils = new XMLUtils();
-        tmpDir = Files.createTempDir();
+        tmpDir = Files.createTempDirectory(StreamStoreTest.class.getName()).toFile();
         store = new StreamStore(tmpDir, xmlUtils);
     }
 
@@ -45,10 +51,17 @@ public class StreamStoreTest {
         final Serializer serializer = store.getSerializer(tmpDir.toURI().resolve("foo/bar"));
         serializer.serializeNode(source);
     }
+    
+    @Test
+    public void transformWithAnchorInURIPath() throws IOException, DITAOTException, URISyntaxException {
+    	final Path target = Paths.get(tmpDir.getAbsolutePath(), "source.xml");
+        Files.write(target, "<root/>".getBytes(StandardCharsets.UTF_8));
+        final URI uri = new URI(target.toUri().toString() + "#abc");
+    	store.transform(uri, Collections.emptyList());
+    }
 
     @After
     public void tearDown() throws Exception {
-//        FileUtils.deleteDirectory(tmpDir);
-        System.out.println(tmpDir);
+        FileUtils.deleteDirectory(tmpDir);
     }
 }

@@ -16,9 +16,11 @@ import org.xml.sax.XMLFilter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
+import static org.dita.dost.util.URLUtils.setFragment;
 import static org.dita.dost.util.URLUtils.toURI;
 
 /**
@@ -94,19 +96,20 @@ public abstract class AbstractStore implements Store {
     }
 
     @Override
-    public void transform(final URI src, final List<XMLFilter> filters) throws DITAOTException {
+    public void transform(URI src, final List<XMLFilter> filters) throws DITAOTException {
 //        assert input.isAbsolute();
 //        if (!input.getScheme().equals("file")) {
 //            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
 //        }
-        final URI dst = toURI(src.toString() + FILE_EXTENSION_TEMP).normalize();
-        transformURI(src, dst, filters);
+        final URI srcFile = setFragment(src, null);
+        final URI dst = toURI(srcFile.toString() + FILE_EXTENSION_TEMP).normalize();
+        transformURI(srcFile, dst, filters);
         try {
-            move(dst, src);
+            move(dst, srcFile);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final IOException e) {
-            throw new DITAOTException("Failed to replace " + src + ": " + e.getMessage());
+            throw new DITAOTException("Failed to replace " + srcFile + ": " + e.getMessage());
         }
     }
 
