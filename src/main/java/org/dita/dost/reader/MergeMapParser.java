@@ -225,7 +225,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                             }
                             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId.toString());
                         } else {
-                        	final URI fileName = URLUtils.toDirURI(dirPath).resolve(attValue);
+                            final URI fileName = URLUtils.toDirURI(dirPath).resolve(attValue);
                             logger.error(MessageUtils.getMessage("DOTX008E", fileName.toString()).toString());
                         }
                     }
