@@ -594,7 +594,7 @@ public class TestKeyrefReader {
         assertEquals("topic-copy.dita", root.get("copy").href.toString());
     }
     
-	@Test
+    @Test
     public void testIntermediaryKeyRefCopyMetadata() throws DITAOTException {
         final File filename = new File(srcDir, "intermediaryKeyref.ditamap");
         keyrefreader.read(filename.toURI(), readMap(filename));
