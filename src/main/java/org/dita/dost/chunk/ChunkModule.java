@@ -33,8 +33,7 @@ import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getName;
 import static org.dita.dost.util.FileUtils.replaceExtension;
-import static org.dita.dost.util.URLUtils.getRelativePath;
-import static org.dita.dost.util.URLUtils.setFragment;
+import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
 public class ChunkModule extends AbstractPipelineModuleImpl {
@@ -91,11 +90,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                         .filter(chunk ->
                                 chunk.src != null &&
                                         (chunk.dst != null
-                                                ? setFragment(chunk.dst, null).equals(tmp)
+                                                ? removeFragment(chunk.dst).equals(tmp)
                                                 : false)
                         )
                         .findAny()
-                        .flatMap(chunk -> Optional.ofNullable(job.getFileInfo(setFragment(chunk.src, null))))
+                        .flatMap(chunk -> Optional.ofNullable(job.getFileInfo(removeFragment(chunk.src))))
                         .orElse(null);
                 final Builder builder = src != null ? FileInfo.builder(src) : FileInfo.builder();
                 final URI dstRel = job.tempDirURI.relativize(tmp);
@@ -114,7 +113,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         for (ChunkOperation chunk : chunks) {
             final URI uri = pick.apply(chunk);
             if (uri != null) {
-                res.add(setFragment(uri, null));
+                res.add(removeFragment(uri));
             }
             collect(chunk.children, pick, res);
         }
@@ -126,11 +125,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final Document chunkDoc = merge(chunk);
             rewriteLinks(chunkDoc, chunk, rewriteMap);
             chunkDoc.normalizeDocument();
-            final URI dst = setFragment(chunk.dst, null);
+            final URI dst = removeFragment(chunk.dst);
             job.getStore().writeDocument(chunkDoc, dst);
 
 //            if (job.getFileInfo(dst) == null) {
-//                final FileInfo src = chunk.src != null ? job.getFileInfo(setFragment(chunk.src, null)) : null;
+//                final FileInfo src = chunk.src != null ? job.getFileInfo(removeFragment(chunk.src, null)) : null;
 //                final FileInfo.Builder builder = src != null ? FileInfo.builder(src) : FileInfo.builder();
 //                final URI dstRel = job.tempDirURI.relativize(dst);
 //                final FileInfo dstFi = builder
