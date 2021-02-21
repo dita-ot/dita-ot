@@ -186,6 +186,17 @@ public class URLUtilsTest {
         assertEquals(new URI("urn:foo:bar#baz"), URLUtils.setFragment(new URI("urn:foo:bar"), "baz"));
         assertEquals(new URI("urn:foo:bar"), URLUtils.setFragment(new URI("urn:foo:bar"), null));
     }
+
+    @Test
+    public void testRemoveFragment() throws URISyntaxException {
+        assertEquals(new URI("foo"), URLUtils.removeFragment(new URI("foo#bar")));
+        assertEquals(new URI("foo"), URLUtils.removeFragment(new URI("foo#")));
+        assertEquals(new URI("foo"), URLUtils.removeFragment(new URI("foo")));
+        assertEquals(new URI(""), URLUtils.removeFragment(new URI("#bar")));
+        assertEquals(new URI("file:/foo/bar"), URLUtils.removeFragment(new URI("file:/foo/bar")));
+        assertEquals(new URI("file://localhost/foo/bar"), URLUtils.removeFragment(new URI("file://localhost/foo/bar")));
+        assertEquals(new URI("urn:foo:bar"), URLUtils.removeFragment(new URI("urn:foo:bar")));
+    }
     
     @Test
     public void testStripFragment() throws URISyntaxException {

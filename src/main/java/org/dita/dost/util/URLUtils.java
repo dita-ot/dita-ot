@@ -561,6 +561,16 @@ public final class URLUtils {
     }
 
     /**
+     * Remove fragment from URI.
+     *
+     * @param path remove fragment from this URI
+     * @return URI without fragment.
+     */
+    public static URI removeFragment(final URI path) {
+        return setFragment(path, null);
+    }
+
+    /**
      * Create new URI with a given path.
      *
      * @param orig URI to set path on
