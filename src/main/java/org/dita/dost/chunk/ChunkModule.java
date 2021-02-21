@@ -13,9 +13,11 @@ import net.sf.saxon.s9api.streams.Step;
 import org.dita.dost.chunk.ChunkOperation.ChunkBuilder;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
+import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.URLUtils;
 import org.w3c.dom.*;
 
@@ -24,7 +26,6 @@ import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
@@ -40,9 +41,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
     static final String GEN_CHUNK_PREFIX = "Chunk";
     static final String GEN_UNIQUE_PREFIX = "unique_";
+    private TempFileNameScheme tempFileNameScheme;
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
+        init();
         try {
             // read modifiable map
             final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
@@ -65,6 +68,15 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
+    private void init() {
+        try {
+            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        tempFileNameScheme.setBaseDir(job.getInputDir());
+    }
+
     private void removeChunkSources(List<ChunkOperation> chunks) {
         final Set<URI> sources = new HashSet<>();
         collect(chunks, chunk -> chunk.src, sources);
@@ -72,6 +84,30 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         collect(chunks, chunk -> chunk.dst, destinations);
         final Set<URI> removed = sources.stream().filter(dst -> !destinations.contains(dst)).collect(Collectors.toSet());
         removed.forEach(tmp -> job.remove(job.getFileInfo(tmp)));
+        final Set<URI> added = destinations.stream().filter(dst -> !sources.contains(dst)).collect(Collectors.toSet());
+        added.forEach(tmp -> {
+            if (job.getFileInfo(tmp) == null) {
+                final FileInfo src = chunks.stream()
+                        .filter(chunk ->
+                                chunk.src != null &&
+                                        (chunk.dst != null
+                                                ? setFragment(chunk.dst, null).equals(tmp)
+                                                : false)
+                        )
+                        .findAny()
+                        .flatMap(chunk -> Optional.ofNullable(job.getFileInfo(setFragment(chunk.src, null))))
+                        .orElse(null);
+                final Builder builder = src != null ? FileInfo.builder(src) : FileInfo.builder();
+                final URI dstRel = job.tempDirURI.relativize(tmp);
+//                final URI result = src != null && src.result != null ? src.result.resolve(tmp) : toDirURI(job.getOutputDir()).resolve(tmp);
+                final FileInfo dstFi = builder
+                        .uri(dstRel)
+                        .format(ATTR_FORMAT_VALUE_DITA)
+//                        .result(result)
+                        .build();
+                job.add(dstFi);
+            }
+        });
     }
 
     private void collect(List<ChunkOperation> chunks, final Function<ChunkOperation, URI> pick, Set<URI> res) {
@@ -90,8 +126,19 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final Document chunkDoc = merge(chunk);
             rewriteLinks(chunkDoc, chunk, rewriteMap);
             chunkDoc.normalizeDocument();
-            job.getStore().writeDocument(chunkDoc, setFragment(chunk.dst, null));
-            // FIXME: Add missing FileInfo to Job
+            final URI dst = setFragment(chunk.dst, null);
+            job.getStore().writeDocument(chunkDoc, dst);
+
+//            if (job.getFileInfo(dst) == null) {
+//                final FileInfo src = chunk.src != null ? job.getFileInfo(setFragment(chunk.src, null)) : null;
+//                final FileInfo.Builder builder = src != null ? FileInfo.builder(src) : FileInfo.builder();
+//                final URI dstRel = job.tempDirURI.relativize(dst);
+//                final FileInfo dstFi = builder
+//                        .uri(dstRel)
+//                        // FIXME add result
+//                        .build();
+//                job.add(dstFi);
+//            }
         }
     }
 
@@ -343,11 +390,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     private Element getElement(URI src) throws IOException {
         final Document chunkDoc = job.getStore().getDocument(src);
         if (src.getFragment() != null) {
-            final NodeList children = chunkDoc.getElementsByTagName("*") ;
+            final NodeList children = chunkDoc.getElementsByTagName("*");
             for (int i = 0; i < children.getLength(); i++) {
                 final Node child = children.item(i);
                 if (TOPIC_TOPIC.matches(child)
-                        && ((Element)child).getAttribute(ATTRIBUTE_NAME_ID).equals(src.getFragment())) {
+                        && ((Element) child).getAttribute(ATTRIBUTE_NAME_ID).equals(src.getFragment())) {
                     return (Element) child;
                 }
             }

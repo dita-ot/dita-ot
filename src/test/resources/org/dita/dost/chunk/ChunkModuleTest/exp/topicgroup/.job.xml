@@ -6,7 +6,6 @@
     <file src="file:/a.dita" uri="a.dita" path="a.dita" format="dita" target="true"/>
     <file src="file:/topicgroup.ditamap" uri="topicgroup.ditamap" path="topicgroup.ditamap" format="ditamap"
           input="true"/>
-    <file src="file:/b.dita" uri="b.dita" path="b.dita" format="dita" target="true"/>
-    <file src="file:/c.dita" uri="c.dita" path="c.dita" format="dita" target="true"/>
+    <file uri="Chunk1.dita" path="Chunk1.dita" format="dita"/>
   </files>
 </job>
