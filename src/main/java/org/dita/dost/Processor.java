@@ -225,7 +225,9 @@ public final class Processor {
                 try {
                     FileUtils.forceDelete(tempDir);
                 } catch (final IOException ex) {
-                    logger.error("Failed to delete temporary directory " + tempDir);
+                    if (logger != null) {
+                        logger.error("Failed to delete temporary directory " + tempDir);
+                    }
                 }
             }
         }
