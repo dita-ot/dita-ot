@@ -80,9 +80,8 @@ public class PreprocessorTask extends Task {
              if (style != null) {
                  log("Loading stylesheet " + style, Project.MSG_INFO);
                  final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
-                 final URIResolver resolver = new DelegatingURIResolver(
-                         xmlcatalog != null ? xmlcatalog : CatalogUtils.getCatalogResolver(),
-                         job.getStore());
+                 final URIResolver catalogResolver = xmlcatalog != null ? xmlcatalog : CatalogUtils.getCatalogResolver();
+                 final URIResolver resolver = new DelegatingURIResolver(catalogResolver, job.getStore());
                  xsltCompiler.setURIResolver(resolver);
                  final XsltExecutable compile = xsltCompiler.compile(job.getStore().getSource(style));
                  final XsltTransformer t = compile.load();
