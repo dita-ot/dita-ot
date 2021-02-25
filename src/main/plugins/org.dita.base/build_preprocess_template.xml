@@ -342,6 +342,11 @@ See the accompanying LICENSE file for applicable license.
         <param name="root-chunk-override" value="${root-chunk-override}" if:set="root-chunk-override"/>
       </module>
     </pipeline>
+    <pipeline message="Process DITA 2 chunks." taskname="chunk2">
+      <module class="org.dita.dost.chunk.ChunkModule" parallel="false">
+        <param name="root-chunk-override" value="${root-chunk-override}" if:set="root-chunk-override"/>
+      </module>
+    </pipeline>
     
     <local name="inputTopicPath"/>
     <pathconvert property="inputTopicPath">
