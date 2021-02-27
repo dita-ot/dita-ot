@@ -13,6 +13,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.store.CacheStore;
 import org.dita.dost.store.Store;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
@@ -20,6 +21,7 @@ import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -45,6 +47,11 @@ public abstract class AbstractModuleTest {
     private final DocumentBuilder builder;
     private final String testCase;
     private final Map<String, String> params;
+    protected boolean parallel;
+    protected File tempDir;
+    protected Job job;
+    protected AbstractPipelineModule chunkModule;
+    protected CachingLogger logger;
 
     public AbstractModuleTest(final String testCase, final Map<String, String> params) {
         this.testCase = testCase;
@@ -100,6 +107,15 @@ public abstract class AbstractModuleTest {
     public void setUp() throws Exception {
         tempBaseDir = TestUtils.createTempDir(getClass());
         TestUtils.copy(new File(resourceDir, "src"), tempBaseDir);
+        final String testName = FilenameUtils.getBaseName(testCase);
+        tempDir = new File(tempBaseDir, testName);
+        chunkModule = getModule(tempDir);
+        final Store store = new StreamStore(tempDir, new XMLUtils());
+        job = new Job(tempDir, store);
+        chunkModule.setJob(job);
+        logger = new CachingLogger(true);
+        chunkModule.setLogger(logger);
+        chunkModule.setParallel(parallel);
     }
 
     @After
@@ -108,18 +124,35 @@ public abstract class AbstractModuleTest {
     }
 
     @Test
+    public void serialFile() {
+        test();
+    }
+
+    @Test
+    public void parallelFile() {
+        chunkModule.setParallel(true);
+        test();
+    }
+
+    @Ignore
+    @Test
+    public void serialMemory() throws IOException {
+        chunkModule.setJob(new Job(tempDir, new CacheStore(tempDir, new XMLUtils())));
+        test();
+    }
+
+    @Ignore
+    @Test
+    public void parallelMemory() throws IOException {
+        chunkModule.setJob(new Job(tempDir, new CacheStore(tempDir, new XMLUtils())));
+        chunkModule.setParallel(true);
+        test();
+    }
+
     public void test() {
         final String testName = FilenameUtils.getBaseName(testCase);
-        final File tempDir = new File(tempBaseDir, testName);
         final File expDir = new File(expBaseDir, testName);
         try {
-            final AbstractPipelineModule chunkModule = getModule(tempDir);
-            final Store store = new StreamStore(tempDir, new XMLUtils());
-            final Job job = new Job(tempDir, store);
-            chunkModule.setJob(job);
-            final CachingLogger logger = new CachingLogger(true);
-            chunkModule.setLogger(logger);
-
             final AbstractPipelineInput input = getAbstractPipelineInput();
             params.forEach(input::setAttribute);
             chunkModule.execute(input);

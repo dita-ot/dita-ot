@@ -51,7 +51,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             // read modifiable map
             final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final URI mapFile = job.tempDirURI.resolve(in.uri);
-            final Document mapDoc = getMap(mapFile);
+            final Document mapDoc = getInputMap(mapFile);
             List<ChunkOperation> chunks = new ArrayList<>();
             final Map<URI, URI> rewriteMap = new HashMap<>();
             // walk topicref | map
@@ -60,22 +60,13 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             rewriteTopicrefs(mapFile, chunks);
             job.getStore().writeDocument(mapDoc, mapFile);
             // for each chunk
-            generateChunks(chunks, rewriteMap);
+            generateChunks(chunks, Collections.unmodifiableMap(rewriteMap));
             removeChunkSources(chunks);
             job.write();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DITAOTException(e);
         }
         return null;
-    }
-
-    private Document getMap(URI mapFile) throws IOException {
-        final Document doc = job.getStore().getDocument(mapFile);
-        if (rootChunkOverride != null) {
-            logger.debug("Use override root chunk {0}", rootChunkOverride);
-            doc.getDocumentElement().setAttribute(ATTRIBUTE_NAME_CHUNK, rootChunkOverride);
-        }
-        return doc;
     }
 
     private void init(AbstractPipelineInput input) {
@@ -91,6 +82,15 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         }
     }
 
+    private Document getInputMap(URI mapFile) throws IOException {
+        final Document doc = job.getStore().getDocument(mapFile);
+        if (rootChunkOverride != null) {
+            logger.debug("Use override root chunk {0}", rootChunkOverride);
+            doc.getDocumentElement().setAttribute(ATTRIBUTE_NAME_CHUNK, rootChunkOverride);
+        }
+        return doc;
+    }
+
     private void removeChunkSources(List<ChunkOperation> chunks) {
         final Set<URI> sources = new HashSet<>();
         collect(chunks, chunk -> chunk.src, sources);
@@ -104,9 +104,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 final FileInfo src = chunks.stream()
                         .filter(chunk ->
                                 chunk.src != null &&
-                                        (chunk.dst != null
-                                                ? removeFragment(chunk.dst).equals(tmp)
-                                                : false)
+                                        (chunk.dst != null && removeFragment(chunk.dst).equals(tmp))
                         )
                         .findAny()
                         .flatMap(chunk -> Optional.ofNullable(job.getFileInfo(removeFragment(chunk.src))))
@@ -134,26 +132,31 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    private void generateChunks(List<ChunkOperation> chunks, Map<URI, URI> rewriteMap) throws IOException {
-        for (ChunkOperation chunk : chunks) {
-            //   recursively merge chunk topics
-            final Document chunkDoc = merge(chunk);
-            rewriteLinks(chunkDoc, chunk, rewriteMap);
-            chunkDoc.normalizeDocument();
-            final URI dst = removeFragment(chunk.dst);
-            job.getStore().writeDocument(chunkDoc, dst);
-
-//            if (job.getFileInfo(dst) == null) {
-//                final FileInfo src = chunk.src != null ? job.getFileInfo(removeFragment(chunk.src, null)) : null;
-//                final FileInfo.Builder builder = src != null ? FileInfo.builder(src) : FileInfo.builder();
-//                final URI dstRel = job.tempDirURI.relativize(dst);
-//                final FileInfo dstFi = builder
-//                        .uri(dstRel)
-//                        // FIXME add result
-//                        .build();
-//                job.add(dstFi);
-//            }
-        }
+    private void generateChunks(List<ChunkOperation> chunks, Map<URI, URI> rewriteMap) {
+        //            if (job.getFileInfo(dst) == null) {
+        //                final FileInfo src = chunk.src != null ? job.getFileInfo(removeFragment(chunk.src, null)) : null;
+        //                final FileInfo.Builder builder = src != null ? FileInfo.builder(src) : FileInfo.builder();
+        //                final URI dstRel = job.tempDirURI.relativize(dst);
+        //                final FileInfo dstFi = builder
+        //                        .uri(dstRel)
+        //                        // FIXME add result
+        //                        .build();
+        //                job.add(dstFi);
+        //            }
+        (parallel ? chunks.stream().parallel() : chunks.stream())
+                .forEach(chunk -> {
+                    logger.info("Generate chunk {0}", removeFragment(chunk.dst));
+                    try {
+                        //   recursively merge chunk topics
+                        final Document chunkDoc = merge(chunk);
+                        rewriteLinks(chunkDoc, chunk, rewriteMap);
+                        chunkDoc.normalizeDocument();
+                        final URI dst = removeFragment(chunk.dst);
+                        job.getStore().writeDocument(chunkDoc, dst);
+                    } catch (IOException e) {
+                        logger.error("Failed to generate chunk {0}", removeFragment(chunk.dst), e);
+                    }
+                });
     }
 
     /**
