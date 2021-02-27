@@ -8,6 +8,7 @@
 
 package org.dita.dost.chunk;
 
+import com.google.common.collect.ImmutableMap;
 import org.dita.dost.module.AbstractModuleTest;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -19,30 +20,34 @@ import org.junit.runners.Parameterized.Parameters;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 
 @RunWith(Parameterized.class)
 public class ChunkModuleTest extends AbstractModuleTest {
-    @Parameters(name = "{0}")
+    @Parameters(name = "{0} {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"combine.ditamap"},
-                {"dita.ditamap"},
-                {"link.ditamap"},
-                {"uplevels.ditamap"},
-                {"format.ditamap"},
-                {"nested.ditamap"},
-                {"scope.ditamap"},
-                {"topicgroup.ditamap"},
-                {"topichead.ditamap"},
-                {"multiple.ditamap"},
-                {"map.ditamap"}
+                {"combine.ditamap", Collections.emptyMap()},
+                {"override.ditamap", ImmutableMap.of("root-chunk-override", "combine")},
+                {"dita.ditamap", Collections.emptyMap()},
+                {"link.ditamap", Collections.emptyMap()},
+                {"uplevels.ditamap", Collections.emptyMap()},
+                {"format.ditamap", Collections.emptyMap()},
+                {"nested.ditamap", Collections.emptyMap()},
+                {"scope.ditamap", Collections.emptyMap()},
+                {"topicgroup.ditamap", Collections.emptyMap()},
+                {"topichead.ditamap", Collections.emptyMap()},
+                {"multiple.ditamap", Collections.emptyMap()},
+                {"map.ditamap", Collections.emptyMap()}
         });
     }
 
-    public ChunkModuleTest(final String testCase) {
-        super(testCase);
+    public ChunkModuleTest(final String testCase, final Map<String, String> params) {
+        super(testCase, params);
     }
 
     @Override

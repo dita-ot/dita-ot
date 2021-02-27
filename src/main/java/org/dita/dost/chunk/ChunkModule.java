@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
+import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getName;
 import static org.dita.dost.util.FileUtils.replaceExtension;
@@ -41,15 +42,16 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     static final String GEN_CHUNK_PREFIX = "Chunk";
     static final String GEN_UNIQUE_PREFIX = "unique_";
     private TempFileNameScheme tempFileNameScheme;
+    private String rootChunkOverride;
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        init();
+        init(input);
         try {
             // read modifiable map
             final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final URI mapFile = job.tempDirURI.resolve(in.uri);
-            final Document mapDoc = job.getStore().getDocument(mapFile);
+            final Document mapDoc = getMap(mapFile);
             List<ChunkOperation> chunks = new ArrayList<>();
             final Map<URI, URI> rewriteMap = new HashMap<>();
             // walk topicref | map
@@ -67,13 +69,26 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
-    private void init() {
+    private Document getMap(URI mapFile) throws IOException {
+        final Document doc = job.getStore().getDocument(mapFile);
+        if (rootChunkOverride != null) {
+            logger.debug("Use override root chunk {0}", rootChunkOverride);
+            doc.getDocumentElement().setAttribute(ATTRIBUTE_NAME_CHUNK, rootChunkOverride);
+        }
+        return doc;
+    }
+
+    private void init(AbstractPipelineInput input) {
         try {
             tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
+
+        if (input.getAttribute(ROOT_CHUNK_OVERRIDE) != null) {
+            rootChunkOverride = input.getAttribute(ROOT_CHUNK_OVERRIDE);
+        }
     }
 
     private void removeChunkSources(List<ChunkOperation> chunks) {
@@ -444,40 +459,43 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      * Walk map and collect chunks.
      */
     private void walk(final URI mapFile, final Element elem, final List<ChunkOperation> chunks) {
+        final String chunk = elem.getAttribute(ATTRIBUTE_NAME_CHUNK);
         //   if @chunk = COMBINE
-        if (MAP_MAP.matches(elem) && elem.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(COMBINE.name)) {
-            //     create chunk
-            final URI href = URI.create(replaceExtension(mapFile.toString(), ".dita"));
-            final ChunkBuilder builder = new ChunkBuilder(COMBINE)
-                    //.src(href)
-                    .dst(href)
-                    .topicref(elem);
-            //     remove contents
-            //                elem.removeChild(child);
-            getChildElements(elem, MAP_TOPICREF).stream()
-                    .flatMap(child -> collect(mapFile, child).stream())
-                    .forEachOrdered(builder::addChild);
-            // remove @chunk
-            elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
-            chunks.add(builder.build());
-            return;
-        } else if (elem.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(COMBINE.name)) {
-            //     create chunk
-            final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
-            final URI href = hrefNode != null ? mapFile.resolve(hrefNode.getValue()) : null;
-            final ChunkBuilder builder = new ChunkBuilder(COMBINE)
-                    .src(href)
+        if (chunk.equals(COMBINE.name)) {
+            if (MAP_MAP.matches(elem)) {
+                //     create chunk
+                final URI href = URI.create(replaceExtension(mapFile.toString(), ".dita"));
+                final ChunkBuilder builder = new ChunkBuilder(COMBINE)
+                        //.src(href)
+                        .dst(href)
+                        .topicref(elem);
+                //     remove contents
+                //                elem.removeChild(child);
+                getChildElements(elem, MAP_TOPICREF).stream()
+                        .flatMap(child -> collect(mapFile, child).stream())
+                        .forEachOrdered(builder::addChild);
+                // remove @chunk
+                elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+                chunks.add(builder.build());
+                return;
+            } else {
+                //     create chunk
+                final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
+                final URI href = hrefNode != null ? mapFile.resolve(hrefNode.getValue()) : null;
+                final ChunkBuilder builder = new ChunkBuilder(COMBINE)
+                        .src(href)
 //                    .dst(href)
-                    .topicref(elem);
-            //     remove contents
-            //                elem.removeChild(child);
-            getChildElements(elem, MAP_TOPICREF).stream()
-                    .flatMap(child -> collect(mapFile, child).stream())
-                    .forEachOrdered(builder::addChild);
-            // remove @chunk
-            elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
-            chunks.add(builder.build());
-            return;
+                        .topicref(elem);
+                //     remove contents
+                //                elem.removeChild(child);
+                getChildElements(elem, MAP_TOPICREF).stream()
+                        .flatMap(child -> collect(mapFile, child).stream())
+                        .forEachOrdered(builder::addChild);
+                // remove @chunk
+                elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+                chunks.add(builder.build());
+                return;
+            }
         } else {
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
                 walk(mapFile, child, chunks);

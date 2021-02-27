@@ -16,6 +16,8 @@ import org.junit.runners.Parameterized.Parameters;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 
@@ -79,7 +81,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
     }
 
     public ChunkModuleTest(final String testCase) {
-        super(testCase);
+        super(testCase, Collections.emptyMap());
     }
 
     @Override

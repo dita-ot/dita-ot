@@ -13,6 +13,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.store.Store;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -43,9 +44,11 @@ public abstract class AbstractModuleTest {
     private File tempBaseDir;
     private final DocumentBuilder builder;
     private final String testCase;
+    private final Map<String, String> params;
 
-    public AbstractModuleTest(final String testCase) {
+    public AbstractModuleTest(final String testCase, final Map<String, String> params) {
         this.testCase = testCase;
+        this.params = params;
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -111,15 +114,17 @@ public abstract class AbstractModuleTest {
         final File expDir = new File(expBaseDir, testName);
         try {
             final AbstractPipelineModule chunkModule = getModule(tempDir);
-            final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+            final Store store = new StreamStore(tempDir, new XMLUtils());
+            final Job job = new Job(tempDir, store);
             chunkModule.setJob(job);
             final CachingLogger logger = new CachingLogger(true);
             chunkModule.setLogger(logger);
 
             final AbstractPipelineInput input = getAbstractPipelineInput();
+            params.forEach(input::setAttribute);
             chunkModule.execute(input);
 
-            compare(tempDir, expDir);
+            compare(tempDir, expDir, job.getStore());
 
             logger.getMessages().stream()
                     .filter(m -> m.level == Message.Level.ERROR)
@@ -135,16 +140,16 @@ public abstract class AbstractModuleTest {
 
     private static final Set<String> IGNORE = ImmutableSet.of(".job.xml", ".DS_Store");
 
-    private void compare(File actDir, File expDir) throws SAXException, IOException {
+    private void compare(File actDir, File expDir, Store store) throws SAXException, IOException {
         final File[] exps = expDir.listFiles();
         for (final File exp : exps) {
             if (exp.isDirectory()) {
-                compare(new File(actDir, exp.getName()), new File(expDir, exp.getName()));
+                compare(new File(actDir, exp.getName()), new File(expDir, exp.getName()), store);
             } else if (IGNORE.contains(exp.getName())) {
                 // skip
             } else {
                 final Document expDoc = getDocument(exp);
-                final Document actDoc = getDocument(new File(actDir, exp.getName()));
+                final Document actDoc = store.getDocument(new File(actDir, exp.getName()).toURI());
 //                assertXMLEqual("Comparing " + exp + " to " + new File(actDir, exp.getName()) + ":",
 //                        expDoc, actDoc);
                 try {
