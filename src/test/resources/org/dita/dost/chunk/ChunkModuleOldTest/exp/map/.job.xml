@@ -3,9 +3,8 @@
     <string>file:/</string>
   </property>
   <files>
-    <file src="file:/a.dita" uri="a.dita" path="a.dita" format="dita" target="true"/>
-    <file src="file:/map.ditamap" uri="map.ditamap" path="map.ditamap" format="ditamap" input="true"/>
-    <file src="file:/b.dita" uri="b.dita" path="b.dita" format="dita" target="true"/>
-    <file src="file:/c.dita" uri="c.dita" path="c.dita" format="dita" target="true"/>
+    <file uri="map.dita" path="map.dita" result="file:/map.dita" format="dita"/>
+    <file src="file:/map.ditamap" uri="map.ditamap" path="map.ditamap" result="file:/map.ditamap" format="ditamap"
+          input="true"/>
   </files>
 </job>
