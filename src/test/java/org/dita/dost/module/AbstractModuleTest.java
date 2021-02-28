@@ -134,17 +134,19 @@ public abstract class AbstractModuleTest {
         test();
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void serialMemory() throws IOException {
-        chunkModule.setJob(new Job(tempDir, new CacheStore(tempDir, new XMLUtils())));
+        job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
+        chunkModule.setJob(job);
         test();
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void parallelMemory() throws IOException {
-        chunkModule.setJob(new Job(tempDir, new CacheStore(tempDir, new XMLUtils())));
+        job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
+        chunkModule.setJob(job);
         chunkModule.setParallel(true);
         test();
     }
@@ -195,11 +197,17 @@ public abstract class AbstractModuleTest {
             }
         }
         if (new File(expDir, ".job.xml").exists()) {
-            final Job expJob = new Job(actDir, new StreamStore(actDir, new XMLUtils()));
-            final Job actJob = new Job(expDir, new StreamStore(expDir, new XMLUtils()));
+            final Job expJob = new Job(expDir, new StreamStore(expDir, new XMLUtils()));
+//            final Job actJob = new Job(actDir, new StreamStore(actDir, new XMLUtils()));
             final Collection<FileInfo> expFileInfo = new HashSet(expJob.getFileInfo());
-            final Collection<FileInfo> actFileInfo = new HashSet(actJob.getFileInfo());
-            assertEquals(expFileInfo, actFileInfo);
+            final Collection<FileInfo> actFileInfo = new HashSet(job.getFileInfo());
+            try {
+                assertEquals(expFileInfo, actFileInfo);
+            } catch (Throwable e) {
+                System.out.println(Files.exists(new File(actDir, ".job.xml").toPath()));
+                Files.copy(new File(actDir, ".job.xml").toPath(), System.out);
+                throw e;
+            }
         }
     }
 
