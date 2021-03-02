@@ -30,16 +30,16 @@ public class ChunkModuleOldTest extends AbstractModuleTest {
     @Parameters(name = "{0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"combine.ditamap"},
-                {"dita.ditamap"},
-                {"link.ditamap"},
-                {"uplevels.ditamap"},
-                {"format.ditamap"},
-                {"nested.ditamap"},
-                {"scope.ditamap"},
-                {"topicgroup.ditamap"},
-                {"topichead.ditamap"},
-                {"map.ditamap"}
+                {"combine"},
+                {"dita"},
+                {"link"},
+                {"uplevels"},
+                {"format"},
+                {"nested"},
+                {"scope"},
+                {"topicgroup"},
+                {"topichead"},
+                {"map"}
         });
     }
 

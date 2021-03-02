@@ -107,8 +107,7 @@ public abstract class AbstractModuleTest {
     public void setUp() throws Exception {
         tempBaseDir = TestUtils.createTempDir(getClass());
         TestUtils.copy(new File(resourceDir, "src"), tempBaseDir);
-        final String testName = FilenameUtils.getBaseName(testCase);
-        tempDir = new File(tempBaseDir, testName);
+        tempDir = new File(tempBaseDir, testCase);
         chunkModule = getModule(tempDir);
         final Store store = new StreamStore(tempDir, new XMLUtils());
         job = new Job(tempDir, store);
@@ -152,8 +151,7 @@ public abstract class AbstractModuleTest {
     }
 
     public void test() {
-        final String testName = FilenameUtils.getBaseName(testCase);
-        final File expDir = new File(expBaseDir, testName);
+        final File expDir = new File(expBaseDir, testCase);
         try {
             final AbstractPipelineInput input = getAbstractPipelineInput();
             params.forEach(input::setAttribute);

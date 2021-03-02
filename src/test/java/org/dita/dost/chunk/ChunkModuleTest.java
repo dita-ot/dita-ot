@@ -13,12 +13,6 @@ import org.dita.dost.module.AbstractModuleTest;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.store.CacheStore;
-import org.dita.dost.store.Store;
-import org.dita.dost.store.StreamStore;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -28,7 +22,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 
@@ -37,18 +30,18 @@ public class ChunkModuleTest extends AbstractModuleTest {
     @Parameters(name = "{0} {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"combine.ditamap", Collections.emptyMap()},
-                {"override.ditamap", ImmutableMap.of("root-chunk-override", "combine")},
-                {"dita.ditamap", Collections.emptyMap()},
-                {"link.ditamap", Collections.emptyMap()},
-                {"uplevels.ditamap", Collections.emptyMap()},
-                {"format.ditamap", Collections.emptyMap()},
-                {"nested.ditamap", Collections.emptyMap()},
-                {"scope.ditamap", Collections.emptyMap()},
-                {"topicgroup.ditamap", Collections.emptyMap()},
-                {"topichead.ditamap", Collections.emptyMap()},
-                {"multiple.ditamap", Collections.emptyMap()},
-                {"map.ditamap", Collections.emptyMap()}
+                {"combine", Collections.emptyMap()},
+                {"override", ImmutableMap.of("root-chunk-override", "combine")},
+                {"dita", Collections.emptyMap()},
+                {"link", Collections.emptyMap()},
+                {"uplevels", Collections.emptyMap()},
+                {"format", Collections.emptyMap()},
+                {"nested", Collections.emptyMap()},
+                {"scope", Collections.emptyMap()},
+                {"topicgroup", Collections.emptyMap()},
+                {"topichead", Collections.emptyMap()},
+                {"multiple", Collections.emptyMap()},
+                {"map", Collections.emptyMap()}
         });
     }
 
