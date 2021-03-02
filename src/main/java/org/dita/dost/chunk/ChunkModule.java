@@ -27,6 +27,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
@@ -52,15 +54,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final URI mapFile = job.tempDirURI.resolve(in.uri);
             final Document mapDoc = getInputMap(mapFile);
-            List<ChunkOperation> chunks = new ArrayList<>();
-            final Map<URI, URI> rewriteMap = new HashMap<>();
             // walk topicref | map
-            walk(mapFile, mapDoc.getDocumentElement(), chunks);
+            List<ChunkOperation> chunks = walk(mapFile, mapDoc);
+            final Map<URI, URI> rewriteMap = new HashMap<>();
             chunks = rewrite(mapFile, rewriteMap, chunks);
             rewriteTopicrefs(mapFile, chunks);
             job.getStore().writeDocument(mapDoc, mapFile);
             // for each chunk
-            generateChunks(chunks, Collections.unmodifiableMap(rewriteMap));
+            generateChunks(chunks, unmodifiableMap(rewriteMap));
             removeChunkSources(chunks);
             job.write();
         } catch (IOException e) {
@@ -208,7 +209,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         for (ChunkOperation rootChunk : chunks) {
             list.add(rewriteChunk(mapFile, rewriteMap, rootChunk).build());
         }
-        return list;
+        return unmodifiableList(list);
     }
 
     private ChunkBuilder rewriteChunk(final URI mapFile,
@@ -461,6 +462,12 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * Walk map and collect chunks.
      */
+    private List<ChunkOperation> walk(final URI mapFile, final Document mapDoc) {
+        final List<ChunkOperation> chunks = new ArrayList<>();
+        walk(mapFile, mapDoc.getDocumentElement(), chunks);
+        return unmodifiableList(chunks);
+    }
+
     private void walk(final URI mapFile, final Element elem, final List<ChunkOperation> chunks) {
         final String chunk = elem.getAttribute(ATTRIBUTE_NAME_CHUNK);
         //   if @chunk = COMBINE

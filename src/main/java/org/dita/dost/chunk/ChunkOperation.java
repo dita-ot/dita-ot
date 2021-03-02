@@ -13,10 +13,11 @@ import org.w3c.dom.Element;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.unmodifiableList;
 
 class ChunkOperation {
 
@@ -130,7 +131,7 @@ class ChunkOperation {
             final List<ChunkOperation> cos = children.stream()
                     .map(ChunkBuilder::build)
                     .collect(Collectors.toList());
-            return new ChunkOperation(operation, src, dst, id, topicref, Collections.unmodifiableList(cos));
+            return new ChunkOperation(operation, src, dst, id, topicref, unmodifiableList(cos));
         }
     }
 }
