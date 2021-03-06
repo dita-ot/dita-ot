@@ -31,6 +31,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 {"combine", Collections.emptyMap()},
+                {"duplicate", Collections.emptyMap()},
                 {"override", ImmutableMap.of("root-chunk-override", "combine")},
                 {"dita", Collections.emptyMap()},
                 {"link", Collections.emptyMap()},

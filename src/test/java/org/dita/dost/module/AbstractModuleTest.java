@@ -8,7 +8,6 @@
 package org.dita.dost.module;
 
 import com.google.common.collect.ImmutableSet;
-import org.apache.commons.io.FilenameUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
@@ -21,7 +20,6 @@ import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -133,7 +131,6 @@ public abstract class AbstractModuleTest {
         test();
     }
 
-//    @Ignore
     @Test
     public void serialMemory() throws IOException {
         job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
@@ -141,7 +138,6 @@ public abstract class AbstractModuleTest {
         test();
     }
 
-//    @Ignore
     @Test
     public void parallelMemory() throws IOException {
         job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
