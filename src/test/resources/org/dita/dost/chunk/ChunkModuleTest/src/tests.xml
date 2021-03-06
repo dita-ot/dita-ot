@@ -186,4 +186,24 @@
       <topic id="topic_b2" title="b2"/>
     </topic>
   </test>
+  <test name="dita">
+    <map href="dita.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="b.dita"/>
+        <topicref href="c.dita"/>
+      </topicref>
+    </map>
+    <dita href="a.dita" title="a">
+      <topic id="topic_a1" title="a1"/>
+      <topic id="topic_a2" title="a2"/>
+    </dita>
+    <dita href="b.dita" title="a">
+      <topic id="topic_b1" title="b1"/>
+      <topic id="topic_b2" title="b2"/>
+    </dita>
+    <dita href="c.dita" title="c">
+      <topic id="topic_c1" title="c1"/>
+      <topic id="topic_c2" title="c2"/>
+    </dita>
+  </test>
 </tests>

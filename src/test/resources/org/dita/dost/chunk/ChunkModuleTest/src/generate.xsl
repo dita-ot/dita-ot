@@ -10,7 +10,7 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="topic">
+  <xsl:template match="topic | dita">
     <xsl:param name="dir" as="xs:string"/>
     <xsl:result-document href="{$dir}/{@href}" indent="yes" omit-xml-declaration="yes">
       <xsl:apply-templates select="." mode="generate"/>
@@ -85,6 +85,12 @@
         </related-links>
       </xsl:if>
     </topic>
+  </xsl:template>
+
+  <xsl:template match="dita" mode="generate">
+    <dita ditaarch:DITAArchVersion="2.0">
+      <xsl:apply-templates select="topic" mode="#current"/>
+    </dita>
   </xsl:template>
 
 </xsl:stylesheet>
