@@ -69,7 +69,9 @@
               </xsl:when>
               <xsl:when test="link">
                 <xsl:for-each select="link">
-                  <xref class="- topic/xref " href="{@href}"/>
+                  <xref class="- topic/xref ">
+                    <xsl:copy-of select="@*"/>
+                  </xref>
                 </xsl:for-each>
               </xsl:when>
             </xsl:choose>
@@ -80,7 +82,9 @@
       <xsl:if test="link">
         <related-links class="- topic/related-links ">
           <xsl:for-each select="link">
-            <link class="- topic/link " href="{@href}"/>
+            <link class="- topic/link ">
+              <xsl:copy-of select="@*"/>
+            </link>
           </xsl:for-each>
         </related-links>
       </xsl:if>

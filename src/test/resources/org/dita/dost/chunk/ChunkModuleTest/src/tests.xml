@@ -206,4 +206,24 @@
       <topic id="topic_c2" title="c2"/>
     </dita>
   </test>
+  <test name="format">
+    <map href="format.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="b.dita" format="txt"/>
+      </topicref>
+    </map>
+    <topic id="topic_r4k_cyw_g4b" href="a.dita" title="a">
+      <p>a</p>
+    </topic>
+  </test>
+  <test name="scope">
+    <map href="scope.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="https://example.com/" format="dita" scope="extenal"/>
+      </topicref>
+    </map>
+    <topic id="topic" href="a.dita" title="a">
+      <link href="https://example.com/" format="dita" scope="extenal"/>
+    </topic>
+  </test>
 </tests>
