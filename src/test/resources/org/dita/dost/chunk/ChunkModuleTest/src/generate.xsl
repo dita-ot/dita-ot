@@ -1,12 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" exclude-result-prefixes="xs" version="2.0">
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" exclude-result-prefixes="xs ditaarch" version="2.0">
 
   <xsl:template match="/">
     <xsl:for-each select="tests/test">
-      <xsl:apply-templates select="*">
+      <xsl:apply-templates select="* except resource">
         <xsl:with-param name="dir" select="@name"/>
       </xsl:apply-templates>
+      <xsl:result-document href="{@name}/.job.xml" indent="yes" omit-xml-declaration="yes">
+        <job>
+          <property name="user.input.dir.uri">
+            <string>file:/</string>
+          </property>
+          <files>
+            <xsl:for-each select="*">
+              <file src="file:/{@href}" uri="{@href}" path="{@href}">
+                <xsl:choose>
+                  <xsl:when test="self::map">
+                    <xsl:attribute name="format">ditamap</xsl:attribute>
+                    <xsl:attribute name="input">true</xsl:attribute>
+                  </xsl:when>
+                  <xsl:when test="self::resource">
+                    <xsl:copy-of select="@format"/>
+                    <xsl:attribute name="target">true</xsl:attribute>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:attribute name="format">dita</xsl:attribute>
+                    <xsl:attribute name="target">true</xsl:attribute>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </file>
+            </xsl:for-each>
+          </files>
+        </job>
+      </xsl:result-document>
     </xsl:for-each>
   </xsl:template>
 

@@ -215,6 +215,7 @@
     <topic id="topic_r4k_cyw_g4b" href="a.dita" title="a">
       <p>a</p>
     </topic>
+    <resource href="b.txt" format="txt"/>
   </test>
   <test name="scope">
     <map href="scope.ditamap">
