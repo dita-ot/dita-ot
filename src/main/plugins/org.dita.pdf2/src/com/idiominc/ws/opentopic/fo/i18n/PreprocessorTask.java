@@ -1,26 +1,22 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
+import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
-import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.XMLCatalog;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.DelegatingURIResolver;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.net.URI;
 
 import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
@@ -83,8 +79,13 @@ public class PreprocessorTask extends Task {
 
              if (style != null) {
                  log("Loading stylesheet " + style, Project.MSG_INFO);
-                 final XsltExecutable compile = xmlUtils.getProcessor().newXsltCompiler().compile(job.getStore().getSource(style));
+                 final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
+                 final URIResolver catalogResolver = xmlcatalog != null ? xmlcatalog : CatalogUtils.getCatalogResolver();
+                 final URIResolver resolver = new DelegatingURIResolver(catalogResolver, job.getStore());
+                 xsltCompiler.setURIResolver(resolver);
+                 final XsltExecutable compile = xsltCompiler.compile(job.getStore().getSource(style));
                  final XsltTransformer t = compile.load();
+                 t.setURIResolver(resolver);
                  t.setSource(new DOMSource(document));
                  t.setDestination(job.getStore().getDestination(output));
                  t.transform();

@@ -35,25 +35,15 @@ public class ProcessorTest {
         p = pf.newProcessor("html5");
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void testRunWithoutArgs() throws Exception {
-        try {
-            p.run();
-            fail();
-        } catch (final IllegalStateException e) {
-        }
+        p.run();
     }
 
     @Test
-    public void testRun() throws DITAOTException {
-        final File mapFile;
-        final File out;
-        try {
-            mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/test.ditamap").toURI());
-            out = tempDirGenerator.newFolder("out");
-        } catch (URISyntaxException | IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void testRun() throws DITAOTException, IOException, URISyntaxException {
+        final File mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/test.ditamap").toURI());
+        final File out = tempDirGenerator.newFolder("out");
         p.setInput(mapFile)
                 .setOutputDir(out)
                 .run();
@@ -62,16 +52,10 @@ public class ProcessorTest {
     }
 
 
-    @Test(expected = org.dita.dost.exception.DITAOTException.class)
-    public void testBroken() throws DITAOTException {
-        final File mapFile;
-        final File out;
-        try {
-            mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/broken.dita").toURI());
-            out = tempDirGenerator.newFolder("out");
-        } catch (URISyntaxException | IOException e) {
-            throw new RuntimeException(e);
-        }
+    @Test(expected = DITAOTException.class)
+    public void testBroken() throws DITAOTException, IOException, URISyntaxException {
+        final File mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/broken.dita").toURI());
+        final File out = tempDirGenerator.newFolder("out");
         try {
             p.setInput(mapFile)
                     .setOutputDir(out)
@@ -84,16 +68,10 @@ public class ProcessorTest {
         }
     }
 
-    @Test(expected = org.dita.dost.exception.DITAOTException.class)
-    public void testCleanTempOnFailure() throws DITAOTException {
-        final File mapFile;
-        final File out;
-        try {
-            mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/broken.dita").toURI());
-            out = tempDirGenerator.newFolder("out");
-        } catch (URISyntaxException | IOException e) {
-            throw new RuntimeException(e);
-        }
+    @Test(expected = DITAOTException.class)
+    public void testCleanTempOnFailure() throws DITAOTException, IOException, URISyntaxException {
+        final File mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/broken.dita").toURI());
+        final File out = tempDirGenerator.newFolder("out");
         try {
             p.setInput(mapFile)
                     .setOutputDir(out)
@@ -102,7 +80,6 @@ public class ProcessorTest {
         } catch (BuildException e) {
             assertEquals(1, tempDir.listFiles(f -> f.isDirectory()).length);
             assertEquals(1, tempDir.listFiles(f -> f.isFile() && f.getName().endsWith(".log")).length);
-
             throw e;
         }
     }

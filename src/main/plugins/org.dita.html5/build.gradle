@@ -5,63 +5,46 @@
  *
  * See the accompanying LICENSE file for applicable license.
  */
-buildscript {
-    dependencies {
-        classpath 'io.bit3:jsass:5.5.3'
-    }
 
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
+plugins {
+    id 'io.miret.etienne.sass' version '1.1.1'
 }
 
-apply plugin: 'java'
+sass {
+    // dart-sass version to use:
+    version = '1.32.0'
 
-File cssDir = file('css')
-File sassDir = file('sass')
+    // Directory where to install dart-sass:
+    directory = file ("${rootDir}/.gradle/sass")
 
-import io.bit3.jsass.CompilationException
-import io.bit3.jsass.Compiler
-import io.bit3.jsass.Options
-import io.bit3.jsass.OutputStyle
-
-import java.nio.charset.Charset
-import java.nio.file.Files
-
-def sass(FileCollection files, File outputDir) {
-    if (!outputDir.exists() && !outputDir.mkdir()) {
-        throw new IOException("Failed to create ${outputDir}")
-    }
-
-    files.each {
-        def compiler = new Compiler()
-        def options = new Options()
-        options.setOutputStyle(OutputStyle.EXPANDED)
-
-        def basename = it.getName().substring(0, it.getName().lastIndexOf('.'))
-        def outputFile = new File(outputDir, basename + '.css')
-
-        try {
-            logger.info("Compiling ${it}")
-            def output = compiler.compileFile(it.toURI(), outputFile.toURI(), options)
-            Files.write(outputFile.toPath(), output.getCss().getBytes(Charset.forName("UTF-8")))
-        } catch (CompilationException e) {
-            logger.error(e.getMessage())
-        } catch (IOException e) {
-            logger.error("Compilation failed: ${e.getMessage()}")
-        }
-    }
+    // Base URL where to download dart-sass from:
+    baseUrl = 'https://github.com/sass/dart-sass/releases/download'
 }
 
-task compileSass {
-    inputs.dir sassDir
-    outputs.dir cssDir
+compileSass {
+    // Directory where to output generated CSS:
+    outputDir = project.file ("${projectDir}/css")
 
-    doLast {
-        sass(
-                fileTree(dir: 'sass', includes: ['commonltr.scss', 'commonrtl.scss']),
-                cssDir
-        )
-    }
+    // Source directory containing sass to compile:
+    sourceDir = project.file ("${projectDir}/sass")
+
+    // Set the output style:
+    // Possible values are “expanded” and “compressed”, default is “expanded”.
+    style = expanded
+
+    // Don’t emit a @charset for CSS with non-ASCII chars (default to emit):
+    // noCharset ()
+
+    // When an error occurs, do not emit a stylesheet describing it:
+    // (Default to emit)
+    noErrorCss ()
+
+    // Watch sass files in sourceDir for changes
+    // watch ()
+
+    // Source map style:
+    //  - file: output source map in a separate file (default)
+    //  - embed: embed source map in CSS
+    //  - none: do not emit source map.
+    sourceMap = none
 }

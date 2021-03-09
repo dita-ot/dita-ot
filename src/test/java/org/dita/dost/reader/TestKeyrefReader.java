@@ -43,6 +43,7 @@ import static java.util.Collections.*;
 import static junit.framework.Assert.assertEquals;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class TestKeyrefReader {
 
@@ -591,6 +592,15 @@ public class TestKeyrefReader {
 
         assertEquals("topic-original.dita", root.get("original").href.toString());
         assertEquals("topic-copy.dita", root.get("copy").href.toString());
+    }
+    
+    @Test
+    public void testIntermediaryKeyRefCopyMetadata() throws DITAOTException {
+        final File filename = new File(srcDir, "intermediaryKeyref.ditamap");
+        keyrefreader.read(filename.toURI(), readMap(filename));
+        final KeyScope root = keyrefreader.getKeyDefinition();
+        KeyDef keyDef = root.keyDefinition.get("b");
+        assertTrue(keyDef.element.toString().contains("Product A"));
     }
 
     private void log(final KeyScope scope, final String indent) {
