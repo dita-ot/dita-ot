@@ -620,7 +620,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
   
   <message id="DOTX037W" type="WARN">
-    <reason>No title found for this document; using "***" in XHTML title bar.</reason>
+    <reason>No title found for this document; using "***" as HTML page title.</reason>
     <response></response>
   </message>
   

@@ -7,16 +7,18 @@
  */
 package org.dita.dost.reader;
 
-import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.junit.Assert.*;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URI;
+import org.dita.dost.TestUtils;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.MergeUtils;
+import org.dita.dost.util.XMLUtils;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,19 +26,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URI;
 
-import org.dita.dost.store.StreamStore;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.helpers.DefaultHandler;
-import org.dita.dost.TestUtils;
-import org.dita.dost.util.MergeUtils;
-import org.junit.Test;
+import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.junit.Assert.assertEquals;
 
 public class MergeTopicParserTest {
 
@@ -46,7 +43,7 @@ public class MergeTopicParserTest {
 
     private static SAXTransformerFactory stf;
     private MergeTopicParser parser;
-    
+
     @BeforeClass
     public static void setupClass() {
         final TransformerFactory tf = TransformerFactory.newInstance();
@@ -89,7 +86,7 @@ public class MergeTopicParserTest {
         final DocumentBuilder builder = factory.newDocumentBuilder();
         final Document output = builder.newDocument();
         final TransformerHandler s = stf.newTransformerHandler();
-        s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION , "yes");
+        s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION, "yes");
         s.setResult(new DOMResult(output));
         parser.setContentHandler(s);
         parser.setLogger(new TestUtils.TestLogger());
@@ -107,7 +104,7 @@ public class MergeTopicParserTest {
         parser.parse("test.xml", srcDir.getAbsoluteFile());
         final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", URI.class);
         method.setAccessible(true);
-        
+
         parser.parse("test.xml", srcDir.getAbsoluteFile());
         assertEquals(new URI("test.jpg"), method.invoke(parser, new URI("test.jpg")));
         assertEquals(new URI("test.jpg#foo"), method.invoke(parser, new URI("test.jpg#foo")));
@@ -115,12 +112,43 @@ public class MergeTopicParserTest {
         assertEquals(new URI("images/test.jpg"), method.invoke(parser, new URI("images/test.jpg")));
         assertEquals(new URI("images/test.jpg#foo"), method.invoke(parser, new URI("images/test.jpg#foo")));
         assertEquals(new URI("../test.jpg"), method.invoke(parser, new URI("../test.jpg")));
-        
+
         parser.setOutput(new File(srcDir, "test.xml"));
         parser.parse("src" + File.separator + "test.xml", resourceDir.getAbsoluteFile());
         assertEquals(new URI("test.jpg"), method.invoke(parser, new URI("test.jpg")));
         assertEquals(new URI("images/test.jpg"), method.invoke(parser, new URI("images/test.jpg")));
         assertEquals(new URI("../test.jpg"), method.invoke(parser, new URI("../test.jpg")));
     }
-    
+
+    @Test
+    public void testHandleLocalHrefCacheStore() throws Exception {
+        final File tmpDir = new File(resourceDir, "tmpRandom");
+        final CacheStore store = new CacheStore(tmpDir, new XMLUtils());
+        final Job job = new Job(srcDir, store);
+        TestUtils.TestLogger logger = new TestUtils.TestLogger();
+        final MergeUtils util = new MergeUtils();
+        util.setLogger(logger);
+        util.setJob(job);
+        final MergeTopicParser parser = new MergeTopicParser(util);
+        parser.setLogger(logger);
+        parser.setJob(job);
+        parser.setContentHandler(new DefaultHandler());
+        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        final Document doc = builder.parse(new File(srcDir, "test.xml"));
+        final URI uri = new File(tmpDir, "test.xml").toURI();
+        store.writeDocument(doc, uri);
+
+        parser.setOutput(new File(tmpDir, "test.xml"));
+        final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalDita", URI.class, AttributesImpl.class);
+        method.setAccessible(true);
+
+        parser.parse("test.xml", tmpDir.getAbsoluteFile());
+        final AttributesImpl attrs = new AttributesImpl();
+        final URI val = (URI) method.invoke(parser, new URI("test.jpg"), attrs);
+        final String original = attrs.getValue("ohref");
+        assertEquals("test.jpg", original);
+        assertEquals("#unique_7", val.toString());
+        assertEquals("unique_7", util.getIdValue(new File(tmpDir, "test.jpg").toURI()));
+    }
+
 }

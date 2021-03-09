@@ -684,7 +684,7 @@
   </message>
   
   <message id="DOTX037W" type="WARN">
-    <reason>No title found for this document; using &quot;***&quot; in XHTML title bar.</reason>
+    <reason>No title found for this document; using &quot;***&quot; as HTML page title.</reason>
     <response></response>
   </message>
   

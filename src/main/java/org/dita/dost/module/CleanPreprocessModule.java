@@ -81,7 +81,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                         final Processor processor = xmlUtils.getProcessor();
                         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
                         xsltCompiler.setErrorListener(toErrorListener(logger));
-                        final XsltExecutable xsltExecutable = xsltCompiler.compile(new StreamSource(f.toString()));
+                        final XsltExecutable xsltExecutable = xsltCompiler.compile(f);
                         return xsltExecutable.load();
                     } catch (UncheckedXPathException e) {
                         throw new RuntimeException("Failed to compile XSLT: " + e.getXPathException().getMessageAndLocation(), e);
