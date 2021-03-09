@@ -287,4 +287,11 @@ public class ChunkModuleTest extends AbstractModuleTest {
         test("with_non_dita.ditamap");
     }
 
+    @Test
+    public void testto_content_with_namespace_mathml() {test("to_content_with_namespace_mathml.ditamap");}
+
+    @Test
+
+    public void testto_content_with_namespace_xsi() {test("to_content_with_namespace_xsi.ditamap");}
+
 }

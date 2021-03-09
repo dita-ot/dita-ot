@@ -1022,6 +1022,11 @@ public final class Constants {
     public static final String DITA_OT_NS_PREFIX = "dita-ot";
     public static final String DITA_OT_NAMESPACE = "http://dita-ot.sourceforge.net";
     public static final String DITA_OT_NS = "http://dita-ot.sourceforge.net/ns/201007/dita-ot";
+    /**ATTRIBUTE_NAMESPACE_PREFIX_XSI.*/
+    public static final String XML_SCHEMA_NS = "http://www.w3.org/2001/XMLSchema-instance";
+    public static final String XSI_NS_PREFIX = "xsi";
+    public static final String ATTRIBUTE_NAMESPACE_PREFIX_XSI = XMLNS_ATTRIBUTE + ":" + XSI_NS_PREFIX;
+    public static final String ATTRIBUTE_NAME_NONAMESPACESCHEMALOCATION = "xsi:noNamespaceSchemaLocation";
     /**dita-ot:orig-href.*/
     public static final String ATTRIBUTE_NAME_DITA_OT_ORIG_HREF = DITA_OT_NS_PREFIX + ":" + "orig-href";
 
