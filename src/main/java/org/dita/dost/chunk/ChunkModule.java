@@ -451,11 +451,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     }
 
     private void relativizeLinks(final Element topic, final URI src, final URI dst) {
-        for (Element link : getChildElements(topic, TOPIC_LINK, true)) {
-            final URI href = URLUtils.toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
-            final URI abs = src.resolve(href);
-            final URI rel = getRelativePath(dst.resolve("."), abs);
-            link.setAttribute(ATTRIBUTE_NAME_HREF, rel.toString());
+        final List<Element> elements = toList(topic.getElementsByTagName("*"));
+        for (Element link : elements) {
+            if (TOPIC_LINK.matches(link) || TOPIC_XREF.matches(link)) {
+                final URI href = URLUtils.toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
+                final URI abs = src.resolve(href);
+                final URI rel = getRelativePath(dst.resolve("."), abs);
+                link.setAttribute(ATTRIBUTE_NAME_HREF, rel.toString());
+            }
         }
     }
 

@@ -17,10 +17,8 @@
       <title class="- topic/title ">b</title>
       <body class="- topic/body ">
         <p class="- topic/p ">
-          <!-- FIXME -->
-          <xref class="- topic/xref " href="../a.dita"/>
-          <!-- FIXME -->
-          <xref class="- topic/xref " href="subdir/c.dita"/>
+          <xref class="- topic/xref " href="a.dita#topic_a"/>
+          <xref class="- topic/xref " href="a.dita#topic_c"/>
         </p>
       </body>
       <related-links class="- topic/related-links ">
@@ -33,10 +31,8 @@
       <title class="- topic/title ">c</title>
       <body class="- topic/body ">
         <p class="- topic/p ">
-          <!-- FIXME -->
-          <xref class="- topic/xref " href="../../a.dita"/>
-          <!-- FIXME -->
-          <xref class="- topic/xref " href="../b.dita"/>
+          <xref class="- topic/xref " href="a.dita#topic_a"/>
+          <xref class="- topic/xref " href="a.dita#topic_b"/>
         </p>
       </body>
       <related-links class="- topic/related-links ">
