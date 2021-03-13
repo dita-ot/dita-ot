@@ -63,7 +63,6 @@
       <link href="a.dita"/>
     </topic>
   </test>
-  
   <test name="uplevels-root">
     <map href="map.ditamap">
       <topicref href="a.dita" chunk="combine">
@@ -84,8 +83,26 @@
       <link href="../b.dita"/>
     </topic>
   </test>
-  
-  
+  <test name="uplevels-dir">
+    <map href="dir/map.ditamap">
+      <topicref href="../a.dita" chunk="combine">
+        <topicref href="b.dita"/>
+        <topicref href="subdir/c.dita"/>
+      </topicref>
+    </map>
+    <topic id="topic_a" href="a.dita" title="a">
+      <link href="dir/b.dita"/>
+      <link href="dir/subdir/c.dita"/>
+    </topic>
+    <topic id="topic_b" href="dir/b.dita" title="b">
+      <link href="../a.dita"/>
+      <link href="subdir/c.dita"/>
+    </topic>
+    <topic id="topic_c" href="dir/subdir/c.dita" title="c">
+      <link href="../../a.dita"/>
+      <link href="../b.dita"/>
+    </topic>
+  </test>
   <test name="topicgroup">
     <map href="topicgroup.ditamap">
       <topicref href="a.dita" chunk="combine">

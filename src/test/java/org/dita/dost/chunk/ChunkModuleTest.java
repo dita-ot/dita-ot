@@ -36,6 +36,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
                 {"dita", Collections.emptyMap()},
                 {"link", Collections.emptyMap()},
                 {"uplevels", Collections.emptyMap()},
+                {"uplevels-dir", Collections.emptyMap()},
                 {"uplevels-root", Collections.emptyMap()},
                 {"format", Collections.emptyMap()},
                 {"nested", Collections.emptyMap()},
