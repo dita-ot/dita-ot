@@ -11,15 +11,14 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:import href="plugin:org.dita.html5:xsl/dita2html5Impl.xsl"/>
   
-  <xsl:output method="html"
-              encoding="UTF-8"
-              indent="no"
-              doctype-system="about:legacy-compat"
-              omit-xml-declaration="yes"/>
-
-  <!-- root rule -->
-  <xsl:template match="/">
-    <xsl:apply-templates/>
-  </xsl:template>
+			<xsl:output method="html" 
+					encoding="utf-8" 
+					omit-xml-declaration="yes"/>
+			
+			<!-- root rule -->
+			<xsl:template match="/">
+			<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
+			<xsl:apply-templates/>
+			</xsl:template>
 
 </xsl:stylesheet>
