@@ -11,9 +11,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:import href="plugin:org.dita.html5:xsl/map2html5-coverImpl.xsl"/>
 
-  <xsl:output method="html"
-              encoding="UTF-8"
-              doctype-system="about:legacy-compat"
+			<xsl:output method="html" 
+			  encoding="utf-8" 
               omit-xml-declaration="yes"/>
 
 </xsl:stylesheet>
