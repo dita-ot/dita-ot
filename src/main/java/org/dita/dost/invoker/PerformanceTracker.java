@@ -91,7 +91,7 @@ public class PerformanceTracker implements BuildListener {
         document.append("document", grepFilename(project.getUserProperty("args.input")));
         document.append("transtype", project.getUserProperty("transtype"));
         document.append("dita-basedir", project.getProperty("dita.dir"));
-        document.append("dita-version", grepVersion(project.getProperty("dita.dir")));
+        document.append("dita-version", project.getProperty("otversion"));
         document.append("java-version", project.getProperty("java.version"));
         if (getenv().containsKey("HOSTNAME")) {
             document.append("hostname", getenv().get("HOSTNAME"));
@@ -104,17 +104,6 @@ public class PerformanceTracker implements BuildListener {
 
     private String grepFilename(String fullPath) {
         return get(fullPath).getFileName().toString();
-    }
-
-    String grepVersion(String basedir) {
-        Iterator<Path> pathIterator = get(basedir).iterator();
-        while (pathIterator.hasNext()) {
-            Path path = pathIterator.next();
-            if (path.toString().startsWith("dita-ot-")) {
-                return path.toString().replaceAll("^.*?(?=\\d)", "");
-            }
-        }
-        return "";
     }
 
     /**

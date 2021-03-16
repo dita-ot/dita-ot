@@ -23,43 +23,7 @@ public class PerformanceTrackerTest {
         tracker = new PerformanceTracker();
     }
 
-    @Test
-    public void grepVersion() {
-        // given
-        String path = "C:\\git\\dita-ot\\ifx-dita-ot\\dita-ot-3.3.3";
-
-        // when
-        String version = tracker.grepVersion(path);
-
-        // then
-        assertEquals("3.3.3", version);
-    }
-
-    @Test
-    public void grepVersion_trailingSeparator() {
-        // given
-        String path = "C:\\git\\dita-ot\\ifx-dita-ot\\dita-ot-3.3.3\\";
-
-        // when
-        String version = tracker.grepVersion(path);
-
-        // then
-        assertEquals("3.3.3", version);
-    }
-
-    @Test
-    public void grepVersion_pathContinuesAfterVersion() {
-        // given
-        String path = "C:\\git\\dita-ot\\ifx-dita-ot\\dita-ot-3.3.3\\bin\\..";
-
-        // when
-        String version = tracker.grepVersion(path);
-
-        // then
-        assertEquals("3.3.3", version);
-    }
-
-    @Test
+     @Test
     public void loadCookie_missingCookieFile() {
         // given
 
