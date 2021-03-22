@@ -377,6 +377,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                             .flatMap(keyscope -> scope.stream().map(s -> s.getChildScope(keyscope)))
                             .collect(Collectors.toList())
                             : scope;
+                    ss.remove(null);
                     final QName rewriteAttrName = getReferenceAttribute(node);
                     final boolean isResourceOnly = isResourceOnly(node);
                     node.select(attribute()).forEach(attr -> {
