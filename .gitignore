@@ -1,8 +1,15 @@
+# Modified gradle build file that skips docs
+build.gradle
+
+# Log files for troubleshooting build
+log*
+
 # Gradle task artifacts & build results
 .gradle/
 build/
 target/
 *.iml
+
 
 # JAR files retrieved during the build process
 src/main/lib/*.jar

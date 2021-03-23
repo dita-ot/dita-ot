@@ -363,7 +363,7 @@ task distPluginChecksums() {
 distPluginChecksums.mustRunAfter distPlugins
 generateNotices.mustRunAfter distPlugins
 
-task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
