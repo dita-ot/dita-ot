@@ -197,7 +197,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             try {
                 final URI uri = new URI(href);
                 final URI abs = URLUtils.stripFragment(currentFile.resolve(uri)).normalize();
-                if (abs.getScheme() != null && abs.getScheme().equals("file")) {
+                if (abs.getScheme() != null && abs.getScheme().equals("file") && !"external".equals(atts.getValue(ATTRIBUTE_NAME_SCOPE))) {
                     final File p = new File(abs);
                     try {
                         final File canFile = p.getCanonicalFile();
