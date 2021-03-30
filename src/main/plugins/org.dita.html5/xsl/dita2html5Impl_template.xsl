@@ -40,6 +40,7 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- root rule -->
   <xsl:template match="/">
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
     <xsl:apply-templates/>
   </xsl:template>
   

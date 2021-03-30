@@ -2353,7 +2353,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="chapterHead">
     <head>
       <!-- initial meta information -->
-      <xsl:call-template name="generateCharset"/>   <!-- Set the character set to UTF-8 -->
+      <!--<xsl:call-template name="generateCharset"/>-->   <!-- Set the character set to UTF-8 -->
       <xsl:apply-templates select="." mode="generateDefaultCopyright"/> <!-- Generate a default copyright, if needed -->
       <xsl:call-template name="generateDefaultMeta"/> <!-- Standard meta for security, robots, etc -->
       <xsl:apply-templates select="." mode="getMeta"/> <!-- Process metadata from topic prolog -->
