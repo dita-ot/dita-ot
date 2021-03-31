@@ -7,16 +7,14 @@
  */
 package org.dita.dost.module.filter;
 
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.pipeline.AbstractPipelineInput;
-import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.writer.ProfilingFilter;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.XMLFilter;
+import static java.lang.System.getProperty;
+import static java.util.Collections.singletonList;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_SCOPE;
+import static org.dita.dost.util.Constants.ATTR_SCOPE_VALUE_EXTERNAL;
+import static org.dita.dost.util.Constants.DITAVAREF_D_DITAVALREF;
+import static org.dita.dost.util.Constants.MAP_TOPICREF;
+import static org.dita.dost.util.XMLUtils.getChildElements;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,10 +24,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static java.lang.System.getProperty;
-import static java.util.Collections.singletonList;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.getChildElements;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.writer.ProfilingFilter;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.XMLFilter;
 
 /**
  * Branch filter module for topics.
@@ -181,7 +186,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
             logger.info("Filtering " + srcAbsUri);
             try {
-                job.getStore().transform(srcAbsUri, pipe);
+                job.getStore().transform(URLUtils.stripFragment(srcAbsUri), pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }
