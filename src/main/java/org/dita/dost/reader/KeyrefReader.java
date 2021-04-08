@@ -429,14 +429,15 @@ public final class KeyrefReader implements AbstractReader {
                             throw new UncheckedXPathException(e);
                         }
                     });
+                    
+                    resMeta.select(child()).forEach(child -> {
+                    	try {
+                    		receiver.append(child.getUnderlyingNode());
+                    	} catch (XPathException e) {
+                    		throw new UncheckedXPathException(e);
+                    	}
+                    });
                 }
-                resMeta.select(child()).forEach(child -> {
-                    try {
-                        receiver.append(child.getUnderlyingNode());
-                    } catch (XPathException e) {
-                        throw new UncheckedXPathException(e);
-                    }
-                });
                 receiver.endElement();
             }
 
