@@ -147,7 +147,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
                     logger.error("Failed to create directory " + dstDirUri);
                 }
                 try {
-                    job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
+                    job.getStore().transform(URLUtils.stripFragment(srcAbsUri), dstAbsUri, pipe);
                 } catch (final DITAOTException e) {
                     logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
                 }
