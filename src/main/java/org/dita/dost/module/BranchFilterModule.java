@@ -19,6 +19,7 @@ import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.*;
@@ -376,7 +377,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                 final List<XMLFilter> pipe = singletonList(writer);
 
                 try {
-                    job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
+                    job.getStore().transform(URLUtils.stripFragment(srcAbsUri), dstAbsUri, pipe);
                 } catch (final DITAOTException e) {
                     logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
                 }
@@ -435,7 +436,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
             logger.info("Filtering " + srcAbsUri);
             try {
-                job.getStore().transform(srcAbsUri, pipe);
+                job.getStore().transform(URLUtils.stripFragment(srcAbsUri), pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
             }

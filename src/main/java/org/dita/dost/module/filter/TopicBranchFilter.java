@@ -4,6 +4,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -99,7 +100,7 @@ public class TopicBranchFilter {
     private void transformDocument(URI srcAbsUri, ProfilingFilter writer) {
         try {
             logger.debug("Filtering " + srcAbsUri);
-            job.getStore().transform(srcAbsUri, singletonList(writer));
+            job.getStore().transform(URLUtils.stripFragment(srcAbsUri), singletonList(writer));
         } catch (final DITAOTException e) {
             logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
         }
