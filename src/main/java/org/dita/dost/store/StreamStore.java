@@ -8,33 +8,52 @@
 
 package org.dita.dost.store;
 
-import com.google.common.annotations.VisibleForTesting;
-import net.sf.saxon.event.PipelineConfiguration;
-import net.sf.saxon.event.Receiver;
-import net.sf.saxon.event.ReceivingContentHandler;
-import net.sf.saxon.s9api.*;
-import net.sf.saxon.serialize.SerializationProperties;
-import net.sf.saxon.trans.UncheckedXPathException;
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xml.sax.*;
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.apache.commons.io.FileUtils.forceDelete;
+import static org.apache.commons.io.FileUtils.moveFile;
+import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
+import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.Constants.*;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.apache.commons.io.FileUtils.*;
-import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
-import static org.dita.dost.util.URLUtils.toFile;
-import static org.dita.dost.util.URLUtils.toURI;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamSource;
+
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
+import org.xml.sax.XMLReader;
+
+import com.google.common.annotations.VisibleForTesting;
+
+import net.sf.saxon.event.PipelineConfiguration;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.event.ReceivingContentHandler;
+import net.sf.saxon.s9api.Destination;
+import net.sf.saxon.s9api.SAXDestination;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XsltTransformer;
+import net.sf.saxon.serialize.SerializationProperties;
+import net.sf.saxon.trans.UncheckedXPathException;
 
 /**
  * Stream based XML I/O
@@ -116,7 +135,7 @@ public class StreamStore extends AbstractStore implements Store {
             throw new IOException(e);
         }
     }
-
+    
     @Override
     public void transform(final URI input, final ContentHandler contentHandler) throws DITAOTException {
         assert input.isAbsolute();
@@ -126,6 +145,7 @@ public class StreamStore extends AbstractStore implements Store {
 
         try {
             final XMLReader xmlReader = XMLUtils.getXMLReader();
+            xmlReader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             xmlReader.setContentHandler(contentHandler);
             xmlReader.parse(input.toString());
         } catch (SAXException | IOException e) {
