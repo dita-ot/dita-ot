@@ -38,6 +38,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
                 {"uplevels", Collections.emptyMap()},
                 {"uplevels-dir", Collections.emptyMap()},
                 {"uplevels-root", Collections.emptyMap()},
+                {"uplevels-parallel", Collections.emptyMap()},
                 {"format", Collections.emptyMap()},
                 {"nested", Collections.emptyMap()},
                 {"scope", Collections.emptyMap()},
