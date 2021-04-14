@@ -401,43 +401,24 @@ public final class KeyrefReader implements AbstractReader {
             final XdmNode defMeta = getTopicmeta(defElem);
             if (defMeta != null) {
                 final XdmNode resMeta = getTopicmeta(refElem);
-                if (resMeta == null) {
-                    receiver.startElement(
-                            new FingerprintedQName(DEFAULT_NS_PREFIX, NULL_NS_URI, MAP_TOPICMETA.localName),
-                            Untyped.getInstance(),
-                            UNKNOWN_LOCATION,
-                            0);
-                    receiver.attribute(
-                            new FingerprintedQName(DEFAULT_NS_PREFIX, NULL_NS_URI, ATTRIBUTE_NAME_CLASS),
-                            STRING,
-                            MAP_TOPICMETA.toString(),
-                            UNKNOWN_LOCATION,
-                            0);
+                if (resMeta != null) {
+                	populateTopicMeta(receiver, resMeta);
                 } else {
-                    final NodeInfo ni = resMeta.getUnderlyingNode();
-
-                    receiver.startElement(
-                            new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
-                            ni.getSchemaType(),
-                            ni.saveLocation(),
-                            0);
-                    receiver.namespace(new InScopeNamespaces(resMeta.getUnderlyingNode()), REJECT_DUPLICATES);
-                    resMeta.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
-                        try {
-                            receiver.append(attr.getUnderlyingNode());
-                        } catch (XPathException e) {
-                            throw new UncheckedXPathException(e);
-                        }
-                    });
-                    
-                    resMeta.select(child()).forEach(child -> {
-                    	try {
-                    		receiver.append(child.getUnderlyingNode());
-                    	} catch (XPathException e) {
-                    		throw new UncheckedXPathException(e);
-                    	}
-                    });
+                	populateTopicMeta(receiver, defMeta);
                 }
+                
+            } else {
+            	receiver.startElement(
+                        new FingerprintedQName(DEFAULT_NS_PREFIX, NULL_NS_URI, MAP_TOPICMETA.localName),
+                        Untyped.getInstance(),
+                        UNKNOWN_LOCATION,
+                        0);
+                receiver.attribute(
+                        new FingerprintedQName(DEFAULT_NS_PREFIX, NULL_NS_URI, ATTRIBUTE_NAME_CLASS),
+                        STRING,
+                        MAP_TOPICMETA.toString(),
+                        UNKNOWN_LOCATION,
+                        0);
                 receiver.endElement();
             }
 
@@ -451,6 +432,39 @@ public final class KeyrefReader implements AbstractReader {
             return refElem;
         }
     }
+
+	/**
+	 * @param receiver
+	 * @param resMeta
+	 * @throws XPathException
+	 */
+	private void populateTopicMeta(final Receiver receiver, final XdmNode resMeta) throws XPathException {
+		final NodeInfo ni = resMeta.getUnderlyingNode();
+
+		 receiver.startElement(
+		         new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
+		         ni.getSchemaType(),
+		         ni.saveLocation(),
+		         0);
+		 receiver.namespace(new InScopeNamespaces(resMeta.getUnderlyingNode()), REJECT_DUPLICATES);
+		 resMeta.select(attribute(not(hasLocalName(ATTRIBUTE_NAME_KEYREF)))).forEach(attr -> {
+		     try {
+		         receiver.append(attr.getUnderlyingNode());
+		     } catch (XPathException e) {
+		         throw new UncheckedXPathException(e);
+		     }
+		 });
+		 
+		 resMeta.select(child()).forEach(child -> {
+		 	try {
+		 		receiver.append(child.getUnderlyingNode());
+		 	} catch (XPathException e) {
+		 		throw new UncheckedXPathException(e);
+		 	}
+		 });
+		 
+		 receiver.endElement();
+	}
 
     private XdmNode getTopicmeta(final XdmNode topicref) {
         return topicref
