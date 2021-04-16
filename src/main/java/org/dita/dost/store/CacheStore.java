@@ -328,6 +328,11 @@ public class CacheStore extends AbstractStore implements Store {
         }
         fallback.transform(src, dst);
     }
+    
+    @Override
+    public void transform(final URI src, final ContentHandler dst, boolean namespaceAware) throws DITAOTException {
+    	transform(src,dst);
+    }
 
     @Override
     public void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {

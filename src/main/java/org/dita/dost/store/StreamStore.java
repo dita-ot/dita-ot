@@ -138,6 +138,10 @@ public class StreamStore extends AbstractStore implements Store {
     
     @Override
     public void transform(final URI input, final ContentHandler contentHandler) throws DITAOTException {
+    	transform(input, contentHandler, true);
+    }
+    
+    public void transform(final URI input, final ContentHandler contentHandler, boolean namespaceAware) throws DITAOTException {
         assert input.isAbsolute();
         if (!input.getScheme().equals("file")) {
             throw new IllegalArgumentException("Only file URI scheme supported: " + input);
@@ -145,7 +149,7 @@ public class StreamStore extends AbstractStore implements Store {
 
         try {
             final XMLReader xmlReader = XMLUtils.getXMLReader();
-            xmlReader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+            xmlReader.setFeature(FEATURE_NAMESPACE_PREFIX, namespaceAware);
             xmlReader.setContentHandler(contentHandler);
             xmlReader.parse(input.toString());
         } catch (SAXException | IOException e) {
