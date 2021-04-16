@@ -53,6 +53,8 @@ public interface Store extends URIResolver {
      * @param contentHandler SAX pipe to read to
      */
     void transform(final URI src, final ContentHandler contentHandler) throws DITAOTException;
+    
+    void transform(final URI src, final ContentHandler contentHandler, boolean namespaceAware) throws DITAOTException;
 
     /**
      * Transform file with XML filters.

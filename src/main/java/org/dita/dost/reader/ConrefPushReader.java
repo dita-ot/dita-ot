@@ -89,7 +89,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         pushcontentWriter = getXMLStreamWriter();
         pushType = null;
         try {
-            job.getStore().transform(filename.toURI(), this);
+            job.getStore().transform(filename.toURI(), this, false);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
