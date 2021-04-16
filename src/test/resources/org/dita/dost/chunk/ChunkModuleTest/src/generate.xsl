@@ -87,8 +87,13 @@
       <title class="- topic/title ">
         <xsl:value-of select="@title"/>
       </title>
-      <xsl:if test="link | p">
+      <xsl:if test="link | p | image">
         <body class="- topic/body ">
+          <xsl:for-each select="image">
+            <image class="- topic/image ">
+              <xsl:copy-of select="@*"/>
+            </image>
+          </xsl:for-each>
           <p class="- topic/p ">
             <xsl:choose>
               <xsl:when test="p">

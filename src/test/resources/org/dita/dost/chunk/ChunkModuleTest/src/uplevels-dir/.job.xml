@@ -23,5 +23,20 @@
             path="dir/subdir/c.dita"
             format="dita"
             target="true"/>
+      <file src="file:/a.png"
+            uri="a.png"
+            path="a.png"
+            format="image"
+            target="true"/>
+      <file src="file:/dir/b.png"
+            uri="dir/b.png"
+            path="dir/b.png"
+            format="image"
+            target="true"/>
+      <file src="file:/dir/subdir/c.png"
+            uri="dir/subdir/c.png"
+            path="dir/subdir/c.png"
+            format="image"
+            target="true"/>
    </files>
 </job>

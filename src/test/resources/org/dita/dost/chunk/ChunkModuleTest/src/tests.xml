@@ -71,17 +71,29 @@
       </topicref>
     </map>
     <topic id="topic_a" href="a.dita" title="a">
+      <image href="a.png"/>
+      <image href="dir/b.png"/>
+      <image href="dir/subdir/c.png"/>
       <link href="dir/b.dita"/>
       <link href="dir/subdir/c.dita"/>
     </topic>
     <topic id="topic_b" href="dir/b.dita" title="b">
+      <image href="../a.png"/>
+      <image href="b.png"/>
+      <image href="subdir/c.png"/>
       <link href="../a.dita"/>
       <link href="subdir/c.dita"/>
     </topic>
     <topic id="topic_c" href="dir/subdir/c.dita" title="c">
+      <image href="../../a.png"/>
+      <image href="../b.png"/>
+      <image href="c.png"/>
       <link href="../../a.dita"/>
       <link href="../b.dita"/>
     </topic>
+    <resource href="a.png" format="image"/>
+    <resource href="dir/b.png" format="image"/>
+    <resource href="dir/subdir/c.png" format="image"/>
   </test>
   <test name="uplevels-dir">
     <map href="dir/map.ditamap">
@@ -91,17 +103,29 @@
       </topicref>
     </map>
     <topic id="topic_a" href="a.dita" title="a">
+      <image href="a.png"/>
+      <image href="dir/b.png"/>
+      <image href="dir/subdir/c.png"/>
       <link href="dir/b.dita"/>
       <link href="dir/subdir/c.dita"/>
     </topic>
     <topic id="topic_b" href="dir/b.dita" title="b">
+      <image href="../a.png"/>
+      <image href="b.png"/>
+      <image href="subdir/c.png"/>
       <link href="../a.dita"/>
       <link href="subdir/c.dita"/>
     </topic>
     <topic id="topic_c" href="dir/subdir/c.dita" title="c">
+      <image href="../../a.png"/>
+      <image href="../b.png"/>
+      <image href="c.png"/>
       <link href="../../a.dita"/>
       <link href="../b.dita"/>
     </topic>
+    <resource href="a.png" format="image"/>
+    <resource href="dir/b.png" format="image"/>
+    <resource href="dir/subdir/c.png" format="image"/>
   </test>
   <test name="uplevels-parallel">
     <map href="maps/map.ditamap">
@@ -111,17 +135,29 @@
       </topicref>
     </map>
     <topic id="topic_a" href="a.dita" title="a">
+      <image href="a.png"/>
+      <image href="dir/b.png"/>
+      <image href="dir/subdir/c.png"/>
       <link href="dir/b.dita"/>
       <link href="dir/subdir/c.dita"/>
     </topic>
     <topic id="topic_b" href="dir/b.dita" title="b">
+      <image href="../a.png"/>
+      <image href="b.png"/>
+      <image href="subdir/c.png"/>
       <link href="../a.dita"/>
       <link href="subdir/c.dita"/>
     </topic>
     <topic id="topic_c" href="dir/subdir/c.dita" title="c">
+      <image href="../../a.png"/>
+      <image href="../b.png"/>
+      <image href="c.png"/>
       <link href="../../a.dita"/>
       <link href="../b.dita"/>
     </topic>
+    <resource href="a.png" format="image"/>
+    <resource href="dir/b.png" format="image"/>
+    <resource href="dir/subdir/c.png" format="image"/>
   </test>
   <test name="topicgroup">
     <map href="topicgroup.ditamap">
