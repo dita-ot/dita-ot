@@ -3,39 +3,44 @@
   xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" exclude-result-prefixes="xs ditaarch" version="2.0">
 
   <xsl:template match="/">
-    <xsl:for-each select="tests/test">
-      <xsl:apply-templates select="* except resource">
-        <xsl:with-param name="dir" select="@name"/>
-      </xsl:apply-templates>
-      <xsl:result-document href="{@name}/.job.xml" indent="yes" omit-xml-declaration="yes">
-        <job>
-          <property name="user.input.dir.uri">
-            <string>file:/</string>
-          </property>
-          <files>
-            <xsl:for-each select="*">
-              <file src="file:/{@href}" uri="{@href}" path="{@href}">
-                <xsl:choose>
-                  <xsl:when test="self::map">
-                    <xsl:attribute name="format">ditamap</xsl:attribute>
-                    <xsl:attribute name="input">true</xsl:attribute>
-                  </xsl:when>
-                  <xsl:when test="self::resource">
-                    <xsl:copy-of select="@format"/>
-                    <xsl:attribute name="target">true</xsl:attribute>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:attribute name="format">dita</xsl:attribute>
-                    <xsl:attribute name="target">true</xsl:attribute>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </file>
-            </xsl:for-each>
-          </files>
-        </job>
-      </xsl:result-document>
-    </xsl:for-each>
+    <xsl:apply-templates select="tests/test"/>
   </xsl:template>
+  
+  <xsl:template match="test">
+    <xsl:variable name="extends" select="if (exists(@extends)) then ../test[@name = current()/@extends] else ()"/>
+    <xsl:apply-templates select="(*, $extends/*) except resource">
+      <xsl:with-param name="dir" select="@name"/>
+    </xsl:apply-templates>
+    <xsl:result-document href="{@name}/.job.xml" indent="yes" omit-xml-declaration="yes">
+      <job>
+        <property name="user.input.dir.uri">
+          <string>file:/</string>
+        </property>
+        <files>
+          <xsl:for-each select="*, $extends/*">
+            <file src="file:/{@href}" uri="{@href}" path="{@href}">
+              <xsl:choose>
+                <xsl:when test="self::map">
+                  <xsl:attribute name="format">ditamap</xsl:attribute>
+                  <xsl:attribute name="input">true</xsl:attribute>
+                </xsl:when>
+                <xsl:when test="self::resource">
+                  <xsl:copy-of select="@format"/>
+                  <xsl:attribute name="target">true</xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:attribute name="format">dita</xsl:attribute>
+                  <xsl:attribute name="target">true</xsl:attribute>
+                </xsl:otherwise>
+              </xsl:choose>
+            </file>
+          </xsl:for-each>
+        </files>
+      </job>
+    </xsl:result-document>
+  </xsl:template>
+  
+  <xsl:template match="test[@abstact = 'true']" priority="10"/>
 
   <xsl:template match="topic | dita">
     <xsl:param name="dir" as="xs:string"/>
