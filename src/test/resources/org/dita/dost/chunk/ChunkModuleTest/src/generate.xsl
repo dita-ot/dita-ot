@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" exclude-result-prefixes="xs ditaarch" version="2.0">
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:x="x" exclude-result-prefixes="xs ditaarch x" version="3.0">
 
   <xsl:template match="/">
     <xsl:apply-templates select="tests/test"/>
@@ -88,11 +88,13 @@
   </xsl:template>
 
   <xsl:template match="topic" mode="generate">
+    <xsl:variable name="test" select="ancestor::test" as="element()"/>
+    <xsl:variable name="base-uri" select="@href"/>
     <topic class="- topic/topic " id="{@id}" ditaarch:DITAArchVersion="2.0">
       <title class="- topic/title ">
         <xsl:value-of select="@title"/>
       </title>
-      <xsl:if test="link | p | image">
+      <xsl:if test="exists(link | p | image) or $test/@generate-links = 'true'">
         <body class="- topic/body ">
           <xsl:for-each select="image">
             <image class="- topic/image ">
@@ -112,21 +114,55 @@
                 </xsl:for-each>
               </xsl:when>
             </xsl:choose>
+            <xsl:if test="$test/@generate-links = 'true'">
+              <xsl:for-each select="$test/topic[not(. is current())]">
+                <xref class="- topic/xref " href="{x:relativize(@href, $base-uri)}"/>
+              </xsl:for-each>
+            </xsl:if>
           </p>
         </body>
       </xsl:if>
       <xsl:apply-templates select="topic" mode="#current"/>
-      <xsl:if test="link">
+      <xsl:if test="link or $test/@generate-links = 'true'">
         <related-links class="- topic/related-links ">
           <xsl:for-each select="link">
             <link class="- topic/link ">
               <xsl:copy-of select="@*"/>
             </link>
           </xsl:for-each>
+          <xsl:if test="$test/@generate-links = 'true'">
+            <xsl:for-each select="$test/topic[not(. is current())]">
+              <link class="- topic/link " href="{x:relativize(@href, $base-uri)}"/>
+            </xsl:for-each>
+          </xsl:if>
         </related-links>
       </xsl:if>
     </topic>
   </xsl:template>
+  
+  <xsl:function name="x:relativize" as="xs:string">
+    <xsl:param name="this" as="xs:string"/>
+    <xsl:param name="that" as="xs:string"/>
+    <xsl:variable name="this-tokens" as="xs:string+" select="tokenize($this, '/')"/>
+    <xsl:variable name="that-tokens" as="xs:string+" select="tokenize($that, '/')"/>
+    <xsl:value-of select="x:relativize.strip-and-prefix($that-tokens, $this-tokens)"/>
+  </xsl:function>
+  
+  <xsl:function name="x:relativize.strip-and-prefix" as="xs:string">
+    <xsl:param name="a" as="xs:string+"/>
+    <xsl:param name="b" as="xs:string+"/>
+    <xsl:choose>
+      <xsl:when test="head($a) = head($b)">
+        <xsl:sequence select="x:relativize.strip-and-prefix(tail($a), tail($b))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of>
+          <xsl:for-each select="tail($a)">../</xsl:for-each>
+          <xsl:value-of select="$b" separator="/"/>
+        </xsl:value-of>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
 
   <xsl:template match="dita" mode="generate">
     <dita ditaarch:DITAArchVersion="2.0">
