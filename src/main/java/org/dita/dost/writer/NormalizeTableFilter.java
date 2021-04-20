@@ -107,7 +107,7 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
                     generateColSpec();
                 }
             }
-        } else if (TOPIC_ROW.matches(cls)) {
+        } else if (TOPIC_ROW.matches(cls)&&tableState!=null) {
             // TODO: Inline me to (currentColumn + 1)
             tableState.columnNumber = 1; // initialize the column number
             tableState.columnNumberEnd = 0;
@@ -195,7 +195,7 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
         if (TOPIC_TGROUP.matches(cls)) {
             tableStack.removeFirst();
             tableState = tableStack.peekFirst();
-        } else if (TOPIC_ROW.matches(cls)) {
+        } else if (TOPIC_ROW.matches(cls)&&tableState!=null) {
             tableState.previousRow = tableState.currentRow;
             tableState.currentRow = null;
             tableState.currentColumn = -1;
