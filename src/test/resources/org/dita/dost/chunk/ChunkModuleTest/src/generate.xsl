@@ -89,7 +89,6 @@
 
   <xsl:template match="topic" mode="generate">
     <xsl:variable name="test" select="ancestor::test" as="element()"/>
-    <xsl:variable name="base-uri" select="@href"/>
     <topic class="- topic/topic " id="{@id}" ditaarch:DITAArchVersion="2.0">
       <title class="- topic/title ">
         <xsl:value-of select="@title"/>
@@ -115,14 +114,16 @@
               </xsl:when>
             </xsl:choose>
             <xsl:if test="$test/@generate-links = 'true'">
-              <xsl:for-each select="$test/topic[not(. is current())]">
-                <xref class="- topic/xref " href="{x:relativize(@href, $base-uri)}"/>
-              </xsl:for-each>
+              <xsl:call-template name="generate-links">
+                <xsl:with-param name="test" select="$test"/>
+                <xsl:with-param name="element" as="element()">
+                  <xref class="- topic/xref "/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:if>
           </p>
         </body>
       </xsl:if>
-      <xsl:apply-templates select="topic" mode="#current"/>
       <xsl:if test="link or $test/@generate-links = 'true'">
         <related-links class="- topic/related-links ">
           <xsl:for-each select="link">
@@ -131,13 +132,31 @@
             </link>
           </xsl:for-each>
           <xsl:if test="$test/@generate-links = 'true'">
-            <xsl:for-each select="$test/topic[not(. is current())]">
-              <link class="- topic/link " href="{x:relativize(@href, $base-uri)}"/>
-            </xsl:for-each>
+            <xsl:call-template name="generate-links">
+              <xsl:with-param name="test" select="$test"/>
+              <xsl:with-param name="element" as="element()">
+                <link class="- topic/link "/>
+              </xsl:with-param>
+            </xsl:call-template>
           </xsl:if>
         </related-links>
       </xsl:if>
+      <xsl:apply-templates select="topic" mode="#current"/>
     </topic>
+  </xsl:template>
+  
+  <xsl:template name="generate-links">
+    <xsl:param name="test" as="element()"/>
+    <xsl:param name="element" as="element()"/>
+    <xsl:variable name="base-uri" select="ancestor-or-self::topic[@href][1]/@href"/>
+    <xsl:for-each select="$test/topic[not(. is current())]">
+      <xsl:element name="{name($element)}">
+        <xsl:copy-of select="$element/@*"/>
+        <xsl:attribute name="href">
+          <xsl:value-of select="x:relativize(@href, $base-uri)"/>
+        </xsl:attribute>
+      </xsl:element>
+    </xsl:for-each>
   </xsl:template>
   
   <xsl:function name="x:relativize" as="xs:string">
@@ -152,7 +171,7 @@
     <xsl:param name="a" as="xs:string+"/>
     <xsl:param name="b" as="xs:string+"/>
     <xsl:choose>
-      <xsl:when test="head($a) = head($b)">
+      <xsl:when test="head($a) = head($b) and count($a) ne 1 and count($b) ne 1">
         <xsl:sequence select="x:relativize.strip-and-prefix(tail($a), tail($b))"/>
       </xsl:when>
       <xsl:otherwise>
