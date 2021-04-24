@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:x="x" exclude-result-prefixes="xs ditaarch x" version="3.0">
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:x="x" exclude-result-prefixes="xs ditaarch x"
+  version="3.0">
 
   <xsl:template match="/">
     <xsl:apply-templates select="tests/test"/>
   </xsl:template>
-  
+
   <xsl:template match="test">
-    <xsl:variable name="extends" select="if (exists(@extends)) then ../test[@name = current()/@extends] else ()"/>
+    <xsl:variable name="extends" select="
+        if (exists(@extends)) then
+          ../test[@name = current()/@extends]
+        else
+          ()"/>
     <xsl:apply-templates select="(*, $extends/*) except resource">
       <xsl:with-param name="dir" select="@name"/>
     </xsl:apply-templates>
@@ -39,7 +44,7 @@
       </job>
     </xsl:result-document>
   </xsl:template>
-  
+
   <xsl:template match="test[@abstact = 'true']" priority="10"/>
 
   <xsl:template match="topic | dita">
@@ -144,21 +149,53 @@
       <xsl:apply-templates select="topic" mode="#current"/>
     </topic>
   </xsl:template>
-  
+
   <xsl:template name="generate-links">
     <xsl:param name="test" as="element()"/>
     <xsl:param name="element" as="element()"/>
     <xsl:variable name="base-uri" select="ancestor-or-self::topic[@href][1]/@href"/>
-    <xsl:for-each select="$test/topic[not(. is current())]">
+    <xsl:variable name="current-topic" select="."/>
+    <xsl:for-each select="$test//topic[not(. is $current-topic)]">
+      <xsl:variable name="current-root-topic" select="$current-topic/ancestor-or-self::topic[last()]"/>
+      <xsl:variable name="target-root-topic" select="ancestor-or-self::topic[last()]"/>
+      <xsl:variable name="href" select="$target-root-topic/@href"/>
       <xsl:element name="{name($element)}">
         <xsl:copy-of select="$element/@*"/>
         <xsl:attribute name="href">
-          <xsl:value-of select="x:relativize(@href, $base-uri)"/>
+          <xsl:choose>
+            <xsl:when test="$current-root-topic is $target-root-topic">
+              <xsl:text>#</xsl:text>
+              <xsl:value-of select="@id"/>
+            </xsl:when>
+            <xsl:when test="$current-topic is $target-root-topic">
+              <xsl:text>1: </xsl:text>
+              <xsl:value-of select="x:relativize($href, $base-uri)"/>
+              <xsl:if test="exists(parent::topic)">
+                <xsl:text>#</xsl:text>
+                <xsl:value-of select="@id"/>
+              </xsl:if>
+            </xsl:when>
+            <xsl:when test="$current-topic is $target-root-topic">
+              <xsl:text>2: </xsl:text>
+              <xsl:value-of select="x:relativize($href, $base-uri)"/>
+              <xsl:if test="exists(parent::topic)">
+                <xsl:text>#</xsl:text>
+                <xsl:value-of select="@id"/>
+              </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="x:relativize($href, $base-uri)"/>
+              <xsl:if test="exists(parent::topic)">
+                <xsl:text>#</xsl:text>
+                <xsl:value-of select="@id"/>
+              </xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:attribute>
       </xsl:element>
     </xsl:for-each>
   </xsl:template>
-  
+
   <xsl:function name="x:relativize" as="xs:string">
     <xsl:param name="this" as="xs:string"/>
     <xsl:param name="that" as="xs:string"/>
@@ -166,7 +203,7 @@
     <xsl:variable name="that-tokens" as="xs:string+" select="tokenize($that, '/')"/>
     <xsl:value-of select="x:relativize.strip-and-prefix($that-tokens, $this-tokens)"/>
   </xsl:function>
-  
+
   <xsl:function name="x:relativize.strip-and-prefix" as="xs:string">
     <xsl:param name="a" as="xs:string+"/>
     <xsl:param name="b" as="xs:string+"/>
