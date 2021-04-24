@@ -170,22 +170,26 @@ public abstract class AbstractModuleTest {
     private static final Set<String> IGNORE = ImmutableSet.of(".job.xml", ".DS_Store");
 
     private void compare(File actDir, File expDir, Store store) throws SAXException, IOException {
-        final File[] exps = expDir.listFiles();
-        for (final File exp : exps) {
+        final Set<String> names = new HashSet<>();
+        names.addAll(Arrays.asList(actDir.list()));
+        names.addAll(Arrays.asList(expDir.list()));
+        names.removeAll(IGNORE);
+
+        for (final String name : names) {
+            final File act = new File(actDir, name);
+            final File exp = new File(expDir, name);
             if (exp.isDirectory()) {
-                compare(new File(actDir, exp.getName()), new File(expDir, exp.getName()), store);
-            } else if (IGNORE.contains(exp.getName())) {
-                // skip
+                compare(act, new File(expDir, name), store);
             } else {
                 final Document expDoc = getDocument(exp);
-                final Document actDoc = store.getDocument(new File(actDir, exp.getName()).toURI());
-//                assertXMLEqual("Comparing " + exp + " to " + new File(actDir, exp.getName()) + ":",
+                final Document actDoc = store.getDocument(act.toURI());
+//                assertXMLEqual("Comparing " + exp + " to " + act + ":",
 //                        expDoc, actDoc);
                 try {
                     assertXMLEqual(expDoc, actDoc);
                 } catch (AssertionError e) {
                     System.out.println(exp);
-                    Files.copy(new File(actDir, exp.getName()).toPath(), System.out);
+                    Files.copy(act.toPath(), System.out);
                     throw e;
                 }
             }
