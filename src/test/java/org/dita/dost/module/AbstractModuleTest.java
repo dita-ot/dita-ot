@@ -171,14 +171,20 @@ public abstract class AbstractModuleTest {
 
     private void compare(File actDir, File expDir, Store store) throws SAXException, IOException {
         final Set<String> names = new HashSet<>();
-        names.addAll(Arrays.asList(actDir.list()));
-        names.addAll(Arrays.asList(expDir.list()));
+        final String[] actList = actDir.list();
+        if (actList != null) {
+            names.addAll(Arrays.asList(actList));
+        }
+        final String[] expList = expDir.list();
+        if (expList != null) {
+            names.addAll(Arrays.asList(expList));
+        }
         names.removeAll(IGNORE);
 
         for (final String name : names) {
             final File act = new File(actDir, name);
             final File exp = new File(expDir, name);
-            if (exp.isDirectory()) {
+            if (exp.isDirectory() || act.isDirectory()) {
                 compare(act, new File(expDir, name), store);
             } else {
                 final Document expDoc = getDocument(exp);

@@ -98,7 +98,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         final Set<URI> destinations = new HashSet<>();
         collect(chunks, chunk -> chunk.dst, destinations);
         final Set<URI> removed = sources.stream().filter(dst -> !destinations.contains(dst)).collect(Collectors.toSet());
-        removed.forEach(tmp -> job.remove(job.getFileInfo(tmp)));
+        removed.forEach(tmp -> {
+            try {
+                job.getStore().delete(tmp);
+            } catch (IOException e) {
+                logger.error("Failed to delete " + tmp, e);
+            }
+            job.remove(job.getFileInfo(tmp));
+        });
         final Set<URI> added = destinations.stream().filter(dst -> !sources.contains(dst)).collect(Collectors.toSet());
         added.forEach(tmp -> {
             if (job.getFileInfo(tmp) == null) {
