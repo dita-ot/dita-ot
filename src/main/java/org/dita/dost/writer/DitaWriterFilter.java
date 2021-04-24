@@ -21,6 +21,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.Map;
 
+import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.reader.GenListModuleReader.*;
@@ -146,15 +147,14 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             if (ATTRIBUTE_NAME_CONREF.equals(attQName.getLocalPart())) {
                 attValue = replaceHREF(QName.valueOf(ATTRIBUTE_NAME_CONREF), atts).toString();
             } else if (ATTRIBUTE_NAME_HREF.equals(attQName.getLocalPart()) || ATTRIBUTE_NAME_COPY_TO.equals(attQName.getLocalPart())) {
-                if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
-                        atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)) {
+                if (isLocalScope(atts.getValue(ATTRIBUTE_NAME_SCOPE))) {
                     attValue = replaceHREF(attQName, atts).toString();
                 }
             } else if (ATTRIBUTE_NAME_FORMAT.equals(attQName.getLocalPart())) {
                 final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
                 final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                 // verify format is correct
-                if (isFormatDita(format) && (scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
+                if (isFormatDita(format) && isLocalScope(scope)) {
                     attValue = ATTR_FORMAT_VALUE_DITA;
                     if (!format.equals(ATTR_FORMAT_VALUE_DITA)) {
                         XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT, DITA_OT_NS_PREFIX + ":" + ATTRIBUTE_NAME_ORIG_FORMAT, "CDATA", format);

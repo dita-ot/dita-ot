@@ -564,11 +564,19 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
     public boolean isDitaFormat(final Element elem) {
         final String format = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
-        return format.isEmpty() || format.equals(ATTR_FORMAT_VALUE_DITA);
+        return isDitaFormat(format);
+    }
+
+    public boolean isDitaFormat(final String format) {
+        return format == null || format.isEmpty() || format.equals(ATTR_FORMAT_VALUE_DITA);
     }
 
     public static boolean isLocalScope(final Element elem) {
         final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
-        return scope.isEmpty() || scope.equals(ATTR_SCOPE_VALUE_LOCAL);
+        return isLocalScope(scope);
+    }
+
+    public static boolean isLocalScope(final String scope) {
+        return scope == null || scope.isEmpty() || scope.equals(ATTR_SCOPE_VALUE_LOCAL);
     }
 }

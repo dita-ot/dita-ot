@@ -20,6 +20,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.FileUtils.replaceExtension;
@@ -55,7 +56,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
             // FIXME: handle cascading
             final String processingRole = res.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
             if (source != null &&
-                    (scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL)) &&
+                    isLocalScope(scope) &&
                     (format == null || format.equals(ATTR_FORMAT_VALUE_DITA)) &&
                     (processingRole == null || processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_NORMAL))) {
                 final URI file = stripFragment(source);

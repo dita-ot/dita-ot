@@ -9,6 +9,7 @@
 package org.dita.dost.reader;
 
 import static javax.xml.XMLConstants.*;
+import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.reader.MergeMapParser.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
@@ -222,7 +223,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         final URI attValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         if (attValue != null) {
             final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-            if ((scopeValue == null || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue))
+            if (isLocalScope(scopeValue)
                     && attValue.getScheme() == null) {
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
                 // The scope for @href is local
