@@ -4,7 +4,7 @@
   </property>
   <files>
     <file src="file:/nested.ditamap" uri="nested.ditamap" path="nested.ditamap" result="file:/nested.ditamap"
-          format="ditamap" input="true"/>
+      format="ditamap" input="true"/>
     <file uri="x.dita" path="x.dita" result="file:/x.dita" format="dita"/>
   </files>
 </job>

@@ -68,7 +68,7 @@
       <image href="a.png"/>
       <image href="dir/b.png"/>
       <image href="dir/subdir/c.png"/>
-      <topic id="topic_aa" title="aa"/>      
+      <topic id="topic_aa" title="aa"/>
     </topic>
     <topic id="topic_b" href="dir/b.dita" title="b">
       <image href="../a.png"/>
