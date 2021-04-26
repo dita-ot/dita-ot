@@ -697,7 +697,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             createOrUpdateFileInfo(file, fi -> fi.isConrefPush = true);
         }
         for (final URI file: keyrefSet) {
-            createOrUpdateFileInfo(file, fi -> fi.hasKeyref = true);
+            createOrUpdateFileInfo(file, fi -> {
+            	fi.hasKeyref = true; 
+            	fi.isInputResource = true;
+            	});
         }
         for (final URI file: coderefSet) {
             createOrUpdateFileInfo(file, fi -> fi.hasCoderef = true);
