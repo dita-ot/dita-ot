@@ -27,8 +27,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableMap;
+import static java.util.Collections.*;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
@@ -50,24 +49,33 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         init(input);
         try {
-            // read modifiable map
-            final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-            final URI mapFile = job.tempDirURI.resolve(in.uri);
-            final Document mapDoc = getInputMap(mapFile);
-            // walk topicref | map
-            List<ChunkOperation> chunks = walk(mapFile, mapDoc);
-            final Map<URI, URI> rewriteMap = new HashMap<>();
-            chunks = rewrite(mapFile, rewriteMap, chunks);
-            rewriteTopicrefs(mapFile, chunks);
-            job.getStore().writeDocument(mapDoc, mapFile);
-            // for each chunk
-            generateChunks(chunks, unmodifiableMap(rewriteMap));
-            removeChunkSources(chunks);
+            processCombine();
             job.write();
         } catch (IOException e) {
             throw new DITAOTException(e);
         }
         return null;
+    }
+
+    /**
+     * Process all combine chunks in input map.
+     */
+    private void processCombine() throws IOException {
+        // read modifiable map
+        final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+        final URI mapFile = job.tempDirURI.resolve(in.uri);
+        logger.info("Processing {0}", mapFile);
+        final Document mapDoc = getInputMap(mapFile);
+        // walk topicref | map
+        List<ChunkOperation> chunks = collectChunkOperations(mapFile, mapDoc);
+        final Map<URI, URI> rewriteMap = new HashMap<>();
+        chunks = rewrite(mapFile, rewriteMap, chunks);
+        rewriteTopicrefs(mapFile, chunks);
+        logger.info("Writing {0}", mapFile);
+        job.getStore().writeDocument(mapDoc, mapFile);
+        // for each chunk
+        generateChunks(chunks, unmodifiableMap(rewriteMap));
+        removeChunkSources(chunks);
     }
 
     private void init(AbstractPipelineInput input) {
@@ -93,12 +101,13 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     }
 
     private void removeChunkSources(List<ChunkOperation> chunks) {
-        final Set<URI> sources = new HashSet<>();
-        collect(chunks, chunk -> chunk.src, sources);
-        final Set<URI> destinations = new HashSet<>();
-        collect(chunks, chunk -> chunk.dst, destinations);
-        final Set<URI> removed = sources.stream().filter(dst -> !destinations.contains(dst)).collect(Collectors.toSet());
+        final Set<URI> sources = collectResources(chunks, chunk -> chunk.src);
+        final Set<URI> destinations = collectResources(chunks, chunk -> chunk.dst);
+        final Set<URI> removed = sources.stream()
+                .filter(dst -> !destinations.contains(dst))
+                .collect(Collectors.toSet());
         removed.forEach(tmp -> {
+            logger.info("Remove {0}", tmp);
             try {
                 job.getStore().delete(tmp);
             } catch (IOException e) {
@@ -106,7 +115,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             }
             job.remove(job.getFileInfo(tmp));
         });
-        final Set<URI> added = destinations.stream().filter(dst -> !sources.contains(dst)).collect(Collectors.toSet());
+        final Set<URI> added = destinations.stream()
+                .filter(dst -> !sources.contains(dst))
+                .collect(Collectors.toSet());
         added.forEach(tmp -> {
             if (job.getFileInfo(tmp) == null) {
                 final FileInfo src = chunks.stream()
@@ -130,16 +141,25 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         });
     }
 
-    private void collect(List<ChunkOperation> chunks, final Function<ChunkOperation, URI> pick, Set<URI> res) {
+    private Set<URI> collectResources(List<ChunkOperation> chunks, final Function<ChunkOperation, URI> pick) {
+        final Set<URI> sources = new HashSet<>();
+        collectResources(chunks, pick, sources);
+        return unmodifiableSet(sources);
+    }
+
+    private void collectResources(List<ChunkOperation> chunks, final Function<ChunkOperation, URI> pick, Set<URI> res) {
         for (ChunkOperation chunk : chunks) {
             final URI uri = pick.apply(chunk);
             if (uri != null) {
                 res.add(removeFragment(uri));
             }
-            collect(chunk.children, pick, res);
+            collectResources(chunk.children, pick, res);
         }
     }
 
+    /**
+     * Generate combine chunks by merging topics and rewriting links.
+     */
     private void generateChunks(List<ChunkOperation> chunks, Map<URI, URI> rewriteMap) {
         //            if (job.getFileInfo(dst) == null) {
         //                final FileInfo src = chunk.src != null ? job.getFileInfo(removeFragment(chunk.src, null)) : null;
@@ -429,14 +449,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    private List<Element> getRootTopics(final Document chunkDoc) {
-        final Element root = chunkDoc.getDocumentElement();
-        if (root.getNodeName().equals(ELEMENT_NAME_DITA)) {
-            return getChildElements(root, TOPIC_TOPIC);
-        } else {
-            return Collections.singletonList(root);
-        }
-    }
+//    private List<Element> getRootTopics(final Document chunkDoc) {
+//        final Element root = chunkDoc.getDocumentElement();
+//        if (root.getNodeName().equals(ELEMENT_NAME_DITA)) {
+//            return getChildElements(root, TOPIC_TOPIC);
+//        } else {
+//            return Collections.singletonList(root);
+//        }
+//    }
 
     private Element getLastChildTopic(final Element dita) {
         final List<Element> childElements = getChildElements(dita, TOPIC_TOPIC);
@@ -472,13 +492,16 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * Walk map and collect chunks.
      */
-    private List<ChunkOperation> walk(final URI mapFile, final Document mapDoc) {
+    private List<ChunkOperation> collectChunkOperations(final URI mapFile, final Document mapDoc) {
+        logger.debug("Collect chunk operations");
         final List<ChunkOperation> chunks = new ArrayList<>();
-        walk(mapFile, mapDoc.getDocumentElement(), chunks);
+        collectChunkOperations(mapFile, mapDoc.getDocumentElement(), chunks);
         return unmodifiableList(chunks);
     }
 
-    private void walk(final URI mapFile, final Element elem, final List<ChunkOperation> chunks) {
+    private void collectChunkOperations(final URI mapFile,
+                                        final Element elem,
+                                        final List<ChunkOperation> chunks) {
         final String chunk = elem.getAttribute(ATTRIBUTE_NAME_CHUNK);
         //   if @chunk = COMBINE
         if (chunk.equals(COMBINE.name)) {
@@ -518,11 +541,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             }
         } else {
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
-                walk(mapFile, child, chunks);
+                collectChunkOperations(mapFile, child, chunks);
             }
         }
     }
 
+    /**
+     * Collect combine chunk contents.
+     */
     private List<ChunkBuilder> collect(final URI mapFile, final Element elem) {
         final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
         final Element navtitle = getNavtitle(elem);
