@@ -66,6 +66,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         final URI mapFile = job.tempDirURI.resolve(in.uri);
         logger.info("Processing {0}", mapFile);
         final Document mapDoc = getInputMap(mapFile);
+        final Float ditaVersion = getDitaVersion(mapDoc.getDocumentElement());
+        if (ditaVersion == null || ditaVersion < 2.0f) {
+            return;
+        }
+
         // walk topicref | map
         List<ChunkOperation> chunks = collectChunkOperations(mapFile, mapDoc);
         final Map<URI, URI> rewriteMap = new HashMap<>();
@@ -180,6 +185,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                         rewriteLinks(chunkDoc, chunk, rewriteMap);
                         chunkDoc.normalizeDocument();
                         final URI dst = removeFragment(chunk.dst);
+                        logger.info("Writing {0}", dst);
                         job.getStore().writeDocument(chunkDoc, dst);
                     } catch (IOException e) {
                         logger.error("Failed to generate chunk {0}", removeFragment(chunk.dst), e);
@@ -324,13 +330,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      * Get root topic ID.
      */
     private String getRootTopicId(final URI src) {
+        logger.debug("Get root ID from {0}", src);
         try {
             final XdmNode node = job.getStore().getImmutableNode(src);
             final Step<XdmNode> firstTopicId = descendant(TOPIC_TOPIC.matcher()).first()
                     .then(attribute(ATTRIBUTE_NAME_ID));
             return node.select(firstTopicId).asString();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to read root ID from {0}", src, e);
             return null;
         }
     }
@@ -433,6 +440,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     }
 
     private Element getElement(URI src) throws IOException {
+        logger.info("Reading {0}", src);
         final Document chunkDoc = job.getStore().getDocument(src);
         if (src.getFragment() != null) {
             final NodeList children = chunkDoc.getElementsByTagName("*");
@@ -604,5 +612,17 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
     public static boolean isLocalScope(final String scope) {
         return scope == null || scope.isEmpty() || scope.equals(ATTR_SCOPE_VALUE_LOCAL);
+    }
+
+    public static Float getDitaVersion(Element topic) {
+        final String ditaVersion = topic.getAttributeNS(DITA_NAMESPACE, ATTRIBUTE_NAME_DITAARCHVERSION);
+        if (!ditaVersion.isEmpty()) {
+            try {
+                return new Float(ditaVersion);
+            } catch (IllegalArgumentException e) {
+                // Ignore
+            }
+        }
+        return null;
     }
 }
