@@ -55,5 +55,114 @@
     </x:scenario>    
     
   </x:scenario>
+  
+  <!--
+  <x:scenario label="find-relative-path template">
+    <x:scenario label="path to topic">
+      <x:context>
+        <foo conref="foo/bar/baz.dita"/>
+      </x:context>
+      <x:call template="find-relative-path"/>
+      <x:expect label="should strip file" select="'foo/bar/'"/>
+    </x:scenario>
+    <x:scenario label="path to topic with ID">
+      <x:context>
+        <foo conref="foo/bar/baz.dita#qux"/>
+      </x:context>
+      <x:call template="find-relative-path"/>
+      <x:expect label="should strip file" select="'foo/bar/'"/>
+    </x:scenario>
+    <x:scenario label="relative path to topic">
+      <x:context>
+        <foo conref="../../foo/bar.dita"/>
+      </x:context>
+      <x:call template="find-relative-path"/>
+      <x:expect label="should strip file" select="'../../foo/'"/>
+    </x:scenario>
+  </x:scenario>
+  -->
+  
+  <x:scenario label="Rewrite @conref:orig-id">
+    <x:scenario label="when no matching @id">
+      <x:context mode="clean">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">title</title>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="generated-1"/>
+          </body>
+        </topic>
+      </x:context>
+      <x:expect label="should generate @id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">title</title>
+          <body class="- topic/body ">
+            <p class="- topic/p " id="foo"/>
+          </body>
+        </topic>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="when matching @id">
+      <x:context mode="clean">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">title</title>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="generated-1"/>
+            <p class="- topic/p " id="foo"/>
+          </body>
+        </topic>
+      </x:context>
+      <x:expect label="should generate @id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">title</title>
+          <body class="- topic/body ">
+            <p class="- topic/p " id="generated-1"/>
+            <p class="- topic/p " id="foo"/>
+          </body>
+        </topic>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="when multiple same @conref:orig-id">
+      <x:context mode="clean">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">title</title>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="generated-1"/>
+            <p class="- topic/p " conref:orig-id="foo" id="generated-2"/>
+          </body>
+        </topic>
+      </x:context>
+      <x:expect label="should generate for first occurrence">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">title</title>
+          <body class="- topic/body ">
+            <p class="- topic/p " id="foo"/>
+            <p class="- topic/p " id="generated-2"/>
+          </body>
+        </topic>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="when maching @id in shortdesk">
+      <x:context mode="clean">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">
+            <keyword class="- topic/keyword " conref:orig-id="foo" id="generated-1"/>
+          </title>
+          <shortdesc class="- topic/shortdesc ">
+            <keyword class="- topic/keyword " id="foo"/>
+          </shortdesc>
+        </topic>
+      </x:context>
+      <x:expect label="should generate @id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">
+            <keyword class="- topic/keyword " id="generated-1"/>
+          </title>
+          <shortdesc class="- topic/shortdesc ">
+            <keyword class="- topic/keyword " id="foo"/>
+          </shortdesc>
+        </topic>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
 
 </x:description>

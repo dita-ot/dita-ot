@@ -35,9 +35,14 @@ See the accompanying LICENSE file for applicable license.
   <xsl:key name="id" match="*[@id]" use="@id"/>
 
   <xsl:template match="/">
-    <xsl:apply-templates>
-      <xsl:with-param name="conref-ids" tunnel="yes" select="()"/>
-    </xsl:apply-templates>
+    <xsl:variable name="resolved" as="document-node()">
+      <xsl:document>
+        <xsl:apply-templates>
+          <xsl:with-param name="conref-ids" tunnel="yes" select="()"/>
+        </xsl:apply-templates>
+      </xsl:document>
+    </xsl:variable>
+    <xsl:apply-templates select="$resolved/node()" mode="clean"/>
   </xsl:template>
 
   <!-- If the target element does not exist, this template will be called to issue an error -->
@@ -526,16 +531,15 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="@id">
     <xsl:param name="conref-filename" tunnel="yes" as="xs:string?"/>
-    <xsl:attribute name="id">
-      <xsl:choose>
-        <xsl:when test="exists($conref-filename)">
-          <xsl:value-of select="generate-id(..)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="."/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
+    <xsl:choose>
+      <xsl:when test="exists($conref-filename)">
+        <xsl:attribute name="id" select="generate-id(..)"/>
+        <xsl:attribute name="conref:orig-id" select="."/>
+      </xsl:when>     
+      <xsl:otherwise>
+        <xsl:copy/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="generate-href">
@@ -897,4 +901,29 @@ See the accompanying LICENSE file for applicable license.
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="*[@conref:orig-id]" mode="clean">
+    <xsl:copy>
+      <xsl:copy-of select="@* except @conref:orig-id"/>
+      <xsl:variable name="orig-id" select="@conref:orig-id" as="attribute()"/>
+      <xsl:variable name="topic" select="ancestor::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
+      <xsl:variable name="content" select="$topic/*[not(contains(@class, ' topic/topic '))]" as="element()*"/>
+      <xsl:variable name="first" select="($content//@conref:orig-id[. = $orig-id])[1]" as="attribute()"/>
+      <xsl:variable name="ids" as="element()*">
+        <xsl:for-each select="$content">
+          <xsl:sequence select="key('id', $orig-id, .)"/>
+        </xsl:for-each>
+      </xsl:variable>
+      <xsl:if test="empty($ids) and $orig-id is $first">
+        <xsl:attribute name="id" select="$orig-id"/>
+      </xsl:if>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="node() | @*" mode="clean" priority="0">
+    <xsl:copy>
+      <xsl:apply-templates select="node() | @*" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+  
 </xsl:stylesheet>
