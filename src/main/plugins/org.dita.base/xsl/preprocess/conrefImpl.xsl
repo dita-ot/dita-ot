@@ -46,11 +46,13 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <!-- If the target element does not exist, this template will be called to issue an error -->
+  <!-- Deprecated since 1.5 -->
   <xsl:template name="missing-target-error">
     <xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/>
   </xsl:template>
 
   <!-- If an ID is duplicated, and there are 2 possible targets, issue a warning -->
+  <!-- Deprecated since 1.5 -->
   <xsl:template name="duplicateConrefTarget">
     <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
   </xsl:template>
