@@ -16,7 +16,7 @@
       <step class="- topic/li task/step ">
         <cmd class="- topic/ph task/cmd ">
           <cite class="- topic/cite ">Mycite Conref
-                 <keyword class="- topic/keyword "><text id="d17e35" class="- topic/text ">MyText
+            <keyword class="- topic/keyword "><text id="MytextID" class="- topic/text ">MyText
                      <text class="- topic/text "><text class="- topic/text "><text class="- topic/text "><text class="- topic/text ">This is myTextID for conref</text></text></text></text>
                      </text></keyword>
                  </cite>

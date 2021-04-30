@@ -44,60 +44,47 @@
     </prolog>
     <body class="- topic/body ">
       <p class="- topic/p " conref="">Invalid conref, ignore the attribute</p>
-      <p class="- topic/p ">Xref to the another file: <xref class="- topic/xref "
-          href="lang-concept.dita" type="concept"><?ditaot gentext?>Concept for language
-            test<?ditaot genshortdesc?><desc class="- topic/desc ">this is the related
-            concept</desc></xref>. Now do it again, <xref class="- topic/xref "
-          href="lang-concept.dita" type="concept"><?ditaot usertext?>with link
-            text<?ditaot genshortdesc?><desc class="- topic/desc ">this is the related
-            concept</desc></xref>.</p>
+      <p class="- topic/p ">Xref to the another file: <xref class="- topic/xref " href="lang-concept.dita"
+          type="concept"><?ditaot gentext?>Concept for language test<?ditaot genshortdesc?><desc class="- topic/desc "
+            >this is the related concept</desc></xref>. Now do it again, <xref class="- topic/xref "
+          href="lang-concept.dita" type="concept"><?ditaot usertext?>with link text<?ditaot genshortdesc?><desc
+            class="- topic/desc ">this is the related concept</desc></xref>.</p>
       <p class="- topic/p ">Xref to fig in another file's topic: <xref class="- topic/xref "
-          href="lang-concept.dita#lang-concept" type="concept"><?ditaot gentext?>Concept for
-          language test<?ditaot genshortdesc?><desc class="- topic/desc ">this is the related
-            concept</desc></xref>. Now do it again, <xref class="- topic/xref "
-          href="lang-concept.dita#lang-concept" type="concept"><?ditaot usertext?>with link
-            text<?ditaot genshortdesc?><desc class="- topic/desc ">this is the related
-            concept</desc></xref>.</p>
+          href="lang-concept.dita#lang-concept" type="concept"><?ditaot gentext?>Concept for language
+            test<?ditaot genshortdesc?><desc class="- topic/desc ">this is the related concept</desc></xref>. Now do it
+        again, <xref class="- topic/xref " href="lang-concept.dita#lang-concept" type="concept"><?ditaot usertext?>with
+          link text<?ditaot genshortdesc?><desc class="- topic/desc ">this is the related concept</desc></xref>.</p>
       <p class="- topic/p ">Xref to fig in another file: <xref class="- topic/xref "
-          href="lang-concept.dita#lang-concept/fig" type="fig"><?ditaot gentext?>Figure 1</xref>.
-        Now do it again, <xref class="- topic/xref " href="lang-concept.dita#lang-concept/fig"
-          type="fig"><?ditaot usertext?>with link text</xref>.</p>
-      <p class="- topic/p ">Xref to this topic: <xref class="- topic/xref "
-          href="lang-common0.dita#topic" type="topic"><?ditaot gentext?>Topic elements with
-          generated text</xref>. Now do it again, <xref class="- topic/xref "
+          href="lang-concept.dita#lang-concept/fig" type="fig"><?ditaot gentext?>Figure 1</xref>. Now do it again, <xref
+          class="- topic/xref " href="lang-concept.dita#lang-concept/fig" type="fig"><?ditaot usertext?>with link
+          text</xref>.</p>
+      <p class="- topic/p ">Xref to this topic: <xref class="- topic/xref " href="lang-common0.dita#topic" type="topic"
+          ><?ditaot gentext?>Topic elements with generated text</xref>. Now do it again, <xref class="- topic/xref "
           href="lang-common0.dita#topic" type="topic"><?ditaot usertext?>with link text</xref>.</p>
       <p class="- topic/p ">Xref to the concept in this file: <xref class="- topic/xref "
-          href="lang-common0.dita#concept" type="concept"><?ditaot gentext?>Concept elements with
-          generated text</xref>. Now do it again, <xref class="- topic/xref "
-          href="lang-common0.dita#concept" type="concept"><?ditaot usertext?>with link
-        text</xref>.</p>
-      <p class="- topic/p ">Xref to the fig in this topic: <xref class="- topic/xref "
-          href="#topic/d7e168" type="fig"><?ditaot gentext?>图 1</xref>. Now do it again, <xref
-          class="- topic/xref " href="#topic/d7e168" type="fig"><?ditaot usertext?>with link
-          text</xref>.</p>
-      <p class="- topic/p ">Xref to the table in this topic: <xref class="- topic/xref "
-          href="#topic/d7e179" type="table"><?ditaot gentext?>表 1</xref>. Now do it again, <xref
-          class="- topic/xref " href="#topic/d7e179" type="table"><?ditaot usertext?>with link
-          text</xref>.</p>
-      <p class="- topic/p ">Xref to an external website: <xref class="- topic/xref " format="html"
-          scope="external" href="http://www.ibm.com"/>. Now do it again, <xref class="- topic/xref " format="html"
-          scope="external" href="http://www.ibm.com"><?ditaot usertext?>with link text</xref>.</p>
-      <p class="- topic/p ">Xref to an external website with an anchor: <xref class="- topic/xref "
-          format="html" scope="external" href="http://www.ibm.com/index.html#anchor"/>. Now do it again, <xref
-          class="- topic/xref " format="html" scope="external" href="http://www.ibm.com/index.html#anchor"
+          href="lang-common0.dita#concept" type="concept"><?ditaot gentext?>Concept elements with generated text</xref>.
+        Now do it again, <xref class="- topic/xref " href="lang-common0.dita#concept" type="concept"
           ><?ditaot usertext?>with link text</xref>.</p>
-      <fig class="- topic/fig " id="d7e168">
+      <p class="- topic/p ">Xref to the fig in this topic: <xref class="- topic/xref " href="#topic/d8e195"/>. Now do it again, <xref class="- topic/xref " href="#topic/d8e195"><?ditaot usertext?>with link text</xref>.</p>
+      <p class="- topic/p ">Xref to the table in this topic: <xref class="- topic/xref " href="#topic/d8e208"/>. Now do it again, <xref class="- topic/xref " href="#topic/d8e208"><?ditaot usertext?>with link text</xref>.</p>
+      <p class="- topic/p ">Xref to an external website: <xref class="- topic/xref " format="html" scope="external"
+          href="http://www.ibm.com"/>. Now do it again, <xref class="- topic/xref " format="html" scope="external"
+          href="http://www.ibm.com"><?ditaot usertext?>with link text</xref>.</p>
+      <p class="- topic/p ">Xref to an external website with an anchor: <xref class="- topic/xref " format="html"
+          scope="external" href="http://www.ibm.com/index.html#anchor"/>. Now do it again, <xref class="- topic/xref "
+          format="html" scope="external" href="http://www.ibm.com/index.html#anchor"><?ditaot usertext?>with link
+          text</xref>.</p>
+      <fig class="- topic/fig " id="fig">
         <title class="- topic/title ">figure title</title>
         <p class="- topic/p ">test <q class="- topic/q ">quote</q> in a figure</p>
       </fig>
-      <table class="- topic/table " id="d7e179">
+      <table class="- topic/table " id="table">
         <title class="- topic/title ">table title</title>
         <tgroup class="- topic/tgroup " cols="1">
           <colspec class="- topic/colspec " colname="col1" colnum="1" rowheader="headers"/>
           <tbody class="- topic/tbody ">
             <row class="- topic/row ">
-              <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">test
-                table</entry>
+              <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">test table</entry>
             </row>
           </tbody>
         </tgroup>
@@ -118,9 +105,8 @@
         </ol>
       </note>
       <p class="- topic/p " rev="rev1">Revised paragraph</p>
-      <required-cleanup class="- topic/required-cleanup " translate="no">test required
-          cleanup<draft-comment class="- topic/draft-comment " translate="no">test
-          draft-comment</draft-comment></required-cleanup>
+      <required-cleanup class="- topic/required-cleanup " translate="no">test required cleanup<draft-comment
+          class="- topic/draft-comment " translate="no">test draft-comment</draft-comment></required-cleanup>
       <syntaxdiagram class="+ topic/fig pr-d/syntaxdiagram ">
         <groupchoice class="+ topic/figgroup pr-d/groupchoice ">
           <kwd class="+ topic/keyword pr-d/kwd ">kwd</kwd>
@@ -167,13 +153,11 @@
         <?ditaot genshortdesc?>
         <desc class="- topic/desc ">This is the parent topic for generated text tests</desc>
       </link>
-      <link class="- topic/link " href="lang-prerequisite.dita" importance="required" role="sibling"
-        type="task">
+      <link class="- topic/link " href="lang-prerequisite.dita" importance="required" role="sibling" type="task">
         <?ditaot gentext?>
         <linktext class="- topic/linktext ">Prerequisite task</linktext>
         <?ditaot genshortdesc?>
-        <desc class="- topic/desc ">This should create a prerequisite link in the language
-          test</desc>
+        <desc class="- topic/desc ">This should create a prerequisite link in the language test</desc>
       </link>
     </related-links>
   </topic>
