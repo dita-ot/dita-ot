@@ -915,9 +915,17 @@ See the accompanying LICENSE file for applicable license.
           <xsl:sequence select="key('id', $orig-id, .)"/>
         </xsl:for-each>
       </xsl:variable>
-      <xsl:if test="empty($ids) and $orig-id is $first">
-        <xsl:attribute name="id" select="$orig-id"/>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="empty($ids) and $orig-id is $first">
+          <xsl:attribute name="id" select="$orig-id"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="id" select="'DOTX077I'"/>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref:orig-id"/>;%2=<xsl:value-of select="@id"/></xsl:with-param>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:apply-templates select="node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
