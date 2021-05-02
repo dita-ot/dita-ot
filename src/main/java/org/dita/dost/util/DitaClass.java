@@ -7,10 +7,12 @@
  */
 package org.dita.dost.util;
 
+import static net.sf.saxon.s9api.streams.Predicates.hasAttribute;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -201,11 +203,22 @@ public final class DitaClass {
     }
 
     /**
+     * S9api predicate to match element node against DITA class.
+     *
+     * @return predicate that returns {@code true} if given node is an Element and its class matches this class,
+     * otherwise {@code false}
+     */
+    public Predicate<XdmNode> matcher() {
+        return item -> item.getNodeKind() == XdmNodeKind.ELEMENT
+                && matches(item.attribute(ATTRIBUTE_NAME_CLASS));
+    }
+
+    /**
      * Test if the current DitaClass is a valid DITA class value
      *
      * @return {@code true} if uses valid DITA class syntax, otherwise {@code false}
      */
-    public boolean isValid () {
+    public boolean isValid() {
         return validDitaClass;
     }
 

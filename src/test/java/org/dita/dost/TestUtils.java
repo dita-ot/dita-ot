@@ -69,7 +69,10 @@ public class TestUtils {
      * @throws RuntimeException if retrieving the directory failed
      */
     public static File getResourceDir(final Class<?> testClass) throws RuntimeException {
-        final URL dir = ClassLoader.getSystemResource(testClass.getSimpleName());
+        URL dir = ClassLoader.getSystemResource(testClass.getCanonicalName().replace('.', '/'));
+        if (dir == null) {
+            dir = ClassLoader.getSystemResource(testClass.getSimpleName());
+        }
         if (dir == null) {
             throw new RuntimeException("Failed to find resource for " + testClass.getSimpleName());
         }

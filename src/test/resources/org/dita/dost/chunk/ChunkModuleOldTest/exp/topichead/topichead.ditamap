@@ -1,0 +1,17 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map " ditaarch:DITAArchVersion="1.3"
+>
+  <topicref chunk="to-content" class="- map/topicref " href="a.dita#topic_r4k_cyw_g4b">
+    <topichead class="+ map/topicref mapgroup-d/topichead ">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">navtitle</navtitle>
+      </topicmeta>
+      <topicref class="- map/topicref " href="a.dita#topic_ayt_dyw_g4b"/>
+    </topichead>
+  </topicref>
+  <topichead chunk="to-content" class="+ map/topicref mapgroup-d/topichead " href="Chunk1.dita#Chunk1">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">navtitle</navtitle>
+    </topicmeta>
+    <topicref class="- map/topicref " href="Chunk1.dita#topic_ayt_dyw_g4b"/>
+  </topichead>
+</map>

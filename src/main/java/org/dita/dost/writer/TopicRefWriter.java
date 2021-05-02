@@ -17,6 +17,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.Map;
 
+import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getFragment;
 import static org.dita.dost.util.URLUtils.*;
@@ -121,15 +122,12 @@ public final class TopicRefWriter extends AbstractXMLFilter {
         }
 
         String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        if (scopeValue == null) {
-            scopeValue = ATTR_SCOPE_VALUE_LOCAL;
-        }
         String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         if (formatValue == null) {
             formatValue = ATTR_FORMAT_VALUE_DITA;
         }
 
-        return scopeValue.equals(ATTR_SCOPE_VALUE_LOCAL) && formatValue.equals(ATTR_FORMAT_VALUE_DITA);
+        return isLocalScope(scopeValue) && formatValue.equals(ATTR_FORMAT_VALUE_DITA);
 
     }
 

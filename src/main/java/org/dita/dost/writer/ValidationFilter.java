@@ -27,6 +27,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.util.Configuration.Mode;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -421,7 +422,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
             final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
             final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-            if (format == null && (scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL)) && href != null) {
+            if (format == null && isLocalScope(scope) && href != null) {
                 final URI target = currentFile.resolve(href);
                 final Job.FileInfo fi = job.getFileInfo(target);
                 if (fi != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {

@@ -1,0 +1,9 @@
+<job>
+  <property name="user.input.dir.uri">
+    <string>file:/</string>
+  </property>
+  <files>
+    <file path="override.dita" format="dita"/>
+    <file src="file:/override.ditamap" uri="override.ditamap" path="override.ditamap" format="ditamap" input="true"/>
+  </files>
+</job>

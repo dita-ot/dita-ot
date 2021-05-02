@@ -1,0 +1,8 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="topic_a1"
+  ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">a1</title>
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="topic_a2"
+    ditaarch:DITAArchVersion="1.3">
+    <title class="- topic/title ">a2</title>
+  </topic>
+</topic>

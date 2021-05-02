@@ -9,6 +9,7 @@
 package org.dita.dost.reader;
 
 import static javax.xml.transform.OutputKeys.*;
+import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
@@ -192,7 +193,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                 atts = new AttributesImpl(attributes);
                 final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-                if ((scopeValue == null || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue))
+                if (isLocalScope(scopeValue)
                         && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equals(formatValue))) {
                     final URI ohref = attValue;
                     final URI copyToValue = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));

@@ -1,0 +1,7 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+     class="- map/map "
+     ditaarch:DITAArchVersion="2.0">
+   <topicref class="- map/topicref " href="../topics/a.dita" chunk="combine">
+      <topicref class="- map/topicref " href="../topics/b.dita"/>
+   </topicref>
+</map>

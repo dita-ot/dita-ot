@@ -1,64 +1,227 @@
-<?xml version="1.0" encoding="UTF-8"?><job>
+<?xml version="1.0" ?>
+<job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
   <property name="user.input.dir">
     <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent</string>
   </property>
+  <property name="default.cascade">
+    <string>nomerge</string>
+  </property>
   <property name="outputdir">
     <string>/Volumes/tmp/out</string>
+  </property>
+  <property name="plugin.org.dita.eclipsehelp.dir">
+    <string>plugins/org.dita.eclipsehelp</string>
+  </property>
+  <property name="plugin.org.dita.odt.dir">
+    <string>plugins/org.dita.odt</string>
+  </property>
+  <property name="plugin.org.dita.htmlhelp.dir">
+    <string>plugins/org.dita.htmlhelp</string>
+  </property>
+  <property name="temp-file-name-scheme">
+    <string>org.dita.dost.module.reader.DefaultTempFileScheme</string>
+  </property>
+  <property name="plugin.org.dita.eclipsecontent.dir">
+    <string>plugins/org.dita.eclipsecontent</string>
+  </property>
+  <property name="plugin.org.dita.base.dir">
+    <string>plugins/org.dita.base</string>
+  </property>
+  <property name="transtypes">
+    <string>pdf;pdf2;tocjs;xhtml;eclipsehelp;html5;htmlhelp;javahelp;troff</string>
+  </property>
+  <property name="plugindirs">
+    <string>plugins;demo</string>
+  </property>
+  <property name="plugin.org.dita.specialization.dita11.dir">
+    <string>plugins/org.dita.specialization.dita11</string>
+  </property>
+  <property name="user.input.file.listfile">
+    <string>usr.input.file.list</string>
+  </property>
+  <property name="plugin.org.dita.wordrtf.dir">
+    <string>plugins/org.dita.wordrtf</string>
+  </property>
+  <property name="outercontrol">
+    <string>WARN</string>
+  </property>
+  <property name="plugin.ignores">
+    <string></string>
+  </property>
+  <property name="relflagimagefile">
+    <string>relflagimage.list</string>
+  </property>
+  <property name="plugin.org.dita.specialization.eclipsemap.dir">
+    <string>plugins/org.dita.specialization.eclipsemap</string>
+  </property>
+  <property name="user.input.file.uri">
+    <string>topicgroup_chunk.ditamap</string>
+  </property>
+  <property name="user.input.file">
+    <string>topicgroup_chunk.ditamap</string>
+  </property>
+  <property name="plugin.org.dita.pdf.dir">
+    <string>plugins/org.dita.pdf</string>
+  </property>
+  <property name="plugin.org.dita.pdf2.dir">
+    <string>plugins/org.dita.pdf2</string>
+  </property>
+  <property name="plugin.org.dita.specialization.dita132.dir">
+    <string>plugins/org.dita.specialization.dita132</string>
+  </property>
+  <property name="print_transtypes">
+    <string>pdf2;pdf;legacypdf;odt</string>
   </property>
   <property name="onlytopicinmap">
     <string>false</string>
   </property>
   <property name="InputMapDir.uri">
-    <string>file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/topicgroup_chunk.ditamap</string>
+    <string>
+      file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/topicgroup_chunk.ditamap
+    </string>
+  </property>
+  <property name="supported_resource_extensions">
+    <string>.pdf;.swf</string>
+  </property>
+  <property name="plugin.org.dita.np.dir">
+    <string>plugins/org.dita.np</string>
+  </property>
+  <property name="plugin.org.dita.xhtml.dir">
+    <string>plugins/org.dita.xhtml</string>
+  </property>
+  <property name="plugin.org.dita.docbook.dir">
+    <string>plugins/org.dita.docbook</string>
+  </property>
+  <property name="chunk.id-generation-scheme">
+    <string>counter</string>
+  </property>
+  <property name="org.dita.pdf2.index.frame-markup">
+    <string>false</string>
+  </property>
+  <property name="plugin.org.dita.javahelp.dir">
+    <string>plugins/org.dita.javahelp</string>
   </property>
   <property name="tempdirToinputmapdir.relative.value">
-    <string/>
+    <string></string>
   </property>
-  <property name="user.input.file.listfile">
-    <string>usr.input.file.list</string>
+  <property name="plugin.org.dita-ot.html.dir">
+    <string>plugins/org.dita-ot.html</string>
   </property>
   <property name="relflagimagelist">
-    <string/>
+    <string></string>
   </property>
-  <property name="outercontrol">
-    <string>WARN</string>
+  <property name="supported_html_extensions">
+    <string>.htm;.html</string>
   </property>
-  <property name="relflagimagefile">
-    <string>relflagimage.list</string>
+  <property name="otrelease">
+    <string>1.2</string>
+  </property>
+  <property name="supported_image_extensions">
+    <string>.bmp;.svg;.png;.tif;.jpg;.gif;.jpeg;.tiff;.eps</string>
   </property>
   <property name="InputMapDir">
-    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/topicgroup_chunk.ditamap</string>
+    <string>
+      /Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/topicgroup_chunk.ditamap
+    </string>
   </property>
-  <property name="user.input.file.uri">
-    <string>topicgroup_chunk.ditamap</string>
+  <property name="otversion">
+    <string>1.2.3</string>
+  </property>
+  <property name="plugin.com.sophos.tocjs.dir">
+    <string>plugins/com.sophos.tocjs</string>
+  </property>
+  <property name="plugin.org.dita.troff.dir">
+    <string>plugins/org.dita.troff</string>
+  </property>
+  <property name="org.dita.pdf2.i18n.enabled">
+    <string>true</string>
   </property>
   <property name="user.input.dir.uri">
     <string>file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/</string>
   </property>
-  <property name="user.input.file">
-    <string>topicgroup_chunk.ditamap</string>
-  </property>
   <property name="uplevels">
-    <string/>
+    <string></string>
   </property>
   <files>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita4.dita" uri="dita4.dita" path="dita4.dita" format="dita" target="true"/>
-    <file uri="Chunk6.dita" path="Chunk6.dita" format="dita"/>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/topicgroup_chunk.ditamap" uri="topicgroup_chunk.ditamap" path="topicgroup_chunk.ditamap" format="ditamap" input="true"/>
-    <file uri="Chunk0.dita" path="Chunk0.dita" format="dita"/>
-    <file uri="Chunk8.dita" path="Chunk8.dita" format="dita"/>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita2.dita" uri="dita2.dita" path="dita2.dita" format="dita" target="true"/>
-    <file uri="Chunk11.dita" path="Chunk11.dita" format="dita"/>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita5.dita" uri="dita5.dita" path="dita5.dita" format="dita" target="true"/>
-    <file uri="Chunk7.dita" path="Chunk7.dita" format="dita"/>
-    <file uri="Chunk1.dita" path="Chunk1.dita" format="dita"/>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita1.dita" uri="dita1.dita" path="dita1.dita" format="dita" target="true"/>
-    <file uri="Chunk10.dita" path="Chunk10.dita" format="dita"/>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita3.dita" uri="dita3.dita" path="dita3.dita" format="dita" target="true"/>
-    <file uri="Chunk9.dita" path="Chunk9.dita" format="dita"/>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita6.dita" uri="dita6.dita" path="dita6.dita" format="dita" target="true"/>
+    <file uri="Chunk19.dita" path="Chunk19.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk19.dita"
+          format="dita"></file>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/topicgroup_chunk.ditamap"
+        uri="topicgroup_chunk.ditamap" path="topicgroup_chunk.ditamap"
+        result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/topicgroup_chunk.ditamap"
+        format="ditamap" input="true"></file>
+    <file uri="Chunk8.dita" path="Chunk8.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk8.dita"
+          format="dita"></file>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita5.dita"
+        uri="dita5.dita" path="dita5.dita"
+        result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita5.dita"
+        format="dita" target="true"></file>
+    <file uri="Chunk7.dita" path="Chunk7.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk7.dita"
+          format="dita"></file>
+    <file uri="Chunk1.dita" path="Chunk1.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk1.dita"
+          format="dita"></file>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita1.dita"
+        uri="dita1.dita" path="dita1.dita"
+        result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita1.dita"
+        format="dita" target="true"></file>
+    <file uri="Chunk10.dita" path="Chunk10.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk10.dita"
+          format="dita"></file>
+    <file uri="Chunk13.dita" path="Chunk13.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk13.dita"
+          format="dita"></file>
+    <file uri="Chunk20.dita" path="Chunk20.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk20.dita"
+          format="dita"></file>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita4.dita"
+        uri="dita4.dita" path="dita4.dita"
+        result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita4.dita"
+        format="dita" target="true"></file>
+    <file uri="Chunk6.dita" path="Chunk6.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk6.dita"
+          format="dita"></file>
+    <file uri="Chunk17.dita" path="Chunk17.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk17.dita"
+          format="dita"></file>
+    <file uri="Chunk0.dita" path="Chunk0.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk0.dita"
+          format="dita"></file>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita2.dita"
+        uri="dita2.dita" path="dita2.dita"
+        result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita2.dita"
+        format="dita" target="true"></file>
+    <file uri="Chunk11.dita" path="Chunk11.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk11.dita"
+          format="dita"></file>
+    <file uri="Chunk15.dita" path="Chunk15.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk15.dita"
+          format="dita"></file>
+    <file uri="Chunk18.dita" path="Chunk18.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk18.dita"
+          format="dita"></file>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita3.dita"
+        uri="dita3.dita" path="dita3.dita"
+        result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita3.dita"
+        format="dita" target="true"></file>
+    <file uri="Chunk9.dita" path="Chunk9.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/Chunk9.dita"
+          format="dita"></file>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita6.dita"
+        uri="dita6.dita" path="dita6.dita"
+        result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_rewrite_tocontent/dita6.dita"
+        format="dita" target="true"></file>
   </files>
 </job>

@@ -1,0 +1,14 @@
+<job>
+  <property name="user.input.dir.uri">
+    <string>file:/</string>
+  </property>
+  <files>
+    <file src="file:/map.ditamap" uri="map.ditamap" path="map.ditamap" format="ditamap" input="true"/>
+    <file src="file:/a.dita" uri="a.dita" path="a.dita" format="dita" target="true"/>
+    <file src="file:/dir/b.dita" uri="dir/b.dita" path="dir/b.dita" format="dita" target="true"/>
+    <file src="file:/dir/subdir/c.dita" uri="dir/subdir/c.dita" path="dir/subdir/c.dita" format="dita" target="true"/>
+    <file src="file:/a.png" uri="a.png" path="a.png" format="image" target="true"/>
+    <file src="file:/dir/b.png" uri="dir/b.png" path="dir/b.png" format="image" target="true"/>
+    <file src="file:/dir/subdir/c.png" uri="dir/subdir/c.png" path="dir/subdir/c.png" format="image" target="true"/>
+  </files>
+</job>

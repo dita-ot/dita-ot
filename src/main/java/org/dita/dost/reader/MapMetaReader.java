@@ -259,7 +259,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     }
 
     private boolean isLocalScope(final Attr scopeAttr) {
-        return scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equals(scopeAttr.getNodeValue());
+        return scopeAttr == null || scopeAttr.getNodeValue().equals(ATTR_SCOPE_VALUE_LOCAL);
     }
 
     private boolean isDitaFormat(final Attr formatAttr) {

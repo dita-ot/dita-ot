@@ -1,0 +1,18 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+     class="- map/map "
+     ditaarch:DITAArchVersion="2.0">
+   <topicref class="- map/topicref " href="a.dita" chunk="combine">
+      <topichead class="+ map/topicref mapgroup-d/topichead ">
+         <topicmeta class="- map/topicmeta ">
+            <navtitle class="- topic/navtitle ">navtitle</navtitle>
+         </topicmeta>
+         <topicref class="- map/topicref " href="b.dita"/>
+      </topichead>
+   </topicref>
+   <topichead class="+ map/topicref mapgroup-d/topichead " chunk="combine">
+      <topicmeta class="- map/topicmeta ">
+         <navtitle class="- topic/navtitle ">navtitle</navtitle>
+      </topicmeta>
+      <topicref class="- map/topicref " href="c.dita"/>
+   </topichead>
+</map>

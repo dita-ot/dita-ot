@@ -1,0 +1,21 @@
+<dita>
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="topic_r4k_cyw_g4b"
+    ditaarch:DITAArchVersion="1.3">
+    <title class="- topic/title ">a</title>
+    <body class="- topic/body ">
+      <p class="- topic/p ">a</p>
+    </body>
+    <topic class="- topic/topic " id="topic_ayt_dyw_g4b" ditaarch:DITAArchVersion="1.3">
+      <title class="- topic/title ">b</title>
+      <body class="- topic/body ">
+        <p class="- topic/p ">b</p>
+      </body>
+      <topic class="- topic/topic " id="unique_0" ditaarch:DITAArchVersion="1.3">
+        <title class="- topic/title ">c</title>
+        <body class="- topic/body ">
+          <p class="- topic/p ">c</p>
+        </body>
+      </topic>
+    </topic>
+  </topic>
+</dita>

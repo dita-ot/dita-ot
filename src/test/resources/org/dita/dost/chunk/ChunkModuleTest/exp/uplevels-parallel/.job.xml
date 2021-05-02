@@ -1,0 +1,111 @@
+<?xml version="1.0" ?>
+<job>
+  <property name="default.cascade">
+    <string>nomerge</string>
+  </property>
+  <property name="plugin.org.dita.eclipsehelp.dir">
+    <string>plugins/org.dita.eclipsehelp</string>
+  </property>
+  <property name="plugin.org.dita.odt.dir">
+    <string>plugins/org.dita.odt</string>
+  </property>
+  <property name="plugin.org.dita.htmlhelp.dir">
+    <string>plugins/org.dita.htmlhelp</string>
+  </property>
+  <property name="temp-file-name-scheme">
+    <string>org.dita.dost.module.reader.DefaultTempFileScheme</string>
+  </property>
+  <property name="plugin.org.dita.eclipsecontent.dir">
+    <string>plugins/org.dita.eclipsecontent</string>
+  </property>
+  <property name="plugin.org.dita.base.dir">
+    <string>plugins/org.dita.base</string>
+  </property>
+  <property name="transtypes">
+    <string>pdf;pdf2;tocjs;xhtml;eclipsehelp;html5;htmlhelp;javahelp;troff</string>
+  </property>
+  <property name="plugindirs">
+    <string>plugins;demo</string>
+  </property>
+  <property name="plugin.org.dita.specialization.dita11.dir">
+    <string>plugins/org.dita.specialization.dita11</string>
+  </property>
+  <property name="plugin.org.dita.wordrtf.dir">
+    <string>plugins/org.dita.wordrtf</string>
+  </property>
+  <property name="plugin.ignores">
+    <string/>
+  </property>
+  <property name="plugin.org.dita.specialization.eclipsemap.dir">
+    <string>plugins/org.dita.specialization.eclipsemap</string>
+  </property>
+  <property name="plugin.org.dita.pdf.dir">
+    <string>plugins/org.dita.pdf</string>
+  </property>
+  <property name="plugin.org.dita.pdf2.dir">
+    <string>plugins/org.dita.pdf2</string>
+  </property>
+  <property name="plugin.org.dita.specialization.dita132.dir">
+    <string>plugins/org.dita.specialization.dita132</string>
+  </property>
+  <property name="print_transtypes">
+    <string>pdf2;pdf;legacypdf;odt</string>
+  </property>
+  <property name="supported_resource_extensions">
+    <string>.pdf;.swf</string>
+  </property>
+  <property name="plugin.org.dita.np.dir">
+    <string>plugins/org.dita.np</string>
+  </property>
+  <property name="plugin.org.dita.xhtml.dir">
+    <string>plugins/org.dita.xhtml</string>
+  </property>
+  <property name="plugin.org.dita.docbook.dir">
+    <string>plugins/org.dita.docbook</string>
+  </property>
+  <property name="chunk.id-generation-scheme">
+    <string>counter</string>
+  </property>
+  <property name="org.dita.pdf2.index.frame-markup">
+    <string>false</string>
+  </property>
+  <property name="plugin.org.dita.javahelp.dir">
+    <string>plugins/org.dita.javahelp</string>
+  </property>
+  <property name="plugin.org.dita-ot.html.dir">
+    <string>plugins/org.dita-ot.html</string>
+  </property>
+  <property name="supported_html_extensions">
+    <string>.htm;.html</string>
+  </property>
+  <property name="otrelease">
+    <string>1.2</string>
+  </property>
+  <property name="supported_image_extensions">
+    <string>.bmp;.svg;.png;.tif;.jpg;.gif;.jpeg;.tiff;.eps</string>
+  </property>
+  <property name="otversion">
+    <string>1.2.3</string>
+  </property>
+  <property name="plugin.com.sophos.tocjs.dir">
+    <string>plugins/com.sophos.tocjs</string>
+  </property>
+  <property name="plugin.org.dita.troff.dir">
+    <string>plugins/org.dita.troff</string>
+  </property>
+  <property name="org.dita.pdf2.i18n.enabled">
+    <string>true</string>
+  </property>
+  <property name="user.input.dir.uri">
+    <string>file:/</string>
+  </property>
+  <files>
+    <file src="file:/a.png" uri="a.png" path="a.png" result="file:/a.png" format="image" target="true"/>
+    <file src="file:/a.dita" uri="a.dita" path="a.dita" result="file:/a.dita" format="dita" target="true"/>
+    <file src="file:/maps/map.ditamap" uri="maps/map.ditamap" path="maps/map.ditamap" result="file:/maps/map.ditamap"
+      format="ditamap" input="true"/>
+    <file src="file:/dir/b.png" uri="dir/b.png" path="dir/b.png" result="file:/dir/b.png" format="image" target="true"/>
+    <file src="file:/dir/subdir/c.png" uri="dir/subdir/c.png" path="dir/subdir/c.png" result="file:/dir/subdir/c.png"
+      format="image" target="true"/>
+  </files>
+</job>
