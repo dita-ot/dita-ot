@@ -118,6 +118,8 @@ abstract class Arguments {
             handleArgListener(args);
         } else if (isLongForm(arg, "-logger")) {
             handleArgLogger(args);
+        } else if (isLongForm(arg, "-no-color")) {
+            useColor = false;
         } else {
             throw new BuildException("Unsupported argument: %s", arg);
         }

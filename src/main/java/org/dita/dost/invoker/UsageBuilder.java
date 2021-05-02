@@ -28,6 +28,7 @@ public class UsageBuilder {
         if (!compact) {
             options("d", "debug", null, locale.getString("help.option.debug"));
             options("v", "verbose", null, locale.getString("help.option.verbose"));
+            options(null, "no-color", null, locale.getString("help.option.no-color"));
         }
     }
 
