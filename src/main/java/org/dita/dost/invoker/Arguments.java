@@ -88,6 +88,10 @@ abstract class Arguments {
         final String os = System.getProperty("os.name");
         if (os != null && os.startsWith("Windows")) {
             return false;
+        } else if (System.getenv("NO_COLOR") != null) {
+            return false;
+        } else if (Objects.equals(System.getenv("TERM"), "dumb")) {
+            return false;
         }
         return Boolean.parseBoolean(Configuration.configuration.getOrDefault("cli.color", "true"));
     }
