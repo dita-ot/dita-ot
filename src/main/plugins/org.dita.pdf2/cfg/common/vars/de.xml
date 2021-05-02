@@ -30,8 +30,8 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
 -->
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
-  <variable id="Preface odd header"><param ref-name="pagenum"/> | Einleitung | <param ref-name="pagenum"/></variable>
-  <variable id="Preface even header"><param ref-name="pagenum"/> | Einleitung | <param ref-name="pagenum"/></variable>
+  <variable id="Preface odd header"><param ref-name="prodname"/> | Einleitung | <param ref-name="pagenum"/></variable>
+  <variable id="Preface even header"><param ref-name="pagenum"/> | Einleitung | <param ref-name="prodname"/></variable>
   <variable id="Table of Contents">Inhalt</variable>
   <variable id="Index Continued String">Fortsetzung</variable>
   <variable id="Index See String">, Siehe </variable>
