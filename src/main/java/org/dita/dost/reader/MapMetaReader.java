@@ -54,6 +54,7 @@ public final class MapMetaReader extends AbstractDomFilter {
             TOPIC_PUBLISHER.matcher
     )));
     private static final Set<String> metaSet = Collections.unmodifiableSet(new HashSet<>(asList(
+            TOPIC_NAVTITLE.matcher,
             MAP_SEARCHTITLE.matcher,
             TOPIC_SEARCHTITLE.matcher,
             TOPIC_AUTHOR.matcher,
