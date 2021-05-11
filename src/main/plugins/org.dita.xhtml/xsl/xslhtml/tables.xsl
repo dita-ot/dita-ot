@@ -400,6 +400,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
       <xsl:when test="$row/@rowsep"><xsl:value-of select="$row/@rowsep"/></xsl:when>
       <xsl:when test="$colspec/@rowsep"><xsl:value-of select="$colspec/@rowsep"/></xsl:when>
+      <xsl:when test="$group/@rowsep"><xsl:value-of select="$group/@rowsep"/></xsl:when>
       <xsl:when test="$table/@rowsep"><xsl:value-of select="$table/@rowsep"/></xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$table.rowsep-default"/>
@@ -417,6 +418,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:when>
       <xsl:when test="@colsep"><xsl:value-of select="@colsep"/></xsl:when>
       <xsl:when test="$colspec/@colsep"><xsl:value-of select="$colspec/@colsep"/></xsl:when>
+      <xsl:when test="$group/@colsep"><xsl:value-of select="$group/@colsep"/></xsl:when>
       <xsl:when test="$table/@colsep"><xsl:value-of select="$table/@colsep"/></xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$table.colsep-default"/>
