@@ -16,7 +16,7 @@ See the accompanying LICENSE file for applicable license.
             <!-- Trademark -->
             <character>&#8482;</character>
             <!-- Service mark -->
-            <character>&#2120;</character>
+            <character>&#x2120;</character>
         </character-set>
     </alphabet>
 
