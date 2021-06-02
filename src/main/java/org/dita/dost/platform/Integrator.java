@@ -321,7 +321,7 @@ public final class Integrator {
                 //configuration.put(name, ditaDir.getAbsolutePath());
                 configuration.put(name, ".");
             } else {
-                configuration.put(name, FileUtils.getRelativePath(new File(ditaDir, "dummy"), f.getPluginDir()).getPath());
+                configuration.put(name, FileUtils.getRelativePath(new File(ditaDir, "dummy"), f.getPluginDir()).getPath().replace("\\", "/"));
             }
         }
         configuration.putAll(getParserConfiguration());
