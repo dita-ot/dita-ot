@@ -10,7 +10,7 @@
   
   <!-- Mocks -->
   <xsl:variable name="writing-mode"/>
-  <xsl:variable name="maxCharsInShortDesc "/>
+  <xsl:variable name="maxCharsInShortDesc" as="xs:integer">0</xsl:variable>
   <xsl:function name="dita-ot:matches-searchtitle-class">
   <xsl:param name="argument"/>
   </xsl:function>
