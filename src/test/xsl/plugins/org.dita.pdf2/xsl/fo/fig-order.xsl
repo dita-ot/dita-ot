@@ -43,7 +43,10 @@
   <xsl:template name="buildBasicLinkDestination"/>
   <xsl:template name="get-id"/>
   <xsl:template name="determineTopicType"/>
-  <xsl:template name="processAttrSetReflection"/>
+  <xsl:template name="processAttrSetReflection">
+      <xsl:param name="attrSet"/>
+      <xsl:param name="path"/>
+  </xsl:template>
   <xsl:template name="topic-title-mock" match="*[contains(@class,' topic/title ')]"><topic-title/></xsl:template>
   <xsl:template name="topic-desc-mock" match="*[contains(@class,' topic/desc ')]"><topic-desc/></xsl:template>
   <xsl:template name="topic-image-mock" match="*[contains(@class,' topic/image ')]"><topic-image/></xsl:template>
