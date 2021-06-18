@@ -40,19 +40,23 @@
   <xsl:attribute-set name="image__inline"/>
   <xsl:key name="map-id" match="map-id">map-id</xsl:key>
   <xsl:key name="enumerableByClass" match="enumerableByClass">enumerableByClass</xsl:key>
-  <xsl:template name="buildBasicLinkDestination"/>
+  <xsl:template name="buildBasicLinkDestination">
+    <xsl:param name="scope" />
+    <xsl:param name="format" />
+    <xsl:param name="href" />
+  </xsl:template>
   <xsl:template name="get-id"/>
   <xsl:template name="determineTopicType"/>
   <xsl:template name="processAttrSetReflection">
-      <xsl:param name="attrSet"/>
-      <xsl:param name="path"/>
+    <xsl:param name="attrSet"/>
+    <xsl:param name="path"/>
   </xsl:template>
   <xsl:template name="topic-title-mock" match="*[contains(@class,' topic/title ')]"><topic-title/></xsl:template>
   <xsl:template name="topic-desc-mock" match="*[contains(@class,' topic/desc ')]"><topic-desc/></xsl:template>
   <xsl:template name="topic-image-mock" match="*[contains(@class,' topic/image ')]"><topic-image/></xsl:template>
   <xsl:template name="getVariable">
-    <xsl:param name="id"/>
-    <xsl:param name="params"/>
+  <xsl:param name="id"/>
+  <xsl:param name="params"/>
   </xsl:template>
   
 </xsl:stylesheet>
