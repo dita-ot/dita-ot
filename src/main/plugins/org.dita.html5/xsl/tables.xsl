@@ -101,6 +101,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
         <xsl:when test="$row/@rowsep"><xsl:value-of select="$row/@rowsep"/></xsl:when>
         <xsl:when test="$colspec/@rowsep"><xsl:value-of select="$colspec/@rowsep"/></xsl:when>
+        <xsl:when test="$group/@rowsep"><xsl:value-of select="$group/@rowsep"/></xsl:when>
         <xsl:when test="$table/@rowsep"><xsl:value-of select="$table/@rowsep"/></xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$table.rowsep-default"/>
