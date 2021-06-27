@@ -59,7 +59,7 @@ See the accompanying LICENSE file for applicable license.
         <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Japanese">
-        <font-face>KozMinProVI-Regular, Arial Unicode MS, Batang</font-face>
+        <font-face>MS-Gothic, Hiragino Kaku Gothic Pro, HiraKakuProN-W3, YuGothic, Arial Unicode MS</font-face>
       </physical-font>
       <physical-font char-set="Korean">
         <font-face>AdobeMyungjoStd-Medium, Arial Unicode MS, Batang</font-face>
@@ -85,7 +85,7 @@ See the accompanying LICENSE file for applicable license.
         <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Japanese">
-        <font-face>KozMinProVI-Regular, Arial Unicode MS, Batang</font-face>
+        <font-face>MS-Mincho, Hiragino Mincho Pro, HiraMinProN-W3, YuMincho, Arial Unicode MS</font-face>
       </physical-font>
       <physical-font char-set="Korean">
         <font-face>AdobeMyungjoStd-Medium, Arial Unicode MS, Batang</font-face>
@@ -111,7 +111,7 @@ See the accompanying LICENSE file for applicable license.
         <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Japanese">
-        <font-face>KozMinProVI-Regular, Arial Unicode MS, Batang</font-face>
+        <font-face>MS-Gothic, Hiragino Kaku Gothic Pro, HiraKakuProN-W3, YuGothic, Arial Unicode MS</font-face>
       </physical-font>
       <physical-font char-set="Korean">
         <font-face>AdobeMyungjoStd-Medium, Arial Unicode MS, Batang</font-face>
