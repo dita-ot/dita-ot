@@ -17,6 +17,8 @@ import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.URLUtils;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.ErrorHandler;
@@ -321,7 +323,8 @@ public final class Integrator {
                 //configuration.put(name, ditaDir.getAbsolutePath());
                 configuration.put(name, ".");
             } else {
-                configuration.put(name, FileUtils.getRelativePath(new File(ditaDir, "dummy"), f.getPluginDir()).getPath());
+
+                configuration.put(name, URLUtils.getRelativePath(new File(ditaDir, "dummy").toURI(), f.getPluginDir().toURI()).toString());
             }
         }
         configuration.putAll(getParserConfiguration());
