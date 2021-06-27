@@ -1022,8 +1022,8 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:call-template name="get-id"/>
               </xsl:attribute>
             </xsl:if>
-            <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
-            <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
+            <xsl:apply-templates select="*[not(contains(@class,' topic/title ') or contains(@class,' topic/desc '))]"/>
+            <xsl:apply-templates select="*[contains(@class,' topic/title ') or contains(@class,' topic/desc ')]"/>
         </fo:block>
     </xsl:template>
 
