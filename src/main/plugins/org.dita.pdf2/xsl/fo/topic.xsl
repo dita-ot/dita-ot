@@ -861,7 +861,7 @@ See the accompanying LICENSE file for applicable license.
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='warning'">
-                        <fo:inline xsl:use-attribute-sets="note__label__danger">
+                        <fo:inline xsl:use-attribute-sets="note__label__warning">
                             <xsl:call-template name="getVariable">
                                 <xsl:with-param name="id" select="'Warning'"/>
                             </xsl:call-template>
