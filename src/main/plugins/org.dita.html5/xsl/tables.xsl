@@ -383,7 +383,9 @@ See the accompanying LICENSE file for applicable license.
               <xsl:choose>     <!-- Hungarian: "1. Table " -->
                 <xsl:when test="$ancestorlang = ('hu', 'hu-hu')">
                   <xsl:value-of select="$tbl-count-actual"/>
-                  <xsl:text>. </xsl:text>
+                  <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'label-separator'"/>
+                  </xsl:call-template>
                   <xsl:call-template name="getVariable">
                     <xsl:with-param name="id" select="'Table'"/>
                   </xsl:call-template>
@@ -395,13 +397,17 @@ See the accompanying LICENSE file for applicable license.
                   </xsl:call-template>
                   <xsl:text> </xsl:text>
                   <xsl:value-of select="$tbl-count-actual"/>
-                  <xsl:text>. </xsl:text>
+                  <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'label-separator'"/>
+                  </xsl:call-template>
                 </xsl:otherwise>
               </xsl:choose>
             </span>
             <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="tabletitle"/>
             <xsl:if test="*[contains(@class, ' topic/desc ')]">
-              <xsl:text>. </xsl:text>
+              <xsl:call-template name="getVariable">
+                <xsl:with-param name="id" select="'desc-separator'"/>
+              </xsl:call-template>
             </xsl:if>
           </span>
           <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
@@ -586,7 +592,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" mode="title-number">
     <xsl:param name="number" as="xs:integer"/>
-    <xsl:sequence select="concat(dita-ot:get-variable(., 'Table'), ' ', $number, '. ')"/>
+    <xsl:sequence select="concat(dita-ot:get-variable(., 'Table'), ' ', $number, dita-ot:get-variable(., 'label-separator'))"/>
   </xsl:template>
 
   <xsl:template mode="title-number" priority="1" match="
@@ -595,7 +601,7 @@ See the accompanying LICENSE file for applicable license.
    /*[contains(@class, ' topic/title ')]
   ">
     <xsl:param name="number" as="xs:integer"/>
-    <xsl:sequence select="concat($number, '. ', dita-ot:get-variable(., 'Table'), ' ')"/>
+    <xsl:sequence select="concat($number, dita-ot:get-variable(., 'label-separator'), dita-ot:get-variable(., 'Table'), ' ')"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" name="topic.table_title">
