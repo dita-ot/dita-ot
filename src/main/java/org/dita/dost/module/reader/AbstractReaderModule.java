@@ -176,7 +176,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             filterUtils = parseFilterFile();
         }
 
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+        if (transtype.contains(INDEX_TYPE_ECLIPSEHELP)) {
             exportAnchorsFilter = new ExportAnchorsFilter();
             exportAnchorsFilter.setInputFile(rootFile);
         }
@@ -773,7 +773,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
         }
 
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+        if (transtype.contains(INDEX_TYPE_ECLIPSEHELP)) {
             final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
             delayConrefUtils.setLogger(logger);
             delayConrefUtils.setJob(job);
