@@ -1,16 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map33_filter3/temp/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map33_filter3/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA 1.3 Map//EN?><?doctype-system file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.3" domains="(topic delay-d) (map mapgroup-d) (topic indexing-d) (map glossref-d) (topic hi-d) (topic ut-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)">
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map33_filter3/temp/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/map33_filter3/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA 1.3 Map//EN?><?doctype-system file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- map/map " cascade="nomerge" specializations="@props/deliveryTarget">
     <title class="- topic/title ">map13: A hierarchy of CVF(correct value of platform attribute)</title>
-    <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap " dita-ot:orig-class="- map/topicref " dita-ot:orig-format="ditamap" dita-ot:orig-href="baseOSHierarchy.ditamap" dita-ot:submap-DITAArchVersion="1.3" dita-ot:submap-cascade="nomerge" dita-ot:submap-class="- map/map subjectScheme/subjectScheme " dita-ot:submap-domains="(map mapgroup-d) (map subjectScheme) a(props deliveryTarget) (topic hazard-d) (topic hi-d) (topic ut-d)" dita-ot:submap-processing-role="resource-only" dita-ot:submap-toc="no"><submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta "><submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">Base Operation System (Hierarchy)</submap-title></submap-topicmeta><subjectdef class="- map/topicref subjectScheme/subjectdef " keys="os" navtitle="Operating system" processing-role="resource-only" toc="no">
-    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="linux" navtitle="Linux">
-      <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="redhat" navtitle="RedHat Linux"/>
-      <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="suse" navtitle="SuSE Linux"/>
-    </subjectdef>
-    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="mswin" navtitle="Windows"/>
-    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="zos" navtitle="z/OS"/>
-    </subjectdef><enumerationdef class="- map/topicref subjectScheme/enumerationdef " processing-role="resource-only" toc="no">
-        <attributedef class="- topic/data subjectScheme/attributedef " name="platform" translate="no"/>
-        <subjectdef class="- map/topicref subjectScheme/subjectdef " keyref="os"/>
-        
-    </enumerationdef></submap>
-    <topicref class="- map/topicref " href="topic4.dita"/>
+    <topicref href="baseOSHierarchy.ditamap" format="ditamap" type="subjectScheme" class="- map/topicref "/>
+    <topicref href="topic4.dita" class="- map/topicref "/>
 </map>
