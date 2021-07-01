@@ -2358,12 +2358,12 @@ See the accompanying LICENSE file for applicable license.
       <xsl:call-template name="generateDefaultMeta"/> <!-- Standard meta for security, robots, etc -->
       <xsl:apply-templates select="." mode="getMeta"/> <!-- Process metadata from topic prolog -->
       <xsl:call-template name="copyright"/>         <!-- Generate copyright, if specified manually -->
-      <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
       <xsl:call-template name="generateChapterTitle"/> <!-- Generate the <title> element -->
       <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here -->
       <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here -->
       <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here -->
       <xsl:call-template name="processHDF"/>        <!-- Add user HDF file, if specified -->
+      <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
     </head>
   </xsl:template>
 
