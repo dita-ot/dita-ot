@@ -15,6 +15,7 @@ See the accompanying LICENSE file for applicable license.
           depends="html5.init,
                    build-init,
                    preprocess,
+                   html5.after.preprocess,
                    html5.topic,
                    html5.map,
                    html5.css"/>
@@ -101,6 +102,10 @@ See the accompanying LICENSE file for applicable license.
     <!-- Set to "true" if you get out-of-memory errors during preprocess
     while processing very large (thousands of files) document sets. -->
     <property name="dita.html5.reloadstylesheet" value="false"/>
+  </target>
+
+  <target name="html5.after.preprocess">
+    <dita:extension id="dita.build.html5.after.preprocess" behavior="org.dita.dost.platform.InsertAction"/>
   </target>
 
   <target name="html5.topic"

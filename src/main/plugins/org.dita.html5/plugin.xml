@@ -13,6 +13,7 @@ See the accompanying LICENSE file for applicable license.
   <extension-point id="dita.conductor.html5.toc.param" name="HTML/XSLT XSLT parameter"/>
   <extension-point id="dita.xsl.html5.toc" name="HTML5 TOC XSLT import"/>
   <extension-point id="dita.xsl.html5.cover" name="HTML5 Cover XSLT import"/>
+  <extension-point id="dita.build.html5.after.preprocess" name="HTML5 build inclusion after preprocess"/>
   <!-- extensions -->
   <transtype name="html5" desc="HTML5">
     <param name="args.artlbl" desc="Specifies whether to generate a label for each image; the label will contain the image file name." type="enum">
