@@ -13,6 +13,7 @@ import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.ReceivingContentHandler;
 import net.sf.saxon.s9api.*;
+import net.sf.saxon.lib.EmptySource;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
@@ -247,10 +248,14 @@ public class StreamStore extends AbstractStore implements Store {
     public Source getSource(final URI path) {
         final URI f = getUri(path);
         if (isTempFile(f)) {
-            if (LOG) System.err.println("  getSource:" + f);
-            final Source s = new StreamSource(f.toString());
-            s.setSystemId(f.toString());
-            return s;
+            if (exists(f)) {
+                if (LOG) System.err.println("  getSource:" + f);
+                final Source s = new StreamSource(f.toString());
+                s.setSystemId(f.toString());
+                return s;
+            } else {
+                return new EmptySource();
+            }
         } else {
             if (LOG) System.err.println("  getSource:" + path);
             return new StreamSource(path.toString());

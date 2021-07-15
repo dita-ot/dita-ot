@@ -379,7 +379,7 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("badconref.dita"))
                 .put("validate", "false")
-                .warnCount(2)
+                .warnCount(1)
                 .errorCount(2)
                 .test();
     }
@@ -521,8 +521,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("input.ditamap"))
                 .put("link-crawl", "map")
-                .errorCount(2)
-                .warnCount(2)
+                .errorCount(1)
+                .warnCount(1)
                 .test();
     }
 

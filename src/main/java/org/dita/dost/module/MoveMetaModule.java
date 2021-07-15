@@ -33,8 +33,7 @@ import java.util.Map.Entry;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toFile;
-import static org.dita.dost.util.XMLUtils.toErrorListener;
-import static org.dita.dost.util.XMLUtils.toMessageListener;
+import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * Cascades metadata from maps to topics and then from topics to maps.
@@ -88,7 +87,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
 
             try {
                 final XsltTransformer transformer = xsltExecutable.load();
-                transformer.setErrorListener(toErrorListener(logger));
+                transformer.setErrorReporter(toErrorReporter(logger));
                 transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
                 transformer.setMessageListener(toMessageListener(logger));
 
