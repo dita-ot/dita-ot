@@ -35,17 +35,24 @@ See the accompanying LICENSE file for applicable license.
   <xsl:key name="id" match="*[@id]" use="@id"/>
 
   <xsl:template match="/">
-    <xsl:apply-templates>
-      <xsl:with-param name="conref-ids" tunnel="yes" select="()"/>
-    </xsl:apply-templates>
+    <xsl:variable name="resolved" as="document-node()">
+      <xsl:document>
+        <xsl:apply-templates>
+          <xsl:with-param name="conref-ids" tunnel="yes" select="()"/>
+        </xsl:apply-templates>
+      </xsl:document>
+    </xsl:variable>
+    <xsl:apply-templates select="$resolved/node()" mode="clean"/>
   </xsl:template>
 
   <!-- If the target element does not exist, this template will be called to issue an error -->
+  <!-- Deprecated since 1.5 -->
   <xsl:template name="missing-target-error">
     <xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/>
   </xsl:template>
 
   <!-- If an ID is duplicated, and there are 2 possible targets, issue a warning -->
+  <!-- Deprecated since 1.5 -->
   <xsl:template name="duplicateConrefTarget">
     <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
   </xsl:template>
@@ -527,16 +534,15 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="@id">
     <xsl:param name="conref-filename" tunnel="yes" as="xs:string?"/>
-    <xsl:attribute name="id">
-      <xsl:choose>
-        <xsl:when test="exists($conref-filename)">
-          <xsl:value-of select="generate-id(..)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="."/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
+    <xsl:choose>
+      <xsl:when test="exists($conref-filename)">
+        <xsl:attribute name="id" select="generate-id(..)"/>
+        <xsl:attribute name="conref:orig-id" select="."/>
+      </xsl:when>     
+      <xsl:otherwise>
+        <xsl:copy/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="generate-href">
@@ -545,34 +551,25 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="topicid" tunnel="yes" as="xs:string?"/>
     <xsl:param name="elemid" tunnel="yes" as="xs:string?"/>
     <xsl:param name="conref-source-topicid" tunnel="yes" as="xs:string?"/>
-    <xsl:variable name="conref-topicid" as="xs:string">
-      <xsl:choose>
-        <xsl:when test="empty($topicid)">
-          <xsl:value-of select="//*[contains(@class, ' topic/topic ')][1]/@id"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$topicid"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
+    
+    <xsl:variable name="conref-topicid" as="xs:string"
+                  select="if (exists($topicid))
+                          then $topicid
+                          else //*[contains(@class, ' topic/topic ')][1]/@id"/>
     <xsl:variable name="href-topicid" select="dita-ot:get-topic-id(.)" as="xs:string?"/>
     <xsl:variable name="href-elemid" select="dita-ot:get-element-id(.)" as="xs:string?"/>
     <xsl:variable name="conref-gen-id" as="xs:string">
-      <xsl:choose>
-        <xsl:when test="empty($elemid) or $elemid = $href-elemid">
-          <xsl:value-of select="generate-id(key('id', $conref-topicid)[contains(@class, ' topic/topic ')]//*[@id = $href-elemid])"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="generate-id(key('id', $conref-topicid)[contains(@class, ' topic/topic ')]//*[@id = $elemid]//*[@id = $href-elemid])"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:variable name="topic" select="key('id', $conref-topicid)[contains(@class, ' topic/topic ')]"/>
+      <xsl:sequence select="if (empty($elemid) or $elemid = $href-elemid)
+                            then generate-id($topic//*[@id = $href-elemid])
+                            else generate-id($topic//*[@id = $elemid]//*[@id = $href-elemid])"/>
     </xsl:variable>
     <xsl:variable name="href-gen-id" as="xs:string">
-      <xsl:variable name="topic" select="key('id', $href-topicid)"/>
-      <xsl:value-of select="generate-id($topic[contains(@class, ' topic/topic ')]//*[@id = $href-elemid][generate-id(ancestor::*[contains(@class, ' topic/topic ')][1]) = generate-id($topic)])"/>
+      <xsl:variable name="topic" select="key('id', $href-topicid)[contains(@class, ' topic/topic ')]"/>
+      <xsl:value-of select="generate-id($topic//*[@id = $href-elemid][generate-id(ancestor::*[contains(@class, ' topic/topic ')][1]) = generate-id($topic)])"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="($conref-gen-id = '') or (not($conref-gen-id = $href-gen-id))">
+      <xsl:when test="$conref-gen-id = '' or not($conref-gen-id = $href-gen-id)">
         <!--href target is not in conref target -->
         <xsl:value-of select="$current-relative-path"/>
         <xsl:value-of select="$conref-filename"/>
@@ -898,4 +895,37 @@ See the accompanying LICENSE file for applicable license.
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="*[@conref:orig-id]" mode="clean">
+    <xsl:copy>
+      <xsl:copy-of select="@* except @conref:orig-id"/>
+      <xsl:variable name="orig-id" select="@conref:orig-id" as="attribute()"/>
+      <xsl:variable name="topic" select="ancestor::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
+      <xsl:variable name="content" select="$topic/*[not(contains(@class, ' topic/topic '))]" as="element()*"/>
+      <xsl:variable name="first" select="($content//@conref:orig-id[. = $orig-id])[1]" as="attribute()"/>
+      <xsl:variable name="ids" as="element()*">
+        <xsl:for-each select="$content">
+          <xsl:sequence select="key('id', $orig-id, .)"/>
+        </xsl:for-each>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="empty($ids) and $orig-id is $first">
+          <xsl:attribute name="id" select="$orig-id"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="id" select="'DOTX077I'"/>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref:orig-id"/>;%2=<xsl:value-of select="@id"/></xsl:with-param>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="node() | @*" mode="clean" priority="0">
+    <xsl:copy>
+      <xsl:apply-templates select="node() | @*" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+  
 </xsl:stylesheet>

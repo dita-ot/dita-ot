@@ -808,6 +808,11 @@ See the accompanying LICENSE file for applicable license.
     <reason>A content reference in a constrained document type cannot be resolved because it would violate one of the document constraints "%1".</reason>
     <response>The current constrained document may only reuse content from documents with equivalent constraints.</response>
   </message>
+  
+  <message id="DOTX077I" type="INFO">
+    <reason>Resolving content references results in duplicate ID '%1'.</reason>
+    <response>Rewriting resolved version to '%2'.</response>
+  </message>
 
 
   <!-- End of XSL Messages --> 
