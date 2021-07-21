@@ -9,10 +9,7 @@ package org.dita.dost.util;
 
 import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.expr.instruct.TerminationException;
-import net.sf.saxon.lib.CollationURIResolver;
-import net.sf.saxon.lib.ExtensionFunctionDefinition;
-import net.sf.saxon.lib.Logger;
-import net.sf.saxon.lib.StandardErrorListener;
+import net.sf.saxon.lib.*;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.s9api.streams.Step;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -144,16 +141,10 @@ public final class XMLUtils {
         return res;
     }
 
-    public static ErrorListener toErrorListener(final DITAOTLogger logger) {
-        final StandardErrorListener listener = new StandardErrorListener();
-        listener.setLogger(toSaxonLogger(logger));
-        return listener;
-    }
-
-    public static MessageListener toMessageListener(final DITAOTLogger logger) {
-        return new MessageListener() {
+    public static MessageListener2 toMessageListener(final DITAOTLogger logger) {
+        return new MessageListener2() {
             @Override
-            public void message(XdmNode content, boolean terminate, SourceLocator locator) {
+            public void message(XdmNode content, net.sf.saxon.s9api.QName code, boolean terminate, SourceLocator locator) {
                 final Optional<String> errorCode = content.select(descendant(isProcessingInstruction()).where(hasLocalName("error-code")))
                         .findAny()
                         .map(XdmItem::getStringValue);
@@ -189,29 +180,25 @@ public final class XMLUtils {
         };
     }
 
-    public static Logger toSaxonLogger(final DITAOTLogger logger) {
-        return new Logger() {
-            @Override
-            public void println(String message, int severity) {
-                switch(severity) {
-                    case Logger.INFO:
-                        logger.info(message);
-                        break;
-                    case Logger.WARNING:
-                        logger.warn(message);
-                        break;
-                    case Logger.ERROR:
-                        logger.error(message);
-                        break;
-                    case Logger.DISASTER:
-                        throw new RuntimeException(message);
-                    default:
-                        throw new IllegalArgumentException();
+    public static ErrorReporter toErrorReporter(final DITAOTLogger logger) {
+        return (XmlProcessingError error) -> {
+            if (error.isWarning()) {
+                logger.warn(error.getMessage());
+            } else {
+                if (error.getCause() instanceof FileNotFoundException) {
+                    error.asWarning();
+                    final StringBuilder buf = new StringBuilder()
+                            .append(error.getLocation().getSystemId())
+                            .append(":")
+                            .append(error.getLocation().getLineNumber())
+                            .append(":")
+                            .append(error.getLocation().getColumnNumber())
+                            .append(": ")
+                            .append(error.getMessage());
+                    logger.warn(buf.toString());
+                } else {
+                    logger.error(error.getMessage());
                 }
-            }
-            @Override
-            public StreamResult asStreamResult() {
-                return null;
             }
         };
     }

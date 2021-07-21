@@ -29,8 +29,7 @@ import java.util.List;
 
 import static org.dita.dost.reader.GenListModuleReader.KEYREF_ATTRS;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.toErrorListener;
-import static org.dita.dost.util.XMLUtils.toMessageListener;
+import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * Recursively inline map references in maps.
@@ -45,7 +44,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     private void init(final AbstractPipelineInput input) {
         processor = xmlUtils.getProcessor();
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
-        xsltCompiler.setErrorListener(toErrorListener(logger));
+        xsltCompiler.setErrorReporter(toErrorReporter(logger));
         final File style = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
         try {
             templates = xsltCompiler.compile(new StreamSource(style));
@@ -96,7 +95,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         try {
             doc = XMLUtils.getDocumentBuilder().newDocument();
             final XsltTransformer transformer = templates.load();
-            transformer.setErrorListener(toErrorListener(logger));
+            transformer.setErrorReporter(toErrorReporter(logger));
             transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
             transformer.setMessageListener(toMessageListener(logger));
 

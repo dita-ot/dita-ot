@@ -448,7 +448,6 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
                 .input(Paths.get("input.ditamap"))
                 .put("link-crawl", "map")
                 .errorCount(2)
-                .warnCount(2)
                 .test();
     }
 }
