@@ -88,6 +88,20 @@ public class KeyrefModuleTest {
                 .format("dita")
                 .hasKeyref(true)
                 .build());
+        job.add(new FileInfo.Builder()
+                .uri(URI.create("res.dita"))
+                .src(new File(baseDir, "src" + File.separator + "res.dita").toURI())
+                .result(new File(baseDir, "src" + File.separator + "res.dita").toURI())
+                .format("dita")
+                .hasKeyref(true)
+                .build());
+        job.add(new FileInfo.Builder()
+                .uri(URI.create("res.png"))
+                .src(new File(baseDir, "src" + File.separator + "res.png").toURI())
+                .result(new File(baseDir, "src" + File.separator + "res.png").toURI())
+                .format("png")
+                .hasKeyref(true)
+                .build());
         module.setJob(job);
         module.setLogger(new TestLogger());
     }
@@ -198,19 +212,22 @@ public class KeyrefModuleTest {
                 .isInput(true)
                 .build();
         job.add(inputMapFileInfo);
-
 	    final XdmNode act = parse(inputMapFileInfo.src);
 	    final KeyScope childScope1 = new KeyScope("A", "A",
 	    		ImmutableMap.of(
 	    				"VAR", new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
-	    				"A.VAR", new KeyDef("A.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null)
+	    				"A.VAR", new KeyDef("A.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
+	    				"A.VAR2", new KeyDef("A.VAR2", new URI("res.dita"), "local", "dita", inputMapFileInfo.src, null),
+	    				"A.VAR3", new KeyDef("A.VAR3", new URI("res.png"), "local", "png", inputMapFileInfo.src, null)
 	    				),
 	    		EMPTY_LIST
 	    		);
 	    final KeyScope childScope2 = new KeyScope("B", "B",
 	    		ImmutableMap.of(
 	    				"VAR", new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
-	    				"B.VAR", new KeyDef("B.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null)
+	    				"B.VAR", new KeyDef("B.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
+	    				"B.VAR2", new KeyDef("B.VAR2", new URI("res.dita"), "local", "dita", inputMapFileInfo.src, null),
+	    				"B.VAR3", new KeyDef("B.VAR3", new URI("res.png"), "local", "png", inputMapFileInfo.src, null)
 	    				),
 	    		EMPTY_LIST
 	    		);
@@ -226,7 +243,7 @@ public class KeyrefModuleTest {
         receiver.open();
         module.walkMap(inputMapFileInfo, act, singletonList(keyScope), res, receiver);
         receiver.close();
-
+        
 	    ResolveTask task = res.get(0);
 	    assertEquals("topic.dita", task.in.file.toString());
 	    assertEquals(null, task.scope.name);
@@ -239,13 +256,31 @@ public class KeyrefModuleTest {
 	    keyDef = task.scope.keyDefinition.get("A.VAR");
 	    assertEquals(new URI("topic-1.dita"), keyDef.href);
 	    
-	    task = res.get(2);
+	    task = res.get(3);
+	    assertEquals("res.png", task.in.file.toString());
+	    assertEquals("A", task.scope.name);
+	    keyDef = task.scope.keyDefinition.get("A.VAR3");
+	    assertEquals(new URI("res.png"), keyDef.href);
+	    
+	    task = res.get(4);
 	    assertEquals("topic.dita", task.in.file.toString());
 	    assertEquals("B", task.scope.name);
 	    keyDef = task.scope.keyDefinition.get("VAR");
 	    assertEquals(new URI("topic.dita"), keyDef.href);
 	    keyDef = task.scope.keyDefinition.get("B.VAR");
 	    assertEquals(new URI("topic-2.dita"), keyDef.href);
+	    
+	    task = res.get(5);
+	    assertEquals("res.dita", task.in.file.toString());
+	    assertEquals("B", task.scope.name);
+	    keyDef = task.scope.keyDefinition.get("B.VAR2");
+	    assertEquals(new URI("res-1.dita"), keyDef.href);
+	    
+	    task = res.get(6);
+	    assertEquals("res.png", task.in.file.toString());
+	    assertEquals("B", task.scope.name);
+	    keyDef = task.scope.keyDefinition.get("B.VAR3");
+	    assertEquals(new URI("res.png"), keyDef.href);
 	}
 
     private XdmNode parse(final URI in) {

@@ -442,7 +442,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
      * @return key reference processing
      */
     private ResolveTask processTopic(final FileInfo f, final KeyScope scope, final boolean isResourceOnly) {
-        final int increment = isResourceOnly ? 0 : 1;
+    	boolean ditaFormat = f.format == null || "dita".equals(f.format);
+    	final int increment = isResourceOnly && ! ditaFormat ? 0 : 1;
         final Integer used = usage.containsKey(f.uri) ? usage.get(f.uri) + increment : increment;
         usage.put(f.uri, used);
 
