@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" 
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" 
+  xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
+  xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable" 
+  stylesheet="../../../../../main/plugins/org.dita.html5/xsl/functions.xsl"> 
+  
+  <x:variable name="generated" as="element()" select="/*/*[1]">
+    <gen>
+      <parmhead class="- topic/sthead "></parmhead>
+    </gen>    
+  </x:variable>
+  
+  <x:scenario label="dita-ot:generate-stable-id"> 
+    <x:scenario label="element with topic parent">
+      <x:call function="dita-ot:generate-stable-id">
+        <x:param name="element" as="element()">
+          <topic id="topic-01" class="- topic/topic ">
+            <title class="- topic/title ">Test Topic</title>
+            <body class="- topic/body ">
+              <p class="- topic/p ">A paragraph</p>
+            </body>
+          </topic>
+        </x:param>
+      </x:call>
+      <x:expect label="Expect a non-empty value"
+        test="not(matches(., '^\s*$'))"
+        select="true()"
+      />
+    </x:scenario>
+    <x:scenario label="generated element (no topic parent)">
+      <x:call function="dita-ot:generate-stable-id">
+        <x:param name="element" as="element()" select="$generated"/>        
+      </x:call>
+      <x:expect label="Expect a non-empty value"
+        test="not(matches(., '^\s*$'))"
+        select="true()"
+      />      
+    </x:scenario>
+  </x:scenario>
+</x:description>
