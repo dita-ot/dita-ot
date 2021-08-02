@@ -8,12 +8,10 @@
 package org.dita.dost.ant;
 
 import com.google.common.collect.ImmutableSet;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Location;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-import org.apache.tools.ant.types.Mapper;
-import org.apache.tools.ant.types.XMLCatalog;
+import org.apache.tools.ant.*;
+import org.apache.tools.ant.types.*;
+import org.apache.tools.ant.types.resources.FileResource;
+import org.apache.tools.ant.types.resources.Resources;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.log.MessageUtils;
@@ -31,6 +29,8 @@ import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -205,7 +205,7 @@ public final class ExtensibleAntInvoker extends Task {
                 throw new DITAOTException("Pipeline XSLT task with parallel=true cannot be used with Ant's xmlcatalog");
             }
             final XsltModule module = new XsltModule();
-            module.setStyle(xm.style);
+            module.setStyle(toSource(xm.xslResource));
             if (xm.in != null) {
                 module.setSource(xm.in);
                 module.setResult(xm.out);
@@ -270,6 +270,14 @@ public final class ExtensibleAntInvoker extends Task {
             }
             module.setParallel(m.parallel);
             return module;
+        }
+    }
+
+    private Source toSource(final Resource style) {
+        if (style instanceof FileResource) {
+            return new StreamSource(((FileResource) style).getFile());
+        } else {
+            throw new BuildException(String.format("%s not supported", style.getClass().toString()));
         }
     }
 
@@ -477,7 +485,6 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public static class XsltElem extends ModuleElem {
 
-        private File style;
         private File baseDir;
         private File destDir;
         private File in;
@@ -492,11 +499,15 @@ public final class ExtensibleAntInvoker extends Task {
         private XMLCatalog xmlcatalog;
         private boolean reloadstylesheet;
         private boolean parallel;
+        private Resource xslResource;
 
         // Ant setters
 
         public void setStyle(final File style) {
-            this.style = style;
+            final FileResource fr = new FileResource();
+            fr.setProject(getProject());
+            fr.setFile(style);
+            this.xslResource = fr;
         }
 
         public void setBasedir(final File baseDir) {
@@ -554,6 +565,14 @@ public final class ExtensibleAntInvoker extends Task {
             this.filedirparameter = filedirparameter;
         }
 
+        public void addConfiguredStyle(final Resources rc) {
+            if (rc.size() != 1) {
+                throw new BuildException("The style element must be specified with exactly one nested resource.");
+            } else {
+                this.xslResource = rc.iterator().next();
+            }
+        }
+
         public void addConfiguredXmlcatalog(final XMLCatalog xmlcatalog) {
             this.xmlcatalog = xmlcatalog;
         }
@@ -576,6 +595,15 @@ public final class ExtensibleAntInvoker extends Task {
 
         public void addOutputProperty(final OutputPropertyElem outputProperty) {
             outputProperties.add(outputProperty);
+        }
+    }
+
+    public static class StyleElem extends ConfElem {
+        // XXX This should be List<ResourceCollection>
+        private List<FileSet> filesets = new ArrayList<>();
+
+        public void addFileset(final FileSet fileset) {
+            filesets.add(fileset);
         }
     }
 
@@ -731,6 +759,7 @@ public final class ExtensibleAntInvoker extends Task {
 
         private String name;
         private String value;
+        private List<ResourceCollection> rcs = new ArrayList<>();
 
         /**
          * Get parameter name.
@@ -747,7 +776,7 @@ public final class ExtensibleAntInvoker extends Task {
          * @return isValid {@code true} is valid object, otherwise {@code false}
          */
         public boolean isValid() {
-            return (name != null && value != null);
+            return (name != null && (value != null || !rcs.isEmpty()));
         }
 
         /**
@@ -761,11 +790,25 @@ public final class ExtensibleAntInvoker extends Task {
 
         /**
          * Get parameter value.
-         *
          * @return parameter value, {@code null} if not set
          */
         public String getValue() {
-            return value;
+            if (!rcs.isEmpty()) {
+                return rcs.stream()
+                        .flatMap(rc -> rc.stream())
+                        .map(ParamElem::resourceToString)
+                        .collect(Collectors.joining(File.pathSeparator));
+            } else {
+                return value;
+            }
+        }
+
+        private static String resourceToString(final Resource r) {
+            if (r instanceof FileResource) {
+                return ((FileResource) r).getFile().getAbsolutePath();
+            } else {
+                throw new BuildException(String.format("%s not supported as param value", r.getClass()));
+            }
         }
 
         /**
@@ -795,6 +838,13 @@ public final class ExtensibleAntInvoker extends Task {
             value = v.getPath();
         }
 
+        /**
+         * Add resource collection as value.
+         * @param res resource collection
+         */
+        public void add(final ResourceCollection res) {
+            rcs.add(res);
+        }
     }
 
     /**
