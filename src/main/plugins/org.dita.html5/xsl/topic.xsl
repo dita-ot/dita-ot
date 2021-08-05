@@ -1511,10 +1511,12 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/object ')]" name="topic.object">
    <object>
     <xsl:copy-of select="@id | @declare | @codebase | @type | @archive | @height | @usemap | @tabindex | @classid | @data | @codetype | @standby | @width | @name"/>
+    <!-- In HTML5, <param> must precede any other fallback content -->
+    <xsl:apply-templates select="*[contains(@class, ' topic/param ')]"/>
     <xsl:if test="@longdescref or *[contains(@class, ' topic/longdescref ')]">
       <xsl:apply-templates select="." mode="ditamsg:longdescref-on-object"/>
     </xsl:if>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="node() except *[contains(@class, ' topic/param ')]"/>
    <!-- Test for Flash movie; include EMBED statement for non-IE browsers -->
    <xsl:if test="contains(@codebase, 'swflash.cab')">
     <embed>
