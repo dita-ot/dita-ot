@@ -1591,8 +1591,8 @@ See the accompanying LICENSE file for applicable license.
       </xsl:call-template>
     </xsl:variable>
     <xsl:if test="not(../@width) and not(../@height)">
-      <xsl:attribute name="height" select="floor(number($height) * number(.) div 100)"/>
-      <xsl:attribute name="width" select="floor(number($width) * number(.) div 100)"/>
+      <xsl:attribute name="height" select="floor(number($height-in-pixel) * number(.) div 100)"/>
+      <xsl:attribute name="width" select="floor(number($width-in-pixel) * number(.) div 100)"/>
     </xsl:if>
 </xsl:template>
 
