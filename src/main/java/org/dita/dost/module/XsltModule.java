@@ -53,7 +53,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     private XsltExecutable templates;
     private final Map<String, String> params = new HashMap<>();
     private final Properties properties = new Properties();
-    private File style;
+    private Source style;
     private File in;
     private File out;
     private File destDir;
@@ -101,11 +101,11 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
         xsltCompiler.setURIResolver(uriResolver);
         xsltCompiler.setErrorReporter(toErrorReporter(logger));
-        logger.info("Loading stylesheet " + style.getAbsolutePath());
+        logger.info("Loading stylesheet " + style.getSystemId());
         try {
-            templates = xsltCompiler.compile(new StreamSource(style));
+            templates = xsltCompiler.compile(style);
         } catch (SaxonApiException e) {
-            throw new RuntimeException("Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(), e);
+            throw new RuntimeException("Failed to compile stylesheet '" + style.getSystemId() + "': " + e.getMessage(), e);
         }
         if (in != null) {
             transform(in, out);
@@ -192,7 +192,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
     private void transform(final File in, final File out) throws DITAOTException {
         if (reloadstylesheet || t == null) {
-            logger.info("Loading stylesheet " + style.getAbsolutePath());
+            logger.info("Loading stylesheet " + style.getSystemId());
             t = getTransformer();
         }
         transform(in, out, t);
@@ -295,7 +295,15 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         }
     }
 
+    /**
+     * @deprecated use {@link #setStyle(Source)} instead
+     */
+    @Deprecated
     public void setStyle(final File style) {
+        this.style = new StreamSource(style);
+    }
+
+    public void setStyle(final Source style) {
         this.style = style;
     }
 
