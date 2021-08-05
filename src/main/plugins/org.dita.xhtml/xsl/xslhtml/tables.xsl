@@ -684,14 +684,23 @@ See the accompanying LICENSE file for applicable license.
     <xsl:choose>
      <xsl:when test="@frame = 'none'">
       <xsl:attribute name="border">0</xsl:attribute>
-      <xsl:attribute name="class">simpletablenoborder</xsl:attribute>
      </xsl:when>
      <xsl:otherwise>
       <xsl:attribute name="border">1</xsl:attribute>
-      <xsl:attribute name="class">simpletableborder</xsl:attribute>
      </xsl:otherwise>
     </xsl:choose>
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class">
+        <xsl:choose>
+          <xsl:when test="@frame = 'none'">
+            simpletablenoborder
+          </xsl:when>
+          <xsl:otherwise>
+            simpletableborder
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
     <xsl:call-template name="setscale"/>
     <xsl:call-template name="dita2html:simpletable-cols"/>

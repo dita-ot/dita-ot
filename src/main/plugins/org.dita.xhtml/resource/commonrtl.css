@@ -402,6 +402,9 @@ div.imagejustify {
   border-left: hidden;
   border-bottom: hidden;
 }
+.simpletableborder {
+  border: solid 1px;
+}
 pre.screen {
   padding: 5px 5px 5px 5px;
   border: outset;
