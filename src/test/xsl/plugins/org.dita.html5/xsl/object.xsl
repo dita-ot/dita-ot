@@ -8,7 +8,6 @@
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot table simpletable">
   
-  
   <xsl:import href="../../../../../main/plugins/org.dita.base/xsl/common/output-message.xsl"/>
   <xsl:import href="../../../../../main/plugins/org.dita.base/xsl/common/dita-utilities.xsl"/>
   <xsl:import href="../../../../../main/plugins/org.dita.base/xsl/common/functions.xsl"/>

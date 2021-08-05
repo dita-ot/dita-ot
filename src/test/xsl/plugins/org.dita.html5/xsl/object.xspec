@@ -2,7 +2,8 @@
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
-  xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable" stylesheet="object.xsl"
+  xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable"
+  stylesheet="object.xsl"
   >
 
   <x:scenario label="object-with-desc">
@@ -19,6 +20,5 @@
       </object>
     </x:expect>
   </x:scenario>
-
 
 </x:description>
