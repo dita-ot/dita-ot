@@ -402,7 +402,7 @@ div.imagejustify {
   border-left: hidden;
   border-bottom: hidden;
 }
-.simpletableborder {
+.simpletableborder th, .simpletableborder td {
   border: solid 1px;
 }
 pre.screen {
