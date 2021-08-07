@@ -39,22 +39,6 @@
 
       <x:expect label="return element id prefixed with topic id" select="'topic__p'"/>
     </x:scenario>
-    <x:scenario label="generated element">
-      <x:call function="dita-ot:generate-html-id">
-        <x:param name="element" select="(//p)[1]">
-          <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
-            domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d) "
-            id="topic" ditaarch:DITAArchVersion="1.3">
-            <title class="- topic/title ">Title</title>
-            <body class="- topic/body ">
-              <p class="- topic/p " id="p">para</p>
-            </body>
-          </topic>
-        </x:param>
-      </x:call>
-      
-      <x:expect label="return element id prefixed with topic id" select="'topic__p'"/>
-    </x:scenario>
     <x:scenario label="element without id">
       <x:call function="dita-ot:generate-html-id">
         <x:param name="element" select="(//p)[1]">
@@ -126,6 +110,17 @@
       </x:call>
 
       <x:expect label="return element id prefixed with topic id" select="'topic__section__p__1'"/>
+    </x:scenario>
+    <x:scenario label="generated element without id">
+      <x:call function="dita-ot:generate-stable-id">
+        <x:param name="element" select="(//p)[1]">
+          <body class="- topic/body ">
+            <p class="- topic/p ">para</p>
+          </body>
+        </x:param>
+      </x:call>
+      
+      <x:expect label="return generated id" test="matches(., '^d\d+e\d+$')"/>
     </x:scenario>
   </x:scenario>
 
