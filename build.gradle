@@ -393,7 +393,7 @@ test {
         'src/test/xsl/plugins/org.dita.html5/xsl/functions.xspec',
         'src/test/xsl/plugins/org.dita.html5/xsl/simpletable.xspec',
         'src/test/xsl/plugins/org.dita.pdf2/xsl/fo/simpletable.xspec',
-        'src/test/xsl/plugins/org.dita.pdf2/xsl/fo/fig-order.xspec',
+        'src/test/xsl/plugins/org.dita.pdf2/xsl/fo/topic.xspec',
         'src/test/xsl/preprocess/conrefImpl.xspec',
         'src/test/xsl/preprocess/maplinkImpl.xspec'
     )
