@@ -1580,11 +1580,19 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- AM: handling for scale attribute -->
 <xsl:template match="*[contains(@class, ' topic/image ')]/@scale">
-    <xsl:variable name="width" select="../@dita-ot:image-width"/>
-    <xsl:variable name="height" select="../@dita-ot:image-height"/>
+    <xsl:variable name="width-in-pixel">
+      <xsl:call-template name="length-to-pixels">
+        <xsl:with-param name="dimen" select="../@dita-ot:image-width"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="height-in-pixel">
+      <xsl:call-template name="length-to-pixels">
+        <xsl:with-param name="dimen" select="../@dita-ot:image-height"/>
+      </xsl:call-template>
+    </xsl:variable>
     <xsl:if test="not(../@width) and not(../@height)">
-      <xsl:attribute name="height" select="floor(number($height) * number(.) div 100)"/>
-      <xsl:attribute name="width" select="floor(number($width) * number(.) div 100)"/>
+      <xsl:attribute name="height" select="floor(number($height-in-pixel) * number(.) div 100)"/>
+      <xsl:attribute name="width" select="floor(number($width-in-pixel) * number(.) div 100)"/>
     </xsl:if>
 </xsl:template>
 
