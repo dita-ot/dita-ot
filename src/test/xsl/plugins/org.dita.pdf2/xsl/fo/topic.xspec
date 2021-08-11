@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  stylesheet="topic.xsl">
+
+  <x:scenario>
+    <x:label>GIVEN a fig</x:label>
+    <x:scenario>
+      <x:label>WHEN it is empty</x:label>
+      <x:context>
+        <fig class="- topic/fig "/>
+      </x:context>
+      <x:expect>
+        <x:label>THEN render an empty fo:block</x:label>
+        <fo:block id=""/>
+      </x:expect>
+    </x:scenario>
+    <x:scenario>
+      <x:label>WHEN it has a title</x:label>
+      <x:context>
+        <fig class="- topic/fig ">
+          <title class="- topic/title "/>
+        </fig>
+      </x:context>
+      <x:expect>
+        <x:label>THEN render a figure with title</x:label>
+        <fo:block id="">
+          <topic-title/>
+        </fo:block>
+      </x:expect>
+    </x:scenario>
+    <x:scenario>
+      <x:label>WHEN it has a desc</x:label>
+      <x:context>
+        <fig class="- topic/fig ">
+          <desc class="- topic/desc "/>
+        </fig>
+      </x:context>
+      <x:expect>
+        <x:label>THEN render a figure with desc</x:label>
+        <fo:block id="">
+          <topic-desc/>
+        </fo:block>
+      </x:expect>
+    </x:scenario>
+    <x:scenario>
+      <x:label>WHEN it has a title and a desc</x:label>
+      <x:context>
+        <fig class="- topic/fig ">
+          <title class="- topic/title "/>
+          <desc class="- topic/desc "/>
+        </fig>
+      </x:context>
+      <x:expect>
+        <x:label>THEN render a figure with title then desc</x:label>
+        <fo:block id="">
+          <topic-title/>
+          <topic-desc/>
+        </fo:block>
+      </x:expect>
+    </x:scenario>
+    <x:scenario>
+      <x:label>WHEN it has a title and a desc and something else like an image</x:label>
+      <x:context>
+        <fig class="- topic/fig ">
+          <title class="- topic/title "/>
+          <desc class="- topic/desc "/>
+          <image class="- topic/image "/>
+        </fig>
+      </x:context>
+      <x:expect>
+        <x:label>THEN render a figure with an image first, then a title, then a desc</x:label>
+        <fo:block id="">
+          <topic-image/>
+          <topic-title/>
+          <topic-desc/>
+        </fo:block>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+
+</x:description>
