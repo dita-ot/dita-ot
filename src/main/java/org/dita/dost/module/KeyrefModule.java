@@ -48,6 +48,7 @@ import static net.sf.saxon.s9api.streams.Predicates.attributeEq;
 import static net.sf.saxon.s9api.streams.Steps.ancestorOrSelf;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
+import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
@@ -442,8 +443,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
      * @return key reference processing
      */
     private ResolveTask processTopic(final FileInfo f, final KeyScope scope, final boolean isResourceOnly) {
-    	boolean ditaFormat = f.format == null || "dita".equals(f.format);
-    	final int increment = isResourceOnly && ! ditaFormat ? 0 : 1;
+        final int increment = isResourceOnly && !isFormatDita(f.format) ? 0 : 1;
         final Integer used = usage.containsKey(f.uri) ? usage.get(f.uri) + increment : increment;
         usage.put(f.uri, used);
 
