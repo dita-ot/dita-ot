@@ -1525,24 +1525,6 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="." mode="ditamsg:longdescref-on-object"/>
     </xsl:if>
     <xsl:apply-templates select="node() except *[contains(@class, ' topic/param ')]"/>
-   <!-- Test for Flash movie; include EMBED statement for non-IE browsers -->
-   <xsl:if test="contains(@codebase, 'swflash.cab')">
-    <embed>
-     <xsl:if test="@id"><xsl:attribute name="name" select="@id"/></xsl:if>
-     <xsl:copy-of select="@height | @width"/>
-     <xsl:attribute name="type"><xsl:text>application/x-shockwave-flash</xsl:text></xsl:attribute>
-     <xsl:attribute name="pluginspage"><xsl:text>http://www.macromedia.com/go/getflashplayer</xsl:text></xsl:attribute>
-     <xsl:if test="*[contains(@class, ' topic/param ')]/@name = 'movie'">
-      <xsl:attribute name="src" select="*[contains(@class, ' topic/param ')][@name = 'movie']/@value"/>
-     </xsl:if>
-     <xsl:if test="*[contains(@class, ' topic/param ')]/@name = 'quality'">
-      <xsl:attribute name="quality" select="*[contains(@class, ' topic/param ')][@name = 'quality']/@value"/>
-     </xsl:if>
-     <xsl:if test="*[contains(@class, ' topic/param ')]/@name = 'bgcolor'">
-      <xsl:attribute name="bgcolor" select="*[contains(@class, ' topic/param ')][@name = 'bgcolor']/@value"/>
-     </xsl:if>
-    </embed>
-   </xsl:if>
    </object>
   </xsl:template>
   
