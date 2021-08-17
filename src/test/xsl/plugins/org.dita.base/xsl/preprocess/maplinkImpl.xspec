@@ -12,7 +12,7 @@
         </topicref>
       </map>
     </x:context>
-    <x:expect label="generate child and parent links">
+    <x:expect label="generate child, ancestor and parent links">
       <mapcollection>
         <maplinks href="a.dita">
           <linkpool class="- topic/linkpool ">
@@ -36,6 +36,8 @@
           <linkpool class="- topic/linkpool ">
             <link class="- topic/link " mapclass="- map/topicref " scope="local" format="dita" href="aa.dita"
               role="parent"/>
+            <link class="- topic/link " mapclass="- map/topicref " scope="local" format="dita" href="a.dita"
+              role="ancestor"/>
           </linkpool>
         </maplinks>
       </mapcollection>
