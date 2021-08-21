@@ -1990,8 +1990,12 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template name="spec-title-nospace">
    <xsl:if test="@spectitle"><div style="margin-bottom: 0;"><strong><xsl:value-of select="@spectitle"/></strong></div></xsl:if>
   </xsl:template>
-    
+
+  <!-- Deprecated since 3.7, use "copyright" mode instead -->
   <xsl:template name="copyright">
+    <xsl:apply-templates select="." mode="copyright"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="copyright">
   
   </xsl:template>
   
@@ -2127,7 +2131,11 @@ See the accompanying LICENSE file for applicable license.
   <!-- ========== Section-like generated content =========== -->
   
   <!-- render any contained footnotes as endnotes.  Links back to reference point -->
+  <!-- Deprecated since 3.7, use "gen-endnotes" mode instead -->
   <xsl:template name="gen-endnotes">
+    <xsl:apply-templates select="." mode="gen-endnotes"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="gen-endnotes">
     <!-- Skip any footnotes that are in draft elements when draft = no -->
     <xsl:apply-templates select="//*[contains(@class, ' topic/fn ')][not( (ancestor::*[contains(@class, ' topic/draft-comment ')] or ancestor::*[contains(@class, ' topic/required-cleanup ')]) and $DRAFT = 'no')]" mode="genEndnote"/>
   
@@ -2381,7 +2389,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <!-- Output metadata that should appear in every XHTML topic -->
+  <!-- Deprecated since 3.7, use "generateDefaultMeta" mode instead -->
   <xsl:template name="generateDefaultMeta">
+    <xsl:apply-templates select="." mode="generateDefaultMeta"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="generateDefaultMeta">
     <xsl:if test="$genDefMeta = 'yes'">
       <meta name="security" content="public"/>
       <meta name="Robots" content="index,follow" />
@@ -2389,7 +2401,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <!-- Generate links to CSS files -->
+  <!-- Deprecated since 3.7, use "generateCssLinks" mode instead -->
   <xsl:template name="generateCssLinks">
+    <xsl:apply-templates select="." mode="generateCssLinks"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="generateCssLinks">
     <xsl:variable name="childlang" as="xs:string">
       <xsl:variable name="lang">
         <xsl:choose>
@@ -2441,7 +2457,11 @@ See the accompanying LICENSE file for applicable license.
     
   </xsl:template>
   
+  <!-- Deprecated since 3.7, use "generateChapterTitle" mode instead -->
   <xsl:template name="generateChapterTitle">
+    <xsl:apply-templates select="." mode="generateChapterTitle"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="generateChapterTitle">
     <!-- Title processing - special handling for short descriptions -->
     <title>
       <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
@@ -2458,7 +2478,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <!-- Add user's head XHTML code snippet, if specified -->
+  <!-- Deprecated since 3.7, use "processHDF" mode instead -->
   <xsl:template name="processHDF">
+    <xsl:apply-templates select="." mode="processHDF"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="processHDF">
     <xsl:if test="string-length($HDFFILE) > 0">
       <xsl:apply-templates select="document($HDFFILE, /)" mode="add-HDF"/>
     </xsl:if>
@@ -2573,19 +2597,31 @@ See the accompanying LICENSE file for applicable license.
     </xsl:if>
   </xsl:template>
   
+  <!-- Deprecated since 3.7, use "generateBreadcrumbs" mode instead -->
   <xsl:template name="generateBreadcrumbs">
+    <xsl:apply-templates select="." mode="generateBreadcrumbs"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="generateBreadcrumbs">
     <!-- Insert previous/next/ancestor breadcrumbs links at the top of the html5. -->
     <xsl:apply-templates select="*[contains(@class, ' topic/related-links ')]" mode="breadcrumb"/>
   </xsl:template>
   
+  <!-- Deprecated since 3.7, use "processHDR" mode instead -->
   <xsl:template name="processHDR">
+    <xsl:apply-templates select="." mode="processHDR"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="processHDR">
     <!-- Add user's running heading XHTML code snippet if requested to -->
     <xsl:if test="string-length($HDRFILE) > 0">
       <xsl:copy-of select="document($HDRFILE, /)"/>      
     </xsl:if>    
   </xsl:template>
   
+  <!-- Deprecated since 3.7, use "processFTR" mode instead -->
   <xsl:template name="processFTR">
+    <xsl:apply-templates select="." mode="processFTR"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="processFTR">
     <!-- Add user's running footing XHTML code snippet if requested to -->
     <xsl:if test="string-length($FTRFILE) > 0">
       <xsl:copy-of select="document($FTRFILE, /)"/>
@@ -2741,7 +2777,11 @@ See the accompanying LICENSE file for applicable license.
     *[contains(@class,' topic/fn ') and empty(@callout)]"
     use="tokenize(@class, '\s+')"/>
   
+  <!-- Deprecated since 3.7, use "generateCharset" mode instead -->
   <xsl:template name="generateCharset">
+    <xsl:apply-templates select="." mode="generateCharset"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="generateCharset">
     <meta charset="UTF-8"/>
   </xsl:template>  
   
