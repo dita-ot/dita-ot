@@ -204,7 +204,7 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:text> </xsl:text>
                     <xsl:value-of select="$target[contains(@class, ' map/map ')]/@keyscope"/>
                   </xsl:variable>
-                  <xsl:value-of select="string-join(distinct-values(tokenize($keyscope, '\s+')), ' ')"/>
+                  <xsl:value-of select="string-join(distinct-values(tokenize(normalize-space($keyscope), '\s+')), ' ')"/>
                 </xsl:attribute>
               </xsl:if>
               <xsl:apply-templates select="$target/@chunk"/>
