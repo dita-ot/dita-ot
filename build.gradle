@@ -142,7 +142,6 @@ clean {
     delete "src/main/lib/"
     delete "src/main/plugins/org.dita.htmlhelp/lib/"
     delete "src/main/plugins/org.dita.pdf2/lib/"
-    delete "src/main/plugins/org.dita.pdf2.axf/lib/"
     delete "src/main/plugins/org.dita.pdf2.fop/lib/"
     delete "src/main/plugins/org.dita.pdf2.xep/lib/"
 }
@@ -156,7 +155,7 @@ task copyInstall(type: Copy) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
+task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
     description "Build archives and install all plugins with dependencies"
     mainClass = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/config")
@@ -186,7 +185,8 @@ def bundled = [
         "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20210603/org.oasis-open.dita.v2_0.zip",
         "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20210603/org.oasis-open.dita.techcomm.v2_0.zip",
         "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.2.2/org.oasis-open.xdita.v0_2_2.zip",
-        "index": "https://github.com/dita-ot/org.dita.index/releases/download/1.0.0/org.dita.index-1.0.0.zip"
+        "index": "https://github.com/dita-ot/org.dita.index/releases/download/1.0.0/org.dita.index-1.0.0.zip",
+        "axf": "https://github.com/dita-ot/org.dita.pdf2.axf/releases/download/3.6.1/org.dita.pdf2.axf-3.6.1.zip"
 ]
 
 apply from: 'gradle/dist.gradle'
@@ -253,8 +253,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "plugins/org.dita.html5/.sass-cache"
         include "plugins/org.dita.htmlhelp/**"
         include "plugins/org.dita.pdf2.axf/**"
-        exclude "plugins/org.dita.pdf2.axf/build"
-        exclude "plugins/org.dita.pdf2.axf/src"
         include "plugins/org.dita.pdf2.fop/**"
         exclude "plugins/org.dita.pdf2.fop/build"
         include "plugins/org.dita.pdf2.xep/**"
@@ -283,7 +281,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
     mainClass = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir
@@ -343,7 +341,6 @@ def plugins = [
         "org.dita.html5",
         "org.dita.htmlhelp",
         "org.dita.pdf2",
-        "org.dita.pdf2.axf",
         "org.dita.pdf2.fop",
         "org.dita.pdf2.xep",
         "org.dita.xhtml",

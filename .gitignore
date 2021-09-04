@@ -43,8 +43,6 @@ src/main/plugins/org.dita.htmlhelp/build_dita2htmlhelp.xml
 src/main/plugins/org.dita.htmlhelp/lib/htmlhelp.jar
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhp.xsl
-src/main/plugins/org.dita.pdf2.axf/lib/axf.jar
-src/main/plugins/org.dita.pdf2.axf/xsl/fo/topic2fo_shell_axf.xsl
 src/main/plugins/org.dita.pdf2.fop/lib
 src/main/plugins/org.dita.pdf2.fop/xsl/fo/topic2fo_shell_fop.xsl
 src/main/plugins/org.dita.pdf2.xep/lib/
