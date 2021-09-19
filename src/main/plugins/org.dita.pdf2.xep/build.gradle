@@ -14,7 +14,6 @@ description = """DITA Open Toolkit PDF plug-in for RenderX."""
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 dependencies {
     implementation rootProject
@@ -31,12 +30,12 @@ jar.archiveFileName = "${project.name}.jar"
 jar.include "com/idiominc/**"
 
 task copyInstall(type: Copy) {
-    from (configurations.runtimeClasspath.allArtifacts.files)
+    from (jar)
     destinationDir = file("lib")
 }
 
 task copyDistTemp(type: Copy) {
-    from (configurations.runtimeClasspath.allArtifacts.files) {
+    from (jar) {
         into "plugins/org.dita.pdf2.xep/lib"
     }
     destinationDir = file("${rootProject.buildDir}/tmp/dist")

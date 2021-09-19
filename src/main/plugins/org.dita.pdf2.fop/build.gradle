@@ -7,7 +7,6 @@ description = """DITA Open Toolkit PDF plug-in for FOP."""
 
 repositories {
     mavenCentral()
-    jcenter()
     maven {
         url "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/"
     }
@@ -30,6 +29,7 @@ dependencies {
 }
 
 task copyInstall(type: Copy) {
+    from (jar)
     from(sourceSets.main.runtimeClasspath) {
         include 'batik-all-*.jar'
         include 'fop-*.jar'
@@ -47,6 +47,7 @@ task copyInstall(type: Copy) {
 }
 
 task copyDistTemp(type: Copy) {
+    from (jar)
     from(sourceSets.main.runtimeClasspath) {
         include 'batik-all-*.jar'
         include 'fop-*.jar'
