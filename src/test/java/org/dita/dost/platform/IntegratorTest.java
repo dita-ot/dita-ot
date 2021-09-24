@@ -8,6 +8,7 @@
 package org.dita.dost.platform;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -95,10 +96,11 @@ public class IntegratorTest {
         expProperties.setProperty("plugin.dummy.dir", "plugins/dummy");
         final Properties actProperties = getProperties(new File(tempDir, "config" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));
         // supported_image_extensions needs to be tested separately
-        assertEquals(new HashSet(Arrays.asList(expProperties.getProperty("supported_image_extensions").split(";"))),
-                     new HashSet(Arrays.asList(expProperties.getProperty("supported_image_extensions").split(";"))));
-        expProperties.remove("supported_image_extensions");
-        actProperties.remove("supported_image_extensions");assertEquals(expProperties, actProperties);
+        assertEquals(new HashSet(Arrays.asList(expProperties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS).split(";"))),
+                     new HashSet(Arrays.asList(expProperties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS).split(";"))));
+        expProperties.remove(CONF_SUPPORTED_IMAGE_EXTENSIONS);
+        actProperties.remove(CONF_SUPPORTED_IMAGE_EXTENSIONS);
+        assertEquals(expProperties, actProperties);
 
         assertXMLEqual(new InputSource(new File(expDir, "build.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "build.xml").toURI().toString()));
