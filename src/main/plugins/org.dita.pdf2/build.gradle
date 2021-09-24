@@ -14,7 +14,6 @@ description = """DITA Open Toolkit PDF plug-in."""
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 dependencies {
     implementation rootProject
@@ -39,12 +38,12 @@ jar.include "com/suite/**"
 jar.include "org/dita/dost/pdf2/**"
 
 task copyInstall(type: Copy) {
-    from (configurations.runtimeClasspath.allArtifacts.files)
+    from (jar)
     destinationDir = file("lib")
 }
 
 task copyDistTemp(type: Copy) {
-    from (configurations.runtimeClasspath.allArtifacts.files) {
+    from (jar) {
         into "plugins/org.dita.pdf2/lib"
     }
     destinationDir = file("${rootProject.buildDir}/tmp/dist")

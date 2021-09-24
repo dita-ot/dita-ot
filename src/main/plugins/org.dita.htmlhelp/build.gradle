@@ -14,7 +14,6 @@ description = """DITA Open Toolkit HTML Help plug-in."""
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 dependencies {
     implementation rootProject
@@ -32,12 +31,12 @@ dependencies {
 jar.archiveFileName = "${project.name}.jar"
 
 task copyInstall(type: Copy) {
-    from (configurations.runtimeClasspath.allArtifacts.files)
+    from (jar)
     destinationDir = file("lib")
 }
 
 task copyDistTemp(type: Copy) {
-    from (configurations.runtimeClasspath.allArtifacts.files) {
+    from (jar) {
         into "plugins/org.dita.htmlhelp/lib"
     }
     destinationDir = file("${rootProject.buildDir}/tmp/dist")

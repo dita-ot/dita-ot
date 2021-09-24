@@ -23,7 +23,6 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    jcenter()
     maven {
         url "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/"
     }
@@ -50,7 +49,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.11.0'
     implementation group: 'org.relaxng', name: 'jing', version: '20181222'
-    runtimeOnly group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.9'
+    implementation group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.9'
     testImplementation  group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
     testImplementation  group: 'junit', name: 'junit', version:'4.12'
     testImplementation  group: 'org.xmlunit', name: 'xmlunit-core', version: '2.6.0'
@@ -139,7 +138,17 @@ task e2eTest(type: Test, dependsOn: 'buildLocal') {
 
 defaultTasks 'buildLocal'
 
+clean {
+    delete "src/main/lib/"
+    delete "src/main/plugins/org.dita.htmlhelp/lib/"
+    delete "src/main/plugins/org.dita.pdf2/lib/"
+    delete "src/main/plugins/org.dita.pdf2.axf/lib/"
+    delete "src/main/plugins/org.dita.pdf2.fop/lib/"
+    delete "src/main/plugins/org.dita.pdf2.xep/lib/"
+}
+
 task copyInstall(type: Copy) {
+    from (jar)
     from (configurations.runtimeClasspath.allArtifacts.files)
     from (configurations.runtimeClasspath) {
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
@@ -149,7 +158,7 @@ task copyInstall(type: Copy) {
 }
 task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
     description "Build archives and install all plugins with dependencies"
-    main = "org.apache.tools.ant.launch.Launcher"
+    mainClass = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/config")
     workingDir file("${projectDir}/src/main")
     args "-f"
@@ -195,10 +204,13 @@ task initDist(dependsOn: [jar, cleanDistTemp]) {
 }
 
 task copyDistTemp(type: Copy, dependsOn: initDist) {
+    from (jar) {
+        into "lib"
+    }
     from (configurations.runtimeClasspath.allArtifacts.files) {
         into "lib"
     }
-    from (configurations.runtime) {
+    from (configurations.runtimeClasspath) {
         into "lib"
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
         rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
@@ -272,7 +284,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 copyDistTemp.outputs.dir distTempDir
 
 task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
-    main = "org.apache.tools.ant.launch.Launcher"
+    mainClass = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir
     args "-f"
@@ -282,7 +294,8 @@ task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTe
 task integrateDistPlugins() {
     dependsOn bundled.collect{ name, url ->
         return tasks.create("integrateDist${name}", JavaExec) {
-            main = "org.apache.tools.ant.launch.Launcher"
+            dependsOn(integrateDistTemp)
+            mainClass = "org.apache.tools.ant.launch.Launcher"
             classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
             workingDir distTempDir
             args "-f"
@@ -340,6 +353,7 @@ task distPlugins() {
     dependsOn plugins.collect{ name ->
         def taskName = "distPlugin${name.split("\\.").collect{token -> return token.capitalize()}.join("")}"
         return tasks.create(taskName, Zip) {
+            dependsOn(integrateDistTemp)
             from ("${distTempDir}/plugins/${name}") {
                 exclude "build"
                 exclude "src"
