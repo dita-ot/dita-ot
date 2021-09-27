@@ -45,8 +45,6 @@ src/main/plugins/org.dita.htmlhelp/xsl/map2hhc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhp.xsl
 src/main/plugins/org.dita.pdf2.fop/lib
 src/main/plugins/org.dita.pdf2.fop/xsl/fo/topic2fo_shell_fop.xsl
-src/main/plugins/org.dita.pdf2.xep/lib/
-src/main/plugins/org.dita.pdf2.xep/xsl/fo/topic2fo_shell_xep.xsl
 src/main/plugins/org.dita.pdf2/**/*.class
 src/main/plugins/org.dita.pdf2/build.xml
 src/main/plugins/org.dita.pdf2/cfg/catalog.xml
