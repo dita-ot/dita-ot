@@ -1505,6 +1505,9 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- Process common attributes -->
     <xsl:template name="commonattributes">
+      <xsl:apply-templates select="." mode="commonattributes"/>
+    </xsl:template>
+    <xsl:template match="@* | node()" mode="commonattributes">
       <xsl:apply-templates select="@id"/>
       <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')] |
                                    *[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="flag-attributes"/>
