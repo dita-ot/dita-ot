@@ -1910,11 +1910,18 @@ See the accompanying LICENSE file for applicable license.
 <!-- Process standard attributes that may appear anywhere. Previously this was "setclass" -->
 <xsl:template name="commonattributes">
   <xsl:param name="default-output-class"/>
+  <xsl:apply-templates select="." mode="commonattributes">
+    <xsl:with-param name="default-output-class" select="tokenize(normalize-space($default-output-class), '\s+')"/>
+  </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="@* | node()" mode="commonattributes">
+  <xsl:param name="default-output-class" as="xs:string*"/>
   <xsl:apply-templates select="@xml:lang"/>
   <xsl:apply-templates select="@dir"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
   <xsl:apply-templates select="." mode="set-output-class">
-    <xsl:with-param name="default" select="$default-output-class"/>
+    <xsl:with-param name="default" select="string-join($default-output-class, ' ')"/>
   </xsl:apply-templates>
   <xsl:if test="exists($passthrough-attrs)">
     <xsl:for-each select="@*">
