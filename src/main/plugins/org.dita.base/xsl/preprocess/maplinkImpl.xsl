@@ -183,6 +183,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:if test="$include.roles = 'parent'">
       <xsl:apply-templates select="." mode="link-to-parent"/>
     </xsl:if>
+    <xsl:if test="$include.roles = 'ancestor'">
+      <xsl:apply-templates select="." mode="link-to-ancestor"/>
+    </xsl:if>
     <xsl:apply-templates select="." mode="link-to-prereqs"/>
     <xsl:if test="$include.roles = 'sibling'">
       <xsl:apply-templates select="." mode="link-to-siblings"/>
@@ -216,6 +219,20 @@ See the accompanying LICENSE file for applicable license.
     </xsl:apply-templates>
   </xsl:template>
   
+  <!--ancestor-->
+  <xsl:template match="*" mode="link-to-ancestor"/>
+  <xsl:template match="*[contains(@class, ' map/topicref ')][not(ancestor::*[contains(concat(' ', @chunk, ' '), ' to-content ')])]"
+                mode="link-to-ancestor">
+    <xsl:apply-templates select="ancestor::*[contains(@class, ' map/topicref ')]
+                                            [@href and not(@href = '')]
+                                            [not(@linking = ('none', 'sourceonly'))]
+                                            [not(@processing-role = 'resource-only')]
+                                            [position() ne 1]"
+                          mode="link">
+      <xsl:with-param name="role">ancestor</xsl:with-param>
+    </xsl:apply-templates>
+  </xsl:template>
+
   <!--prereqs - preceding with importance=required and in a sequence, but leaving the immediately previous one alone to avoid duplication with prev/next generation-->
   <xsl:template match="*" mode="link-to-prereqs"/>
   <xsl:template match="*[@collection-type = 'sequence']/*[contains(@class, ' map/topicref ')]

@@ -136,10 +136,10 @@ See the accompanying LICENSE file for applicable license.
     <condition property="include.rellinks" value="">
       <equals arg1="${args.rellinks}" arg2="none"/>
     </condition>
-    <condition property="include.rellinks" value="#default sibling friend cousin ancestor descendant sample external other">
+    <condition property="include.rellinks" value="#default friend sample external other">
       <equals arg1="${args.rellinks}" arg2="nofamily"/>
     </condition>
-    <condition property="include.rellinks" value="#default child sibling friend next previous cousin ancestor descendant sample external other">
+    <condition property="include.rellinks" value="#default child sibling friend next previous cousin descendant sample external other">
       <or>
         <equals arg1="${args.hide.parent.link}" arg2="yes"/>
         <equals arg1="${args.rellinks}" arg2="noparent"/>
