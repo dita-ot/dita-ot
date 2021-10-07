@@ -25,18 +25,6 @@ See the accompanying LICENSE file for applicable license.
     <reason>Index entry '%1' will be sorted under the "Special characters" heading.</reason>
     <response/>
   </message>
-  <message id="XEPJ001W" type="WARN">
-    <reason>%1</reason>
-    <response/>
-  </message>
-  <message id="XEPJ002E" type="ERROR">
-    <reason>%1</reason>
-    <response/>
-  </message>
-  <message id="XEPJ003E" type="ERROR">
-    <reason>%1</reason>
-    <response/>
-  </message>
   <!-- DOTA067W and DOTA068W actually come from Java code inside the PDF plug-in.
        DOTA prefix is innacurate. No reason to change at this point. -->
   <message id="DOTA067W" type="WARN">
