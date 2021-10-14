@@ -32,7 +32,7 @@ jobs:
       - name: Maven snapshot deployment
         run: |
           echo "$GPG_ASC" > 24AC15F2.asc
-          gpg --dearmor 24AC15F2.asc > 24AC15F2.gpg
+          gpg --dearmor 24AC15F2.asc
           ./gradlew --no-daemon --info publish -PossrhUsername=$OSSRH_USERNAME -PossrhPassword=$OSSRH_PASSWORD -Psigning.password=$SIGNING_PASSWORD -Psigning.keyId=24AC15F2 -Psigning.secretKeyRingFile=24AC15F2.gpg
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
