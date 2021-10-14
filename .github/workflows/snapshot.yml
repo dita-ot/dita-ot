@@ -29,3 +29,13 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'eu-west-1'
           SOURCE_DIR: 'build/distributions'
+      - name: Maven snapshot deployment
+        run: |
+          echo $GPG_PASSPHRASE > 24AC15F2.asc
+          gpg --dearmor 24AC15F2.asc > 24AC15F2.gpg
+          ./gradlew --no-daemon --info publish -PossrhUsername=$OSSRH_USERNAME -PossrhPassword=$OSSRH_PASSWORD -Psigning.password=$SIGNING_PASSWORD -Psigning.keyId=24AC15F2 -Psigning.secretKeyRingFile=.travis/24AC15F2.gpg
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
