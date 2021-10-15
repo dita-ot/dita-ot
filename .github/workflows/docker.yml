@@ -1,14 +1,12 @@
-# Build DITA-OT Docker image and deploy to ghcr.io
 name: Docker
-
 on:
   workflow_dispatch:
     inputs:
       version:
         description: 'DITA-OT version'
         required: true
-
 jobs:
+  # Build DITA-OT Docker image and deploy to ghcr.io
   docker:
     name: Build and deploy Docker image
     runs-on: ubuntu-latest
