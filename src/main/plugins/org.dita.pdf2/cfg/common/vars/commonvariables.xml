@@ -6,7 +6,8 @@ Copyright 2017 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<vars xmlns="http://www.idiominc.com/opentopic/vars">
+<?xml-model href="../../../../org.dita.base/xsl/common/strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
   <!-- 
    
     This file defines common variables that appear in the published output.
@@ -113,9 +114,9 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- To restore finger image used before 2.2, reference the image: Configuration/OpenTopic/cfg/common/artwork/hand.gif -->
   <!-- Image path to use for a note of "note" type. -->
-  <variable id="note Note Image Path"></variable>
+  <variable id="note Note Image Path"/>
   <!-- Image path to use for a note of "notice" type. -->
-  <variable id="notice Note Image Path"></variable>
+  <variable id="notice Note Image Path"/>
   <!-- Image path to use for a note of "attention" type. -->
   <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</variable>
   <!-- Image path to use for a note of "caution" type. -->
@@ -125,19 +126,19 @@ See the accompanying LICENSE file for applicable license.
   <!-- Image path to use for a note of "warning" type. -->
   <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</variable>
   <!-- Image path to use for a note of "fastpath" type. -->
-  <variable id="fastpath Note Image Path"></variable>
+  <variable id="fastpath Note Image Path"/>
   <!-- Image path to use for a note of "important" type. -->
-  <variable id="important Note Image Path"></variable>
+  <variable id="important Note Image Path"/>
   <!-- Image path to use for a note of "remember" type. -->
-  <variable id="remember Note Image Path"></variable>
+  <variable id="remember Note Image Path"/>
   <!-- Image path to use for a note of "restriction" type. -->
-  <variable id="restriction Note Image Path"></variable>
+  <variable id="restriction Note Image Path"/>
   <!-- Image path to use for a note of "tip" type. -->
-  <variable id="tip Note Image Path"></variable>
+  <variable id="tip Note Image Path"/>
   <!-- Image path to use for a note of "troubleshooting" type. -->
   <variable id="trouble Note Image Path">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</variable>
   <!-- Image path to use for a note of "other" type. -->
-  <variable id="other Note Image Path"></variable>
+  <variable id="other Note Image Path"/>
 
   <!--Numbering and format for task steps-->
   <variable id="Step Number"><param ref-name="number"/>. </variable>
@@ -145,9 +146,9 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Substep Number"><param ref-name="number"/>) </variable>
   <variable id="Substep Format">a</variable>
 
-  <variable id="#quote-start"><variable id="OpenQuote"/></variable>
-  <variable id="#quote-end"><variable id="CloseQuote"/></variable>
+  <variable id="#quote-start"><variableref refid="OpenQuote"/></variable>
+  <variable id="#quote-end"><variableref refid="CloseQuote"/></variable>
     
   <!-- Hazard statement domain -->
   <variable id="hazard.image.default">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</variable>
-</vars>
+</variables>

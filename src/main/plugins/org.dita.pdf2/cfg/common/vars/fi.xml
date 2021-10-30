@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--  
+<!--
 This file is part of the DITA Open Toolkit project.
 
 Copyright 2011 Jarno Elovirta
 
 See the accompanying LICENSE file for applicable license.
 -->
-<vars xmlns="http://www.idiominc.com/opentopic/vars">
-  <variable id="Preface odd header"><param ref-name="prodname"/> | <variable id="Preface title"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Preface even header"><param ref-name="pagenum"/> | <variable id="Preface title"/> | <param ref-name="prodname"/></variable>
+<?xml-model href="../../../../org.dita.base/xsl/common/strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+  <variable id="Preface odd header"><param ref-name="prodname"/> | <variableref refid="Preface title"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Preface even header"><param ref-name="pagenum"/> | <variableref refid="Preface title"/> | <param ref-name="prodname"/></variable>
   <variable id="Table of Contents">Sisällys</variable>
   <variable id="Index Continued String">jatkoa</variable>
   <variable id="Index See String">, Katso </variable>
@@ -44,14 +45,14 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Optional Step">Valinnainen:</variable>
   <variable id="Required Step">Pakollinen:</variable>
   <!--Labels for task sections, now reused from common-->
-  <variable id="Task Prereq"></variable>
-  <variable id="Task Context"></variable>
-  <variable id="Task Steps"></variable>
-  <variable id="#steps-unordered-label"></variable>
-  <variable id="Task Result"></variable>
-  <variable id="Task Example"></variable>
-  <variable id="Task Postreq"></variable>
+  <variable id="Task Prereq"/>
+  <variable id="Task Context"/>
+  <variable id="Task Steps"/>
+  <variable id="#steps-unordered-label"/>
+  <variable id="Task Result"/>
+  <variable id="Task Example"/>
+  <variable id="Task Postreq"/>
   <variable id="Glossary">Sanasto</variable>
   <variable id="List of Tables">Luettelo tauluista</variable>
   <variable id="List of Figures">Luettelo kuvista</variable>
-</vars>
+</variables>
