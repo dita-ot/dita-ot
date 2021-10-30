@@ -108,8 +108,6 @@ public class IntegratorTest {
                 new InputSource(new File(tempDir, "catalog.xml").toURI().toString()));
         assertXMLEqual(new InputSource(new File(expDir, "xsl" + File.separator + "shell.xsl").toURI().toString()),
                 new InputSource(new File(tempDir, "xsl" + File.separator + "shell.xsl").toURI().toString()));
-        assertXMLEqual(new InputSource(new File(expDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml").toURI().toString()),
-                new InputSource(new File(tempDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml").toURI().toString()));
         assertXMLEqual(new InputSource(new File(expDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()),
                 new InputSource(new File(tempDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()));
 
