@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,58 +6,59 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="sv-se">        <!-- Swedish -->
-  <str name="Figure">Figur</str>
-  <str name="Table">Tabell</str>
-  <str name="Next topic">Nästa avsnitt</str>
-  <str name="Previous topic">Föregående avsnitt</str>
-  <str name="Parent topic">Överordnat ämne</str>
-  <str name="Required cleanup">Korrigering krävs</str>
-  <str name="Draft comment">Kommentar till utkast</str>
-  <str name="Option">Alternativ</str>
-  <str name="Description">Beskrivning</str>
-  <str name="Optional">Valfritt</str>
-  <str name="Required">Krävs</str>
-  <str name="Skip visual syntax diagram">Hoppa över syntaxdiagram</str>
-  <str name="Read syntax diagram">Läs syntaxdiagram</str>
-  <str name="Start of change">Ändring startar</str>
-  <str name="End of change">Ändring slutar</str>
-  <str name="Index">Index</str>
-  <str name="Special characters">Specialtecken</str>
-  <str name="Numerics">Siffror</str>
-  <str name="End notes">Noter</str>
-  <str name="Artwork">Bild</str>
-  <str name="Syntax">Syntax</str>
-  <str name="Type">Typ</str>
-  <str name="Value">Värde</str>
-  <str name="Note">Anm</str>
-  <str name="Notes">Anm</str>
-  <str name="Tip">Tips</str>
-  <str name="Fastpath">Genväg</str>
-  <str name="Important">Viktigt</str>
-  <str name="Attention">Varning</str>
-  <str name="Caution">Varning - risk för personskada</str>
-  <str name="Danger">Varning - livsfara</str>
-  <str name="Remember">Glöm inte</str>
-  <str name="Restriction">Begränsning</str>
-  <str name="Trouble">Problem</str>
-  <str name="Warning">Varning - risk för maskinskada</str>
-  <str name="Contents">Innehåll</str>
-  <str name="Related concepts">Närliggande begrepp</str>
-  <str name="Related tasks">Närliggande uppgifter</str>
-  <str name="Related reference">Närliggande referens</str>
-  <str name="Related information">Närliggande information</str>
-  <str name="Prerequisite">Läs detta först</str>
-  <str name="Prerequisites">Läs detta först</str>
-  <str name="or">or</str>
-  <str name="task_context">Den här uppgiften</str>
-  <str name="task_example">Exempel</str>
-  <str name="task_postreq">Och sedan då?</str>
-  <str name="task_prereq">Innan du börjar</str>
-  <str name="task_procedure">Arbetsordning</str>
-  <str name="task_procedure_unordered">Arbetsordning</str>
-  <str name="task_results">Resultat</str>
-  <str name="Copyright">Copyright</str>
-  <str name="OpenQuote">”</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Figur</variable>
+   <variable id="Table">Tabell</variable>
+   <variable id="Next topic">Nästa avsnitt</variable>
+   <variable id="Previous topic">Föregående avsnitt</variable>
+   <variable id="Parent topic">Överordnat ämne</variable>
+   <variable id="Required cleanup">Korrigering krävs</variable>
+   <variable id="Draft comment">Kommentar till utkast</variable>
+   <variable id="Option">Alternativ</variable>
+   <variable id="Description">Beskrivning</variable>
+   <variable id="Optional">Valfritt</variable>
+   <variable id="Required">Krävs</variable>
+   <variable id="Skip visual syntax diagram">Hoppa över syntaxdiagram</variable>
+   <variable id="Read syntax diagram">Läs syntaxdiagram</variable>
+   <variable id="Start of change">Ändring startar</variable>
+   <variable id="End of change">Ändring slutar</variable>
+   <variable id="Index">Index</variable>
+   <variable id="Special characters">Specialtecken</variable>
+   <variable id="Numerics">Siffror</variable>
+   <variable id="End notes">Noter</variable>
+   <variable id="Artwork">Bild</variable>
+   <variable id="Syntax">Syntax</variable>
+   <variable id="Type">Typ</variable>
+   <variable id="Value">Värde</variable>
+   <variable id="Note">Anm</variable>
+   <variable id="Notes">Anm</variable>
+   <variable id="Tip">Tips</variable>
+   <variable id="Fastpath">Genväg</variable>
+   <variable id="Important">Viktigt</variable>
+   <variable id="Attention">Varning</variable>
+   <variable id="Caution">Varning - risk för personskada</variable>
+   <variable id="Danger">Varning - livsfara</variable>
+   <variable id="Remember">Glöm inte</variable>
+   <variable id="Restriction">Begränsning</variable>
+   <variable id="Trouble">Problem</variable>
+   <variable id="Warning">Varning - risk för maskinskada</variable>
+   <variable id="Contents">Innehåll</variable>
+   <variable id="Related concepts">Närliggande begrepp</variable>
+   <variable id="Related tasks">Närliggande uppgifter</variable>
+   <variable id="Related reference">Närliggande referens</variable>
+   <variable id="Related information">Närliggande information</variable>
+   <variable id="Prerequisite">Läs detta först</variable>
+   <variable id="Prerequisites">Läs detta först</variable>
+   <variable id="or">or</variable>
+   <variable id="task_context">Den här uppgiften</variable>
+   <variable id="task_example">Exempel</variable>
+   <variable id="task_postreq">Och sedan då?</variable>
+   <variable id="task_prereq">Innan du börjar</variable>
+   <variable id="task_procedure">Arbetsordning</variable>
+   <variable id="task_procedure_unordered">Arbetsordning</variable>
+   <variable id="task_results">Resultat</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="OpenQuote">”</variable>
+   <variable id="a11y.and-then"/>
+</variables>

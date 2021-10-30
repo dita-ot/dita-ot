@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,57 +6,58 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="nl-nl">        <!-- Dutch -->
-  <str name="Figure">Figuur</str>
-  <str name="Table">Tabel</str>
-  <str name="Next topic">Volgend onderwerp</str>
-  <str name="Previous topic">Vorig onderwerp</str>
-  <str name="Parent topic">Hoofdonderwerp</str>
-  <str name="Required cleanup">Opschonen vereist</str>
-  <str name="Draft comment">Opmerking over concept</str>
-  <str name="Option">Optie</str>
-  <str name="Description">Beschrijving</str>
-  <str name="Optional">Optioneel</str>
-  <str name="Required">Vereist</str>
-  <str name="Skip visual syntax diagram">Syntaxisdiagram overslaan</str>
-  <str name="Read syntax diagram">Syntaxisdiagram lezen</str>
-  <str name="Start of change">Begin wijziging</str>
-  <str name="End of change">Einde wijziging</str>
-  <str name="Index">Trefwoordenregister</str>
-  <str name="Special characters">Speciale tekens</str>
-  <str name="Numerics">Numerieke tekens</str>
-  <str name="End notes">Eindnoten</str>
-  <str name="Artwork">Artwork</str>
-  <str name="Syntax">Syntaxis</str>
-  <str name="Type">Type</str>
-  <str name="Value">Waarde</str>
-  <str name="Note">Opmerking</str>
-  <str name="Notes">Opmerkingen</str>
-  <str name="Tip">Tip</str>
-  <str name="Fastpath">Versnelde keuze</str>
-  <str name="Important">Belangrijk</str>
-  <str name="Attention">Waarschuwing</str>
-  <str name="Caution">Let op!</str>
-  <str name="Danger">Gevaar!</str>
-  <str name="Remember">Let op</str>
-  <str name="Restriction">Beperking</str>
-  <str name="Trouble">Probleem</str>
-  <str name="Warning">Attentie</str>
-  <str name="Contents">Inhoudsopgave</str>
-  <str name="Related concepts">Verwante onderwerpen</str>
-  <str name="Related tasks">Verwante taken</str>
-  <str name="Related reference">Verwante verwijzing</str>
-  <str name="Related information">Verwante informatie</str>
-  <str name="Prerequisite">Vereiste</str>
-  <str name="Prerequisites">Vereisten</str>
-  <str name="or">of</str>
-  <str name="task_context">Over deze taak</str>
-  <str name="task_example">Voorbeeld</str>
-  <str name="task_postreq">Volgende stappen</str>
-  <str name="task_prereq">Voordat u begint</str>
-  <str name="task_procedure">Procedure</str>
-  <str name="task_procedure_unordered">Procedure</str>
-  <str name="task_results">Resultaten</str>
-  <str name="Copyright">Copyright</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Figuur</variable>
+   <variable id="Table">Tabel</variable>
+   <variable id="Next topic">Volgend onderwerp</variable>
+   <variable id="Previous topic">Vorig onderwerp</variable>
+   <variable id="Parent topic">Hoofdonderwerp</variable>
+   <variable id="Required cleanup">Opschonen vereist</variable>
+   <variable id="Draft comment">Opmerking over concept</variable>
+   <variable id="Option">Optie</variable>
+   <variable id="Description">Beschrijving</variable>
+   <variable id="Optional">Optioneel</variable>
+   <variable id="Required">Vereist</variable>
+   <variable id="Skip visual syntax diagram">Syntaxisdiagram overslaan</variable>
+   <variable id="Read syntax diagram">Syntaxisdiagram lezen</variable>
+   <variable id="Start of change">Begin wijziging</variable>
+   <variable id="End of change">Einde wijziging</variable>
+   <variable id="Index">Trefwoordenregister</variable>
+   <variable id="Special characters">Speciale tekens</variable>
+   <variable id="Numerics">Numerieke tekens</variable>
+   <variable id="End notes">Eindnoten</variable>
+   <variable id="Artwork">Artwork</variable>
+   <variable id="Syntax">Syntaxis</variable>
+   <variable id="Type">Type</variable>
+   <variable id="Value">Waarde</variable>
+   <variable id="Note">Opmerking</variable>
+   <variable id="Notes">Opmerkingen</variable>
+   <variable id="Tip">Tip</variable>
+   <variable id="Fastpath">Versnelde keuze</variable>
+   <variable id="Important">Belangrijk</variable>
+   <variable id="Attention">Waarschuwing</variable>
+   <variable id="Caution">Let op!</variable>
+   <variable id="Danger">Gevaar!</variable>
+   <variable id="Remember">Let op</variable>
+   <variable id="Restriction">Beperking</variable>
+   <variable id="Trouble">Probleem</variable>
+   <variable id="Warning">Attentie</variable>
+   <variable id="Contents">Inhoudsopgave</variable>
+   <variable id="Related concepts">Verwante onderwerpen</variable>
+   <variable id="Related tasks">Verwante taken</variable>
+   <variable id="Related reference">Verwante verwijzing</variable>
+   <variable id="Related information">Verwante informatie</variable>
+   <variable id="Prerequisite">Vereiste</variable>
+   <variable id="Prerequisites">Vereisten</variable>
+   <variable id="or">of</variable>
+   <variable id="task_context">Over deze taak</variable>
+   <variable id="task_example">Voorbeeld</variable>
+   <variable id="task_postreq">Volgende stappen</variable>
+   <variable id="task_prereq">Voordat u begint</variable>
+   <variable id="task_procedure">Procedure</variable>
+   <variable id="task_procedure_unordered">Procedure</variable>
+   <variable id="task_results">Resultaten</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="a11y.and-then"/>
+</variables>

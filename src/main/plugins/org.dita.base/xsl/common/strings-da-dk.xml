@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,57 +6,58 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="da-dk">        <!-- Danish -->
-  <str name="Figure">Figur</str>
-  <str name="Table">Tabel</str>
-  <str name="Next topic">Næste emne</str>
-  <str name="Previous topic">Forrige emne</str>
-  <str name="Parent topic">Overordnet emne</str>
-  <str name="Required cleanup">Påkrævet oprydning</str>
-  <str name="Draft comment">Kommentar til kladde</str>
-  <str name="Option">Valg</str>
-  <str name="Description">Beskrivelse</str>
-  <str name="Optional">Valgfrit</str>
-  <str name="Required">Påkrævet</str>
-  <str name="Skip visual syntax diagram">Spring over visuel syntaksdiagram</str>
-  <str name="Read syntax diagram">Læs syntaksdiagram</str>
-  <str name="Start of change">Start på ændringer</str>
-  <str name="End of change">Slut på ændringer</str>
-  <str name="Index">Stikordsregister</str>
-  <str name="Special characters">Specialtegn</str>
-  <str name="Numerics">Numerisk</str>
-  <str name="End notes">Slutbemærkninger</str>
-  <str name="Artwork">Illustrationer</str>
-  <str name="Syntax">Syntaks</str>
-  <str name="Type">Type</str>
-  <str name="Value">Værdi</str>
-  <str name="Note">Bemærk</str>
-  <str name="Notes">Bemærkninger</str>
-  <str name="Tip">Tip</str>
-  <str name="Fastpath">Genvej</str>
-  <str name="Important">Vigtigt</str>
-  <str name="Attention">Advarsel</str>
-  <str name="Caution">Pas på</str>
-  <str name="Danger">Fare!</str>
-  <str name="Remember">Husk</str>
-  <str name="Restriction">Begrænsning</str>
-  <str name="Trouble">Problem</str>
-  <str name="Warning">Advarsel</str>
-  <str name="Contents">Indholdsfortegnelse</str>
-  <str name="Related concepts">Beslægtede begreber</str>
-  <str name="Related tasks">Beslægtede opgaver</str>
-  <str name="Related reference">Beslægtet reference</str>
-  <str name="Related information">Beslægtede oplysninger</str>
-  <str name="Prerequisite">Forudsætning</str>
-  <str name="Prerequisites">Forudsætninger</str>
-  <str name="or">eller</str>
-  <str name="task_context">Om denne opgave</str>
-  <str name="task_example">Eksempel</str>
-  <str name="task_postreq">Næste trin</str>
-  <str name="task_prereq">Inden du begynder</str>
-  <str name="task_procedure">Fremgangsmåde</str>
-  <str name="task_procedure_unordered">Fremgangsmåde</str>
-  <str name="task_results">Resultater</str>
-  <str name="Copyright">Copyright</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Figur</variable>
+   <variable id="Table">Tabel</variable>
+   <variable id="Next topic">Næste emne</variable>
+   <variable id="Previous topic">Forrige emne</variable>
+   <variable id="Parent topic">Overordnet emne</variable>
+   <variable id="Required cleanup">Påkrævet oprydning</variable>
+   <variable id="Draft comment">Kommentar til kladde</variable>
+   <variable id="Option">Valg</variable>
+   <variable id="Description">Beskrivelse</variable>
+   <variable id="Optional">Valgfrit</variable>
+   <variable id="Required">Påkrævet</variable>
+   <variable id="Skip visual syntax diagram">Spring over visuel syntaksdiagram</variable>
+   <variable id="Read syntax diagram">Læs syntaksdiagram</variable>
+   <variable id="Start of change">Start på ændringer</variable>
+   <variable id="End of change">Slut på ændringer</variable>
+   <variable id="Index">Stikordsregister</variable>
+   <variable id="Special characters">Specialtegn</variable>
+   <variable id="Numerics">Numerisk</variable>
+   <variable id="End notes">Slutbemærkninger</variable>
+   <variable id="Artwork">Illustrationer</variable>
+   <variable id="Syntax">Syntaks</variable>
+   <variable id="Type">Type</variable>
+   <variable id="Value">Værdi</variable>
+   <variable id="Note">Bemærk</variable>
+   <variable id="Notes">Bemærkninger</variable>
+   <variable id="Tip">Tip</variable>
+   <variable id="Fastpath">Genvej</variable>
+   <variable id="Important">Vigtigt</variable>
+   <variable id="Attention">Advarsel</variable>
+   <variable id="Caution">Pas på</variable>
+   <variable id="Danger">Fare!</variable>
+   <variable id="Remember">Husk</variable>
+   <variable id="Restriction">Begrænsning</variable>
+   <variable id="Trouble">Problem</variable>
+   <variable id="Warning">Advarsel</variable>
+   <variable id="Contents">Indholdsfortegnelse</variable>
+   <variable id="Related concepts">Beslægtede begreber</variable>
+   <variable id="Related tasks">Beslægtede opgaver</variable>
+   <variable id="Related reference">Beslægtet reference</variable>
+   <variable id="Related information">Beslægtede oplysninger</variable>
+   <variable id="Prerequisite">Forudsætning</variable>
+   <variable id="Prerequisites">Forudsætninger</variable>
+   <variable id="or">eller</variable>
+   <variable id="task_context">Om denne opgave</variable>
+   <variable id="task_example">Eksempel</variable>
+   <variable id="task_postreq">Næste trin</variable>
+   <variable id="task_prereq">Inden du begynder</variable>
+   <variable id="task_procedure">Fremgangsmåde</variable>
+   <variable id="task_procedure_unordered">Fremgangsmåde</variable>
+   <variable id="task_results">Resultater</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="a11y.and-then"/>
+</variables>

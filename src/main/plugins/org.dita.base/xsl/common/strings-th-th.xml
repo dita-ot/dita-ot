@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,57 +6,58 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="th-th">        <!-- Thai -->
-  <str name="Figure">รูปที่</str>
-  <str name="Table">ตารางที่</str>
-  <str name="Next topic">หัวข้อถัดไป</str>
-  <str name="Previous topic">หัวข้อก่อนหน้า</str>
-  <str name="Parent topic">หัวข้อต้นทาง</str>
-  <str name="Required cleanup">การแก้ไขที่ต้องการ</str>
-  <str name="Draft comment">ข้อคิดเห็นฉบับร่าง</str>
-  <str name="Option">ทางเลือก</str>
-  <str name="Description">คำอธิบาย</str>
-  <str name="Optional">ทางเลือก</str>
-  <str name="Required">บังคับ</str>
-  <str name="Skip visual syntax diagram">ข้ามการดู syntax diagram</str>
-  <str name="Read syntax diagram">อ่าน syntax diagram</str>
-  <str name="Start of change">เริ่มต้นของการเปลี่ยนแปลง</str>
-  <str name="End of change">สิ้นสุดของการเปลี่ยนแปลง</str>
-  <str name="Index">ดัชนี</str>
-  <str name="Special characters">อักขระพิเศษ</str>
-  <str name="Numerics">ตัวเลข</str>
-  <str name="End notes">หมายเหตุท้าย</str>
-  <str name="Artwork">อาร์ตเวิร์ก</str>
-  <str name="Syntax">Syntax</str>
-  <str name="Type">ประเภท</str>
-  <str name="Value">ค่า</str>
-  <str name="Note">หมายเหตุ</str>
-  <str name="Notes">หมายเหตุ</str>
-  <str name="Tip">คำแนะนำ</str>
-  <str name="Fastpath">ทางด่วน</str>
-  <str name="Important">สำคัญ</str>
-  <str name="Attention">ข้อควรสนใจ</str>
-  <str name="Caution">ข้อควรระวัง</str>
-  <str name="Danger">อันตราย</str>
-  <str name="Remember">เตือนความจำ</str>
-  <str name="Restriction">ข้อจำกัด</str>
-  <str name="Trouble">ปัญหา</str>
-  <str name="Warning">คำเตือน</str>
-  <str name="Contents">สารบัญ</str>
-  <str name="Related concepts">หลักการที่เกี่ยวข้อง</str>
-  <str name="Related tasks">งานที่เกี่ยวข้อง</str>
-  <str name="Related reference">สิ่งอ้างอิงที่เกี่ยวข้อง</str>
-  <str name="Related information">ข้อมูลที่เกี่ยวข้อง</str>
-  <str name="Prerequisite">สิ่งที่ต้องทำก่อน</str>
-  <str name="Prerequisites">สิ่งที่ต้องทำก่อน</str>
-  <str name="or">หรือ</str>
-  <str name="task_context">เกี่ยวกับภารกิจนี้</str>
-  <str name="task_example">ตัวอย่าง</str>
-  <str name="task_postreq">สิ่งที่ต้องทำต่อไป</str>
-  <str name="task_prereq">ก่อนเริ่มต้นภารกิจ</str>
-  <str name="task_procedure">กระบวนการ</str>
-  <str name="task_procedure_unordered">กระบวนการ</str>
-  <str name="task_results">ผลลัพธ์</str>
-  <str name="Copyright">ลิขสิทธิ์ของ</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">รูปที่</variable>
+   <variable id="Table">ตารางที่</variable>
+   <variable id="Next topic">หัวข้อถัดไป</variable>
+   <variable id="Previous topic">หัวข้อก่อนหน้า</variable>
+   <variable id="Parent topic">หัวข้อต้นทาง</variable>
+   <variable id="Required cleanup">การแก้ไขที่ต้องการ</variable>
+   <variable id="Draft comment">ข้อคิดเห็นฉบับร่าง</variable>
+   <variable id="Option">ทางเลือก</variable>
+   <variable id="Description">คำอธิบาย</variable>
+   <variable id="Optional">ทางเลือก</variable>
+   <variable id="Required">บังคับ</variable>
+   <variable id="Skip visual syntax diagram">ข้ามการดู syntax diagram</variable>
+   <variable id="Read syntax diagram">อ่าน syntax diagram</variable>
+   <variable id="Start of change">เริ่มต้นของการเปลี่ยนแปลง</variable>
+   <variable id="End of change">สิ้นสุดของการเปลี่ยนแปลง</variable>
+   <variable id="Index">ดัชนี</variable>
+   <variable id="Special characters">อักขระพิเศษ</variable>
+   <variable id="Numerics">ตัวเลข</variable>
+   <variable id="End notes">หมายเหตุท้าย</variable>
+   <variable id="Artwork">อาร์ตเวิร์ก</variable>
+   <variable id="Syntax">Syntax</variable>
+   <variable id="Type">ประเภท</variable>
+   <variable id="Value">ค่า</variable>
+   <variable id="Note">หมายเหตุ</variable>
+   <variable id="Notes">หมายเหตุ</variable>
+   <variable id="Tip">คำแนะนำ</variable>
+   <variable id="Fastpath">ทางด่วน</variable>
+   <variable id="Important">สำคัญ</variable>
+   <variable id="Attention">ข้อควรสนใจ</variable>
+   <variable id="Caution">ข้อควรระวัง</variable>
+   <variable id="Danger">อันตราย</variable>
+   <variable id="Remember">เตือนความจำ</variable>
+   <variable id="Restriction">ข้อจำกัด</variable>
+   <variable id="Trouble">ปัญหา</variable>
+   <variable id="Warning">คำเตือน</variable>
+   <variable id="Contents">สารบัญ</variable>
+   <variable id="Related concepts">หลักการที่เกี่ยวข้อง</variable>
+   <variable id="Related tasks">งานที่เกี่ยวข้อง</variable>
+   <variable id="Related reference">สิ่งอ้างอิงที่เกี่ยวข้อง</variable>
+   <variable id="Related information">ข้อมูลที่เกี่ยวข้อง</variable>
+   <variable id="Prerequisite">สิ่งที่ต้องทำก่อน</variable>
+   <variable id="Prerequisites">สิ่งที่ต้องทำก่อน</variable>
+   <variable id="or">หรือ</variable>
+   <variable id="task_context">เกี่ยวกับภารกิจนี้</variable>
+   <variable id="task_example">ตัวอย่าง</variable>
+   <variable id="task_postreq">สิ่งที่ต้องทำต่อไป</variable>
+   <variable id="task_prereq">ก่อนเริ่มต้นภารกิจ</variable>
+   <variable id="task_procedure">กระบวนการ</variable>
+   <variable id="task_procedure_unordered">กระบวนการ</variable>
+   <variable id="task_results">ผลลัพธ์</variable>
+   <variable id="Copyright">ลิขสิทธิ์ของ</variable>
+   <variable id="a11y.and-then"/>
+</variables>

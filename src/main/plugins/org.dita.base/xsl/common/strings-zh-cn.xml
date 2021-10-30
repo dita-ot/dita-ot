@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,58 +6,59 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="zh-cn">        <!-- Simplified Chinese -->
-  <str name="Figure">图</str>
-  <str name="Table">表</str>
-  <str name="Next topic">下一主题</str>
-  <str name="Previous topic">上一主题</str>
-  <str name="Parent topic">父主题</str>
-  <str name="Required cleanup">需要修正</str>
-  <str name="Draft comment">非正式版注释</str>
-  <str name="Option">选项</str>
-  <str name="Description">描述</str>
-  <str name="Optional">可选</str>
-  <str name="Required">必需</str>
-  <str name="Skip visual syntax diagram">跳过直观语法图</str>
-  <str name="Read syntax diagram">阅读语法图</str>
-  <str name="Start of change">更新开始</str>
-  <str name="End of change">更新结束</str>
-  <str name="Index">索引</str>
-  <str name="Special characters">特别字符</str>
-  <str name="Numerics">数字</str>
-  <str name="End notes">结尾注释</str>
-  <str name="Artwork">图片</str>
-  <str name="Syntax">语法</str>
-  <str name="Type">类型</str>
-  <str name="Value">值</str>
-  <str name="Note">注</str>
-  <str name="Notes">注</str>
-  <str name="Tip">提示</str>
-  <str name="Fastpath">捷径</str>
-  <str name="Important">重要</str>
-  <str name="Attention">注意</str>
-  <str name="Caution">警告</str>
-  <str name="Danger">危险</str>
-  <str name="Remember">切记</str>
-  <str name="Restriction">限制</str>
-  <str name="Trouble">故障</str>
-  <str name="Warning">警告</str>
-  <str name="Contents">内容</str>
-  <str name="Related concepts">相关概念</str>
-  <str name="Related tasks">相关任务</str>
-  <str name="Related reference">相关参考</str>
-  <str name="Related information">相关信息</str>
-  <str name="Prerequisite">先决条件</str>
-  <str name="Prerequisites">先决条件</str>
-  <str name="or">或</str>
-  <str name="task_context">关于此任务</str>
-  <str name="task_example">示例</str>
-  <str name="task_postreq">下一步做什么</str>
-  <str name="task_prereq">开始之前</str>
-  <str name="task_procedure">过程</str>
-  <str name="task_procedure_unordered">过程</str>
-  <str name="task_results">结果</str>
-  <str name="Copyright">版权</str>
-  <str name="ColonSymbol">：</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">图</variable>
+   <variable id="Table">表</variable>
+   <variable id="Next topic">下一主题</variable>
+   <variable id="Previous topic">上一主题</variable>
+   <variable id="Parent topic">父主题</variable>
+   <variable id="Required cleanup">需要修正</variable>
+   <variable id="Draft comment">非正式版注释</variable>
+   <variable id="Option">选项</variable>
+   <variable id="Description">描述</variable>
+   <variable id="Optional">可选</variable>
+   <variable id="Required">必需</variable>
+   <variable id="Skip visual syntax diagram">跳过直观语法图</variable>
+   <variable id="Read syntax diagram">阅读语法图</variable>
+   <variable id="Start of change">更新开始</variable>
+   <variable id="End of change">更新结束</variable>
+   <variable id="Index">索引</variable>
+   <variable id="Special characters">特别字符</variable>
+   <variable id="Numerics">数字</variable>
+   <variable id="End notes">结尾注释</variable>
+   <variable id="Artwork">图片</variable>
+   <variable id="Syntax">语法</variable>
+   <variable id="Type">类型</variable>
+   <variable id="Value">值</variable>
+   <variable id="Note">注</variable>
+   <variable id="Notes">注</variable>
+   <variable id="Tip">提示</variable>
+   <variable id="Fastpath">捷径</variable>
+   <variable id="Important">重要</variable>
+   <variable id="Attention">注意</variable>
+   <variable id="Caution">警告</variable>
+   <variable id="Danger">危险</variable>
+   <variable id="Remember">切记</variable>
+   <variable id="Restriction">限制</variable>
+   <variable id="Trouble">故障</variable>
+   <variable id="Warning">警告</variable>
+   <variable id="Contents">内容</variable>
+   <variable id="Related concepts">相关概念</variable>
+   <variable id="Related tasks">相关任务</variable>
+   <variable id="Related reference">相关参考</variable>
+   <variable id="Related information">相关信息</variable>
+   <variable id="Prerequisite">先决条件</variable>
+   <variable id="Prerequisites">先决条件</variable>
+   <variable id="or">或</variable>
+   <variable id="task_context">关于此任务</variable>
+   <variable id="task_example">示例</variable>
+   <variable id="task_postreq">下一步做什么</variable>
+   <variable id="task_prereq">开始之前</variable>
+   <variable id="task_procedure">过程</variable>
+   <variable id="task_procedure_unordered">过程</variable>
+   <variable id="task_results">结果</variable>
+   <variable id="Copyright">版权</variable>
+   <variable id="ColonSymbol">：</variable>
+   <variable id="a11y.and-then"/>
+</variables>

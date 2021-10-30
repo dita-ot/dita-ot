@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,57 +6,58 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="sk-sk">       <!-- Slovak -->
-  <str name="Figure">Obrázok</str>
-  <str name="Table">Tabuľka</str>
-  <str name="Next topic">Nasledujúca téma</str>
-  <str name="Previous topic">Predchádzajúca téma</str>
-  <str name="Parent topic">Nadradená téma</str>
-  <str name="Required cleanup">Požadované čistenie</str>
-  <str name="Draft comment">Poznámka v koncepte</str>
-  <str name="Option">Voľba</str>
-  <str name="Description">Opis</str>
-  <str name="Optional">Voliteľný</str>
-  <str name="Required">Požadovaný</str>
-  <str name="Skip visual syntax diagram">Preskočiť vizuálny diagram syntaxe</str>
-  <str name="Read syntax diagram">Čítať diagram syntaxe</str>
-  <str name="Start of change">Začiatok zmeny</str>
-  <str name="End of change">Koniec zmeny</str>
-  <str name="Index">Index</str>
-  <str name="Special characters">Špeciálne znaky</str>
-  <str name="Numerics">Numerický</str>
-  <str name="End notes">Záverečné poznámky</str>
-  <str name="Artwork">Obrázok</str>
-  <str name="Syntax">Syntax</str>
-  <str name="Type">Typ</str>
-  <str name="Value">Hodnota</str>
-  <str name="Note">Poznámka</str>
-  <str name="Notes">Poznámky</str>
-  <str name="Tip">Tip</str>
-  <str name="Fastpath">Rýchla cesta</str>
-  <str name="Important">Dôležité</str>
-  <str name="Attention">Varovanie</str>
-  <str name="Caution">POZOR</str>
-  <str name="Danger">NEBEZPEČENSTVO</str>
-  <str name="Remember">Zapamätajte si</str>
-  <str name="Restriction">Obmedzenie</str>
-  <str name="Trouble">Problém</str>
-  <str name="Warning">Varovanie</str>
-  <str name="Contents">Obsah</str>
-  <str name="Related concepts">Súvisiace koncepty</str>
-  <str name="Related tasks">Súvisiace úlohy</str>
-  <str name="Related reference">Súvisiaci odkaz</str>
-  <str name="Related information">Súvisiace informácie</str>
-  <str name="Prerequisite">Požiadavka</str>
-  <str name="Prerequisites">Požiadavky</str>
-  <str name="or">or</str>
-  <str name="task_context">Informácie o úlohe</str>
-  <str name="task_example">Príklad</str>
-  <str name="task_postreq">Ako ďalej</str>
-  <str name="task_prereq">Skôr ako začnete</str>
-  <str name="task_procedure">Procedúra</str>
-  <str name="task_procedure_unordered">Procedúra</str>
-  <str name="task_results">Výsledky</str>
-  <str name="Copyright">Copyright</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Obrázok</variable>
+   <variable id="Table">Tabuľka</variable>
+   <variable id="Next topic">Nasledujúca téma</variable>
+   <variable id="Previous topic">Predchádzajúca téma</variable>
+   <variable id="Parent topic">Nadradená téma</variable>
+   <variable id="Required cleanup">Požadované čistenie</variable>
+   <variable id="Draft comment">Poznámka v koncepte</variable>
+   <variable id="Option">Voľba</variable>
+   <variable id="Description">Opis</variable>
+   <variable id="Optional">Voliteľný</variable>
+   <variable id="Required">Požadovaný</variable>
+   <variable id="Skip visual syntax diagram">Preskočiť vizuálny diagram syntaxe</variable>
+   <variable id="Read syntax diagram">Čítať diagram syntaxe</variable>
+   <variable id="Start of change">Začiatok zmeny</variable>
+   <variable id="End of change">Koniec zmeny</variable>
+   <variable id="Index">Index</variable>
+   <variable id="Special characters">Špeciálne znaky</variable>
+   <variable id="Numerics">Numerický</variable>
+   <variable id="End notes">Záverečné poznámky</variable>
+   <variable id="Artwork">Obrázok</variable>
+   <variable id="Syntax">Syntax</variable>
+   <variable id="Type">Typ</variable>
+   <variable id="Value">Hodnota</variable>
+   <variable id="Note">Poznámka</variable>
+   <variable id="Notes">Poznámky</variable>
+   <variable id="Tip">Tip</variable>
+   <variable id="Fastpath">Rýchla cesta</variable>
+   <variable id="Important">Dôležité</variable>
+   <variable id="Attention">Varovanie</variable>
+   <variable id="Caution">POZOR</variable>
+   <variable id="Danger">NEBEZPEČENSTVO</variable>
+   <variable id="Remember">Zapamätajte si</variable>
+   <variable id="Restriction">Obmedzenie</variable>
+   <variable id="Trouble">Problém</variable>
+   <variable id="Warning">Varovanie</variable>
+   <variable id="Contents">Obsah</variable>
+   <variable id="Related concepts">Súvisiace koncepty</variable>
+   <variable id="Related tasks">Súvisiace úlohy</variable>
+   <variable id="Related reference">Súvisiaci odkaz</variable>
+   <variable id="Related information">Súvisiace informácie</variable>
+   <variable id="Prerequisite">Požiadavka</variable>
+   <variable id="Prerequisites">Požiadavky</variable>
+   <variable id="or">or</variable>
+   <variable id="task_context">Informácie o úlohe</variable>
+   <variable id="task_example">Príklad</variable>
+   <variable id="task_postreq">Ako ďalej</variable>
+   <variable id="task_prereq">Skôr ako začnete</variable>
+   <variable id="task_procedure">Procedúra</variable>
+   <variable id="task_procedure_unordered">Procedúra</variable>
+   <variable id="task_results">Výsledky</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="a11y.and-then"/>
+</variables>

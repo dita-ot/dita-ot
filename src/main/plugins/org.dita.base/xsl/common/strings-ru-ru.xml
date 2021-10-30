@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,59 +6,60 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="ru-ru">        <!-- Russian -->
-  <str name="Figure">Рис.</str>
-  <str name="Table">Табл.</str>
-  <str name="Next topic">Следующая тема</str>
-  <str name="Previous topic">Предыдущая тема</str>
-  <str name="Parent topic">На уровень выше</str>
-  <str name="Required cleanup">Требуется исправление</str>
-  <str name="Draft comment">Замечание в черновой версии</str>
-  <str name="Option">Опция</str>
-  <str name="Description">Описание</str>
-  <str name="Optional">Необязательно</str>
-  <str name="Required">Обязательно</str>
-  <str name="Skip visual syntax diagram">Пропуск синтаксической диаграммы</str>
-  <str name="Read syntax diagram">Чтение синтаксической диаграммы</str>
-  <str name="Start of change">Изменено</str>
-  <str name="End of change">Конец изменений</str>
-  <str name="Index">Индекс</str>
-  <str name="Special characters">Спец. символы</str>
-  <str name="Numerics">Числа</str>
-  <str name="End notes">Сноски</str>
-  <str name="Artwork">Иллюстрация</str>
-  <str name="Syntax">Синтаксис</str>
-  <str name="Type">Тип</str>
-  <str name="Value">Значение</str>
-  <str name="Note">Прим.</str>
-  <str name="Notes">Прим.</str>
-  <str name="Tip">Совет</str>
-  <str name="Fastpath">Быстрый путь</str>
-  <str name="Important">Важное замечание</str>
-  <str name="Attention">Внимание</str>
-  <str name="Caution">ОСТОРОЖНО</str>
-  <str name="Danger">ОПАСНО</str>
-  <str name="Remember">Напоминание</str>
-  <str name="Restriction">Ограничение</str>
-  <str name="Trouble">Неполадка</str>
-  <str name="Warning">Внимание</str>
-  <str name="Contents">Содержание</str>
-  <str name="Related concepts">Понятия, связанные с данным</str>
-  <str name="Related tasks">Задачи, связанные с данной</str>
-  <str name="Related reference">Ссылки, связанные с данной</str>
-  <str name="Related information">Информация, связанная с данной</str>
-  <str name="Prerequisite">Предварительное условие</str>
-  <str name="Prerequisites">Предварительные условия</str>
-  <str name="or">or</str>
-  <str name="task_context">Об этой задаче</str>
-  <str name="task_example">Пример</str>
-  <str name="task_postreq">Дальнейшие действия</str>
-  <str name="task_prereq">Подготовка</str>
-  <str name="task_procedure">Процедура</str>
-  <str name="task_procedure_unordered">Процедура</str>
-  <str name="task_results">Результат</str>
-  <str name="Copyright">Copyright</str>
-  <str name="OpenQuote">«</str>
-  <str name="CloseQuote">»</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Рис.</variable>
+   <variable id="Table">Табл.</variable>
+   <variable id="Next topic">Следующая тема</variable>
+   <variable id="Previous topic">Предыдущая тема</variable>
+   <variable id="Parent topic">На уровень выше</variable>
+   <variable id="Required cleanup">Требуется исправление</variable>
+   <variable id="Draft comment">Замечание в черновой версии</variable>
+   <variable id="Option">Опция</variable>
+   <variable id="Description">Описание</variable>
+   <variable id="Optional">Необязательно</variable>
+   <variable id="Required">Обязательно</variable>
+   <variable id="Skip visual syntax diagram">Пропуск синтаксической диаграммы</variable>
+   <variable id="Read syntax diagram">Чтение синтаксической диаграммы</variable>
+   <variable id="Start of change">Изменено</variable>
+   <variable id="End of change">Конец изменений</variable>
+   <variable id="Index">Индекс</variable>
+   <variable id="Special characters">Спец. символы</variable>
+   <variable id="Numerics">Числа</variable>
+   <variable id="End notes">Сноски</variable>
+   <variable id="Artwork">Иллюстрация</variable>
+   <variable id="Syntax">Синтаксис</variable>
+   <variable id="Type">Тип</variable>
+   <variable id="Value">Значение</variable>
+   <variable id="Note">Прим.</variable>
+   <variable id="Notes">Прим.</variable>
+   <variable id="Tip">Совет</variable>
+   <variable id="Fastpath">Быстрый путь</variable>
+   <variable id="Important">Важное замечание</variable>
+   <variable id="Attention">Внимание</variable>
+   <variable id="Caution">ОСТОРОЖНО</variable>
+   <variable id="Danger">ОПАСНО</variable>
+   <variable id="Remember">Напоминание</variable>
+   <variable id="Restriction">Ограничение</variable>
+   <variable id="Trouble">Неполадка</variable>
+   <variable id="Warning">Внимание</variable>
+   <variable id="Contents">Содержание</variable>
+   <variable id="Related concepts">Понятия, связанные с данным</variable>
+   <variable id="Related tasks">Задачи, связанные с данной</variable>
+   <variable id="Related reference">Ссылки, связанные с данной</variable>
+   <variable id="Related information">Информация, связанная с данной</variable>
+   <variable id="Prerequisite">Предварительное условие</variable>
+   <variable id="Prerequisites">Предварительные условия</variable>
+   <variable id="or">or</variable>
+   <variable id="task_context">Об этой задаче</variable>
+   <variable id="task_example">Пример</variable>
+   <variable id="task_postreq">Дальнейшие действия</variable>
+   <variable id="task_prereq">Подготовка</variable>
+   <variable id="task_procedure">Процедура</variable>
+   <variable id="task_procedure_unordered">Процедура</variable>
+   <variable id="task_results">Результат</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="OpenQuote">«</variable>
+   <variable id="CloseQuote">»</variable>
+   <variable id="a11y.and-then"/>
+</variables>

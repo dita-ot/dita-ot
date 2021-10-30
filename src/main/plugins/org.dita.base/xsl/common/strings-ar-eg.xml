@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,58 +6,58 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-
-<strings xml:lang="ar-eg">        <!-- Arabic -->
-  <str name="Figure">شكل</str>
-  <str name="Table">جدول</str>
-  <str name="Next topic">الموضوع التالي</str>
-  <str name="Previous topic">الموضوع السابق</str>
-  <str name="Parent topic">الموضوع الأصلي</str>
-  <str name="Required cleanup">الاخلاء المطلوب</str>
-  <str name="Draft comment">تعليق المسودة</str>
-  <str name="Option">اختيار</str>
-  <str name="Description">توصيف</str>
-  <str name="Optional">اختياري</str>
-  <str name="Required">مطلوب</str>
-  <str name="Skip visual syntax diagram">تخطي شكل الصيغة المرئية</str>
-  <str name="Read syntax diagram">شكل صيغة القراءة</str>
-  <str name="Start of change">بداية التغيير</str>
-  <str name="End of change">نهاية التغيير</str>
-  <str name="Index">الفهرس</str>
-  <str name="Special characters">الحروف الخاصة</str>
-  <str name="Numerics">أرقام</str>
-  <str name="End notes">ملحوظات النهاية</str>
-  <str name="Artwork">عمل فني</str>
-  <str name="Syntax">الصيغة</str>
-  <str name="Type">النوع</str>
-  <str name="Value">القيمة</str>
-  <str name="Note">ملاحظة</str>
-  <str name="Notes">ملاحظات</str>
-  <str name="Tip">تلميح</str>
-  <str name="Fastpath">طريقة مختصرة</str>
-  <str name="Important">هام</str>
-  <str name="Attention">تنبيه</str>
-  <str name="Caution">تحذير</str>
-  <str name="Danger">خطر</str>
-  <str name="Remember">تذكر</str>
-  <str name="Restriction">ممنوع</str>
-  <str name="Trouble">المشكلة</str>
-  <str name="Warning">تحذﻳر</str>
-  <str name="Contents">المحتويات</str>
-  <str name="Related concepts">المفاهيم المتعلقة</str>
-  <str name="Related tasks">المهام المتعلقة</str>
-  <str name="Related reference">المرجع المتعلق</str>
-  <str name="Related information">المعلومات المتعلقة</str>
-  <str name="Prerequisite">متطلب رئيسي</str>
-  <str name="Prerequisites">متطلبات رئيسية</str>
-  <str name="or">or</str>
-  <str name="task_context">نبذة عن هذه المهمة</str>
-  <str name="task_example">مثال</str>
-  <str name="task_postreq">ما تريد القيام به بعد الآن</str>
-  <str name="task_prereq">قبل البدء</str>
-  <str name="task_procedure">اجراء</str>
-  <str name="task_procedure_unordered">اجراء</str>
-  <str name="task_results">النتائج</str>
-  <str name="Copyright">حقوق النشر لشركة</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">شكل</variable>
+   <variable id="Table">جدول</variable>
+   <variable id="Next topic">الموضوع التالي</variable>
+   <variable id="Previous topic">الموضوع السابق</variable>
+   <variable id="Parent topic">الموضوع الأصلي</variable>
+   <variable id="Required cleanup">الاخلاء المطلوب</variable>
+   <variable id="Draft comment">تعليق المسودة</variable>
+   <variable id="Option">اختيار</variable>
+   <variable id="Description">توصيف</variable>
+   <variable id="Optional">اختياري</variable>
+   <variable id="Required">مطلوب</variable>
+   <variable id="Skip visual syntax diagram">تخطي شكل الصيغة المرئية</variable>
+   <variable id="Read syntax diagram">شكل صيغة القراءة</variable>
+   <variable id="Start of change">بداية التغيير</variable>
+   <variable id="End of change">نهاية التغيير</variable>
+   <variable id="Index">الفهرس</variable>
+   <variable id="Special characters">الحروف الخاصة</variable>
+   <variable id="Numerics">أرقام</variable>
+   <variable id="End notes">ملحوظات النهاية</variable>
+   <variable id="Artwork">عمل فني</variable>
+   <variable id="Syntax">الصيغة</variable>
+   <variable id="Type">النوع</variable>
+   <variable id="Value">القيمة</variable>
+   <variable id="Note">ملاحظة</variable>
+   <variable id="Notes">ملاحظات</variable>
+   <variable id="Tip">تلميح</variable>
+   <variable id="Fastpath">طريقة مختصرة</variable>
+   <variable id="Important">هام</variable>
+   <variable id="Attention">تنبيه</variable>
+   <variable id="Caution">تحذير</variable>
+   <variable id="Danger">خطر</variable>
+   <variable id="Remember">تذكر</variable>
+   <variable id="Restriction">ممنوع</variable>
+   <variable id="Trouble">المشكلة</variable>
+   <variable id="Warning">تحذﻳر</variable>
+   <variable id="Contents">المحتويات</variable>
+   <variable id="Related concepts">المفاهيم المتعلقة</variable>
+   <variable id="Related tasks">المهام المتعلقة</variable>
+   <variable id="Related reference">المرجع المتعلق</variable>
+   <variable id="Related information">المعلومات المتعلقة</variable>
+   <variable id="Prerequisite">متطلب رئيسي</variable>
+   <variable id="Prerequisites">متطلبات رئيسية</variable>
+   <variable id="or">or</variable>
+   <variable id="task_context">نبذة عن هذه المهمة</variable>
+   <variable id="task_example">مثال</variable>
+   <variable id="task_postreq">ما تريد القيام به بعد الآن</variable>
+   <variable id="task_prereq">قبل البدء</variable>
+   <variable id="task_procedure">اجراء</variable>
+   <variable id="task_procedure_unordered">اجراء</variable>
+   <variable id="task_results">النتائج</variable>
+   <variable id="Copyright">حقوق النشر لشركة</variable>
+   <variable id="a11y.and-then"/>
+</variables>
