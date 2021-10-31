@@ -41,8 +41,8 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Danger">DANGER</variable>
    <variable id="Remember">Remember</variable>
    <variable id="Restriction">Restriction</variable>
-   <variable id="Warning">Warning</variable>
    <variable id="Trouble">Trouble</variable>
+   <variable id="Warning">Warning</variable>
    <variable id="Contents">Contents</variable>
    <variable id="Related concepts">Related concepts</variable>
    <variable id="Related tasks">Related tasks</variable>
