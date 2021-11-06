@@ -51,7 +51,7 @@ dependencies {
     implementation group: 'org.relaxng', name: 'jing', version: '20181222'
     implementation group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.12'
     testImplementation  group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
-    testImplementation  group: 'junit', name: 'junit', version:'4.12'
+    testImplementation  group: 'junit', name: 'junit', version:'4.13.2'
     testImplementation  group: 'org.xmlunit', name: 'xmlunit-core', version: '2.6.0'
 }
 
