@@ -362,6 +362,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("test.ditamap"))
                 .put("generate-debug-attributes", "false")
+                .errorCount(2)
                 .test();
     }
 
