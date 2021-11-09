@@ -409,7 +409,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
         </xsl:call-template>
       </xsl:when>
-      <xsl:when test="not($linking='none') and @href and not(contains(@href,'#'))">
+      <xsl:when test="not($linking='none') and @href and not(contains(@href,'#')) and not(@scope = 'peer')">
         <xsl:variable name="update-id-path" select="($mapref-id-path, generate-id(.))"/>
         <xsl:variable name="href" select="@href" as="xs:string?"/>
         <xsl:apply-templates select="document($href, /)/*[contains(@class,' map/map ')]" mode="mapref">
