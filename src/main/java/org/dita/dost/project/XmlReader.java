@@ -215,7 +215,7 @@ public class XmlReader {
                 getChildren(publication, ELEM_PARAM)
                         .map(param -> new ProjectBuilder.Publication.Param(
                                 getValue(param, ATTR_NAME),
-                                getValue(param, ATTR_VALUE),
+                                param.getAttributeNode(ATTR_VALUE) != null ? param.getAttribute(ATTR_VALUE) : null,
                                 getHref(param).orElse(null),
                                 getFile(param).orElse(null)
                         ))
