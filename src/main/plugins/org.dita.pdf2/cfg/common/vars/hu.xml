@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--   
+<!--
 This file is part of the DITA Open Toolkit project. 
 
 Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<vars xmlns="http://www.idiominc.com/opentopic/vars">
+<?xml-model href="../../../../org.dita.base/xsl/common/strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
   <variable id="Preface odd header"><param ref-name="prodname"/> | Bevezető | <param ref-name="pagenum"/></variable>
   <variable id="Preface even header"><param ref-name="pagenum"/> | Bevezető | <param ref-name="prodname"/></variable>
   <variable id="Table of Contents">Tartalom</variable>
@@ -38,19 +39,19 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Required-Cleanup">[Tisztázandó]</variable>
   <variable id="On the page"> oldalszám: <param ref-name="pagenum"/></variable>
   <variable id="Page"> oldal <param ref-name="pagenum"/></variable>
-  <variable id="This link"></variable><!--UNUSED-->
-  <variable id="Child topics"></variable><!--UNUSED-->
-  <variable id="Related references"></variable><!--UNUSED-->
+  <variable id="This link"/><!--UNUSED-->
+  <variable id="Child topics"/><!--UNUSED-->
+  <variable id="Related references"/><!--UNUSED-->
   <variable id="Optional Step">Választható:</variable>
   <variable id="Required Step">Kötelező:</variable>
-  <variable id="Task Prereq"></variable>
-  <variable id="Task Context"></variable>
-  <variable id="Task Steps"></variable>
-  <variable id="#steps-unordered-label"></variable>
-  <variable id="Task Result"></variable>
-  <variable id="Task Example"></variable>
-  <variable id="Task Postreq"></variable>
+  <variable id="Task Prereq"/>
+  <variable id="Task Context"/>
+  <variable id="Task Steps"/>
+  <variable id="#steps-unordered-label"/>
+  <variable id="Task Result"/>
+  <variable id="Task Example"/>
+  <variable id="Task Postreq"/>
   <variable id="Glossary">Fogalomtár</variable>
   <variable id="List of Tables">Táblázatok</variable>
   <variable id="List of Figures">Ábrák</variable>
-</vars>
+</variables>

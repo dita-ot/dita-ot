@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--   
+<!--
 This file is part of the DITA Open Toolkit project. 
 
 Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<vars xmlns="http://www.idiominc.com/opentopic/vars">
+<?xml-model href="../../../../org.dita.base/xsl/common/strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
   <variable id="Preface odd header"><param ref-name="prodname"/> | تمهﻳد | <param ref-name="pagenum"/></variable>
   <variable id="Preface even header"><param ref-name="pagenum"/> | تمهﻳد | <param ref-name="prodname"/></variable>
   <variable id="Table of Contents">المحتوﻳات</variable>
@@ -38,19 +39,19 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Required-Cleanup">[الاخلاء المطلوب]</variable>
   <variable id="On the page"> بالصفحة <param ref-name="pagenum"/></variable>
   <variable id="Page"> الصفحة <param ref-name="pagenum"/></variable>
-  <variable id="This link"></variable><!--UNUSED-->
-  <variable id="Child topics"></variable><!--UNUSED-->
-  <variable id="Related references"></variable><!--UNUSED-->
+  <variable id="This link"/><!--UNUSED-->
+  <variable id="Child topics"/><!--UNUSED-->
+  <variable id="Related references"/><!--UNUSED-->
   <variable id="Optional Step">اختياري:</variable>
   <variable id="Required Step">مطلوب:</variable>
-  <variable id="Task Prereq"></variable>
-  <variable id="Task Context"></variable>
-  <variable id="Task Steps"></variable>
-  <variable id="#steps-unordered-label"></variable>
-  <variable id="Task Result"></variable>
-  <variable id="Task Example"></variable>
-  <variable id="Task Postreq"></variable>
+  <variable id="Task Prereq"/>
+  <variable id="Task Context"/>
+  <variable id="Task Steps"/>
+  <variable id="#steps-unordered-label"/>
+  <variable id="Task Result"/>
+  <variable id="Task Example"/>
+  <variable id="Task Postreq"/>
   <variable id="Glossary">قاموس المصطلحات</variable>
   <variable id="List of Tables">الجداول</variable>
   <variable id="List of Figures">الأشكال</variable>
-</vars>
+</variables>

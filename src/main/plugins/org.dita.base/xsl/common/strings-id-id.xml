@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,57 +6,58 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="id-id">        <!-- Indonesian -->
-  <str name="Figure">Gambar</str>
-  <str name="Table">Tabel</str>
-  <str name="Next topic">Topik berikutnya</str>
-  <str name="Previous topic">Topik sebelumnya</str>
-  <str name="Parent topic">Topik Induk</str>
-  <str name="Required cleanup">Pembersihan diperlukan</str>
-  <str name="Draft comment">Komentar draf</str>
-  <str name="Option">Pilihan</str>
-  <str name="Description">Deskripsi</str>
-  <str name="Optional">Opsional</str>
-  <str name="Required">Diperlukan</str>
-  <str name="Skip visual syntax diagram">Lewatkan diagram sintaks visual</str>
-  <str name="Read syntax diagram">Baca diagram sintaks</str>
-  <str name="Start of change">Mulai perubahan</str>
-  <str name="End of change">Akhiri perubahan</str>
-  <str name="Index">Indeks</str>
-  <str name="Special characters">Karakter khusus</str>
-  <str name="Numerics">Numerik</str>
-  <str name="End notes">Catatan akhir</str>
-  <str name="Artwork">Grafis</str>
-  <str name="Syntax">Sintaks</str>
-  <str name="Type">Jenis</str>
-  <str name="Value">Nilai</str>
-  <str name="Note">Catatan</str>
-  <str name="Notes">Catatan</str>
-  <str name="Tip">Kiat</str>
-  <str name="Fastpath">Jalur cepat</str>
-  <str name="Important">Penting</str>
-  <str name="Attention">Perhatian</str>
-  <str name="Caution">PERINGATAN</str>
-  <str name="Danger">BAHAYA</str>
-  <str name="Remember">Ingat</str>
-  <str name="Trouble">Masalah</str>
-  <str name="Warning">Peringatan</str>
-  <str name="Restriction">Pembatasan</str>
-  <str name="Contents">Isi</str>
-  <str name="Related concepts">Konsep terkait</str>
-  <str name="Related tasks">Tugas terkait</str>
-  <str name="Related reference">Referensi terkait</str>
-  <str name="Related information">Informasi terkait</str>
-  <str name="Prerequisite">Prasyarat</str>
-  <str name="Prerequisites">Prasyarat</str>
-  <str name="or">atau</str>
-  <str name="task_context">Mengenai tugas ini</str>
-  <str name="task_example">Contoh</str>
-  <str name="task_postreq">Yang harus dilakukan berikutnya</str>
-  <str name="task_prereq">Sebelum Anda mulai</str>
-  <str name="task_procedure">Prosedur</str>
-  <str name="task_procedure_unordered">Prosedur</str>
-  <str name="task_results">Hasil</str>
-  <str name="Copyright">Hak cipta</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Gambar</variable>
+   <variable id="Table">Tabel</variable>
+   <variable id="Next topic">Topik berikutnya</variable>
+   <variable id="Previous topic">Topik sebelumnya</variable>
+   <variable id="Parent topic">Topik Induk</variable>
+   <variable id="Required cleanup">Pembersihan diperlukan</variable>
+   <variable id="Draft comment">Komentar draf</variable>
+   <variable id="Option">Pilihan</variable>
+   <variable id="Description">Deskripsi</variable>
+   <variable id="Optional">Opsional</variable>
+   <variable id="Required">Diperlukan</variable>
+   <variable id="Skip visual syntax diagram">Lewatkan diagram sintaks visual</variable>
+   <variable id="Read syntax diagram">Baca diagram sintaks</variable>
+   <variable id="Start of change">Mulai perubahan</variable>
+   <variable id="End of change">Akhiri perubahan</variable>
+   <variable id="Index">Indeks</variable>
+   <variable id="Special characters">Karakter khusus</variable>
+   <variable id="Numerics">Numerik</variable>
+   <variable id="End notes">Catatan akhir</variable>
+   <variable id="Artwork">Grafis</variable>
+   <variable id="Syntax">Sintaks</variable>
+   <variable id="Type">Jenis</variable>
+   <variable id="Value">Nilai</variable>
+   <variable id="Note">Catatan</variable>
+   <variable id="Notes">Catatan</variable>
+   <variable id="Tip">Kiat</variable>
+   <variable id="Fastpath">Jalur cepat</variable>
+   <variable id="Important">Penting</variable>
+   <variable id="Attention">Perhatian</variable>
+   <variable id="Caution">PERINGATAN</variable>
+   <variable id="Danger">BAHAYA</variable>
+   <variable id="Remember">Ingat</variable>
+   <variable id="Trouble">Masalah</variable>
+   <variable id="Warning">Peringatan</variable>
+   <variable id="Restriction">Pembatasan</variable>
+   <variable id="Contents">Isi</variable>
+   <variable id="Related concepts">Konsep terkait</variable>
+   <variable id="Related tasks">Tugas terkait</variable>
+   <variable id="Related reference">Referensi terkait</variable>
+   <variable id="Related information">Informasi terkait</variable>
+   <variable id="Prerequisite">Prasyarat</variable>
+   <variable id="Prerequisites">Prasyarat</variable>
+   <variable id="or">atau</variable>
+   <variable id="task_context">Mengenai tugas ini</variable>
+   <variable id="task_example">Contoh</variable>
+   <variable id="task_postreq">Yang harus dilakukan berikutnya</variable>
+   <variable id="task_prereq">Sebelum Anda mulai</variable>
+   <variable id="task_procedure">Prosedur</variable>
+   <variable id="task_procedure_unordered">Prosedur</variable>
+   <variable id="task_results">Hasil</variable>
+   <variable id="Copyright">Hak cipta</variable>
+   <variable id="a11y.and-then"/>
+</variables>

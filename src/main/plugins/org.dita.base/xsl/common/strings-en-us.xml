@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,90 +6,58 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="en-us">        <!-- US English -->
-  <!-- 
-    This file controls strings that appear in published output.
-    There is one version of this file per language or locale.  To add support 
-    for a new language, create a copy of this file, name 
-    it using the strings-<locale ISO code>.xml format, and
-    add a mapping for the language into the strings.xml file.
-    
-    Strings with no localized text, common to all (or nearly all)
-    languages, are stored in strings-common.xml. Any common string
-    may be copied into strings-<locale ISO code>.xml to provide a 
-    locale-specific value for the common string.
-  -->
-  <str name="Figure">Figure</str>
-  <str name="Table">Table</str>
-  <str name="Next topic">Next topic</str>
-  <str name="Previous topic">Previous topic</str>
-  <str name="Parent topic">Parent topic</str>
-  <str name="Required cleanup">Required cleanup</str>
-  <str name="Draft comment">Draft comment</str>
-  <!-- Option is used as a heading for the choption column
-       in task choice tables -->
-  <str name="Option">Option</str>
-  <!-- Description is used as a heading for both the chdesc
-       column in <choicetable> in <task> topics and the propdesc
-       column in <property> tables in <reference> topics -->
-  <str name="Description">Description</str>
-  <str name="Optional">Optional</str>
-  <str name="Required">Required</str>
-  <!-- Text available for links that skip visual syntax diagrams -->
-  <str name="Skip visual syntax diagram">Skip visual syntax diagram</str>
-  <str name="Read syntax diagram">Read syntax diagram</str>
-  <str name="Start of change">Start of change</str>
-  <str name="End of change">End of change</str>
-  <str name="Index">Index</str>
-  <str name="Special characters">Special characters</str>
-  <str name="Numerics">Numerics</str>
-  <str name="End notes">End notes</str>
-  <str name="Artwork">Artwork</str>
-  <str name="Syntax">Syntax</str>
-    
-  <!-- Type and Value are used as headings for the proptype and propvalue
-       columns in a property table in <reference> topics -->
-  <str name="Type">Type</str>
-  <str name="Value">Value</str>
-
-  <!-- peril notice labels for various <note> types -->
-  <str name="Note">Note</str>
-  <str name="Notes">Notes</str>
-  <str name="Tip">Tip</str>
-  <str name="Fastpath">Fastpath</str>
-  <str name="Important">Important</str>
-  <str name="Attention">Attention</str>
-  <str name="Caution">CAUTION</str>
-  <str name="Danger">DANGER</str>
-  <str name="Remember">Remember</str>
-  <str name="Restriction">Restriction</str>
-  <str name="Warning">Warning</str>
-  <str name="Trouble">Trouble</str>
-  
-  <!-- Title text for Table of contents -->
-  <str name="Contents">Contents</str>
-  <!-- Title text for generated link sections -->
-  <str name="Related concepts">Related concepts</str>
-  <str name="Related tasks">Related tasks</str>
-  <str name="Related reference">Related reference</str>
-  <str name="Related information">Related information</str>
-
-  <str name="Prerequisite">Prerequisite</str>
-  <str name="Prerequisites">Prerequisites</str>
-  <str name="or">or</str>
-
-  <!--Task section labels -->
-  <str name="task_context">About this task</str>
-  <str name="task_example">Example</str>
-  <str name="task_postreq">What to do next</str>
-  <str name="task_prereq">Before you begin</str>
-  <str name="task_procedure">Procedure</str>
-  <str name="task_procedure_unordered">Procedure</str>
-  <str name="task_results">Results</str>
-
-  <str name="Copyright">Copyright</str>
-  <!-- Accessible text for the default > character 
-       generated between menu cascade items (the character
-       itself comes from string name "#menucascade-separator") -->
-  <str name="a11y.and-then">and then</str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Figure</variable>
+   <variable id="Table">Table</variable>
+   <variable id="Next topic">Next topic</variable>
+   <variable id="Previous topic">Previous topic</variable>
+   <variable id="Parent topic">Parent topic</variable>
+   <variable id="Required cleanup">Required cleanup</variable>
+   <variable id="Draft comment">Draft comment</variable>
+   <variable id="Option">Option</variable>
+   <variable id="Description">Description</variable>
+   <variable id="Optional">Optional</variable>
+   <variable id="Required">Required</variable>
+   <variable id="Skip visual syntax diagram">Skip visual syntax diagram</variable>
+   <variable id="Read syntax diagram">Read syntax diagram</variable>
+   <variable id="Start of change">Start of change</variable>
+   <variable id="End of change">End of change</variable>
+   <variable id="Index">Index</variable>
+   <variable id="Special characters">Special characters</variable>
+   <variable id="Numerics">Numerics</variable>
+   <variable id="End notes">End notes</variable>
+   <variable id="Artwork">Artwork</variable>
+   <variable id="Syntax">Syntax</variable>
+   <variable id="Type">Type</variable>
+   <variable id="Value">Value</variable>
+   <variable id="Note">Note</variable>
+   <variable id="Notes">Notes</variable>
+   <variable id="Tip">Tip</variable>
+   <variable id="Fastpath">Fastpath</variable>
+   <variable id="Important">Important</variable>
+   <variable id="Attention">Attention</variable>
+   <variable id="Caution">CAUTION</variable>
+   <variable id="Danger">DANGER</variable>
+   <variable id="Remember">Remember</variable>
+   <variable id="Restriction">Restriction</variable>
+   <variable id="Trouble">Trouble</variable>
+   <variable id="Warning">Warning</variable>
+   <variable id="Contents">Contents</variable>
+   <variable id="Related concepts">Related concepts</variable>
+   <variable id="Related tasks">Related tasks</variable>
+   <variable id="Related reference">Related reference</variable>
+   <variable id="Related information">Related information</variable>
+   <variable id="Prerequisite">Prerequisite</variable>
+   <variable id="Prerequisites">Prerequisites</variable>
+   <variable id="or">or</variable>
+   <variable id="task_context">About this task</variable>
+   <variable id="task_example">Example</variable>
+   <variable id="task_postreq">What to do next</variable>
+   <variable id="task_prereq">Before you begin</variable>
+   <variable id="task_procedure">Procedure</variable>
+   <variable id="task_procedure_unordered">Procedure</variable>
+   <variable id="task_results">Results</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="a11y.and-then">and then</variable>
+</variables>

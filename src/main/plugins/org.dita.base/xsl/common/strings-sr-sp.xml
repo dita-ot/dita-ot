@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -8,57 +8,58 @@ See the accompanying LICENSE file for applicable license.
 -->
 <!-- Note that this file is used when the toolkit encounters
      xml:lang="sr-sp" as well as xml:lang="sr-rs" -->
-<strings xml:lang="sr">        <!-- Serbian -->
-  <str name="Figure">Илустрација</str>
-  <str name="Table">Табела</str>
-  <str name="Next topic">Следећа тема</str>
-  <str name="Previous topic">Претходна тема</str>
-  <str name="Parent topic">Надређена тема</str>
-  <str name="Required cleanup">Неопходно чишћење</str>
-  <str name="Draft comment">Коментар на концепт</str>
-  <str name="Option">Избор</str>
-  <str name="Description">Опис</str>
-  <str name="Optional">Необавезно</str>
-  <str name="Required">Неопходно</str>
-  <str name="Skip visual syntax diagram">Прескочите визуални синтаксни дијаграм</str>
-  <str name="Read syntax diagram">Прочитајте визуални синтаксни дијаграм</str>
-  <str name="Start of change">Почетак промене</str>
-  <str name="End of change">Крај промене</str>
-  <str name="Index">Индекс</str>
-  <str name="Special characters">Посебни Знаци</str>
-  <str name="Numerics">Нумерици</str>
-  <str name="End notes">Завршне примедбе</str>
-  <str name="Artwork">Илустрације</str>
-  <str name="Syntax">Синтакса</str>
-  <str name="Type">Врста</str>
-  <str name="Value">Вредност</str>
-  <str name="Note">Напомена</str>
-  <str name="Notes">Напомене</str>
-  <str name="Tip">Савет</str>
-  <str name="Fastpath">Пречица</str>
-  <str name="Important">Важно</str>
-  <str name="Attention">Пажња</str>
-  <str name="Caution">УПОЗОРЕЊЕ</str>
-  <str name="Danger">ОПАСНОСТ</str>
-  <str name="Remember">Запамтите</str>
-  <str name="Restriction">Ограничење</str>
-  <str name="Trouble">Проблем</str>
-  <str name="Warning">Упозорење</str>
-  <str name="Contents">Садржај</str>
-  <str name="Related concepts">Сродни концепти</str>
-  <str name="Related tasks">Сродни задаци</str>
-  <str name="Related reference">Сродна референца</str>
-  <str name="Related information">Сродна информација</str>
-  <str name="Prerequisite">Предуслов</str>
-  <str name="Prerequisites">Предуслови</str>
-  <str name="or">or</str>
-  <str name="task_context">О овом задатку</str>
-  <str name="task_example">Пример</str>
-  <str name="task_postreq">Шта урадити следеће</str>
-  <str name="task_prereq">Пре него што почнете</str>
-  <str name="task_procedure">Поступак</str>
-  <str name="task_procedure_unordered">Поступак</str>
-  <str name="task_results">Резултат</str>
-  <str name="Copyright">Copyright</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Илустрација</variable>
+   <variable id="Table">Табела</variable>
+   <variable id="Next topic">Следећа тема</variable>
+   <variable id="Previous topic">Претходна тема</variable>
+   <variable id="Parent topic">Надређена тема</variable>
+   <variable id="Required cleanup">Неопходно чишћење</variable>
+   <variable id="Draft comment">Коментар на концепт</variable>
+   <variable id="Option">Избор</variable>
+   <variable id="Description">Опис</variable>
+   <variable id="Optional">Необавезно</variable>
+   <variable id="Required">Неопходно</variable>
+   <variable id="Skip visual syntax diagram">Прескочите визуални синтаксни дијаграм</variable>
+   <variable id="Read syntax diagram">Прочитајте визуални синтаксни дијаграм</variable>
+   <variable id="Start of change">Почетак промене</variable>
+   <variable id="End of change">Крај промене</variable>
+   <variable id="Index">Индекс</variable>
+   <variable id="Special characters">Посебни Знаци</variable>
+   <variable id="Numerics">Нумерици</variable>
+   <variable id="End notes">Завршне примедбе</variable>
+   <variable id="Artwork">Илустрације</variable>
+   <variable id="Syntax">Синтакса</variable>
+   <variable id="Type">Врста</variable>
+   <variable id="Value">Вредност</variable>
+   <variable id="Note">Напомена</variable>
+   <variable id="Notes">Напомене</variable>
+   <variable id="Tip">Савет</variable>
+   <variable id="Fastpath">Пречица</variable>
+   <variable id="Important">Важно</variable>
+   <variable id="Attention">Пажња</variable>
+   <variable id="Caution">УПОЗОРЕЊЕ</variable>
+   <variable id="Danger">ОПАСНОСТ</variable>
+   <variable id="Remember">Запамтите</variable>
+   <variable id="Restriction">Ограничење</variable>
+   <variable id="Trouble">Проблем</variable>
+   <variable id="Warning">Упозорење</variable>
+   <variable id="Contents">Садржај</variable>
+   <variable id="Related concepts">Сродни концепти</variable>
+   <variable id="Related tasks">Сродни задаци</variable>
+   <variable id="Related reference">Сродна референца</variable>
+   <variable id="Related information">Сродна информација</variable>
+   <variable id="Prerequisite">Предуслов</variable>
+   <variable id="Prerequisites">Предуслови</variable>
+   <variable id="or">or</variable>
+   <variable id="task_context">О овом задатку</variable>
+   <variable id="task_example">Пример</variable>
+   <variable id="task_postreq">Шта урадити следеће</variable>
+   <variable id="task_prereq">Пре него што почнете</variable>
+   <variable id="task_procedure">Поступак</variable>
+   <variable id="task_procedure_unordered">Поступак</variable>
+   <variable id="task_results">Резултат</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="a11y.and-then"/>
+</variables>
