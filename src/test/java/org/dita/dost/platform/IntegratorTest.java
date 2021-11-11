@@ -111,7 +111,7 @@ public class IntegratorTest {
                 new InputSource(new File(tempDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()));
     }
 
-    @Test
+    @Test(expected = UncheckedIOException.class)
     public void testExecute_missingFile() throws Exception {
         Files.delete(tempDir.toPath().resolve(Paths.get("plugins", "dummy", "build.xml")));
 

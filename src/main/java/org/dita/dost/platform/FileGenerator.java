@@ -170,9 +170,10 @@ final class FileGenerator extends XMLFilterImpl {
                 }
                 getContentHandler().startElement(uri, localName, qName, atts.build());
             }
+        } catch (SAXException | RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage(), e) ;
+            throw new RuntimeException(e);
         }
     }
 
