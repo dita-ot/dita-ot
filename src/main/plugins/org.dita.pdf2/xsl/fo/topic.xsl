@@ -75,17 +75,62 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:with-param name="theCounter" select="$level"/>
             </xsl:apply-templates>
         </xsl:variable>
-        <xsl:variable name="attrSet2" select="concat($attrSet1, '__content')"/>
         <fo:block>
             <xsl:call-template name="commonattributes"/>
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="$attrSet1"/>
-                <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
+            <xsl:call-template name="get-attributes">
+              <xsl:with-param name="element" as="element()">
+                <xsl:choose>
+                  <xsl:when test="$attrSet1 = 'topic.title'">
+                    <placeholder xsl:use-attribute-sets="topic.title"/>
+                  </xsl:when>
+                  <xsl:when test="$attrSet1 = 'topic.topic.title'">
+                    <placeholder xsl:use-attribute-sets="topic.topic.title"/>
+                  </xsl:when>
+                  <xsl:when test="$attrSet1 = 'topic.topic.topic.title'">
+                    <placeholder xsl:use-attribute-sets="topic.topic.topic.title"/>
+                  </xsl:when>
+                  <xsl:when test="$attrSet1 = 'topic.topic.topic.topic.title'">
+                    <placeholder xsl:use-attribute-sets="topic.topic.topic.topic.title"/>
+                  </xsl:when>
+                  <xsl:when test="$attrSet1 = 'topic.topic.topic.topic.topic.title'">
+                    <placeholder xsl:use-attribute-sets="topic.topic.topic.topic.topic.title"/>
+                  </xsl:when>
+                  <xsl:when test="$attrSet1 = 'topic.topic.topic.topic.topic.topic.title'">
+                    <placeholder xsl:use-attribute-sets="topic.topic.topic.topic.topic.topic.title"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <placeholder/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:with-param>
             </xsl:call-template>
             <fo:block>
-                <xsl:call-template name="processAttrSetReflection">
-                    <xsl:with-param name="attrSet" select="$attrSet2"/>
-                    <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
+                <xsl:call-template name="get-attributes">
+                  <xsl:with-param name="element" as="element()">
+                    <xsl:choose>
+                      <xsl:when test="$attrSet1 = 'topic.title'">
+                        <placeholder xsl:use-attribute-sets="topic.title__content"/>
+                      </xsl:when>
+                      <xsl:when test="$attrSet1 = 'topic.topic.title'">
+                        <placeholder xsl:use-attribute-sets="topic.topic.title__content"/>
+                      </xsl:when>
+                      <xsl:when test="$attrSet1 = 'topic.topic.topic.title'">
+                        <placeholder xsl:use-attribute-sets="topic.topic.topic.title__content"/>
+                      </xsl:when>
+                      <xsl:when test="$attrSet1 = 'topic.topic.topic.topic.title'">
+                        <placeholder xsl:use-attribute-sets="topic.topic.topic.topic.title__content"/>
+                      </xsl:when>
+                      <xsl:when test="$attrSet1 = 'topic.topic.topic.topic.topic.title'">
+                        <placeholder xsl:use-attribute-sets="topic.topic.topic.topic.topic.title__content"/>
+                      </xsl:when>
+                      <xsl:when test="$attrSet1 = 'topic.topic.topic.topic.topic.topic.title'">
+                        <placeholder xsl:use-attribute-sets="topic.topic.topic.topic.topic.topic.title__content"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <placeholder/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
                 </xsl:call-template>
                 <xsl:if test="$level = 1">
                     <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
@@ -949,16 +994,18 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="@href or @reftitle">
-                    <xsl:call-template name="processAttrSetReflection">
-                        <xsl:with-param name="attrSet" select="'lq'"/>
-                        <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
-                    </xsl:call-template>
+                  <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
+                      <placeholder xsl:use-attribute-sets="lq"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:call-template name="processAttrSetReflection">
-                        <xsl:with-param name="attrSet" select="'lq_simple'"/>
-                        <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
-                    </xsl:call-template>
+                  <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
+                      <placeholder xsl:use-attribute-sets="lq_simple"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:apply-templates/>
@@ -1285,10 +1332,27 @@ See the accompanying LICENSE file for applicable license.
             </xsl:choose>
         </xsl:param>
 <!--Using align attribute set according to image @align attribute-->
-        <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="concat('__align__', $imageAlign)"/>
-                <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
-            </xsl:call-template>
+        <xsl:call-template name="get-attributes">
+          <xsl:with-param name="element" as="element()">
+            <xsl:choose>
+              <xsl:when test="$imageAlign = 'left'">
+                <placeholder xsl:use-attribute-sets="__align__left"/>
+              </xsl:when>
+              <xsl:when test="$imageAlign = 'right'">
+                <placeholder xsl:use-attribute-sets="__align__right"/>
+              </xsl:when>
+              <xsl:when test="$imageAlign = 'center'">
+                <placeholder xsl:use-attribute-sets="__align__center"/>
+              </xsl:when>
+              <xsl:when test="$imageAlign = 'justify'">
+                <placeholder xsl:use-attribute-sets="__align__justify"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <placeholder/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:with-param>
+        </xsl:call-template>
         <fo:external-graphic src="url('{$href}')" xsl:use-attribute-sets="image">
             <!--Setting image height if defined-->
             <xsl:if test="$height">

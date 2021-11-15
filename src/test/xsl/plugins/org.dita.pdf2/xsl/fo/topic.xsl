@@ -39,6 +39,23 @@
   <xsl:attribute-set name="image__block"/>
   <xsl:attribute-set name="image__inline"/>
   <xsl:attribute-set name="topic"/>
+  <xsl:attribute-set name="topic.title"/>
+  <xsl:attribute-set name="topic.topic.title"/>
+  <xsl:attribute-set name="topic.topic.topic.title"/>
+  <xsl:attribute-set name="topic.topic.topic.topic.title"/>
+  <xsl:attribute-set name="topic.topic.topic.topic.topic.title"/>
+  <xsl:attribute-set name="topic.topic.topic.topic.topic.topic.title"/>
+  <xsl:attribute-set name="topic.title__content"/>
+  <xsl:attribute-set name="topic.topic.title__content"/>
+  <xsl:attribute-set name="topic.topic.topic.title__content"/>
+  <xsl:attribute-set name="topic.topic.topic.topic.title__content"/>
+  <xsl:attribute-set name="topic.topic.topic.topic.topic.title__content"/>
+  <xsl:attribute-set name="topic.topic.topic.topic.topic.topic.title__content"/>
+  <xsl:attribute-set name="lq_simple"/>
+  <xsl:attribute-set name="__align__left"/>
+  <xsl:attribute-set name="__align__right"/>
+  <xsl:attribute-set name="__align__center"/>
+  <xsl:attribute-set name="__align__justify"/>
   <xsl:attribute-set name="section.title"/>
   <xsl:attribute-set name="example.title"/>
   <xsl:attribute-set name="tm__content__service"/>
@@ -118,9 +135,8 @@
   </xsl:template>
   <xsl:template name="get-id"/>
   <xsl:template name="determineTopicType"/>
-  <xsl:template name="processAttrSetReflection">
-  <xsl:param name="attrSet"/>
-  <xsl:param name="path"/>
+  <xsl:template name="get-attributes" as="attribute()*">
+  <xsl:param name="element" as="element()"/>
   </xsl:template>
   <xsl:template name="topic-title-mock" match="*[contains(@class,' topic/title ')]"><topic-title/></xsl:template>
   <xsl:template name="topic-desc-mock" match="*[contains(@class,' topic/desc ')]"><topic-desc/></xsl:template>
