@@ -59,6 +59,21 @@
   <xsl:attribute-set name="thead.row.entry__content"/>
   <xsl:attribute-set name="thead.row.entry"/>
   <xsl:attribute-set name="thead.row"/>
+  <xsl:attribute-set name="thead__tableframe__bottom"/>
+  <xsl:attribute-set name="__tableframe__bottom"/>
+  <xsl:attribute-set name="__tableframe__top"/>
+  <xsl:attribute-set name="__tableframe__right"/>
+  <xsl:attribute-set name="__tableframe__right"/>
+  <xsl:attribute-set name="table__tableframe__all"/>
+  <xsl:attribute-set name="table__tableframe__topbot"/>
+  <xsl:attribute-set name="table__tableframe__top"/>
+  <xsl:attribute-set name="table__tableframe__bottom"/>
+  <xsl:attribute-set name="table__tableframe__sides"/>
+  <xsl:attribute-set name="__tableframe__top"/>
+  <xsl:attribute-set name="__tableframe__left"/>
+  <xsl:attribute-set name="__tableframe__right"/>
+  <xsl:attribute-set name="__tableframe__bottom"/>
+  <xsl:attribute-set name="__tableframe__right"/>
   
   <xsl:template name="get-id"/>
   
@@ -91,10 +106,9 @@
   </xsl:template>
   
   <xsl:template name="commonattributes"/>
-  
-  <xsl:template name="processAttrSetReflection">
-    <xsl:param name="attrSet"/>
-    <xsl:param name="path"/>
+
+  <xsl:template name="get-attributes" as="attribute()*">
+    <xsl:param name="element" as="element()"/>
   </xsl:template>
   
   <xsl:template name="setExpanse"/>
