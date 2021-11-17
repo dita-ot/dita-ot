@@ -1,0 +1,1016 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fo:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:opentopic-i18n="http://www.idiominc.com/opentopic/i18n" xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:x="adobe:ns:meta/"
+  xmlns:xmp="http://ns.adobe.com/xap/1.0/" font-size="10pt" writing-mode="lr" xml:lang="en"
+  line-height-shift-adjustment="disregard-shifts"
+  font-family="Times New Roman, Times, Arial Unicode MS, Tahoma, Batang, SimSun">
+  <fo:layout-master-set>
+    <fo:simple-page-master master-name="front-matter-first" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="front-matter-last" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="last-frontmatter-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="last-frontmatter-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="front-matter-odd" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="odd-frontmatter-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="odd-frontmatter-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="toc-odd" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="odd-toc-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="odd-toc-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="toc-last" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="even-toc-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="even-toc-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="toc-first" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="odd-toc-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="odd-toc-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="body-first" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="first-body-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="first-body-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="body-odd" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="odd-body-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="odd-body-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="body-last" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="last-body-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="last-body-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="index-first" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body column-count="2" margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="odd-index-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="odd-index-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="index-odd" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body column-count="2" margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="odd-index-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="odd-index-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="glossary-first" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="odd-glossary-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="odd-glossary-footer"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="glossary-odd" page-height="279.4mm" page-width="215.9mm">
+      <fo:region-body margin-bottom="20mm" margin-left="20mm" margin-right="20mm" margin-top="20mm"/>
+      <fo:region-before display-align="before" extent="20mm" region-name="odd-glossary-header"/>
+      <fo:region-after display-align="after" extent="20mm" region-name="odd-glossary-footer"/>
+    </fo:simple-page-master>
+    <fo:page-sequence-master master-name="toc-sequence">
+      <fo:repeatable-page-master-alternatives>
+        <fo:conditional-page-master-reference master-reference="toc-first" odd-or-even="odd" page-position="first"/>
+        <fo:conditional-page-master-reference master-reference="toc-last" odd-or-even="even" page-position="last"/>
+        <fo:conditional-page-master-reference master-reference="toc-odd"/>
+      </fo:repeatable-page-master-alternatives>
+    </fo:page-sequence-master>
+    <fo:page-sequence-master master-name="body-sequence">
+      <fo:repeatable-page-master-alternatives>
+        <fo:conditional-page-master-reference master-reference="body-first" odd-or-even="odd" page-position="first"/>
+        <fo:conditional-page-master-reference master-reference="body-last" odd-or-even="even" page-position="last"/>
+        <fo:conditional-page-master-reference master-reference="body-odd"/>
+      </fo:repeatable-page-master-alternatives>
+    </fo:page-sequence-master>
+    <fo:page-sequence-master master-name="ditamap-body-sequence">
+      <fo:repeatable-page-master-alternatives>
+        <fo:conditional-page-master-reference master-reference="body-odd"/>
+      </fo:repeatable-page-master-alternatives>
+    </fo:page-sequence-master>
+    <fo:page-sequence-master master-name="index-sequence">
+      <fo:repeatable-page-master-alternatives>
+        <fo:conditional-page-master-reference master-reference="index-first" odd-or-even="odd" page-position="first"/>
+        <fo:conditional-page-master-reference master-reference="index-odd"/>
+      </fo:repeatable-page-master-alternatives>
+    </fo:page-sequence-master>
+    <fo:page-sequence-master master-name="front-matter">
+      <fo:repeatable-page-master-alternatives>
+        <fo:conditional-page-master-reference master-reference="front-matter-first" odd-or-even="odd"
+          page-position="first"/>
+        <fo:conditional-page-master-reference master-reference="front-matter-last" odd-or-even="even"
+          page-position="last"/>
+        <fo:conditional-page-master-reference master-reference="front-matter-odd"/>
+      </fo:repeatable-page-master-alternatives>
+    </fo:page-sequence-master>
+    <fo:page-sequence-master master-name="glossary-sequence">
+      <fo:repeatable-page-master-alternatives>
+        <fo:conditional-page-master-reference master-reference="glossary-first" odd-or-even="odd" page-position="first"/>
+        <fo:conditional-page-master-reference master-reference="glossary-odd"/>
+      </fo:repeatable-page-master-alternatives>
+    </fo:page-sequence-master>
+  </fo:layout-master-set>
+  <fo:declarations>
+    <x:xmpmeta>
+      <rdf:RDF>
+        <rdf:Description rdf:about="">
+          <dc:title>mainbooktitle</dc:title>
+          <xmp:CreatorTool>DITA Open Toolkit</xmp:CreatorTool>
+        </rdf:Description>
+      </rdf:RDF>
+    </x:xmpmeta>
+  </fo:declarations>
+  <fo:bookmark-tree>
+    <fo:bookmark internal-destination="_OPENTOPIC_TOC_PROCESSING_d160e65" starting-state="hide">
+      <fo:bookmark-title>title title/keyword</fo:bookmark-title>
+      <fo:bookmark internal-destination="_OPENTOPIC_TOC_PROCESSING_d160e384" starting-state="hide">
+        <fo:bookmark-title>Inline elements</fo:bookmark-title>
+      </fo:bookmark>
+    </fo:bookmark>
+    <fo:bookmark internal-destination="_OPENTOPIC_TOC_PROCESSING_d160e627" starting-state="hide">
+      <fo:bookmark-title>title title/keyword</fo:bookmark-title>
+    </fo:bookmark>
+    <fo:bookmark internal-destination="_OPENTOPIC_TOC_PROCESSING_d160e718" starting-state="hide">
+      <fo:bookmark-title>title title/keyword</fo:bookmark-title>
+    </fo:bookmark>
+    <fo:bookmark internal-destination="_OPENTOPIC_TOC_PROCESSING_d160e793" starting-state="hide">
+      <fo:bookmark-title>title title/keyword</fo:bookmark-title>
+    </fo:bookmark>
+  </fo:bookmark-tree>
+  <fo:page-sequence force-page-count="even" master-reference="front-matter">
+    <fo:static-content flow-name="xsl-footnote-separator">
+      <fo:block><fo:leader color="black" leader-length="25%" leader-pattern="rule" rule-style="solid"
+          rule-thickness="0.5pt"/></fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-frontmatter-footer">
+      <fo:block end-indent="10pt" space-after="10pt" space-after.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-frontmatter-header">
+      <fo:block end-indent="10pt" space-before="10pt" space-before.conditionality="retain" text-align="end"
+          > | Introduction | <fo:inline font-weight="bold"><fo:page-number/></fo:inline></fo:block>
+    </fo:static-content>
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block-container text-align="center">
+        <fo:block font-size="22pt" font-weight="bold" line-height="140%" space-before="80mm"
+          space-before.conditionality="retain" line-height-shift-adjustment="disregard-shifts"
+          font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"><fo:block/><fo:block><fo:inline
+              border-end-width="0pt" border-start-width="0pt">mainbooktitle</fo:inline></fo:block></fo:block>
+        <fo:block font-size="11pt" font-weight="bold" line-height="normal" space-before="36pt"
+          line-height-shift-adjustment="disregard-shifts"
+          font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"/>
+      </fo:block-container>
+    </fo:flow>
+  </fo:page-sequence>
+  <fo:page-sequence force-page-count="even" master-reference="body-sequence">
+    <fo:static-content flow-name="xsl-footnote-separator">
+      <fo:block><fo:leader color="black" leader-length="25%" leader-pattern="rule" rule-style="solid"
+          rule-thickness="0.5pt"/></fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-body-footer">
+      <fo:block end-indent="10pt" space-after="10pt" space-after.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-body-header">
+      <fo:block end-indent="10pt" space-before="10pt" space-before.conditionality="retain" text-align="end"
+            > | <fo:inline><fo:retrieve-marker retrieve-class-name="current-header"/></fo:inline> | <fo:inline
+          font-weight="bold"><fo:page-number/></fo:inline></fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="first-body-header">
+      <fo:block end-indent="10pt" space-before="10pt" space-before.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="first-body-footer">
+      <fo:block end-indent="10pt" space-after="10pt" space-after.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="last-body-header">
+      <fo:block/>
+    </fo:static-content>
+    <fo:static-content flow-name="last-body-footer">
+      <fo:block/>
+    </fo:static-content>
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block font-size="10pt" id="unique_1"><fo:marker marker-class-name="current-topic-number"
+          >1</fo:marker><fo:marker marker-class-name="current-header">title <fo:inline border-end-width="0pt"
+            border-start-width="0pt">title/keyword</fo:inline></fo:marker><fo:block
+          id="_OPENTOPIC_TOC_PROCESSING_d160e65"><fo:block border-after-style="solid" border-after-width="2pt"
+            border-before-style="solid" border-before-width="2pt" font-size="20pt" font-weight="bold" padding-top="10pt"
+            >Chapter <fo:block font-size="40pt" font-weight="bold">1</fo:block></fo:block></fo:block><fo:block
+          border-after-color="black" border-after-style="solid" border-after-width="3pt" font-size="18pt"
+          font-weight="bold" keep-with-next.within-column="always" padding-top="16.8pt" space-after="16.8pt"
+          space-before="0pt" line-height-shift-adjustment="disregard-shifts"
+          font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun">title <fo:inline border-end-width="0pt"
+            border-start-width="0pt">title/keyword</fo:inline></fo:block><fo:table page-break-after="always"
+          table-layout="fixed" width="100%">
+          <fo:table-column column-number="1" column-width="35%"/>
+          <fo:table-column column-number="2" column-width="65%"/>
+          <fo:table-body>
+            <fo:table-row>
+              <fo:table-cell>
+                <fo:block end-indent="5pt" font-size="10.5pt" line-height-shift-adjustment="disregard-shifts"
+                  font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"><fo:block end-indent="5pt"
+                    font-size="10.5pt" font-weight="bold" line-height-shift-adjustment="disregard-shifts"
+                    font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun">Topics: </fo:block><fo:list-block
+                    provisional-distance-between-starts="18pt" provisional-label-separation="12pt" space-after="9pt"
+                    space-before="9pt">
+                    <fo:list-item relative-align="baseline" space-after="1.5pt" space-before="1.5pt">
+                      <fo:list-item-label end-indent="label-end()" keep-together.within-line="always">
+                        <fo:block text-align="start">•</fo:block>
+                      </fo:list-item-label>
+                      <fo:list-item-body start-indent="body-start()">
+                        <fo:block><fo:basic-link color="blue" internal-destination="unique_2">Inline
+                            elements</fo:basic-link></fo:block>
+                      </fo:list-item-body>
+                    </fo:list-item>
+                  </fo:list-block></fo:block>
+              </fo:table-cell>
+              <fo:table-cell border-start-color="black" border-start-style="solid" border-start-width="1pt"
+                padding-start="10pt">
+                <fo:block><fo:block>bodydiv <fo:inline border-end-width="0pt" border-start-width="0pt"
+                      >bodydiv/keyword</fo:inline>
+                    <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                    >bodydiv/p</fo:block></fo:block><fo:block space-after="0.6em" space-before="0.6em">div <fo:inline
+                      border-end-width="0pt" border-start-width="0pt">div/keyword</fo:inline>
+                    <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                    >div/p</fo:block></fo:block><fo:table space-after="5pt" space-before="5pt" table-layout="fixed"
+                    width="100%">
+                    <fo:table-body>
+                      <fo:table-row>
+                        <fo:table-cell relative-align="baseline">
+                          <fo:block end-indent="3pt" font-weight="bold" space-after="3pt"
+                            space-after.conditionality="retain" space-before="3pt" space-before.conditionality="retain"
+                            start-indent="3pt"><fo:inline>dt <fo:inline border-end-width="0pt" border-start-width="0pt"
+                                >dt/keyword</fo:inline></fo:inline></fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell>
+                          <fo:block end-indent="3pt" space-after="3pt" space-after.conditionality="retain"
+                            space-before="3pt" space-before.conditionality="retain" start-indent="3pt">dd <fo:inline
+                              border-end-width="0pt" border-start-width="0pt">dd/keyword</fo:inline>
+                            <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                            >dd/p</fo:block></fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-body>
+                  </fo:table><fo:block space-before="0.6em"><fo:block>example <fo:inline border-end-width="0pt"
+                        border-start-width="0pt">example/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >example/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"><fo:block
+                      font-weight="bold" keep-with-next.within-column="always" space-after="5pt"
+                      line-height-shift-adjustment="disregard-shifts"
+                      font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"
+                      >example/title</fo:block><fo:block>example <fo:block space-after="0.6em" space-before="0.6em"
+                        text-indent="0em">example/p</fo:block></fo:block></fo:block><fo:block id="d160e146"
+                        ><fo:inline><fo:external-graphic src="url('file:/Users/xxx/image.svg')"/></fo:inline><fo:block
+                      font-size="10pt" font-weight="bold" keep-with-previous.within-page="always" space-after="10pt"
+                      space-before="5pt" line-height-shift-adjustment="disregard-shifts"
+                      font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun">Figure 1:
+                    fig/title</fo:block></fo:block><fo:table border-after-color="black" border-after-style="solid"
+                    border-after-width="1pt" border-before-color="black" border-before-style="solid"
+                    border-before-width="1pt" border-color="black" border-end-color="black" border-end-style="solid"
+                    border-end-width="1pt" border-start-color="black" border-start-style="solid"
+                    border-start-width="1pt" border-style="solid" border-width="5pt" space-after="10pt"
+                    space-before="8pt" width="100%">
+                    <fo:table-column column-width="6em"/>
+                    <fo:table-column/>
+                    <fo:table-body>
+                      <fo:table-row keep-with-next="always">
+                        <fo:table-cell background-color="#FFD100" border-color="black" border-style="solid"
+                          border-width="2pt" font-size="1.5em" font-style="normal" font-weight="bold"
+                          keep-together="always" number-columns-spanned="2" padding="3pt" start-indent="0pt"
+                          text-align="center" text-transform="uppercase" line-height-shift-adjustment="disregard-shifts"
+                          font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun">
+                          <fo:block><fo:external-graphic baseline-shift="baseline" content-height="1em"
+                              padding-right="3pt"
+                              src="url('file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/pdf/temp/pdf/Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg')"
+                              vertical-align="middle"/><fo:inline>CAUTION</fo:inline></fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                      <fo:table-row>
+                        <fo:table-cell border-color="black" border-style="solid" border-width="2pt"
+                          keep-together="always" padding="3pt" start-indent="0pt" text-align="center">
+                          <fo:block><fo:external-graphic content-width="4em"
+                              src="url('file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/pdf/temp/pdf/Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg')"
+                              width="4em"/></fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell border-color="black" border-style="solid" border-width="2pt"
+                          keep-together="always" padding="3pt" start-indent="0pt">
+                          <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em">typeofhazard <fo:inline
+                              border-end-width="0pt" border-start-width="0pt"
+                            >typeofhazard/keyword</fo:inline></fo:block>
+                          <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em">howtoavoid <fo:inline
+                              border-end-width="0pt" border-start-width="0pt">howtoavoid/keyword</fo:inline></fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-body>
+                  </fo:table><fo:inline><fo:external-graphic xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+                      fox:alt-text="image/alt" src="url('file:/Users/xxx/image.svg')"/></fo:inline><fo:block
+                    font-size="10pt" linefeed-treatment="preserve" space-after="0.8em" space-before="0.8em"
+                    white-space-collapse="true" wrap-option="wrap">lines <fo:inline border-end-width="0pt"
+                      border-start-width="0pt">lines/keyword</fo:inline></fo:block><fo:block
+                    end-indent="15pt + from-parent(end-indent)" space-after="0.6em" space-before="0.6em"
+                    start-indent="30pt + from-parent(start-indent)">lq <fo:inline border-end-width="0pt"
+                      border-start-width="0pt">lq/keyword</fo:inline>
+                    <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                    >lq/p</fo:block></fo:block><fo:block space-after="0.6em" space-before="0.6em"><fo:inline
+                      border-end-width="0pt" border-start-width="0pt" font-weight="bold"><fo:inline>Note</fo:inline>:
+                    </fo:inline> note <fo:inline border-end-width="0pt" border-start-width="0pt"
+                      >note/keyword</fo:inline>
+                    <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                    >note/p</fo:block></fo:block><fo:table space-after="0.6em" space-before="0.6em" table-layout="fixed"
+                    width="100%">
+                    <fo:table-column column-number="1" column-width="32pt"/>
+                    <fo:table-column column-number="2" column-width="100% - 32pt"/>
+                    <fo:table-body>
+                      <fo:table-row>
+                        <fo:table-cell padding-end="5pt" start-indent="0pt">
+                          <fo:block><fo:external-graphic baseline-shift="baseline" content-height="2em"
+                              padding-right="3pt"
+                              src="url('file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/pdf/temp/pdf/Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg')"
+                              vertical-align="middle"/></fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell start-indent="0pt">
+                          <fo:block space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt"
+                              border-start-width="0pt" font-weight="bold"><fo:inline>Attention</fo:inline>: </fo:inline>
+                            note/attention</fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-body>
+                  </fo:table><fo:table space-after="0.6em" space-before="0.6em" table-layout="fixed" width="100%">
+                    <fo:table-column column-number="1" column-width="32pt"/>
+                    <fo:table-column column-number="2" column-width="100% - 32pt"/>
+                    <fo:table-body>
+                      <fo:table-row>
+                        <fo:table-cell padding-end="5pt" start-indent="0pt">
+                          <fo:block><fo:external-graphic baseline-shift="baseline" content-height="2em"
+                              padding-right="3pt"
+                              src="url('file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/pdf/temp/pdf/Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg')"
+                              vertical-align="middle"/></fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell start-indent="0pt">
+                          <fo:block space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt"
+                              border-start-width="0pt" font-weight="bold"><fo:inline>CAUTION</fo:inline>: </fo:inline>
+                            note/caution</fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-body>
+                  </fo:table><fo:table space-after="0.6em" space-before="0.6em" table-layout="fixed" width="100%">
+                    <fo:table-column column-number="1" column-width="32pt"/>
+                    <fo:table-column column-number="2" column-width="100% - 32pt"/>
+                    <fo:table-body>
+                      <fo:table-row>
+                        <fo:table-cell padding-end="5pt" start-indent="0pt">
+                          <fo:block><fo:external-graphic baseline-shift="baseline" content-height="2em"
+                              padding-right="3pt"
+                              src="url('file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/pdf/temp/pdf/Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg')"
+                              vertical-align="middle"/></fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell start-indent="0pt">
+                          <fo:block space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt"
+                              border-start-width="0pt" font-weight="bold"><fo:inline>DANGER</fo:inline>: </fo:inline>
+                            note/danger</fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-body>
+                  </fo:table><fo:block space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt"
+                      border-start-width="0pt" font-weight="bold"><fo:inline>Fastpath</fo:inline>: </fo:inline>
+                    note/fastpath</fo:block><fo:block space-after="0.6em" space-before="0.6em"><fo:inline
+                      border-end-width="0pt" border-start-width="0pt" font-weight="bold"
+                        ><fo:inline>Important</fo:inline>: </fo:inline> note/important</fo:block><fo:block
+                    space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt" border-start-width="0pt"
+                      font-weight="bold"><fo:inline>Note</fo:inline>: </fo:inline> note/note</fo:block><fo:block
+                    space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt" border-start-width="0pt"
+                      font-weight="bold"><fo:inline>Notice</fo:inline>: </fo:inline> note/notice</fo:block><fo:block
+                    space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt" border-start-width="0pt"
+                      font-weight="bold"><fo:inline>Remember</fo:inline>: </fo:inline> note/remember</fo:block><fo:block
+                    space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt" border-start-width="0pt"
+                      font-weight="bold"><fo:inline>Restriction</fo:inline>: </fo:inline>
+                    note/restriction</fo:block><fo:block space-after="0.6em" space-before="0.6em"><fo:inline
+                      border-end-width="0pt" border-start-width="0pt" font-weight="bold"><fo:inline>Tip</fo:inline>:
+                    </fo:inline> note/tip</fo:block><fo:table space-after="0.6em" space-before="0.6em"
+                    table-layout="fixed" width="100%">
+                    <fo:table-column column-number="1" column-width="32pt"/>
+                    <fo:table-column column-number="2" column-width="100% - 32pt"/>
+                    <fo:table-body>
+                      <fo:table-row>
+                        <fo:table-cell padding-end="5pt" start-indent="0pt">
+                          <fo:block><fo:external-graphic baseline-shift="baseline" content-height="2em"
+                              padding-right="3pt"
+                              src="url('file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/pdf/temp/pdf/Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg')"
+                              vertical-align="middle"/></fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell start-indent="0pt">
+                          <fo:block space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt"
+                              border-start-width="0pt" font-weight="bold"><fo:inline>Trouble</fo:inline>: </fo:inline>
+                            note/trouble</fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-body>
+                  </fo:table><fo:table space-after="0.6em" space-before="0.6em" table-layout="fixed" width="100%">
+                    <fo:table-column column-number="1" column-width="32pt"/>
+                    <fo:table-column column-number="2" column-width="100% - 32pt"/>
+                    <fo:table-body>
+                      <fo:table-row>
+                        <fo:table-cell padding-end="5pt" start-indent="0pt">
+                          <fo:block><fo:external-graphic baseline-shift="baseline" content-height="2em"
+                              padding-right="3pt"
+                              src="url('file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/pdf/temp/pdf/Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg')"
+                              vertical-align="middle"/></fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell start-indent="0pt">
+                          <fo:block space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt"
+                              border-start-width="0pt" font-weight="bold"><fo:inline>Warning</fo:inline>: </fo:inline>
+                            note/warning</fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-body>
+                  </fo:table><fo:list-block provisional-distance-between-starts="5mm" provisional-label-separation="1mm"
+                    space-after="0.6em" space-before="0.6em">
+                    <fo:list-item relative-align="baseline" space-after="1.5pt" space-before="1.5pt">
+                      <fo:list-item-label end-indent="label-end()" keep-together.within-line="always">
+                        <fo:block font-weight="bold" text-align="start">1. </fo:block>
+                      </fo:list-item-label>
+                      <fo:list-item-body start-indent="body-start()">
+                        <fo:block>li <fo:inline border-end-width="0pt" border-start-width="0pt">li/keyword</fo:inline>
+                          <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                          >li/p</fo:block></fo:block>
+                      </fo:list-item-body>
+                    </fo:list-item>
+                  </fo:list-block><fo:block space-after="0.6em" space-before="0.6em" text-indent="0em">p <fo:inline
+                      border-end-width="0pt" border-start-width="0pt">p/keyword</fo:inline></fo:block><fo:block
+                    font-size="10pt" line-height="106%" linefeed-treatment="preserve" space-after="0.6em"
+                    space-before="0.6em" white-space-collapse="false" white-space-treatment="preserve"
+                    wrap-option="wrap" line-height-shift-adjustment="disregard-shifts"
+                    font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">pre <fo:inline
+                      border-end-width="0pt" border-start-width="0pt">pre/keyword</fo:inline></fo:block><fo:block
+                    space-before="0.6em"><fo:block>section <fo:inline border-end-width="0pt" border-start-width="0pt"
+                        >section/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >section/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"><fo:block
+                      font-weight="bold" keep-with-next.within-column="always" space-before="15pt"
+                      line-height-shift-adjustment="disregard-shifts"
+                      font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"
+                      >section/title</fo:block><fo:block>section <fo:block space-after="0.6em" space-before="0.6em"
+                        text-indent="0em">section/p</fo:block></fo:block></fo:block><fo:table border-after-color="black"
+                    border-after-style="solid" border-after-width="1pt" border-before-color="black"
+                    border-before-style="solid" border-before-width="1pt" border-end-color="black"
+                    border-end-style="solid" border-end-width="1pt" border-start-color="black"
+                    border-start-style="solid" border-start-width="1pt" font-size="10pt" space-after="10pt"
+                    space-before="8pt" table-layout="fixed" width="100%">
+                    <fo:table-header>
+                      <fo:table-row>
+                        <fo:table-cell border-after-color="black" border-after-style="solid" border-after-width="1pt"
+                          border-after-width.conditionality="retain" border-before-color="black"
+                          border-before-style="solid" border-before-width="1pt">
+                          <fo:block end-indent="3pt" font-weight="bold" space-after="3pt"
+                            space-after.conditionality="retain" space-before="3pt" space-before.conditionality="retain"
+                            start-indent="3pt">stentry <fo:inline border-end-width="0pt" border-start-width="0pt"
+                              >stentry/keyword</fo:inline>
+                            <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                            >stentry/p</fo:block></fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-header>
+                    <fo:table-body>
+                      <fo:table-row>
+                        <fo:table-cell>
+                          <fo:block end-indent="3pt" space-after="3pt" space-after.conditionality="retain"
+                            space-before="3pt" space-before.conditionality="retain" start-indent="3pt">stentry
+                              <fo:inline border-end-width="0pt" border-start-width="0pt">stentry/keyword</fo:inline>
+                            <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                            >stentry/p</fo:block></fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-body>
+                  </fo:table><fo:list-block provisional-distance-between-starts="5mm" provisional-label-separation="1mm"
+                    space-after="0.6em" space-before="0.6em">
+                    <fo:list-item space-after="1.5pt" space-before="1.5pt">
+                      <fo:list-item-label end-indent="label-end()" keep-together.within-line="always">
+                        <fo:block text-align="start"/>
+                      </fo:list-item-label>
+                      <fo:list-item-body start-indent="body-start()">
+                        <fo:block>sli <fo:inline border-end-width="0pt" border-start-width="0pt"
+                          >sli/keyword</fo:inline></fo:block>
+                      </fo:list-item-body>
+                    </fo:list-item>
+                  </fo:list-block><fo:block-container reference-orientation="0" start-indent="from-parent(start-indent)">
+                    <fo:block font-size="10pt" id="d160e328" space-after="10pt" start-indent="0pt">
+                      <fo:table border-after-color="black" border-after-style="solid" border-after-width="1pt"
+                        border-before-color="black" border-before-style="solid" border-before-width="1pt"
+                        border-end-color="black" border-end-style="solid" border-end-width="1pt"
+                        border-start-color="black" border-start-style="solid" border-start-width="1pt" space-after="5pt"
+                        space-before="5pt" table-layout="fixed" width="100%">
+                        <fo:table-column column-number="1" column-width="proportional-column-width(1)"/>
+                        <fo:table-header>
+                          <fo:table-row>
+                            <fo:table-cell border-before-color="black" border-before-style="solid"
+                              border-before-width="1pt" text-align="from-table-column()">
+                              <fo:block end-indent="3pt" font-weight="bold" space-after="3pt"
+                                space-after.conditionality="retain" space-before="3pt"
+                                space-before.conditionality="retain" start-indent="3pt">entry <fo:inline
+                                  border-end-width="0pt" border-start-width="0pt">entry/keyword</fo:inline>
+                                <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                                >entry/p</fo:block></fo:block>
+                            </fo:table-cell>
+                          </fo:table-row>
+                        </fo:table-header>
+                        <fo:table-body>
+                          <fo:table-row keep-together.within-page="always">
+                            <fo:table-cell border-before-color="black" border-before-style="solid"
+                              border-before-width="1pt" text-align="from-table-column()">
+                              <fo:block end-indent="3pt" space-after="3pt" space-after.conditionality="retain"
+                                space-before="3pt" space-before.conditionality="retain" start-indent="3pt">entry
+                                  <fo:inline border-end-width="0pt" border-start-width="0pt">entry/keyword</fo:inline>
+                                <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                                >entry/p</fo:block></fo:block>
+                            </fo:table-cell>
+                          </fo:table-row>
+                        </fo:table-body>
+                      </fo:table>
+                    </fo:block>
+                  </fo:block-container><fo:list-block provisional-distance-between-starts="5mm"
+                    provisional-label-separation="1mm" space-after="0.6em" space-before="0.6em">
+                    <fo:list-item relative-align="baseline" space-after="1.5pt" space-before="1.5pt">
+                      <fo:list-item-label end-indent="label-end()" keep-together.within-line="always">
+                        <fo:block text-align="start">•</fo:block>
+                      </fo:list-item-label>
+                      <fo:list-item-body start-indent="body-start()">
+                        <fo:block>li <fo:inline border-end-width="0pt" border-start-width="0pt">li/keyword</fo:inline>
+                          <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                          >li/p</fo:block></fo:block>
+                      </fo:list-item-body>
+                    </fo:list-item>
+                  </fo:list-block></fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+          </fo:table-body>
+        </fo:table><fo:block font-size="10pt"><fo:block><fo:block border-after-color="black" border-after-style="solid"
+              border-after-width="1pt" font-size="14pt" font-weight="bold" keep-with-next.within-column="always"
+              padding-top="12pt" space-after="5pt" space-before="12pt" line-height-shift-adjustment="disregard-shifts"
+              font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"><fo:block border-end-width="0pt"
+                border-start-width="0pt"><fo:marker marker-class-name="current-h2">Inline
+                  elements</fo:marker><fo:wrapper id="unique_2"/><fo:wrapper id="_OPENTOPIC_TOC_PROCESSING_d160e384"
+                />Inline elements</fo:block></fo:block><fo:block font-size="10pt" start-indent="25pt">
+              <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"> abbreviated-form <fo:inline
+                  line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">apiname</fo:inline>
+                <fo:inline font-weight="bold">b</fo:inline> boolean <fo:inline border-end-width="0pt"
+                  border-start-width="0pt" color="green">boolean: yes</fo:inline>
+                <fo:inline border-end-width="0pt" border-start-width="0pt" color="green">boolean: no</fo:inline>
+                <fo:inline font-style="italic">cite</fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">cmdname</fo:inline>
+                <fo:block background-color="#f0f0f0" end-indent="6pt + from-parent(end-indent)" font-size="10pt"
+                  hyphenation-character="►" keep-with-previous.within-page="always" line-height="106%"
+                  linefeed-treatment="preserve" padding="6pt" space-after="0.6em" space-before="0.6em"
+                  start-indent="6pt + from-parent(start-indent)" white-space-collapse="false"
+                  white-space-treatment="preserve" wrap-option="wrap" line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">codeblock</fo:block>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">codeph</fo:inline>
+                <fo:inline border-end-width="0pt" border-start-width="0pt">equation-inline</fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">filepath</fo:inline>
+                <fo:footnote>
+                  <fo:inline baseline-shift="super" font-size="75%" keep-with-previous.within-line="always"
+                      ><fo:basic-link internal-destination="fnd160e435">1</fo:basic-link></fo:inline>
+                  <fo:footnote-body>
+                    <fo:list-block font-size="10pt" font-style="normal" font-weight="normal" line-height="1.2"
+                      provisional-distance-between-starts="8mm" provisional-label-separation="2mm" start-indent="0pt"
+                      text-decoration="no-underline no-overline">
+                      <fo:list-item>
+                        <fo:list-item-label end-indent="label-end()">
+                          <fo:block id="fnd160e435" text-align="right"><fo:inline baseline-shift="super" font-size="75%"
+                              keep-with-previous.within-line="always">1</fo:inline></fo:block>
+                        </fo:list-item-label>
+                        <fo:list-item-body start-indent="body-start()" text-align="start">
+                          <fo:block>fn</fo:block>
+                        </fo:list-item-body>
+                      </fo:list-item>
+                    </fo:list-block>
+                  </fo:footnote-body>
+                </fo:footnote>
+                <fo:inline font-style="italic">i</fo:inline>
+                <fo:inline><fo:external-graphic xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+                    fox:alt-text="image/alt" src="url('file:/Users/xxx/image.svg')"/></fo:inline> indexterm <fo:inline
+                  border-end-width="0pt" border-start-width="0pt">keyword</fo:inline>
+                <fo:inline text-decoration="line-through">line-through</fo:inline>
+                <fo:block font-size="10pt" linefeed-treatment="preserve" space-after="0.8em" space-before="0.8em"
+                  white-space-collapse="true" wrap-option="wrap">lines</fo:block>
+                <fo:block end-indent="15pt + from-parent(end-indent)" space-after="0.6em" space-before="0.6em"
+                  start-indent="30pt + from-parent(start-indent)">lq</fo:block>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">markupname</fo:inline>
+                <fo:inline line-height="100%"><fo:inline font-weight="bold" line-height="100%">menucascade</fo:inline>
+                  &gt; <fo:inline font-weight="bold" line-height="100%">uicontrol</fo:inline></fo:inline>
+                <fo:block font-size="10pt" line-height="106%" linefeed-treatment="preserve" space-after="0.6em"
+                  space-before="0.6em" white-space-collapse="false" white-space-treatment="preserve" wrap-option="wrap"
+                  line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">msgblock</fo:block>
+                <fo:inline>msgnum</fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">msgph</fo:inline>
+                <fo:block space-after="0.6em" space-before="0.6em"><fo:inline border-end-width="0pt"
+                    border-start-width="0pt" font-weight="bold"><fo:inline>Note</fo:inline>: </fo:inline>
+                  note</fo:block>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun"
+                  >&amp;#numcharref;</fo:inline>
+                <fo:inline>option</fo:inline>
+                <fo:inline text-decoration="overline">overline</fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun"
+                  >%parameterentity;</fo:inline>
+                <fo:inline>parmname</fo:inline>
+                <fo:inline border-end-width="0pt" border-start-width="0pt">ph</fo:inline>
+                <fo:block font-size="10pt" line-height="106%" linefeed-treatment="preserve" space-after="0.6em"
+                  space-before="0.6em" white-space-collapse="false" white-space-treatment="preserve" wrap-option="wrap"
+                  line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">pre</fo:block>
+                <fo:inline border-end-width="0pt" border-start-width="0pt">“q”</fo:inline>
+                <fo:block background-color="#f0f0f0" font-size="10pt" line-height="106%" linefeed-treatment="preserve"
+                  space-after="0.8em" space-before="1.2em" white-space-collapse="false" white-space-treatment="preserve"
+                  wrap-option="wrap" line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">screen</fo:block>
+                <fo:inline border-end-width="0pt" border-start-width="0pt" color="red">state: state=value</fo:inline>
+                <fo:inline baseline-shift="sub" font-size="75%">sub</fo:inline>
+                <fo:inline baseline-shift="super" font-size="75%">sup</fo:inline>
+                <fo:instream-foreign-object xmlns:svg="http://www.w3.org/2000/svg">
+                  <svg:svg xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+                    xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript"
+                    contentStyleType="text/css" height="12pt" preserveAspectRatio="xMidYMid meet" version="1.1"
+                    viewBox="0 0 1 1" width="12pt" zoomAndPan="magnify">
+                    <svg:rect fill="red" height="1" width="1" x="0" y="0"/>
+                  </svg:svg>
+                </fo:instream-foreign-object>
+                <fo:inline>synph</fo:inline>
+                <fo:block><fo:block>
+                    <fo:inline line-height-shift-adjustment="disregard-shifts"
+                      font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun"
+                      >syntaxdiagram</fo:inline><fo:inline line-height-shift-adjustment="disregard-shifts"
+                      font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun"
+                      >/</fo:inline><fo:inline line-height-shift-adjustment="disregard-shifts"
+                      font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun"
+                      >groupseq</fo:inline><fo:inline line-height-shift-adjustment="disregard-shifts"
+                      font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun"
+                      >/</fo:inline><fo:inline line-height-shift-adjustment="disregard-shifts"
+                      font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">kwd</fo:inline>
+                  </fo:block></fo:block>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">systemoutput</fo:inline>
+                <fo:inline border-end-width="0pt" border-start-width="0pt" font-style="italic">term</fo:inline>
+                <fo:inline>text</fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun"
+                  >&amp;textentity;</fo:inline>
+                <fo:inline border-end-width="0pt" border-start-width="0pt">reg<fo:inline baseline-shift="20%"
+                    font-size="75%" line-height-shift-adjustment="disregard-shifts"><fo:inline line-height="100%"
+                      font-family="Times New Roman, Times, Arial Unicode MS, Tahoma, Batang" baseline-shift="20%"
+                      font-size="smaller">®</fo:inline></fo:inline></fo:inline>
+                <fo:inline border-end-width="0pt" border-start-width="0pt">service<fo:inline baseline-shift="50%"
+                    font-size="40%" line-height-shift-adjustment="disregard-shifts"><fo:inline line-height="100%"
+                      font-family="Times New Roman, Times, Arial Unicode MS, Tahoma, Batang" baseline-shift="20%"
+                      font-size="smaller">℠</fo:inline></fo:inline></fo:inline>
+                <fo:inline border-end-width="0pt" border-start-width="0pt">tm<fo:inline baseline-shift="20%"
+                    font-size="75%" line-height-shift-adjustment="disregard-shifts"><fo:inline line-height="100%"
+                      font-family="Times New Roman, Times, Arial Unicode MS, Tahoma, Batang" baseline-shift="20%"
+                      font-size="smaller">™</fo:inline></fo:inline></fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">tt</fo:inline>
+                <fo:inline text-decoration="underline">u</fo:inline>
+                <fo:inline font-weight="bold" line-height="100%">uicontrol</fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">userinput</fo:inline>
+                <fo:inline font-style="italic">varname</fo:inline>
+                <fo:inline font-weight="bold">wintitle</fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">@xmlatt</fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun"
+                  >&lt;xmlelement&gt;</fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun">xmlnsname</fo:inline>
+                <fo:inline line-height-shift-adjustment="disregard-shifts"
+                  font-family="Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun"
+                  >&lt;?xmlpi?&gt;</fo:inline>
+                <fo:basic-link color="blue" internal-destination="unique_1">xref</fo:basic-link>
+                <fo:basic-link color="blue" internal-destination="unique_1">title
+                  title/keyword</fo:basic-link><fo:inline> on page <fo:inline><fo:page-number-citation ref-id="unique_1"
+                    /></fo:inline></fo:inline>
+              </fo:block>
+            </fo:block></fo:block></fo:block></fo:block>
+    </fo:flow>
+  </fo:page-sequence>
+  <fo:page-sequence force-page-count="even" master-reference="body-sequence">
+    <fo:static-content flow-name="xsl-footnote-separator">
+      <fo:block><fo:leader color="black" leader-length="25%" leader-pattern="rule" rule-style="solid"
+          rule-thickness="0.5pt"/></fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-body-footer">
+      <fo:block end-indent="10pt" space-after="10pt" space-after.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-body-header">
+      <fo:block end-indent="10pt" space-before="10pt" space-before.conditionality="retain" text-align="end"
+            > | <fo:inline><fo:retrieve-marker retrieve-class-name="current-header"/></fo:inline> | <fo:inline
+          font-weight="bold"><fo:page-number/></fo:inline></fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="first-body-header">
+      <fo:block end-indent="10pt" space-before="10pt" space-before.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="first-body-footer">
+      <fo:block end-indent="10pt" space-after="10pt" space-after.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="last-body-header">
+      <fo:block/>
+    </fo:static-content>
+    <fo:static-content flow-name="last-body-footer">
+      <fo:block/>
+    </fo:static-content>
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block font-size="10pt" id="unique_3"><fo:marker marker-class-name="current-topic-number"
+          >2</fo:marker><fo:marker marker-class-name="current-header">title <fo:inline border-end-width="0pt"
+            border-start-width="0pt">title/keyword</fo:inline></fo:marker><fo:block
+          id="_OPENTOPIC_TOC_PROCESSING_d160e627"><fo:block border-after-style="solid" border-after-width="2pt"
+            border-before-style="solid" border-before-width="2pt" font-size="20pt" font-weight="bold" padding-top="10pt"
+            >Chapter <fo:block font-size="40pt" font-weight="bold">2</fo:block></fo:block></fo:block><fo:block
+          border-after-color="black" border-after-style="solid" border-after-width="3pt" font-size="18pt"
+          font-weight="bold" keep-with-next.within-column="always" padding-top="16.8pt" space-after="16.8pt"
+          space-before="0pt" line-height-shift-adjustment="disregard-shifts"
+          font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun">title <fo:inline border-end-width="0pt"
+            border-start-width="0pt">title/keyword</fo:inline></fo:block><fo:table page-break-after="always"
+          table-layout="fixed" width="100%">
+          <fo:table-column column-number="1" column-width="35%"/>
+          <fo:table-column column-number="2" column-width="65%"/>
+          <fo:table-body>
+            <fo:table-row>
+              <fo:table-cell>
+                <fo:block end-indent="5pt" font-size="10.5pt" line-height-shift-adjustment="disregard-shifts"
+                  font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"/>
+              </fo:table-cell>
+              <fo:table-cell border-start-color="black" border-start-style="solid" border-start-width="1pt"
+                padding-start="10pt">
+                <fo:block><fo:block space-after="0.6em" space-before="0.6em" text-indent="0em">shortdesc <fo:inline
+                      border-end-width="0pt" border-start-width="0pt">shortdesc/keyword</fo:inline></fo:block><fo:block
+                    space-after="0.6em" space-before="0.6em">div <fo:inline border-end-width="0pt"
+                      border-start-width="0pt">div/keyword</fo:inline></fo:block><fo:table space-after="5pt"
+                    space-before="5pt" table-layout="fixed" width="100%">
+                    <fo:table-body>
+                      <fo:table-row>
+                        <fo:table-cell relative-align="baseline">
+                          <fo:block end-indent="3pt" font-weight="bold" space-after="3pt"
+                            space-after.conditionality="retain" space-before="3pt" space-before.conditionality="retain"
+                            start-indent="3pt"><fo:inline>dt <fo:inline border-end-width="0pt" border-start-width="0pt"
+                                >dt/keyword</fo:inline></fo:inline></fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell>
+                          <fo:block end-indent="3pt" space-after="3pt" space-after.conditionality="retain"
+                            space-before="3pt" space-before.conditionality="retain" start-indent="3pt">dd <fo:inline
+                              border-end-width="0pt" border-start-width="0pt">dd/keyword</fo:inline>
+                            <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                            >dd/p</fo:block></fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-body>
+                  </fo:table><fo:block space-before="0.6em"><fo:block>example <fo:inline border-end-width="0pt"
+                        border-start-width="0pt">example/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >example/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"><fo:block
+                      font-weight="bold" keep-with-next.within-column="always" space-after="5pt"
+                      line-height-shift-adjustment="disregard-shifts"
+                      font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"
+                      >example/title</fo:block><fo:block>example <fo:block space-after="0.6em" space-before="0.6em"
+                        text-indent="0em">example/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"
+                      ><fo:block>section <fo:inline border-end-width="0pt" border-start-width="0pt"
+                        >section/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >section/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"><fo:block
+                      font-weight="bold" keep-with-next.within-column="always" space-before="15pt"
+                      line-height-shift-adjustment="disregard-shifts"
+                      font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"
+                      >section/title</fo:block><fo:block>section <fo:block space-after="0.6em" space-before="0.6em"
+                        text-indent="0em">section/p</fo:block></fo:block></fo:block></fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+          </fo:table-body>
+        </fo:table></fo:block>
+    </fo:flow>
+  </fo:page-sequence>
+  <fo:page-sequence force-page-count="even" master-reference="body-sequence">
+    <fo:static-content flow-name="xsl-footnote-separator">
+      <fo:block><fo:leader color="black" leader-length="25%" leader-pattern="rule" rule-style="solid"
+          rule-thickness="0.5pt"/></fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-body-footer">
+      <fo:block end-indent="10pt" space-after="10pt" space-after.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-body-header">
+      <fo:block end-indent="10pt" space-before="10pt" space-before.conditionality="retain" text-align="end"
+            > | <fo:inline><fo:retrieve-marker retrieve-class-name="current-header"/></fo:inline> | <fo:inline
+          font-weight="bold"><fo:page-number/></fo:inline></fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="first-body-header">
+      <fo:block end-indent="10pt" space-before="10pt" space-before.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="first-body-footer">
+      <fo:block end-indent="10pt" space-after="10pt" space-after.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="last-body-header">
+      <fo:block/>
+    </fo:static-content>
+    <fo:static-content flow-name="last-body-footer">
+      <fo:block/>
+    </fo:static-content>
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block font-size="10pt" id="unique_4"><fo:marker marker-class-name="current-topic-number"
+          >3</fo:marker><fo:marker marker-class-name="current-header">title <fo:inline border-end-width="0pt"
+            border-start-width="0pt">title/keyword</fo:inline></fo:marker><fo:block
+          id="_OPENTOPIC_TOC_PROCESSING_d160e718"><fo:block border-after-style="solid" border-after-width="2pt"
+            border-before-style="solid" border-before-width="2pt" font-size="20pt" font-weight="bold" padding-top="10pt"
+            >Chapter <fo:block font-size="40pt" font-weight="bold">3</fo:block></fo:block></fo:block><fo:block
+          border-after-color="black" border-after-style="solid" border-after-width="3pt" font-size="18pt"
+          font-weight="bold" keep-with-next.within-column="always" padding-top="16.8pt" space-after="16.8pt"
+          space-before="0pt" line-height-shift-adjustment="disregard-shifts"
+          font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun">title <fo:inline border-end-width="0pt"
+            border-start-width="0pt">title/keyword</fo:inline></fo:block><fo:table page-break-after="always"
+          table-layout="fixed" width="100%">
+          <fo:table-column column-number="1" column-width="35%"/>
+          <fo:table-column column-number="2" column-width="65%"/>
+          <fo:table-body>
+            <fo:table-row>
+              <fo:table-cell>
+                <fo:block end-indent="5pt" font-size="10.5pt" line-height-shift-adjustment="disregard-shifts"
+                  font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"/>
+              </fo:table-cell>
+              <fo:table-cell border-start-color="black" border-start-style="solid" border-start-width="1pt"
+                padding-start="10pt">
+                <fo:block><fo:block space-after="0.6em" space-before="0.6em" text-indent="0em">shortdesc <fo:inline
+                      border-end-width="0pt" border-start-width="0pt">shortdesc/keyword</fo:inline></fo:block><fo:block
+                    space-before="0.6em"><fo:block>prereq <fo:inline border-end-width="0pt" border-start-width="0pt"
+                        >prereq/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >prereq/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"><fo:block>context
+                        <fo:inline border-end-width="0pt" border-start-width="0pt">context/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >context/p</fo:block></fo:block></fo:block><fo:block><fo:block space-after="0.6em"
+                      space-before="0.6em">
+                      <fo:block>cmd <fo:inline border-end-width="0pt" border-start-width="0pt"
+                        >cmd/keyword</fo:inline></fo:block>
+                    </fo:block></fo:block><fo:block space-before="0.6em"><fo:block>result <fo:inline
+                        border-end-width="0pt" border-start-width="0pt">result/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >result/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"
+                      ><fo:block>tasktroubleshooting <fo:inline border-end-width="0pt" border-start-width="0pt"
+                        >tasktroubleshooting/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                        >tasktroubleshooting/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"
+                      ><fo:block>example <fo:inline border-end-width="0pt" border-start-width="0pt"
+                        >example/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >example/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"><fo:block>postreq
+                        <fo:inline border-end-width="0pt" border-start-width="0pt">postreq/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >postreq/p</fo:block></fo:block></fo:block></fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+          </fo:table-body>
+        </fo:table></fo:block>
+    </fo:flow>
+  </fo:page-sequence>
+  <fo:page-sequence force-page-count="even" master-reference="body-sequence">
+    <fo:static-content flow-name="xsl-footnote-separator">
+      <fo:block><fo:leader color="black" leader-length="25%" leader-pattern="rule" rule-style="solid"
+          rule-thickness="0.5pt"/></fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-body-footer">
+      <fo:block end-indent="10pt" space-after="10pt" space-after.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-body-header">
+      <fo:block end-indent="10pt" space-before="10pt" space-before.conditionality="retain" text-align="end"
+            > | <fo:inline><fo:retrieve-marker retrieve-class-name="current-header"/></fo:inline> | <fo:inline
+          font-weight="bold"><fo:page-number/></fo:inline></fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="first-body-header">
+      <fo:block end-indent="10pt" space-before="10pt" space-before.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="first-body-footer">
+      <fo:block end-indent="10pt" space-after="10pt" space-after.conditionality="retain" text-align="end"/>
+    </fo:static-content>
+    <fo:static-content flow-name="last-body-header">
+      <fo:block/>
+    </fo:static-content>
+    <fo:static-content flow-name="last-body-footer">
+      <fo:block/>
+    </fo:static-content>
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block font-size="10pt" id="unique_5"><fo:marker marker-class-name="current-topic-number"
+          >4</fo:marker><fo:marker marker-class-name="current-header">title <fo:inline border-end-width="0pt"
+            border-start-width="0pt">title/keyword</fo:inline></fo:marker><fo:block
+          id="_OPENTOPIC_TOC_PROCESSING_d160e793"><fo:block border-after-style="solid" border-after-width="2pt"
+            border-before-style="solid" border-before-width="2pt" font-size="20pt" font-weight="bold" padding-top="10pt"
+            >Chapter <fo:block font-size="40pt" font-weight="bold">4</fo:block></fo:block></fo:block><fo:block
+          border-after-color="black" border-after-style="solid" border-after-width="3pt" font-size="18pt"
+          font-weight="bold" keep-with-next.within-column="always" padding-top="16.8pt" space-after="16.8pt"
+          space-before="0pt" line-height-shift-adjustment="disregard-shifts"
+          font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun">title <fo:inline border-end-width="0pt"
+            border-start-width="0pt">title/keyword</fo:inline></fo:block><fo:table page-break-after="always"
+          table-layout="fixed" width="100%">
+          <fo:table-column column-number="1" column-width="35%"/>
+          <fo:table-column column-number="2" column-width="65%"/>
+          <fo:table-body>
+            <fo:table-row>
+              <fo:table-cell>
+                <fo:block end-indent="5pt" font-size="10.5pt" line-height-shift-adjustment="disregard-shifts"
+                  font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"/>
+              </fo:table-cell>
+              <fo:table-cell border-start-color="black" border-start-style="solid" border-start-width="1pt"
+                padding-start="10pt">
+                <fo:block><fo:block space-after="0.6em" space-before="0.6em" text-indent="0em">shortdesc <fo:inline
+                      border-end-width="0pt" border-start-width="0pt">shortdesc/keyword</fo:inline></fo:block><fo:block
+                    space-before="0.6em"><fo:block>example <fo:inline border-end-width="0pt" border-start-width="0pt"
+                        >example/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >example/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"><fo:block
+                      font-weight="bold" keep-with-next.within-column="always" space-after="5pt"
+                      line-height-shift-adjustment="disregard-shifts"
+                      font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"
+                      >example/title</fo:block><fo:block>example <fo:block space-after="0.6em" space-before="0.6em"
+                        text-indent="0em">example/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"
+                      ><fo:block>section <fo:inline border-end-width="0pt" border-start-width="0pt"
+                        >section/keyword</fo:inline>
+                      <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                      >section/p</fo:block></fo:block></fo:block><fo:block space-before="0.6em"><fo:block
+                      font-weight="bold" keep-with-next.within-column="always" space-before="15pt"
+                      line-height-shift-adjustment="disregard-shifts"
+                      font-family="Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun"
+                      >section/title</fo:block><fo:block>section <fo:block space-after="0.6em" space-before="0.6em"
+                        text-indent="0em">section/p</fo:block></fo:block></fo:block><fo:table border-after-color="black"
+                    border-after-style="solid" border-after-width="1pt" border-before-color="black"
+                    border-before-style="solid" border-before-width="1pt" border-end-color="black"
+                    border-end-style="solid" border-end-width="1pt" border-start-color="black"
+                    border-start-style="solid" border-start-width="1pt" font-size="10pt" space-after="10pt"
+                    space-before="8pt" table-layout="fixed" width="100%">
+                    <fo:table-header>
+                      <fo:table-row>
+                        <fo:table-cell border-after-color="black" border-after-style="solid" border-after-width="1pt"
+                          border-after-width.conditionality="retain" border-before-color="black"
+                          border-before-style="solid" border-before-width="1pt">
+                          <fo:block end-indent="3pt" font-weight="bold" space-after="3pt"
+                            space-after.conditionality="retain" space-before="3pt" space-before.conditionality="retain"
+                            start-indent="3pt">stentry <fo:inline border-end-width="0pt" border-start-width="0pt"
+                              >stentry/keyword</fo:inline>
+                            <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                            >stentry/p</fo:block></fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-header>
+                    <fo:table-body>
+                      <fo:table-row>
+                        <fo:table-cell>
+                          <fo:block end-indent="3pt" space-after="3pt" space-after.conditionality="retain"
+                            space-before="3pt" space-before.conditionality="retain" start-indent="3pt">stentry
+                              <fo:inline border-end-width="0pt" border-start-width="0pt">stentry/keyword</fo:inline>
+                            <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                            >stentry/p</fo:block></fo:block>
+                        </fo:table-cell>
+                      </fo:table-row>
+                    </fo:table-body>
+                  </fo:table><fo:block-container reference-orientation="0" start-indent="from-parent(start-indent)">
+                    <fo:block font-size="10pt" id="d160e889" space-after="10pt" start-indent="0pt">
+                      <fo:table border-after-color="black" border-after-style="solid" border-after-width="1pt"
+                        border-before-color="black" border-before-style="solid" border-before-width="1pt"
+                        border-end-color="black" border-end-style="solid" border-end-width="1pt"
+                        border-start-color="black" border-start-style="solid" border-start-width="1pt" space-after="5pt"
+                        space-before="5pt" table-layout="fixed" width="100%">
+                        <fo:table-column column-number="1"/>
+                        <fo:table-header>
+                          <fo:table-row>
+                            <fo:table-cell border-before-color="black" border-before-style="solid"
+                              border-before-width="1pt" text-align="from-table-column()">
+                              <fo:block end-indent="3pt" font-weight="bold" space-after="3pt"
+                                space-after.conditionality="retain" space-before="3pt"
+                                space-before.conditionality="retain" start-indent="3pt">entry <fo:inline
+                                  border-end-width="0pt" border-start-width="0pt">entry/keyword</fo:inline>
+                                <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                                >entry/p</fo:block></fo:block>
+                            </fo:table-cell>
+                          </fo:table-row>
+                        </fo:table-header>
+                        <fo:table-body>
+                          <fo:table-row keep-together.within-page="always">
+                            <fo:table-cell border-before-color="black" border-before-style="solid"
+                              border-before-width="1pt" text-align="from-table-column()">
+                              <fo:block end-indent="3pt" space-after="3pt" space-after.conditionality="retain"
+                                space-before="3pt" space-before.conditionality="retain" start-indent="3pt">entry
+                                  <fo:inline border-end-width="0pt" border-start-width="0pt">entry/keyword</fo:inline>
+                                <fo:block space-after="0.6em" space-before="0.6em" text-indent="0em"
+                                >entry/p</fo:block></fo:block>
+                            </fo:table-cell>
+                          </fo:table-row>
+                        </fo:table-body>
+                      </fo:table>
+                    </fo:block>
+                  </fo:block-container></fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+          </fo:table-body>
+        </fo:table></fo:block>
+    </fo:flow>
+  </fo:page-sequence>
+</fo:root>

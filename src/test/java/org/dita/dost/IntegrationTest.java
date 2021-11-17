@@ -175,7 +175,9 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testMetadataInheritance() throws Throwable {
-        test("MetadataInheritance");
+        builder()
+                .transtype(PREPROCESS)
+                .test("MetadataInheritance");
     }
 
     @Test
