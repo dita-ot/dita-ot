@@ -56,7 +56,9 @@ public abstract class AbstractIntegrationTest {
                 "dita2xhtml"),
         HTML5("html5", false, "html5",
                 "dita2html5"),
-        PDF("pdf", false, "pdf",
+        PDF("pdf", true,
+                ImmutableSet.of( "fo"),
+                "pdf",
                 "dita2pdf2"),
         ECLIPSEHELP("eclipsehelp", false,"eclipsehelp",
                 "dita2eclipsehelp"),
@@ -69,11 +71,16 @@ public abstract class AbstractIntegrationTest {
 
         final String name;
         final boolean compareTemp;
+        final Set<String> compareable;
         public final String exp;
         final String[] targets;
         Transtype(String name, boolean compareTemp, String exp, String... targets) {
+            this(name, compareTemp, ImmutableSet.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt"), exp, targets);
+        }
+        Transtype(String name, boolean compareTemp, Set<String> compareable, String exp, String... targets) {
             this.name = name;
             this.compareTemp = compareTemp;
+            this.compareable = compareable;
             this.exp = exp;
             this.targets = targets;
         }
@@ -488,7 +495,8 @@ public abstract class AbstractIntegrationTest {
                     } else if (ext.equals("html") || ext.equals("htm") || ext.equals("xhtml")
                             || ext.equals("hhk")) {
                         assertXMLEqual(parseHtml(exp), parseHtml(act));
-                    } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap")) {
+                    } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap")
+                            || ext.equals("fo")) {
                         assertXMLEqual(parseXml(exp), parseXml(act));
                     } else if (ext.equals("txt")) {
                         assertArrayEquals(readTextFile(exp), readTextFile(act));
@@ -502,12 +510,11 @@ public abstract class AbstractIntegrationTest {
         }
     }
 
-    final Set<String> compareable = ImmutableSet.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "txt");
-    final Set<String> ignorable = ImmutableSet.of("keydef.xml", "subrelation.xml", ".job.xml");
+    final Set<String> ignorable = ImmutableSet.of("keydef.xml", "subrelation.xml", ".job.xml", "stage2.fo");
 
     private Collection<String> getFiles(File expDir, File actDir) {
         final FileFilter filter = f -> f.isDirectory()
-                || (compareable.contains(FileUtils.getExtension(f.getName()))
+                || (this.transtype.compareable.contains(FileUtils.getExtension(f.getName()))
                     && !ignorable.contains(f.getName()));
         final Set<String> buf = new HashSet<>();
         final File[] exp = expDir.listFiles(filter);
@@ -565,6 +572,11 @@ public abstract class AbstractIntegrationTest {
             e.removeAttributeNS(DITA_OT_NS, "submap-specializations");
             // remove workdir processing instructions
             removeWorkdirProcessingInstruction(e);
+        }
+        final NodeList images = d.getElementsByTagNameNS("http://www.w3.org/1999/XSL/Format", "external-graphic");
+        for (int i = 0; i < images.getLength(); i++) {
+            final Element e = (Element) images.item(i);
+            e.removeAttribute("src");
         }
         // rewrite IDs
         return rewriteIds(d, ditaIdPattern);
