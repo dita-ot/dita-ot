@@ -109,7 +109,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:copy>
             <xsl:copy-of select="@*[not(name() = 'font-family')]"/>
             <xsl:attribute name="line-height-shift-adjustment">disregard-shifts</xsl:attribute>
-            <xsl:attribute name="font-family"><xsl:value-of select="normalize-space($physical-font-family)"/></xsl:attribute>
+            <xsl:attribute name="font-family" select="normalize-space($physical-font-family)"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
@@ -195,18 +195,18 @@ See the accompanying LICENSE file for applicable license.
         </xsl:comment>
         </xsl:if>
         <fo:inline line-height="100%">
-            <xsl:attribute name="font-family"><xsl:value-of select="normalize-space($physical-font-family)"/></xsl:attribute>
+            <xsl:attribute name="font-family" select="normalize-space($physical-font-family)"/>
 
             <xsl:if test="$font-style">
-                <xsl:attribute name="font-style"><xsl:value-of select="normalize-space($font-style)"/></xsl:attribute>
+                <xsl:attribute name="font-style" select="normalize-space($font-style)"/>
             </xsl:if>
 
             <xsl:if test="$baseline-shift">
-                <xsl:attribute name="baseline-shift"><xsl:value-of select="normalize-space($baseline-shift)"/></xsl:attribute>
+                <xsl:attribute name="baseline-shift" select="normalize-space($baseline-shift)"/>
             </xsl:if>
 
             <xsl:if test="$override-size">
-                <xsl:attribute name="font-size"><xsl:value-of select="normalize-space($override-size)"/></xsl:attribute>
+                <xsl:attribute name="font-size" select="normalize-space($override-size)"/>
             </xsl:if>
 
             <xsl:apply-templates/>

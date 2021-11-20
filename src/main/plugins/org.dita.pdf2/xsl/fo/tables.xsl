@@ -607,14 +607,10 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template name="applySpansAttrs">
         <xsl:if test="exists(@morerows) and xs:integer(@morerows) gt 0">
-            <xsl:attribute name="number-rows-spanned">
-              <xsl:value-of select="xs:integer(@morerows) + 1"/>
-            </xsl:attribute>
+            <xsl:attribute name="number-rows-spanned" select="xs:integer(@morerows) + 1"/>
         </xsl:if>
       <xsl:if test="exists(@dita-ot:morecols) and xs:integer(@dita-ot:morecols) gt 0">
-        <xsl:attribute name="number-columns-spanned">
-        <xsl:value-of select="xs:integer(@dita-ot:morecols) + 1"/>
-        </xsl:attribute>
+        <xsl:attribute name="number-columns-spanned" select="xs:integer(@dita-ot:morecols) + 1"/>
       </xsl:if>
     </xsl:template>
 
@@ -648,9 +644,7 @@ See the accompanying LICENSE file for applicable license.
 
         <xsl:choose>
             <xsl:when test="not(normalize-space($align) = '')">
-                <xsl:attribute name="text-align">
-                    <xsl:value-of select="$align"/>
-                </xsl:attribute>
+                <xsl:attribute name="text-align" select="$align"/>
             </xsl:when>
             <xsl:when test="(normalize-space($align) = '') and contains(@class, ' topic/colspec ')"/>
             <xsl:otherwise>
@@ -659,19 +653,13 @@ See the accompanying LICENSE file for applicable license.
         </xsl:choose>
         <xsl:choose>
             <xsl:when test="$valign='top'">
-                <xsl:attribute name="display-align">
-                    <xsl:value-of select="'before'"/>
-                </xsl:attribute>
+                <xsl:attribute name="display-align" select="'before'"/>
             </xsl:when>
             <xsl:when test="$valign='middle'">
-                <xsl:attribute name="display-align">
-                    <xsl:value-of select="'center'"/>
-                </xsl:attribute>
+                <xsl:attribute name="display-align" select="'center'"/>
             </xsl:when>
             <xsl:when test="$valign='bottom'">
-                <xsl:attribute name="display-align">
-                    <xsl:value-of select="'after'"/>
-                </xsl:attribute>
+                <xsl:attribute name="display-align" select="'after'"/>
             </xsl:when>
         </xsl:choose>
     </xsl:template>

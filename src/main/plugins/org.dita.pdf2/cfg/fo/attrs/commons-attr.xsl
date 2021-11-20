@@ -65,7 +65,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:attribute-set name="common.border" use-attribute-sets="common.border__top common.border__right common.border__bottom common.border__left"/>
 
   <xsl:attribute-set name="base-font">
-    <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute name="font-size" select="$default-font-size"/>
   </xsl:attribute-set>
 
   <!-- titles -->

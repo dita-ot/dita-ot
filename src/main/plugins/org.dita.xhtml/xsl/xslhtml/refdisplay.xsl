@@ -141,7 +141,7 @@ See the accompanying LICENSE file for applicable license.
                <xsl:call-template name="th-align"/>
              </xsl:with-param>
            </xsl:call-template>           
-           <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-type</xsl:attribute>
+           <xsl:attribute name="id" select="concat(generate-id(parent::*), '-type')"/>
            <xsl:call-template name="getVariable">
              <xsl:with-param name="id" select="'Type'"/>
            </xsl:call-template>
@@ -160,7 +160,7 @@ See the accompanying LICENSE file for applicable license.
                <xsl:call-template name="th-align"/>
              </xsl:with-param>
            </xsl:call-template>
-           <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-value</xsl:attribute>
+           <xsl:attribute name="id" select="concat(generate-id(parent::*), '-value')"/>
            <xsl:call-template name="getVariable">
              <xsl:with-param name="id" select="'Value'"/>
            </xsl:call-template>
@@ -182,7 +182,7 @@ See the accompanying LICENSE file for applicable license.
                <xsl:call-template name="th-align"/>
              </xsl:with-param>
            </xsl:call-template>           
-           <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-desc</xsl:attribute>
+           <xsl:attribute name="id" select="concat(generate-id(parent::*), '-desc')"/>
            <xsl:call-template name="getVariable">
              <xsl:with-param name="id" select="'Description'"/>
            </xsl:call-template>

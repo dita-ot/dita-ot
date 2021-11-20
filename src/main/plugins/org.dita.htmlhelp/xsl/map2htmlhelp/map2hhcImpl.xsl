@@ -292,10 +292,10 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">
-                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>
+                <xsl:attribute name="value" select="$pathFromMaplist"/><xsl:value-of select="@href"/>
               </xsl:when>
               <xsl:otherwise> <!-- If non-DITA, keep the href as-is -->
-                <xsl:attribute name="value"><xsl:value-of select="@href"/></xsl:attribute>
+                <xsl:attribute name="value" select="@href"/>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:element>

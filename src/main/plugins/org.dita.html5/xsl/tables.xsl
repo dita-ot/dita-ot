@@ -147,9 +147,8 @@ See the accompanying LICENSE file for applicable license.
       </xsl:when>
     </xsl:choose>
     <xsl:if test="@morerows">
-      <xsl:attribute name="rowspan"> <!-- set the number of rows to span -->
-        <xsl:value-of select="@morerows + 1"/>
-      </xsl:attribute>
+      <!-- set the number of rows to span -->
+      <xsl:attribute name="rowspan" select="@morerows + 1"/>
     </xsl:if>
     <xsl:if test="@dita-ot:morecols"> <!-- get the number of columns to span from the specified named column values -->
       <xsl:attribute name="colspan" select="@dita-ot:morecols + 1"/>

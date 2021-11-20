@@ -105,9 +105,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
   <xsl:template match="alt-text" mode="ditaval-outputflag">
-    <xsl:attribute name="alt">
-      <xsl:value-of select="."/>
-    </xsl:attribute>
+    <xsl:attribute name="alt" select="."/>
   </xsl:template>
 
 </xsl:stylesheet>

@@ -56,11 +56,11 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="related-links__content">
-        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent" select="$side-col-width"/>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.ul" use-attribute-sets="ul">
-    <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+    <xsl:attribute name="start-indent" select="$side-col-width"/>
   </xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.ul.li" use-attribute-sets="ul.li">
@@ -79,7 +79,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:attribute-set>
 
   <xsl:attribute-set name="related-links.ol" use-attribute-sets="ol">
-    <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+    <xsl:attribute name="start-indent" select="$side-col-width"/>
   </xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.ol.li" use-attribute-sets="ol.li">

@@ -326,7 +326,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
   </xsl:param>
   <xsl:element name="h{$headinglevel}">
-      <xsl:attribute name="class">topictitle<xsl:value-of select="$headinglevel"/></xsl:attribute>
+      <xsl:attribute name="class" select="concat('topictitle', $headinglevel)"/>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class">topictitle<xsl:value-of select="$headinglevel"/></xsl:with-param>
       </xsl:call-template>
@@ -1603,14 +1603,14 @@ See the accompanying LICENSE file for applicable license.
     </xsl:call-template>
   </xsl:variable>
   <xsl:if test="not($height-in-pixel = '100%')">
-    <xsl:attribute name="height">
+    <xsl:attribute name="height" select="number($height-in-pixel)">
       <!--xsl:choose>
         <xsl:when test="../@scale and string(number(../@scale))!='NaN'">          
           <xsl:value-of select="number($height-in-pixel) * number(../@scale)"/>
         </xsl:when>
-        <xsl:otherwise-->
+        <xsl:otherwise>
           <xsl:value-of select="number($height-in-pixel)"/>
-        <!--/xsl:otherwise>
+        </xsl:otherwise>
       </xsl:choose-->
     </xsl:attribute>
   </xsl:if>  
@@ -1623,14 +1623,14 @@ See the accompanying LICENSE file for applicable license.
     </xsl:call-template>
   </xsl:variable>
   <xsl:if test="not($width-in-pixel = '100%')">
-    <xsl:attribute name="width">
+    <xsl:attribute name="width" select="number($width-in-pixel)">
       <!--xsl:choose>
         <xsl:when test="../@scale and string(number(../@scale))!='NaN'">          
           <xsl:value-of select="number($width-in-pixel) * number(../@scale)"/>
         </xsl:when>
-        <xsl:otherwise-->
+        <xsl:otherwise>
           <xsl:value-of select="number($width-in-pixel)"/>
-        <!--/xsl:otherwise>
+        </xsl:otherwise>
       </xsl:choose-->
     </xsl:attribute>
   </xsl:if>  
@@ -2341,7 +2341,7 @@ See the accompanying LICENSE file for applicable license.
 <!-- this directive provides a "depth" indicator without doing recursive nesting -->
 <xsl:value-of select="substring('------', 1, count(ancestor::*))"/>
      <a>
-       <xsl:attribute name="href">#<xsl:value-of select="generate-id()"/></xsl:attribute>
+       <xsl:attribute name="href" select="concat('#', generate-id())"/>
        <xsl:value-of select="."/>
      </a>
      <!--recursive call for subtopics here"/-->

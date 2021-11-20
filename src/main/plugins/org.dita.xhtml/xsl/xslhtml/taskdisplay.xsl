@@ -192,7 +192,7 @@ See the accompanying LICENSE file for applicable license.
                  It is possible (preferable) to keep stepsection within an <li> and use CSS to
                  fix numbering, but with testing in March of 2009, this does not work in IE. 
                  It is possible in Firefox 3. -->
-            <xsl:attribute name="start"><xsl:value-of select="count(preceding-sibling::*[contains(@class,' task/step ')])+1"/></xsl:attribute>
+            <xsl:attribute name="start" select="count(preceding-sibling::*[contains(@class,' task/step ')])+1"/>
           </xsl:if>
           <xsl:apply-templates select="." mode="steps">
             <xsl:with-param name="step_expand" select="$step_expand"/>
