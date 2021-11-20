@@ -437,7 +437,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <!--basic child processing-->
   <xsl:template match="*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')]" priority="2" name="topic.link_child">
-    <li class="ulchildlink">
+    <li>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class" select="'ulchildlink'"/>
       </xsl:call-template>
@@ -473,7 +473,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <!--ordered child processing-->
   <xsl:template match="*[@collection-type = 'sequence']/*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')]" priority="3" name="topic.link_orderedchild">
-    <li class="olchildlink">
+    <li>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class" select="'olchildlink'"/>
       </xsl:call-template>

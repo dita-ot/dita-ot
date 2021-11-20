@@ -405,8 +405,10 @@ See the accompanying LICENSE file for applicable license.
             </xsl:if>
           </span>
           <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
-            <span class="tabledesc">
-              <xsl:call-template name="commonattributes"/>
+            <span>
+              <xsl:call-template name="commonattributes">
+                <xsl:with-param name="default-output-class" select="'tabledesc'"/>
+              </xsl:call-template>
               <xsl:apply-templates select="." mode="tabledesc"/>
             </span>
           </xsl:for-each>
@@ -415,8 +417,10 @@ See the accompanying LICENSE file for applicable license.
       <!-- desc -->
       <xsl:when test="*[contains(@class, ' topic/desc ')]">
         <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
-          <span class="tabledesc">
-            <xsl:call-template name="commonattributes"/>
+          <span>
+            <xsl:call-template name="commonattributes">
+              <xsl:with-param name="default-output-class" select="'tabledesc'"/>
+            </xsl:call-template>
             <xsl:apply-templates select="." mode="tabledesc"/>
           </span>
         </xsl:for-each>
