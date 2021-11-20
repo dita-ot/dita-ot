@@ -27,7 +27,7 @@ See the accompanying LICENSE file for applicable license.
 
 <xsl:template match="*[contains(@class,' pr-d/fragment ')]" priority="2">
   <div>
-  <a><xsl:attribute name="name" select="title"/> </a>
+  <a name="{title}"> </a>
   <xsl:apply-templates/>
   </div>
 </xsl:template>

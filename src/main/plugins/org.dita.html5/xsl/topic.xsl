@@ -2179,9 +2179,7 @@ See the accompanying LICENSE file for applicable license.
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-          <a>
-            <xsl:attribute name="name" select="concat('fntarg_', $fnid)"/>
-            <xsl:attribute name="href" select="concat('#fnsrc_', $fnid)"/>
+          <a name="fntarg_{$fnid}" href="#fnsrc_{$fnid}">
             <sup>
               <xsl:value-of select="$convergedcallout"/>
             </sup>
