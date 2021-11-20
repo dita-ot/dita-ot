@@ -266,9 +266,7 @@ See the accompanying LICENSE file for applicable license.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:attribute name="id">
-              <xsl:value-of select="$new_id"/>
-            </xsl:attribute>
+            <xsl:attribute name="id" select="$new_id"/>
             <xsl:apply-templates>
                 <xsl:with-param name="newid" select="$new_id"/>
             </xsl:apply-templates>
@@ -280,9 +278,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class,' map/topicref ')][not(@href)]" priority="5">
     <xsl:param name="newid"/>
     <xsl:copy>
-      <xsl:attribute name="id">
-        <xsl:value-of select="generate-id()"/>
-      </xsl:attribute>
+      <xsl:attribute name="id" select="generate-id()"/>
       <xsl:apply-templates select="@*">
         <xsl:with-param name="newid" select="$newid"/>
       </xsl:apply-templates>

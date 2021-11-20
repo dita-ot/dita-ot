@@ -70,7 +70,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute-set name="index-indents">
         <xsl:attribute name="end-indent">5pt</xsl:attribute>
         <xsl:attribute name="last-line-end-indent">0pt</xsl:attribute>
-        <xsl:attribute name="start-indent"><xsl:value-of select="$index.indent"/> * 2</xsl:attribute>
+        <xsl:attribute name="start-indent" select="concat($index.indent, ' * 2')"/>
         <xsl:attribute name="text-indent">-<xsl:value-of select="$index.indent"/> * 2</xsl:attribute>
         <xsl:attribute name="font-size">9pt</xsl:attribute>
     </xsl:attribute-set>

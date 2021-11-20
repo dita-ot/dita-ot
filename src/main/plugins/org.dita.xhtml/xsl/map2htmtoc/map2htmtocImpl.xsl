@@ -57,9 +57,7 @@ See the accompanying LICENSE file for applicable license.
 
   <body>
      <xsl:if test="string-length($OUTPUTCLASS) &gt; 0">
-       <xsl:attribute name="class">
-         <xsl:value-of select="$OUTPUTCLASS"/>
-       </xsl:attribute>
+       <xsl:attribute name="class" select="$OUTPUTCLASS"/>
      </xsl:if>
      <xsl:value-of select="$newline"/>
     <xsl:apply-templates mode="toc"/>

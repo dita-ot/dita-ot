@@ -198,14 +198,12 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:value-of select="$href"/>
               </xsl:attribute>
               <xsl:if test="@keyscope | $target[@keyscope and contains(@class, ' map/map ')]">
-                <xsl:attribute name="keyscope">
-                  <xsl:variable name="keyscope">
-                    <xsl:value-of select="@keyscope"/>
-                    <xsl:text> </xsl:text>
-                    <xsl:value-of select="$target[contains(@class, ' map/map ')]/@keyscope"/>
-                  </xsl:variable>
-                  <xsl:value-of select="string-join(distinct-values(tokenize(normalize-space($keyscope), '\s+')), ' ')"/>
-                </xsl:attribute>
+                <xsl:variable name="keyscope">
+                  <xsl:value-of select="@keyscope"/>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="$target[contains(@class, ' map/map ')]/@keyscope"/>
+                </xsl:variable>
+                <xsl:attribute name="keyscope" select="string-join(distinct-values(tokenize(normalize-space($keyscope), '\s+')), ' ')"/>
               </xsl:if>
               <xsl:apply-templates select="$target/@chunk"/>
               <xsl:apply-templates select="@* except (@class, @href, @dita-ot:orig-href, @format, @dita-ot:orig-format, @keys, @keyscope, @type)"/>
@@ -272,14 +270,10 @@ See the accompanying LICENSE file for applicable license.
         <xsl:choose>
           <xsl:when test=". = ''"/>
           <xsl:when test="$relative-path = '#none#' or dita-ot:is-external(.)">
-            <xsl:attribute name="{name()}">
-              <xsl:value-of select="."/>
-            </xsl:attribute>
+            <xsl:attribute name="{name()}" select="."/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="{name()}">
-              <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
-            </xsl:attribute>
+            <xsl:attribute name="{name()}" select="dita-ot:normalize-uri(concat($relative-path, .))"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
@@ -536,9 +530,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:apply-templates>
     </xsl:variable>
     <xsl:if test="$inherited-value!='#none#'">
-      <xsl:attribute name="{$attrib}">
-        <xsl:value-of select="$inherited-value"/>
-      </xsl:attribute>
+      <xsl:attribute name="{$attrib}" select="$inherited-value"/>
     </xsl:if>
   </xsl:template>
 
@@ -550,9 +542,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:apply-templates>
     </xsl:variable>
     <xsl:if test="$inherited-value!='#none#'">
-      <xsl:attribute name="format">
-        <xsl:value-of select="$inherited-value"/>
-      </xsl:attribute>
+      <xsl:attribute name="format" select="$inherited-value"/>
     </xsl:if>
   </xsl:template>
 

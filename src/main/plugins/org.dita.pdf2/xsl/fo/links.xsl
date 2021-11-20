@@ -586,21 +586,15 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:attribute>
             </xsl:when>
           <xsl:when test="$scope = 'peer'">
-            <xsl:attribute name="internal-destination">
-              <xsl:value-of select="$href"/>
-            </xsl:attribute>
+            <xsl:attribute name="internal-destination" select="$href"/>
           </xsl:when>
           <xsl:when test="contains($href, '#')">
-            <xsl:attribute name="internal-destination">
-              <xsl:value-of select="opentopic-func:getDestinationId($href)"/>
-            </xsl:attribute>
+            <xsl:attribute name="internal-destination" select="opentopic-func:getDestinationId($href)"/>
           </xsl:when>         
             <xsl:otherwise>
               <!-- Appears that topicmerge updates links so that this section will never be triggered; 
                    keeping $href as backup value in case something goes wrong. -->
-              <xsl:attribute name="internal-destination">
-                <xsl:value-of select="$href"/>
-              </xsl:attribute>
+              <xsl:attribute name="internal-destination" select="$href"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

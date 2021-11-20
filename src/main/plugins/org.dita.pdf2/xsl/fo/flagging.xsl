@@ -117,29 +117,19 @@ See the accompanying LICENSE file for applicable license.
 
             <xsl:choose>
                <xsl:when test="$attr='color'">
-                  <xsl:attribute name="change-bar-color">
-                     <xsl:value-of select="$val"/>
-                  </xsl:attribute>
+                  <xsl:attribute name="change-bar-color" select="$val"/>
                </xsl:when>
                <xsl:when test="$attr='offset'">
-                  <xsl:attribute name="change-bar-offset">
-                     <xsl:value-of select="$val"/>
-                  </xsl:attribute>
+                  <xsl:attribute name="change-bar-offset" select="$val"/>
                </xsl:when>
                <xsl:when test="$attr='placement'">
-                  <xsl:attribute name="change-bar-placement">
-                     <xsl:value-of select="$val"/>
-                  </xsl:attribute>
+                  <xsl:attribute name="change-bar-placement" select="$val"/>
                </xsl:when>
                <xsl:when test="$attr='style'">
-                  <xsl:attribute name="change-bar-style">
-                     <xsl:value-of select="$val"/>
-                  </xsl:attribute>
+                  <xsl:attribute name="change-bar-style" select="$val"/>
                </xsl:when>
                <xsl:when test="$attr='width'">
-                  <xsl:attribute name="change-bar-width">
-                     <xsl:value-of select="$val"/>
-                  </xsl:attribute>
+                  <xsl:attribute name="change-bar-width" select="$val"/>
                </xsl:when>
             </xsl:choose>
          </xsl:when>
@@ -195,9 +185,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:variable name="attr" select="substring-before($value,':')"/>
             <xsl:variable name="val" select="substring-after($value,':')"/>
             
-            <xsl:attribute name="{$attr}">
-               <xsl:value-of select="$val"/>
-            </xsl:attribute>
+            <xsl:attribute name="{$attr}" select="$val"/>
             
          </xsl:when>
          <xsl:otherwise>

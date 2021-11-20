@@ -53,8 +53,8 @@ See the accompanying LICENSE file for applicable license.
           <xsl:choose>
             <xsl:when test="*[contains(@class, ' topic/xref ')]">
               <xsl:variable name="alttext"><xsl:apply-templates select="*[contains(@class, ' topic/xref ')]/node()[not(contains(@class, ' topic/desc '))]" mode="text-only"/></xsl:variable>
-              <xsl:attribute name="alt"><xsl:value-of select="normalize-space($alttext)"/></xsl:attribute>
-              <xsl:attribute name="title"><xsl:value-of select="normalize-space($alttext)"/></xsl:attribute>
+              <xsl:attribute name="alt" select="normalize-space($alttext)"/>
+              <xsl:attribute name="title" select="normalize-space($alttext)"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="." mode="ditamsg:area-element-without-linktext"/>
@@ -63,9 +63,7 @@ See the accompanying LICENSE file for applicable license.
 
           <!-- if not valid shape (blank, rect, circle, poly); Warning, pass thru the value -->
           <xsl:variable name="shapeval"><xsl:value-of select="*[contains(@class,' ut-d/shape ')]"/></xsl:variable>
-          <xsl:attribute name="shape">
-            <xsl:value-of select="$shapeval"/>
-          </xsl:attribute>
+          <xsl:attribute name="shape" select="$shapeval"/>
           <xsl:variable name="shapetest" select="concat('-',$shapeval,'-')" as="xs:string"/>
           <xsl:choose>
             <xsl:when test="contains('--rect-circle-poly-default-',$shapetest)"/>
@@ -80,9 +78,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:variable name="coordval"><xsl:value-of select="*[contains(@class,' ut-d/coords ')]"/></xsl:variable>
           <xsl:choose>
             <xsl:when test="string-length($coordval)>0 and not($shapeval='default')">
-              <xsl:attribute name="coords">
-                <xsl:value-of select="$coordval"/>
-              </xsl:attribute>
+              <xsl:attribute name="coords" select="$coordval"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="." mode="ditamsg:area-element-missing-coords"/>
@@ -121,7 +117,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:attribute name="alt"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:attribute>
     </xsl:when>
     <xsl:when test="@alt">
-      <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
+      <xsl:attribute name="alt" select="@alt"/>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
