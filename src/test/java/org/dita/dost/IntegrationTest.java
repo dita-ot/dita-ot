@@ -11,14 +11,9 @@ package org.dita.dost;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
-import static java.util.Arrays.asList;
-import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
-import static org.junit.Assert.fail;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
 
 public abstract class IntegrationTest extends AbstractIntegrationTest {
 
@@ -171,13 +166,6 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("root.ditamap"))
                 .test();
-    }
-
-    @Test
-    public void testMetadataInheritance() throws Throwable {
-        builder()
-                .transtype(PREPROCESS)
-                .test("MetadataInheritance");
     }
 
     @Test
