@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_yh1_zrb_qrb">
+    <title>title <keyword>title/keyword</keyword></title>
+    <shortdesc>shortdesc <keyword>shortdesc/keyword</keyword></shortdesc>
+    <conbody>
+        <data>data <keyword>data/keyword</keyword></data>
+        <data-about>
+            <data>data <keyword>data/keyword</keyword></data>
+        </data-about>
+        <div>div <keyword>div/keyword</keyword></div>
+        <dl>
+            <dlentry>
+                <dt>dt <keyword>dt/keyword</keyword></dt>
+                <dd>dd <keyword>dd/keyword</keyword>
+                    <p>dd/p</p></dd>
+            </dlentry>
+        </dl>
+        <draft-comment>draft-comment <keyword>draft-comment/keyword</keyword>
+            <p>draft-comment/p</p></draft-comment>
+        <example>example <keyword>example/keyword</keyword>
+            <p>example/p</p></example>
+        <example><title>example/title</title>example
+            <p>example/p</p></example>
+        <section>section <keyword>section/keyword</keyword>
+            <p>section/p</p></section>
+        <section><title>section/title</title>section
+            <p>section/p</p></section>
+    </conbody>
+</concept>

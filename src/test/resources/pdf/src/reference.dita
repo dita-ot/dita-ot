@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_rky_2sb_qrb">
+    <title>title <keyword>title/keyword</keyword></title>
+    <shortdesc>shortdesc <keyword>shortdesc/keyword</keyword></shortdesc>
+    <refbody>
+        <data>data <keyword>data/keyword</keyword></data>
+        <data-about>
+            <data>data <keyword>data/keyword</keyword></data>
+        </data-about>
+        <example>example <keyword>example/keyword</keyword>
+            <p>example/p</p></example>
+        <example><title>example/title</title>example
+            <p>example/p</p></example>
+        <foreign>foreign <keyword>foreign/keyword</keyword>
+            <p>foreign/p</p></foreign>
+        <section>section <keyword>section/keyword</keyword>
+            <p>section/p</p></section>
+        <section><title>section/title</title>section
+            <p>section/p</p></section>
+        <simpletable>
+            <sthead>
+                <stentry>stentry <keyword>stentry/keyword</keyword>
+                    <p>stentry/p</p></stentry>
+            </sthead>
+            <strow>
+                <stentry>stentry <keyword>stentry/keyword</keyword>
+                    <p>stentry/p</p></stentry>
+            </strow>
+        </simpletable>
+        <sort-as>sort-as <keyword>sort-as/keyword</keyword></sort-as>
+        <table>
+            <tgroup cols="1">
+                <colspec/>
+                <thead>
+                    <row>
+                        <entry>entry <keyword>entry/keyword</keyword>
+                            <p>entry/p</p></entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>entry <keyword>entry/keyword</keyword>
+                            <p>entry/p</p></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <unknown>unknown <keyword>unknown/keyword</keyword>
+            <p>unknown/p</p></unknown>
+    </refbody>
+</reference>

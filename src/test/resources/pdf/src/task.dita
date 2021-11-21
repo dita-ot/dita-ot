@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="task_gnt_nrb_qrb">
+    <title>title <keyword>title/keyword</keyword></title>
+    <shortdesc>shortdesc <keyword>shortdesc/keyword</keyword></shortdesc>
+    <taskbody>
+        <prereq>prereq <keyword>prereq/keyword</keyword>
+            <p>prereq/p</p></prereq>
+        <context>context <keyword>context/keyword</keyword>
+            <p>context/p</p></context>
+        <steps>
+            <step>
+                <cmd>cmd <keyword>cmd/keyword</keyword></cmd>
+            </step>
+        </steps>
+        <result>result <keyword>result/keyword</keyword>
+            <p>result/p</p></result>
+        <tasktroubleshooting>tasktroubleshooting <keyword>tasktroubleshooting/keyword</keyword>
+            <p>tasktroubleshooting/p</p></tasktroubleshooting>
+        <example>example <keyword>example/keyword</keyword>
+            <p>example/p</p></example>
+        <postreq>postreq <keyword>postreq/keyword</keyword>
+            <p>postreq/p</p></postreq>
+    </taskbody>
+</task>

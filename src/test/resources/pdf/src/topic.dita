@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic_z3z_1qb_qrb">
+    <title>title <keyword>title/keyword</keyword></title>
+    <body>
+        <bodydiv>bodydiv <keyword>bodydiv/keyword</keyword>
+            <p>bodydiv/p</p></bodydiv>
+        <data>data <keyword>data/keyword</keyword></data>
+        <data-about>
+            <data>data <keyword>data/keyword</keyword></data>
+        </data-about>
+        <div>div <keyword>div/keyword</keyword>
+            <p>div/p</p></div>
+        <dl>
+            <dlentry>
+                <dt>dt <keyword>dt/keyword</keyword></dt>
+                <dd>dd <keyword>dd/keyword</keyword>
+                    <p>dd/p</p></dd>
+            </dlentry>
+        </dl>
+        <draft-comment>draft-comment <keyword>draft-comment/keyword</keyword>
+            <p>draft-comment/p</p></draft-comment>
+        <example>example <keyword>example/keyword</keyword>
+            <p>example/p</p></example>
+        <example><title>example/title</title>example
+            <p>example/p</p></example>
+        <fig>
+            <title>fig/title</title>
+            <image href="image.svg"/>
+        </fig>
+        <foreign>foreign <keyword>foreign/keyword</keyword>
+            <p>foreign/p</p></foreign>
+        <hazardstatement>
+            <messagepanel>
+                <typeofhazard>typeofhazard <keyword>typeofhazard/keyword</keyword></typeofhazard>
+                <howtoavoid>howtoavoid <keyword>howtoavoid/keyword</keyword></howtoavoid>
+            </messagepanel>
+        </hazardstatement>
+        <image href="image.svg">
+            <alt>image/alt</alt>
+        </image>
+        <!--
+    <imagemap>
+      <image></image>
+      <area>
+        <shape>rect</shape>
+        <coords></coords>
+        <xref></xref>
+      </area>
+    </imagemap>
+    -->
+        <lines>lines <keyword>lines/keyword</keyword></lines>
+        <lq>lq <keyword>lq/keyword</keyword>
+            <p>lq/p</p></lq>
+        <note>note <keyword>note/keyword</keyword>
+            <p>note/p</p></note>
+        <note type="attention">note/attention</note>
+        <note type="caution">note/caution</note>
+        <note type="danger">note/danger</note>
+        <note type="fastpath">note/fastpath</note>
+        <note type="important">note/important</note>
+        <note type="note">note/note</note>
+        <note type="notice">note/notice</note>
+        <note type="remember">note/remember</note>
+        <note type="restriction">note/restriction</note>
+        <note type="tip">note/tip</note>
+        <note type="trouble">note/trouble</note>
+        <note type="warning">note/warning</note>
+        <ol>
+            <li>li <keyword>li/keyword</keyword>
+                <p>li/p</p></li>
+        </ol>
+        <p>p <keyword>p/keyword</keyword></p>
+        <pre>pre <keyword>pre/keyword</keyword></pre>
+        <required-cleanup>required-cleanup <keyword>required-cleanup/keyword</keyword>
+            <p>required-cleanup/p</p></required-cleanup>
+        <section>section <keyword>section/keyword</keyword>
+            <p>section/p</p></section>
+        <section><title>section/title</title>section
+            <p>section/p</p></section>
+        <simpletable>
+            <sthead>
+                <stentry>stentry <keyword>stentry/keyword</keyword>
+                    <p>stentry/p</p></stentry>
+            </sthead>
+            <strow>
+                <stentry>stentry <keyword>stentry/keyword</keyword>
+                    <p>stentry/p</p></stentry>
+            </strow>
+        </simpletable>
+        <sl>
+            <sli>sli <keyword>sli/keyword</keyword></sli>
+        </sl>
+        <sort-as>sort-as <keyword>sort-as/keyword</keyword></sort-as>
+        <table>
+            <tgroup cols="1">
+                <colspec colwidth="1*"/>
+                <thead>
+                    <row>
+                        <entry>entry <keyword>entry/keyword</keyword>
+                            <p>entry/p</p></entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>entry <keyword>entry/keyword</keyword>
+                            <p>entry/p</p></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <ul>
+            <li>li <keyword>li/keyword</keyword>
+                <p>li/p</p></li>
+        </ul>
+        <unknown>unknown <keyword>unknown/keyword</keyword>
+            <p>unknown/p</p></unknown>
+    </body>
+    <topic id="idw_p4d_qrb">
+        <title>Inline elements</title>
+        <body>
+            <p>
+                abbreviated-form <abbreviated-form keyref="abbreviated-form"/>
+                <apiname>apiname</apiname>
+                <b>b</b>
+                boolean <boolean state="yes"/> <boolean state="no"/>
+                <cite>cite</cite>
+                <cmdname>cmdname</cmdname>
+                <codeblock>codeblock</codeblock>
+                <codeph>codeph</codeph>
+                <data>data</data>
+                <data-about><data>data/data-about</data></data-about>
+                <draft-comment>draft-comment</draft-comment>
+                <equation-inline>equation-inline</equation-inline>
+                <filepath>filepath</filepath>
+                <fn>fn</fn>
+                <foreign>foreign</foreign>
+                <i>i</i>
+                <image href="image.svg"><alt>image/alt</alt></image>
+                <indexterm>indexterm</indexterm>
+                <keyword>keyword</keyword>
+                <line-through>line-through</line-through>
+                <lines>lines</lines>
+                <lq>lq</lq>
+                <markupname>markupname</markupname>
+                <mathml><m:math><m:mn>1</m:mn></m:math></mathml>
+                <menucascade><uicontrol>menucascade</uicontrol><uicontrol>uicontrol</uicontrol></menucascade>
+                <msgblock>msgblock</msgblock>
+                <msgnum>msgnum</msgnum>
+                <msgph>msgph</msgph>
+                <note>note</note>
+                <numcharref>numcharref</numcharref>
+                <option>option</option>
+                <overline>overline</overline>
+                <parameterentity>parameterentity</parameterentity>
+                <parmname>parmname</parmname>
+                <ph>ph</ph>
+                <pre>pre</pre>
+                <q>q</q>
+                <required-cleanup>required-cleanup</required-cleanup>
+                <screen>screen</screen>
+                <sort-as>sort-as</sort-as>
+                <state name="state" value="value"/>
+                <sub>sub</sub>
+                <sup>sup</sup>
+                <svg-container>
+                    <svg:svg height="12pt" width="12pt" viewBox="0 0 1 1">
+                        <svg:rect width="1" height="1" x="0" y="0" fill="red"/>
+                    </svg:svg>
+                </svg-container>
+                <synph>synph</synph>
+                <syntaxdiagram><groupseq><kwd>syntaxdiagram</kwd><delim>/</delim><kwd>groupseq</kwd><delim>/</delim><kwd>kwd</kwd></groupseq></syntaxdiagram>
+                <systemoutput>systemoutput</systemoutput>
+                <term>term</term>
+                <text>text</text>
+                <textentity>textentity</textentity>
+                <tm tmtype="reg">reg</tm>
+                <tm tmtype="service">service</tm>
+                <tm tmtype="tm">tm</tm>
+                <tt>tt</tt>
+                <u>u</u>
+                <uicontrol>uicontrol</uicontrol>
+                <unknown>unknown</unknown>
+                <userinput>userinput</userinput>
+                <varname>varname</varname>
+                <wintitle>wintitle</wintitle>
+                <xmlatt>xmlatt</xmlatt>
+                <xmlelement>xmlelement</xmlelement>
+                <xmlnsname>xmlnsname</xmlnsname>
+                <xmlpi>xmlpi</xmlpi>
+                <xref href="#topic_z3z_1qb_qrb">xref</xref>
+                <xref href="#topic_z3z_1qb_qrb"/>
+             </p>
+        </body>
+    </topic>
+</topic>
