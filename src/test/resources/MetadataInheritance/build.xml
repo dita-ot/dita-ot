@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="MetadataInheritance" default="MetadataInheritance2preprocess" basedir=".">
+<project name="MetadataInheritance" default="run" basedir=".">
   <dirname property="test.basedir" file="${ant.file.MetadataInheritance}"/>
   <property name="test.name" value="MetadataInheritance"/>
   <property name="dita.dir" location="${test.basedir}/../.."/>
@@ -33,11 +33,11 @@
   <target name="run">
     <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${test.basedir}/src/${test-name}.ditamap"/>
-      <property name="output.dir" location="${result.dir}/preprocess/${test-name}"/>
+      <property name="output.dir" location="${result.dir}"/>
       <property name="transtype" value="MatadataInheritance_xhtml"/>
       <target name="build-init"/>
       <target name="preprocess"/>
-      <property name="dita.temp.dir" location="${result.dir}/preprocess/${test-name}"/>
+      <property name="dita.temp.dir" location="${temp.dir}/preprocess/${test-name}"/>
       <property name="dita.ext" value=".dita"/>
     </ant>
   </target>

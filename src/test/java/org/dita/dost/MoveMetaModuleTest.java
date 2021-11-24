@@ -11,23 +11,18 @@ package org.dita.dost;
 import com.google.common.collect.ImmutableSet;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.apache.tools.ant.*;
-import org.dita.dost.store.CacheStore;
-import org.dita.dost.store.Store;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -41,9 +36,36 @@ import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.dita.dost.MoveMetaModuleTest.Transtype.PREPROCESS;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertArrayEquals;
 
+@RunWith(Parameterized.class)
 public class MoveMetaModuleTest {
+    @Parameterized.Parameters(name = "{0}")
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{
+                {"MatadataInheritance_foreign"},
+                {"MatadataInheritance_keywords"},
+                {"MatadataInheritance_linktext"},
+                {"MatadataInheritance_othermeta"},
+                {"MatadataInheritance_pemissions"},
+                {"MatadataInheritance_pemissions_replace"},
+                {"MatadataInheritance_prodinfo"},
+                {"MatadataInheritance_publisher"},
+                {"MatadataInheritance_resourceid"},
+                {"MatadataInheritance_searchtitle"},
+                {"MatadataInheritance_shortdesc"},
+                {"MatadataInheritance_source"},
+                {"MatadataInheritance_source_replace"},
+                {"MatadataInheritance_unknown"},
+                {"MetadataInheritance_audience"},
+                {"MetadataInheritance_author"},
+                {"MetadataInheritance_category"},
+                {"MetadataInheritance_copyright"},
+                {"MetadataInheritance_critdates"},
+                {"MetadataInheritance_critdates_replace"},
+                {"MetadataInheritance_data"},
+                {"MetadataInheritance_dataabout"}
+        });
+    }
 
     protected static final Map<String, Pattern> htmlIdPattern = new HashMap<>();
     protected static final Map<String, Pattern> ditaIdPattern = new HashMap<>();
@@ -90,7 +112,11 @@ public class MoveMetaModuleTest {
     private int errorCount = 0;
     private List<TestListener.Message> log;
     private File actDir;
-    private String name = "MetadataInheritance";
+    private String testName;
+
+    public MoveMetaModuleTest(String testName) {
+        this.testName = testName;
+    }
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -110,10 +136,10 @@ public class MoveMetaModuleTest {
     @Test
     public void testMetadataInheritance() throws Throwable {
         this.transtype = PREPROCESS;
-        final File testDir = Paths.get("src", "test", "resources", name).toFile();
+        final File testDir = Paths.get("src", "test", "resources", "MetadataInheritance").toFile();
 
-        final File expDir = new File(testDir, EXP_DIR);
-        final File actDir = new File(baseTempDir, testDir.getName() + File.separator + "testresult");
+        final File expDir = Paths.get(testDir.getAbsolutePath(), EXP_DIR, "preprocess", testName).toFile();
+        final File actDir = Paths.get(baseTempDir.getAbsolutePath(), testDir.getName(), "temp", "preprocess", testName).toFile();
         List<TestListener.Message> log = null;
         try {
             log = run(testDir, expDir.list(), actDir);
@@ -134,9 +160,9 @@ public class MoveMetaModuleTest {
     }
 
     protected MoveMetaModuleTest compare() throws Throwable {
-        File exp = Paths.get("src", "test", "resources", name, EXP_DIR, transtype.toString()).toFile();
+        File exp = Paths.get("src", "test", "resources", "MetadataInheritance", EXP_DIR, transtype.toString()).toFile();
         if (!exp.exists()) {
-            exp = Paths.get("src", "test", "resources", name, EXP_DIR, transtype.exp).toFile();
+            exp = Paths.get("src", "test", "resources", "MetadataInheritance", EXP_DIR, transtype.exp).toFile();
         }
         if (!exp.exists()) {
             throw new RuntimeException("Unable to find expected output directory");
@@ -225,15 +251,7 @@ public class MoveMetaModuleTest {
             System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
             project.fireBuildStarted();
             project.init();
-            for (final String transtype : transtypes) {
-                if (canCompare.contains(transtype)) {
-                    project.setUserProperty("run." + transtype, "true");
-                    if (transtype.equals("pdf") || transtype.equals("pdf2")) {
-                        project.setUserProperty("pdf.formatter", "fop");
-                        project.setUserProperty("fop.formatter.output-format", "text/plain");
-                    }
-                }
-            }
+            project.setUserProperty("test-name", testName);
             project.setUserProperty("generate-debug-attributes", "false");
             project.setUserProperty("preprocess.copy-generated-files.skip", "true");
             project.setUserProperty("ant.file", buildFile.getAbsolutePath());
@@ -257,87 +275,6 @@ public class MoveMetaModuleTest {
             System.setOut(savedOut);
             System.setErr(savedErr);
             return listener.messages;
-        }
-    }
-
-    /**
-     * Run test conversion
-     *
-     * @param srcDir    test source directory
-     * @param transtype transtype to test
-     * @return list of log messages
-     * @throws Exception if conversion failed
-     */
-    private List<TestListener.Message> runOt(final File srcDir, final Transtype transtype, final File tempBaseDir, final File resBaseDir,
-                                             final Map<String, String> args, final String[] targets) throws Exception {
-//        System.out.println(transtype);
-        final File tempDir = new File(tempBaseDir, transtype.toString());
-        final File resDir = new File(resBaseDir, transtype.toString());
-        deleteDirectory(resDir);
-        deleteDirectory(tempDir);
-
-        final TestListener listener = new TestListener(System.out, System.err);
-        final PrintStream savedErr = System.err;
-        final PrintStream savedOut = System.out;
-        try {
-            final File buildFile = new File(ditaDir, "build.xml");
-            final Project project = new Project();
-            project.addBuildListener(listener);
-            System.setOut(new PrintStream(new DemuxOutputStream(project, false)));
-            System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
-            project.fireBuildStarted();
-            project.init();
-            project.setUserProperty("transtype", transtype.name);
-            if (transtype.equals("pdf") || transtype.equals("pdf2")) {
-                project.setUserProperty("pdf.formatter", "fop");
-                project.setUserProperty("fop.formatter.output-format", "text/plain");
-            }
-            project.setUserProperty("generate-debug-attributes", "false");
-            project.setUserProperty("preprocess.copy-generated-files.skip", "true");
-            project.setUserProperty("ant.file", buildFile.getAbsolutePath());
-            project.setUserProperty("ant.file.type", "file");
-            project.setUserProperty("dita.dir", ditaDir.getAbsolutePath());
-            project.setUserProperty("output.dir", resDir.getAbsolutePath());
-            project.setUserProperty("dita.temp.dir", tempDir.getAbsolutePath());
-            project.setUserProperty("clean.temp", "no");
-            args.entrySet().forEach(e -> project.setUserProperty(e.getKey(), e.getValue()));
-
-            project.setKeepGoingMode(false);
-            ProjectHelper.configureProject(project, buildFile);
-            final Vector<String> ts = new Vector<>();
-            if (targets != null) {
-                ts.addAll(Arrays.asList(targets));
-            } else {
-                ts.addAll(Arrays.asList(transtype.targets));
-            }
-            project.executeTargets(ts);
-
-            final Store store = project.getReference(ANT_REFERENCE_STORE);
-
-            if (store != null && store instanceof CacheStore) {
-                final Job job = new Job(tempDir.getAbsoluteFile(), store);
-                for (Job.FileInfo fileInfo : job.getFileInfo()) {
-                    if (fileInfo.uri != null) {
-                        final URI f = job.tempDirURI.resolve(fileInfo.uri);
-                        if (store.exists(f)) {
-                            final Path dir = Paths.get(f).getParent();
-                            if (!Files.exists(dir)) {
-                                Files.createDirectories(dir);
-                            }
-                            try (final InputStream inputStream = store.getInputStream(f)) {
-                                Files.copy(inputStream, Paths.get(f));
-                            } catch (NoSuchFileException | FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
-
-            return listener.messages;
-        } finally {
-            System.setOut(savedOut);
-            System.setErr(savedErr);
         }
     }
 
