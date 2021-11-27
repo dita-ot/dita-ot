@@ -8,45 +8,26 @@
 
 package org.dita.dost.module;
 
-import com.google.common.collect.ImmutableSet;
-import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
-import org.apache.tools.ant.*;
-import org.dita.dost.TestUtils;
-import org.dita.dost.chunk.ChunkModule;
-import org.dita.dost.module.AbstractModuleTest;
-import org.dita.dost.module.AbstractPipelineModule;
-import org.dita.dost.module.MoveMetaModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.store.CacheStore;
-import org.dita.dost.store.Store;
-import org.dita.dost.store.StreamStore;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
+import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
+import java.io.File;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
-import static java.util.Collections.emptyList;
-import static junit.framework.Assert.assertEquals;
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-//import static org.dita.dost.MoveMetaModuleTest.Transtype.PREPROCESS;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_STYLE;
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 
 @RunWith(Parameterized.class)
 public class MoveMetaModuleTest extends AbstractModuleTest {
@@ -113,24 +94,12 @@ public class MoveMetaModuleTest extends AbstractModuleTest {
     @Test
     @Ignore
     public void parallelFile() {
-        chunkModule.setParallel(true);
-        test();
+        // Ignore because MoveMetaModule doesn't use parallel features
     }
 
     @Test
     @Ignore
-    public void serialMemory() throws IOException {
-        job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
-        chunkModule.setJob(job);
-        test();
-    }
-
-    @Test
-    @Ignore
-    public void parallelMemory() throws IOException {
-        job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
-        chunkModule.setJob(job);
-        chunkModule.setParallel(true);
-        test();
+    public void parallelMemory() {
+        // Ignore because MoveMetaModule doesn't use parallel features
     }
 }
