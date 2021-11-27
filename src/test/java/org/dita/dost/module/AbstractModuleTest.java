@@ -49,6 +49,7 @@ public abstract class AbstractModuleTest {
     private final Map<String, String> params;
     protected boolean parallel;
     protected File tempDir;
+    protected XMLUtils xmlUtils;
     protected Job job;
     protected AbstractPipelineModule chunkModule;
     protected CachingLogger logger;
@@ -111,7 +112,7 @@ public abstract class AbstractModuleTest {
         TestUtils.copy(srcDir, tempBaseDir);
         tempDir = new File(tempBaseDir, testCase);
         chunkModule = getModule(tempDir);
-        final XMLUtils xmlUtils = new XMLUtils();
+        xmlUtils = new XMLUtils();
         final Store store = new StreamStore(tempDir, xmlUtils);
         job = new Job(tempDir, store);
         chunkModule.setXmlUtils(xmlUtils);
@@ -139,14 +140,14 @@ public abstract class AbstractModuleTest {
 
     @Test
     public void serialMemory() throws IOException {
-        job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
+        job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
         chunkModule.setJob(job);
         test();
     }
 
     @Test
     public void parallelMemory() throws IOException {
-        job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
+        job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
         chunkModule.setJob(job);
         chunkModule.setParallel(true);
         test();
@@ -207,8 +208,8 @@ public abstract class AbstractModuleTest {
             }
         }
         if (new File(expDir, ".job.xml").exists()) {
-            final Job expJob = new Job(expDir, new StreamStore(expDir, new XMLUtils()));
-//            final Job actJob = new Job(actDir, new StreamStore(actDir, new XMLUtils()));
+            final Job expJob = new Job(expDir, new StreamStore(expDir, xmlUtils));
+//            final Job actJob = new Job(actDir, new StreamStore(actDir, xmlUtils));
             final Collection<FileInfo> expFileInfo = new HashSet(expJob.getFileInfo());
             final Collection<FileInfo> actFileInfo = new HashSet(job.getFileInfo());
             try {
