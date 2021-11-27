@@ -257,26 +257,6 @@ public abstract class AbstractIntegrationTest {
         return this;
     }
 
-    @Deprecated
-    protected void test(final String name) throws Throwable {
-        final File testDir = Paths.get("src", "test", "resources", name).toFile();
-
-        final File expDir = new File(testDir, EXP_DIR);
-        final File actDir = new File(baseTempDir, testDir.getName() + File.separator + "testresult");
-        List<TestListener.Message> log = null;
-        try {
-            log = run(testDir, expDir.list(), actDir);
-            compare(expDir, actDir);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final Throwable e) {
-            if (log != null && level >= 0) {
-                outputLog(log);
-            }
-            throw new Throwable("Case " + testDir.getName() + " failed: " + e.getMessage(), e);
-        }
-    }
-
     private void outputLog(List<TestListener.Message> log) {
         System.err.println("Log start");
         for (final TestListener.Message m : log) {
@@ -325,69 +305,6 @@ public abstract class AbstractIntegrationTest {
             }
         }
         return count;
-    }
-
-    /**
-     * Run test conversion
-     *
-     * @param d          test source directory
-     * @param transtypes list of transtypes to test
-     * @return list of log messages
-     * @throws Exception if conversion failed
-     */
-    private List<TestListener.Message> run(final File d, final String[] transtypes, final File resDir) throws Exception {
-        if (transtypes.length == 0) {
-            return emptyList();
-        }
-
-        final File tempDir = new File(baseTempDir, d.getName() + File.separator + "temp");
-        deleteDirectory(resDir);
-        deleteDirectory(tempDir);
-
-        final TestListener listener = new TestListener(System.out, System.err);
-        final PrintStream savedErr = System.err;
-        final PrintStream savedOut = System.out;
-        try {
-            final File buildFile = new File(d, "build.xml");
-            final Project project = new Project();
-            project.addBuildListener(listener);
-            System.setOut(new PrintStream(new DemuxOutputStream(project, false)));
-            System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
-            project.fireBuildStarted();
-            project.init();
-            for (final String transtype : transtypes) {
-                if (canCompare.contains(transtype)) {
-                    project.setUserProperty("run." + transtype, "true");
-                    if (transtype.equals("pdf") || transtype.equals("pdf2")) {
-                        project.setUserProperty("pdf.formatter", "fop");
-                        project.setUserProperty("fop.formatter.output-format", "text/plain");
-                    }
-                }
-            }
-            project.setUserProperty("generate-debug-attributes", "false");
-            project.setUserProperty("preprocess.copy-generated-files.skip", "true");
-            project.setUserProperty("ant.file", buildFile.getAbsolutePath());
-            project.setUserProperty("ant.file.type", "file");
-            project.setUserProperty("dita.dir", ditaDir.getAbsolutePath());
-            project.setUserProperty("result.dir", resDir.getAbsolutePath());
-            project.setUserProperty("temp.dir", tempDir.getAbsolutePath());
-            project.setKeepGoingMode(false);
-            ProjectHelper.configureProject(project, buildFile);
-            final Vector<String> targets = new Vector<>();
-            targets.addElement(project.getDefaultTarget());
-            project.executeTargets(targets);
-
-            assertEquals("Warn message count does not match expected",
-                    getMessageCount(project, "warn"),
-                    countMessages(listener.messages, Project.MSG_WARN));
-            assertEquals("Error message count does not match expected",
-                    getMessageCount(project, "error"),
-                    countMessages(listener.messages, Project.MSG_ERR));
-        } finally {
-            System.setOut(savedOut);
-            System.setErr(savedErr);
-            return listener.messages;
-        }
     }
 
     /**
