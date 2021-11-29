@@ -7,4 +7,7 @@
 <body>
 	<p id="content2"> content of test2 </p>
 </body>
+<related-links>
+  <link href="#./content2"/>
+</related-links>
 </topic>
