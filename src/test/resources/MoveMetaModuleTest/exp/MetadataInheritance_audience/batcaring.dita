@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA 1.3 Topic//EN?><?doctype-system file:/C:/DITA-OT1.4/dtd/topic.dtd?>
+<topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " ditaarch:DITAArchVersion="1.3"
+  domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+  id="batcaring" specializations="@props/deliveryTarget" xml:lang="en-us">
+  <title class="- topic/title ">batcaring</title>
+  <prolog class="- topic/prolog ">
+    <metadata class="- topic/metadata ">
+      <audience class="- topic/audience " experiencelevel="expert" job="administering" type="administrator"/>
+    </metadata>
+  </prolog>
+  <body class="- topic/body ">
+    <p class="- topic/p ">The ANT tasks are refactored so that developers can easily find the targets they need and make
+      their own extensions. Developers can still use Java Command Line as before. Ant Build Script "<codeph
+        class="+ topic/ph pr-d/codeph ">conductor.xml</codeph>" is marked as deprecated, but developers can still use it
+      as before. "<codeph class="+ topic/ph pr-d/codeph ">build.xml</codeph>" is the renamed version of "<codeph
+        class="+ topic/ph pr-d/codeph ">conductor.xml</codeph>", and developers can use it as what they do with "<codeph
+        class="+ topic/ph pr-d/codeph ">conductor.xml</codeph>". New users are suggested to use those separated build
+      scripts like "<codeph class="+ topic/ph pr-d/codeph ">build_dita2*.xml</codeph>". The original demo ant script
+        "<codeph class="+ topic/ph pr-d/codeph ">build.xml</codeph>" is renamed to "<codeph
+        class="+ topic/ph pr-d/codeph ">build_demo.xml</codeph>". "<codeph class="+ topic/ph pr-d/codeph "
+        >build_demo.xml</codeph>" should be used to verify the functions of the toolkit after this release.</p>
+  </body>
+</topic>

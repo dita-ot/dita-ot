@@ -15,6 +15,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.store.CacheStore;
 import org.dita.dost.store.Store;
 import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -32,6 +33,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
@@ -39,14 +41,15 @@ import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractModuleTest {
 
-    private final File resourceDir = TestUtils.getResourceDir(getClass());
-    private final File expBaseDir = new File(resourceDir, "exp");
-    private File tempBaseDir;
+    File resourceDir = TestUtils.getResourceDir(getClass());
+    File expBaseDir = new File(resourceDir, "exp");
+    File tempBaseDir;
     private final DocumentBuilder builder;
-    private final String testCase;
+    final String testCase;
     private final Map<String, String> params;
     protected boolean parallel;
     protected File tempDir;
+    protected XMLUtils xmlUtils;
     protected Job job;
     protected AbstractPipelineModule chunkModule;
     protected CachingLogger logger;
@@ -92,7 +95,7 @@ public abstract class AbstractModuleTest {
         }
     }
 
-    private List<Node> getChildren(final Node node) {
+    List<Node> getChildren(final Node node) {
         final List<Node> res = new ArrayList<>();
         final NodeList ns = node.getChildNodes();
         for (int i = 0; i < ns.getLength(); i++) {
@@ -103,12 +106,16 @@ public abstract class AbstractModuleTest {
 
     @Before
     public void setUp() throws Exception {
+        CatalogUtils.setDitaDir(Paths.get("src", "main").toFile());
         tempBaseDir = TestUtils.createTempDir(getClass());
-        TestUtils.copy(new File(resourceDir, "src"), tempBaseDir);
+        final File srcDir = new File(resourceDir, "src");
+        TestUtils.copy(srcDir, tempBaseDir);
         tempDir = new File(tempBaseDir, testCase);
         chunkModule = getModule(tempDir);
-        final Store store = new StreamStore(tempDir, new XMLUtils());
+        xmlUtils = new XMLUtils();
+        final Store store = new StreamStore(tempDir, xmlUtils);
         job = new Job(tempDir, store);
+        chunkModule.setXmlUtils(xmlUtils);
         chunkModule.setJob(job);
         logger = new CachingLogger(true);
         chunkModule.setLogger(logger);
@@ -133,14 +140,14 @@ public abstract class AbstractModuleTest {
 
     @Test
     public void serialMemory() throws IOException {
-        job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
+        job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
         chunkModule.setJob(job);
         test();
     }
 
     @Test
     public void parallelMemory() throws IOException {
-        job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
+        job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
         chunkModule.setJob(job);
         chunkModule.setParallel(true);
         test();
@@ -201,8 +208,8 @@ public abstract class AbstractModuleTest {
             }
         }
         if (new File(expDir, ".job.xml").exists()) {
-            final Job expJob = new Job(expDir, new StreamStore(expDir, new XMLUtils()));
-//            final Job actJob = new Job(actDir, new StreamStore(actDir, new XMLUtils()));
+            final Job expJob = new Job(expDir, new StreamStore(expDir, xmlUtils));
+//            final Job actJob = new Job(actDir, new StreamStore(actDir, xmlUtils));
             final Collection<FileInfo> expFileInfo = new HashSet(expJob.getFileInfo());
             final Collection<FileInfo> actFileInfo = new HashSet(job.getFileInfo());
             try {

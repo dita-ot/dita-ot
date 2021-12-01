@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?>
+<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map "
+  ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+  specializations="@props/deliveryTarget" title="Put your title here (Required for Eclipse)">
+  <topicmeta class="- map/topicmeta ">
+    <shortdesc class="- map/shortdesc ">this is shortdesc</shortdesc>
+  </topicmeta>
+  <topicref class="- map/topicref "
+    navtitle="The title of the topic article appears here when you use the Inser Topic Reference feature; or when you type a title in the navtitle attribute"
+    type="topic" href="batfeeding.dita">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">batfeeding</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">batfeeding</linktext>
+      <?ditaot usershortdesc?>
+      <shortdesc class="- map/shortdesc ">this is shortdesc1</shortdesc>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " navtitle="Remember to delete the tags provided in the template if they are not used"
+  />
+</map>

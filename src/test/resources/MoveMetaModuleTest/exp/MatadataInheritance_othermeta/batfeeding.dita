@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA 1.3 Topic//EN?><?doctype-system file:/C:/DITA-OT1.4/dtd/topic.dtd?>
+<topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " ditaarch:DITAArchVersion="1.3"
+  domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+  id="batfeeding" specializations="@props/deliveryTarget" xml:lang="en-us">
+  <title class="- topic/title ">batfeeding</title>
+  <prolog class="- topic/prolog ">
+    <metadata class="- topic/metadata ">
+      <othermeta class="- topic/othermeta " content="other1" name="other1"/>
+    </metadata>
+  </prolog>
+  <body class="- topic/body ">
+    <p class="- topic/p ">In DITA 1.1, you can use new element, &lt;data&gt;. This element and the content inside it is
+      ignored in the transformation process of DITA files.<note class="- topic/note " rev="r5"><ul class="- topic/ul ">
+          <li class="- topic/li ">Because OASIS DITA 1.1 is not yet an approved standard as of the release of DITA OT
+            1.3, the functionality described here should be considered a <i class="+ topic/ph hi-d/i ">preview</i>
+            capability. </li>
+          <li class="- topic/li ">The specification and the defined functions that need to be supported can change by
+            the time OASIS formally approves DITA 1.1.</li>
+        </ul></note></p>
+    <p class="- topic/p ">As an author, when you create DITA files, you can add the &lt;data&gt; element, and put
+      content inside it. When you transform the DITA files to the output that you want, the transformation ignores the
+      &lt;data&gt; element and any content inside. </p>
+    <p class="- topic/p " rev="r3">As a specializer, when you specialize the &lt;data&gt; element, and put information
+      inside the specialized element, you can create a transform override to use the information. </p>
+  </body>
+</topic>

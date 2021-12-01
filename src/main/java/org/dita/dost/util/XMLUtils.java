@@ -905,6 +905,12 @@ public final class XMLUtils {
         return processor;
     }
 
+    public XsltCompiler getXsltCompiler() {
+        XsltCompiler res = processor.newXsltCompiler();
+        res.setURIResolver(catalogResolver);
+        return res;
+    }
+
     /**
      * Convenience builder for {@link org.xml.sax.Attributes SAX Attributes}.
      */
