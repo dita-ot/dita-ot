@@ -19,5 +19,9 @@
         <linktext class="- topic/linktext "><?ditaot gentext?>test 2</linktext>
       </link>
     </linkpool>
+    <link href="#test2/content2" class="- topic/link " type="p">
+      <?ditaot gentext?>
+      <linktext class="- topic/linktext "/>
+    </link>
   </related-links>
 </topic>
