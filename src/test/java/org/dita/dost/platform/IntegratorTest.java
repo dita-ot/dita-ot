@@ -11,10 +11,9 @@ import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS;
 import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
@@ -110,7 +109,25 @@ public class IntegratorTest {
                 new InputSource(new File(tempDir, "xsl" + File.separator + "shell.xsl").toURI().toString()));
         assertXMLEqual(new InputSource(new File(expDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()),
                 new InputSource(new File(tempDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()));
+    }
 
+    @Test(expected = UncheckedIOException.class)
+    public void testExecute_missingFile() throws Exception {
+        Files.delete(tempDir.toPath().resolve(Paths.get("plugins", "dummy", "build.xml")));
+
+        final File libDir = new File(tempDir, "lib");
+        if (!libDir.exists() && !libDir.mkdirs()) {
+            throw new IOException("Failed to create directory " + libDir);
+        }
+        final File resourcesDir = new File(tempDir, "resources");
+        if (!resourcesDir.exists() && !resourcesDir.mkdirs()) {
+            throw new IOException("Failed to create directory " + resourcesDir);
+        }
+
+        final Integrator i = new Integrator(tempDir);
+        i.setProperties(new File(tempDir, "integrator.properties"));
+        i.setLogger(new TestUtils.TestLogger(false));
+        i.execute();
     }
 
     private Properties getProperties(final File f) throws IOException {

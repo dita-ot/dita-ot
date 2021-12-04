@@ -8,6 +8,9 @@
  */
 package org.dita.dost.platform;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -72,12 +75,16 @@ class InsertAction extends XMLFilterImpl implements IAction {
     public void getResult(final ContentHandler retBuf) throws SAXException {
         setContentHandler(retBuf);
         try {
-            for (final Value fileName: fileNameSet) {
+            for (final Value fileName : fileNameSet) {
                 currentFile = fileName.value;
                 reader.parse(currentFile);
             }
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e) ;
+        } catch (SAXException | RuntimeException e) {
+            throw e;
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
