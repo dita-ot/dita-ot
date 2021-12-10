@@ -2269,6 +2269,7 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- ========== STUBS FOR USER PROVIDED OVERRIDE EXTENSIONS ========== -->
 
+<!-- Deprecated since 3.7, use "args.hdf" instead -->
 <xsl:template name="gen-user-head">
   <xsl:apply-templates select="." mode="gen-user-head"/>
 </xsl:template>
@@ -2277,6 +2278,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- it will be placed in the HEAD section of the XHTML. -->
 </xsl:template>
 
+<!-- Deprecated since 3.7, use "args.hdr" instead -->
 <xsl:template name="gen-user-header">
   <xsl:apply-templates select="." mode="gen-user-header"/>
 </xsl:template>
@@ -2285,6 +2287,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- it will be placed in the running heading section of the XHTML. -->
 </xsl:template>
 
+<!-- Deprecated since 3.7, use "args.ftr" instead -->
 <xsl:template name="gen-user-footer">
   <xsl:apply-templates select="." mode="gen-user-footer"/>
 </xsl:template>
@@ -2293,14 +2296,15 @@ See the accompanying LICENSE file for applicable license.
   <!-- it will be placed in the running footing section of the XHTML. -->
 </xsl:template>
 
+<!-- Deprecated since 3.7, use "args.xhtml.toc.xsl" or "args.html5.toc.xsl" instead -->
 <xsl:template name="gen-user-sidetoc">
   <xsl:apply-templates select="." mode="gen-user-sidetoc"/>
 </xsl:template>
 <xsl:template match="/|node()|@*" mode="gen-user-sidetoc">
   <!-- to customize: copy this to your override transform, add the content you want. -->
-  <!-- Uncomment the line below to have a "freebie" table of contents on the top-right -->
 </xsl:template>
 
+<!-- Deprecated since 3.7, use "args.hdf" instead -->
 <xsl:template name="gen-user-scripts">
   <xsl:apply-templates select="." mode="gen-user-scripts"/>
 </xsl:template>
@@ -2309,6 +2313,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- It will be placed before the ending HEAD tag -->
 </xsl:template>
 
+<!-- Deprecated since 3.7, use "args.css" instead -->
 <xsl:template name="gen-user-styles">
   <xsl:apply-templates select="." mode="gen-user-styles"/>
 </xsl:template>
