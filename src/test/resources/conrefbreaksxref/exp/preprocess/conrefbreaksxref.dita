@@ -3,20 +3,20 @@
 <shortdesc class="- topic/shortdesc ">This topic conrefs to another, which uses xref internally.</shortdesc>
 <body class="- topic/body ">
 <section class="- topic/section "><title class="- topic/title ">Section that is pulled to another topic.</title><p class="- topic/p ">Look
-as the figure in this section: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#this-target/fig" type="fig"><?ditaot gentext?>Figure 1</xref>.</p><p class="- topic/p ">Look
-at a figure in this topic, outside of this section: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#this-target/out" type="fig"><?ditaot gentext?>Figure 2</xref></p><p class="- topic/p ">Now
+as the figure in this section: <xref class="- topic/xref " href="#conrefbreaksxref/d7e48" type="fig"><?ditaot gentext?>Figure 1</xref>.</p><p class="- topic/p ">Look
+at a figure in this topic, outside of this section: <xref class="- topic/xref " href="#conrefbreaksxref/d7e56"/></p><p class="- topic/p ">Now
 look at this topic: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#this-target" type="topic"><?ditaot gentext?>conrefbreaksxref target<?ditaot genshortdesc?><desc class="- topic/desc ">This topic is referenced by another, and has some internal linking.</desc></xref></p>
 <p class="- topic/p ">Now look at "current topic" with #. syntax: <xref class="- topic/xref " href="#conrefbreaksxref" type="topic"><?ditaot gentext?>conrefbreaksxref source<?ditaot genshortdesc?><desc class="- topic/desc ">This topic conrefs to another, which uses xref internally.</desc></xref></p>
 <p class="- topic/p ">Now look at "fig in current topic" with #./fig syntax: <xref
 class="- topic/xref " href="#conrefbreaksxref/fig" type="fig"><?ditaot gentext?>Figure 3</xref></p><p class="- topic/p ">Now
 look at the topic below: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#sub" type="topic"><?ditaot gentext?>Sub-topic in the reusable file</xref>.</p><p class="- topic/p ">Now look at a figure
-in the topic below: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#sub/fig" type="fig"><?ditaot gentext?>Figure 3</xref></p><fig class="- topic/fig " id="d7e40"><title class="- topic/title ">Figure In My Section</title>
+in the topic below: <xref class="- topic/xref " href="conrefbreaksxreftarget.dita#sub/fig" type="fig"><?ditaot gentext?>Figure 3</xref></p><fig class="- topic/fig " id="d7e48"><title class="- topic/title ">Figure In My Section</title>
 <p class="- topic/p ">This is a figure here.</p>
 </fig></section>
 <section class="- topic/section "><title class="- topic/title ">Topic in the subdir</title><p class="- topic/p ">Look at the figure
-in this section: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdir/subfig" type="fig"><?ditaot gentext?>Figure 1</xref>.</p><p class="- topic/p ">Look at the figure
-in this topic, outside the section: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdir/outfig" type="fig"><?ditaot gentext?>Figure 2</xref></p><p class="- topic/p ">Look
-at this topic: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdir" type="topic"><?ditaot gentext?>conrefbreaksxref: target in the subdir<?ditaot genshortdesc?><desc class="- topic/desc ">Pull in a section, from a topic in the subdir.</desc></xref></p><p class="- topic/p ">Look at a figure in a sub-topic: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdirsubfig/nestfig" type="fig"><?ditaot gentext?>Figure 3</xref></p><p class="- topic/p ">Look at the subtopic: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdirsubfig" type="topic"><?ditaot gentext?>Subdir Subfig</xref></p><fig class="- topic/fig " id="d8e39"><title class="- topic/title ">This iz me fig</title>
+in this section: <xref class="- topic/xref " href="#conrefbreaksxref/d8e39" type="fig"><?ditaot gentext?>Figure 2</xref>.</p><p class="- topic/p ">Look at the figure
+in this topic, outside the section: <xref class="- topic/xref " href="#conrefbreaksxref/d8e50"/></p><p class="- topic/p ">Look
+at this topic: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdir" type="topic"><?ditaot gentext?>conrefbreaksxref: target in the subdir<?ditaot genshortdesc?><desc class="- topic/desc ">Pull in a section, from a topic in the subdir.</desc></xref></p><p class="- topic/p ">Look at a figure in a sub-topic: <xref class="- topic/xref " href="#conrefbreaksxref/d8e69"/></p><p class="- topic/p ">Look at the subtopic: <xref class="- topic/xref " href="subdir/conrefbreaksxrefsubdir.dita#subdirsubfig" type="topic"><?ditaot gentext?>Subdir Subfig</xref></p><fig class="- topic/fig " id="d8e39"><title class="- topic/title ">This iz me fig</title>
 <p class="- topic/p ">here's a figure. Go figure.</p>
 </fig></section>
 <fig class="- topic/fig " id="fig">

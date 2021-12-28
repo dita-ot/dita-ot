@@ -547,7 +547,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="conref-topicid" as="xs:string">
       <xsl:choose>
         <xsl:when test="empty($topicid)">
-          <xsl:value-of select="//*[contains(@class, ' topic/topic ')][1]/@id"/>
+          <xsl:value-of select="/descendant-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$topicid"/>
@@ -559,10 +559,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="conref-gen-id" as="xs:string">
       <xsl:choose>
         <xsl:when test="empty($elemid) or $elemid = $href-elemid">
-          <xsl:value-of select="generate-id(key('id', $conref-topicid)[contains(@class, ' topic/topic ')]//*[@id = $href-elemid])"/>
+          <xsl:value-of select="generate-id((key('id', $conref-topicid)[contains(@class, ' topic/topic ')]//*[@id = $href-elemid])[1])"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="generate-id(key('id', $conref-topicid)[contains(@class, ' topic/topic ')]//*[@id = $elemid]//*[@id = $href-elemid])"/>
+          <xsl:value-of select="generate-id((key('id', $conref-topicid)[contains(@class, ' topic/topic ')]//*[@id = $elemid]//*[@id = $href-elemid])[1])"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
