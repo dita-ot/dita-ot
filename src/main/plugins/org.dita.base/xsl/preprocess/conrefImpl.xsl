@@ -34,6 +34,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:key name="id" match="*[@id]" use="@id"/>
 
+  <xsl:variable name="root" select="/" as="document-node()"/>
+
   <xsl:template match="/">
     <xsl:variable name="resolved" as="document-node()">
       <xsl:document>
@@ -42,7 +44,12 @@ See the accompanying LICENSE file for applicable license.
         </xsl:apply-templates>
       </xsl:document>
     </xsl:variable>
-    <xsl:apply-templates select="$resolved/node()" mode="clean"/>
+    <xsl:variable name="resolved-ids" as="document-node()">
+      <xsl:document>
+        <xsl:apply-templates select="$resolved/node()" mode="id"/>
+      </xsl:document>
+    </xsl:variable>
+    <xsl:apply-templates select="$resolved-ids/node()" mode="href"/>
   </xsl:template>
 
   <!-- If the target element does not exist, this template will be called to issue an error -->
@@ -516,11 +523,8 @@ See the accompanying LICENSE file for applicable license.
           </xsl:when>
           <!--not in the local file -->
           <xsl:otherwise>
-            <xsl:attribute name="href">
-              <xsl:call-template name="generate-href">
-                <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
-              </xsl:call-template>
-            </xsl:attribute>
+            <xsl:attribute name="conref:href" select="."/>
+            <xsl:attribute name="conref:src" select="base-uri(.)"/>
           </xsl:otherwise>
         </xsl:choose>
 
@@ -541,52 +545,6 @@ See the accompanying LICENSE file for applicable license.
       <xsl:otherwise>
         <xsl:copy/>
       </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="generate-href">
-    <xsl:param name="current-relative-path" tunnel="yes" as="xs:string"/>
-    <xsl:param name="conref-filename" tunnel="yes" as="xs:string"/>
-    <xsl:param name="topicid" tunnel="yes" as="xs:string?"/>
-    <xsl:param name="elemid" tunnel="yes" as="xs:string?"/>
-    <xsl:param name="conref-source-topicid" tunnel="yes" as="xs:string?"/>
-
-    <xsl:variable name="href-topicid" select="dita-ot:get-topic-id(.)" as="xs:string?"/>
-    <xsl:variable name="href-elemid" select="dita-ot:get-element-id(.)" as="xs:string?"/>
-    <xsl:variable name="conref-gen-id" as="xs:string">
-      <!-- topic ID param or conref target root topic @id -->
-      <xsl:variable name="conref-topicid" as="xs:string"
-                    select="if (exists($topicid))
-                            then $topicid
-                            else /descendant-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-      <xsl:variable name="topic" select="key('id', $conref-topicid)[contains(@class, ' topic/topic ')]" as="element()"/>
-      <xsl:variable name="conref-gen-target" as="element()*"
-                    select="if (empty($elemid) or $elemid = $href-elemid)
-                            then $topic//*[@id = $href-elemid]
-                            else $topic//*[@id = $elemid]//*[@id = $href-elemid]"/>
-      <xsl:value-of select="generate-id($conref-gen-target[1])"/>
-    </xsl:variable>
-    <xsl:variable name="href-gen-id" as="xs:string">
-      <!-- target topic in conref target topic -->
-      <xsl:variable name="topic" select="key('id', $href-topicid)[contains(@class, ' topic/topic ')]" as="element()"/>
-      <xsl:variable name="href-gen-target" as="element()*"
-                    select="$topic//*[@id = $href-elemid]
-                                     [ancestor::*[contains(@class, ' topic/topic ')][1] is $topic]"/>
-      <xsl:value-of select="generate-id($href-gen-target[1])"/>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$conref-gen-id = '' or not($conref-gen-id = $href-gen-id)">
-        <!--href target is not in conref target -->
-        <xsl:value-of select="$current-relative-path"/>
-        <xsl:value-of select="$conref-filename"/>
-        <xsl:value-of select="."/>
-      </xsl:when>
-      <xsl:when test="$conref-gen-id = $href-gen-id">
-        <xsl:text>#</xsl:text>
-        <xsl:value-of select="$conref-source-topicid"/>
-        <xsl:text>/</xsl:text>
-        <xsl:value-of select="$conref-gen-id"/>
-      </xsl:when>
     </xsl:choose>
   </xsl:template>
 
@@ -901,9 +859,9 @@ See the accompanying LICENSE file for applicable license.
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="*[@conref:orig-id]" mode="clean">
+  <xsl:template match="*[@conref:orig-id]" mode="id">
     <xsl:element name="{name()}" namespace="{namespace-uri()}">
-      <xsl:copy-of select="@* except @conref:orig-id"/>
+      <xsl:copy-of select="@* (: except @conref:orig-id :)"/>
       <xsl:variable name="orig-id" select="@conref:orig-id" as="attribute()"/>
       <xsl:variable name="topic" select="ancestor::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
       <xsl:variable name="content" select="$topic/*[not(contains(@class, ' topic/topic '))]" as="element()*"/>
@@ -928,10 +886,58 @@ See the accompanying LICENSE file for applicable license.
     </xsl:element>
   </xsl:template>
   
-  <xsl:template match="node() | @*" mode="clean" priority="0">
+  <xsl:template match="node() | @*" mode="id" priority="-10">
     <xsl:copy>
       <xsl:apply-templates select="node() | @*" mode="#current"/>
     </xsl:copy>
   </xsl:template>
-  
+
+  <xsl:key name="conref-id" match="*[@conref:orig-id]" use="@conref:orig-id"/>
+
+  <xsl:template match="@conref:href" mode="href">
+    <xsl:variable name="href-topic-id" select="dita-ot:get-topic-id(.)" as="xs:string?"/>
+    <xsl:variable name="href-element-id" select="dita-ot:get-element-id(.)" as="xs:string?"/>
+    <xsl:variable name="topic" select="dita-ot:get-closest-topic(.)" as="element()"/>
+
+    <xsl:variable name="target" select="key('conref-id', $href-element-id, $topic)" as="element()*"/>
+
+    <xsl:choose>
+      <xsl:when test="exists($target)">
+        <xsl:choose>
+          <xsl:when test="$target/@id = $target/@conref:orig-id">
+            <xsl:attribute name="href" select="concat('#', $topic/@id, '/', $href-element-id)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="href" select="concat('#', $topic/@id, '/', $target/@id)"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="href">
+          <xsl:value-of select="dita-ot:relativize(base-uri($root), ../@conref:src)"/>
+          <xsl:text>#</xsl:text>
+          <xsl:value-of select="$href-topic-id"/>
+          <xsl:if test="$href-element-id">
+            <xsl:text>/</xsl:text>
+            <xsl:value-of select="$href-element-id"/>
+          </xsl:if>
+        </xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="@conref:*" mode="href" priority="-5"/>
+
+  <xsl:template match="*[@conref:*]" mode="href" priority="-5">
+    <xsl:element name="{name()}" namespace="{namespace-uri()}">
+      <xsl:apply-templates select="node() | @*" mode="#current"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="node() | @*" mode="href" priority="-10">
+    <xsl:copy>
+      <xsl:apply-templates select="node() | @*" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
 </xsl:stylesheet>

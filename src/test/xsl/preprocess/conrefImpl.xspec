@@ -84,7 +84,7 @@
   
   <x:scenario label="Rewrite @conref:orig-id">
     <x:scenario label="when no matching @id">
-      <x:context mode="clean">
+      <x:context mode="id">
         <topic class="- topic/topic " id="topic">
           <title class="- topic/title ">title</title>
           <body class="- topic/body ">
@@ -96,13 +96,13 @@
         <topic class="- topic/topic " id="topic">
           <title class="- topic/title ">title</title>
           <body class="- topic/body ">
-            <p class="- topic/p " id="foo"/>
+            <p class="- topic/p " conref:orig-id="foo" id="foo"/>
           </body>
         </topic>
       </x:expect>
     </x:scenario>
     <x:scenario label="when matching @id">
-      <x:context mode="clean">
+      <x:context mode="id">
         <topic class="- topic/topic " id="topic">
           <title class="- topic/title ">title</title>
           <body class="- topic/body ">
@@ -115,14 +115,14 @@
         <topic class="- topic/topic " id="topic">
           <title class="- topic/title ">title</title>
           <body class="- topic/body ">
-            <p class="- topic/p " id="generated-1"/>
+            <p class="- topic/p " conref:orig-id="foo" id="generated-1" />
             <p class="- topic/p " id="foo"/>
           </body>
         </topic>
       </x:expect>
     </x:scenario>
     <x:scenario label="when multiple same @conref:orig-id">
-      <x:context mode="clean">
+      <x:context mode="id">
         <topic class="- topic/topic " id="topic">
           <title class="- topic/title ">title</title>
           <body class="- topic/body ">
@@ -135,14 +135,14 @@
         <topic class="- topic/topic " id="topic">
           <title class="- topic/title ">title</title>
           <body class="- topic/body ">
-            <p class="- topic/p " id="foo"/>
-            <p class="- topic/p " id="generated-2"/>
+            <p class="- topic/p " conref:orig-id="foo" id="foo"/>
+            <p class="- topic/p " conref:orig-id="foo" id="generated-2"/>
           </body>
         </topic>
       </x:expect>
     </x:scenario>
     <x:scenario label="when maching @id in shortdesk">
-      <x:context mode="clean">
+      <x:context mode="id">
         <topic class="- topic/topic " id="topic">
           <title class="- topic/title ">
             <keyword class="- topic/keyword " conref:orig-id="foo" id="generated-1"/>
@@ -155,7 +155,7 @@
       <x:expect label="should generate @id">
         <topic class="- topic/topic " id="topic">
           <title class="- topic/title ">
-            <keyword class="- topic/keyword " id="generated-1"/>
+            <keyword class="- topic/keyword " conref:orig-id="foo" id="generated-1"/>
           </title>
           <shortdesc class="- topic/shortdesc ">
             <keyword class="- topic/keyword " id="foo"/>

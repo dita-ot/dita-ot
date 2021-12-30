@@ -72,12 +72,12 @@
           href="lang-common0.dita#concept" type="concept"><?ditaot usertext?>with link
         text</xref>.</p>
       <p class="- topic/p ">Xref to the fig in this topic: <xref class="- topic/xref "
-          href="#topic/d8e195"/>. Now do it again, <xref
-          class="- topic/xref " href="#topic/d8e195"><?ditaot usertext?>with link
+          href="#topic/fig" type="fig"><?ditaot gentext?>图 1</xref>. Now do it again, <xref
+          class="- topic/xref " href="#topic/fig" type="fig"><?ditaot usertext?>with link
           text</xref>.</p>
       <p class="- topic/p ">Xref to the table in this topic: <xref class="- topic/xref "
-          href="#topic/d8e208"/>. Now do it again, <xref
-          class="- topic/xref " href="#topic/d8e208"><?ditaot usertext?>with link
+          href="#topic/table" type="table"><?ditaot gentext?>表 1</xref>. Now do it again, <xref
+          class="- topic/xref " href="#topic/table" type="table"><?ditaot usertext?>with link
           text</xref>.</p>
       <p class="- topic/p ">Xref to an external website: <xref class="- topic/xref " format="html"
           scope="external" href="http://www.ibm.com"/>. Now do it again, <xref class="- topic/xref " format="html"
