@@ -908,7 +908,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:attribute name="href" select="concat('#', $topic/@id, '/', $href-element-id)"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="href" select="concat('#', $topic/@id, '/', $target/@id)"/>
+            <xsl:attribute name="href" select="concat('#', $topic/@id, '/', $target[1]/@id)"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
