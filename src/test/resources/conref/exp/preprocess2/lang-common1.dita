@@ -46,17 +46,17 @@
         it again, <xref class="- topic/xref " href="lang-common0.dita#topic" type="topic"><?ditaot usertext?>with link text</xref>.</p>
       <p class="- topic/p ">Xref to the concept in this file: <xref class="- topic/xref " href="lang-common0.dita#concept" type="concept"><?ditaot gentext?>Concept elements with generated text</xref>. Now do it again, <xref class="- topic/xref " href="lang-common0.dita#concept" type="concept"><?ditaot usertext?>with link
           text</xref>.</p>
-      <p class="- topic/p ">Xref to the fig in this topic: <xref class="- topic/xref " href="#topic/d7e195" type="fig"><?ditaot gentext?>图 1</xref>. Now do it again, <xref class="- topic/xref " href="#topic/d7e195" type="fig"><?ditaot usertext?>with
+      <p class="- topic/p ">Xref to the fig in this topic: <xref class="- topic/xref " href="#topic/fig" type="fig"><?ditaot gentext?>图 1</xref>. Now do it again, <xref class="- topic/xref " href="#topic/fig" type="fig"><?ditaot usertext?>with
           link text</xref>.</p>
-      <p class="- topic/p ">Xref to the table in this topic: <xref class="- topic/xref " href="#topic/d7e208" type="table"><?ditaot gentext?>表 1</xref>. Now do it again, <xref class="- topic/xref " href="#topic/d7e208" type="table"><?ditaot usertext?>with link text</xref>.</p>
+      <p class="- topic/p ">Xref to the table in this topic: <xref class="- topic/xref " href="#topic/table" type="table"><?ditaot gentext?>表 1</xref>. Now do it again, <xref class="- topic/xref " href="#topic/table" type="table"><?ditaot usertext?>with link text</xref>.</p>
       <p class="- topic/p ">Xref to an external website: <xref class="- topic/xref " format="html" href="http://www.ibm.com" scope="external"/>. Now do it again, <xref class="- topic/xref " format="html" href="http://www.ibm.com" scope="external"><?ditaot usertext?>with link text</xref>.</p>
       <p class="- topic/p ">Xref to an external website with an anchor: <xref class="- topic/xref " format="html" href="http://www.ibm.com/index.html#anchor" scope="external"/>. Now do it again, <xref class="- topic/xref " format="html" href="http://www.ibm.com/index.html#anchor" scope="external"><?ditaot usertext?>with link
           text</xref>.</p>
-      <fig class="- topic/fig " id="d7e195">
+      <fig class="- topic/fig " id="fig">
         <title class="- topic/title ">figure title</title>
         <p class="- topic/p ">test <q class="- topic/q ">quote</q> in a figure</p>
       </fig>
-      <table class="- topic/table " id="d7e208">
+      <table class="- topic/table " id="table">
         <title class="- topic/title ">table title</title>
         <tgroup class="- topic/tgroup " cols="1">
           <colspec class="- topic/colspec " colname="col1" colnum="1" rowheader="headers"/>
