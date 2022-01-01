@@ -59,7 +59,10 @@
                        "(%change-item;)*"
 >
 <!ENTITY % change-historylist.attributes
-              "%changehistory.data.atts;"
+              "%univ-atts;
+               mapkeyref
+                          CDATA
+                                    #IMPLIED"
 >
 <!ELEMENT  change-historylist %change-historylist.content;>
 <!ATTLIST  change-historylist %change-historylist.attributes;>

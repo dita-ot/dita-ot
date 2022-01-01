@@ -222,9 +222,14 @@
                           NMTOKENS
                                     #IMPLIED"
 >
+<!-- Include colspec/@outputclass fix for DITA 1.3:
+     https://lists.oasis-open.org/archives/dita-comment/202112/msg00000.html -->
 <!ENTITY % dita.colspec.attributes
               "%id-atts;
-               %localization-atts;"
+               %localization-atts;
+               outputclass
+                          CDATA
+                                    #IMPLIED"
 >
 <!--                    LONG NAME: Table                           -->
 <!ENTITY % table.content
