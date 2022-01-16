@@ -143,12 +143,12 @@ See the accompanying LICENSE file for applicable license.
       <or>
         <equals arg1="${args.hide.parent.link}" arg2="yes"/>
         <equals arg1="${args.rellinks}" arg2="noparent"/>
+        <not><isset property="args.rellinks"/></not>
       </or>
     </condition>
     <condition property="include.rellinks" value="#default parent child sibling friend next previous cousin ancestor descendant sample external other">
       <or>
         <equals arg1="${args.rellinks}" arg2="all"/>
-        <not><isset property="args.rellinks"/></not>
       </or>
     </condition>
 
