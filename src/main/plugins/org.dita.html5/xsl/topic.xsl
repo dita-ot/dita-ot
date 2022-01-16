@@ -2296,7 +2296,6 @@ See the accompanying LICENSE file for applicable license.
   <!-- it will be placed in the running footing section of the XHTML. -->
 </xsl:template>
 
-<!-- Deprecated since 3.7, use "args.xhtml.toc.xsl" or "args.html5.toc.xsl" instead -->
 <xsl:template name="gen-user-sidetoc">
   <xsl:apply-templates select="." mode="gen-user-sidetoc"/>
 </xsl:template>
