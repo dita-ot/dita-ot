@@ -16,10 +16,13 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Extract tag name
+        run: |
+          echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
       - name: Build distribution package
         run: |
           ./gradlew --no-daemon
-          ./gradlew dist -Pcommit=${GITHUB_SHA} --no-daemon
+          ./gradlew dist -Pcommit=${GITHUB_SHA} -Ptag=${TAG_NAME} --no-daemon
       - name: Deploy distribution package to releases
         uses: softprops/action-gh-release@v1
         with:
