@@ -54,7 +54,6 @@ See the accompanying LICENSE file for applicable license.
         <include name="messages.xml"/>
         <include name="messages_*.properties"/>
         <include name="plugins.xml"/>
-        <include name="log4j.properties"/>
         <include name="configuration.properties"/>
         <include name="CatalogManager.properties"/>
         <include name="org.dita.dost.platform/plugin.properties"/>

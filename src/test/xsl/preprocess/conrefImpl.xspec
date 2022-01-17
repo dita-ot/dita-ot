@@ -55,5 +55,209 @@
     </x:scenario>    
     
   </x:scenario>
+  
+  <!--
+  <x:scenario label="find-relative-path template">
+    <x:scenario label="path to topic">
+      <x:context>
+        <foo conref="foo/bar/baz.dita"/>
+      </x:context>
+      <x:call template="find-relative-path"/>
+      <x:expect label="should strip file" select="'foo/bar/'"/>
+    </x:scenario>
+    <x:scenario label="path to topic with ID">
+      <x:context>
+        <foo conref="foo/bar/baz.dita#qux"/>
+      </x:context>
+      <x:call template="find-relative-path"/>
+      <x:expect label="should strip file" select="'foo/bar/'"/>
+    </x:scenario>
+    <x:scenario label="relative path to topic">
+      <x:context>
+        <foo conref="../../foo/bar.dita"/>
+      </x:context>
+      <x:call template="find-relative-path"/>
+      <x:expect label="should strip file" select="'../../foo/'"/>
+    </x:scenario>
+  </x:scenario>
+  -->
+  
+  <x:scenario label="Rewrite @conref:orig-id">
+    <x:scenario label="when no matching @id">
+      <x:context mode="id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="generated-1"/>
+          </body>
+        </topic>
+      </x:context>
+      <x:expect label="should generate @id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="foo"/>
+          </body>
+        </topic>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="when matching @id">
+      <x:context mode="id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="generated-1"/>
+            <p class="- topic/p " id="foo"/>
+          </body>
+        </topic>
+      </x:context>
+      <x:expect label="should generate @id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="generated-1" />
+            <p class="- topic/p " id="foo"/>
+          </body>
+        </topic>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="when multiple same @conref:orig-id">
+      <x:context mode="id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="generated-1"/>
+            <p class="- topic/p " conref:orig-id="foo" id="generated-2"/>
+          </body>
+        </topic>
+      </x:context>
+      <x:expect label="should generate for first occurrence">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="foo"/>
+            <p class="- topic/p " conref:orig-id="foo" id="generated-2"/>
+          </body>
+        </topic>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="when matching @id in shortdesk">
+      <x:context mode="id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">
+            <keyword class="- topic/keyword " conref:orig-id="foo" id="generated-1"/>
+          </title>
+          <shortdesc class="- topic/shortdesc ">
+            <keyword class="- topic/keyword " id="foo"/>
+          </shortdesc>
+        </topic>
+      </x:context>
+      <x:expect label="should generate @id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">
+            <keyword class="- topic/keyword " conref:orig-id="foo" id="generated-1"/>
+          </title>
+          <shortdesc class="- topic/shortdesc ">
+            <keyword class="- topic/keyword " id="foo"/>
+          </shortdesc>
+        </topic>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="Rewrite @conref:href">
+    <x:scenario label="when no duplicate target @id">
+      <x:context mode="href">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="foo"/>
+            <xref class="- topic/xref " conref:href="#target/foo" conref:src="file:/tmp/target.dita"/>
+          </body>
+        </topic>
+      </x:context>
+      <x:expect label="should use original @id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " id="foo"/>
+            <xref class="- topic/xref " href="#topic/foo"/>
+          </body>
+        </topic>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="when duplicate target @id">
+      <x:context mode="href">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="generated-1"/>
+            <p class="- topic/p " id="foo"/>
+            <xref class="- topic/xref " conref:href="#target/foo" conref:src="file:/tmp/target.dita"/>
+          </body>
+        </topic>
+      </x:context>
+      <x:expect label="should use generated @id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " id="generated-1"/>
+            <p class="- topic/p " id="foo"/>
+            <xref class="- topic/xref " href="#topic/generated-1"/>
+          </body>
+        </topic>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="when multiple same target @conref:orig-id">
+      <x:context mode="href">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " conref:orig-id="foo" id="generated-1"/>
+            <p class="- topic/p " conref:orig-id="foo" id="generated-2"/>
+            <xref class="- topic/xref " conref:href="#target/foo" conref:src="file:/tmp/target.dita"/>
+          </body>
+        </topic>
+      </x:context>
+      <x:expect label="should link to first occurrence">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title "/>
+          <body class="- topic/body ">
+            <p class="- topic/p " id="generated-1"/>
+            <p class="- topic/p " id="generated-2"/>
+            <xref class="- topic/xref " href="#topic/generated-1"/>
+          </body>
+        </topic>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="when target @id in shortdesk">
+      <x:context mode="href">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">
+            <keyword class="- topic/keyword " conref:orig-id="foo" id="generated-1"/>
+          </title>
+          <shortdesc class="- topic/shortdesc ">
+            <keyword class="- topic/keyword " id="foo"/>
+          </shortdesc>
+          <body class="- topic/body ">
+            <xref class="- topic/xref " conref:href="#target/foo" conref:src="file:/tmp/target.dita"/>
+          </body>
+        </topic>
+      </x:context>
+      <x:expect label="should link to target @id">
+        <topic class="- topic/topic " id="topic">
+          <title class="- topic/title ">
+            <keyword class="- topic/keyword " id="generated-1"/>
+          </title>
+          <shortdesc class="- topic/shortdesc ">
+            <keyword class="- topic/keyword " id="foo"/>
+          </shortdesc>
+          <body class="- topic/body ">
+            <xref class="- topic/xref " href="#topic/generated-1"/>
+          </body>
+        </topic>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
 
 </x:description>

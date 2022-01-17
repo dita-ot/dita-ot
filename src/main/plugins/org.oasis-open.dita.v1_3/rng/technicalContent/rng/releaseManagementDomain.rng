@@ -109,7 +109,10 @@ PUBLIC "-//OASIS//ENTITIES DITA Release Management Domain//EN"
         </zeroOrMore>
       </define>
       <define name="change-historylist.attributes">
-        <ref name="changehistory.data.atts"/>
+        <ref name="univ-atts"/>
+        <optional>
+          <attribute name="mapkeyref"/>
+        </optional>
       </define>
       <define name="change-historylist.element">
         <element name="change-historylist" dita:longName="Change History List"
