@@ -1423,11 +1423,19 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- AM: handling for scale attribute -->
   <xsl:template match="*[contains(@class, ' topic/image ')]/@scale">
-      <xsl:variable name="width" select="../@dita-ot:image-width"/>
-      <xsl:variable name="height" select="../@dita-ot:image-height"/>
+      <xsl:variable name="width-in-pixel">
+        <xsl:call-template name="length-to-pixels">
+          <xsl:with-param name="dimen" select="../@dita-ot:image-width"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="height-in-pixel">
+        <xsl:call-template name="length-to-pixels">
+          <xsl:with-param name="dimen" select="../@dita-ot:image-height"/>
+        </xsl:call-template>
+      </xsl:variable>
       <xsl:if test="not(../@width) and not(../@height)">
-        <xsl:attribute name="height" select="floor(number($height) * number(.) div 100)"/>
-        <xsl:attribute name="width" select="floor(number($width) * number(.) div 100)"/>
+        <xsl:attribute name="height" select="floor(number($height-in-pixel) * number(.) div 100)"/>
+        <xsl:attribute name="width" select="floor(number($width-in-pixel) * number(.) div 100)"/>
       </xsl:if>
   </xsl:template>
   
@@ -1511,28 +1519,12 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/object ')]" name="topic.object">
    <object>
     <xsl:copy-of select="@id | @declare | @codebase | @type | @archive | @height | @usemap | @tabindex | @classid | @data | @codetype | @standby | @width | @name"/>
+    <!-- In HTML5, <param> must precede any other fallback content -->
+    <xsl:apply-templates select="*[contains(@class, ' topic/param ')]"/>
     <xsl:if test="@longdescref or *[contains(@class, ' topic/longdescref ')]">
       <xsl:apply-templates select="." mode="ditamsg:longdescref-on-object"/>
     </xsl:if>
-    <xsl:apply-templates/>
-   <!-- Test for Flash movie; include EMBED statement for non-IE browsers -->
-   <xsl:if test="contains(@codebase, 'swflash.cab')">
-    <embed>
-     <xsl:if test="@id"><xsl:attribute name="name" select="@id"/></xsl:if>
-     <xsl:copy-of select="@height | @width"/>
-     <xsl:attribute name="type"><xsl:text>application/x-shockwave-flash</xsl:text></xsl:attribute>
-     <xsl:attribute name="pluginspage"><xsl:text>http://www.macromedia.com/go/getflashplayer</xsl:text></xsl:attribute>
-     <xsl:if test="*[contains(@class, ' topic/param ')]/@name = 'movie'">
-      <xsl:attribute name="src" select="*[contains(@class, ' topic/param ')][@name = 'movie']/@value"/>
-     </xsl:if>
-     <xsl:if test="*[contains(@class, ' topic/param ')]/@name = 'quality'">
-      <xsl:attribute name="quality" select="*[contains(@class, ' topic/param ')][@name = 'quality']/@value"/>
-     </xsl:if>
-     <xsl:if test="*[contains(@class, ' topic/param ')]/@name = 'bgcolor'">
-      <xsl:attribute name="bgcolor" select="*[contains(@class, ' topic/param ')][@name = 'bgcolor']/@value"/>
-     </xsl:if>
-    </embed>
-   </xsl:if>
+    <xsl:apply-templates select="node() except *[contains(@class, ' topic/param ')]"/>
    </object>
   </xsl:template>
   
@@ -1802,11 +1794,18 @@ See the accompanying LICENSE file for applicable license.
   <!-- Process standard attributes that may appear anywhere. Previously this was "setclass" -->
   <xsl:template name="commonattributes">
     <xsl:param name="default-output-class"/>
+    <xsl:apply-templates select="." mode="commonattributes">
+      <xsl:with-param name="default-output-class" select="tokenize(normalize-space($default-output-class), '\s+')"/>
+    </xsl:apply-templates>
+  </xsl:template>
+  
+  <xsl:template match="@* | node()" mode="commonattributes">
+    <xsl:param name="default-output-class" as="xs:string*"/>
     <xsl:apply-templates select="@xml:lang"/>
     <xsl:apply-templates select="@dir"/>
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <xsl:apply-templates select="." mode="set-output-class">
-      <xsl:with-param name="default" select="$default-output-class"/>
+      <xsl:with-param name="default" select="string-join($default-output-class, ' ')"/>
     </xsl:apply-templates>
     <xsl:choose>
       <xsl:when test="exists($passthrough-attrs[empty(@att) and empty(@value)])">
@@ -1998,8 +1997,12 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template name="spec-title-nospace">
    <xsl:if test="@spectitle"><div style="margin-bottom: 0;"><strong><xsl:value-of select="@spectitle"/></strong></div></xsl:if>
   </xsl:template>
-    
+
+  <!-- Deprecated since 3.7, use "copyright" mode instead -->
   <xsl:template name="copyright">
+    <xsl:apply-templates select="." mode="copyright"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="copyright">
   
   </xsl:template>
   
@@ -2135,7 +2138,11 @@ See the accompanying LICENSE file for applicable license.
   <!-- ========== Section-like generated content =========== -->
   
   <!-- render any contained footnotes as endnotes.  Links back to reference point -->
+  <!-- Deprecated since 3.7, use "gen-endnotes" mode instead -->
   <xsl:template name="gen-endnotes">
+    <xsl:apply-templates select="." mode="gen-endnotes"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="gen-endnotes">
     <!-- Skip any footnotes that are in draft elements when draft = no -->
     <xsl:apply-templates select="//*[contains(@class, ' topic/fn ')][not( (ancestor::*[contains(@class, ' topic/draft-comment ')] or ancestor::*[contains(@class, ' topic/required-cleanup ')]) and $DRAFT = 'no')]" mode="genEndnote"/>
   
@@ -2262,6 +2269,7 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- ========== STUBS FOR USER PROVIDED OVERRIDE EXTENSIONS ========== -->
 
+<!-- Deprecated since 3.7, use "args.hdf" instead -->
 <xsl:template name="gen-user-head">
   <xsl:apply-templates select="." mode="gen-user-head"/>
 </xsl:template>
@@ -2270,6 +2278,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- it will be placed in the HEAD section of the XHTML. -->
 </xsl:template>
 
+<!-- Deprecated since 3.7, use "args.hdr" instead -->
 <xsl:template name="gen-user-header">
   <xsl:apply-templates select="." mode="gen-user-header"/>
 </xsl:template>
@@ -2278,6 +2287,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- it will be placed in the running heading section of the XHTML. -->
 </xsl:template>
 
+<!-- Deprecated since 3.7, use "args.ftr" instead -->
 <xsl:template name="gen-user-footer">
   <xsl:apply-templates select="." mode="gen-user-footer"/>
 </xsl:template>
@@ -2291,9 +2301,9 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 <xsl:template match="/|node()|@*" mode="gen-user-sidetoc">
   <!-- to customize: copy this to your override transform, add the content you want. -->
-  <!-- Uncomment the line below to have a "freebie" table of contents on the top-right -->
 </xsl:template>
 
+<!-- Deprecated since 3.7, use "args.hdf" instead -->
 <xsl:template name="gen-user-scripts">
   <xsl:apply-templates select="." mode="gen-user-scripts"/>
 </xsl:template>
@@ -2302,6 +2312,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- It will be placed before the ending HEAD tag -->
 </xsl:template>
 
+<!-- Deprecated since 3.7, use "args.css" instead -->
 <xsl:template name="gen-user-styles">
   <xsl:apply-templates select="." mode="gen-user-styles"/>
 </xsl:template>
@@ -2358,12 +2369,12 @@ See the accompanying LICENSE file for applicable license.
       <xsl:call-template name="generateDefaultMeta"/> <!-- Standard meta for security, robots, etc -->
       <xsl:apply-templates select="." mode="getMeta"/> <!-- Process metadata from topic prolog -->
       <xsl:call-template name="copyright"/>         <!-- Generate copyright, if specified manually -->
-      <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
       <xsl:call-template name="generateChapterTitle"/> <!-- Generate the <title> element -->
       <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here -->
       <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here -->
       <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here -->
       <xsl:call-template name="processHDF"/>        <!-- Add user HDF file, if specified -->
+      <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
     </head>
   </xsl:template>
 
@@ -2389,7 +2400,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <!-- Output metadata that should appear in every XHTML topic -->
+  <!-- Deprecated since 3.7, use "generateDefaultMeta" mode instead -->
   <xsl:template name="generateDefaultMeta">
+    <xsl:apply-templates select="." mode="generateDefaultMeta"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="generateDefaultMeta">
     <xsl:if test="$genDefMeta = 'yes'">
       <meta name="security" content="public"/>
       <meta name="Robots" content="index,follow" />
@@ -2397,7 +2412,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <!-- Generate links to CSS files -->
+  <!-- Deprecated since 3.7, use "generateCssLinks" mode instead -->
   <xsl:template name="generateCssLinks">
+    <xsl:apply-templates select="." mode="generateCssLinks"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="generateCssLinks">
     <xsl:variable name="childlang" as="xs:string">
       <xsl:variable name="lang">
         <xsl:choose>
@@ -2449,7 +2468,11 @@ See the accompanying LICENSE file for applicable license.
     
   </xsl:template>
   
+  <!-- Deprecated since 3.7, use "generateChapterTitle" mode instead -->
   <xsl:template name="generateChapterTitle">
+    <xsl:apply-templates select="." mode="generateChapterTitle"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="generateChapterTitle">
     <!-- Title processing - special handling for short descriptions -->
     <title>
       <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
@@ -2466,7 +2489,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <!-- Add user's head XHTML code snippet, if specified -->
+  <!-- Deprecated since 3.7, use "processHDF" mode instead -->
   <xsl:template name="processHDF">
+    <xsl:apply-templates select="." mode="processHDF"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="processHDF">
     <xsl:if test="string-length($HDFFILE) > 0">
       <xsl:apply-templates select="document($HDFFILE, /)" mode="add-HDF"/>
     </xsl:if>
@@ -2581,19 +2608,31 @@ See the accompanying LICENSE file for applicable license.
     </xsl:if>
   </xsl:template>
   
+  <!-- Deprecated since 3.7, use "generateBreadcrumbs" mode instead -->
   <xsl:template name="generateBreadcrumbs">
+    <xsl:apply-templates select="." mode="generateBreadcrumbs"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="generateBreadcrumbs">
     <!-- Insert previous/next/ancestor breadcrumbs links at the top of the html5. -->
     <xsl:apply-templates select="*[contains(@class, ' topic/related-links ')]" mode="breadcrumb"/>
   </xsl:template>
   
+  <!-- Deprecated since 3.7, use "processHDR" mode instead -->
   <xsl:template name="processHDR">
+    <xsl:apply-templates select="." mode="processHDR"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="processHDR">
     <!-- Add user's running heading XHTML code snippet if requested to -->
     <xsl:if test="string-length($HDRFILE) > 0">
       <xsl:copy-of select="document($HDRFILE, /)"/>      
     </xsl:if>    
   </xsl:template>
   
+  <!-- Deprecated since 3.7, use "processFTR" mode instead -->
   <xsl:template name="processFTR">
+    <xsl:apply-templates select="." mode="processFTR"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="processFTR">
     <!-- Add user's running footing XHTML code snippet if requested to -->
     <xsl:if test="string-length($FTRFILE) > 0">
       <xsl:copy-of select="document($FTRFILE, /)"/>
@@ -2749,7 +2788,11 @@ See the accompanying LICENSE file for applicable license.
     *[contains(@class,' topic/fn ') and empty(@callout)]"
     use="tokenize(@class, '\s+')"/>
   
+  <!-- Deprecated since 3.7, use "generateCharset" mode instead -->
   <xsl:template name="generateCharset">
+    <xsl:apply-templates select="." mode="generateCharset"/>
+  </xsl:template>
+  <xsl:template match="/ | @* | node()" mode="generateCharset">
     <meta charset="UTF-8"/>
   </xsl:template>  
   

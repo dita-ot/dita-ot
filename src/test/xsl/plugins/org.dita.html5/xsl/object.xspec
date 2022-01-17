@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
+  xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable"
+  stylesheet="object.xsl"
+  >
+
+  <x:scenario label="object-with-desc">
+    <x:context select="/object">
+      <object class="- topic/object ">
+        <desc class="- topic/desc ">This is the description</desc>
+        <param name="param1" class="- topic/param " value="This is param1"/>
+      </object>
+    </x:context>
+    <x:expect label="Fallback follows params">
+      <object>
+        <param name="param1" value="This is param1" />
+        <span>This is the description</span>
+      </object>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

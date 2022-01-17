@@ -41,7 +41,7 @@ import static org.dita.dost.util.XMLUtils.rootElement;
 final public class ChunkModule extends AbstractPipelineModuleImpl {
 
     private static final DitaClass ECLIPSEMAP_PLUGIN = DitaClass.getInstance("- map/map eclipsemap/plugin ");
-    private static final String ROOT_CHUNK_OVERRIDE = "root-chunk-override";
+    public static final String ROOT_CHUNK_OVERRIDE = "root-chunk-override";
 
     /**
      * using to save relative path when do rename action for newly chunked file

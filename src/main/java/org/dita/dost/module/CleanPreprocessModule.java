@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
 import static java.util.Collections.emptyMap;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
-import static org.dita.dost.util.XMLUtils.toErrorListener;
+import static org.dita.dost.util.XMLUtils.toErrorReporter;
 
 /**
  * Move temporary files not based on output URI to match output URI structure.
@@ -80,7 +80,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                     try {
                         final Processor processor = xmlUtils.getProcessor();
                         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
-                        xsltCompiler.setErrorListener(toErrorListener(logger));
+                        xsltCompiler.setErrorReporter(toErrorReporter(logger));
                         final XsltExecutable xsltExecutable = xsltCompiler.compile(f);
                         return xsltExecutable.load();
                     } catch (UncheckedXPathException e) {

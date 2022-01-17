@@ -266,6 +266,13 @@ See the accompanying LICENSE file for applicable license.
         <xsl:attribute name="start-indent">0pt</xsl:attribute>
     </xsl:attribute-set>
 
+    <xsl:attribute-set name="note__image">
+        <xsl:attribute name="content-height">2em</xsl:attribute>
+        <xsl:attribute name="padding-right">3pt</xsl:attribute>
+        <xsl:attribute name="vertical-align">middle</xsl:attribute>
+        <xsl:attribute name="baseline-shift">baseline</xsl:attribute>
+    </xsl:attribute-set>
+
     <xsl:attribute-set name="note__text__entry">
         <xsl:attribute name="start-indent">0pt</xsl:attribute>
     </xsl:attribute-set>

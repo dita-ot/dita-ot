@@ -1580,11 +1580,19 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- AM: handling for scale attribute -->
 <xsl:template match="*[contains(@class, ' topic/image ')]/@scale">
-    <xsl:variable name="width" select="../@dita-ot:image-width"/>
-    <xsl:variable name="height" select="../@dita-ot:image-height"/>
+    <xsl:variable name="width-in-pixel">
+      <xsl:call-template name="length-to-pixels">
+        <xsl:with-param name="dimen" select="../@dita-ot:image-width"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="height-in-pixel">
+      <xsl:call-template name="length-to-pixels">
+        <xsl:with-param name="dimen" select="../@dita-ot:image-height"/>
+      </xsl:call-template>
+    </xsl:variable>
     <xsl:if test="not(../@width) and not(../@height)">
-      <xsl:attribute name="height" select="floor(number($height) * number(.) div 100)"/>
-      <xsl:attribute name="width" select="floor(number($width) * number(.) div 100)"/>
+      <xsl:attribute name="height" select="floor(number($height-in-pixel) * number(.) div 100)"/>
+      <xsl:attribute name="width" select="floor(number($width-in-pixel) * number(.) div 100)"/>
     </xsl:if>
 </xsl:template>
 
@@ -1902,11 +1910,18 @@ See the accompanying LICENSE file for applicable license.
 <!-- Process standard attributes that may appear anywhere. Previously this was "setclass" -->
 <xsl:template name="commonattributes">
   <xsl:param name="default-output-class"/>
+  <xsl:apply-templates select="." mode="commonattributes">
+    <xsl:with-param name="default-output-class" select="tokenize(normalize-space($default-output-class), '\s+')"/>
+  </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="@* | node()" mode="commonattributes">
+  <xsl:param name="default-output-class" as="xs:string*"/>
   <xsl:apply-templates select="@xml:lang"/>
   <xsl:apply-templates select="@dir"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
   <xsl:apply-templates select="." mode="set-output-class">
-    <xsl:with-param name="default" select="$default-output-class"/>
+    <xsl:with-param name="default" select="string-join($default-output-class, ' ')"/>
   </xsl:apply-templates>
   <xsl:if test="exists($passthrough-attrs)">
     <xsl:for-each select="@*">

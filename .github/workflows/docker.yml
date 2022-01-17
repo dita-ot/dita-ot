@@ -1,0 +1,30 @@
+name: Docker
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'DITA-OT version'
+        required: true
+jobs:
+  # Build DITA-OT Docker image and deploy to ghcr.io
+  docker:
+    name: Build and deploy Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Login
+        run: |
+          echo $PAT | docker login ghcr.io --username ditaotbot --password-stdin
+        env:
+          PAT: ${{ secrets.PACKAGE_REGISTRY }}
+      - name: Build image
+        run: |
+          docker build --tag ghcr.io/dita-ot/dita-ot:${VERSION} --build-arg VERSION=${VERSION} .
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+      - name: Deploy image
+        run: |
+          docker push ghcr.io/dita-ot/dita-ot:${VERSION}
+        env:
+          VERSION: ${{ github.event.inputs.version }}

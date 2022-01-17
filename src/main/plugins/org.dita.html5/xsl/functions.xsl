@@ -48,12 +48,18 @@ See the accompanying LICENSE file for applicable license.
   <xsl:function name="dita-ot:generate-stable-id" as="xs:string">
     <xsl:param name="element" as="element()"/>
     
-    <xsl:variable name="topic" select="$element/ancestor-or-self::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
-    <xsl:variable name="parent-element" select="$element/ancestor-or-self::*[@id][1][not(. is $topic)]" as="element()?"/>
-    <xsl:variable name="closest" select="($parent-element, $topic)[1]" as="element()"/>
-    <xsl:variable name="index" select="count($closest/descendant::*[local-name() = local-name($element)][. &lt;&lt; $element]) + 1" as="xs:integer"/>
-    
-    <xsl:sequence select="dita-ot:generate-id($topic/@id, string-join(($parent-element/@id, local-name($element), string($index)), $HTML_ID_SEPARATOR))"/>
+    <xsl:variable name="topic" select="$element/ancestor-or-self::*[contains(@class, ' topic/topic ')][1]" as="element()?"/>
+    <xsl:choose>
+      <xsl:when test="empty($topic)">
+        <xsl:sequence select="generate-id($element)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="parent-element" select="$element/ancestor-or-self::*[@id][1][not(. is $topic)]" as="element()?"/>
+        <xsl:variable name="closest" select="($parent-element, $topic)[1]" as="element()"/>
+        <xsl:variable name="index" select="count($closest/descendant::*[local-name() = local-name($element)][. &lt;&lt; $element]) + 1" as="xs:integer"/>
+        <xsl:sequence select="dita-ot:generate-id($topic/@id, string-join(($parent-element/@id, local-name($element), string($index)), $HTML_ID_SEPARATOR))"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:function>
 
   <xsl:function name="table:is-tbody-entry" as="xs:boolean">

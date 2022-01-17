@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,57 +6,58 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="tr-tr">        <!-- Turkish -->
-  <str name="Figure">Şekil</str>
-  <str name="Table">Çizelge</str>
-  <str name="Next topic">Sonraki</str>
-  <str name="Previous topic">Önceki</str>
-  <str name="Parent topic">Ana başlık</str>
-  <str name="Required cleanup">Düzeltilmeli</str>
-  <str name="Draft comment">Draft comment</str>
-  <str name="Option">Seçenek</str>
-  <str name="Description">Tanımlama</str>
-  <str name="Optional">İsteğe bağlı</str>
-  <str name="Required">Gerekli</str>
-  <str name="Skip visual syntax diagram">Görsel sözdizim çizgesini atla</str>
-  <str name="Read syntax diagram">Sözdizim çizgesini oku</str>
-  <str name="Start of change">Değişikliklerin başlangıcı</str>
-  <str name="End of change">Değişikliklerin bitişi</str>
-  <str name="Index">Dizin</str>
-  <str name="Special characters">Özel karakterler</str>
-  <str name="Numerics">Sayısallar</str>
-  <str name="End notes">Notların sonu</str>
-  <str name="Artwork">Şekil</str>
-  <str name="Syntax">Sözdizim</str>
-  <str name="Type">İpucu</str>
-  <str name="Value">Değer</str>
-  <str name="Note">Not</str>
-  <str name="Notes">Notlar</str>
-  <str name="Tip">Tip</str>
-  <str name="Fastpath">Kısa yol</str>
-  <str name="Important">Önemli</str>
-  <str name="Attention">Uyarı</str>
-  <str name="Caution">DİKKAT</str>
-  <str name="Danger">TEHLİKE</str>
-  <str name="Remember">Unutmayın</str>
-  <str name="Restriction">Sınırlama</str>
-  <str name="Trouble">Sorun</str>
-  <str name="Warning">Uyarı</str>
-  <str name="Contents">İçindekiler</str>
-  <str name="Related concepts">İlgili kavramlar</str>
-  <str name="Related tasks">İlgili görevler</str>
-  <str name="Related reference">İlgili başvurular</str>
-  <str name="Related information">İlgili bilgiler</str>
-  <str name="Prerequisite">Okunması Gerekenler</str>
-  <str name="Prerequisites">Okunması Gerekenler</str>
-  <str name="or">or</str>
-  <str name="task_context">Bu görev hakkında</str>
-  <str name="task_example">Örnek</str>
-  <str name="task_postreq">Sonraki adım</str>
-  <str name="task_prereq">Başlamadan önce</str>
-  <str name="task_procedure">Yordam</str>
-  <str name="task_procedure_unordered">Yordam</str>
-  <str name="task_results">Sonuçlar</str>
-  <str name="Copyright">Copyright</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Şekil</variable>
+   <variable id="Table">Çizelge</variable>
+   <variable id="Next topic">Sonraki</variable>
+   <variable id="Previous topic">Önceki</variable>
+   <variable id="Parent topic">Ana başlık</variable>
+   <variable id="Required cleanup">Düzeltilmeli</variable>
+   <variable id="Draft comment">Draft comment</variable>
+   <variable id="Option">Seçenek</variable>
+   <variable id="Description">Tanımlama</variable>
+   <variable id="Optional">İsteğe bağlı</variable>
+   <variable id="Required">Gerekli</variable>
+   <variable id="Skip visual syntax diagram">Görsel sözdizim çizgesini atla</variable>
+   <variable id="Read syntax diagram">Sözdizim çizgesini oku</variable>
+   <variable id="Start of change">Değişikliklerin başlangıcı</variable>
+   <variable id="End of change">Değişikliklerin bitişi</variable>
+   <variable id="Index">Dizin</variable>
+   <variable id="Special characters">Özel karakterler</variable>
+   <variable id="Numerics">Sayısallar</variable>
+   <variable id="End notes">Notların sonu</variable>
+   <variable id="Artwork">Şekil</variable>
+   <variable id="Syntax">Sözdizim</variable>
+   <variable id="Type">İpucu</variable>
+   <variable id="Value">Değer</variable>
+   <variable id="Note">Not</variable>
+   <variable id="Notes">Notlar</variable>
+   <variable id="Tip">Tip</variable>
+   <variable id="Fastpath">Kısa yol</variable>
+   <variable id="Important">Önemli</variable>
+   <variable id="Attention">Uyarı</variable>
+   <variable id="Caution">DİKKAT</variable>
+   <variable id="Danger">TEHLİKE</variable>
+   <variable id="Remember">Unutmayın</variable>
+   <variable id="Restriction">Sınırlama</variable>
+   <variable id="Trouble">Sorun</variable>
+   <variable id="Warning">Uyarı</variable>
+   <variable id="Contents">İçindekiler</variable>
+   <variable id="Related concepts">İlgili kavramlar</variable>
+   <variable id="Related tasks">İlgili görevler</variable>
+   <variable id="Related reference">İlgili başvurular</variable>
+   <variable id="Related information">İlgili bilgiler</variable>
+   <variable id="Prerequisite">Okunması Gerekenler</variable>
+   <variable id="Prerequisites">Okunması Gerekenler</variable>
+   <variable id="or">or</variable>
+   <variable id="task_context">Bu görev hakkında</variable>
+   <variable id="task_example">Örnek</variable>
+   <variable id="task_postreq">Sonraki adım</variable>
+   <variable id="task_prereq">Başlamadan önce</variable>
+   <variable id="task_procedure">Yordam</variable>
+   <variable id="task_procedure_unordered">Yordam</variable>
+   <variable id="task_results">Sonuçlar</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="a11y.and-then"/>
+</variables>

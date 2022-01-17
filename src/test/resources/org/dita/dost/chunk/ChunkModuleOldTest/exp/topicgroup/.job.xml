@@ -1,0 +1,13 @@
+<job>
+  <property name="user.input.dir.uri">
+    <string>file:/</string>
+  </property>
+  <files>
+    <file src="file:/a.dita" uri="a.dita" path="a.dita" result="file:/a.dita" format="dita" target="true"/>
+    <file uri="Chunk1.dita" path="Chunk1.dita" result="file:/Chunk1.dita" format="dita"/>
+    <file src="file:/topicgroup.ditamap" uri="topicgroup.ditamap" path="topicgroup.ditamap"
+      result="file:/topicgroup.ditamap" format="ditamap" input="true"/>
+    <file src="file:/c.dita" uri="c.dita" path="c.dita" result="file:/c.dita" format="dita" target="true"/>
+    <file src="file:/b.dita" uri="b.dita" path="b.dita" result="file:/b.dita" format="dita" target="true"/>
+  </files>
+</job>

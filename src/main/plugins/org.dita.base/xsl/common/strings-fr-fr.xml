@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,60 +6,61 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="fr-fr">     <!-- French -->
-  <str name="Figure">Figure</str>
-  <str name="Table">Tableau</str>
-  <str name="Next topic">Sujet suivant</str>
-  <str name="Previous topic">Sujet précédent</str>
-  <str name="Parent topic">Sujet parent</str>
-  <str name="Required cleanup">A revoir</str>
-  <str name="Draft comment">Commentaire de travail</str>
-  <str name="Option">Option</str>
-  <str name="Description">Description</str>
-  <str name="Optional">Facultatif </str>
-  <str name="Required">Obligatoire</str>
-  <str name="Skip visual syntax diagram">Sauter le diagramme</str>
-  <str name="Read syntax diagram">Lire le diagramme</str>
-  <str name="Start of change">Début de modification</str>
-  <str name="End of change">Fin de modification</str>
-  <str name="Index">Index</str>
-  <str name="Special characters">Caractères spéciaux</str>
-  <str name="Numerics">Nombres</str>
-  <str name="End notes">Notes finales</str>
-  <str name="Artwork">Graphique</str>
-  <str name="Syntax">Syntaxe</str>
-  <str name="Type">Type</str>
-  <str name="Value">Valeur</str>
-  <str name="Note">Remarque</str>
-  <str name="Notes">Remarques</str>
-  <str name="Tip">Conseil</str>
-  <str name="Fastpath">Raccourci</str>
-  <str name="Important">Important</str>
-  <str name="Attention">Avertissement</str>
-  <str name="Caution">ATTENTION</str>
-  <str name="Danger">DANGER</str>
-  <str name="Remember">A faire</str>
-  <str name="Restriction">Restriction</str>
-  <str name="Trouble">Incident</str>
-  <str name="Warning">Avertissement</str>
-  <str name="Contents">Table des matières</str>
-  <str name="Related concepts">Concepts associés</str>
-  <str name="Related tasks">Tâches associées</str>
-  <str name="Related reference">Référence associée</str>
-  <str name="Related information">Information associée</str>
-  <str name="Prerequisite">Préambule</str>
-  <str name="Prerequisites">Préambules</str>
-  <str name="or">ou</str>
-  <str name="task_context">Pourquoi et quand exécuter cette tâche</str>
-  <str name="task_example">Exemple</str>
-  <str name="task_prereq">Avant de commencer</str>
-  <str name="task_postreq">Que faire ensuite</str>
-  <str name="task_procedure">Procédure</str>
-  <str name="task_procedure_unordered">Procédure</str>
-  <str name="task_results">Résultats</str>
-  <str name="Copyright">Copyright</str>
-  <str name="OpenQuote">« </str>
-  <str name="CloseQuote"> »</str>
-  <str name="ColonSymbol"> :</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Figure</variable>
+   <variable id="Table">Tableau</variable>
+   <variable id="Next topic">Sujet suivant</variable>
+   <variable id="Previous topic">Sujet précédent</variable>
+   <variable id="Parent topic">Sujet parent</variable>
+   <variable id="Required cleanup">A revoir</variable>
+   <variable id="Draft comment">Commentaire de travail</variable>
+   <variable id="Option">Option</variable>
+   <variable id="Description">Description</variable>
+   <variable id="Optional">Facultatif </variable>
+   <variable id="Required">Obligatoire</variable>
+   <variable id="Skip visual syntax diagram">Sauter le diagramme</variable>
+   <variable id="Read syntax diagram">Lire le diagramme</variable>
+   <variable id="Start of change">Début de modification</variable>
+   <variable id="End of change">Fin de modification</variable>
+   <variable id="Index">Index</variable>
+   <variable id="Special characters">Caractères spéciaux</variable>
+   <variable id="Numerics">Nombres</variable>
+   <variable id="End notes">Notes finales</variable>
+   <variable id="Artwork">Graphique</variable>
+   <variable id="Syntax">Syntaxe</variable>
+   <variable id="Type">Type</variable>
+   <variable id="Value">Valeur</variable>
+   <variable id="Note">Remarque</variable>
+   <variable id="Notes">Remarques</variable>
+   <variable id="Tip">Conseil</variable>
+   <variable id="Fastpath">Raccourci</variable>
+   <variable id="Important">Important</variable>
+   <variable id="Attention">Avertissement</variable>
+   <variable id="Caution">ATTENTION</variable>
+   <variable id="Danger">DANGER</variable>
+   <variable id="Remember">A faire</variable>
+   <variable id="Restriction">Restriction</variable>
+   <variable id="Trouble">Incident</variable>
+   <variable id="Warning">Avertissement</variable>
+   <variable id="Contents">Table des matières</variable>
+   <variable id="Related concepts">Concepts associés</variable>
+   <variable id="Related tasks">Tâches associées</variable>
+   <variable id="Related reference">Référence associée</variable>
+   <variable id="Related information">Information associée</variable>
+   <variable id="Prerequisite">Préambule</variable>
+   <variable id="Prerequisites">Préambules</variable>
+   <variable id="or">ou</variable>
+   <variable id="task_context">Pourquoi et quand exécuter cette tâche</variable>
+   <variable id="task_example">Exemple</variable>
+   <variable id="task_prereq">Avant de commencer</variable>
+   <variable id="task_postreq">Que faire ensuite</variable>
+   <variable id="task_procedure">Procédure</variable>
+   <variable id="task_procedure_unordered">Procédure</variable>
+   <variable id="task_results">Résultats</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="OpenQuote">« </variable>
+   <variable id="CloseQuote"> »</variable>
+   <variable id="ColonSymbol"> :</variable>
+   <variable id="a11y.and-then"/>
+</variables>

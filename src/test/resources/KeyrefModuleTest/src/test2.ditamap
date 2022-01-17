@@ -2,9 +2,13 @@
   <topicref class="- map/topicref " href="topic.dita"/>
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup " keyscope="A">
     <topicref class="- map/topicref " href="topic.dita"/>
+  	<topicref class="- map/topicref " href="res.dita" processing-role="resource-only"/>
+  	<topicref class="- map/topicref " href="res.png" processing-role="resource-only" format="png"/>
   </topicgroup>
   
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup " keyscope="B">
     <topicref class="- map/topicref " href="topic.dita"/>
+  	<topicref class="- map/topicref " href="res.dita" processing-role="resource-only"/>
+  	<topicref class="- map/topicref " href="res.png" processing-role="resource-only" format="png"/>
   </topicgroup>
 </map>

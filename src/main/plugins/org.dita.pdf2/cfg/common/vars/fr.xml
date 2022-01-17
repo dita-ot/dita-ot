@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--   
+<!--
 Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
@@ -29,7 +29,8 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project. 
 See the accompanying LICENSE file for applicable license.
 -->
-<vars xmlns="http://www.idiominc.com/opentopic/vars">
+<?xml-model href="../../../../org.dita.base/xsl/common/strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
   <variable id="Preface odd header"><param ref-name="prodname"/> | Préface | <param ref-name="pagenum"/></variable>
   <variable id="Preface even header"><param ref-name="pagenum"/> | Préface | <param ref-name="prodname"/></variable>
   <variable id="Table of Contents">Table des matières</variable>
@@ -65,14 +66,14 @@ See the accompanying LICENSE file for applicable license.
   <variable id="This link">ce lien</variable><!--UNUSED-->
   <variable id="Optional Step">Facultatif :</variable>
   <variable id="Required Step">Obligatoire :</variable>
-  <variable id="Task Prereq"></variable>
-  <variable id="Task Context"></variable>
-  <variable id="Task Steps"></variable>
-  <variable id="#steps-unordered-label"></variable>
-  <variable id="Task Result"></variable>
-  <variable id="Task Example"></variable>
-  <variable id="Task Postreq"></variable>
+  <variable id="Task Prereq"/>
+  <variable id="Task Context"/>
+  <variable id="Task Steps"/>
+  <variable id="#steps-unordered-label"/>
+  <variable id="Task Result"/>
+  <variable id="Task Example"/>
+  <variable id="Task Postreq"/>
   <variable id="Glossary">Glossaire</variable>
   <variable id="List of Tables">Liste des tableaux</variable>
   <variable id="List of Figures">Liste des illustrations</variable>
-</vars>
+</variables>

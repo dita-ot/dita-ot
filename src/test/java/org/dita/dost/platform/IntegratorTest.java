@@ -8,6 +8,7 @@
 package org.dita.dost.platform;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -90,24 +91,23 @@ public class IntegratorTest {
         i.execute();
 
         final Properties expProperties = getProperties(new File(expDir, "lib" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));
-        expProperties.setProperty("plugin.org.dita.base.dir", new File("plugins" + File.separator + "org.dita.base").getPath());
-        expProperties.setProperty("plugin.base.dir", new File("plugins" + File.separator + "base").getPath());
-        expProperties.setProperty("plugin.dummy.dir", new File("plugins" + File.separator + "dummy").getPath());
+        expProperties.setProperty("plugin.org.dita.base.dir", new File("plugins/org.dita.base").getPath());
+        expProperties.setProperty("plugin.base.dir", "plugins/base");
+        expProperties.setProperty("plugin.dummy.dir", "plugins/dummy");
         final Properties actProperties = getProperties(new File(tempDir, "config" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));
         // supported_image_extensions needs to be tested separately
-        assertEquals(new HashSet(Arrays.asList(expProperties.getProperty("supported_image_extensions").split(";"))),
-                     new HashSet(Arrays.asList(expProperties.getProperty("supported_image_extensions").split(";"))));
-        expProperties.remove("supported_image_extensions");
-        actProperties.remove("supported_image_extensions");
+        assertEquals(new HashSet(Arrays.asList(expProperties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS).split(";"))),
+                     new HashSet(Arrays.asList(expProperties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS).split(";"))));
+        expProperties.remove(CONF_SUPPORTED_IMAGE_EXTENSIONS);
+        actProperties.remove(CONF_SUPPORTED_IMAGE_EXTENSIONS);
         assertEquals(expProperties, actProperties);
+
         assertXMLEqual(new InputSource(new File(expDir, "build.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "build.xml").toURI().toString()));
         assertXMLEqual(new InputSource(new File(expDir, "catalog.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "catalog.xml").toURI().toString()));
         assertXMLEqual(new InputSource(new File(expDir, "xsl" + File.separator + "shell.xsl").toURI().toString()),
                 new InputSource(new File(tempDir, "xsl" + File.separator + "shell.xsl").toURI().toString()));
-        assertXMLEqual(new InputSource(new File(expDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml").toURI().toString()),
-                new InputSource(new File(tempDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml").toURI().toString()));
         assertXMLEqual(new InputSource(new File(expDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()),
                 new InputSource(new File(tempDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()));
 

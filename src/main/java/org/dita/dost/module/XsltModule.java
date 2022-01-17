@@ -27,14 +27,14 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
 import static org.dita.dost.util.FileUtils.replaceExtension;
-import static org.dita.dost.util.XMLUtils.toErrorListener;
+import static org.dita.dost.util.XMLUtils.toErrorReporter;
 import static org.dita.dost.util.XMLUtils.toMessageListener;
 
 /**
@@ -53,7 +53,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     private XsltExecutable templates;
     private final Map<String, String> params = new HashMap<>();
     private final Properties properties = new Properties();
-    private File style;
+    private Source style;
     private File in;
     private File out;
     private File destDir;
@@ -100,12 +100,12 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         processor = xmlUtils.getProcessor();
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
         xsltCompiler.setURIResolver(uriResolver);
-        xsltCompiler.setErrorListener(toErrorListener(logger));
-        logger.info("Loading stylesheet " + style.getAbsolutePath());
+        xsltCompiler.setErrorReporter(toErrorReporter(logger));
+        logger.info("Loading stylesheet " + style.getSystemId());
         try {
-            templates = xsltCompiler.compile(new StreamSource(style));
+            templates = xsltCompiler.compile(style);
         } catch (SaxonApiException e) {
-            throw new RuntimeException("Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(), e);
+            throw new RuntimeException("Failed to compile stylesheet '" + style.getSystemId() + "': " + e.getMessage(), e);
         }
         if (in != null) {
             transform(in, out);
@@ -181,7 +181,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 //            final URIResolver resolver = Configuration.DEBUG
 //                    ? new XMLUtils.DebugURIResolver(uriResolver)
 //                    : uriResolver;
-            transformer.setErrorListener(toErrorListener(logger));
+            transformer.setErrorReporter(toErrorReporter(logger));
             transformer.setURIResolver(uriResolver);
             transformer.setMessageListener(toMessageListener(logger));
             return transformer;
@@ -192,6 +192,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
     private void transform(final File in, final File out) throws DITAOTException {
         if (reloadstylesheet || t == null) {
+            logger.info("Loading stylesheet " + style.getSystemId());
             t = getTransformer();
         }
         transform(in, out, t);
@@ -294,7 +295,15 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         }
     }
 
+    /**
+     * @deprecated use {@link #setStyle(Source)} instead
+     */
+    @Deprecated
     public void setStyle(final File style) {
+        this.style = new StreamSource(style);
+    }
+
+    public void setStyle(final Source style) {
         this.style = style;
     }
 

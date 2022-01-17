@@ -861,7 +861,7 @@ See the accompanying LICENSE file for applicable license.
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='warning'">
-                        <fo:inline xsl:use-attribute-sets="note__label__danger">
+                        <fo:inline xsl:use-attribute-sets="note__label__warning">
                             <xsl:call-template name="getVariable">
                                 <xsl:with-param name="id" select="'Warning'"/>
                             </xsl:call-template>
@@ -927,10 +927,8 @@ See the accompanying LICENSE file for applicable license.
                         <fo:table-row>
                                 <fo:table-cell xsl:use-attribute-sets="note__image__entry">
                                     <fo:block>
-                                        <fo:external-graphic src="url('{concat($artworkPrefix, $noteImagePath)}')" 
-                                                             content-height="2em" padding-right="3pt"
-                                                             vertical-align="middle"
-                                                             baseline-shift="baseline"/>
+                                        <fo:external-graphic src="url('{concat($artworkPrefix, $noteImagePath)}')"
+                                                            xsl:use-attribute-sets="note__image"/>
                                     </fo:block>
                                 </fo:table-cell>
                                 <fo:table-cell xsl:use-attribute-sets="note__text__entry">
@@ -1024,8 +1022,8 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:call-template name="get-id"/>
               </xsl:attribute>
             </xsl:if>
-            <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
-            <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
+            <xsl:apply-templates select="*[not(contains(@class,' topic/title ') or contains(@class,' topic/desc '))]"/>
+            <xsl:apply-templates select="*[contains(@class,' topic/title ') or contains(@class,' topic/desc ')]"/>
         </fo:block>
     </xsl:template>
 
@@ -1507,6 +1505,9 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- Process common attributes -->
     <xsl:template name="commonattributes">
+      <xsl:apply-templates select="." mode="commonattributes"/>
+    </xsl:template>
+    <xsl:template match="@* | node()" mode="commonattributes">
       <xsl:apply-templates select="@id"/>
       <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')] |
                                    *[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="flag-attributes"/>

@@ -19,7 +19,6 @@ src/main/plugins/org.dita.base/build.xml
 src/main/plugins/org.dita.base/build_preprocess.xml
 src/main/plugins/org.dita.base/build_preprocess2.xml
 src/main/plugins/org.dita.base/catalog-dita.xml
-src/main/plugins/org.dita.base/xsl/common/allstrings.xml
 src/main/plugins/org.dita.base/xsl/common/strings.xml
 src/main/plugins/org.dita.base/xsl/preprocess/conref.xsl
 src/main/plugins/org.dita.base/xsl/preprocess/flag.xsl
@@ -43,12 +42,8 @@ src/main/plugins/org.dita.htmlhelp/build_dita2htmlhelp.xml
 src/main/plugins/org.dita.htmlhelp/lib/htmlhelp.jar
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhp.xsl
-src/main/plugins/org.dita.pdf2.axf/lib/axf.jar
-src/main/plugins/org.dita.pdf2.axf/xsl/fo/topic2fo_shell_axf.xsl
 src/main/plugins/org.dita.pdf2.fop/lib
 src/main/plugins/org.dita.pdf2.fop/xsl/fo/topic2fo_shell_fop.xsl
-src/main/plugins/org.dita.pdf2.xep/lib/
-src/main/plugins/org.dita.pdf2.xep/xsl/fo/topic2fo_shell_xep.xsl
 src/main/plugins/org.dita.pdf2/**/*.class
 src/main/plugins/org.dita.pdf2/build.xml
 src/main/plugins/org.dita.pdf2/cfg/catalog.xml

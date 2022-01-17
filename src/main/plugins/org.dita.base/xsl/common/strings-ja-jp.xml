@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,59 +6,60 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="ja-jp">        <!-- Japanese -->
-  <str name="Figure">図</str>
-  <str name="Table">表</str>
-  <str name="Next topic">次のトピック</str>
-  <str name="Previous topic">前のトピック</str>
-  <str name="Parent topic">親トピック</str>
-  <str name="Required cleanup">クリーンアップ要求</str>
-  <str name="Draft comment">ドラフト注釈</str>
-  <str name="Option">オプション</str>
-  <str name="Description">説明</str> 
-  <str name="Optional">オプション</str>
-  <str name="Required">必須</str>
-  <str name="Skip visual syntax diagram">構文図をスキップする</str>
-  <str name="Read syntax diagram">構文図を読む</str>
-  <str name="Start of change">変更の始まり</str>
-  <str name="End of change">変更の終わり</str>
-  <str name="Index">索引</str>
-  <str name="Special characters">特殊文字</str>
-  <str name="Numerics">数字</str>
-  <str name="End notes">脚注</str>
-  <str name="Artwork">アートワーク</str>
-  <str name="Syntax">構文</str>
-  <str name="Type">タイプ</str>
-  <str name="Value">値</str>
-  <str name="Note">注</str>
-  <str name="Notes">注</str>
-  <str name="Tip">ヒント</str>
-  <str name="Fastpath">ファースト・パス</str>
-  <str name="Important">重要</str>
-  <str name="Attention">重要</str>
-  <str name="Caution">注意</str>
-  <str name="Danger">危険</str>
-  <str name="Remember">要確認</str>
-  <str name="Restriction">制約事項</str>
-  <str name="Trouble">問題</str>
-  <str name="Warning">警告</str>
-  <str name="Contents">目次</str>
-  <str name="Related concepts">関連概念</str>
-  <str name="Related tasks">関連タスク</str>
-  <str name="Related reference">関連資料</str>
-  <str name="Related information">関連情報</str>
-  <str name="Prerequisite">前提条件</str>
-  <str name="Prerequisites">前提条件</str>
-  <str name="or">または</str>
-  <str name="task_context">このタスクについて</str>
-  <str name="task_example">例</str>
-  <str name="task_prereq">始める前に</str>
-  <str name="task_postreq">次のタスク</str>
-  <str name="task_procedure">手順</str>
-  <str name="task_procedure_unordered">手順</str>
-  <str name="task_results">タスクの結果</str>
-  <str name="Copyright">Copyright</str>
-  <str name="OpenQuote">「</str>
-  <str name="CloseQuote">」</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">図</variable>
+   <variable id="Table">表</variable>
+   <variable id="Next topic">次のトピック</variable>
+   <variable id="Previous topic">前のトピック</variable>
+   <variable id="Parent topic">親トピック</variable>
+   <variable id="Required cleanup">クリーンアップ要求</variable>
+   <variable id="Draft comment">ドラフト注釈</variable>
+   <variable id="Option">オプション</variable>
+   <variable id="Description">説明</variable>
+   <variable id="Optional">オプション</variable>
+   <variable id="Required">必須</variable>
+   <variable id="Skip visual syntax diagram">構文図をスキップする</variable>
+   <variable id="Read syntax diagram">構文図を読む</variable>
+   <variable id="Start of change">変更の始まり</variable>
+   <variable id="End of change">変更の終わり</variable>
+   <variable id="Index">索引</variable>
+   <variable id="Special characters">特殊文字</variable>
+   <variable id="Numerics">数字</variable>
+   <variable id="End notes">脚注</variable>
+   <variable id="Artwork">アートワーク</variable>
+   <variable id="Syntax">構文</variable>
+   <variable id="Type">タイプ</variable>
+   <variable id="Value">値</variable>
+   <variable id="Note">注</variable>
+   <variable id="Notes">注</variable>
+   <variable id="Tip">ヒント</variable>
+   <variable id="Fastpath">ファースト・パス</variable>
+   <variable id="Important">重要</variable>
+   <variable id="Attention">重要</variable>
+   <variable id="Caution">注意</variable>
+   <variable id="Danger">危険</variable>
+   <variable id="Remember">要確認</variable>
+   <variable id="Restriction">制約事項</variable>
+   <variable id="Trouble">問題</variable>
+   <variable id="Warning">警告</variable>
+   <variable id="Contents">目次</variable>
+   <variable id="Related concepts">関連概念</variable>
+   <variable id="Related tasks">関連タスク</variable>
+   <variable id="Related reference">関連資料</variable>
+   <variable id="Related information">関連情報</variable>
+   <variable id="Prerequisite">前提条件</variable>
+   <variable id="Prerequisites">前提条件</variable>
+   <variable id="or">または</variable>
+   <variable id="task_context">このタスクについて</variable>
+   <variable id="task_example">例</variable>
+   <variable id="task_prereq">始める前に</variable>
+   <variable id="task_postreq">次のタスク</variable>
+   <variable id="task_procedure">手順</variable>
+   <variable id="task_procedure_unordered">手順</variable>
+   <variable id="task_results">タスクの結果</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="OpenQuote">「</variable>
+   <variable id="CloseQuote">」</variable>
+   <variable id="a11y.and-then"/>
+</variables>

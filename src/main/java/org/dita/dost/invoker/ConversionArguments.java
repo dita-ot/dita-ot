@@ -161,8 +161,7 @@ public class ConversionArguments extends Arguments {
             } else if (isLongForm(arg, "-autoproxy")) {
                 proxy = true;
             } else if (arg.startsWith("-") || arg.startsWith("/")) {
-                // we don't have any more args to recognize!
-                throw new IllegalArgumentException(arg);
+                parseCommonOptions(arg, args);
             } else {
                 // if it's no other arg, it may be the target
                 targets.addElement(arg);

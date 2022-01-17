@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,57 +6,58 @@ Copyright 2009 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="ur-pk">        <!-- Urdu -->
-  <str name="Figure">تصویر</str>
-  <str name="Table">جدول</str>
-  <str name="Next topic">اگلا موضوع</str>
-  <str name="Previous topic">سابقہ موضوع</str>
-  <str name="Parent topic">مادر موضوع</str>
-  <str name="Required cleanup">مطلوبہ صفائی</str>
-  <str name="Draft comment">تبصرے کا مسودہ</str>
-  <str name="Option">اختیار</str>
-  <str name="Description">وضاحت</str>
-  <str name="Optional">اختیاری</str>
-  <str name="Required">ضروری</str>
-  <str name="Skip visual syntax diagram">وژوئل سنٹیکس کی شکل چھوڑ دیں</str>
-  <str name="Read syntax diagram">وژوئل سنٹیکس کی شکل پڑھیں</str>
-  <str name="Start of change">تبدیلی کی شروعات</str>
-  <str name="End of change">تبدیلی کی کا اختتام</str>
-  <str name="Index">انڈکس</str>
-  <str name="Special characters">خاص حروف</str>
-  <str name="Numerics">نمبر</str>
-  <str name="End notes">اختتامی نوٹس</str>
-  <str name="Artwork">آرٹ ورک</str>
-  <str name="Syntax">سنٹیکس</str>
-  <str name="Type">قسم</str>
-  <str name="Value">قدر</str>
-  <str name="Note">نوٹ</str>
-  <str name="Notes">نوٹس</str>
-  <str name="Tip">مشورہ</str>
-  <str name="Fastpath">تیز طریقہ</str>
-  <str name="Important">اہم</str>
-  <str name="Attention">براۓ توجہ</str>
-  <str name="Caution">احتیاط</str>
-  <str name="Danger">خطرناک</str>
-  <str name="Remember">یاد رکھیں</str>
-  <str name="Restriction">پابندی</str>
-  <str name="Trouble">مشکل/پریشانی</str>
-  <str name="Warning">انتباہ</str>
-  <str name="Contents">فہرست</str>
-  <str name="Related concepts">متعلقہ خیالات</str>
-  <str name="Related tasks">متعلقہ کام</str>
-  <str name="Related reference">متعلقہ حوالہ</str>
-  <str name="Related information">متعلقہ معلومات</str>
-  <str name="Prerequisite">شرط اول</str>
-  <str name="Prerequisites">اولین شرطیں</str>
-  <str name="or">یا</str>
-  <str name="task_context">اس کام کے متعلق</str>
-  <str name="task_example">مثال</str>
-  <str name="task_postreq">آکے کیا کرنا ہے</str>
-  <str name="task_prereq">قبل اس کے کہ آپ شروع کریں</str>
-  <str name="task_procedure">طریق عمل</str>
-  <str name="task_procedure_unordered">طریق عمل</str>
-  <str name="task_results">نتائج</str>
-  <str name="Copyright">حقوق</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">تصویر</variable>
+   <variable id="Table">جدول</variable>
+   <variable id="Next topic">اگلا موضوع</variable>
+   <variable id="Previous topic">سابقہ موضوع</variable>
+   <variable id="Parent topic">مادر موضوع</variable>
+   <variable id="Required cleanup">مطلوبہ صفائی</variable>
+   <variable id="Draft comment">تبصرے کا مسودہ</variable>
+   <variable id="Option">اختیار</variable>
+   <variable id="Description">وضاحت</variable>
+   <variable id="Optional">اختیاری</variable>
+   <variable id="Required">ضروری</variable>
+   <variable id="Skip visual syntax diagram">وژوئل سنٹیکس کی شکل چھوڑ دیں</variable>
+   <variable id="Read syntax diagram">وژوئل سنٹیکس کی شکل پڑھیں</variable>
+   <variable id="Start of change">تبدیلی کی شروعات</variable>
+   <variable id="End of change">تبدیلی کی کا اختتام</variable>
+   <variable id="Index">انڈکس</variable>
+   <variable id="Special characters">خاص حروف</variable>
+   <variable id="Numerics">نمبر</variable>
+   <variable id="End notes">اختتامی نوٹس</variable>
+   <variable id="Artwork">آرٹ ورک</variable>
+   <variable id="Syntax">سنٹیکس</variable>
+   <variable id="Type">قسم</variable>
+   <variable id="Value">قدر</variable>
+   <variable id="Note">نوٹ</variable>
+   <variable id="Notes">نوٹس</variable>
+   <variable id="Tip">مشورہ</variable>
+   <variable id="Fastpath">تیز طریقہ</variable>
+   <variable id="Important">اہم</variable>
+   <variable id="Attention">براۓ توجہ</variable>
+   <variable id="Caution">احتیاط</variable>
+   <variable id="Danger">خطرناک</variable>
+   <variable id="Remember">یاد رکھیں</variable>
+   <variable id="Restriction">پابندی</variable>
+   <variable id="Trouble">مشکل/پریشانی</variable>
+   <variable id="Warning">انتباہ</variable>
+   <variable id="Contents">فہرست</variable>
+   <variable id="Related concepts">متعلقہ خیالات</variable>
+   <variable id="Related tasks">متعلقہ کام</variable>
+   <variable id="Related reference">متعلقہ حوالہ</variable>
+   <variable id="Related information">متعلقہ معلومات</variable>
+   <variable id="Prerequisite">شرط اول</variable>
+   <variable id="Prerequisites">اولین شرطیں</variable>
+   <variable id="or">یا</variable>
+   <variable id="task_context">اس کام کے متعلق</variable>
+   <variable id="task_example">مثال</variable>
+   <variable id="task_postreq">آکے کیا کرنا ہے</variable>
+   <variable id="task_prereq">قبل اس کے کہ آپ شروع کریں</variable>
+   <variable id="task_procedure">طریق عمل</variable>
+   <variable id="task_procedure_unordered">طریق عمل</variable>
+   <variable id="task_results">نتائج</variable>
+   <variable id="Copyright">حقوق</variable>
+   <variable id="a11y.and-then"/>
+</variables>

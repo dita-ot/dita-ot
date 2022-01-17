@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" stylesheet="maplinkImpl.xsl">
+
+  <x:scenario label="three level descendants">
+    <x:context>
+      <map class="- map/map ">
+        <topicref class="- map/topicref " href="a.dita">
+          <topicref class="- map/topicref " href="aa.dita">
+            <topicref class="- map/topicref " href="aaa.dita"/>
+          </topicref>
+        </topicref>
+      </map>
+    </x:context>
+    <x:expect label="generate child, ancestor and parent links">
+      <mapcollection>
+        <maplinks href="a.dita">
+          <linkpool class="- topic/linkpool ">
+            <linkpool class="- topic/linkpool ">
+              <link class="- topic/link " mapclass="- map/topicref " scope="local" format="dita" href="aa.dita"
+                role="child"/>
+            </linkpool>
+          </linkpool>
+        </maplinks>
+        <maplinks href="aa.dita">
+          <linkpool class="- topic/linkpool ">
+            <link class="- topic/link " mapclass="- map/topicref " scope="local" format="dita" href="a.dita"
+              role="parent"/>
+            <linkpool class="- topic/linkpool ">
+              <link class="- topic/link " mapclass="- map/topicref " scope="local" format="dita" href="aaa.dita"
+                role="child"/>
+            </linkpool>
+          </linkpool>
+        </maplinks>
+        <maplinks href="aaa.dita">
+          <linkpool class="- topic/linkpool ">
+            <link class="- topic/link " mapclass="- map/topicref " scope="local" format="dita" href="aa.dita"
+              role="parent"/>
+            <link class="- topic/link " mapclass="- map/topicref " scope="local" format="dita" href="a.dita"
+              role="ancestor"/>
+          </linkpool>
+        </maplinks>
+      </mapcollection>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

@@ -133,7 +133,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="change-historylist.attributes">
-      <xs:attributeGroup ref="changehistory.data.atts"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="mapkeyref" type="xs:string"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="change-item">

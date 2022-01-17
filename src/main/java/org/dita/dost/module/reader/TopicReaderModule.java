@@ -36,6 +36,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import static net.sf.saxon.s9api.streams.Steps.descendant;
+import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
@@ -217,7 +218,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             return null;
         }
         final String scope = in.getAttributeValue(QNAME_SCOPE);
-        if (!(scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
+        if (!isLocalScope(scope)) {
             return null;
         }
         final String format = in.getAttributeValue(QNAME_FORMAT);

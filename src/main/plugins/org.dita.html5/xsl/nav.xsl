@@ -25,7 +25,8 @@ See the accompanying LICENSE file for applicable license.
   </xsl:variable>
 
   <xsl:attribute-set name="toc">
-    <xsl:attribute name="role">toc</xsl:attribute>
+    <xsl:attribute name="class">toc</xsl:attribute>
+    <xsl:attribute name="role">navigation</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:template match="*" mode="gen-user-sidetoc">

@@ -1,0 +1,128 @@
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+    ditaarch:DITAArchVersion="2.0" id="topic_a">
+    <title class="- topic/title ">a</title>
+    <body class="- topic/body ">
+      <image class="- topic/image " href="a.png"/>
+      <image class="- topic/image " href="dir/b.png"/>
+      <image class="- topic/image " href="dir/subdir/c.png"/>
+      <p class="- topic/p ">
+        <xref class="- topic/xref " href="a.dita#topic_aa"/>
+        <xref class="- topic/xref " href="a.dita#topic_b"/>
+        <xref class="- topic/xref " href="dir/b.dita#topic_bb"/>
+        <xref class="- topic/xref " href="a.dita#topic_c"/>
+        <xref class="- topic/xref " href="dir/subdir/c.dita#topic_cc"/>
+      </p>
+    </body>
+    <related-links class="- topic/related-links ">
+      <link class="- topic/link " href="a.dita#topic_aa"/>
+      <link class="- topic/link " href="a.dita#topic_b"/>
+      <link class="- topic/link " href="dir/b.dita#topic_bb"/>
+      <link class="- topic/link " href="a.dita#topic_c"/>
+      <link class="- topic/link " href="dir/subdir/c.dita#topic_cc"/>
+    </related-links>
+    <topic class="- topic/topic " ditaarch:DITAArchVersion="2.0" id="topic_aa">
+      <title class="- topic/title ">aa</title>
+      <body class="- topic/body ">
+        <p class="- topic/p ">
+          <xref class="- topic/xref " href="a.dita#topic_a"/>
+          <xref class="- topic/xref " href="a.dita#topic_b"/>
+          <xref class="- topic/xref " href="dir/b.dita#topic_bb"/>
+          <xref class="- topic/xref " href="a.dita#topic_c"/>
+          <xref class="- topic/xref " href="dir/subdir/c.dita#topic_cc"/>
+        </p>
+      </body>
+      <related-links class="- topic/related-links ">
+        <link class="- topic/link " href="a.dita#topic_a"/>
+        <link class="- topic/link " href="a.dita#topic_b"/>
+        <link class="- topic/link " href="dir/b.dita#topic_bb"/>
+        <link class="- topic/link " href="a.dita#topic_c"/>
+        <link class="- topic/link " href="dir/subdir/c.dita#topic_cc"/>
+      </related-links>
+    </topic>
+    <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+      ditaarch:DITAArchVersion="2.0" id="topic_b">
+      <title class="- topic/title ">b</title>
+      <body class="- topic/body ">
+        <image class="- topic/image " href="../a.png"/>
+        <image class="- topic/image " href="b.png"/>
+        <image class="- topic/image " href="subdir/c.png"/>
+        <p class="- topic/p ">
+          <xref class="- topic/xref " href="a.dita#topic_a"/>
+          <xref class="- topic/xref " href="a.dita#topic_aa"/>
+          <xref class="- topic/xref " href="dir/b.dita#topic_bb"/>
+          <xref class="- topic/xref " href="a.dita#topic_c"/>
+          <xref class="- topic/xref " href="dir/subdir/c.dita#topic_cc"/>
+        </p>
+      </body>
+      <related-links class="- topic/related-links ">
+        <link class="- topic/link " href="a.dita#topic_a"/>
+        <link class="- topic/link " href="a.dita#topic_aa"/>
+        <link class="- topic/link " href="dir/b.dita#topic_bb"/>
+        <link class="- topic/link " href="a.dita#topic_c"/>
+        <link class="- topic/link " href="dir/subdir/c.dita#topic_cc"/>
+      </related-links>
+      <topic class="- topic/topic " ditaarch:DITAArchVersion="2.0" id="topic_bb">
+        <title class="- topic/title ">bb</title>
+        <body class="- topic/body ">
+          <p class="- topic/p ">
+            <xref class="- topic/xref " href="a.dita#topic_a"/>
+            <xref class="- topic/xref " href="a.dita#topic_aa"/>
+            <xref class="- topic/xref " href="dir/b.dita#topic_b"/>
+            <xref class="- topic/xref " href="a.dita#topic_c"/>
+            <xref class="- topic/xref " href="dir/subdir/c.dita#topic_cc"/>
+          </p>
+        </body>
+        <related-links class="- topic/related-links ">
+          <link class="- topic/link " href="a.dita#topic_a"/>
+          <link class="- topic/link " href="a.dita#topic_aa"/>
+          <link class="- topic/link " href="dir/b.dita#topic_b"/>
+          <link class="- topic/link " href="a.dita#topic_c"/>
+          <link class="- topic/link " href="dir/subdir/c.dita#topic_cc"/>
+        </related-links>
+      </topic>
+    </topic>
+    <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+      ditaarch:DITAArchVersion="2.0" id="topic_c">
+      <title class="- topic/title ">c</title>
+      <body class="- topic/body ">
+        <image class="- topic/image " href="../../a.png"/>
+        <image class="- topic/image " href="../b.png"/>
+        <image class="- topic/image " href="c.png"/>
+        <p class="- topic/p ">
+          <xref class="- topic/xref " href="a.dita#topic_a"/>
+          <xref class="- topic/xref " href="a.dita#topic_aa"/>
+          <xref class="- topic/xref " href="a.dita#topic_b"/>
+          <xref class="- topic/xref " href="dir/b.dita#topic_bb"/>
+          <xref class="- topic/xref " href="dir/subdir/c.dita#topic_cc"/>
+        </p>
+      </body>
+      <related-links class="- topic/related-links ">
+        <link class="- topic/link " href="a.dita#topic_a"/>
+        <link class="- topic/link " href="a.dita#topic_aa"/>
+        <link class="- topic/link " href="a.dita#topic_b"/>
+        <link class="- topic/link " href="dir/b.dita#topic_bb"/>
+        <link class="- topic/link " href="dir/subdir/c.dita#topic_cc"/>
+      </related-links>
+      <topic class="- topic/topic " ditaarch:DITAArchVersion="2.0" id="topic_cc">
+        <title class="- topic/title ">cc</title>
+        <body class="- topic/body ">
+          <p class="- topic/p ">
+            <xref class="- topic/xref " href="a.dita#topic_a"/>
+            <xref class="- topic/xref " href="a.dita#topic_aa"/>
+            <xref class="- topic/xref " href="a.dita#topic_b"/>
+            <xref class="- topic/xref " href="dir/b.dita#topic_bb"/>
+            <xref class="- topic/xref " href="dir/subdir/c.dita#topic_c"/>
+          </p>
+        </body>
+        <related-links class="- topic/related-links ">
+          <link class="- topic/link " href="a.dita#topic_a"/>
+          <link class="- topic/link " href="a.dita#topic_aa"/>
+          <link class="- topic/link " href="a.dita#topic_b"/>
+          <link class="- topic/link " href="dir/b.dita#topic_bb"/>
+          <link class="- topic/link " href="dir/subdir/c.dita#topic_c"/>
+        </related-links>
+      </topic>
+    </topic>
+  </topic>
+</dita>

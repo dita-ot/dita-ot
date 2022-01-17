@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,58 +6,59 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="ca-es">        <!-- Catalan -->
-  <str name="Figure">Figura</str>
-  <str name="Table">Taula</str>
-  <str name="Next topic">Tema següent</str>
-  <str name="Previous topic">Tema anterior</str>
-  <str name="Parent topic">Tema principal</str>
-  <str name="Required cleanup">Per revisar</str>
-  <str name="Draft comment">Esborrany: comentaris</str>
-  <str name="Option">Opció</str>
-  <str name="Description">Descripció</str>
-  <str name="Optional">Opcional</str>
-  <str name="Required">Necessari</str>
-  <str name="Skip visual syntax diagram">Ometre l'esquema de sintaxi visual</str>
-  <str name="Read syntax diagram">Llegir l'esquema de sintaxi</str>
-  <str name="Start of change">Inici del canvi</str>
-  <str name="End of change">Fi del canvi</str>
-  <str name="Index">Índex</str>
-  <str name="Special characters">Caràcters Especials</str>
-  <str name="Numerics">Números</str>
-  <str name="End notes">Notes al peu</str>
-  <str name="Artwork">Gràfics</str>
-  <str name="Syntax">Sintaxi</str>
-  <str name="Type">Tipus</str>
-  <str name="Value">Valor</str>
-  <str name="intro-to-topic-link">apartat</str>
-  <str name="Note">Nota</str>
-  <str name="Notes">Notes</str>
-  <str name="Tip">Consell</str>
-  <str name="Fastpath">Drecera</str>
-  <str name="Important">Important</str>
-  <str name="Attention">Atenció</str>
-  <str name="Caution">PRECAUCIÓ</str>
-  <str name="Danger">PERILL</str>
-  <str name="Remember">Recordeu</str>
-  <str name="Restriction">Restricció</str>
-  <str name="Trouble">Problema</str>
-  <str name="Warning">Avís</str>
-  <str name="Contents">Contingut</str>
-  <str name="Related concepts">Conceptes relacionats</str>
-  <str name="Related tasks">Tasques relacionades</str>
-  <str name="Related reference">Referència relacionada</str>
-  <str name="Related information">Informació relacionada</str>
-  <str name="Prerequisite">Requisit</str>
-  <str name="Prerequisites">Requisits</str>
-  <str name="or">or</str>
-  <str name="task_context">Quant a aquesta tasca</str>
-  <str name="task_example">Exemple</str>
-  <str name="task_postreq">Què cal fer posteriorment</str>
-  <str name="task_prereq">Abans de començar</str>
-  <str name="task_procedure">Procediment</str>
-  <str name="task_procedure_unordered">Procediment</str>
-  <str name="task_results">Resultats</str>
-  <str name="Copyright">Copyright</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Figura</variable>
+   <variable id="Table">Taula</variable>
+   <variable id="Next topic">Tema següent</variable>
+   <variable id="Previous topic">Tema anterior</variable>
+   <variable id="Parent topic">Tema principal</variable>
+   <variable id="Required cleanup">Per revisar</variable>
+   <variable id="Draft comment">Esborrany: comentaris</variable>
+   <variable id="Option">Opció</variable>
+   <variable id="Description">Descripció</variable>
+   <variable id="Optional">Opcional</variable>
+   <variable id="Required">Necessari</variable>
+   <variable id="Skip visual syntax diagram">Ometre l'esquema de sintaxi visual</variable>
+   <variable id="Read syntax diagram">Llegir l'esquema de sintaxi</variable>
+   <variable id="Start of change">Inici del canvi</variable>
+   <variable id="End of change">Fi del canvi</variable>
+   <variable id="Index">Índex</variable>
+   <variable id="Special characters">Caràcters Especials</variable>
+   <variable id="Numerics">Números</variable>
+   <variable id="End notes">Notes al peu</variable>
+   <variable id="Artwork">Gràfics</variable>
+   <variable id="Syntax">Sintaxi</variable>
+   <variable id="Type">Tipus</variable>
+   <variable id="Value">Valor</variable>
+   <variable id="intro-to-topic-link">apartat</variable>
+   <variable id="Note">Nota</variable>
+   <variable id="Notes">Notes</variable>
+   <variable id="Tip">Consell</variable>
+   <variable id="Fastpath">Drecera</variable>
+   <variable id="Important">Important</variable>
+   <variable id="Attention">Atenció</variable>
+   <variable id="Caution">PRECAUCIÓ</variable>
+   <variable id="Danger">PERILL</variable>
+   <variable id="Remember">Recordeu</variable>
+   <variable id="Restriction">Restricció</variable>
+   <variable id="Trouble">Problema</variable>
+   <variable id="Warning">Avís</variable>
+   <variable id="Contents">Contingut</variable>
+   <variable id="Related concepts">Conceptes relacionats</variable>
+   <variable id="Related tasks">Tasques relacionades</variable>
+   <variable id="Related reference">Referència relacionada</variable>
+   <variable id="Related information">Informació relacionada</variable>
+   <variable id="Prerequisite">Requisit</variable>
+   <variable id="Prerequisites">Requisits</variable>
+   <variable id="or">or</variable>
+   <variable id="task_context">Quant a aquesta tasca</variable>
+   <variable id="task_example">Exemple</variable>
+   <variable id="task_postreq">Què cal fer posteriorment</variable>
+   <variable id="task_prereq">Abans de començar</variable>
+   <variable id="task_procedure">Procediment</variable>
+   <variable id="task_procedure_unordered">Procediment</variable>
+   <variable id="task_results">Resultats</variable>
+   <variable id="Copyright">Copyright</variable>
+   <variable id="a11y.and-then"/>
+</variables>

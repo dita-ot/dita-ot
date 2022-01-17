@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
-  xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable" stylesheet="../../../../../main/plugins/org.dita.html5/xsl/functions.xsl">
+  xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable" 
+  stylesheet="../../../../../main/plugins/org.dita.html5/xsl/functions.xsl">
 
   <x:scenario label="dita-ot:get-prefixed-id">
     <x:scenario label="p in topic">
@@ -109,6 +110,17 @@
       </x:call>
 
       <x:expect label="return element id prefixed with topic id" select="'topic__section__p__1'"/>
+    </x:scenario>
+    <x:scenario label="generated element without id">
+      <x:call function="dita-ot:generate-stable-id">
+        <x:param name="element" select="(//p)[1]">
+          <body class="- topic/body ">
+            <p class="- topic/p ">para</p>
+          </body>
+        </x:param>
+      </x:call>
+      
+      <x:expect label="return generated id" test="matches(., '^d\d+e\d+$')"/>
     </x:scenario>
   </x:scenario>
 

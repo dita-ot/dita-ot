@@ -240,11 +240,13 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                 throws SAXException {
             Attributes resAtts = atts;
             if ((TOPIC_XREF.matches(atts) || TOPIC_LINK.matches(atts) || TOPIC_IMAGE.matches(atts))
-                    && !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, atts.getValue(ATTRIBUTE_NAME_SCOPE))
-                    && atts.getValue(ATTRIBUTE_NAME_HREF) != null) {
-                resAtts = new XMLUtils.AttributesBuilder(atts)
-                        .add(ATTRIBUTE_NAME_HREF, updateHref(atts.getValue(ATTRIBUTE_NAME_HREF)))
-                        .build();
+                    && !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, atts.getValue(ATTRIBUTE_NAME_SCOPE))) {
+                final String value = atts.getValue(ATTRIBUTE_NAME_HREF);
+                if (value != null && !value.startsWith("#")) {
+                    resAtts = new XMLUtils.AttributesBuilder(atts)
+                            .add(ATTRIBUTE_NAME_HREF, updateHref(value))
+                            .build();
+                }
             }
             getContentHandler().startElement(uri, localName, qName, resAtts);
         }

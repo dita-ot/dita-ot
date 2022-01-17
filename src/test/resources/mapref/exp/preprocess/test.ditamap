@@ -39,5 +39,13 @@
         <linktext class="- map/linktext ">title</linktext>
       </topicmeta>
     </topicref>
+    <mapref class="+ map/topicref mapgroup-d/mapref " format="ditamap" scope="peer" href="peer.ditamap"
+      audience="novice">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle "/>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext "/>
+      </topicmeta>
+    </mapref>
   </topicgroup>
 </map>

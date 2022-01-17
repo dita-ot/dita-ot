@@ -10,5 +10,7 @@
     <!-- indirect mapref with fallback -->
     <mapref keys="B" href="submap.ditamap"/>
     <mapref keyref="B" href="fallback.ditamap"/>
+    <!-- peer map -->
+    <mapref href="peer.ditamap" scope="peer"/>
   </topicgroup>
 </map>

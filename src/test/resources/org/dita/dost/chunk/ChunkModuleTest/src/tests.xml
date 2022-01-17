@@ -1,0 +1,277 @@
+<tests>
+  <test name="combine">
+    <map href="combine.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="b.dita">
+          <topicref href="c.dita"/>
+        </topicref>
+      </topicref>
+    </map>
+    <topic id="topic_a" href="a.dita" title="a">
+      <p>a</p>
+    </topic>
+    <topic id="topic_b" href="b.dita" title="b">
+      <p>b</p>
+    </topic>
+    <topic id="topic_c" href="c.dita" title="c">
+      <p>c</p>
+    </topic>
+  </test>
+  <test name="map">
+    <map href="map.ditamap" chunk="combine">
+      <topicref href="a.dita">
+        <topicref href="b.dita">
+          <topicref href="c.dita"/>
+        </topicref>
+      </topicref>
+    </map>
+    <topic id="topic_r4k_cyw_g4b" href="a.dita" title="a">
+      <p>a</p>
+    </topic>
+    <topic id="topic_ayt_dyw_g4b" href="b.dita" title="b">
+      <p>b</p>
+    </topic>
+    <topic id="topic_ayt_dyw_g4b" href="c.dita" title="c">
+      <p>c</p>
+    </topic>
+  </test>
+  <test name="override">
+    <map href="override.ditamap">
+      <topicref href="a.dita">
+        <topicref href="b.dita"/>
+      </topicref>
+    </map>
+    <topic id="topic_a" href="a.dita" title="a">
+      <p>a</p>
+    </topic>
+    <topic id="topic" href="b.dita" title="b">
+      <p>b</p>
+    </topic>
+  </test>
+  <test name="uplevels">
+    <map href="maps/uplevels.ditamap">
+      <topicref href="../topics/a.dita" chunk="combine">
+        <topicref href="../topics/b.dita"/>
+      </topicref>
+    </map>
+    <topic id="topic_a" href="topics/a.dita" title="a">
+      <p>a</p>
+      <link href="b.dita"/>
+    </topic>
+    <topic id="topic_b" href="topics/b.dita" title="b">
+      <p>b</p>
+      <link href="a.dita"/>
+    </topic>
+  </test>
+  <test name="uplevels-base" abstact="true" generate-links="true">
+    <topic id="topic_a" href="a.dita" title="a">
+      <image href="a.png"/>
+      <image href="dir/b.png"/>
+      <image href="dir/subdir/c.png"/>
+      <topic id="topic_aa" title="aa"/>
+    </topic>
+    <topic id="topic_b" href="dir/b.dita" title="b">
+      <image href="../a.png"/>
+      <image href="b.png"/>
+      <image href="subdir/c.png"/>
+      <topic id="topic_bb" title="bb"/>
+    </topic>
+    <topic id="topic_c" href="dir/subdir/c.dita" title="c">
+      <image href="../../a.png"/>
+      <image href="../b.png"/>
+      <image href="c.png"/>
+      <topic id="topic_cc" title="cc"/>
+    </topic>
+    <resource href="a.png" format="image"/>
+    <resource href="dir/b.png" format="image"/>
+    <resource href="dir/subdir/c.png" format="image"/>
+  </test>
+  <test name="uplevels-root" extends="uplevels-base">
+    <map href="map.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="dir/b.dita"/>
+        <topicref href="dir/subdir/c.dita"/>
+      </topicref>
+    </map>
+  </test>
+  <test name="uplevels-dir" extends="uplevels-base">
+    <map href="dir/map.ditamap">
+      <topicref href="../a.dita" chunk="combine">
+        <topicref href="b.dita"/>
+        <topicref href="subdir/c.dita"/>
+      </topicref>
+    </map>
+  </test>
+  <test name="uplevels-parallel" extends="uplevels-base">
+    <map href="maps/map.ditamap">
+      <topicref href="../a.dita" chunk="combine">
+        <topicref href="../dir/b.dita"/>
+        <topicref href="../dir/subdir/c.dita"/>
+      </topicref>
+    </map>
+  </test>
+  <test name="topicgroup">
+    <map href="topicgroup.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicgroup>
+          <topicref href="b.dita"/>
+        </topicgroup>
+      </topicref>
+      <topicgroup chunk="combine">
+        <topicref href="c.dita"/>
+      </topicgroup>
+    </map>
+    <topic id="topic_r4k_cyw_g4b" href="a.dita" title="a">
+      <p>a</p>
+    </topic>
+    <topic id="topic_ayt_dyw_g4b" href="b.dita" title="b">
+      <p>b</p>
+    </topic>
+    <topic id="topic_ayt_dyw_g4b" href="c.dita" title="c">
+      <p>c</p>
+    </topic>
+  </test>
+  <test name="topichead">
+    <map href="topichead.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topichead>
+          <topicmeta>
+            <navtitle>navtitle</navtitle>
+          </topicmeta>
+          <topicref href="b.dita"/>
+        </topichead>
+      </topicref>
+      <topichead chunk="combine">
+        <topicmeta>
+          <navtitle>navtitle</navtitle>
+        </topicmeta>
+        <topicref href="c.dita"/>
+      </topichead>
+    </map>
+    <topic id="topic_r4k_cyw_g4b" href="a.dita" title="a">
+      <p>a</p>
+    </topic>
+    <topic id="topic_ayt_dyw_g4b" href="b.dita" title="b">
+      <p>b</p>
+    </topic>
+    <topic id="topic_ayt_dyw_g4b" href="c.dita" title="c">
+      <p>c</p>
+    </topic>
+  </test>
+  <test name="duplicate">
+    <map href="combine.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="b.dita">
+          <topicref href="c.dita"/>
+        </topicref>
+      </topicref>
+    </map>
+    <topic id="topic" href="a.dita" title="a">
+      <p>a</p>
+    </topic>
+    <topic id="topic" href="b.dita" title="b">
+      <p>b</p>
+    </topic>
+    <topic id="topic" href="c.dita" title="c">
+      <p>c</p>
+    </topic>
+  </test>
+  <test name="multiple">
+    <map href="combine.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="b.dita">
+          <topicref href="c.dita"/>
+        </topicref>
+      </topicref>
+      <topicref href="a.dita">
+        <topicref href="b.dita">
+          <topicref href="c.dita"/>
+        </topicref>
+      </topicref>
+    </map>
+    <topic id="topic" href="a.dita" title="a">
+      <p>a</p>
+    </topic>
+    <topic id="topic" href="b.dita" title="b">
+      <p>b</p>
+    </topic>
+    <topic id="topic" href="c.dita" title="c">
+      <p>c</p>
+    </topic>
+  </test>
+  <test name="link">
+    <map href="link.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="b.dita">
+          <topicref href="c.dita"/>
+        </topicref>
+      </topicref>
+    </map>
+    <topic id="topic_a" href="a.dita" title="a">
+      <link href="b.dita"/>
+      <link href="c.dita"/>
+    </topic>
+    <topic id="topic_b" href="b.dita" title="b">
+      <link href="a.dita"/>
+      <link href="c.dita"/>
+    </topic>
+    <topic id="topic_c" href="c.dita" title="c">
+      <link href="a.dita"/>
+      <link href="b.dita"/>
+    </topic>
+  </test>
+  <test name="nested">
+    <map href="nested.ditamap">
+      <topicref href="a.dita#topic_a2" chunk="combine">
+        <topicref href="b.dita#topic_b2"/>
+      </topicref>
+    </map>
+    <topic id="topic_a1" href="a.dita" title="a1">
+      <topic id="topic_a2" title="a2"/>
+    </topic>
+    <topic id="topic_b1" href="b.dita" title="b1">
+      <topic id="topic_b2" title="b2"/>
+    </topic>
+  </test>
+  <test name="dita">
+    <map href="dita.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="b.dita"/>
+        <topicref href="c.dita"/>
+      </topicref>
+    </map>
+    <dita href="a.dita" title="a">
+      <topic id="topic_a1" title="a1"/>
+      <topic id="topic_a2" title="a2"/>
+    </dita>
+    <dita href="b.dita" title="a">
+      <topic id="topic_b1" title="b1"/>
+      <topic id="topic_b2" title="b2"/>
+    </dita>
+    <dita href="c.dita" title="c">
+      <topic id="topic_c1" title="c1"/>
+      <topic id="topic_c2" title="c2"/>
+    </dita>
+  </test>
+  <test name="format">
+    <map href="format.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="b.dita" format="txt"/>
+      </topicref>
+    </map>
+    <topic id="topic_r4k_cyw_g4b" href="a.dita" title="a">
+      <p>a</p>
+    </topic>
+    <resource href="b.txt" format="txt"/>
+  </test>
+  <test name="scope">
+    <map href="scope.ditamap">
+      <topicref href="a.dita" chunk="combine">
+        <topicref href="https://example.com/" format="dita" scope="extenal"/>
+      </topicref>
+    </map>
+    <topic id="topic" href="a.dita" title="a">
+      <link href="https://example.com/" format="dita" scope="extenal"/>
+    </topic>
+  </test>
+</tests>

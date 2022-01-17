@@ -8,16 +8,19 @@
 package org.dita.dost.module;
 
 import com.google.common.collect.ImmutableSet;
-import org.apache.commons.io.FilenameUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.store.Store;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -28,11 +31,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.nio.file.Files;
+import java.util.*;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractModuleTest {
 
@@ -40,8 +43,17 @@ public abstract class AbstractModuleTest {
     private final File expBaseDir = new File(resourceDir, "exp");
     private File tempBaseDir;
     private final DocumentBuilder builder;
+    private final String testCase;
+    private final Map<String, String> params;
+    protected boolean parallel;
+    protected File tempDir;
+    protected Job job;
+    protected AbstractPipelineModule chunkModule;
+    protected CachingLogger logger;
 
-    public AbstractModuleTest() {
+    public AbstractModuleTest(final String testCase, final Map<String, String> params) {
+        this.testCase = testCase;
+        this.params = params;
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -93,6 +105,14 @@ public abstract class AbstractModuleTest {
     public void setUp() throws Exception {
         tempBaseDir = TestUtils.createTempDir(getClass());
         TestUtils.copy(new File(resourceDir, "src"), tempBaseDir);
+        tempDir = new File(tempBaseDir, testCase);
+        chunkModule = getModule(tempDir);
+        final Store store = new StreamStore(tempDir, new XMLUtils());
+        job = new Job(tempDir, store);
+        chunkModule.setJob(job);
+        logger = new CachingLogger(true);
+        chunkModule.setLogger(logger);
+        chunkModule.setParallel(parallel);
     }
 
     @After
@@ -100,21 +120,40 @@ public abstract class AbstractModuleTest {
         TestUtils.forceDelete(tempBaseDir);
     }
 
-    public void test(final String testCase) {
-        final String testName = FilenameUtils.getBaseName(testCase);
-        final File tempDir = new File(tempBaseDir, testName);
-        final File expDir = new File(expBaseDir, testName);
-        try {
-            final AbstractPipelineModule chunkModule = getModule(tempDir);
-            final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
-            chunkModule.setJob(job);
-            final CachingLogger logger = new CachingLogger(true);
-            chunkModule.setLogger(logger);
+    @Test
+    public void serialFile() {
+        test();
+    }
 
+    @Test
+    public void parallelFile() {
+        chunkModule.setParallel(true);
+        test();
+    }
+
+    @Test
+    public void serialMemory() throws IOException {
+        job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
+        chunkModule.setJob(job);
+        test();
+    }
+
+    @Test
+    public void parallelMemory() throws IOException {
+        job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
+        chunkModule.setJob(job);
+        chunkModule.setParallel(true);
+        test();
+    }
+
+    public void test() {
+        final File expDir = new File(expBaseDir, testCase);
+        try {
             final AbstractPipelineInput input = getAbstractPipelineInput();
+            params.forEach(input::setAttribute);
             chunkModule.execute(input);
 
-            compare(tempDir, expDir);
+            compare(tempDir, expDir, job.getStore());
 
             logger.getMessages().stream()
                     .filter(m -> m.level == Message.Level.ERROR)
@@ -124,25 +163,54 @@ public abstract class AbstractModuleTest {
         }
     }
 
-    abstract AbstractPipelineInput getAbstractPipelineInput();
+    protected abstract AbstractPipelineInput getAbstractPipelineInput();
 
-    abstract AbstractPipelineModule getModule(File tempDir);
+    protected abstract AbstractPipelineModule getModule(File tempDir);
 
     private static final Set<String> IGNORE = ImmutableSet.of(".job.xml", ".DS_Store");
 
-    private void compare(File actDir, File expDir) throws SAXException, IOException {
-        final File[] exps = expDir.listFiles();
-        for (final File exp : exps) {
-            if (exp.isDirectory()) {
-                compare(new File(expDir, exp.getName()), new File(actDir, exp.getName()));
-            } else if (IGNORE.contains(exp.getName())) {
-                // skip
+    private void compare(File actDir, File expDir, Store store) throws SAXException, IOException {
+        final Set<String> names = new HashSet<>();
+        final String[] actList = actDir.list();
+        if (actList != null) {
+            names.addAll(Arrays.asList(actList));
+        }
+        final String[] expList = expDir.list();
+        if (expList != null) {
+            names.addAll(Arrays.asList(expList));
+        }
+        names.removeAll(IGNORE);
+
+        for (final String name : names) {
+            final File act = new File(actDir, name);
+            final File exp = new File(expDir, name);
+            if (exp.isDirectory() || act.isDirectory()) {
+                compare(act, new File(expDir, name), store);
             } else {
                 final Document expDoc = getDocument(exp);
-                final Document actDoc = getDocument(new File(actDir, exp.getName()));
-//                assertXMLEqual("Comparing " + exp + " to " + new File(actDir, exp.getName()) + ":",
+                final Document actDoc = store.getDocument(act.toURI());
+//                assertXMLEqual("Comparing " + exp + " to " + act + ":",
 //                        expDoc, actDoc);
-                assertXMLEqual(expDoc, actDoc);
+                try {
+                    assertXMLEqual(expDoc, actDoc);
+                } catch (AssertionError e) {
+                    System.out.println(exp);
+                    Files.copy(act.toPath(), System.out);
+                    throw e;
+                }
+            }
+        }
+        if (new File(expDir, ".job.xml").exists()) {
+            final Job expJob = new Job(expDir, new StreamStore(expDir, new XMLUtils()));
+//            final Job actJob = new Job(actDir, new StreamStore(actDir, new XMLUtils()));
+            final Collection<FileInfo> expFileInfo = new HashSet(expJob.getFileInfo());
+            final Collection<FileInfo> actFileInfo = new HashSet(job.getFileInfo());
+            try {
+                assertEquals(expFileInfo, actFileInfo);
+            } catch (Throwable e) {
+                System.out.println(Files.exists(new File(actDir, ".job.xml").toPath()));
+                Files.copy(new File(actDir, ".job.xml").toPath(), System.out);
+                throw e;
             }
         }
     }

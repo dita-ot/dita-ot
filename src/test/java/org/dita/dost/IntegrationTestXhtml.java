@@ -362,6 +362,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("test.ditamap"))
                 .put("generate-debug-attributes", "false")
+                .errorCount(0)
                 .test();
     }
 
@@ -448,7 +449,6 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
                 .input(Paths.get("input.ditamap"))
                 .put("link-crawl", "map")
                 .errorCount(2)
-                .warnCount(2)
                 .test();
     }
 }

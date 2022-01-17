@@ -1,0 +1,20 @@
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.3">
+  <topic class="- topic/topic " id="topic_a1" ditaarch:DITAArchVersion="1.3">
+    <title class="- topic/title ">a1</title>
+  </topic>
+  <topic class="- topic/topic " id="topic_a2" ditaarch:DITAArchVersion="1.3">
+    <title class="- topic/title ">a2</title>
+    <topic class="- topic/topic " id="topic_b1" ditaarch:DITAArchVersion="1.3">
+      <title class="- topic/title ">b1</title>
+    </topic>
+    <topic class="- topic/topic " id="topic_b2" ditaarch:DITAArchVersion="1.3">
+      <title class="- topic/title ">b2</title>
+    </topic>
+    <topic class="- topic/topic " id="topic_c1" ditaarch:DITAArchVersion="1.3">
+      <title class="- topic/title ">c1</title>
+    </topic>
+    <topic class="- topic/topic " id="topic_c2" ditaarch:DITAArchVersion="1.3">
+      <title class="- topic/title ">c2</title>
+    </topic>
+  </topic>
+</dita>

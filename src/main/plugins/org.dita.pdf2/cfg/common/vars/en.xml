@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--   
+<!--
 Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
@@ -29,7 +29,8 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project. 
 See the accompanying LICENSE file for applicable license.
 -->
-<vars xmlns="http://www.idiominc.com/opentopic/vars">
+<?xml-model href="../../../../org.dita.base/xsl/common/strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
   <!-- 
    
     This file controls strings that appear in the published output.
@@ -155,13 +156,13 @@ See the accompanying LICENSE file for applicable license.
 
   <!--Labels for task sections. These are kept for backwards compatibility, actual
       labels are now stored in common strings files. -->
-  <variable id="Task Prereq"></variable>
-  <variable id="Task Context"></variable>
-  <variable id="Task Steps"></variable>
-  <variable id="#steps-unordered-label"></variable>
-  <variable id="Task Result"></variable>
-  <variable id="Task Example"></variable>
-  <variable id="Task Postreq"></variable>
+  <variable id="Task Prereq"/>
+  <variable id="Task Context"/>
+  <variable id="Task Steps"/>
+  <variable id="#steps-unordered-label"/>
+  <variable id="Task Result"/>
+  <variable id="Task Example"/>
+  <variable id="Task Postreq"/>
      
   <!-- Heading for a Glossary topic -->
   <variable id="Glossary">Glossary</variable>
@@ -171,4 +172,4 @@ See the accompanying LICENSE file for applicable license.
      
   <!-- Heading for a generated List of Figures -->
   <variable id="List of Figures">List of Figures</variable>
-</vars>
+</variables>

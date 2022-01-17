@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the DITA Open Toolkit project.
 
@@ -6,57 +6,58 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<strings xml:lang="kk-kz">        <!-- Kazakh -->
-  <str name="Figure">Сурет</str>
-  <str name="Table">Кесте</str>
-  <str name="Next topic">Келесі бөлім</str>
-  <str name="Previous topic">Бұдан бұрынғы бөлім</str>
-  <str name="Parent topic">Негізгі бөлім</str>
-  <str name="Required cleanup">Қажет тазалау</str>
-  <str name="Draft comment">Жоба түсініктеме</str>
-  <str name="Option">Параметр</str>
-  <str name="Description">Сипаттама</str>
-  <str name="Optional">Қосымша</str>
-  <str name="Required">Қажет</str>
-  <str name="Skip visual syntax diagram">Визуалдық синтаксистік диаграмманы өткізіп жіберу</str>
-  <str name="Read syntax diagram">Синтаксистік диаграмманы оқу</str>
-  <str name="Start of change">Өзгертуді бастау</str>
-  <str name="End of change">Өзгертуді аяқтау</str>
-  <str name="Index">Индекс</str>
-  <str name="Special characters">Арнайы таңбалар</str>
-  <str name="Numerics">Сандар</str>
-  <str name="End notes">Қорытынды ескертулер</str>
-  <str name="Artwork">Графика</str>
-  <str name="Syntax">Синтаксис</str>
-  <str name="Type">Түр</str>
-  <str name="Value">Мән</str>
-  <str name="Note">Ескерту</str>
-  <str name="Notes">Ескертулер</str>
-  <str name="Tip">Кеңес</str>
-  <str name="Fastpath">Жылдам жол</str>
-  <str name="Important">Маңызды</str>
-  <str name="Attention">Назар аударыңыз</str>
-  <str name="Caution">АБАЙЛАҢЫЗ</str>
-  <str name="Danger">ҚАУІП</str>
-  <str name="Remember">Есте сақтаңыз</str>
-  <str name="Trouble">Қиындық</str>
-  <str name="Warning">Ескерту</str>
-  <str name="Restriction">Шектеу</str>
-  <str name="Contents">Мазмұны</str>
-  <str name="Related concepts">Өзара байланысты түсініктер</str>
-  <str name="Related tasks">Өзара байланысты тапсырмалар</str>
-  <str name="Related reference">Өзара байланысты сілтеме</str>
-  <str name="Related information">Өзара байланысты ақпарат</str>
-  <str name="Prerequisite">Бастапқы шарт</str>
-  <str name="Prerequisites">Бастапқы шарттар</str>
-  <str name="or">немесе</str>
-  <str name="task_context">Осы тапсырма туралы</str>
-  <str name="task_example">Мысал</str>
-  <str name="task_postreq">Келесі әрекет</str>
-  <str name="task_prereq">Бастаудан бұрын</str>
-  <str name="task_procedure">Процедура</str>
-  <str name="task_procedure_unordered">Процедура</str>
-  <str name="task_results">Нәтижелер</str>
-  <str name="Copyright">авторлық құқықтары</str>
-  <str name="a11y.and-then"></str>
-</strings>
+<?xml-model href="strings.rnc" type="application/relax-ng-compact-syntax"?>
+<variables>
+   <variable id="Figure">Сурет</variable>
+   <variable id="Table">Кесте</variable>
+   <variable id="Next topic">Келесі бөлім</variable>
+   <variable id="Previous topic">Бұдан бұрынғы бөлім</variable>
+   <variable id="Parent topic">Негізгі бөлім</variable>
+   <variable id="Required cleanup">Қажет тазалау</variable>
+   <variable id="Draft comment">Жоба түсініктеме</variable>
+   <variable id="Option">Параметр</variable>
+   <variable id="Description">Сипаттама</variable>
+   <variable id="Optional">Қосымша</variable>
+   <variable id="Required">Қажет</variable>
+   <variable id="Skip visual syntax diagram">Визуалдық синтаксистік диаграмманы өткізіп жіберу</variable>
+   <variable id="Read syntax diagram">Синтаксистік диаграмманы оқу</variable>
+   <variable id="Start of change">Өзгертуді бастау</variable>
+   <variable id="End of change">Өзгертуді аяқтау</variable>
+   <variable id="Index">Индекс</variable>
+   <variable id="Special characters">Арнайы таңбалар</variable>
+   <variable id="Numerics">Сандар</variable>
+   <variable id="End notes">Қорытынды ескертулер</variable>
+   <variable id="Artwork">Графика</variable>
+   <variable id="Syntax">Синтаксис</variable>
+   <variable id="Type">Түр</variable>
+   <variable id="Value">Мән</variable>
+   <variable id="Note">Ескерту</variable>
+   <variable id="Notes">Ескертулер</variable>
+   <variable id="Tip">Кеңес</variable>
+   <variable id="Fastpath">Жылдам жол</variable>
+   <variable id="Important">Маңызды</variable>
+   <variable id="Attention">Назар аударыңыз</variable>
+   <variable id="Caution">АБАЙЛАҢЫЗ</variable>
+   <variable id="Danger">ҚАУІП</variable>
+   <variable id="Remember">Есте сақтаңыз</variable>
+   <variable id="Trouble">Қиындық</variable>
+   <variable id="Warning">Ескерту</variable>
+   <variable id="Restriction">Шектеу</variable>
+   <variable id="Contents">Мазмұны</variable>
+   <variable id="Related concepts">Өзара байланысты түсініктер</variable>
+   <variable id="Related tasks">Өзара байланысты тапсырмалар</variable>
+   <variable id="Related reference">Өзара байланысты сілтеме</variable>
+   <variable id="Related information">Өзара байланысты ақпарат</variable>
+   <variable id="Prerequisite">Бастапқы шарт</variable>
+   <variable id="Prerequisites">Бастапқы шарттар</variable>
+   <variable id="or">немесе</variable>
+   <variable id="task_context">Осы тапсырма туралы</variable>
+   <variable id="task_example">Мысал</variable>
+   <variable id="task_postreq">Келесі әрекет</variable>
+   <variable id="task_prereq">Бастаудан бұрын</variable>
+   <variable id="task_procedure">Процедура</variable>
+   <variable id="task_procedure_unordered">Процедура</variable>
+   <variable id="task_results">Нәтижелер</variable>
+   <variable id="Copyright">авторлық құқықтары</variable>
+   <variable id="a11y.and-then"/>
+</variables>

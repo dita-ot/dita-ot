@@ -1,0 +1,10 @@
+<job>
+  <property name="user.input.dir.uri">
+    <string>file:/</string>
+  </property>
+  <files>
+    <file src="file:/format.ditamap" uri="format.ditamap" path="format.ditamap" format="ditamap" input="true"/>
+    <file src="file:/a.dita" uri="a.dita" path="a.dita" format="dita" target="true"/>
+    <file src="file:/b.txt" uri="b.txt" path="b.txt" format="txt" target="true"/>
+  </files>
+</job>

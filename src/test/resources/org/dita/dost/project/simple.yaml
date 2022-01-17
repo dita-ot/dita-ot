@@ -22,3 +22,5 @@ deliverables:
       href: "foo%20bar"
     - name: "args.path"
       path: "baz+qux"
+    - name: "args.empty"
+      value: ""
