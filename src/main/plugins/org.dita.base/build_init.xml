@@ -194,28 +194,47 @@ See the accompanying LICENSE file for applicable license.
         <echo unless:set="preprocess.@{process}.skip">Run @{process}</echo>
       </sequential>
     </macrodef>
+    <!-- TODO: merge -->
+    <preprocess-skip-init process="debug-filter"/>
+    <preprocess-skip-init process="gen-list"/>
+
     <preprocess-skip-init process="branch-filter"/>
+
     <preprocess-skip-init process="chunk"/>
+
+    <!-- TODO: rename to clean-preprocess and combine the targets -->
     <preprocess-skip-init process="clean-map-check"/>
     <preprocess-skip-init process="clean-preprocess"/>
+
     <preprocess-skip-init process="coderef"/>
+
+    <!-- XXX: merge? -->
     <preprocess-skip-init process="conref"/>
     <preprocess-skip-init process="conrefpush"/>
+
+    <!-- XXX: merge? -->
     <preprocess-skip-init process="copy-files"/>
     <preprocess-skip-init process="copy-flag"/>
     <preprocess-skip-init process="copy-html"/>
     <preprocess-skip-init process="copy-image"/>
-    <preprocess-skip-init process="debug-filter"/>
-    <preprocess-skip-init process="gen-list"/>
+
     <preprocess-skip-init process="keyref"/>
-    <preprocess-skip-init process="map-profile"/>
-    <preprocess-skip-init process="maplink"/>
+
+    <preprocess-skip-init process="maplink"/><!-- Collect all links from maps and push them into topics -->
+
     <preprocess-skip-init process="mapref"/>
-    <preprocess-skip-init process="move-meta-entries"/>
+
+    <preprocess-skip-init process="move-meta-entries"/><!-- Push information from <topicmeta> in the map into the corresponding topics and pull metadata (such as navtitle) into the map from the referenced topics. -->
+
     <preprocess-skip-init process="normalize-codeblock"/>
+
+    <!-- TODO: merge -->
     <preprocess-skip-init process="profile"/>
     <preprocess-skip-init process="topic-profile"/>
-    <preprocess-skip-init process="topicpull"/>
+    <preprocess-skip-init process="map-profile"/>
+
+    <preprocess-skip-init process="topicpull"/><!-- Populate link text for links within topics (xref, link). -->
+
     <fail if:set="clean-temp.skip">Internal property clean-temp.skip may not be set directly.</fail>
     <condition property="clean-temp.skip">
       <and>
