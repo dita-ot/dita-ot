@@ -52,9 +52,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/var ')]" name="topic.pr-d.var">
    <span>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'var'"/>
-    </xsl:call-template>
+    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
@@ -62,9 +60,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/synph ')]" name="topic.pr-d.synph">
    <span>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'synph'"/>
-    </xsl:call-template>
+    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
@@ -72,9 +68,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/oper ')]" name="topic.pr-d.oper">
    <span>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'oper'"/>
-    </xsl:call-template>
+    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
@@ -82,9 +76,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/delim ')]" name="topic.pr-d.delim">
    <span>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'delim'"/>
-    </xsl:call-template>
+    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
@@ -92,9 +84,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/sep ')]" name="topic.pr-d.sep">
    <span>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'sep'"/>
-    </xsl:call-template>
+    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
@@ -102,9 +92,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/repsep ')]" name="topic.pr-d.repsep">
    <span>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'repsep'"/>
-    </xsl:call-template>
+    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
@@ -112,9 +100,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/option ')]" name="topic.pr-d.option">
    <span>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'option'"/>
-    </xsl:call-template>
+    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
@@ -122,9 +108,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/parmname ')]" name="topic.pr-d.parmname">
    <span>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'parmname'"/>
-    </xsl:call-template>
+    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
@@ -132,9 +116,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/apiname ')]" name="topic.pr-d.apiname">
    <span>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'apiname'"/>
-    </xsl:call-template>
+    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>

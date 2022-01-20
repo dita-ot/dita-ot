@@ -330,9 +330,7 @@ list just like regular named attribute sets.
         </xsl:if>
 
         <xsl:for-each select="xsl:attribute">
-            <xsl:attribute name="{@name}">
-                <xsl:value-of select="."/>
-            </xsl:attribute>
+            <xsl:attribute name="{@name}" select="."/>
             <xsl:for-each select="xsl:*">
               <xsl:call-template name="output-message">
                 <xsl:with-param name="id" select="'PDFX009E'"/>

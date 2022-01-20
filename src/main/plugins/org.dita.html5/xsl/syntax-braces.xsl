@@ -20,7 +20,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/fragment ')]" mode="process-syntaxdiagram">
     <div>
-    <a><xsl:attribute name="name"><xsl:value-of select="*[contains(@class,' topic/title ')]"/></xsl:attribute> </a>
+    <a name="{*[contains(@class,' topic/title ')]}"> </a>
     <xsl:apply-templates mode="process-syntaxdiagram"/>
     </div>
   </xsl:template>
@@ -50,7 +50,7 @@ See the accompanying LICENSE file for applicable license.
   and if so, produce an associative link. -->
   <xsl:template match="*[contains(@class,' pr-d/fragref ')]" mode="process-syntaxdiagram">
     <kbd>
-        <a><xsl:attribute name="href">#<xsl:value-of select="."/></xsl:attribute>
+        <a href="#{.}">
     &lt;<xsl:value-of select="."/>&gt;</a>
     </kbd>
   </xsl:template>

@@ -57,7 +57,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute-set name="__toc__topic__content">
         <xsl:attribute name="last-line-end-indent">-22pt</xsl:attribute>
         <xsl:attribute name="end-indent">22pt</xsl:attribute>
-        <xsl:attribute name="text-indent">-<xsl:value-of select="$toc.text-indent"/></xsl:attribute>
+        <xsl:attribute name="text-indent" select="concat('-', $toc.text-indent)"/>
         <xsl:attribute name="text-align">start</xsl:attribute>
         <xsl:attribute name="text-align-last">justify</xsl:attribute>
         <xsl:attribute name="font-size">
@@ -111,11 +111,11 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__title">
-      <xsl:attribute name="end-indent"><xsl:value-of select="$toc.text-indent"/></xsl:attribute>
+      <xsl:attribute name="end-indent" select="$toc.text-indent"/>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__page-number">
-      <xsl:attribute name="start-indent">-<xsl:value-of select="$toc.text-indent"/></xsl:attribute>
+      <xsl:attribute name="start-indent" select="concat('-', $toc.text-indent)"/>
       <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -188,7 +188,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
     
     <xsl:attribute-set name="__toc__indent__booklist" use-attribute-sets="__toc__indent">
-        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/> + <xsl:value-of select="$toc.text-indent"/></xsl:attribute>
+        <xsl:attribute name="start-indent" select="concat($side-col-width, ' + ', $toc.text-indent)"/>
         <xsl:attribute name="space-before">10pt</xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
     </xsl:attribute-set>

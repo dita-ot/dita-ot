@@ -113,7 +113,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <!--@type|@importance|@linking|@toc|@print|@search|@format|@scope-->
           <!--need to create type variable regardless, for passing as a parameter to getstuff template-->
           <xsl:if test="(:not(@type) and :)$type!='#none#'">
-            <xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
+            <xsl:attribute name="type" select="$type"/>
           </xsl:if>
           <!-- FIXME: importance is not inheretable per http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/cascading-in-a-ditamap.html -->
           <!--xsl:if test="not(@importance)"-->
@@ -140,16 +140,16 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">processing-role</xsl:with-param></xsl:apply-templates>
           </xsl:if>
           <xsl:if test="(:not(@print) and :)$print!='#none#'">
-            <xsl:attribute name="print"><xsl:value-of select="$print"/></xsl:attribute>
+            <xsl:attribute name="print" select="$print"/>
           </xsl:if>
           <!--xsl:if test="not(@search)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">search</xsl:with-param></xsl:apply-templates>
           <!--/xsl:if-->
           <xsl:if test="(:not(@format) and :)$format!='#none#'">
-            <xsl:attribute name="format"><xsl:value-of select="$format"/></xsl:attribute>
+            <xsl:attribute name="format" select="$format"/>
           </xsl:if>
           <xsl:if test="(:not(@scope) and :)$scope!='#none#'">
-            <xsl:attribute name="scope"><xsl:value-of select="$scope"/></xsl:attribute>
+            <xsl:attribute name="scope" select="$scope"/>
           </xsl:if>
           <!--xsl:if test="not(@audience)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">audience</xsl:with-param></xsl:apply-templates>
@@ -232,7 +232,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:apply-templates>
     </xsl:variable>
     <xsl:if test="$inherited-value!='#none#'">
-      <xsl:attribute name="{$attrib}"><xsl:value-of select="$inherited-value"/></xsl:attribute>
+      <xsl:attribute name="{$attrib}" select="$inherited-value"/>
     </xsl:if>
   </xsl:template>
 
@@ -502,9 +502,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:variable name="target" select="if (exists($doc)) then (key('topic-by-id', $topicid, $doc)[1]) else ()" as="element()?"/>
             <xsl:choose>
               <xsl:when test="$target[contains(@class, $classval)]">
-                <xsl:attribute name="type">
-                  <xsl:value-of select="local-name($target[contains(@class, $classval)])"/>
-                </xsl:attribute>
+                <xsl:attribute name="type" select="local-name($target[contains(@class, $classval)])"/>
               </xsl:when>
               <xsl:when test="$topicid!='#none#' and not($target[contains(@class, ' topic/topic ')])">
                 <!-- topicid does not point to a valid topic -->
@@ -521,9 +519,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="$topicpos='firstinfile'">
             <xsl:choose>
               <xsl:when test="($doc//*[contains(@class, ' topic/topic ')])[1]">
-                <xsl:attribute name="type">
-                  <xsl:value-of select="local-name(($doc//*[contains(@class, $classval)])[1])"/>
-                </xsl:attribute>
+                <xsl:attribute name="type" select="local-name(($doc//*[contains(@class, $classval)])[1])"/>
               </xsl:when>
               <xsl:otherwise><!-- do nothing - omit attribute--></xsl:otherwise>
             </xsl:choose>

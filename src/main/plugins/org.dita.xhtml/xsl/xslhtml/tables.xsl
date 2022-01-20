@@ -833,11 +833,7 @@ See the accompanying LICENSE file for applicable license.
 
       <!-- If there is a keycol header or an sthead header, create the attribute -->
       <xsl:if test="string-length($header) > 0 or string-length($keycolhead) > 0">
-          <xsl:attribute name="headers">
-              <xsl:value-of select="$header"/>
-              <xsl:if test="string-length($header) > 0 and string-length($keycolhead) > 0"><xsl:text> </xsl:text></xsl:if>
-              <xsl:value-of select="$keycolhead"/>
-          </xsl:attribute>
+        <xsl:attribute name="headers" select="($header[normalize-space(.)], $keycolhead[normalize-space(.)])" separator=" "/>
       </xsl:if>
   </xsl:if>
 </xsl:template>
@@ -1001,8 +997,10 @@ See the accompanying LICENSE file for applicable license.
           </xsl:if>
         </span>
         <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
-          <span class="tabledesc">
-            <xsl:call-template name="commonattributes"/>
+          <span>
+            <xsl:call-template name="commonattributes">
+              <xsl:with-param name="default-output-class" select="'tabledesc'"/>
+            </xsl:call-template>
             <xsl:apply-templates select="." mode="tabledesc"/>
           </span>
         </xsl:for-each>
@@ -1011,8 +1009,10 @@ See the accompanying LICENSE file for applicable license.
     <!-- desc -->
     <xsl:when test="*[contains(@class, ' topic/desc ')]">
       <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
-        <span class="tabledesc">
-          <xsl:call-template name="commonattributes"/>
+        <span>
+          <xsl:call-template name="commonattributes">
+            <xsl:with-param name="default-output-class" select="'tabledesc'"/>
+          </xsl:call-template>
           <xsl:apply-templates select="." mode="tabledesc"/>
         </span>
       </xsl:for-each>

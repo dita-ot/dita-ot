@@ -264,7 +264,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:choose>
     </xsl:param>
     <xsl:element name="h{$headinglevel}">
-        <xsl:attribute name="class">topictitle<xsl:value-of select="$headinglevel"/></xsl:attribute>
+        <xsl:attribute name="class" select="concat('topictitle', $headinglevel)"/>
         <xsl:call-template name="commonattributes">
           <xsl:with-param name="default-output-class">topictitle<xsl:value-of select="$headinglevel"/></xsl:with-param>
         </xsl:call-template>
@@ -383,7 +383,7 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- section processor - div with no generated title -->
   <xsl:template match="*[contains(@class, ' topic/section ')]" name="topic.section">
-    <section class="section">
+    <section>
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="gen-toc-id"/>
       <xsl:call-template name="setidaname"/>
@@ -396,7 +396,7 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- example processor - div with no generated title -->
   <xsl:template match="*[contains(@class, ' topic/example ')]" name="topic.example">
-    <div class="example">
+    <div>
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="gen-toc-id"/>
       <xsl:call-template name="setidaname"/>
@@ -425,8 +425,10 @@ See the accompanying LICENSE file for applicable license.
         If so, use div_class="p" instead of p -->
    <xsl:choose>
      <xsl:when test="descendant::*[dita-ot:is-block(.)]">
-       <div class="p">
-         <xsl:call-template name="commonattributes"/>
+       <div>
+         <xsl:call-template name="commonattributes">
+           <xsl:with-param name="default-output-class" select="'p'"/>
+         </xsl:call-template>
          <xsl:call-template name="setid"/>
          <xsl:apply-templates/>
        </div>
@@ -624,7 +626,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/sl ')]" name="topic.sl">
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:call-template name="setaname"/>
-    <ul class="simple">
+    <ul>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class" select="'simple'"/>
       </xsl:call-template>
@@ -893,8 +895,10 @@ See the accompanying LICENSE file for applicable license.
         </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
-        <span class="keyword">
-          <xsl:call-template name="commonattributes"/>
+        <span>
+          <xsl:call-template name="commonattributes">
+            <xsl:with-param name="default-output-class" select="'keyword'"/>
+          </xsl:call-template>
           <xsl:call-template name="setidaname"/>   
           <xsl:apply-templates/>  
         </span>
@@ -1002,8 +1006,10 @@ See the accompanying LICENSE file for applicable license.
     <!-- Deprecated since 2.1 -->
     <xsl:param name="displaytext"/>
     
-    <dfn class="term">
-      <xsl:call-template name="commonattributes"/>
+    <dfn>
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="'term'"/>
+      </xsl:call-template>
       <xsl:call-template name="setidaname"/>
       <xsl:choose>
         <xsl:when test="normalize-space($displaytext)">
@@ -1247,7 +1253,6 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:call-template name="spec-title-nospace"/>
     <pre>
-      <xsl:attribute name="class" select="name()"/>
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="setscale"/>
       <xsl:call-template name="setidaname"/>
@@ -1446,16 +1451,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:call-template>
     </xsl:variable>
     <xsl:if test="not($height-in-pixel = '100%')">
-      <xsl:attribute name="height">
-        <!--xsl:choose>
-          <xsl:when test="../@scale and string(number(../@scale))!='NaN'">          
-            <xsl:value-of select="number($height-in-pixel) * number(../@scale)"/>
-          </xsl:when>
-          <xsl:otherwise-->
-            <xsl:value-of select="number($height-in-pixel)"/>
-          <!--/xsl:otherwise>
-        </xsl:choose-->
-      </xsl:attribute>
+      <xsl:attribute name="height" select="number($height-in-pixel)"/>
     </xsl:if>  
   </xsl:template>
   
@@ -1466,16 +1462,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:call-template>
     </xsl:variable>
     <xsl:if test="not($width-in-pixel = '100%')">
-      <xsl:attribute name="width">
-        <!--xsl:choose>
-          <xsl:when test="../@scale and string(number(../@scale))!='NaN'">          
-            <xsl:value-of select="number($width-in-pixel) * number(../@scale)"/>
-          </xsl:when>
-          <xsl:otherwise-->
-            <xsl:value-of select="number($width-in-pixel)"/>
-          <!--/xsl:otherwise>
-        </xsl:choose-->
-      </xsl:attribute>
+      <xsl:attribute name="width" select="number($width-in-pixel)"/>
     </xsl:if>  
   </xsl:template>
   
@@ -2150,7 +2137,7 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- Catch footnotes that should appear at the end of the topic, and output them. -->
   <xsl:template match="*[contains(@class, ' topic/fn ')]" mode="genEndnote">
-    <div class="p">
+    <div>
       <xsl:variable name="fnid"><xsl:number from="/" level="any"/></xsl:variable>
       <xsl:variable name="callout" select="@callout"/>
       <xsl:variable name="convergedcallout" select="if (string-length($callout) > 0) then $callout else $fnid"/>
@@ -2179,9 +2166,7 @@ See the accompanying LICENSE file for applicable license.
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-          <a>
-            <xsl:attribute name="name" select="concat('fntarg_', $fnid)"/>
-            <xsl:attribute name="href" select="concat('#fnsrc_', $fnid)"/>
+          <a name="fntarg_{$fnid}" href="#fnsrc_{$fnid}">
             <sup>
               <xsl:value-of select="$convergedcallout"/>
             </sup>
@@ -2802,9 +2787,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="*|text()" mode="text-only"/>
     </xsl:variable>
     <meta name="description">
-      <xsl:attribute name="content">
-        <xsl:value-of select="normalize-space($shortmeta)"/>
-      </xsl:attribute>
+      <xsl:attribute name="content" select="normalize-space($shortmeta)"/>
     </meta>
   </xsl:template>
   
@@ -2885,8 +2868,10 @@ See the accompanying LICENSE file for applicable license.
             <xsl:text>. </xsl:text>
           </xsl:if>
           <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
-            <span class="figdesc">
-              <xsl:call-template name="commonattributes"/>
+            <span>
+              <xsl:call-template name="commonattributes">
+                <xsl:with-param name="default-output-class" select="'figdesc'"/>
+              </xsl:call-template>
               <xsl:apply-templates select="." mode="figdesc"/>
             </span>
           </xsl:for-each>

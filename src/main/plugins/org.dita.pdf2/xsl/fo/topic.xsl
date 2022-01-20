@@ -1103,9 +1103,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template name="setScale">
         <xsl:if test="@scale">
             <!-- For applications that do not yet take percentages. need to divide by 10 and use "pt" -->
-            <xsl:attribute name="font-size">
-                <xsl:value-of select="concat(@scale, '%')"/>
-            </xsl:attribute>
+            <xsl:attribute name="font-size" select="concat(@scale, '%')"/>
         </xsl:if>
     </xsl:template>
 
@@ -1391,9 +1389,7 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="not($width) and not($height) and $scale">
-                <xsl:attribute name="content-width">
-                    <xsl:value-of select="concat($scale,'%')"/>
-                </xsl:attribute>
+                <xsl:attribute name="content-width" select="concat($scale,'%')"/>
             </xsl:if>
           <xsl:if test="@scalefit = 'yes' and not($width) and not($height) and not($scale)">            
             <xsl:attribute name="width">100%</xsl:attribute>
@@ -1554,9 +1550,7 @@ See the accompanying LICENSE file for applicable license.
     <!-- Template to copy original IDs -->
 
     <xsl:template match="@id">
-        <xsl:attribute name="id">
-            <xsl:value-of select="."/>
-        </xsl:attribute>
+        <xsl:attribute name="id" select="."/>
     </xsl:template>
     
     <!-- Templates to reprocess reused content while dropping IDs from reuse context -->
