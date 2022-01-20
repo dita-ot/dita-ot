@@ -7,7 +7,7 @@ Copyright 2006 IBM Corporation
 See the accompanying LICENSE file for applicable license.
 -->
 <project name="ditaot-init"
-         xmlns:if="ant:if">
+         xmlns:if="ant:if" xmlns:unless="ant:unless">
     
   <!-- Read configuration properties -->
   <loadproperties>
@@ -178,6 +178,53 @@ See the accompanying LICENSE file for applicable license.
     </condition>
     
     <property name="conserve-memory" value="false"/>
+
+    <!-- Process skip -->
+    <macrodef name="preprocess-skip-init">
+      <attribute name="process"/>
+      <sequential>
+        <fail if:set="preprocess.@{process}.skip">Internal property preprocess.@{process}.skip may not be set directly.</fail>
+        <condition property="preprocess.@{process}.skip">
+          <and>
+            <isset property="build-step.@{process}"/>
+            <isfalse value="${build-step.@{process}}"/>
+          </and>
+        </condition>
+        <echo if:set="preprocess.@{process}.skip">Skip @{process}</echo>
+        <echo unless:set="preprocess.@{process}.skip">Run @{process}</echo>
+      </sequential>
+    </macrodef>
+    <preprocess-skip-init process="branch-filter"/>
+    <preprocess-skip-init process="chunk"/>
+    <preprocess-skip-init process="clean-map-check"/>
+    <preprocess-skip-init process="clean-preprocess"/>
+    <preprocess-skip-init process="coderef"/>
+    <preprocess-skip-init process="conref"/>
+    <preprocess-skip-init process="conrefpush"/>
+    <preprocess-skip-init process="copy-files"/>
+    <preprocess-skip-init process="copy-flag"/>
+    <preprocess-skip-init process="copy-html"/>
+    <preprocess-skip-init process="copy-image"/>
+    <preprocess-skip-init process="debug-filter"/>
+    <preprocess-skip-init process="gen-list"/>
+    <preprocess-skip-init process="keyref"/>
+    <preprocess-skip-init process="map-profile"/>
+    <preprocess-skip-init process="maplink"/>
+    <preprocess-skip-init process="mapref"/>
+    <preprocess-skip-init process="move-meta-entries"/>
+    <preprocess-skip-init process="normalize-codeblock"/>
+    <preprocess-skip-init process="profile"/>
+    <preprocess-skip-init process="topic-profile"/>
+    <preprocess-skip-init process="topicpull"/>
+    <fail if:set="clean-temp.skip">Internal property clean-temp.skip may not be set directly.</fail>
+    <condition property="clean-temp.skip">
+      <and>
+        <isset property="build-step.clean-temp"/>
+        <isfalse value="${build-step.clean-temp}"/>
+      </and>
+    </condition>
+    <echo if:set="clean-temp.skip">Skip clean-temp</echo>
+    <echo unless:set="clean-temp.skip">Run clean-temp</echo>
   </target>
   
   <target name="log-arg">

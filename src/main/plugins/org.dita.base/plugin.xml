@@ -172,6 +172,98 @@ See the accompanying LICENSE file for applicable license.
       <val>true</val>
       <val default="true">false</val>
     </param>
+    <param name="build-step.clean-temp" desc="Run process clean-temp" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.branch-filter" desc="Run process branch-filter" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.chunk" desc="Run process chunk" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.clean-map-check" desc="Run process clean-map-check" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.clean-preprocess" desc="Run process clean-preprocess" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.coderef" desc="Run process coderef" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.conref" desc="Run process conref" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.conrefpush" desc="Run process conrefpush" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.copy-files" desc="Run process copy-files" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.copy-flag" desc="Run process copy-flag" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.copy-html" desc="Run process copy-html" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.copy-image" desc="Run process copy-image" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.debug-filter" desc="Run process debug-filter" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.gen-list" desc="Run process gen-list" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.keyref" desc="Run process keyref" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.map-profile" desc="Run process map-profile" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.maplink" desc="Run process maplink" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.mapref" desc="Run process mapref" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.move-meta-entries" desc="Run process move-meta-entries" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.normalize-codeblock" desc="Run process normalize-codeblock" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.profile" desc="Run process profile" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.topic-profile" desc="Run process topic-profile" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="build-step.topicpull" desc="Run process topicpull" type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
   </transtype>
   <feature extension="dita.image.extensions" value=".gif"/>
   <feature extension="dita.image.extensions" value=".eps"/>
