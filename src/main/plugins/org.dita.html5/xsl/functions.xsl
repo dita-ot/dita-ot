@@ -138,8 +138,24 @@ See the accompanying LICENSE file for applicable license.
       ($el/@colsep,
        table:get-entry-colspec($el)/@colsep,
        table:get-current-table($el)/@colsep,
-       table:get-current-tgroup($el)/@colsep)[1]
+       table:get-current-tgroup($el)/@colsep)[1][table:is-not-last-column-cell($el)]
     "/>
+  </xsl:function>
+  
+  <!-- Judge that given entry ($prmEntry) is not the last column cell -->
+  <xsl:function name="table:is-not-last-column-cell" as="xs:boolean">
+    <xsl:param name="prmEntry" as="element()"/>
+    <xsl:variable name="tgroupCols" as="xs:integer" select="xs:integer(string(table:get-current-tgroup($prmEntry)/@cols))"/>
+    <xsl:variable name="entryColNum" as="xs:integer" select="xs:integer(string($prmEntry/@dita-ot:x))"/>
+    <xsl:choose>
+      <xsl:when test="exists($prmEntry/@dita-ot:morecols)">
+        <xsl:variable name="endCol" as="xs:integer" select="$entryColNum + xs:integer($prmEntry/@dita-ot:morecols)"/>
+        <xsl:sequence select="$endCol ne $tgroupCols"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="$entryColNum ne $tgroupCols"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:function>
 
   <xsl:function name="table:get-entry-rowsep" as="attribute(rowsep)?">
@@ -149,10 +165,26 @@ See the accompanying LICENSE file for applicable license.
       ($el/@rowsep,
        table:get-entry-colspec($el)/@rowsep,
        table:get-current-table($el)/@rowsep,
-       table:get-current-tgroup($el)/@rowsep)[1]
+       table:get-current-tgroup($el)/@rowsep)[1][table:is-not-last-row-cell($el)]
     "/>
   </xsl:function>
-  
+
+  <!-- Judge that given entry ($prmEntry) is not the last row cell -->
+  <xsl:function name="table:is-not-last-row-cell" as="xs:boolean">
+    <xsl:param name="prmEntry" as="element()"/>
+    <xsl:variable name="tgroupRowCount" as="xs:integer" select="count(table:get-current-tgroup($prmEntry)/descendant::*[contains(@class,' topic/row ')])"/>
+    <xsl:variable name="entryRowNum" as="xs:integer" select="xs:integer(string($prmEntry/@dita-ot:y))"/>
+    <xsl:choose>
+      <xsl:when test="exists($prmEntry/@morerows)">
+        <xsl:variable name="endRowNum" as="xs:integer" select="$entryRowNum + xs:integer($prmEntry/@morerows)"/>
+        <xsl:sequence select="$endRowNum ne $tgroupRowCount"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="$entryRowNum ne $tgroupRowCount"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
   <xsl:function name="table:find-entry-end-column" as="xs:integer">
     <xsl:param name="ctx" as="element()"/>
     <xsl:choose>
