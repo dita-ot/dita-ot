@@ -180,7 +180,9 @@ See the accompanying LICENSE file for applicable license.
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
-    <pipeline message="Resolve mapref in ditamap" taskname="mapref">
+    <pipeline message="Resolve mapref in ditamap"
+              taskname="mapref"
+              unless:set="preprocess.mapref.skip">
       <module class="org.dita.dost.module.MaprefModule">
         <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
         <ditafileset format="ditamap" input="true"/>
