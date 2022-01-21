@@ -747,8 +747,12 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- DITA spec prose defines as either 0 or 1, but DTD as NMTOKENS. However, OASIS Table Exchange model uses 0 or anything else. -->
     <xsl:template name="getTableColsep" as="xs:string">
+        <xsl:param name="prmEntry" as="element()" required="no" select="."/>
         <xsl:variable name="colname" select="@colname"/>
         <xsl:choose>
+            <xsl:when test="dita-ot:isLastColumnEntry($prmEntry)">
+                <xsl:sequence select="'0'"/>
+            </xsl:when>
             <xsl:when test="@colsep">
                 <xsl:value-of select="@colsep"/>
             </xsl:when>
@@ -766,10 +770,30 @@ See the accompanying LICENSE file for applicable license.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
+    <!-- Judge that given entry ($prmEntry) is the last column cell -->
+    <xsl:function name="dita-ot:isLastColumnEntry" as="xs:boolean">
+        <xsl:param name="prmEntry" as="element()"/>
+        <xsl:variable name="tgroupCols" as="xs:integer" select="xs:integer(string($prmEntry/ancestor::*[contains(@class,' topic/tgroup ')][1]/@cols))"/>
+        <xsl:variable name="entryColNum" as="xs:integer" select="xs:integer(string($prmEntry/@dita-ot:x))"/>
+        <xsl:choose>
+            <xsl:when test="exists($prmEntry/@dita-ot:morecols)">
+                <xsl:variable name="endCol" as="xs:integer" select="$entryColNum + xs:integer($prmEntry/@dita-ot:morecols)"/>
+                <xsl:sequence select="$endCol eq $tgroupCols"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$entryColNum eq $tgroupCols"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
     <xsl:template name="getTableRowsep" as="xs:string">
+        <xsl:param name="prmEntry" as="element()" required="no" select="."/>
         <xsl:variable name="colname" select="@colname"/>
         <xsl:choose>
+            <xsl:when test="dita-ot:isLastRowEntry($prmEntry)">
+                <xsl:sequence select="'0'"/>
+            </xsl:when>
             <xsl:when test="@rowsep">
                 <xsl:value-of select="@rowsep"/>
             </xsl:when>
@@ -791,6 +815,22 @@ See the accompanying LICENSE file for applicable license.
         </xsl:choose>
     </xsl:template>
 
+    <!-- Judge that given entry ($prmEntry) is the last row cell -->
+    <xsl:function name="dita-ot:isLastRowEntry" as="xs:boolean">
+        <xsl:param name="prmEntry" as="element()"/>
+        <xsl:variable name="tgroupRowCount" as="xs:integer" select="count($prmEntry/ancestor::*[contains(@class,' topic/tgroup ')][1]/descendant::*[contains(@class,' topic/row ')])"/>
+        <xsl:variable name="entryRowNum" as="xs:integer" select="xs:integer(string($prmEntry/@dita-ot:y))"/>
+        <xsl:choose>
+            <xsl:when test="exists($prmEntry/@morerows)">
+                <xsl:variable name="endRowNum" as="xs:integer" select="$entryRowNum + xs:integer($prmEntry/@morerows)"/>
+                <xsl:sequence select="$endRowNum eq $tgroupRowCount"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$entryRowNum eq $tgroupRowCount"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
     <xsl:template name="displayAtts">
         <xsl:param name="element" as="element()"/>
         <xsl:variable name="frame" as="xs:string" select="($element/@frame, $table.frame-default)[1]"/>
