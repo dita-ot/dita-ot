@@ -220,6 +220,7 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">true</val>
       <val>false</val>
     </param>
+    <!--
     <param name="build-step.debug-filter" desc="Run process debug-filter" type="enum">
       <val default="true">true</val>
       <val>false</val>
@@ -228,6 +229,7 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">true</val>
       <val>false</val>
     </param>
+    -->
     <param name="build-step.keyref" desc="Run process keyref" type="enum">
       <val default="true">true</val>
       <val>false</val>

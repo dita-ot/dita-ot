@@ -103,8 +103,8 @@ See the accompanying LICENSE file for applicable license.
   <target name="gen-list"
     dita:depends="{depend.preprocess.gen-list.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.gen-list.skip"
     description="Generate file list">
+    <!--unless="preprocess.gen-list.skip"-->
     <pipeline message="Generate list." taskname="gen-list"
       inputmap="${args.input}">
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
@@ -134,8 +134,8 @@ See the accompanying LICENSE file for applicable license.
   <target name="debug-filter"
           dita:depends="{depend.preprocess.debug-filter.pre}"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-          unless="preprocess.debug-filter.skip"
-          description="Debug and filter input files" >
+          description="Debug and filter input files">
+    <!--unless="preprocess.debug-filter.skip"-->
     <pipeline message="Debug and filtering." taskname="filter">
       <module class="org.dita.dost.module.DebugAndFilterModule">
         <param name="ditadir" location="${dita.dir}"/>
