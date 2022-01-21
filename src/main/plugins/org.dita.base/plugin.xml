@@ -204,10 +204,12 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">true</val>
       <val>false</val>
     </param>
+    <!--
     <param name="build-step.copy-files" desc="Run process copy-files" type="enum">
       <val default="true">true</val>
       <val>false</val>
     </param>
+    -->
     <param name="build-step.copy-flag" desc="Run process copy-flag" type="enum">
       <val default="true">true</val>
       <val>false</val>

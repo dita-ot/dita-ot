@@ -457,10 +457,12 @@ See the accompanying LICENSE file for applicable license.
   <!-- copy-files
       Copy files to the output directory. -->
   <target name="copy-files"
-    dita:depends="{depend.preprocess.copy-files.pre},copy-image,copy-html,copy-flag"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.copy-files.skip" />
-     
+          dita:depends="{depend.preprocess.copy-files.pre},
+                        copy-image,
+                        copy-html,
+                        copy-flag"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"/>
+
   <target name="copy-image"
     unless="preprocess.copy-image.skip"
     dita:depends="{depend.preprocess.copy-image.pre}"

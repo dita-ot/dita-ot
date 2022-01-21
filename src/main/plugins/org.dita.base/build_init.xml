@@ -214,8 +214,7 @@ See the accompanying LICENSE file for applicable license.
     <preprocess-skip-init name="preprocess.conref"/>
     <preprocess-skip-init name="preprocess.conrefpush"/>
 
-    <!-- XXX: merge? -->
-    <preprocess-skip-init name="preprocess.copy-files"/>
+    <!-- XXX: merge call copy properties under the same property -->
     <preprocess-skip-init name="preprocess.copy-flag"/>
     <preprocess-skip-init name="preprocess.copy-html"/>
     <preprocess-skip-init name="preprocess.copy-image"/>

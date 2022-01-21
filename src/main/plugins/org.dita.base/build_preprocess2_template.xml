@@ -434,9 +434,11 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <target name="copy-files2" description="Copy files to the output directory"
-          depends="copy-image2,copy-html,copy-flag"
-          unless="preprocess.copy-files.skip" />
+  <target name="copy-files2"
+          description="Copy files to the output directory"
+          depends="copy-image2,
+                   copy-html,
+                   copy-flag"/>
 
   <target name="copy-image2"
           unless="preprocess.copy-image.skip"
