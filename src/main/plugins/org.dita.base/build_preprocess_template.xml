@@ -201,7 +201,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="conrefpush"
     dita:depends="{depend.preprocess.conrefpush.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.conrefpush.skip"
+    unless="preprocess.conref.skip"
     description="Resolve conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">

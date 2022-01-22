@@ -193,7 +193,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
   
   <target name="map-conrefpush"
-    unless="preprocess.conrefpush.skip"
+    unless="preprocess.conref.skip"
     description="Resolve input map files conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
@@ -293,7 +293,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="topic-conrefpush"
-          unless="preprocess.conrefpush.skip"
+          unless="preprocess.conref.skip"
           description="Resolve conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">

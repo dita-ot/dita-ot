@@ -200,10 +200,12 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">true</val>
       <val>false</val>
     </param>
+    <!--
     <param name="build-step.conrefpush" desc="Run process conrefpush" type="enum">
       <val default="true">true</val>
       <val>false</val>
     </param>
+    -->
     <!--
     <param name="build-step.copy-files" desc="Run process copy-files" type="enum">
       <val default="true">true</val>
