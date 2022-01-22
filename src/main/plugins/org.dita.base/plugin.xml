@@ -184,10 +184,12 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">true</val>
       <val>false</val>
     </param>
+    <!--
     <param name="build-step.clean-map-check" desc="Run process clean-map-check" type="enum">
       <val default="true">true</val>
       <val>false</val>
     </param>
+    -->
     <param name="build-step.clean-preprocess" desc="Run process clean-preprocess" type="enum">
       <val default="true">true</val>
       <val>false</val>

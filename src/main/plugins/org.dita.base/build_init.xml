@@ -92,7 +92,7 @@ See the accompanying LICENSE file for applicable license.
     <!-- end to check input parameters -->
 
     <!-- begin to init required parameters -->
-    
+
     <property name="filter-stage" value="early"/>
     <condition property="filter-on-parse" value="true">
       <and>
@@ -117,7 +117,7 @@ See the accompanying LICENSE file for applicable license.
     </condition>
 
     <property name="args.grammar.cache" value="yes"/>
-    <property name="args.xml.systemid.set" value="yes"/>    
+    <property name="args.xml.systemid.set" value="yes"/>
     <!-- end to init required parameters -->
 
     <!-- create required directories -->
@@ -131,7 +131,7 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- Validate the xml file or not,default is validation(true)-->
     <property name="validate" value="true"/>
-    
+
     <!-- Related links to output: none, all, nofamily -->
     <condition property="include.rellinks" value="">
       <equals arg1="${args.rellinks}" arg2="none"/>
@@ -160,7 +160,7 @@ See the accompanying LICENSE file for applicable license.
     <property name="onlytopic.in.map" value="false"/>
 
     <property name="link-crawl" value="topic"/>
-    
+
     <!--
     default value : warn
   fail     :1a) Fail quickly if files are going to be generated/copied outside of that directory
@@ -170,24 +170,25 @@ See the accompanying LICENSE file for applicable license.
     <property name="outer.control" value="warn"/>
 
     <condition property="inner.transform">
-        <equals arg1="${generate.copy.outer}" arg2="1"/>
+      <equals arg1="${generate.copy.outer}" arg2="1"/>
     </condition>
 
     <condition property="old.transform">
       <equals arg1="${generate.copy.outer}" arg2="3"></equals>
     </condition>
-    
+
     <property name="conserve-memory" value="false"/>
 
     <!-- Process skip -->
     <macrodef name="preprocess-skip-init">
       <attribute name="name"/>
+      <attribute name="step"/>
       <sequential>
         <fail if:set="@{name}.skip">Internal property @{name}.skip may not be set directly.</fail>
         <condition property="@{name}.skip">
           <and>
-            <isset property="build-step.@{name}"/>
-            <isfalse value="${build-step.@{name}}"/>
+            <isset property="build-step.@{step}"/>
+            <isfalse value="${build-step.@{step}}"/>
           </and>
         </condition>
         <echo level="info" if:set="@{name}.skip">Skip @{name}</echo>
@@ -196,48 +197,47 @@ See the accompanying LICENSE file for applicable license.
     </macrodef>
     <!-- XXX: gen-list and debug-filter cannot be skipped -->
     <!--
-    <preprocess-skip-init name="preprocess.debug-filter"/>
-    <preprocess-skip-init name="preprocess.gen-list"/>
+    <preprocess-skip-init name="preprocess.debug-filter" step="debug-filter"/>
+    <preprocess-skip-init name="preprocess.gen-list" step="gen-list"/>
     -->
 
-    <preprocess-skip-init name="preprocess.branch-filter"/>
+    <preprocess-skip-init name="preprocess.branch-filter" step="branch-filter"/>
 
-    <preprocess-skip-init name="preprocess.chunk"/>
+    <preprocess-skip-init name="preprocess.chunk" step="chunk"/>
 
-    <!-- TODO: rename to clean-preprocess and combine the targets -->
-    <preprocess-skip-init name="preprocess.clean-map-check"/>
-    <preprocess-skip-init name="preprocess.clean-preprocess"/>
+    <preprocess-skip-init name="preprocess.clean-preprocess" step="clean-preprocess"/>
+    <preprocess-skip-init name="preprocess.clean-map-check" step="clean-preprocess"/>
 
-    <preprocess-skip-init name="preprocess.coderef"/>
+    <preprocess-skip-init name="preprocess.coderef" step="coderef"/>
 
     <!-- XXX: merge? -->
-    <preprocess-skip-init name="preprocess.conref"/>
-    <preprocess-skip-init name="preprocess.conrefpush"/>
+    <preprocess-skip-init name="preprocess.conref" step="conref"/>
+    <preprocess-skip-init name="preprocess.conrefpush" step="conrefpush"/>
 
     <!-- XXX: merge call copy properties under the same property -->
-    <preprocess-skip-init name="preprocess.copy-flag"/>
-    <preprocess-skip-init name="preprocess.copy-html"/>
-    <preprocess-skip-init name="preprocess.copy-image"/>
+    <preprocess-skip-init name="preprocess.copy-flag" step="copy-flag"/>
+    <preprocess-skip-init name="preprocess.copy-html" step="copy-html"/>
+    <preprocess-skip-init name="preprocess.copy-image" step="copy-image"/>
 
-    <preprocess-skip-init name="preprocess.keyref"/>
+    <preprocess-skip-init name="preprocess.keyref" step="keyref"/>
 
-    <preprocess-skip-init name="preprocess.maplink"/><!-- Collect all links from maps and push them into topics -->
+    <preprocess-skip-init name="preprocess.maplink" step="maplink"/><!-- Collect all links from maps and push them into topics -->
 
     <!-- XXX: In order to make e.g. keyref work, maprefs need to be resolved -->
-    <preprocess-skip-init name="preprocess.mapref"/>
+    <preprocess-skip-init name="preprocess.mapref" step="mapref"/>
 
-    <preprocess-skip-init name="preprocess.move-meta-entries"/><!-- Push information from <topicmeta> in the map into the corresponding topics and pull metadata (such as navtitle) into the map from the referenced topics. -->
+    <preprocess-skip-init name="preprocess.move-meta-entries" step="move-meta-entries"/><!-- Push information from <topicmeta> in the map into the corresponding topics and pull metadata (such as navtitle) into the map from the referenced topics. -->
 
-    <preprocess-skip-init name="preprocess.normalize-codeblock"/>
+    <preprocess-skip-init name="preprocess.normalize-codeblock" step="normalize-codeblock"/>
 
     <!-- TODO: merge -->
-    <preprocess-skip-init name="preprocess.profile"/>
-    <preprocess-skip-init name="preprocess.topic-profile"/>
-    <preprocess-skip-init name="preprocess.map-profile"/>
+    <preprocess-skip-init name="preprocess.profile" step="profile"/>
+    <preprocess-skip-init name="preprocess.topic-profile" step="topic-profile"/>
+    <preprocess-skip-init name="preprocess.map-profile" step="map-profile"/>
 
-    <preprocess-skip-init name="preprocess.topicpull"/><!-- Populate link text for links within topics (xref, link). -->
+    <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/><!-- Populate link text for links within topics (xref, link). -->
 
-    <preprocess-skip-init name="clean-temp"/>
+    <preprocess-skip-init name="clean-temp" step="clean-temp"/>
   </target>
   
   <target name="log-arg">
