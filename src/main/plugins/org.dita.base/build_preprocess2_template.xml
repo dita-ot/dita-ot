@@ -111,9 +111,14 @@ See the accompanying LICENSE file for applicable license.
       </job>
     </echoxml>
     <property name="map.filter-on-parse" value="false"/>
-    <property name="topic.filter-on-parse" value="true"/>
+    <preprocess-skip-init name="preprocess.map-profile" step="map-profile"/>
     <condition property="preprocess.map-profile.skip">
       <istrue value="${map.filter-on-parse}"/>
+    </condition>
+    <property name="topic.filter-on-parse" value="true"/>
+    <preprocess-skip-init name="preprocess.topic-profile" step="topic-profile"/>
+    <condition property="preprocess.topic-profile.skip">
+      <istrue value="${topic.filter-on-parse}"/>
     </condition>
   </target>
   
@@ -223,7 +228,7 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
   
-  <target name="map-profile" depends="map-profile-check"
+  <target name="map-profile"
     unless="preprocess.map-profile.skip"
     description="Profile input map files">
     <pipeline message="Profile filtering." taskname="profile">
@@ -236,12 +241,6 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <target name="map-profile-check">
-    <condition property="preprocess.map-profile.skip">
-      <istrue value="${map.filter-on-parse}"/>
-    </condition>
-  </target>
-  
   <target name="topic-reader"
     description="Generate file list">
     <pipeline message="Generate topics" taskname="topic-reader"
@@ -323,7 +322,7 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <target name="topic-profile" depends="topic-profile-check"
+  <target name="topic-profile"
           unless="preprocess.topic-profile.skip"
           description="Profile input files">
     <pipeline message="Profile filtering." taskname="profile">
@@ -333,12 +332,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
-  </target>
-
-  <target name="topic-profile-check">
-    <condition property="preprocess.topic-profile.skip">
-      <istrue value="${topic.filter-on-parse}"/>
-    </condition>
   </target>
 
   <target name="preprocess2.topic-fragment"

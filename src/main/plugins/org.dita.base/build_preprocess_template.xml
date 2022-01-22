@@ -161,7 +161,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <!-- profile -->
-  <target name="profile" depends="profile-check"
+  <target name="profile"
           unless="preprocess.profile.skip"
           description="Profile input files">
     <pipeline message="Profile filtering." taskname="profile"
@@ -179,12 +179,6 @@ See the accompanying LICENSE file for applicable license.
     </pathconvert>
     <condition property="noTopic">
       <equals arg1="${inputTopicPath}" arg2=""/>
-    </condition>
-  </target>
-
-  <target name="profile-check">
-    <condition property="preprocess.profile.skip">
-      <istrue value="${filter-on-parse}"/>
     </condition>
   </target>
   
