@@ -195,11 +195,6 @@ See the accompanying LICENSE file for applicable license.
         <echo level="info" unless:set="@{name}.skip">Run @{name}</echo>
       </sequential>
     </macrodef>
-    <!-- XXX: gen-list and debug-filter cannot be skipped -->
-    <!--
-    <preprocess-skip-init name="preprocess.debug-filter" step="debug-filter"/>
-    <preprocess-skip-init name="preprocess.gen-list" step="gen-list"/>
-    -->
 
     <preprocess-skip-init name="preprocess.branch-filter" step="branch-filter"/>
 
@@ -210,9 +205,7 @@ See the accompanying LICENSE file for applicable license.
 
     <preprocess-skip-init name="preprocess.coderef" step="coderef"/>
 
-    <!-- XXX: merge? -->
     <preprocess-skip-init name="preprocess.conref" step="conref"/>
-    <preprocess-skip-init name="preprocess.conrefpush" step="conrefpush"/>
 
     <!-- XXX: merge call copy properties under the same property -->
     <preprocess-skip-init name="preprocess.copy-flag" step="copy-flag"/>

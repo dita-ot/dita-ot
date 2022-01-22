@@ -184,12 +184,6 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">true</val>
       <val>false</val>
     </param>
-    <!--
-    <param name="build-step.clean-map-check" desc="Run process clean-map-check" type="enum">
-      <val default="true">true</val>
-      <val>false</val>
-    </param>
-    -->
     <param name="build-step.clean-preprocess" desc="Run process clean-preprocess" type="enum">
       <val default="true">true</val>
       <val>false</val>
@@ -202,18 +196,6 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">true</val>
       <val>false</val>
     </param>
-    <!--
-    <param name="build-step.conrefpush" desc="Run process conrefpush" type="enum">
-      <val default="true">true</val>
-      <val>false</val>
-    </param>
-    -->
-    <!--
-    <param name="build-step.copy-files" desc="Run process copy-files" type="enum">
-      <val default="true">true</val>
-      <val>false</val>
-    </param>
-    -->
     <param name="build-step.copy-flag" desc="Run process copy-flag" type="enum">
       <val default="true">true</val>
       <val>false</val>
@@ -226,16 +208,6 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">true</val>
       <val>false</val>
     </param>
-    <!--
-    <param name="build-step.debug-filter" desc="Run process debug-filter" type="enum">
-      <val default="true">true</val>
-      <val>false</val>
-    </param>
-    <param name="build-step.gen-list" desc="Run process gen-list" type="enum">
-      <val default="true">true</val>
-      <val>false</val>
-    </param>
-    -->
     <param name="build-step.keyref" desc="Run process keyref" type="enum">
       <val default="true">true</val>
       <val>false</val>
