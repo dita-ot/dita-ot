@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
+  xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable" stylesheet="tables.xsl">
+
+  <x:scenario label="frame none">
+    <x:context select="/table">
+      <table class="- topic/table " frame="none">
+        <title class="- topic/title ">Cell span sample</title>
+        <tgroup class="- topic/tgroup " cols="3">
+          <colspec align="center" class="- topic/colspec " colname="col1" colnum="1" colsep="1" colwidth="1*" rowsep="1"/>
+          <colspec align="center" class="- topic/colspec " colname="col2" colnum="2" colsep="1" colwidth="1*" rowsep="1"/>
+          <colspec align="center" class="- topic/colspec " colname="col3" colnum="3" colsep="1" colwidth="1*" rowsep="1"/>
+          <tbody class="- topic/tbody ">
+            <row class="- topic/row " valign="middle">
+              <entry class="- topic/entry " colname="col1" dita-ot:morecols="1" dita-ot:x="1" dita-ot:y="1"
+                nameend="col2" namest="col1">
+                <p class="- topic/p ">horizontally spanned</p>
+              </entry>
+              <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="1" morerows="1">
+                <p class="- topic/p ">vertically spanned</p>
+              </entry>
+            </row>
+            <row class="- topic/row " valign="middle">
+              <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="2" morerows="1">
+                <p class="- topic/p ">vertically spanned</p>
+              </entry>
+              <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="2">
+                <p class="- topic/p ">no spanned</p>
+              </entry>
+            </row>
+            <row class="- topic/row " valign="middle">
+              <entry class="- topic/entry " colname="col2" dita-ot:morecols="1" dita-ot:x="2" dita-ot:y="3"
+                nameend="col3" namest="col2">
+                <p class="- topic/p ">horizontally spanned</p>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </x:context>
+    <x:expect label="generates no frame">
+      <table class="frame-none">
+        <caption>
+          <span class="table--title-label">Table 1. </span>
+          <span>Cell span sample</span>
+        </caption>
+        <colgroup>
+          <col style="width:33.33333333333333%"/>
+          <col style="width:33.33333333333333%"/>
+          <col style="width:33.33333333333333%"/>
+        </colgroup>
+        <tbody>
+          <tr class="valign-middle">
+            <td class="align-center colsep-1 rowsep-1" colspan="2">horizontally spanned</td>
+            <td class="align-center colsep-1 rowsep-1" rowspan="2">vertically spanned</td>
+          </tr>
+          <tr class="valign-middle">
+            <td class="align-center colsep-1 rowsep-1" rowspan="2">vertically spanned</td>
+            <td class="align-center colsep-1 rowsep-1">no spanned</td>
+          </tr>
+          <tr class="valign-middle">
+            <td class="align-center colsep-1 rowsep-1" colspan="2">horizontally spanned</td>
+          </tr>
+        </tbody>
+      </table>
+    </x:expect>
+  </x:scenario>
+
+</x:description>
