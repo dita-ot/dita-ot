@@ -3,8 +3,7 @@
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
   xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable"
-  stylesheet="object.xsl"
-  >
+  stylesheet="topic.xsl">
 
   <x:scenario label="object-with-desc">
     <x:context select="/object">
