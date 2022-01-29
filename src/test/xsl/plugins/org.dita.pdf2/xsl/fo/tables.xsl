@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="2.0">
   
-  <xsl:import href="mocks.xsl"/>  
+  <xsl:import href="mocks.xsl"/>
   <xsl:import href="../../../../../../main/plugins/org.dita.pdf2/xsl/fo/tables.xsl"/>
   <xsl:import href="../../../../../../main/plugins/org.dita.pdf2/cfg/fo/attrs/basic-settings.xsl"/>
   <xsl:import href="../../../../../../main/plugins/org.dita.pdf2/cfg/fo/attrs/commons-attr.xsl"/>
