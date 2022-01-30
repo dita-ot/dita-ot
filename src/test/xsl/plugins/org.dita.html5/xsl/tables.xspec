@@ -44,14 +44,14 @@
         <tbody class="tbody">
           <tr class="row valign-middle">
             <td class="entry align-center colsep-1 rowsep-1" colspan="2">horizontally spanned</td>
-            <td class="entry align-center colsep-1 rowsep-1" rowspan="2">vertically spanned</td>
+            <td class="entry align-center rowsep-1" rowspan="2">vertically spanned</td>
           </tr>
           <tr class="row valign-middle">
-            <td class="entry align-center colsep-1 rowsep-1" rowspan="2">vertically spanned</td>
+            <td class="entry align-center colsep-1" rowspan="2">vertically spanned</td>
             <td class="entry align-center colsep-1 rowsep-1">no spanned</td>
           </tr>
           <tr class="row valign-middle">
-            <td class="entry align-center colsep-1 rowsep-1" colspan="2">horizontally spanned</td>
+            <td class="entry align-center" colspan="2">horizontally spanned</td>
           </tr>
         </tbody>
       </table>
