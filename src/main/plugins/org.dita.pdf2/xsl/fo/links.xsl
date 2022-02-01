@@ -57,7 +57,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:when test="*[contains(@class,' topic/desc ')] and
                             processing-instruction()[name()='ditaot'][.='usershortdesc']">
                 <fo:block xsl:use-attribute-sets="link__shortdesc">
-                    <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
+                    <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]" mode="insert-description"/>
                 </fo:block>
             </xsl:when>
             <!-- External: do not attempt to retrieve. -->
@@ -66,11 +66,11 @@ See the accompanying LICENSE file for applicable license.
             <!-- When the target has a short description and no local override, use the target -->
             <xsl:when test="$element/*[contains(@class, ' topic/shortdesc ')]">
                 <xsl:variable name="generatedShortdesc" as="element()*">
-                    <xsl:apply-templates select="$element/*[contains(@class, ' topic/shortdesc ')]"/>
+                    <fo:block xsl:use-attribute-sets="link__shortdesc">
+                        <xsl:apply-templates select="$element/*[contains(@class, ' topic/shortdesc ')]" mode="insert-description"/>
+                    </fo:block>
                 </xsl:variable>
-                <fo:block xsl:use-attribute-sets="link__shortdesc">
-                    <xsl:apply-templates select="$generatedShortdesc" mode="dropCopiedIds"/>
-                </fo:block>
+                <xsl:apply-templates select="$generatedShortdesc" mode="dropCopiedIds"/>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
@@ -89,7 +89,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/xref ') or contains(@class, ' topic/link ')]/*[contains(@class,' topic/desc ')]" priority="1"/>
-    <xsl:template match="*[contains(@class,' topic/desc ')]" mode="insert-description">
+    <xsl:template match="*[contains(@class,' topic/desc ') or contains(@class, ' topic/shortdesc ')]" mode="insert-description">
         <xsl:apply-templates/>
     </xsl:template>
 
@@ -565,7 +565,7 @@ See the accompanying LICENSE file for applicable license.
         </fo:inline>
         <xsl:if test="*[contains(@class, ' topic/desc ')]">
           <fo:block xsl:use-attribute-sets="link__shortdesc">
-            <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
+              <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]" mode="insert-description"/>
           </fo:block>
         </xsl:if>
       </fo:block>
