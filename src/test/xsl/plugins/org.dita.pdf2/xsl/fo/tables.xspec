@@ -43,12 +43,12 @@
                 <fo:table-cell number-columns-spanned="2" text-align="from-table-column()" display-align="center" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
                   <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">horizontally spanned</fo:block>
                 </fo:table-cell>
-                <fo:table-cell number-rows-spanned="2" text-align="from-table-column()" display-align="center" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+                <fo:table-cell number-rows-spanned="2" text-align="from-table-column()" display-align="center" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain">
                   <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">vertically spanned</fo:block>
                 </fo:table-cell>
               </fo:table-row>
               <fo:table-row keep-together.within-page="always">
-                <fo:table-cell number-rows-spanned="2" text-align="from-table-column()" display-align="center" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+                <fo:table-cell number-rows-spanned="2" text-align="from-table-column()" display-align="center" border-end-style="solid" border-end-width="1pt" border-end-color="black">
                   <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">vertically spanned</fo:block>
                 </fo:table-cell>
                 <fo:table-cell text-align="from-table-column()" display-align="center" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
@@ -56,7 +56,7 @@
                 </fo:table-cell>
               </fo:table-row>
               <fo:table-row keep-together.within-page="always">
-                <fo:table-cell number-columns-spanned="2" text-align="from-table-column()" display-align="center" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+                <fo:table-cell number-columns-spanned="2" text-align="from-table-column()" display-align="center">
                   <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">horizontally spanned</fo:block>
                 </fo:table-cell>
               </fo:table-row>
