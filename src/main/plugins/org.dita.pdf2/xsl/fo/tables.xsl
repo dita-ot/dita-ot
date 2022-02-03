@@ -774,8 +774,8 @@ See the accompanying LICENSE file for applicable license.
     <!-- Judge that given entry ($prmEntry) is the last column cell -->
     <xsl:function name="dita-ot:isLastColumnEntry" as="xs:boolean">
         <xsl:param name="prmEntry" as="element()"/>
-        <xsl:variable name="tgroupCols" as="xs:integer" select="xs:integer(string($prmEntry/ancestor::*[contains(@class,' topic/tgroup ')][1]/@cols))"/>
-        <xsl:variable name="entryColNum" as="xs:integer" select="xs:integer(string($prmEntry/@dita-ot:x))"/>
+        <xsl:variable name="tgroupCols" as="xs:integer" select="xs:integer($prmEntry/ancestor::*[contains(@class,' topic/tgroup ')][1]/@cols)"/>
+        <xsl:variable name="entryColNum" as="xs:integer" select="xs:integer($prmEntry/@dita-ot:x)"/>
         <xsl:choose>
             <xsl:when test="exists($prmEntry/@dita-ot:morecols)">
                 <xsl:variable name="endCol" as="xs:integer" select="$entryColNum + xs:integer($prmEntry/@dita-ot:morecols)"/>
@@ -819,7 +819,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:function name="dita-ot:isLastRowEntry" as="xs:boolean">
         <xsl:param name="prmEntry" as="element()"/>
         <xsl:variable name="tgroupRowCount" as="xs:integer" select="count($prmEntry/ancestor::*[contains(@class,' topic/tgroup ')][1]/descendant::*[contains(@class,' topic/row ')])"/>
-        <xsl:variable name="entryRowNum" as="xs:integer" select="xs:integer(string($prmEntry/@dita-ot:y))"/>
+        <xsl:variable name="entryRowNum" as="xs:integer" select="xs:integer($prmEntry/@dita-ot:y)"/>
         <xsl:choose>
             <xsl:when test="exists($prmEntry/@morerows)">
                 <xsl:variable name="endRowNum" as="xs:integer" select="$entryRowNum + xs:integer($prmEntry/@morerows)"/>
