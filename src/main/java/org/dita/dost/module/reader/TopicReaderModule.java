@@ -12,12 +12,14 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.exception.UncheckedDITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.SubjectSchemeReader;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.NormalizeFilter;
@@ -296,7 +298,11 @@ public final class TopicReaderModule extends AbstractReaderModule {
             } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
                 formatSet.add(file);
                 if (!exists(file.filename)) {
-                    logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
+                    if (processingMode == Configuration.Mode.STRICT) {
+                        throw new UncheckedDITAOTException(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toException());
+                    } else {
+                        logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
+                    }
                 }
             } else {
                 htmlSet.put(file.format, file.filename);
