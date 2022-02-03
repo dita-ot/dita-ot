@@ -16,18 +16,18 @@
       </simpletable>
     </x:context>
     <x:expect label="has caption">
-      <fo:block>Table.title 1 foo</fo:block>
-      <fo:table>
+      <fo:block font-size="10pt" font-family="sans-serif" font-weight="bold" space-before="10pt" space-after="10pt" keep-with-next.within-column="always">Table.title 1 foo</fo:block>
+      <fo:table font-size="10pt" width="100%" space-before="8pt" space-after="10pt" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black" border-start-style="solid" border-start-width="1pt" border-start-color="black">
         <fo:table-body>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>e1</fo:block>
+            <fo:table-cell border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e1</fo:block>
+            </fo:table-cell>
+            <fo:table-cell border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e2</fo:block>
             </fo:table-cell>
             <fo:table-cell>
-              <fo:block>e2</fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>e3</fo:block>
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e3</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-body>
@@ -51,30 +51,30 @@
       </simpletable>
     </x:context>
     <x:expect label="has thead">
-      <fo:table>
+      <fo:table font-size="10pt" width="100%" space-before="8pt" space-after="10pt" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black" border-start-style="solid" border-start-width="1pt" border-start-color="black">
         <fo:table-header>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>s1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">s1</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>s2</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">s2</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>s3</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">s3</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-header>
         <fo:table-body>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>e1</fo:block>
+            <fo:table-cell border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e1</fo:block>
+            </fo:table-cell>
+            <fo:table-cell border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e2</fo:block>
             </fo:table-cell>
             <fo:table-cell>
-              <fo:block>e2</fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>e3</fo:block>
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e3</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-body>
@@ -127,97 +127,97 @@
       </simpletable>
     </x:context>
     <x:expect label="has thead">
-      <fo:table>
+      <fo:table font-size="10pt" width="100%" space-before="8pt" space-after="10pt" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black" border-start-style="solid" border-start-width="1pt" border-start-color="black">
         <fo:table-header>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>1 1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">1 1</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>2 1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">2 1</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>3 1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">3 1</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>4 1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">4 1</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>5 1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">5 1</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-header>
         <fo:table-body>
           <fo:table-row>
-            <fo:table-cell number-columns-spanned="2">
-              <fo:block>1 2</fo:block>
+            <fo:table-cell number-columns-spanned="2" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">1 2</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>3 2</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">3 2</fo:block>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="2">
-              <fo:block>4 2</fo:block>
-            </fo:table-cell>
-          </fo:table-row>
-          <fo:table-row>
-            <fo:table-cell>
-              <fo:block>1 3</fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>2 3</fo:block>
-            </fo:table-cell>
-            <fo:table-cell number-rows-spanned="2" number-columns-spanned="2">
-              <fo:block>3 3</fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>5 3</fo:block>
+            <fo:table-cell number-columns-spanned="2" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">4 2</fo:block>
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>1 4</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">1 3</fo:block>
             </fo:table-cell>
-            <fo:table-cell number-rows-spanned="2">
-              <fo:block>2 4</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">2 3</fo:block>
             </fo:table-cell>
-            <fo:table-cell number-rows-spanned="3">
-              <fo:block>5 4</fo:block>
+            <fo:table-cell number-rows-spanned="2" number-columns-spanned="2" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">3 3</fo:block>
             </fo:table-cell>
-          </fo:table-row>
-          <fo:table-row>
-            <fo:table-cell number-rows-spanned="2">
-              <fo:block>1 5</fo:block>
-            </fo:table-cell>
-            <fo:table-cell number-columns-spanned="2">
-              <fo:block>3 5</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">5 3</fo:block>
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>2 6</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">1 4</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>3 6</fo:block>
+            <fo:table-cell number-rows-spanned="2" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">2 4</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>4 6</fo:block>
+            <fo:table-cell number-rows-spanned="3" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">5 4</fo:block>
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>1 7</fo:block>
+            <fo:table-cell number-rows-spanned="2" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">1 5</fo:block>
+            </fo:table-cell>
+            <fo:table-cell number-columns-spanned="2" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">3 5</fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+          <fo:table-row>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">2 6</fo:block>
+            </fo:table-cell>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">3 6</fo:block>
+            </fo:table-cell>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">4 6</fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+          <fo:table-row>
+            <fo:table-cell border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">1 7</fo:block>
+            </fo:table-cell>
+            <fo:table-cell border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">2 7</fo:block>
+            </fo:table-cell>
+            <fo:table-cell border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">3 7</fo:block>
+            </fo:table-cell>
+            <fo:table-cell border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">4 7</fo:block>
             </fo:table-cell>
             <fo:table-cell>
-              <fo:block>2 7</fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>3 7</fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>4 7</fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>5 7</fo:block>
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">5 7</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-body>
@@ -247,44 +247,44 @@
       </simpletable>
     </x:context>
     <x:expect label="has thead">
-      <fo:table>
+      <fo:table font-size="10pt" width="100%" space-before="8pt" space-after="10pt" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black" border-start-style="solid" border-start-width="1pt" border-start-color="black">
         <fo:table-header>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>s1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">s1</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>s2</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">s2</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>s3</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">s3</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>s4</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">s4</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-header>
         <fo:table-body>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>e1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e1</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>e2</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e2</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>e3</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e3</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>e4</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e4</fo:block>
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
-            <fo:table-cell number-columns-spanned="2">
-              <fo:block>e1</fo:block>
+            <fo:table-cell number-columns-spanned="2" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e1</fo:block>
             </fo:table-cell>
             <fo:table-cell number-columns-spanned="2">
-              <fo:block>e3</fo:block>
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">e3</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-body>
@@ -310,32 +310,32 @@
       </simpletable>
     </x:context>
     <x:expect label="has th column">
-      <fo:table>
+      <fo:table font-size="10pt" width="100%" space-before="8pt" space-after="10pt" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black" border-start-style="solid" border-start-width="1pt" border-start-color="black">
         <fo:table-header>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>1 1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">1 1</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>2 1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">2 1</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-header>
         <fo:table-body>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>1 2</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">1 2</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>2 2</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">2 2</fo:block>
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>1 3</fo:block>
+            <fo:table-cell border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">1 3</fo:block>
             </fo:table-cell>
             <fo:table-cell>
-              <fo:block>2 3</fo:block>
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">2 3</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-body>
@@ -361,32 +361,32 @@
       </simpletable>
     </x:context>
     <x:expect label="has th column">
-      <fo:table>
+      <fo:table font-size="10pt" width="100%" space-before="8pt" space-after="10pt" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black" border-start-style="solid" border-start-width="1pt" border-start-color="black">
         <fo:table-header>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>1 1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">1 1</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>2 1</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-before-style="solid" border-before-width="1pt" border-before-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt" font-weight="bold">2 1</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-header>
         <fo:table-body>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>1 2</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">1 2</fo:block>
             </fo:table-cell>
-            <fo:table-cell>
-              <fo:block>2 2</fo:block>
+            <fo:table-cell border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">2 2</fo:block>
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
-            <fo:table-cell>
-              <fo:block>1 3</fo:block>
+            <fo:table-cell border-end-style="solid" border-end-width="1pt" border-end-color="black">
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">1 3</fo:block>
             </fo:table-cell>
             <fo:table-cell>
-              <fo:block>2 3</fo:block>
+              <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">2 3</fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-body>

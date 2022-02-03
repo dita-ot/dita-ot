@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
+  xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable" stylesheet="tables.xsl">
+
+  <x:scenario label="frame none">
+    <x:context select="/table">
+      <table class="- topic/table " frame="none">
+        <title class="- topic/title ">Cell span sample</title>
+        <tgroup class="- topic/tgroup " cols="3">
+          <colspec align="center" class="- topic/colspec " colname="col1" colnum="1" colsep="1" colwidth="1*" rowsep="1"/>
+          <colspec align="center" class="- topic/colspec " colname="col2" colnum="2" colsep="1" colwidth="1*" rowsep="1"/>
+          <colspec align="center" class="- topic/colspec " colname="col3" colnum="3" colsep="1" colwidth="1*" rowsep="1"/>
+          <tbody class="- topic/tbody ">
+            <row class="- topic/row " valign="middle">
+              <entry class="- topic/entry " colname="col1" dita-ot:morecols="1" dita-ot:x="1" dita-ot:y="1"
+                nameend="col2" namest="col1">horizontally spanned</entry>
+              <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="1" morerows="1">vertically spanned</entry>
+            </row>
+            <row class="- topic/row " valign="middle">
+              <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="2" morerows="1">vertically spanned</entry>
+              <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="2">no spanned</entry>
+            </row>
+            <row class="- topic/row " valign="middle">
+              <entry class="- topic/entry " colname="col2" dita-ot:morecols="1" dita-ot:x="2" dita-ot:y="3"
+                nameend="col3" namest="col2">horizontally spanned</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </x:context>
+    <x:expect label="generates no frame">
+      <fo:block-container reference-orientation="0" start-indent="from-parent(start-indent)">
+        <fo:block font-size="10pt" space-after="10pt" start-indent="0pt" id="">
+          <fo:block font-size="10pt" font-family="sans-serif" font-weight="bold" space-before="10pt" space-after="10pt" keep-with-next.within-column="always">Table.title 1 Cell span sample</fo:block>
+          <fo:table table-layout="fixed" width="100%" space-before="5pt" space-after="5pt">
+            <fo:table-column column-number="1" column-width="proportional-column-width(1)" text-align="center"/>
+            <fo:table-column column-number="2" column-width="proportional-column-width(1)" text-align="center"/>
+            <fo:table-column column-number="3" column-width="proportional-column-width(1)" text-align="center"/>
+            <fo:table-body>
+              <fo:table-row keep-together.within-page="always">
+                <fo:table-cell number-columns-spanned="2" text-align="from-table-column()" display-align="center" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+                  <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">horizontally spanned</fo:block>
+                </fo:table-cell>
+                <fo:table-cell number-rows-spanned="2" text-align="from-table-column()" display-align="center" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+                  <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">vertically spanned</fo:block>
+                </fo:table-cell>
+              </fo:table-row>
+              <fo:table-row keep-together.within-page="always">
+                <fo:table-cell number-rows-spanned="2" text-align="from-table-column()" display-align="center" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+                  <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">vertically spanned</fo:block>
+                </fo:table-cell>
+                <fo:table-cell text-align="from-table-column()" display-align="center" border-after-style="solid" border-after-width="1pt" border-after-color="black" border-after-width.conditionality="retain" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+                  <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">no spanned</fo:block>
+                </fo:table-cell>
+              </fo:table-row>
+              <fo:table-row keep-together.within-page="always">
+                <fo:table-cell number-columns-spanned="2" text-align="from-table-column()" display-align="center" border-end-style="solid" border-end-width="1pt" border-end-color="black">
+                  <fo:block space-before="3pt" space-before.conditionality="retain" space-after="3pt" space-after.conditionality="retain" start-indent="3pt" end-indent="3pt">horizontally spanned</fo:block>
+                </fo:table-cell>
+              </fo:table-row>
+            </fo:table-body>
+          </fo:table>
+        </fo:block>
+      </fo:block-container>
+    </x:expect>
+  </x:scenario>
+
+</x:description>
