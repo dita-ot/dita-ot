@@ -12,7 +12,6 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.UncheckedDITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -20,6 +19,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DelegatingURIResolver;
 import org.dita.dost.util.Job;
+import org.xmlresolver.Resolver;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
@@ -72,7 +72,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
     private void init() {
         if (catalog == null) {
-            final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
+            final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
             catalog = catalogResolver;
         }
         uriResolver = new DelegatingURIResolver(catalog, job.getStore());

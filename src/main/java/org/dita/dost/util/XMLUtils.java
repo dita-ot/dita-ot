@@ -12,13 +12,13 @@ import net.sf.saxon.expr.instruct.TerminationException;
 import net.sf.saxon.lib.*;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.s9api.streams.Step;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
+import org.xmlresolver.Resolver;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -61,7 +61,7 @@ public final class XMLUtils {
         saxParserFactory.setNamespaceAware(true);
     }
     private DITAOTLogger logger;
-    private final CatalogResolver catalogResolver;
+    private final Resolver catalogResolver;
     private final Processor processor;
     private final XsltCompiler xsltCompiler;
 

@@ -12,8 +12,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 
-import org.apache.xml.resolver.CatalogManager;
-import org.apache.xml.resolver.tools.CatalogResolver;
+import org.xmlresolver.*;
 
 /**
  * General catalog file resolving utilities.
@@ -24,7 +23,7 @@ import org.apache.xml.resolver.tools.CatalogResolver;
 public final class CatalogUtils {
 
     /**apache catalogResolver.*/
-    private static CatalogResolver catalogResolver = null;
+    private static Resolver catalogResolver = null;
     /** Absolute directory to find catalog-dita.xml.*/
     private static File ditaDir;
     /**
@@ -47,16 +46,19 @@ public final class CatalogUtils {
      * Get CatalogResolver.
      * @return CatalogResolver
      */
-    public static synchronized CatalogResolver getCatalogResolver() {
+    public static synchronized Resolver getCatalogResolver() {
         if (catalogResolver == null) {
-            final CatalogManager manager = new CatalogManager();
-            manager.setIgnoreMissingProperties(true);
-            manager.setUseStaticCatalog(false); // We'll use a private catalog.
-            manager.setPreferPublic(true);
+            final XMLResolverConfiguration config = new XMLResolverConfiguration();
+//            manager.setIgnoreMissingProperties(true);
+//            manager.setUseStaticCatalog(false); // We'll use a private catalog.
+//            manager.setPreferPublic(true);
+            config.setFeature(ResolverFeature.PREFER_PUBLIC, true);
+//            final CatalogManager manager = new CatalogManager(config);
             final File catalogFilePath = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base") + File.separator + FILE_NAME_CATALOG);
-            manager.setCatalogFiles(catalogFilePath.toURI().toASCIIString());
+//            manager.setCatalogFiles(catalogFilePath.toURI().toASCIIString());
+            config.addCatalog(catalogFilePath.toURI().toASCIIString());
             //manager.setVerbosity(10);
-            catalogResolver = new CatalogResolver(manager);
+            catalogResolver = new Resolver(config);
         }
 
         return catalogResolver;
