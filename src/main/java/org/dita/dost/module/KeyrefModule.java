@@ -332,7 +332,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                         String referenceValue = node.getAttributeValue(rewriteAttrName);
                         if (referenceValue != null) {
                             for (final KeyScope s : ss) {
-                                final URI href = stripFragment(map.uri.resolve(referenceValue));
+                                URI resolved = map.uri.resolve(referenceValue);
+                                String frag = resolved.getFragment();
+                                final URI href = stripFragment(resolved);
                                 final FileInfo fi = job.getFileInfo(href);
                                 if (fi != null && fi.hasKeyref) {
                                     final int count = usage.getOrDefault(fi.uri, 0);
@@ -344,6 +346,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                                         if (resolveTask.out != null) {
                                             final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
                                             referenceValue = value.toString();
+                                            if(frag != null && ! referenceValue.contains("#")) {
+                                                referenceValue += "#" + frag;
+                                            }
                                         }
                                     } else {
                                         final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly(node));
@@ -353,6 +358,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                                             final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
                                             fixKeyDefRefs(s, fi.uri, value);
                                             referenceValue = value.toString();
+                                            if(frag != null && ! referenceValue.contains("#")) {
+                                                referenceValue += "#" + frag;
+                                            }
                                         }
                                     }
                                 }
