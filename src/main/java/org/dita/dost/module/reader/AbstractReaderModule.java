@@ -25,6 +25,7 @@ import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xmlresolver.Resolver;
 
 import javax.xml.namespace.QName;
 import java.io.*;
@@ -358,11 +359,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
 
         try {
+            final EntityResolver resolver = processingMode.equals(Mode.LAX)
+                    ? new LaxEntityResolver(CatalogUtils.getCatalogResolver(), logger)
+                    : CatalogUtils.getCatalogResolver();
             XMLReader parser = getXmlReader(ref.format);
             XMLReader xmlSource = parser;
             for (final XMLFilter f: getProcessingPipe(currentFile)) {
                 f.setParent(xmlSource);
-                f.setEntityResolver(CatalogUtils.getCatalogResolver());
+                f.setEntityResolver(resolver);
                 xmlSource = f;
             }
 
