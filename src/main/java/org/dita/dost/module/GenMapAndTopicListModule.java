@@ -24,10 +24,7 @@ import org.dita.dost.util.*;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.ProfilingFilter;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLFilter;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.*;
@@ -408,10 +405,13 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         final String[] params = { currentFile.toString() };
 
         try {
+            final EntityResolver resolver = processingMode.equals(Mode.LAX)
+                    ? new LaxEntityResolver(CatalogUtils.getCatalogResolver())
+                    : CatalogUtils.getCatalogResolver();
             XMLReader xmlSource = getXmlReader(ref.format);
             for (final XMLFilter f: getProcessingPipe(currentFile)) {
                 f.setParent(xmlSource);
-                f.setEntityResolver(CatalogUtils.getCatalogResolver());
+                f.setEntityResolver(resolver);
                 xmlSource = f;
             }
             xmlSource.setContentHandler(nullHandler);
