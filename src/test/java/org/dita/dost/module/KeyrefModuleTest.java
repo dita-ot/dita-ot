@@ -308,4 +308,59 @@ public class KeyrefModuleTest {
             throw new RuntimeException(e);
         }
     }
+
+	@Test
+	public void testWalkMapAndRewriteKeydefHrefKeepAnchor() throws ParserConfigurationException, IOException, SAXException, URISyntaxException, XPathException {
+	    inputMapFileInfo = new Builder()
+	            .uri(create("test3.ditamap"))
+	            .src(new File(baseDir, "src" + File.separator + "test3.ditamap").toURI())
+	            .result(new File(baseDir, "src" + File.separator + "test3.ditamap").toURI())
+	            .format("ditamap")
+	            .isInput(true)
+	            .build();
+	    job.add(inputMapFileInfo);
+	    final XdmNode act = parse(inputMapFileInfo.src);
+	    final KeyScope childScope1 = new KeyScope("A", "A",
+	    		ImmutableMap.of(
+	    				"VAR", new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null),
+	    				"A.VAR", new KeyDef("A.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null)
+	    				),
+	    		EMPTY_LIST
+	    		);
+	    final KeyScope childScope2 = new KeyScope("B", "B",
+	    		ImmutableMap.of(
+	    				"VAR", new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null),
+	    				"B.VAR", new KeyDef("B.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null)
+	    				),
+	    		EMPTY_LIST
+	    		);
+	    final KeyScope keyScope =
+	            new KeyScope("#root", null, new HashMap<String, KeyDef>(), 
+	                        Arrays.asList(new KeyScope[] {childScope1, childScope2})
+	    );
+	    final List<ResolveTask> res = new ArrayList<>();
+	    final XdmDestination destination = new XdmDestination();
+	    final Receiver receiver = destination.getReceiver(
+	            xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
+	            new SerializationProperties());
+	    receiver.open();
+	    module.walkMap(inputMapFileInfo, act, singletonList(keyScope), res, receiver);
+	    receiver.close();
+	    
+	    XdmNode node = destination.getXdmNode();
+	    assertEquals("<map xmlns:dita-ot=\"http://dita-ot.sourceforge.net/ns/201007/dita-ot\"\n" + 
+	    		"     xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\"\n" + 
+	    		"     cascade=\"merge\"\n" + 
+	    		"     class=\"- map/map \"\n" + 
+	    		"     ditaarch:DITAArchVersion=\"1.3\"\n" + 
+	    		"     domains=\"(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)\">\n" + 
+	    		"   <topicref class=\"- map/topicref \" href=\"topic.dita#abc\"/>\n" + 
+	    		"   <topicgroup class=\"+ map/topicref mapgroup-d/topicgroup \" keyscope=\"A\">\n" + 
+	    		"      <topicref class=\"- map/topicref \" href=\"topic-1.dita#abc\"/>\n" + 
+	    		"   </topicgroup>\n" + 
+	    		"   <topicgroup class=\"+ map/topicref mapgroup-d/topicgroup \" keyscope=\"B\">\n" + 
+	    		"      <topicref class=\"- map/topicref \" href=\"topic-2.dita#abc\"/>\n" + 
+	    		"   </topicgroup>\n" + 
+	    		"</map>", node.toString());
+	}
 }
