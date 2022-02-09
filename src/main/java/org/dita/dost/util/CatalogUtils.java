@@ -49,15 +49,10 @@ public final class CatalogUtils {
     public static synchronized Resolver getCatalogResolver() {
         if (catalogResolver == null) {
             final XMLResolverConfiguration config = new XMLResolverConfiguration();
-//            manager.setIgnoreMissingProperties(true);
-//            manager.setUseStaticCatalog(false); // We'll use a private catalog.
-//            manager.setPreferPublic(true);
             config.setFeature(ResolverFeature.PREFER_PUBLIC, true);
-//            final CatalogManager manager = new CatalogManager(config);
+//            config.setFeature(ResolverFeature.THROW_URI_EXCEPTIONS, true);
             final File catalogFilePath = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base") + File.separator + FILE_NAME_CATALOG);
-//            manager.setCatalogFiles(catalogFilePath.toURI().toASCIIString());
             config.addCatalog(catalogFilePath.toURI().toASCIIString());
-            //manager.setVerbosity(10);
             catalogResolver = new Resolver(config);
         }
 
