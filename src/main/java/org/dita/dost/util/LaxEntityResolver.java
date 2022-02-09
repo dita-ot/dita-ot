@@ -8,6 +8,8 @@
 
 package org.dita.dost.util;
 
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -19,9 +21,11 @@ import java.net.URISyntaxException;
 
 public class LaxEntityResolver implements EntityResolver {
     private final EntityResolver parent;
+    private final DITAOTLogger logger;
 
-    public LaxEntityResolver(EntityResolver parent) {
+    public LaxEntityResolver(EntityResolver parent, DITAOTLogger logger) {
         this.parent = parent;
+        this.logger = logger;
     }
 
     @Override
@@ -31,6 +35,7 @@ public class LaxEntityResolver implements EntityResolver {
             new URI(systemId);
         } catch (URISyntaxException e) {
             normalized = URIUtils.normalizeURI(systemId);
+            logger.warn(MessageUtils.getMessage("DOTJ084W", systemId, normalized).toString());
         }
         return parent.resolveEntity(publicId, normalized);
     }

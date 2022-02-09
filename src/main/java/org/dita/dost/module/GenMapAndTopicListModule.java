@@ -406,7 +406,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         try {
             final EntityResolver resolver = processingMode.equals(Mode.LAX)
-                    ? new LaxEntityResolver(CatalogUtils.getCatalogResolver())
+                    ? new LaxEntityResolver(CatalogUtils.getCatalogResolver(), logger)
                     : CatalogUtils.getCatalogResolver();
             XMLReader xmlSource = getXmlReader(ref.format);
             for (final XMLFilter f: getProcessingPipe(currentFile)) {

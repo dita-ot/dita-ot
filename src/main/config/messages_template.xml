@@ -423,6 +423,11 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <message id="DOTJ084W" type="WARN">
+    <reason>Invalid URI '%1'.</reason>
+    <response>Using normalized '%2'.</response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  
