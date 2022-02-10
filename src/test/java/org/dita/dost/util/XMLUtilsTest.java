@@ -74,7 +74,7 @@ public class XMLUtilsTest {
     final net.sf.saxon.Configuration configuration = new Configuration();
     XMLUtils.configureSaxonExtensions(configuration);
     final SymbolicName.F functionName = new SymbolicName.F(new StructuredQName("x", "y", "z"), 0);
-    assertTrue(configuration.getIntegratedFunctionLibrary().isAvailable(functionName));
+    assertTrue(configuration.getIntegratedFunctionLibrary().isAvailable(functionName, 20));
   }
 
   @Test

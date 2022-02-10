@@ -372,7 +372,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         } else {
           final NodeInfo ni = node.getUnderlyingNode();
           receiver.startElement(
-            new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
+            new FingerprintedQName(ni.getPrefix(), ni.getNamespaceUri(), ni.getLocalPart()),
             ni.getSchemaType(),
             ni.attributes(),
             ni.getAllNamespaces(),
@@ -402,7 +402,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final StructuredQName structuredQName = qName.getStructuredQName();
     return new FingerprintedQName(
       structuredQName.getPrefix(),
-      structuredQName.getURI(),
+      structuredQName.getNamespaceUri(),
       structuredQName.getLocalPart()
     );
   }

@@ -244,11 +244,12 @@ public class CacheStore extends AbstractStore implements Store {
     if (isTempFile(path)) {
       if (LOG) System.err.println("writeDocument: " + path);
       doc.setDocumentURI(path.toString());
-      final XdmNode node = xmlUtils.getProcessor().newDocumentBuilder().wrap(doc);
-      final NodeInfo nodeInfo = node.getUnderlyingNode();
-      if (nodeInfo.getBaseURI() == null || nodeInfo.getBaseURI().isEmpty()) {
-        nodeInfo.setSystemId(doc.getBaseURI());
+      final DocumentBuilder documentBuilder = xmlUtils.getProcessor().newDocumentBuilder();
+      final DOMSource domSource = new DOMSource(doc, doc.getBaseURI());
+      if (doc.getBaseURI() == null || doc.getBaseURI().isEmpty()) {
+        domSource.setSystemId(doc.getBaseURI());
       }
+      final XdmNode node = documentBuilder.wrap(domSource);
       put(path, new Entry(null, node, null));
     } else {
       fallback.writeDocument(doc, path);
@@ -552,7 +553,7 @@ public class CacheStore extends AbstractStore implements Store {
       //                doc = (Document) ((DocumentWrapper) treeInfo).docNode;
       //                doc.setDocumentURI(d.toString());
       //            } else {
-      final TreeInfo rebasedDocument = new RebasedDocument(
+      final RebasedDocument rebasedDocument = new RebasedDocument(
         treeInfo,
         nodeInfo -> d.toString(),
         nodeInfo -> d.toString()
