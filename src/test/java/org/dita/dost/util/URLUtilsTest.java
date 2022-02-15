@@ -140,6 +140,7 @@ public class URLUtilsTest {
         assertEquals(new URI("foo%20bar.txt"), URLUtils.toURI("foo bar.txt"));
         assertEquals(new URI("foo/bar.txt"), URLUtils.toURI("foo" + Constants.WINDOWS_SEPARATOR + "bar.txt"));
         assertEquals(new URI("foo%20bar.txt"), URLUtils.toURI(" foo bar.txt "));
+        assertEquals(new URI("user's%20manual.txt"), URLUtils.toURI("user's manual.txt"));
         assertEquals(new URI("http://www.example.com/"), URLUtils.toURI(" http://www.example.com/ "));
     }
 
