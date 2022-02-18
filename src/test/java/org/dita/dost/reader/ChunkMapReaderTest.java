@@ -22,16 +22,13 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
-import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
