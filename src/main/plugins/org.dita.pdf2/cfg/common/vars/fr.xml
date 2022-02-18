@@ -42,10 +42,10 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Table of Contents Part">Partie <param ref-name="number"/> : </variable>
   <variable id="Table of Contents Preface">Préface </variable>
   <variable id="Preface title">Préface</variable>
-  <variable id="Notices title"><!--TODO:Notices title--></variable>
+  <variable id="Notices title">Notices</variable>
   <variable id="Mini Toc">Sujets :</variable>
   <variable id="#note-separator"> : </variable>
-  <variable id="Notice"><!--TODO:Notice--></variable>
+  <variable id="Notice">Notice</variable>
   <variable id="Figure.title">Illustration <param ref-name="number"/> : <param ref-name="title"/></variable>
   <variable id="Figure Number">Illustration <param ref-name="number"/></variable>
   <variable id="Table.title">Tableau <param ref-name="number"/> : <param ref-name="title"/></variable>

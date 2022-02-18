@@ -37,9 +37,9 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Fastpath">Direktaufruf</variable>
    <variable id="Important">Wichtig</variable>
    <variable id="Attention">Achtung</variable>
-   <variable id="Caution">ACHTUNG</variable>
+   <variable id="Caution">VORSICHT</variable>
    <variable id="Danger">GEFAHR</variable>
-   <variable id="Remember">Hinweis</variable>
+   <variable id="Remember">Erinnern</variable>
    <variable id="Restriction">Einschränkung</variable>
    <variable id="Trouble">Problem</variable>
    <variable id="Warning">Warnung</variable>
