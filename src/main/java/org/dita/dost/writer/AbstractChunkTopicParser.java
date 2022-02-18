@@ -14,6 +14,7 @@ import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.TopicIdParser;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -300,9 +301,10 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                 // update @href to point back to current file
                 // if the location is moved to chunk, @href will
                 // be update again to the new location.
-            	if(relative.toString().contains("#")) {
+            	if(relative.toString().contains(SHARP)) {
             		//If the relative reference already has an anchor, we need to replace that with the current anchor.
-            		XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, relative.resolve(href).toString());
+            		final URI res = URLUtils.setFragment(relative, href.substring(1)); 
+            		XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, res.toString());
             	} else {
             		XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, relative + href);
             	}
