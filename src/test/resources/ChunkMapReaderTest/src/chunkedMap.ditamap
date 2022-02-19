@@ -2,4 +2,5 @@
     <title class="- topic/title ">My map</title>
     <topicref href="chunkedTopic.dita#subtopic2" chunk="to-content select-topic" class="- map/topicref "/>
     <topicref href="chunkedTopic.dita#subtopic3" chunk="to-content select-topic" class="- map/topicref "/>
+    <topicref href="chunkedTopic.dita" chunk="to-content select-topic" class="- map/topicref "/>
 </map>

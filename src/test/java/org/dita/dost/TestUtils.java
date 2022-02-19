@@ -7,6 +7,10 @@
  */
 package org.dita.dost;
 
+import net.sf.saxon.Configuration;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmNode;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.CatalogUtils;
@@ -55,6 +59,7 @@ public class TestUtils {
     public static final File testStub = new File("src" + File.separator + "test" + File.separator + "resources");
 
     private static final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+    private static Processor processor = new Processor(new Configuration());
 
     static {
         builderFactory.setNamespaceAware(true);
@@ -786,4 +791,7 @@ public class TestUtils {
 
     }
 
+    public static XdmNode parse(File input) throws SaxonApiException {
+        return processor.newDocumentBuilder().build(input);
+    }
 }
