@@ -9,6 +9,9 @@ package org.dita.dost.reader;
 
 import com.google.common.collect.ImmutableMap;
 
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Predicates;
+import net.sf.saxon.s9api.streams.Steps;
 import org.apache.commons.io.IOUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
@@ -29,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
+import static org.dita.dost.TestUtils.parse;
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -786,11 +791,6 @@ public class ChunkMapReaderTest {
 	    final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
 	    job.setInputDir(srcDir.toURI());
 	    job.setInputMap(URI.create("chunkedMap.ditamap"));
-	
-	    final ChunkMapReader mapReader = new ChunkMapReader();
-	    mapReader.setLogger(new TestUtils.TestLogger());
-	    mapReader.setJob(job);
-	
 	    TestUtils.copy(new File(srcDir, "chunkedMap.ditamap"), new File(tempDir, "chunkedMap.ditamap"));
 	    job.add(new Job.FileInfo.Builder()
 	            .src(new File(srcDir, "chunkedMap.ditamap").toURI())
@@ -804,11 +804,23 @@ public class ChunkMapReaderTest {
 	    		.src(new File(srcDir, srcFile).toURI())
 	    		.uri(toURI(srcFile))
 	    		.build());
-	    mapReader.read(new File(tempDir, "chunkedMap.ditamap"));
-	    
-	    //Before the fix the reference looked like this: <xref href="chunkedTopic.dita#subtopic2#subtopic3" 
-	    assertTrue(IOUtils.toString(new File(tempDir, "subtopic2.dita").toURI(), 
-	    		Charset.defaultCharset()).contains("<xref href=\"chunkedTopic.dita#subtopic3\" class=\"- topic/xref \">"));
-	}
 
+        final ChunkMapReader mapReader = new ChunkMapReader();
+        mapReader.setLogger(new TestUtils.TestLogger());
+        mapReader.setJob(job);
+
+        mapReader.read(new File(tempDir, "chunkedMap.ditamap"));
+
+        final XdmNode actWithFragment = parse(new File(tempDir, "subtopic2.dita"));
+        assertTrue(actWithFragment
+                .select(Steps.descendant(TOPIC_XREF.matcher()
+                        .and(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "chunkedTopic.dita#subtopic3"))))
+                .exists());
+
+        final XdmNode actWithoutFragment = parse(new File(tempDir, "parentTopic.dita"));
+        assertTrue(actWithoutFragment
+                .select(Steps.descendant(TOPIC_XREF.matcher()
+                        .and(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "chunkedTopic.dita#subtopic3"))))
+                .exists());
+	}
 }
