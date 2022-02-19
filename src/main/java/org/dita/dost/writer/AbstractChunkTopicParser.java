@@ -301,13 +301,9 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                 // update @href to point back to current file
                 // if the location is moved to chunk, @href will
                 // be update again to the new location.
-            	if(relative.toString().contains(SHARP)) {
-            		//If the relative reference already has an anchor, we need to replace that with the current anchor.
-            		final URI res = URLUtils.setFragment(relative, href.substring(1)); 
-            		XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, res.toString());
-            	} else {
-            		XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, relative + href);
-            	}
+                final URI hrefUri = URI.create(href);
+                final URI res = URLUtils.setFragment(relative.resolve(hrefUri), hrefUri.getFragment());
+                XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, res.toString());
             } else if (relative.toString().contains(SLASH)) {
                 // if new file is not under the same directory with current file
                 // add path information to the @href value
