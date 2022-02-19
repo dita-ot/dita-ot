@@ -14,6 +14,8 @@ import net.sf.saxon.s9api.DOMDestination;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Predicates;
+import net.sf.saxon.s9api.streams.Steps;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.XPathException;
 import org.dita.dost.TestUtils;
@@ -46,7 +48,10 @@ import static java.net.URI.create;
 import static java.util.Collections.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.createTempDir;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
+import static org.dita.dost.util.Constants.MAP_TOPICREF;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class KeyrefModuleTest {
 
@@ -308,4 +313,54 @@ public class KeyrefModuleTest {
             throw new RuntimeException(e);
         }
     }
+
+	@Test
+	public void testWalkMapAndRewriteKeydefHrefKeepAnchor() throws URISyntaxException, XPathException {
+	    inputMapFileInfo = new Builder()
+	            .uri(create("test3.ditamap"))
+	            .src(new File(baseDir, "src" + File.separator + "test3.ditamap").toURI())
+	            .result(new File(baseDir, "src" + File.separator + "test3.ditamap").toURI())
+	            .format("ditamap")
+	            .isInput(true)
+	            .build();
+	    job.add(inputMapFileInfo);
+	    final XdmNode act = parse(inputMapFileInfo.src);
+	    final KeyScope childScope1 = new KeyScope("A", "A",
+	    		ImmutableMap.of(
+	    				"VAR", new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null),
+	    				"A.VAR", new KeyDef("A.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null)
+	    				),
+	    		EMPTY_LIST
+	    		);
+	    final KeyScope childScope2 = new KeyScope("B", "B",
+	    		ImmutableMap.of(
+	    				"VAR", new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null),
+	    				"B.VAR", new KeyDef("B.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null)
+	    				),
+	    		EMPTY_LIST
+	    		);
+	    final KeyScope keyScope =
+	            new KeyScope("#root", null, new HashMap<String, KeyDef>(), 
+	                        Arrays.asList(new KeyScope[] {childScope1, childScope2})
+	    );
+	    final List<ResolveTask> res = new ArrayList<>();
+	    final XdmDestination destination = new XdmDestination();
+	    final Receiver receiver = destination.getReceiver(
+	            xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
+	            new SerializationProperties());
+	    receiver.open();
+	    module.walkMap(inputMapFileInfo, act, singletonList(keyScope), res, receiver);
+	    receiver.close();
+	    
+	    XdmNode node = destination.getXdmNode();
+
+		assertTrue(node
+				.select(Steps.descendant(MAP_TOPICREF.matcher())
+						.where(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "topic-1.dita#abc")))
+				.exists());
+		assertTrue(node
+				.select(Steps.descendant(MAP_TOPICREF.matcher())
+						.where(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "topic-2.dita#abc")))
+				.exists());
+	}
 }
