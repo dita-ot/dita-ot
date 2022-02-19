@@ -14,6 +14,8 @@ import net.sf.saxon.s9api.DOMDestination;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Predicates;
+import net.sf.saxon.s9api.streams.Steps;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.XPathException;
 import org.dita.dost.TestUtils;
@@ -46,7 +48,10 @@ import static java.net.URI.create;
 import static java.util.Collections.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.createTempDir;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
+import static org.dita.dost.util.Constants.MAP_TOPICREF;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class KeyrefModuleTest {
 
@@ -310,7 +315,7 @@ public class KeyrefModuleTest {
     }
 
 	@Test
-	public void testWalkMapAndRewriteKeydefHrefKeepAnchor() throws ParserConfigurationException, IOException, SAXException, URISyntaxException, XPathException {
+	public void testWalkMapAndRewriteKeydefHrefKeepAnchor() throws URISyntaxException, XPathException {
 	    inputMapFileInfo = new Builder()
 	            .uri(create("test3.ditamap"))
 	            .src(new File(baseDir, "src" + File.separator + "test3.ditamap").toURI())
@@ -348,19 +353,14 @@ public class KeyrefModuleTest {
 	    receiver.close();
 	    
 	    XdmNode node = destination.getXdmNode();
-	    assertEquals("<map xmlns:dita-ot=\"http://dita-ot.sourceforge.net/ns/201007/dita-ot\"\n" + 
-	    		"     xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\"\n" + 
-	    		"     cascade=\"merge\"\n" + 
-	    		"     class=\"- map/map \"\n" + 
-	    		"     ditaarch:DITAArchVersion=\"1.3\"\n" + 
-	    		"     domains=\"(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)\">\n" + 
-	    		"   <topicref class=\"- map/topicref \" href=\"topic.dita#abc\"/>\n" + 
-	    		"   <topicgroup class=\"+ map/topicref mapgroup-d/topicgroup \" keyscope=\"A\">\n" + 
-	    		"      <topicref class=\"- map/topicref \" href=\"topic-1.dita#abc\"/>\n" + 
-	    		"   </topicgroup>\n" + 
-	    		"   <topicgroup class=\"+ map/topicref mapgroup-d/topicgroup \" keyscope=\"B\">\n" + 
-	    		"      <topicref class=\"- map/topicref \" href=\"topic-2.dita#abc\"/>\n" + 
-	    		"   </topicgroup>\n" + 
-	    		"</map>", node.toString());
+
+		assertTrue(node
+				.select(Steps.descendant(MAP_TOPICREF.matcher())
+						.where(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "topic-1.dita#abc")))
+				.exists());
+		assertTrue(node
+				.select(Steps.descendant(MAP_TOPICREF.matcher())
+						.where(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "topic-2.dita#abc")))
+				.exists());
 	}
 }
