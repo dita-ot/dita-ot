@@ -162,7 +162,8 @@ public final class CopyToReader extends AbstractXMLFilter {
                     final URI copyToSourceAbs = copyToMap.get(targetAbs);
                     if (copyToSourceAbs != null) {
                         if (!sourceAbs.equals(copyToSourceAbs)) {
-                            logger.warn(MessageUtils.getMessage("DOTX065W", source.toString(), targetAbs.toString()).toString());
+                            logger.warn(MessageUtils.getMessage("DOTX065W", source.toString(), targetAbs.toString())
+                                    .setLocation(atts).toString());
                         }
                     } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null &&
                             atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)) {

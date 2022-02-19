@@ -269,7 +269,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 final String fragment = target.getFragment();
                 if (fragment == null) {
                     //if there is no '#' in target string, report error
-                    logger.error(MessageUtils.getMessage("DOTJ041E", target.toString()).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ041E", target.toString()).setLocation(atts).toString());
                 } else {
                     String id;
                     //has element id
