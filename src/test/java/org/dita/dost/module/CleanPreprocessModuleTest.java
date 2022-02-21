@@ -52,6 +52,7 @@ public class CleanPreprocessModuleTest {
         assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/a"), create("file:/foo/bar/b")));
         assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/b")));
         assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/baz/b")));
+        assertEquals(create("file:/C:/"), module.getCommonBase(create("file:/C:/a"), create("file:/D:/b")));
         assertEquals(null, module.getCommonBase(create("file:/foo/bar/a"), create("https://example.com/baz/b")));
     }
 
