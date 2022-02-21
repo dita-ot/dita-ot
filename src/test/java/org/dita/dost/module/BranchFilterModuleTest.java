@@ -356,28 +356,8 @@ public class BranchFilterModuleTest extends BranchFilterModule {
 	    m.setXmlUtils(new XMLUtils());
 	    
 	    m.processMap(URI.create("topicAnchors.ditamap")); 
-	    assertEquals("Should re-write references", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><map xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" class=\"- map/map \" ditaarch:DITAArchVersion=\"1.3\" domains=\"                          (topic abbrev-d)                          (topic delay-d)                          (map ditavalref-d)                          (map glossref-d)                          (topic hazard-d)                          (topic hi-d)                          (topic indexing-d)                          (map mapgroup-d)                          (topic markup-d xml-d)                          (topic markup-d)                          (topic pr-d)                          (topic relmgmt-d)                          (topic sw-d)                          (topic ui-d)                          (topic ut-d)                          a(props deliveryTarget)\">    \n" + 
-	    		"    <title class=\"- topic/title \">Online Help</title>\n" + 
-	    		"    \n" + 
-	    		"    <topicgroup class=\"+ map/topicref mapgroup-d/topicgroup \" keyscope=\"A\">\n" + 
-	    		"        \n" + 
-	    		"        <topicref class=\"- map/topicref \" href=\"topic.dita\">\n" + 
-	    		"            <topicref class=\"- map/topicref \" href=\"topic.dita#subtopic1_id\"/>\n" + 
-	    		"            <topicref class=\"- map/topicref \" href=\"topic.dita#subtopic2_id\"/>\n" + 
-	    		"            <topicref class=\"- map/topicref \" href=\"topic.dita#subtopic3_id\"/>\n" + 
-	    		"        </topicref>\n" + 
-	    		"    <ditavalref class=\"+ map/topicref ditavalref-d/ditavalref \" format=\"ditaval\" href=\"filter_A.ditaval\" processing-role=\"resource-only\"/></topicgroup>\n" + 
-	    		"    \n" + 
-	    		"    <topicgroup class=\"+ map/topicref mapgroup-d/topicgroup \" keyscope=\"B\">\n" + 
-	    		"        \n" + 
-	    		"        <topicref class=\"- map/topicref \" href=\"topic-1.dita\">\n" + 
-	    		"            <topicref class=\"- map/topicref \" href=\"topic-1.dita#subtopic1_id\"/>\n" + 
-	    		"            <topicref class=\"- map/topicref \" href=\"topic-1.dita#subtopic2_id\"/>\n" + 
-	    		"            <topicref class=\"- map/topicref \" href=\"topic-1.dita#subtopic3_id\"/>\n" + 
-	    		"        </topicref>\n" + 
-	    		"    <ditavalref class=\"+ map/topicref ditavalref-d/ditavalref \" format=\"ditaval\" href=\"filter_B.ditaval\" processing-role=\"resource-only\"/></topicgroup>\n" + 
-	    		"    \n" + 
-	    		"</map>", IOUtils.toString(new File(tempDir, "topicAnchors.ditamap").toURI().toURL(), "UTF-8"));
+	    assertXMLEqual(new InputSource(new File(expDir, "topicAnchors.ditamap").toURI().toURL().toString()), 
+	    		new InputSource(new File(tempDir, "topicAnchors.ditamap").toURI().toURL().toString()));
 	}
 
 }

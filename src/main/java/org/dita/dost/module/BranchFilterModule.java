@@ -377,7 +377,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                 final List<XMLFilter> pipe = singletonList(writer);
 
                 try {
-                	job.getStore().transform(URLUtils.removeFragment(srcAbsUri), URLUtils.removeFragment(dstAbsUri), pipe);
+                    job.getStore().transform(URLUtils.removeFragment(srcAbsUri), URLUtils.removeFragment(dstAbsUri), pipe);
                 } catch (final DITAOTException e) {
                     logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
                 }
