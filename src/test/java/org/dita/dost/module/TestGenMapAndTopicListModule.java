@@ -26,6 +26,7 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TestGenMapAndTopicListModule {
 
@@ -326,6 +327,18 @@ public class TestGenMapAndTopicListModule {
                         .filter(f -> !f.isResourceOnly)
                         .map(fi -> fi.uri.toString())
                         .collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testImage() throws Exception{
+        final File inputDir = new File("image");
+        final File inputMap = new File(inputDir, "image.dita");
+        final File outDir = new File(tempDir, "out");
+
+        final Job job = generate(inputDir, inputMap, outDir, tempDir);
+
+        assertNotNull(job.getFileInfo(URI.create("image.svg")));
+        assertNotNull(job.getFileInfo(URI.create("image.svg?media=print")));
     }
 
     private Set<String> readLines(final File f) throws IOException {

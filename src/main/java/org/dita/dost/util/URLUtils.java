@@ -564,6 +564,21 @@ public final class URLUtils {
     }
 
     /**
+     * Create new URI with a given query.
+     *
+     * @param path URI to set query on
+     * @param query new query, {@code null} for no query
+     * @return new URI instance with given query
+     */
+    public static URI setQuery(final URI path, final String query) {
+        try {
+            return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), query, path.getFragment());
+        } catch (final URISyntaxException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    /**
      * Remove fragment from URI.
      *
      * @param path remove fragment from this URI
@@ -705,7 +720,8 @@ public final class URLUtils {
         if (file.getScheme() == null) {
             return new File(file.getPath()).exists();
         } else if ("file".equals(file.getScheme())) {
-            return new File(file).exists();
+            final URI resource = removeFragment(setQuery(file, null));
+            return new File(resource).exists();
         } else {
             // Assume non-file URIs always exists and force fetching them
             return true;
