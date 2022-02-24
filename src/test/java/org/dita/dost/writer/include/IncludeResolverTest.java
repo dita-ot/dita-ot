@@ -7,7 +7,6 @@
  */
 package org.dita.dost.writer.include;
 
-import com.google.common.io.Files;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.store.StreamStore;
@@ -25,18 +24,17 @@ import org.xml.sax.InputSource;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.net.URI.create;
-import static org.apache.commons.io.FileUtils.copyFile;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 import static org.dita.dost.util.Constants.PR_D_CODEREF;
-import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class IncludeResolverTest {
@@ -66,10 +64,10 @@ public class IncludeResolverTest {
     public void setup() throws IOException {
         tempDir = TestUtils.createTempDir(IncludeResolverTest.class);
 
-        copyFile(new File(srcDir, test), new File(tempDir, test));
-        Files.write("dummy", new File(tempDir, "topic.dita"), Charset.forName("UTF-8"));
+        Files.copy(new File(srcDir, test).toPath(), new File(tempDir, test).toPath());
+        Files.write(new File(tempDir, "topic.dita").toPath(),"dummy".getBytes(StandardCharsets.UTF_8));
         for (final String file : new String[]{"code.xml", "utf-8.xml", "plain.txt", "range.txt", "schema.xml"}) {
-            copyFile(new File(srcDir, file), new File(tempDir, file));
+            Files.copy(new File(srcDir, file).toPath(), new File(tempDir, file).toPath());
         }
 
         filter = new CoderefResolver();

@@ -265,7 +265,9 @@ See the accompanying LICENSE file for applicable license.
           <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
         </filter>
         <filter class="org.dita.dost.writer.NormalizeSimpleTableFilter"/>
-        <filter class="org.dita.dost.writer.CoderefResolver" unless:set="preprocess.coderef.skip"/>
+        <filter class="org.dita.dost.writer.CoderefResolver" unless:set="preprocess.coderef.skip">
+          <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
+        </filter>
         <filter class="org.dita.dost.writer.NormalizeCodeblock" unless:set="preprocess.normalize-codeblock.skip"/>
       </sax>
     </pipeline>

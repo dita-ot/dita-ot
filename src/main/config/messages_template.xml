@@ -423,6 +423,11 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <message id="DOTJ084E" type="ERROR">
+    <reason>Included file %1 contained invalid byte sequence for charset %2</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  
