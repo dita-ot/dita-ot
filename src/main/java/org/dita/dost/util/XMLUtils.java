@@ -154,7 +154,8 @@ public final class XMLUtils {
                             .findAny()
                             .map(XdmItem::getStringValue)
                             .orElse("INFO");
-                final String msg = content.getStringValue();
+                //Output entire node set
+                final String msg = errorCode.isPresent() ? content.getStringValue() : content.toString();
                 switch (level) {
                     case "FATAL":
                         final TerminationException err = new TerminationException(msg);
