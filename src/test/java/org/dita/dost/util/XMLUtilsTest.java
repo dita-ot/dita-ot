@@ -8,8 +8,14 @@
 package org.dita.dost.util;
 
 import net.sf.saxon.Configuration;
+import net.sf.saxon.expr.instruct.TerminationException;
 import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.om.StructuredQName;
+import net.sf.saxon.s9api.MessageListener2;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.SaxonApiUncheckedException;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.sapling.Saplings;
 import net.sf.saxon.trans.SymbolicName;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
@@ -27,18 +33,11 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static javax.xml.XMLConstants.XML_NS_URI;
@@ -265,6 +264,105 @@ public class XMLUtilsTest {
         assertTrue(XMLUtils.nonDitaContext(classes));
         classes.addFirst(null);
         assertTrue(XMLUtils.nonDitaContext(classes));
+    }
+
+    @Test
+    public void toMessageListener() throws SaxonApiException {
+        final CachingLogger logger = new CachingLogger();
+        final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+
+        final XdmNode msg = Saplings.doc().withChild(
+                    Saplings.text("message "),
+                    Saplings.elem("debug")
+                )
+                .toXdmNode(new XMLUtils().getProcessor());
+
+        listener.message(msg, null, false, null);
+
+        final List<Message> act = logger.getMessages();
+        assertEquals(1, act.size());
+        assertEquals(new Message(Message.Level.INFO, "message <debug/>", null), act.get(0));
+    }
+
+    @Test
+    public void toMessageListener_withLevelAndErrorCode() throws SaxonApiException {
+        final CachingLogger logger = new CachingLogger();
+        final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+
+        final XdmNode msg = Saplings.doc().withChild(
+                    Saplings.pi("error-code", "DOTX037W"),
+                    Saplings.pi("level", "WARN"),
+                    Saplings.text("message "),
+                    Saplings.elem("debug")
+                )
+                .toXdmNode(new XMLUtils().getProcessor());
+
+        listener.message(msg, null, false, null);
+
+        final List<Message> act = logger.getMessages();
+        assertEquals(1, act.size());
+        assertEquals(new Message(Message.Level.WARN, "message <debug/>", null), act.get(0));
+    }
+
+    @Test
+    public void toMessageListener_withErrorCode() throws SaxonApiException {
+        final CachingLogger logger = new CachingLogger();
+        final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+
+        final XdmNode msg = Saplings.doc().withChild(
+                    Saplings.pi("error-code", "DOTX037W"),
+                    Saplings.text("message "),
+                    Saplings.elem("debug")
+                )
+                .toXdmNode(new XMLUtils().getProcessor());
+
+        listener.message(msg, null, false, null);
+
+        final List<Message> act = logger.getMessages();
+        assertEquals(1, act.size());
+        assertEquals(new Message(Message.Level.INFO, "message <debug/>", null), act.get(0));
+    }
+
+    @Test
+    public void toMessageListener_withFatalErrorCode() throws SaxonApiException {
+        final CachingLogger logger = new CachingLogger();
+        final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+
+        final XdmNode msg = Saplings.doc().withChild(
+                    Saplings.pi("error-code", "DOTX037W"),
+                    Saplings.pi("level", "WARN"),
+                    Saplings.text("message "),
+                    Saplings.elem("debug")
+                )
+                .toXdmNode(new XMLUtils().getProcessor());
+
+        try {
+            listener.message(msg, null, true, null);
+            fail();
+        } catch (SaxonApiUncheckedException e) {
+            final TerminationException cause = (TerminationException) e.getCause();
+            assertEquals("DOTX037W", cause.getErrorCodeLocalPart());
+            assertEquals("message <debug/>", cause.getMessage());
+        }
+    }
+
+    @Test
+    public void toMessageListener_withLevel() throws SaxonApiException {
+        final CachingLogger logger = new CachingLogger();
+        final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+
+        final XdmNode msg = Saplings.doc().withChild(
+                    Saplings.pi("level", "ERROR"),
+                    Saplings.text("message "),
+                    Saplings.elem("debug")
+                )
+                .toXdmNode(new XMLUtils().getProcessor());
+
+        listener.message(msg, null, false, null);
+
+        final List<Message> act = logger.getMessages();
+        assertEquals(1, act.size());
+        assertEquals(new Message(Message.Level.ERROR, "message <debug/>", null), act.get(0));
     }
 
 //    @Test
