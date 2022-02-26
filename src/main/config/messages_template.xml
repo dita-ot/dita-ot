@@ -424,8 +424,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ084E" type="ERROR">
-    <reason>Included file %1 contained invalid byte sequence for charset %2</reason>
-    <response></response>
+    <reason>Couldn’t read '%1' with the %2 character set.</reason>
+    <response>Save the file with %2 encoding.</response>
   </message>
 
   <!-- End of Java Messages -->
