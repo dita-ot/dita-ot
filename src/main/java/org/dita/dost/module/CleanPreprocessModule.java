@@ -264,7 +264,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             } else {
                 final int common = Math.max(0, i);
                 final List<String> commons = Arrays.asList(la).subList(0, common);
-                if (commons != null && commons.size() > 1) {
+                if (commons.size() > 1) {
                 	final String path = commons.stream()
                 			.collect(Collectors.joining("/")) + "/";
                 	return URLUtils.setPath(left, path);
