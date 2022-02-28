@@ -25,6 +25,7 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -63,7 +64,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
                     log("Found temporary directory file " + tempFile, Project.MSG_VERBOSE);
                     res.add(new StoreResource(job, job.tempDirURI.relativize(f.uri)));
                 } else if (f.src != null && Objects.equals(f.src.getScheme(), "file")) {
-                    final File srcFile = new File(f.src);
+                    final File srcFile = new File(URLUtils.setQuery(f.src, null));
                     if (srcFile.exists()) {
                         log("Found source directory file " + srcFile, Project.MSG_VERBOSE);
                         final File rel = FileUtils.getRelativePath(new File(new File(job.getInputDir()), "dummy"), srcFile);

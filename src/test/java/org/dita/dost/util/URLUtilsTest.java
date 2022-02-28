@@ -283,4 +283,12 @@ public class URLUtilsTest {
         final URI act = toDirURI(src);
         assertTrue(act.toString().endsWith("/"));
     }
+
+    @Test
+    public void setQuery() {
+        assertEquals(URI.create("foo"), URLUtils.setQuery(URI.create("foo"), null));
+        assertEquals(URI.create("foo?baz"), URLUtils.setQuery(URI.create("foo"), "baz"));
+        assertEquals(URI.create("foo"), URLUtils.setQuery(URI.create("foo?bar"), null));
+        assertEquals(URI.create("foo?baz"), URLUtils.setQuery(URI.create("foo?bar"), "baz"));
+    }
 }
