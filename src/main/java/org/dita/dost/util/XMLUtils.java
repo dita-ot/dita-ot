@@ -11,7 +11,9 @@ import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.expr.instruct.TerminationException;
 import net.sf.saxon.lib.*;
 import net.sf.saxon.s9api.*;
+import net.sf.saxon.s9api.streams.Predicates;
 import net.sf.saxon.s9api.streams.Step;
+import net.sf.saxon.s9api.streams.XdmStream;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -31,6 +33,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
@@ -154,7 +157,13 @@ public final class XMLUtils {
                             .findAny()
                             .map(XdmItem::getStringValue)
                             .orElse("INFO");
-                final String msg = content.getStringValue();
+                final String msg = content
+                        .select(descendant(
+                                hasLocalName("level").or(hasLocalName("error-code"))
+                                        .and(hasType(ItemType.PROCESSING_INSTRUCTION_NODE))
+                                .negate()))
+                        .map(n -> n.toString())
+                        .collect(Collectors.joining());
                 switch (level) {
                     case "FATAL":
                         final TerminationException err = new TerminationException(msg);
