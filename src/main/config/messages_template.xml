@@ -423,6 +423,11 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <message id="DOTJ084E" type="ERROR">
+    <reason>Couldn’t read '%1' with the %2 character set.</reason>
+    <response>Save the file with %2 encoding.</response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

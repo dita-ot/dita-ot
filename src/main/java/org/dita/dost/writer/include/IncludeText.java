@@ -8,6 +8,8 @@
 
 package org.dita.dost.writer.include;
 
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.UncheckedDITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
@@ -19,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,12 +35,14 @@ final class IncludeText {
     private final URI currentFile;
     private final ContentHandler contentHandler;
     private final DITAOTLogger logger;
+    private final Configuration.Mode processingMode;
 
-    IncludeText(Job job, URI currentFile, ContentHandler contentHandler, DITAOTLogger logger) {
+    IncludeText(Job job, URI currentFile, ContentHandler contentHandler, DITAOTLogger logger, Configuration.Mode processingMode) {
         this.job = job;
         this.currentFile = currentFile;
         this.contentHandler = contentHandler;
         this.logger = logger;
+        this.processingMode = processingMode;
     }
 
     boolean include(final Attributes atts) {
@@ -48,6 +53,15 @@ final class IncludeText {
         if (codeFile != null) {
             try (BufferedReader codeReader = Files.newBufferedReader(codeFile.toPath(), charset)) {
                 range.copyLines(codeReader);
+            } catch (final MalformedInputException e) {
+                final String msg = MessageUtils.getMessage("DOTJ084E", codeFile.toURI().toString(), charset.toString())
+                        .setLocation(atts)
+                        .toString();
+                if (processingMode.equals(Configuration.Mode.STRICT)) {
+                    throw new UncheckedDITAOTException(new DITAOTException(msg, e));
+                } else {
+                    logger.error(msg);
+                }
             } catch (final Exception e) {
                 logger.error("Failed to process include {0}", codeFile, e);
                 return false;
