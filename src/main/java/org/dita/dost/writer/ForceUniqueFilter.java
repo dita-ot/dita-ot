@@ -18,7 +18,6 @@ import java.net.URI;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import static org.dita.dost.chunk.ChunkModule.isLocalScope;
@@ -43,7 +42,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
     /**
      * Stack used to detect the current element type. 
      */
-    private final Deque<String> classElementStack = new LinkedList<>();
+    private final Deque<String> classElementStack = new ArrayDeque<>();
     
     /**
      * Stack used to hold the current topicref parent.
@@ -79,23 +78,23 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
                 
                 ParentTopicref parentTopicref = topicrefParentsStack.peek();
                 boolean parentTopicHasEmbededSubtopcis = false;
-                if(parentTopicref != null && parentTopicref.getHref() != null) {
-                  URI parentHref = parentTopicref.getHref();
-                  parentHref = stripFragment(parentHref);
-                  parentTopicHasEmbededSubtopcis = href != null && parentHref.equals(file) && href.getFragment() != null;
+                if (parentTopicref != null && parentTopicref.href != null) {
+                    URI parentHref = parentTopicref.href;
+                    parentHref = stripFragment(parentHref);
+                    parentTopicHasEmbededSubtopcis = href != null && parentHref.equals(file) && href.getFragment() != null;
                 }
-                if(parentTopicHasEmbededSubtopcis) {
-                  dstFi = parentTopicref.getDstFi();
+                if (parentTopicHasEmbededSubtopcis) {
+                    dstFi = parentTopicref.dstFi;
                 } else {
-                  count++;
-                  topicrefCount.put(file, count);
+                    count++;
+                    topicrefCount.put(file, count);
                 }
                 
                 if (count > 1) { // not only reference to this topic
                     final FileInfo srcFi = job.getFileInfo(currentFile.resolve(stripFragment(source)));
                     if (srcFi != null) {
-                        if(dstFi == null) {
-                          dstFi = generateCopyToTarget(srcFi, count);
+                        if (dstFi == null) {
+                            dstFi = generateCopyToTarget(srcFi, count);
                         }
                         copyToMap.put(dstFi, srcFi);
                         final URI dstTempAbs = job.tempDirURI.resolve(dstFi.uri);
@@ -120,7 +119,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
 
         final String classValue = classElementStack.removeFirst();
         if (classValue != null && ignoreStack.peek() && MAP_TOPICREF.matches(classValue)) {
-          topicrefParentsStack.pop();
+            topicrefParentsStack.pop();
         }
         ignoreStack.pop();
     }
@@ -157,40 +156,26 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
      *
      */
     private static final class ParentTopicref {
-      /**
-       * The href value for the parent topic.
-       */
-      private URI href;
+        /**
+         * The href value for the parent topic.
+         */
+        public final URI href;
       
-      /**
-       * Information about the destination file used in the output. 
-       */
-      private FileInfo dstFi;
+        /**
+         * Information about the destination file used in the output. 
+         */
+        public final FileInfo dstFi;
       
-      /**
-       * Constructor.
-       * 
-       * @param href The href value for the parent topic.
-       * @param dstFi Information about the destination file used in the output. 
-       */
-      public ParentTopicref(URI href, FileInfo dstFi) {
-        this.href = href;
-        this.dstFi = dstFi;
-      }
+        /**
+         * Constructor.
+         * 
+         * @param href The href value for the parent topic.
+         * @param dstFi Information about the destination file used in the output. 
+         */
+        public ParentTopicref(URI href, FileInfo dstFi) {
+            this.href = href;
+            this.dstFi = dstFi;
+        }
       
-      /**
-       * @return The href value for the parent topic.
-       */
-      public URI getHref() {
-        return href;
-      }
-      
-      /**
-       * @return Information about the destination file used in the output. 
-       */
-      public FileInfo getDstFi() {
-        return dstFi;
-      }
-
     }
 }
