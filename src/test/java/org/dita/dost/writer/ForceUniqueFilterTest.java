@@ -73,6 +73,11 @@ public class ForceUniqueFilterTest {
                 .uri(URI.create("test2.dita"))
                 .result(srcDir.toURI().resolve("test2.dita"))
                 .build());
+        job.add(new Builder()
+                .src(srcDir.toURI().resolve("topic.dita"))
+                .uri(URI.create("topic.dita"))
+                .result(srcDir.toURI().resolve("topic.dita"))
+                .build());
         tempFileNameScheme = new DefaultTempFileScheme();
         tempFileNameScheme.setBaseDir(srcDir.toURI());
     }
@@ -100,12 +105,14 @@ public class ForceUniqueFilterTest {
         assertFalse(d.hasDifferences());
 
         assertEquals(new HashMap<FileInfo, FileInfo>(ImmutableMap.of(
-                createFileInfo("test.dita", "test_3.dita"),
-                createFileInfo("test.dita", "test.dita"),
+                createFileInfo(null, "copy-to_2.dita"),
+                createFileInfo(null, "copy-to.dita"),
                 createFileInfo("test.dita", "test_2.dita"),
                 createFileInfo("test.dita", "test.dita"),
-                createFileInfo(null, "copy-to_2.dita"),
-                createFileInfo(null, "copy-to.dita")
+                createFileInfo("topic.dita", "topic_2.dita"),
+                createFileInfo("topic.dita", "topic.dita"),
+                createFileInfo("test.dita", "test_3.dita"),
+                createFileInfo("test.dita", "test.dita")
         )), f.copyToMap);
     }
 

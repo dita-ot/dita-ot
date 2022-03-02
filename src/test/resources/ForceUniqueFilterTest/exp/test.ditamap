@@ -15,4 +15,14 @@
   </reltable>
   <topicref class="- map/topicref " href="test2.dita" copy-to="copy-to.dita"/>
   <topicref class="- map/topicref " href="test3.dita" copy-to="copy-to_2.dita"/>
+  <topicref class="- map/topicref " href="topic.dita">
+    <topicref class="- map/topicref " href="topic.dita#configuration">
+      <topicref class="- map/topicref " href="topic.dita#option"></topicref>
+    </topicref>
+  </topicref>
+  <topicref class="- map/topicref " href="topic.dita" copy-to="topic_2.dita">
+    <topicref class="- map/topicref " href="topic.dita#configuration" copy-to="topic_2.dita#configuration">
+      <topicref class="- map/topicref " href="topic.dita#option" copy-to="topic_2.dita#option"></topicref>
+    </topicref>
+  </topicref>
 </map>
