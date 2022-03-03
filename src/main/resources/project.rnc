@@ -63,7 +63,8 @@ publication =
     attribute name { text }?,
     attribute id { xsd:NCName }?,
     attribute transtype { text },
-    param*
+    param*,
+    profile?
   }
 
 publication-ref =
