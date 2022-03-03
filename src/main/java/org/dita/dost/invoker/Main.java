@@ -50,6 +50,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.dita.dost.invoker.Arguments.*;
 import static org.dita.dost.util.Configuration.transtypes;
@@ -443,8 +444,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                             props.put(param.name, value);
                         }
                     });
-                    if (!context.profiles.ditavals.isEmpty()) {
-                        final String filters = context.profiles.ditavals.stream()
+                    final List<org.dita.dost.project.Project.Deliverable.Profile.DitaVal> ditavals = Stream.concat(
+                                    publications.profiles.ditavals.stream(),
+                                    context.profiles.ditavals.stream()
+                            )
+                            .collect(Collectors.toList());
+                    if (!ditavals.isEmpty()) {
+                        final String filters = ditavals.stream()
                                 .map(ditaVal -> Paths.get(base.resolve(ditaVal.href)).toString())
                                 .collect(Collectors.joining(File.pathSeparator));
                         props.put("args.filter", filters);
