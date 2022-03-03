@@ -219,7 +219,16 @@ public class XmlReader {
                                 getHref(param).orElse(null),
                                 getFile(param).orElse(null)
                         ))
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                getChild(publication, ELEM_PROFILE)
+                        .map(inputs -> getChildren(inputs, ELEM_DITAVAL)
+                                .map(this::getHref)
+                                .filter(Optional::isPresent)
+                                .map(Optional::get)
+                                .collect(Collectors.toList())
+                        )
+                        .map(ProjectBuilder.Deliverable.Profile::new)
+                        .orElse(null)
         );
     }
 

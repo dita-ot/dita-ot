@@ -66,7 +66,7 @@ public class ProjectTest {
                                 new Publication("Site", "site", null, "html5", Arrays.asList(
                                         new Publication.Param("args.gen.task.lbl", "YES", null, null),
                                         new Publication.Param("args.rellinks", "noparent", null, null)
-                                ))
+                                ), null)
                         )
                 ),
                 null,

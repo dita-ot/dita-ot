@@ -47,6 +47,7 @@ public class ProjectFactoryTest {
                                         null,
                                         "id",
                                         null,
+                                        null,
                                         null)
                         )
                 ),
@@ -55,6 +56,7 @@ public class ProjectFactoryTest {
                         new Publication(
                                 null,
                                 "id",
+                                null,
                                 null,
                                 null,
                                 null)
@@ -108,6 +110,7 @@ public class ProjectFactoryTest {
                                         null,
                                         null,
                                         "missing",
+                                        null,
                                         null,
                                         null)
                         )
