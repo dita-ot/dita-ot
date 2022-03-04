@@ -36,7 +36,6 @@ import org.apache.tools.ant.property.ResolvePropertyMap;
 import org.apache.tools.ant.util.ClasspathUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.platform.Plugins;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Publication;
@@ -357,7 +356,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     throw new BuildException("");
                 }
             } else {
-                projectProps = handleProject(conversionArgs.projectFile, definedProps);
+                projectProps = collectProperties(conversionArgs.projectFile, definedProps);
             }
             repeat = conversionArgs.repeat;
             // default values
@@ -400,9 +399,17 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         readyToRun = true;
     }
 
-    private List<Map<String, Object>> handleProject(final File projectFile, final Map<String, Object> definedProps) {
+    private List<Map<String, Object>> collectProperties(final File projectFile, final Map<String, Object> definedProps) {
         final URI base = projectFile.toURI();
         final org.dita.dost.project.Project project = readProjectFile(projectFile);
+
+        return collectProperties(project, base, definedProps);
+    }
+
+    @VisibleForTesting
+    List<Map<String, Object>> collectProperties(final org.dita.dost.project.Project project,
+                                                final URI base,
+                                                final Map<String, Object> definedProps) {
         final String runDeliverable = (String) definedProps.get("project.deliverable");
 
         final List<Map<String, Object>> projectProps = project.deliverables.stream()
@@ -416,7 +423,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     final Path output = getOutputDir(deliverable, props);
                     props.put(ANT_OUTPUT_DIR, output.toString());
                     final Publication publications = deliverable.publication;
-                    props.put("transtype", publications.transtype);
+                    props.put(ANT_TRANSTYPE, publications.transtype);
                     publications.params.forEach(param -> {
                         if (props.containsKey(param.name)) {
                             return;
