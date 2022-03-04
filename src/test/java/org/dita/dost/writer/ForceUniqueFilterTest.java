@@ -20,20 +20,23 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-import org.xmlunit.builder.DiffBuilder;
-import org.xmlunit.diff.Diff;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 public class ForceUniqueFilterTest {
 
@@ -54,29 +57,16 @@ public class ForceUniqueFilterTest {
                 .result(srcDir.toURI().resolve("test.ditamap"))
                 .format("ditamap")
                 .build());
-        job.add(new Builder()
-                .src(srcDir.toURI().resolve("test.dita"))
-                .uri(URI.create("test.dita"))
-                .result(srcDir.toURI().resolve("test.dita"))
-                .build());
-        job.add(new Builder()
-                .src(srcDir.toURI().resolve("test3.dita"))
-                .uri(URI.create("test3.dita"))
-                .result(srcDir.toURI().resolve("test3.dita"))
-                .build());
+        for (String name : new String[]{"test.dita", "test3.dita", "test2.dita", "topic.dita"}) {
+            job.add(new Builder()
+                    .src(srcDir.toURI().resolve(name))
+                    .uri(URI.create(name))
+                    .result(srcDir.toURI().resolve(name))
+                    .build());
+        }
         job.add(new Builder()
                 .uri(URI.create("copy-to.dita"))
                 .result(srcDir.toURI().resolve("copy-to.dita"))
-                .build());
-        job.add(new Builder()
-                .src(srcDir.toURI().resolve("test2.dita"))
-                .uri(URI.create("test2.dita"))
-                .result(srcDir.toURI().resolve("test2.dita"))
-                .build());
-        job.add(new Builder()
-                .src(srcDir.toURI().resolve("topic.dita"))
-                .uri(URI.create("topic.dita"))
-                .result(srcDir.toURI().resolve("topic.dita"))
                 .build());
         tempFileNameScheme = new DefaultTempFileScheme();
         tempFileNameScheme.setBaseDir(srcDir.toURI());
@@ -90,29 +80,20 @@ public class ForceUniqueFilterTest {
         f.setCurrentFile(new File(srcDir, "test.ditamap").toURI());
         f.setParent(SAXParserFactory.newInstance().newSAXParser().getXMLReader());
 
-        final DOMResult dst = new DOMResult();
-        TransformerFactory.newInstance().newTransformer().transform(new SAXSource(f, new InputSource(new File(srcDir, "test.ditamap").toURI().toString())), dst);
+        final Document act = filter(new File(srcDir, "test.ditamap"), f);
+        final Document exp = parse(new File(expDir, "test.ditamap"));
 
-        final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-        builderFactory.setNamespaceAware(true);
-        builderFactory.setIgnoringComments(true);
-        final Document exp = builderFactory.newDocumentBuilder().parse(new InputSource(new File(expDir, "test.ditamap").toURI().toString()));
-        final Diff d = DiffBuilder
-                .compare(exp)
-                .withTest(dst.getNode())
-                .ignoreWhitespace()
-                .build();
-        assertFalse(d.hasDifferences());
+        TestUtils.assertXMLEqual(exp, act);
 
-        assertEquals(new HashMap<FileInfo, FileInfo>(ImmutableMap.of(
-                createFileInfo(null, "copy-to_2.dita"),
-                createFileInfo(null, "copy-to.dita"),
+        assertEquals(new HashMap<>(ImmutableMap.of(
+                createFileInfo("test.dita", "test_3.dita"),
+                createFileInfo("test.dita", "test.dita"),
                 createFileInfo("test.dita", "test_2.dita"),
                 createFileInfo("test.dita", "test.dita"),
+                createFileInfo(null, "copy-to_2.dita"),
+                createFileInfo(null, "copy-to.dita"),
                 createFileInfo("topic.dita", "topic_2.dita"),
-                createFileInfo("topic.dita", "topic.dita"),
-                createFileInfo("test.dita", "test_3.dita"),
-                createFileInfo("test.dita", "test.dita")
+                createFileInfo("topic.dita", "topic.dita")
         )), f.copyToMap);
     }
 
@@ -126,5 +107,17 @@ public class ForceUniqueFilterTest {
                 .build();
     }
 
+    private Document parse(File input) throws ParserConfigurationException, IOException, SAXException {
+        final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setNamespaceAware(true);
+        builderFactory.setIgnoringComments(true);
+        return builderFactory.newDocumentBuilder().parse(new InputSource(input.toURI().toString()));
+    }
 
+    private Document filter(File input, XMLReader f) throws TransformerException {
+        final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        final DOMResult dst = new DOMResult();
+        transformer.transform(new SAXSource(f, new InputSource(input.toURI().toString())), dst);
+        return (Document) dst.getNode();
+    }
 }
