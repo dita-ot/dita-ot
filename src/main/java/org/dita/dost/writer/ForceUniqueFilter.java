@@ -47,7 +47,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
     /**
      * Stack used to hold the current topicref parent.
      */
-    private Deque<ParentTopicref> topicrefParentsStack = new ArrayDeque<>();
+    private final Deque<ParentTopicref> topicrefParentsStack = new ArrayDeque<>();
     
     // ContentHandler methods
 
@@ -76,14 +76,13 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
                 final URI file = stripFragment(source);
                 Integer count = topicrefCount.getOrDefault(file, 0);
                 
-                ParentTopicref parentTopicref = topicrefParentsStack.peek();
-                boolean parentTopicHasEmbededSubtopcis = false;
+                final ParentTopicref parentTopicref = topicrefParentsStack.peek();
+                boolean parentTopicHasEmbededSubtopics = false;
                 if (parentTopicref != null && parentTopicref.href != null) {
-                    URI parentHref = parentTopicref.href;
-                    parentHref = stripFragment(parentHref);
-                    parentTopicHasEmbededSubtopcis = href != null && parentHref.equals(file) && href.getFragment() != null;
+                    final URI parentHref = stripFragment(parentTopicref.href);
+                    parentTopicHasEmbededSubtopics = href != null && parentHref.equals(file) && href.getFragment() != null;
                 }
-                if (parentTopicHasEmbededSubtopcis) {
+                if (parentTopicHasEmbededSubtopics) {
                     dstFi = parentTopicref.dstFi;
                 } else {
                     count++;
