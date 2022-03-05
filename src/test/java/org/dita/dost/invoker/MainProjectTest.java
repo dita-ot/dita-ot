@@ -51,6 +51,7 @@ public class MainProjectTest {
         final List<Map<String, Object>> act = main.collectProperties(project, projectFile, emptyMap());
 
         final Map<String, Object> exp = ImmutableMap.<String, Object>builder()
+                .put("project.deliverable", "site")
                 .put("output.dir", Paths.get("out", "site").toAbsolutePath().toString())
                 .put("args.input", baseDir.resolve("site.ditamap").toString())
                 .put("transtype", "html5")
@@ -73,6 +74,7 @@ public class MainProjectTest {
         final List<Map<String, Object>> act = main.collectProperties(project, projectFile, emptyMap());
 
         final Map<String, Object> exp = ImmutableMap.<String, Object>builder()
+                .put("project.deliverable", "site")
                 .put("output.dir", Paths.get("out", "site").toAbsolutePath().toString())
                 .put("args.input", baseDir.resolve("site.ditamap").toString())
                 .put("transtype", "html5")

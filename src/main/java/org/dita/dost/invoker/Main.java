@@ -70,6 +70,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static final String ANT_TRANSTYPE = "transtype";
     private static final String ANT_PLUGIN_FILE = "plugin.file";
     private static final String ANT_PLUGIN_ID = "plugin.id";
+    private static final String ANT_PROJECT_DELIVERABLE = "project.deliverable";
 
     /**
      * File that we are using for configuration.
@@ -407,13 +408,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     List<Map<String, Object>> collectProperties(final org.dita.dost.project.Project project,
                                                 final URI base,
                                                 final Map<String, Object> definedProps) {
-        final String runDeliverable = (String) definedProps.get("project.deliverable");
+        final String runDeliverable = (String) definedProps.get(ANT_PROJECT_DELIVERABLE);
 
         final List<Map<String, Object>> projectProps = project.deliverables.stream()
                 .filter(deliverable -> runDeliverable != null ? Objects.equals(deliverable.id, runDeliverable) : true)
                 .map(deliverable -> {
                     final Map<String, Object> props = new HashMap<>(definedProps);
 
+                    props.put(ANT_PROJECT_DELIVERABLE, deliverable.id != null
+                            ? deliverable.id
+                            : UUID.randomUUID().toString());
                     final Context context = deliverable.context;
                     final URI input = base.resolve(context.inputs.inputs.get(0).href);
                     props.put(ANT_ARGS_INPUT, input.toString());
