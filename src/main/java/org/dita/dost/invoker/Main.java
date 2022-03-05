@@ -47,6 +47,8 @@ import java.io.*;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -71,6 +73,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static final String ANT_PLUGIN_FILE = "plugin.file";
     private static final String ANT_PLUGIN_ID = "plugin.id";
     private static final String ANT_PROJECT_DELIVERABLE = "project.deliverable";
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
 
     /**
      * File that we are using for configuration.
@@ -341,12 +344,17 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         } else if (args instanceof ConversionArguments) {
             final ConversionArguments conversionArgs = (ConversionArguments) args;
             if (conversionArgs.projectFile == null) {
+                projectProps = Collections.singletonList(definedProps);
+            } else {
+                projectProps = collectProperties(conversionArgs.projectFile, definedProps);
+            }
+            for (Map<String, Object> projectProp : projectProps) {
                 String err = null;
-                if (!definedProps.containsKey(ANT_TRANSTYPE) && !definedProps.containsKey(ANT_ARGS_INPUT)) {
+                if (!projectProp.containsKey(ANT_TRANSTYPE) && !projectProp.containsKey(ANT_ARGS_INPUT)) {
                     err = locale.getString("conversion.error.input_and_transformation_not_defined");
-                } else if (!definedProps.containsKey(ANT_TRANSTYPE)) {
+                } else if (!projectProp.containsKey(ANT_TRANSTYPE)) {
                     err = locale.getString("conversion.error.transformation_not_defined");
-                } else if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
+                } else if (!projectProp.containsKey(ANT_ARGS_INPUT)) {
                     err = locale.getString("conversion.error.input_not_defined");
                 }
                 if (err != null) {
@@ -354,15 +362,25 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     args.printUsage(true);
                     throw new BuildException("");
                 }
-            } else {
-                projectProps = collectProperties(conversionArgs.projectFile, definedProps);
-            }
-            // default values
-            if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
-                definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());
-            }
-            if (!definedProps.containsKey(ANT_BASE_TEMP_DIR) && !definedProps.containsKey(ANT_TEMP_DIR)) {
-                definedProps.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
+                // default values
+                if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
+                    definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());
+                }
+                if (!projectProp.containsKey(ANT_BASE_TEMP_DIR)) {
+                    projectProp.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
+                }
+                if (projectProp.containsKey(ANT_PROJECT_DELIVERABLE)) {
+                    if (projectProp.containsKey(ANT_TEMP_DIR)) {
+                        projectProp.put(ANT_TEMP_DIR, Paths.get(projectProp.get(ANT_TEMP_DIR).toString(),
+                                        projectProp.get(ANT_PROJECT_DELIVERABLE).toString())
+                                .toAbsolutePath().toString());
+                    } else {
+                        final String tempDir = "temp" + projectProp.get(ANT_PROJECT_DELIVERABLE)
+                                + LocalDateTime.now().format(dateTimeFormatter);
+                        projectProp.put(ANT_TEMP_DIR, Paths.get(projectProp.get(ANT_BASE_TEMP_DIR).toString(), tempDir)
+                                .toAbsolutePath().toString());
+                    }
+                }
             }
         } else {
             throw new RuntimeException("Command or subcommand not supported: " + args.getClass().getCanonicalName());
