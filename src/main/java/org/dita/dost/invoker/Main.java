@@ -95,7 +95,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Set of properties that can be used by tasks.
      */
     private List<Map<String, Object>> projectProps;
-    private int repeat;
 
     /**
      * Whether or not this instance has successfully been constructed and is
@@ -196,8 +195,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // expect the worst
         int exitCode = 1;
         try {
-            final long[] durations = new long[repeat];
-            for (int i = 0; i < repeat; i++) {
+            final long[] durations = new long[this.args.repeat];
+            for (int i = 0; i < this.args.repeat; i++) {
                 final long start = System.currentTimeMillis();
                 try {
                     for (Map<String, Object> props : projectProps) {
@@ -213,7 +212,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 final long end = System.currentTimeMillis();
                 durations[i] = end - start;
             }
-            if (repeat > 1) {
+            if (this.args.repeat > 1) {
                 for (int i = 0; i < durations.length; i++) {
                     System.out.println(String.format(locale.getString("conversion.repeatDuration"),
                             i + 1, durations[i]));
@@ -284,7 +283,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
         projectProps = Collections.singletonList(definedProps);
         buildFile = args.buildFile;
-        repeat = 1;
 
         if (args.justPrintUsage) {
             args.printUsage(false);
@@ -358,7 +356,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             } else {
                 projectProps = collectProperties(conversionArgs.projectFile, definedProps);
             }
-            repeat = conversionArgs.repeat;
             // default values
             if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
                 definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());

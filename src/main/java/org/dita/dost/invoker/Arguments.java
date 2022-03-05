@@ -75,6 +75,7 @@ abstract class Arguments {
     boolean justPrintVersion;
     boolean justPrintDiagnostics;
     final Map<String, Object> definedProps = new HashMap<>();
+    int repeat = 1;
 
     Arguments() {
         useColor = getUseColor();
