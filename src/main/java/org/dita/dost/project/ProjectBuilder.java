@@ -94,18 +94,21 @@ public class ProjectBuilder {
         public String idref;
         public String transtype;
         public List<Param> params;
+        public Deliverable.Profile profiles;
 
         @JsonCreator
         public Publication(@JsonProperty("name") String name,
                            @JsonProperty("id") String id,
                            @JsonProperty("idref") String idref,
                            @JsonProperty("transtype") String transtype,
-                           @JsonProperty("params") List<Param> params) {
+                           @JsonProperty("params") List<Param> params,
+                           @JsonProperty("profiles") Deliverable.Profile profiles) {
             this.name = name;
             this.id = id;
             this.idref = idref;
             this.transtype = transtype;
             this.params = params;
+            this.profiles = profiles;
         }
 
         public static class Param {
