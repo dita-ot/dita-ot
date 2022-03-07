@@ -84,9 +84,6 @@ See the accompanying LICENSE file for applicable license.
   <!-- Heading to put at the top a chapter-level "mini-TOC" -->
   <variable id="Mini Toc">Topics: </variable>
 
-  <!-- Text to use for 'Notice' label generated from <note> element. -->
-  <variable id="Notice">Notice</variable>
-
   <!-- Text to use for figure titles, with title text or only figure number. -->
   <variable id="Figure.title">Figure <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Figure Number">Figure <param ref-name="number"/></variable>

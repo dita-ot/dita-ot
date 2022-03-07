@@ -44,7 +44,6 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Preface title">Introduzione</variable>
   <variable id="Notices title"><!--TODO:Notices title--></variable>
   <variable id="Mini Toc">Argomenti: </variable>
-  <variable id="Notice"><!--TODO:Notice--></variable>
   <variable id="Figure.title"> Figura <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Figure Number"> Figura <param ref-name="number"/></variable>
   <variable id="Table.title">Tabella <param ref-name="number"/>: <param ref-name="title"/></variable>

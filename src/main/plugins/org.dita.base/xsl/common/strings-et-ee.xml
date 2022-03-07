@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Väärtus</variable>
    <variable id="Note">Märkus</variable>
    <variable id="Notes">Märkused</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Soovitus</variable>
    <variable id="Fastpath">Kiirtee</variable>
    <variable id="Important">Tähtis</variable>

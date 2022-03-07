@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Значэнне</variable>
    <variable id="Note">Заўвага</variable>
    <variable id="Notes">Заўвагі</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Парада</variable>
    <variable id="Fastpath">Хуткі пераход</variable>
    <variable id="Important">Важна</variable>

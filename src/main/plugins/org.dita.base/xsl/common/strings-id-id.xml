@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Nilai</variable>
    <variable id="Note">Catatan</variable>
    <variable id="Notes">Catatan</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Kiat</variable>
    <variable id="Fastpath">Jalur cepat</variable>
    <variable id="Important">Penting</variable>

@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Érték</variable>
    <variable id="Note">Megjegyzés</variable>
    <variable id="Notes">Megjegyzések</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Tipp</variable>
    <variable id="Fastpath">Közvetlen almenüre lépés</variable>
    <variable id="Important">Fontos</variable>
