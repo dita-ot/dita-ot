@@ -44,7 +44,6 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Preface title">Einleitung</variable>
   <variable id="Notices title">Hinweise</variable>
   <variable id="Mini Toc">Themen: </variable>
-  <variable id="Notice">HINWEIS</variable>
   <variable id="Figure.title">Abbildung  <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Figure Number">Abbildung  <param ref-name="number"/></variable>
   <variable id="Table.title">Tabelle <param ref-name="number"/>: <param ref-name="title"/></variable>

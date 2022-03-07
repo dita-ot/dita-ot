@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">ערך</variable>
    <variable id="Note">הערה</variable>
    <variable id="Notes">הערות</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">עצה</variable>
    <variable id="Fastpath">נתיב מהיר</variable>
    <variable id="Important">חשוב</variable>

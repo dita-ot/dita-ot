@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Vērtība</variable>
    <variable id="Note">Piezīme</variable>
    <variable id="Notes">Piezīmes</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Padoms</variable>
    <variable id="Fastpath">Ātrais ceļš</variable>
    <variable id="Important">Svarīgi</variable>

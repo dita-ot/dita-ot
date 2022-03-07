@@ -45,7 +45,6 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Notices title">特記事項</variable>
   <variable id="Mini Toc">トピック : </variable>
   <variable id="#note-separator"> : </variable>
-  <variable id="Notice"><!--TODO:Notice--></variable>
   <variable id="Figure.title">図 <param ref-name="number"/> : <param ref-name="title"/></variable>
   <variable id="Figure Number">図 <param ref-name="number"/></variable>
   <variable id="Table.title">表 <param ref-name="number"/> : <param ref-name="title"/></variable>

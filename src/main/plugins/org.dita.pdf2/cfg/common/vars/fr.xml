@@ -45,7 +45,6 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Notices title">Avis</variable>
   <variable id="Mini Toc">Sujets :</variable>
   <variable id="#note-separator"> : </variable>
-  <variable id="Notice">AVIS</variable>
   <variable id="Figure.title">Illustration <param ref-name="number"/> : <param ref-name="title"/></variable>
   <variable id="Figure Number">Illustration <param ref-name="number"/></variable>
   <variable id="Table.title">Tableau <param ref-name="number"/> : <param ref-name="title"/></variable>

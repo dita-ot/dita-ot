@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Arvo</variable>
    <variable id="Note">Huomautus</variable>
    <variable id="Notes">Huomautuksia</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Vihje</variable>
    <variable id="Fastpath">Pikaohje</variable>
    <variable id="Important">Tärkeää</variable>

@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Wert</variable>
    <variable id="Note">Anmerkung</variable>
    <variable id="Notes">Anmerkungen</variable>
+   <variable id="Notice">HINWEIS</variable>
    <variable id="Tip">Tipp</variable>
    <variable id="Fastpath">Direktaufruf</variable>
    <variable id="Important">Wichtig</variable>

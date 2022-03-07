@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Gildi</variable>
    <variable id="Note">Athugið</variable>
    <variable id="Notes">Athugasemdir</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Heilræði</variable>
    <variable id="Fastpath">Flýtileið</variable>
    <variable id="Important">Áríðandi</variable>

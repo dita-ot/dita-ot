@@ -35,6 +35,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Вредност</variable>
    <variable id="Note">Напомена</variable>
    <variable id="Notes">Напомене</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Савет</variable>
    <variable id="Fastpath">Пречица</variable>
    <variable id="Important">Важно</variable>
