@@ -348,6 +348,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             } else {
                 projectProps = collectProperties(conversionArgs.projectFile, definedProps);
             }
+            final String tempDirToken = "temp" + LocalDateTime.now().format(dateTimeFormatter);
             for (Map<String, Object> projectProp : projectProps) {
                 String err = null;
                 if (!projectProp.containsKey(ANT_TRANSTYPE) && !projectProp.containsKey(ANT_ARGS_INPUT)) {
@@ -371,14 +372,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 }
                 if (projectProp.containsKey(ANT_PROJECT_DELIVERABLE)) {
                     if (projectProp.containsKey(ANT_TEMP_DIR)) {
-                        projectProp.put(ANT_TEMP_DIR, Paths.get(projectProp.get(ANT_TEMP_DIR).toString(),
-                                        projectProp.get(ANT_PROJECT_DELIVERABLE).toString())
+                        final Path tempDir = Paths.get(projectProp.get(ANT_TEMP_DIR).toString(),
+                                projectProp.get(ANT_PROJECT_DELIVERABLE).toString());
+                        projectProp.put(ANT_TEMP_DIR, tempDir
                                 .toAbsolutePath().toString());
                     } else {
-                        final String tempDir = "temp" + projectProp.get(ANT_PROJECT_DELIVERABLE)
-                                + LocalDateTime.now().format(dateTimeFormatter);
-                        projectProp.put(ANT_TEMP_DIR, Paths.get(projectProp.get(ANT_BASE_TEMP_DIR).toString(), tempDir)
-                                .toAbsolutePath().toString());
+                        final Path tempDir =  Paths.get(projectProp.get(ANT_BASE_TEMP_DIR).toString(),
+                                tempDirToken,
+                                projectProp.get(ANT_PROJECT_DELIVERABLE).toString());
+                        projectProp.put(ANT_TEMP_DIR, tempDir.toAbsolutePath().toString());
                     }
                 }
             }
