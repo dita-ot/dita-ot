@@ -1,0 +1,22 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.3" domains="                          (topic abbrev-d)                          (topic delay-d)                          (map ditavalref-d)                          (map glossref-d)                          (topic hazard-d)                          (topic hi-d)                          (topic indexing-d)                          (map mapgroup-d)                          (topic markup-d xml-d)                          (topic markup-d)                          (topic pr-d)                          (topic relmgmt-d)                          (topic sw-d)                          (topic ui-d)                          (topic ut-d)                          a(props deliveryTarget)" class="- map/map ">    
+    <title class="- topic/title ">Online Help</title>
+    
+    <topicgroup keyscope="A" class="+ map/topicref mapgroup-d/topicgroup ">
+        <ditavalref href="filter_A.ditaval" format="ditaval" processing-role="resource-only" class="+ map/topicref ditavalref-d/ditavalref "/>
+        <topicref href="topic.dita" class="- map/topicref ">
+            <topicref href="topic.dita#subtopic1_id" class="- map/topicref "/>
+            <topicref href="topic.dita#subtopic2_id" class="- map/topicref "/>
+            <topicref href="topic.dita#subtopic3_id" class="- map/topicref "/>
+        </topicref>
+    </topicgroup>
+    
+    <topicgroup keyscope="B" class="+ map/topicref mapgroup-d/topicgroup ">
+        <ditavalref href="filter_B.ditaval" format="ditaval" processing-role="resource-only" class="+ map/topicref ditavalref-d/ditavalref "/>
+        <topicref href="topic.dita" class="- map/topicref ">
+            <topicref href="topic.dita#subtopic1_id" class="- map/topicref "/>
+            <topicref href="topic.dita#subtopic2_id" class="- map/topicref "/>
+            <topicref href="topic.dita#subtopic3_id" class="- map/topicref "/>
+        </topicref>
+    </topicgroup>
+    
+</map>
