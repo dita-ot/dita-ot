@@ -158,26 +158,4 @@ public class CleanPreprocessModuleTest {
 
         module.execute(input);
     }
-
-    @Test
-    public void RewriteRule() throws Exception {
-        job.setInputDir(URI.create("file:/foo/bar/"));
-        job.add(new Builder()
-                .uri(create("map.ditamap"))
-                .isInput(true)
-                .result(create("file:/foo/bar/map.ditamap"))
-                .build());
-        job.add(new Builder()
-                .uri(create("topics/topic.dita"))
-                .result(create("file:/foo/bar/topics/topic.dita"))
-                .build());
-        module.setJob(job);
-        module.setXmlUtils(xmlUtils);
-        final TestLogger logger = new TestUtils.TestLogger(false);
-        module.setLogger(logger);
-        final Map<String, String> input = new HashMap<>();
-        input.put("use-result-filename", "true");
-
-        module.execute(input);
-    }
 }
