@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.net.URI.create;
+import static org.dita.dost.util.Constants.OS_NAME;
+import static org.dita.dost.util.Constants.OS_NAME_WINDOWS;
 import static org.junit.Assert.assertEquals;
 
 public class CleanPreprocessModuleTest {
@@ -47,13 +49,27 @@ public class CleanPreprocessModuleTest {
     }
 
     @Test
-    public void getCommonBase() {
-        assertEquals(create("file:/foo/bar/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/bar/b")));
-        assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/a"), create("file:/foo/bar/b")));
-        assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/b")));
-        assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/baz/b")));
-        assertEquals(create("file:/C:/"), module.getCommonBase(create("file:/C:/a"), create("file:/D:/b")));
-        assertEquals(null, module.getCommonBase(create("file:/foo/bar/a"), create("https://example.com/baz/b")));
+    public void getCommonBase_unix() {
+        if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
+            assertEquals(create("file:/foo/bar/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/bar/b")));
+            assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/a"), create("file:/foo/bar/b")));
+            assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/b")));
+            assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/baz/b")));
+            assertEquals(create("file:/"), module.getCommonBase(create("file:/foo/a/b/c"), create("file:/bar/b/c/d")));
+            assertEquals(null, module.getCommonBase(create("file:/foo/bar/a"), create("https://example.com/baz/b")));
+        }
+    }
+
+    @Test
+    public void getCommonBase_windows() {
+        if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
+            assertEquals(create("file:/F:/bar/"), module.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/bar/b")));
+            assertEquals(create("file:/F:/"), module.getCommonBase(create("file:/F:/a"), create("file:/F:/bar/b")));
+            assertEquals(create("file:/F:/"), module.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/b")));
+            assertEquals(create("file:/F:/"), module.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/baz/b")));
+            assertEquals(null, module.getCommonBase(create("file:/C:/a"), create("file:/D:/b")));
+            assertEquals(null, module.getCommonBase(create("file:/f:/bar/a"), create("https://example.com/baz/b")));
+        }
     }
 
     @Test
@@ -139,6 +155,28 @@ public class CleanPreprocessModuleTest {
         module.setLogger(logger);
         final Map<String, String> input = new HashMap<>();
         input.put("result.rewrite-rule.xsl", "abc.xsl");
+
+        module.execute(input);
+    }
+
+    @Test
+    public void RewriteRule() throws Exception {
+        job.setInputDir(URI.create("file:/foo/bar/"));
+        job.add(new Builder()
+                .uri(create("map.ditamap"))
+                .isInput(true)
+                .result(create("file:/foo/bar/map.ditamap"))
+                .build());
+        job.add(new Builder()
+                .uri(create("topics/topic.dita"))
+                .result(create("file:/foo/bar/topics/topic.dita"))
+                .build());
+        module.setJob(job);
+        module.setXmlUtils(xmlUtils);
+        final TestLogger logger = new TestUtils.TestLogger(false);
+        module.setLogger(logger);
+        final Map<String, String> input = new HashMap<>();
+        input.put("use-result-filename", "true");
 
         module.execute(input);
     }
