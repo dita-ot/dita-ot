@@ -51,6 +51,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.dita.dost.invoker.Arguments.*;
@@ -424,20 +425,27 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return collectProperties(project, base, definedProps);
     }
 
+    private <T> Stream<Map.Entry<T, Integer>> zipWithIndex(List<T> src) {
+        return IntStream
+                .range(0, src.size())
+                .mapToObj(i -> new AbstractMap.SimpleImmutableEntry(src.get(i), i));
+    }
+
     @VisibleForTesting
     List<Map<String, Object>> collectProperties(final org.dita.dost.project.Project project,
                                                 final URI base,
                                                 final Map<String, Object> definedProps) {
         final String runDeliverable = (String) definedProps.get(ANT_PROJECT_DELIVERABLE);
 
-        final List<Map<String, Object>> projectProps = project.deliverables.stream()
-                .filter(deliverable -> runDeliverable != null ? Objects.equals(deliverable.id, runDeliverable) : true)
-                .map(deliverable -> {
+        final List<Map<String, Object>> projectProps = zipWithIndex(project.deliverables)
+                .filter(entry -> runDeliverable == null || Objects.equals(entry.getKey().id, runDeliverable))
+                .map(entry -> {
+                    final org.dita.dost.project.Project.Deliverable deliverable = entry.getKey();
                     final Map<String, Object> props = new HashMap<>(definedProps);
 
                     props.put(ANT_PROJECT_DELIVERABLE, deliverable.id != null
                             ? deliverable.id
-                            : UUID.randomUUID().toString());
+                            : String.format("deliverable-%d", entry.getValue() + 1));
                     final Context context = deliverable.context;
                     final URI input = base.resolve(context.inputs.inputs.get(0).href);
                     props.put(ANT_ARGS_INPUT, input.toString());
