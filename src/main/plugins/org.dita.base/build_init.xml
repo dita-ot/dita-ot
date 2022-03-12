@@ -196,7 +196,6 @@ See the accompanying LICENSE file for applicable license.
 
     <property name="conserve-memory" value="false"/>
 
-    <!-- TODO: move to preprocess and preprocess2 -->
     <preprocess-skip-init name="preprocess.branch-filter" step="branch-filter"/>
 
     <preprocess-skip-init name="preprocess.chunk" step="chunk"/>
@@ -224,10 +223,10 @@ See the accompanying LICENSE file for applicable license.
 
     <preprocess-skip-init name="preprocess.normalize-codeblock" step="normalize-codeblock"/>
 
-    <preprocess-skip-init name="preprocess.profile" step="profile"/>
-    <condition property="preprocess.profile.skip">
+    <condition property="build-step.profile" value="false">
       <istrue value="${filter-on-parse}"/>
     </condition>
+    <preprocess-skip-init name="preprocess.profile" step="profile"/>
 
     <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/><!-- Populate link text for links within topics (xref, link). -->
   </target>
