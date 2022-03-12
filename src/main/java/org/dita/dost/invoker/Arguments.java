@@ -20,6 +20,8 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.dita.dost.util.LangUtils.pair;
+
 /**
  * Command line arguments.
  *
@@ -145,7 +147,7 @@ abstract class Arguments {
         } else {
             value = args.pop();
         }
-        return new AbstractMap.SimpleEntry<>(name, value);
+        return pair(name, value);
     }
 
     /**

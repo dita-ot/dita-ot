@@ -51,12 +51,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.dita.dost.invoker.Arguments.*;
 import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
+import static org.dita.dost.util.LangUtils.pair;
+import static org.dita.dost.util.LangUtils.zipWithIndex;
 
 /**
  * Command line entry point into DITA-OT. This class is entered via the canonical
@@ -425,12 +426,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return collectProperties(project, base, definedProps);
     }
 
-    private <T> Stream<Map.Entry<T, Integer>> zipWithIndex(List<T> src) {
-        return IntStream
-                .range(0, src.size())
-                .mapToObj(i -> new AbstractMap.SimpleImmutableEntry(src.get(i), i));
-    }
-
     @VisibleForTesting
     List<Map<String, Object>> collectProperties(final org.dita.dost.project.Project project,
                                                 final URI base,
@@ -556,7 +551,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private void printDeliverables(final File projectFile) {
         final List<Map.Entry<String, String>> pairs = readProjectFile(projectFile).deliverables.stream()
                 .filter(deliverable -> deliverable.id != null)
-                .map(deliverable -> new AbstractMap.SimpleEntry<>(deliverable.id, deliverable.name))
+                .map(deliverable -> pair(deliverable.id, deliverable.name))
                 .collect(Collectors.toList());
         final int length = pairs.stream()
                 .map(Map.Entry::getKey)
