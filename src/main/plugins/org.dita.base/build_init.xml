@@ -45,6 +45,22 @@ See the accompanying LICENSE file for applicable license.
     </sequential>
   </macrodef>
 
+  <macrodef name="preprocess-skip-init">
+    <attribute name="name"/>
+    <attribute name="step"/>
+    <sequential>
+      <fail if:set="@{name}.skip">Internal property @{name}.skip may not be set directly.</fail>
+      <condition property="@{name}.skip">
+        <and>
+          <isset property="build-step.@{step}"/>
+          <isfalse value="${build-step.@{step}}"/>
+        </and>
+      </condition>
+      <echo level="info" if:set="@{name}.skip">Skip @{name}</echo>
+      <echo level="info" unless:set="@{name}.skip">Run @{name}</echo>
+    </sequential>
+  </macrodef>
+
   <target name="build-init"
           depends="init-properties,
                    check-arg,
@@ -177,23 +193,7 @@ See the accompanying LICENSE file for applicable license.
 
     <property name="conserve-memory" value="false"/>
 
-    <!-- Process skip -->
-    <macrodef name="preprocess-skip-init">
-      <attribute name="name"/>
-      <attribute name="step"/>
-      <sequential>
-        <fail if:set="@{name}.skip">Internal property @{name}.skip may not be set directly.</fail>
-        <condition property="@{name}.skip">
-          <and>
-            <isset property="build-step.@{step}"/>
-            <isfalse value="${build-step.@{step}}"/>
-          </and>
-        </condition>
-        <echo level="info" if:set="@{name}.skip">Skip @{name}</echo>
-        <echo level="info" unless:set="@{name}.skip">Run @{name}</echo>
-      </sequential>
-    </macrodef>
-
+    <!-- TODO: move to preprocess and preprocess2 -->
     <preprocess-skip-init name="preprocess.branch-filter" step="branch-filter"/>
 
     <preprocess-skip-init name="preprocess.chunk" step="chunk"/>
@@ -227,8 +227,6 @@ See the accompanying LICENSE file for applicable license.
     </condition>
 
     <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/><!-- Populate link text for links within topics (xref, link). -->
-
-    <preprocess-skip-init name="clean-temp" step="clean-temp"/>
   </target>
   
   <target name="log-arg">
