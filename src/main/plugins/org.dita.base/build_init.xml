@@ -49,7 +49,10 @@ See the accompanying LICENSE file for applicable license.
     <attribute name="name"/>
     <attribute name="step"/>
     <sequential>
-      <fail if:set="@{name}.skip">Internal property @{name}.skip may not be set directly.</fail>
+      <dita-ot-fail id="DOTA015F" if:set="@{name}.skip">
+        <param name="1" expression="@{name}.skip"/>
+        <param name="2" expression="build-step.@{step}"/>
+      </dita-ot-fail>
       <condition property="@{name}.skip">
         <and>
           <isset property="build-step.@{step}"/>
