@@ -266,7 +266,9 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <target name="topic-branch-filter">
+  <target name="topic-branch-filter"
+          unless="preprocess.branch-filter.skip"
+          description="Topic branch filtering">
     <pipeline taskname="branch-filter" message="Filter branches">
       <module class="org.dita.dost.module.filter.TopicBranchFilterModule"/>
     </pipeline>

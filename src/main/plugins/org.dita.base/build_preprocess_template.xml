@@ -182,7 +182,8 @@ See the accompanying LICENSE file for applicable license.
     </condition>
   </target>
   
-  <target name="branch-filter">
+  <target name="branch-filter"
+          unless="preprocess.branch-filter.skip">
     <pipeline taskname="branch-filter" message="Filter branches">
       <module class="org.dita.dost.module.BranchFilterModule"/>
     </pipeline>
