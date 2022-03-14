@@ -447,6 +447,7 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
+  <!-- XXX: should this be inlined to make the target tree flatter? -->
   <target name="copy-files2"
           description="Copy files to the output directory"
           depends="copy-image2,

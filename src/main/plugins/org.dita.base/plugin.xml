@@ -233,12 +233,12 @@ See the accompanying LICENSE file for applicable license.
       <val>false</val>
     </param>
     <param name="build-step.profile" desc="Run process profile" type="enum">
-      <val default="true">true</val>
-      <val>false</val>
+      <val>true</val>
+      <val default="true">false</val>
     </param>
     <param name="build-step.topic-profile" desc="Run process topic-profile" type="enum">
-      <val default="true">true</val>
-      <val>false</val>
+      <val>true</val>
+      <val default="true">false</val>
     </param>
     <param name="build-step.topicpull" desc="Run process topicpull" type="enum">
       <val default="true">true</val>
