@@ -111,15 +111,33 @@ See the accompanying LICENSE file for applicable license.
       </job>
     </echoxml>
     <property name="map.filter-on-parse" value="false"/>
+    <condition property="topic.filter-on-parse" value="true" else="false">
+      <equals arg1="${filter-stage}" arg2="early"/>
+    </condition>
     <condition property="build-step.map-profile" value="false" else="true">
       <istrue value="${map.filter-on-parse}"/>
     </condition>
-    <preprocess-skip-init name="preprocess.map-profile" step="map-profile"/>
-    <property name="topic.filter-on-parse" value="true"/>
     <condition property="build-step.topic-profile" value="false" else="true">
       <istrue value="${topic.filter-on-parse}"/>
     </condition>
+
+    <preprocess-skip-init name="preprocess.map-profile" step="map-profile"/>
     <preprocess-skip-init name="preprocess.topic-profile" step="topic-profile"/>
+    <preprocess-skip-init name="preprocess.branch-filter" step="branch-filter"/>
+    <preprocess-skip-init name="preprocess.chunk" step="chunk"/>
+    <preprocess-skip-init name="preprocess.clean-preprocess" step="clean-preprocess"/>
+    <preprocess-skip-init name="preprocess.clean-map-check" step="clean-preprocess"/>
+    <preprocess-skip-init name="preprocess.coderef" step="coderef"/>
+    <preprocess-skip-init name="preprocess.conref" step="conref"/>
+    <preprocess-skip-init name="preprocess.copy-flag" step="copy-flag"/>
+    <preprocess-skip-init name="preprocess.copy-html" step="copy-html"/>
+    <preprocess-skip-init name="preprocess.copy-image" step="copy-image"/>
+    <preprocess-skip-init name="preprocess.keyref" step="keyref"/>
+    <preprocess-skip-init name="preprocess.maplink" step="maplink"/>
+    <preprocess-skip-init name="preprocess.mapref" step="mapref"/>
+    <preprocess-skip-init name="preprocess.move-meta-entries" step="move-meta-entries"/>
+    <preprocess-skip-init name="preprocess.normalize-codeblock" step="normalize-codeblock"/>
+    <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/>
   </target>
   
   <target name="map-reader"
