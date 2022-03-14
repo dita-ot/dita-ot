@@ -59,6 +59,11 @@ See the accompanying LICENSE file for applicable license.
       </or>
     </condition>
 
+    <condition property="build-step.profile" value="false">
+      <istrue value="${filter-on-parse}"/>
+    </condition>
+    <preprocess-skip-init name="preprocess.profile" step="profile"/>
+
     <basename property="dita.input.filename" file="${args.input}" />
     <pathconvert property="dita.map.filename.root">
       <path path="${dita.input.filename}"/>

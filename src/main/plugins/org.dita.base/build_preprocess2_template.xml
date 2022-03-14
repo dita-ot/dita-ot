@@ -111,15 +111,15 @@ See the accompanying LICENSE file for applicable license.
       </job>
     </echoxml>
     <property name="map.filter-on-parse" value="false"/>
-    <preprocess-skip-init name="preprocess.map-profile" step="map-profile"/>
-    <condition property="preprocess.map-profile.skip">
+    <condition property="build-step.map-profile" value="false" else="true">
       <istrue value="${map.filter-on-parse}"/>
     </condition>
+    <preprocess-skip-init name="preprocess.map-profile" step="map-profile"/>
     <property name="topic.filter-on-parse" value="true"/>
-    <preprocess-skip-init name="preprocess.topic-profile" step="topic-profile"/>
-    <condition property="preprocess.topic-profile.skip">
+    <condition property="build-step.topic-profile" value="false" else="true">
       <istrue value="${topic.filter-on-parse}"/>
     </condition>
+    <preprocess-skip-init name="preprocess.topic-profile" step="topic-profile"/>
   </target>
   
   <target name="map-reader"

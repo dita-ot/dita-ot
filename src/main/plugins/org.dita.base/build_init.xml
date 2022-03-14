@@ -207,28 +207,21 @@ See the accompanying LICENSE file for applicable license.
 
     <preprocess-skip-init name="preprocess.conref" step="conref"/>
 
-    <!-- XXX: merge call copy properties under the same property -->
     <preprocess-skip-init name="preprocess.copy-flag" step="copy-flag"/>
     <preprocess-skip-init name="preprocess.copy-html" step="copy-html"/>
     <preprocess-skip-init name="preprocess.copy-image" step="copy-image"/>
 
     <preprocess-skip-init name="preprocess.keyref" step="keyref"/>
 
-    <preprocess-skip-init name="preprocess.maplink" step="maplink"/><!-- Collect all links from maps and push them into topics -->
+    <preprocess-skip-init name="preprocess.maplink" step="maplink"/>
 
-    <!-- XXX: In order to make e.g. keyref work, maprefs need to be resolved -->
     <preprocess-skip-init name="preprocess.mapref" step="mapref"/>
 
-    <preprocess-skip-init name="preprocess.move-meta-entries" step="move-meta-entries"/><!-- Push information from <topicmeta> in the map into the corresponding topics and pull metadata (such as navtitle) into the map from the referenced topics. -->
+    <preprocess-skip-init name="preprocess.move-meta-entries" step="move-meta-entries"/>
 
     <preprocess-skip-init name="preprocess.normalize-codeblock" step="normalize-codeblock"/>
 
-    <condition property="build-step.profile" value="false">
-      <istrue value="${filter-on-parse}"/>
-    </condition>
-    <preprocess-skip-init name="preprocess.profile" step="profile"/>
-
-    <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/><!-- Populate link text for links within topics (xref, link). -->
+    <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/>
   </target>
   
   <target name="log-arg">
