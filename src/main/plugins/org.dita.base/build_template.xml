@@ -25,10 +25,9 @@ See the accompanying LICENSE file for applicable license.
       </condition>
       <param name="1" value="${transtype}"/>
     </dita-ot-fail>
-    <property name="clean.temp" value="true"/>
-    <condition property="clean-temp.skip">
-      <isfalse value="${clean.temp}"/>
-    </condition>
+    <property name="clean.temp" value="yes"/>
+    <property name="build-step.clean-temp" value="${clean.temp}"/>
+    <preprocess-skip-init name="clean-temp" step="clean-temp"/>
     <antcall inheritRefs="true">
       <target name="dita2${transtype}"/>
       <target name="clean-temp"/>

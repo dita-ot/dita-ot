@@ -59,6 +59,27 @@ See the accompanying LICENSE file for applicable license.
       </or>
     </condition>
 
+    <condition property="build-step.profile" value="false">
+      <istrue value="${filter-on-parse}"/>
+    </condition>
+
+    <preprocess-skip-init name="preprocess.profile" step="profile"/>
+    <preprocess-skip-init name="preprocess.branch-filter" step="branch-filter"/>
+    <preprocess-skip-init name="preprocess.chunk" step="chunk"/>
+    <preprocess-skip-init name="preprocess.clean-preprocess" step="clean-preprocess"/>
+    <preprocess-skip-init name="preprocess.clean-map-check" step="clean-preprocess"/>
+    <preprocess-skip-init name="preprocess.coderef" step="coderef"/>
+    <preprocess-skip-init name="preprocess.conref" step="conref"/>
+    <preprocess-skip-init name="preprocess.copy-flag" step="copy-flag"/>
+    <preprocess-skip-init name="preprocess.copy-html" step="copy-html"/>
+    <preprocess-skip-init name="preprocess.copy-image" step="copy-image"/>
+    <preprocess-skip-init name="preprocess.keyref" step="keyref"/>
+    <preprocess-skip-init name="preprocess.maplink" step="maplink"/>
+    <preprocess-skip-init name="preprocess.mapref" step="mapref"/>
+    <preprocess-skip-init name="preprocess.move-meta-entries" step="move-meta-entries"/>
+    <preprocess-skip-init name="preprocess.normalize-codeblock" step="normalize-codeblock"/>
+    <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/>
+
     <basename property="dita.input.filename" file="${args.input}" />
     <pathconvert property="dita.map.filename.root">
       <path path="${dita.input.filename}"/>
@@ -103,7 +124,6 @@ See the accompanying LICENSE file for applicable license.
   <target name="gen-list"
     dita:depends="{depend.preprocess.gen-list.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.gen-list.skip"
     description="Generate file list">
     <pipeline message="Generate list." taskname="gen-list"
       inputmap="${args.input}">
@@ -134,8 +154,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="debug-filter"
           dita:depends="{depend.preprocess.debug-filter.pre}"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-          unless="preprocess.debug-filter.skip"
-          description="Debug and filter input files" >
+          description="Debug and filter input files">
     <pipeline message="Debug and filtering." taskname="filter">
       <module class="org.dita.dost.module.DebugAndFilterModule">
         <param name="ditadir" location="${dita.dir}"/>
@@ -163,7 +182,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <!-- profile -->
-  <target name="profile" depends="profile-check"
+  <target name="profile"
           unless="preprocess.profile.skip"
           description="Profile input files">
     <pipeline message="Profile filtering." taskname="profile"
@@ -183,14 +202,9 @@ See the accompanying LICENSE file for applicable license.
       <equals arg1="${inputTopicPath}" arg2=""/>
     </condition>
   </target>
-
-  <target name="profile-check">
-    <condition property="preprocess.profile.skip">
-      <istrue value="${filter-on-parse}"/>
-    </condition>
-  </target>
   
-  <target name="branch-filter">
+  <target name="branch-filter"
+          unless="preprocess.branch-filter.skip">
     <pipeline taskname="branch-filter" message="Filter branches">
       <module class="org.dita.dost.module.BranchFilterModule"/>
     </pipeline>
@@ -201,7 +215,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="conrefpush"
     dita:depends="{depend.preprocess.conrefpush.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.conrefpush.skip"
+    unless="preprocess.conref.skip"
     description="Resolve conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
@@ -457,10 +471,12 @@ See the accompanying LICENSE file for applicable license.
   <!-- copy-files
       Copy files to the output directory. -->
   <target name="copy-files"
-    dita:depends="{depend.preprocess.copy-files.pre},copy-image,copy-html,copy-flag"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.copy-files.skip" />
-     
+          dita:depends="{depend.preprocess.copy-files.pre},
+                        copy-image,
+                        copy-html,
+                        copy-flag"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"/>
+
   <target name="copy-image"
     unless="preprocess.copy-image.skip"
     dita:depends="{depend.preprocess.copy-image.pre}"

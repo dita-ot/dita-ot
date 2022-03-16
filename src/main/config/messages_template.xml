@@ -50,6 +50,10 @@ See the accompanying LICENSE file for applicable license.
     <reason>Attribute @%1 is deprecated.</reason>
     <response>Use attribute @%2 instead.</response>
   </message>
+  <message id="DOTA015F" type="FATAL">
+    <reason>Internal property %1 may not be set directly.</reason>
+    <response>Use property %2 instead.</response>
+  </message>
 
   <!-- Start of Java Messages -->
   
