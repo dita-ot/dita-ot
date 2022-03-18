@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/pushBefore_with_crossRef/temp/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/pushBefore_with_crossRef/temp/preprocess/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?><topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="TopicID1" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic " specializations="@props/deliveryTarget">
+    <title class="- topic/title ">This is a case for pushBefore with crossreference link</title>
+    
+    <body class="- topic/body ">
+        <p class="- topic/p ">
+            
+              
+           
+            <xref conref="pushBefore_with_crossRef.dita#topicID/A" conaction="mark" class="- topic/xref "/>
+            <xref conaction="pushbefore" href="http://www.google.com" scope="external" class="- topic/xref ">Google</xref>
+           
+           <xref conref="pushBefore_with_crossRef.dita#topicID/A" conaction="mark" class="- topic/xref "/>
+            <xref conaction="pushbefore" href="http://www.sohu.com" scope="external" class="- topic/xref ">Sohu</xref>
+         
+           <xref conref="pushBefore_with_crossRef.dita#topicID/A" conaction="mark" class="- topic/xref "/>
+            <xref conaction="pushbefore" href="http://www.sina.com" scope="external" class="- topic/xref ">Sina</xref>
+            
+            <xref conref="pushBefore_with_crossRef.dita#topicID/A" conaction="mark" class="- topic/xref "/>
+            <xref conaction="pushbefore" href="http://www.baidu.com" scope="external" class="- topic/xref ">Baidu</xref>
+            
+            
+            <xref conaction="pushbefore" href="1/dita2.dita" class="- topic/xref ">DITA2</xref>
+            <xref conref="pushBefore_with_crossRef.dita#topicID/B" conaction="mark" class="- topic/xref "/>
+          
+           
+            
+            <xref conaction="pushbefore" href="1/11/dita22.dita" class="- topic/xref ">DITA22</xref>
+           <xref conref="pushBefore_with_crossRef.dita#topicID/C" conaction="mark" class="- topic/xref "/>
+          
+            
+            
+            <xref conaction="pushbefore" href="1/dita2.dita#X/AA" class="- topic/xref ">Sibling Reference</xref>
+            <xref conref="pushBefore_with_crossRef.dita#topicID/D" conaction="mark" class="- topic/xref "/>
+        
+            
+            
+            
+        </p>
+    </body>
+</topic>
