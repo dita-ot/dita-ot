@@ -108,14 +108,6 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testtable_colwidth() throws Throwable {
-        builder().name("table_colwidth")
-                .transtype(PREPROCESS)
-                .input(Paths.get("test.dita"))
-                .test();
-    }
-
-    @Test
     public void testconkeyref_push() throws Throwable {
         builder().name("conkeyref_push")
                 .transtype(PREPROCESS)

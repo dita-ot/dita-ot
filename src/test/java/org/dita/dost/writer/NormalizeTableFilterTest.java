@@ -46,6 +46,11 @@ public class NormalizeTableFilterTest {
     }
 
     @Test
+    public void test() throws Exception {
+        test("test.dita");
+    }
+
+    @Test
     public void simple() throws Exception {
         test("simple.dita");
     }
