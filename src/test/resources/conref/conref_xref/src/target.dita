@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="target">
+  <title/>
+  <body>
+    <div id="target-element">
+      <xref href="#target/outside"/>
+      <!--  -->
+      
+      <p id="inside"/>
+      <p id="source"/>
+      
+      <xref href="#."/>
+      <xref href="#./inside"/>
+      <xref href="#./source"/>
+      <xref href="#./outside"/>
+
+      <xref href="#target"/>
+      <xref href="#target/inside"/>
+      <xref href="#target/source"/>
+      <xref href="#target/outside"/>
+      
+      <xref href="#sub"/>
+      <xref href="#sub/fig"/>
+    </div>
+    <p id="outside"/>
+  </body>
+  <topic id="sub">
+    <title/>
+    <body>
+      <p id="fig"/>
+    </body>
+  </topic>
+</topic>
