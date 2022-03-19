@@ -16,6 +16,7 @@ import org.dita.dost.store.CacheStore;
 import org.dita.dost.store.Store;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Configuration.Mode;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -53,6 +54,7 @@ public abstract class AbstractModuleTest {
     protected Job job;
     protected AbstractPipelineModule chunkModule;
     protected CachingLogger logger;
+    protected Mode mode = Mode.STRICT;
 
     public AbstractModuleTest(final String testCase, final Map<String, String> params) {
         this.testCase = testCase;
@@ -117,7 +119,7 @@ public abstract class AbstractModuleTest {
         job = new Job(tempDir, store);
         chunkModule.setXmlUtils(xmlUtils);
         chunkModule.setJob(job);
-        logger = new CachingLogger(true);
+        logger = new CachingLogger(mode.equals(Mode.STRICT));
         chunkModule.setLogger(logger);
         chunkModule.setParallel(parallel);
     }

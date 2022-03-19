@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><subjectScheme xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map subjectScheme/subjectScheme " ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d)                            (map subjectScheme)                            a(props deliveryTarget)                            (topic hazard-d)                            (topic hi-d)                            (topic ut-d)   " processing-role="resource-only" toc="no">
+    <title class="- topic/title ">Product</title>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="audiences" navtitle="Audience">
+        <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="programmer" navtitle="Programmer"> </subjectdef>
+        <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="user" navtitle="User"/>
+        <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="admin" navtitle="Administrator "/>
+        <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="pm" navtitle="Program Manager"/>
+    </subjectdef>
+    
+    <enumerationdef class="- map/topicref subjectScheme/enumerationdef ">
+        <attributedef class="- topic/data subjectScheme/attributedef " name="audience" translate="no"/>
+        <subjectdef class="- map/topicref subjectScheme/subjectdef " keyref="audiences"/>
+        
+    </enumerationdef>
+    
+</subjectScheme>

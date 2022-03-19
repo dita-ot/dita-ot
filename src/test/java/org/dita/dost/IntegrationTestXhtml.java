@@ -40,7 +40,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_dupkey() throws Throwable {
-        builder().name("keyref_dupkey")
+        builder().name(Paths.get("keyref", "keyref_dupkey"))
                 .transtype(XHTML)
                 .input(Paths.get("keyref-test-01.ditamap"))
                 .test();
@@ -48,7 +48,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_to_keyref() throws Throwable {
-        builder().name("keyref_to_keyref")
+        builder().name(Paths.get("keyref", "keyref_to_keyref"))
                 .transtype(XHTML)
                 .input(Paths.get("keyref-test-01.ditamap"))
                 .test();
@@ -56,7 +56,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testconref_with_xref() throws Throwable {
-        builder().name("conref_with_xref")
+        builder().name(Paths.get("conref", "conref_with_xref"))
                 .transtype(XHTML)
                 .input(Paths.get("test-conref-xref-keyref-bug.ditamap"))
                 .test();
@@ -96,7 +96,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testconref_pushreplace() throws Throwable {
-        builder().name("conref_pushreplace")
+        builder().name(Paths.get("conref", "conref_pushreplace"))
                 .transtype(XHTML)
                 .input(Paths.get("test.ditamap"))
                 .test();
@@ -164,7 +164,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
     
     @Test
     public void testconref_topiconly() throws Throwable {
-        builder().name("conref_topiconly")
+        builder().name(Paths.get("conref", "conref_topiconly"))
                 .transtype(XHTML)
                 .input(Paths.get("conref_to_self.dita"))
                 .put("validate", "false")
@@ -174,7 +174,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile8() throws Throwable {
-        builder().name("map13_flag")
+        builder().name(Paths.get("filter", "map13_flag"))
                 .transtype(XHTML)
                 .input(Paths.get("map13.ditamap"))
                 .put("args.filter", Paths.get("flag.ditaval"))
@@ -183,7 +183,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile9() throws Throwable {
-        builder().name("map13_flag2")
+        builder().name(Paths.get("filter", "map13_flag2"))
                 .transtype(XHTML)
                 .input(Paths.get("map13.ditamap"))
                 .put("args.filter", Paths.get("flag2.ditaval"))
@@ -192,7 +192,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile10() throws Throwable {
-        builder().name("map33_flag")
+        builder().name(Paths.get("filter", "map33_flag"))
                 .transtype(XHTML)
                 .input(Paths.get("map33.ditamap"))
                 .put("args.filter", Paths.get("flag.ditaval"))
@@ -201,7 +201,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile11() throws Throwable {
-        builder().name("map33_flag2")
+        builder().name(Paths.get("filter", "map33_flag2"))
                 .transtype(XHTML)
                 .input(Paths.get("map33.ditamap"))
                 .put("args.filter", Paths.get("flag2.ditaval"))
@@ -218,7 +218,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref() throws Throwable {
-        builder().name("keyref")
+        builder().name(Paths.get("keyref", "basic"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("test.ditamap"))
                 .test();
@@ -226,7 +226,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_All_tags() throws Throwable {
-        builder().name("keyref_All_tags")
+        builder().name(Paths.get("keyref", "keyref_All_tags"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author1.ditamap"))
                 .warnCount(1)
@@ -235,7 +235,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Keyword_links() throws Throwable {
-        builder().name("keyref_Keyword_links")
+        builder().name(Paths.get("keyref", "keyref_Keyword_links"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author1.ditamap"))
                 .test();
@@ -243,7 +243,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Redirect_conref_1() throws Throwable {
-        builder().name("keyref_Redirect_conref_1")
+        builder().name(Paths.get("keyref", "keyref_Redirect_conref_1"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author1.ditamap"))
                 .test();
@@ -251,7 +251,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Redirect_conref_2() throws Throwable {
-        builder().name("keyref_Redirect_conref_2")
+        builder().name(Paths.get("keyref", "keyref_Redirect_conref_2"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author2.ditamap"))
                 .test();
@@ -259,7 +259,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Redirect_link_or_xref_1() throws Throwable {
-        builder().name("keyref_Redirect_link_or_xref_1")
+        builder().name(Paths.get("keyref", "keyref_Redirect_link_or_xref_1"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author1.ditamap"))
                 .test();
@@ -267,7 +267,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Redirect_link_or_xref_2() throws Throwable {
-        builder().name("keyref_Redirect_link_or_xref_2")
+        builder().name(Paths.get("keyref", "keyref_Redirect_link_or_xref_2"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author2.ditamap"))
                 .test();
@@ -275,7 +275,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Redirect_link_or_xref_3() throws Throwable {
-        builder().name("keyref_Redirect_link_or_xref_3")
+        builder().name(Paths.get("keyref", "keyref_Redirect_link_or_xref_3"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author3.ditamap"))
                 .test();
@@ -283,7 +283,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Redirect_link_or_xref_4() throws Throwable {
-        builder().name("keyref_Redirect_link_or_xref_4")
+        builder().name(Paths.get("keyref", "keyref_Redirect_link_or_xref_4"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author4.ditamap"))
                 .test();
@@ -291,7 +291,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Redirect_link_or_xref_5() throws Throwable {
-        builder().name("keyref_Redirect_link_or_xref_5")
+        builder().name(Paths.get("keyref", "keyref_Redirect_link_or_xref_5"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author5.ditamap"))
                 .test();
@@ -299,7 +299,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Redirect_link_or_xref_6() throws Throwable {
-        builder().name("keyref_Redirect_link_or_xref_6")
+        builder().name(Paths.get("keyref", "keyref_Redirect_link_or_xref_6"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author6.ditamap"))
                 .test();
@@ -307,7 +307,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Splitting_combining_targets1() throws Throwable {
-        builder().name("keyref_Splitting_combining_targets_1")
+        builder().name(Paths.get("keyref", "keyref_Splitting_combining_targets_1"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author1.ditamap"))
                 .test();
@@ -315,7 +315,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Splitting_combining_targets2() throws Throwable {
-        builder().name("keyref_Splitting_combining_targets_2")
+        builder().name(Paths.get("keyref", "keyref_Splitting_combining_targets_2"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author2.ditamap"))
                 .test();
@@ -323,7 +323,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Splitting_combining_targets3() throws Throwable {
-        builder().name("keyref_Splitting_combining_targets_3")
+        builder().name(Paths.get("keyref", "keyref_Splitting_combining_targets_3"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author3.ditamap"))
                 .test();
@@ -331,7 +331,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_Swap_out_variable_content() throws Throwable {
-        builder().name("keyref_Swap_out_variable_content")
+        builder().name(Paths.get("keyref", "keyref_Swap_out_variable_content"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author1.ditamap"))
                 .test();
@@ -339,7 +339,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref_modify() throws Throwable {
-        builder().name("keyref_modify")
+        builder().name(Paths.get("keyref", "keyref_modify"))
                 .transtype(XHTML)
                 .input(Paths.get("mp_author1.ditamap"))
                 .warnCount(1)
@@ -358,7 +358,7 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
 
     @Test
     public void testmapref() throws Throwable {
-        builder().name("mapref")
+        builder().name(Paths.get("mapref", "basic"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("test.ditamap"))
                 .put("generate-debug-attributes", "false")

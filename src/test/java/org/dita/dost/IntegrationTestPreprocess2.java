@@ -47,7 +47,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
     @Ignore
     @Test
     public void testcopyto() throws Throwable {
-        builder().name("copyto")
+        builder().name(Paths.get("copyto", "basic"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC2.ditamap"))
                 .warnCount(0)
@@ -56,7 +56,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
 
     @Test
     public void testconrefmissingfile() throws Throwable {
-        builder().name("conrefmissingfile")
+        builder().name(Paths.get("conref", "conrefmissingfile"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("badconref.dita"))
                 .put("validate", "false")
@@ -67,7 +67,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
 
     @Test
     public void testmapref() throws Throwable {
-        builder().name("mapref")
+        builder().name(Paths.get("mapref", "basic"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("test.ditamap"))
                 .put("generate-debug-attributes", "false")
@@ -79,7 +79,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
     @Ignore
     @Test
     public void testcopyto_linktarget() throws Throwable {
-        builder().name("copyto_linktarget")
+        builder().name(Paths.get("copyto", "copyto_linktarget"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("linktarget.ditamap"))
                 .errorCount(1)
@@ -90,7 +90,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
 
     @Test
     public void testcontrolValueFile4() throws Throwable {
-        builder().name("map31_filter_multi")
+        builder().name(Paths.get("filter", "map31_filter_multi"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("map31.ditamap"))
                 .put("args.filter", Paths.get("filter_multi.ditaval"))
@@ -101,7 +101,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
     @Ignore
     @Test
     public void testcopyto_extensions_metadata() throws Throwable {
-        builder().name("copyto_extensions_metadata")
+        builder().name(Paths.get("copyto", "copyto_extensions_metadata"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC1.ditamap"))
                 .warnCount(0)
@@ -111,7 +111,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
     @Ignore
     @Test
     public void testcopyto_circulartarget() throws Throwable {
-        builder().name("copyto_circulartarget")
+        builder().name(Paths.get("copyto", "copyto_circulartarget"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC4.ditamap"))
                 .test();
@@ -120,7 +120,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
     @Ignore
     @Test
     public void testcopyto_sametarget2() throws Throwable {
-        builder().name("copyto_sametarget2")
+        builder().name(Paths.get("copyto", "copyto_sametarget2"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC6.ditamap"))
                 .warnCount(4)
@@ -130,7 +130,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
     @Ignore
     @Test
     public void testcopyto_sametarget() throws Throwable {
-        builder().name("copyto_sametarget")
+        builder().name(Paths.get("copyto", "copyto_sametarget"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC3.ditamap"))
                 .warnCount(2)
@@ -139,7 +139,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
 
     @Test
     public void testcontrolValueFile5() throws Throwable {
-        builder().name("map32_filter_multi")
+        builder().name(Paths.get("filter", "map32_filter_multi"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("map32.ditamap"))
                 .put("args.filter", Paths.get("filter_multi.ditaval"))

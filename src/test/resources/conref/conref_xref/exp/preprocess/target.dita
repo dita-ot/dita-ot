@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Volumes/tmp/tmp?><?workdir-uri file:/Volumes/tmp/tmp/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?><topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="target" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic " specializations="@props/deliveryTarget">
+  <title class="- topic/title "/>
+  <body class="- topic/body ">
+    <div id="target-element" class="- topic/div ">
+      <p id="inside" class="- topic/p "/>
+      <p id="source" class="- topic/p "/>
+      
+      <xref href="#target" class="- topic/xref "/>
+      <xref href="#target/inside" class="- topic/xref "/>
+      <xref href="#target/source" class="- topic/xref "/>
+      <xref href="#target/outside" class="- topic/xref "/>
+            
+      <xref href="#target" class="- topic/xref "/>
+      <xref href="#target/inside" class="- topic/xref "/>
+      <xref href="#target/source" class="- topic/xref "/>
+      <xref href="#target/outside" class="- topic/xref "/>
+      
+      <xref href="#sub" class="- topic/xref "/>
+      <xref href="#sub/fig" class="- topic/xref "/>
+    </div>
+    <p id="outside" class="- topic/p "/>
+  </body>
+  <topic id="sub" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)" class="- topic/topic " specializations="@props/deliveryTarget">
+    <title class="- topic/title "/>
+    <body class="- topic/body ">
+      <p id="fig" class="- topic/p "/>
+    </body>
+  </topic>
+</topic>

@@ -35,7 +35,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertEquals;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.dita.dost.TestUtils.assertXMLEqual;
@@ -93,7 +92,7 @@ public abstract class AbstractIntegrationTest {
 
     // Builder
 
-    private String name;
+    private Path name;
     private Transtype transtype;
     private String[] targets;
     private Path input;
@@ -102,6 +101,11 @@ public abstract class AbstractIntegrationTest {
     private int errorCount = 0;
 
     public AbstractIntegrationTest name(String name) {
+        this.name = Paths.get(name);
+        return this;
+    }
+
+    public AbstractIntegrationTest name(Path name) {
         this.name = name;
         return this;
     }
@@ -204,7 +208,9 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected File run() throws Throwable {
-        final File testDir = Paths.get("src", "test", "resources", name).toFile();
+        final File testDir = Paths.get("src", "test", "resources")
+                .resolve(name)
+                .toFile();
         final File srcDir = new File(testDir, SRC_DIR);
         final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
         final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
@@ -244,9 +250,15 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected AbstractIntegrationTest compare() throws Throwable {
-        File exp = Paths.get("src", "test", "resources", name, EXP_DIR, transtype.toString()).toFile();
+        File exp = Paths.get("src", "test", "resources")
+                .resolve(name)
+                .resolve(Paths.get(EXP_DIR, transtype.toString()))
+                .toFile();
         if (!exp.exists()) {
-            exp = Paths.get("src", "test", "resources", name, EXP_DIR, transtype.exp).toFile();
+            exp = Paths.get("src", "test", "resources")
+                    .resolve(name)
+                    .resolve(Paths.get(EXP_DIR, transtype.exp))
+                    .toFile();
         }
         if (!exp.exists()) {
             throw new RuntimeException("Unable to find expected output directory");
