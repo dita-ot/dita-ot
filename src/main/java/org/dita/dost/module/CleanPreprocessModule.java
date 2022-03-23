@@ -15,26 +15,20 @@ import org.apache.commons.io.FileUtils;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.Job;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
 import org.w3c.dom.Document;
 import org.xml.sax.XMLFilter;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -43,8 +37,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.Collections.emptyMap;
-import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
-import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.toErrorReporter;
 
 /**
@@ -263,11 +256,14 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                 //
             } else {
                 final int common = Math.max(0, i);
-                final String path = Arrays.asList(la)
-                        .subList(0, common)
-                        .stream()
-                        .collect(Collectors.joining("/")) + "/";
-                return URLUtils.setPath(left, path);
+                final List<String> commons = Arrays.asList(la).subList(0, common);
+                if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS) && commons.size() <= 1) {
+                    return null;
+                } else {
+                    final String path = commons.stream()
+                            .collect(Collectors.joining("/")) + "/";
+                    return URLUtils.setPath(left, path);
+                }
             }
         }
         return null;

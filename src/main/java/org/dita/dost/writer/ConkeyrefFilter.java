@@ -75,10 +75,10 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
                     }
                     XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target.toString());
                 } else {
-                    logger.warn(MessageUtils.getMessage("DOTJ060W", key, conkeyref).toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ060W", key, conkeyref).setLocation(atts).toString());
                 }
             } else {
-                logger.error(MessageUtils.getMessage("DOTJ046E", conkeyref).toString());
+                logger.error(MessageUtils.getMessage("DOTJ046E", conkeyref).setLocation(atts).toString());
             }
         }
         getContentHandler().startElement(uri, localName, name, resAtts != null ? resAtts : atts);

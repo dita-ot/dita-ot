@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Τιμή</variable>
    <variable id="Note">Σημείωση</variable>
    <variable id="Notes">Σημειώσεις</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Συμβουλή</variable>
    <variable id="Fastpath">Άμεση μετάβαση</variable>
    <variable id="Important">Σημαντικό</variable>

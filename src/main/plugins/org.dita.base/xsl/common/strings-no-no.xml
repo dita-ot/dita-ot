@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Verdi</variable>
    <variable id="Note">Merk</variable>
    <variable id="Notes">Merknader</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Tips</variable>
    <variable id="Fastpath">Snarvei</variable>
    <variable id="Important">Viktig</variable>

@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Værdi</variable>
    <variable id="Note">Bemærk</variable>
    <variable id="Notes">Bemærkninger</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Tip</variable>
    <variable id="Fastpath">Genvej</variable>
    <variable id="Important">Vigtigt</variable>

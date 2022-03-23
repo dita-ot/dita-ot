@@ -144,7 +144,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
                         keysDefMap.put(key, new KeyDef(key, null, null, null, null, null));
                     }
                 } else {
-                    logger.info(MessageUtils.getMessage("DOTJ045I", key).toString());
+                    logger.info(MessageUtils.getMessage("DOTJ045I", key).setLocation(atts).toString());
                 }
             }
         }

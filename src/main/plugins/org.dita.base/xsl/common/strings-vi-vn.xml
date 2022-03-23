@@ -31,6 +31,7 @@ This file is part of the DITA Open Toolkit project.
    <variable id="Value">Giá trị</variable>
    <variable id="Note">Ghi chú</variable>
    <variable id="Notes">Các ghi chú</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Mẹo</variable>
    <variable id="Fastpath">Đường dẫn nhanh</variable>
    <variable id="Important">Quan trọng</variable>

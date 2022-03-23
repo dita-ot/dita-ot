@@ -21,7 +21,6 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Preface title">Prefácio</variable>
   <variable id="Notices title">Notice</variable><!--TODO:Notices title-->
   <variable id="Mini Toc">Índice: </variable><!-- TODO: replace translation "Contents" with "Topics"-->
-  <variable id="Notice">Notice</variable><!--TODO:Notice-->
   <variable id="Figure.title">Figura <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Figure Number">Figura <param ref-name="number"/></variable>
   <variable id="Table.title">Tabela <param ref-name="number"/>: <param ref-name="title"/></variable>

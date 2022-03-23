@@ -42,7 +42,7 @@ final class IncludeText {
 
     boolean include(final Attributes atts) {
         final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-        final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT), atts.getValue(ATTRIBUTE_NAME_ENCODING));
+        final Charset charset = getCharset(atts);
         final Range range = getRange(hrefValue);
         final File codeFile = getFile(hrefValue);
         if (codeFile != null) {
@@ -125,11 +125,12 @@ final class IncludeText {
     /**
      * Get code file charset.
      *
-     * @param format   format attribute value, may be {@code null}
-     * @param encoding encoding attribute balue, may be {@code null}
      * @return charset if set, otherwise default charset
      */
-    private Charset getCharset(final String format, final String encoding) {
+
+    private Charset getCharset(Attributes atts) {
+        final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+        final String encoding = atts.getValue(ATTRIBUTE_NAME_ENCODING);
         Charset c = null;
         try {
             if (encoding != null) {
@@ -141,7 +142,7 @@ final class IncludeText {
                 }
             }
         } catch (final RuntimeException e) {
-            logger.error(MessageUtils.getMessage("DOTJ052E", encoding).toString());
+            logger.error(MessageUtils.getMessage("DOTJ052E", encoding).setLocation(atts).toString());
         }
         if (c == null) {
             final String defaultCharset = Configuration.configuration.get("default.coderef-charset");

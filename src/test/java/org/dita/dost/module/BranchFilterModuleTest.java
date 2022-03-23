@@ -7,6 +7,7 @@
  */
 package org.dita.dost.module;
 
+import org.apache.commons.io.IOUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.store.StreamStore;
@@ -319,5 +320,44 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         }
         return res;
     }
+
+	@Test
+	public void testRewriteReferencesContainingAnchors() throws IOException, SAXException {
+	    final BranchFilterModule m = new BranchFilterModule();
+	    final Job job = new Job(tempDir,  new StreamStore(tempDir, new XMLUtils()));
+	    job.setInputDir(tempDir.toURI());
+	    final Set<Job.FileInfo> res = new HashSet<>();
+        res.add(new Job.FileInfo.Builder()
+                .src(new File(tempDir, "topicAnchors.ditamap").toURI())
+                .result(new File(tempDir, "topicAnchors.ditamap").toURI())
+                .uri(URI.create("topicAnchors.ditamap"))
+                .format(ATTR_FORMAT_VALUE_DITAMAP)
+                .build());
+        for (final String uri: Arrays.asList("filter_A.ditaval", "filter_B.ditaval")) {
+            res.add(new Job.FileInfo.Builder()
+                    .src(new File(tempDir, uri).toURI())
+                    .result(new File(tempDir, uri).toURI())
+                    .uri(URI.create(uri))
+                    .format(ATTR_FORMAT_VALUE_DITAVAL)
+                    .build());
+        }
+        for (final String uri: Arrays.asList("topic.dita")) {
+            res.add(new Job.FileInfo.Builder()
+                    .src(new File(tempDir, uri).toURI())
+                    .result(new File(tempDir, uri).toURI())
+                    .uri(URI.create(uri))
+                    .format(ATTR_FORMAT_VALUE_DITA)
+                    .build());
+        }
+        job.addAll(res);
+	    m.setJob(job);
+	    final CachingLogger logger = new CachingLogger();
+	    m.setLogger(logger);
+	    m.setXmlUtils(new XMLUtils());
+	    
+	    m.processMap(URI.create("topicAnchors.ditamap")); 
+	    assertXMLEqual(new InputSource(new File(expDir, "topicAnchors.ditamap").toURI().toURL().toString()), 
+	    		new InputSource(new File(tempDir, "topicAnchors.ditamap").toURI().toURL().toString()));
+	}
 
 }

@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">值</variable>
    <variable id="Note">注</variable>
    <variable id="Notes">注</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">提示</variable>
    <variable id="Fastpath">捷径</variable>
    <variable id="Important">重要</variable>

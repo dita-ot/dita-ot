@@ -140,6 +140,7 @@ public class URLUtilsTest {
         assertEquals(new URI("foo%20bar.txt"), URLUtils.toURI("foo bar.txt"));
         assertEquals(new URI("foo/bar.txt"), URLUtils.toURI("foo" + Constants.WINDOWS_SEPARATOR + "bar.txt"));
         assertEquals(new URI("foo%20bar.txt"), URLUtils.toURI(" foo bar.txt "));
+        assertEquals(new URI("user's%20manual.txt"), URLUtils.toURI("user's manual.txt"));
         assertEquals(new URI("http://www.example.com/"), URLUtils.toURI(" http://www.example.com/ "));
     }
 
@@ -281,5 +282,13 @@ public class URLUtilsTest {
         final File src = new File(tempDir.newFolder(), "missing");
         final URI act = toDirURI(src);
         assertTrue(act.toString().endsWith("/"));
+    }
+
+    @Test
+    public void setQuery() {
+        assertEquals(URI.create("foo"), URLUtils.setQuery(URI.create("foo"), null));
+        assertEquals(URI.create("foo?baz"), URLUtils.setQuery(URI.create("foo"), "baz"));
+        assertEquals(URI.create("foo"), URLUtils.setQuery(URI.create("foo?bar"), null));
+        assertEquals(URI.create("foo?baz"), URLUtils.setQuery(URI.create("foo?bar"), "baz"));
     }
 }

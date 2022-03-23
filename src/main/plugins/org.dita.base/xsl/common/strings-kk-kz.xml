@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Мән</variable>
    <variable id="Note">Ескерту</variable>
    <variable id="Notes">Ескертулер</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Кеңес</variable>
    <variable id="Fastpath">Жылдам жол</variable>
    <variable id="Important">Маңызды</variable>

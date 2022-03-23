@@ -21,7 +21,6 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Preface title">Eessõna</variable>
   <variable id="Notices title">Notice</variable><!--TODO:Notices title-->
   <variable id="Mini Toc">Sisukord: </variable><!-- TODO: replace translation "Contents" with "Topics"-->
-  <variable id="Notice">Notice</variable><!--TODO:Notice-->
   <variable id="Figure.title">Joonis <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Figure Number">Joonis <param ref-name="number"/></variable>
   <variable id="Table.title">Tabel <param ref-name="number"/>: <param ref-name="title"/></variable>

@@ -34,6 +34,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="intro-to-topic-link">apartat</variable>
    <variable id="Note">Nota</variable>
    <variable id="Notes">Notes</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Consell</variable>
    <variable id="Fastpath">Drecera</variable>
    <variable id="Important">Important</variable>

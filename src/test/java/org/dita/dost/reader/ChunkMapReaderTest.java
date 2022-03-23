@@ -8,6 +8,11 @@
 package org.dita.dost.reader;
 
 import com.google.common.collect.ImmutableMap;
+
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Predicates;
+import net.sf.saxon.s9api.streams.Steps;
+import org.apache.commons.io.IOUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.store.StreamStore;
@@ -20,17 +25,19 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
-import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
+import static org.dita.dost.TestUtils.parse;
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class ChunkMapReaderTest {
 
@@ -779,4 +786,41 @@ public class ChunkMapReaderTest {
         TestUtils.forceDelete(tempDir);
     }
 
+	@Test
+	public void testReadSplitTopic() throws Exception {
+	    final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+	    job.setInputDir(srcDir.toURI());
+	    job.setInputMap(URI.create("chunkedMap.ditamap"));
+	    TestUtils.copy(new File(srcDir, "chunkedMap.ditamap"), new File(tempDir, "chunkedMap.ditamap"));
+	    job.add(new Job.FileInfo.Builder()
+	            .src(new File(srcDir, "chunkedMap.ditamap").toURI())
+	            .uri(toURI("chunkedMap.ditamap"))
+	            .isInput(true)
+	            .build());
+	    String srcFile = "chunkedTopic.dita";
+	    final URI dst = tempDir.toURI().resolve(srcFile);
+	    TestUtils.copy(new File(srcDir, "chunkedTopic.dita"), new File(dst));
+	    job.add(new Job.FileInfo.Builder()
+	    		.src(new File(srcDir, srcFile).toURI())
+	    		.uri(toURI(srcFile))
+	    		.build());
+
+        final ChunkMapReader mapReader = new ChunkMapReader();
+        mapReader.setLogger(new TestUtils.TestLogger());
+        mapReader.setJob(job);
+
+        mapReader.read(new File(tempDir, "chunkedMap.ditamap"));
+
+        final XdmNode actWithFragment = parse(new File(tempDir, "subtopic2.dita"));
+        assertTrue(actWithFragment
+                .select(Steps.descendant(TOPIC_XREF.matcher()
+                        .and(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "chunkedTopic.dita#subtopic3"))))
+                .exists());
+
+        final XdmNode actWithoutFragment = parse(new File(tempDir, "parentTopic.dita"));
+        assertTrue(actWithoutFragment
+                .select(Steps.descendant(TOPIC_XREF.matcher()
+                        .and(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "chunkedTopic.dita#subtopic3"))))
+                .exists());
+	}
 }

@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Vrednost</variable>
    <variable id="Note">Opomba</variable>
    <variable id="Notes">Opombe</variable>
+   <variable id="Notice">Objava</variable>
    <variable id="Tip">Nasvet</variable>
    <variable id="Fastpath">Bližnjica</variable>
    <variable id="Important">Pomembno</variable>

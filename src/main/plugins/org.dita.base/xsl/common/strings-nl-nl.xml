@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Waarde</variable>
    <variable id="Note">Opmerking</variable>
    <variable id="Notes">Opmerkingen</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Tip</variable>
    <variable id="Fastpath">Versnelde keuze</variable>
    <variable id="Important">Belangrijk</variable>

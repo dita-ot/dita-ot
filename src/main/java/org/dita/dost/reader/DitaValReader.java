@@ -179,7 +179,7 @@ public final class DitaValReader implements AbstractReader {
                 action = readFlag(elem);
                 break;
             default:
-                throw new IllegalArgumentException(MessageUtils.getMessage("DOTJ077F", attAction).toString());
+                throw new IllegalArgumentException(MessageUtils.getMessage("DOTJ077F", attAction).setLocation(elem).toString());
         }
         if (action != null) {
             final QName attName;
@@ -205,7 +205,7 @@ public final class DitaValReader implements AbstractReader {
                 }
                 if (attName != null && attName.equals(REV)
                         && !filterAttributes.isEmpty() && !filterAttributes.contains(REV)) {
-                    logger.warn(MessageUtils.getMessage("DOTJ074W").toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ074W").setLocation((elem)).toString());
                     return;
                 }
             }
