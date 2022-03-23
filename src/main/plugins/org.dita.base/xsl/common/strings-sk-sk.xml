@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Hodnota</variable>
    <variable id="Note">Poznámka</variable>
    <variable id="Notes">Poznámky</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Tip</variable>
    <variable id="Fastpath">Rýchla cesta</variable>
    <variable id="Important">Dôležité</variable>

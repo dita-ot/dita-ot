@@ -47,7 +47,6 @@ task copyInstall(type: Copy) {
 }
 
 task copyDistTemp(type: Copy) {
-    from (jar)
     from(sourceSets.main.runtimeClasspath) {
         include 'batik-all-*.jar'
         include 'fop-*.jar'

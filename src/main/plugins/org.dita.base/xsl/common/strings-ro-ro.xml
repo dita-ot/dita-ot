@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Valoare</variable>
    <variable id="Note">Notă</variable>
    <variable id="Notes">Note</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Indiciu</variable>
    <variable id="Fastpath">Cale rapidă</variable>
    <variable id="Important">Important</variable>

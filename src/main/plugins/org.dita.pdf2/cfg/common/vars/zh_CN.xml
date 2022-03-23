@@ -44,7 +44,6 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Preface title">序言</variable>
   <variable id="Notices title">Notice</variable><!--TODO:Notices title-->
   <variable id="Mini Toc">内容: </variable><!-- TODO: replace translation "Contents" with "Topics"-->
-  <variable id="Notice"><!--TODO:Notice--></variable>
   <variable id="Figure.title">图 <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Figure Number">图 <param ref-name="number"/></variable>
   <variable id="Table.title">表 <param ref-name="number"/>: <param ref-name="title"/></variable>

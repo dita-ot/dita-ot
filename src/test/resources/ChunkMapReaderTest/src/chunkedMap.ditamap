@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " class="- map/map ">
+    <title class="- topic/title ">My map</title>
+    <topicref href="chunkedTopic.dita#subtopic2" chunk="to-content select-topic" class="- map/topicref "/>
+    <topicref href="chunkedTopic.dita#subtopic3" chunk="to-content select-topic" class="- map/topicref "/>
+    <topicref href="chunkedTopic.dita" chunk="to-content select-topic" class="- map/topicref "/>
+</map>

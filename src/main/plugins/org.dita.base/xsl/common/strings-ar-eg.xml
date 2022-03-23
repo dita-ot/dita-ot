@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">القيمة</variable>
    <variable id="Note">ملاحظة</variable>
    <variable id="Notes">ملاحظات</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">تلميح</variable>
    <variable id="Fastpath">طريقة مختصرة</variable>
    <variable id="Important">هام</variable>

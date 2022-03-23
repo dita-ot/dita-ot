@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">Vrijednost</variable>
    <variable id="Note">Bilješka</variable>
    <variable id="Notes">Bilješke</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">Savjet</variable>
    <variable id="Fastpath">Brza staza</variable>
    <variable id="Important">Važno</variable>

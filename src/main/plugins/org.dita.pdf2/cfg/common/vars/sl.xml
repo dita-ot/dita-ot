@@ -21,7 +21,6 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Preface title">Predgovor</variable>
   <variable id="Notices title">Opozorilo</variable>
   <variable id="Mini Toc">Teme: </variable>
-  <variable id="Notice">Objava</variable>
   <variable id="Figure.title">Slika <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Figure Number">Slika <param ref-name="number"/></variable>
   <variable id="Table.title">Tabela <param ref-name="number"/>: <param ref-name="title"/></variable>

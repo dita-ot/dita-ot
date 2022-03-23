@@ -39,12 +39,25 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
     public final Map<FileInfo, FileInfo> copyToMap = new HashMap<>();
     private TempFileNameScheme tempFileNameScheme;
 
+    /**
+     * Stack used to detect the current element type. 
+     */
+    private final Deque<String> classElementStack = new ArrayDeque<>();
+    
+    /**
+     * Stack used to hold the current topicref parent.
+     */
+    private final Deque<ParentTopicref> topicrefParentsStack = new ArrayDeque<>();
+    
     // ContentHandler methods
 
     @Override
     public void startElement(final String uri, final String localName, final String qName,
                              final Attributes atts) throws SAXException {
         ignoreStack.push(MAP_RELTABLE.matches(atts) ? false : ignoreStack.isEmpty() || ignoreStack.peek());
+
+        final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        classElementStack.addFirst(classValue);
 
         Attributes res = atts;
         if (ignoreStack.peek() && MAP_TOPICREF.matches(res)) {
@@ -55,20 +68,34 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
             final String format = res.getValue(ATTRIBUTE_NAME_FORMAT);
             // FIXME: handle cascading
             final String processingRole = res.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
+            FileInfo dstFi = null;
             if (source != null &&
                     isLocalScope(scope) &&
                     (format == null || format.equals(ATTR_FORMAT_VALUE_DITA)) &&
                     (processingRole == null || processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_NORMAL))) {
                 final URI file = stripFragment(source);
                 Integer count = topicrefCount.getOrDefault(file, 0);
-                count++;
-                topicrefCount.put(file, count);
+                
+                final ParentTopicref parentTopicref = topicrefParentsStack.peek();
+                boolean parentTopicHasEmbededSubtopics = false;
+                if (parentTopicref != null && parentTopicref.href != null) {
+                    final URI parentHref = stripFragment(parentTopicref.href);
+                    parentTopicHasEmbededSubtopics = href != null && parentHref.equals(file) && href.getFragment() != null;
+                }
+                if (parentTopicHasEmbededSubtopics) {
+                    dstFi = parentTopicref.dstFi;
+                } else {
+                    count++;
+                    topicrefCount.put(file, count);
+                }
+                
                 if (count > 1) { // not only reference to this topic
                     final FileInfo srcFi = job.getFileInfo(currentFile.resolve(stripFragment(source)));
                     if (srcFi != null) {
-                        final FileInfo dstFi = generateCopyToTarget(srcFi, count);
+                        if (dstFi == null) {
+                            dstFi = generateCopyToTarget(srcFi, count);
+                        }
                         copyToMap.put(dstFi, srcFi);
-
                         final URI dstTempAbs = job.tempDirURI.resolve(dstFi.uri);
                         final URI targetRel = getRelativePath(currentFile, dstTempAbs);
                         final URI target = setFragment(targetRel, href.getFragment());
@@ -79,6 +106,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
                     }
                 }
             }
+            topicrefParentsStack.push(new ParentTopicref(href, dstFi));
         }
 
         getContentHandler().startElement(uri, localName, qName, res);
@@ -88,6 +116,10 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         getContentHandler().endElement(uri, localName, qName);
 
+        final String classValue = classElementStack.removeFirst();
+        if (classValue != null && ignoreStack.peek() && MAP_TOPICREF.matches(classValue)) {
+            topicrefParentsStack.pop();
+        }
         ignoreStack.pop();
     }
 
@@ -116,5 +148,33 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
 
     public void setTempFileNameScheme(TempFileNameScheme tempFileNameScheme) {
         this.tempFileNameScheme = tempFileNameScheme;
+    }
+    
+    /**
+     * Holds additional information about the parent for a topicref.
+     *
+     */
+    private static final class ParentTopicref {
+        /**
+         * The href value for the parent topic.
+         */
+        public final URI href;
+      
+        /**
+         * Information about the destination file used in the output. 
+         */
+        public final FileInfo dstFi;
+      
+        /**
+         * Constructor.
+         * 
+         * @param href The href value for the parent topic.
+         * @param dstFi Information about the destination file used in the output. 
+         */
+        public ParentTopicref(URI href, FileInfo dstFi) {
+            this.href = href;
+            this.dstFi = dstFi;
+        }
+      
     }
 }

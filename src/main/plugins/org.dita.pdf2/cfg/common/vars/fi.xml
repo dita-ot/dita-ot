@@ -21,7 +21,6 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Preface title">Esipuhe</variable>
   <variable id="Notices title"><!--TODO:Notice--></variable>
   <variable id="Mini Toc"><!--TODO:Topics: --></variable>  
-  <variable id="Notice"><!--TODO:Notice--></variable>
   <variable id="Figure.title">Kuva <param ref-name="number"/>. <param ref-name="title"/></variable>
   <variable id="Figure Number">Kuva <param ref-name="number"/></variable>
   <variable id="Table.title">Taulu <param ref-name="number"/>. <param ref-name="title"/></variable>

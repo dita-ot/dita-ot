@@ -33,6 +33,7 @@ See the accompanying LICENSE file for applicable license.
    <variable id="Value">قدر</variable>
    <variable id="Note">نوٹ</variable>
    <variable id="Notes">نوٹس</variable>
+   <variable id="Notice">Notice</variable><!--TODO:Notice-->
    <variable id="Tip">مشورہ</variable>
    <variable id="Fastpath">تیز طریقہ</variable>
    <variable id="Important">اہم</variable>
