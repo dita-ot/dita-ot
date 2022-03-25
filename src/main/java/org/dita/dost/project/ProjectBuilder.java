@@ -14,6 +14,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * Project file AST builder.
+ */
 public class ProjectBuilder {
 
     @JsonProperty("deliverables")

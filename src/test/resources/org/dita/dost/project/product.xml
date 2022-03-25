@@ -5,6 +5,8 @@
   <deliverable name="name">
     <context idref="site"/>
     <output href="./site"/>
-    <publication idref="common-sitePub2"/>
+    <publication idref="common-sitePub2">
+      <param name="args.gen.task.lbl" value="NO"/>
+    </publication>
   </deliverable>
 </project>

@@ -6,5 +6,7 @@ deliverables:
   output: "./site"
   publication:
     idref: "common-sitePub2"
+    params:
+    - { name: "args.gen.task.lbl", value: "NO" }
 includes:
 - "common.json"

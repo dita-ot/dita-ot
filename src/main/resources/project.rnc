@@ -70,7 +70,8 @@ publication =
 publication-ref =
   ## Publication reference
   element publication {
-    attribute idref { xsd:NCName }
+    attribute idref { xsd:NCName },
+    param*
   }
 
 param =

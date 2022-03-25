@@ -63,35 +63,61 @@ public class ProjectFactory {
         return new Project(
                 src.deliverables == null ? Collections.emptyList() :
                         src.deliverables.stream()
-                                .map(deliverable -> new Deliverable(
-                                        deliverable.name,
-                                        deliverable.id,
-                                        Optional.ofNullable(deliverable.context)
-                                                .flatMap(context -> Optional.ofNullable(context.idref))
-                                                .map(idref -> {
-                                                    final Context pub = src.contexts.stream()
-                                                            .filter(context -> Objects.equals(context.id, deliverable.context.idref))
-                                                            .findAny()
-                                                            .orElseThrow(() -> new RuntimeException(String.format("Context not found: %s", deliverable.context.idref)));
-                                                    return pub;
-                                                })
-                                                .orElse(deliverable.context),
-                                        deliverable.output,
-                                        Optional.ofNullable(deliverable.publication)
-                                                .flatMap(publication -> Optional.ofNullable(publication.idref))
-                                                .map(idref -> {
-                                                    final Publication pub = src.publications.stream()
-                                                            .filter(publication -> Objects.equals(publication.id, deliverable.publication.idref))
-                                                            .findAny()
-                                                            .orElseThrow(() -> new RuntimeException(String.format("Publication not found: %s", deliverable.publication.idref)));
-                                                    return pub;
-                                                })
-                                                .orElse(deliverable.publication)
-                                ))
+                                .map(deliverable -> {
+                                    final Context context = Optional.ofNullable(deliverable.context)
+                                            .flatMap(cntx -> Optional.ofNullable(cntx.idref))
+                                            .map(idref -> {
+                                                final Context pub = src.contexts.stream()
+                                                        .filter(cntx -> Objects.equals(cntx.id, deliverable.context.idref))
+                                                        .findAny()
+                                                        .orElseThrow(() -> new RuntimeException(String.format("Context not found: %s", deliverable.context.idref)));
+                                                return pub;
+                                            })
+                                            .orElse(deliverable.context);
+                                    final Publication publication = Optional.ofNullable(deliverable.publication)
+                                            .flatMap(publ -> Optional.ofNullable(publ.idref))
+                                            .map(idref -> {
+                                                final Publication pub = src.publications.stream()
+                                                        .filter(publ -> Objects.equals(publ.id, deliverable.publication.idref))
+                                                        .findAny()
+                                                        .orElseThrow(() -> new RuntimeException(String.format("Publication not found: %s", deliverable.publication.idref)));
+                                                return merge(pub, deliverable.publication);
+                                            })
+                                            .orElse(deliverable.publication);
+                                    return new Deliverable(
+                                            deliverable.name,
+                                            deliverable.id,
+                                            context,
+                                            deliverable.output,
+                                            publication
+                                    );
+                                })
                                 .collect(Collectors.toList()),
                 src.includes,
                 src.publications,
                 src.contexts);
+    }
+
+    private static Publication merge(Publication base, Publication extend) {
+        final Map<String, Publication.Param> params = new HashMap<>();
+        if (base.params != null) {
+            for (Publication.Param param : base.params) {
+                params.put(param.name, param);
+            }
+        }
+        if (extend.params != null) {
+            for (Publication.Param param : extend.params) {
+                params.put(param.name, param);
+            }
+        }
+        return new Publication(
+                base.name,
+                base.id,
+                base.idref,
+                base.transtype,
+                new ArrayList<>(params.values()),
+                base.profiles
+        );
     }
 
     private Project load(final URI file, final Set<URI> processed) throws IOException, SAXParseException {
