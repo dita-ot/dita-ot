@@ -134,6 +134,7 @@
    </xs:group>
    <xs:attributeGroup name="change-historylist.attributes">
       <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass" type="xs:string"/>
       <xs:attribute name="mapkeyref" type="xs:string"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
