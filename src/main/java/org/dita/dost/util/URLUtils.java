@@ -572,7 +572,11 @@ public final class URLUtils {
      */
     public static URI setQuery(final URI path, final String query) {
         try {
-            return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), query, path.getFragment());
+            if (path.getPath() != null) {
+                return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), query, path.getFragment());
+            } else {
+                return new URI(path.getScheme(), path.getSchemeSpecificPart(), path.getFragment());
+            }
         } catch (final URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
