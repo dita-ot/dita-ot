@@ -216,7 +216,8 @@ See the accompanying LICENSE file for applicable license.
           </xsl:with-param>
       </xsl:apply-templates>
       <xsl:choose>
-        <xsl:when test="count(*[contains(@class, ' task/step ')]) eq 1">
+        <xsl:when test="count(*[contains(@class, ' task/step ')]) eq 1 and
+                        not(contains(parent::*/@class, ' task/step '))">
           <fo:block>
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates mode="onestep"/>
@@ -247,18 +248,20 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/steps ')]/*[contains(@class, ' task/step ')]">
+        <xsl:variable name="depth" select="count(ancestor::*[contains(@class, ' task/steps ')])"/>
         <xsl:variable name="format">
           <xsl:call-template name="getVariable">
-            <xsl:with-param name="id" select="'Step Format'"/>
+            <xsl:with-param name="id" select="concat('Step Format ', $depth)"/>
           </xsl:call-template>
         </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="steps.step">
             <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="steps.step__label">
                 <fo:block xsl:use-attribute-sets="steps.step__label__content">
-                    <xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
+                    <xsl:if test="$depth > 1 or 
+                                  (preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')])">
                         <xsl:call-template name="getVariable">
-                            <xsl:with-param name="id" select="'Step Number'"/>
+                            <xsl:with-param name="id" select="concat('Step Number ', $depth)"/>
                             <xsl:with-param name="params" as="element()*">
                                 <number>
                                     <xsl:number format="{$format}" count="*[contains(@class, ' task/step ')]"/>
@@ -336,7 +339,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' task/substeps ')]/*[contains(@class, ' task/substep ')]">
         <xsl:variable name="format">
           <xsl:call-template name="getVariable">
-            <xsl:with-param name="id" select="'Substep Format'"/>
+            <xsl:with-param name="id" select="'Step Format 2'"/>
           </xsl:call-template>
         </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="substeps.substep">
@@ -344,7 +347,7 @@ See the accompanying LICENSE file for applicable license.
             <fo:list-item-label xsl:use-attribute-sets="substeps.substep__label">
                 <fo:block xsl:use-attribute-sets="substeps.substep__label__content">
                     <xsl:call-template name="getVariable">
-                      <xsl:with-param name="id" select="'Substep Number'"/>
+                      <xsl:with-param name="id" select="'Step Number 2'"/>
                       <xsl:with-param name="params" as="element()*">
                         <number>
                           <xsl:number format="{$format}"/>
@@ -562,6 +565,10 @@ See the accompanying LICENSE file for applicable license.
     </xsl:if>
   </xsl:template>
 
+    <xsl:template match="*[contains(@class,' task/step ')]/*" mode="dita2xslfo:task-heading">
+      <!-- No heading for DITA 2.0 nested steps -->
+    </xsl:template>
+      
     <xsl:template match="*" mode="dita2xslfo:task-heading">
         <xsl:param name="use-label"/>
         <xsl:if test="$GENERATE-TASK-LABELS='YES'">
