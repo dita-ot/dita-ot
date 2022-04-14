@@ -423,6 +423,11 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <message id="DOTJ085E" type="ERROR">
+    <reason>Parameter '%1' cannot be set with param in project file. The param '%1' will be ignored.</reason>
+    <response>Use '%2' key instead.</response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

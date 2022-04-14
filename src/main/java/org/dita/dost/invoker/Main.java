@@ -37,6 +37,7 @@ import org.apache.tools.ant.property.ResolvePropertyMap;
 import org.apache.tools.ant.util.ClasspathUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.platform.Plugins;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Publication;
@@ -501,9 +502,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         for (org.dita.dost.project.Project.Deliverable deliverable : project.deliverables) {
             for (Publication.Param param : deliverable.publication.params) {
                 if (RESERVED_PARAMS.containsKey(param.name)) {
-                    final String msg = "Parameter " + param.name + " cannot be set with param, use "
-                            + RESERVED_PARAMS.get(param.name) + " key instead";
-                    printErrorMessage(msg);
+                    printErrorMessage(MessageUtils.getMessage("DOTJ085E", param.name, RESERVED_PARAMS.get(param.name)).toString());
                 }
             }
         }
