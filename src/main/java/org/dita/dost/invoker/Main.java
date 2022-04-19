@@ -28,6 +28,7 @@ package org.dita.dost.invoker;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.input.DefaultInputHandler;
 import org.apache.tools.ant.input.InputHandler;
@@ -70,6 +71,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static final String ANT_TRANSTYPE = "transtype";
     private static final String ANT_PLUGIN_FILE = "plugin.file";
     private static final String ANT_PLUGIN_ID = "plugin.id";
+    private static final Map<String, String> RESERVED_PARAMS = ImmutableMap.of(
+            "output.dir", "output",
+            "transtype", "transtype",
+            "args.input", "input",
+            "args.filter", "profiles"
+    );
 
     /**
      * File that we are using for configuration.
@@ -482,10 +489,22 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         try {
             final ProjectFactory factory = ProjectFactory.getInstance();
             factory.setLax(true);
-            return factory.load(projectFile.toURI());
+            final org.dita.dost.project.Project res = factory.load(projectFile.toURI());
+            validateProject(res);
+            return res;
         } catch (Exception e) {
             printErrorMessage(e.getMessage());
             throw new BuildException("");
+        }
+    }
+
+    private void validateProject(org.dita.dost.project.Project project) throws IOException {
+        for (org.dita.dost.project.Project.Deliverable deliverable : project.deliverables) {
+            for (Publication.Param param : deliverable.publication.params) {
+                if (RESERVED_PARAMS.containsKey(param.name)) {
+                    printErrorMessage(MessageUtils.getMessage("DOTJ085E", param.name, RESERVED_PARAMS.get(param.name)).toString());
+                }
+            }
         }
     }
 
