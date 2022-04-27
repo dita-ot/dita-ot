@@ -168,7 +168,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                 }
             }
             topicIds.clear();
-        } else if (TOPIC_RESOURCEID.matches(cls) || DELAY_D_ANCHORID.matches(cls)) {
+        } else if (TOPIC_RESOURCEID.matches(cls)) {
             // not considered a normal element ID
         } else {
             final String id = atts.getValue(ATTRIBUTE_NAME_ID);

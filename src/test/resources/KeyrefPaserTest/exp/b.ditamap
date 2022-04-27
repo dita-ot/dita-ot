@@ -47,9 +47,6 @@
   <keywords class="- topic/keywords ">
   <keyword class="- topic/keyword ">keywords</keyword>
   </keywords>
-  <exportanchors class="+ topic/keywords delay-d/exportanchors ">
-  <anchorid class="+ topic/keyword delay-d/anchorid " id="anchorid"/>
-  </exportanchors>
   <prodinfo class="- topic/prodinfo ">
   <prodname class="- topic/prodname ">test</prodname>
   <vrmlist class="- topic/vrmlist ">
@@ -108,9 +105,6 @@
       <keywords class="- topic/keywords ">
         <keyword class="- topic/keyword ">override keywords</keyword>
       </keywords>
-      <exportanchors class="+ topic/keywords delay-d/exportanchors ">
-        <anchorid class="+ topic/keyword delay-d/anchorid " id="override-anchorid"/>
-      </exportanchors>
       <prodinfo class="- topic/prodinfo ">
         <prodname class="- topic/prodname ">override test</prodname>
         <vrmlist class="- topic/vrmlist ">

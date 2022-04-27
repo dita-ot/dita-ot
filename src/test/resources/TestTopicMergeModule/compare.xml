@@ -12,13 +12,6 @@
       <topicmeta class="- map/topicmeta ">
         <navtitle class="- topic/navtitle ">ABC</navtitle>
         <linktext class="- map/linktext ">ABC</linktext>
-        <exportanchors class="+ topic/keywords delay-d/exportanchors ">
-          <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="commonconfig"
-           />
-          <anchorid class="+ topic/keyword delay-d/anchorid " id="step1"/>
-          <anchorid class="+ topic/keyword delay-d/anchorid " id="step2"
-          />
-        </exportanchors>
       </topicmeta>
     </topicref>
     <topicref class="- map/topicref " ohref="test1.xml" first_topic_id="#unique_2" href="#unique_2" type="task"
@@ -36,17 +29,6 @@
    >
     <title class="- topic/title "
      >ABC</title>
-    <prolog class="- topic/prolog ">
-      <metadata class="- topic/metadata ">
-        <exportanchors class="+ topic/keywords delay-d/exportanchors ">
-          <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="commonconfig"
-           />
-          <anchorid class="+ topic/keyword delay-d/anchorid " id="step1"/>
-          <anchorid class="+ topic/keyword delay-d/anchorid " id="step2"
-          />
-        </exportanchors>
-      </metadata>
-    </prolog>
     <taskbody class="- topic/body task/taskbody "
      >
       <steps class="- topic/ol task/steps "

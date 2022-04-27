@@ -33,17 +33,6 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
         }
     }
 
-    @Override
-    @Ignore
-    @Test
-    public void testexportanchors() throws Throwable {
-        builder().name("exportanchors")
-                .transtype(PREPROCESS)
-                .input(Paths.get("test.ditamap"))
-                .put("transtype", "eclipsehelp")
-                .test();
-    }
-
     @Ignore
     @Test
     public void testcopyto() throws Throwable {

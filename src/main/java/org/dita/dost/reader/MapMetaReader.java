@@ -97,8 +97,7 @@ public final class MapMetaReader extends AbstractDomFilter {
             MAP_SHORTDESC.matcher,
             TOPIC_SHORTDESC.matcher,
             TOPIC_NAVTITLE.matcher,
-            TOPIC_METADATA.matcher,
-            DELAY_D_EXPORTANCHORS.matcher
+            TOPIC_METADATA.matcher
             ));
 
     private final Map<String, Element> globalMeta;

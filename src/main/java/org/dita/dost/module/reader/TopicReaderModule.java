@@ -265,12 +265,6 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
         pipe.add(topicFragmentFilter);
 
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            exportAnchorsFilter.setCurrentFile(fileToParse);
-            exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
-            pipe.add(exportAnchorsFilter);
-        }
-
         listFilter.setCurrentFile(fileToParse);
         listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
         pipe.add(listFilter);

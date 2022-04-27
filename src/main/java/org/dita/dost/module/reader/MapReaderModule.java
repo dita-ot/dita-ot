@@ -101,12 +101,6 @@ public final class MapReaderModule extends AbstractReaderModule {
         normalizeFilter.setLogger(logger);
         pipe.add(normalizeFilter);
 
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            exportAnchorsFilter.setCurrentFile(fileToParse);
-            exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
-            pipe.add(exportAnchorsFilter);
-        }
-
         keydefFilter.setCurrentDir(fileToParse.resolve("."));
         keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
         pipe.add(keydefFilter);

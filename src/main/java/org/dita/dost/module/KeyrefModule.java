@@ -23,7 +23,6 @@ import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
@@ -56,11 +55,6 @@ import static org.dita.dost.util.URLUtils.*;
 final class KeyrefModule extends AbstractPipelineModuleImpl {
 
     private TempFileNameScheme tempFileNameScheme;
-    /**
-     * Delayed conref utils.
-     */
-    private DelayConrefUtils delayConrefUtils;
-    private String transtype;
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
 
@@ -134,14 +128,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                     .reduce(startScope, KeyScope::merge);
             final List<ResolveTask> jobs = collectProcessingTopics(in, resourceFis, rootScope, doc);
 
-            transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-            if (transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
-                delayConrefUtils = new DelayConrefUtils();
-                delayConrefUtils.setJob(job);
-                delayConrefUtils.setLogger(logger);
-            } else {
-                delayConrefUtils = null;
-            }
             (parallel ? jobs.stream().parallel() : jobs.stream())
                     .filter(r -> r.out != null)
                     .forEach(this::processFile);
@@ -481,7 +467,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         conkeyrefFilter.setJob(job);
         conkeyrefFilter.setKeyDefinitions(r.scope);
         conkeyrefFilter.setCurrentFile(job.tempDirURI.resolve(r.in.uri));
-        conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
         filters.add(conkeyrefFilter);
 
         final TopicFragmentFilter topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
