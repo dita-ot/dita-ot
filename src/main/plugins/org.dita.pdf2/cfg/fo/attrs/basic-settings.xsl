@@ -10,7 +10,6 @@ See the accompanying LICENSE file for applicable license.
                 exclude-result-prefixes="xs">
 
   <xsl:param name="locale"/>
-  <xsl:param name="customizationDir.url"/>
   <xsl:param name="artworkPrefix"/>
   <xsl:param name="publishRequiredCleanup"/>
   <xsl:param name="DRAFT"/>

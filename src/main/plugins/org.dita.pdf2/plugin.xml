@@ -40,7 +40,6 @@ See the accompanying LICENSE file for applicable license.
       <val>BASIC</val>
     </param>
     <param name="args.xsl.pdf" desc="Specifies an XSL file that is used to override the default XSL transformation." type="file"/>
-    <param name="customization.dir" desc="Specifies the customization directory." type="dir"/>
     <param name="pdf.formatter" desc="Specifies the XSL processor." type="enum"/>
     <param name="publish.required.cleanup" desc="Specifies whether draft-comment and required-cleanup elements are included in the output." type="enum">
       <val>yes</val>
