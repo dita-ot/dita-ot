@@ -22,7 +22,6 @@ import org.dita.dost.reader.KeydefFilter;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.DebugFilter;
-import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.ProfilingFilter;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXParseException;
@@ -132,7 +131,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     private GenListModuleReader listFilter;
     private KeydefFilter keydefFilter;
-    private ExportAnchorsFilter exportAnchorsFilter;
     private ContentHandler nullHandler;
     private FilterUtils filterUtils;
     private TempFileNameScheme tempFileNameScheme;
@@ -253,11 +251,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             filterUtils = parseFilterFile();
         }
 
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            exportAnchorsFilter = new ExportAnchorsFilter();
-            exportAnchorsFilter.setInputFile(rootFile);
-        }
-
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
         keydefFilter.setCurrentFile(rootFile);
@@ -376,12 +369,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             profilingFilter.setFilterUtils(filterUtils);
             profilingFilter.setCurrentFile(fileToParse);
             pipe.add(profilingFilter);
-        }
-
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            exportAnchorsFilter.setCurrentFile(fileToParse);
-            exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
-            pipe.add(exportAnchorsFilter);
         }
 
         keydefFilter.setCurrentDir(fileToParse.resolve("."));
@@ -901,14 +888,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             subjectSchemeReader.writeMapToXML(addMapFilePrefix(schemeDictionary), new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
-        }
-
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
-            delayConrefUtils.setLogger(logger);
-            delayConrefUtils.setJob(job);
-            delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap());
-            delayConrefUtils.writeExportAnchors(exportAnchorsFilter, tempFileNameScheme);
         }
     }
 

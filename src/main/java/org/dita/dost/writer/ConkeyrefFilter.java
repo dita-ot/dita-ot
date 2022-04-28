@@ -27,16 +27,11 @@ import org.xml.sax.helpers.AttributesImpl;
 public final class ConkeyrefFilter extends AbstractXMLFilter {
 
     private KeyScope keys;
-    /** Delayed conref utils, may be {@code null} */
-    private DelayConrefUtils delayConrefUtils;
 
     public void setKeyDefinitions(final KeyScope keys) {
         this.keys = keys;
     }
 
-    public void setDelayConrefUtils(final DelayConrefUtils delayConrefUtils) {
-        this.delayConrefUtils = delayConrefUtils;
-    }
 
     // XML filter methods ------------------------------------------------------
 
@@ -51,15 +46,6 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
             final KeyDef keyDef = keys.get(key);
             if (keyDef != null) {
                 final String id = keyIndex != -1 ? conkeyref.substring(keyIndex + 1) : null;
-                if (delayConrefUtils != null) {
-                    final List<Boolean> list = delayConrefUtils.checkExport(stripFragment(keyDef.href).toString(), id, key, job.tempDir);
-                    final boolean idExported = list.get(0);
-                    final boolean keyrefExported = list.get(1);
-                    //both id and key are exported and transtype is eclipsehelp
-                    if (idExported && keyrefExported) {
-                        break conkeyref;
-                    }
-                }
                 resAtts = new AttributesImpl(atts);
                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_CONKEYREF);
                 final KeyDef k = keys.get(key);

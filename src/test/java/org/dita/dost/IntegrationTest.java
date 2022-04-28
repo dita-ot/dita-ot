@@ -282,17 +282,6 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
                 .test();
     }
 
-    // TODO Move the Eclipse Help plugin
-    @Test
-    @Ignore
-    public void testexportanchors() throws Throwable {
-        builder().name("exportanchors")
-                .transtype(PREPROCESS)
-                .input(Paths.get("test.ditamap"))
-                .put("transtype", "eclipsehelp")
-                .test();
-    }
-
     @Test
     public void testkeyref() throws Throwable {
         builder().name(Paths.get("keyref", "basic"))

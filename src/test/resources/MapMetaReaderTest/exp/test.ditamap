@@ -41,9 +41,6 @@
     <keywords class="- topic/keywords ">
       <keyword class="- topic/keyword ">map keyword</keyword>
     </keywords>
-    <exportanchors class="+ topic/keywords delay-d/exportanchors ">
-      <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="map anchorkey"/>
-    </exportanchors>
     <prodinfo class="- topic/prodinfo ">
       <prodname class="- topic/prodname ">map prodnamefoo</prodname>
       <vrmlist class="- topic/vrmlist ">
@@ -89,9 +86,8 @@
     <keyword class="- topic/keyword ">topicref keyword</keyword>
   </keywords><keywords class="- topic/keywords ">
     <keyword class="- topic/keyword ">topicref keyword</keyword>
-  </keywords><exportanchors class="+ topic/keywords delay-d/exportanchors ">
-    <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="topicref anchorkey"/>
-  </exportanchors><prodinfo class="- topic/prodinfo ">
+  </keywords>
+    <prodinfo class="- topic/prodinfo ">
     <prodname class="- topic/prodname ">topicref prodnamefoo</prodname>
     <vrmlist class="- topic/vrmlist ">
       <vrm class="- topic/vrm " version="2.0"/>
@@ -148,9 +144,8 @@
     <keyword class="- topic/keyword ">topicref keyword</keyword>
   </keywords><keywords class="- topic/keywords ">
     <keyword class="- topic/keyword ">topicref keyword</keyword>
-  </keywords><exportanchors class="+ topic/keywords delay-d/exportanchors ">
-    <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="topicref anchorkey"/>
-  </exportanchors><prodinfo class="- topic/prodinfo ">
+  </keywords>
+    <prodinfo class="- topic/prodinfo ">
     <prodname class="- topic/prodname ">topicref prodnamefoo</prodname>
     <vrmlist class="- topic/vrmlist ">
       <vrm class="- topic/vrm " version="2.0"/>
