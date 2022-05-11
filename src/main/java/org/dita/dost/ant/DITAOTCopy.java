@@ -13,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -89,9 +91,16 @@ public final class DITAOTCopy extends Task {
         if (destDir == null) {
             throw new BuildException("Destination directory not defined");
         }
-        if (!destDir.exists() && !destDir.mkdirs()) {
-            throw new BuildException(new IOException("Destination directory " + destDir + " cannot be created"));
+        if (!destDir.exists()) {
+            try {
+                Files.createDirectories(destDir.toPath());
+            } catch (FileAlreadyExistsException e) {
+                // Ignore
+            } catch (IOException e) {
+                throw new BuildException(e);
+            }
         }
+
         try {
             final FileUtils fileUtils = FileUtils.newFileUtils();
             final List<String> incs = getIncludes();

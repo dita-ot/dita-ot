@@ -28,6 +28,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URI;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -164,11 +165,6 @@ public class StreamStore extends AbstractStore implements Store {
 
     @Override
     void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
-        final File outputFile = new File(output);
-        if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
-            throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
-        }
-
         try {
             XMLReader reader = xmlUtils.getXMLReader();
             for (final XMLFilter filter : filters) {
@@ -238,8 +234,12 @@ public class StreamStore extends AbstractStore implements Store {
     Serializer getSerializer(final URI dst) throws IOException {
         final File outputFile = new File(dst);
         final File dir = outputFile.getParentFile();
-        if (!dir.exists() && !dir.mkdirs()) {
-            throw new IOException("Failed to create directory " + dir.getAbsolutePath());
+        if (!dir.exists()) {
+            try {
+                Files.createDirectories(dir.toPath());
+            } catch (FileAlreadyExistsException e) {
+                // Ignore
+            }
         }
         return xmlUtils.getProcessor().newSerializer(outputFile);
     }

@@ -21,6 +21,8 @@ import org.xml.sax.XMLFilter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -128,8 +130,14 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
                 final List<XMLFilter> pipe = singletonList(writer);
 
                 final File dstDirUri = new File(dstAbsUri.resolve("."));
-                if (!dstDirUri.exists() && !dstDirUri.mkdirs()) {
-                    logger.error("Failed to create directory " + dstDirUri);
+                if (!dstDirUri.exists()) {
+                    try {
+                        Files.createDirectories(dstDirUri.toPath());
+                    } catch (FileAlreadyExistsException e) {
+                        // Ignore
+                    } catch (IOException e) {
+                        logger.error("Failed to create directory " + dstDirUri);
+                    }
                 }
                 try {
                     job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
