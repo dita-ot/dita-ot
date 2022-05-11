@@ -235,7 +235,7 @@ public class StreamStore extends AbstractStore implements Store {
     }
 
     @VisibleForTesting
-    Serializer getSerializer(final URI dst) throws IOException {
+    synchronized Serializer getSerializer(final URI dst) throws IOException {
         final File outputFile = new File(dst);
         final File dir = outputFile.getParentFile();
         if (!dir.exists() && !dir.mkdirs()) {
