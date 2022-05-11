@@ -22,6 +22,8 @@ import org.dita.dost.util.Job.FileInfo;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 
 import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 import static org.dita.dost.util.Constants.*;
@@ -84,8 +86,14 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         }
 
         final File outputDir = out.getParentFile();
-        if (!outputDir.exists() && !outputDir.mkdirs()) {
-            logger.error("Failed to create directory " + outputDir.getAbsolutePath());
+        if (!outputDir.exists()) {
+            try {
+                Files.createDirectories(outputDir.toPath());
+            } catch (FileAlreadyExistsException e) {
+                // Ignore
+            } catch (IOException e) {
+                logger.error("Failed to create directory " + outputDir.getAbsolutePath());
+            }
         }
         try (final OutputStream output = new BufferedOutputStream(job.getStore().getOutputStream(out.toURI()))) {
             if (style != null) {
