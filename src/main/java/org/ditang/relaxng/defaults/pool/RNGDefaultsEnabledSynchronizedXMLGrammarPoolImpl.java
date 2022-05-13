@@ -1,8 +1,9 @@
 /*
- * Copyright (c) 2019 Syncro Soft SRL - All Rights Reserved.
+ * This file is part of the DITA Open Toolkit project.
  *
- * This file contains proprietary and confidential source code.
- * Unauthorized copying of this file, via any medium, is strictly prohibited.
+ * Copyright 2022 Radu Coravu
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.ditang.relaxng.defaults.pool;
 
@@ -17,35 +18,35 @@ import org.ditang.relaxng.defaults.RelaxNGDefaultValues;
  * @author radu_coravu
  */
 public class RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl
-    extends org.dita.dost.util.XMLGrammarPoolImplUtils implements RNGDefaultsEnabledGrammarPool {
-  
-  /**
-   * Caches Relax NG default values based on the URL pointing to the RNG schemas.
-   */
-  private final Map<String, RelaxNGDefaultValues> rngDefaultValues = new HashMap<>();
-  
-  /**
-   * @see ro.sync.xml.parser.RNGDefaultsEnabledGrammarPool#getRngDefaultValues(java.lang.String)
-   */
-  @Override
-  public synchronized RelaxNGDefaultValues getRngDefaultValues(String systemID) {
-    return rngDefaultValues.get(systemID);
-  }
-  
-  /**
-   * @see ro.sync.xml.parser.RNGDefaultsEnabledGrammarPool#putRngDefaultValues(java.lang.String, org.ditang.relaxng.defaults.RelaxNGDefaultValues)
-   */
-  @Override
-  public synchronized void putRngDefaultValues(String systemID, RelaxNGDefaultValues defaults) {
-    rngDefaultValues.put(systemID, defaults);
-  }
-  
-  /**
-   * @see org.ditang.relaxng.pool.SynchronizedXMLGrammarPoolImpl#clear()
-   */
-  @Override
-  public synchronized void clear() {
-    rngDefaultValues.clear();
-    super.clear();
-  }
+extends org.dita.dost.util.XMLGrammarPoolImplUtils implements RNGDefaultsEnabledGrammarPool {
+
+    /**
+     * Caches Relax NG default values based on the URL pointing to the RNG schemas.
+     */
+    private final Map<String, RelaxNGDefaultValues> rngDefaultValues = new HashMap<>();
+
+    /**
+     * @see org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledGrammarPool#getRngDefaultValues(java.lang.String)
+     */
+    @Override
+    public synchronized RelaxNGDefaultValues getRngDefaultValues(String systemID) {
+        return rngDefaultValues.get(systemID);
+    }
+
+    /**
+     * @see org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledGrammarPool#putRngDefaultValues(java.lang.String, org.ditang.relaxng.defaults.RelaxNGDefaultValues)
+     */
+    @Override
+    public synchronized void putRngDefaultValues(String systemID, RelaxNGDefaultValues defaults) {
+        rngDefaultValues.put(systemID, defaults);
+    }
+
+    /**
+     * @see org.ditang.relaxng.pool.SynchronizedXMLGrammarPoolImpl#clear()
+     */
+    @Override
+    public synchronized void clear() {
+        rngDefaultValues.clear();
+        super.clear();
+    }
 }

@@ -30,75 +30,75 @@ import com.thaiopensource.validate.SchemaReader;
  * 
  */
 public class RNGDefaultValues extends RelaxNGDefaultValues {
-  /**
-   * Schema reader for RNG schemas.
-   */
-  public static class OxygenXMLSchemaReader extends OxygenRelaxNGSchemaReader {
     /**
-     * The schema reader instance.
+     * Schema reader for RNG schemas.
      */
-    private static final SchemaReader theInstance = new OxygenXMLSchemaReader();
+    public static class OxygenXMLSchemaReader extends OxygenRelaxNGSchemaReader {
+        /**
+         * The schema reader instance.
+         */
+        private static final SchemaReader theInstance = new OxygenXMLSchemaReader();
 
-    /**
-     * Private constructor.
-     */
-    private OxygenXMLSchemaReader() {
-      super();
+        /**
+         * Private constructor.
+         */
+        private OxygenXMLSchemaReader() {
+            super();
+        }
+
+        /**
+         * Get the singleton instance.
+         * 
+         * @return The instance.
+         */
+        public static SchemaReader getInstance() {
+            return theInstance;
+        }
+
+        /**
+         * Creates a parseable object from a catalog resolved input source
+         * associated to a RNG schema.
+         * 
+         * @return the parseable object
+         */
+        @Override
+        protected Parseable<Pattern, NameClass, Locator, VoidValue, CommentListImpl, AnnotationsImpl> createParseable(
+                SAXSource source, SAXResolver resolver, ErrorHandler eh,
+                PropertyMap properties) throws SAXException {
+            if (source.getXMLReader() == null) {
+                source = new SAXSource(resolver.createXMLReader(),
+                        source.getInputSource());
+            }
+            return new SAXParseable<>(
+                    source, resolver, eh);
+        }
+
     }
 
     /**
-     * Get the singleton instance.
-     * 
-     * @return The instance.
+     * Constructor
+     * @param resolver The resolver
+     * @param eh The error handler
      */
-    public static SchemaReader getInstance() {
-      return theInstance;
+    public RNGDefaultValues(Resolver resolver, ErrorHandler eh) {
+        this(resolver, eh, false);
     }
 
     /**
-     * Creates a parseable object from a catalog resolved input source
-     * associated to a RNG schema.
-     * 
-     * @return the parseable object
+     * Constructor
+     * @param resolver The resolver
+     * @param eh The error handler
+     * @param keepSchema <code>true</code> to keep a reference to the schema.
+     */
+    public RNGDefaultValues(Resolver resolver, ErrorHandler eh, boolean keepSchema) {
+        super(resolver, eh, keepSchema);
+    }
+
+    /**
+     * Return the <code>OxygenXMLSchemaReader</code> instance.
      */
     @Override
-    protected Parseable<Pattern, NameClass, Locator, VoidValue, CommentListImpl, AnnotationsImpl> createParseable(
-        SAXSource source, SAXResolver resolver, ErrorHandler eh,
-        PropertyMap properties) throws SAXException {
-      if (source.getXMLReader() == null) {
-        source = new SAXSource(resolver.createXMLReader(),
-            source.getInputSource());
-      }
-      return new SAXParseable<>(
-              source, resolver, eh);
+    protected SchemaReader getSchemaReader() {
+        return OxygenXMLSchemaReader.getInstance();
     }
-
-  }
-  
-  /**
-   * Constructor
-   * @param resolver The resolver
-   * @param eh The error handler
-   */
-  public RNGDefaultValues(Resolver resolver, ErrorHandler eh) {
-    this(resolver, eh, false);
-  }
-
-  /**
-   * Constructor
-   * @param resolver The resolver
-   * @param eh The error handler
-   * @param keepSchema <code>true</code> to keep a reference to the schema.
-   */
-  public RNGDefaultValues(Resolver resolver, ErrorHandler eh, boolean keepSchema) {
-    super(resolver, eh, keepSchema);
-  }
-
-  /**
-   * Return the <code>OxygenXMLSchemaReader</code> instance.
-   */
-  @Override
-  protected SchemaReader getSchemaReader() {
-    return OxygenXMLSchemaReader.getInstance();
-  }
 }

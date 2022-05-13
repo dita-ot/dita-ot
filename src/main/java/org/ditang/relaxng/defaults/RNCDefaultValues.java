@@ -33,71 +33,71 @@ import com.thaiopensource.validate.SchemaReader;
  * @author george@oxygenxml.com
  */
 public class RNCDefaultValues extends RelaxNGDefaultValues {
-  /**
-   * Constructor
-   * @param resolver The resolver
-   * @param eh The error handler
-   */
-  public RNCDefaultValues(Resolver resolver, ErrorHandler eh) {
-    this(resolver, eh, false);
-  }
-  /**
-   * Constructor
-   * @param resolver The resolver
-   * @param eh The error handler
-   * @param keepSchema Keep a reference to the schema
-   */
-  public RNCDefaultValues(Resolver resolver, ErrorHandler eh, boolean keepSchema) {
-    super(resolver, eh, keepSchema);
-  }
-
-  /**
-   * class OxygenCompactSchemaReader extends SchemaReaderImpl
-   */
-  private static class OxygenCompactSchemaReader extends
-      OxygenRelaxNGSchemaReader {
     /**
-     * The instance of schema reader.
+     * Constructor
+     * @param resolver The resolver
+     * @param eh The error handler
      */
-    private static final SchemaReader theInstance = new OxygenCompactSchemaReader();
-
+    public RNCDefaultValues(Resolver resolver, ErrorHandler eh) {
+        this(resolver, eh, false);
+    }
     /**
-     * Not instantiable from outside.
+     * Constructor
+     * @param resolver The resolver
+     * @param eh The error handler
+     * @param keepSchema Keep a reference to the schema
      */
-    private OxygenCompactSchemaReader() {
-      super();
+    public RNCDefaultValues(Resolver resolver, ErrorHandler eh, boolean keepSchema) {
+        super(resolver, eh, keepSchema);
     }
 
     /**
-     * Get the reader singleton.
-     * 
-     * @return The current Schema Reader instance.
+     * class OxygenCompactSchemaReader extends SchemaReaderImpl
      */
-    private static SchemaReader getInstance() {
-      return theInstance;
+    private static class OxygenCompactSchemaReader extends
+    OxygenRelaxNGSchemaReader {
+        /**
+         * The instance of schema reader.
+         */
+        private static final SchemaReader theInstance = new OxygenCompactSchemaReader();
+
+        /**
+         * Not instantiable from outside.
+         */
+        private OxygenCompactSchemaReader() {
+            super();
+        }
+
+        /**
+         * Get the reader singleton.
+         * 
+         * @return The current Schema Reader instance.
+         */
+        private static SchemaReader getInstance() {
+            return theInstance;
+        }
+
+        /**
+         * Creates a parseable object from a catalog resolved input source
+         * associated to a RNG schema.
+         * 
+         * @return the parseable object
+         */
+        @Override
+        protected Parseable<Pattern, NameClass, Locator, VoidValue, CommentListImpl, AnnotationsImpl> createParseable(
+                SAXSource source, SAXResolver saxResolver, ErrorHandler eh,
+                PropertyMap properties) {
+            return new CompactParseable<>(
+                    SAX.createInput(source.getInputSource()), saxResolver.getResolver(),
+                    eh);
+        }
     }
 
     /**
-     * Creates a parseable object from a catalog resolved input source
-     * associated to a RNG schema.
-     * 
-     * @return the parseable object
+     * Returns an instance of OxygenCompactSchemaReader.
      */
     @Override
-    protected Parseable<Pattern, NameClass, Locator, VoidValue, CommentListImpl, AnnotationsImpl> createParseable(
-        SAXSource source, SAXResolver saxResolver, ErrorHandler eh,
-        PropertyMap properties) {
-      return new CompactParseable<>(
-              SAX.createInput(source.getInputSource()), saxResolver.getResolver(),
-              eh);
+    protected SchemaReader getSchemaReader() {
+        return OxygenCompactSchemaReader.getInstance();
     }
-  }
-
-  /**
-   * Returns an instance of OxygenCompactSchemaReader.
-   */
-  @Override
-  protected SchemaReader getSchemaReader() {
-    return OxygenCompactSchemaReader.getInstance();
-  }
 }
