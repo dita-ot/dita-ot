@@ -16,6 +16,7 @@ import org.apache.xerces.xni.XMLDocumentHandler;
 import org.apache.xerces.xni.XNIException;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.apache.xerces.xni.parser.XMLComponentManager;
+import org.apache.xerces.xni.parser.XMLConfigurationException;
 import org.apache.xerces.xni.parser.XMLDocumentSource;
 
 import com.thaiopensource.resolver.Resolver;
@@ -47,6 +48,11 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
    * The special RNG resolver 
    */
   protected Resolver resolver;
+  
+  /**
+   * <code>true</code> to validate the file while parsing with the RNG defaults component
+   */
+  private boolean relaxNGValidation = false;
 
   /**
    * Default constructor.
@@ -134,8 +140,11 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
    */
   protected void insertRelaxDefaultsComponent() {
     if (fRelaxDefaults == null) {
-      fRelaxDefaults = new RelaxNGDefaultsComponent(resolver);
+      fRelaxDefaults = new RelaxNGDefaultsComponent(resolver, fGrammarPool);
       addCommonComponent(fRelaxDefaults);
+      fRelaxDefaults.setValidate(relaxNGValidation);
+      fRelaxDefaults.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.ERROR_HANDLER_PROPERTY, 
+          getProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.ERROR_HANDLER_PROPERTY));
       fRelaxDefaults.reset(this);
     }
     XMLDocumentSource prev = fLastComponent;
@@ -149,5 +158,23 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
         next.setDocumentSource(fRelaxDefaults);
     }
   }
+  /**
+   * @see org.apache.xerces.parsers.XIncludeAwareParserConfiguration#setFeature(java.lang.String, boolean)
+   */
+  @Override
+  public void setFeature(String featureId, boolean state) throws XMLConfigurationException {
+    if(XERCES_SCHEMA_VALIDATION.equals(featureId)) {
+      relaxNGValidation = state;
+    } else {
+      super.setFeature(featureId, state);
+    }
+  }
   
+  @Override
+	public void setProperty(String propertyId, Object value) throws XMLConfigurationException {
+		if("http://apache.org/xml/properties/internal/grammar-pool".equals(propertyId)) {
+	  		fGrammarPool = (XMLGrammarPool) value;
+		}
+		super.setProperty(propertyId, value);
+	}
 }

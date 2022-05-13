@@ -39,7 +39,16 @@ public class RNCDefaultValues extends RelaxNGDefaultValues {
    * @param eh The error handler
    */
   public RNCDefaultValues(Resolver resolver, ErrorHandler eh) {
-    super(resolver, eh);
+    this(resolver, eh, false);
+  }
+  /**
+   * Constructor
+   * @param resolver The resolver
+   * @param eh The error handler
+   * @param keepSchema Keep a reference to the schema
+   */
+  public RNCDefaultValues(Resolver resolver, ErrorHandler eh, boolean keepSchema) {
+    super(resolver, eh, keepSchema);
   }
 
   /**

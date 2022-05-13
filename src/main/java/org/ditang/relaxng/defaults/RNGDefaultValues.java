@@ -74,14 +74,24 @@ public class RNGDefaultValues extends RelaxNGDefaultValues {
     }
 
   }
-
+  
   /**
    * Constructor
    * @param resolver The resolver
    * @param eh The error handler
    */
   public RNGDefaultValues(Resolver resolver, ErrorHandler eh) {
-    super(resolver, eh);    
+    this(resolver, eh, false);
+  }
+
+  /**
+   * Constructor
+   * @param resolver The resolver
+   * @param eh The error handler
+   * @param keepSchema <code>true</code> to keep a reference to the schema.
+   */
+  public RNGDefaultValues(Resolver resolver, ErrorHandler eh, boolean keepSchema) {
+    super(resolver, eh, keepSchema);
   }
 
   /**

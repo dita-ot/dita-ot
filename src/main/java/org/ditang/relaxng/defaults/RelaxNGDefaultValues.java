@@ -25,6 +25,7 @@ import com.thaiopensource.util.PropertyMapBuilder;
 import com.thaiopensource.validate.IncorrectSchemaException;
 import com.thaiopensource.validate.SchemaReader;
 import com.thaiopensource.validate.ValidateProperty;
+import com.thaiopensource.validate.Validator;
 
 /**
  * Relax NG default values gatherer.
@@ -40,16 +41,30 @@ public abstract class RelaxNGDefaultValues {
    * Resolver
    */
   private final Resolver resolver;
+  /**
+   * <code>true</code> to keep a reference to the schema.
+   */
+  private final boolean keepSchema;
   
-
   /**
    * Constructor.
    * @param resolver The resolver
    * @param eh The error handler
    */
-  public RelaxNGDefaultValues(Resolver resolver, ErrorHandler eh) {
+  protected RelaxNGDefaultValues(Resolver resolver, ErrorHandler eh) {
+    this(resolver, eh, false);
+  }
+
+  /**
+   * Constructor.
+   * @param resolver The resolver
+   * @param eh The error handler
+   * @param keepSchema <code>true</code> to keep a reference to the schema.
+   */
+  protected RelaxNGDefaultValues(Resolver resolver, ErrorHandler eh, boolean keepSchema) {
     this.resolver = resolver;
     this.eh = eh;
+    this.keepSchema = keepSchema;
   }
 
   /**
@@ -61,6 +76,14 @@ public abstract class RelaxNGDefaultValues {
    * Stores collected values.
    */
   private DefaultValuesCollector defaultValuesCollector = null;
+  /**
+   * <code>true</code> if there were update errors.
+   */
+  private boolean hasUpdateErrors;
+  /**
+   * The schema reference
+   */
+  private SchemaWrapper schema;
 
   /**
    * Collects default values. Listener for the default values extractor.
@@ -85,6 +108,8 @@ public abstract class RelaxNGDefaultValues {
     /**
      * Get a key for an element.
      * 
+     * @param elementLocalName
+     * @param elementNamespace
      * @return A string formed from the element local name and its namespace.
      */
     private String getKey(String elementLocalName, String elementNamespace) {
@@ -101,7 +126,7 @@ public abstract class RelaxNGDefaultValues {
      *          The element namespace. Use null or empty for no namespace.
      * @return A list of Attribute objects or null if no defaults.
      */
-    List<Attribute> getDefaultAttributes(String elementLocalName,
+    private List<Attribute> getDefaultAttributes(String elementLocalName,
         String elementNamespace) {
       return defaults.get(getKey(elementLocalName, elementNamespace));
     }
@@ -113,10 +138,15 @@ public abstract class RelaxNGDefaultValues {
      *      java.lang.String, java.lang.String, java.lang.String,
      *      java.lang.String)
      */
+    @Override
     public void defaultValue(String elementLocalName, String elementNamespace,
         String attributeLocalName, String attributeNamepsace, String value) {
       String key = getKey(elementLocalName, elementNamespace);
-      List<Attribute> list = defaults.computeIfAbsent(key, k -> new ArrayList<>());
+      List<Attribute> list = defaults.get(key);
+      if (list == null) {
+        list = new ArrayList<Attribute>();
+        defaults.put(key, list);
+      }
       list.add(new Attribute(attributeLocalName, attributeNamepsace, value));
     }
   }
@@ -132,6 +162,12 @@ public abstract class RelaxNGDefaultValues {
     /** The attribute default value */
     String value;
 
+    /**
+     * 
+     * @param localName
+     * @param namespace
+     * @param value
+     */
     public Attribute(String localName, String namespace, String value) {
       this.localName = localName;
       this.namespace = namespace;
@@ -142,7 +178,9 @@ public abstract class RelaxNGDefaultValues {
   /**
    * Updates the annotation model.
    * 
-   * @param in The schema input source.
+   * @param in
+   *          The schema input source.
+   * @throws SAXException 
    */
   public void update(InputSource in) throws SAXException {
     defaultValuesCollector = null;
@@ -152,16 +190,24 @@ public abstract class RelaxNGDefaultValues {
     builder.put(ValidateProperty.ERROR_HANDLER, eh);
     PropertyMap properties = builder.toPropertyMap();
     try {
-      SchemaWrapper sw = (SchemaWrapper) getSchemaReader().createSchema(in,
-          properties);
+      SchemaWrapper sw = (SchemaWrapper) getSchemaReader().createSchema(in, properties);
+      if(keepSchema) {
+        schema = sw;
+      }
       Pattern start = sw.getStart();
       defaultValuesCollector = new DefaultValuesCollector(start);
+      hasUpdateErrors = false;
     } catch (Exception e) {
+      hasUpdateErrors = true;
       eh.warning(new SAXParseException("Error loading defaults: " + e.getMessage(), null, e));
-    } catch (StackOverflowError e) {
-      //EXM-24759 Also catch stackoverflow
-      eh.warning(new SAXParseException("Error loading defaults: " + e.getMessage(), null, null));
     }
+  }
+  
+  /**
+   * @return Returns <code>true</code> if there were errors updating the defaults.
+   */
+  public boolean hasUpdateErrors() {
+    return hasUpdateErrors;
   }
 
   /**
@@ -178,5 +224,20 @@ public abstract class RelaxNGDefaultValues {
       return defaultValuesCollector.getDefaultAttributes(localName, namespace);
     }
     return null;
+  }
+
+  /**
+   * @param properties The properties
+   * @return Returns the validator.
+   */
+  public Validator createValidator(PropertyMap properties) {
+    return schema.createValidator(properties);
+  }
+  
+  /**
+   * @return Returns <code>true</code> if keeps a reference to the schema.
+   */
+  public boolean isKeepSchema() {
+    return keepSchema;
   }
 }

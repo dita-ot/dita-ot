@@ -9,6 +9,7 @@ package org.dita.dost.reader;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.util.XMLGrammarPoolImplUtils;
+import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl;
 
 /**
  * Manages creation and access to a master Xerces grammar pool.
@@ -28,7 +29,7 @@ public final class GrammarPoolManager {
         XMLGrammarPool pool = grammarPool.get();
         if (pool == null) {
             try {
-                pool = new XMLGrammarPoolImplUtils();
+                pool = new RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl();
                 grammarPool.set(pool);
             } catch (final Exception e) {
                 System.out.println("Failed to create Xerces grammar pool for caching DTDs and schemas");

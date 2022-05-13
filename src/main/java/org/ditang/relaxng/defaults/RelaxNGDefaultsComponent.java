@@ -9,7 +9,11 @@ package org.ditang.relaxng.defaults;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 import org.apache.xerces.impl.Constants;
 import org.apache.xerces.util.SymbolTable;
@@ -23,22 +27,31 @@ import org.apache.xerces.xni.XMLLocator;
 import org.apache.xerces.xni.XMLResourceIdentifier;
 import org.apache.xerces.xni.XMLString;
 import org.apache.xerces.xni.XNIException;
+import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.apache.xerces.xni.parser.XMLComponent;
 import org.apache.xerces.xni.parser.XMLComponentManager;
 import org.apache.xerces.xni.parser.XMLConfigurationException;
 import org.apache.xerces.xni.parser.XMLDocumentSource;
 import org.apache.xerces.xni.parser.XMLEntityResolver;
+import org.apache.xerces.xni.parser.XMLErrorHandler;
 import org.apache.xerces.xni.parser.XMLInputSource;
+import org.apache.xerces.xni.parser.XMLParseException;
+import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledGrammarPool;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.AttributesImpl;
 
 import com.thaiopensource.resolver.BasicResolver;
 import com.thaiopensource.resolver.Identifier;
 import com.thaiopensource.resolver.Input;
 import com.thaiopensource.resolver.Resolver;
 import com.thaiopensource.resolver.ResolverException;
+import com.thaiopensource.util.PropertyMapBuilder;
+import com.thaiopensource.validate.ValidateProperty;
+import com.thaiopensource.validate.Validator;
 
 /**
  * XNI component that adds Relax NG default values.
@@ -117,11 +130,43 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
   private Resolver resolver;
 
   /**
+   * The grammar pool
+   */
+  private XMLGrammarPool grammarPool;
+
+  /**
+   * <code>true</code> if we should also validate the content.
+   */
+  private boolean validate = false;
+
+  /**
+   * The Jing validator used to validate the content as it is being parsed.
+   */
+  private Validator validator;
+
+  /**
+   * The XML locator
+   */
+  private XMLLocator locator;
+
+  /**
+   * The error handler
+   */
+  private XMLErrorHandler errorHandler;
+  
+  /**
+   * The prefix mapping stack
+   */
+  private final Stack<Set<String>> prefixMappingStack = new Stack<Set<String>>();
+
+  /**
    * Constructor.
    * @param resolver The resolver
+   * @param grammarPool The grammar pool
    */
-  public RelaxNGDefaultsComponent(Resolver resolver) {
+  public RelaxNGDefaultsComponent(Resolver resolver, XMLGrammarPool grammarPool) {
     this.resolver = resolver;
+    this.grammarPool = grammarPool;
     if(this.resolver == null) {
       //Wrap a resolver over an XMLEntityResolver
       this.resolver = new Resolver() {
@@ -174,6 +219,9 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
     type = null;
     context = null;
     defaults = null;
+    validator = null;
+    prefixMappingStack.clear();
+    locator = null;
     fSymbolTable = (SymbolTable) componentManager.getProperty(SYMBOL_TABLE);
     fResolver = (XMLEntityResolver) componentManager.getProperty(ENTITY_RESOLVER);
   }
@@ -185,6 +233,7 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
    */
   public void startDocument(XMLLocator locator, String enc,
       NamespaceContext nc, Augmentations aug) throws XNIException {
+    this.locator = locator;
     context = nc;
     baseSystemId = locator.getBaseSystemId();
     detecting = true;
@@ -200,12 +249,101 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
    *      org.apache.xerces.xni.XMLAttributes,
    *      org.apache.xerces.xni.Augmentations)
    */
+  @Override
   public void startElement(QName name, XMLAttributes atts, Augmentations aug)
       throws XNIException {
+    boolean oldDetecting = detecting;
     onStartElement(name, atts);
     if (documentHandler != null) {
       documentHandler.startElement(name, atts, aug);
     }
+    if(validator != null) {
+      try {
+        if(detecting != oldDetecting) {
+        	triggerStartDocumentToValidator();
+        }
+        startElementToValidator(name, atts);
+      } catch (SAXException e) {
+        throw new XNIException(e);
+      }
+    }
+  }
+  
+  /**
+   * Namespace mapping default prefix
+   */
+  private static final String NS_MAPPING_DEFAULT = "xmlns";
+
+  /**
+   * Namespace mapping prefix
+   */
+  private static final String NS_MAPPING_PREFIX = NS_MAPPING_DEFAULT + ":";
+
+  /**
+   * @param name The element name
+   * @param atts The XNI attributes
+   * @throws SAXException
+   */
+  private void startElementToValidator(QName name, XMLAttributes atts) throws SAXException {
+    AttributesImpl attrs = new AttributesImpl();
+    Set<String> prefixes = null;
+    int len = atts.getLength();
+    for (int i = 0; i < len; i++) {
+      String qName = atts.getQName(i);
+      if(qName.startsWith(NS_MAPPING_PREFIX) || qName.equals(NS_MAPPING_DEFAULT)) {
+        if(prefixes == null) {
+          prefixes = new HashSet<>();
+        }
+        String value = atts.getValue(i);
+        if(value == null) {
+          value = "";
+        }
+        String prefix = "";
+        if(qName.startsWith(NS_MAPPING_PREFIX)) {
+          prefix = qName.substring(NS_MAPPING_PREFIX.length());
+        }
+        validator.getContentHandler().startPrefixMapping(prefix, value);
+        prefixes.add(prefix);
+      } else {
+        attrs.addAttribute(atts.getURI(i) != null ? atts.getURI(i) : "", atts.getLocalName(i), atts.getQName(i), atts.getType(i), atts.getValue(i));
+      }
+    }
+    prefixMappingStack.push(prefixes);
+    validator.getContentHandler().startElement(name.uri != null ? name.uri : "", name.localpart, name.rawname, attrs);
+  }
+
+
+  /**
+   * Trigger the start document method.
+   * 
+   * @throws SAXException
+   */
+  private void triggerStartDocumentToValidator() throws SAXException {
+    //Set the document locator and start document before handling the first element
+    if(locator != null) {
+      validator.getContentHandler().setDocumentLocator(new Locator() {
+        @Override
+        public String getSystemId() {
+          return locator.getExpandedSystemId();
+        }
+
+        @Override
+        public String getPublicId() {
+          return locator.getPublicId();
+        }
+
+        @Override
+        public int getLineNumber() {
+          return locator.getLineNumber();
+        }
+
+        @Override
+        public int getColumnNumber() {
+          return locator.getColumnNumber();
+        }
+      });
+    }
+    validator.getContentHandler().startDocument();
   }
 
   /**
@@ -216,8 +354,13 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
    */
   private void onStartElement(QName name, XMLAttributes atts) {
     if (detecting) {
-      detecting = false;
-      loadDefaults();
+      if("http://relaxng.org/ns/structure/1.0".equals(name.uri)) {
+        //Avoid loading defaults when validating RNG schemas.
+        defaults = null;
+      } else {
+        loadDefaults();
+      }
+		  detecting = false;
     }
     if (defaults != null) {
       checkAndAddDefaults(name, atts);
@@ -232,34 +375,49 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
     ErrorHandler eh = new ErrorHandler() {
       @Override
       public void warning(SAXParseException exception) throws SAXException {
-        if (DEBUG) {
-          exception.printStackTrace();
+        if(validate) {
+          if(errorHandler != null) {
+            errorHandler.warning("", "", new XMLParseException(locator, exception.getMessage(), exception));
+          } else {
+            throw exception;
+          }
         }
+        if (DEBUG) {
+            exception.printStackTrace();
+          }
       }
 
       @Override
       public void error(SAXParseException exception) throws SAXException {
-        if (DEBUG) {
-          exception.printStackTrace();
+        if(validate) {
+          if(errorHandler != null) {
+            errorHandler.error("", "", new XMLParseException(locator, exception.getMessage(), exception));
+          } else {
+            throw exception;
+          }
         }
+        if (DEBUG) {
+            exception.printStackTrace();
+          }
       }
 
       @Override
       public void fatalError(SAXParseException exception) throws SAXException {
-        if (DEBUG) {
-          exception.printStackTrace();
+        if(validate) {
+          if(errorHandler != null) {
+            errorHandler.fatalError("", "", new XMLParseException(locator, exception.getMessage(), exception));
+          } else {
+            throw exception;
+          }
         }
+        if (DEBUG) {
+            exception.printStackTrace();
+          }
       }
     };
     
     if(schema != null) {
-      if ("xml".equals(type)) {
-        defaults = new RNGDefaultValues(resolver, eh);
-    }
-      if ("compact".equals(type)) {
-        defaults = new RNCDefaultValues(resolver, eh);
-    }
-    if (defaults != null) {
+    if ("xml".equals(type) || "compact".equals(type)) {
         Identifier id = new Identifier(schema, baseSystemId);
         Input input = new Input();
         try {
@@ -285,14 +443,46 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
         }        
           in = new InputSource(expanded);
         }
-          try {
+        try {
+          //Use caching grammar pool
+          RNGDefaultsEnabledGrammarPool pool = null;
+          if(grammarPool instanceof RNGDefaultsEnabledGrammarPool) {
+            pool = (RNGDefaultsEnabledGrammarPool) grammarPool;
+          }
+          RelaxNGDefaultValues cachedDefaults = pool != null ? pool.getRngDefaultValues(in.getSystemId()) : null;
+          if(cachedDefaults != null && 
+        		  //Either the cached defaults has a schema reference
+        		  (cachedDefaults.isKeepSchema()
+        				  //Or we do not want to validate.
+        				  || ! validate)) {
+        	//Retrieve defaults from pool
+            defaults = cachedDefaults;
+          } else {
+            if ("xml".equals(type)) {
+              defaults = new RNGDefaultValues(resolver, eh, validate);
+            } else {
+              defaults = new RNCDefaultValues(resolver, eh, validate);
+            }
+
             defaults.update(in);
-          } catch (Exception e) {
-          if (DEBUG) {
-            e.printStackTrace();
+            
+            if(pool != null && ! defaults.hasUpdateErrors()){
+              pool.putRngDefaultValues(in.getSystemId(), defaults);
+            }
           }
+          if(validate && defaults != null) {
+            PropertyMapBuilder builder = new PropertyMapBuilder();
+            //Set the resolver
+            builder.put(ValidateProperty.RESOLVER, resolver);  
+            builder.put(ValidateProperty.ERROR_HANDLER, eh);
+            validator = defaults.createValidator(builder.toPropertyMap());
           }
+        } catch (Exception e) {
+            if (DEBUG) {
+                e.printStackTrace();
+              }
         }
+      }
     }
   }
 
@@ -430,10 +620,12 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
    */
   public void processingInstruction(String name, XMLString content,
       Augmentations arg2) throws XNIException {
+	  boolean detectedSchema = false;
     if (detecting && schema == null && "oxygen".equals(name)) {
       String data = content.toString();
       schema = getFromPIDataPseudoAttribute(data, "RNGSchema", true);
       type = getFromPIDataPseudoAttribute(data, "type", true);
+      detectedSchema = true;
     }
 
     if (detecting && schema == null && "xml-model".equals(name)) {
@@ -470,9 +662,11 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
           }
         }
       }
+      detectedSchema = true;
     }
 
-    if (documentHandler != null) {
+    if (documentHandler != null
+    		&& ! detectedSchema) {
       documentHandler.processingInstruction(name, content, arg2);
     }
   }
@@ -636,6 +830,33 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
     if (documentHandler != null) {
       documentHandler.emptyElement(name, atts, arg2);
     }
+    if(validator != null) {
+      try {
+        startElementToValidator(name, atts);
+        endElementToValidator(name);
+      } catch (SAXException e) {
+        throw new XNIException(e);
+      }
+    }
+  }
+
+
+  /**
+   * @param name The element name
+   * @throws SAXException
+   */
+  private void endElementToValidator(QName name) throws SAXException {
+    validator.getContentHandler().endElement(name.uri != null ? name.uri : "", name.localpart, name.rawname);
+    if(!prefixMappingStack.isEmpty()) {
+      Set<String> prefixes = prefixMappingStack.pop();
+      if(prefixes != null) {
+        Iterator<String> iter = prefixes.iterator();
+        while(iter.hasNext()) {
+          String prefix = iter.next();
+          validator.getContentHandler().endPrefixMapping(prefix);
+        }
+      }
+    }
   }
 
   /**
@@ -681,8 +902,15 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
     if (documentHandler != null) {
       documentHandler.characters(arg0, arg1);
     }
+    if(validator != null) {
+      try {
+        validator.getContentHandler().characters(arg0.ch, arg0.offset, arg0.length);
+      } catch (SAXException e) {
+        throw new XNIException(e);
+      }
+    }
   }
-
+  
   /**
    * @see org.apache.xerces.xni.XMLDocumentHandler#ignorableWhitespace(org.apache.xerces.xni.XMLString,
    *      org.apache.xerces.xni.Augmentations)
@@ -691,6 +919,13 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
       throws XNIException {
     if (documentHandler != null) {
       documentHandler.ignorableWhitespace(arg0, arg1);
+    }
+    if(validator != null) {
+      try {
+        validator.getContentHandler().ignorableWhitespace(arg0.ch, arg0.offset, arg0.length);
+      } catch (SAXException e) {
+        throw new XNIException(e);
+      }
     }
   }
 
@@ -701,6 +936,13 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
   public void endElement(QName arg0, Augmentations arg1) throws XNIException {
     if (documentHandler != null) {
       documentHandler.endElement(arg0, arg1);
+    }
+    if(validator != null) {
+      try {
+        endElementToValidator(arg0);
+      } catch (SAXException e) {
+        throw new XNIException(e);
+      }
     }
   }
 
@@ -729,6 +971,13 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
     if (documentHandler != null) {
       documentHandler.endDocument(arg0);
     }
+    if(validator != null) {
+      try {
+        validator.getContentHandler().endDocument();
+      } catch (SAXException e) {
+        throw new XNIException(e);
+      }
+    }
   }
 
   /**
@@ -753,10 +1002,9 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
   }
 
   /**
-   * @see org.apache.xerces.xni.parser.XMLComponent#setFeature(java.lang.String,
-   *      boolean)
+   * @see org.apache.xerces.xni.parser.XMLComponent#setFeature(java.lang.String, boolean)
    */
-  public void setFeature(String arg0, boolean arg1)
+  public void setFeature(String feature, boolean value)
       throws XMLConfigurationException {
     // Do nothing
   }
@@ -770,10 +1018,13 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
 
   /**
    * Sets the value of a property during parsing.
+   * 
+   * @param propertyId Property ID
+   * @param value      Property value
    */
+  @Override
   public void setProperty(String propertyId, Object value)
       throws XMLConfigurationException {
-
     // Xerces properties
     if (propertyId.startsWith(Constants.XERCES_PROPERTY_PREFIX)) {
       final int suffixLength = propertyId.length()
@@ -785,6 +1036,9 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
       } else if (suffixLength == Constants.ENTITY_RESOLVER_PROPERTY.length()
           && propertyId.endsWith(Constants.ENTITY_RESOLVER_PROPERTY)) {
         fResolver = (XMLEntityResolver) value;
+      } else if(suffixLength == Constants.ERROR_HANDLER_PROPERTY.length()
+          && propertyId.endsWith(Constants.ERROR_HANDLER_PROPERTY)) {
+        errorHandler = (XMLErrorHandler)value;
       }
     }
   } // setProperty(String,Object)
@@ -825,5 +1079,12 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
    */
   public XMLDocumentHandler getDocumentHandler() {
     return documentHandler;
+  }
+  
+  /**
+   * @param relaxNGValidation <code>true</code> to validate while parsing the XML document.
+   */
+  public void setValidate(boolean relaxNGValidation) {
+    this.validate = relaxNGValidation;
   }
 }
