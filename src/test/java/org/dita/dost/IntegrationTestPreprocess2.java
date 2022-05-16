@@ -186,22 +186,24 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
     
     @Test
     public void testRngGrammarPool() throws Throwable {
+        RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl grammarPool = (RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl) GrammarPoolManager.getGrammarPool();
+        grammarPool.clear();
         builder().name("bookmap-rng-based")
                 .transtype(PREPROCESS)
                 .input(Paths.get("main.ditamap"))
                 .test();
-        RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl grammarPool = (RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl) GrammarPoolManager.getGrammarPool();
         assertEquals("One bookmap, one topic and one concept", 3, grammarPool.getCacheSize());
     }
     
     @Test
     public void testRngNoGrammarPool() throws Throwable {
+        RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl grammarPool = (RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl) GrammarPoolManager.getGrammarPool();
+        grammarPool.clear();
         builder().name("bookmap-rng-based")
                 .transtype(PREPROCESS)
                 .input(Paths.get("main.ditamap"))
                 .put("args.grammar.cache", "no")
                 .test();
-        RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl grammarPool = (RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl) GrammarPoolManager.getGrammarPool();
         assertEquals("Grammar cache is not used", 0, grammarPool.getCacheSize());
     }
 }
