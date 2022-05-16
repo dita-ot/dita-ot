@@ -8,12 +8,16 @@
 
 package org.dita.dost;
 
+import org.apache.xerces.xni.grammars.XMLGrammarPool;
+import org.dita.dost.reader.GrammarPoolManager;
+import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.file.Paths;
 
 import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
+import static org.junit.Assert.assertEquals;
 
 public class IntegrationTestPreprocess2 extends IntegrationTest {
 
@@ -178,5 +182,26 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
                 .input(Paths.get("main/chunkup.ditamap"))
                 .put("outer.control", "quiet")
                 .test();
+    }
+    
+    @Test
+    public void testRngGrammarPool() throws Throwable {
+        builder().name("bookmap-rng-based")
+                .transtype(PREPROCESS)
+                .input(Paths.get("main.ditamap"))
+                .test();
+        RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl grammarPool = (RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl) GrammarPoolManager.getGrammarPool();
+        assertEquals("One bookmap, one topic and one concept", 3, grammarPool.getCacheSize());
+    }
+    
+    @Test
+    public void testRngNoGrammarPool() throws Throwable {
+        builder().name("bookmap-rng-based")
+                .transtype(PREPROCESS)
+                .input(Paths.get("main.ditamap"))
+                .put("args.grammar.cache", "no")
+                .test();
+        RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl grammarPool = (RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl) GrammarPoolManager.getGrammarPool();
+        assertEquals("Grammar cache is not used", 0, grammarPool.getCacheSize());
     }
 }

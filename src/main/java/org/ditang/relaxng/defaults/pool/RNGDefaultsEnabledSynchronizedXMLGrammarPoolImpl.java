@@ -49,4 +49,12 @@ extends org.dita.dost.util.XMLGrammarPoolImplUtils implements RNGDefaultsEnabled
         rngDefaultValues.clear();
         super.clear();
     }
+    
+    /**
+     * Get the size of the cache.
+     * @return The size of the cache.
+     */
+    public synchronized int getCacheSize() {
+        return rngDefaultValues.size();
+    }
 }
