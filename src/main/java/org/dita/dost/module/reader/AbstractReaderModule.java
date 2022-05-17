@@ -28,6 +28,8 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.namespace.QName;
 import java.io.*;
 import java.net.URI;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -329,9 +331,15 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         final URI rel = tempFileNameScheme.generateTempFileName(currentFile);
         outputFile = new File(job.tempDirURI.resolve(rel));
         final File outputDir = outputFile.getParentFile();
-        if (!outputDir.exists() && !outputDir.mkdirs()) {
-            logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
-            return;
+        if (!outputDir.exists()) {
+            try {
+                Files.createDirectories(outputDir.toPath());
+            } catch (FileAlreadyExistsException e) {
+                // Ignore
+            } catch (IOException e) {
+                logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
+                return;
+            }
         }
         validateMap = Collections.emptyMap();
         defaultValueMap = Collections.emptyMap();

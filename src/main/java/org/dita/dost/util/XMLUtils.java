@@ -32,6 +32,8 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URI;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -650,8 +652,14 @@ public final class XMLUtils {
      */
     @Deprecated
     private void transformFile(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
-        if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
-            throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
+        if (!outputFile.getParentFile().exists()) {
+            try {
+                Files.createDirectories(outputFile.getParentFile().toPath());
+            } catch (FileAlreadyExistsException e) {
+                // Ignore
+            } catch (IOException e) {
+                throw new DITAOTException(e);
+            }
         }
 
         try (final InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
@@ -703,8 +711,14 @@ public final class XMLUtils {
     @Deprecated
     private void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(output);
-        if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
-            throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
+        if (!outputFile.getParentFile().exists()) {
+            try {
+                Files.createDirectories(outputFile.getParentFile().toPath());
+            } catch (FileAlreadyExistsException e) {
+                // Ignore
+            } catch (IOException e) {
+                throw new DITAOTException(e);
+            }
         }
 
         try {

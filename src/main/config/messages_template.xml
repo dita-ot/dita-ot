@@ -432,6 +432,11 @@ See the accompanying LICENSE file for applicable license.
     <response>Save the file with %2 encoding.</response>
   </message>
 
+  <message id="DOTJ085E" type="ERROR">
+    <reason>The '%1' parameter can’t be set with 'param' in project files.</reason>
+    <response>Use '%2' instead.</response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  
