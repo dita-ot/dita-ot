@@ -189,6 +189,11 @@ public class URLUtilsTest {
     }
 
     @Test
+    public void setFragment_mailto() {
+        assertEquals(URI.create("mailto:email@example.com?subject=Email"), URLUtils.setFragment(URI.create("mailto:email@example.com?subject=Email"), null));
+    }
+
+    @Test
     public void testRemoveFragment() throws URISyntaxException {
         assertEquals(new URI("foo"), URLUtils.removeFragment(new URI("foo#bar")));
         assertEquals(new URI("foo"), URLUtils.removeFragment(new URI("foo#")));
@@ -290,5 +295,10 @@ public class URLUtilsTest {
         assertEquals(URI.create("foo?baz"), URLUtils.setQuery(URI.create("foo"), "baz"));
         assertEquals(URI.create("foo"), URLUtils.setQuery(URI.create("foo?bar"), null));
         assertEquals(URI.create("foo?baz"), URLUtils.setQuery(URI.create("foo?bar"), "baz"));
+    }
+
+    @Test
+    public void setQuery_mailto() {
+        assertEquals(URI.create("mailto:email@example.com?subject=Email"), URLUtils.setQuery(URI.create("mailto:email@example.com?subject=Email"), null));
     }
 }

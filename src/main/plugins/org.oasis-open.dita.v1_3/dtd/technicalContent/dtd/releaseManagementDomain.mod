@@ -60,6 +60,9 @@
 >
 <!ENTITY % change-historylist.attributes
               "%univ-atts;
+               outputclass
+                          CDATA
+                                    #IMPLIED
                mapkeyref
                           CDATA
                                     #IMPLIED"

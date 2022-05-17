@@ -113,6 +113,9 @@ PUBLIC "-//OASIS//ENTITIES DITA Release Management Domain//EN"
         <optional>
           <attribute name="mapkeyref"/>
         </optional>
+        <optional>
+          <attribute name="outputclass"/>
+        </optional>
       </define>
       <define name="change-historylist.element">
         <element name="change-historylist" dita:longName="Change History List"
