@@ -8,12 +8,14 @@
 
 package org.dita.dost;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS2;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML_WITH_PREPROCESS2;
 
 import java.nio.file.Paths;
 
-import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class IntegrationTestPreprocess2 extends IntegrationTest {
 

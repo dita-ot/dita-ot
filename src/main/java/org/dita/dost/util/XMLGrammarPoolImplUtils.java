@@ -18,7 +18,7 @@ import org.apache.xerces.xni.grammars.XMLGrammarDescription;
  * @author william
  *
  */
-public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
+public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 
     private static final Grammar[] INITIAL_GRAMMAR_SET = new Grammar[0];
 
