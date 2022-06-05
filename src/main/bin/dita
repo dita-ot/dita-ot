@@ -175,5 +175,6 @@ ant_sys_opts=
 if [ -n "$CYGHOME" ]; then
   ant_sys_opts="-Dcygwin.user.home=\"$CYGHOME\""
 fi
-ant_exec_command="exec \"$JAVACMD\" $ANT_OPTS -Djava.awt.headless=true -classpath \"$LOCALCLASSPATH\" -Dant.home=\"$DITA_HOME\" -Ddita.dir=\"$DITA_HOME\" -Dant.library.dir=\"$ANT_LIB\" $ant_sys_opts org.apache.tools.ant.launch.Launcher $ANT_ARGS -cp \"$CLASSPATH\""
+# sun.io.useCanonCaches improves performance (see https://bugs.openjdk.java.net/browse/JDK-8207005)
+ant_exec_command="exec \"$JAVACMD\" $ANT_OPTS -Djava.awt.headless=true -Dsun.io.useCanonCaches=true -classpath \"$LOCALCLASSPATH\" -Dant.home=\"$DITA_HOME\" -Ddita.dir=\"$DITA_HOME\" -Dant.library.dir=\"$ANT_LIB\" $ant_sys_opts org.apache.tools.ant.launch.Launcher $ANT_ARGS -cp \"$CLASSPATH\""
 eval $ant_exec_command "$ant_exec_args"
