@@ -23,12 +23,15 @@ import org.w3c.dom.Text;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.NamespaceSupport;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.net.URI;
 import java.util.*;
 
-import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
+import static javax.xml.XMLConstants.*;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
@@ -81,6 +84,9 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     TempFileNameScheme tempFileNameScheme;
     private ChunkFilenameGenerator chunkFilenameGenerator;
+
+    NamespaceSupport namespaces = new NamespaceSupport();
+    HashMap<String, Integer> namespaceMap = new HashMap<String, Integer>();
 
     @Override
     public void setJob(final Job job) {
@@ -316,6 +322,37 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX) == null) {
             addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX, DITA_OT_NS);
         }
+        //Need to add a check to see if root element of the topic uses schema validation or not.
+        if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(ATTRIBUTE_NAME_NONAMESPACESCHEMALOCATION) != null) {
+            addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_XSI, W3C_XML_SCHEMA_INSTANCE_NS_URI);
+        }
+
+        return resAtts;
+    }
+
+    /**
+     * Add namespace declaration attribute if required.
+     *
+     * @param - Atributes from element to be processed.
+     * @uri - uri of the namespace of the element to be processed
+     *
+     * @return - Attributes with the extra namespace declaration, if required.
+     */
+    Attributes processAttributesNS(Attributes atts, String uri) {
+        final AttributesImpl resAtts = new AttributesImpl(processAttributes(atts));
+
+        //Check to see we are at the root element to be processed is the start of the namespaced element
+        if (namespaceMap.get(uri) == 1) {
+            String prefix = namespaces.getPrefix(uri);
+            if (prefix != null) {
+                if (prefix != DEFAULT_NS_PREFIX){
+                    addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE + ":" + prefix, uri);
+                }else {
+                    addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE, uri);
+                }
+            }
+        }
+
         return resAtts;
     }
 
@@ -508,6 +545,26 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         } catch (IOException e) {
             throw new SAXException(e);
         }
+    }
+
+    /**
+     * start of namespace associated with Element
+     *
+     * @param prefix
+     * @param uri
+     */
+    public void startPrefixMapping(String prefix, String uri) {
+    	namespaces.pushContext();        
+        namespaces.declarePrefix(prefix, uri);
+    }
+
+    /**
+     * end of namespace associated with Element
+     *
+     * @param prefix
+     */
+    public void endPrefixMapping(String prefix) {
+        namespaces.popContext();
     }
 
 }
