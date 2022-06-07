@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
@@ -366,7 +367,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
 
         //pop the namespace level
-        if (uri != "") {
+        if (uri != NULL_NS_URI) {
             if (namespaceMap.containsKey(uri)){
                 decreaseNamespaceLevel(uri);
             }
@@ -414,7 +415,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         AttributesImpl resAtts = null;
 
         //This part is to handle namespace declaration in the content.
-        if (uri != "") {
+        if (uri != NULL_NS_URI) {
             if (namespaceMap.containsKey(uri)){
                 increaseNamespaceLevel(uri);
             }else {

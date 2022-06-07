@@ -22,15 +22,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.NamespaceSupport;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.net.URI;
 import java.util.*;
 
-import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
+import static javax.xml.XMLConstants.*;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
@@ -323,7 +324,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         }
         //Need to add a check to see if root element of the topic uses schema validation or not.
         if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(ATTRIBUTE_NAME_NONAMESPACESCHEMALOCATION) != null) {
-            addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_XSI, XML_SCHEMA_NS);
+            addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_XSI, W3C_XML_SCHEMA_INSTANCE_NS_URI);
         }
 
         return resAtts;
@@ -344,10 +345,10 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         if (namespaceMap.get(uri) == 1) {
             String prefix = namespaces.getPrefix(uri);
             if (prefix != null) {
-                if (prefix != ""){
-                    addOrSetAttribute(resAtts, "xmlns:" + prefix, uri);
+                if (prefix != DEFAULT_NS_PREFIX){
+                    addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE + ":" + prefix, uri);
                 }else {
-                    addOrSetAttribute(resAtts, "xmlns", uri);
+                    addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE, uri);
                 }
             }
         }
