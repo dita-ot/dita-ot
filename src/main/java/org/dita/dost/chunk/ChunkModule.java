@@ -31,6 +31,7 @@ import static java.util.Collections.*;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
+import static org.dita.dost.chunk.ChunkOperation.Operation.SPLIT;
 import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getName;
@@ -49,7 +50,19 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         init(input);
         try {
-            processCombine();
+            // read modifiable map
+            final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
+            final URI mapFile = job.tempDirURI.resolve(in.uri);
+            logger.info("Processing {0}", mapFile);
+            final Document mapDoc = getInputMap(mapFile);
+            final Float ditaVersion = getDitaVersion(mapDoc.getDocumentElement());
+            if (ditaVersion == null || ditaVersion < 2.0f) {
+                return null;
+            }
+            final List<ChunkOperation> chunks = collectChunkOperations(mapFile, mapDoc);
+
+            processCombine(mapFile, mapDoc, chunks);
+            processSplit(mapFile, mapDoc, chunks);
             job.write();
         } catch (IOException e) {
             throw new DITAOTException(e);
@@ -60,27 +73,70 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * Process all combine chunks in input map.
      */
-    private void processCombine() throws IOException {
-        // read modifiable map
-        final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-        final URI mapFile = job.tempDirURI.resolve(in.uri);
-        logger.info("Processing {0}", mapFile);
-        final Document mapDoc = getInputMap(mapFile);
-        final Float ditaVersion = getDitaVersion(mapDoc.getDocumentElement());
-        if (ditaVersion == null || ditaVersion < 2.0f) {
-            return;
-        }
-
+    private void processCombine(final URI mapFile, final Document mapDoc, final List<ChunkOperation> chunks) throws IOException {
         // walk topicref | map
-        List<ChunkOperation> chunks = collectChunkOperations(mapFile, mapDoc);
-        final Map<URI, URI> rewriteMap = new HashMap<>();
-        chunks = rewrite(mapFile, rewriteMap, chunks);
-        rewriteTopicrefs(mapFile, chunks);
-        logger.info("Writing {0}", mapFile);
-        job.getStore().writeDocument(mapDoc, mapFile);
-        // for each chunk
-        generateChunks(chunks, unmodifiableMap(rewriteMap));
-        removeChunkSources(chunks);
+        if (chunks.stream().anyMatch(c -> c.operation.equals(COMBINE))) {
+            final Map<URI, URI> rewriteMap = new HashMap<>();
+            final List<ChunkOperation> rewrittenChunks = rewrite(mapFile, rewriteMap, chunks);
+            rewriteTopicrefs(mapFile, rewrittenChunks);
+            logger.info("Writing {0}", mapFile);
+            job.getStore().writeDocument(mapDoc, mapFile);
+            // for each chunk
+            generateChunks(rewrittenChunks, unmodifiableMap(rewriteMap));
+            removeChunkSources(rewrittenChunks);
+        }
+    }
+
+    /**
+     * Process all split chunks in input map.
+     */
+    private void processSplit(final URI mapFile, final Document mapDoc, final List<ChunkOperation> chunks) throws IOException {
+        if (chunks.stream().anyMatch(c -> c.operation.equals(SPLIT))) {
+            for (ChunkOperation chunk : chunks) {
+                logger.info("Split {0}", chunk.src);
+                final FileInfo fileInfo = job.getFileInfo(chunk.src);
+                final Document doc = job.getStore().getDocument(chunk.src);
+                splitNestedTopic(fileInfo, doc.getDocumentElement(), chunk.topicref);
+                if (doc.getDocumentElement().getTagName().equals(ELEMENT_NAME_DITA)) {
+                    // job.remove(job.getFileInfo(chunk.src));
+                } else {
+                    job.getStore().writeDocument(doc, chunk.src);
+                }
+            }
+            job.getStore().writeDocument(mapDoc, mapFile);
+        }
+    }
+
+    private void splitNestedTopic(final FileInfo fileInfo, final Element topic, final Element topicref) {
+        topicref.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+        final List<Element> nestedTopics = getChildElements(topic, TOPIC_TOPIC);
+        for (Element nestedTopic : nestedTopics) {
+            final Element nestedTopicref = topicref.getOwnerDocument().createElement(MAP_TOPICREF.localName);
+            nestedTopicref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
+
+            splitNestedTopic(fileInfo, nestedTopic, nestedTopicref);
+
+            final Element removedNestedTopic = (Element) topic.removeChild(nestedTopic);
+            final Document doc = xmlUtils.getDocumentBuilder().newDocument();
+            final Element adoptedNestedTopic = (Element) doc.adoptNode(removedNestedTopic);
+            doc.appendChild(adoptedNestedTopic);
+            final URI dst = URI.create(topic.getBaseURI().replaceAll("\\.dita$", "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID) + ".dita"));
+            final URI tmp = job.tempDirURI.relativize(dst);
+            final URI result = URI.create(fileInfo.result.toString().replaceAll("\\.dita$", "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID) + ".dita"));
+            final FileInfo adoptedFileInfo = new Builder(fileInfo)
+                    .uri(tmp)
+                    .result(result)
+                    .build();
+            job.add(adoptedFileInfo);
+            try {
+                job.getStore().writeDocument(doc, dst);
+            } catch (IOException e) {
+                logger.error("Failed to write {0}", dst, e);
+            }
+
+            nestedTopicref.setAttribute(ATTRIBUTE_NAME_HREF, tmp.resolve(".").relativize(tmp).toString());
+            topicref.appendChild(nestedTopicref);
+        }
     }
 
     private void init(AbstractPipelineInput input) {
@@ -503,14 +559,18 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     private List<ChunkOperation> collectChunkOperations(final URI mapFile, final Document mapDoc) {
         logger.debug("Collect chunk operations");
         final List<ChunkOperation> chunks = new ArrayList<>();
-        collectChunkOperations(mapFile, mapDoc.getDocumentElement(), chunks);
+        collectChunkOperations(mapFile, mapDoc.getDocumentElement(), chunks, null);
         return unmodifiableList(chunks);
     }
 
     private void collectChunkOperations(final URI mapFile,
                                         final Element elem,
-                                        final List<ChunkOperation> chunks) {
-        final String chunk = elem.getAttribute(ATTRIBUTE_NAME_CHUNK);
+                                        final List<ChunkOperation> chunks,
+                                        final ChunkOperation.Operation defaultOperation) {
+        String chunk = elem.getAttribute(ATTRIBUTE_NAME_CHUNK);
+        if (chunk.isEmpty() && defaultOperation != null) {
+            chunk = defaultOperation.name();
+        }
         //   if @chunk = COMBINE
         if (chunk.equals(COMBINE.name)) {
             if (MAP_MAP.matches(elem)) {
@@ -547,9 +607,37 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 chunks.add(builder.build());
                 return;
             }
+        } else if (chunk.equals(SPLIT.name)) {
+            // split every topicref
+            if (MAP_MAP.matches(elem)) {
+                // split default for topicrefs
+                for (Element child : getChildElements(elem, MAP_TOPICREF)) {
+                    collectChunkOperations(mapFile, child, chunks, SPLIT);
+                }
+                return;
+            } else {
+                //     create chunk
+                final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
+                if (hrefNode != null) {
+                    final URI href = mapFile.resolve(hrefNode.getValue());
+                    final ChunkBuilder builder = new ChunkBuilder(SPLIT)
+                            .src(href)
+//                    .dst(href)
+                            .topicref(elem);
+                    //     remove contents
+                    //                elem.removeChild(child);
+//                getChildElements(elem, MAP_TOPICREF).stream()
+//                        .flatMap(child -> collect(mapFile, child).stream())
+//                        .forEachOrdered(builder::addChild);
+                    // remove @chunk
+                    elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+                    chunks.add(builder.build());
+                }
+                return;
+            }
         } else {
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
-                collectChunkOperations(mapFile, child, chunks);
+                collectChunkOperations(mapFile, child, chunks, null);
             }
         }
     }
@@ -618,7 +706,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         final String ditaVersion = topic.getAttributeNS(DITA_NAMESPACE, ATTRIBUTE_NAME_DITAARCHVERSION);
         if (!ditaVersion.isEmpty()) {
             try {
-                return new Float(ditaVersion);
+                return Float.valueOf(ditaVersion);
             } catch (IllegalArgumentException e) {
                 // Ignore
             }

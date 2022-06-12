@@ -45,7 +45,9 @@ public class ChunkModuleTest extends AbstractModuleTest {
                 {"topicgroup", Collections.emptyMap()},
                 {"topichead", Collections.emptyMap()},
                 {"multiple", Collections.emptyMap()},
-                {"map", Collections.emptyMap()}
+                {"map", Collections.emptyMap()},
+
+                {"split", Collections.emptyMap()}
         });
     }
 
