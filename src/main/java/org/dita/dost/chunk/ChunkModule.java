@@ -92,6 +92,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      */
     private void processSplit(final URI mapFile, final Document mapDoc, final List<ChunkOperation> chunks) throws IOException {
         if (chunks.stream().anyMatch(c -> c.operation.equals(SPLIT))) {
+            mapDoc.getDocumentElement().removeAttribute(ATTRIBUTE_NAME_CHUNK);
             for (ChunkOperation chunk : chunks) {
                 logger.info("Split {0}", chunk.src);
                 final FileInfo fileInfo = job.getFileInfo(chunk.src);
@@ -576,7 +577,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                                         final ChunkOperation.Operation defaultOperation) {
         String chunk = elem.getAttribute(ATTRIBUTE_NAME_CHUNK);
         if (chunk.isEmpty() && defaultOperation != null) {
-            chunk = defaultOperation.name();
+            chunk = defaultOperation.name().toLowerCase();
         }
         //   if @chunk = COMBINE
         if (chunk.equals(COMBINE.name)) {
