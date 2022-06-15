@@ -1,9 +1,11 @@
-<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="topic_a"
-       ditaarch:DITAArchVersion="2.0">
-  <title class="- topic/title ">a</title>
-  <body class="- topic/body ">
-    <p class="- topic/p ">a</p>
-  </body>
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="topic_a"
+         ditaarch:DITAArchVersion="2.0">
+    <title class="- topic/title ">a</title>
+    <body class="- topic/body ">
+      <p class="- topic/p ">a</p>
+    </body>
+  </topic>
   <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="topic_b"
          ditaarch:DITAArchVersion="2.0">
     <title class="- topic/title ">b</title>
@@ -18,4 +20,4 @@
       </body>
     </topic>
   </topic>
-</topic>
+</dita>

@@ -98,7 +98,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 final Document doc = job.getStore().getDocument(chunk.src);
                 splitNestedTopic(fileInfo, doc.getDocumentElement(), chunk.topicref);
                 if (doc.getDocumentElement().getTagName().equals(ELEMENT_NAME_DITA)) {
-                    // job.remove(job.getFileInfo(chunk.src));
+                    job.remove(job.getFileInfo(chunk.src));
+                    job.getStore().delete(chunk.src);
+                    final List<Element> topicrefs = getChildElements(chunk.topicref, MAP_TOPICREF);
+                    final Element parentNode = (Element) chunk.topicref.getParentNode();
+                    for (Element topicref : topicrefs) {
+                        parentNode.insertBefore(chunk.topicref.removeChild(topicref), chunk.topicref);
+                    }
+                    parentNode.removeChild(chunk.topicref);
                 } else {
                     job.getStore().writeDocument(doc, chunk.src);
                 }
