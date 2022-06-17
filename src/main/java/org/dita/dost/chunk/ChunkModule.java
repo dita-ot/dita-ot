@@ -21,6 +21,7 @@ import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.URLUtils;
 import org.w3c.dom.*;
 
+import javax.xml.XMLConstants;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -100,6 +101,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 splitNestedTopic(fileInfo, doc.getDocumentElement(), chunk.topicref);
                 if (doc.getDocumentElement().getTagName().equals(ELEMENT_NAME_DITA)) {
                     job.remove(job.getFileInfo(chunk.src));
+                    logger.info("Delete {0}", chunk.src);
                     job.getStore().delete(chunk.src);
                     final List<Element> topicrefs = getChildElements(chunk.topicref, MAP_TOPICREF);
                     final Element parentNode = (Element) chunk.topicref.getParentNode();
@@ -108,6 +110,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     }
                     parentNode.removeChild(chunk.topicref);
                 } else {
+                    logger.info("Write {0}", chunk.src);
                     job.getStore().writeDocument(doc, chunk.src);
                 }
             }
@@ -128,6 +131,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final Document doc = xmlUtils.getDocumentBuilder().newDocument();
             final Element adoptedNestedTopic = (Element) doc.adoptNode(removedNestedTopic);
             doc.appendChild(adoptedNestedTopic);
+            cascadeNamespaces(adoptedNestedTopic, topic);
             final URI dst = URI.create(topic.getBaseURI().replaceAll("\\.dita$", "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID) + ".dita"));
             final URI tmp = job.tempDirURI.relativize(dst);
             final URI result = URI.create(fileInfo.result.toString().replaceAll("\\.dita$", "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID) + ".dita"));
@@ -137,6 +141,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     .build();
             job.add(adoptedFileInfo);
             try {
+                logger.info("Write {0}", dst);
                 job.getStore().writeDocument(doc, dst);
             } catch (IOException e) {
                 logger.error("Failed to write {0}", dst, e);
@@ -144,6 +149,21 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
             nestedTopicref.setAttribute(ATTRIBUTE_NAME_HREF, tmp.resolve(".").relativize(tmp).toString());
             topicref.appendChild(nestedTopicref);
+        }
+    }
+
+    private void cascadeNamespaces(Element dst, Node src) {
+        if (src.getParentNode() != null) {
+            cascadeNamespaces(dst, src.getParentNode());
+        }
+        final NamedNodeMap attributes = src.getAttributes();
+        if (attributes != null) {
+            for (int i = 0; i < attributes.getLength(); i++) {
+                final Attr attribute = (Attr) attributes.item(i);
+                if (Objects.equals(attribute.getPrefix(), XMLConstants.XMLNS_ATTRIBUTE)) {
+                    dst.setAttributeNode((Attr) dst.getOwnerDocument().importNode(attribute, false));
+                }
+            }
         }
     }
 
@@ -596,7 +616,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 // remove @chunk
                 elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
                 chunks.add(builder.build());
-                return;
             } else {
                 //     create chunk
                 final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
@@ -613,7 +632,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 // remove @chunk
                 elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
                 chunks.add(builder.build());
-                return;
             }
         } else if (chunk.equals(SPLIT.name)) {
             // split every topicref
@@ -622,7 +640,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 for (Element child : getChildElements(elem, MAP_TOPICREF)) {
                     collectChunkOperations(mapFile, child, chunks, SPLIT);
                 }
-                return;
             } else {
                 //     create chunk
                 final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
@@ -641,11 +658,13 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
                     chunks.add(builder.build());
                 }
-                return;
+                for (Element child : getChildElements(elem, MAP_TOPICREF)) {
+                    collectChunkOperations(mapFile, child, chunks, defaultOperation);
+                }
             }
         } else {
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
-                collectChunkOperations(mapFile, child, chunks, null);
+                collectChunkOperations(mapFile, child, chunks, defaultOperation);
             }
         }
     }

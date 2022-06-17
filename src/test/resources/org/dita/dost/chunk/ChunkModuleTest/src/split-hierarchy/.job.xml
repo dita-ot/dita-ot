@@ -1,0 +1,11 @@
+<job>
+  <property name="user.input.dir.uri">
+    <string>file:/</string>
+  </property>
+  <files>
+    <file src="file:/combine.ditamap" uri="combine.ditamap" path="combine.ditamap" format="ditamap" input="true"/>
+    <file src="file:/ancestor.dita" uri="ancestor.dita" path="ancestor.dita" format="dita" target="true"/>
+    <file src="file:/middle.dita" uri="middle.dita" path="middle.dita" format="dita" target="true"/>
+    <file src="file:/child.dita" uri="child.dita" path="child.dita" format="dita" target="true"/>
+  </files>
+</job>

@@ -1,0 +1,7 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0"
+       class="- topic/topic " id="ancestor-last-child">
+  <title class="- topic/title ">Child of last major topic in ancestor composite document</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">ancestor-last-child</p>
+  </body>
+</topic>

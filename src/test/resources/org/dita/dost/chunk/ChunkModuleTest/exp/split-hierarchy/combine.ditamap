@@ -1,0 +1,23 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+     class="- map/map "
+     ditaarch:DITAArchVersion="2.0">
+  <!-- FIXME -->
+  <!--
+  <topicref class="- map/topicref " href="ancestor_ancestor-first.dita"/>
+  <topicref class="- map/topicref " href="ancestor_ancestor-last.dita">
+    <topicref class="- map/topicref " href="ancestor_ancestor-last-child.dita"/>
+    <topicref class="- map/topicref " href="middle.dita">
+      <topicref class="- map/topicref " href="child.dita"/>
+      <topicref class="- map/topicref " href="middle_middle-child.dita"/>
+    </topicref>
+  </topicref>
+  -->
+  <topicref class="- map/topicref " href="middle.dita">
+    <topicref class="- map/topicref " href="child.dita"/>
+    <topicref class="- map/topicref " href="middle_middle-child.dita"/>
+  </topicref>
+  <topicref class="- map/topicref " href="ancestor_ancestor-first.dita"/>
+  <topicref class="- map/topicref " href="ancestor_ancestor-last.dita">
+    <topicref class="- map/topicref " href="ancestor_ancestor-last-child.dita"/>
+  </topicref>
+</map>
