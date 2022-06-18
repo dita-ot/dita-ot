@@ -611,7 +611,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 //     remove contents
                 //                elem.removeChild(child);
                 getChildElements(elem, MAP_TOPICREF).stream()
-                        .flatMap(child -> collect(mapFile, child).stream())
+                        .flatMap(child -> collectCombineChunks(mapFile, child).stream())
                         .forEachOrdered(builder::addChild);
                 // remove @chunk
                 elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
@@ -627,7 +627,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 //     remove contents
                 //                elem.removeChild(child);
                 getChildElements(elem, MAP_TOPICREF).stream()
-                        .flatMap(child -> collect(mapFile, child).stream())
+                        .flatMap(child -> collectCombineChunks(mapFile, child).stream())
                         .forEachOrdered(builder::addChild);
                 // remove @chunk
                 elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
@@ -672,7 +672,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * Collect combine chunk contents.
      */
-    private List<ChunkBuilder> collect(final URI mapFile, final Element elem) {
+    private List<ChunkBuilder> collectCombineChunks(final URI mapFile, final Element elem) {
         final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
         final Element navtitle = getNavtitle(elem);
         if (hrefNode != null && isDitaFormat(elem) && isLocalScope(elem)) {
@@ -681,7 +681,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     .src(href)
                     .topicref(elem);
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
-                for (ChunkBuilder chunkBuilder : collect(mapFile, child)) {
+                for (ChunkBuilder chunkBuilder : collectCombineChunks(mapFile, child)) {
                     builder.addChild(chunkBuilder);
                 }
             }
@@ -690,14 +690,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final ChunkBuilder builder = new ChunkBuilder(COMBINE)
                     .topicref(elem);
             for (Element child : getChildElements(elem, MAP_TOPICREF)) {
-                for (ChunkBuilder chunkBuilder : collect(mapFile, child)) {
+                for (ChunkBuilder chunkBuilder : collectCombineChunks(mapFile, child)) {
                     builder.addChild(chunkBuilder);
                 }
             }
             return Collections.singletonList(builder);
         } else {
             return getChildElements(elem, MAP_TOPICREF).stream()
-                    .flatMap(child -> collect(mapFile, child).stream())
+                    .flatMap(child -> collectCombineChunks(mapFile, child).stream())
                     .collect(Collectors.toList());
         }
     }
