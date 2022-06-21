@@ -596,31 +596,39 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
             if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
                 final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
-                final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
-                final URI dstSource;
-                dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
-                final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
-                final String dstPathFromMap = !copyTo.isEmpty() ? FilenameUtils.getPath(copyTo) : FilenameUtils.getPath(href);
-                final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
-                        .result(dstSource)
-                        .uri(dstTemp);
-                if (dstBuilder.build().format == null) {
-                    dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
+                boolean isDITA = false;
+                if(hrefFileInfo != null) {
+                    isDITA = hrefFileInfo.format == null 
+                            || ATTR_FORMAT_VALUE_DITA.equals(hrefFileInfo.format) 
+                            || ATTR_FORMAT_VALUE_DITAMAP.equals(hrefFileInfo.format);
                 }
-                if (hrefFileInfo.src == null && href != null) {
-                    if (copyToFileInfo != null) {
-                        dstBuilder.src(copyToFileInfo.src);
+                if(isDITA) {
+                    final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
+                    final URI dstSource;
+                    dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
+                    final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
+                    final String dstPathFromMap = !copyTo.isEmpty() ? FilenameUtils.getPath(copyTo) : FilenameUtils.getPath(href);
+                    final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
+                            .result(dstSource)
+                            .uri(dstTemp);
+                    if (dstBuilder.build().format == null) {
+                        dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
                     }
-                }
-                final FileInfo dstFileInfo = dstBuilder
-                        .build();
+                    if (hrefFileInfo.src == null && href != null) {
+                        if (copyToFileInfo != null) {
+                            dstBuilder.src(copyToFileInfo.src);
+                        }
+                    }
+                    final FileInfo dstFileInfo = dstBuilder
+                            .build();
 
-                elem.setAttribute(BRANCH_COPY_TO, dstPathFromMap + FilenameUtils.getName(dstTemp.toString()));
-                if (!copyTo.isEmpty()) {
-                    elem.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
-                }
+                    elem.setAttribute(BRANCH_COPY_TO, dstPathFromMap + FilenameUtils.getName(dstTemp.toString()));
+                    if (!copyTo.isEmpty()) {
+                        elem.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
+                    }
 
-                job.add(dstFileInfo);
+                    job.add(dstFileInfo);
+                }
             }
         }
 
