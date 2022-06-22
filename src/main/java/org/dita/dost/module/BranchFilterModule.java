@@ -267,8 +267,13 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     private boolean isDitaFormat(final Attr formatAttr) {
         return formatAttr == null ||
-                ATTR_FORMAT_VALUE_DITA.equals(formatAttr.getNodeValue()) ||
-                ATTR_FORMAT_VALUE_DITAMAP.equals(formatAttr.getNodeValue());
+                isDitaFormat(formatAttr.getNodeValue());
+    }
+    
+    private boolean isDitaFormat(final String formatAttr) {
+        return formatAttr == null ||
+                ATTR_FORMAT_VALUE_DITA.equals(formatAttr) ||
+                ATTR_FORMAT_VALUE_DITAMAP.equals(formatAttr);
     }
 
     /** Filter map and remove excluded content. */
@@ -598,9 +603,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                 final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
                 boolean isDITA = false;
                 if(hrefFileInfo != null) {
-                    isDITA = hrefFileInfo.format == null 
-                            || ATTR_FORMAT_VALUE_DITA.equals(hrefFileInfo.format) 
-                            || ATTR_FORMAT_VALUE_DITAMAP.equals(hrefFileInfo.format);
+                    isDITA = isDitaFormat(hrefFileInfo.format);
                 }
                 if(isDITA) {
                     final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
