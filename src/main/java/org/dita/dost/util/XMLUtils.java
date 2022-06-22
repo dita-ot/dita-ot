@@ -81,7 +81,7 @@ public final class XMLUtils {
 
     public XMLUtils() {
         catalogResolver = CatalogUtils.getCatalogResolver();
-        final net.sf.saxon.Configuration config = new net.sf.saxon.Configuration();
+        final net.sf.saxon.Configuration config = net.sf.saxon.Configuration.newConfiguration();
         config.setURIResolver(catalogResolver);
         configureSaxonExtensions(config);
         configureSaxonCollationResolvers(config);
