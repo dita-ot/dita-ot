@@ -601,11 +601,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
             if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
                 final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
-                boolean isDITA = false;
-                if(hrefFileInfo != null) {
-                    isDITA = isDitaFormat(hrefFileInfo.format);
-                }
-                if(isDITA) {
+                if (isDitaFormat(hrefFileInfo.format)) {
                     final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
                     final URI dstSource;
                     dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
