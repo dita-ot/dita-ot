@@ -100,32 +100,41 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 final Document doc = job.getStore().getDocument(chunk.src);
                 var topicrefs = splitNestedTopic(fileInfo, doc.getDocumentElement(), chunk.topicref);
                 if (doc.getDocumentElement().getTagName().equals(ELEMENT_NAME_DITA)) {
-                    job.remove(job.getFileInfo(chunk.src));
-                    logger.info("Delete {0}", chunk.src);
-                    job.getStore().delete(chunk.src);
-                    // move nested topicrefs of split topicref to last generated topicref
-                    final List<Element> nestedTopicrefs = getChildElements(chunk.topicref, MAP_TOPICREF);
-                    final Element lastTopicref = topicrefs.get(topicrefs.size() - 1);
-                    for (Element nestedTopicref : nestedTopicrefs) {
-                        lastTopicref.appendChild(chunk.topicref.removeChild(nestedTopicref));
-                    }
-                    // insert generated topicrefs next to split topicref
-                    final Element parentNode = (Element) chunk.topicref.getParentNode();
-                    for (Element topicref : topicrefs) {
-                        parentNode.insertBefore(topicref, chunk.topicref);
-                    }
-                    // remove split topicref
-                    parentNode.removeChild(chunk.topicref);
+                    processSplitDitabase(chunk, topicrefs);
                 } else {
-                    logger.info("Write {0}", chunk.src);
-                    for (Element topicref : topicrefs) {
-                        chunk.topicref.appendChild(topicref);
-                    }
-                    job.getStore().writeDocument(doc, chunk.src);
+                    processSplitTopic(chunk, doc, topicrefs);
                 }
             }
             job.getStore().writeDocument(mapDoc, mapFile);
         }
+    }
+
+    private void processSplitTopic(ChunkOperation chunk, Document doc, List<Element> topicrefs) throws IOException {
+        logger.info("Write {0}", chunk.src);
+        for (Element topicref : topicrefs) {
+            chunk.topicref.appendChild(topicref);
+        }
+        job.getStore().writeDocument(doc, chunk.src);
+    }
+
+    private void processSplitDitabase(ChunkOperation chunk, List<Element> topicrefs) throws IOException {
+        // move nested topicrefs of split topicref to last generated topicref
+        final List<Element> nestedTopicrefs = getChildElements(chunk.topicref, MAP_TOPICREF);
+        final Element lastTopicref = topicrefs.get(topicrefs.size() - 1);
+        for (Element nestedTopicref : nestedTopicrefs) {
+            lastTopicref.appendChild(chunk.topicref.removeChild(nestedTopicref));
+        }
+        // insert generated topicrefs next to split topicref
+        final Element parentNode = (Element) chunk.topicref.getParentNode();
+        for (Element topicref : topicrefs) {
+            parentNode.insertBefore(topicref, chunk.topicref);
+        }
+        // remove split topicref
+        parentNode.removeChild(chunk.topicref);
+        // remove ditabase
+        job.remove(job.getFileInfo(chunk.src));
+        logger.info("Delete {0}", chunk.src);
+        job.getStore().delete(chunk.src);
     }
 
     private List<Element> splitNestedTopic(final FileInfo fileInfo, final Element topic, final Element topicref) {
