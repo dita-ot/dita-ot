@@ -98,19 +98,29 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 logger.info("Split {0}", chunk.src);
                 final FileInfo fileInfo = job.getFileInfo(chunk.src);
                 final Document doc = job.getStore().getDocument(chunk.src);
-                splitNestedTopic(fileInfo, doc.getDocumentElement(), chunk.topicref);
+                var topicrefs = splitNestedTopic(fileInfo, doc.getDocumentElement(), chunk.topicref);
                 if (doc.getDocumentElement().getTagName().equals(ELEMENT_NAME_DITA)) {
                     job.remove(job.getFileInfo(chunk.src));
                     logger.info("Delete {0}", chunk.src);
                     job.getStore().delete(chunk.src);
-                    final List<Element> topicrefs = getChildElements(chunk.topicref, MAP_TOPICREF);
+                    // move nested topicrefs of split topicref to last generated topicref
+                    final List<Element> nestedTopicrefs = getChildElements(chunk.topicref, MAP_TOPICREF);
+                    final Element lastTopicref = topicrefs.get(topicrefs.size() - 1);
+                    for (Element nestedTopicref : nestedTopicrefs) {
+                        lastTopicref.appendChild(chunk.topicref.removeChild(nestedTopicref));
+                    }
+                    // insert generated topicrefs next to split topicref
                     final Element parentNode = (Element) chunk.topicref.getParentNode();
                     for (Element topicref : topicrefs) {
-                        parentNode.insertBefore(chunk.topicref.removeChild(topicref), chunk.topicref);
+                        parentNode.insertBefore(topicref, chunk.topicref);
                     }
+                    // remove split topicref
                     parentNode.removeChild(chunk.topicref);
                 } else {
                     logger.info("Write {0}", chunk.src);
+                    for (Element topicref : topicrefs) {
+                        chunk.topicref.appendChild(topicref);
+                    }
                     job.getStore().writeDocument(doc, chunk.src);
                 }
             }
@@ -118,38 +128,42 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    private void splitNestedTopic(final FileInfo fileInfo, final Element topic, final Element topicref) {
+    private List<Element> splitNestedTopic(final FileInfo fileInfo, final Element topic, final Element topicref) {
         topicref.removeAttribute(ATTRIBUTE_NAME_CHUNK);
-        final List<Element> nestedTopics = getChildElements(topic, TOPIC_TOPIC);
-        for (Element nestedTopic : nestedTopics) {
-            final Element nestedTopicref = topicref.getOwnerDocument().createElement(MAP_TOPICREF.localName);
-            nestedTopicref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
+        return getChildElements(topic, TOPIC_TOPIC).stream()
+                .map(nestedTopic -> {
+                    final Element nestedTopicref = topicref.getOwnerDocument().createElement(MAP_TOPICREF.localName);
+                    nestedTopicref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
 
-            splitNestedTopic(fileInfo, nestedTopic, nestedTopicref);
+                    final List<Element> childTopicrefs = splitNestedTopic(fileInfo, nestedTopic, nestedTopicref);
+                    for (Element childTopicref : childTopicrefs) {
+                        nestedTopicref.appendChild(childTopicref);
+                    }
 
-            final Element removedNestedTopic = (Element) topic.removeChild(nestedTopic);
-            final Document doc = xmlUtils.getDocumentBuilder().newDocument();
-            final Element adoptedNestedTopic = (Element) doc.adoptNode(removedNestedTopic);
-            doc.appendChild(adoptedNestedTopic);
-            cascadeNamespaces(adoptedNestedTopic, topic);
-            final URI dst = URI.create(topic.getBaseURI().replaceAll("\\.dita$", "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID) + ".dita"));
-            final URI tmp = job.tempDirURI.relativize(dst);
-            final URI result = URI.create(fileInfo.result.toString().replaceAll("\\.dita$", "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID) + ".dita"));
-            final FileInfo adoptedFileInfo = new Builder(fileInfo)
-                    .uri(tmp)
-                    .result(result)
-                    .build();
-            job.add(adoptedFileInfo);
-            try {
-                logger.info("Write {0}", dst);
-                job.getStore().writeDocument(doc, dst);
-            } catch (IOException e) {
-                logger.error("Failed to write {0}", dst, e);
-            }
+                    final Element removedNestedTopic = (Element) topic.removeChild(nestedTopic);
+                    final Document doc = xmlUtils.getDocumentBuilder().newDocument();
+                    final Element adoptedNestedTopic = (Element) doc.adoptNode(removedNestedTopic);
+                    doc.appendChild(adoptedNestedTopic);
+                    cascadeNamespaces(adoptedNestedTopic, topic);
+                    final URI dst = URI.create(topic.getBaseURI().replaceAll("\\.dita$", "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID) + ".dita"));
+                    final URI tmp = job.tempDirURI.relativize(dst);
+                    final URI result = URI.create(fileInfo.result.toString().replaceAll("\\.dita$", "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID) + ".dita"));
+                    final FileInfo adoptedFileInfo = new Builder(fileInfo)
+                            .uri(tmp)
+                            .result(result)
+                            .build();
+                    job.add(adoptedFileInfo);
+                    try {
+                        logger.info("Write {0}", dst);
+                        job.getStore().writeDocument(doc, dst);
+                    } catch (IOException e) {
+                        logger.error("Failed to write {0}", dst, e);
+                    }
 
-            nestedTopicref.setAttribute(ATTRIBUTE_NAME_HREF, tmp.resolve(".").relativize(tmp).toString());
-            topicref.appendChild(nestedTopicref);
-        }
+                    nestedTopicref.setAttribute(ATTRIBUTE_NAME_HREF, tmp.resolve(".").relativize(tmp).toString());
+                    return nestedTopicref;
+                })
+                .collect(Collectors.toList());
     }
 
     private void cascadeNamespaces(Element dst, Node src) {
