@@ -34,6 +34,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
                 {"duplicate", Collections.emptyMap()},
                 {"override", ImmutableMap.of("root-chunk-override", "combine")},
                 {"dita", Collections.emptyMap()},
+                {"combine-empty-ditabase", Collections.emptyMap()},
                 {"link", Collections.emptyMap()},
                 {"uplevels", Collections.emptyMap()},
                 {"uplevels-dir", Collections.emptyMap()},

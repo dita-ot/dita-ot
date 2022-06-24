@@ -450,7 +450,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final XdmNode node = job.getStore().getImmutableNode(src);
             final Step<XdmNode> firstTopicId = descendant(TOPIC_TOPIC.matcher()).first()
                     .then(attribute(ATTRIBUTE_NAME_ID));
-            return node.select(firstTopicId).asString();
+            return node.select(firstTopicId)
+                    .findFirst()
+                    .map(XdmNode::getStringValue)
+                    .orElse(null);
         } catch (IOException e) {
             logger.error("Failed to read root ID from {0}", src, e);
             return null;
@@ -466,7 +469,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             Element dstTopic = getElement(rootChunk.src);
             doc = dstTopic.getOwnerDocument();
             if (dstTopic.getNodeName().equals(ELEMENT_NAME_DITA)) {
-                dstTopic = getLastChildTopic(dstTopic);
+                final Element lastChildTopic = getLastChildTopic(dstTopic);
+                if (lastChildTopic != null) {
+                    dstTopic = lastChildTopic;
+                }
             } else {
                 final Element ditaWrapper = createDita(doc);
                 doc.replaceChild(ditaWrapper, doc.getDocumentElement());
