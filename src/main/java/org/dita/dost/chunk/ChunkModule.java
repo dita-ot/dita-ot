@@ -118,16 +118,24 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     }
 
     private void processSplitDitabase(ChunkOperation chunk, List<Element> topicrefs) throws IOException {
-        // move nested topicrefs of split topicref to last generated topicref
-        final List<Element> nestedTopicrefs = getChildElements(chunk.topicref, MAP_TOPICREF);
-        final Element lastTopicref = topicrefs.get(topicrefs.size() - 1);
-        for (Element nestedTopicref : nestedTopicrefs) {
-            lastTopicref.appendChild(chunk.topicref.removeChild(nestedTopicref));
-        }
-        // insert generated topicrefs next to split topicref
         final Element parentNode = (Element) chunk.topicref.getParentNode();
-        for (Element topicref : topicrefs) {
-            parentNode.insertBefore(topicref, chunk.topicref);
+        if (topicrefs.isEmpty()) {
+            // move nested topicrefs of split topicref next to split topicref
+            final List<Element> nestedTopicrefs = getChildElements(chunk.topicref, MAP_TOPICREF);
+            for (Element nestedTopicref : nestedTopicrefs) {
+                parentNode.insertBefore(chunk.topicref.removeChild(nestedTopicref), chunk.topicref);
+            }
+        } else {
+            // move nested topicrefs of split topicref into last generated topicref
+            final List<Element> nestedTopicrefs = getChildElements(chunk.topicref, MAP_TOPICREF);
+            final Element lastTopicref = topicrefs.get(topicrefs.size() - 1);
+            for (Element nestedTopicref : nestedTopicrefs) {
+                lastTopicref.appendChild(chunk.topicref.removeChild(nestedTopicref));
+            }
+            // insert generated topicrefs next to split topicref
+            for (Element topicref : topicrefs) {
+                parentNode.insertBefore(topicref, chunk.topicref);
+            }
         }
         // remove split topicref
         parentNode.removeChild(chunk.topicref);
