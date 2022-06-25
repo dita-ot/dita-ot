@@ -52,7 +52,8 @@ public class ChunkModuleTest extends AbstractModuleTest {
                 {"split-dita", Collections.emptyMap()},
                 {"split-hierarchy", Collections.emptyMap()},
                 {"split-empty-ditabase", Collections.emptyMap()},
-                {"split-map", Collections.emptyMap()}
+                {"split-map", Collections.emptyMap()},
+                {"managing-links", Collections.emptyMap()}
         });
     }
 
@@ -65,6 +66,12 @@ public class ChunkModuleTest extends AbstractModuleTest {
         final AbstractPipelineInput input = new PipelineHashIO();
         input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
         return input;
+    }
+
+    @Override
+    public void test() {
+        initStore(job.getStore());
+        super.test();
     }
 
     @Override

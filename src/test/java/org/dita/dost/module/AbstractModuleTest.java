@@ -33,9 +33,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UncheckedIOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
@@ -155,6 +159,26 @@ public abstract class AbstractModuleTest {
         test();
     }
 
+    protected void initStore(Store cache) {
+        if (cache instanceof CacheStore) {
+            final File srcDir = new File(resourceDir, "src" + File.separator + testCase);
+            try {
+                Files.walk(srcDir.toPath())
+                        .filter(src -> Files.isRegularFile(src))
+                        .forEach(src -> {
+                    final URI dst = tempDir.toPath().resolve(srcDir.toPath().relativize(src)).toUri();
+                    try (OutputStream out = cache.getOutputStream(dst)) {
+                        Files.copy(src, out);
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
+                });
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+    }
+
     public void test() {
         final File expDir = new File(expBaseDir, testCase);
         try {
@@ -182,7 +206,9 @@ public abstract class AbstractModuleTest {
         final Set<String> names = new HashSet<>();
         final String[] actList = actDir.list();
         if (actList != null) {
-            names.addAll(Arrays.asList(actList));
+            Stream.of(actList)
+                    .filter(f -> store.exists(new File(f).toURI()))
+                    .forEach(names::add);
         }
         final String[] expList = expDir.list();
         if (expList != null) {
