@@ -162,9 +162,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     final Element adoptedNestedTopic = (Element) doc.adoptNode(removedNestedTopic);
                     doc.appendChild(adoptedNestedTopic);
                     cascadeNamespaces(adoptedNestedTopic, topic);
-                    final URI dst = URI.create(topic.getBaseURI().replaceAll("\\.dita$", "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID) + ".dita"));
+                    final String suffix = "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID);
+                    final URI dst = addSuffixToPath(job.tempDirURI.resolve(fileInfo.uri), suffix);
                     final URI tmp = job.tempDirURI.relativize(dst);
-                    final URI result = URI.create(fileInfo.result.toString().replaceAll("\\.dita$", "_" + adoptedNestedTopic.getAttribute(ATTRIBUTE_NAME_ID) + ".dita"));
+                    final URI result = addSuffixToPath(fileInfo.result, suffix);
                     final FileInfo adoptedFileInfo = new Builder(fileInfo)
                             .uri(tmp)
                             .result(result)
@@ -181,6 +182,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     return nestedTopicref;
                 })
                 .collect(Collectors.toList());
+    }
+
+    private URI addSuffixToPath(URI src, String suffix) {
+        return setPath(src, src.getPath().replaceAll("\\.dita$", suffix + ".dita"));
     }
 
     private void cascadeNamespaces(Element dst, Node src) {
