@@ -2,7 +2,7 @@ name: Release
 on:
   push:
     tags:
-      - '*'
+      - "*"
 jobs:
   # Build distribution package and upload the GitHub releases
   dist:
@@ -11,13 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          submodules: 'recursive'
+          submodules: "recursive"
       - name: Set up JDK 1.8
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '8'
-          cache: 'gradle'
+          distribution: "temurin"
+          java-version: "8"
+          cache: "gradle"
       - name: Set tag name
         run: |
           echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
@@ -32,6 +32,32 @@ jobs:
         with:
           files: |
             build/distributions/*.zip
+  # Build DITA-OT Docker image and deploy to ghcr.io
+  docker:
+    if: github.repository == 'dita-ot/dita-ot'
+    needs: dist
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set tag name
+        run: |
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Login
+        run: |
+          echo $PAT | docker login ghcr.io --username ditaotbot --password-stdin
+        env:
+          PAT: ${{ secrets.PACKAGE_REGISTRY }}
+      - name: Build image
+        run: |
+          docker build --tag ghcr.io/dita-ot/dita-ot:${VERSION} --build-arg VERSION=${VERSION} .
+        env:
+          VERSION: ${{ env.tag }}
+      - name: Deploy image
+        run: |
+          docker push ghcr.io/dita-ot/dita-ot:${VERSION}
+        env:
+          VERSION: ${{ env.tag }}
   # Publish release to Maven
   maven:
     if: github.repository == 'dita-ot/dita-ot'
@@ -41,9 +67,9 @@ jobs:
       - name: Set up JDK 1.8
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '8'
-          cache: 'gradle'
+          distribution: "temurin"
+          java-version: "8"
+          cache: "gradle"
       - name: Deploy Maven release
         run: |
           echo "$GPG_ASC" > 24AC15F2.asc
