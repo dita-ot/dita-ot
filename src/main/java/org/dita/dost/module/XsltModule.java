@@ -19,6 +19,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DelegatingURIResolver;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 
 import javax.xml.transform.Source;
@@ -114,7 +115,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 final List<Entry<File, File>> tmps = includes.stream().parallel()
                         .map(include -> {
                             try {
-                                final File in = new File(baseDir, include.getPath());
+                                final File in = FileUtils.getFilePath(baseDir, include);
                                 final File out = getOutput(include.getPath());
                                 if (out == null) {
                                     return null;
@@ -159,7 +160,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     }
 
     private File getOutput(final String path) {
-        File out = new File(destDir, path);
+        File out = FileUtils.getFilePath(destDir, path);
         if (mapper != null) {
             final String[] outs = mapper.mapFileName(path);
             if (outs == null) {
@@ -168,7 +169,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             if (outs.length > 1) {
                 throw new RuntimeException("XSLT module only support one to one output mapping");
             }
-            out = new File(destDir, outs[0]);
+            out = FileUtils.getFilePath(destDir, outs[0]);
         } else if (extension != null) {
             out = new File(replaceExtension(out.getAbsolutePath(), extension));
         }

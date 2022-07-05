@@ -19,6 +19,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ConrefPushReader;
 import org.dita.dost.reader.ConrefPushReader.MoveKey;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.ConrefPushParser;
 import org.w3c.dom.DocumentFragment;
@@ -38,7 +39,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
             reader.setLogger(logger);
             reader.setJob(job);
             for (final FileInfo f: fis) {
-                final File file = new File(job.tempDir, f.file.getPath());
+                final File file = FileUtils.getFilePath(job.tempDir, f.file);
                 logger.info("Reading " + file.toURI());
                 //FIXME: this reader calculate parent directory
                 reader.read(file.getAbsoluteFile());

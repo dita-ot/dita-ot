@@ -24,6 +24,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.DelayConrefUtils;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
@@ -499,12 +500,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             if (r.out != null) {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
                         " to " + job.tempDirURI.resolve(r.out.uri));
-                job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
-                        new File(job.tempDir, r.out.file.getPath()).toURI(),
+                job.getStore().transform(FileUtils.getFilePath(job.tempDir, r.in.file).toURI(),
+                        FileUtils.getFilePath(job.tempDir, r.out.file).toURI(),
                         filters);
             } else {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
-                job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
+                job.getStore().transform(FileUtils.getFilePath(job.tempDir, r.in.file).toURI(),
                         filters);
             }
             // validate resource-only list

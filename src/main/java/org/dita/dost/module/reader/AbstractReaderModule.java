@@ -915,7 +915,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         // write list attribute to file
         final String fileKey = REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
         prop.setProperty(fileKey, REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
-        final File list = new File(job.tempDir, prop.getProperty(fileKey));
+        final File list = org.dita.dost.util.FileUtils.getFilePath(job.tempDir, prop.getProperty(fileKey));
         try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(list.toURI())))) {
             for (URI aNewSet : newSet) {
                 bufferedWriter.write(aNewSet.getPath());

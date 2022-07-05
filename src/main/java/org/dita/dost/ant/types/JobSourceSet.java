@@ -59,7 +59,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
             res = new ArrayList<>();
             for (final FileInfo f : job.getFileInfo(this::filter)) {
                 log("Scanning for " + f.file.getPath(), Project.MSG_VERBOSE);
-                final File tempFile = new File(job.tempDir, f.file.getPath());
+                final File tempFile = FileUtils.getFilePath(job.tempDir, f.file);
                 if (job.getStore().exists(tempFile.toURI())) {
                     log("Found temporary directory file " + tempFile, Project.MSG_VERBOSE);
                     res.add(new StoreResource(job, job.tempDirURI.relativize(f.uri)));

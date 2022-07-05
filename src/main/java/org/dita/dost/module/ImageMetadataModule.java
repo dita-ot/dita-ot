@@ -22,6 +22,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Pool;
 import org.dita.dost.writer.ImageMetadataFilter;
 import org.xml.sax.Attributes;
@@ -68,7 +69,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
                 });
                 job.getFileInfo(filter).stream()
                         .parallel()
-                        .map(f -> new File(job.tempDir, f.file.getPath()).getAbsoluteFile())
+                        .map(f -> FileUtils.getFilePath(job.tempDir, f.file).getAbsoluteFile())
                         .forEach(filename -> {
                             final ImageMetadataFilter writer = pool.borrowObject();
                             try {
@@ -82,7 +83,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
                 writer.setLogger(logger);
                 writer.setJob(job);
                 for (final FileInfo f : job.getFileInfo(filter)) {
-                    writer.write(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
+                    writer.write(FileUtils.getFilePath(job.tempDir, f.file).getAbsoluteFile());
                 }
             }
 

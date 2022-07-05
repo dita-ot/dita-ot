@@ -119,7 +119,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             logger.warn("Ignoring a copy-to file " + f.result);
             return;
         }
-        outputFile = new File(job.tempDir, f.file.getPath());
+        outputFile = FileUtils.getFilePath(job.tempDir, f.file);
         logger.info("Processing " + f.src + " to " + outputFile.toURI());
 
         final Set<URI> schemaSet = dic.get(f.uri);

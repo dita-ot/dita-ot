@@ -20,6 +20,7 @@ import java.io.File;
 import java.net.URI;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.URLUtils;
@@ -174,7 +175,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         filePath = stripFragment(filename);
         dirPath = dir;
         try {
-            final URI f = new File(dir, filePath).getAbsoluteFile().toURI();
+            final URI f = FileUtils.getFilePath(dir, filePath).getAbsoluteFile().toURI();
             logger.info("Processing " + f);
             job.getStore().transform(f, this);
         } catch (final RuntimeException e) {
@@ -251,7 +252,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
      * @return rewritten href value
      */
     private URI handleLocalHref(final URI attValue) {
-        final URI current = new File(dirPath, filePath).toURI().normalize();
+        final URI current = FileUtils.getFilePath(dirPath, filePath).toURI().normalize();
         final URI reference = current.resolve(attValue);
         final URI merge = output.toURI();
         return getRelativePath(merge, reference);
