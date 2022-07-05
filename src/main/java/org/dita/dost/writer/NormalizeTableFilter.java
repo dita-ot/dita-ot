@@ -108,6 +108,9 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
                 }
             }
         } else if (TOPIC_ROW.matches(cls)) {
+            if(tableState == null) {
+                tableState = new TableState();
+            }
             // TODO: Inline me to (currentColumn + 1)
             tableState.columnNumber = 1; // initialize the column number
             tableState.columnNumberEnd = 0;
@@ -127,6 +130,9 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
             }
             tableState.currentColumn = 0;
         } else if (TOPIC_ENTRY.matches(cls)) {
+            if(tableState == null) {
+                tableState = new TableState();
+            }
             processEntry(res);
         }
 
