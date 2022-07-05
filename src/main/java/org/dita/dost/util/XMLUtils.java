@@ -9,11 +9,11 @@ package org.dita.dost.util;
 
 import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.expr.instruct.TerminationException;
-import net.sf.saxon.lib.*;
+import net.sf.saxon.lib.CollationURIResolver;
+import net.sf.saxon.lib.ErrorReporter;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.s9api.*;
-import net.sf.saxon.s9api.streams.Predicates;
 import net.sf.saxon.s9api.streams.Step;
-import net.sf.saxon.s9api.streams.XdmStream;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -197,15 +197,18 @@ public final class XMLUtils {
                 logger.warn(error.getMessage());
             } else {
                 if (error.getCause() instanceof FileNotFoundException) {
-                    error.asWarning();
-                    final StringBuilder buf = new StringBuilder()
-                            .append(error.getLocation().getSystemId())
-                            .append(":")
-                            .append(error.getLocation().getLineNumber())
-                            .append(":")
-                            .append(error.getLocation().getColumnNumber())
-                            .append(": ")
-                            .append(error.getMessage());
+                    error = error.asWarning();
+                    final StringBuilder buf = new StringBuilder();
+                    final Location location = error.getLocation();
+                    if (location != null) {
+                        buf.append(location.getSystemId())
+                                .append(":")
+                                .append(location.getLineNumber())
+                                .append(":")
+                                .append(location.getColumnNumber())
+                                .append(": ");
+                    }
+                    buf.append(error.getMessage());
                     logger.warn(buf.toString());
                 } else {
                     logger.error(error.getMessage());
