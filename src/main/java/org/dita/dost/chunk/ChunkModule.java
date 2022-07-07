@@ -461,12 +461,17 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                         : mapFile.resolve(id + FILE_EXTENSION_DITA), id);
             }
         }
+
+        rewriteMap.put(rootChunk.src, dst);
+        if (rootChunk.src != null) {
+            rewriteMap.put(setFragment(rootChunk.src, id), dst);
+        }
+
         final ChunkBuilder builder = new ChunkBuilder(rootChunk.operation)
                 .topicref(rootChunk.topicref)
                 .src(rootChunk.src)
                 .dst(dst)
                 .id(id);
-        rewriteMap.put(rootChunk.src, dst);
         for (ChunkOperation child : rootChunk.children) {
             final ChunkBuilder childBuilder = rewriteChunkChild(
                     rewriteMap,
@@ -494,12 +499,17 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             id = GEN_UNIQUE_PREFIX + i;
             dst = setFragment(rootChunkSrc, id);
         }
+
+        rewriteMap.put(chunk.src, dst);
+        if (chunk.src != null) {
+            rewriteMap.put(setFragment(chunk.src, id), dst);
+        }
+
         final ChunkBuilder builder = new ChunkBuilder(chunk.operation)
                 .topicref(chunk.topicref)
                 .src(chunk.src)
                 .dst(dst)
                 .id(id);
-        rewriteMap.put(chunk.src, dst);
         for (ChunkOperation child : chunk.children) {
             builder.addChild(rewriteChunkChild(rewriteMap, rootChunkSrc, child));
         }
