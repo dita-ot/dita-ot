@@ -5,17 +5,12 @@
      domains="a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)"
      specializations="@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product">
   <title class="- topic/title ">Map with chunks and key definitions</title>
-  <!--1-->
   <keydef class="+ map/topicref mapgroup-d/keydef " href="splitThis.dita" keys="splitThisKey"
           processing-role="resource-only"/>
-  <!--2-->
   <keydef class="+ map/topicref mapgroup-d/keydef " href="splitThis.dita#splitThisChild" keys="splitThisChildKey"
           processing-role="resource-only"/>
-  <!--1-->
   <topicref chunk="split" class="- map/topicref " href="splitThis.dita" keys="explicitSplitKey"/>
-  <!--3-->
   <topicref chunk="combine" class="- map/topicref " href="combineThis.dita" keys="combineThisKey">
-    <!--3-->
     <topicref class="- map/topicref " href="combinedChild.dita" keys="combinedChildKey"/>
   </topicref>
   <topicref class="- map/topicref " href="links.dita"/>

@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.*;
@@ -44,6 +46,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
     static final String GEN_CHUNK_PREFIX = "Chunk";
     static final String GEN_UNIQUE_PREFIX = "unique_";
+    static final Pattern EXTENSION_PATTERN = Pattern.compile("\\.\\w+?$");
     private TempFileNameScheme tempFileNameScheme;
     private String rootChunkOverride;
 
@@ -219,11 +222,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     final Element adoptedNestedTopic = (Element) doc.adoptNode(removedNestedTopic);
                     doc.appendChild(adoptedNestedTopic);
                     cascadeNamespaces(adoptedNestedTopic, topic);
-                    final String suffix = "_" + id;
                     final URI src = job.tempDirURI.resolve(fileInfo.uri);
-                    final URI dst = addSuffixToPath(src, suffix);
+                    final URI dst = addSuffixToPath(src, id);
                     final URI tmp = job.tempDirURI.relativize(dst);
-                    final URI result = addSuffixToPath(fileInfo.result, suffix);
+                    final URI result = addSuffixToPath(fileInfo.result, id);
                     final FileInfo adoptedFileInfo = new Builder(fileInfo)
                             .uri(tmp)
                             .result(result)
@@ -245,8 +247,18 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 .collect(Collectors.toList());
     }
 
-    private URI addSuffixToPath(URI src, String suffix) {
-        return setPath(src, src.getPath().replaceAll("\\.dita$", suffix + ".dita"));
+    private String generateSuffix(String id) {
+        return "_" + id;
+    }
+
+    private URI addSuffixToPath(URI src, String id) {
+        final String suffix = generateSuffix(id);
+        final Matcher matcher = EXTENSION_PATTERN.matcher(src.getPath());
+        if (matcher.find()) {
+            return setPath(src, matcher.replaceAll(suffix + "$0"));
+        } else {
+            return setPath(src, src.getPath() + suffix);
+        }
     }
 
     private void cascadeNamespaces(Element dst, Node src) {
@@ -439,7 +451,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final Collection<URI> values = rewriteMap.values();
 //            for (int i = 1; values.contains(dst); i++) {
 //                // FIXME
-//                id = GEN_CHUNK_PREFIX + i;
+//                id = generateChunkPrefix(i);
 //                dst = setFragment(rootChunk.src != null
 //                        ? setFragment(rootChunk.src, id)
 //                        : mapFile.resolve(id + FILE_EXTENSION_DITA), id);
@@ -452,10 +464,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             } else {
                 id = null;
             }
-            dst = rootChunk.src != null ? setFragment(rootChunk.src, id) : mapFile.resolve(GEN_CHUNK_PREFIX + "1" + FILE_EXTENSION_DITA);
+            dst = rootChunk.src != null ? setFragment(rootChunk.src, id) : mapFile.resolve(generateChunkPrefix(1) + FILE_EXTENSION_DITA);
             final Collection<URI> values = rewriteMap.values();
             for (int i = 1; id == null || values.contains(dst); i++) {
-                id = GEN_CHUNK_PREFIX + i;
+                id = generateChunkPrefix(i);
                 dst = setFragment(rootChunk.src != null
                         ? setFragment(rootChunk.src, id)
                         : mapFile.resolve(id + FILE_EXTENSION_DITA), id);
@@ -482,6 +494,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         return builder;
     }
 
+    private String generateChunkPrefix(int index) {
+        return GEN_CHUNK_PREFIX + index;
+    }
+
     private ChunkBuilder rewriteChunkChild(final Map<URI, URI> rewriteMap,
                                            final URI rootChunkSrc,
                                            final ChunkOperation chunk) {
@@ -496,7 +512,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         URI dst = setFragment(rootChunkSrc, id);
         final Collection<URI> values = rewriteMap.values();
         for (int i = 1; id == null || values.contains(dst); i++) {
-            id = GEN_UNIQUE_PREFIX + i;
+            id = generateUniquePrefix(i);
             dst = setFragment(rootChunkSrc, id);
         }
 
@@ -514,6 +530,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             builder.addChild(rewriteChunkChild(rewriteMap, rootChunkSrc, child));
         }
         return builder;
+    }
+
+    private String generateUniquePrefix(int index) {
+        return GEN_UNIQUE_PREFIX + index;
     }
 
     /**
