@@ -53,7 +53,8 @@ public class ChunkModuleTest extends AbstractModuleTest {
                 {"split-hierarchy", Collections.emptyMap()},
                 {"split-empty-ditabase", Collections.emptyMap()},
                 {"split-map", Collections.emptyMap()},
-                {"managing-links", Collections.emptyMap()}
+                {"managing-links", Collections.emptyMap()},
+                {"managing-links-duplicates", Collections.emptyMap()}
         });
     }
 
