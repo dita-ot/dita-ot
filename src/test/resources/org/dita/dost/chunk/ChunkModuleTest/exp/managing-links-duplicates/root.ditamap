@@ -12,13 +12,11 @@
   <topicref class="- map/topicref " href="splitThis.dita" keys="explicitSplitKey">
     <topicref class="- map/topicref " href="splitThis_splitThisChild.dita"/>
   </topicref>
-  <topicref class="- map/topicref " href="combineThis.dita#combineThisRoot" keys="combineThisKey">
+  <topicref class="- map/topicref " href="combineThis1.dita#combineThisRoot" keys="combineThisKey">
     <topicref class="- map/topicref " href="combineThis.dita#combinedChildRoot" keys="combinedChildKey"/>
   </topicref>
   <topicref class="- map/topicref " href="links.dita"/>
-  <!--
   <topicref class="- map/topicref " href="combinedChild.dita"/>
   <topicref class="- map/topicref " href="combineThis.dita"/>
-  -->
   <topicref class="- map/topicref " href="splitThis.dita"/>
 </map>

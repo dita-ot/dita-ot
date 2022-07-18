@@ -12,10 +12,10 @@
       <xref href="splitThis.dita#splitThisRoot" class="- topic/xref ">splitThis.dita#splitThisRoot</xref>
       <xref href="splitThis_splitThisChild.dita" class="- topic/xref ">splitThis.dita#splitThisChild</xref>
       <xref keyref="explicitSplitKey" class="- topic/xref " href="splitThis.dita">explicitSplitKey</xref>
-      <xref href="combineThis.dita#combineThisRoot" class="- topic/xref ">combineThis.dita</xref>
-      <xref href="combineThis.dita#combineThisRoot" class="- topic/xref ">combineThis.dita#combineThisRoot</xref>
+      <xref href="combineThis1.dita#combineThisRoot" class="- topic/xref ">combineThis.dita</xref>
+      <xref href="combineThis1.dita#combineThisRoot" class="- topic/xref ">combineThis.dita#combineThisRoot</xref>
       <xref href="combineThis.dita#combineThisChild" class="- topic/xref ">combineThis.dita#combineThisChild</xref>
-      <xref keyref="combineThisKey" class="- topic/xref " href="combineThis.dita#combineThisRoot">combineThisKey</xref>
+      <xref keyref="combineThisKey" class="- topic/xref " href="combineThis1.dita#combineThisRoot">combineThisKey</xref>
       <xref href="combineThis.dita#combinedChildRoot" class="- topic/xref ">combinedChild.dita</xref>
       <xref href="combineThis.dita#combinedChildRoot" class="- topic/xref ">combinedChild.dita#combinedChildRoot
       </xref>

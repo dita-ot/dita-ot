@@ -4,6 +4,8 @@
     <string>file:/</string>
   </property>
   <files>
+    <file src="file:/combinedChild.dita" uri="combinedChild.dita" path="combinedChild.dita"
+          result="file:/combinedChild.dita" format="dita" target="true"/>
     <file src="file:/combineThis.dita" uri="combineThis.dita" path="combineThis.dita" result="file:/combineThis.dita"
           format="dita" target="true"/>
     <file src="file:/splitThis.dita" uri="splitThis_splitThisChild.dita" path="splitThis_splitThisChild.dita"
@@ -16,5 +18,7 @@
           has-keyref="true" has-link="true" target="true"/>
     <file src="file:/root.ditamap" uri="root.ditamap" path="root.ditamap" result="file:/root.ditamap" format="ditamap"
           input="true"/>
+    <file src="file:/combineThis.dita" uri="combineThis1.dita" path="combineThis1.dita" result="file:/combineThis.dita"
+          format="dita" target="true"/>
   </files>
 </job>

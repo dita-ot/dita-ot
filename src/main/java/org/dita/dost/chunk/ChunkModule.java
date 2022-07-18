@@ -75,6 +75,17 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
+    private void removeChunkAttributes(final Element map, final ChunkOperation.Operation operation) {
+        if (map.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(operation.name)) {
+            map.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+        }
+        for (Element topicref : getChildElements(map, MAP_TOPICREF, true)) {
+            if (topicref.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(operation.name)) {
+                topicref.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+            }
+        }
+    }
+
     /**
      * Rewrite links in topics
      */
@@ -125,16 +136,17 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      * Process all combine chunks in input map.
      */
     private Map<URI, URI> processCombine(final URI mapFile, final Document mapDoc, final List<ChunkOperation> chunks) throws IOException {
-        // walk topicref | map
         if (chunks.stream().anyMatch(c -> c.operation.equals(COMBINE))) {
             final Map<URI, URI> rewriteMap = new HashMap<>();
-            final List<ChunkOperation> rewrittenChunks = rewriteCombineChunks(mapFile, mapDoc, rewriteMap, chunks);
+            final Set<URI> normalTopicRefs = getNormalTopicRefs(mapFile, mapDoc);
+            final List<ChunkOperation> rewrittenChunks = rewriteCombineChunks(mapFile, mapDoc, normalTopicRefs, rewriteMap, chunks);
             rewriteTopicrefs(mapFile, rewrittenChunks);
+            removeChunkAttributes(mapDoc.getDocumentElement(), COMBINE);
             logger.info("Writing {0}", mapFile);
             job.getStore().writeDocument(mapDoc, mapFile);
             // for each chunk
             generateChunks(rewrittenChunks, unmodifiableMap(rewriteMap));
-            removeChunkSources(rewrittenChunks);
+            removeChunkSources(normalTopicRefs, rewrittenChunks);
             return unmodifiableMap(rewriteMap);
         }
         return emptyMap();
@@ -161,6 +173,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     }
                 }
             }
+            removeChunkAttributes(mapDoc.getDocumentElement(), SPLIT);
+            logger.info("Writing {0}", mapFile);
             job.getStore().writeDocument(mapDoc, mapFile);
             return rewriteMap;
         }
@@ -186,14 +200,29 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         if (mapDoc.getDocumentElement().getAttribute(ATTRIBUTE_NAME_CHUNK).equals(SPLIT.name)) {
             return emptySet();
         }
-        return getChildElements(mapDoc.getDocumentElement(), MAP_TOPICREF, true).stream()
-                .filter(topicref -> topicref.getAttribute(ATTRIBUTE_NAME_CHUNK).isEmpty() &&
-                        !topicref.getAttribute(ATTRIBUTE_NAME_HREF).isEmpty() &&
-                        isNormalProcessRole(topicref))
-                .map(topicref -> setFragment(mapFile.resolve(topicref.getAttribute(ATTRIBUTE_NAME_HREF)), null))
-                .collect(Collectors.toSet());
+        final Set<URI> res = new HashSet<>();
+        getNormalTopicRefsWalker(mapFile, mapDoc.getDocumentElement(), res);
+        return res;
     }
 
+    private void getNormalTopicRefsWalker(final URI mapFile, final Element root, final Set<URI> res) {
+        if (MAP_TOPICREF.matches(root) || MAP_MAP.matches(root)) {
+            final String chunk = root.getAttribute(ATTRIBUTE_NAME_CHUNK);
+            final String href = root.getAttribute(ATTRIBUTE_NAME_HREF);
+            if (chunk.isEmpty() && !href.isEmpty() && isNormalProcessRole(root) && isDitaFormat(root)) {
+                res.add(removeFragment(mapFile.resolve(href)));
+            }
+            if (!chunk.equals(COMBINE.name)) {
+                final NodeList children = root.getChildNodes();
+                for (int i = 0; i < children.getLength(); i++) {
+                    final Node child = children.item(i);
+                    if (child.getNodeType() == Node.ELEMENT_NODE) {
+                        getNormalTopicRefsWalker(mapFile, (Element) child, res);
+                    }
+                }
+            }
+        }
+    }
 
     private void processSplitTopic(ChunkOperation chunk, Document doc, List<Element> topicrefs, FileInfo fileInfo) throws IOException {
         logger.info("Write {0}", chunk.dst);
@@ -340,11 +369,12 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         return doc;
     }
 
-    private void removeChunkSources(List<ChunkOperation> chunks) {
+    private void removeChunkSources(final Set<URI> normalTopicRefs,
+                                    final List<ChunkOperation> chunks) {
         final Set<URI> sources = collectResources(chunks, chunk -> chunk.src);
         final Set<URI> destinations = collectResources(chunks, chunk -> chunk.dst);
         final Set<URI> removed = sources.stream()
-                .filter(dst -> !destinations.contains(dst))
+                .filter(dst -> !destinations.contains(dst) && !normalTopicRefs.contains(dst))
                 .collect(Collectors.toSet());
         removed.forEach(tmp -> {
             logger.info("Remove {0}", tmp);
@@ -472,19 +502,20 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      */
     private List<ChunkOperation> rewriteCombineChunks(final URI mapFile,
                                                       final Document mapDoc,
+                                                      final Set<URI> normalTopicRefs,
                                                       final Map<URI, URI> rewriteMap,
                                                       final List<ChunkOperation> chunks) {
         return chunks.stream()
                 .filter(chunk -> chunk.operation == COMBINE)
-                .map(chunk -> rewriteCombineChunk(mapFile, mapDoc, rewriteMap, chunk).build())
+                .map(chunk -> rewriteCombineChunk(mapFile, mapDoc, normalTopicRefs, rewriteMap, chunk).build())
                 .collect(Collectors.toUnmodifiableList());
     }
 
     private ChunkBuilder rewriteCombineChunk(final URI mapFile,
                                              final Document mapDoc,
+                                             final Set<URI> normalTopicRefs,
                                              final Map<URI, URI> rewriteMap,
                                              final ChunkOperation rootChunk) {
-        final Set<URI> normalTopicRefs = getNormalTopicRefs(mapFile, mapDoc);
         String id = null;
         URI dst;
         if (MAP_MAP.matches(rootChunk.topicref)) {
@@ -512,22 +543,54 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 id = GEN_CHUNK_PREFIX + 1;
             }
             // init dst
+            URI dstBase;
             if (rootChunk.src == null) {
-                dst = mapFile.resolve(id + FILE_EXTENSION_DITA);
+                dstBase = mapFile.resolve(GEN_CHUNK_PREFIX + FILE_EXTENSION_DITA);
+                dst = addSuffix(dstBase, Integer.toString(1));
             } else {
-                dst = rootChunk.src;
+                dstBase = rootChunk.src;
+                dst = dstBase;
             }
             dst = setFragment(dst, id);
+
+//            URI dstBase;
+//            if (rootChunk.src == null) {
+//                dstBase = mapFile.resolve(GEN_CHUNK_PREFIX + FILE_EXTENSION_DITA);
+////                dst = mapFile.resolve(generateChunkPrefix(rootChunk.src, 1) + FILE_EXTENSION_DITA);
+////            } else if (normalTopicRefs.contains(rootChunk.src)){
+////                dstBase = rootChunk.src;
+////                dst = setFragment(addSuffix(rootChunk.src, "1"), id);
+//            } else {
+//                dstBase = rootChunk.src;
+////                dst = setFragment(rootChunk.src, id);
+//            }
+//            dst = setFragment(dstBase, id);
+
+            // guarantee unique dst
             final Collection<URI> values = rewriteMap.values();
-            for (int i = 1; values.contains(dst); i++) {
-                id = GEN_CHUNK_PREFIX + i;
+            for (int i = 1; values.contains(dst) || normalTopicRefs.contains(removeFragment(dst)); i++) {
                 if (rootChunk.src == null) {
-                    dst = mapFile.resolve(id + FILE_EXTENSION_DITA);
-                } else {
-                    dst = rootChunk.src;
+                    id = GEN_CHUNK_PREFIX + i;
+//                } else {
+//                    assert false;
+//                    dstBase = rootChunk.src;
                 }
+                dst = addSuffix(dstBase, Integer.toString(i));
                 dst = setFragment(dst, id);
             }
+
+//            for (int i = 1; id == null || values.contains(dst) /*|| normalTopicRefs.contains(removeFragment(dst))*/ ; i++) {
+//                if (id == null) {
+//                    id = generateChunkPrefix(i);
+//                }
+////                if (rootChunk.src == null) {
+////                    dst = setFragment(mapFile.resolve(id + FILE_EXTENSION_DITA), id);
+////                } else {
+////                    dst = setFragment(setFragment(rootChunk.src, id), id);
+////                }
+//                dst = addSuffix(dstBase, "_" + i);
+//            }
+//            dst = setFragment(dst, id);
         }
 
         rewriteMap.put(rootChunk.src, dst);
@@ -801,7 +864,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                         .flatMap(child -> collectCombineChunks(mapFile, child).stream())
                         .forEachOrdered(builder::addChild);
                 // remove @chunk
-                elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+//                elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
                 chunks.add(builder.build());
             } else {
                 //     create chunk
@@ -817,7 +880,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                         .flatMap(child -> collectCombineChunks(mapFile, child).stream())
                         .forEachOrdered(builder::addChild);
                 // remove @chunk
-                elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+//                elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
                 chunks.add(builder.build());
             }
         } else if (chunk.equals(SPLIT.name)) {

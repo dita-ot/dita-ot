@@ -9,4 +9,7 @@
    <topicgroup class="+ map/topicref mapgroup-d/topicgroup " chunk="combine">
       <topicref class="- map/topicref " href="c.dita"/>
    </topicgroup>
+   <topicgroup class="+ map/topicref mapgroup-d/topicgroup " chunk="combine">
+      <topicref class="- map/topicref " href="d.dita"/>
+   </topicgroup>
 </map>
