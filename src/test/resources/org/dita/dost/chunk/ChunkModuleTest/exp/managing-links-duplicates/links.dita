@@ -16,10 +16,10 @@
       <xref href="combineThis1.dita#combineThisRoot" class="- topic/xref ">combineThis.dita#combineThisRoot</xref>
       <xref href="combineThis.dita#combineThisChild" class="- topic/xref ">combineThis.dita#combineThisChild</xref>
       <xref keyref="combineThisKey" class="- topic/xref " href="combineThis1.dita#combineThisRoot">combineThisKey</xref>
-      <xref href="combineThis.dita#combinedChildRoot" class="- topic/xref ">combinedChild.dita</xref>
-      <xref href="combineThis.dita#combinedChildRoot" class="- topic/xref ">combinedChild.dita#combinedChildRoot
+      <xref href="combineThis1.dita#combinedChildRoot" class="- topic/xref ">combinedChild.dita</xref>
+      <xref href="combineThis1.dita#combinedChildRoot" class="- topic/xref ">combinedChild.dita#combinedChildRoot
       </xref>
-      <xref keyref="combinedChildKey" class="- topic/xref " href="combineThis.dita#combinedChildRoot">combinedChildKey</xref>
+      <xref keyref="combinedChildKey" class="- topic/xref " href="combineThis1.dita#combinedChildRoot">combinedChildKey</xref>
     </p>
   </body>
 </topic>

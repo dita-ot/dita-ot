@@ -553,24 +553,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             }
             dst = setFragment(dst, id);
 
-//            URI dstBase;
-//            if (rootChunk.src == null) {
-//                dstBase = mapFile.resolve(GEN_CHUNK_PREFIX + FILE_EXTENSION_DITA);
-////                dst = mapFile.resolve(generateChunkPrefix(rootChunk.src, 1) + FILE_EXTENSION_DITA);
-////            } else if (normalTopicRefs.contains(rootChunk.src)){
-////                dstBase = rootChunk.src;
-////                dst = setFragment(addSuffix(rootChunk.src, "1"), id);
-//            } else {
-//                dstBase = rootChunk.src;
-////                dst = setFragment(rootChunk.src, id);
-//            }
-//            dst = setFragment(dstBase, id);
-
             // guarantee unique dst
             final Collection<URI> values = rewriteMap.values();
             for (int i = 1; values.contains(dst) || normalTopicRefs.contains(removeFragment(dst)); i++) {
                 if (rootChunk.src == null) {
-                    id = GEN_CHUNK_PREFIX + i;
+//                    id = GEN_CHUNK_PREFIX + i;
 //                } else {
 //                    assert false;
 //                    dstBase = rootChunk.src;
@@ -578,19 +565,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 dst = addSuffix(dstBase, Integer.toString(i));
                 dst = setFragment(dst, id);
             }
-
-//            for (int i = 1; id == null || values.contains(dst) /*|| normalTopicRefs.contains(removeFragment(dst))*/ ; i++) {
-//                if (id == null) {
-//                    id = generateChunkPrefix(i);
-//                }
-////                if (rootChunk.src == null) {
-////                    dst = setFragment(mapFile.resolve(id + FILE_EXTENSION_DITA), id);
-////                } else {
-////                    dst = setFragment(setFragment(rootChunk.src, id), id);
-////                }
-//                dst = addSuffix(dstBase, "_" + i);
-//            }
-//            dst = setFragment(dst, id);
         }
 
         rewriteMap.put(rootChunk.src, dst);
@@ -606,7 +580,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         for (ChunkOperation child : rootChunk.children) {
             final ChunkBuilder childBuilder = rewriteChunkChild(
                     rewriteMap,
-                    rootChunk.src != null ? rootChunk.src : dst,
+                    Objects.requireNonNull(dst),
                     child);
             builder.addChild(childBuilder);
         }
@@ -618,7 +592,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     }
 
     private ChunkBuilder rewriteChunkChild(final Map<URI, URI> rewriteMap,
-                                           final URI rootChunkSrc,
+                                           final URI rootChunkDst,
                                            final ChunkOperation chunk) {
         String id;
         if (chunk.src != null && chunk.src.getFragment() != null) {
@@ -628,11 +602,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         } else {
             id = null;
         }
-        URI dst = setFragment(rootChunkSrc, id);
+        URI dst = setFragment(rootChunkDst, id);
         final Collection<URI> values = rewriteMap.values();
         for (int i = 1; id == null || values.contains(dst); i++) {
             id = generateUniquePrefix(i);
-            dst = setFragment(rootChunkSrc, id);
+            dst = setFragment(rootChunkDst, id);
         }
 
         rewriteMap.put(chunk.src, dst);
@@ -646,7 +620,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 .dst(dst)
                 .id(id);
         for (ChunkOperation child : chunk.children) {
-            builder.addChild(rewriteChunkChild(rewriteMap, rootChunkSrc, child));
+            builder.addChild(rewriteChunkChild(rewriteMap, rootChunkDst, child));
         }
         return builder;
     }
