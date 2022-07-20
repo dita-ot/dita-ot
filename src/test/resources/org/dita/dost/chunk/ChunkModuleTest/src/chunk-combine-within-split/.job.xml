@@ -1,0 +1,12 @@
+<job>
+  <property name="user.input.dir.uri">
+    <string>file:/</string>
+  </property>
+  <files>
+    <file src="file:/root.ditamap" uri="root.ditamap" path="root.ditamap" format="ditamap" input="true"/>
+    <file src="file:/splitme.dita" uri="splitme.dita" path="splitme.dita" format="dita" target="true"/>
+    <file src="file:/exception.dita" uri="exception.dita" path="exception.dita" format="dita" target="true"/>
+    <file src="file:/exceptionChild.dita" uri="exceptionChild.dita" path="exceptionChild.dita" format="dita"
+          target="true"/>
+  </files>
+</job>

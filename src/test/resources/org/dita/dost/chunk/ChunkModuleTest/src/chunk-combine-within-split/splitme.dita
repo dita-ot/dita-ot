@@ -1,0 +1,14 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="splitme"
+       ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/title ">splitme</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">splitme</p>
+  </body>
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="splitmeChild"
+         ditaarch:DITAArchVersion="2.0">
+    <title class="- topic/title ">splitmeChild</title>
+    <body class="- topic/body ">
+      <p class="- topic/p ">splitmeChild</p>
+    </body>
+  </topic>
+</topic>
