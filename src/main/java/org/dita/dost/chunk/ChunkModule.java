@@ -12,6 +12,7 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Step;
 import org.dita.dost.chunk.ChunkOperation.ChunkBuilder;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -881,6 +882,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                     // remove @chunk
 //                    elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
                     chunks.add(builder.build());
+                } else {
+                    logger.warn(MessageUtils.getMessage("DOTJ086W", elem.getTagName()).setLocation(elem).toString());
                 }
                 for (Element child : getChildElements(elem, MAP_TOPICREF)) {
                     collectChunkOperations(mapFile, child, chunks, defaultOperation);
@@ -897,6 +900,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
      * Collect combine chunk contents.
      */
     private List<ChunkBuilder> collectCombineChunks(final URI mapFile, final Element elem) {
+        if (!elem.getAttribute(ATTRIBUTE_NAME_CHUNK).isEmpty()) {
+            logger.warn(MessageUtils.getMessage("DOTJ087W", elem.getAttribute(ATTRIBUTE_NAME_CHUNK))
+                    .setLocation(elem).toString());
+            elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+        }
         final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
         final Element navtitle = getNavtitle(elem);
         if (hrefNode != null && isDitaFormat(elem) && isLocalScope(elem)) {
