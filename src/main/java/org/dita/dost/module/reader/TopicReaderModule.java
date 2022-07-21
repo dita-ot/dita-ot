@@ -38,9 +38,9 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import static net.sf.saxon.s9api.streams.Steps.descendant;
-import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.ancestors;
 import static org.dita.dost.util.XMLUtils.toList;

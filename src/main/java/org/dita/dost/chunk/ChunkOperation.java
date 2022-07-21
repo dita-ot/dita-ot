@@ -98,6 +98,15 @@ class ChunkOperation {
             this.operation = operation;
         }
 
+        public ChunkBuilder(final ChunkOperation orig) {
+            this.operation = orig.operation;
+            this.src = orig.src;
+            this.dst = orig.dst;
+            this.id = orig.id;
+            this.topicref = orig.topicref;
+            this.children = orig.children.stream().map(ChunkBuilder::new).collect(Collectors.toList());
+        }
+
         public ChunkBuilder src(final URI src) {
 //            assert src.isAbsolute();
             this.src = src;

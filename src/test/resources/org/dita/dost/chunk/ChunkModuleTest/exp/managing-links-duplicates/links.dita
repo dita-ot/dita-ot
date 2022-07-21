@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+       xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="topic_c5c_3fr_c5b"
+       ditaarch:DITAArchVersion="2.0"
+       specializations="@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product"
+       class="- topic/topic "
+       domains="a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)">
+  <title class="- topic/title "/>
+  <body class="- topic/body ">
+    <p class="- topic/p ">
+      <xref href="splitThis.dita" class="- topic/xref ">splitThis.dita</xref>
+      <xref href="splitThis.dita#splitThisRoot" class="- topic/xref ">splitThis.dita#splitThisRoot</xref>
+      <xref href="splitThis_splitThisChild.dita" class="- topic/xref ">splitThis.dita#splitThisChild</xref>
+      <xref keyref="explicitSplitKey" class="- topic/xref " href="splitThis.dita">explicitSplitKey</xref>
+      <xref href="combineThis1.dita#combineThisRoot" class="- topic/xref ">combineThis.dita</xref>
+      <xref href="combineThis1.dita#combineThisRoot" class="- topic/xref ">combineThis.dita#combineThisRoot</xref>
+      <xref href="combineThis.dita#combineThisChild" class="- topic/xref ">combineThis.dita#combineThisChild</xref>
+      <xref keyref="combineThisKey" class="- topic/xref " href="combineThis1.dita#combineThisRoot">combineThisKey</xref>
+      <xref href="combineThis1.dita#combinedChildRoot" class="- topic/xref ">combinedChild.dita</xref>
+      <xref href="combineThis1.dita#combinedChildRoot" class="- topic/xref ">combinedChild.dita#combinedChildRoot
+      </xref>
+      <xref keyref="combinedChildKey" class="- topic/xref " href="combineThis1.dita#combinedChildRoot">combinedChildKey</xref>
+    </p>
+  </body>
+</topic>

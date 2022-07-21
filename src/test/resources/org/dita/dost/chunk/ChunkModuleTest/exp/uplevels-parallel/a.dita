@@ -69,7 +69,7 @@
           <p class="- topic/p ">
             <xref class="- topic/xref " href="a.dita#topic_a"/>
             <xref class="- topic/xref " href="a.dita#topic_aa"/>
-            <xref class="- topic/xref " href="dir/b.dita#topic_b"/>
+            <xref class="- topic/xref " href="a.dita#topic_b"/>
             <xref class="- topic/xref " href="a.dita#topic_c"/>
             <xref class="- topic/xref " href="dir/subdir/c.dita#topic_cc"/>
           </p>
@@ -77,7 +77,7 @@
         <related-links class="- topic/related-links ">
           <link class="- topic/link " href="a.dita#topic_a"/>
           <link class="- topic/link " href="a.dita#topic_aa"/>
-          <link class="- topic/link " href="dir/b.dita#topic_b"/>
+          <link class="- topic/link " href="a.dita#topic_b"/>
           <link class="- topic/link " href="a.dita#topic_c"/>
           <link class="- topic/link " href="dir/subdir/c.dita#topic_cc"/>
         </related-links>
@@ -113,7 +113,7 @@
             <xref class="- topic/xref " href="a.dita#topic_aa"/>
             <xref class="- topic/xref " href="a.dita#topic_b"/>
             <xref class="- topic/xref " href="dir/b.dita#topic_bb"/>
-            <xref class="- topic/xref " href="dir/subdir/c.dita#topic_c"/>
+            <xref class="- topic/xref " href="a.dita#topic_c"/>
           </p>
         </body>
         <related-links class="- topic/related-links ">
@@ -121,7 +121,7 @@
           <link class="- topic/link " href="a.dita#topic_aa"/>
           <link class="- topic/link " href="a.dita#topic_b"/>
           <link class="- topic/link " href="dir/b.dita#topic_bb"/>
-          <link class="- topic/link " href="dir/subdir/c.dita#topic_c"/>
+          <link class="- topic/link " href="a.dita#topic_c"/>
         </related-links>
       </topic>
     </topic>

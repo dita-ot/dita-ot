@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<job>
+  <property name="user.input.dir.uri">
+    <string>file:/</string>
+  </property>
+  <files>
+    <file src="file:/combineThis.dita" uri="combineThis.dita" path="combineThis.dita" result="file:/combineThis.dita"
+          format="dita" target="true"/>
+    <file src="file:/splitThis.dita" uri="splitThis_splitThisChild.dita" path="splitThis_splitThisChild.dita"
+          result="file:/splitThis_splitThisChild.dita" format="dita" target="true"/>
+    <file src="file:/splitThis.dita" uri="splitThis.dita" path="splitThis.dita" result="file:/splitThis.dita"
+          format="dita" target="true"/>
+    <file src="file:/root.ditamap" uri="root.ditamap" path="root.ditamap" result="file:/root.ditamap" format="ditamap"
+          input="true"/>
+    <file src="file:/links.dita" uri="links.dita" path="links.dita" result="file:/links.dita" format="dita"
+          has-keyref="true" has-link="true" target="true"/>
+  </files>
+</job>

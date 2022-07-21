@@ -1,0 +1,14 @@
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
+  <topic class="- topic/topic " ditaarch:DITAArchVersion="2.0" id="exception">
+    <title class="- topic/title ">exception</title>
+    <body class="- topic/body ">
+      <p class="- topic/p ">exception</p>
+    </body>
+    <topic class="- topic/topic " ditaarch:DITAArchVersion="2.0" id="exceptionChild">
+      <title class="- topic/title ">exceptionChild</title>
+      <body class="- topic/body ">
+        <p class="- topic/p ">exceptionChild</p>
+      </body>
+    </topic>
+  </topic>
+</dita>

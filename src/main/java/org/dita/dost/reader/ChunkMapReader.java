@@ -34,8 +34,8 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableSet;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
-import static org.dita.dost.chunk.ChunkModule.getDitaVersion;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.getDitaVersion;
 import static org.dita.dost.util.FileUtils.getFragment;
 import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.StringUtils.join;

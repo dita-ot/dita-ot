@@ -1,0 +1,9 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " id="middle-root"
+       ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/title ">Root topic in middle document</title>
+  <body>
+    <body class="- topic/body ">
+      <p class="- topic/p ">middle-root</p>
+    </body>
+  </body>
+</topic>

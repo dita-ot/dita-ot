@@ -437,6 +437,16 @@ See the accompanying LICENSE file for applicable license.
     <response>Use '%2' instead.</response>
   </message>
 
+  <message id="DOTJ086W" type="WARN">
+    <reason>Split chunk attribute found on '&lt;%1>' element that does not reference a topic.</reason>
+    <response>Ignoring chunk operation.</response>
+  </message>
+
+  <message id="DOTJ087W" type="WARN">
+    <reason>Found chunk attribute with value '%1' inside combine chunk.</reason>
+    <response>Ignoring chunk operation.</response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  
