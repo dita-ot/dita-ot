@@ -38,6 +38,7 @@ import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.chunk.ChunkOperation.Operation.SPLIT;
 import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.*;
 import static org.dita.dost.util.FileUtils.getName;
 import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.URLUtils.*;
@@ -939,41 +940,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             return getChildElement(topicref, MAP_TOPICMETA)
                     .flatMap(topicmeta -> getChildElement(topicmeta, TOPIC_NAVTITLE))
                     .orElse(null);
-        }
-        return null;
-    }
-
-    public boolean isDitaFormat(final Element elem) {
-        final String format = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
-        return isDitaFormat(format);
-    }
-
-    public boolean isDitaFormat(final String format) {
-        return format == null || format.isEmpty() || format.equals(ATTR_FORMAT_VALUE_DITA);
-    }
-
-    public static boolean isLocalScope(final Element elem) {
-        final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
-        return isLocalScope(scope);
-    }
-
-    public static boolean isLocalScope(final String scope) {
-        return scope == null || scope.isEmpty() || scope.equals(ATTR_SCOPE_VALUE_LOCAL);
-    }
-
-    public static boolean isNormalProcessRole(final Element elem) {
-        final String processingRole = elem.getAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE);
-        return !processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
-    }
-
-    public static Float getDitaVersion(Element topic) {
-        final String ditaVersion = topic.getAttributeNS(DITA_NAMESPACE, ATTRIBUTE_NAME_DITAARCHVERSION);
-        if (!ditaVersion.isEmpty()) {
-            try {
-                return Float.valueOf(ditaVersion);
-            } catch (IllegalArgumentException e) {
-                // Ignore
-            }
         }
         return null;
     }

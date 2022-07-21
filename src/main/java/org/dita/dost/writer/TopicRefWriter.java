@@ -17,8 +17,8 @@ import java.io.File;
 import java.net.URI;
 import java.util.Map;
 
-import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.FileUtils.getFragment;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
