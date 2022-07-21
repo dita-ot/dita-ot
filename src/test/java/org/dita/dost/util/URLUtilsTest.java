@@ -7,8 +7,9 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.URLUtils.toDirURI;
-import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,9 +17,8 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import static org.dita.dost.util.URLUtils.toDirURI;
+import static org.junit.Assert.*;
 
 public class URLUtilsTest {
 
@@ -300,5 +300,11 @@ public class URLUtilsTest {
     @Test
     public void setQuery_mailto() {
         assertEquals(URI.create("mailto:email@example.com?subject=Email"), URLUtils.setQuery(URI.create("mailto:email@example.com?subject=Email"), null));
+    }
+
+    @Test
+    public void addSuffixToPath() {
+        assertEquals(URI.create("file:/foo/barquz.baz"), URLUtils.addSuffixToPath(URI.create("file:/foo/bar.baz"), "quz"));
+        assertEquals(URI.create("file:/foo/barquz"), URLUtils.addSuffixToPath(URI.create("file:/foo/bar"), "quz"));
     }
 }

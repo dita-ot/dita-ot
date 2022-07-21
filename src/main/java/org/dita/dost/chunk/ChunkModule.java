@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -48,7 +47,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
     static final String GEN_CHUNK_PREFIX = "Chunk";
     static final String GEN_UNIQUE_PREFIX = "unique_";
-    static final Pattern EXTENSION_PATTERN = Pattern.compile("\\.\\w+?$");
     static final String SPLIT_CHUNK_DUPLICATE_SUFFIX = "1";
     private TempFileNameScheme tempFileNameScheme;
     private String rootChunkOverride;
@@ -325,13 +323,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     }
 
     private URI addSuffixToPath(URI src, String id) {
-        final String suffix = generateSuffix(id);
-        final Matcher matcher = EXTENSION_PATTERN.matcher(src.getPath());
-        if (matcher.find()) {
-            return setPath(src, matcher.replaceAll(suffix + "$0"));
-        } else {
-            return setPath(src, src.getPath() + suffix);
-        }
+        return URLUtils.addSuffixToPath(src, generateSuffix(id));
     }
 
     private void cascadeNamespaces(Element dst, Node src) {
