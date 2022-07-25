@@ -14,6 +14,7 @@ apply plugin: 'signing'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
+/** Semver version number */
 version = '4.0.0-SNAPSHOT'
 
 description = """DITA Open Toolkit"""
@@ -166,6 +167,7 @@ task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":fo
 // Distribution
 
 ext.distTempDir = file("${buildDir}/tmp/dist")
+/** When patch is "0", only use major and minor versions, e.g. 1.2 instead of 1.2.0 */
 def cleanVersion = project.version.split('\\.').toList()[2] == "0" ?
         project.version.split('\\.').toList().subList(0, 2).join('.').toString() :
         project.version
