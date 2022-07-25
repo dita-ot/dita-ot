@@ -571,7 +571,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:param name="flagrules"/>
   <xsl:choose>
    <xsl:when test="$flagrules/*">
-    <xsl:apply-templates select="$flagrules/*[1]" mode="conflict-check"/>
+    <xsl:apply-templates select="$flagrules/*[1]" mode="#current"/>
    </xsl:when>
    <xsl:otherwise>
     <xsl:value-of select="'false'"/>
@@ -588,7 +588,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:value-of select="'true'"/>
    </xsl:when>
    <xsl:when test="following-sibling::*">
-    <xsl:apply-templates select="following-sibling::*[1]" mode="conflict-check">
+    <xsl:apply-templates select="following-sibling::*[1]" mode="#current">
      <xsl:with-param name="color" select="@color"/>
      <xsl:with-param name="backcolor" select="@backcolor"/>
     </xsl:apply-templates>

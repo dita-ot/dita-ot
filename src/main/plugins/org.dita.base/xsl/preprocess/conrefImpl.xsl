@@ -454,7 +454,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Processing a copy of the original element, that used @conref: apply-templates on
      all of the attributes, though some may be filtered out. -->
   <xsl:template match="*" mode="original-attributes">
-    <xsl:apply-templates select="@*" mode="original-attributes"/>
+    <xsl:apply-templates select="@*" mode="#current"/>
   </xsl:template>
 
   <xsl:template match="@*" mode="original-attributes">

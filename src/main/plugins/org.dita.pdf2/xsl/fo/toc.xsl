@@ -54,7 +54,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
     
     <xsl:template match="/" mode="toc">
-        <xsl:apply-templates mode="toc">
+        <xsl:apply-templates mode="#current">
             <xsl:with-param name="include" select="'true'"/>
         </xsl:apply-templates>
     </xsl:template>
@@ -115,12 +115,12 @@ See the accompanying LICENSE file for applicable license.
                           </xsl:otherwise>
                         </xsl:choose>
                     </fo:block>
-                    <xsl:apply-templates mode="toc">
+                    <xsl:apply-templates mode="#current">
                         <xsl:with-param name="include" select="'true'"/>
                     </xsl:apply-templates>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:apply-templates mode="toc">
+                <xsl:apply-templates mode="#current">
                         <xsl:with-param name="include" select="'true'"/>
                 </xsl:apply-templates>
               </xsl:otherwise>
@@ -241,7 +241,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="node()" mode="toc">
         <xsl:param name="include"/>
-        <xsl:apply-templates mode="toc">
+        <xsl:apply-templates mode="#current">
             <xsl:with-param name="include" select="$include"/>
         </xsl:apply-templates>
     </xsl:template>

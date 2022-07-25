@@ -406,7 +406,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="not($linking='none') and @href and not(contains(@href,'#')) and not(@scope = 'peer')">
         <xsl:variable name="update-id-path" select="($mapref-id-path, generate-id(.))"/>
         <xsl:variable name="href" select="@href" as="xs:string?"/>
-        <xsl:apply-templates select="document($href, /)/*[contains(@class,' map/map ')]" mode="mapref">
+        <xsl:apply-templates select="document($href, /)/*[contains(@class,' map/map ')]" mode="#current">
           <xsl:with-param name="parentMaprefKeyscope" select="@keyscope" tunnel="yes"/>
           <xsl:with-param name="relative-path">
             <xsl:choose>
@@ -470,13 +470,13 @@ See the accompanying LICENSE file for applicable license.
       <xsl:if test="$keyscope">
         <xsl:attribute name="keyscope" select="$keyscope"/>
       </xsl:if>
-      <xsl:apply-templates select="@* | node()" mode="reltable-copy"/>
+      <xsl:apply-templates select="@* | node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
 
   <xsl:template match="@* | node()" mode="reltable-copy">
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="reltable-copy"/>
+      <xsl:apply-templates select="@* | node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
 
@@ -590,7 +590,7 @@ See the accompanying LICENSE file for applicable license.
     <!--@importance|@linking|@toc|@print|@search|@format|@scope-->
     <xsl:param name="attrib"/>
     <xsl:variable name="attrib-here">
-      <xsl:apply-templates select="@*[local-name()=$attrib]" mode="mappull:inherit-attribute"/>
+      <xsl:apply-templates select="@*[local-name()=$attrib]" mode="#current"/>
     </xsl:variable>
     <xsl:choose>
       <!-- Any time the attribute is specified on this element, use it -->
@@ -625,14 +625,14 @@ See the accompanying LICENSE file for applicable license.
             <xsl:value-of select="$colspec"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]" mode="mappull:inherit-attribute">
+            <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]" mode="#current">
               <xsl:with-param name="attrib" select="$attrib"/>
             </xsl:apply-templates>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="parent::*" mode="mappull:inherit-attribute">
+        <xsl:apply-templates select="parent::*" mode="#current">
           <xsl:with-param name="attrib" select="$attrib"/>
         </xsl:apply-templates>
       </xsl:otherwise>

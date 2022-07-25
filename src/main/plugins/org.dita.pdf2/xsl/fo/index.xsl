@@ -78,7 +78,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
         <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]" as="element()?"/>
         <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
-            <xsl:apply-templates mode="index-entries"/>
+            <xsl:apply-templates mode="#current"/>
         </xsl:if>
     </xsl:template>
 
@@ -93,7 +93,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="opentopic-index:index.entry" mode="index-entries">
         <xsl:choose>
             <xsl:when test="opentopic-index:index.entry">
-                <xsl:apply-templates mode="index-entries"/>
+                <xsl:apply-templates mode="#current"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy-of select="."/>
@@ -104,7 +104,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="opentopic-index:index.groups" mode="index-entries"/>
 
     <xsl:template match="*" priority="-1" mode="index-entries">
-        <xsl:apply-templates mode="index-entries"/>
+        <xsl:apply-templates mode="#current"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/indexterm ')]">
@@ -210,20 +210,20 @@ See the accompanying LICENSE file for applicable license.
         <xsl:with-param name="id" select="'Index'"/>
       </xsl:call-template>
     </fo:block>
-    <xsl:apply-templates select="//opentopic-index:index.groups" mode="index-postprocess"/>
+    <xsl:apply-templates select="//opentopic-index:index.groups" mode="#current"/>
   </xsl:template>
 
     <xsl:template match="*" mode="index-postprocess" priority="-1">
-    <xsl:apply-templates mode="index-postprocess"/>
+    <xsl:apply-templates mode="#current"/>
   </xsl:template>
 
   <xsl:template match="opentopic-index:index.groups" mode="index-postprocess">
-    <xsl:apply-templates mode="index-postprocess"/>
+    <xsl:apply-templates mode="#current"/>
   </xsl:template>
 
   <xsl:template match="opentopic-index:index.group[opentopic-index:index.entry]" mode="index-postprocess">
     <fo:block xsl:use-attribute-sets="index.entry" >
-      <xsl:apply-templates mode="index-postprocess"/>
+      <xsl:apply-templates mode="#current"/>
     </fo:block>
   </xsl:template>
 
@@ -322,7 +322,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="opentopic-index:index.entry" mode="get-see-destination-id">
       <xsl:value-of select="concat(@value,':')"/>
-      <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination-id"/>
+      <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="#current"/>
     </xsl:template>
 
     <xsl:template match="opentopic-index:index.entry" mode="get-see-value">
@@ -330,7 +330,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
             <xsl:if test="exists(opentopic-index:index.entry)">
               <xsl:text> </xsl:text>
-              <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+              <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="#current"/>
             </xsl:if>
         </fo:inline>
     </xsl:template>
@@ -444,7 +444,7 @@ See the accompanying LICENSE file for applicable license.
             <fo:table-row>
               <fo:table-cell>
                 <fo:block xsl:use-attribute-sets="index.entry__content">
-                  <xsl:apply-templates mode="index-postprocess"/>
+                  <xsl:apply-templates mode="#current"/>
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -468,7 +468,7 @@ See the accompanying LICENSE file for applicable license.
           </xsl:if>
         </fo:block>
         <fo:block xsl:use-attribute-sets="index.entry__content">
-          <xsl:apply-templates mode="index-postprocess"/>
+          <xsl:apply-templates mode="#current"/>
         </fo:block>
       </xsl:otherwise>
     </xsl:choose>

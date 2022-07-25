@@ -188,7 +188,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:sequence select="$newmaxcount"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/strow ')][1]" mode="count-max-simpletable-cells">
+          <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/strow ')][1]" mode="#current">
             <xsl:with-param name="maxcount" select="$newmaxcount"/>
           </xsl:apply-templates>
         </xsl:otherwise>
@@ -260,7 +260,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:function>
 
     <xsl:template match="*" mode="insert-text">
-        <xsl:apply-templates mode="insert-text"/>
+        <xsl:apply-templates mode="#current"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/indexterm ')]" mode="insert-text"/>
@@ -896,7 +896,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="node() | text()" mode="setTableEntriesScale">
         <xsl:copy>
-            <xsl:apply-templates select="node() | @* | text()" mode="setTableEntriesScale"/>
+            <xsl:apply-templates select="node() | @* | text()" mode="#current"/>
         </xsl:copy>
     </xsl:template>
 

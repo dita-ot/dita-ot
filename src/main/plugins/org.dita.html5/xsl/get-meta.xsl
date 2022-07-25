@@ -161,7 +161,7 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- CONTENT: Type -->
   <xsl:template match="dita" mode="gen-type-metadata">
-    <xsl:apply-templates select="*[1]" mode="gen-type-metadata"/>
+    <xsl:apply-templates select="*[1]" mode="#current"/>
   </xsl:template>
 
   <xsl:template match="*" mode="gen-type-metadata">
@@ -205,7 +205,7 @@ See the accompanying LICENSE file for applicable license.
     <meta name="rights">
       <xsl:attribute name="content">
         <xsl:text>&#xA9; </xsl:text>
-        <xsl:apply-templates select="*[contains(@class,' topic/copyryear ')][1]" mode="gen-metadata"/>
+        <xsl:apply-templates select="*[contains(@class,' topic/copyryear ')][1]" mode="#current"/>
         <xsl:text> </xsl:text>
         <xsl:if test="*[contains(@class,' topic/copyrholder ')]">
           <xsl:value-of select="*[contains(@class,' topic/copyrholder ')]"/>
@@ -234,7 +234,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:value-of select="@year"/>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates select="$next" mode="gen-metadata">
+    <xsl:apply-templates select="$next" mode="#current">
       <xsl:with-param name="previous" select="."/>
       <xsl:with-param name="open-sequence" select="$begin-sequence"/>
     </xsl:apply-templates>

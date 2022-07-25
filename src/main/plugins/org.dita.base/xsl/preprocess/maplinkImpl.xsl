@@ -53,11 +53,11 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="node() | @*" mode="strip">
     <xsl:copy>
-      <xsl:apply-templates select="node() | @*" mode="strip"/>
+      <xsl:apply-templates select="node() | @*" mode="#current"/>
     </xsl:copy>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' ditaot-d/submap ')]" mode="strip">
-    <xsl:apply-templates select="node()" mode="strip"/>
+    <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
 
   <!-- Start by creating the collection element for the map being processed. -->
@@ -142,7 +142,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:if test="*/*">
       <xsl:copy>
         <xsl:copy-of select="@*"/>
-        <xsl:apply-templates mode="add-links-to-temp-file"/>
+        <xsl:apply-templates mode="#current"/>
       </xsl:copy>
     </xsl:if>
   </xsl:template>
@@ -329,7 +329,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:apply-templates>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]" mode="recusive">
-    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="recusive"/>
+    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current"/>
   </xsl:template>
   <xsl:template match="*" mode="recusive" priority="-10">
     <xsl:apply-templates select="self::*[@href and not(@href = '')]
@@ -436,7 +436,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:value-of select="*[contains(@class, ' topic/title ')]"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates mode="grab-group-title" select="*[contains(@class, ' map/topicref ')][1]"/>
+        <xsl:apply-templates mode="#current" select="*[contains(@class, ' map/topicref ')][1]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>  
@@ -612,7 +612,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="@*|node()" mode="add-props-to-link">
     <xsl:copy>
-      <xsl:apply-templates select="@*|node()" mode="add-props-to-link"/>
+      <xsl:apply-templates select="@*|node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
   <xsl:template match="@imageref" mode="add-props-to-link">

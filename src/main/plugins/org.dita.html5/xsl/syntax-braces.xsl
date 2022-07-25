@@ -21,7 +21,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class,' pr-d/fragment ')]" mode="process-syntaxdiagram">
     <div>
     <a name="{*[contains(@class,' topic/title ')]}"> </a>
-    <xsl:apply-templates mode="process-syntaxdiagram"/>
+    <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
@@ -42,7 +42,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' topic/title ')]" mode="process-syntaxdiagram">
-    <h4><xsl:apply-templates mode="process-syntaxdiagram"/></h4>
+    <h4><xsl:apply-templates mode="#current"/></h4>
   </xsl:template>
   
   
@@ -247,7 +247,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:otherwise>
           <a href="#">
             <xsl:attribute name="onMouseOver">
-              <xsl:text>alert('</xsl:text><xsl:apply-templates mode="process-syntaxdiagram"/><xsl:text>')</xsl:text>
+              <xsl:text>alert('</xsl:text><xsl:apply-templates mode="#current"/><xsl:text>')</xsl:text>
             </xsl:attribute>
             <xsl:text>*</xsl:text>
           </a>

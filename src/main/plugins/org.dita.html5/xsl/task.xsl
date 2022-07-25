@@ -264,7 +264,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="." mode="steps">
       <xsl:with-param name="step_expand" select="$step_expand"/>
     </xsl:apply-templates>
-    <xsl:apply-templates select="following-sibling::*[1][contains(@class,' task/step ')]" mode="sequence-of-steps">
+    <xsl:apply-templates select="following-sibling::*[1][contains(@class,' task/step ')]" mode="#current">
       <xsl:with-param name="step_expand" select="$step_expand"/>
     </xsl:apply-templates>
   </xsl:template>

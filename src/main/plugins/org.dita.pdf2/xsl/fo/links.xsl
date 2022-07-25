@@ -235,14 +235,14 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/dlentry ')]" mode="retrieveReferenceTitle">
-      <xsl:apply-templates select="*[contains(@class,' topic/dt ')][1]" mode="retrieveReferenceTitle"/>
+      <xsl:apply-templates select="*[contains(@class,' topic/dt ')][1]" mode="#current"/>
     </xsl:template>
     <xsl:template match="*[contains(@class, ' topic/dt ')]" mode="retrieveReferenceTitle">
       <xsl:apply-templates select="." mode="text-only"/>
     </xsl:template>
   
     <xsl:template match="*[contains(@class, ' topic/title ')]" mode="retrieveReferenceTitle">
-      <xsl:apply-templates select=".." mode="retrieveReferenceTitle"/>
+      <xsl:apply-templates select=".." mode="#current"/>
     </xsl:template>
 
     <!-- Default rule: if element has a title, use that, otherwise return '#none#' -->

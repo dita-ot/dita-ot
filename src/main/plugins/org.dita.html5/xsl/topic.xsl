@@ -1900,7 +1900,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:variable>
       <!-- If there are any module/element pairs before the last one, process them and add a space -->
       <xsl:if test="contains(substring-before($checkclass, $lastpair), '/')">
-        <xsl:apply-templates select="." mode="get-element-ancestry">
+        <xsl:apply-templates select="." mode="#current">
           <xsl:with-param name="checkclass" select="substring-before($checkclass, $lastpair)"/>
         </xsl:apply-templates>
         <xsl:text> </xsl:text>
@@ -2113,12 +2113,12 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- For header file processing, pull out the wrapping DIV if one is there -->
   <xsl:template match="/div" mode="add-HDF">
-    <xsl:apply-templates select="*|comment()|processing-instruction()|text()" mode="add-HDF"/>
+    <xsl:apply-templates select="*|comment()|processing-instruction()|text()" mode="#current"/>
   </xsl:template>
   
   <xsl:template match="*|@*|comment()|processing-instruction()|text()" mode="add-HDF">
     <xsl:copy>
-      <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()" mode="add-HDF"/>
+      <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
   
