@@ -160,7 +160,7 @@ public final class XMLUtils {
                             .map(XdmItem::getStringValue)
                             .orElse("INFO");
                 final String msg = content
-                        .select(descendant(
+                        .select(child(
                                 hasLocalName("level").or(hasLocalName("error-code"))
                                         .and(hasType(ItemType.PROCESSING_INSTRUCTION_NODE))
                                 .negate()))
