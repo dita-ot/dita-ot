@@ -77,11 +77,13 @@ public class TestFileUtils {
             assertEquals(new File("d:\\a.dita"), FileUtils.getRelativePath(new File("c:\\map.ditamap"), new File("d:\\a.dita")));
             assertEquals(new File("a.dita"), FileUtils.getRelativePath(new File("c:\\map1\\map2\\map.ditamap"), new File("c:\\map1\\map2\\a.dita")));
             assertEquals(new File("../topic/a.dita"), FileUtils.getRelativePath(new File("c:\\map1\\map.ditamap"), new File("c:\\topic\\a.dita")));
+            assertEquals(new File("D:\\top_level_error\\out\\pdf-OPENME2\\index.html"), FileUtils.getRelativePath(new File("B1\\B2\\B3\\B4\\topic.dita"), new File("D:\\top_level_error\\out\\pdf-OPENME2\\index.html")));
         } else {
             assertEquals(new File("../a.dita"), FileUtils.getRelativePath(new File("/map/map.ditamap"), new File("/a.dita")));
             assertEquals(new File("a.dita"), FileUtils.getRelativePath(new File("/map.ditamap"), new File("/a.dita")));
             assertEquals(new File("a.dita"), FileUtils.getRelativePath(new File("/map1/map2/map.ditamap"), new File("/map1/map2/a.dita")));
             assertEquals(new File("../topic/a.dita"), FileUtils.getRelativePath(new File("/map1/map.ditamap"), new File("/topic/a.dita")));
+            assertEquals(new File("/top_level_error/out/pdf-OPENME2/index.html"), FileUtils.getRelativePath(new File("B1/B2/B3/B4/topic.dita"), new File("/top_level_error/out/pdf-OPENME2/index.html")));
         }
     }
     
