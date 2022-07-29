@@ -863,8 +863,17 @@ See the accompanying LICENSE file for applicable license.
     <xsl:element name="{name()}" namespace="{namespace-uri()}">
       <xsl:copy-of select="@* (: except @conref:orig-id :)"/>
       <xsl:variable name="orig-id" select="@conref:orig-id" as="attribute()"/>
-      <xsl:variable name="topic" select="ancestor::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
-      <xsl:variable name="content" select="$topic/*[not(contains(@class, ' topic/topic '))]" as="element()*"/>
+      <xsl:variable name="content" as="element()*">
+        <xsl:choose>
+          <xsl:when test="contains(@class, ' topic/topic ')">
+            <xsl:sequence select="."/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:variable name="topic" select="ancestor::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
+            <xsl:sequence select="$topic/*[not(contains(@class, ' topic/topic '))]"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
       <xsl:variable name="first" select="($content//@conref:orig-id[. = $orig-id])[1]" as="attribute()"/>
       <xsl:variable name="ids" as="element()*">
         <xsl:for-each select="$content">
