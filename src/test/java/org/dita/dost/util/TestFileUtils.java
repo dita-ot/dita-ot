@@ -7,16 +7,15 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-
-import java.io.*;
-
+import org.dita.dost.TestUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import org.dita.dost.TestUtils;
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.*;
 
 public class TestFileUtils {
 
@@ -273,16 +272,6 @@ public class TestFileUtils {
         assertFalse(FileUtils.directoryContains(srcDir, srcDir));
         assertFalse(FileUtils.directoryContains(new File(srcDir, "test"), srcDir));
         assertFalse(FileUtils.directoryContains(srcDir, new File(srcDir, ".." + File.separator + "test.txt")));
-    }
-    @Test
-    public void testFilePath() {
-        File f1 = new File(".").getAbsoluteFile();
-        File f2 = new File(srcDir, "test2.xml").getAbsoluteFile();
-        File f3 = new File("abc/test3.xml");
-        assertEquals(f2, FileUtils.getFilePath(f1, f2));
-        assertEquals(f2, FileUtils.getFilePath(f1, f2.toURI()));
-        assertEquals(f2, FileUtils.getFilePath(f1, f2.getPath()));
-        assertEquals(new File(f1, f3.getPath()), FileUtils.getFilePath(f1, f3));
     }
     
     @AfterClass

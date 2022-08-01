@@ -24,7 +24,6 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.DelayConrefUtils;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
@@ -33,7 +32,6 @@ import org.dita.dost.writer.KeyrefPaser;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.XMLFilter;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -500,12 +498,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             if (r.out != null) {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
                         " to " + job.tempDirURI.resolve(r.out.uri));
-                job.getStore().transform(FileUtils.getFilePath(job.tempDir, r.in.file).toURI(),
-                        FileUtils.getFilePath(job.tempDir, r.out.file).toURI(),
+                job.getStore().transform(job.tempDirURI.resolve(r.in.uri),
+                        job.tempDirURI.resolve(r.out.uri),
                         filters);
             } else {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
-                job.getStore().transform(FileUtils.getFilePath(job.tempDir, r.in.file).toURI(),
+                job.getStore().transform(job.tempDirURI.resolve(r.in.uri),
                         filters);
             }
             // validate resource-only list

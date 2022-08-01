@@ -154,7 +154,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         // write list attribute to file
         final String fileKey = REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
         prop.setProperty(fileKey, REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
-        final File list = FileUtils.getFilePath(job.tempDir, prop.getProperty(fileKey));
+        final File list = job.tempDir.toPath().resolve(prop.getProperty(fileKey)).toFile();
         try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(list.toURI())))) {
             for (URI aNewSet : newSet) {
                 bufferedWriter.write(aNewSet.getPath());

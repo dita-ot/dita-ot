@@ -7,10 +7,6 @@
  */
 package org.dita.dost.ant.types;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.supportedImageExtensions;
-import static org.dita.dost.util.URLUtils.*;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import org.apache.tools.ant.Project;
@@ -31,6 +27,11 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_IMAGE;
+import static org.dita.dost.util.FileUtils.supportedImageExtensions;
+import static org.dita.dost.util.URLUtils.toFile;
 
 /**
  * Resource collection that finds matching resources from job configuration.
@@ -59,7 +60,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
             res = new ArrayList<>();
             for (final FileInfo f : job.getFileInfo(this::filter)) {
                 log("Scanning for " + f.file.getPath(), Project.MSG_VERBOSE);
-                final File tempFile = FileUtils.getFilePath(job.tempDir, f.file);
+                final File tempFile = new File(job.tempDirURI.resolve(f.uri));
                 if (job.getStore().exists(tempFile.toURI())) {
                     log("Found temporary directory file " + tempFile, Project.MSG_VERBOSE);
                     res.add(new StoreResource(job, job.tempDirURI.relativize(f.uri)));

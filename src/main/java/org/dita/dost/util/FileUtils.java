@@ -615,34 +615,5 @@ public final class FileUtils {
             return c.getPath().startsWith(d.getPath());
         }
     }
-    
-    /**
-     * Get a file path.
-     * @param parent The parent file.
-     * @param path An URI containing a path which can be either absolute or relative. 
-     * @return The file path, never <code>null</code>
-     */
-    public static File getFilePath(File parent, URI path) {
-        return parent.toPath().resolve(path.getPath()).toFile();
-    }
-    
-    /**
-     * Get a file path.
-     * @param parent The parent file.
-     * @param path A file containing a path which can be either absolute or relative. 
-     * @return The file path, never <code>null</code>
-     */
-    public static File getFilePath(File parent, File path) {
-        return parent.toPath().resolve(path.toPath()).toFile();
-    }
 
-    /**
-     * Get a file path.
-     * @param parent The parent file.
-     * @param path A file path which can be either absolute or relative. 
-     * @return The file path, never <code>null</code>
-     */
-    public static File getFilePath(File parent, String path) {
-        return parent.toPath().resolve(path).toFile();
-    }
 }

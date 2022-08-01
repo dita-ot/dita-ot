@@ -15,7 +15,6 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DelegatingURIResolver;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -88,7 +87,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     }
 
     private void processMap(final FileInfo input) throws DITAOTException {
-        final File inputFile = FileUtils.getFilePath(job.tempDir, input.file);
+        final File inputFile = new File(job.tempDirURI.resolve(input.uri));
         final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
 
         logger.info("Processing " + inputFile.toURI());
@@ -161,8 +160,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     }
 
     private void replace(final FileInfo input) throws DITAOTException {
-        final File inputFile = FileUtils.getFilePath(job.tempDir, input.file.getPath() + FILE_EXTENSION_TEMP);
-        final File outputFile = FileUtils.getFilePath(job.tempDir, input.file);
+        final File inputFile = new File(job.tempDirURI.resolve(input.uri + FILE_EXTENSION_TEMP));
+        final File outputFile = new File(job.tempDirURI.resolve(input.uri));
         try {
             job.getStore().move(inputFile.toURI(), outputFile.toURI());
         } catch (final IOException e) {

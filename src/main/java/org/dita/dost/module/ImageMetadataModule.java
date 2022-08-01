@@ -7,7 +7,13 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.*;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Pool;
+import org.dita.dost.writer.ImageMetadataFilter;
+import org.xml.sax.Attributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,16 +22,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.pipeline.AbstractPipelineInput;
-import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Pool;
-import org.dita.dost.writer.ImageMetadataFilter;
-import org.xml.sax.Attributes;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Image metadata module.
@@ -69,7 +67,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
                 });
                 job.getFileInfo(filter).stream()
                         .parallel()
-                        .map(f -> FileUtils.getFilePath(job.tempDir, f.file).getAbsoluteFile())
+                        .map(f -> new File(job.tempDirURI.resolve(f.uri)).getAbsoluteFile())
                         .forEach(filename -> {
                             final ImageMetadataFilter writer = pool.borrowObject();
                             try {
@@ -83,7 +81,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
                 writer.setLogger(logger);
                 writer.setJob(job);
                 for (final FileInfo f : job.getFileInfo(filter)) {
-                    writer.write(FileUtils.getFilePath(job.tempDir, f.file).getAbsoluteFile());
+                    writer.write(new File(job.tempDirURI.resolve(f.uri)).getAbsoluteFile());
                 }
             }
 

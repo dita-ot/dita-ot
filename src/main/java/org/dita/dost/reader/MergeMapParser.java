@@ -8,36 +8,29 @@
  */
 package org.dita.dost.reader;
 
-import static javax.xml.transform.OutputKeys.*;
-import static org.dita.dost.chunk.ChunkModule.isLocalScope;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.*;
+import org.dita.dost.util.Job.FileInfo;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.XMLFilterImpl;
 
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Stack;
 
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
-
-import org.xml.sax.helpers.XMLFilterImpl;
-import org.xml.sax.helpers.AttributesImpl;
-
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.MergeUtils;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
+import static org.dita.dost.chunk.ChunkModule.isLocalScope;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 /**
  * MergeMapParser reads the ditamap file after preprocessing and merges
@@ -250,14 +243,14 @@ public final class MergeMapParser extends XMLFilterImpl {
                     String element = f.file.getPath();
                     if (!dirPath.equals(tempdir)) {
                         element = FileUtils.getRelativeUnixPath(new File(dirPath,"a.ditamap").getAbsolutePath(),
-                                                                   FileUtils.getFilePath(tempdir, element).getAbsolutePath());
+                                                                   tempdir.toPath().resolve(element).toAbsolutePath().toString());
                     }
                     final URI abs = job.tempDirURI.resolve(f.uri);
                     if (!util.isVisited(abs)) {
                         util.visit(abs);
                         if (!f.isResourceOnly) {
                             //ensure the file exists
-                            final File file = FileUtils.getFilePath(dirPath, element);
+                            final File file = dirPath.toPath().resolve(element).toFile();
                             if (job.getStore().exists(file.toURI())) {
                                 topicParser.parse(element, dirPath);
                             } else {

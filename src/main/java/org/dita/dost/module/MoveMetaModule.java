@@ -16,7 +16,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DelegatingURIResolver;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.DitaMapMetaWriter;
 import org.dita.dost.writer.DitaMetaWriter;
@@ -81,7 +80,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         }
 
         for (final FileInfo f : fis) {
-            final File inputFile = FileUtils.getFilePath(job.tempDir, f.file);
+            final File inputFile = new File(job.tempDirURI.resolve(f.uri));
             final File tmp = new File(inputFile.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis()));
             logger.info("Processing " + inputFile.toURI());
             logger.debug("Processing " + inputFile.toURI() + " to " + tmp.toURI());
@@ -134,7 +133,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 final URI key = stripFragment(entry.getKey());
                 final FileInfo fi = job.getFileInfo(key);
                 if (fi == null) {
-                    logger.error("File " + FileUtils.getFilePath(job.tempDir, key) + " was not found.");
+                    logger.error("File " + job.tempDirURI.resolve(key) + " was not found.");
                     continue;
                 }
                 final URI targetFileName = job.tempDirURI.resolve(fi.uri);
@@ -160,7 +159,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 final URI key = stripFragment(entry.getKey());
                 final FileInfo fi = job.getFileInfo(key);
                 if (fi == null) {
-                    logger.error("File " + FileUtils.getFilePath(job.tempDir, key) + " was not found.");
+                    logger.error("File " + job.tempDirURI.resolve(key) + " was not found.");
                     continue;
                 }
                 final URI targetFileName = job.tempDirURI.resolve(fi.uri);
@@ -187,7 +186,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         metaReader.setLogger(logger);
         metaReader.setJob(job);
         for (final FileInfo f : fis) {
-            final File mapFile = FileUtils.getFilePath(job.tempDir, f.file);
+            final File mapFile = job.tempDir.toPath().resolve(f.file.toPath()).toFile();
             //FIXME: this reader gets the parent path of input file
             try {
                 metaReader.read(mapFile);

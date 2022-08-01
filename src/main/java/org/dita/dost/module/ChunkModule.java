@@ -15,7 +15,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ChunkMapReader;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.TopicRefWriter;
@@ -74,7 +73,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile.toURI())) {
                 for (final FileInfo f : job.getFileInfo()) {
                     if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                        mapReader.read(FileUtils.getFilePath(job.tempDir, f.file).getAbsoluteFile());
+                        mapReader.read(new File(job.tempDirURI.resolve(f.uri)).getAbsoluteFile());
                     }
                 }
             } else {
