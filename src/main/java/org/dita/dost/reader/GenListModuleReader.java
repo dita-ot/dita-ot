@@ -26,6 +26,7 @@ import static org.dita.dost.util.Configuration.ditaFormat;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.nonDitaContext;
+import static org.dita.dost.util.FileUtils.*;
 
 /**
  * Parse relevant DITA files and collect information.
@@ -645,7 +646,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             //return ATTR_FORMAT_VALUE_HTML;
         } else {
             String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-            if(format != null && org.dita.dost.util.FileUtils.isSupportedImageFile("." + format)) {
+            if (format != null && isSupportedImageFile("." + format)) {
                 format = ATTR_FORMAT_VALUE_IMAGE;
             }
             return format;
