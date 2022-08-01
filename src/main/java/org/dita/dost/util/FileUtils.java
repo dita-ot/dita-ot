@@ -8,12 +8,12 @@
  */
 package org.dita.dost.util;
 
-import static org.apache.commons.io.FilenameUtils.*;
-import static org.dita.dost.util.Constants.*;
-
 import java.io.File;
 import java.net.URI;
 import java.util.*;
+
+import static org.apache.commons.io.FilenameUtils.normalize;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Static file utilities.
@@ -623,7 +623,7 @@ public final class FileUtils {
      * @return The file path, never <code>null</code>
      */
     public static File getFilePath(File parent, URI path) {
-        return getFilePath(parent, path.getPath());
+        return parent.toPath().resolve(path.getPath()).toFile();
     }
     
     /**
@@ -633,7 +633,7 @@ public final class FileUtils {
      * @return The file path, never <code>null</code>
      */
     public static File getFilePath(File parent, File path) {
-        return getFilePath(parent, path.getPath());
+        return parent.toPath().resolve(path.toPath()).toFile();
     }
 
     /**
@@ -643,10 +643,6 @@ public final class FileUtils {
      * @return The file path, never <code>null</code>
      */
     public static File getFilePath(File parent, String path) {
-        File filePath = new File(path);
-        if(!filePath.isAbsolute()) {
-            filePath = new File(parent, path);
-        }
-        return filePath;
+        return parent.toPath().resolve(path).toFile();
     }
 }
