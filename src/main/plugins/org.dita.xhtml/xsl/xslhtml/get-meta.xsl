@@ -159,7 +159,7 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- CONTENT: Type -->
 <xsl:template match="dita" mode="gen-type-metadata">
-  <xsl:apply-templates select="*[1]" mode="gen-type-metadata"/>
+  <xsl:apply-templates select="*[1]" mode="#current"/>
 </xsl:template>
 <xsl:template match="*" mode="gen-type-metadata">
   <meta name="DC.type" content="{name(.)}"/>

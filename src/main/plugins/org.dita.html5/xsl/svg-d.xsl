@@ -39,13 +39,13 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="svg:*" mode="dita-ot:svg-prefix" priority="10">
     <xsl:element name="{local-name()}" namespace="http://www.w3.org/2000/svg">
-      <xsl:apply-templates select="@* | node()" mode="dita-ot:svg-prefix"/>
+      <xsl:apply-templates select="@* | node()" mode="#current"/>
     </xsl:element>
   </xsl:template>
   
   <xsl:template match="@* | node()" mode="dita-ot:svg-prefix">
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="dita-ot:svg-prefix"/>
+      <xsl:apply-templates select="@* | node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
 

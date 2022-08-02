@@ -286,18 +286,18 @@ See the accompanying LICENSE file for applicable license.
       <xsl:text>.</xsl:text>
       <xsl:value-of select="substring-before($afterDot,'/')"/>
       <xsl:text>/</xsl:text>
-      <xsl:apply-templates select="." mode="parseHrefUptoExtension"><xsl:with-param name="href" select="substring-after($afterDot,'/')"/></xsl:apply-templates>
+      <xsl:apply-templates select="." mode="#current"><xsl:with-param name="href" select="substring-after($afterDot,'/')"/></xsl:apply-templates>
     </xsl:when>
     <!-- Multiple periods, no slashes, no topic or element ID, so the file name contains more periods -->
     <xsl:when test="not(contains($afterDot,'#'))">
       <xsl:text>.</xsl:text>
-      <xsl:apply-templates select="." mode="parseHrefUptoExtension"><xsl:with-param name="href" select="$afterDot"/></xsl:apply-templates>
+      <xsl:apply-templates select="." mode="#current"><xsl:with-param name="href" select="$afterDot"/></xsl:apply-templates>
     </xsl:when>
     <!-- Multiple periods, no slashes, with #. Move to next period. Needs additional work to support
          IDs containing periods. -->
     <xsl:otherwise>
       <xsl:text>.</xsl:text>
-      <xsl:apply-templates select="." mode="parseHrefUptoExtension"><xsl:with-param name="href" select="$afterDot"/></xsl:apply-templates>
+      <xsl:apply-templates select="." mode="#current"><xsl:with-param name="href" select="$afterDot"/></xsl:apply-templates>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

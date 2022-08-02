@@ -120,7 +120,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="node() | @*" mode="codeblock.line-number">
     <xsl:copy>
-      <xsl:apply-templates select="node() | @*" mode="codeblock.line-number"/>
+      <xsl:apply-templates select="node() | @*" mode="#current"/>
     </xsl:copy>
   </xsl:template>
   
@@ -142,7 +142,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="@* | node()" mode="codeblock">
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="codeblock"/>
+      <xsl:apply-templates select="@* | node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
   

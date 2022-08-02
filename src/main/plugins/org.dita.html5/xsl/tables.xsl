@@ -316,7 +316,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="number($endCurrentRow) &lt; number($startMatchRow)">
         <!-- Call this template again with the next entry in column one -->
         <xsl:if test="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]">
-          <xsl:apply-templates select="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]/*[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
+          <xsl:apply-templates select="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]/*[contains(@class, ' topic/entry ')][1]" mode="#current">
             <xsl:with-param name="startMatchRow" select="$startMatchRow"/>
             <xsl:with-param name="endMatchRow" select="$endMatchRow"/>
             <xsl:with-param name="startCurrentRow" select="number($endCurrentRow)+1"/>
@@ -332,7 +332,7 @@ See the accompanying LICENSE file for applicable license.
         <!-- If we are not at the end of the tbody cell, and more rows exist, continue testing column 1 -->
         <xsl:if test="number($endCurrentRow) &lt; number($endMatchRow) and
                       parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]">
-          <xsl:apply-templates select="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]/*[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
+          <xsl:apply-templates select="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]/*[contains(@class, ' topic/entry ')][1]" mode="#current">
             <xsl:with-param name="startMatchRow" select="$startMatchRow"/>
             <xsl:with-param name="endMatchRow" select="$endMatchRow"/>
             <xsl:with-param name="startCurrentRow" select="number($endCurrentRow)+1"/>

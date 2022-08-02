@@ -70,7 +70,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="pathFromMaplist" as="xs:string"/>
     <xsl:param name="children" select="()" as="element()*"/>
     <xsl:param name="parent" select="parent::*" as="element()?"/>
-    <xsl:apply-templates select="$parent" mode="toc-pull">
+    <xsl:apply-templates select="$parent" mode="#current">
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       <xsl:with-param name="children" select="$children"/>
     </xsl:apply-templates>
@@ -86,7 +86,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="title">
       <xsl:apply-templates select="." mode="get-navtitle"/>
     </xsl:variable>
-    <xsl:apply-templates select="$parent" mode="toc-pull">
+    <xsl:apply-templates select="$parent" mode="#current">
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       <xsl:with-param name="children" as="element()*">
         <xsl:apply-templates select="preceding-sibling::*[contains(@class, ' map/topicref ')]" mode="toc">
@@ -159,7 +159,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*" mode="toc" priority="-10">
     <xsl:param name="pathFromMaplist" as="xs:string"/>
-    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
+    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current">
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
     </xsl:apply-templates>
   </xsl:template>

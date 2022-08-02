@@ -102,7 +102,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes">
       <xsl:apply-templates select=".//prop/@backcolor | .//prop/@color | .//prop/@style |
-                                   .//revprop/@backcolor | .//revprop/@color | .//revprop/@style" mode="flag-attributes"/>
+                                   .//revprop/@backcolor | .//revprop/@color | .//revprop/@style" mode="#current"/>
     </xsl:template>
     <xsl:template match="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="flag-attributes">
       <!-- No flagging at end -->

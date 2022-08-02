@@ -24,7 +24,7 @@ See the accompanying LICENSE file for applicable license.
       <nav>
         <ul>
           <xsl:call-template name="commonattributes"/>
-          <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
+          <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current">
             <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
           </xsl:apply-templates>
         </ul>
@@ -95,7 +95,7 @@ See the accompanying LICENSE file for applicable license.
                                      [not(@toc = 'no')]
                                      [not(@processing-role = 'resource-only')]">
             <ul>
-              <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
+              <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current">
                 <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
               </xsl:apply-templates>
             </ul>
@@ -103,7 +103,7 @@ See the accompanying LICENSE file for applicable license.
         </li>
       </xsl:when>
       <xsl:otherwise><!-- if it is an empty topicref -->
-        <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
+        <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current">
           <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
         </xsl:apply-templates>
       </xsl:otherwise>
@@ -116,7 +116,7 @@ See the accompanying LICENSE file for applicable license.
                         [not(@processing-role = 'resource-only')]"
                 mode="toc">
     <xsl:param name="pathFromMaplist"/>
-    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
+    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current">
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
     </xsl:apply-templates>
   </xsl:template>
@@ -165,12 +165,12 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="/ | @* | node()" mode="normalize-map">
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="normalize-map"/>
+      <xsl:apply-templates select="@* | node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]" mode="normalize-map">
-    <xsl:apply-templates select="* except *[contains(@class, ' map/topicmeta ')]" mode="normalize-map"/>
+    <xsl:apply-templates select="* except *[contains(@class, ' map/topicmeta ')]" mode="#current"/>
   </xsl:template>
 
 </xsl:stylesheet>

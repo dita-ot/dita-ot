@@ -101,7 +101,7 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:attribute name="href" select="$updateTopicTarget"/>
                 <xsl:choose>
                   <xsl:when test="$lastTopic">
-                    <xsl:apply-templates select="*|comment()|processing-instruction()" mode="resolve-root-dita">
+                    <xsl:apply-templates select="*|comment()|processing-instruction()" mode="#current">
                       <xsl:with-param name="ditaDocs" select="$ditaDocs" as="element()+"/>
                     </xsl:apply-templates>
                   </xsl:when>
@@ -115,7 +115,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:when>
         <xsl:otherwise>
           <xsl:copy>
-            <xsl:apply-templates select="@*|node()" mode="resolve-root-dita">
+            <xsl:apply-templates select="@*|node()" mode="#current">
               <xsl:with-param name="ditaDocs" select="$ditaDocs" as="element()+"/>
             </xsl:apply-templates>
           </xsl:copy>
@@ -139,7 +139,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="dita/*[contains(@class,' topic/topic ')]" mode="resolve-root-dita">
       <xsl:param name="ditaDocs" as="element()+"/>
       <xsl:copy>
-        <xsl:apply-templates select="parent::dita/@*,@*|node()" mode="resolve-root-dita">
+        <xsl:apply-templates select="parent::dita/@*,@*|node()" mode="#current">
           <xsl:with-param name="ditaDocs" select="$ditaDocs" as="element()+"/>
         </xsl:apply-templates>
       </xsl:copy>
@@ -148,7 +148,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="@*|node()" mode="resolve-root-dita">
       <xsl:param name="ditaDocs" as="element()+"/>
       <xsl:copy>
-        <xsl:apply-templates select="@*|node()" mode="resolve-root-dita">
+        <xsl:apply-templates select="@*|node()" mode="#current">
           <xsl:with-param name="ditaDocs" select="$ditaDocs" as="element()+"/>
         </xsl:apply-templates>
       </xsl:copy>
@@ -158,7 +158,7 @@ See the accompanying LICENSE file for applicable license.
         <opentopic:map xmlns:opentopic="http://www.idiominc.com/opentopic">
             <xsl:apply-templates/>
         </opentopic:map>
-        <xsl:apply-templates mode="build-tree"/>
+        <xsl:apply-templates mode="#current"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' map/topicref ')]" mode="build-tree">
@@ -196,12 +196,12 @@ See the accompanying LICENSE file for applicable license.
                       </xsl:choose>
                   </title>
                   <!--body class=" topic/body "/-->
-                  <xsl:apply-templates mode="build-tree"/>
+                  <xsl:apply-templates mode="#current"/>
               </topic>
           </xsl:if>
       </xsl:when>
       <xsl:otherwise>
-          <xsl:apply-templates mode="build-tree"/>
+          <xsl:apply-templates mode="#current"/>
       </xsl:otherwise>
     </xsl:choose>
     </xsl:template>
@@ -211,36 +211,36 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' bookmap/backmatter ')] |
                          *[contains(@class,' bookmap/booklists ')] |
                          *[contains(@class,' bookmap/frontmatter ')]" priority="2" mode="build-tree">
-        <xsl:apply-templates mode="build-tree"/>
+        <xsl:apply-templates mode="#current"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' bookmap/toc ')][not(@href)]" priority="2" mode="build-tree">
         <ot-placeholder:toc id="{generate-id()}">
-            <xsl:apply-templates mode="build-tree"/>
+            <xsl:apply-templates mode="#current"/>
         </ot-placeholder:toc>
     </xsl:template>
   
     <xsl:template match="*[contains(@class,' bookmap/indexlist ')][not(@href)]" priority="2" mode="build-tree">
         <ot-placeholder:indexlist id="{generate-id()}">
-            <xsl:apply-templates mode="build-tree"/>
+            <xsl:apply-templates mode="#current"/>
         </ot-placeholder:indexlist>
     </xsl:template>
   
     <xsl:template match="*[contains(@class,' bookmap/glossarylist ')][not(@href)]" priority="2" mode="build-tree">
         <ot-placeholder:glossarylist id="{generate-id()}">
-            <xsl:apply-templates mode="build-tree"/>
+            <xsl:apply-templates mode="#current"/>
         </ot-placeholder:glossarylist>
     </xsl:template>
   
     <xsl:template match="*[contains(@class,' bookmap/tablelist ')][not(@href)]" priority="2" mode="build-tree">
         <ot-placeholder:tablelist id="{generate-id()}">
-            <xsl:apply-templates mode="build-tree"/>
+            <xsl:apply-templates mode="#current"/>
         </ot-placeholder:tablelist>
     </xsl:template>
   
     <xsl:template match="*[contains(@class,' bookmap/figurelist ')][not(@href)]" priority="2" mode="build-tree">
         <ot-placeholder:figurelist id="{generate-id()}">
-            <xsl:apply-templates mode="build-tree"/>
+            <xsl:apply-templates mode="#current"/>
         </ot-placeholder:figurelist>
     </xsl:template>
 
@@ -329,7 +329,7 @@ See the accompanying LICENSE file for applicable license.
 
 
     <xsl:template match="*" mode="build-tree" priority="-1">
-        <xsl:apply-templates mode="build-tree"/>
+        <xsl:apply-templates mode="#current"/>
     </xsl:template>
 
     <xsl:template match="text()" mode="build-tree" priority="-1"/>

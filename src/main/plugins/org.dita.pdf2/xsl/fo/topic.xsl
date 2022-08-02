@@ -179,7 +179,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:param name="theName" select="''" as="xs:string"/>
         <xsl:choose>
             <xsl:when test="$theCounter > 0">
-                <xsl:apply-templates select="." mode="createTopicAttrsName">
+                <xsl:apply-templates select="." mode="#current">
                     <xsl:with-param name="theCounter" select="$theCounter - 1"/>
                     <xsl:with-param name="theName" select="concat($theName, 'topic.')"/>
                 </xsl:apply-templates>
@@ -1557,7 +1557,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="@id" mode="dropCopiedIds"/>
     <xsl:template match="*|@*|text()" mode="dropCopiedIds">
         <xsl:copy>
-            <xsl:apply-templates select="@*|*|text()" mode="dropCopiedIds"/>
+            <xsl:apply-templates select="@*|*|text()" mode="#current"/>
         </xsl:copy>
     </xsl:template>
 

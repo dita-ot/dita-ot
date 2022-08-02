@@ -446,7 +446,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:template match="*" mode="topicpull:inherit-attribute">
     <xsl:param name="attrib"/>
     <xsl:variable name="attrib-here" as="xs:string?">
-      <xsl:apply-templates select="@*[local-name()=$attrib]" mode="topicpull:inherit-attribute"/>
+      <xsl:apply-templates select="@*[local-name()=$attrib]" mode="#current"/>
     </xsl:variable>
     <xsl:choose>
       <!-- Any time the attribute is specified on this element, use it -->
@@ -831,7 +831,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   
   <!-- If a link is to a title, assume the parent is the real target, process accordingly -->
   <xsl:template match="*[contains(@class,' topic/title ')]" mode="topicpull:resolvelinktext">
-    <xsl:apply-templates select=".." mode="topicpull:resolvelinktext"/>
+    <xsl:apply-templates select=".." mode="#current"/>
   </xsl:template>
   
   <!-- Get the link text from a specific topic. -->
@@ -1231,21 +1231,21 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:choose>
       <xsl:when test="empty(@href) or @scope='peer' or @scope='external'">
         <xsl:copy>
-          <xsl:apply-templates select="@*|text()|*" mode="copy-shortdesc" />
+          <xsl:apply-templates select="@*|text()|*" mode="#current" />
         </xsl:copy>
       </xsl:when>
       <xsl:when test="@format and not(@format='dita')">
         <xsl:copy>
-          <xsl:apply-templates select="@*|text()|*" mode="copy-shortdesc" />
+          <xsl:apply-templates select="@*|text()|*" mode="#current" />
         </xsl:copy>
       </xsl:when>
       <xsl:when test="not(contains(@href,'/'))"><!-- May be DITA, but in the same directory -->
         <xsl:copy>
-          <xsl:apply-templates select="@*|text()|*" mode="copy-shortdesc" />
+          <xsl:apply-templates select="@*|text()|*" mode="#current" />
         </xsl:copy>
       </xsl:when>
       <xsl:when test="text()|*[not(contains(@class,' topic/desc '))]">
-        <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()|comment()|processing-instruction()" mode="copy-shortdesc" />
+        <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()|comment()|processing-instruction()" mode="#current" />
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>***</xsl:text><!-- go get the target text -->
@@ -1267,7 +1267,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <!-- In an abstract, and this is not the first -->
       <xsl:text> </xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="*|text()|comment()|processing-instruction()" mode="copy-shortdesc" />
+    <xsl:apply-templates select="*|text()|comment()|processing-instruction()" mode="#current" />
   </xsl:template>
   
   <xsl:template match="@id" mode="copy-shortdesc" />
@@ -1277,7 +1277,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   
   <xsl:template match="*|@*|processing-instruction()" mode="copy-shortdesc">
     <xsl:copy>
-      <xsl:apply-templates select="@*|text()|*|processing-instruction()" mode="copy-shortdesc" />
+      <xsl:apply-templates select="@*|text()|*|processing-instruction()" mode="#current" />
     </xsl:copy>
   </xsl:template>
 
@@ -1386,7 +1386,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   
   <xsl:template match="*|@*|text()|comment()|processing-instruction()" mode="specialize-foreign-unknown">
     <xsl:copy>
-      <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()" mode="specialize-foreign-unknown"/>
+      <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
 

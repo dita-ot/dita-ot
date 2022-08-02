@@ -288,7 +288,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:value-of select="@*[local-name() = $attrib]"/>
       <xsl:text> </xsl:text>
       <xsl:if test="ancestor-or-self::*[@cascade][1]/@cascade = 'merge'">
-        <xsl:apply-templates select="parent::*" mode="mappull:merge-inherit-attribute">
+        <xsl:apply-templates select="parent::*" mode="#current">
           <xsl:with-param name="attrib" select="$attrib"/>
         </xsl:apply-templates>
       </xsl:if>
@@ -300,12 +300,12 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:value-of>
       <xsl:value-of select="@*[local-name() = $attrib]"/>
       <xsl:text> </xsl:text>
-      <xsl:apply-templates select="parent::*" mode="mappull:merge-inherit-attribute">
+      <xsl:apply-templates select="parent::*" mode="#current">
         <xsl:with-param name="attrib" select="$attrib"/>
       </xsl:apply-templates>
       <xsl:text> </xsl:text>
       <xsl:variable name="position" select="1 + count(preceding-sibling::*)" as="xs:integer"/>
-      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][$position ]" mode="mappull:merge-inherit-attribute">
+      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][$position ]" mode="#current">
         <xsl:with-param name="attrib" select="$attrib"/>
       </xsl:apply-templates>
     </xsl:value-of>
@@ -320,7 +320,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <!--@importance|@linking|@toc|@print|@search|@format|@scope-->
     <xsl:param name="attrib" as="xs:string"/>
     <xsl:variable name="attrib-here" as="xs:string?">
-      <xsl:apply-templates select="@*[local-name()=$attrib]" mode="mappull:inherit-attribute"/>
+      <xsl:apply-templates select="@*[local-name()=$attrib]" mode="#current"/>
     </xsl:variable>
     <xsl:choose>
       <!-- Any time the attribute is specified on this element, use it -->
@@ -346,7 +346,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="$row!=''"><xsl:value-of select="$row"/></xsl:when>
           <xsl:when test="$colspec!=''"><xsl:value-of select="$colspec"/></xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]" mode="mappull:inherit-attribute">
+            <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]" mode="#current">
               <xsl:with-param name="attrib" select="$attrib"/>
             </xsl:apply-templates>
           </xsl:otherwise>
@@ -358,7 +358,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="parent::*" mode="mappull:inherit-attribute">
+        <xsl:apply-templates select="parent::*" mode="#current">
           <xsl:with-param name="attrib" select="$attrib"/>
         </xsl:apply-templates>
       </xsl:otherwise>
@@ -1160,7 +1160,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <!-- In an abstract, and this is not the first -->
       <xsl:text> </xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="node()" mode="copy-shortdesc"/>
+    <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
   
   <xsl:template match="@id" mode="copy-shortdesc"/>
@@ -1176,7 +1176,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
   
   <xsl:template match="@* | node()" mode="copy-shortdesc" name="copy-shortdesc" priority="-10">
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="copy-shortdesc"/>
+      <xsl:apply-templates select="@* | node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
 

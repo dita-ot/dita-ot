@@ -96,7 +96,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="opentopic:map" mode="topicref-validation">
-        <xsl:apply-templates mode="topicref-validation"/>
+        <xsl:apply-templates mode="#current"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="topicref-validation">
@@ -113,7 +113,7 @@ See the accompanying LICENSE file for applicable license.
               </xsl:call-template>
             </xsl:if>
         </xsl:if>
-        <xsl:apply-templates mode="topicref-validation"/>
+        <xsl:apply-templates mode="#current"/>
     </xsl:template>
 
     <xsl:template match="*" mode="topicref-validation"/>
@@ -246,7 +246,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
     <xsl:choose>
       <xsl:when test="empty($referencedTopic)">
-        <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="generatePageSequenceFromTopicref"/>
+        <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:for-each select="$referencedTopic">
@@ -260,7 +260,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="createFrontMatter"/>
     <xsl:choose>
       <xsl:when test="$map-based-page-sequence-generation">
-        <xsl:apply-templates select="opentopic:map/*[contains(@class, ' map/topicref ')]" mode="generatePageSequences"/>
+        <xsl:apply-templates select="opentopic:map/*[contains(@class, ' map/topicref ')]" mode="#current"/>
       </xsl:when>
       <!-- legacy topic based page-sequence generation -->
       <xsl:otherwise>
@@ -278,13 +278,13 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:template match="*" mode="generatePageSequences" priority="-1">
-    <xsl:apply-templates select="*" mode="generatePageSequences"/>
+    <xsl:apply-templates select="*" mode="#current"/>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generatePageSequences" priority="0">
     <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
     <xsl:choose>
       <xsl:when test="empty($referencedTopic)">
-        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="generatePageSequences"/>
+        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
       </xsl:when>
       <xsl:when test="ancestor::*[contains(@class,' bookmap/frontmatter ')]">
         <!-- TODO: To fit the pattern, this should be in its own match template. But a general match for frontmatter/*
@@ -304,13 +304,13 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' bookmap/frontmatter ') or
                          contains(@class, ' bookmap/backmatter ') or
                          contains(@class, ' bookmap/booklists ')]" mode="generatePageSequences">
-    <xsl:apply-templates select="*" mode="generatePageSequences"/>
+    <xsl:apply-templates select="*" mode="#current"/>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' bookmap/chapter ')]" mode="generatePageSequences">
     <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
     <xsl:choose>
       <xsl:when test="empty($referencedTopic)">
-        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="generatePageSequences"/>
+        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:for-each select="$referencedTopic">
@@ -323,7 +323,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
     <xsl:choose>
       <xsl:when test="empty($referencedTopic)">
-        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="generatePageSequences"/>
+        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:for-each select="$referencedTopic">
@@ -336,7 +336,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
     <xsl:choose>
       <xsl:when test="empty($referencedTopic)">
-        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="generatePageSequences"/>
+        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:for-each select="$referencedTopic">
@@ -349,7 +349,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="referencedTopic" select="key('topic-id', @id)" as="element()*"/>
     <xsl:choose>
       <xsl:when test="empty($referencedTopic)">
-        <xsl:apply-templates select="*[contains(@class, ' bookmap/appendix ')]" mode="generatePageSequences"/>
+        <xsl:apply-templates select="*[contains(@class, ' bookmap/appendix ')]" mode="#current"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:for-each select="$referencedTopic">

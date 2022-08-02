@@ -96,7 +96,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:choose>
       <xsl:when test="@imageref">
         <img src="{@imageref}">
-          <xsl:apply-templates select="alt-text" mode="ditaval-outputflag"/>
+          <xsl:apply-templates select="alt-text" mode="#current"/>
         </img>
       </xsl:when>
       <xsl:otherwise>

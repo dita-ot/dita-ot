@@ -14,7 +14,7 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- DEFAULT RULE: FOR EVERY ELEMENT, ONLY PROCESS TEXT CONTENT -->
   <xsl:template match="*" mode="dita-ot:text-only">
-    <xsl:apply-templates select="text()|*|processing-instruction()" mode="dita-ot:text-only"/>
+    <xsl:apply-templates select="text()|*|processing-instruction()" mode="#current"/>
   </xsl:template>
 
   <xsl:template match="text()" mode="dita-ot:text-only">
@@ -26,7 +26,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="getVariable">
       <xsl:with-param name="id" select="'OpenQuote'"/>
     </xsl:call-template>
-    <xsl:apply-templates mode="dita-ot:text-only"/>
+    <xsl:apply-templates mode="#current"/>
     <xsl:call-template name="getVariable">
       <xsl:with-param name="id" select="'CloseQuote'"/>
     </xsl:call-template>
@@ -47,7 +47,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- EXCEPTIONS -->
   <xsl:template match="*[contains(@class,' topic/image ')]" mode="dita-ot:text-only">
     <xsl:choose>
-      <xsl:when test="*[contains(@class,' topic/alt ')]"><xsl:apply-templates mode="dita-ot:text-only"/></xsl:when>
+      <xsl:when test="*[contains(@class,' topic/alt ')]"><xsl:apply-templates mode="#current"/></xsl:when>
       <xsl:when test="@alt"><xsl:value-of select="@alt"/></xsl:when>
     </xsl:choose>
   </xsl:template>
@@ -62,7 +62,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/xref ')]" mode="dita-ot:text-only">
-    <xsl:apply-templates select="node()[not(contains(@class,' topic/desc '))]" mode="dita-ot:text-only"/>
+    <xsl:apply-templates select="node()[not(contains(@class,' topic/desc '))]" mode="#current"/>
   </xsl:template>
 
 
