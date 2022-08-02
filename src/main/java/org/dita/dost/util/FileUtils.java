@@ -8,12 +8,12 @@
  */
 package org.dita.dost.util;
 
-import static org.apache.commons.io.FilenameUtils.*;
-import static org.dita.dost.util.Constants.*;
-
 import java.io.File;
 import java.net.URI;
 import java.util.*;
+
+import static org.apache.commons.io.FilenameUtils.normalize;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Static file utilities.

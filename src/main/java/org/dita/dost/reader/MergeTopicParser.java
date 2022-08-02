@@ -8,17 +8,6 @@
  */
 package org.dita.dost.reader;
 
-import static javax.xml.XMLConstants.*;
-import static org.dita.dost.chunk.ChunkModule.isLocalScope;
-import static org.dita.dost.reader.MergeMapParser.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.URLUtils.setFragment;
-
-import java.io.File;
-import java.net.URI;
-
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.MergeUtils;
@@ -28,6 +17,17 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
+
+import java.io.File;
+import java.net.URI;
+
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.chunk.ChunkModule.isLocalScope;
+import static org.dita.dost.reader.MergeMapParser.ATTRIBUTE_NAME_OHREF;
+import static org.dita.dost.reader.MergeMapParser.ATTRIBUTE_NAME_OID;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.*;
 
 /**
  * MergeTopicParser reads topic file and transform the references to other dita
@@ -174,7 +174,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         filePath = stripFragment(filename);
         dirPath = dir;
         try {
-            final URI f = new File(dir, filePath).getAbsoluteFile().toURI();
+            final URI f = dir.toPath().resolve(filePath).toAbsolutePath().toFile().toURI();
             logger.info("Processing " + f);
             job.getStore().transform(f, this);
         } catch (final RuntimeException e) {
@@ -251,7 +251,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
      * @return rewritten href value
      */
     private URI handleLocalHref(final URI attValue) {
-        final URI current = new File(dirPath, filePath).toURI().normalize();
+        final URI current = dirPath.toPath().resolve(filePath).toUri().normalize();
         final URI reference = current.resolve(attValue);
         final URI merge = output.toURI();
         return getRelativePath(merge, reference);

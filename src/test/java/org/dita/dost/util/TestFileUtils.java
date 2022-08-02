@@ -7,16 +7,15 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-
-import java.io.*;
-
+import org.dita.dost.TestUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import org.dita.dost.TestUtils;
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.*;
 
 public class TestFileUtils {
 
