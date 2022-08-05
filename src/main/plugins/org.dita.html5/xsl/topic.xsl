@@ -1797,7 +1797,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="default-output-class" as="xs:string*"/>
     <xsl:apply-templates select="@xml:lang"/>
 
-    <xsl:if test="$BIDIRECTIONAL_DOCUMENT and not(@dir)">
+    <xsl:if test="$BIDIRECTIONAL_DOCUMENT='true' and not(@dir)">
       <xsl:choose>
         <xsl:when  test="contains(@class,' pr-d/')">
          <xsl:attribute name="dir">auto</xsl:attribute>
