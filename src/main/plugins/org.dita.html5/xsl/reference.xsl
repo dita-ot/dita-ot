@@ -308,7 +308,7 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group"
-                name="related-links:result.reference" as="element()">
+                name="related-links:result.reference" as="element()?">
     <xsl:param name="links"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " xsl:use-attribute-sets="linklist linklist-reference">
