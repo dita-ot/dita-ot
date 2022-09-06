@@ -1014,7 +1014,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         // write list attribute to file
         final String fileKey = REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
         prop.setProperty(fileKey, REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
-        final File list = new File(job.tempDir, prop.getProperty(fileKey));
+        final File list = job.tempDir.toPath().resolve(prop.getProperty(fileKey)).toFile();
         try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(list.toURI())))) {
             final Iterator<URI> it = newSet.iterator();
             while (it.hasNext()) {

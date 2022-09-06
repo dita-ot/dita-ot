@@ -163,6 +163,22 @@
         </topic>
       </x:expect>
     </x:scenario>
+    <x:scenario label="when orig @id is on topic">
+      <x:context mode="id">
+        <topic class="- topic/topic " id="topic" conref:orig-id="foo">
+          <title class="- topic/title "/>
+        </topic>
+      </x:context>
+      <x:expect label="should use orig id on topic">
+        <topic xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
+          class="- topic/topic "
+          id="foo"
+          conref:orig-id="foo">
+          <title xmlns:x="http://www.jenitennison.com/xslt/xspec"
+            class="- topic/title " />
+        </topic>
+      </x:expect>
+    </x:scenario>
   </x:scenario>
   
   <x:scenario label="Rewrite @conref:href">

@@ -64,6 +64,11 @@ public class NormalizeTableFilterTest {
     public void rowspan() throws Exception {
         test("rowspan.dita");
     }
+    
+    @Test
+    public void onlyrows() throws Exception {
+        test("onlyRows.dita");
+    }
 
     @Test
     public void nested() throws Exception {

@@ -370,6 +370,26 @@ public class XMLUtilsTest {
         assertEquals(1, act.size());
         assertEquals(new Message(Message.Level.ERROR, "message <debug/>", null), act.get(0));
     }
+    
+    @Test
+    public void toMessageListenerProperElemsSerialization() throws SaxonApiException {
+        final CachingLogger logger = new CachingLogger();
+        final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+
+        final XdmNode msg = Saplings.doc().withChild(
+                    Saplings.text("abc "),
+                    Saplings.elem("def").withChild(Saplings.elem("hij"))
+                )
+                .toXdmNode(new XMLUtils().getProcessor());
+
+        listener.message(msg, null, false, null);
+
+        final List<Message> act = logger.getMessages();
+        assertEquals(1, act.size());
+        assertEquals("abc <def>\n" + 
+                "   <hij/>\n" + 
+                "</def>", act.get(0).message);
+    }
 
     @Test
     public void toErrorReporter_message() {

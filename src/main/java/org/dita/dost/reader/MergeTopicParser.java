@@ -174,7 +174,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         filePath = stripFragment(filename);
         dirPath = dir;
         try {
-            final URI f = new File(dir, filePath).getAbsoluteFile().toURI();
+            final URI f = dir.toPath().resolve(filePath).toAbsolutePath().toFile().toURI();
             logger.info("Processing " + f);
             job.getStore().transform(f, this);
         } catch (final RuntimeException e) {
@@ -251,7 +251,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
      * @return rewritten href value
      */
     private URI handleLocalHref(final URI attValue) {
-        final URI current = new File(dirPath, filePath).toURI().normalize();
+        final URI current = dirPath.toPath().resolve(filePath).toUri().normalize();
         final URI reference = current.resolve(attValue);
         final URI merge = output.toURI();
         return getRelativePath(merge, reference);

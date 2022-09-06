@@ -7,24 +7,23 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.Assert.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-
+import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.dita.dost.TestUtils;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import static org.dita.dost.util.Constants.INPUT_DIR;
+import static org.dita.dost.util.Constants.INPUT_DIR_URI;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public final class JobTest {
 

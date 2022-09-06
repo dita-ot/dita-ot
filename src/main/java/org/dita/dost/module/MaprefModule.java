@@ -87,7 +87,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     }
 
     private void processMap(final FileInfo input) throws DITAOTException {
-        final File inputFile = new File(job.tempDir, input.file.getPath());
+        final File inputFile = new File(job.tempDirURI.resolve(input.uri));
         final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
 
         logger.info("Processing " + inputFile.toURI());
@@ -160,8 +160,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     }
 
     private void replace(final FileInfo input) throws DITAOTException {
-        final File inputFile = new File(job.tempDir, input.file.getPath() + FILE_EXTENSION_TEMP);
-        final File outputFile = new File(job.tempDir, input.file.getPath());
+        final File inputFile = new File(job.tempDirURI.resolve(input.uri + FILE_EXTENSION_TEMP));
+        final File outputFile = new File(job.tempDirURI.resolve(input.uri));
         try {
             job.getStore().move(inputFile.toURI(), outputFile.toURI());
         } catch (final IOException e) {

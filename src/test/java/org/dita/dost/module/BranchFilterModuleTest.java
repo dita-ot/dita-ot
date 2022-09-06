@@ -7,6 +7,7 @@
  */
 package org.dita.dost.module;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
@@ -359,5 +360,27 @@ public class BranchFilterModuleTest extends BranchFilterModule {
 	    assertXMLEqual(new InputSource(new File(expDir, "topicAnchors.ditamap").toURI().toURL().toString()), 
 	    		new InputSource(new File(tempDir, "topicAnchors.ditamap").toURI().toURL().toString()));
 	}
+
+        @Test
+        public void testNoRenameNonDITAResources() throws IOException, SAXException {
+            final BranchFilterModule m = new BranchFilterModule();
+            final Job job = getJob();
+            for (final String uri: Arrays.asList("test.pdf")) {
+                job.add(new Job.FileInfo.Builder()
+                        .src(new File(tempDir, uri).toURI())
+                        .result(new File(tempDir, uri).toURI())
+                        .uri(URI.create(uri))
+                        .format(ATTR_FORMAT_VALUE_NONDITA)
+                        .build());
+            }
+            m.setJob(job);
+            final CachingLogger logger = new CachingLogger();
+            m.setLogger(logger);
+            m.setXmlUtils(new XMLUtils());
+            
+            m.processMap(URI.create("inputNonDitaRes.ditamap"));
+            assertXMLEqual(new InputSource(new File(expDir, "inputNonDitaRes.ditamap").toURI().toString()),
+                    new InputSource(new File(tempDir, "inputNonDitaRes.ditamap").toURI().toString()));
+        }
 
 }
