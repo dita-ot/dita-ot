@@ -32,7 +32,6 @@ import org.dita.dost.writer.KeyrefPaser;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.XMLFilter;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -329,10 +328,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                     AttributeMap atts = ni.attributes();
                     final QName rewriteAttrName = getReferenceAttribute(node);
                     if (rewriteAttrName != null) {
-                        String referenceValue = node.getAttributeValue(rewriteAttrName);
+                        URI referenceValue = toURI(node.getAttributeValue(rewriteAttrName));
                         if (referenceValue != null) {
                             for (final KeyScope s : ss) {
-                                final URI href = stripFragment(map.uri.resolve(referenceValue));
+                                final URI resolved = map.uri.resolve(referenceValue);
+                                final String fragment = resolved.getFragment();
+                                final URI href = stripFragment(resolved);
                                 final FileInfo fi = job.getFileInfo(href);
                                 if (fi != null && fi.hasKeyref) {
                                     final int count = usage.getOrDefault(fi.uri, 0);
@@ -342,17 +343,21 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                                     if (count != 0 && existing.isPresent()) {
                                         final ResolveTask resolveTask = existing.get();
                                         if (resolveTask.out != null) {
-                                            final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
-                                            referenceValue = value.toString();
+                                            referenceValue = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                                            if (fragment != null && referenceValue.getFragment() == null) {
+                                                referenceValue = setFragment(referenceValue, fragment);
+                                            }
                                         }
                                     } else {
                                         final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly(node));
                                         res.add(resolveTask);
                                         final Integer used = usage.get(fi.uri);
                                         if (used > 1) {
-                                            final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
-                                            fixKeyDefRefs(s, fi.uri, value);
-                                            referenceValue = value.toString();
+                                            referenceValue = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                                            fixKeyDefRefs(s, fi.uri, referenceValue);
+                                            if (fragment != null && referenceValue.getFragment() == null) {
+                                                referenceValue = setFragment(referenceValue, fragment);
+                                            }
                                         }
                                     }
                                 }
@@ -360,7 +365,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                             atts = atts.put(new AttributeInfo(
                                     toNodeName(rewriteAttrName),
                                     STRING,
-                                    referenceValue,
+                                    referenceValue.toString(),
                                     Loc.NONE,
                                     ReceiverOption.NONE));
                         }
@@ -493,12 +498,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             if (r.out != null) {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
                         " to " + job.tempDirURI.resolve(r.out.uri));
-                job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
-                        new File(job.tempDir, r.out.file.getPath()).toURI(),
+                job.getStore().transform(job.tempDirURI.resolve(r.in.uri),
+                        job.tempDirURI.resolve(r.out.uri),
                         filters);
             } else {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
-                job.getStore().transform(new File(job.tempDir, r.in.file.getPath()).toURI(),
+                job.getStore().transform(job.tempDirURI.resolve(r.in.uri),
                         filters);
             }
             // validate resource-only list

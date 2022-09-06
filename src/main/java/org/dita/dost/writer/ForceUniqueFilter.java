@@ -15,10 +15,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.net.URI;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.util.Constants.*;
@@ -42,7 +39,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
     /**
      * Stack used to detect the current element type. 
      */
-    private final Deque<String> classElementStack = new ArrayDeque<>();
+    private final Deque<Optional<String>> classElementStack = new ArrayDeque<>();
     
     /**
      * Stack used to hold the current topicref parent.
@@ -57,7 +54,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
         ignoreStack.push(MAP_RELTABLE.matches(atts) ? false : ignoreStack.isEmpty() || ignoreStack.peek());
 
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        classElementStack.addFirst(classValue);
+        classElementStack.addFirst(Optional.ofNullable(classValue));
 
         Attributes res = atts;
         if (ignoreStack.peek() && MAP_TOPICREF.matches(res)) {
@@ -116,8 +113,8 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         getContentHandler().endElement(uri, localName, qName);
 
-        final String classValue = classElementStack.removeFirst();
-        if (classValue != null && ignoreStack.peek() && MAP_TOPICREF.matches(classValue)) {
+        final Optional<String> classValue = classElementStack.removeFirst();
+        if (classValue.isPresent() && ignoreStack.peek() && MAP_TOPICREF.matches(classValue.get())) {
             topicrefParentsStack.pop();
         }
         ignoreStack.pop();

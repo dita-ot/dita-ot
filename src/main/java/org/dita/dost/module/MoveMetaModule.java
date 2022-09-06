@@ -80,7 +80,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         }
 
         for (final FileInfo f : fis) {
-            final File inputFile = new File(job.tempDir, f.file.getPath());
+            final File inputFile = new File(job.tempDirURI.resolve(f.uri));
             final File tmp = new File(inputFile.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis()));
             logger.info("Processing " + inputFile.toURI());
             logger.debug("Processing " + inputFile.toURI() + " to " + tmp.toURI());
@@ -133,7 +133,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 final URI key = stripFragment(entry.getKey());
                 final FileInfo fi = job.getFileInfo(key);
                 if (fi == null) {
-                    logger.error("File " + new File(job.tempDir, key.getPath()) + " was not found.");
+                    logger.error("File " + job.tempDirURI.resolve(key) + " was not found.");
                     continue;
                 }
                 final URI targetFileName = job.tempDirURI.resolve(fi.uri);
@@ -159,7 +159,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 final URI key = stripFragment(entry.getKey());
                 final FileInfo fi = job.getFileInfo(key);
                 if (fi == null) {
-                    logger.error("File " + new File(job.tempDir, key.getPath()) + " was not found.");
+                    logger.error("File " + job.tempDirURI.resolve(key) + " was not found.");
                     continue;
                 }
                 final URI targetFileName = job.tempDirURI.resolve(fi.uri);
@@ -186,7 +186,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         metaReader.setLogger(logger);
         metaReader.setJob(job);
         for (final FileInfo f : fis) {
-            final File mapFile = new File(job.tempDir, f.file.getPath());
+            final File mapFile = job.tempDir.toPath().resolve(f.file.toPath()).toFile();
             //FIXME: this reader gets the parent path of input file
             try {
                 metaReader.read(mapFile);

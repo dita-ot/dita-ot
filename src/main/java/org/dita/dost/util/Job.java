@@ -27,6 +27,8 @@ import javax.xml.transform.dom.DOMResult;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
@@ -310,7 +312,7 @@ public final class Job {
      * @throws IOException if writing configuration files failed
      */
     public void write() throws IOException {
-        try (Writer outStream = new BufferedWriter(new OutputStreamWriter(getStore().getOutputStream(jobFile.toURI())))) {
+        try (Writer outStream = new BufferedWriter(new OutputStreamWriter(getStore().getOutputStream(jobFile.toURI()), StandardCharsets.UTF_8))) {
             XMLStreamWriter out = null;
             try {
                 out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream);

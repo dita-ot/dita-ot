@@ -14,7 +14,7 @@ apply plugin: 'signing'
 
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
-version = '3.7.2'
+version = '3.7.3'
 
 description = """DITA Open Toolkit"""
 
@@ -47,7 +47,7 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.8'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
-    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.13.0'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.13.4'
     implementation group: 'org.relaxng', name: 'jing', version: '20181222'
     implementation group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.12'
     testImplementation  group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
