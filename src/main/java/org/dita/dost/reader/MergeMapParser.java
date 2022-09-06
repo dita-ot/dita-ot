@@ -243,14 +243,14 @@ public final class MergeMapParser extends XMLFilterImpl {
                     String element = f.file.getPath();
                     if (!dirPath.equals(tempdir)) {
                         element = FileUtils.getRelativeUnixPath(new File(dirPath,"a.ditamap").getAbsolutePath(),
-                                                                   new File(tempdir, element).getAbsolutePath());
+                                                                   tempdir.toPath().resolve(element).toAbsolutePath().toString());
                     }
                     final URI abs = job.tempDirURI.resolve(f.uri);
                     if (!util.isVisited(abs)) {
                         util.visit(abs);
                         if (!f.isResourceOnly) {
                             //ensure the file exists
-                            final File file = new File(dirPath, element);
+                            final File file = dirPath.toPath().resolve(element).toFile();
                             if (job.getStore().exists(file.toURI())) {
                                 topicParser.parse(element, dirPath);
                             } else {

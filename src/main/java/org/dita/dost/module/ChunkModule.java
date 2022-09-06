@@ -73,7 +73,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile.toURI())) {
                 for (final FileInfo f : job.getFileInfo()) {
                     if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                        mapReader.read(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
+                        mapReader.read(new File(job.tempDirURI.resolve(f.uri)).getAbsoluteFile());
                     }
                 }
             } else {

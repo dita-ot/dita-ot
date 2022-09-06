@@ -8,12 +8,12 @@
  */
 package org.dita.dost.util;
 
-import static org.apache.commons.io.FilenameUtils.*;
-import static org.dita.dost.util.Constants.*;
-
 import java.io.File;
 import java.net.URI;
 import java.util.*;
+
+import static org.apache.commons.io.FilenameUtils.normalize;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Static file utilities.
@@ -166,7 +166,7 @@ public final class FileUtils {
      * @return relative path, or refPath if different root means no relative path is possible
      */
     public static File getRelativePath(final File basePath, final File refPath) {
-        if (!basePath.toPath().getRoot().equals(refPath.toPath().getRoot())) {
+        if (basePath.toPath().getRoot() == null || !basePath.toPath().getRoot().equals(refPath.toPath().getRoot())) {
             return refPath;
         }
         return basePath.toPath().getParent().relativize(refPath.toPath()).toFile();

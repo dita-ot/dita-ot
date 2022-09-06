@@ -12,6 +12,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -339,6 +340,17 @@ public class TestGenMapAndTopicListModule {
 
         assertNotNull(job.getFileInfo(URI.create("image.svg")));
         assertNotNull(job.getFileInfo(URI.create("image.svg?media=print")));
+    }
+    
+    @Test
+    public void testImageKeydef() throws Exception{
+        final File inputDir = new File("image-keydef");
+        final File inputMap = new File(inputDir, "svg.ditamap");
+        final File outDir = new File(tempDir, "out");
+
+        final Job job = generate(inputDir, inputMap, outDir, tempDir);
+        FileInfo fileInfo = job.getFileInfo(new URI("figures/ISO_7010_W012.svg"));
+        assertEquals("image", fileInfo.format);
     }
 
     private Set<String> readLines(final File f) throws IOException {
