@@ -587,8 +587,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
             <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
           </xsl:when>
-          <xsl:when test="*/*[dita-ot:matches-linktext-class(@class)]">
-            <xsl:value-of select="*/*[dita-ot:matches-linktext-class(@class)]"/>
+          <xsl:when test="*/*[@class][dita-ot:matches-linktext-class(@class)]">
+            <xsl:value-of select="*/*[@class][dita-ot:matches-linktext-class(@class)]"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="@href"/>
@@ -604,8 +604,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="@navtitle">
             <xsl:value-of select="@navtitle"/>
           </xsl:when>
-          <xsl:when test="*/*[dita-ot:matches-linktext-class(@class)]">
-            <xsl:value-of select="*/*[dita-ot:matches-linktext-class(@class)]"/>
+          <xsl:when test="*/*[@class][dita-ot:matches-linktext-class(@class)]">
+            <xsl:value-of select="*/*[@class][dita-ot:matches-linktext-class(@class)]"/>
           </xsl:when>
           <xsl:otherwise>#none#</xsl:otherwise>
         </xsl:choose>
@@ -618,8 +618,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="@navtitle">
             <xsl:value-of select="@navtitle"/>
           </xsl:when>
-          <xsl:when test="*/*[dita-ot:matches-linktext-class(@class)]">
-            <xsl:value-of select="*/*[dita-ot:matches-linktext-class(@class)]"/>
+          <xsl:when test="*/*[@class][dita-ot:matches-linktext-class(@class)]">
+            <xsl:value-of select="*/*[@class][dita-ot:matches-linktext-class(@class)]"/>
           </xsl:when>
           <xsl:when test="$format = 'ditamap'">
             <!-- don't complain - peer maps don't need a navtitle -->
@@ -810,8 +810,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:template match="*" mode="mappull:navtitle-fallback" as="xs:string?">
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
-      <xsl:when test="*/*[dita-ot:matches-linktext-class(@class)]">
-        <xsl:value-of select="*/*[dita-ot:matches-linktext-class(@class)]"/>
+      <xsl:when test="*/*[@class][dita-ot:matches-linktext-class(@class)]">
+        <xsl:value-of select="*/*[@class][dita-ot:matches-linktext-class(@class)]"/>
         <xsl:apply-templates select="." mode="ditamsg:using-linktext-for-navtitle"/>
       </xsl:when>
       <xsl:otherwise>
