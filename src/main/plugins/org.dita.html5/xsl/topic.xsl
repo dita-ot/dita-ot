@@ -1393,6 +1393,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="setid"/>
+      <xsl:apply-templates select="." mode="set-image-loading"/>
       <xsl:choose>
         <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
           <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
@@ -1947,6 +1948,15 @@ See the accompanying LICENSE file for applicable license.
     <xsl:if test="@scale">
   <!--    <xsl:attribute name="style">font-size: <xsl:value-of select="@scale"/>%;</xsl:attribute> -->
     </xsl:if>
+  </xsl:template>
+  
+  <!-- leave @loading unset for local/peer images - defaults to "eager" -->    
+  <xsl:template match="*" mode="set-image-loading"/>
+  <xsl:template match="*[@scope='external']" mode="set-image-loading">
+    <xsl:attribute name="loading" select="'lazy'"/>
+  </xsl:template>
+  <xsl:template match="*[matches(@href, '^https?:')]" mode="set-image-loading" priority="-10">
+    <xsl:attribute name="loading" select="'lazy'"/>
   </xsl:template>
   
     <xsl:template name="style">
