@@ -1955,9 +1955,6 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[@scope='external']" mode="set-image-loading">
     <xsl:attribute name="loading" select="'lazy'"/>
   </xsl:template>
-  <xsl:template match="*[matches(@href, '^https?:')]" mode="set-image-loading" priority="-10">
-    <xsl:attribute name="loading" select="'lazy'"/>
-  </xsl:template>
   
     <xsl:template name="style">
       <xsl:param name="contents"/>
