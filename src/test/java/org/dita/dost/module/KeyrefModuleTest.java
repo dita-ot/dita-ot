@@ -51,6 +51,7 @@ import static org.dita.dost.TestUtils.createTempDir;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.dita.dost.util.Constants.MAP_TOPICREF;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class KeyrefModuleTest {
@@ -363,4 +364,38 @@ public class KeyrefModuleTest {
 						.where(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "topic-2.dita#abc")))
 				.exists());
 	}
+
+    @Test
+    public void testNoNPEPeerMap() throws URISyntaxException, XPathException {
+        inputMapFileInfo = new Builder()
+                .uri(create("test4.ditamap"))
+                .src(new File(baseDir, "src" + File.separator + "test4.ditamap").toURI())
+                .result(new File(baseDir, "src" + File.separator + "test4.ditamap").toURI())
+                .format("ditamap")
+                .isInput(true)
+                .build();
+        job.add(inputMapFileInfo);
+        final XdmNode act = parse(inputMapFileInfo.src);
+        Map<String, KeyDef> defsMap = new HashMap<>();
+        defsMap.put("Tool", new KeyDef("Tool", null, "local", "dita", inputMapFileInfo.src, null));
+        
+        KeyScope submap1 = new KeyScope("submap", " mapref[6]map[6].submap", defsMap, Arrays.asList(new KeyScope[] {}));
+        KeyScope submap2 = new KeyScope("submap", "submap[8]map[6].submap", defsMap, Arrays.asList(new KeyScope[] {}));
+        
+        final KeyScope keyScope =
+                new KeyScope("#root", null, defsMap, 
+                            Arrays.asList(new KeyScope[] {submap1, submap2})
+        );
+        final List<ResolveTask> res = new ArrayList<>();
+        final XdmDestination destination = new XdmDestination();
+        final Receiver receiver = destination.getReceiver(
+                xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
+                new SerializationProperties());
+        receiver.open();
+        module.walkMap(inputMapFileInfo, act, singletonList(keyScope), res, receiver);
+        receiver.close();
+        
+        XdmNode node = destination.getXdmNode();
+        assertNotNull(node);
+    }
 }
