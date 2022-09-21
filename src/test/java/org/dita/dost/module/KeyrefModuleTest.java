@@ -379,7 +379,7 @@ public class KeyrefModuleTest {
         Map<String, KeyDef> defsMap = new HashMap<>();
         defsMap.put("Tool", new KeyDef("Tool", null, "local", "dita", inputMapFileInfo.src, null));
         
-        KeyScope submap1 = new KeyScope("submap", " mapref[6]map[6].submap", defsMap, Arrays.asList(new KeyScope[] {}));
+        KeyScope submap1 = new KeyScope("submap", "mapref[6]map[6].submap", defsMap, Arrays.asList(new KeyScope[] {}));
         KeyScope submap2 = new KeyScope("submap", "submap[8]map[6].submap", defsMap, Arrays.asList(new KeyScope[] {}));
         
         final KeyScope keyScope =
