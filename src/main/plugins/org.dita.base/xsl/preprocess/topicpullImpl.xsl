@@ -1147,9 +1147,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <sup class="+ topic/ph hi-d/sup ">
-      <xsl:value-of select="$convergedcallout"/>
-    </sup>
+    <xsl:value-of select="$convergedcallout"/>
   </xsl:template>
 
   <!-- Getting text from a dlentry target: use the contents of the term -->
