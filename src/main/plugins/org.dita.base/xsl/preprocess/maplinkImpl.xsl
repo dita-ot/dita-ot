@@ -95,6 +95,9 @@ See the accompanying LICENSE file for applicable license.
         <xsl:when test="@copy-to and (not(@format) or @format = 'dita') and not(contains(@chunk, 'to-content'))">
           <xsl:value-of select="dita-ot:normalize-uri(@copy-to)"/>
         </xsl:when>
+        <xsl:when test="@filter-copy-to and (not(@format) or @format = 'dita') and not(contains(@chunk, 'to-content'))">
+          <xsl:value-of select="dita-ot:normalize-uri(@filter-copy-to)"/>
+        </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="dita-ot:normalize-uri(@href)"/>
         </xsl:otherwise>
