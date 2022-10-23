@@ -7,6 +7,7 @@ See the accompanying LICENSE file for applicable license.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+  xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
@@ -264,6 +265,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/indexterm ')]" mode="insert-text"/>
+    <xsl:template match="opentopic-index:*" mode="insert-text"/>
 
     <xsl:template match="text()[contains(., '[') and contains(., ']')][ancestor::*[contains(@class, ' topic/dl ')][contains(@otherprops,'sortable')]]" priority="10">
         <xsl:value-of select="substring-before(.,'[')"/>
