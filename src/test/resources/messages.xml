@@ -669,7 +669,7 @@
   </message>
   
   <message id="DOTX034E" type="ERROR">
-    <reason>Unable to generate link text for a cross reference to an undered list item: &apos;%1&apos;</reason>
+    <reason>Unable to generate link text for a cross reference to an unordered list item: &apos;%1&apos;</reason>
     <response></response>
   </message>
   
