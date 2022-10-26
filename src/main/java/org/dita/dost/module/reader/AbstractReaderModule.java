@@ -39,8 +39,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.dita.dost.reader.GenListModuleReader.ROOT_URI;
-import static org.dita.dost.reader.GenListModuleReader.Reference;
+import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
@@ -538,7 +537,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
 
         if (listFilter.isDitaTopic()) {
-            if (ref.format != null && !ref.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+            if (!isFormatDita(ref.format)) {
                 assert currentFile.getFragment() == null;
                 final URI f = currentFile.normalize();
                 if (!fileinfos.containsKey(f)) {
@@ -654,7 +653,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
         for (final URI file: fullTopicSet) {
             createOrUpdateFileInfo(file, fi -> {
-                if (fi.format == null) {
+                if (isFormatDita(fi.format)) {
                     fi.format = ATTR_FORMAT_VALUE_DITA;
                 }
             });

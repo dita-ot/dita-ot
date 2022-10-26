@@ -61,10 +61,11 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
             final URI href = toURI(res.getValue(ATTRIBUTE_NAME_HREF));
             final URI copyTo = toURI(res.getValue(ATTRIBUTE_NAME_COPY_TO));
             final URI source = copyTo != null ? copyTo : href;
-            final String scope = res.getValue(ATTRIBUTE_NAME_SCOPE);
+            String currentScope = res.getValue(ATTRIBUTE_NAME_SCOPE);
+            String scope = getCascadingScope(currentScope);
             final String format = res.getValue(ATTRIBUTE_NAME_FORMAT);
-            // FIXME: handle cascading
-            final String processingRole = res.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
+            String currentProcesingResource = res.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
+            final String processingRole = getCascadingProcessingRole(currentProcesingResource);
             FileInfo dstFi = null;
             if (source != null &&
                     isLocalScope(scope) &&
@@ -103,10 +104,50 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
                     }
                 }
             }
-            topicrefParentsStack.push(new ParentTopicref(href, dstFi));
+            topicrefParentsStack.push(new ParentTopicref(href, dstFi, currentScope, currentProcesingResource));
         }
 
         getContentHandler().startElement(uri, localName, qName, res);
+    }
+
+    /**
+     * Get the scope of the element, looking also at cascading values.
+     * @param currentScope The current scope.
+     * @return The cascading scope.
+     */
+    private String getCascadingScope(String currentScope) {
+        String scope = currentScope;
+        if(scope == null) {
+            Iterator<ParentTopicref> iter = topicrefParentsStack.descendingIterator();
+            while(iter.hasNext()) {
+                ParentTopicref parentTopicref = iter.next();
+                if(parentTopicref.scope != null) {
+                    scope = parentTopicref.scope;
+                    break;
+                }
+            }
+        }
+        return scope;
+    }
+    
+    /**
+     * Get the processing role of the element, looking also at cascading values.
+     * @param currentProcessingRole The current processing role.
+     * @return The cascading processing role.
+     */
+    private String getCascadingProcessingRole(String currentProcessingRole) {
+        String processingRole = currentProcessingRole;
+        if(processingRole == null) {
+            Iterator<ParentTopicref> iter = topicrefParentsStack.descendingIterator();
+            while(iter.hasNext()) {
+                ParentTopicref parentTopicref = iter.next();
+                if(parentTopicref.processingRole != null) {
+                    processingRole = parentTopicref.processingRole;
+                    break;
+                }
+            }
+        }
+        return processingRole;
     }
 
     @Override
@@ -155,22 +196,36 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
         /**
          * The href value for the parent topic.
          */
-        public final URI href;
+        private final URI href;
       
         /**
          * Information about the destination file used in the output. 
          */
-        public final FileInfo dstFi;
-      
+        private final FileInfo dstFi;
+        
+        /**
+         * Scope attribute on the topicref
+         */
+        private final String scope;
+        
+        /**
+         * processing-role attribute on the topicref
+         */
+        private final String processingRole;
+        
         /**
          * Constructor.
          * 
          * @param href The href value for the parent topic.
          * @param dstFi Information about the destination file used in the output. 
+         * @param scope Value of scope attribute
+         * @param processingRole Value of processing-role attribute.
          */
-        public ParentTopicref(URI href, FileInfo dstFi) {
+        public ParentTopicref(URI href, FileInfo dstFi, String scope, String processingRole) {
             this.href = href;
             this.dstFi = dstFi;
+            this.scope = scope;
+            this.processingRole = processingRole;
         }
       
     }
