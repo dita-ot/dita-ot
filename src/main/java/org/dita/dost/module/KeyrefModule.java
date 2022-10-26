@@ -306,10 +306,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 if (MAP_MAP.matches(node) || MAP_TOPICREF.matches(node)) {
                     final List<KeyScope> ss = node.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null
                             ? Stream.of(node.attribute(ATTRIBUTE_NAME_KEYSCOPE).trim().split("\\s+"))
-                            .flatMap(keyscope -> scope.stream().map(s -> s.getChildScope(keyscope)))
+                            .flatMap(keyscope -> scope.stream().map(s -> s.getChildScope(keyscope))).filter(Objects::nonNull)
                             .collect(Collectors.toList())
                             : scope;
-
                     final NodeInfo ni = node.getUnderlyingNode();
                     AttributeMap atts = ni.attributes();
                     final QName rewriteAttrName = getReferenceAttribute(node);
