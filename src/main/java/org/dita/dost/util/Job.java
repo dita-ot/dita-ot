@@ -486,6 +486,7 @@ public final class Job {
      *
      * @param map input file path relative to input directory
      */
+    @Deprecated
     public void setInputMap(final URI map) {
         assert !map.isAbsolute();
         setProperty(INPUT_DITAMAP_URI, map.toString());

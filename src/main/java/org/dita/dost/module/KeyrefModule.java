@@ -32,6 +32,7 @@ import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.XMLFilter;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
@@ -96,16 +97,34 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             tempFileNameScheme.setBaseDir(job.getInputDir());
 
             // Read start map
-            final KeyrefReader reader = new KeyrefReader();
-            reader.setLogger(logger);
-            reader.setXmlUtils(xmlUtils);
-            final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-            final URI mapFile = in.uri;
-            final XdmNode doc = readMap(in);
-            logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
-            reader.read(job.tempDirURI.resolve(mapFile), doc);
+            final Collection<FileInfo> startFis = job.getFileInfo(fi -> fi.isInput);
+            final Map<FileInfo, XdmNode> documentMap = startFis.stream()
+                    .collect(toMap(fi -> fi, fi -> {
+                        try {
+                            return readMap(fi);
+                        } catch (DITAOTException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }));
 
-            final KeyScope startScope = reader.getKeyDefinition();
+            final KeyScope startScope = documentMap.entrySet().stream()
+                    .map(entry -> {
+                        try {
+                            final FileInfo in = entry.getKey();
+                            final XdmNode doc = entry.getValue();
+                            final URI mapFile = in.uri;
+                            logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
+                            final KeyrefReader reader = new KeyrefReader();
+                            reader.setLogger(logger);
+                            reader.read(job.tempDirURI.resolve(mapFile), doc);
+                            final KeyScope s = reader.getKeyDefinition();
+                            writeMap(in, doc);
+                            return s;
+                        } catch (DITAOTException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .reduce(KeyScope.EMPTY, KeyScope::merge);
 
             // Read resources maps
             final Collection<FileInfo> resourceFis = job.getFileInfo(fi -> fi.isInputResource && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP));
@@ -125,7 +144,15 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                         }
                     })
                     .reduce(startScope, KeyScope::merge);
-            final List<ResolveTask> jobs = collectProcessingTopics(in, resourceFis, rootScope, doc);
+
+            final List<ResolveTask> jobs = collectProcessingTopics(resourceFis, rootScope, documentMap);
+            documentMap.forEach((in, doc) -> {
+                try {
+                    writeMap(in, doc);
+                } catch (DITAOTException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
             (parallel ? jobs.stream().parallel() : jobs.stream())
                     .filter(r -> r.out != null)
@@ -156,25 +183,29 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     /**
      * Collect topics for key reference processing and modify map to reflect new file names.
      */
-    private List<ResolveTask> collectProcessingTopics(final FileInfo map,
-                                                      final Collection<FileInfo> fis,
+    private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis,
                                                       final KeyScope rootScope,
-                                                      final XdmNode doc) throws DITAOTException {
-        assert doc.getNodeKind() == XdmNodeKind.DOCUMENT;
+                                                      Map<FileInfo, XdmNode> documentMap) {
         final List<ResolveTask> res = new ArrayList<>();
-        res.add(new ResolveTask(rootScope, map, null));
-
-        try {
-            final URI file = job.tempDirURI.resolve(map.uri);
-            final Destination destination = job.getStore().getDestination(file);
-            final PipelineConfiguration pipe = doc.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
-            final Receiver receiver = new NamespaceReducer(destination.getReceiver(pipe, new SerializationProperties()));
-            receiver.open();
-            walkMap(map, doc, Collections.singletonList(rootScope), res, receiver);
-            receiver.close();
-        } catch (final IOException | SaxonApiException | XPathException e) {
-            throw new DITAOTException("Failed to write map: " + e.getMessage(), e);
-        }
+        documentMap.forEach((input, doc) -> {
+            res.add(new ResolveTask(rootScope, input, null));
+            // Collect topics from map and rewrite topicrefs for duplicates
+            try {
+                final URI file = job.tempDirURI.resolve(input.uri);
+                final Destination destination = job.getStore().getDestination(file);
+                final PipelineConfiguration pipe = doc.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
+                final Receiver receiver = new NamespaceReducer(destination.getReceiver(pipe, new SerializationProperties()));
+                receiver.open();
+                walkMap(input, doc, Collections.singletonList(rootScope), res, receiver);
+                receiver.close();
+            } catch (SaxonApiException e) {
+                throw new RuntimeException("Failed to write map: " + e.getMessage(), e);
+            } catch (XPathException e) {
+                throw new UncheckedXPathException(e);
+            } catch (IOException e) {
+                throw new UncheckedIOException("Failed to write map: " + e.getMessage(), e);
+            }
+        });
 
         // Collect topics not in map and map itself
         for (final FileInfo f : fis) {

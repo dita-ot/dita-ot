@@ -101,9 +101,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     KeydefFilter keydefFilter;
     boolean validate = true;
     ContentHandler nullHandler;
-    private TempFileNameScheme tempFileNameScheme;
-    /** Absolute path to input file. */
-    URI rootFile;
+    TempFileNameScheme tempFileNameScheme;
+    /** List of absolute input files. */
+    List<URI> rootFiles;
     List<URI> resources;
     /** Subject scheme absolute file paths. */
     private final Set<URI> schemeSet = ConcurrentHashMap.newKeySet();
@@ -166,7 +166,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
-        listFilter.setPrimaryDitamap(rootFile);
+        rootFiles.stream().reduce(URLUtils::getBase).ifPresent(rootFile -> {
+            listFilter.setRootDir(rootFile.resolve("."));
+        });
+        listFilter.setRootDir(baseInputDir);
         listFilter.setJob(job);
         listFilter.setFormatFilter(formatFilter);
 
@@ -176,7 +179,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
-        keydefFilter.setCurrentFile(rootFile);
         keydefFilter.setJob(job);
 
         nullHandler = new DefaultHandler();
@@ -273,22 +275,30 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             resources = Collections.emptyList();
         }
 
-        URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
-        ditaInput = ditaInput != null ? ditaInput : job.getInputFile();
-        if (ditaInput.isAbsolute()) {
-            rootFile = ditaInput;
-        } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
-            rootFile = setScheme(ditaInput, "file");
-        } else if (baseInputDir != null) {
-            rootFile = baseInputDir.resolve(ditaInput);
+        if (input.getAttribute("inputs") != null) {
+            rootFiles = Arrays.stream(input.getAttribute("inputs").split(" "))
+                    .map(URLUtils::toURI)
+                    .map(ditaInput -> getRootFile(basedir, ditaInput))
+                    .collect(Collectors.toList());
         } else {
-            rootFile = basedir.toURI().resolve(ditaInput);
+            URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
+            if (ditaInput == null) {
+                ditaInput = job.getInputFile();
+            }
+            final URI rootFile = getRootFile(basedir, ditaInput);
+            rootFiles = Collections.singletonList(rootFile);
         }
-        job.setInputFile(rootFile);
-
+        for (URI rootFile : rootFiles) {
+            assert rootFile.isAbsolute();
+        }
+        job.setInputFile(rootFiles.get(0));
         if (baseInputDir == null) {
-            baseInputDir = rootFile.resolve(".");
+            baseInputDir = rootFiles.stream()
+                    .map(f -> f.resolve("."))
+                    .reduce((left, right) -> URLUtils.getBase(left, right))
+                    .get();
         }
+        assert baseInputDir.isAbsolute();
         job.setInputDir(baseInputDir);
 
         profilingEnabled = Optional.ofNullable(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED))
@@ -299,6 +309,21 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                     .filter(File::exists)
                     .orElse(null);
         }
+    }
+
+    private URI getRootFile(File basedir, URI ditaInput) {
+        URI rootFile;
+        if (ditaInput.isAbsolute()) {
+            rootFile = ditaInput;
+        } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
+            rootFile = setScheme(ditaInput, "file");
+        } else if (baseInputDir != null) {
+            rootFile = baseInputDir.resolve(ditaInput);
+        } else {
+            rootFile = basedir.toURI().resolve(ditaInput);
+        }
+        assert rootFile.isAbsolute();
+        return rootFile;
     }
 
     void processWaitList() throws DITAOTException {
@@ -351,7 +376,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                     .src(currentFile)
                     .uri(rel)
                     .result(currentFile)
-                    .isInput(currentFile.equals(rootFile))
+                    .isInput(rootFiles.contains(currentFile))
                     .build();
             job.add(stub);
         }
@@ -379,8 +404,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             if (listFilter.isValidInput()) {
                 processParseResult(currentFile);
                 categorizeCurrentFile(ref);
-            } else if (!currentFile.equals(rootFile)) {
-                logger.error(MessageUtils.getMessage("DOTJ021E", params).toString());
+            } else if (!rootFiles.contains(currentFile)) {
+                logger.warn(MessageUtils.getMessage("DOTJ021E", params).toString());
                 failureList.add(currentFile);
             }
         } catch (final RuntimeException e) {
@@ -390,7 +415,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             if (inner != null && inner instanceof DITAOTException) {
                 throw (DITAOTException) inner;
             }
-            if (currentFile.equals(rootFile)) {
+            if (rootFiles.contains(currentFile)) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage(), sax);
             } else if (processingMode == Mode.STRICT) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
@@ -400,14 +425,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             failureList.add(currentFile);
         } catch (final FileNotFoundException e) {
             if (!exists(currentFile)) {
-                if (currentFile.equals(rootFile)) {
+                if (rootFiles.contains(currentFile)) {
                     throw new DITAOTException(MessageUtils.getMessage("DOTA069F", params).toString(), e);
                 } else if (processingMode == Mode.STRICT) {
                     throw new DITAOTException(MessageUtils.getMessage("DOTX008E", params).toString(), e);
                 } else {
                     logger.error(MessageUtils.getMessage("DOTX008E", params).toString());
                 }
-            } else if (currentFile.equals(rootFile)) {
+            } else if (rootFiles.contains(currentFile)) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ078F", params).toString() + " Cannot load file: " + e.getMessage(), e);
             } else if (processingMode == Mode.STRICT) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ079E", params).toString() + " Cannot load file: " + e.getMessage(), e);
@@ -416,7 +441,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             }
             failureList.add(currentFile);
         } catch (final Exception e) {
-            if (currentFile.equals(rootFile)) {
+            if (rootFiles.contains(currentFile)) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(),  e);
             } else if (processingMode == Mode.STRICT) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
@@ -430,7 +455,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        if (!listFilter.isValidInput() && currentFile.equals(rootFile)) {
+        if (!listFilter.isValidInput() && rootFiles.contains(currentFile)) {
             if (validate) {
                 // stop the build if all content in the input file was filtered out.
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ022F", params).toString());
@@ -608,7 +633,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 pureConrefTargets.add(target);
             }
         }
-        pureConrefTargets.remove(rootFile);
+        pureConrefTargets.removeAll(rootFiles);
         conrefTargetSet = pureConrefTargets;
 
         // Remove pure conref targets from fullTopicSet
@@ -625,14 +650,17 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         tempFileNameScheme.setBaseDir(baseInputDir);
 
         // assume empty Job
-        final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
+        final List<URI> rootTemps = rootFiles.stream()
+                .map(f -> tempFileNameScheme.generateTempFileName(f))
+                .collect(Collectors.toList());
+        final URI rootTemp = rootTemps.get(0);
         final File relativeRootFile = toFile(rootTemp);
 
         job.setInputMap(rootTemp);
 
         job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
         final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);
-        writeListFile(inputfile, relativeRootFile.toString());
+        writeListFile(inputfile, rootTemps.stream().map(URI::toString).collect(Collectors.toList()));
 
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
@@ -747,13 +775,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        final FileInfo root = job.getFileInfo(rootFile);
-        if (root == null) {
-            throw new RuntimeException("Unable to set input file to job configuration");
-        }
-        job.add(new FileInfo.Builder(root)
-                .isInput(true)
-                .build());
+        rootFiles.stream()
+                .map(tempFileNameScheme::generateTempFileName)
+                .map(job::getFileInfo)
+                .map(root -> new FileInfo.Builder(root).isInput(true).build())
+                .forEach(job::add);
 
         try {
             logger.info("Serializing job specification");
@@ -788,11 +814,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /**
      * Write list file.
      * @param inputfile output list file
-     * @param relativeRootFile list value
+     * @param relativeRootFiles list value
      */
-    private void writeListFile(final File inputfile, final String relativeRootFile) {
+    private void writeListFile(final File inputfile, final List<String> relativeRootFiles) {
         try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(inputfile.toURI())))) {
-            bufferedWriter.write(relativeRootFile);
+            for (String relativeRootFile : relativeRootFiles) {
+                bufferedWriter.write(relativeRootFile);
+                bufferedWriter.write('\n');
+            }
             bufferedWriter.flush();
         } catch (final IOException e) {
             logger.error(e.getMessage(), e);

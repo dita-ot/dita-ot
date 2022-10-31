@@ -41,6 +41,7 @@ See the accompanying LICENSE file for applicable license.
                   clean-map,
                   clean-preprocess,
                   copy-files,
+                  preprocess.post,
                   {depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
@@ -48,9 +49,14 @@ See the accompanying LICENSE file for applicable license.
   <target name="preprocess.init">
     <dita-ot-fail id="DOTA002F">
       <condition>
-        <not><isset property="args.input"/></not>
+        <and>
+          <not><isset property="args.input"/></not>
+          <not><isset property="args.inputs"/></not>
+        </and>
       </condition>
     </dita-ot-fail>
+
+    <property name="args.inputs" value="${args.input}"/>
 
     <condition property="clean-preprocess.use-result-filename" value="true">
       <or>
@@ -80,7 +86,26 @@ See the accompanying LICENSE file for applicable license.
     <preprocess-skip-init name="preprocess.normalize-codeblock" step="normalize-codeblock"/>
     <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/>
 
-    <basename property="dita.input.filename" file="${args.input}" />
+    <echo level="info">*****************************************************************</echo>
+    <echo level="info" if:set="args.input" unless:set="args.inputs">* input = ${args.input}</echo>
+    <echo level="info" if:set="args.inputs">* inputs = ${args.inputs}</echo>
+    <echo level="info">* resources = ${args.resources}</echo>
+    <echo level="info">*****************************************************************</echo>
+  </target>
+
+  <target name="preprocess.post">
+    <!-- First input file -->
+    <local name="input.first"/>
+    <pathconvert property="input.first">
+      <first>
+        <path path="${args.input}" if:set="args.input" unless:set="args.inputs"/>
+        <path path="${args.inputs}" if:set="args.inputs"/>
+      </first>
+    </pathconvert>
+    <!-- Root filename -->
+    <local name="dita.input.filename"/>
+    <basename property="dita.input.filename" file="${input.first}" />
+    <!-- Root filename without file extension -->
     <pathconvert property="dita.map.filename.root">
       <path path="${dita.input.filename}"/>
       <chainedmapper>
@@ -89,11 +114,6 @@ See the accompanying LICENSE file for applicable license.
       </chainedmapper>
     </pathconvert>
     <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>
-    
-    <echo level="info">*****************************************************************</echo>
-    <echo level="info">* input = ${args.input}</echo>
-    <echo level="info">* resources = ${args.resources}</echo>
-    <echo level="info">*****************************************************************</echo>
   </target>
   
   <!-- clean-temp
@@ -130,6 +150,7 @@ See the accompanying LICENSE file for applicable license.
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
         <param name="resources" value="${args.resources}" if:set="args.resources"/>
         <param name="inputdir" location="${args.input.dir}" if:set="args.input.dir"/>
+        <param name="inputs" value="${args.inputs}" if:set="args.inputs"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
@@ -185,8 +206,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="profile"
           unless="preprocess.profile.skip"
           description="Profile input files">
-    <pipeline message="Profile filtering." taskname="profile"
-              inputmap="${args.input}">
+    <pipeline message="Profile filtering." taskname="profile">
       <module class="org.dita.dost.module.FilterModule">
         <ditafileset format="dita"/>
         <ditafileset format="ditamap" input="true"/>

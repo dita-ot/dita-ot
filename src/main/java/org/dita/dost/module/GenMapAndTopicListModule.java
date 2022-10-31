@@ -135,8 +135,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private FilterUtils filterUtils;
     private TempFileNameScheme tempFileNameScheme;
 
-    /** Absolute path to input file. */
-    private URI rootFile;
+    /** List of absolute input files. */
+    List<URI> rootFiles;
     private List<URI> resources;
     /** File currently being processed */
     private URI currentFile;
@@ -205,6 +205,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             updateBaseDirectory();
             handleConref();
             outputResult();
+
+            job.write();
         } catch (final DITAOTException e) {
             throw e;
         } catch (final Exception e) {
@@ -235,7 +237,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
 
     private void readStartFile() throws DITAOTException {
-        addToWaitList(new Reference(rootFile));
+        for (final URI root : rootFiles) {
+            addToWaitList(new Reference(root));
+        }
     }
 
     /**
@@ -244,7 +248,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     private void initFilters() {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
-        listFilter.setPrimaryDitamap(rootFile);
+        rootFiles.stream().reduce(URLUtils::getBase).ifPresent(rootFile -> {
+            listFilter.setRootDir(rootFile.resolve("."));
+        });
         listFilter.setJob(job);
 
         if (profilingEnabled) {
@@ -253,7 +259,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
-        keydefFilter.setCurrentFile(rootFile);
         keydefFilter.setJob(job);
 
         nullHandler = new DefaultHandler();
@@ -310,7 +315,39 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             resources = Collections.emptyList();
         }
 
-        final URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
+        if (input.getAttribute("inputs") != null) {
+            rootFiles = Arrays.stream(input.getAttribute("inputs").split(" "))
+                    .map(URLUtils::toURI)
+                    .map(ditaInput -> getRootFile(basedir, ditaInput))
+                    .collect(Collectors.toList());
+        } else {
+            final URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
+            final URI rootFile = getRootFile(basedir, ditaInput);
+            rootFiles = Collections.singletonList(rootFile);
+        }
+        for (URI rootFile : rootFiles) {
+            assert rootFile.isAbsolute();
+        }
+        job.setInputFile(rootFiles.get(0));
+        if (baseInputDir == null) {
+            baseInputDir = rootFiles.stream()
+                    .map(f -> f.resolve("."))
+                    .reduce((left, right) -> URLUtils.getBase(left, right))
+                    .get();
+        }
+        assert baseInputDir.isAbsolute();
+        job.setInputDir(baseInputDir);
+
+        profilingEnabled = Optional.ofNullable(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED))
+                .map(Boolean::parseBoolean)
+                .orElse(true);
+
+        // create the keydef file for scheme files
+        schemekeydefMap = new HashMap<>();
+    }
+
+    private URI getRootFile(final File basedir, final URI ditaInput) {
+        final URI rootFile;
         if (ditaInput.isAbsolute()) {
             rootFile = ditaInput;
         } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
@@ -321,22 +358,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             rootFile = basedir.toURI().resolve(ditaInput);
         }
         assert rootFile.isAbsolute();
-
-        if (baseInputDir == null) {
-            baseInputDir = rootFile.resolve(".");
-        }
-        assert baseInputDir.isAbsolute();
-
-        profilingEnabled = true;
-        if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {
-            profilingEnabled = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED));
-        }
-
-        // create the keydef file for scheme files
-        schemekeydefMap = new HashMap<>();
-
-        // Set the mapDir
-        job.setInputFile(rootFile);
+        return rootFile;
     }
 
     private void processWaitList() throws DITAOTException {
@@ -408,7 +430,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             if (listFilter.isValidInput()) {
                 processParseResult(currentFile);
                 categorizeCurrentFile(ref);
-            } else if (!currentFile.equals(rootFile)) {
+            } else if (!rootFiles.contains(currentFile)) {
                 logger.error(MessageUtils.getMessage("DOTJ021E", params).toString());
                 failureList.add(currentFile);
             }
@@ -419,7 +441,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             if (inner != null && inner instanceof DITAOTException) {
                 throw (DITAOTException) inner;
             }
-            if (currentFile.equals(rootFile)) {
+            if (rootFiles.contains(currentFile)) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage(), sax);
             } else if (processingMode == Mode.STRICT) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
@@ -429,14 +451,14 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             failureList.add(currentFile);
         } catch (final FileNotFoundException e) {
             if (!exists(currentFile)) {
-                if (currentFile.equals(rootFile)) {
+                if (rootFiles.contains(currentFile)) {
                     throw new DITAOTException(MessageUtils.getMessage("DOTA069F", params).toString(), e);
                 } else if (processingMode == Mode.STRICT) {
                     throw new DITAOTException(MessageUtils.getMessage("DOTX008E", params).toString(), e);
                 } else {
                     logger.error(MessageUtils.getMessage("DOTX008E", params).toString());
                 }
-            } else if (currentFile.equals(rootFile)) {
+            } else if (rootFiles.contains(currentFile)) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ078F", params).toString() + " Cannot load file: " + e.getMessage(), e);
             } else if (processingMode == Mode.STRICT) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ079E", params).toString() + " Cannot load file: " + e.getMessage(), e);
@@ -445,7 +467,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             }
             failureList.add(currentFile);
         } catch (final Exception e) {
-            if (currentFile.equals(rootFile)) {
+            if (rootFiles.contains(currentFile)) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(),  e);
             } else if (processingMode == Mode.STRICT) {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
@@ -455,7 +477,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             failureList.add(currentFile);
         }
 
-        if (!listFilter.isValidInput() && currentFile.equals(rootFile)) {
+        if (!listFilter.isValidInput() && rootFiles.contains(currentFile)) {
             if (validate) {
                 // stop the build if all content in the input file was filtered out.
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ022F", params).toString());
@@ -632,11 +654,13 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             final URI f = file.toString().contains(STICK)
                     ? toURI(file.toString().substring(0, file.toString().indexOf(STICK)))
                     : file;
-            final URI relative = getRelativePath(rootFile, f).normalize();
-            final int lastIndex = relative.getPath().lastIndexOf(".." + URI_SEPARATOR);
-            if (lastIndex != -1) {
-                final int newUplevels = lastIndex / 3 + 1;
-                uplevels = Math.max(newUplevels, uplevels);
+            for (URI rootFile : rootFiles) {
+                final URI relative = getRelativePath(rootFile, f).normalize();
+                final int lastIndex = relative.getPath().lastIndexOf(".." + URI_SEPARATOR);
+                if (lastIndex != -1) {
+                    final int newUplevels = lastIndex / 3 + 1;
+                    uplevels = Math.max(newUplevels, uplevels);
+                }
             }
         }
     }
@@ -671,8 +695,12 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      * @param rootTemp relative URI for temporary root file
      * @return path to up-level, e.g. {@code ../../}, may be empty string
      */
-    private String getLevelsPath(final URI rootTemp) {
-        final int u = rootTemp.toString().split(URI_SEPARATOR).length - 1;
+    private String getLevelsPath(final List<URI> rootTemp) {
+        final int u = rootTemp.stream()
+                .map(URI::toString)
+                .mapToInt(r -> r.split(URI_SEPARATOR).length - 1)
+                .max()
+                .orElse(0);
         if (u == 0) {
             return "";
         }
@@ -739,23 +767,31 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         tempFileNameScheme.setBaseDir(baseInputDir);
 
         // assume empty Job
-        final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
+        final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFiles.get(0));
         final File relativeRootFile = toFile(rootTemp);
 
         job.setInputDir(baseInputDir);
         job.setInputMap(rootTemp);
 
         //If root input file is marked resource only due to conref or other feature, remove that designation
-        if (resourceOnlySet.contains(rootFile)) {
-            resourceOnlySet.remove(rootFile);
+        for (URI rootFile : rootFiles) {
+            if (resourceOnlySet.contains(rootFile)) {
+                resourceOnlySet.remove(rootFile);
+            }
         }
 
         job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
         final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);
-        writeListFile(inputfile, relativeRootFile.toString());
+        writeListFile(inputfile, rootFiles.stream()
+                .map(rootFile -> tempFileNameScheme.generateTempFileName(rootFile))
+                .map(URI::toString)
+                .collect(Collectors.toList()));
+
 
         job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
-        job.setProperty("uplevels", getLevelsPath(rootTemp));
+        job.setProperty("uplevels", getLevelsPath(rootFiles.stream()
+                .map(rootFile -> tempFileNameScheme.generateTempFileName(rootFile))
+                .collect(Collectors.toList())));
 
         resourceOnlySet.addAll(resources);
 
@@ -865,13 +901,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             job.add(fi);
         }
 
-        final FileInfo root = job.getFileInfo(rootFile);
-        if (root == null) {
-            throw new RuntimeException("Unable to set input file to job configuration");
-        }
-        job.add(new FileInfo.Builder(root)
-                .isInput(true)
-                .build());
+        rootFiles.stream()
+                .map(tempFileNameScheme::generateTempFileName)
+                .map(job::getFileInfo)
+                .map(root -> new FileInfo.Builder(root).isInput(true).build())
+                .forEach(job::add);
 
         try {
             logger.info("Serializing job specification");
@@ -905,11 +939,14 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     /**
      * Write list file.
      * @param inputfile output list file
-     * @param relativeRootFile list value
+     * @param relativeRootFiles list values
      */
-    private void writeListFile(final File inputfile, final String relativeRootFile) {
+    private void writeListFile(final File inputfile, final List<String> relativeRootFiles) {
         try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(inputfile.toURI())))) {
-            bufferedWriter.write(relativeRootFile);
+            for (String relativeRootFile : relativeRootFiles) {
+                bufferedWriter.write(relativeRootFile);
+                bufferedWriter.write('\n');
+            }
             bufferedWriter.flush();
         } catch (final IOException e) {
             logger.error(e.getMessage(), e) ;
