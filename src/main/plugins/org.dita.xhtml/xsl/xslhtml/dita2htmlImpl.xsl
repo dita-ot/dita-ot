@@ -311,6 +311,7 @@ See the accompanying LICENSE file for applicable license.
  <xsl:call-template name="gen-toc-id"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
+  <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
 </xsl:template>
 
 
@@ -2268,7 +2269,7 @@ See the accompanying LICENSE file for applicable license.
 <!-- render any contained footnotes as endnotes.  Links back to reference point -->
 <xsl:template name="gen-endnotes">
   <!-- Skip any footnotes that are in draft elements when draft = no -->
-  <xsl:apply-templates select="//*[contains(@class, ' topic/fn ')][not( (ancestor::*[contains(@class, ' topic/draft-comment ')] or ancestor::*[contains(@class, ' topic/required-cleanup ')]) and $DRAFT = 'no')]" mode="genEndnote"/>
+  <xsl:apply-templates select=".//child::*[contains(@class, ' topic/fn ')][not( (ancestor::*[contains(@class, ' topic/draft-comment ')] or ancestor::*[contains(@class, ' topic/required-cleanup ')]) and $DRAFT = 'no')]" mode="genEndnote"/>
 
 </xsl:template>
 
@@ -2781,7 +2782,6 @@ See the accompanying LICENSE file for applicable license.
                                <!-- followed by body content, again by fall-through in document order -->
                                <!-- followed by related links -->
                                <!-- followed by child topics by fall-through -->
-        <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
         <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
       </article>
     </main>
