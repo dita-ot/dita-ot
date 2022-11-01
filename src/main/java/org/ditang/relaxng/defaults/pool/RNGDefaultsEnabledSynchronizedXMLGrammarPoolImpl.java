@@ -14,7 +14,7 @@ import org.ditang.relaxng.defaults.RelaxNGDefaultValues;
 
 /**
  * Caches RNG defaults.
- * 
+ *
  * @author radu_coravu
  */
 public class RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl
@@ -42,14 +42,14 @@ extends org.dita.dost.util.XMLGrammarPoolImplUtils implements RNGDefaultsEnabled
     }
 
     /**
-     * @see org.ditang.relaxng.pool.SynchronizedXMLGrammarPoolImpl#clear()
+     * @see org.apache.xerces.util.XMLGrammarPoolImpl#clear()
      */
     @Override
     public synchronized void clear() {
         rngDefaultValues.clear();
         super.clear();
     }
-    
+
     /**
      * Get the size of the cache.
      * @return The size of the cache.
