@@ -126,7 +126,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
                     if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
                         getStartDocuments(fi).forEach(this::addToWaitList);
                     } else {
-                        if (fi.format == null) {
+                        if (isFormatDita(fi.format)) {
                             fi.format = ATTR_FORMAT_VALUE_DITA;
                             job.add(fi);
                         }
