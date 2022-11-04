@@ -119,16 +119,15 @@ public final class ChunkMapReader extends AbstractDomFilter {
         if (ditaVersion == null ||ditaVersion >= 2.0f) {
             return doc;
         }
-
-        readLinks(doc);
-        readProcessingInstructions(doc);
-
         final Element root = doc.getDocumentElement();
         if (rootChunkOverride != null) {
             final String c = join(rootChunkOverride, " ");
             logger.debug("Use override root chunk \"" + c + "\"");
             root.setAttribute(ATTRIBUTE_NAME_CHUNK, c);
         }
+        readLinks(doc);
+        readProcessingInstructions(doc);
+
         final Collection<String> rootChunk = split(root.getAttribute(ATTRIBUTE_NAME_CHUNK));
         defaultChunkByToken = getChunkByToken(rootChunk, "by-", CHUNK_BY_DOCUMENT);
 
