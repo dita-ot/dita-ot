@@ -25,4 +25,7 @@
       <topicref class="- map/topicref " href="topic.dita#option" copy-to="topic_2.dita#option"></topicref>
     </topicref>
   </topicref>
+  <topicref class="- map/topicref " processing-role="resource-only">
+    <topicref class="- map/topicref " href="topic.dita"/>
+  </topicref>
 </map>

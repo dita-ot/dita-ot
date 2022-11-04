@@ -34,6 +34,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
     xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
@@ -76,6 +77,9 @@ See the accompanying LICENSE file for applicable license.
                           <fo:basic-link xsl:use-attribute-sets="__toc__link">
                             <xsl:attribute name="internal-destination">
                               <xsl:call-template name="generate-toc-id"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="fox:alt-text">
+                              <xsl:call-template name="getNavTitle"/>
                             </xsl:attribute>
                             <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop[@changebar]" mode="changebar">
                                 <xsl:with-param name="changebar-id" select="concat(dita-ot:generate-changebar-id(.),'-toc')"/>

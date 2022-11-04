@@ -43,8 +43,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-  <!-- If converting to PDF, never try to pull info from targets with print="no" -->
-  <xsl:param name="FINALOUTPUTTYPE" select="''" as="xs:string"/>
   <xsl:param name="conserve-memory" select="'false'" as="xs:string"/>
   
   <!-- Equivalent to document() but may discard documents from cache when instructed and able. -->
@@ -174,7 +172,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:when test="@href=''">
               <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
             </xsl:when>
-            <xsl:when test="$print='no' and ($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD')"/>
             <xsl:when test="@href">
               <xsl:call-template name="get-stuff">
                 <xsl:with-param name="type" select="$type"/>
