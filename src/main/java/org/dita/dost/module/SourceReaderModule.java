@@ -50,38 +50,6 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
     Processor processor;
 
     /**
-     * Get reader for input format
-     * @param format input document format
-     * @return reader for given format
-     * @throws SAXException if creating reader failed
-     */
-    XMLReader getXmlReader(final String format) throws SAXException {
-        if (format == null || format.equals(ATTR_FORMAT_VALUE_DITA)) {
-            return reader;
-        }
-        for (final Map.Entry<String, String> e : parserMap.entrySet()) {
-            if (format.equals(e.getKey())) {
-                try {
-                    // XMLReaderFactory.createXMLReader cannot be used
-                    final XMLReader r = (XMLReader) Class.forName(e.getValue()).newInstance();
-                    final Map<String, Boolean> features = parserFeatures.getOrDefault(e.getKey(), emptyMap());
-                    for (final Map.Entry<String, Boolean> feature : features.entrySet()) {
-                        try {
-                            r.setFeature(feature.getKey(), feature.getValue());
-                        } catch (final SAXNotRecognizedException ex) {
-                            // Not Xerces, ignore exception
-                        }
-                    }
-                    return r;
-                } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
-                    throw new SAXException(ex);
-                }
-            }
-        }
-        return reader;
-    }
-
-    /**
      * XML reader used for pipeline parsing DITA documents.
      *
      * @throws SAXException if parser configuration failed

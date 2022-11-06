@@ -395,7 +395,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         final String[] params = { currentFile.toString() };
 
         try {
-            XMLReader xmlSource = getXmlReader(ref.format);
+            XMLReader xmlSource = Objects.requireNonNullElse(XMLUtils.getXmlReader(ref.format), reader);
             for (final XMLFilter f: getProcessingPipe(currentFile)) {
                 f.setParent(xmlSource);
                 f.setEntityResolver(CatalogUtils.getCatalogResolver());

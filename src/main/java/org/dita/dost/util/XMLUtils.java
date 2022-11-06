@@ -38,6 +38,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptyMap;
 import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static net.sf.saxon.s9api.streams.Predicates.*;
@@ -45,6 +46,8 @@ import static net.sf.saxon.s9api.streams.Steps.child;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.moveFile;
+import static org.dita.dost.util.Configuration.parserFeatures;
+import static org.dita.dost.util.Configuration.parserMap;
 import static org.dita.dost.util.Constants.*;
 
 /**
@@ -858,6 +861,38 @@ public final class XMLUtils {
         } catch (ParserConfigurationException e) {
             throw new SAXException(e);
         }
+    }
+
+    /**
+     * Get reader for input format
+     * @param format input document format
+     * @return reader for given format, {@code null} if no matching reader found
+     * @throws SAXException if creating reader failed
+     */
+    public static XMLReader getXmlReader(final String format) throws SAXException {
+        if (format == null || format.equals(ATTR_FORMAT_VALUE_DITA) || format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+            return null;
+        }
+        for (final Map.Entry<String, String> e : parserMap.entrySet()) {
+            if (format.equals(e.getKey())) {
+                try {
+                    // XMLReaderFactory.createXMLReader cannot be used
+                    final XMLReader r = (XMLReader) Class.forName(e.getValue()).newInstance();
+                    final Map<String, Boolean> features = parserFeatures.getOrDefault(e.getKey(), emptyMap());
+                    for (final Map.Entry<String, Boolean> feature : features.entrySet()) {
+                        try {
+                            r.setFeature(feature.getKey(), feature.getValue());
+                        } catch (final SAXNotRecognizedException ex) {
+                            // Not Xerces, ignore exception
+                        }
+                    }
+                    return r;
+                } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
+                    throw new SAXException(ex);
+                }
+            }
+        }
+        return null;
     }
 
     /**

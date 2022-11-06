@@ -143,7 +143,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         try {
             reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger));
 
-            XMLReader parser = getXmlReader(f.format);
+            XMLReader parser = Objects.requireNonNullElse(XMLUtils.getXmlReader(f.format), reader);
             XMLReader xmlSource = parser;
             for (final XMLFilter filter: getProcessingPipe(currentFile)) {
                 filter.setParent(xmlSource);
