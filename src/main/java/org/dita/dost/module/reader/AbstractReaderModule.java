@@ -357,7 +357,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
 
         try {
-            XMLReader parser = Objects.requireNonNullElse(XMLUtils.getXmlReader(ref.format), reader);
+            XMLReader parser = XMLUtils.getXmlReader(ref.format).orElse(reader);
             XMLReader xmlSource = parser;
             for (final XMLFilter f: getProcessingPipe(currentFile)) {
                 f.setParent(xmlSource);

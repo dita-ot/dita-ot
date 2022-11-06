@@ -866,12 +866,12 @@ public final class XMLUtils {
     /**
      * Get reader for input format
      * @param format input document format
-     * @return reader for given format, {@code null} if no matching reader found
+     * @return reader for given forma
      * @throws SAXException if creating reader failed
      */
-    public static XMLReader getXmlReader(final String format) throws SAXException {
+    public static Optional<XMLReader> getXmlReader(final String format) throws SAXException {
         if (format == null || format.equals(ATTR_FORMAT_VALUE_DITA) || format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
-            return null;
+            return Optional.empty();
         }
         for (final Map.Entry<String, String> e : parserMap.entrySet()) {
             if (format.equals(e.getKey())) {
@@ -886,13 +886,13 @@ public final class XMLUtils {
                             // Not Xerces, ignore exception
                         }
                     }
-                    return r;
+                    return Optional.of(r);
                 } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
                     throw new SAXException(ex);
                 }
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
