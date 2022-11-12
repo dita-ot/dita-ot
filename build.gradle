@@ -249,6 +249,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/out"
         exclude "docsrc/platform.ditaval"
         exclude "docsrc/temp"
+        exclude "docsrc/node_modules/**"
         include "docsrc/**"
         exclude "plugins/*/plugin.xml"
         include "plugins/org.dita.base/**"
@@ -326,8 +327,6 @@ def skipDocs() {
 }
 
 task generateJavadocs(type: Javadoc) {
-    classpath = sourceSets.main.compileClasspath
-    source = sourceSets.main.allJava
     include "**/org/dita/dost/*.*"
     include "**/org/dita/dost/exception/DITAOTException.*"
     include "**/org/dita/dost/util/Configuration.*"

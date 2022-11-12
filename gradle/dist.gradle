@@ -26,6 +26,7 @@ def licenses = [
         [name: 'isorelax', title: 'Isorelax', license: ['isorelax.txt']],
         [name: 'gradle-wrapper'],
         [name: 'org.lwdita'],
+        [name: 'pdf-generator'],
         [name: 'index'],
         [name: 'fo'],
         [name: 'eclipsehelp'],
