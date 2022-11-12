@@ -189,6 +189,7 @@ def bundled = [
         "index": "https://github.com/dita-ot/org.dita.index/releases/download/1.0.0/org.dita.index-1.0.0.zip",
         "axf": "https://github.com/dita-ot/org.dita.pdf2.axf/releases/download/3.6.1/org.dita.pdf2.axf-3.6.1.zip",
         "xep": "https://github.com/dita-ot/org.dita.pdf2.xep/releases/download/3.6.3/org.dita.pdf2.xep-3.6.3.zip",
+        "theme": "https://github.com/jelovirt/pdf-generator/releases/download/0.6.1/com.elovirta.pdf.zip",
 ]
 
 apply from: 'gradle/dist.gradle'
