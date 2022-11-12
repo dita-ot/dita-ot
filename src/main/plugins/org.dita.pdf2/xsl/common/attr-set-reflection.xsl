@@ -50,268 +50,264 @@ checks a list of possible attribute-sets, and uses attribute-sets on the
 list just like regular named attribute sets.
 --> 
 
-    <xsl:template name="new-attr-set-reflection">
-        <xsl:param name="temp-element" />
-        <xsl:for-each select="$temp-element//@*">
-            <xsl:attribute name="{name()}">
-                <xsl:value-of select="."/>
-            </xsl:attribute>
-        </xsl:for-each>
+    <xsl:template name="get-attributes" as="attribute()*">
+        <xsl:param name="element" as="element()"/>
+        <xsl:sequence select="$element/@*"/>
     </xsl:template>
 
-
-    <xsl:template name="processAttrSetReflection">
+    <!-- Deprecated since 4.0 -->
+    <xsl:template name="processAttrSetReflection" as="attribute()*">
         <xsl:param name="attrSet"/>
         <xsl:param name="path"/>
         <xsl:choose>
             <xsl:when test="$attrSet = 'topic.title'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.title"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.topic.title'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.topic.title"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.topic.topic.title'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.topic.topic.title"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.topic.topic.topic.title'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.topic.topic.topic.title"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.topic.topic.topic.topic.title'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.topic.topic.topic.topic.title"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.topic.topic.topic.topic.topic.title'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.topic.topic.topic.topic.topic.title"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = '__tableframe__bottom'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="__tableframe__bottom"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = '__tableframe__right'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="__tableframe__right"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = '__tableframe__top'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="__tableframe__top"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'lq'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="lq"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'lq_simple'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="lq_simple"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'table__tableframe__all'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="table__tableframe__all"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'table__tableframe__bottom'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="table__tableframe__bottom"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'table__tableframe__sides'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="table__tableframe__sides"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'table__tableframe__top'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="table__tableframe__top"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'table__tableframe__topbot'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="table__tableframe__topbot"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'thead__tableframe__bottom'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="thead__tableframe__bottom"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = '__align__left'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="__align__left"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = '__align__right'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="__align__right"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = '__align__center'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="__align__center"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = '__align__justify'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="__align__justify"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'thead.row'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="thead.row"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'thead.row.entry'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="thead.row.entry"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'thead.row.entry__content'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="thead.row.entry__content"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'tfoot.row'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="tfoot.row"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'tfoot.row.entry'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="tfoot.row.entry"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'tfoot.row.entry__content'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="tfoot.row.entry__content"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'tbody.row'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="tbody.row"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'tbody.row.entry'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="tbody.row.entry"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'tbody.row.entry__content'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="tbody.row.entry__content"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.title__content'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.title__content"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.topic.title__content'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.topic.title__content"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.topic.topic.title__content'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.topic.topic.title__content"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.topic.topic.topic.title__content'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.topic.topic.topic.title__content"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.topic.topic.topic.topic.title__content'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.topic.topic.topic.topic.title__content"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$attrSet = 'topic.topic.topic.topic.topic.topic.title__content'">
-                <xsl:call-template name="new-attr-set-reflection">
-                    <xsl:with-param name="temp-element">
+                <xsl:call-template name="get-attributes">
+                    <xsl:with-param name="element" as="element()">
                         <xsl:element name="placeholder" use-attribute-sets="topic.topic.topic.topic.topic.topic.title__content"/>
                     </xsl:with-param>
                 </xsl:call-template>
@@ -334,9 +330,7 @@ list just like regular named attribute sets.
         </xsl:if>
 
         <xsl:for-each select="xsl:attribute">
-            <xsl:attribute name="{@name}">
-                <xsl:value-of select="."/>
-            </xsl:attribute>
+            <xsl:attribute name="{@name}" select="."/>
             <xsl:for-each select="xsl:*">
               <xsl:call-template name="output-message">
                 <xsl:with-param name="id" select="'PDFX009E'"/>

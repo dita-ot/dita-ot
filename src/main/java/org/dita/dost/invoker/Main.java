@@ -49,12 +49,17 @@ import java.io.*;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.dita.dost.invoker.Arguments.*;
 import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
+import static org.dita.dost.util.LangUtils.pair;
+import static org.dita.dost.util.LangUtils.zipWithIndex;
 
 /**
  * Command line entry point into DITA-OT. This class is entered via the canonical
@@ -71,6 +76,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static final String ANT_TRANSTYPE = "transtype";
     private static final String ANT_PLUGIN_FILE = "plugin.file";
     private static final String ANT_PLUGIN_ID = "plugin.id";
+    private static final String ANT_PROJECT_DELIVERABLE = "project.deliverable";
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
     private static final Map<String, String> RESERVED_PARAMS = ImmutableMap.of(
             "output.dir", "output",
             "transtype", "transtype",
@@ -102,7 +109,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Set of properties that can be used by tasks.
      */
     private List<Map<String, Object>> projectProps;
-    private int repeat;
 
     /**
      * Whether or not this instance has successfully been constructed and is
@@ -203,8 +209,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // expect the worst
         int exitCode = 1;
         try {
-            final long[] durations = new long[repeat];
-            for (int i = 0; i < repeat; i++) {
+            final long[] durations = new long[this.args.repeat];
+            for (int i = 0; i < this.args.repeat; i++) {
                 final long start = System.currentTimeMillis();
                 try {
                     for (Map<String, Object> props : projectProps) {
@@ -220,7 +226,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 final long end = System.currentTimeMillis();
                 durations[i] = end - start;
             }
-            if (repeat > 1) {
+            if (this.args.repeat > 1) {
                 for (int i = 0; i < durations.length; i++) {
                     System.out.println(String.format(locale.getString("conversion.repeatDuration"),
                             i + 1, durations[i]));
@@ -291,7 +297,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
         projectProps = Collections.singletonList(definedProps);
         buildFile = args.buildFile;
-        repeat = 1;
 
         if (args.justPrintUsage) {
             args.printUsage(false);
@@ -349,12 +354,18 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         } else if (args instanceof ConversionArguments) {
             final ConversionArguments conversionArgs = (ConversionArguments) args;
             if (conversionArgs.projectFile == null) {
+                projectProps = Collections.singletonList(definedProps);
+            } else {
+                projectProps = collectProperties(conversionArgs.projectFile, definedProps);
+            }
+            final String tempDirToken = "temp" + LocalDateTime.now().format(dateTimeFormatter);
+            for (Map<String, Object> projectProp : projectProps) {
                 String err = null;
-                if (!definedProps.containsKey(ANT_TRANSTYPE) && !definedProps.containsKey(ANT_ARGS_INPUT)) {
+                if (!projectProp.containsKey(ANT_TRANSTYPE) && !projectProp.containsKey(ANT_ARGS_INPUT)) {
                     err = locale.getString("conversion.error.input_and_transformation_not_defined");
-                } else if (!definedProps.containsKey(ANT_TRANSTYPE)) {
+                } else if (!projectProp.containsKey(ANT_TRANSTYPE)) {
                     err = locale.getString("conversion.error.transformation_not_defined");
-                } else if (!definedProps.containsKey(ANT_ARGS_INPUT)) {
+                } else if (!projectProp.containsKey(ANT_ARGS_INPUT)) {
                     err = locale.getString("conversion.error.input_not_defined");
                 }
                 if (err != null) {
@@ -362,16 +373,26 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     args.printUsage(true);
                     throw new BuildException("");
                 }
-            } else {
-                projectProps = handleProject(conversionArgs.projectFile, definedProps);
-            }
-            repeat = conversionArgs.repeat;
-            // default values
-            if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
-                definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());
-            }
-            if (!definedProps.containsKey(ANT_BASE_TEMP_DIR) && !definedProps.containsKey(ANT_TEMP_DIR)) {
-                definedProps.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
+                // default values
+                if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
+                    definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());
+                }
+                if (!projectProp.containsKey(ANT_BASE_TEMP_DIR)) {
+                    projectProp.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
+                }
+                if (projectProp.containsKey(ANT_PROJECT_DELIVERABLE)) {
+                    if (projectProp.containsKey(ANT_TEMP_DIR)) {
+                        final Path tempDir = Paths.get(projectProp.get(ANT_TEMP_DIR).toString(),
+                                projectProp.get(ANT_PROJECT_DELIVERABLE).toString());
+                        projectProp.put(ANT_TEMP_DIR, tempDir
+                                .toAbsolutePath().toString());
+                    } else {
+                        final Path tempDir =  Paths.get(projectProp.get(ANT_BASE_TEMP_DIR).toString(),
+                                tempDirToken,
+                                projectProp.get(ANT_PROJECT_DELIVERABLE).toString());
+                        projectProp.put(ANT_TEMP_DIR, tempDir.toAbsolutePath().toString());
+                    }
+                }
             }
         } else {
             throw new RuntimeException("Command or subcommand not supported: " + args.getClass().getCanonicalName());
@@ -406,23 +427,35 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         readyToRun = true;
     }
 
-    private List<Map<String, Object>> handleProject(final File projectFile, final Map<String, Object> definedProps) {
+    private List<Map<String, Object>> collectProperties(final File projectFile, final Map<String, Object> definedProps) {
         final URI base = projectFile.toURI();
         final org.dita.dost.project.Project project = readProjectFile(projectFile);
-        final String runDeliverable = (String) definedProps.get("project.deliverable");
 
-        final List<Map<String, Object>> projectProps = project.deliverables.stream()
-                .filter(deliverable -> runDeliverable != null ? Objects.equals(deliverable.id, runDeliverable) : true)
-                .map(deliverable -> {
+        return collectProperties(project, base, definedProps);
+    }
+
+    @VisibleForTesting
+    List<Map<String, Object>> collectProperties(final org.dita.dost.project.Project project,
+                                                final URI base,
+                                                final Map<String, Object> definedProps) {
+        final String runDeliverable = (String) definedProps.get(ANT_PROJECT_DELIVERABLE);
+
+        final List<Map<String, Object>> projectProps = zipWithIndex(project.deliverables)
+                .filter(entry -> runDeliverable == null || Objects.equals(entry.getKey().id, runDeliverable))
+                .map(entry -> {
+                    final org.dita.dost.project.Project.Deliverable deliverable = entry.getKey();
                     final Map<String, Object> props = new HashMap<>(definedProps);
 
+                    props.put(ANT_PROJECT_DELIVERABLE, deliverable.id != null
+                            ? deliverable.id
+                            : String.format("deliverable-%d", entry.getValue() + 1));
                     final Context context = deliverable.context;
                     final URI input = base.resolve(context.inputs.inputs.get(0).href);
                     props.put(ANT_ARGS_INPUT, input.toString());
                     final Path output = getOutputDir(deliverable, props);
                     props.put(ANT_OUTPUT_DIR, output.toString());
                     final Publication publications = deliverable.publication;
-                    props.put("transtype", publications.transtype);
+                    props.put(ANT_TRANSTYPE, publications.transtype);
                     publications.params.forEach(param -> {
                         if (props.containsKey(param.name)) {
                             return;
@@ -450,8 +483,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                             props.put(param.name, value);
                         }
                     });
-                    if (!context.profiles.ditavals.isEmpty()) {
-                        final String filters = context.profiles.ditavals.stream()
+                    final List<org.dita.dost.project.Project.Deliverable.Profile.DitaVal> ditavals = Stream.concat(
+                                    publications.profiles.ditavals.stream(),
+                                    context.profiles.ditavals.stream()
+                            )
+                            .collect(Collectors.toList());
+                    if (!ditavals.isEmpty()) {
+                        final String filters = ditavals.stream()
                                 .map(ditaVal -> Paths.get(base.resolve(ditaVal.href)).toString())
                                 .collect(Collectors.joining(File.pathSeparator));
                         props.put("args.filter", filters);
@@ -533,7 +571,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private void printDeliverables(final File projectFile) {
         final List<Map.Entry<String, String>> pairs = readProjectFile(projectFile).deliverables.stream()
                 .filter(deliverable -> deliverable.id != null)
-                .map(deliverable -> new AbstractMap.SimpleEntry<>(deliverable.id, deliverable.name))
+                .map(deliverable -> pair(deliverable.id, deliverable.name))
                 .collect(Collectors.toList());
         final int length = pairs.stream()
                 .map(Map.Entry::getKey)

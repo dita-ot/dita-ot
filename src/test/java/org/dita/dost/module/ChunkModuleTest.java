@@ -75,7 +75,9 @@ public class ChunkModuleTest extends AbstractModuleTest {
                 {"topicgroup_chunk"},
                 {"unware_chunk_content"},
                 {"unware_chunk_content2"},
-                {"with_non_dita"}
+                {"with_non_dita"},
+                {"to_content_with_namespace_mathml"},
+                {"to_content_with_namespace_xsi"}
         });
     }
 

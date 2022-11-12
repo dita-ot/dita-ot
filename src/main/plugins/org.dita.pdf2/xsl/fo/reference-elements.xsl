@@ -362,9 +362,10 @@ See the accompanying LICENSE file for applicable license.
         <xsl:with-param name="frame" select="$frame"/>
       </xsl:call-template>
       <xsl:if test="$frame = 'all' or $frame = 'topbot' or $frame = 'top' or not($frame)">
-        <xsl:call-template name="processAttrSetReflection">
-          <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
-          <xsl:with-param name="path" select="$tableAttrs"/>
+        <xsl:call-template name="get-attributes">
+          <xsl:with-param name="element" as="element()">
+            <placeholder xsl:use-attribute-sets="__tableframe__top"/>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:if>
       <xsl:if test="$hasVerticalBorder = 'yes'">
@@ -404,9 +405,10 @@ See the accompanying LICENSE file for applicable license.
         <xsl:with-param name="frame" select="$frame"/>
       </xsl:call-template>
       <xsl:if test="$frame = 'all' or $frame = 'topbot' or $frame = 'top' or not($frame)">
-        <xsl:call-template name="processAttrSetReflection">
-          <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
-          <xsl:with-param name="path" select="$tableAttrs"/>
+        <xsl:call-template name="get-attributes">
+          <xsl:with-param name="element" as="element()">
+            <placeholder xsl:use-attribute-sets="__tableframe__top"/>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:if>
       <xsl:if test="following-sibling::*[contains(@class, ' reference/proptypehd ') or contains(@class, ' reference/propvaluehd ') or contains(@class, ' reference/propdeschd ')]">

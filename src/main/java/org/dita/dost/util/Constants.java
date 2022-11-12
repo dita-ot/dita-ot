@@ -132,9 +132,6 @@ public final class Constants {
     public static final DitaClass CONCEPT_CONBODY = DitaClass.getInstance("- topic/body concept/conbody ");
     public static final DitaClass CONCEPT_CONBODYDIV = DitaClass.getInstance("- topic/bodydiv concept/conbodydiv ");
     public static final DitaClass CONCEPT_CONCEPT = DitaClass.getInstance("- topic/topic concept/concept ");
-    public static final DitaClass DELAY_D_ANCHORID = DitaClass.getInstance("+ topic/keyword delay-d/anchorid ");
-    public static final DitaClass DELAY_D_ANCHORKEY = DitaClass.getInstance("+ topic/keyword delay-d/anchorkey ");
-    public static final DitaClass DELAY_D_EXPORTANCHORS = DitaClass.getInstance("+ topic/keywords delay-d/exportanchors ");
     public static final DitaClass DITAVAREF_D_DITAVALMETA = DitaClass.getInstance("+ map/topicmeta ditavalref-d/ditavalmeta ");
     public static final DitaClass DITAVAREF_D_DITAVALREF = DitaClass.getInstance("+ map/topicref ditavalref-d/ditavalref ");
     public static final DitaClass DITAVAREF_D_DVR_KEYSCOPEPREFIX = DitaClass.getInstance("+ topic/data ditavalref-d/dvrKeyscopePrefix ");
@@ -1022,6 +1019,9 @@ public final class Constants {
     public static final String DITA_OT_NS_PREFIX = "dita-ot";
     public static final String DITA_OT_NAMESPACE = "http://dita-ot.sourceforge.net";
     public static final String DITA_OT_NS = "http://dita-ot.sourceforge.net/ns/201007/dita-ot";
+    public static final String XSI_NS_PREFIX = "xsi";
+    public static final String ATTRIBUTE_NAMESPACE_PREFIX_XSI = XMLNS_ATTRIBUTE + ":" + XSI_NS_PREFIX;
+    public static final String ATTRIBUTE_NAME_NONAMESPACESCHEMALOCATION = XSI_NS_PREFIX + ":noNamespaceSchemaLocation";
     /**dita-ot:orig-href.*/
     public static final String ATTRIBUTE_NAME_DITA_OT_ORIG_HREF = DITA_OT_NS_PREFIX + ":" + "orig-href";
 

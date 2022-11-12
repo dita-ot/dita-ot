@@ -50,6 +50,10 @@ See the accompanying LICENSE file for applicable license.
     <reason>Attribute @%1 is deprecated.</reason>
     <response>Use attribute @%2 instead.</response>
   </message>
+  <message id="DOTA015F" type="FATAL">
+    <reason>Internal property %1 may not be set directly.</reason>
+    <response>Use property %2 instead.</response>
+  </message>
 
   <!-- Start of Java Messages -->
   
@@ -423,9 +427,24 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <message id="DOTJ084E" type="ERROR">
+    <reason>Couldn’t read '%1' with the %2 character set.</reason>
+    <response>Save the file with %2 encoding.</response>
+  </message>
+
   <message id="DOTJ085E" type="ERROR">
     <reason>The '%1' parameter cannot be set with 'param' in project files.</reason>
     <response>Use '%2' instead.</response>
+  </message>
+
+  <message id="DOTJ086W" type="WARN">
+    <reason>Split chunk attribute found on '&lt;%1>' element that does not reference a topic.</reason>
+    <response>Ignoring chunk operation.</response>
+  </message>
+
+  <message id="DOTJ087W" type="WARN">
+    <reason>Found chunk attribute with value '%1' inside combine chunk.</reason>
+    <response>Ignoring chunk operation.</response>
   </message>
 
   <!-- End of Java Messages -->

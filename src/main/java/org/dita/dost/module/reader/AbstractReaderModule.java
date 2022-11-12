@@ -20,7 +20,6 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.reader.*;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.DitaWriterFilter;
-import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
@@ -100,7 +99,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     private URI baseInputDir;
     GenListModuleReader listFilter;
     KeydefFilter keydefFilter;
-    ExportAnchorsFilter exportAnchorsFilter;
     boolean validate = true;
     ContentHandler nullHandler;
     private TempFileNameScheme tempFileNameScheme;
@@ -174,11 +172,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         if (profilingEnabled) {
             filterUtils = parseFilterFile();
-        }
-
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            exportAnchorsFilter = new ExportAnchorsFilter();
-            exportAnchorsFilter.setInputFile(rootFile);
         }
 
         keydefFilter = new KeydefFilter();
@@ -364,7 +357,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
 
         try {
-            XMLReader parser = getXmlReader(ref.format);
+            XMLReader parser = XMLUtils.getXmlReader(ref.format).orElse(reader);
             XMLReader xmlSource = parser;
             for (final XMLFilter f: getProcessingPipe(currentFile)) {
                 f.setParent(xmlSource);
@@ -778,14 +771,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
         }
-
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
-            delayConrefUtils.setLogger(logger);
-            delayConrefUtils.setJob(job);
-            delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap());
-            delayConrefUtils.writeExportAnchors(exportAnchorsFilter, tempFileNameScheme);
-        }
     }
 
     /** Filter copy-to where target is used directly. */
@@ -925,19 +910,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
 
         prop.setProperty(REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
-    }
-
-    private XMLReader getXmlReader(final String format) throws SAXException {
-        for (final Map.Entry<String, String> e: parserMap.entrySet()) {
-            if (format != null && format.equals(e.getKey())) {
-                try {
-                    return (XMLReader) Class.forName(e.getValue()).newInstance();
-                } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
-                    throw new SAXException(ex);
-                }
-            }
-        }
-        return reader;
     }
 
     void init() throws SAXException {

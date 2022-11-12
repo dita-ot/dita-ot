@@ -9,7 +9,9 @@ package org.dita.dost.util;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.expr.instruct.TerminationException;
+import net.sf.saxon.expr.parser.Loc;
 import net.sf.saxon.lib.CollationURIResolver;
+import net.sf.saxon.lib.ErrorReporter;
 import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.MessageListener2;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -17,6 +19,8 @@ import net.sf.saxon.s9api.SaxonApiUncheckedException;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.sapling.Saplings;
 import net.sf.saxon.trans.SymbolicName;
+import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.trans.XmlProcessingException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
@@ -30,10 +34,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.LocatorImpl;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -383,6 +389,55 @@ public class XMLUtilsTest {
         assertEquals("abc <def>\n" + 
                 "   <hij/>\n" + 
                 "</def>", act.get(0).message);
+    }
+
+    @Test
+    public void toErrorReporter_message() {
+        final CachingLogger logger = new CachingLogger();
+        final ErrorReporter errorReporter = XMLUtils.toErrorReporter(logger);
+        errorReporter.report(new XmlProcessingException(new XPathException("msg")));
+
+        assertEquals(1, logger.getMessages().size());
+        final Message message = logger.getMessages().get(0);
+        assertEquals("msg", message.message);
+        assertEquals(null, message.exception);
+        assertEquals(Message.Level.ERROR, message.level);
+    }
+
+    @Test
+    public void toErrorReporter_location() {
+        final CachingLogger logger = new CachingLogger();
+        final ErrorReporter errorReporter = XMLUtils.toErrorReporter(logger);
+        final LocatorImpl loc = new LocatorImpl();
+        loc.setLineNumber(1);
+        loc.setColumnNumber(2);
+        loc.setSystemId("foo:///bar");
+        errorReporter.report(new XmlProcessingException(
+                new XPathException("msg", null, Loc.makeFromSax(loc))));
+
+        assertEquals(1, logger.getMessages().size());
+        final Message message = logger.getMessages().get(0);
+        assertEquals("msg", message.message);
+        assertEquals(null, message.exception);
+        assertEquals(Message.Level.ERROR, message.level);
+    }
+
+    @Test
+    public void toErrorReporter_FileNotFoundException() {
+        final CachingLogger logger = new CachingLogger();
+        final ErrorReporter errorReporter = XMLUtils.toErrorReporter(logger);
+        final LocatorImpl loc = new LocatorImpl();
+        loc.setLineNumber(1);
+        loc.setColumnNumber(2);
+        loc.setSystemId("foo:///bar");
+        errorReporter.report(new XmlProcessingException(
+                new XPathException("msg", Loc.makeFromSax(loc), new FileNotFoundException("cause"))));
+
+        assertEquals(1, logger.getMessages().size());
+        final Message message = logger.getMessages().get(0);
+        assertEquals("foo:///bar:1:2: msg", message.message);
+        assertEquals(null, message.exception);
+        assertEquals(Message.Level.WARN, message.level);
     }
 
 //    @Test

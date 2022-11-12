@@ -43,8 +43,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-  <!-- If converting to PDF, never try to pull info from targets with print="no" -->
-  <xsl:param name="FINALOUTPUTTYPE" select="''" as="xs:string"/>
   <xsl:param name="conserve-memory" select="'false'" as="xs:string"/>
   
   <!-- Equivalent to document() but may discard documents from cache when instructed and able. -->
@@ -113,7 +111,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <!--@type|@importance|@linking|@toc|@print|@search|@format|@scope-->
           <!--need to create type variable regardless, for passing as a parameter to getstuff template-->
           <xsl:if test="(:not(@type) and :)$type!='#none#'">
-            <xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
+            <xsl:attribute name="type" select="$type"/>
           </xsl:if>
           <!-- FIXME: importance is not inheretable per http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/cascading-in-a-ditamap.html -->
           <!--xsl:if test="not(@importance)"-->
@@ -140,16 +138,16 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">processing-role</xsl:with-param></xsl:apply-templates>
           </xsl:if>
           <xsl:if test="(:not(@print) and :)$print!='#none#'">
-            <xsl:attribute name="print"><xsl:value-of select="$print"/></xsl:attribute>
+            <xsl:attribute name="print" select="$print"/>
           </xsl:if>
           <!--xsl:if test="not(@search)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">search</xsl:with-param></xsl:apply-templates>
           <!--/xsl:if-->
           <xsl:if test="(:not(@format) and :)$format!='#none#'">
-            <xsl:attribute name="format"><xsl:value-of select="$format"/></xsl:attribute>
+            <xsl:attribute name="format" select="$format"/>
           </xsl:if>
           <xsl:if test="(:not(@scope) and :)$scope!='#none#'">
-            <xsl:attribute name="scope"><xsl:value-of select="$scope"/></xsl:attribute>
+            <xsl:attribute name="scope" select="$scope"/>
           </xsl:if>
           <!--xsl:if test="not(@audience)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">audience</xsl:with-param></xsl:apply-templates>
@@ -174,7 +172,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:when test="@href=''">
               <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
             </xsl:when>
-            <xsl:when test="$print='no' and ($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD')"/>
             <xsl:when test="@href">
               <xsl:call-template name="get-stuff">
                 <xsl:with-param name="type" select="$type"/>
@@ -232,7 +229,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:apply-templates>
     </xsl:variable>
     <xsl:if test="$inherited-value!='#none#'">
-      <xsl:attribute name="{$attrib}"><xsl:value-of select="$inherited-value"/></xsl:attribute>
+      <xsl:attribute name="{$attrib}" select="$inherited-value"/>
     </xsl:if>
   </xsl:template>
 
@@ -288,7 +285,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:value-of select="@*[local-name() = $attrib]"/>
       <xsl:text> </xsl:text>
       <xsl:if test="ancestor-or-self::*[@cascade][1]/@cascade = 'merge'">
-        <xsl:apply-templates select="parent::*" mode="mappull:merge-inherit-attribute">
+        <xsl:apply-templates select="parent::*" mode="#current">
           <xsl:with-param name="attrib" select="$attrib"/>
         </xsl:apply-templates>
       </xsl:if>
@@ -300,12 +297,12 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:value-of>
       <xsl:value-of select="@*[local-name() = $attrib]"/>
       <xsl:text> </xsl:text>
-      <xsl:apply-templates select="parent::*" mode="mappull:merge-inherit-attribute">
+      <xsl:apply-templates select="parent::*" mode="#current">
         <xsl:with-param name="attrib" select="$attrib"/>
       </xsl:apply-templates>
       <xsl:text> </xsl:text>
       <xsl:variable name="position" select="1 + count(preceding-sibling::*)" as="xs:integer"/>
-      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][$position ]" mode="mappull:merge-inherit-attribute">
+      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][$position ]" mode="#current">
         <xsl:with-param name="attrib" select="$attrib"/>
       </xsl:apply-templates>
     </xsl:value-of>
@@ -320,7 +317,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <!--@importance|@linking|@toc|@print|@search|@format|@scope-->
     <xsl:param name="attrib" as="xs:string"/>
     <xsl:variable name="attrib-here" as="xs:string?">
-      <xsl:apply-templates select="@*[local-name()=$attrib]" mode="mappull:inherit-attribute"/>
+      <xsl:apply-templates select="@*[local-name()=$attrib]" mode="#current"/>
     </xsl:variable>
     <xsl:choose>
       <!-- Any time the attribute is specified on this element, use it -->
@@ -346,7 +343,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="$row!=''"><xsl:value-of select="$row"/></xsl:when>
           <xsl:when test="$colspec!=''"><xsl:value-of select="$colspec"/></xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]" mode="mappull:inherit-attribute">
+            <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]" mode="#current">
               <xsl:with-param name="attrib" select="$attrib"/>
             </xsl:apply-templates>
           </xsl:otherwise>
@@ -358,7 +355,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="parent::*" mode="mappull:inherit-attribute">
+        <xsl:apply-templates select="parent::*" mode="#current">
           <xsl:with-param name="attrib" select="$attrib"/>
         </xsl:apply-templates>
       </xsl:otherwise>
@@ -502,9 +499,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:variable name="target" select="if (exists($doc)) then (key('topic-by-id', $topicid, $doc)[1]) else ()" as="element()?"/>
             <xsl:choose>
               <xsl:when test="$target[contains(@class, $classval)]">
-                <xsl:attribute name="type">
-                  <xsl:value-of select="local-name($target[contains(@class, $classval)])"/>
-                </xsl:attribute>
+                <xsl:attribute name="type" select="local-name($target[contains(@class, $classval)])"/>
               </xsl:when>
               <xsl:when test="$topicid!='#none#' and not($target[contains(@class, ' topic/topic ')])">
                 <!-- topicid does not point to a valid topic -->
@@ -521,9 +516,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="$topicpos='firstinfile'">
             <xsl:choose>
               <xsl:when test="($doc//*[contains(@class, ' topic/topic ')])[1]">
-                <xsl:attribute name="type">
-                  <xsl:value-of select="local-name(($doc//*[contains(@class, $classval)])[1])"/>
-                </xsl:attribute>
+                <xsl:attribute name="type" select="local-name(($doc//*[contains(@class, $classval)])[1])"/>
               </xsl:when>
               <xsl:otherwise><!-- do nothing - omit attribute--></xsl:otherwise>
             </xsl:choose>
@@ -1164,7 +1157,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <!-- In an abstract, and this is not the first -->
       <xsl:text> </xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="node()" mode="copy-shortdesc"/>
+    <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
   
   <xsl:template match="@id" mode="copy-shortdesc"/>
@@ -1180,7 +1173,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
   
   <xsl:template match="@* | node()" mode="copy-shortdesc" name="copy-shortdesc" priority="-10">
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="copy-shortdesc"/>
+      <xsl:apply-templates select="@* | node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
 

@@ -68,17 +68,17 @@ See the accompanying LICENSE file for applicable license.
                 <fo:bookmark-title>
                     <xsl:value-of select="normalize-space($topicTitle)"/>
                 </fo:bookmark-title>
-                <xsl:apply-templates mode="bookmark"/>
+                <xsl:apply-templates mode="#current"/>
             </fo:bookmark>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates mode="bookmark"/>
+            <xsl:apply-templates mode="#current"/>
           </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
     <xsl:template match="*" mode="bookmark">
-        <xsl:apply-templates mode="bookmark"/>
+        <xsl:apply-templates mode="#current"/>
     </xsl:template>
 
     <xsl:template match="text()" mode="bookmark"/>
@@ -172,7 +172,7 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:call-template>
             </fo:bookmark-title>
             
-            <xsl:apply-templates mode="bookmark"/>
+            <xsl:apply-templates mode="#current"/>
         </fo:bookmark>
     </xsl:template>
     
@@ -188,7 +188,7 @@ See the accompanying LICENSE file for applicable license.
                     </xsl:call-template>
                 </fo:bookmark-title>
                 
-                <xsl:apply-templates mode="bookmark"/>
+                <xsl:apply-templates mode="#current"/>
             </fo:bookmark>
         </xsl:if>
     </xsl:template>
@@ -205,7 +205,7 @@ See the accompanying LICENSE file for applicable license.
                     </xsl:call-template>
                 </fo:bookmark-title>
                 
-                <xsl:apply-templates mode="bookmark"/>
+                <xsl:apply-templates mode="#current"/>
             </fo:bookmark>
         </xsl:if>
     </xsl:template>
@@ -224,7 +224,7 @@ See the accompanying LICENSE file for applicable license.
                       </fo:bookmark-title>
                       <xsl:if test="$bookmarks.index-group-size !=0 and 
                                     count(//opentopic-index:index.groups//opentopic-index:index.entry) &gt; $bookmarks.index-group-size">
-                        <xsl:apply-templates select="//opentopic-index:index.groups" mode="bookmark-index"/>
+                        <xsl:apply-templates select="//opentopic-index:index.groups" mode="#current"/>
                       </xsl:if>
                   </fo:bookmark>
               </xsl:when>
@@ -233,10 +233,10 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="opentopic-index:index.groups" mode="bookmark-index">
-      <xsl:apply-templates select="opentopic-index:index.group" mode="bookmark-index"/>
+      <xsl:apply-templates select="opentopic-index:index.group" mode="#current"/>
     </xsl:template>
     <xsl:template match="opentopic-index:index.group" mode="bookmark-index">
-      <xsl:apply-templates select="opentopic-index:label" mode="bookmark-index"/>
+      <xsl:apply-templates select="opentopic-index:label" mode="#current"/>
     </xsl:template>
     <xsl:template match="opentopic-index:label" mode="bookmark-index">
       <!-- Letter headings in index are always collapsed, regardless of bookmarkStyle. -->

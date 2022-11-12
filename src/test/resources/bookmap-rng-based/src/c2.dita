@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="urn:oasis:names:tc:dita:rng:concept.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<concept id="c2">
+    <title>C2</title>
+    <shortdesc>S</shortdesc>
+    <conbody>
+        <p></p>
+    </conbody>
+</concept>

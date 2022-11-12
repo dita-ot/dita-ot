@@ -22,10 +22,10 @@ import java.io.File;
 import java.net.URI;
 
 import static javax.xml.XMLConstants.XML_NS_URI;
-import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.reader.MergeMapParser.ATTRIBUTE_NAME_OHREF;
 import static org.dita.dost.reader.MergeMapParser.ATTRIBUTE_NAME_OID;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.FileUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.*;
 

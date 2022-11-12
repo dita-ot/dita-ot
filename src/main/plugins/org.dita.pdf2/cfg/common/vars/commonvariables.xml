@@ -140,11 +140,20 @@ See the accompanying LICENSE file for applicable license.
   <!-- Image path to use for a note of "other" type. -->
   <variable id="other Note Image Path"/>
 
-  <!--Numbering and format for task steps-->
+  <!--Deprecated since 4.0: "Step Number", "Step Format", "Substep Number", and "Substep Format"-->
   <variable id="Step Number"><param ref-name="number"/>. </variable>
   <variable id="Step Format">1</variable>
   <variable id="Substep Number"><param ref-name="number"/>) </variable>
   <variable id="Substep Format">a</variable>
+  <!--Numbering and format for task steps-->
+  <variable id="Step Number 1"><param ref-name="number"/>. </variable>
+  <variable id="Step Format 1">1</variable>
+  <variable id="Step Number 2"><param ref-name="number"/>) </variable>
+  <variable id="Step Format 2">a</variable>
+  <variable id="Step Number 3"><param ref-name="number"/>. </variable>
+  <variable id="Step Format 3">1</variable>
+  <variable id="Step Number 4"><param ref-name="number"/>) </variable>
+  <variable id="Step Format 4">a</variable>
 
   <variable id="#quote-start"><variableref refid="OpenQuote"/></variable>
   <variable id="#quote-end"><variableref refid="CloseQuote"/></variable>

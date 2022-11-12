@@ -1,0 +1,15 @@
+<job>
+  <property name="user.input.dir.uri">
+    <string>file:/</string>
+  </property>
+  <files>
+    <file src="file:/splitme.dita" uri="splitme_splitmeChild.dita" path="splitme_splitmeChild.dita"
+          result="file:/splitme_splitmeChild.dita" format="dita" target="true"/>
+    <file src="file:/splitme.dita" uri="splitme.dita" path="splitme.dita" result="file:/splitme.dita" format="dita"
+          target="true"/>
+    <file src="file:/exception.dita" uri="exception.dita" path="exception.dita" result="file:/exception.dita"
+          format="dita" target="true"/>
+    <file src="file:/root.ditamap" uri="root.ditamap" path="root.ditamap" result="file:/root.ditamap" format="ditamap"
+          input="true"/>
+  </files>
+</job>

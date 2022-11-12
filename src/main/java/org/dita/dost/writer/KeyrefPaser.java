@@ -31,8 +31,8 @@ import static javax.xml.XMLConstants.NULL_NS_URI;
 import static net.sf.saxon.s9api.streams.Predicates.hasLocalName;
 import static net.sf.saxon.s9api.streams.Predicates.isText;
 import static net.sf.saxon.s9api.streams.Steps.*;
-import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
 
 /**

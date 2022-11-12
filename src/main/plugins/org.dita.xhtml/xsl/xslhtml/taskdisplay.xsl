@@ -49,8 +49,10 @@ See the accompanying LICENSE file for applicable license.
 
 <xsl:template match="*[contains(@class,' task/prereq ')]" mode="get-output-class">p</xsl:template>
 <xsl:template match="*[contains(@class,' task/prereq ')]" name="topic.task.prereq">
-<div class="p">
-  <xsl:call-template name="commonattributes"/>
+<div>
+  <xsl:call-template name="commonattributes">
+    <xsl:with-param name="default-output-class" select="'p'"/>
+  </xsl:call-template>
   <xsl:call-template name="gen-toc-id"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
@@ -192,7 +194,7 @@ See the accompanying LICENSE file for applicable license.
                  It is possible (preferable) to keep stepsection within an <li> and use CSS to
                  fix numbering, but with testing in March of 2009, this does not work in IE. 
                  It is possible in Firefox 3. -->
-            <xsl:attribute name="start"><xsl:value-of select="count(preceding-sibling::*[contains(@class,' task/step ')])+1"/></xsl:attribute>
+            <xsl:attribute name="start" select="count(preceding-sibling::*[contains(@class,' task/step ')])+1"/>
           </xsl:if>
           <xsl:apply-templates select="." mode="steps">
             <xsl:with-param name="step_expand" select="$step_expand"/>
@@ -210,7 +212,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:apply-templates select="." mode="steps">
     <xsl:with-param name="step_expand" select="$step_expand"/>
   </xsl:apply-templates>
-  <xsl:apply-templates select="following-sibling::*[1][contains(@class,' task/step ')]" mode="sequence-of-steps">
+  <xsl:apply-templates select="following-sibling::*[1][contains(@class,' task/step ')]" mode="#current">
     <xsl:with-param name="step_expand" select="$step_expand"/>
   </xsl:apply-templates>
 </xsl:template>
@@ -239,7 +241,7 @@ See the accompanying LICENSE file for applicable license.
 <!-- only 1 step - output as a para -->
 <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep">
   <xsl:param name="step_expand"/>
-  <div class="p">
+  <div>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'p'"/>
     </xsl:call-template>
@@ -375,8 +377,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:call-template name="setaname"/>
     <xsl:value-of select="$newline"/>
-    <table border="1" frame="hsides" rules="rows" cellpadding="4" cellspacing="0" summary="" class="choicetableborder">
-      <xsl:call-template name="commonattributes"/>
+    <table border="1" frame="hsides" rules="rows" cellpadding="4" cellspacing="0" summary="">
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="'choicetableborder'"/>
+      </xsl:call-template>
       <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
       <xsl:call-template name="setid"/>
       <xsl:value-of select="$newline"/>

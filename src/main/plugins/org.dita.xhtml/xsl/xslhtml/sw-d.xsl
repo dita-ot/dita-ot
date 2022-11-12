@@ -13,7 +13,7 @@ See the accompanying LICENSE file for applicable license.
 <!-- software-domain.ent domain: filepath | msgph | userinput | systemoutput | cmdname | msgnum | varname -->
 
 <xsl:template match="*[contains(@class,' sw-d/filepath ')]" name="topic.sw-d.filepath">
- <span class="filepath">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -21,7 +21,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/msgph ')]" name="topic.sw-d.msgph">
- <samp class="msgph">
+ <samp>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -29,7 +29,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/userinput ')]" name="topic.sw-d.userinput">
- <kbd class="userinput">
+ <kbd>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -37,15 +37,17 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/systemoutput ')]" name="topic.sw-d.systemoutput">
- <samp class="sysout">
-  <xsl:call-template name="commonattributes"/>
+ <samp>
+  <xsl:call-template name="commonattributes">
+   <xsl:with-param name="default-output-class" select="'sysout'"/>
+  </xsl:call-template>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
  </samp>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/cmdname ')]" name="topic.sw-d.cmdname">
- <span class="cmdname">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -53,7 +55,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/msgnum ')]" name="topic.sw-d.msgnum">
- <span class="msgnum">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -61,7 +63,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/varname ')]" name="topic.sw-d.varname">
- <var class="varname">
+ <var>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>

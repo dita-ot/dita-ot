@@ -54,10 +54,10 @@ with those set forth herein.
       <param name="1" location="${args.xsl.pdf}"/>
     </dita-ot-fail>
     
-    <property name="preprocess.copy-image.skip" value="true"/>
-    <property name="preprocess.copy-flag.skip" value="true"/>
+    <property name="build-step.copy-image" value="false"/>
+    <property name="build-step.copy-flag" value="false"/>
     <property name="clean-preprocess.use-result-filename" value="false"/>
-    <condition property="preprocess.chunk.skip" value="true">
+    <condition property="build-step.chunk" value="false">
       <isfalse value="${org.dita.pdf2.chunk.enabled}"/>
     </condition>
     

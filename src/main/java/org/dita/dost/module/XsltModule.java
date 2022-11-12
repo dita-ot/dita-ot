@@ -27,13 +27,13 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
 import static org.dita.dost.util.FileUtils.replaceExtension;
+import static org.dita.dost.util.LangUtils.pair;
 import static org.dita.dost.util.XMLUtils.toErrorReporter;
 import static org.dita.dost.util.XMLUtils.toMessageListener;
 
@@ -123,7 +123,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                                 if (in.equals(out)) {
                                     final File tmp = new File(out.getAbsolutePath() + FILE_EXTENSION_TEMP);
                                     transform(in, tmp, transformer);
-                                    return new SimpleEntry<>(tmp, out);
+                                    return pair(tmp, out);
                                 } else {
                                     transform(in, out, transformer);
                                     return null;

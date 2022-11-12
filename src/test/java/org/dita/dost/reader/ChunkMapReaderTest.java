@@ -7,12 +7,25 @@
  */
 package org.dita.dost.reader;
 
-import com.google.common.collect.ImmutableMap;
+import static org.dita.dost.TestUtils.parse;
+import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
+import static org.dita.dost.util.Constants.TOPIC_XREF;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.streams.Predicates;
-import net.sf.saxon.s9api.streams.Steps;
-import org.apache.commons.io.IOUtils;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.store.StreamStore;
@@ -22,22 +35,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
 
-import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
-import static org.dita.dost.TestUtils.parse;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toURI;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Predicates;
+import net.sf.saxon.s9api.streams.Steps;
 
 public class ChunkMapReaderTest {
 
@@ -823,4 +825,40 @@ public class ChunkMapReaderTest {
                         .and(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "chunkedTopic.dita#subtopic3"))))
                 .exists());
 	}
+
+    @Test
+    public void testReadRootChunkOverride() throws Exception {
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+        job.setInputDir(srcDir.toURI());
+        job.setInputMap(URI.create("mapNoChunk.ditamap"));
+    
+        final ChunkMapReader mapReader = new ChunkMapReader();
+        mapReader.setRootChunkOverride("to-content");
+        mapReader.setLogger(new TestUtils.TestLogger());
+        mapReader.setJob(job);
+    
+        TestUtils.copy(new File(srcDir, "mapNoChunk.ditamap"), new File(tempDir, "mapNoChunk.ditamap"));
+        job.add(new Job.FileInfo.Builder()
+                .src(new File(srcDir, "mapNoChunk.ditamap").toURI())
+                .uri(toURI("mapNoChunk.ditamap"))
+                .isInput(true)
+                .build());
+        List<String> srcFiles = Arrays.asList(
+                "1.dita", "2.dita", "3.dita");
+        for (final String srcFile : srcFiles) {
+            final URI dst = tempDir.toURI().resolve(srcFile);
+            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(srcDir, srcFile).toURI())
+                    .uri(toURI(srcFile))
+                    .build());
+        }
+    
+        mapReader.read(new File(tempDir, "mapNoChunk.ditamap"));
+        Set<URI> expected = new HashSet<>();
+        expected.add(prefixTemp("1.dita"));
+        expected.add(prefixTemp("2.dita"));
+        expected.add(prefixTemp("3.dita"));
+        assertEquals(expected, mapReader.getChunkTopicSet());
+    }
 }

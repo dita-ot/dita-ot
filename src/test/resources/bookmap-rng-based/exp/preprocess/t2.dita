@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><?workdir /Users/raducoravu/Desktop/tmpR?><?workdir-uri file:/Users/raducoravu/Desktop/tmpR/?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="t2" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d xml-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic svg-d) (topic sw-d) (topic ui-d) (topic ut-d) a(props deliveryTarget)" class="- topic/topic " xtrf="file:/Users/raducoravu/dita-ot/src/test/resources/bookmap-rng-based/src/t2.dita" xtrc="topic:1;3:16" specializations="@props/deliveryTarget">
+  <title class="- topic/title " xtrf="file:/Users/raducoravu/dita-ot/src/test/resources/bookmap-rng-based/src/t2.dita" xtrc="title:1;4:10">T2</title>
+    <body class="- topic/body " xtrf="file:/Users/raducoravu/dita-ot/src/test/resources/bookmap-rng-based/src/t2.dita" xtrc="body:1;5:11">
+        <p class="- topic/p " xtrf="file:/Users/raducoravu/dita-ot/src/test/resources/bookmap-rng-based/src/t2.dita" xtrc="p:1;6:12"/>
+    </body>
+</topic>

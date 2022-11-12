@@ -18,7 +18,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style">
     <!-- Add the pre-calculated CSS style for this element -->
-    <xsl:attribute name="style"><xsl:value-of select="."/></xsl:attribute>
+    <xsl:attribute name="style" select="."/>
   </xsl:template>
 
   <!-- By default, process flags where encountered: at the start and end of the element content. -->
@@ -96,7 +96,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:choose>
       <xsl:when test="@imageref">
         <img src="{@imageref}">
-          <xsl:apply-templates select="alt-text" mode="ditaval-outputflag"/>
+          <xsl:apply-templates select="alt-text" mode="#current"/>
         </img>
       </xsl:when>
       <xsl:otherwise>
@@ -105,9 +105,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
   <xsl:template match="alt-text" mode="ditaval-outputflag">
-    <xsl:attribute name="alt">
-      <xsl:value-of select="."/>
-    </xsl:attribute>
+    <xsl:attribute name="alt" select="."/>
   </xsl:template>
 
 </xsl:stylesheet>

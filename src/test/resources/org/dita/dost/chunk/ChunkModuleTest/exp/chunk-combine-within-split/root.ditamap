@@ -1,0 +1,9 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map " ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/topic ">Split most, but not one branch</title>
+  <topicref class="- map/topicref " href="splitme.dita">
+    <topicref class="- map/topicref " href="splitme_splitmeChild.dita"/>
+  </topicref>
+  <topicref class="- map/topicref " href="exception.dita#exception">
+    <topicref class="- map/topicref " href="exception.dita#exceptionChild"/>
+  </topicref>
+</map>

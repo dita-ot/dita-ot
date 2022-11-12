@@ -38,9 +38,9 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import static net.sf.saxon.s9api.streams.Steps.descendant;
-import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.ancestors;
 import static org.dita.dost.util.XMLUtils.toList;
@@ -264,12 +264,6 @@ public final class TopicReaderModule extends AbstractReaderModule {
         pipe.add(normalizeFilter);
 
         pipe.add(topicFragmentFilter);
-
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            exportAnchorsFilter.setCurrentFile(fileToParse);
-            exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
-            pipe.add(exportAnchorsFilter);
-        }
 
         listFilter.setCurrentFile(fileToParse);
         listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));

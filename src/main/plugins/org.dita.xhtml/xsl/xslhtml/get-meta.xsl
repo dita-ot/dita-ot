@@ -159,7 +159,7 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- CONTENT: Type -->
 <xsl:template match="dita" mode="gen-type-metadata">
-  <xsl:apply-templates select="*[1]" mode="gen-type-metadata"/>
+  <xsl:apply-templates select="*[1]" mode="#current"/>
 </xsl:template>
 <xsl:template match="*" mode="gen-type-metadata">
   <meta name="DC.type" content="{name(.)}"/>
@@ -172,7 +172,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*|text()" mode="text-only"/>
   </xsl:variable>
   <meta name="DC.title">
-    <xsl:attribute name="content"><xsl:value-of select="normalize-space($titlemeta)"/></xsl:attribute>
+    <xsl:attribute name="content" select="normalize-space($titlemeta)"/>
   </meta>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -183,11 +183,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*|text()" mode="text-only"/>
   </xsl:variable>
   <meta name="abstract">
-    <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
+    <xsl:attribute name="content" select="normalize-space($shortmeta)"/>
   </meta>
   <xsl:value-of select="$newline"/>
   <meta name="description">
-    <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
+    <xsl:attribute name="content" select="normalize-space($shortmeta)"/>
   </meta>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -201,11 +201,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:variable>
   <xsl:if test="normalize-space($shortmeta)!=''">
     <meta name="abstract">
-      <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
+      <xsl:attribute name="content" select="normalize-space($shortmeta)"/>
     </meta>
     <xsl:value-of select="$newline"/>
     <meta name="description">
-      <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
+      <xsl:attribute name="content" select="normalize-space($shortmeta)"/>
     </meta>
     <xsl:value-of select="$newline"/>
   </xsl:if>
@@ -264,7 +264,7 @@ See the accompanying LICENSE file for applicable license.
      </xsl:choose>
     </xsl:variable>
     <meta name="DC.relation" scheme="URI">
-      <xsl:attribute name="content"><xsl:value-of select="$linkmeta_ext"/></xsl:attribute>
+      <xsl:attribute name="content" select="$linkmeta_ext"/>
     </meta>
     <xsl:value-of select="$newline"/>
   </xsl:otherwise>
@@ -403,7 +403,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*|text()" mode="text-only"/>
   </xsl:variable>
   <meta name="prodname">
-    <xsl:attribute name="content"><xsl:value-of select="normalize-space($prodnamemeta)"/></xsl:attribute>
+    <xsl:attribute name="content" select="normalize-space($prodnamemeta)"/>
   </meta>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -426,7 +426,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*|text()" mode="text-only"/>
   </xsl:variable>
   <meta name="brand">
-    <xsl:attribute name="content"><xsl:value-of select="normalize-space($brandmeta)"/></xsl:attribute>
+    <xsl:attribute name="content" select="normalize-space($brandmeta)"/>
   </meta>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -436,7 +436,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*|text()" mode="text-only"/>
   </xsl:variable>
   <meta name="component">
-    <xsl:attribute name="content"><xsl:value-of select="normalize-space($componentmeta)"/></xsl:attribute>
+    <xsl:attribute name="content" select="normalize-space($componentmeta)"/>
   </meta>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -446,7 +446,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*|text()" mode="text-only"/>
   </xsl:variable>
   <meta name="featnum">
-    <xsl:attribute name="content"><xsl:value-of select="normalize-space($featnummeta)"/></xsl:attribute>
+    <xsl:attribute name="content" select="normalize-space($featnummeta)"/>
   </meta>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -456,7 +456,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*|text()" mode="text-only"/>
   </xsl:variable>
   <meta name="prognum">
-    <xsl:attribute name="content"><xsl:value-of select="normalize-space($prognummeta)"/></xsl:attribute>
+    <xsl:attribute name="content" select="normalize-space($prognummeta)"/>
   </meta>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -466,7 +466,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*|text()" mode="text-only"/>
   </xsl:variable>
   <meta name="platform">
-    <xsl:attribute name="content"><xsl:value-of select="normalize-space($platformmeta)"/></xsl:attribute>
+    <xsl:attribute name="content" select="normalize-space($platformmeta)"/>
   </meta>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -476,7 +476,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*|text()" mode="text-only"/>
   </xsl:variable>
   <meta name="series">
-    <xsl:attribute name="content"><xsl:value-of select="normalize-space($seriesmeta)"/></xsl:attribute>
+    <xsl:attribute name="content" select="normalize-space($seriesmeta)"/>
   </meta>
   <xsl:value-of select="$newline"/>
 </xsl:template>

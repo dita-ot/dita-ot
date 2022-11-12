@@ -79,7 +79,6 @@ public class ConversionArguments extends Arguments {
      * Project file
      */
     File projectFile;
-    int repeat = 1;
 
     public final List<String> inputs = new ArrayList<>();
     private final List<String> resources = new ArrayList<>();

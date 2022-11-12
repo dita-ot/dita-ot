@@ -74,7 +74,8 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         logger.info("Loading stylesheet " + styleFile);
         final XsltExecutable xsltExecutable;
         try {
-            xsltExecutable = xmlUtils.getProcessor().newXsltCompiler().compile(new StreamSource(styleFile));
+            final XsltCompiler xsltCompiler = xmlUtils.getXsltCompiler();
+            xsltExecutable = xsltCompiler.compile(new StreamSource(styleFile));
         } catch (SaxonApiException e) {
             throw new RuntimeException("Failed to compile stylesheet '" + styleFile.toURI() + "': " + e.getMessage(), e);
         }

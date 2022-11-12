@@ -18,7 +18,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:with-param name="id" select="'#menucascade-separator'"/>
       </xsl:call-template>
     </xsl:if>
-    <xsl:apply-templates select="*|text()" mode="dita-ot:text-only"/>
+    <xsl:apply-templates select="*|text()" mode="#current"/>
   </xsl:template>
 
 </xsl:stylesheet>

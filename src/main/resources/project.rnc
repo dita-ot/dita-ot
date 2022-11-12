@@ -63,13 +63,15 @@ publication =
     attribute name { text }?,
     attribute id { xsd:NCName }?,
     attribute transtype { text },
-    param*
+    param*,
+    profile?
   }
 
 publication-ref =
   ## Publication reference
   element publication {
-    attribute idref { xsd:NCName }
+    attribute idref { xsd:NCName },
+    param*
   }
 
 param =

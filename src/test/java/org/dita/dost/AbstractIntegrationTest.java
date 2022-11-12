@@ -35,7 +35,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertEquals;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.dita.dost.TestUtils.assertXMLEqual;
@@ -56,7 +55,9 @@ public abstract class AbstractIntegrationTest {
                 "dita2xhtml"),
         HTML5("html5", false, "html5",
                 "dita2html5"),
-        PDF("pdf", false, "pdf",
+        PDF("pdf", true,
+                ImmutableSet.of( "fo"),
+                "pdf",
                 "dita2pdf2"),
         ECLIPSEHELP("eclipsehelp", false,"eclipsehelp",
                 "dita2eclipsehelp"),
@@ -69,11 +70,16 @@ public abstract class AbstractIntegrationTest {
 
         final String name;
         final boolean compareTemp;
+        final Set<String> compareable;
         public final String exp;
         final String[] targets;
         Transtype(String name, boolean compareTemp, String exp, String... targets) {
+            this(name, compareTemp, ImmutableSet.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt"), exp, targets);
+        }
+        Transtype(String name, boolean compareTemp, Set<String> compareable, String exp, String... targets) {
             this.name = name;
             this.compareTemp = compareTemp;
+            this.compareable = compareable;
             this.exp = exp;
             this.targets = targets;
         }
@@ -86,7 +92,7 @@ public abstract class AbstractIntegrationTest {
 
     // Builder
 
-    private String name;
+    private Path name;
     private Transtype transtype;
     private String[] targets;
     private Path input;
@@ -95,6 +101,11 @@ public abstract class AbstractIntegrationTest {
     private int errorCount = 0;
 
     public AbstractIntegrationTest name(String name) {
+        this.name = Paths.get(name);
+        return this;
+    }
+
+    public AbstractIntegrationTest name(Path name) {
         this.name = name;
         return this;
     }
@@ -197,7 +208,9 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected File run() throws Throwable {
-        final File testDir = Paths.get("src", "test", "resources", name).toFile();
+        final File testDir = Paths.get("src", "test", "resources")
+                .resolve(name)
+                .toFile();
         final File srcDir = new File(testDir, SRC_DIR);
         final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
         final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
@@ -237,9 +250,15 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected AbstractIntegrationTest compare() throws Throwable {
-        File exp = Paths.get("src", "test", "resources", name, EXP_DIR, transtype.toString()).toFile();
+        File exp = Paths.get("src", "test", "resources")
+                .resolve(name)
+                .resolve(Paths.get(EXP_DIR, transtype.toString()))
+                .toFile();
         if (!exp.exists()) {
-            exp = Paths.get("src", "test", "resources", name, EXP_DIR, transtype.exp).toFile();
+            exp = Paths.get("src", "test", "resources")
+                    .resolve(name)
+                    .resolve(Paths.get(EXP_DIR, transtype.exp))
+                    .toFile();
         }
         if (!exp.exists()) {
             throw new RuntimeException("Unable to find expected output directory");
@@ -248,26 +267,6 @@ public abstract class AbstractIntegrationTest {
 
         compare(exp, act);
         return this;
-    }
-
-    @Deprecated
-    protected void test(final String name) throws Throwable {
-        final File testDir = Paths.get("src", "test", "resources", name).toFile();
-
-        final File expDir = new File(testDir, EXP_DIR);
-        final File actDir = new File(baseTempDir, testDir.getName() + File.separator + "testresult");
-        List<TestListener.Message> log = null;
-        try {
-            log = run(testDir, expDir.list(), actDir);
-            compare(expDir, actDir);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final Throwable e) {
-            if (log != null && level >= 0) {
-                outputLog(log);
-            }
-            throw new Throwable("Case " + testDir.getName() + " failed: " + e.getMessage(), e);
-        }
     }
 
     private void outputLog(List<TestListener.Message> log) {
@@ -318,69 +317,6 @@ public abstract class AbstractIntegrationTest {
             }
         }
         return count;
-    }
-
-    /**
-     * Run test conversion
-     *
-     * @param d          test source directory
-     * @param transtypes list of transtypes to test
-     * @return list of log messages
-     * @throws Exception if conversion failed
-     */
-    private List<TestListener.Message> run(final File d, final String[] transtypes, final File resDir) throws Exception {
-        if (transtypes.length == 0) {
-            return emptyList();
-        }
-
-        final File tempDir = new File(baseTempDir, d.getName() + File.separator + "temp");
-        deleteDirectory(resDir);
-        deleteDirectory(tempDir);
-
-        final TestListener listener = new TestListener(System.out, System.err);
-        final PrintStream savedErr = System.err;
-        final PrintStream savedOut = System.out;
-        try {
-            final File buildFile = new File(d, "build.xml");
-            final Project project = new Project();
-            project.addBuildListener(listener);
-            System.setOut(new PrintStream(new DemuxOutputStream(project, false)));
-            System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
-            project.fireBuildStarted();
-            project.init();
-            for (final String transtype : transtypes) {
-                if (canCompare.contains(transtype)) {
-                    project.setUserProperty("run." + transtype, "true");
-                    if (transtype.equals("pdf") || transtype.equals("pdf2")) {
-                        project.setUserProperty("pdf.formatter", "fop");
-                        project.setUserProperty("fop.formatter.output-format", "text/plain");
-                    }
-                }
-            }
-            project.setUserProperty("generate-debug-attributes", "false");
-            project.setUserProperty("preprocess.copy-generated-files.skip", "true");
-            project.setUserProperty("ant.file", buildFile.getAbsolutePath());
-            project.setUserProperty("ant.file.type", "file");
-            project.setUserProperty("dita.dir", ditaDir.getAbsolutePath());
-            project.setUserProperty("result.dir", resDir.getAbsolutePath());
-            project.setUserProperty("temp.dir", tempDir.getAbsolutePath());
-            project.setKeepGoingMode(false);
-            ProjectHelper.configureProject(project, buildFile);
-            final Vector<String> targets = new Vector<>();
-            targets.addElement(project.getDefaultTarget());
-            project.executeTargets(targets);
-
-            assertEquals("Warn message count does not match expected",
-                    getMessageCount(project, "warn"),
-                    countMessages(listener.messages, Project.MSG_WARN));
-            assertEquals("Error message count does not match expected",
-                    getMessageCount(project, "error"),
-                    countMessages(listener.messages, Project.MSG_ERR));
-        } finally {
-            System.setOut(savedOut);
-            System.setErr(savedErr);
-            return listener.messages;
-        }
     }
 
     /**
@@ -488,7 +424,8 @@ public abstract class AbstractIntegrationTest {
                     } else if (ext.equals("html") || ext.equals("htm") || ext.equals("xhtml")
                             || ext.equals("hhk")) {
                         assertXMLEqual(parseHtml(exp), parseHtml(act));
-                    } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap")) {
+                    } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap")
+                            || ext.equals("fo")) {
                         assertXMLEqual(parseXml(exp), parseXml(act));
                     } else if (ext.equals("txt")) {
                         assertArrayEquals(readTextFile(exp), readTextFile(act));
@@ -502,12 +439,11 @@ public abstract class AbstractIntegrationTest {
         }
     }
 
-    final Set<String> compareable = ImmutableSet.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "txt");
-    final Set<String> ignorable = ImmutableSet.of("keydef.xml", "subrelation.xml", ".job.xml");
+    final Set<String> ignorable = ImmutableSet.of("keydef.xml", "subrelation.xml", ".job.xml", "stage2.fo");
 
     private Collection<String> getFiles(File expDir, File actDir) {
         final FileFilter filter = f -> f.isDirectory()
-                || (compareable.contains(FileUtils.getExtension(f.getName()))
+                || (this.transtype.compareable.contains(FileUtils.getExtension(f.getName()))
                     && !ignorable.contains(f.getName()));
         final Set<String> buf = new HashSet<>();
         final File[] exp = expDir.listFiles(filter);
@@ -565,6 +501,11 @@ public abstract class AbstractIntegrationTest {
             e.removeAttributeNS(DITA_OT_NS, "submap-specializations");
             // remove workdir processing instructions
             removeWorkdirProcessingInstruction(e);
+        }
+        final NodeList images = d.getElementsByTagNameNS("http://www.w3.org/1999/XSL/Format", "external-graphic");
+        for (int i = 0; i < images.getLength(); i++) {
+            final Element e = (Element) images.item(i);
+            e.removeAttribute("src");
         }
         // rewrite IDs
         return rewriteIds(d, ditaIdPattern);

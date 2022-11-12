@@ -188,7 +188,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:sequence select="$newmaxcount"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/strow ')][1]" mode="count-max-simpletable-cells">
+          <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/strow ')][1]" mode="#current">
             <xsl:with-param name="maxcount" select="$newmaxcount"/>
           </xsl:apply-templates>
         </xsl:otherwise>
@@ -260,7 +260,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:function>
 
     <xsl:template match="*" mode="insert-text">
-        <xsl:apply-templates mode="insert-text"/>
+        <xsl:apply-templates mode="#current"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/indexterm ')]" mode="insert-text"/>
@@ -607,14 +607,10 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template name="applySpansAttrs">
         <xsl:if test="exists(@morerows) and xs:integer(@morerows) gt 0">
-            <xsl:attribute name="number-rows-spanned">
-              <xsl:value-of select="xs:integer(@morerows) + 1"/>
-            </xsl:attribute>
+            <xsl:attribute name="number-rows-spanned" select="xs:integer(@morerows) + 1"/>
         </xsl:if>
       <xsl:if test="exists(@dita-ot:morecols) and xs:integer(@dita-ot:morecols) gt 0">
-        <xsl:attribute name="number-columns-spanned">
-        <xsl:value-of select="xs:integer(@dita-ot:morecols) + 1"/>
-        </xsl:attribute>
+        <xsl:attribute name="number-columns-spanned" select="xs:integer(@dita-ot:morecols) + 1"/>
       </xsl:if>
     </xsl:template>
 
@@ -648,9 +644,7 @@ See the accompanying LICENSE file for applicable license.
 
         <xsl:choose>
             <xsl:when test="not(normalize-space($align) = '')">
-                <xsl:attribute name="text-align">
-                    <xsl:value-of select="$align"/>
-                </xsl:attribute>
+                <xsl:attribute name="text-align" select="$align"/>
             </xsl:when>
             <xsl:when test="(normalize-space($align) = '') and contains(@class, ' topic/colspec ')"/>
             <xsl:otherwise>
@@ -659,19 +653,13 @@ See the accompanying LICENSE file for applicable license.
         </xsl:choose>
         <xsl:choose>
             <xsl:when test="$valign='top'">
-                <xsl:attribute name="display-align">
-                    <xsl:value-of select="'before'"/>
-                </xsl:attribute>
+                <xsl:attribute name="display-align" select="'before'"/>
             </xsl:when>
             <xsl:when test="$valign='middle'">
-                <xsl:attribute name="display-align">
-                    <xsl:value-of select="'center'"/>
-                </xsl:attribute>
+                <xsl:attribute name="display-align" select="'center'"/>
             </xsl:when>
             <xsl:when test="$valign='bottom'">
-                <xsl:attribute name="display-align">
-                    <xsl:value-of select="'after'"/>
-                </xsl:attribute>
+                <xsl:attribute name="display-align" select="'after'"/>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
@@ -721,41 +709,50 @@ See the accompanying LICENSE file for applicable license.
             </xsl:choose>
         </xsl:variable>
         <xsl:if test="number($rowsep) = 1 and (../parent::node()[contains(@class, ' topic/thead ')])">
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="'thead__tableframe__bottom'"/>
-                <xsl:with-param name="path" select="$tableAttrs"/>
-            </xsl:call-template>
+          <xsl:call-template name="get-attributes">
+            <xsl:with-param name="element" as="element()">
+              <placeholder xsl:use-attribute-sets="thead__tableframe__bottom"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:if>
         <xsl:if test="number($rowsep) = 1 and ((../following-sibling::*[contains(@class, ' topic/row ')]) or (../parent::node()[contains(@class, ' topic/tbody ')] and ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/tfoot ')]))">
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="'__tableframe__bottom'"/>
-                <xsl:with-param name="path" select="$tableAttrs"/>
-            </xsl:call-template>
+          <xsl:call-template name="get-attributes">
+            <xsl:with-param name="element" as="element()">
+              <placeholder xsl:use-attribute-sets="__tableframe__bottom"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:if>
         <xsl:if test="$needTopBorderOnBreak">
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
-                <xsl:with-param name="path" select="$tableAttrs"/>
-            </xsl:call-template>
+          <xsl:call-template name="get-attributes">
+            <xsl:with-param name="element" as="element()">
+              <placeholder xsl:use-attribute-sets="__tableframe__top"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:if>
         <xsl:if test="number($colsep) = 1 and following-sibling::*[contains(@class, ' topic/entry ')]">
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
-                <xsl:with-param name="path" select="$tableAttrs"/>
-            </xsl:call-template>
+          <xsl:call-template name="get-attributes">
+            <xsl:with-param name="element" as="element()">
+              <placeholder xsl:use-attribute-sets="__tableframe__right"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:if>
         <xsl:if test="number($colsep) = 1 and not(following-sibling::*[contains(@class, ' topic/entry ')]) and ((count(preceding-sibling::*) + 1) &lt; ancestor::*[contains(@class, ' topic/tgroup ')][1]/@cols)">
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
-                <xsl:with-param name="path" select="$tableAttrs"/>
-            </xsl:call-template>
+          <xsl:call-template name="get-attributes">
+            <xsl:with-param name="element" as="element()">
+              <placeholder xsl:use-attribute-sets="__tableframe__right"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:if>
     </xsl:template>
 
     <!-- DITA spec prose defines as either 0 or 1, but DTD as NMTOKENS. However, OASIS Table Exchange model uses 0 or anything else. -->
     <xsl:template name="getTableColsep" as="xs:string">
+        <xsl:param name="prmEntry" as="element()" required="no" select="."/>
         <xsl:variable name="colname" select="@colname"/>
         <xsl:choose>
+            <xsl:when test="dita-ot:isLastColumnEntry($prmEntry)">
+                <xsl:sequence select="'0'"/>
+            </xsl:when>
             <xsl:when test="@colsep">
                 <xsl:value-of select="@colsep"/>
             </xsl:when>
@@ -773,10 +770,30 @@ See the accompanying LICENSE file for applicable license.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
+    <!-- Judge that given entry ($prmEntry) is the last column cell -->
+    <xsl:function name="dita-ot:isLastColumnEntry" as="xs:boolean">
+        <xsl:param name="prmEntry" as="element()"/>
+        <xsl:variable name="tgroupCols" as="xs:integer" select="xs:integer($prmEntry/ancestor::*[contains(@class,' topic/tgroup ')][1]/@cols)"/>
+        <xsl:variable name="entryColNum" as="xs:integer" select="xs:integer($prmEntry/@dita-ot:x)"/>
+        <xsl:choose>
+            <xsl:when test="exists($prmEntry/@dita-ot:morecols)">
+                <xsl:variable name="endCol" as="xs:integer" select="$entryColNum + xs:integer($prmEntry/@dita-ot:morecols)"/>
+                <xsl:sequence select="$endCol eq $tgroupCols"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$entryColNum eq $tgroupCols"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
     <xsl:template name="getTableRowsep" as="xs:string">
+        <xsl:param name="prmEntry" as="element()" required="no" select="."/>
         <xsl:variable name="colname" select="@colname"/>
         <xsl:choose>
+            <xsl:when test="dita-ot:isLastRowEntry($prmEntry)">
+                <xsl:sequence select="'0'"/>
+            </xsl:when>
             <xsl:when test="@rowsep">
                 <xsl:value-of select="@rowsep"/>
             </xsl:when>
@@ -798,6 +815,22 @@ See the accompanying LICENSE file for applicable license.
         </xsl:choose>
     </xsl:template>
 
+    <!-- Judge that given entry ($prmEntry) is the last row cell -->
+    <xsl:function name="dita-ot:isLastRowEntry" as="xs:boolean">
+        <xsl:param name="prmEntry" as="element()"/>
+        <xsl:variable name="tgroupRowCount" as="xs:integer" select="count($prmEntry/ancestor::*[contains(@class,' topic/tgroup ')][1]/descendant::*[contains(@class,' topic/row ')])"/>
+        <xsl:variable name="entryRowNum" as="xs:integer" select="xs:integer($prmEntry/@dita-ot:y)"/>
+        <xsl:choose>
+            <xsl:when test="exists($prmEntry/@morerows)">
+                <xsl:variable name="endRowNum" as="xs:integer" select="$entryRowNum + xs:integer($prmEntry/@morerows)"/>
+                <xsl:sequence select="$endRowNum eq $tgroupRowCount"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$entryRowNum eq $tgroupRowCount"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
     <xsl:template name="displayAtts">
         <xsl:param name="element" as="element()"/>
         <xsl:variable name="frame" as="xs:string" select="($element/@frame, $table.frame-default)[1]"/>
@@ -810,34 +843,39 @@ See the accompanying LICENSE file for applicable license.
 
         <xsl:choose>
             <xsl:when test="$frame = 'all'">
-                <xsl:call-template name="processAttrSetReflection">
-                    <xsl:with-param name="attrSet" select="'table__tableframe__all'"/>
-                    <xsl:with-param name="path" select="$tableAttrs"/>
-                </xsl:call-template>
+              <xsl:call-template name="get-attributes">
+                <xsl:with-param name="element" as="element()">
+                  <placeholder xsl:use-attribute-sets="table__tableframe__all"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:when>
             <xsl:when test="$frame = 'topbot'">
-                <xsl:call-template name="processAttrSetReflection">
-                    <xsl:with-param name="attrSet" select="'table__tableframe__topbot'"/>
-                    <xsl:with-param name="path" select="$tableAttrs"/>
-                </xsl:call-template>
+              <xsl:call-template name="get-attributes">
+                <xsl:with-param name="element" as="element()">
+                  <placeholder xsl:use-attribute-sets="table__tableframe__topbot"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:when>
             <xsl:when test="$frame = 'top'">
-                <xsl:call-template name="processAttrSetReflection">
-                    <xsl:with-param name="attrSet" select="'table__tableframe__top'"/>
-                    <xsl:with-param name="path" select="$tableAttrs"/>
-                </xsl:call-template>
+              <xsl:call-template name="get-attributes">
+                <xsl:with-param name="element" as="element()">
+                  <placeholder xsl:use-attribute-sets="table__tableframe__top"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:when>
             <xsl:when test="$frame = 'bottom'">
-                <xsl:call-template name="processAttrSetReflection">
-                    <xsl:with-param name="attrSet" select="'table__tableframe__bottom'"/>
-                    <xsl:with-param name="path" select="$tableAttrs"/>
-                </xsl:call-template>
+              <xsl:call-template name="get-attributes">
+                <xsl:with-param name="element" as="element()">
+                  <placeholder xsl:use-attribute-sets="table__tableframe__bottom"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:when>
             <xsl:when test="$frame = 'sides'">
-                <xsl:call-template name="processAttrSetReflection">
-                    <xsl:with-param name="attrSet" select="'table__tableframe__sides'"/>
-                    <xsl:with-param name="path" select="$tableAttrs"/>
-                </xsl:call-template>
+              <xsl:call-template name="get-attributes">
+                <xsl:with-param name="element" as="element()">
+                  <placeholder xsl:use-attribute-sets="table__tableframe__sides"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
@@ -858,7 +896,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="node() | text()" mode="setTableEntriesScale">
         <xsl:copy>
-            <xsl:apply-templates select="node() | @* | text()" mode="setTableEntriesScale"/>
+            <xsl:apply-templates select="node() | @* | text()" mode="#current"/>
         </xsl:copy>
     </xsl:template>
 
@@ -1153,24 +1191,22 @@ See the accompanying LICENSE file for applicable license.
         <xsl:param name="frame" select="(ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"
             as="xs:string"/>
         <xsl:if test="$frame = ('all', 'topbot', 'top')">
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
-                <xsl:with-param name="path" select="$tableAttrs"/>
-            </xsl:call-template>
+          <xsl:call-template name="get-attributes">
+            <xsl:with-param name="element" as="element()">
+              <placeholder xsl:use-attribute-sets="__tableframe__top"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:if>
     </xsl:template>
     <xsl:template match="*" mode="simpletableSideBorders">
         <xsl:param name="frame" select="(ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"
             as="xs:string"/>
         <xsl:if test="$frame = ('all', 'topbot', 'sides')">
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="'__tableframe__left'"/>
-                <xsl:with-param name="path" select="$tableAttrs"/>
-            </xsl:call-template>
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
-                <xsl:with-param name="path" select="$tableAttrs"/>
-            </xsl:call-template>
+          <xsl:call-template name="get-attributes">
+            <xsl:with-param name="element" as="element()">
+              <placeholder xsl:use-attribute-sets="__tableframe__left __tableframe__right"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:if>
     </xsl:template>
     <xsl:template match="*" mode="simpletableVerticalBorders">
@@ -1185,10 +1221,11 @@ See the accompanying LICENSE file for applicable license.
         <xsl:param name="frame" as="xs:string?"/>
         <xsl:choose>
             <xsl:when test="$frame = ('all', 'topbot') or empty($frame)">
-                <xsl:call-template name="processAttrSetReflection">
-                    <xsl:with-param name="attrSet" select="'__tableframe__bottom'"/>
-                    <xsl:with-param name="path" select="$tableAttrs"/>
-                </xsl:call-template>
+              <xsl:call-template name="get-attributes">
+                <xsl:with-param name="element" as="element()">
+                  <placeholder xsl:use-attribute-sets="__tableframe__bottom"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
@@ -1197,10 +1234,11 @@ See the accompanying LICENSE file for applicable license.
         <xsl:param name="frame" as="xs:string?"/>
         <xsl:choose>
             <xsl:when test="$frame = ('all', 'sides') or empty($frame)">
-                <xsl:call-template name="processAttrSetReflection">
-                    <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
-                    <xsl:with-param name="path" select="$tableAttrs"/>
-                </xsl:call-template>
+              <xsl:call-template name="get-attributes">
+                <xsl:with-param name="element" as="element()">
+                  <placeholder xsl:use-attribute-sets="__tableframe__right"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:when>
         </xsl:choose>
     </xsl:template>

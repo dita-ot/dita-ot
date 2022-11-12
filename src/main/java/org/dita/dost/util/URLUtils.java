@@ -8,23 +8,23 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Corrects the URLs.
  */
 public final class URLUtils {
+
+    static final Pattern EXTENSION_PATTERN = Pattern.compile("\\.\\w+?$");
 
     /**
      * Private default constructor to make class uninstantiable.
@@ -810,6 +810,15 @@ public final class URLUtils {
             return res;
         } else {
             return setPath(res, res.getPath() + "/");
+        }
+    }
+
+    public static URI addSuffixToPath(URI src, String suffix) {
+        final Matcher matcher = EXTENSION_PATTERN.matcher(src.getPath());
+        if (matcher.find()) {
+            return setPath(src, matcher.replaceAll(suffix + "$0"));
+        } else {
+            return setPath(src, src.getPath() + suffix);
         }
     }
 }

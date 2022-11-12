@@ -77,7 +77,14 @@ public class Project {
                                 resolveURI(param.href, base),
                                 resolvePath(param.path, base))
                         )
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                new Deliverable.Profile(
+                        publication.profiles != null
+                        ? publication.profiles.ditavals.stream()
+                                .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
+                                .collect(Collectors.toList())
+                        : Collections.emptyList()
+                )
         );
     }
 
@@ -96,13 +103,13 @@ public class Project {
                                 .collect(Collectors.toList())
                 )
                         : new Deliverable.Inputs(Collections.emptyList()),
-                context.profiles != null
-                        ? new Deliverable.Profile(
-                        context.profiles.ditavals.stream()
+                new Deliverable.Profile(
+                        context.profiles != null
+                        ?  context.profiles.ditavals.stream()
                                 .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
                                 .collect(Collectors.toList())
+                        : Collections.emptyList()
                 )
-                        : new Deliverable.Profile(Collections.emptyList())
         );
     }
 
@@ -208,17 +215,20 @@ public class Project {
         public final String idref;
         public final String transtype;
         public final List<Param> params;
+        public final Deliverable.Profile profiles;
 
         public Publication(String name,
                            String id,
                            String idref,
                            String transtype,
-                           List<Param> params) {
+                           List<Param> params,
+                           Deliverable.Profile profiles) {
             this.name = name;
             this.id = id;
             this.idref = idref;
             this.transtype = transtype;
             this.params = params;
+            this.profiles = profiles;
         }
 
         public static class Param {

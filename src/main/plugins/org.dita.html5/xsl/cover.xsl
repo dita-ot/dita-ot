@@ -21,7 +21,7 @@ See the accompanying LICENSE file for applicable license.
       <nav>
         <ul>
           <xsl:call-template name="commonattributes"/>
-          <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
+          <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current">
             <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
           </xsl:apply-templates>
         </ul>
@@ -92,7 +92,7 @@ See the accompanying LICENSE file for applicable license.
             [not(@toc = 'no')]
             [not(@processing-role = 'resource-only')]">
             <ul>
-              <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
+              <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current">
                 <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
               </xsl:apply-templates>
             </ul>
@@ -100,7 +100,7 @@ See the accompanying LICENSE file for applicable license.
         </li>
       </xsl:when>
       <xsl:otherwise><!-- if it is an empty topicref -->
-        <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
+        <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current">
           <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
         </xsl:apply-templates>
       </xsl:otherwise>
@@ -113,7 +113,7 @@ See the accompanying LICENSE file for applicable license.
     [not(@processing-role = 'resource-only')]"
     mode="toc">
     <xsl:param name="pathFromMaplist"/>
-    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
+    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current">
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
     </xsl:apply-templates>
   </xsl:template>

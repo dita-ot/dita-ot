@@ -235,14 +235,14 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/dlentry ')]" mode="retrieveReferenceTitle">
-      <xsl:apply-templates select="*[contains(@class,' topic/dt ')][1]" mode="retrieveReferenceTitle"/>
+      <xsl:apply-templates select="*[contains(@class,' topic/dt ')][1]" mode="#current"/>
     </xsl:template>
     <xsl:template match="*[contains(@class, ' topic/dt ')]" mode="retrieveReferenceTitle">
       <xsl:apply-templates select="." mode="text-only"/>
     </xsl:template>
   
     <xsl:template match="*[contains(@class, ' topic/title ')]" mode="retrieveReferenceTitle">
-      <xsl:apply-templates select=".." mode="retrieveReferenceTitle"/>
+      <xsl:apply-templates select=".." mode="#current"/>
     </xsl:template>
 
     <!-- Default rule: if element has a title, use that, otherwise return '#none#' -->
@@ -586,21 +586,15 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:attribute>
             </xsl:when>
           <xsl:when test="$scope = 'peer'">
-            <xsl:attribute name="internal-destination">
-              <xsl:value-of select="$href"/>
-            </xsl:attribute>
+            <xsl:attribute name="internal-destination" select="$href"/>
           </xsl:when>
           <xsl:when test="contains($href, '#')">
-            <xsl:attribute name="internal-destination">
-              <xsl:value-of select="opentopic-func:getDestinationId($href)"/>
-            </xsl:attribute>
+            <xsl:attribute name="internal-destination" select="opentopic-func:getDestinationId($href)"/>
           </xsl:when>         
             <xsl:otherwise>
               <!-- Appears that topicmerge updates links so that this section will never be triggered; 
                    keeping $href as backup value in case something goes wrong. -->
-              <xsl:attribute name="internal-destination">
-                <xsl:value-of select="$href"/>
-              </xsl:attribute>
+              <xsl:attribute name="internal-destination" select="$href"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

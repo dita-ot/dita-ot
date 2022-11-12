@@ -9,6 +9,7 @@
 package org.dita.dost.writer.include;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -58,6 +59,7 @@ public class IncludeResolver extends AbstractXMLFilter {
 
     private Deque<Boolean> ignoreDepth = new ArrayDeque<>();
     private Deque<Deque<StackItem>> includeStack = new ArrayDeque<>();
+    private Configuration.Mode processingMode;
 
     private static class StackItem {
         public final String cls;
@@ -88,8 +90,11 @@ public class IncludeResolver extends AbstractXMLFilter {
 
     // XMLFilter methods -------------------------------------------------------
 
+    @Override
     public void startDocument()
             throws SAXException {
+        final String mode = params.get(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
+        processingMode = mode != null ? Configuration.Mode.valueOf(mode.toUpperCase()) : Configuration.Mode.LAX;
         final ArrayDeque<StackItem> elementStack = new ArrayDeque<>();
         elementStack.push(new StackItem(null, true));
         includeStack.push(elementStack);
@@ -135,7 +140,7 @@ public class IncludeResolver extends AbstractXMLFilter {
                         final String parse = getParse(atts.getValue(ATTRIBUTE_NAME_PARSE));
                         switch (parse) {
                             case "text":
-                                include = new IncludeText(job, currentFile, getContentHandler(), logger).include(atts);
+                                include = new IncludeText(job, currentFile, getContentHandler(), logger, processingMode).include(atts);
                                 break;
                             case "xml":
                                 include = new IncludeXml(job, currentFile, getContentHandler(), logger).include(atts);

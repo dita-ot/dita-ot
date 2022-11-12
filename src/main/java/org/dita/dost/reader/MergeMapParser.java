@@ -28,8 +28,8 @@ import java.net.URI;
 import java.util.Stack;
 
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
-import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
 
 /**

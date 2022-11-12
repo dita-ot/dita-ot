@@ -104,7 +104,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:if test="$include.roles = 'previous'">
           <!--output previous link first, if it exists-->
           <xsl:if test="*[@href][@role = 'previous']">
-            <xsl:apply-templates select="*[@href][@role = 'previous'][1]" mode="breadcrumb"/>
+            <xsl:apply-templates select="*[@href][@role = 'previous'][1]" mode="#current"/>
           </xsl:if>
         </xsl:if>
         <!--if both previous and next links exist, output a separator bar-->
@@ -116,7 +116,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:if test="$include.roles = 'next'">
           <!--output next link, if it exists-->
           <xsl:if test="*[@href][@role = 'next']">
-            <xsl:apply-templates select="*[@href][@role = 'next'][1]" mode="breadcrumb"/>
+            <xsl:apply-templates select="*[@href][@role = 'next'][1]" mode="#current"/>
           </xsl:if>
         </xsl:if>
         <xsl:if test="$include.roles = 'previous' and $include.roles = 'next' and $include.roles = 'ancestor'">
@@ -152,7 +152,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:with-param name="id" select="'Prerequisites'"/>
           </xsl:call-template>
         </dt>
-        <xsl:apply-templates select="$prereqs" mode="prereqs"/>
+        <xsl:apply-templates select="$prereqs" mode="#current"/>
       </dl>
     </xsl:if>
   </xsl:template>
@@ -437,7 +437,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <!--basic child processing-->
   <xsl:template match="*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')]" priority="2" name="topic.link_child">
-    <li class="ulchildlink">
+    <li>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class" select="'ulchildlink'"/>
       </xsl:call-template>
@@ -473,7 +473,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <!--ordered child processing-->
   <xsl:template match="*[@collection-type = 'sequence']/*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')]" priority="3" name="topic.link_orderedchild">
-    <li class="olchildlink">
+    <li>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class" select="'olchildlink'"/>
       </xsl:call-template>

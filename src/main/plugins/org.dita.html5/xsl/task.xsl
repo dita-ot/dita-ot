@@ -86,6 +86,8 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="*/*[contains(@class,' task/stepxmp ')]">yes</xsl:when>
       <xsl:when test="*/*[contains(@class,' task/tutorialinfo ')]">yes</xsl:when>
       <xsl:when test="*/*[contains(@class,' task/stepresult ')]">yes</xsl:when>
+      <xsl:when test="*/*[contains(@class,' task/steps ')]">yes</xsl:when>
+      <xsl:when test="*/*[contains(@class,' task/steps-unordered ')]">yes</xsl:when>
       <xsl:otherwise>no</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -103,15 +105,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' task/steps ') or contains(@class,' task/steps-unordered ')]"
+  <xsl:template match="*[not(contains(@class,' task/step '))]
+                /*[contains(@class,' task/steps ') or contains(@class,' task/steps-unordered ')]"
                 mode="common-processing-within-steps">
     <xsl:param name="step_expand"/>
-    <xsl:param name="list-type">
-      <xsl:choose>
-        <xsl:when test="contains(@class,' task/steps ')">ol</xsl:when>
-        <xsl:otherwise>ul</xsl:otherwise>
-      </xsl:choose>
-    </xsl:param>
+    <xsl:param name="list-type" select="if (contains(@class,' task/steps ')) then 'ol' else 'ul'"/>
     <section>
       <xsl:call-template name="gen-toc-id"/>
       <xsl:call-template name="setidaname"/>
@@ -164,6 +162,52 @@ See the accompanying LICENSE file for applicable license.
     </section>
   </xsl:template>
   
+  <!-- Nested steps: no section container, no label, no special format for single step -->
+  <xsl:template match="*[contains(@class,' task/step ')]
+    /*[contains(@class,' task/steps ') or contains(@class,' task/steps-unordered ')]"
+    mode="common-processing-within-steps">
+    <xsl:param name="step_expand"/>
+    <xsl:param name="list-type" select="if (contains(@class,' task/steps ')) then 'ol' else 'ul'"/>
+    <div>
+      <xsl:call-template name="gen-toc-id"/>
+      <xsl:call-template name="setidaname"/>
+      <xsl:choose>
+        <xsl:when test="not(*[contains(@class,' task/stepsection ')])">
+          <xsl:apply-templates select="." mode="step-elements-with-no-stepsection">
+            <xsl:with-param name="step_expand" select="$step_expand"/>
+            <xsl:with-param name="list-type" select="$list-type"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="*[1][contains(@class,' task/stepsection ')] and not(*[contains(@class,' task/stepsection ')][2])">
+          <!-- Stepsection is first, no other appearances -->
+          <xsl:apply-templates select="*[contains(@class,' task/stepsection ')]"/>
+          <xsl:apply-templates select="." mode="step-elements-with-no-stepsection">
+            <xsl:with-param name="step_expand" select="$step_expand"/>
+            <xsl:with-param name="list-type" select="$list-type"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- Stepsection elements mixed in with steps -->
+          <xsl:apply-templates select="." mode="step-elements-with-stepsection">
+            <xsl:with-param name="step_expand" select="$step_expand"/>
+            <xsl:with-param name="list-type" select="$list-type"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="*" mode="set-step-list-style" as="attribute()?">
+    <xsl:if test="contains(@class,' task/steps ')">
+      <xsl:variable name="stepscount" select="count(ancestor-or-self::*[contains(@class, ' task/steps ')])"/>
+      <xsl:choose>
+        <xsl:when test="$stepscount mod 3 = 1"/>
+        <xsl:when test="$stepscount mod 3 = 2"><xsl:attribute name="type">a</xsl:attribute></xsl:when>
+        <xsl:otherwise><xsl:attribute name="type">i</xsl:attribute></xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:template>
+  
   <xsl:template match="*" mode="step-elements-with-no-stepsection">
     <xsl:param name="step_expand"/>
     <xsl:param name="list-type"/>
@@ -171,6 +215,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:element name="{$list-type}">
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="setid"/>
+      <xsl:apply-templates select="." mode="set-step-list-style"/>
       <xsl:apply-templates select="*[contains(@class,' task/step ')]" mode="steps">
         <xsl:with-param name="step_expand" select="$step_expand"/>
       </xsl:apply-templates>
@@ -191,14 +236,17 @@ See the accompanying LICENSE file for applicable license.
         <xsl:otherwise>
           <!-- First step in a series of steps -->
           <xsl:element name="{$list-type}">
-            <xsl:for-each select=".."><xsl:call-template name="commonattributes"/></xsl:for-each>
+            <xsl:for-each select="..">
+              <xsl:call-template name="commonattributes"/>
+              <xsl:apply-templates select="." mode="set-step-list-style"/>
+            </xsl:for-each>
             <xsl:if test="$list-type='ol' and preceding-sibling::*[contains(@class,' task/step ')]">
               <!-- Restart numbering for ordered steps that were interrupted by stepsection.
                    The start attribute is valid in XHTML 1.0 Transitional, but not for XHTML 1.0 Strict.
                    It is possible (preferable) to keep stepsection within an <li> and use CSS to
                    fix numbering, but with testing in March of 2009, this does not work in IE. 
                    It is possible in Firefox 3. -->
-              <xsl:attribute name="start"><xsl:value-of select="count(preceding-sibling::*[contains(@class,' task/step ')])+1"/></xsl:attribute>
+              <xsl:attribute name="start" select="count(preceding-sibling::*[contains(@class,' task/step ')])+1"/>
             </xsl:if>
             <xsl:apply-templates select="." mode="steps">
               <xsl:with-param name="step_expand" select="$step_expand"/>
@@ -216,7 +264,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="." mode="steps">
       <xsl:with-param name="step_expand" select="$step_expand"/>
     </xsl:apply-templates>
-    <xsl:apply-templates select="following-sibling::*[1][contains(@class,' task/step ')]" mode="sequence-of-steps">
+    <xsl:apply-templates select="following-sibling::*[1][contains(@class,' task/step ')]" mode="#current">
       <xsl:with-param name="step_expand" select="$step_expand"/>
     </xsl:apply-templates>
   </xsl:template>
@@ -245,7 +293,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- only 1 step - output as a para -->
   <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep">
     <xsl:param name="step_expand"/>
-    <div class="p">
+    <div>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class" select="'p'"/>
       </xsl:call-template>
@@ -380,8 +428,10 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class,' task/choicetable ')]" name="topic.task.choicetable">
     <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:call-template name="setaname"/>
-    <table border="1" frame="hsides" rules="rows" cellpadding="4" cellspacing="0" summary="" class="choicetableborder">
-      <xsl:call-template name="commonattributes"/>
+    <table border="1" frame="hsides" rules="rows" cellpadding="4" cellspacing="0" summary="">
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="'choicetableborder'"/>
+      </xsl:call-template>
       <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
       <xsl:call-template name="setid"/>
       <xsl:call-template name="dita2html:simpletable-cols"/>

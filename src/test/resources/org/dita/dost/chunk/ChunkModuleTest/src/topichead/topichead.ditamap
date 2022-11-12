@@ -15,4 +15,5 @@
       </topicmeta>
       <topicref class="- map/topicref " href="c.dita"/>
    </topichead>
+   <topichead class="+ map/topicref mapgroup-d/topichead " chunk="split"/>
 </map>

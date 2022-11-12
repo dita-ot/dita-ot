@@ -21,7 +21,6 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- =========== DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS =========== -->
   <!-- output type -->
-  <xsl:param name="FINALOUTPUTTYPE" select="''"/>
   <xsl:param name="INPUTMAP" select="''"/>
   <xsl:param name="WORKDIR">
     <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
@@ -53,11 +52,11 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="node() | @*" mode="strip">
     <xsl:copy>
-      <xsl:apply-templates select="node() | @*" mode="strip"/>
+      <xsl:apply-templates select="node() | @*" mode="#current"/>
     </xsl:copy>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' ditaot-d/submap ')]" mode="strip">
-    <xsl:apply-templates select="node()" mode="strip"/>
+    <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
 
   <!-- Start by creating the collection element for the map being processed. -->
@@ -122,17 +121,14 @@ See the accompanying LICENSE file for applicable license.
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
     </xsl:variable>
-    <!-- If going to print, and @print=no, do not create links for this topicref -->
-    <xsl:if test="not(($FINALOUTPUTTYPE = 'PDF' or $FINALOUTPUTTYPE = 'IDD') and @print = 'no')">
-      <xsl:variable name="newlinks">
-        <maplinks href="{$hrefFromOriginalMap}">
-          <xsl:apply-templates select="." mode="generate-all-links">
-            <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory" tunnel="yes"/>
-          </xsl:apply-templates>
-        </maplinks>
-      </xsl:variable>
-      <xsl:apply-templates select="$newlinks" mode="add-links-to-temp-file"/>
-    </xsl:if>
+    <xsl:variable name="newlinks">
+      <maplinks href="{$hrefFromOriginalMap}">
+        <xsl:apply-templates select="." mode="generate-all-links">
+          <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory" tunnel="yes"/>
+        </xsl:apply-templates>
+      </maplinks>
+    </xsl:variable>
+    <xsl:apply-templates select="$newlinks" mode="add-links-to-temp-file"/>
     <xsl:apply-templates>
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
     </xsl:apply-templates>
@@ -145,7 +141,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:if test="*/*">
       <xsl:copy>
         <xsl:copy-of select="@*"/>
-        <xsl:apply-templates mode="add-links-to-temp-file"/>
+        <xsl:apply-templates mode="#current"/>
       </xsl:copy>
     </xsl:if>
   </xsl:template>
@@ -332,7 +328,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:apply-templates>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]" mode="recusive">
-    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="recusive"/>
+    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current"/>
   </xsl:template>
   <xsl:template match="*" mode="recusive" priority="-10">
     <xsl:apply-templates select="self::*[@href and not(@href = '')]
@@ -439,7 +435,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:value-of select="*[contains(@class, ' topic/title ')]"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates mode="grab-group-title" select="*[contains(@class, ' map/topicref ')][1]"/>
+        <xsl:apply-templates mode="#current" select="*[contains(@class, ' map/topicref ')][1]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>  
@@ -538,8 +534,7 @@ See the accompanying LICENSE file for applicable license.
     <!-- child found tag -->
     <xsl:param name="found" select="true()" as="xs:boolean"/>
     <!-- If going to print, and @print=no, do not create links for this topicref -->
-    <xsl:if test="not(($FINALOUTPUTTYPE = 'PDF' or $FINALOUTPUTTYPE = 'IDD') and @print = 'no') and 
-                  not(@processing-role = 'resource-only') and $found">
+    <xsl:if test="not(@processing-role = 'resource-only') and $found">
       <link class="- topic/link ">
         <xsl:if test="@class">
           <xsl:attribute name="mapclass" select="@class"/>
@@ -594,15 +589,10 @@ See the accompanying LICENSE file for applicable license.
         <!--figure out the linktext and desc-->
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="add-props-to-link"/>
         <xsl:if test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]">
-          <!--Do not output linktext when The final output type is PDF or IDD
-            The target of the HREF is a local DITA file
-            The user has not specified locktitle to override the title -->
-          <xsl:if test="not(($FINALOUTPUTTYPE = 'PDF' or $FINALOUTPUTTYPE = 'IDD') and (not(@scope) or @scope = 'local') and (not(@format) or @format = 'dita') and (not(@locktitle) or @locktitle = 'no'))">
-            <linktext class="- topic/linktext ">
-              <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']"/>
-              <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]/node()"/>
-            </linktext>
-          </xsl:if>
+          <linktext class="- topic/linktext ">
+            <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']"/>
+            <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]/node()"/>
+          </linktext>
         </xsl:if>
         <xsl:if test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-shortdesc-class(@class)]">
           <!-- add desc node and text -->
@@ -615,7 +605,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="@*|node()" mode="add-props-to-link">
     <xsl:copy>
-      <xsl:apply-templates select="@*|node()" mode="add-props-to-link"/>
+      <xsl:apply-templates select="@*|node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
   <xsl:template match="@imageref" mode="add-props-to-link">

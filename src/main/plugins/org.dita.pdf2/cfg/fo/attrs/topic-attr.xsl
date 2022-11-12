@@ -102,7 +102,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:attribute-set name="topic.topic.topic.topic.title" use-attribute-sets="base-font common.title">
         <xsl:attribute name="space-before">10pt</xsl:attribute>
-        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent" select="$side-col-width"/>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -111,7 +111,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic.topic.topic.topic.topic.title" use-attribute-sets="base-font common.title">
-        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent" select="$side-col-width"/>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -120,7 +120,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic.topic.topic.topic.topic.topic.title" use-attribute-sets="base-font common.title">
-        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent" select="$side-col-width"/>
         <xsl:attribute name="font-style">italic</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -172,15 +172,15 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body__toplevel" use-attribute-sets="base-font">
-        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent" select="$side-col-width"/>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body__secondLevel" use-attribute-sets="base-font">
-        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent" select="$side-col-width"/>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body" use-attribute-sets="base-font">
-        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent" select="$side-col-width"/>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="abstract" use-attribute-sets="body">

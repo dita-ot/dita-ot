@@ -22,12 +22,8 @@ See the accompanying LICENSE file for applicable license.
   <!-- Add both lang and xml:lang attributes -->
   <xsl:template match="@xml:lang" name="generate-lang">
     <xsl:param name="lang" select="."/>
-    <xsl:attribute name="xml:lang">
-      <xsl:value-of select="$lang"/>
-    </xsl:attribute>
-    <xsl:attribute name="lang">
-      <xsl:value-of select="$lang"/>
-    </xsl:attribute>
+    <xsl:attribute name="xml:lang" select="$lang"/>
+    <xsl:attribute name="lang" select="$lang"/>
   </xsl:template>
 
 

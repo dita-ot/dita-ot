@@ -17,8 +17,8 @@ import org.xml.sax.helpers.AttributesImpl;
 import java.net.URI;
 import java.util.*;
 
-import static org.dita.dost.chunk.ChunkModule.isLocalScope;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.URLUtils.*;

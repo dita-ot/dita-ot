@@ -111,10 +111,33 @@ See the accompanying LICENSE file for applicable license.
       </job>
     </echoxml>
     <property name="map.filter-on-parse" value="false"/>
-    <property name="topic.filter-on-parse" value="true"/>
-    <condition property="preprocess.map-profile.skip">
+    <condition property="topic.filter-on-parse" value="true" else="false">
+      <equals arg1="${filter-stage}" arg2="early"/>
+    </condition>
+    <condition property="build-step.map-profile" value="false" else="true">
       <istrue value="${map.filter-on-parse}"/>
     </condition>
+    <condition property="build-step.topic-profile" value="false" else="true">
+      <istrue value="${topic.filter-on-parse}"/>
+    </condition>
+
+    <preprocess-skip-init name="preprocess.map-profile" step="map-profile"/>
+    <preprocess-skip-init name="preprocess.topic-profile" step="topic-profile"/>
+    <preprocess-skip-init name="preprocess.branch-filter" step="branch-filter"/>
+    <preprocess-skip-init name="preprocess.chunk" step="chunk"/>
+    <preprocess-skip-init name="preprocess.clean-preprocess" step="clean-preprocess"/>
+    <preprocess-skip-init name="preprocess.clean-map-check" step="clean-preprocess"/>
+    <preprocess-skip-init name="preprocess.coderef" step="coderef"/>
+    <preprocess-skip-init name="preprocess.conref" step="conref"/>
+    <preprocess-skip-init name="preprocess.copy-flag" step="copy-flag"/>
+    <preprocess-skip-init name="preprocess.copy-html" step="copy-html"/>
+    <preprocess-skip-init name="preprocess.copy-image" step="copy-image"/>
+    <preprocess-skip-init name="preprocess.keyref" step="keyref"/>
+    <preprocess-skip-init name="preprocess.maplink" step="maplink"/>
+    <preprocess-skip-init name="preprocess.mapref" step="mapref"/>
+    <preprocess-skip-init name="preprocess.move-meta-entries" step="move-meta-entries"/>
+    <preprocess-skip-init name="preprocess.normalize-codeblock" step="normalize-codeblock"/>
+    <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/>
   </target>
   
   <target name="map-reader"
@@ -177,10 +200,11 @@ See the accompanying LICENSE file for applicable license.
       <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
-        <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
-    <pipeline message="Resolve mapref in ditamap" taskname="mapref">
+    <pipeline message="Resolve mapref in ditamap"
+              taskname="mapref"
+              unless:set="preprocess.mapref.skip">
       <module class="org.dita.dost.module.MaprefModule">
         <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
         <ditafileset format="ditamap" input="true"/>
@@ -191,7 +215,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
   
   <target name="map-conrefpush"
-    unless="preprocess.conrefpush.skip"
+    unless="preprocess.conref.skip"
     description="Resolve input map files conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
@@ -221,7 +245,7 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
   
-  <target name="map-profile" depends="map-profile-check"
+  <target name="map-profile"
     unless="preprocess.map-profile.skip"
     description="Profile input map files">
     <pipeline message="Profile filtering." taskname="profile">
@@ -234,12 +258,6 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <target name="map-profile-check">
-    <condition property="preprocess.map-profile.skip">
-      <istrue value="${map.filter-on-parse}"/>
-    </condition>
-  </target>
-  
   <target name="topic-reader"
     description="Generate file list">
     <pipeline message="Generate topics" taskname="topic-reader"
@@ -265,7 +283,9 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <target name="topic-branch-filter">
+  <target name="topic-branch-filter"
+          unless="preprocess.branch-filter.skip"
+          description="Topic branch filtering">
     <pipeline taskname="branch-filter" message="Filter branches">
       <module class="org.dita.dost.module.filter.TopicBranchFilterModule"/>
     </pipeline>
@@ -277,7 +297,6 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Resolve keyref." taskname="keyref">
       <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
         <ditafileset format="dita"/>
-        <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
   </target>
@@ -291,7 +310,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="topic-conrefpush"
-          unless="preprocess.conrefpush.skip"
+          unless="preprocess.conref.skip"
           description="Resolve conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
       <module class="org.dita.dost.module.ConrefPushModule">
@@ -321,7 +340,7 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <target name="topic-profile" depends="topic-profile-check"
+  <target name="topic-profile"
           unless="preprocess.topic-profile.skip"
           description="Profile input files">
     <pipeline message="Profile filtering." taskname="profile">
@@ -331,12 +350,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
-  </target>
-
-  <target name="topic-profile-check">
-    <condition property="preprocess.topic-profile.skip">
-      <istrue value="${topic.filter-on-parse}"/>
-    </condition>
   </target>
 
   <target name="preprocess2.topic-fragment"
@@ -351,7 +364,9 @@ See the accompanying LICENSE file for applicable license.
           <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
         </filter>
         <filter class="org.dita.dost.writer.NormalizeSimpleTableFilter"/>
-        <filter class="org.dita.dost.writer.CoderefResolver" unless:set="preprocess.coderef.skip"/>
+        <filter class="org.dita.dost.writer.CoderefResolver" unless:set="preprocess.coderef.skip">
+          <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
+        </filter>
         <filter class="org.dita.dost.writer.NormalizeCodeblock" unless:set="preprocess.normalize-codeblock.skip"/>
       </sax>
     </pipeline>
@@ -430,9 +445,12 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <target name="copy-files2" description="Copy files to the output directory"
-          depends="copy-image2,copy-html,copy-flag"
-          unless="preprocess.copy-files.skip" />
+  <!-- XXX: should this be inlined to make the target tree flatter? -->
+  <target name="copy-files2"
+          description="Copy files to the output directory"
+          depends="copy-image2,
+                   copy-html,
+                   copy-flag"/>
 
   <target name="copy-image2"
           unless="preprocess.copy-image.skip"

@@ -1,23 +1,22 @@
 # DITA Open Toolkit [![Build]](http://travis-ci.org/dita-ot/dita-ot) [![Slack]](http://slack.dita-ot.org/)
 
-_DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for XML content authored in the _Darwin Information Typing Architecture_.
+_DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for content authored in the _Darwin Information Typing Architecture_.
 
 Visit the project website at [dita-ot.org][site] for documentation, information about releases, and [download packages][dist].  
 
 For information on additional DITA and DITA-OT resources, see [SUPPORT]. To report a bug or suggest a feature, [create an issue][issue]. For more information on how you can help contribute to the project, see [CONTRIBUTING].
 
-- [Prerequisites: Java 8](#prerequisites-java-8)
+- [Prerequisites: Java 17](#prerequisites-java-17)
 - [Installing](#installing)
 - [Building output](#building-output)
 - [For developers](#for-developers)
 - [License](#license)
 
-## Prerequisites: Java 8
+## Prerequisites: Java 17
 
-- To _build_ DITA-OT, you’ll need Java Development Kit (JDK), version 8 or newer
-- To _run_ DITA-OT, the Java Runtime Environment (JRE) is sufficient
+To build and run DITA-OT, you’ll need Java Development Kit (JDK), version 17 or newer.
 
-You can download the Oracle JRE or JDK from [oracle.com/technetwork/java][java].
+You can download the OpenJDK from [AdoptOpenJDK][adoptopenjdk].
 
 ## Installing
 
@@ -99,7 +98,7 @@ DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 [site]: https://www.dita-ot.org/
 [dist]: https://www.dita-ot.org/download
 [support]: https://github.com/dita-ot/.github/blob/master/SUPPORT.md
-[java]: http://www.oracle.com/technetwork/java/javase/downloads
+[adoptopenjdk]: https://adoptopenjdk.net/
 [homebrew]: https://brew.sh
 [docs]: https://www.dita-ot.org/dev/
 [options]: https://www.dita-ot.org/dev/topics/build-using-dita-command.html

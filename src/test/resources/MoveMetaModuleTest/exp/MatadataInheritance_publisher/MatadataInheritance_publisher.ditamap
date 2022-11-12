@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?>
+<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map "
+  ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+  id="Bats3" specializations="@props/deliveryTarget" title="Bats3">
+  <topicmeta class="- map/topicmeta ">
+    <publisher class="- topic/publisher "> ibm csdl. </publisher>
+  </topicmeta>
+  <topicref class="- map/topicref " navtitle="Bats" href="bats.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Programming elements</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Programming elements</linktext>
+      <publisher class="- topic/publisher "> ibm csdl. </publisher>
+    </topicmeta>
+    <topicref class="- map/topicref " navtitle="Caring for your fruit bat" href="batcaring.dita" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">batcaring</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">batcaring</linktext>
+        <publisher class="- topic/publisher "> ibm csdl. </publisher>
+      </topicmeta>
+    </topicref>
+  </topicref>
+  <topicref class="- map/topicref " navtitle="Feeding your bat" href="batfeeding.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">batfeeding</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">batfeeding</linktext>
+      <publisher class="- topic/publisher "> ibm csdl. </publisher>
+    </topicmeta>
+  </topicref>
+</map>

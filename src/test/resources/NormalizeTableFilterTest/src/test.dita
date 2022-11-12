@@ -1,0 +1,47 @@
+<!--
+  ~ This file is part of the DITA Open Toolkit project.
+  ~
+  ~ Copyright 2022 Jarno Elovirta
+  ~
+  ~ See the accompanying LICENSE file for applicable license.
+  -->
+
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " id="id2374525" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Topic title</title>
+  <body class="- topic/body ">
+    <table class="- topic/table ">
+      <tgroup class="- topic/tgroup " cols="2">
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">1</entry>
+            <entry class="- topic/entry ">2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table class="- topic/table ">
+      <tgroup class="- topic/tgroup " cols="2">
+        <colspec class="- topic/colspec " colwidth="1*"></colspec>
+        <colspec class="- topic/colspec " colwidth="3*"></colspec>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">1</entry>
+            <entry class="- topic/entry ">2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table class="- topic/table ">
+      <tgroup class="- topic/tgroup " cols="2">
+        <colspec class="- topic/colspec " colwidth="1cm"></colspec>
+        <colspec class="- topic/colspec " colwidth="3cm"></colspec>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry ">1</entry>
+            <entry class="- topic/entry ">2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </body>
+</topic>

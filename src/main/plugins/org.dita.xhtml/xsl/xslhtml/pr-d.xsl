@@ -41,18 +41,17 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/kwd ')]" name="topic.pr-d.kwd">
- <span class="kwd">
-  <xsl:if test="(@importance='default')">
-   <xsl:attribute name="class">defkwd</xsl:attribute>
-  </xsl:if>
-  <xsl:call-template name="commonattributes"/>
+ <span>
+  <xsl:call-template name="commonattributes">
+   <xsl:with-param name="default-output-class" select="if (@importance = 'default') then 'defkwd' else 'kwd'"/>
+  </xsl:call-template>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
  </span>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/var ')]" name="topic.pr-d.var">
- <span class="var">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -60,7 +59,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/synph ')]" name="topic.pr-d.synph">
- <span class="synph">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -68,7 +67,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/oper ')]" name="topic.pr-d.oper">
- <span class="oper">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -76,7 +75,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/delim ')]" name="topic.pr-d.delim">
- <span class="delim">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -84,7 +83,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/sep ')]" name="topic.pr-d.sep">
- <span class="sep">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -92,7 +91,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/repsep ')]" name="topic.pr-d.repsep">
- <span class="repsep">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -100,7 +99,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/option ')]" name="topic.pr-d.option">
- <span class="option">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -108,7 +107,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/parmname ')]" name="topic.pr-d.parmname">
- <span class="parmname">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
@@ -116,7 +115,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/apiname ')]" name="topic.pr-d.apiname">
- <span class="apiname">
+ <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>

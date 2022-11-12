@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?><?doctype-public -//OASIS//DTD DITA 1.3 Topic//EN?><?doctype-system file:/C:/DITA-OT1.4/dtd/topic.dtd?>
+<topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " ditaarch:DITAArchVersion="1.3"
+  domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+  id="critdates_replace" specializations="@props/deliveryTarget" xml:lang="en-us">
+  <title class="- topic/title ">TestCritdates</title>
+  <shortdesc class="- topic/shortdesc "> path</shortdesc>
+  <prolog class="- topic/prolog ">
+    <permissions class="- topic/permissions " view="entitled"/>
+  </prolog>
+  <body class="- topic/body ">
+    <p class="- topic/p ">asbsdf</p>
+  </body>
+
+</topic>

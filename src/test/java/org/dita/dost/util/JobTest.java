@@ -7,28 +7,23 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.Assert.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Field;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-
+import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.apache.commons.io.FileUtils;
-import org.dita.dost.TestUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import static org.dita.dost.util.Constants.INPUT_DIR;
+import static org.dita.dost.util.Constants.INPUT_DIR_URI;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public final class JobTest {
 
@@ -94,31 +89,6 @@ public final class JobTest {
         job.write();
         final long end = System.currentTimeMillis();
         System.out.println(((end - start)) + " ms");
-    }
-    
-    @Test
-    public void writeUTF8() throws Exception {
-        //Reset default encoding field in order to re-compute it after setting the file.encoding system property.
-        Field defaultCSField = Class.forName("java.nio.charset.Charset").getDeclaredField("defaultCharset");
-        defaultCSField.setAccessible(true);
-        defaultCSField.set(null, null);
-        String initialEncoding = System.getProperty("file.encoding");
-        try {
-            System.getProperties().setProperty("file.encoding", "ASCII");
-            job.add(Job.FileInfo.builder()
-                    .src(new File(tempDir, "\u633F.dita").toURI())
-                    .uri(new File("\u633F.dita").toURI())
-                    .result(new File(tempDir, "\u633F.html").toURI())
-                    .format("dita")
-                    .hasKeyref(true)
-                    .hasLink(true)
-                    .build());
-            job.write();
-            File jobFile = new File(tempDir, ".job.xml");
-            assertTrue(FileUtils.readFileToString(jobFile, StandardCharsets.UTF_8).contains("\u633F.dita"));
-        } finally {
-            System.getProperties().setProperty("file.encoding", initialEncoding);
-        }
     }
 
     @AfterClass
