@@ -404,7 +404,19 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         final DitaClass cls = DitaClass.getInstance(atts);
 
         final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-        final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        if (scope == null && href != null && href.isAbsolute()) {
+            switch (href.getScheme()) {
+                case "http":
+                case "https":
+                case "ftp":
+                case "ftps":
+                case "sftp":
+                case "mailto":
+                    scope = ATTR_SCOPE_VALUE_EXTERNAL;
+                    break;
+            }
+        }
         if (href != null && href.getPath() != null && !href.getPath().isEmpty() &&
                 !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope) && !ATTR_SCOPE_VALUE_PEER.equals(scope)) {
             if (isFormatDita(atts.getValue(ATTRIBUTE_NAME_FORMAT)) && !isDitaMap() &&
@@ -567,7 +579,19 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        if (attrScope == null && ATTRIBUTE_NAME_HREF.equals(attrName) && attrValue.isAbsolute()) {
+            switch (attrValue.getScheme()) {
+                case "http":
+                case "https":
+                case "ftp":
+                case "ftps":
+                case "sftp":
+                case "mailto":
+                    attrScope = ATTR_SCOPE_VALUE_EXTERNAL;
+                    break;
+            }
+        }
 
         // external resource is filtered here.
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)

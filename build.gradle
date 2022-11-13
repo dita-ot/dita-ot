@@ -15,7 +15,7 @@ apply plugin: 'signing'
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
 /** Semver version number */
-version = '4.0.0-SNAPSHOT'
+version = '4.0.0'
 
 description = """DITA Open Toolkit"""
 
@@ -179,16 +179,17 @@ def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "${cleanVersion}"
 def bundled = [
         "eclipsehelp": "https://github.com/dita-ot/org.dita.eclipsehelp/releases/download/3.4/org.dita.eclipsehelp-3.4.0.zip",
-        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/2.4.0/org.lwdita-2.4.0.zip",
+        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/3.3.0/org.lwdita-3.3.0.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/1.0.zip",
         "dita11": "https://github.com/dita-ot/org.dita.specialization.dita11/archive/1.1.1.zip",
         "dita12": "https://github.com/dita-ot/org.oasis-open.dita.v1_2/archive/1.2.1.zip",
-        "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20220111/org.oasis-open.dita.v2_0.zip",
-        "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20220111/org.oasis-open.dita.techcomm.v2_0.zip",
+        "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20221107/org.oasis-open.dita.v2_0.zip",
+        "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20221107/org.oasis-open.dita.techcomm.v2_0.zip",
         "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.2.2/org.oasis-open.xdita.v0_2_2.zip",
         "index": "https://github.com/dita-ot/org.dita.index/releases/download/1.0.0/org.dita.index-1.0.0.zip",
         "axf": "https://github.com/dita-ot/org.dita.pdf2.axf/releases/download/3.6.1/org.dita.pdf2.axf-3.6.1.zip",
         "xep": "https://github.com/dita-ot/org.dita.pdf2.xep/releases/download/3.6.3/org.dita.pdf2.xep-3.6.3.zip",
+        "theme": "https://github.com/jelovirt/pdf-generator/releases/download/0.6.1/com.elovirta.pdf.zip",
 ]
 
 apply from: 'gradle/dist.gradle'
@@ -248,6 +249,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/out"
         exclude "docsrc/platform.ditaval"
         exclude "docsrc/temp"
+        exclude "docsrc/node_modules/**"
         include "docsrc/**"
         exclude "plugins/*/plugin.xml"
         include "plugins/org.dita.base/**"
@@ -325,8 +327,6 @@ def skipDocs() {
 }
 
 task generateJavadocs(type: Javadoc) {
-    classpath = sourceSets.main.compileClasspath
-    source = sourceSets.main.allJava
     include "**/org/dita/dost/*.*"
     include "**/org/dita/dost/exception/DITAOTException.*"
     include "**/org/dita/dost/util/Configuration.*"

@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptySet;
-import static org.dita.dost.util.Constants.FEATURE_VALIDATION;
-import static org.dita.dost.util.Constants.FEATURE_VALIDATION_SCHEMA;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.junit.Assert.*;
 
@@ -50,7 +50,6 @@ public class TestGenListModuleReader {
     private static File tempDir;
 
     private GenListModuleReader reader;
-    private XMLReader parser;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -81,10 +80,55 @@ public class TestGenListModuleReader {
     @Test
     public void startElement() throws SAXException {
         reader.startDocument();
-        reader.startElement("", "topic", "topic", new AttributesBuilder()
-                .add("class", "- topic/topic ")
-                .add("id", "abc")
+        reader.startElement(NULL_NS_URI, TOPIC_TOPIC.localName, TOPIC_TOPIC.localName, new AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString())
+                .add(ATTRIBUTE_NAME_ID, "abc")
                 .build());
+    }
+
+    @Test
+    public void startElement_localImage() throws SAXException {
+        reader.startDocument();
+        reader.startElement(NULL_NS_URI, TOPIC_IMAGE.localName, TOPIC_IMAGE.localName, new AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CLASS, TOPIC_IMAGE.toString())
+                .add(ATTRIBUTE_NAME_HREF, "image.png")
+                .build());
+        assertEquals(1, reader.getNonConrefCopytoTargets().size());
+        assertEquals(ATTR_FORMAT_VALUE_IMAGE, reader.getNonConrefCopytoTargets().iterator().next().format);
+        assertEquals(
+                inputDir.toURI().resolve("image.png"),
+                reader.getNonConrefCopytoTargets().iterator().next().filename);
+        assertEquals(1, reader.getNonTopicrefReferenceSet().size());
+        assertEquals(
+                inputDir.toURI().resolve("image.png"),
+                reader.getNonTopicrefReferenceSet().iterator().next());
+    }
+
+    @Test
+    public void startElement_externalImage_withScope() throws SAXException {
+        reader.startDocument();
+        reader.startElement(NULL_NS_URI, TOPIC_IMAGE.localName, TOPIC_IMAGE.localName, new AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CLASS, TOPIC_IMAGE.toString())
+                .add(ATTRIBUTE_NAME_HREF, "file://example.com/image.png")
+                .add(ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL)
+                .build());
+        reader.endElement(NULL_NS_URI, TOPIC_IMAGE.localName, TOPIC_IMAGE.localName);
+        assertTrue(reader.getNonConrefCopytoTargets().isEmpty());
+        assertTrue(reader.getNonTopicrefReferenceSet().isEmpty());
+    }
+
+    @Test
+    public void startElement_externalImage_withoutScope() throws SAXException {
+        reader.startDocument();
+        for (String scheme : new String[]{ "http", "https", "ftp", "ftps", "sftp", "mailto" }) {
+            reader.startElement(NULL_NS_URI, TOPIC_IMAGE.localName, TOPIC_IMAGE.localName, new AttributesBuilder()
+                    .add(ATTRIBUTE_NAME_CLASS, TOPIC_IMAGE.toString())
+                    .add(ATTRIBUTE_NAME_HREF, scheme + "://example.com/image.png")
+                    .build());
+            reader.endElement(NULL_NS_URI, TOPIC_IMAGE.localName, TOPIC_IMAGE.localName);
+        }
+        assertTrue(reader.getNonConrefCopytoTargets().isEmpty());
+        assertTrue(reader.getNonTopicrefReferenceSet().isEmpty());
     }
 
     @Test
