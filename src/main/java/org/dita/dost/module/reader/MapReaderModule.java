@@ -46,6 +46,8 @@ public final class MapReaderModule extends AbstractReaderModule {
             parseInputParameters(input);
             init();
 
+            initCache(input);
+
             readResourceFiles();
             readStartFile();
             processWaitList();

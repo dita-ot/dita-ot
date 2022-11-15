@@ -12,9 +12,7 @@ import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.store.Store;
 import org.w3c.dom.Document;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,15 +20,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Result;
 import javax.xml.transform.dom.DOMResult;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -127,6 +121,7 @@ public final class Job {
     private final Map<URI, FileInfo> files = new ConcurrentHashMap<>();
     private long lastModified;
     private final Store store;
+    private final UriGraph dependencyGraph;
 
     /**
      * Create new job configuration instance. Initialise by reading temporary configuration files.
@@ -146,6 +141,7 @@ public final class Job {
         tempDirURI = tmpDirUri.toString().endsWith("/") ? tmpDirUri : URI.create(tmpDirUri + "/");
         jobFile = new File(tempDir, JOB_FILE);
         prop = new HashMap<>();
+        dependencyGraph = new UriGraph(16);
         read();
         for (Map.Entry<String, String> e : configuration.entrySet()) {
             if (!prop.containsKey(e.getKey())) {
@@ -161,6 +157,7 @@ public final class Job {
         this.jobFile = new File(tempDir, JOB_FILE);
         this.prop = prop;
         this.files.putAll(files.stream().collect(Collectors.toMap(fi -> fi.uri, Function.identity())));
+        this.dependencyGraph = new UriGraph(files.size());
     }
 
     public Store getStore() {
@@ -186,7 +183,7 @@ public final class Job {
         lastModified = getStore().getLastModified(jobFile.toURI());
         if (getStore().exists(jobFile.toURI())) {
             try (final InputStream in = new FileInputStream(jobFile)) {
-                getStore().transform(jobFile.toURI(), new JobHandler(prop, files));
+                getStore().transform(jobFile.toURI(), new JobHandler(prop, files, dependencyGraph));
             } catch (final DITAOTException e) {
                 throw new IOException("Failed to read job file: " + e.getMessage());
             }
@@ -202,15 +199,17 @@ public final class Job {
 
         private final Map<String, Object> prop;
         private final Map<URI, FileInfo> files;
+        private final UriGraph dependencyGraph;
         private StringBuilder buf;
         private String name;
         private String key;
         private Set<String> set;
         private Map<String, String> map;
 
-        public JobHandler(final Map<String, Object> prop, final Map<URI, FileInfo> files) {
+        public JobHandler(final Map<String, Object> prop, final Map<URI, FileInfo> files, UriGraph dependencyGraph) {
             this.prop = prop;
             this.files = files;
+            this.dependencyGraph = dependencyGraph;
         }
 
         @Override
@@ -269,6 +268,11 @@ public final class Job {
                         throw new RuntimeException(ex);
                     }
                     files.put(i.uri, i);
+                    break;
+                case "dependency":
+                    final URI from = toURI(atts.getValue("from"));
+                    final URI to = toURI(atts.getValue("to"));
+                    dependencyGraph.add(from, to);
                     break;
             }
         }
@@ -411,6 +415,22 @@ public final class Job {
             out.writeEndElement(); //file
         }
         out.writeEndElement(); //files
+
+        out.writeStartElement("cache");
+        out.writeStartElement("dependencies");
+        for (Map.Entry<URI, URI> entry : dependencyGraph.getAll()) {
+            out.writeStartElement("dependency");
+//            FileInfo from = getFileInfo(entry.getKey());
+//            FileInfo to = getFileInfo(entry.getValue());
+//            out.writeAttribute("from", from.uri.toString());
+//            out.writeAttribute("to", to.uri.toString());
+            out.writeAttribute("from", entry.getKey().toString());
+            out.writeAttribute("to", entry.getValue().toString());
+            out.writeEndElement(); //dependency
+        }
+        out.writeEndElement(); //dependencies
+        out.writeEndElement(); //cache
+
         out.writeEndElement(); //job
         out.writeEndDocument();
     }
@@ -1041,4 +1061,7 @@ public final class Job {
         return tempFileNameScheme;
     }
 
+    public void addDependency(URI currentFile, URI hrefTarget) {
+        dependencyGraph.add(currentFile, hrefTarget);
+    }
 }

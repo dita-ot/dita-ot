@@ -24,12 +24,16 @@ public class UriGraph {
     }
 
     public synchronized void add(URI from, URI to) {
-        int source = indexMap.computeIfAbsent(from, (uri) -> indexMap.size());
-        int destination = indexMap.computeIfAbsent(to, (uri) -> indexMap.size());
+        assert from.isAbsolute();
+        assert to.isAbsolute();
+        int source = indexMap.computeIfAbsent(from.normalize(), uri -> indexMap.size());
+        int destination = indexMap.computeIfAbsent(to.normalize(), uri -> indexMap.size());
         graph.addEdge(source, destination);
     }
 
     public synchronized void remove(URI from, URI to) {
+        assert from.isAbsolute();
+        assert to.isAbsolute();
         Integer source = indexMap.get(from);
         Integer destination = indexMap.get(to);
         if (source != null && destination != null) {
@@ -38,6 +42,8 @@ public class UriGraph {
     }
 
     public boolean isEdge(URI from, URI to) {
+        assert from.isAbsolute();
+        assert to.isAbsolute();
         Integer source = indexMap.get(from);
         Integer destination = indexMap.get(to);
         if (source != null && destination != null) {

@@ -153,6 +153,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     /** Formats for source topics */
     // XXX This is a hack to retain format. A better solution would be to keep the format with the source URI
     private final Map<URI, String> sourceFormat = new HashMap<>();
+    /** Dependency graph for source resources. */
+    private final UriGraph dependencyGraph = new UriGraph(16);
 
     /**
      * Create a new instance and do the initialization.
@@ -195,6 +197,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         try {
             parseInputParameters(input);
 
+            initCache(input);
+
             initFilters();
             initXmlReader();
 
@@ -212,6 +216,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
 
         return null;
+    }
+
+    private void initCache(final AbstractPipelineInput input) {
+        String cacheDir = input.getAttribute("cache.dir");
     }
 
     private void readResourceFiles() throws DITAOTException {
@@ -407,6 +415,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
             if (listFilter.isValidInput()) {
                 processParseResult(currentFile);
+                readDependencies(currentFile);
                 categorizeCurrentFile(ref);
             } else if (!currentFile.equals(rootFile)) {
                 logger.error(MessageUtils.getMessage("DOTJ021E", params).toString());
@@ -469,6 +478,12 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         listFilter.reset();
         keydefFilter.reset();
 
+    }
+
+    private void readDependencies(URI currentFile) {
+        for (URI hrefTarget : listFilter.getHrefTargets()) {
+            dependencyGraph.add(currentFile, hrefTarget);
+        }
     }
 
     /**
@@ -872,6 +887,15 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         job.add(new FileInfo.Builder(root)
                 .isInput(true)
                 .build());
+
+        for (Map.Entry<URI, URI> entry : dependencyGraph.getAll()) {
+//            URI from = baseInputDir.relativize(entry.getKey());
+//            URI to = baseInputDir.relativize(entry.getValue());
+            URI from = entry.getKey();
+            URI to = entry.getValue();
+            job.addDependency(from, to);
+
+        }
 
         try {
             logger.info("Serializing job specification");
