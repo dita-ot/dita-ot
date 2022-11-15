@@ -29,22 +29,30 @@ public class Graph {
         return size;
     }
 
+    public boolean[][] getData() {
+        boolean[][] res = new boolean[size][size];
+        for (int i = 0; i < size; i++) {
+            System.arraycopy(adjacentMatrix[i], 0, res[i], 0, size);
+        }
+        return res;
+    }
+
     public void addEdge(int source, int destination) {
         if (source < 0 || destination < 0) {
             throw new IllegalArgumentException();
         }
-        if (source < size && destination < size) {
-            adjacentMatrix[source][destination] = true;
-        } else {
+        if (source >= size || destination >= size) {
             synchronized (this) {
-                int newSize = Math.max(source, destination);
-                int newAdjacentMatrix[][] = new int[newSize][newSize];
+                int newSize = Math.max(source, destination) + 1;
+                boolean[][] newAdjacentMatrix = new boolean[newSize][newSize];
                 for (int i = 0; i < size; i++) {
                     System.arraycopy(adjacentMatrix[i], 0, newAdjacentMatrix[i], 0, size);
                 }
                 size = newSize;
+                adjacentMatrix = newAdjacentMatrix;
             }
         }
+        adjacentMatrix[source][destination] = true;
     }
 
     public void removeEdge(int source, int destination) {
