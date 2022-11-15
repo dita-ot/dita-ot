@@ -255,7 +255,7 @@ public class FilterUtilsTest {
         f.setLogger(new TestUtils.TestLogger());
 
         assertEquals(
-                singleton(flagBase),
+                Set.of(flagBase, flagSpecialization),
                 f.getFlags(new AttributesBuilder().add(OS, "amiga").add(PLATFORM, "unix").build(),
                            new QName[][] {{PROPS, OS}}));
     }
