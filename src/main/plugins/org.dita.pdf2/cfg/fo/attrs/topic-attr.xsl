@@ -75,7 +75,6 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic.topic.title" use-attribute-sets="common.title common.border__bottom">
-        <xsl:attribute name="space-before">15pt</xsl:attribute>
         <xsl:attribute name="space-before">12pt</xsl:attribute>
         <xsl:attribute name="space-after">5pt</xsl:attribute>
         <xsl:attribute name="font-size">14pt</xsl:attribute>
