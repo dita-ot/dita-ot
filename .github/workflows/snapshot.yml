@@ -20,6 +20,10 @@ jobs:
         run: |
           ./gradlew --no-daemon
           ./gradlew dist -Pcommit=${GITHUB_SHA} -PskipGenerateDocs=true --no-daemon
+      - name: Rename distribution file
+        run: |
+          rm build/distributions/org.dita.*
+          mv build/distributions/dita-ot-* build/distributions/dita-ot-develop.zip
       - name: Deploy distribution package to S3
         uses: jakejarvis/s3-sync-action@master
         with:
