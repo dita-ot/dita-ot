@@ -13,15 +13,16 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]">
     <div>
-    <xsl:call-template name="commonattributes"/>
-    <xsl:apply-templates mode="process-syntaxdiagram"/>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="setidaname"/>
+      <xsl:apply-templates mode="process-syntaxdiagram"/>
     </div>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/fragment ')]" mode="process-syntaxdiagram">
     <div>
-    <a name="{*[contains(@class,' topic/title ')]}"> </a>
-    <xsl:apply-templates mode="#current"/>
+      <a name="{*[contains(@class,' topic/title ')]}"> </a>
+      <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
