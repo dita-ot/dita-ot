@@ -13,6 +13,10 @@ See the accompanying LICENSE file for applicable license.
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot ditamsg">
 
+  <!-- optional @class attribute for TOC <body> element
+       (value comes from args.html5.toc.class parameter) -->
+  <xsl:param name="OUTPUTCLASS" as="xs:string?"/>
+
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="toc">
     <xsl:param name="pathFromMaplist"/>
     <xsl:if test="descendant::*[contains(@class, ' map/topicref ')]
@@ -127,8 +131,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="chapterBody">
     <body>
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
-      <xsl:if test="@outputclass">
-        <xsl:attribute name="class" select="@outputclass"/>
+      <xsl:if test="(@outputclass ne '') or ($OUTPUTCLASS ne '')">
+        <xsl:attribute name="class" select="string-join(distinct-values((tokenize(@outputclass, '\s+'), tokenize($OUTPUTCLASS, '\s+'))), ' ')"/>
       </xsl:if>
       <xsl:apply-templates select="." mode="addAttributesToBody"/>
       <xsl:call-template name="setidaname"/>
