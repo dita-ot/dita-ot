@@ -357,7 +357,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
 
         try {
-            XMLReader parser = getXmlReader(ref.format);
+            XMLReader parser = XMLUtils.getXmlReader(ref.format).orElse(reader);
             XMLReader xmlSource = parser;
             for (final XMLFilter f: getProcessingPipe(currentFile)) {
                 f.setParent(xmlSource);
@@ -910,19 +910,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
 
         prop.setProperty(REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
-    }
-
-    private XMLReader getXmlReader(final String format) throws SAXException {
-        for (final Map.Entry<String, String> e: parserMap.entrySet()) {
-            if (format != null && format.equals(e.getKey())) {
-                try {
-                    return (XMLReader) Class.forName(e.getValue()).newInstance();
-                } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
-                    throw new SAXException(ex);
-                }
-            }
-        }
-        return reader;
     }
 
     void init() throws SAXException {
