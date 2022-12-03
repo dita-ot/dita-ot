@@ -23,7 +23,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="chapterBody">
     <body>
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
-      <xsl:if test="(@outputclass ne '') or ($OUTPUTCLASS ne '')">
+      <xsl:if test="normalize-space(@outputclass) or normalize-space($OUTPUTCLASS)">
         <xsl:attribute name="class" select="string-join(distinct-values((tokenize(@outputclass, '\s+'), tokenize($OUTPUTCLASS, '\s+'))), ' ')"/>
       </xsl:if>
       <xsl:apply-templates select="." mode="addAttributesToBody"/>
