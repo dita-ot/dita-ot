@@ -263,6 +263,41 @@ public class FilterUtilsTest {
     }
     
     @Test
+    public void testNoInfoMessageFilter() {
+        //Do not issue information messages that certain values
+        //were not specified in the ditaval filter if the filter has default exclude rules.
+        final Map<FilterKey, Action> fm = new HashMap<>();
+        fm.put(new FilterKey(OS, null), Action.EXCLUDE);
+        fm.put(new FilterKey(OS, "amiga"), Action.INCLUDE);
+        FilterUtils f = new FilterUtils(false, fm, null, null);
+        StringBuilder infoMsg = new StringBuilder();
+        f.setLogger(new TestUtils.TestLogger() {
+            @Override
+            public void info(String msg) {
+                infoMsg.append(msg);
+            }
+        });
+
+        assertTrue(f.extCheckExclude(new QName[] {OS}, Arrays.asList("osx")));
+        assertEquals("Should not output info message " + infoMsg, "", infoMsg.toString());
+        
+        fm.clear();
+        fm.put(FilterUtils.DEFAULT, Action.EXCLUDE);
+        fm.put(new FilterKey(OS, "amiga"), Action.INCLUDE);
+        f = new FilterUtils(false, fm, null, null);
+        infoMsg.setLength(0);
+        f.setLogger(new TestUtils.TestLogger() {
+            @Override
+            public void info(String msg) {
+                infoMsg.append(msg);
+            }
+        });
+
+        assertTrue(f.extCheckExclude(new QName[] {OS}, Arrays.asList("osx")));
+        assertEquals("Should not output info message " + infoMsg, "", infoMsg.toString());
+    }
+    
+    @Test
     public void testNeedExcludeGroup() {
         final Map<FilterKey, Action> fm = new HashMap<>();
         fm.put(new FilterKey(OS, "amiga"), Action.INCLUDE);

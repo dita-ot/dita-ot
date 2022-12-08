@@ -29,6 +29,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
 import org.dita.dost.module.filter.SubjectScheme;
+import org.dita.dost.util.FilterUtils.FilterKey;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -473,7 +474,10 @@ public final class FilterUtils {
         for (final String attSubValue: attValue) {
             final FilterKey filterKey = new FilterKey(attName, attSubValue);
             final Action filterAction = filterMap.get(filterKey);
-            if (filterAction == null && logMissingAction) {
+            if (filterAction == null 
+                    && logMissingAction
+                    && filterMap.get(DEFAULT) == null
+                    && filterMap.get(new FilterKey(attName, null)) == null) {
                 if (!alreadyShowed(filterKey)) {
                     logger.info(MessageUtils.getMessage("DOTJ031I", filterKey.toString()).toString());
                 }
