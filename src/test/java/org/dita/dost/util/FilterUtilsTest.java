@@ -7,31 +7,28 @@
  */
 package org.dita.dost.util;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.*;
-import static javax.xml.XMLConstants.XML_NS_PREFIX;
-import static javax.xml.XMLConstants.XML_NS_URI;
-import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.*;
-
-import java.util.*;
-import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
-
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
+import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
-import org.junit.Test;
-
-import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
+import java.util.*;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.singleton;
+import static javax.xml.XMLConstants.XML_NS_PREFIX;
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PLATFORM;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_REV;
+import static org.junit.Assert.*;
 
 public class FilterUtilsTest {
 
@@ -244,6 +241,23 @@ public class FilterUtilsTest {
         assertEquals(
                 emptySet(),
                 f.getFlags(attr(PLATFORM, "windows"), new QName[0][0]));
+    }
+
+    @Test
+    public void testGetFlagsForSpecialization() {
+        final Flag flagBase = new Flag("prop", "red", null, null, null, null, null, null);
+        final Flag flagSpecialization = new Flag("prop", "blue", null, null, null, null, null, null);
+        final FilterUtils f = new FilterUtils(false,
+                ImmutableMap.<FilterKey, Action>builder()
+                        .put(new FilterKey(PLATFORM, "unix"), flagBase)
+                        .put(new FilterKey(OS, "amiga"), flagSpecialization)
+                        .build(), null, null);
+        f.setLogger(new TestUtils.TestLogger());
+
+        assertEquals(
+                Set.of(flagBase, flagSpecialization),
+                f.getFlags(new AttributesBuilder().add(OS, "amiga").add(PLATFORM, "unix").build(),
+                           new QName[][] {{PROPS, OS}}));
     }
 
     // DITA 1.3
