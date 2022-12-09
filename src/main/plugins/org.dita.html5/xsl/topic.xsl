@@ -1581,6 +1581,10 @@ See the accompanying LICENSE file for applicable license.
     </track>
   </xsl:template>
   
+  <xsl:template match="*[contains(@class, ' topic/media-track ')]/@href">
+    <xsl:attribute name="src" select="."/>
+  </xsl:template>
+  
   <xsl:template match="*[contains(@class,' topic/audio ') or 
     contains(@class,' topic/video ') or 
     contains(@class,' topic/media-source ')]/@href">
