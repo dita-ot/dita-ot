@@ -238,7 +238,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="*[contains(@class,' topic/dt ')][1]" mode="#current"/>
     </xsl:template>
     <xsl:template match="*[contains(@class, ' topic/dt ')]" mode="retrieveReferenceTitle">
-      <xsl:apply-templates select="." mode="text-only"/>
+      <xsl:apply-templates select="." mode="insert-text"/>
     </xsl:template>
   
     <xsl:template match="*[contains(@class, ' topic/title ')]" mode="retrieveReferenceTitle">
@@ -249,7 +249,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*" mode="retrieveReferenceTitle" >
         <xsl:choose>
             <xsl:when test="*[contains(@class,' topic/title ')]">
-                <xsl:value-of select="string(*[contains(@class, ' topic/title ')])"/>
+                <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>#none#</xsl:text>
