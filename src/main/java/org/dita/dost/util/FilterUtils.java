@@ -183,21 +183,19 @@ public final class FilterUtils {
                 }
             }
         }
-        if (res.isEmpty()) {
-            if (extProps != null && extProps.length != 0) {
-                for (final QName[] propList : extProps) {
-                    int propListIndex = propList.length - 1;
-                    final QName propName = propList[propListIndex];
-                    String propValue = atts.getValue(propName.getNamespaceURI(), propName.getLocalPart());
+        if (extProps != null && extProps.length != 0) {
+            for (final QName[] propList : extProps) {
+                int propListIndex = propList.length - 1;
+                final QName propName = propList[propListIndex];
+                String propValue = atts.getValue(propName.getNamespaceURI(), propName.getLocalPart());
 
-                    while ((propValue == null || propValue.trim().isEmpty()) && propListIndex > 0) {
-                        propListIndex--;
-                        final QName current = propList[propListIndex];
-                        propValue = getLabelValue(propName, atts.getValue(current.getNamespaceURI(), current.getLocalPart()));
-                    }
-                    if (propValue != null) {
-                        res.addAll(extCheckFlag(propList, Arrays.asList(propValue.split("\\s+"))));
-                    }
+                while ((propValue == null || propValue.trim().isEmpty()) && propListIndex > 0) {
+                    propListIndex--;
+                    final QName current = propList[propListIndex];
+                    propValue = getLabelValue(propName, atts.getValue(current.getNamespaceURI(), current.getLocalPart()));
+                }
+                if (propValue != null) {
+                    res.addAll(extCheckFlag(propList, Arrays.asList(propValue.split("\\s+"))));
                 }
             }
         }

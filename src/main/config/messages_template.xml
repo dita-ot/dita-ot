@@ -629,7 +629,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
   
   <message id="DOTX034E" type="ERROR">
-    <reason>Unable to generate link text for a cross reference to an undered list item: '%1'</reason>
+    <reason>Unable to generate link text for a cross reference to an unordered list item: '%1'</reason>
     <response></response>
   </message>
   
