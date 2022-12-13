@@ -220,7 +220,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/var ')]">
+    <xsl:template match="*[contains(@class,' pr-d/var ') or contains(@class,' syntaxdiagram-d/var ')]">
         <fo:inline xsl:use-attribute-sets="var">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
@@ -233,28 +233,28 @@ See the accompanying LICENSE file for applicable license.
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/synph ')]">
+    <xsl:template match="*[contains(@class,' pr-d/synph ') or contains(@class,' syntaxdiagram-d/synph ')]">
         <fo:inline xsl:use-attribute-sets="synph">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/oper ')]">
+    <xsl:template match="*[contains(@class,' pr-d/oper ') or contains(@class,' syntaxdiagram-d/oper ')]">
         <fo:inline xsl:use-attribute-sets="oper">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/delim ')]">
+    <xsl:template match="*[contains(@class,' pr-d/delim ') or contains(@class,' syntaxdiagram-d/delim ')]">
         <fo:inline xsl:use-attribute-sets="delim">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/sep ')]">
+    <xsl:template match="*[contains(@class,' pr-d/sep ') or contains(@class,' syntaxdiagram-d/sep ')]">
         <fo:inline xsl:use-attribute-sets="sep">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
@@ -305,21 +305,21 @@ See the accompanying LICENSE file for applicable license.
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/synblk ')]">
+    <xsl:template match="*[contains(@class,' pr-d/synblk ') or contains(@class,' syntaxdiagram-d/synblk ')]">
         <fo:inline xsl:use-attribute-sets="synblk">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/synnoteref ')]">
+    <xsl:template match="*[contains(@class,' pr-d/synnoteref ') or contains(@class,' syntaxdiagram-d/synnoteref ')]">
         <fo:inline xsl:use-attribute-sets="synnoteref">
         <xsl:call-template name="commonattributes"/>
         [<xsl:value-of select="@refid"/>] <!--TODO: synnoteref-->
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/synnote ')]">
+    <xsl:template match="*[contains(@class,' pr-d/synnote ') or contains(@class,' syntaxdiagram-d/synnote ')]">
         <fo:inline xsl:use-attribute-sets="synnote"> <!--TODO: synnote-->
             <xsl:call-template name="commonattributes"/>
             <xsl:choose>
@@ -336,14 +336,14 @@ See the accompanying LICENSE file for applicable license.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]">
+    <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]">
         <fo:block xsl:use-attribute-sets="syntaxdiagram"> <!--TODO: syntaxdiagram-->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/fragment ')]">
+    <xsl:template match="*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]">
         <fo:block xsl:use-attribute-sets="fragment">
             <xsl:call-template name="commonattributes"/>
             <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
@@ -352,7 +352,7 @@ See the accompanying LICENSE file for applicable license.
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
+    <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="syntaxdiagram.title">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="customTitleAnchor"/>
@@ -360,10 +360,10 @@ See the accompanying LICENSE file for applicable license.
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/kwd ')]">
+    <xsl:template match="*[contains(@class,' pr-d/kwd ') or contains(@class,' syntaxdiagram-d/kwd ')]">
         <fo:inline xsl:use-attribute-sets="kwd">
             <xsl:call-template name="commonattributes"/>
-            <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]">
+            <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
                 <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
             </xsl:if>
             <xsl:if test="@importance='optional'"> [</xsl:if>
@@ -390,29 +390,29 @@ See the accompanying LICENSE file for applicable license.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' topic/title ')]">
+    <xsl:template match="*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="fragment.title">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' pr-d/groupcomp ')]|*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' pr-d/groupchoice ')]|*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' pr-d/groupseq ')]">
+    <xsl:template match="*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]/*[contains(@class,' pr-d/groupcomp ') or contains(@class,' syntaxdiagram-d/groupcomp ')]|*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]/*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]|*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]/*[contains(@class,' pr-d/groupseq ') or contains(@class,' syntaxdiagram-d/groupseq ')]">
         <fo:block xsl:use-attribute-sets="fragment.group">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="makeGroup"/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupcomp ')]|*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupseq ')]|*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupchoice ')]">
+    <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupcomp ') or contains(@class,' syntaxdiagram-d/groupcomp ')]|*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupseq ') or contains(@class,' syntaxdiagram-d/groupseq ')]|*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
         <fo:block xsl:use-attribute-sets="syntaxdiagram.group">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="makeGroup"/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/groupcomp ') or contains(@class,' pr-d/groupchoice ') or contains(@class,' pr-d/groupseq ')]/
-        *[contains(@class,' pr-d/groupcomp ') or contains(@class,' pr-d/groupchoice ') or contains(@class,' pr-d/groupseq ')]">
+    <xsl:template match="*[contains(@class,' pr-d/groupcomp ') or contains(@class,' syntaxdiagram-d/groupcomp ') or contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ') or contains(@class,' pr-d/groupseq ') or contains(@class,' syntaxdiagram-d/groupseq ')]/
+        *[contains(@class,' pr-d/groupcomp ') or contains(@class,' syntaxdiagram-d/groupcomp ') or contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ') or contains(@class,' pr-d/groupseq ') or contains(@class,' syntaxdiagram-d/groupseq ')]">
         <fo:inline>
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="makeGroup"/>
@@ -420,7 +420,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template name="makeGroup">
-        <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]">
+        <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
             <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
         </xsl:if>
         <xsl:if test="@importance='optional'">[</xsl:if>
