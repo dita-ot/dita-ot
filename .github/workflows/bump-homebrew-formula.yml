@@ -1,6 +1,6 @@
 # Automatically bump Homebrew formula after each release
 # https://github.com/mislav/bump-homebrew-formula-action
-
+name: Homebrew
 # Controls when the action will run. Triggers the workflow when new tags are pushed
 on:
   workflow_dispatch:
@@ -20,17 +20,14 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Set download URL
-        run: echo ::set-output name=url::https://github.com/dita-ot/dita-ot/releases/download/${{ github.event.inputs.version }}/dita-ot-${{ github.event.inputs.version }}.zip
-        id: download-url
       - name: Create pull-request
-        uses: jelovirt/bump-homebrew-formula-action@version-input-debug
+        uses: mislav/bump-homebrew-formula-action@v2
         if: "!contains(github.event.inputs.version, '-')" # skip prereleases
         with:
           formula-name: dita-ot
           tag-name: ${{ github.event.inputs.version }}
           base-branch: master
-          download-url: ${{ steps.download-url.outputs.url }}
+          download-url: https://github.com/dita-ot/dita-ot/releases/download/${{ github.event.inputs.version }}/dita-ot-${{ github.event.inputs.version }}.zip
           commit-message: |
             {{formulaName}} {{version}}
             
