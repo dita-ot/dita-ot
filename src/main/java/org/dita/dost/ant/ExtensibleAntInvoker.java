@@ -8,7 +8,10 @@
 package org.dita.dost.ant;
 
 import com.google.common.collect.ImmutableSet;
-import org.apache.tools.ant.*;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Location;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.*;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.Resources;
@@ -23,6 +26,7 @@ import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.Store;
 import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -35,11 +39,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
+import static org.dita.dost.util.Configuration.pluginResourceDirs;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.supportedImageExtensions;
 import static org.dita.dost.util.URLUtils.toFile;
@@ -69,6 +76,9 @@ public final class ExtensibleAntInvoker extends Task {
      * Temporary directory.
      */
     private File tempDir;
+    /** Plugin directories. */
+    private Collection<File> pluginDirs;
+    private File workspace;
 
     /**
      * Constructor.
@@ -139,6 +149,16 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     private void initialize() throws BuildException {
+        workspace = Configuration.workspace.orElse(getProject().getBaseDir());
+        pluginDirs = pluginResourceDirs.values().stream()
+                .map(dir -> {
+                    try {
+                        return new File(getProject().getBaseDir(), dir.getPath()).getCanonicalFile();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
         if (tempDir == null) {
             tempDir = new File(this.getProject().getProperty(ANT_TEMP_DIR));
             if (!tempDir.isAbsolute()) {
@@ -273,12 +293,39 @@ public final class ExtensibleAntInvoker extends Task {
         }
     }
 
+    private Source toSource(final File style) {
+        final String stylePath = style.getAbsolutePath();
+        for (final File dir : pluginDirs) {
+            if (stylePath.startsWith(dir.getAbsolutePath())) {
+                final String file = dir.toPath().relativize(style.toPath()).toString();
+                final File workspaceFile = new File(workspace, file);
+                if (workspaceFile.exists()) {
+                    return new StreamSource(workspaceFile);
+                }
+            }
+        }
+        return new StreamSource(style);
+    }
+
     private Source toSource(final Resource style) {
         if (style instanceof FileResource) {
             return new StreamSource(((FileResource) style).getFile());
-        } else {
-            throw new BuildException(String.format("%s not supported", style.getClass().toString()));
+//        } else {
+//            throw new BuildException(String.format("%s not supported", style.getClass().toString()));
         }
+        // FIXME
+        final String stylePath = style.getName();
+        final Path styleP = Paths.get(style.getName());
+        for (final File dir : pluginDirs) {
+            if (stylePath.startsWith(dir.getAbsolutePath())) {
+                final String file = dir.toPath().relativize(styleP).toString();
+                final File workspaceFile = new File(workspace, file);
+                if (workspaceFile.exists()) {
+                    return new StreamSource(workspaceFile);
+                }
+            }
+        }
+        return new StreamSource(styleP.toFile());
     }
 
     private static Predicate<FileInfo> combine(final Collection<FileInfoFilterElem> filters) {

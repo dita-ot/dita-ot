@@ -10,14 +10,18 @@ See the accompanying LICENSE file for applicable license.
          xmlns:if="ant:if">
     
   <!-- Read configuration properties -->
-  <loadproperties>
-    <javaresource name="application.properties"/>
-  </loadproperties>
   <property file="${dita.dir}/config/org.dita.dost.platform/plugin.properties"/>
   <property file="${dita.dir}/config/configuration.properties"/>
   
   <xmlcatalog id="dita.catalog">
-    <catalogpath path="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
+    <catalogpath>
+      <first>
+        <multirootfileset includes="catalog-dita.xml">
+          <basedir file="${dita.plugin.org.dita.base.dir}"/>
+          <basedir file="${dita.plugin.org.dita.base.cache.dir}"/>
+        </multirootfileset>
+      </first>
+    </catalogpath>
   </xmlcatalog>
 
   <taskdef name="init-project" classname="org.dita.dost.ant.InitializeProjectTask"/>
@@ -31,14 +35,17 @@ See the accompanying LICENSE file for applicable license.
   <typedef name="dita-fileset" classname="org.dita.dost.ant.types.JobSourceSet"/>
   <typedef name="ditafileset" classname="org.dita.dost.ant.types.JobSourceSet"/>
   <typedef name="jobmapper" classname="org.dita.dost.ant.types.JobMapper"/>
+  <typedef name="pluginfileset" classname="org.dita.dost.ant.types.PluginSourceSet"/>
 
   <macrodef name="job-helper" >
     <attribute name="file"/>
     <attribute name="property"/>
     <sequential>
       <xslt in="${dita.temp.dir}/.job.xml" out="${dita.temp.dir}/@{file}"
-            style="${dita.plugin.org.dita.base.dir}/xsl/job-helper.xsl"
             force="true" taskname="job-helper">
+        <style>
+          <fileset dir="${dita.plugin.org.dita.base.dir}" includes="xsl/job-helper.xsl"/>
+        </style>
         <param name="property" expression="@{property}"/>
         <outputproperty name="encoding" value="${file.encoding}"/> 
       </xslt>

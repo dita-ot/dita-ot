@@ -11,6 +11,9 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -53,9 +56,17 @@ public final class CatalogUtils {
             manager.setIgnoreMissingProperties(true);
             manager.setUseStaticCatalog(false); // We'll use a private catalog.
             manager.setPreferPublic(true);
-            final File catalogFilePath = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base") + File.separator + FILE_NAME_CATALOG);
-            manager.setCatalogFiles(catalogFilePath.toURI().toASCIIString());
-            //manager.setVerbosity(10);
+            final String catalogFiles = Arrays.asList(
+                        Optional.ofNullable(ditaDir),
+                        Configuration.workspace
+                    ).stream()
+                    .filter(Optional::isPresent)
+                    .map(dir -> new File(dir.get(), Configuration.pluginResourceDirs.get("org.dita.base") + File.separator + FILE_NAME_CATALOG))
+                    .map(catalogFilePath -> catalogFilePath.toURI().toString())
+                    .collect(Collectors.joining(";"));
+            System.err.println(catalogFiles);
+            manager.setCatalogFiles(catalogFiles);
+            manager.setVerbosity(3);
             catalogResolver = new CatalogResolver(manager);
         }
 

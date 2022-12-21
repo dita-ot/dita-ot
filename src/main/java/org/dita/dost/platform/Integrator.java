@@ -103,6 +103,7 @@ public final class Integrator {
     private final XMLReader reader;
     private final Document pluginsDoc;
     private final PluginParser parser;
+    private final File workspace;
     private DITAOTLogger logger;
     private final Set<String> loadedPlugin;
     private final Hashtable<String, List<Value>> featureTable;
@@ -118,6 +119,7 @@ public final class Integrator {
      */
     public Integrator(final File ditaDir) {
         this.ditaDir = ditaDir;
+        workspace = Configuration.workspace.orElse(ditaDir);
         pluginTable = new HashMap<>(16);
         templateSet = new HashMap<>(16);
         descSet = new HashSet<>(16);
@@ -254,16 +256,15 @@ public final class Integrator {
         // Collect information for each feature id and generate a feature table.
         final FileGenerator fileGen = new FileGenerator(featureTable, pluginTable);
         fileGen.setLogger(logger);
+        fileGen.setWorkspace(workspace);
         for (final String currentPlugin : orderPlugins(pluginTable.keySet())) {
             loadPlugin(currentPlugin);
         }
 
         // generate the files from template
         for (final Entry<String, Value> template : templateSet.entrySet()) {
-            final File templateFile = new File(ditaDir, template.getKey());
-            logger.debug("Process template " + templateFile.getPath());
 //            fileGen.setPluginId(template.getValue().id);
-            fileGen.generate(templateFile);
+            fileGen.generate(ditaDir, template.getKey());
         }
 
         // generate configuration properties

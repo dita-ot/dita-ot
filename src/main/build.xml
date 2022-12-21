@@ -8,6 +8,9 @@ See the accompanying LICENSE file for applicable license.
 -->
 <project name="DOST" default="init">
 
+  <loadproperties>
+    <javaresource name="application.properties"/>
+  </loadproperties>
   <!-- Initialize DITA-OT base directory -->
   <dirname property="ant.file.DOST.dir" file="${ant.file.DOST}" />
   <property name="dita.dir" location="${ant.file.DOST.dir}"/>
@@ -15,9 +18,15 @@ See the accompanying LICENSE file for applicable license.
   <property name="dita.dir" location="${basedir}"/>
 
   <property file="${dita.dir}/local.properties"/>
+  <property name="dita.cache.dir" location="/Users/jelovirt/Library/Application Support/DITA-OT"/><!--/${otrelease}-->
 
   <import>
-    <fileset file="${dita.dir}/plugins/org.dita.base/build.xml"/>
+    <first>
+      <multirootfileset includes="plugins/org.dita.base/build.xml">
+        <basedir file="${dita.dir}"/>
+        <basedir file="${dita.cache.dir}"/>
+      </multirootfileset>
+    </first>
   </import>
 
 </project>
