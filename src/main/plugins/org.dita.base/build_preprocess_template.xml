@@ -140,6 +140,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
+        <param name="cache.dir" value="${cache.dir}" if:set="cache.dir"/>
         <param name="profiling.enable" value="${filter-on-parse}" unless:set="filter-on-parse"/>
         <param name="generate-debug-attributes" value="${generate-debug-attributes}" if:set="generate-debug-attributes"/>
         <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>

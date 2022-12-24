@@ -112,6 +112,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             original.forEach(fi -> job.remove(fi));
             // rewrite results
             final Collection<FileInfo> rewritten = rewrite(original);
+            // FIXME this only rewrites FileInfos, we need to also rewrite dependency graph
             // move temp files and update links
             final Job tempJob = new Job(job, emptyMap(), rewritten);
             filter.setJob(tempJob);
@@ -176,7 +177,8 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             try {
                 final DOMSource source = new DOMSource(serialize(fis));
                 final Map<URI, FileInfo> files = new HashMap<>();
-                final Destination result = new SAXDestination(new Job.JobHandler(new HashMap<>(), files));
+                final UriGraph dependencyGraph = new UriGraph(files.size());
+                final Destination result = new SAXDestination(new Job.JobHandler(new HashMap<>(), files, dependencyGraph));
                 rewriteTransformer.setSource(source);
                 rewriteTransformer.setDestination(result);
                 rewriteTransformer.transform();

@@ -132,6 +132,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     TopicFragmentFilter topicFragmentFilter;
     /** Files found during additional resource crawl. **/
     final Set<URI> additionalResourcesSet = ConcurrentHashMap.newKeySet();
+    /** Dependency graph for source resources. */
+    final UriGraph dependencyGraph = new UriGraph(16);
 
     public abstract void readStartFile() throws DITAOTException;
 
@@ -378,6 +380,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
             if (listFilter.isValidInput()) {
                 processParseResult(currentFile);
+                readDependencies(currentFile);
                 categorizeCurrentFile(ref);
             } else if (!currentFile.equals(rootFile)) {
                 logger.error(MessageUtils.getMessage("DOTJ021E", params).toString());
@@ -755,6 +758,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 .isInput(true)
                 .build());
 
+        for (Map.Entry<URI, URI> entry : dependencyGraph.getAll()) {
+//                URI from = baseInputDir.relativize(entry.getKey());
+//                URI to = baseInputDir.relativize(entry.getValue());
+            URI from = entry.getKey();
+            URI to = entry.getValue();
+            job.addDependency(from, to);
+        }
+
         try {
             logger.info("Serializing job specification");
             job.write();
@@ -927,4 +938,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         initFilters();
     }
 
+    void initCache(final AbstractPipelineInput input) {
+        String cacheDir = input.getAttribute("cache.dir");
+    }
+
+    private void readDependencies(URI currentFile) {
+        for (URI hrefTarget : listFilter.getHrefTargets()) {
+            dependencyGraph.add(currentFile, hrefTarget);
+        }
+    }
 }
