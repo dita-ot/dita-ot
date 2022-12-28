@@ -66,6 +66,9 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:apply-templates select="*[not(contains(@class, ' topic/desc '))] | text()"/>
                     <!--use xref content-->
                   </xsl:when>
+                  <xsl:when test="@scope = 'external' and starts-with(@href, 'mailto:')">
+                    <xsl:value-of select="replace(@href, '^mailto:', '')"/><!--remove mailto: prefix from href text-->
+                  </xsl:when>
                   <xsl:otherwise>
                     <xsl:call-template name="href"/><!--use href text-->
                   </xsl:otherwise>
@@ -323,7 +326,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     </xsl:call-template>
   </xsl:template>
 
-  <!--calculate href-->
+  <!--calculate href - used for both @href attribute values and target text -->
   <xsl:template name="href">
     <xsl:apply-templates select="." mode="determine-final-href"/>
   </xsl:template>
@@ -580,6 +583,9 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
         <xsl:when test="*[contains(@class, ' topic/linktext ')]">
           <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
         </xsl:when>
+        <xsl:when test="@scope = 'external' and starts-with(@href, 'mailto:')">
+          <xsl:value-of select="replace(@href, '^mailto:', '')"/><!--remove mailto: prefix from href text-->
+        </xsl:when>
         <xsl:otherwise>
           <!--use href-->
           <xsl:call-template name="href"/>
@@ -763,6 +769,10 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:if test="@scope = 'external' or @type = 'external' or ((lower-case(@format) = 'pdf') and not(@scope = 'local'))">
       <xsl:attribute name="target">_blank</xsl:attribute>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*[@scope = 'external' and starts-with(@href, 'mailto:')]" mode="add-link-target-attribute">
+    <!-- mailto: links do not need browser tab or search engine directives -->
   </xsl:template>
 
   <xsl:template match="*" mode="ditamsg:link-may-be-duplicate">
