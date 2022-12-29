@@ -599,10 +599,6 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute name="target">_blank</xsl:attribute>
     <xsl:attribute name="rel">external noopener</xsl:attribute>
   </xsl:template>
-
-  <xsl:template match="node()[@scope = 'external' and starts-with(@href, 'mailto:')]" mode="external-link" as="attribute()*">
-    <!-- mailto: links do not need browser tab or search engine directives -->
-  </xsl:template>
   
   <!-- =========== SINGLE PART LISTS =========== -->
   

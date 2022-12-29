@@ -771,10 +771,6 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="*[@scope = 'external' and starts-with(@href, 'mailto:')]" mode="add-link-target-attribute">
-    <!-- mailto: links do not need browser tab or search engine directives -->
-  </xsl:template>
-
   <xsl:template match="*" mode="ditamsg:link-may-be-duplicate">
     <xsl:param name="href" select="@href" as="xs:string"/>
     <xsl:param name="outfile" as="xs:string">
