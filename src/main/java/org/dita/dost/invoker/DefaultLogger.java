@@ -288,9 +288,7 @@ class DefaultLogger implements BuildLogger {
                 String label = "[" + name + "] ";
                 final int size = LEFT_COLUMN_SIZE - label.length();
                 final StringBuilder tmp = new StringBuilder();
-                for (int i = 0; i < size; i++) {
-                    tmp.append(" ");
-                }
+                tmp.append(" ".repeat(Math.max(0, size)));
                 tmp.append(label);
                 label = tmp.toString();
 
