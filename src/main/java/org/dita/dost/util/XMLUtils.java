@@ -755,8 +755,7 @@ public final class XMLUtils {
 
     /** Close source. */
     public static void close(final Source input) throws IOException {
-        if (input != null && input instanceof StreamSource) {
-            final StreamSource s = (StreamSource) input;
+        if (input != null && input instanceof final StreamSource s) {
             final InputStream i = s.getInputStream();
             if (i != null) {
                 i.close();
@@ -771,8 +770,7 @@ public final class XMLUtils {
 
     /** Close result. */
     public static void close(final Result result) throws IOException {
-        if (result != null && result instanceof StreamResult) {
-            final StreamResult r = (StreamResult) result;
+        if (result != null && result instanceof final StreamResult r) {
             final OutputStream o = r.getOutputStream();
             if (o != null) {
                 o.close();

@@ -829,10 +829,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (obj == null) {
                 return false;
             }
-            if (!(obj instanceof Reference)) {
+            if (!(obj instanceof final Reference other)) {
                 return false;
             }
-            final Reference other = (Reference) obj;
             if (filename == null) {
                 if (other.filename != null) {
                     return false;

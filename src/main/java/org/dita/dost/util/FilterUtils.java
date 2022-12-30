@@ -532,12 +532,11 @@ public final class FilterUtils {
             if (obj == null) {
                 return false;
             }
-            if (!(obj instanceof FilterKey)) {
+            if (!(obj instanceof final FilterKey other)) {
                 final Throwable t = new RuntimeException("Not comparing FilterKey");
                 t.printStackTrace();
                 return false;
             }
-            final FilterKey other = (FilterKey) obj;
             if (!attribute.equals(other.attribute)) {
                 return false;
             }

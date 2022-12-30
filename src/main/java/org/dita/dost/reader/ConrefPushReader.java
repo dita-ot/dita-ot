@@ -435,10 +435,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
             if (obj == null) {
                 return false;
             }
-            if (!(obj instanceof MoveKey)) {
+            if (!(obj instanceof MoveKey other)) {
                 return false;
             }
-            MoveKey other = (MoveKey) obj;
             if (action == null) {
                 if (other.action != null) {
                     return false;

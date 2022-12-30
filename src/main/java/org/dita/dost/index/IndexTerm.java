@@ -235,12 +235,11 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      */
     @Override
     public boolean equals(final Object o) {
-        if (!(o instanceof IndexTerm)) {
+        if (!(o instanceof final IndexTerm it)) {
             return false;
         } else if (o == this) {
             return true;
         }
-        final IndexTerm it = (IndexTerm) o;
         boolean eqTermName;
         boolean eqTermKey;
         boolean eqTargetList;

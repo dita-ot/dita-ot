@@ -248,8 +248,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             if (same) {
                 destination.setDestinationBaseURI(out.toURI());
             }
-            if (destination instanceof Serializer) {
-                final Serializer serializer = (Serializer) destination;
+            if (destination instanceof final Serializer serializer) {
                 for (final String key : properties.stringPropertyNames()) {
                     serializer.setOutputProperty(new QName(key), properties.getProperty(key));
                 }

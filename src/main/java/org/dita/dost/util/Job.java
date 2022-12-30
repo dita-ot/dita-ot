@@ -342,18 +342,16 @@ public final class Job {
                 out.writeStartElement(ELEMENT_STRING);
                 out.writeCharacters(e.getValue().toString());
                 out.writeEndElement(); //string
-            } else if (e.getValue() instanceof Set) {
+            } else if (e.getValue() instanceof final Set<?> s) {
                 out.writeStartElement(ELEMENT_SET);
-                final Set<?> s = (Set<?>) e.getValue();
                 for (final Object o: s) {
                     out.writeStartElement(ELEMENT_STRING);
                     out.writeCharacters(o.toString());
                     out.writeEndElement(); //string
                 }
                 out.writeEndElement(); //set
-            } else if (e.getValue() instanceof Map) {
+            } else if (e.getValue() instanceof final Map<?, ?> s) {
                 out.writeStartElement(ELEMENT_MAP);
-                final Map<?, ?> s = (Map<?, ?>) e.getValue();
                 for (final Map.Entry<?, ?> o: s.entrySet()) {
                     out.writeStartElement(ELEMENT_ENTRY);
                     out.writeAttribute(ATTRIBUTE_KEY, o.getKey().toString());

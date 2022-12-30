@@ -166,8 +166,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             if (term.getTermKey() == null) {
                 term.setTermKey(term.getTermFullName());
             }
-            if (elementStack.peek() instanceof IndexTerm) {
-                final IndexTerm parentTerm = (IndexTerm) elementStack.peek();
+            if (elementStack.peek() instanceof final IndexTerm parentTerm) {
                 parentTerm.addSubTerm(term);
             }
         }
@@ -341,10 +340,9 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
         }
 
 
-        if (elementStack.peek() instanceof TopicrefElement) {
+        if (elementStack.peek() instanceof final TopicrefElement elem) {
             // for dita files the indexterm has been moved to its <prolog>
             // therefore we don't need to collect these terms again.
-            final TopicrefElement elem = (TopicrefElement) elementStack.peek();
             if (indexMoved && (elem.getFormat() == null || elem.getFormat().equals(ATTR_FORMAT_VALUE_DITA) || elem.getFormat().equals(ATTR_FORMAT_VALUE_DITAMAP))) {
                 return false;
             }

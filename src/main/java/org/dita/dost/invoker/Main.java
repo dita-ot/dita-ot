@@ -316,8 +316,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         } else if (args instanceof TranstypesArguments) {
             printTranstypes();
             return;
-        } else if (args instanceof DeliverablesArguments) {
-            final DeliverablesArguments deliverablesArgs = (DeliverablesArguments) args;
+        } else if (args instanceof final DeliverablesArguments deliverablesArgs) {
             if (deliverablesArgs.projectFile == null) {
                 printErrorMessage(locale.getString("deliverables.error.project_not_defined"));
                 args.printUsage(true);
@@ -325,8 +324,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
             printDeliverables(deliverablesArgs.projectFile);
             return;
-        } else if (args instanceof InstallArguments) {
-            final InstallArguments installArgs = (InstallArguments) args;
+        } else if (args instanceof final InstallArguments installArgs) {
             buildFile = integratorFile;
             targets.clear();
             if (installArgs.installFile != null) {
@@ -340,8 +338,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             } else {
                 targets.add("integrate");
             }
-        } else if (args instanceof UninstallArguments) {
-            final UninstallArguments installArgs = (UninstallArguments) args;
+        } else if (args instanceof final UninstallArguments installArgs) {
             if (installArgs.uninstallId == null) {
                 printErrorMessage(locale.getString("uninstall.error.identifier_not_defined"));
                 args.printUsage(true);
@@ -351,8 +348,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             targets.clear();
             targets.add("uninstall");
             definedProps.put(ANT_PLUGIN_ID, installArgs.uninstallId);
-        } else if (args instanceof ConversionArguments) {
-            final ConversionArguments conversionArgs = (ConversionArguments) args;
+        } else if (args instanceof final ConversionArguments conversionArgs) {
             if (conversionArgs.projectFile == null) {
                 projectProps = Collections.singletonList(definedProps);
             } else {
