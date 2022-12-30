@@ -279,10 +279,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             rootFile = ditaInput;
         } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
             rootFile = setScheme(ditaInput, "file");
-        } else if (baseInputDir != null) {
-            rootFile = baseInputDir.resolve(ditaInput);
         } else {
-            rootFile = basedir.toURI().resolve(ditaInput);
+            rootFile = Objects.requireNonNullElseGet(baseInputDir, () -> basedir.toURI()).resolve(ditaInput);
         }
         job.setInputFile(rootFile);
 

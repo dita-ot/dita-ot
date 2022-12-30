@@ -34,7 +34,6 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.asList;
 import static net.sf.saxon.s9api.streams.Predicates.isElement;
 import static net.sf.saxon.s9api.streams.Steps.child;
 import static net.sf.saxon.s9api.streams.Steps.precedingSibling;
@@ -49,7 +48,7 @@ import static org.dita.dost.util.XMLUtils.rootElement;
  */
 public final class KeyrefReader implements AbstractReader {
 
-    private static final List<String> ATTS = Collections.unmodifiableList(asList(
+    private static final List<String> ATTS = List.of(
             ATTRIBUTE_NAME_HREF,
             ATTRIBUTE_NAME_AUDIENCE,
             ATTRIBUTE_NAME_PLATFORM,
@@ -68,7 +67,7 @@ public final class KeyrefReader implements AbstractReader {
             "dir",
             "translate",
             ATTRIBUTE_NAME_PROCESSING_ROLE,
-            ATTRIBUTE_NAME_CASCADE));
+            ATTRIBUTE_NAME_CASCADE);
 
     private DITAOTLogger logger;
     private Job job;
