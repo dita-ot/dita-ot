@@ -411,8 +411,6 @@ public class CacheStore extends AbstractStore implements Store {
             throw new DITAOTException("Failed to transform document", e);
         } catch (final RuntimeException e) {
             throw e;
-        } catch (final SaxonApiException e) {
-            throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
         }

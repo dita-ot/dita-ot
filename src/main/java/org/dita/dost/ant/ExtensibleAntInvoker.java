@@ -795,7 +795,7 @@ public final class ExtensibleAntInvoker extends Task {
         public String getValue() {
             if (!rcs.isEmpty()) {
                 return rcs.stream()
-                        .flatMap(rc -> rc.stream())
+                        .flatMap(ResourceCollection::stream)
                         .map(ParamElem::resourceToString)
                         .collect(Collectors.joining(File.pathSeparator));
             } else {

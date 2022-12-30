@@ -25,7 +25,6 @@ import java.io.File;
 import java.net.URI;
 import java.util.*;
 
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static net.sf.saxon.s9api.streams.Predicates.hasLocalName;
@@ -47,16 +46,15 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private static final Set<String> no_copy;
     static {
-        final Set<String> nc = new HashSet<>();
-        nc.add(ATTRIBUTE_NAME_ID);
-        nc.add(ATTRIBUTE_NAME_CLASS);
-        nc.add(ATTRIBUTE_NAME_XTRC);
-        nc.add(ATTRIBUTE_NAME_XTRF);
-        nc.add(ATTRIBUTE_NAME_HREF);
-        nc.add(ATTRIBUTE_NAME_KEYS);
-        nc.add(ATTRIBUTE_NAME_TOC);
-        nc.add(ATTRIBUTE_NAME_PROCESSING_ROLE);
-        no_copy = Collections.unmodifiableSet(nc);
+        no_copy = Set.of(
+                ATTRIBUTE_NAME_ID,
+                ATTRIBUTE_NAME_CLASS,
+                ATTRIBUTE_NAME_XTRC,
+                ATTRIBUTE_NAME_XTRF,
+                ATTRIBUTE_NAME_HREF,
+                ATTRIBUTE_NAME_KEYS,
+                ATTRIBUTE_NAME_TOC,
+                ATTRIBUTE_NAME_PROCESSING_ROLE);
     }
 
     /**
@@ -115,13 +113,12 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         keyrefInfos = Collections.unmodifiableList(ki);
     }
 
-    private final static List<String> KEYREF_ATTRIBUTES = Collections.unmodifiableList(asList(
+    private final static List<String> KEYREF_ATTRIBUTES = List.of(
             ATTRIBUTE_NAME_KEYREF,
             ATTRIBUTE_NAME_ARCHIVEKEYREFS,
             ATTRIBUTE_NAME_CLASSIDKEYREF,
             ATTRIBUTE_NAME_CODEBASEKEYREF,
-            ATTRIBUTE_NAME_DATAKEYREF
-    ));
+            ATTRIBUTE_NAME_DATAKEYREF);
 
 
     /**
@@ -256,7 +253,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 // need to pull matching content from the key definition
                 // If keyref on topicref, and no topicmeta, copy topicmeta from key definition
                 if (elemName.peek().equals(MAP_TOPICREF.localName)) {
-                    final Optional<XdmNode> topicmetaNode = elem.select(child().where(c -> MAP_TOPICMETA.matches(c)).first()).findFirst();
+                    final Optional<XdmNode> topicmetaNode = elem.select(child().where(MAP_TOPICMETA::matches).first()).findFirst();
                     if (topicmetaNode.isPresent()) {
                         domToSax(topicmetaNode.get(), true, false);
                     }

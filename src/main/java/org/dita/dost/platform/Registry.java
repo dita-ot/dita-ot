@@ -14,11 +14,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.unmodifiableList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Registry {
@@ -37,7 +35,7 @@ public class Registry {
                     @JsonProperty("cksum") String cksum) {
         this.name = name;
         this.vers = new SemVer(vers);
-        this.deps = deps == null ? emptyList() : unmodifiableList(Arrays.asList(deps));
+        this.deps = deps == null ? emptyList() : List.of(deps);
         try {
             this.url = url != null ? new URL(url) : null;
         } catch (MalformedURLException e) {

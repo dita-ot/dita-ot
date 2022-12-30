@@ -226,19 +226,19 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     }
 
     void parseInputParameters(final AbstractPipelineInput input) {
-        validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
+        validate = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
         processingMode = Optional.ofNullable(input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE))
                 .map(String::toUpperCase)
                 .map(Mode::valueOf)
                 .orElse(Mode.LAX);
-        genDebugInfo = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR));
+        genDebugInfo = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR));
 
         // For the output control
         job.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
         job.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
-        job.setOnlyTopicInMap(Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP)));
+        job.setOnlyTopicInMap(Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP)));
         job.setCrawl(Optional.ofNullable(input.getAttribute(ANT_INVOKER_EXT_PARAM_CRAWL))
                 .orElse(ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_TOPIC));
 
@@ -279,10 +279,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             rootFile = ditaInput;
         } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
             rootFile = setScheme(ditaInput, "file");
-        } else if (baseInputDir != null) {
-            rootFile = baseInputDir.resolve(ditaInput);
         } else {
-            rootFile = basedir.toURI().resolve(ditaInput);
+            rootFile = Objects.requireNonNullElseGet(baseInputDir, () -> basedir.toURI()).resolve(ditaInput);
         }
         job.setInputFile(rootFile);
 

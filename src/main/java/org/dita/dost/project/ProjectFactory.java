@@ -150,14 +150,14 @@ public class ProjectFactory {
             return project;
         }
         final List<Deliverable> deliverables = project.deliverables != null
-                ? new ArrayList(project.deliverables)
-                : new ArrayList();
+                ? new ArrayList<>(project.deliverables)
+                : new ArrayList<>();
         final List<Publication> publications = project.publications != null
-                ? new ArrayList(project.publications)
-                : new ArrayList();
+                ? new ArrayList<>(project.publications)
+                : new ArrayList<>();
         final List<Context> contexts = project.contexts != null
-                ? new ArrayList(project.contexts)
-                : new ArrayList();
+                ? new ArrayList<>(project.contexts)
+                : new ArrayList<>();
         if (project.includes != null) {
             for (final ProjectRef projectRef : project.includes) {
                 final URI href = projectRef.href.isAbsolute() ? projectRef.href : base.resolve(projectRef.href);

@@ -150,46 +150,43 @@ public final class XMLUtils {
     }
 
     public static MessageListener2 toMessageListener(final DITAOTLogger logger) {
-        return new MessageListener2() {
-            @Override
-            public void message(XdmNode content, net.sf.saxon.s9api.QName code, boolean terminate, SourceLocator locator) {
-                final Optional<String> errorCode = content.select(descendant(isProcessingInstruction()).where(hasLocalName("error-code")))
+        return (content, code, terminate, locator) -> {
+            final Optional<String> errorCode = content.select(descendant(isProcessingInstruction()).where(hasLocalName("error-code")))
+                    .findAny()
+                    .map(XdmItem::getStringValue);
+            final String level = terminate
+                    ? "FATAL"
+                    : content.select(descendant(isProcessingInstruction()).where(hasLocalName("level")))
                         .findAny()
-                        .map(XdmItem::getStringValue);
-                final String level = terminate
-                        ? "FATAL"
-                        : content.select(descendant(isProcessingInstruction()).where(hasLocalName("level")))
-                            .findAny()
-                            .map(XdmItem::getStringValue)
-                            .orElse("INFO");
-                final String msg = content
-                        .select(child(
-                                hasLocalName("level").or(hasLocalName("error-code"))
-                                        .and(hasType(ItemType.PROCESSING_INSTRUCTION_NODE))
-                                .negate()))
-                        .map(n -> n.toString())
-                        .collect(Collectors.joining());
-                switch (level) {
-                    case "FATAL":
-                        final TerminationException err = new TerminationException(msg);
-                        errorCode.ifPresent(err::setErrorCode);
-                        throw new SaxonApiUncheckedException(err);
-                    case "ERROR":
-                        logger.error(msg);
-                        break;
-                    case "WARN":
-                        logger.warn(msg);
-                        break;
-                    case "INFO":
-                        logger.info(msg);
-                        break;
-                    case "DEBUG":
-                        logger.debug(msg);
-                        break;
-                    default:
-                        logger.error("Message level " + level + " not supported");
-                        logger.info(msg);
-                }
+                        .map(XdmItem::getStringValue)
+                        .orElse("INFO");
+            final String msg = content
+                    .select(child(
+                            hasLocalName("level").or(hasLocalName("error-code"))
+                                    .and(hasType(ItemType.PROCESSING_INSTRUCTION_NODE))
+                            .negate()))
+                    .map(XdmNode::toString)
+                    .collect(Collectors.joining());
+            switch (level) {
+                case "FATAL":
+                    final TerminationException err = new TerminationException(msg);
+                    errorCode.ifPresent(err::setErrorCode);
+                    throw new SaxonApiUncheckedException(err);
+                case "ERROR":
+                    logger.error(msg);
+                    break;
+                case "WARN":
+                    logger.warn(msg);
+                    break;
+                case "INFO":
+                    logger.info(msg);
+                    break;
+                case "DEBUG":
+                    logger.debug(msg);
+                    break;
+                default:
+                    logger.error("Message level " + level + " not supported");
+                    logger.info(msg);
             }
         };
     }

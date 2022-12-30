@@ -261,7 +261,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     private void parseInputParameters(final AbstractPipelineInput input) {
         ditavalFile = new File(job.tempDir, FILE_NAME_MERGED_DITAVAL);
-        validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
+        validate = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
         if (!validate) {
             final String msg = MessageUtils.getMessage("DOTJ037W").toString();
             logger.warn(msg);
@@ -271,12 +271,12 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         setSystemid = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
         final String mode = input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
         processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
-        genDebugInfo = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR));
+        genDebugInfo = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR));
 
         // For the output control
         job.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
         job.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
-        job.setOnlyTopicInMap(Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP)));
+        job.setOnlyTopicInMap(Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP)));
         job.setCrawl(input.getAttribute(ANT_INVOKER_EXT_PARAM_CRAWL));
 
         // Set the OutputDir
@@ -315,10 +315,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             rootFile = ditaInput;
         } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
             rootFile = setScheme(ditaInput, "file");
-        } else if (baseInputDir != null) {
-            rootFile = baseInputDir.resolve(ditaInput);
         } else {
-            rootFile = basedir.toURI().resolve(ditaInput);
+            rootFile = Objects.requireNonNullElseGet(baseInputDir, () -> basedir.toURI()).resolve(ditaInput);
         }
         assert rootFile.isAbsolute();
 

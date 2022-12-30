@@ -7,13 +7,10 @@
  */
 package org.dita.dost.util;
 
-import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 import java.util.*;
 
-import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
 
 /**
@@ -35,7 +32,7 @@ public class KeyScope {
         this.id = id;
         this.name = name;
         this.keyDefinition = unmodifiableMap(keyDefinition);
-        this.childScopes = unmodifiableList(new ArrayList<>(childScopes));
+        this.childScopes = List.copyOf(childScopes);
     }
 
     public KeyDef get(final String key) {

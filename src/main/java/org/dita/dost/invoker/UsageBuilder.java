@@ -132,9 +132,7 @@ public class UsageBuilder {
             max = Math.max(max, key.toString().length());
         }
         StringBuilder padding = new StringBuilder();
-        for (int i = -2; i < max; i++) {
-            padding.append(' ');
-        }
+        padding.append(" ".repeat(Math.max(0, max + 2)));
         return padding.toString();
     }
 
