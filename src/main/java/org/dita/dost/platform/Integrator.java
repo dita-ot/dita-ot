@@ -570,33 +570,35 @@ public final class Integrator {
             logger.debug("Generate start command shell " + outFile.getPath());
             out = new BufferedWriter(new FileWriter(outFile));
 
-            out.write("#!/bin/sh\n" +
-                    "# Generated file, do not edit manually\"\n" +
-                    "echo \"NOTE: The startcmd.sh has been deprecated, use the 'dita' command instead.\"\n" +
-                    "\n" +
-                    "realpath() {\n" +
-                    "  case $1 in\n" +
-                    "    /*) echo \"$1\" ;;\n" +
-                    "    *) echo \"$PWD/${1#./}\" ;;\n" +
-                    "  esac\n" +
-                    "}\n" +
-                    "\n" +
-                    "if [ \"${DITA_HOME:+1}\" = \"1\" ] && [ -e \"$DITA_HOME\" ]; then\n" +
-                    "  export DITA_DIR=\"$(realpath \"$DITA_HOME\")\"\n" +
-                    "else #elif [ \"${DITA_HOME:+1}\" != \"1\" ]; then\n" +
-                    "  export DITA_DIR=\"$(dirname \"$(realpath \"$0\")\")\"\n" +
-                    "fi\n" +
-                    "\n" +
-                    "if [ -f \"$DITA_DIR\"/bin/ant ] && [ ! -x \"$DITA_DIR\"/bin/ant ]; then\n" +
-                    "  chmod +x \"$DITA_DIR\"/bin/ant\n" +
-                    "fi\n" +
-                    "\n" +
-                    "export ANT_OPTS=\"-Xmx512m $ANT_OPTS\"\n" +
-                    "export ANT_OPTS=\"$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\"\n" +
-                    "export ANT_HOME=\"$DITA_DIR\"\n" +
-                    "export PATH=\"$DITA_DIR\"/bin:\"$PATH\"\n" +
-                    "\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib:$NEW_CLASSPATH\"\n");
+            out.write("""
+                    #!/bin/sh
+                    # Generated file, do not edit manually"
+                    echo "NOTE: The startcmd.sh has been deprecated, use the 'dita' command instead."
+
+                    realpath() {
+                      case $1 in
+                        /*) echo "$1" ;;
+                        *) echo "$PWD/${1#./}" ;;
+                      esac
+                    }
+
+                    if [ "${DITA_HOME:+1}" = "1" ] && [ -e "$DITA_HOME" ]; then
+                      export DITA_DIR="$(realpath "$DITA_HOME")"
+                    else #elif [ "${DITA_HOME:+1}" != "1" ]; then
+                      export DITA_DIR="$(dirname "$(realpath "$0")")"
+                    fi
+
+                    if [ -f "$DITA_DIR"/bin/ant ] && [ ! -x "$DITA_DIR"/bin/ant ]; then
+                      chmod +x "$DITA_DIR"/bin/ant
+                    fi
+
+                    export ANT_OPTS="-Xmx512m $ANT_OPTS"
+                    export ANT_OPTS="$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl"
+                    export ANT_HOME="$DITA_DIR"
+                    export PATH="$DITA_DIR"/bin:"$PATH"
+
+                    NEW_CLASSPATH="$DITA_DIR/lib:$NEW_CLASSPATH"
+                    """);
             for (final File relativeLib: jars) {
                 out.write("NEW_CLASSPATH=\"");
                 if (!relativeLib.isAbsolute()) {
@@ -605,14 +607,16 @@ public final class Integrator {
                 out.write(relativeLib.toString().replace(File.separator, UNIX_SEPARATOR));
                 out.write(":$NEW_CLASSPATH\"\n");
             }
-            out.write("if test -n \"$CLASSPATH\"; then\n" +
-                    "  export CLASSPATH=\"$NEW_CLASSPATH\":\"$CLASSPATH\"\n" +
-                    "else\n" +
-                    "  export CLASSPATH=\"$NEW_CLASSPATH\"\n" +
-                    "fi\n" +
-                    "\n" +
-                    "cd \"$DITA_DIR\"\n" +
-                    "\"$SHELL\"\n");
+            out.write("""
+                    if test -n "$CLASSPATH"; then
+                      export CLASSPATH="$NEW_CLASSPATH":"$CLASSPATH"
+                    else
+                      export CLASSPATH="$NEW_CLASSPATH"
+                    fi
+
+                    cd "$DITA_DIR"
+                    "$SHELL"
+                    """);
             try {
                 Files.setPosixFilePermissions(outFile.toPath(), PERMISSIONS);
             } catch (final UnsupportedOperationException e) {
@@ -635,20 +639,22 @@ public final class Integrator {
             logger.debug("Generate start command batch " + outFile.getPath());
             out = new BufferedWriter(new FileWriter(outFile));
 
-            out.write("@echo off\r\n" +
-                    "REM Generated file, do not edit manually\r\n" +
-                    "echo \"NOTE: The startcmd.bat has been deprecated, use the dita.bat command instead.\"\r\n" +
-                    "pause\r\n" +
-                    "\r\n" +
-                    "REM Get the absolute path of DITAOT's home directory\r\n" +
-                    "set DITA_DIR=%~dp0\r\n" +
-                    "\r\n" +
-                    "REM Set environment variables\r\n" +
-                    "set ANT_OPTS=-Xmx512m %ANT_OPTS%\r\n" +
-                    "set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\r\n" +
-                    "set ANT_HOME=%DITA_DIR%\r\n" +
-                    "set PATH=%DITA_DIR%\\bin;%PATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%\r\n");
+            out.write("""
+                    @echo off\r
+                    REM Generated file, do not edit manually\r
+                    echo "NOTE: The startcmd.bat has been deprecated, use the dita.bat command instead."\r
+                    pause\r
+                    \r
+                    REM Get the absolute path of DITAOT's home directory\r
+                    set DITA_DIR=%~dp0\r
+                    \r
+                    REM Set environment variables\r
+                    set ANT_OPTS=-Xmx512m %ANT_OPTS%\r
+                    set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\r
+                    set ANT_HOME=%DITA_DIR%\r
+                    set PATH=%DITA_DIR%\\bin;%PATH%\r
+                    set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%\r
+                    """);
             for (final File relativeLib: jars) {
                 out.write("set CLASSPATH=");
                 if (!relativeLib.isAbsolute()) {
