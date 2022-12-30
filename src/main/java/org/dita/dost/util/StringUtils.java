@@ -308,43 +308,21 @@ public final class StringUtils {
         while (index < value.length()) {
             final char current = value.charAt(index);
             switch (current) {
-            case '.':
-                buff.append("\\.");
-                break;
+                case '.' -> buff.append("\\.");
+
                 // case '/':
                 // case '|':
-            case '\\':
-                buff.append("[\\\\|/]");
-                break;
-            case '(':
-                buff.append("\\(");
-                break;
-            case ')':
-                buff.append("\\)");
-                break;
-            case '[':
-                buff.append("\\[");
-                break;
-            case ']':
-                buff.append("\\]");
-                break;
-            case '{':
-                buff.append("\\{");
-                break;
-            case '}':
-                buff.append("\\}");
-                break;
-            case '^':
-                buff.append("\\^");
-                break;
-            case '+':
-                buff.append("\\+");
-                break;
-            case '$':
-                buff.append("\\$");
-                break;
-            default:
-                buff.append(current);
+                case '\\' -> buff.append("[\\\\|/]");
+                case '(' -> buff.append("\\(");
+                case ')' -> buff.append("\\)");
+                case '[' -> buff.append("\\[");
+                case ']' -> buff.append("\\]");
+                case '{' -> buff.append("\\{");
+                case '}' -> buff.append("\\}");
+                case '^' -> buff.append("\\^");
+                case '+' -> buff.append("\\+");
+                case '$' -> buff.append("\\$");
+                default -> buff.append(current);
             }
             index++;
         }

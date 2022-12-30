@@ -59,24 +59,14 @@ public final class MessageUtils {
             throw new IllegalArgumentException("Message for ID '" + id + "' not found");
         }
         final String msg = MessageFormat.format(msgs.getString(id), (Object[]) params);
-        MessageBean.Type type = null;
-        switch (id.substring(id.length() - 1)) {
-            case "F":
-                type = MessageBean.Type.FATAL;
-                break;
-            case "E":
-                type = MessageBean.Type.ERROR;
-                break;
-            case "W":
-                type = MessageBean.Type.WARN;
-                break;
-            case "I":
-                type = MessageBean.Type.INFO;
-                break;
-            case "D":
-                type = MessageBean.Type.DEBUG;
-                break;
-        }
+        MessageBean.Type type = switch (id.substring(id.length() - 1)) {
+            case "F" -> MessageBean.Type.FATAL;
+            case "E" -> MessageBean.Type.ERROR;
+            case "W" -> MessageBean.Type.WARN;
+            case "I" -> MessageBean.Type.INFO;
+            case "D" -> MessageBean.Type.DEBUG;
+            default -> null;
+        };
         return new MessageBean(id, type, msg, null);
     }
 

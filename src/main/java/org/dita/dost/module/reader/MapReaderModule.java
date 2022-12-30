@@ -125,21 +125,15 @@ public final class MapReaderModule extends AbstractReaderModule {
         // Ignore topics
 //        if (formatFilter.test(file.format)) {
         switch (file.format) {
-            case ATTR_FORMAT_VALUE_DITAMAP:
-                addToWaitList(file);
-                break;
-            case ATTR_FORMAT_VALUE_IMAGE:
+            case ATTR_FORMAT_VALUE_DITAMAP -> addToWaitList(file);
+            case ATTR_FORMAT_VALUE_IMAGE -> {
                 formatSet.add(file);
                 if (!exists(file.filename)) {
                     logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
                 }
-                break;
-            case ATTR_FORMAT_VALUE_DITAVAL:
-                formatSet.add(file);
-                break;
-            default:
-                htmlSet.put(file.format, file.filename);
-                break;
+            }
+            case ATTR_FORMAT_VALUE_DITAVAL -> formatSet.add(file);
+            default -> htmlSet.put(file.format, file.filename);
         }
 //        }
     }

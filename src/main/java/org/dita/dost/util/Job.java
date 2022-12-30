@@ -231,22 +231,12 @@ public final class Job {
         public void startElement(final String ns, final String localName, final String qName, final Attributes atts) throws SAXException {
             final String n = localName != null ? localName : qName;
             switch (n) {
-                case ELEMENT_PROPERTY:
-                    name = atts.getValue(ATTRIBUTE_NAME);
-                    break;
-                case ELEMENT_STRING:
-                    buf = new StringBuilder();
-                    break;
-                case ELEMENT_SET:
-                    set = new HashSet<>();
-                    break;
-                case ELEMENT_MAP:
-                    map = new HashMap<>();
-                    break;
-                case ELEMENT_ENTRY:
-                    key = atts.getValue(ATTRIBUTE_KEY);
-                    break;
-                case ELEMENT_FILE:
+                case ELEMENT_PROPERTY -> name = atts.getValue(ATTRIBUTE_NAME);
+                case ELEMENT_STRING -> buf = new StringBuilder();
+                case ELEMENT_SET -> set = new HashSet<>();
+                case ELEMENT_MAP -> map = new HashMap<>();
+                case ELEMENT_ENTRY -> key = atts.getValue(ATTRIBUTE_KEY);
+                case ELEMENT_FILE -> {
                     final URI src = toURI(atts.getValue(ATTRIBUTE_SRC));
                     final URI uri = toURI(atts.getValue(ATTRIBUTE_URI));
                     final File path = toFile(atts.getValue(ATTRIBUTE_PATH));
@@ -269,7 +259,7 @@ public final class Job {
                         throw new RuntimeException(ex);
                     }
                     files.put(i.uri, i);
-                    break;
+                }
             }
         }
 
@@ -277,10 +267,8 @@ public final class Job {
         public void endElement(final String uri, final String localName, final String qName) throws SAXException {
             final String n = localName != null ? localName : qName;
             switch (n) {
-                case ELEMENT_PROPERTY:
-                    name = null;
-                    break;
-                case ELEMENT_STRING:
+                case ELEMENT_PROPERTY -> name = null;
+                case ELEMENT_STRING -> {
                     if (set != null) {
                         set.add(buf.toString());
                     } else if (map != null) {
@@ -289,18 +277,16 @@ public final class Job {
                         prop.put(name, buf.toString());
                     }
                     buf = null;
-                    break;
-                case ELEMENT_SET:
+                }
+                case ELEMENT_SET -> {
                     prop.put(name, set);
                     set = null;
-                    break;
-                case ELEMENT_MAP:
+                }
+                case ELEMENT_MAP -> {
                     prop.put(name, map);
                     map = null;
-                    break;
-                case ELEMENT_ENTRY:
-                    key = null;
-                    break;
+                }
+                case ELEMENT_ENTRY -> key = null;
             }
         }
 

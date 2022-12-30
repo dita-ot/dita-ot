@@ -164,23 +164,14 @@ public final class DitaValReader implements AbstractReader {
 
     public void readProp(final Element elem)  {
         final String attAction = elem.getAttribute(ELEMENT_NAME_ACTION);
-        Action action;
-        switch (attAction) {
-            case "include":
-                action = Action.INCLUDE;
-                break;
-            case "exclude":
-                action = Action.EXCLUDE;
-                break;
-            case "passthrough":
-                action = Action.PASSTHROUGH;
-                break;
-            case "flag":
-                action = readFlag(elem);
-                break;
-            default:
-                throw new IllegalArgumentException(MessageUtils.getMessage("DOTJ077F", attAction).setLocation(elem).toString());
-        }
+        Action action = switch (attAction) {
+            case "include" -> Action.INCLUDE;
+            case "exclude" -> Action.EXCLUDE;
+            case "passthrough" -> Action.PASSTHROUGH;
+            case "flag" -> readFlag(elem);
+            default ->
+                    throw new IllegalArgumentException(MessageUtils.getMessage("DOTJ077F", attAction).setLocation(elem).toString());
+        };
         if (action != null) {
             final QName attName;
             if (elem.getTagName().equals(ELEMENT_NAME_REVPROP)) {

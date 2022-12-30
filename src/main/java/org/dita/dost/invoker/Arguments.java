@@ -220,15 +220,10 @@ abstract class Arguments {
 
         @Override
         String getValue(final String value) {
-            switch (value.toLowerCase()) {
-                case "true":
-                case "yes":
-                case "on":
-                case "1":
-                    return trueValue;
-                default:
-                    return falseValue;
-            }
+            return switch (value.toLowerCase()) {
+                case "true", "yes", "on", "1" -> trueValue;
+                default -> falseValue;
+            };
         }
     }
 

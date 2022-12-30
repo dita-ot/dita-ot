@@ -126,19 +126,14 @@ public class ProjectFactory {
         }
         final ProjectBuilder builder;
         switch (FileUtils.getExtension(file.getPath()).toLowerCase()) {
-            case "xml":
+            case "xml" -> {
                 xmlReader.setLogger(logger);
                 xmlReader.setLax(lax);
                 builder = xmlReader.read(file);
-                break;
-            case "json":
-                builder = jsonReader.readValue(file.toURL());
-                break;
-            case "yaml":
-                builder = yamlReader.readValue(file.toURL());
-                break;
-            default:
-                throw new RuntimeException("Unrecognized project file format: " + file);
+            }
+            case "json" -> builder = jsonReader.readValue(file.toURL());
+            case "yaml" -> builder = yamlReader.readValue(file.toURL());
+            default -> throw new RuntimeException("Unrecognized project file format: " + file);
         }
         final Project project = Project.build(builder, file);
 

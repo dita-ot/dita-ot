@@ -149,19 +149,18 @@ public final class ValidationFilter extends AbstractXMLFilter {
             final String id = atts.getValue(ATTRIBUTE_NAME_ID);
             if (id == null) {
                 switch (processingMode) {
-                case STRICT:
-                    throw new SAXException(MessageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
-                case LAX:
-                    if (res == null) {
-                        res = new AttributesImpl(atts);
+                    case STRICT ->
+                            throw new SAXException(MessageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
+                    case LAX -> {
+                        if (res == null) {
+                            res = new AttributesImpl(atts);
+                        }
+                        final String gen = "gen_" + UUID.randomUUID().toString();
+                        addOrSetAttribute(res, ATTRIBUTE_NAME_ID, gen);
+                        logger.error(MessageUtils.getMessage("DOTJ066E", localName, gen).setLocation(locator).toString());
                     }
-                    final String gen = "gen_" + UUID.randomUUID().toString();
-                    addOrSetAttribute(res, ATTRIBUTE_NAME_ID, gen);
-                    logger.error(MessageUtils.getMessage("DOTJ066E", localName, gen).setLocation(locator).toString());
-                    break;
-                case SKIP:
-                    logger.error(MessageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
-                    break;
+                    case SKIP ->
+                            logger.error(MessageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
                 }
             }
             topicIds.clear();
@@ -203,19 +202,18 @@ public final class ValidationFilter extends AbstractXMLFilter {
                         final String canPath = canFile.toString();
                         if (!Objects.equals(absPath, canPath) && Objects.equals(absPath.toLowerCase(), canPath.toLowerCase())) {
                             switch (processingMode) {
-                                case STRICT:
-                                    throw new RuntimeException(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString());
-                                case SKIP:
-                                    logger.error(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() + ", using authored value.");
-                                    break;
-                                case LAX:
+                                case STRICT ->
+                                        throw new RuntimeException(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString());
+                                case SKIP ->
+                                        logger.error(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() + ", using authored value.");
+                                case LAX -> {
                                     final URI corrected = URLUtils.setFragment(currentFile.relativize(canFile.toURI()), uri.getFragment());
                                     if (res == null) {
                                         res = new AttributesImpl(atts);
                                     }
                                     res.setValue(res.getIndex(attrName), currentFile.toString());
                                     logger.error(MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() + ", using " + corrected + ".");
-                                    break;
+                                }
                             }
                         }
                     } catch (IOException e) {
@@ -261,16 +259,15 @@ public final class ValidationFilter extends AbstractXMLFilter {
             final boolean sameAuthority = Objects.equals(currentFile.getRawAuthority(), href.getRawAuthority());
             if (!(sameScheme && sameAuthority)) {
                 switch (processingMode) {
-                    case LAX:
+                    case LAX -> {
                         if (res == null) {
                             res = new AttributesImpl(atts);
                         }
                         addOrSetAttribute(res, ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL);
                         logger.warn(MessageUtils.getMessage("DOTJ075W", href.toString()).setLocation(locator).toString());
-                        break;
-                    default:
-                        logger.warn(MessageUtils.getMessage("DOTJ076W", href.toString()).setLocation(locator) + ", using invalid value.");
-                        break;
+                    }
+                    default ->
+                            logger.warn(MessageUtils.getMessage("DOTJ076W", href.toString()).setLocation(locator) + ", using invalid value.");
                 }
             }
         }
@@ -426,18 +423,16 @@ public final class ValidationFilter extends AbstractXMLFilter {
                 final Job.FileInfo fi = job.getFileInfo(target);
                 if (fi != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
                     switch (processingMode) {
-                        case STRICT:
-                            throw new RuntimeException(MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
-                        case SKIP:
-                                logger.error(MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
-                            break;
-                        case LAX:
-                                logger.error(MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                        case STRICT ->
+                                throw new RuntimeException(MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                        case SKIP -> logger.error(MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                        case LAX -> {
+                            logger.error(MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
                             if (res == null) {
                                 res = new AttributesImpl(atts);
                             }
                             addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, fi.format);
-                            break;
+                        }
                     }
                 }
             }
