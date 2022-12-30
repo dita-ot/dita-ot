@@ -3,6 +3,7 @@ package org.dita.dost;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
 import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildException;
@@ -236,7 +237,7 @@ public final class Processor {
     private ch.qos.logback.classic.Logger openDebugLogger(File tempDir) {
         final LoggerContext loggerContext = new LoggerContext();
 
-        final FileAppender fileAppender = new FileAppender();
+        final FileAppender<ILoggingEvent> fileAppender = new FileAppender<>();
         fileAppender.setFile(new File(tempDir.getAbsolutePath() + ".log").getAbsolutePath());
         fileAppender.setContext(loggerContext);
         fileAppender.setAppend(false);

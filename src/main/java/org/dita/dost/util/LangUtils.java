@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 public class LangUtils {
     public static <T, S> Map.Entry<T, S> pair(T left, S right) {
-        return new AbstractMap.SimpleImmutableEntry(left, right);
+        return new AbstractMap.SimpleImmutableEntry<T, S>(left, right);
     }
 
     /**

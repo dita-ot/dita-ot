@@ -45,9 +45,9 @@ public class SemVer implements Comparable<SemVer> {
             }
         }
         String[] tokens = value.split("\\.");
-        major = Integer.valueOf(tokens[0]);
-        minor = tokens.length >= 2 ? Integer.valueOf(tokens[1]) : 0;
-        patch = tokens.length >= 3 ? Integer.valueOf(tokens[2]) : 0;
+        major = Integer.parseInt(tokens[0]);
+        minor = tokens.length >= 2 ? Integer.parseInt(tokens[1]) : 0;
+        patch = tokens.length >= 3 ? Integer.parseInt(tokens[2]) : 0;
         preRelease = preRel != null
                 ? Stream.of(preRel.split("\\."))
                 .map(token -> {

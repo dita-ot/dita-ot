@@ -850,9 +850,7 @@ XMLComponent, XMLDocumentSource {
         if(!prefixMappingStack.isEmpty()) {
             Set<String> prefixes = prefixMappingStack.pop();
             if(prefixes != null) {
-                Iterator<String> iter = prefixes.iterator();
-                while(iter.hasNext()) {
-                    String prefix = iter.next();
+                for (String prefix : prefixes) {
                     validator.getContentHandler().endPrefixMapping(prefix);
                 }
             }

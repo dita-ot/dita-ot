@@ -348,7 +348,7 @@ public class ConversionArguments extends Arguments {
             }
 
             // ensure that -D properties take precedence
-            final Enumeration propertyNames = props.propertyNames();
+            final Enumeration<?> propertyNames = props.propertyNames();
             while (propertyNames.hasMoreElements()) {
                 final String name = propertyNames.nextElement().toString();
                 if (!definedProps.containsKey(name)) {

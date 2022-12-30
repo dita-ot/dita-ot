@@ -77,7 +77,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
     }
 
     private void init(AbstractPipelineInput input) {
-        forceUnique = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE));
+        forceUnique = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE));
     }
 
     /**
