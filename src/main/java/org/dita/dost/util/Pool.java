@@ -25,7 +25,7 @@ public class Pool<T> {
 
     public Pool(Supplier<T> create) {
         this.create = create;
-        this.objects = new ConcurrentLinkedQueue<T>();
+        this.objects = new ConcurrentLinkedQueue<>();
     }
 
     public T borrowObject() {

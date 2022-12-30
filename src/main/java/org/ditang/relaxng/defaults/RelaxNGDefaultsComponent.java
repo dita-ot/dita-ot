@@ -157,7 +157,7 @@ XMLComponent, XMLDocumentSource {
     /**
      * The prefix mapping stack
      */
-    private final Stack<Set<String>> prefixMappingStack = new Stack<Set<String>>();
+    private final Stack<Set<String>> prefixMappingStack = new Stack<>();
 
     /**
      * Constructor.

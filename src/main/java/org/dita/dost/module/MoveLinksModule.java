@@ -83,8 +83,6 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException("Failed to read links from " + inputFile, e);
         } catch (final RuntimeException e) {
             throw e;
-        } catch (final SaxonApiException e) {
-            throw new DITAOTException("Failed to read links from " + inputFile + ": " + e.getMessage(), e);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to read links from " + inputFile + ": " + e.getMessage(), e);
         }
