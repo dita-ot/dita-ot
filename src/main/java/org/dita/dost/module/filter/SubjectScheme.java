@@ -16,16 +16,10 @@ import java.util.Set;
 
 /**
  * Subject scheme bindings
+ *
+ * @param subjectSchemeMap Subject scheme bindings, {@code Map<AttName, Map<ElemName, Set<Element>>>}
  */
-public class SubjectScheme {
-
-    /** Subject scheme bindings, {@code Map<AttName, Map<ElemName, Set<Element>>>} */
-    public final Map<QName, Map<String, Set<Element>>> subjectSchemeMap;
-
-    public SubjectScheme(final Map<QName, Map<String, Set<Element>>> subjectSchemeMap) {
-        this.subjectSchemeMap = subjectSchemeMap;
-    }
-
+public record SubjectScheme(Map<QName, Map<String, Set<Element>>> subjectSchemeMap) {
     public boolean isEmpty() {
         return subjectSchemeMap.isEmpty();
     }

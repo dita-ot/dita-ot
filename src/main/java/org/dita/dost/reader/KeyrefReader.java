@@ -135,7 +135,7 @@ public final class KeyrefReader implements AbstractReader {
         assert doc.getNodeKind() == XdmNodeKind.DOCUMENT;
         final XdmNode root = doc.select(rootElement()).asNode();
         final List<KeyScope> scopes = readScopesRoot(root);
-        if (scopes.size() == 1 && scopes.get(0).name == null) {
+        if (scopes.size() == 1 && scopes.get(0).name() == null) {
             return scopes.get(0);
         } else {
             return new KeyScope(ROOT_ID, null, Collections.emptyMap(), scopes);
@@ -251,25 +251,25 @@ public final class KeyrefReader implements AbstractReader {
     /** Cascade child keys with prefixes to parent key scopes. */
     @VisibleForTesting
     KeyScope cascadeChildKeys(final KeyScope rootScope) {
-        final Map<String, KeyDef> res = new HashMap<>(rootScope.keyDefinition);
+        final Map<String, KeyDef> res = new HashMap<>(rootScope.keyDefinition());
         cascadeChildKeys(rootScope, res, "");
-        return new KeyScope(rootScope.id, rootScope.name, res,
-                rootScope.childScopes.stream()
+        return new KeyScope(rootScope.id(), rootScope.name(), res,
+                rootScope.childScopes().stream()
                         .map(this::cascadeChildKeys)
                         .collect(Collectors.toList())
         );
     }
 
     private void cascadeChildKeys(final KeyScope scope, final Map<String, KeyDef> keys, final String prefix) {
-        for (final Map.Entry<String, KeyDef> e: scope.keyDefinition.entrySet()) {
+        for (final Map.Entry<String, KeyDef> e: scope.keyDefinition().entrySet()) {
             final KeyDef oldKeyDef = e.getValue();
             final KeyDef newKeyDef = new KeyDef(prefix + oldKeyDef.keys, oldKeyDef.href, oldKeyDef.scope, oldKeyDef.format, oldKeyDef.source, oldKeyDef.element);
             if (!keys.containsKey(newKeyDef.keys)) {
                 keys.put(newKeyDef.keys, newKeyDef);
             }
         }
-        for (final KeyScope child: scope.childScopes) {
-            cascadeChildKeys(child, keys, prefix + child.name + ".");
+        for (final KeyScope child: scope.childScopes()) {
+            cascadeChildKeys(child, keys, prefix + child.name() + ".");
         }
     }
 
@@ -282,18 +282,18 @@ public final class KeyrefReader implements AbstractReader {
     }
 
     private KeyScope inheritParentKeys(final KeyScope current, final Map<String, KeyDef> parent) {
-        if (parent.keySet().isEmpty() && current.childScopes.isEmpty()) {
+        if (parent.keySet().isEmpty() && current.childScopes().isEmpty()) {
             return current;
         } else {
             final Map<String, KeyDef> resKeys = new HashMap<>();
-            resKeys.putAll(current.keyDefinition);
+            resKeys.putAll(current.keyDefinition());
             resKeys.putAll(parent);
             final List<KeyScope> resChildren = new ArrayList<>();
-            for (final KeyScope child : current.childScopes) {
+            for (final KeyScope child : current.childScopes()) {
                 final KeyScope resChild = inheritParentKeys(child, resKeys);
                 resChildren.add(resChild);
             }
-            return new KeyScope(current.id, current.name, resKeys, resChildren);
+            return new KeyScope(current.id(), current.name(), resKeys, resChildren);
         }
     }
 
@@ -301,24 +301,24 @@ public final class KeyrefReader implements AbstractReader {
      * Resolve intermediate key references.
      */
     private KeyScope resolveIntermediate(final KeyScope scope) {
-        final Map<String, KeyDef> keys = new HashMap<>(scope.keyDefinition);
-        for (final Map.Entry<String, KeyDef> e : scope.keyDefinition.entrySet()) {
+        final Map<String, KeyDef> keys = new HashMap<>(scope.keyDefinition());
+        for (final Map.Entry<String, KeyDef> e : scope.keyDefinition().entrySet()) {
             final KeyDef res = resolveIntermediate(scope, e.getValue(), Collections.singletonList(e.getValue()));
             keys.put(e.getKey(), res);
         }
         final List<KeyScope> children = new ArrayList<>();
-        for (final KeyScope child : scope.childScopes) {
+        for (final KeyScope child : scope.childScopes()) {
             final KeyScope resolvedChild = resolveIntermediate(child);
             children.add(resolvedChild);
         }
-        return new KeyScope(scope.id, scope.name, keys, children);
+        return new KeyScope(scope.id(), scope.name(), keys, children);
     }
 
     private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) {
         final XdmNode elem = keyDef.element;
         final String keyref = elem.attribute(ATTRIBUTE_NAME_KEYREF);
-        if (keyref != null && !keyref.trim().isEmpty() && scope.keyDefinition.containsKey(keyref)) {
-            KeyDef keyRefDef = scope.keyDefinition.get(keyref);
+        if (keyref != null && !keyref.trim().isEmpty() && scope.keyDefinition().containsKey(keyref)) {
+            KeyDef keyRefDef = scope.keyDefinition().get(keyref);
             if (circularityTracker.contains(keyRefDef)) {
                 handleCircularDefinitionException(circularityTracker);
                 return keyDef;

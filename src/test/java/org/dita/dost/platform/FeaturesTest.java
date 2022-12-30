@@ -7,23 +7,18 @@
  */
 package org.dita.dost.platform;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-import static java.util.Arrays.*;
-import static org.dita.dost.platform.PluginParser.*;
-
-import java.io.File;
-import java.util.*;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.util.*;
+
+import static java.util.Arrays.asList;
+import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
+import static org.junit.Assert.*;
 
 public class FeaturesTest {
 
@@ -193,13 +188,11 @@ public class FeaturesTest {
         f.addTemplate(null);
 
         final List<Value> act = f.getAllTemplates();
-        Collections.sort(act, new Comparator<Value>() {
-            public int compare(final Value a0, final Value a1) {
-                if (a0 == null || a1 == null) {
-                    return -1;
-                }
-                return Objects.compare(a0.value, a1.value, String::compareTo);
+        Collections.sort(act, (a0, a1) -> {
+            if (a0 == null || a1 == null) {
+                return -1;
             }
+            return Objects.compare(a0.value(), a1.value(), String::compareTo);
         });
         assertEquals(Arrays.asList(
                 null,

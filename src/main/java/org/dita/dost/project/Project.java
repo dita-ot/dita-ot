@@ -17,7 +17,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Project {
+public record Project(List<Deliverable> deliverables,
+                      List<ProjectRef> includes,
+                      List<Publication> publications,
+                      List<Context> contexts) {
 
     public static Project build(final ProjectBuilder src, final URI base) {
         final Project project = new Project(
@@ -80,10 +83,10 @@ public class Project {
                         .collect(Collectors.toList()),
                 new Deliverable.Profile(
                         publication.profiles != null
-                        ? publication.profiles.ditavals.stream()
+                                ? publication.profiles.ditavals.stream()
                                 .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
                                 .collect(Collectors.toList())
-                        : Collections.emptyList()
+                                : Collections.emptyList()
                 )
         );
     }
@@ -105,150 +108,55 @@ public class Project {
                         : new Deliverable.Inputs(Collections.emptyList()),
                 new Deliverable.Profile(
                         context.profiles != null
-                        ?  context.profiles.ditavals.stream()
+                                ? context.profiles.ditavals.stream()
                                 .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
                                 .collect(Collectors.toList())
-                        : Collections.emptyList()
+                                : Collections.emptyList()
                 )
         );
     }
 
-    public final List<Deliverable> deliverables;
-    public final List<ProjectRef> includes;
-    public final List<Publication> publications;
-    public final List<Context> contexts;
-
-    public Project(List<Deliverable> deliverables,
-                   List<ProjectRef> includes,
-                   List<Publication> publications,
-                   List<Context> contexts) {
-        this.deliverables = deliverables;
-        this.includes = includes;
-        this.publications = publications;
-        this.contexts = contexts;
-    }
-
-    public static class Deliverable {
-        public final String name;
-        public final String id;
-        public final Context context;
-        public final URI output;
-        public final Publication publication;
-
-        public Deliverable(String name,
-                           String id,
-                           Context context,
-                           URI output,
-                           Publication publication) {
-            this.name = name;
-            this.id = id;
-            this.context = context;
-            this.output = output;
-            this.publication = publication;
-        }
-
-        public static class Inputs {
-            public final List<Input> inputs;
-
-            public Inputs(List<Input> inputs) {
-                this.inputs = inputs;
-            }
-
-            public static class Input {
-                public final URI href;
-
-                public Input(URI href) {
-                    this.href = href;
-                }
+    public record Deliverable(String name,
+                              String id,
+                              Context context,
+                              URI output,
+                              Publication publication) {
+        public record Inputs(List<Input> inputs) {
+            public record Input(URI href) {
             }
         }
-
-        public static class Profile {
-            public final List<DitaVal> ditavals;
-
-            public Profile(List<DitaVal> ditavals) {
-                this.ditavals = ditavals;
+        public record Profile(List<DitaVal> ditavals) {
+            public record DitaVal(URI href) {
             }
-
-            public static class DitaVal {
-                public final URI href;
-
-                public DitaVal(URI href) {
-                    this.href = href;
-                }
-            }
-        }
-
-    }
-
-    public static class ProjectRef {
-        public final URI href;
-
-        public ProjectRef(URI href) {
-            this.href = href;
         }
     }
 
-    public static class Context {
-        public final String name;
-        public final String id;
-        public final String idref;
-        public final Deliverable.Inputs inputs;
-        public final Deliverable.Profile profiles;
-
-        public Context(String name,
-                       String id,
-                       String idref,
-                       Deliverable.Inputs inputs,
-                       Deliverable.Profile profiles) {
-            this.name = name;
-            this.id = id;
-            this.idref = idref;
-            this.inputs = inputs;
-            this.profiles = profiles;
-        }
+    public record ProjectRef(URI href) {
     }
 
-    public static class Publication {
-        public final String name;
-        public final String id;
-        public final String idref;
-        public final String transtype;
-        public final List<Param> params;
-        public final Deliverable.Profile profiles;
+    public record Context(String name,
+                          String id,
+                          String idref,
+                          Deliverable.Inputs inputs,
+                          Deliverable.Profile profiles) {
+    }
 
-        public Publication(String name,
-                           String id,
-                           String idref,
-                           String transtype,
-                           List<Param> params,
-                           Deliverable.Profile profiles) {
-            this.name = name;
-            this.id = id;
-            this.idref = idref;
-            this.transtype = transtype;
-            this.params = params;
-            this.profiles = profiles;
-        }
+    public record Publication(String name,
+                              String id,
+                              String idref,
+                              String transtype,
+                              List<Param> params,
+                              Deliverable.Profile profiles) {
 
-        public static class Param {
-            public final String name;
-            public final String value;
-            public final URI href;
-            public final Path path;
-
-            public Param(
-                    String name,
-                    String value,
-                    URI href,
-                    Path path) {
-                this.name = Objects.requireNonNull(name);
+        public record Param(String name,
+                            String value,
+                            URI href,
+                            Path path) {
+            public Param {
+                Objects.requireNonNull(name);
                 if (value == null && href == null && path == null) {
                     throw new NullPointerException();
                 }
-                this.value = value;
-                this.href = href;
-                this.path = path;
             }
         }
     }

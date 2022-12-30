@@ -570,14 +570,14 @@ public class TestKeyrefReader {
 
         assertEquals(1, root.keySet().size());
 
-        final KeyScope r = root.childScopes.get(0);
-        assertEquals("A", r.name);
+        final KeyScope r = root.childScopes().get(0);
+        assertEquals("A", r.name());
         assertEquals(2, r.keySet().size());
         assertEquals("def1", r.get("a").element.attribute("id"));
         assertEquals("def1", r.get("A.a").element.attribute("id"));
 
-        final KeyScope d = root.childScopes.get(1);
-        assertEquals("A", d.name);
+        final KeyScope d = root.childScopes().get(1);
+        assertEquals("A", d.name());
         assertEquals(2, d.keySet().size());
         assertEquals("def2", d.get("a").element.attribute("id"));
         assertEquals("def1", d.get("A.a").element.attribute("id"));
@@ -599,16 +599,16 @@ public class TestKeyrefReader {
         final File filename = new File(srcDir, "intermediaryKeyref.ditamap");
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
-        KeyDef keyDef = root.keyDefinition.get("b");
+        KeyDef keyDef = root.keyDefinition().get("b");
         assertTrue(keyDef.element.toString().contains("Product A"));
     }
 
     private void log(final KeyScope scope, final String indent) {
-        System.err.println(indent + "scope: " + scope.name);
-        for (final Map.Entry<String, KeyDef> key : scope.keyDefinition.entrySet()) {
+        System.err.println(indent + "scope: " + scope.name());
+        for (final Map.Entry<String, KeyDef> key : scope.keyDefinition().entrySet()) {
             System.err.println(indent + " * " + key.getKey() + "=" + key.getValue().href);
         }
-        for (final KeyScope child : scope.childScopes) {
+        for (final KeyScope child : scope.childScopes()) {
             log(child, indent + "  ");
         }
     }

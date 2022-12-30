@@ -436,57 +436,58 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                                                 final Map<String, Object> definedProps) {
         final String runDeliverable = (String) definedProps.get(ANT_PROJECT_DELIVERABLE);
 
-        final List<Map<String, Object>> projectProps = zipWithIndex(project.deliverables)
-                .filter(entry -> runDeliverable == null || Objects.equals(entry.getKey().id, runDeliverable))
+        final List<Map<String, Object>> projectProps = zipWithIndex(project.deliverables())
+                .filter(entry -> runDeliverable == null || Objects.equals(entry.getKey().id(), runDeliverable))
                 .map(entry -> {
                     final org.dita.dost.project.Project.Deliverable deliverable = entry.getKey();
                     final Map<String, Object> props = new HashMap<>(definedProps);
 
-                    props.put(ANT_PROJECT_DELIVERABLE, deliverable.id != null
-                            ? deliverable.id
+                    props.put(ANT_PROJECT_DELIVERABLE, deliverable.id() != null
+                            ? deliverable.id()
                             : String.format("deliverable-%d", entry.getValue() + 1));
-                    final Context context = deliverable.context;
-                    final URI input = base.resolve(context.inputs.inputs.get(0).href);
+                    final Context context = deliverable.context();
+                    final URI input = base.resolve(context.inputs().inputs().get(0).href());
                     props.put(ANT_ARGS_INPUT, input.toString());
                     final Path output = getOutputDir(deliverable, props);
                     props.put(ANT_OUTPUT_DIR, output.toString());
-                    final Publication publications = deliverable.publication;
-                    props.put(ANT_TRANSTYPE, publications.transtype);
-                    publications.params.forEach(param -> {
-                        if (props.containsKey(param.name)) {
+                    final Publication publications = deliverable.publication();
+                    props.put(ANT_TRANSTYPE, publications.transtype());
+                    publications.params().forEach(param -> {
+                        if (props.containsKey(param.name())) {
                             return;
                         }
-                        if (param.value != null) {
-                            final Argument argument = ArgumentParser.getPluginArguments().getOrDefault(param.name, new StringArgument(param.name, null));
-                            final String value = argument.getValue(param.value);
-                            props.put(param.name, value);
+                        if (param.value() != null) {
+                            final Argument argument = ArgumentParser.getPluginArguments()
+                                    .getOrDefault(param.name(), new StringArgument(param.name(), null));
+                            final String value = argument.getValue(param.value());
+                            props.put(param.name(), value);
                         } else {
                             final String value;
-                            final Argument argument = ArgumentParser.getPluginArguments().get("--" + param.name);
+                            final Argument argument = ArgumentParser.getPluginArguments().get("--" + param.name());
                             if (argument != null && (argument instanceof FileArgument || argument instanceof AbsoluteFileArgument)) {
-                                if (param.href != null) {
-                                    value = Paths.get(base.resolve(param.href)).toString();
+                                if (param.href() != null) {
+                                    value = Paths.get(base.resolve(param.href())).toString();
                                 } else {
-                                    value = Paths.get(base).resolve(param.path).toString();
+                                    value = Paths.get(base).resolve(param.path()).toString();
                                 }
                             } else {
-                                if (param.href != null) {
-                                    value = param.href.toString();
+                                if (param.href() != null) {
+                                    value = param.href().toString();
                                 } else {
-                                    value = URLUtils.toFile(param.path.toString()).toString();
+                                    value = URLUtils.toFile(param.path().toString()).toString();
                                 }
                             }
-                            props.put(param.name, value);
+                            props.put(param.name(), value);
                         }
                     });
                     final List<org.dita.dost.project.Project.Deliverable.Profile.DitaVal> ditavals = Stream.concat(
-                                    publications.profiles.ditavals.stream(),
-                                    context.profiles.ditavals.stream()
+                                    publications.profiles().ditavals().stream(),
+                                    context.profiles().ditavals().stream()
                             )
                             .collect(Collectors.toList());
                     if (!ditavals.isEmpty()) {
                         final String filters = ditavals.stream()
-                                .map(ditaVal -> Paths.get(base.resolve(ditaVal.href)).toString())
+                                .map(ditaVal -> Paths.get(base.resolve(ditaVal.href())).toString())
                                 .collect(Collectors.joining(File.pathSeparator));
                         props.put("args.filter", filters);
                     }
@@ -510,8 +511,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         outputDir = outputDir.getPath().endsWith("/")
                 ? outputDir
                 : URLUtils.setPath(outputDir, outputDir.getPath() + "/");
-        return Paths.get(deliverable.output != null
-                ? outputDir.resolve(deliverable.output)
+        return Paths.get(deliverable.output() != null
+                ? outputDir.resolve(deliverable.output())
                 : outputDir);
     }
 
@@ -533,10 +534,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
 
     private void validateProject(org.dita.dost.project.Project project) throws IOException {
-        for (org.dita.dost.project.Project.Deliverable deliverable : project.deliverables) {
-            for (Publication.Param param : deliverable.publication.params) {
-                if (RESERVED_PARAMS.containsKey(param.name)) {
-                    printErrorMessage(MessageUtils.getMessage("DOTJ085E", param.name, RESERVED_PARAMS.get(param.name)).toString());
+        for (org.dita.dost.project.Project.Deliverable deliverable : project.deliverables()) {
+            for (Publication.Param param : deliverable.publication().params()) {
+                if (RESERVED_PARAMS.containsKey(param.name())) {
+                    printErrorMessage(MessageUtils.getMessage("DOTJ085E", param.name(), RESERVED_PARAMS.get(param.name())).toString());
                 }
             }
         }
@@ -565,9 +566,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Handle the --deliverables argument
      */
     private void printDeliverables(final File projectFile) {
-        final List<Map.Entry<String, String>> pairs = readProjectFile(projectFile).deliverables.stream()
-                .filter(deliverable -> deliverable.id != null)
-                .map(deliverable -> pair(deliverable.id, deliverable.name))
+        final List<Map.Entry<String, String>> pairs = readProjectFile(projectFile).deliverables().stream()
+                .filter(deliverable -> deliverable.id() != null)
+                .map(deliverable -> pair(deliverable.id(), deliverable.name()))
                 .collect(Collectors.toList());
         final int length = pairs.stream()
                 .map(Map.Entry::getKey)

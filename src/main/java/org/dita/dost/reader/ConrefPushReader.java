@@ -408,52 +408,11 @@ public final class ConrefPushReader extends AbstractXMLReader {
         }
     }
 
-    public static class MoveKey {
-        public final String idPath;
-        public final String action;
-        public MoveKey(final String idPath, final String action) {
-            this.idPath = idPath;
-            this.action = action;
-        }
+    public record MoveKey(String idPath,
+                          String action) {
         @Override
         public String toString() {
             return idPath + STICK + action;
         }
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((action == null) ? 0 : action.hashCode());
-            result = prime * result + ((idPath == null) ? 0 : idPath.hashCode());
-            return result;
-        }
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (!(obj instanceof MoveKey other)) {
-                return false;
-            }
-            if (action == null) {
-                if (other.action != null) {
-                    return false;
-                }
-            } else if (!action.equals(other.action)) {
-                return false;
-            }
-            if (idPath == null) {
-                if (other.idPath != null) {
-                    return false;
-                }
-            } else if (!idPath.equals(other.idPath)) {
-                return false;
-            }
-            return true;
-        }
     }
-
 }

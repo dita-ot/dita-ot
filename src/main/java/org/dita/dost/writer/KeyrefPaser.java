@@ -585,9 +585,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                         } else {
                             // key does not exist.
-                            final MessageBean m = definitionMaps.peek().name == null
+                            final MessageBean m = definitionMaps.peek().name() == null
                                     ? MessageUtils.getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
-                                    : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMaps.peek().name);
+                                    : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMaps.peek().name());
                             logger.info(m.setLocation(atts).toString());
                         }
 
@@ -612,9 +612,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                     }
                 } else {
                     // key does not exist
-                    final MessageBean m = definitionMaps.peek().name == null
+                    final MessageBean m = definitionMaps.peek().name() == null
                             ? MessageUtils.getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
-                            : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMaps.peek().name);
+                            : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMaps.peek().name());
                     logger.info(m.setLocation(atts).toString());
                 }
 

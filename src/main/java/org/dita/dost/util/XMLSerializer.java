@@ -7,14 +7,9 @@
  */
 package org.dita.dost.util;
 
-import static javax.xml.XMLConstants.*;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
@@ -22,10 +17,15 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
+import static javax.xml.XMLConstants.NULL_NS_URI;
 
 /**
  * XML serializer. Users a {@link javax.xml.transform.sax.TransformerHandler
@@ -364,18 +364,7 @@ public class XMLSerializer {
 
     }
 
-    private static final class NamespaceMapping {
-
-        final String prefix;
-        final String uri;
-        final boolean newMapping;
-
-        NamespaceMapping(final String prefix, final String uri, final boolean newMapping) {
-            this.prefix = prefix;
-            this.uri = uri;
-            this.newMapping = newMapping;
-        }
-
+    private record NamespaceMapping(String prefix, String uri, boolean newMapping) {
     }
 
 }

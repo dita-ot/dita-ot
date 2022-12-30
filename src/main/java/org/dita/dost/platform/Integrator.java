@@ -278,7 +278,7 @@ public final class Integrator {
         }
         if (featureTable.containsKey(FEAT_IMAGE_EXTENSIONS)) {
             for (final Value ext : featureTable.get(FEAT_IMAGE_EXTENSIONS)) {
-                final String e = ext.value.trim();
+                final String e = ext.value().trim();
                 if (e.length() != 0) {
                     imgExts.add(e);
                 }
@@ -292,7 +292,7 @@ public final class Integrator {
         // transtypes
         final String transtypes = featureTable.entrySet().stream()
                 .filter(e -> e.getKey().equals(FEAT_TRANSTYPES))
-                .flatMap(e -> e.getValue().stream().map(val -> val.value))
+                .flatMap(e -> e.getValue().stream().map(Value::value))
                 .distinct()
                 .collect(Collectors.joining(CONF_LIST_SEPARATOR));
         configuration.put(CONF_TRANSTYPES, transtypes);
@@ -301,7 +301,7 @@ public final class Integrator {
         final Set<String> printTranstypes = new HashSet<>();
         if (featureTable.containsKey(FEAT_PRINT_TRANSTYPES)) {
             for (final Value ext : featureTable.get(FEAT_PRINT_TRANSTYPES)) {
-                final String e = ext.value.trim();
+                final String e = ext.value().trim();
                 if (e.length() != 0) {
                     printTranstypes.add(e);
                 }
@@ -494,7 +494,7 @@ public final class Integrator {
         final Collection<File> res = new ArrayList<>(src.size());
         final File base = new File(ditaDir, "dummy");
         for (final Value lib: src) {
-            final File libFile = toFile(lib.value);
+            final File libFile = toFile(lib.value());
             if (!libFile.exists()) {
                 throw new IllegalArgumentException("Library file not found: " + libFile.getAbsolutePath());
             }
@@ -682,7 +682,7 @@ public final class Integrator {
         final Set<String> exts = new HashSet<>();
         if (featureTable.containsKey(featureName)) {
             for (final Value ext : featureTable.get(featureName)) {
-                final String e = ext.value.trim();
+                final String e = ext.value().trim();
                 if (e.length() != 0) {
                     exts.add(e);
                 }
@@ -724,7 +724,7 @@ public final class Integrator {
             }
 
             for (final Value templateName : pluginFeatures.getAllTemplates()) {
-                final String template = new File(pluginFeatures.getPluginDir().toURI().resolve(templateName.value)).getAbsolutePath();
+                final String template = new File(pluginFeatures.getPluginDir().toURI().resolve(templateName.value())).getAbsolutePath();
                 final String templatePath = FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy",
                         template);
                 templateSet.put(templatePath, templateName);

@@ -187,46 +187,26 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
     public void setTempFileNameScheme(TempFileNameScheme tempFileNameScheme) {
         this.tempFileNameScheme = tempFileNameScheme;
     }
-    
+
     /**
      * Holds additional information about the parent for a topicref.
      *
+     * @param href           The href value for the parent topic.
+     * @param dstFi          Information about the destination file used in the output.
+     * @param scope          Scope attribute on the topicref
+     * @param processingRole processing-role attribute on the topicref
      */
-    private static final class ParentTopicref {
-        /**
-         * The href value for the parent topic.
-         */
-        private final URI href;
-      
-        /**
-         * Information about the destination file used in the output. 
-         */
-        private final FileInfo dstFi;
-        
-        /**
-         * Scope attribute on the topicref
-         */
-        private final String scope;
-        
-        /**
-         * processing-role attribute on the topicref
-         */
-        private final String processingRole;
-        
+     private record ParentTopicref(URI href, FileInfo dstFi, String scope, String processingRole) {
         /**
          * Constructor.
-         * 
-         * @param href The href value for the parent topic.
-         * @param dstFi Information about the destination file used in the output. 
-         * @param scope Value of scope attribute
+         *
+         * @param href           The href value for the parent topic.
+         * @param dstFi          Information about the destination file used in the output.
+         * @param scope          Value of scope attribute
          * @param processingRole Value of processing-role attribute.
          */
-        public ParentTopicref(URI href, FileInfo dstFi, String scope, String processingRole) {
-            this.href = href;
-            this.dstFi = dstFi;
-            this.scope = scope;
-            this.processingRole = processingRole;
+        private ParentTopicref {
         }
-      
+
     }
 }

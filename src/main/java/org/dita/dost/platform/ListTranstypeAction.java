@@ -7,14 +7,13 @@
  */
 package org.dita.dost.platform;
 
-import java.util.ArrayList;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
 
 /**
  * List transtypes integration action.
@@ -31,7 +30,7 @@ final class ListTranstypeAction extends ImportAction {
     public void getResult(final ContentHandler buf) throws SAXException {
         final String separator = paramTable.getOrDefault("separator", "|");
         final List<String> v = valueSet.stream()
-                .map(fileValue -> fileValue.value)
+                .map(Value::value)
                 .distinct()
                 .collect(Collectors.toList());
         Collections.sort(v);

@@ -455,4 +455,15 @@ public class FilterUtilsTest {
                 singleton(flagBlue),
                 f.getFlags(attr(PROPS, "   os(   windows   )   "), new QName[][] {{PROPS, OS}}));
     }
+
+    @Test
+    public void filterKey_toString() {
+        assertEquals("foo", new FilterKey(QName.valueOf("foo"), null).toString());
+        assertEquals("foo=bar", new FilterKey(QName.valueOf("foo"), "bar").toString());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void filterKey_arguments() {
+        new FilterKey(null, null);
+    }
 }

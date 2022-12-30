@@ -225,7 +225,7 @@ public final class PluginInstallTask extends Task {
     }
 
     private Collection<Registry> resolveAlias(Alias registry) {
-        return readRegistry(registry.alias, null);
+        return readRegistry(registry.alias(), null);
     }
 
     private File get(final URL url, final String expectedChecksum) {

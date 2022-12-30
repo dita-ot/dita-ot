@@ -1078,11 +1078,7 @@ public final class XMLUtils {
     /**
      * Debug XMLReader wrapper that logs calls to parse, not intended for end users.
      */
-    private final static class DebugXMLReader implements XMLReader {
-        private final XMLReader r;
-        DebugXMLReader(final XMLReader r) {
-            this.r = r;
-        }
+    private record DebugXMLReader(XMLReader r) implements XMLReader {
 
         @Override
         public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {

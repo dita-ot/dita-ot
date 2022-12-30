@@ -19,14 +19,7 @@ public class SaxCache {
         void write(ContentHandler handler) throws SAXException;
     }
 
-    public static class StartPrefixMappingEvent implements SaxEvent {
-        public final String prefix;
-        public final String uri;
-
-        public StartPrefixMappingEvent(String prefix, String uri) {
-            this.prefix = prefix;
-            this.uri = uri;
-        }
+    public record StartPrefixMappingEvent(String prefix, String uri) implements SaxEvent {
 
         @Override
         public void write(ContentHandler handler) throws SAXException {
@@ -34,12 +27,7 @@ public class SaxCache {
         }
     }
 
-    public static class EndPrefixMappingEvent implements SaxEvent {
-        public final String prefix;
-
-        public EndPrefixMappingEvent(String prefix) {
-            this.prefix = prefix;
-        }
+    public record EndPrefixMappingEvent(String prefix) implements SaxEvent {
 
         @Override
         public void write(ContentHandler handler) throws SAXException {
@@ -47,12 +35,7 @@ public class SaxCache {
         }
     }
 
-    public static class StartElementEvent implements SaxEvent {
-        public final String uri;
-        public final String localName;
-        public final String qName;
-        public final Attributes atts;
-
+    public record StartElementEvent(String uri, String localName, String qName, Attributes atts) implements SaxEvent {
         public StartElementEvent(String uri, String localName, String qName, Attributes atts) {
             this.uri = uri;
             this.localName = localName;
@@ -66,16 +49,7 @@ public class SaxCache {
         }
     }
 
-    public static class EndElementEvent implements SaxEvent {
-        public final String uri;
-        public final String localName;
-        public final String qName;
-
-        public EndElementEvent(String uri, String localName, String qName) {
-            this.uri = uri;
-            this.localName = localName;
-            this.qName = qName;
-        }
+    public record EndElementEvent(String uri, String localName, String qName) implements SaxEvent {
 
         @Override
         public void write(ContentHandler handler) throws SAXException {
@@ -83,11 +57,7 @@ public class SaxCache {
         }
     }
 
-    public static class CharactersEvent implements SaxEvent {
-        public final char[] ch;
-        public final int start;
-        public final int length;
-
+    public record CharactersEvent(char[] ch, int start, int length) implements SaxEvent {
         public CharactersEvent(char[] ch, int start, int length) {
             final char[] copy = new char[length];
             System.arraycopy(ch, start, copy, 0, length);
@@ -102,11 +72,7 @@ public class SaxCache {
         }
     }
 
-    public static class IgnorableWhitespaceEvent implements SaxEvent {
-        public final char[] ch;
-        public final int start;
-        public final int length;
-
+    public record IgnorableWhitespaceEvent(char[] ch, int start, int length) implements SaxEvent {
         public IgnorableWhitespaceEvent(char[] ch, int start, int length) {
             final char[] copy = new char[length];
             System.arraycopy(ch, start, copy, 0, length);
@@ -121,14 +87,7 @@ public class SaxCache {
         }
     }
 
-    public static class ProcessingInstructionEvent implements SaxEvent {
-        public final String target;
-        public final String data;
-
-        public ProcessingInstructionEvent(String target, String data) {
-            this.target = target;
-            this.data = data;
-        }
+    public record ProcessingInstructionEvent(String target, String data) implements SaxEvent {
 
         @Override
         public void write(ContentHandler handler) throws SAXException {

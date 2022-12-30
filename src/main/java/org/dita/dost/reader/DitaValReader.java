@@ -271,14 +271,14 @@ public final class DitaValReader implements AbstractReader {
      * Refine action key with information from subject schemes.
      */
     private void refineAction(final Action action, final FilterKey key) {
-        if (key.value != null && bindingMap != null && !bindingMap.isEmpty()) {
-            final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
+        if (key.value() != null && bindingMap != null && !bindingMap.isEmpty()) {
+            final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute());
             if (schemeMap != null && !schemeMap.isEmpty()) {
                 for (final Set<Element> submap: schemeMap.values()) {
                     for (final Element e: submap) {
-                        final Element subRoot = searchForKey(e, key.value);
+                        final Element subRoot = searchForKey(e, key.value());
                         if (subRoot != null) {
-                            insertAction(subRoot, key.attribute, action);
+                            insertAction(subRoot, key.attribute(), action);
                         }
                     }
                 }

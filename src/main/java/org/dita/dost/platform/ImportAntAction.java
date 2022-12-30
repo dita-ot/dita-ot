@@ -28,7 +28,7 @@ final class ImportAntAction extends ImportAction {
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
         for (final Value value: valueSet) {
-            final String[] tokens = value.value.split("[/\\\\]", 2);
+            final String[] tokens = value.value().split("[/\\\\]", 2);
             buf.startElement(NULL_NS_URI, "import", "import", XMLUtils.EMPTY_ATTRIBUTES);
             buf.startElement(NULL_NS_URI, "fileset", "fileset", new AttributesBuilder()
                     .add("dir", tokens[0])

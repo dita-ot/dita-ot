@@ -61,14 +61,7 @@ public class IncludeResolver extends AbstractXMLFilter {
     private Deque<Deque<StackItem>> includeStack = new ArrayDeque<>();
     private Configuration.Mode processingMode;
 
-    private static class StackItem {
-        public final String cls;
-        public final boolean include;
-
-        private StackItem(final String cls, final boolean include) {
-            this.cls = cls;
-            this.include = include;
-        }
+    private record StackItem(String cls, boolean include) {
     }
 
     // Constructors ------------------------------------------------------------

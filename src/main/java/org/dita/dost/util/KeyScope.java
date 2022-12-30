@@ -18,15 +18,13 @@ import static java.util.Collections.unmodifiableMap;
  *
  * @since 2.2
  */
-public class KeyScope {
+public record KeyScope(String id,
+                       String name,
+                       Map<String, KeyDef> keyDefinition,
+                       List<KeyScope> childScopes) {
 
     public static final String ROOT_ID = "#root";
     public static final KeyScope EMPTY = new KeyScope(ROOT_ID, null, Collections.emptyMap(), Collections.emptyList());
-
-    public final String id;
-    public final String name;
-    public final Map<String, KeyDef> keyDefinition;
-    public final List<KeyScope> childScopes;
 
     public KeyScope(final String id, final String name, final Map<String, KeyDef> keyDefinition, final List<KeyScope> childScopes) {
         this.id = id;

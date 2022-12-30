@@ -137,7 +137,7 @@ public class KeyrefModuleTest {
                         .build(),
                 emptyList());
 
-        assertEquals(exp, act.get(0).scope);
+        assertEquals(exp, act.get(0).scope());
     }
 
     @Test
@@ -201,8 +201,8 @@ public class KeyrefModuleTest {
 
         final Document exp = b.parse(new File(baseDir, "exp" + File.separator + "test.ditamap"));
 
-        final ResolveTask subMapTask = res.stream().filter(r -> r.in.src.equals(subMap)).findFirst().get();
-        assertEquals(subMapTask.scope, childScope);
+        final ResolveTask subMapTask = res.stream().filter(r -> r.in().src.equals(subMap)).findFirst().get();
+        assertEquals(subMapTask.scope(), childScope);
 
         final Document act = toDocument(destination.getXdmNode());
         assertXMLEqual(exp, act);
@@ -251,41 +251,41 @@ public class KeyrefModuleTest {
         receiver.close();
         
 	    ResolveTask task = res.get(0);
-	    assertEquals("topic.dita", task.in.file.toString());
-	    assertEquals(null, task.scope.name);
+	    assertEquals("topic.dita", task.in().file.toString());
+	    assertEquals(null, task.scope().name());
 	    
 	    task = res.get(1);
-	    assertEquals("topic.dita", task.in.file.toString());
-	    assertEquals("A", task.scope.name);
-	    KeyDef keyDef = task.scope.keyDefinition.get("VAR");
+	    assertEquals("topic.dita", task.in().file.toString());
+	    assertEquals("A", task.scope().name());
+	    KeyDef keyDef = task.scope().keyDefinition().get("VAR");
 	    assertEquals(new URI("topic.dita"), keyDef.href);
-	    keyDef = task.scope.keyDefinition.get("A.VAR");
+	    keyDef = task.scope().keyDefinition().get("A.VAR");
 	    assertEquals(new URI("topic-1.dita"), keyDef.href);
 	    
 	    task = res.get(3);
-	    assertEquals("res.png", task.in.file.toString());
-	    assertEquals("A", task.scope.name);
-	    keyDef = task.scope.keyDefinition.get("A.VAR3");
+	    assertEquals("res.png", task.in().file.toString());
+	    assertEquals("A", task.scope().name());
+	    keyDef = task.scope().keyDefinition().get("A.VAR3");
 	    assertEquals(new URI("res.png"), keyDef.href);
 	    
 	    task = res.get(4);
-	    assertEquals("topic.dita", task.in.file.toString());
-	    assertEquals("B", task.scope.name);
-	    keyDef = task.scope.keyDefinition.get("VAR");
+	    assertEquals("topic.dita", task.in().file.toString());
+	    assertEquals("B", task.scope().name());
+	    keyDef = task.scope().keyDefinition().get("VAR");
 	    assertEquals(new URI("topic.dita"), keyDef.href);
-	    keyDef = task.scope.keyDefinition.get("B.VAR");
+	    keyDef = task.scope().keyDefinition().get("B.VAR");
 	    assertEquals(new URI("topic-2.dita"), keyDef.href);
 	    
 	    task = res.get(5);
-	    assertEquals("res.dita", task.in.file.toString());
-	    assertEquals("B", task.scope.name);
-	    keyDef = task.scope.keyDefinition.get("B.VAR2");
+	    assertEquals("res.dita", task.in().file.toString());
+	    assertEquals("B", task.scope().name());
+	    keyDef = task.scope().keyDefinition().get("B.VAR2");
 	    assertEquals(new URI("res-1.dita"), keyDef.href);
 	    
 	    task = res.get(6);
-	    assertEquals("res.png", task.in.file.toString());
-	    assertEquals("B", task.scope.name);
-	    keyDef = task.scope.keyDefinition.get("B.VAR3");
+	    assertEquals("res.png", task.in().file.toString());
+	    assertEquals("B", task.scope().name());
+	    keyDef = task.scope().keyDefinition().get("B.VAR3");
 	    assertEquals(new URI("res.png"), keyDef.href);
 	}
 
