@@ -132,7 +132,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                                 throw new UncheckedDITAOTException(e);
                             }
                         })
-                        .filter(entry -> entry != null)
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toList());
                 for (Entry<File, File> entry : tmps) {
                     try {

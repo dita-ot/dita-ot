@@ -256,7 +256,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 // need to pull matching content from the key definition
                 // If keyref on topicref, and no topicmeta, copy topicmeta from key definition
                 if (elemName.peek().equals(MAP_TOPICREF.localName)) {
-                    final Optional<XdmNode> topicmetaNode = elem.select(child().where(c -> MAP_TOPICMETA.matches(c)).first()).findFirst();
+                    final Optional<XdmNode> topicmetaNode = elem.select(child().where(MAP_TOPICMETA::matches).first()).findFirst();
                     if (topicmetaNode.isPresent()) {
                         domToSax(topicmetaNode.get(), true, false);
                     }

@@ -431,7 +431,7 @@ public final class KeyrefReader implements AbstractReader {
 
     private XdmNode getTopicmeta(final XdmNode topicref) {
         return topicref
-                .select(child(c -> MAP_TOPICMETA.matches(c)).first())
+                .select(child(MAP_TOPICMETA::matches).first())
                 .findAny()
                 .orElse(null);
     }
