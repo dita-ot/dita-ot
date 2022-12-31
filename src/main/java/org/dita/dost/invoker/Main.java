@@ -664,9 +664,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             final PrintStream savedOut = System.out;
             final InputStream savedIn = System.in;
 
-            // use a system manager that prevents from System.exit()
-            final SecurityManager oldsm = System.getSecurityManager();
-
             // SecurityManager can not be installed here for backwards
             // compatibility reasons (PD). Needs to be loaded prior to
             // ant class if we are going to implement it.
@@ -728,12 +725,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
                 project.executeTargets(targets);
             } finally {
-                // put back the original security manager
-                // The following will never eval to true. (PD)
-                if (oldsm != null) {
-                    System.setSecurityManager(oldsm);
-                }
-
                 System.setOut(savedOut);
                 System.setErr(savedErr);
                 System.setIn(savedIn);
