@@ -333,10 +333,10 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     /**
      * Add namespace declaration attribute if required.
      *
-     * @param - Atributes from element to be processed.
-     * @uri - uri of the namespace of the element to be processed
+     * @param atts attributes from element to be processed.
+     * @param uri uri of the namespace of the element to be processed
      *
-     * @return - Attributes with the extra namespace declaration, if required.
+     * @return attributes with the extra namespace declaration, if required.
      */
     Attributes processAttributesNS(Attributes atts, String uri) {
         final AttributesImpl resAtts = new AttributesImpl(processAttributes(atts));
@@ -549,9 +549,6 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     /**
      * start of namespace associated with Element
-     *
-     * @param prefix
-     * @param uri
      */
     public void startPrefixMapping(String prefix, String uri) {
     	namespaces.pushContext();        
@@ -560,8 +557,6 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     /**
      * end of namespace associated with Element
-     *
-     * @param prefix
      */
     public void endPrefixMapping(String prefix) {
         namespaces.popContext();

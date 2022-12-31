@@ -95,7 +95,7 @@ public final class XMLUtils {
 
     /**
      * Registers Saxon full integrated function definitions.
-     *
+     * <p>
      * The intgrated function should be an instance of net.sf.saxon.lib.ExtensionFunctionDefinition abstract class.
      * @see <a href="https://www.saxonica.com/html/documentation/extensibility/integratedfunctions/ext-full-J.html">Saxon
      *      Java extension functions: full interface</a>

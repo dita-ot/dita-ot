@@ -7,51 +7,26 @@
  */
 package org.ditang.relaxng.defaults;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
-
-import org.apache.xerces.impl.Constants;
-import org.apache.xerces.util.SymbolTable;
-import org.apache.xerces.util.XMLResourceIdentifierImpl;
-import org.apache.xerces.xni.Augmentations;
-import org.apache.xerces.xni.NamespaceContext;
-import org.apache.xerces.xni.QName;
-import org.apache.xerces.xni.XMLAttributes;
-import org.apache.xerces.xni.XMLDocumentHandler;
-import org.apache.xerces.xni.XMLLocator;
-import org.apache.xerces.xni.XMLResourceIdentifier;
-import org.apache.xerces.xni.XMLString;
-import org.apache.xerces.xni.XNIException;
-import org.apache.xerces.xni.grammars.XMLGrammarPool;
-import org.apache.xerces.xni.parser.XMLComponent;
-import org.apache.xerces.xni.parser.XMLComponentManager;
-import org.apache.xerces.xni.parser.XMLConfigurationException;
-import org.apache.xerces.xni.parser.XMLDocumentSource;
-import org.apache.xerces.xni.parser.XMLEntityResolver;
-import org.apache.xerces.xni.parser.XMLErrorHandler;
-import org.apache.xerces.xni.parser.XMLInputSource;
-import org.apache.xerces.xni.parser.XMLParseException;
-import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledGrammarPool;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.AttributesImpl;
-
-import com.thaiopensource.resolver.BasicResolver;
-import com.thaiopensource.resolver.Identifier;
-import com.thaiopensource.resolver.Input;
-import com.thaiopensource.resolver.Resolver;
-import com.thaiopensource.resolver.ResolverException;
+import com.thaiopensource.resolver.*;
 import com.thaiopensource.util.PropertyMapBuilder;
 import com.thaiopensource.validate.ValidateProperty;
 import com.thaiopensource.validate.Validator;
+import org.apache.xerces.impl.Constants;
+import org.apache.xerces.util.SymbolTable;
+import org.apache.xerces.util.XMLResourceIdentifierImpl;
+import org.apache.xerces.xni.*;
+import org.apache.xerces.xni.grammars.XMLGrammarPool;
+import org.apache.xerces.xni.parser.*;
+import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledGrammarPool;
+import org.xml.sax.*;
+import org.xml.sax.helpers.AttributesImpl;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 /**
  * XNI component that adds Relax NG default values.
@@ -282,7 +257,6 @@ XMLComponent, XMLDocumentSource {
     /**
      * @param name The element name
      * @param atts The XNI attributes
-     * @throws SAXException
      */
     private void startElementToValidator(QName name, XMLAttributes atts) throws SAXException {
         AttributesImpl attrs = new AttributesImpl();
@@ -315,8 +289,6 @@ XMLComponent, XMLDocumentSource {
 
     /**
      * Trigger the start document method.
-     * 
-     * @throws SAXException
      */
     private void triggerStartDocumentToValidator() throws SAXException {
         //Set the document locator and start document before handling the first element
@@ -688,7 +660,7 @@ XMLComponent, XMLDocumentSource {
     /**
      * This method is copied from com.icl.saxon.ProcInstParser and used in the
      * PIFinder.
-     * 
+     * <p>
      * Get a pseudo-attribute. This is useful only if the processing instruction
      * data part uses pseudo-attribute syntax, which it does not have to. This
      * syntax is as described in the W3C Recommendation
@@ -749,7 +721,7 @@ XMLComponent, XMLDocumentSource {
     /**
      * This method is copied from com.icl.saxon.ProcInstParser and used in the
      * PIFinder
-     * 
+     * <p>
      * Interpret character references and built-in entity references
      */
     private String unescape(String value) {
@@ -843,7 +815,6 @@ XMLComponent, XMLDocumentSource {
 
     /**
      * @param name The element name
-     * @throws SAXException
      */
     private void endElementToValidator(QName name) throws SAXException {
         validator.getContentHandler().endElement(name.uri != null ? name.uri : "", name.localpart, name.rawname);

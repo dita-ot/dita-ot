@@ -96,7 +96,7 @@ class DefaultLogger implements BuildLogger {
 
     /**
      * Sets the highest level of message this logger should respond to.
-     *
+     * <p>
      * Only messages with a message level lower than or equal to the given level
      * should be written to the log.
      * <p>

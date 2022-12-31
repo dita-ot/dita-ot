@@ -846,7 +846,7 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     /**
-     * Add if and unless attributes to element. Use https://ant.apache.org/manual/ifunless.html instead.
+     * Add if and unless attributes to element. Use <a href="https://ant.apache.org/manual/ifunless.html">Ant's if and unless attributes</a> instead.
      *
      * @deprecated since 3.0
      */
