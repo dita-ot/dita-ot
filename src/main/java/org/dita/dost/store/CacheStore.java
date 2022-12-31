@@ -575,7 +575,7 @@ public class CacheStore extends AbstractStore implements Store {
             return new DOMSource(entry.doc);
         } else if (entry.node != null) {
             final NodeInfo underlyingNode = entry.node.getUnderlyingNode();
-            if (underlyingNode.getSystemId().equals(path)) {
+            if (underlyingNode.getSystemId().equals(path.toString())) {
                 return underlyingNode;
             } else {
                 final Entry rebase = rebase(entry, path);

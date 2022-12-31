@@ -345,7 +345,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         if (namespaceMap.get(uri) == 1) {
             String prefix = namespaces.getPrefix(uri);
             if (prefix != null) {
-                if (prefix != DEFAULT_NS_PREFIX){
+                if (!prefix.equals(DEFAULT_NS_PREFIX)){
                     addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE + ":" + prefix, uri);
                 }else {
                     addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE, uri);
