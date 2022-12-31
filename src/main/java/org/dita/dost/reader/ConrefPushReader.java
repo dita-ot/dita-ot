@@ -38,7 +38,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
     private final Hashtable<File, Hashtable<MoveKey, DocumentFragment>> pushtable;
     /** Document used to construct push table DocumentFragments. */
     private final Document pushDocument;
-    /** push table.*/
 
     /**keep the file path of current file under parse
     filePath is useful to get the absolute path of the target file.*/

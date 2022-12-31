@@ -181,7 +181,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         }
         /**
          * Get the name of this URLResource with original relative path.
-         *
+         * <p>
          * URLResource will return full URL file part that also contains ancestor directories.
          **/
         @Override

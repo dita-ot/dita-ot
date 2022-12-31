@@ -150,8 +150,8 @@ public class XmlReader {
     /**
      * Read and validate project file.
      *
-     * @param in   input project file
-     * @param file
+     * @param in input project file
+     * @param file input project file base URI
      * @return project file document
      */
     private Document readDocument(final InputStream in, final URI file) throws SAXParseException, IOException {

@@ -406,9 +406,6 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     /**
      * Check if we need to add 'xmlns' attribute with prefix
      *
-     * @param atts
-     * @param uri
-     *
      * @return updated attributes
      */
     private Attributes checkForNSDeclaration (Attributes atts, String uri){

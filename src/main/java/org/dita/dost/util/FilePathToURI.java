@@ -53,7 +53,7 @@ final class FilePathToURI {
     /** To escape a file path to a URI, by using %HH to represent special ASCII characters:
      * 0x00~0x1F, 0x7F, ' ', '<', '>', '#', '%' and '"' and non-ASCII characters
      * (whose value >= 128).
-     *
+     * <p>
      * '\' character will also be escaped.
      *
      * @param path The path to be escaped.

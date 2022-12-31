@@ -28,7 +28,7 @@ import com.thaiopensource.validate.SchemaReader;
 
 /**
  * RNC default values gatherer
- * 
+ * <p>
  * 
  * @author george@oxygenxml.com
  */

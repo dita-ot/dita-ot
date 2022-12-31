@@ -22,7 +22,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * InsertCatalogActionRelative inserts the children of the root element of an XML document
  * into a plugin extension point, rewriting relative file references so that they
  * are still correct in their new location.
- *
+ * <p>
  * Attributes affected: (public|system|uri)/@uri
  *   (nextCatalog|delegateURI|delegateSystem|delegatePublic)/@catalog
  *   (rewriteSystem|rewriteURI)/@rewritePrefix

@@ -37,7 +37,7 @@ import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * Cascades metadata from maps to topics and then from topics to maps.
- *
+ * <p>
  * MoveMetaModule implement the move meta step in preprocess. It cascades metadata
  * in maps and collects metadata for topics. The collected metadata is then inserted
  * into maps and topics.

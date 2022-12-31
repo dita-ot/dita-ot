@@ -851,7 +851,7 @@ public final class Integrator {
 
     /**
      * Validate plug-in configuration.
-     *
+     * <p>
      * Follow OSGi symbolic name syntax rules:
      *
      * <pre>

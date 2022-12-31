@@ -17,7 +17,7 @@ import org.apache.tools.ant.Task;
 /**
  * Sets a property to the base name of a specified file, optionally minus a
  * suffix.
- *
+ * <p>
  * This task can accept the following attributes:
  * <ul>
  * <li>file
@@ -35,7 +35,7 @@ import org.apache.tools.ant.Task;
  * is a full-path filename, the basename will be the simple file name.
  * If a suffix is specified, and the specified file ends in that suffix,
  * the basename will be the simple file name without the suffix.
- *
+ * <p>
  *
  * @since Ant 1.5
  *

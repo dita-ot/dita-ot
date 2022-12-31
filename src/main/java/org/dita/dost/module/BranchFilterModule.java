@@ -405,13 +405,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     
     /** Remove files from job if they were renamed and no longer exist with original name **/
     private void removeObsoleteReferences() {
-        /** If a file was renamed and no longer exists with original name, remove from job **/
         for (final URI file: renamedTopics) {
             if (!sameNameTopics.contains(file) && job.getFileInfo(file) != null) {
                 job.remove(job.getFileInfo(file));
             }
         }
-        /** If a file reference was filtered from map and no longer exists, remove from job **/
         for (final URI file: filteredTopics) {
             if (!sameNameTopics.contains(file) && job.getFileInfo(file) != null) {
                 job.remove(job.getFileInfo(file));
