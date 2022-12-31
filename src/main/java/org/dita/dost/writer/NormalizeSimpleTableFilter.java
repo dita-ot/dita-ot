@@ -163,14 +163,7 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
         }
     }
 
-    private static class Span {
-        public final int x;
-        public final int y;
-
-        private Span(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
+    private record Span(int x, int y) {
     }
 
     private static class TableState {

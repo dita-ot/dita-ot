@@ -142,40 +142,38 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
             for (int i = 0; i < conditionElements.getLength(); i++) {
                 final Node node = conditionElements.item(i);
                 switch (node.getNodeType()) {
-                case Node.ELEMENT_NODE:
-                    final Element elem = (Element) node;
-                    export.writeStartElement(node.getNodeName());
-                    final NamedNodeMap atts = node.getAttributes();
-                    for (int j = 0; j < atts.getLength(); j++) {
-                        final String value = atts.item(j).getNodeValue().trim();
-                        if (value.indexOf(':') != -1) {
-                            final String prefix = value.substring(0, value.indexOf(':'));
-                            final String ns = elem.lookupNamespaceURI(prefix);
-                            if (ns != null) {
-                                export.writeNamespace(prefix, ns);
+                    case Node.ELEMENT_NODE -> {
+                        final Element elem = (Element) node;
+                        export.writeStartElement(node.getNodeName());
+                        final NamedNodeMap atts = node.getAttributes();
+                        for (int j = 0; j < atts.getLength(); j++) {
+                            final String value = atts.item(j).getNodeValue().trim();
+                            if (value.indexOf(':') != -1) {
+                                final String prefix = value.substring(0, value.indexOf(':'));
+                                final String ns = elem.lookupNamespaceURI(prefix);
+                                if (ns != null) {
+                                    export.writeNamespace(prefix, ns);
+                                }
                             }
                         }
-                    }
-                    if (atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ||
-                            atts.getNamedItem(ATTRIBUTE_NAME_IMG) != null) {
-                        final String imagerefAtt = atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ?
-                                atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF).getNodeValue() :    // DITA 1.1 and later: use @imageref on <startflag>, <endflag>
-                                atts.getNamedItem(ATTRIBUTE_NAME_IMG).getNodeValue();          // Pre-DITA 1.1: use @img on <prop>
-                        if (toURI(imagerefAtt).isAbsolute()) {
-                            export.writeAttribute(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI, imagerefAtt);
-                        } else {
-                            export.writeAttribute(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI, ditavalDirectory.resolve(imagerefAtt).toString());
+                        if (atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ||
+                                atts.getNamedItem(ATTRIBUTE_NAME_IMG) != null) {
+                            final String imagerefAtt = atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ?
+                                    atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF).getNodeValue() :    // DITA 1.1 and later: use @imageref on <startflag>, <endflag>
+                                    atts.getNamedItem(ATTRIBUTE_NAME_IMG).getNodeValue();          // Pre-DITA 1.1: use @img on <prop>
+                            if (toURI(imagerefAtt).isAbsolute()) {
+                                export.writeAttribute(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI, imagerefAtt);
+                            } else {
+                                export.writeAttribute(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI, ditavalDirectory.resolve(imagerefAtt).toString());
+                            }
                         }
+                        for (int j = 0; j < atts.getLength(); j++) {
+                            export.writeAttribute(atts.item(j).getNodeName(), atts.item(j).getNodeValue());
+                        }
+                        writeConditions(export, node.getChildNodes(), ditavalDirectory);
+                        export.writeEndElement();
                     }
-                    for (int j = 0; j < atts.getLength(); j++) {
-                        export.writeAttribute(atts.item(j).getNodeName(), atts.item(j).getNodeValue());
-                    }
-                    writeConditions(export, node.getChildNodes(), ditavalDirectory);
-                    export.writeEndElement();
-                    break;
-                case Node.TEXT_NODE:
-                    export.writeCharacters(node.getNodeValue());
-                    break;
+                    case Node.TEXT_NODE -> export.writeCharacters(node.getNodeValue());
                 }
             }
         } catch (final XMLStreamException e) {

@@ -129,7 +129,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         final String conactValue = atts.getValue(ATTRIBUTE_NAME_CONACTION);
         if (!start && conactValue != null) {
             switch (conactValue) {
-                case ATTR_CONACTION_VALUE_PUSHBEFORE:
+                case ATTR_CONACTION_VALUE_PUSHBEFORE -> {
                     if (pushcontentDocumentFragment.getChildNodes().getLength() != 0) {
                         // there are redundant "pushbefore", create a new pushcontent and emit a warning message.
                         if (pushcontentWriter != null) {
@@ -146,8 +146,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     level = 1;
                     putElement(name, atts, true);
                     pushType = ATTR_CONACTION_VALUE_PUSHBEFORE;
-                    break;
-                case ATTR_CONACTION_VALUE_PUSHAFTER:
+                }
+                case ATTR_CONACTION_VALUE_PUSHAFTER -> {
                     start = true;
                     level = 1;
                     if (target == null) {
@@ -156,8 +156,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
                         putElement(name, atts, true);
                         pushType = ATTR_CONACTION_VALUE_PUSHAFTER;
                     }
-                    break;
-                case ATTR_CONACTION_VALUE_PUSHREPLACE:
+                }
+                case ATTR_CONACTION_VALUE_PUSHREPLACE -> {
                     start = true;
                     level = 1;
                     target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
@@ -167,9 +167,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
                         pushType = ATTR_CONACTION_VALUE_PUSHREPLACE;
                         putElement(name, atts, true);
                     }
-
-                    break;
-                case ATTR_CONACTION_VALUE_MARK:
+                }
+                case ATTR_CONACTION_VALUE_MARK -> {
                     target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
                     if (target == null) {
                         logger.error(MessageUtils.getMessage("DOTJ068E").setLocation(atts).toString());
@@ -191,7 +190,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                         target = null;
                         pushType = null;
                     }
-                    break;
+                }
             }
         }
     }
@@ -204,14 +203,14 @@ public final class ConrefPushReader extends AbstractXMLReader {
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
             switch (child.getNodeType()) {
-            case Node.ELEMENT_NODE:
-                final Element e = (Element) child;
-                replaceLinkAttributes(e);
-                final NodeList elements = e.getElementsByTagName("*");
-                for (int j = 0; i < elements.getLength(); i++) {
-                    replaceLinkAttributes((Element) elements.item(j));
+                case Node.ELEMENT_NODE -> {
+                    final Element e = (Element) child;
+                    replaceLinkAttributes(e);
+                    final NodeList elements = e.getElementsByTagName("*");
+                    for (int j = 0; i < elements.getLength(); i++) {
+                        replaceLinkAttributes((Element) elements.item(j));
+                    }
                 }
-                break;
             }
         }
         return pushcontent;
@@ -409,53 +408,11 @@ public final class ConrefPushReader extends AbstractXMLReader {
         }
     }
 
-    public static class MoveKey {
-        public final String idPath;
-        public final String action;
-        public MoveKey(final String idPath, final String action) {
-            this.idPath = idPath;
-            this.action = action;
-        }
+    public record MoveKey(String idPath,
+                          String action) {
         @Override
         public String toString() {
             return idPath + STICK + action;
         }
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((action == null) ? 0 : action.hashCode());
-            result = prime * result + ((idPath == null) ? 0 : idPath.hashCode());
-            return result;
-        }
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (!(obj instanceof MoveKey)) {
-                return false;
-            }
-            MoveKey other = (MoveKey) obj;
-            if (action == null) {
-                if (other.action != null) {
-                    return false;
-                }
-            } else if (!action.equals(other.action)) {
-                return false;
-            }
-            if (idPath == null) {
-                if (other.idPath != null) {
-                    return false;
-                }
-            } else if (!idPath.equals(other.idPath)) {
-                return false;
-            }
-            return true;
-        }
     }
-
 }

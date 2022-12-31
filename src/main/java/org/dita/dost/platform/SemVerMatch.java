@@ -122,28 +122,15 @@ public class SemVerMatch {
         }
         final Match match;
         if (matcher.group(1) != null) {
-            switch (matcher.group(1)) {
-                case "~":
-                    match = Match.TILDE;
-                    break;
-                case "^":
-                    match = Match.CARET;
-                    break;
-                case "<":
-                    match = Match.LT;
-                    break;
-                case "<=":
-                    match = Match.LE;
-                    break;
-                case ">":
-                    match = Match.GT;
-                    break;
-                case ">=":
-                    match = Match.GE;
-                    break;
-                default:
-                    throw new IllegalArgumentException();
-            }
+            match = switch (matcher.group(1)) {
+                case "~" -> Match.TILDE;
+                case "^" -> Match.CARET;
+                case "<" -> Match.LT;
+                case "<=" -> Match.LE;
+                case ">" -> Match.GT;
+                case ">=" -> Match.GE;
+                default -> throw new IllegalArgumentException();
+            };
         } else {
             match = Match.EQ;
         }
@@ -153,57 +140,56 @@ public class SemVerMatch {
         final Integer patch = tokens.length >= 3 ? parseToken(tokens[2]) : null;
 
         switch (match) {
-            case TILDE:
+            case TILDE -> {
                 start = new Range(Match.GE,
                         major != null ? major : 0,
                         minor != null ? minor : 0,
                         patch != null ? patch : 0);
                 end = tilde(Match.LT, major, minor);
-                break;
-            case CARET:
+            }
+            case CARET -> {
                 start = new Range(Match.GE,
                         major != null ? major : 0,
                         minor != null ? minor : 0,
                         patch != null ? patch : 0);
                 end = caret(Match.LT, major, minor, patch);
-                break;
-            case LT:
+            }
+            case LT -> {
                 start = new Range(Match.GE, 0, 0, 0);
                 end = new Range(Match.LT,
                         major != null ? major : 0,
                         minor != null ? minor : 0,
                         patch != null ? patch : 0);
-                break;
-            case LE:
+            }
+            case LE -> {
                 start = new Range(Match.GE, 0, 0, 0);
                 end = new Range(Match.LE,
                         major != null ? major : 0,
                         minor != null ? minor : 0,
                         patch != null ? patch : 0);
-                break;
-            case GT:
+            }
+            case GT -> {
                 start = new Range(Match.GT,
                         major != null ? major : 0,
                         minor != null ? minor : 0,
                         patch != null ? patch : 0);
                 end = null;
-                break;
-            case GE:
+            }
+            case GE -> {
                 start = new Range(Match.GE,
                         major != null ? major : 0,
                         minor != null ? minor : 0,
                         patch != null ? patch : 0);
                 end = null;
-                break;
-            case EQ:
+            }
+            case EQ -> {
                 start = new Range(Match.GE,
                         major != null ? major : 0,
                         minor != null ? minor : 0,
                         patch != null ? patch : 0);
                 end = inc(Match.LT, major, minor, patch);
-                break;
-            default:
-                throw new IllegalArgumentException();
+            }
+            default -> throw new IllegalArgumentException();
         }
     }
 
@@ -263,14 +249,10 @@ public class SemVerMatch {
     }
 
     private static Integer parseToken(String token) {
-        switch (token) {
-            case "x":
-            case "X":
-            case "*":
-                return null;
-            default:
-                return Integer.valueOf(token);
-        }
+        return switch (token) {
+            case "x", "X", "*" -> null;
+            default -> Integer.valueOf(token);
+        };
     }
 
     public boolean contains(SemVer semver) {
@@ -285,20 +267,14 @@ public class SemVerMatch {
 
     private boolean compare(SemVer self, SemVer other, Match ops) {
         final int res = -1 * self.compareTo(other);
-        switch(ops) {
-            case LT:
-                return res < 0;
-            case LE:
-                return res <= 0;
-            case GT:
-                return res > 0;
-            case GE:
-                return res >= 0;
-            case EQ:
-                return res == 0;
-            default:
-                throw new IllegalArgumentException();
-        }
+        return switch (ops) {
+            case LT -> res < 0;
+            case LE -> res <= 0;
+            case GT -> res > 0;
+            case GE -> res >= 0;
+            case EQ -> res == 0;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

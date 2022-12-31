@@ -8,15 +8,6 @@
  */
 package org.dita.dost.platform;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.Hashtable;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.dita.dost.log.DITAOTLogger;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -25,6 +16,9 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.*;
 
 /**
  * InsertAction implements IAction and insert the resource
@@ -76,7 +70,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
         setContentHandler(retBuf);
         try {
             for (final Value fileName : fileNameSet) {
-                currentFile = fileName.value;
+                currentFile = fileName.value();
                 reader.parse(currentFile);
             }
         } catch (SAXException | RuntimeException e) {

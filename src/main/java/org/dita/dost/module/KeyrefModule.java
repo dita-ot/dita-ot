@@ -236,7 +236,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
     KeyScope rewriteScopeTargets(KeyScope scope, Map<URI, URI> rewrites) {
         final Map<String, KeyDef> newKeys = new HashMap<>();
-        for (Map.Entry<String, KeyDef> key : scope.keyDefinition.entrySet()) {
+        for (Map.Entry<String, KeyDef> key : scope.keyDefinition().entrySet()) {
             final KeyDef oldKey = key.getValue();
             URI href = oldKey.href;
             if (href != null && rewrites.containsKey(stripFragment(href))) {
@@ -245,9 +245,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element);
             newKeys.put(key.getKey(), newKey);
         }
-        return new KeyScope(scope.id, scope.name,
+        return new KeyScope(scope.id(), scope.name(),
                 newKeys,
-                scope.childScopes.stream()
+                scope.childScopes().stream()
                         .map(c -> rewriteScopeTargets(c, rewrites))
                         .collect(Collectors.toList()));
     }
@@ -256,17 +256,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     /**
      * Tuple class for key reference processing info.
      */
-    static class ResolveTask {
-        final KeyScope scope;
-        final FileInfo in;
-        final FileInfo out;
-
-        ResolveTask(final KeyScope scope, final FileInfo in, final FileInfo out) {
-            assert scope != null;
-            this.scope = scope;
-            assert in != null;
-            this.in = in;
-            this.out = out;
+    record ResolveTask(KeyScope scope,
+                       FileInfo in,
+                       FileInfo out) {
+        public ResolveTask {
+            Objects.requireNonNull(scope);
+            Objects.requireNonNull(in);
         }
     }
 
@@ -407,11 +402,11 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
      * Fix the key definitions to point to the proper href.
      */
     private void fixKeyDefRefs(final KeyScope scope, final URI original, final URI renamed) {
-        for (final KeyDef keyDef : scope.keyDefinition.values()) {
+        for (final KeyDef keyDef : scope.keyDefinition().values()) {
             if (keyDef != null
                     && Objects.equals(keyDef.href, original)
                     && keyDef.keys != null) {
-                final String prefix = scope.name + ".";
+                final String prefix = scope.name() + ".";
                 for (final String key : keyDef.keys.split("\\s")) {
                     if (key.startsWith(prefix)) {
                         keyDef.href = renamed;
@@ -478,7 +473,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         filters.add(parser);
 
         try {
-            logger.debug("Using " + (r.scope.name != null ? r.scope.name + " scope" : "root scope"));
+            logger.debug("Using " + (r.scope.name() != null ? r.scope.name() + " scope" : "root scope"));
             if (r.out != null) {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
                         " to " + job.tempDirURI.resolve(r.out.uri));

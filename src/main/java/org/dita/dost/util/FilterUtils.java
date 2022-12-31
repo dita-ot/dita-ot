@@ -8,28 +8,12 @@
  */
 package org.dita.dost.util;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.emptySet;
-import static javax.xml.XMLConstants.NULL_NS_URI;
-import static org.dita.dost.util.Constants.*;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-
 import org.dita.dost.module.filter.SubjectScheme;
-import org.dita.dost.util.FilterUtils.FilterKey;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -40,6 +24,19 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Utility class used for flagging and filtering.
@@ -494,61 +491,18 @@ public final class FilterUtils {
     /**
      * Filter key object.
      *
+     * @param attribute Attribute name
+     * @param value     Attribute value, may be {@code null}
      * @since 1.6
      */
-    public static class FilterKey {
-        /** Attribute name */
-        public final QName attribute;
-        /** Attribute value, may be {@code null} */
-        public final String value;
-
-        public FilterKey(final QName attribute, final String value) {
-            if (attribute == null) {
-                throw new IllegalArgumentException("Attribute may not be null");
-            }
-            this.attribute = attribute;
-            this.value = value;
+     public record FilterKey(QName attribute, String value) {
+        public FilterKey {
+            Objects.requireNonNull(attribute, "Attribute may not be null");
         }
 
         @Override
         public String toString() {
             return value != null ? attribute.toString() + EQUAL + value : attribute.toString();
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + (attribute.hashCode());
-            result = prime * result + ((value == null) ? 0 : value.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(final Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (!(obj instanceof FilterKey)) {
-                final Throwable t = new RuntimeException("Not comparing FilterKey");
-                t.printStackTrace();
-                return false;
-            }
-            final FilterKey other = (FilterKey) obj;
-            if (!attribute.equals(other.attribute)) {
-                return false;
-            }
-            if (value == null) {
-                if (other.value != null) {
-                    return false;
-                }
-            } else if (!value.equals(other.value)) {
-                return false;
-            }
-            return true;
         }
     }
 
@@ -561,7 +515,7 @@ public final class FilterUtils {
      * @return new filter with subject scheme information
      */
     public FilterUtils refine(final SubjectScheme bindingMap) {
-        return refine(bindingMap.subjectSchemeMap);
+        return refine(bindingMap.subjectSchemeMap());
     }
 
     /**
@@ -702,282 +656,224 @@ public final class FilterUtils {
         }
     }
 
-    public static class Flag implements Action {
-
-        public final String proptype;
-        public final String color;
-        public final String backcolor;
-        public final String[] style;
-        public final String changebar;
-        public final FlagImage startflag;
-        public final FlagImage endflag;
-        public final String outputClass;
-
-        public Flag(String proptype, String color, String backcolor, String[] style, String changebar,
-                FlagImage startflag, FlagImage endflag, String outputClass) {
-            this.proptype = proptype;
-            this.color = color;
-            this.backcolor = backcolor;
-            this.style = style;
-            this.changebar = changebar;
-            this.startflag = startflag;
-            this.endflag = endflag;
-            this.outputClass = outputClass;
-        }
+    public record Flag(String proptype,
+                       String color,
+                       String backcolor,
+                       String[] style, String changebar,
+                       FilterUtils.Flag.FlagImage startflag,
+                       FilterUtils.Flag.FlagImage endflag,
+                       String outputClass) implements Action {
 
         public Flag adjustPath(final URI currentFile, final Job job) {
-            return new Flag(proptype, color, backcolor, style, changebar,
-                    adjustPath(startflag, currentFile, job),
-                    adjustPath(endflag, currentFile, job),
-                    outputClass);
-        }
-
-        private FlagImage adjustPath(final FlagImage img, final URI currentFile, final Job job) {
-            if (img == null) {
-                return img;
-            }
-            final URI rel;
-            final Job.FileInfo flagFi = job.getFileInfo(img.href);
-            if (flagFi != null) {
-                final Job.FileInfo current = job.getFileInfo(currentFile);
-                final URI flag = job.tempDirURI.resolve(flagFi.uri);
-                final URI curr = job.tempDirURI.resolve(current.uri);
-                rel = URLUtils.getRelativePath(curr, flag);
-            } else {
-                rel = img.href;
-            }
-            return new FlagImage(rel, img.alt);
-        }
-
-        public void writeStartFlag(final ContentHandler contentHandler) throws SAXException {
-            final StringJoiner outputClassAttr = new StringJoiner(" ");
-            final StringBuilder styleAttr = new StringBuilder();
-            if (color != null) {
-                styleAttr.append("color:").append(color).append(";");
-            }
-            if (backcolor != null) {
-                styleAttr.append("background-color:").append(backcolor).append(";");
-            }
-            if (outputClass != null) {
-                outputClassAttr.add(outputClass);
-            }
-            if (style != null) {
-                for (final String style : style) {
-                    outputClassAttr.add(FLAG_STYLE_PREFIX + style);
-                }
+                return new Flag(proptype, color, backcolor, style, changebar,
+                        adjustPath(startflag, currentFile, job),
+                        adjustPath(endflag, currentFile, job),
+                        outputClass);
             }
 
-            final XMLUtils.AttributesBuilder atts = new XMLUtils.AttributesBuilder()
-                    .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_STARTPROP.toString());
-            if (outputClassAttr.length() != 0) {
-                atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputClassAttr.toString());
-            }
-            if (styleAttr.length() != 0) {
-                atts.add(ATTRIBUTE_NAME_STYLE, styleAttr.toString());
-            }
-            contentHandler.startElement(NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName,
-                    atts.build());
-            writeProp(contentHandler, true);
-            contentHandler.endElement(NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName);
-        }
-
-        public void writeEndFlag(final ContentHandler contentHandler) throws SAXException {
-            contentHandler.startElement(NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName,
-                    new XMLUtils.AttributesBuilder()
-                            .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_ENDPROP.toString())
-                            .build());
-            writeProp(contentHandler, false);
-            contentHandler.endElement(NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName);
-        }
-
-        private void writeProp(final ContentHandler contentHandler, final boolean isStart) throws SAXException {
-            final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
-            if (color != null) {
-                propAtts.add("color", color);
-            }
-            if (backcolor != null) {
-                propAtts.add("backcolor", backcolor);
-            }
-            if (style != null) {
-                propAtts.add("style", Stream.of(style).collect(Collectors.joining(" ")));
-            }
-            if (outputClass != null) {
-                propAtts.add("outputclass", outputClass);
-            }
-            if (changebar != null) {
-                propAtts.add("changebar", changebar);
-            }
-            contentHandler.startElement(NULL_NS_URI, proptype, proptype, propAtts.build());
-            if (isStart && startflag != null) {
-                startflag.writeFlag(contentHandler, "startflag");
-            }
-            if (!isStart && endflag != null) {
-                endflag.writeFlag(contentHandler, "endflag");
-            }
-            contentHandler.endElement(NULL_NS_URI, proptype, proptype);
-        }
-
-        public Element getStartFlag() {
-            return writeToElement((ContentHandler contentHandler) -> {
-                try {
-                    writeStartFlag(contentHandler);
-                } catch (SAXException e) {
-                    throw new RuntimeException(e);
+            private FlagImage adjustPath(final FlagImage img, final URI currentFile, final Job job) {
+                if (img == null) {
+                    return img;
                 }
-            });
-        }
-
-        public Element getEndFlag() {
-            return writeToElement((ContentHandler contentHandler) -> {
-                try {
-                    writeEndFlag(contentHandler);
-                } catch (SAXException e) {
-                    throw new RuntimeException(e);
+                final URI rel;
+                final Job.FileInfo flagFi = job.getFileInfo(img.href);
+                if (flagFi != null) {
+                    final Job.FileInfo current = job.getFileInfo(currentFile);
+                    final URI flag = job.tempDirURI.resolve(flagFi.uri);
+                    final URI curr = job.tempDirURI.resolve(current.uri);
+                    rel = URLUtils.getRelativePath(curr, flag);
+                } else {
+                    rel = img.href;
                 }
-            });
-        }
-
-        private static Element writeToElement(final Consumer<ContentHandler> writer) {
-            final TransformerFactory factory = TransformerFactory.newInstance();
-            final Transformer transformer;
-            try {
-                transformer = factory.newTransformer();
-            } catch (TransformerConfigurationException e) {
-                throw new RuntimeException(e);
-            }
-            final SAXSource xmlSource = new SAXSource(new XMLReader() {
-                @Override
-                public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
-                    return false;
-                }
-                @Override
-                public void setFeature(String name, boolean value) throws SAXNotRecognizedException, SAXNotSupportedException {
-                }
-                @Override
-                public Object getProperty(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
-                    return null;
-                }
-                @Override
-                public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
-                }
-                @Override
-                public void setEntityResolver(EntityResolver resolver) {
-                }
-                @Override
-                public EntityResolver getEntityResolver() {
-                    return null;
-                }
-                @Override
-                public void setDTDHandler(DTDHandler handler) {
-                }
-                @Override
-                public DTDHandler getDTDHandler() {
-                    return null;
-                }
-                private ContentHandler contentHandler;
-                @Override
-                public void setContentHandler(ContentHandler handler) {
-                    this.contentHandler = handler;
-                }
-                @Override
-                public ContentHandler getContentHandler() {
-                    return contentHandler;
-                }
-                @Override
-                public void setErrorHandler(ErrorHandler handler) {
-                }
-                @Override
-                public ErrorHandler getErrorHandler() {
-                    return null;
-                }
-                @Override
-                public void parse(InputSource input) throws IOException, SAXException {
-                    parse((String) null);
-                }
-                @Override
-                public void parse(String input) throws IOException, SAXException {
-                    getContentHandler().startDocument();
-                    writer.accept(getContentHandler());
-                    getContentHandler().endDocument();
-                }
-            }, null);
-            final DOMResult outputTarget = new DOMResult();
-            try {
-                transformer.transform(xmlSource, outputTarget);
-            } catch (TransformerException e) {
-                throw new RuntimeException(e);
-            }
-            return ((Document) outputTarget.getNode()).getDocumentElement();
-        }
-
-        @Override
-        public String toString() {
-            return "Flag{" +
-                    "color='" + color + '\'' +
-                    ", backcolor='" + backcolor + '\'' +
-                    ", style=" + Arrays.toString(style) +
-                    ", outputclass=" + outputClass +
-                    ", changebar='" + changebar + '\'' +
-                    ", startflag=" + startflag +
-                    ", endflag=" + endflag +
-                    '}';
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Flag flag = (Flag) o;
-
-            if (!Objects.equals(color, flag.color)) return false;
-            if (!Objects.equals(backcolor, flag.backcolor)) return false;
-            // Probably incorrect - comparing Object[] arrays with Arrays.equals
-            if (!Arrays.equals(style, flag.style)) return false;
-            if (!Objects.equals(outputClass, flag.outputClass)) return false;
-            if (!Objects.equals(changebar, flag.changebar)) return false;
-            if (!Objects.equals(startflag, flag.startflag)) return false;
-            return Objects.equals(endflag, flag.endflag);
-        }
-
-        @Override
-        public int hashCode() {
-            int result = color != null ? color.hashCode() : 0;
-            result = 31 * result + (backcolor != null ? backcolor.hashCode() : 0);
-            result = 31 * result + Arrays.hashCode(style);
-            result = 31 * result + (changebar != null ? changebar.hashCode() : 0);
-            result = 31 * result + (outputClass != null ? outputClass.hashCode() : 0);
-            result = 31 * result + (startflag != null ? startflag.hashCode() : 0);
-            result = 31 * result + (endflag != null ? endflag.hashCode() : 0);
-            return result;
-        }
-
-        public static class FlagImage {
-            public final URI href;
-            public final String alt;
-
-            public FlagImage(URI href, String alt) {
-                this.href = href;
-                this.alt = alt;
+                return new FlagImage(rel, img.alt);
             }
 
-            private void writeFlag(final ContentHandler contentHandler, final String tag) throws SAXException {
+            public void writeStartFlag(final ContentHandler contentHandler) throws SAXException {
+                final StringJoiner outputClassAttr = new StringJoiner(" ");
+                final StringBuilder styleAttr = new StringBuilder();
+                if (color != null) {
+                    styleAttr.append("color:").append(color).append(";");
+                }
+                if (backcolor != null) {
+                    styleAttr.append("background-color:").append(backcolor).append(";");
+                }
+                if (outputClass != null) {
+                    outputClassAttr.add(outputClass);
+                }
+                if (style != null) {
+                    for (final String style : style) {
+                        outputClassAttr.add(FLAG_STYLE_PREFIX + style);
+                    }
+                }
+
+                final XMLUtils.AttributesBuilder atts = new XMLUtils.AttributesBuilder()
+                        .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_STARTPROP.toString());
+                if (outputClassAttr.length() != 0) {
+                    atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputClassAttr.toString());
+                }
+                if (styleAttr.length() != 0) {
+                    atts.add(ATTRIBUTE_NAME_STYLE, styleAttr.toString());
+                }
+                contentHandler.startElement(NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName,
+                        atts.build());
+                writeProp(contentHandler, true);
+                contentHandler.endElement(NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName);
+            }
+
+            public void writeEndFlag(final ContentHandler contentHandler) throws SAXException {
+                contentHandler.startElement(NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName,
+                        new XMLUtils.AttributesBuilder()
+                                .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_ENDPROP.toString())
+                                .build());
+                writeProp(contentHandler, false);
+                contentHandler.endElement(NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName);
+            }
+
+            private void writeProp(final ContentHandler contentHandler, final boolean isStart) throws SAXException {
                 final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
-                final URI abs = href;
-                if (abs != null) {
-                    propAtts.add(DITA_OT_NS, ATTRIBUTE_NAME_IMAGEREF_URI, "dita-ot:" + ATTRIBUTE_NAME_IMAGEREF_URI, "CDATA", abs.toString());
-                    final URI rel = abs;
-                    propAtts.add(DITA_OT_NS, "original-" + ATTRIBUTE_NAME_IMAGEREF, "dita-ot:original-" + ATTRIBUTE_NAME_IMAGEREF, "CDATA", rel.toString());
-                    propAtts.add(ATTRIBUTE_NAME_IMAGEREF, rel.toString());
+                if (color != null) {
+                    propAtts.add("color", color);
                 }
-                contentHandler.startElement(NULL_NS_URI, tag, tag, propAtts.build());
-                if (alt != null) {
-                    contentHandler.startElement(NULL_NS_URI, "alt-text", "alt-text", XMLUtils.EMPTY_ATTRIBUTES);
-                    final char[] chars = alt.toCharArray();
-                    contentHandler.characters(chars, 0, chars.length);
-                    contentHandler.endElement(NULL_NS_URI, "alt-text", "alt-text");
+                if (backcolor != null) {
+                    propAtts.add("backcolor", backcolor);
                 }
-                contentHandler.endElement(NULL_NS_URI, tag, tag);
+                if (style != null) {
+                    propAtts.add("style", Stream.of(style).collect(Collectors.joining(" ")));
+                }
+                if (outputClass != null) {
+                    propAtts.add("outputclass", outputClass);
+                }
+                if (changebar != null) {
+                    propAtts.add("changebar", changebar);
+                }
+                contentHandler.startElement(NULL_NS_URI, proptype, proptype, propAtts.build());
+                if (isStart && startflag != null) {
+                    startflag.writeFlag(contentHandler, "startflag");
+                }
+                if (!isStart && endflag != null) {
+                    endflag.writeFlag(contentHandler, "endflag");
+                }
+                contentHandler.endElement(NULL_NS_URI, proptype, proptype);
+            }
+
+            public Element getStartFlag() {
+                return writeToElement((ContentHandler contentHandler) -> {
+                    try {
+                        writeStartFlag(contentHandler);
+                    } catch (SAXException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+
+            public Element getEndFlag() {
+                return writeToElement((ContentHandler contentHandler) -> {
+                    try {
+                        writeEndFlag(contentHandler);
+                    } catch (SAXException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+
+            private static Element writeToElement(final Consumer<ContentHandler> writer) {
+                final TransformerFactory factory = TransformerFactory.newInstance();
+                final Transformer transformer;
+                try {
+                    transformer = factory.newTransformer();
+                } catch (TransformerConfigurationException e) {
+                    throw new RuntimeException(e);
+                }
+                final SAXSource xmlSource = new SAXSource(new XMLReader() {
+                    @Override
+                    public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
+                        return false;
+                    }
+
+                    @Override
+                    public void setFeature(String name, boolean value) throws SAXNotRecognizedException, SAXNotSupportedException {
+                    }
+
+                    @Override
+                    public Object getProperty(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
+                        return null;
+                    }
+
+                    @Override
+                    public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
+                    }
+
+                    @Override
+                    public void setEntityResolver(EntityResolver resolver) {
+                    }
+
+                    @Override
+                    public EntityResolver getEntityResolver() {
+                        return null;
+                    }
+
+                    @Override
+                    public void setDTDHandler(DTDHandler handler) {
+                    }
+
+                    @Override
+                    public DTDHandler getDTDHandler() {
+                        return null;
+                    }
+
+                    private ContentHandler contentHandler;
+
+                    @Override
+                    public void setContentHandler(ContentHandler handler) {
+                        this.contentHandler = handler;
+                    }
+
+                    @Override
+                    public ContentHandler getContentHandler() {
+                        return contentHandler;
+                    }
+
+                    @Override
+                    public void setErrorHandler(ErrorHandler handler) {
+                    }
+
+                    @Override
+                    public ErrorHandler getErrorHandler() {
+                        return null;
+                    }
+
+                    @Override
+                    public void parse(InputSource input) throws IOException, SAXException {
+                        parse((String) null);
+                    }
+
+                    @Override
+                    public void parse(String input) throws IOException, SAXException {
+                        getContentHandler().startDocument();
+                        writer.accept(getContentHandler());
+                        getContentHandler().endDocument();
+                    }
+                }, null);
+                final DOMResult outputTarget = new DOMResult();
+                try {
+                    transformer.transform(xmlSource, outputTarget);
+                } catch (TransformerException e) {
+                    throw new RuntimeException(e);
+                }
+                return ((Document) outputTarget.getNode()).getDocumentElement();
+            }
+
+            @Override
+            public String toString() {
+                return "Flag{" +
+                        "color='" + color + '\'' +
+                        ", backcolor='" + backcolor + '\'' +
+                        ", style=" + Arrays.toString(style) +
+                        ", outputclass=" + outputClass +
+                        ", changebar='" + changebar + '\'' +
+                        ", startflag=" + startflag +
+                        ", endflag=" + endflag +
+                        '}';
             }
 
             @Override
@@ -985,27 +881,70 @@ public final class FilterUtils {
                 if (this == o) return true;
                 if (o == null || getClass() != o.getClass()) return false;
 
-                FlagImage flagImage = (FlagImage) o;
+                Flag flag = (Flag) o;
 
-                if (!Objects.equals(href, flagImage.href)) return false;
-                return Objects.equals(alt, flagImage.alt);
+                if (!Objects.equals(color, flag.color)) return false;
+                if (!Objects.equals(backcolor, flag.backcolor)) return false;
+                // Probably incorrect - comparing Object[] arrays with Arrays.equals
+                if (!Arrays.equals(style, flag.style)) return false;
+                if (!Objects.equals(outputClass, flag.outputClass)) return false;
+                if (!Objects.equals(changebar, flag.changebar)) return false;
+                if (!Objects.equals(startflag, flag.startflag)) return false;
+                return Objects.equals(endflag, flag.endflag);
             }
 
             @Override
             public int hashCode() {
-                int result = href != null ? href.hashCode() : 0;
-                result = 31 * result + (alt != null ? alt.hashCode() : 0);
+                int result = color != null ? color.hashCode() : 0;
+                result = 31 * result + (backcolor != null ? backcolor.hashCode() : 0);
+                result = 31 * result + Arrays.hashCode(style);
+                result = 31 * result + (changebar != null ? changebar.hashCode() : 0);
+                result = 31 * result + (outputClass != null ? outputClass.hashCode() : 0);
+                result = 31 * result + (startflag != null ? startflag.hashCode() : 0);
+                result = 31 * result + (endflag != null ? endflag.hashCode() : 0);
                 return result;
             }
 
-            @Override
-            public String toString() {
-                return "FlagImage{" +
-                        "href=" + href +
-                        ", alt='" + alt + '\'' +
-                        '}';
+            public record FlagImage(URI href, String alt) {
+
+                private void writeFlag(final ContentHandler contentHandler, final String tag) throws SAXException {
+                    final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
+                    final URI abs = href;
+                    if (abs != null) {
+                        propAtts.add(DITA_OT_NS, ATTRIBUTE_NAME_IMAGEREF_URI, "dita-ot:" + ATTRIBUTE_NAME_IMAGEREF_URI, "CDATA", abs.toString());
+                        final URI rel = abs;
+                        propAtts.add(DITA_OT_NS, "original-" + ATTRIBUTE_NAME_IMAGEREF, "dita-ot:original-" + ATTRIBUTE_NAME_IMAGEREF, "CDATA", rel.toString());
+                        propAtts.add(ATTRIBUTE_NAME_IMAGEREF, rel.toString());
+                    }
+                    contentHandler.startElement(NULL_NS_URI, tag, tag, propAtts.build());
+                    if (alt != null) {
+                        contentHandler.startElement(NULL_NS_URI, "alt-text", "alt-text", XMLUtils.EMPTY_ATTRIBUTES);
+                        final char[] chars = alt.toCharArray();
+                        contentHandler.characters(chars, 0, chars.length);
+                        contentHandler.endElement(NULL_NS_URI, "alt-text", "alt-text");
+                    }
+                    contentHandler.endElement(NULL_NS_URI, tag, tag);
+                }
+
+                @Override
+                public boolean equals(Object o) {
+                    if (this == o) return true;
+                    if (o == null || getClass() != o.getClass()) return false;
+
+                    FlagImage flagImage = (FlagImage) o;
+
+                    if (!Objects.equals(href, flagImage.href)) return false;
+                    return Objects.equals(alt, flagImage.alt);
+                }
+
+                @Override
+                public String toString() {
+                    return "FlagImage{" +
+                            "href=" + href +
+                            ", alt='" + alt + '\'' +
+                            '}';
+                }
             }
         }
-    }
 
 }

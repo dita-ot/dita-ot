@@ -61,14 +61,7 @@ public class IncludeResolver extends AbstractXMLFilter {
     private Deque<Deque<StackItem>> includeStack = new ArrayDeque<>();
     private Configuration.Mode processingMode;
 
-    private static class StackItem {
-        public final String cls;
-        public final boolean include;
-
-        private StackItem(final String cls, final boolean include) {
-            this.cls = cls;
-            this.include = include;
-        }
+    private record StackItem(String cls, boolean include) {
     }
 
     // Constructors ------------------------------------------------------------
@@ -139,14 +132,11 @@ public class IncludeResolver extends AbstractXMLFilter {
                         logger.debug("Resolve " + localName + " " + currentFile.resolve(hrefValue));
                         final String parse = getParse(atts.getValue(ATTRIBUTE_NAME_PARSE));
                         switch (parse) {
-                            case "text":
-                                include = new IncludeText(job, currentFile, getContentHandler(), logger, processingMode).include(atts);
-                                break;
-                            case "xml":
-                                include = new IncludeXml(job, currentFile, getContentHandler(), logger).include(atts);
-                                break;
-                            default:
-                                logger.error("Unsupported include parse " + parse);
+                            case "text" ->
+                                    include = new IncludeText(job, currentFile, getContentHandler(), logger, processingMode).include(atts);
+                            case "xml" ->
+                                    include = new IncludeXml(job, currentFile, getContentHandler(), logger).include(atts);
+                            default -> logger.error("Unsupported include parse " + parse);
                         }
                     }
                 } catch (final RuntimeException e) {

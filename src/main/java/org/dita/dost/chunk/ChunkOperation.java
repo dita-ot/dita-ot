@@ -8,18 +8,21 @@
 
 package org.dita.dost.chunk;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.w3c.dom.Element;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableList;
 
-class ChunkOperation {
+record ChunkOperation(org.dita.dost.chunk.ChunkOperation.Operation operation,
+                      URI src,
+                      URI dst,
+                      String id,
+                      Element topicref,
+                      List<ChunkOperation> children) {
 
     public enum Operation {
         COMBINE("combine"),
@@ -29,46 +32,6 @@ class ChunkOperation {
         Operation(final String name) {
             this.name = name;
         }
-    }
-
-    public final Operation operation;
-    public final URI src;
-    public final URI dst;
-    public final String id;
-    public final Element topicref;
-    public final List<ChunkOperation> children;
-
-    @VisibleForTesting
-    ChunkOperation(final Operation operation,
-                   final URI src,
-                   final URI dst,
-                   final String id,
-                   final Element topicref,
-                   final List<ChunkOperation> children) {
-        this.operation = operation;
-        this.src = src;
-        this.dst = dst;
-        this.id = id;
-        this.topicref = topicref;
-        this.children = children;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ChunkOperation that = (ChunkOperation) o;
-        return operation == that.operation &&
-                Objects.equals(src, that.src) &&
-                Objects.equals(dst, that.dst) &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(topicref, that.topicref) &&
-                Objects.equals(children, that.children);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(operation, src, dst, id, topicref, children);
     }
 
     @Override

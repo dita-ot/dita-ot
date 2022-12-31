@@ -37,14 +37,14 @@ final class ImportXSLAction extends ImportAction {
     }
 
     private URI getHref(final Value value) {
-        final URI pluginDir = featureTable.get(value.id).getPluginDir().toURI();
-        final URI templateFile = URLUtils.toFile(value.value).toURI().normalize();
+        final URI pluginDir = featureTable.get(value.id()).getPluginDir().toURI();
+        final URI templateFile = URLUtils.toFile(value.value()).toURI().normalize();
         final URI template = pluginDir.relativize(templateFile);
-        if (value.id == null || template.isAbsolute()) {
+        if (value.id() == null || template.isAbsolute()) {
             final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
-            return URLUtils.toURI(FileUtils.getRelativeUnixPath(templateFilePath, value.value));
+            return URLUtils.toURI(FileUtils.getRelativeUnixPath(templateFilePath, value.value()));
         }
-        return URI.create("plugin:" + value.id + ":" + template);
+        return URI.create("plugin:" + value.id() + ":" + template);
     }
 
 }

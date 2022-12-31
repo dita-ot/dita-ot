@@ -51,7 +51,7 @@ public final class ConrefPushParser extends AbstractDomFilter {
         super.read(filename);
 
         for (final MoveKey key : movetable.keySet()) {
-            logger.warn(MessageUtils.getMessage("DOTJ043W", key.idPath, filename.getPath()).toString());
+            logger.warn(MessageUtils.getMessage("DOTJ043W", key.idPath(), filename.getPath()).toString());
         }
         if (hasConref || hasKeyref) {
             updateList(filename);

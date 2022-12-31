@@ -263,21 +263,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
             if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
                 final ProcessingInstruction pi = (ProcessingInstruction) node;
                 switch (pi.getNodeName()) {
-                    case PI_WORKDIR_TARGET:
-                        workdir = pi;
-                        break;
-                    case PI_WORKDIR_TARGET_URI:
-                        workdirUrl = pi;
-                        break;
-                    case PI_PATH2PROJ_TARGET:
-                        path2proj = pi;
-                        break;
-                    case PI_PATH2PROJ_TARGET_URI:
-                        path2projUrl = pi;
-                        break;
-                    case PI_PATH2ROOTMAP_TARGET_URI:
-                        path2rootmapUrl = pi;
-                        break;
+                    case PI_WORKDIR_TARGET -> workdir = pi;
+                    case PI_WORKDIR_TARGET_URI -> workdirUrl = pi;
+                    case PI_PATH2PROJ_TARGET -> path2proj = pi;
+                    case PI_PATH2PROJ_TARGET_URI -> path2projUrl = pi;
+                    case PI_PATH2ROOTMAP_TARGET_URI -> path2rootmapUrl = pi;
                 }
             }
         }

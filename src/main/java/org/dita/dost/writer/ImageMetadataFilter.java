@@ -176,12 +176,10 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private Attributes readMetadata(final URI imgInput) {
         logger.info("Reading " + imgInput);
         final String mimeType = getMimeType(imgInput);
-        switch (mimeType) {
-            case "image/svg+xml":
-                return readSvgMetadata(imgInput);
-            default:
-                return readBitmapMetadata(imgInput);
-        }
+        return switch (mimeType) {
+            case "image/svg+xml" -> readSvgMetadata(imgInput);
+            default -> readBitmapMetadata(imgInput);
+        };
     }
 
     private Attributes readSvgMetadata(final URI imgInput) {

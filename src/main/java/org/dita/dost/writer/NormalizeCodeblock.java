@@ -114,7 +114,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         }
         final StringBuilder merged = new StringBuilder();
         for (final CharactersEvent e : buf) {
-            merged.append(e.ch, e.start, e.length);
+            merged.append(e.ch(), e.start(), e.length());
         }
         final char[] cs = merged.toString().toCharArray();
         return new CharactersEvent(cs, 0, cs.length);
@@ -128,9 +128,8 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
         final List<SaxEvent> res = new ArrayList<>(buf.size());
         boolean previousEndedInLinefeed = true;
         for (final SaxEvent event : buf) {
-            if (event instanceof CharactersEvent) {
-                final CharactersEvent e = (CharactersEvent) event;
-                final char[] ch = stripLeadingSpace(previousEndedInLinefeed, min, e.ch, e.start, e.length);
+            if (event instanceof final CharactersEvent e) {
+                final char[] ch = stripLeadingSpace(previousEndedInLinefeed, min, e.ch(), e.start(), e.length());
                 res.add(new CharactersEvent(ch, 0, ch.length));
                 previousEndedInLinefeed = ch.length != 0 && ch[ch.length - 1] == '\n';
             } else {
@@ -152,9 +151,8 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     private String getCharacters(Collection<SaxEvent> buf) {
         final StringBuilder merged = new StringBuilder();
         for (final SaxEvent event : buf) {
-            if (event instanceof CharactersEvent) {
-                final CharactersEvent e = (CharactersEvent) event;
-                merged.append(e.ch, e.start, e.length);
+            if (event instanceof final CharactersEvent e) {
+                merged.append(e.ch(), e.start(), e.length());
             }
         }
         return merged.toString();

@@ -407,14 +407,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (scope == null && href != null && href.isAbsolute()) {
             switch (href.getScheme()) {
-                case "http":
-                case "https":
-                case "ftp":
-                case "ftps":
-                case "sftp":
-                case "mailto":
-                    scope = ATTR_SCOPE_VALUE_EXTERNAL;
-                    break;
+                case "http", "https", "ftp", "ftps", "sftp", "mailto" -> scope = ATTR_SCOPE_VALUE_EXTERNAL;
             }
         }
         if (href != null && href.getPath() != null && !href.getPath().isEmpty() &&
@@ -582,14 +575,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (attrScope == null && ATTRIBUTE_NAME_HREF.equals(attrName) && attrValue.isAbsolute()) {
             switch (attrValue.getScheme()) {
-                case "http":
-                case "https":
-                case "ftp":
-                case "ftps":
-                case "sftp":
-                case "mailto":
-                    attrScope = ATTR_SCOPE_VALUE_EXTERNAL;
-                    break;
+                case "http", "https", "ftp", "ftps", "sftp", "mailto" -> attrScope = ATTR_SCOPE_VALUE_EXTERNAL;
             }
         }
 
@@ -843,10 +829,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (obj == null) {
                 return false;
             }
-            if (!(obj instanceof Reference)) {
+            if (!(obj instanceof final Reference other)) {
                 return false;
             }
-            final Reference other = (Reference) obj;
             if (filename == null) {
                 if (other.filename != null) {
                     return false;

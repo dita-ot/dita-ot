@@ -8,14 +8,14 @@
  */
 package org.dita.dost.platform;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * InsertDependsAction implements IAction.
@@ -43,7 +43,7 @@ final class InsertDependsAction implements IAction {
     public String getResult() {
         final List<String> result = new ArrayList<>();
         for (final Value t: value) {
-            final String token = t.value.trim();
+            final String token = t.value().trim();
             // Pieces which are surrounded with braces are extension points.
             if (token.startsWith("{") && token.endsWith("}")) {
                 final String extension = token.substring(1, token.length() - 1);

@@ -164,23 +164,14 @@ public final class DitaValReader implements AbstractReader {
 
     public void readProp(final Element elem)  {
         final String attAction = elem.getAttribute(ELEMENT_NAME_ACTION);
-        Action action;
-        switch (attAction) {
-            case "include":
-                action = Action.INCLUDE;
-                break;
-            case "exclude":
-                action = Action.EXCLUDE;
-                break;
-            case "passthrough":
-                action = Action.PASSTHROUGH;
-                break;
-            case "flag":
-                action = readFlag(elem);
-                break;
-            default:
-                throw new IllegalArgumentException(MessageUtils.getMessage("DOTJ077F", attAction).setLocation(elem).toString());
-        }
+        Action action = switch (attAction) {
+            case "include" -> Action.INCLUDE;
+            case "exclude" -> Action.EXCLUDE;
+            case "passthrough" -> Action.PASSTHROUGH;
+            case "flag" -> readFlag(elem);
+            default ->
+                    throw new IllegalArgumentException(MessageUtils.getMessage("DOTJ077F", attAction).setLocation(elem).toString());
+        };
         if (action != null) {
             final QName attName;
             if (elem.getTagName().equals(ELEMENT_NAME_REVPROP)) {
@@ -280,14 +271,14 @@ public final class DitaValReader implements AbstractReader {
      * Refine action key with information from subject schemes.
      */
     private void refineAction(final Action action, final FilterKey key) {
-        if (key.value != null && bindingMap != null && !bindingMap.isEmpty()) {
-            final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
+        if (key.value() != null && bindingMap != null && !bindingMap.isEmpty()) {
+            final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute());
             if (schemeMap != null && !schemeMap.isEmpty()) {
                 for (final Set<Element> submap: schemeMap.values()) {
                     for (final Element e: submap) {
-                        final Element subRoot = searchForKey(e, key.value);
+                        final Element subRoot = searchForKey(e, key.value());
                         if (subRoot != null) {
-                            insertAction(subRoot, key.attribute, action);
+                            insertAction(subRoot, key.attribute(), action);
                         }
                     }
                 }

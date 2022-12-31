@@ -79,10 +79,9 @@ public class KeyDef {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof KeyDef)) {
+        if (!(obj instanceof KeyDef other)) {
             return false;
         }
-        KeyDef other = (KeyDef) obj;
         if (href == null) {
             if (other.href != null) {
                 return false;

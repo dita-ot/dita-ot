@@ -72,20 +72,11 @@ public final class LoggerListener implements BuildListener {
             level = event.getPriority();
         }
         switch (level) {
-            case Project.MSG_DEBUG:
-                logger.trace(message);
-                break;
-            case Project.MSG_VERBOSE:
-                logger.debug(message);
-                break;
-            case Project.MSG_INFO:
-                logger.info(message);
-                break;
-            case Project.MSG_WARN:
-                logger.warn(message);
-                break;
-            default:
-                logger.error(message);
+            case Project.MSG_DEBUG -> logger.trace(message);
+            case Project.MSG_VERBOSE -> logger.debug(message);
+            case Project.MSG_INFO -> logger.info(message);
+            case Project.MSG_WARN -> logger.warn(message);
+            default -> logger.error(message);
         }
     }
 }

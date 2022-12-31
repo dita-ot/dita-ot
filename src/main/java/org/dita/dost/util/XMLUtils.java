@@ -168,25 +168,19 @@ public final class XMLUtils {
                     .map(XdmNode::toString)
                     .collect(Collectors.joining());
             switch (level) {
-                case "FATAL":
+                case "FATAL" -> {
                     final TerminationException err = new TerminationException(msg);
                     errorCode.ifPresent(err::setErrorCode);
                     throw new SaxonApiUncheckedException(err);
-                case "ERROR":
-                    logger.error(msg);
-                    break;
-                case "WARN":
-                    logger.warn(msg);
-                    break;
-                case "INFO":
-                    logger.info(msg);
-                    break;
-                case "DEBUG":
-                    logger.debug(msg);
-                    break;
-                default:
+                }
+                case "ERROR" -> logger.error(msg);
+                case "WARN" -> logger.warn(msg);
+                case "INFO" -> logger.info(msg);
+                case "DEBUG" -> logger.debug(msg);
+                default -> {
                     logger.error("Message level " + level + " not supported");
                     logger.info(msg);
+                }
             }
         };
     }
@@ -584,12 +578,8 @@ public final class XMLUtils {
         for (int i = 0; i < children.getLength(); i++) {
             final Node n = children.item(i);
             switch (n.getNodeType()) {
-            case Node.TEXT_NODE:
-                buf.append(n.getNodeValue());
-                break;
-            case Node.ELEMENT_NODE:
-                buf.append(getStringValue((Element) n));
-                break;
+                case Node.TEXT_NODE -> buf.append(n.getNodeValue());
+                case Node.ELEMENT_NODE -> buf.append(getStringValue((Element) n));
             }
         }
         return buf.toString();
@@ -765,8 +755,7 @@ public final class XMLUtils {
 
     /** Close source. */
     public static void close(final Source input) throws IOException {
-        if (input != null && input instanceof StreamSource) {
-            final StreamSource s = (StreamSource) input;
+        if (input != null && input instanceof final StreamSource s) {
             final InputStream i = s.getInputStream();
             if (i != null) {
                 i.close();
@@ -781,8 +770,7 @@ public final class XMLUtils {
 
     /** Close result. */
     public static void close(final Result result) throws IOException {
-        if (result != null && result instanceof StreamResult) {
-            final StreamResult r = (StreamResult) result;
+        if (result != null && result instanceof final StreamResult r) {
             final OutputStream o = r.getOutputStream();
             if (o != null) {
                 o.close();
@@ -822,23 +810,12 @@ public final class XMLUtils {
             final char c = chars[i];
 
             switch (c) {
-            case '\'':
-                escaped.append("&apos;");
-                break;
-            case '\"':
-                escaped.append("&quot;");
-                break;
-            case '<':
-                escaped.append("&lt;");
-                break;
-            case '>':
-                escaped.append("&gt;");
-                break;
-            case '&':
-                escaped.append("&amp;");
-                break;
-            default:
-                escaped.append(c);
+                case '\'' -> escaped.append("&apos;");
+                case '\"' -> escaped.append("&quot;");
+                case '<' -> escaped.append("&lt;");
+                case '>' -> escaped.append("&gt;");
+                case '&' -> escaped.append("&amp;");
+                default -> escaped.append(c);
             }
         }
 
@@ -1101,11 +1078,7 @@ public final class XMLUtils {
     /**
      * Debug XMLReader wrapper that logs calls to parse, not intended for end users.
      */
-    private final static class DebugXMLReader implements XMLReader {
-        private final XMLReader r;
-        DebugXMLReader(final XMLReader r) {
-            this.r = r;
-        }
+    private record DebugXMLReader(XMLReader r) implements XMLReader {
 
         @Override
         public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {

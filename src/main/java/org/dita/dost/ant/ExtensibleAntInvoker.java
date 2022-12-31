@@ -196,8 +196,7 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     private AbstractPipelineModule getPipelineModule(final ModuleElem m, final PipelineHashIO pipelineInput) throws DITAOTException {
-        if (m instanceof XsltElem) {
-            final XsltElem xm = (XsltElem) m;
+        if (m instanceof final XsltElem xm) {
             if (xm.reloadstylesheet && xm.parallel) {
                 throw new BuildException("Both reloadstylesheet and parallel cannot be true");
             }
@@ -245,8 +244,7 @@ public final class ExtensibleAntInvoker extends Task {
                 module.setOutputProperty(o.name, o.value);
             }
             return module;
-        } else if (m instanceof SaxPipeElem) {
-            final SaxPipeElem fm = (SaxPipeElem) m;
+        } else if (m instanceof final SaxPipeElem fm) {
             final XmlFilterModule module = new XmlFilterModule();
             module.setParallel(fm.parallel);
             final List<FileInfoFilterElem> predicates = new ArrayList<>(fm.getFormat());

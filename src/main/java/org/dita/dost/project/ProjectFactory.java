@@ -61,62 +61,62 @@ public class ProjectFactory {
     @VisibleForTesting
     static Project resolveReferences(Project src) {
         return new Project(
-                src.deliverables == null ? Collections.emptyList() :
-                        src.deliverables.stream()
+                src.deliverables() == null ? Collections.emptyList() :
+                        src.deliverables().stream()
                                 .map(deliverable -> {
-                                    final Context context = Optional.ofNullable(deliverable.context)
-                                            .flatMap(cntx -> Optional.ofNullable(cntx.idref))
+                                    final Context context = Optional.ofNullable(deliverable.context())
+                                            .flatMap(cntx -> Optional.ofNullable(cntx.idref()))
                                             .map(idref -> {
-                                                final Context pub = src.contexts.stream()
-                                                        .filter(cntx -> Objects.equals(cntx.id, deliverable.context.idref))
+                                                final Context pub = src.contexts().stream()
+                                                        .filter(cntx -> Objects.equals(cntx.id(), deliverable.context().idref()))
                                                         .findAny()
-                                                        .orElseThrow(() -> new RuntimeException(String.format("Context not found: %s", deliverable.context.idref)));
+                                                        .orElseThrow(() -> new RuntimeException(String.format("Context not found: %s", deliverable.context().idref())));
                                                 return pub;
                                             })
-                                            .orElse(deliverable.context);
-                                    final Publication publication = Optional.ofNullable(deliverable.publication)
-                                            .flatMap(publ -> Optional.ofNullable(publ.idref))
+                                            .orElse(deliverable.context());
+                                    final Publication publication = Optional.ofNullable(deliverable.publication())
+                                            .flatMap(publ -> Optional.ofNullable(publ.idref()))
                                             .map(idref -> {
-                                                final Publication pub = src.publications.stream()
-                                                        .filter(publ -> Objects.equals(publ.id, deliverable.publication.idref))
+                                                final Publication pub = src.publications().stream()
+                                                        .filter(publ -> Objects.equals(publ.id(), deliverable.publication().idref()))
                                                         .findAny()
-                                                        .orElseThrow(() -> new RuntimeException(String.format("Publication not found: %s", deliverable.publication.idref)));
-                                                return merge(pub, deliverable.publication);
+                                                        .orElseThrow(() -> new RuntimeException(String.format("Publication not found: %s", deliverable.publication().idref())));
+                                                return merge(pub, deliverable.publication());
                                             })
-                                            .orElse(deliverable.publication);
+                                            .orElse(deliverable.publication());
                                     return new Deliverable(
-                                            deliverable.name,
-                                            deliverable.id,
+                                            deliverable.name(),
+                                            deliverable.id(),
                                             context,
-                                            deliverable.output,
+                                            deliverable.output(),
                                             publication
                                     );
                                 })
                                 .collect(Collectors.toList()),
-                src.includes,
-                src.publications,
-                src.contexts);
+                src.includes(),
+                src.publications(),
+                src.contexts());
     }
 
     private static Publication merge(Publication base, Publication extend) {
         final Map<String, Publication.Param> params = new HashMap<>();
-        if (base.params != null) {
-            for (Publication.Param param : base.params) {
-                params.put(param.name, param);
+        if (base.params() != null) {
+            for (Publication.Param param : base.params()) {
+                params.put(param.name(), param);
             }
         }
-        if (extend.params != null) {
-            for (Publication.Param param : extend.params) {
-                params.put(param.name, param);
+        if (extend.params() != null) {
+            for (Publication.Param param : extend.params()) {
+                params.put(param.name(), param);
             }
         }
         return new Publication(
-                base.name,
-                base.id,
-                base.idref,
-                base.transtype,
+                base.name(),
+                base.id(),
+                base.idref(),
+                base.transtype(),
                 new ArrayList<>(params.values()),
-                base.profiles
+                base.profiles()
         );
     }
 
@@ -126,19 +126,14 @@ public class ProjectFactory {
         }
         final ProjectBuilder builder;
         switch (FileUtils.getExtension(file.getPath()).toLowerCase()) {
-            case "xml":
+            case "xml" -> {
                 xmlReader.setLogger(logger);
                 xmlReader.setLax(lax);
                 builder = xmlReader.read(file);
-                break;
-            case "json":
-                builder = jsonReader.readValue(file.toURL());
-                break;
-            case "yaml":
-                builder = yamlReader.readValue(file.toURL());
-                break;
-            default:
-                throw new RuntimeException("Unrecognized project file format: " + file);
+            }
+            case "json" -> builder = jsonReader.readValue(file.toURL());
+            case "yaml" -> builder = yamlReader.readValue(file.toURL());
+            default -> throw new RuntimeException("Unrecognized project file format: " + file);
         }
         final Project project = Project.build(builder, file);
 
@@ -146,34 +141,34 @@ public class ProjectFactory {
     }
 
     private Project resolveIncludes(final Project project, final URI base, final Set<URI> processed) throws IOException, SAXParseException {
-        if (project.includes == null || project.includes.isEmpty()) {
+        if (project.includes() == null || project.includes().isEmpty()) {
             return project;
         }
-        final List<Deliverable> deliverables = project.deliverables != null
-                ? new ArrayList<>(project.deliverables)
+        final List<Deliverable> deliverables = project.deliverables() != null
+                ? new ArrayList<>(project.deliverables())
                 : new ArrayList<>();
-        final List<Publication> publications = project.publications != null
-                ? new ArrayList<>(project.publications)
+        final List<Publication> publications = project.publications() != null
+                ? new ArrayList<>(project.publications())
                 : new ArrayList<>();
-        final List<Context> contexts = project.contexts != null
-                ? new ArrayList<>(project.contexts)
+        final List<Context> contexts = project.contexts() != null
+                ? new ArrayList<>(project.contexts())
                 : new ArrayList<>();
-        if (project.includes != null) {
-            for (final ProjectRef projectRef : project.includes) {
-                final URI href = projectRef.href.isAbsolute() ? projectRef.href : base.resolve(projectRef.href);
+        if (project.includes() != null) {
+            for (final ProjectRef projectRef : project.includes()) {
+                final URI href = projectRef.href().isAbsolute() ? projectRef.href() : base.resolve(projectRef.href());
                 final Project ref = load(href, processed);
-                if (ref.deliverables != null) {
-                    deliverables.addAll(ref.deliverables);
+                if (ref.deliverables() != null) {
+                    deliverables.addAll(ref.deliverables());
                 }
-                if (ref.publications != null) {
-                    publications.addAll(ref.publications);
+                if (ref.publications() != null) {
+                    publications.addAll(ref.publications());
                 }
-                if (ref.contexts != null) {
-                    contexts.addAll(ref.contexts);
+                if (ref.contexts() != null) {
+                    contexts.addAll(ref.contexts());
                 }
             }
         }
-        return new Project(deliverables, project.includes, publications, contexts);
+        return new Project(deliverables, project.includes(), publications, contexts);
     }
 
     public void setLogger(Logger logger) {

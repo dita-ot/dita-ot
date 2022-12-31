@@ -70,8 +70,7 @@ public final class IndexTermTarget {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (obj instanceof IndexTermTarget) {
-            final IndexTermTarget target = (IndexTermTarget) obj;
+        if (obj instanceof final IndexTermTarget target) {
 
             if (targetName.equals(target.getTargetName())
                     && targetURI.equals(target.getTargetURI())) {
