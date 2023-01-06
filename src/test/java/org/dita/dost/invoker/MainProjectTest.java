@@ -51,7 +51,6 @@ public class MainProjectTest {
         final List<Map<String, Object>> act = main.collectProperties(project, projectFile, emptyMap());
 
         final Map<String, Object> exp = ImmutableMap.<String, Object>builder()
-                .put("project.deliverable", "site")
                 .put("output.dir", Paths.get("out", "site").toAbsolutePath().toString())
                 .put("args.input", baseDir.resolve("site.ditamap").toString())
                 .put("transtype", "html5")
@@ -61,6 +60,8 @@ public class MainProjectTest {
                 .put("args.filter", Paths.get(baseDir).resolve("site.ditaval").toAbsolutePath().toString())
                 .put("args.gen.task.lbl", "YES")
                 .put("args.uri", baseDir.resolve("foo%20bar").toString())
+                .put("deliverable.desc", "Name [site]")
+                .put("project.deliverable", "site")
                 .build();
         assertEquals(singletonList(exp), act);
     }
@@ -74,13 +75,14 @@ public class MainProjectTest {
         final List<Map<String, Object>> act = main.collectProperties(project, projectFile, emptyMap());
 
         final Map<String, Object> exp = ImmutableMap.<String, Object>builder()
-                .put("project.deliverable", "site")
                 .put("output.dir", Paths.get("out", "site").toAbsolutePath().toString())
                 .put("args.input", baseDir.resolve("site.ditamap").toString())
                 .put("transtype", "html5")
                 .put("args.filter", Stream.of("site-html5.ditaval", "site.ditaval")
                         .map(ditaval -> Paths.get(baseDir).resolve(ditaval).toAbsolutePath().toString())
                         .collect(Collectors.joining(File.pathSeparator)))
+                .put("deliverable.desc", "Name [site]")
+                .put("project.deliverable", "site")
                 .build();
         assertEquals(singletonList(exp), act);
     }
