@@ -537,9 +537,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 String topicId = null;
                                 if (relativeTarget.getFragment() == null && !"".equals(elementId)) {
                                     topicId = getFirstTopicId(topicFile);
-                                    if(topicId == null) {
+                                    if (topicId == null) {
                                         String directHref = keyDef.element.attribute(ATTRIBUTE_NAME_HREF);
-                                        if(directHref != null && ! directHref.equals(href.toString())) {
+                                        if (directHref != null && !directHref.equals(href.toString())) {
                                             //Try to also resolve the topic ID using the direct href
                                             try {
                                                 URI directTarget = keyDef.source.resolve(new URI(directHref));
