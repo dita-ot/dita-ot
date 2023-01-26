@@ -198,7 +198,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     final File p = new File(URLUtils.setQuery(URLUtils.stripFragment(abs), null));
                     try {
                         final File canFile = p.getCanonicalFile();
-                        final String absPath = p.getAbsolutePath();
+                        final String absPath = p.toPath().toRealPath().toString();
                         final String canPath = canFile.toString();
                         if (!Objects.equals(absPath, canPath) && Objects.equals(absPath.toLowerCase(), canPath.toLowerCase())) {
                             switch (processingMode) {
