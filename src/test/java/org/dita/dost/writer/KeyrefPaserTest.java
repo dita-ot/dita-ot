@@ -16,6 +16,7 @@ import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -183,5 +184,19 @@ public class KeyrefPaserTest {
         } catch (SaxonApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void testTopicWriteCopyTo() throws Exception {
+        final KeyrefPaser parser = new KeyrefPaser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
+        KeyScope kd = readKeyMap(Paths.get("copy-to-keys.ditamap"));
+        parser.setKeyDefinition(kd);
+        parser.setCurrentFile(new File(tempDir, "copy-to-keys.dita").toURI());
+        parser.write(new File(tempDir, "copy-to-keys.dita"));
+        
+        assertXMLEqual(new InputSource(new File(expDir, "copy-to-keys.dita").toURI().toString()),
+                new InputSource(new File(tempDir, "copy-to-keys.dita").toURI().toString()));
     }
 }

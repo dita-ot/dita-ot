@@ -23,6 +23,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 import static java.util.Arrays.asList;
@@ -536,6 +537,19 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 String topicId = null;
                                 if (relativeTarget.getFragment() == null && !"".equals(elementId)) {
                                     topicId = getFirstTopicId(topicFile);
+                                    if(topicId == null) {
+                                        String directHref = keyDef.element.attribute(ATTRIBUTE_NAME_HREF);
+                                        if(directHref != null && ! directHref.equals(href.toString())) {
+                                            //Try to also resolve the topic ID using the direct href
+                                            try {
+                                                URI directTarget = keyDef.source.resolve(new URI(directHref));
+                                                URI directTopicFile = currentFile.resolve(stripFragment(directTarget));
+                                                topicId = getFirstTopicId(directTopicFile);
+                                            } catch (URISyntaxException e) {
+                                                //Ignore
+                                            }
+                                        }
+                                    }
                                 }
                                 final URI targetOutput = normalizeHrefValue(relativeTarget, elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
