@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.*;
 
 import org.dita.dost.store.StreamStore;
@@ -38,6 +39,7 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 
 public class DebugAndFilterModuleTest {
 
@@ -134,6 +136,48 @@ public class DebugAndFilterModuleTest {
     @After
     public void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
+    }
+
+    @Test
+    public void testBreakWhenWritingOutsideTempDir() throws SAXException, IOException {
+        tempDir = TestUtils.createTempDir(getClass());
+
+        inputDir = new File(resourceDir, "input");
+        final File inputMap = new File(inputDir, "maps" + File.separator + "root-map-01.ditamap");
+        final File outDir = new File(tempDir, "out");
+        tmpDir = new File(tempDir, "temp");
+        TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
+        final Job job = new Job(tmpDir, new StreamStore(tmpDir, new XMLUtils()));
+        URI outside = new File("/etc/passwd").toURI();
+        job.add(new Job.FileInfo.Builder().src(outside).uri(outside).build());
+        job.setInputFile(inputMap.getAbsoluteFile().toURI());
+        job.setGeneratecopyouter(NOT_GENERATEOUTTER);
+        job.setOutputDir(outDir);
+        job.setProperty(INPUT_DIR, inputDir.getAbsolutePath());
+        job.setInputDir(inputDir.getAbsoluteFile().toURI());
+        job.write();
+
+        final PipelineHashIO pipelineInput = new PipelineHashIO();
+        pipelineInput.setAttribute("inputmap", inputMap.getPath());
+        pipelineInput.setAttribute("basedir", inputDir.getAbsolutePath());
+        pipelineInput.setAttribute("inputdir", inputDir.getPath());
+        pipelineInput.setAttribute("outputdir", outDir.getPath());
+        pipelineInput.setAttribute("tempDir", tmpDir.getPath());
+        pipelineInput.setAttribute("ditadir", ditaDir.getAbsolutePath());
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "xhtml");
+
+        final DebugAndFilterModule module = new DebugAndFilterModule();
+        module.setLogger(new TestUtils.TestLogger());
+        module.setJob(job);
+        module.setXmlUtils(new XMLUtils());
+        module.setProcessingPipe(Collections.emptyList());
+        
+        try {
+            module.execute(pipelineInput);
+            assertTrue("Should break, a file needs to be written outside of the temp files folder.", false);
+        } catch(Exception ex) {
+            assertEquals("Cannot write outside of the temporary files folder: file:/etc/passwd", ex.getMessage()); 
+        }
     }
 
     private static class TestHandler implements ContentHandler {
