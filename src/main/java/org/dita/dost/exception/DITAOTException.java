@@ -12,6 +12,8 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
 import org.dita.dost.log.MessageBean;
 
+import java.io.Serial;
+
 /**
  * Exception class for DITAOT, used to handle exceptions in Java modules.
  *
@@ -20,6 +22,7 @@ import org.dita.dost.log.MessageBean;
 public final class DITAOTException extends Exception {
 
     /** serial version. */
+    @Serial
     private static final long serialVersionUID = -7505646495801170017L;
     /** message bean. */
     private MessageBean messageBean = null;
