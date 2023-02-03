@@ -1,4 +1,4 @@
-# DITA Open Toolkit [![Build]](http://travis-ci.org/dita-ot/dita-ot) [![Slack]](http://slack.dita-ot.org/)
+# DITA Open Toolkit [![Slack]](http://slack.dita-ot.org/)
 
 _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for content authored in the _Darwin Information Typing Architecture_.
 
@@ -93,7 +93,6 @@ See the [documentation][docs] for arguments and [options].
 
 DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 
-[build]: https://travis-ci.org/dita-ot/dita-ot.svg?branch=develop
 [slack]: https://img.shields.io/badge/Slack-Join%20us!-%234A154B?style=flat&logo=slack
 [site]: https://www.dita-ot.org/
 [dist]: https://www.dita-ot.org/download
