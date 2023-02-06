@@ -70,7 +70,7 @@ public final class IndexGroupProcessor {
             final Locale theLocale) {
         final IndexCollator collator = new IndexCollator(theLocale);
 
-        final ArrayList<MyIndexGroup> result = new ArrayList<MyIndexGroup>();
+        final ArrayList<MyIndexGroup> result = new ArrayList<>();
 
         final ConfigEntry[] entries = theIndexConfiguration.getEntries();
 
@@ -113,7 +113,7 @@ public final class IndexGroupProcessor {
 
             if (groupMembers.length > 0) {
                 //Find entries by comaping first letter with a chars in current config entry
-                for (final String key : new ArrayList<String>(indexMap.keySet())) {
+                for (final String key : new ArrayList<>(indexMap.keySet())) {
                     if (key.length() > 0) {
                         final String value = getValue((IndexEntry) indexMap.get(key));
                         //                        final char c = value.charAt(0);
@@ -147,12 +147,11 @@ public final class IndexGroupProcessor {
 
         //If some terms remain uncategorized, and a recognized special character
         //group is available, place remaining terms in that group
-        for (int i = 0; i < IndexGroups.length; i++) {
-            final MyIndexGroup group = IndexGroups[i];
+        for (final MyIndexGroup group : IndexGroups) {
             final ConfigEntry configEntry = group.getConfigEntry();
             final String configKey = configEntry.getKey();
             if (configKey.equals(SPECIAL_CHARACTER_GROUP_KEY)) {
-              for (final String key : new ArrayList<String>(indexMap.keySet())) {
+                for (final String key : new ArrayList<>(indexMap.keySet())) {
                     if (key.length() > 0) {
                         final String value = getValue((IndexEntry) indexMap.get(key));
                         //                        final char c = value.charAt(0);
@@ -166,7 +165,7 @@ public final class IndexGroupProcessor {
 
         //No recognized "Special characters" group; uncategorized terms have no place to go, must be dropped
         if (!indexMap.isEmpty()) {
-            for (final String key : new ArrayList<String>(indexMap.keySet())) {
+            for (final String key : new ArrayList<>(indexMap.keySet())) {
                 if (key.length() > 0) {
                     final IndexEntry entry = (IndexEntry) indexMap.get(key);
                     logger.error(MessageUtils.getMessage("PDFJ001E", entry.toString()).toString());
@@ -178,7 +177,7 @@ public final class IndexGroupProcessor {
             }
         }
 
-        final ArrayList<MyIndexGroup> cleanResult = new ArrayList<MyIndexGroup>();
+        final ArrayList<MyIndexGroup> cleanResult = new ArrayList<>();
         for (final MyIndexGroup indexGroup : IndexGroups) {
             if (indexGroup.getEntries().length > 0) {
                 cleanResult.add(indexGroup);
@@ -200,7 +199,7 @@ public final class IndexGroupProcessor {
 
 
     private static String[] getIndexKeysOfIndexesInRange(final String theKey1, final String theKey2, final IndexCollator theCollator, final HashMap<String, IndexEntry> theIndexEntryMap) {
-        final ArrayList<String> res = new ArrayList<String>();
+        final ArrayList<String> res = new ArrayList<>();
         for (final Map.Entry<String, IndexEntry> e : theIndexEntryMap.entrySet()) {
             final int res1 = theCollator.compare(theKey1, getValue(e.getValue()));
             if (res1 <= 0) {
@@ -231,8 +230,8 @@ public final class IndexGroupProcessor {
     private static boolean doesStart(final String[] sourceStrings, final String[] compStrings) {
         for (final String sourceString2 : sourceStrings) {
             final String sourceString = sourceString2;
-            for (int j = 0; j < compStrings.length; j++) {
-                if (sourceString.startsWith(compStrings[j]) && !sourceString.equals(compStrings[j])) {
+            for (String compString : compStrings) {
+                if (sourceString.startsWith(compString) && !sourceString.equals(compString)) {
                     return true;
                 }
             }
@@ -242,7 +241,7 @@ public final class IndexGroupProcessor {
 
 
     private static HashMap<String, IndexEntry> createMap(final IndexEntry[] theIndexEntries) {
-        final HashMap<String, IndexEntry> map = new HashMap<String, IndexEntry>();
+        final HashMap<String, IndexEntry> map = new HashMap<>();
         for (final IndexEntry theIndexEntrie : theIndexEntries) {
             final IndexEntry indexEntry = theIndexEntrie;
             final String value = indexEntry.getValue();
@@ -291,8 +290,8 @@ public final class IndexGroupProcessor {
     implements IndexGroup {
         private final String label;
         private final ConfigEntry configEntry;
-        private final ArrayList<IndexEntry> entries = new ArrayList<IndexEntry>();
-        private final ArrayList<MyIndexGroup> childList = new ArrayList<MyIndexGroup>();
+        private final ArrayList<IndexEntry> entries = new ArrayList<>();
+        private final ArrayList<MyIndexGroup> childList = new ArrayList<>();
 
         public MyIndexGroup(final String theLabel, final ConfigEntry theConfigEntry) {
             this.label = theLabel;

@@ -54,7 +54,7 @@ class ConfigEntryImpl implements ConfigEntry {
      }
 
      public void addRange(final CharRange range) {
-         final ArrayList<CharRange> rangeList = new ArrayList<CharRange>();
+         final ArrayList<CharRange> rangeList = new ArrayList<>();
          for (final CharRange range2 : ranges) {
              rangeList.add(range2);
          }

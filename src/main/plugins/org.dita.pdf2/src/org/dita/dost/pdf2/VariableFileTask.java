@@ -39,12 +39,12 @@ public final class VariableFileTask extends Task {
 
     public static final String COMMON_VARIABLE_FILENAME = "commonvariables.xml";
     
-    private List<FileSet> filesets = new ArrayList<FileSet>();
+    private List<FileSet> filesets = new ArrayList<>();
     private File file;
     
     @Override
     public void execute() throws BuildException {
-        final List<File> files = new ArrayList<File>();
+        final List<File> files = new ArrayList<>();
         for (final FileSet fs: filesets) {
             final DirectoryScanner ds = fs.getDirectoryScanner(getProject());
             for (final String f: ds.getIncludedFiles()) {
