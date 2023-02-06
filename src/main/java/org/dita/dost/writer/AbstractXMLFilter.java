@@ -16,7 +16,6 @@ import java.util.Map;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
