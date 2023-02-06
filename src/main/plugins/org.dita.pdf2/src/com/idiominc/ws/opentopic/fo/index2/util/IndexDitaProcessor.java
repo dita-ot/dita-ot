@@ -55,8 +55,8 @@ See the accompanying LICENSE file for applicable license.
 @Deprecated
 public final class IndexDitaProcessor {
     
-    private static String elIndexRangeStartName = "start";
-    private static String elIndexRangeEndName = "end";
+    private static final String elIndexRangeStartName = "start";
+    private static final String elIndexRangeEndName = "end";
     private static final String LT = "<";
     private static final String GT = ">";
     private static final String sortStart = "[";
