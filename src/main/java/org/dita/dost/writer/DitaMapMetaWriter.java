@@ -20,9 +20,9 @@ import static org.dita.dost.util.Constants.*;
  */
 public final class DitaMapMetaWriter extends AbstractDitaMetaWriter {
 
-    private static final List<DitaClass> topicmetaPosition = Collections.unmodifiableList(Collections.singletonList(
+    private static final List<DitaClass> topicmetaPosition = Collections.singletonList(
             TOPIC_TITLE
-    ));
+    );
     private static final List<DitaClass> topicmetaOrder = Collections.unmodifiableList(Arrays.asList(
             TOPIC_NAVTITLE,
             MAP_LINKTEXT,
