@@ -39,7 +39,7 @@ public final class VariableFileTask extends Task {
 
     public static final String COMMON_VARIABLE_FILENAME = "commonvariables.xml";
     
-    private List<FileSet> filesets = new ArrayList<>();
+    private final List<FileSet> filesets = new ArrayList<>();
     private File file;
     
     @Override
