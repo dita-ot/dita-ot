@@ -603,7 +603,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         if (isFormatDita(file.format) && listFilter.isDitaTopic() &&
                 !job.crawlTopics() &&
                 !listFilter.getConrefTargets().contains(file.filename)) {
-            return;  // Do not process topics linked from within topics
+            // Do not process topics linked from within topics
         } else if ((isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format))) {
             addToWaitList(file);
         } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
