@@ -869,7 +869,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:sequence select="."/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:variable name="topic" select="ancestor::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
+            <xsl:variable name="topic" select="ancestor::*[contains(@class, ' topic/topic ') or contains(@class, ' map/map ')][1]" as="element()"/>
             <xsl:sequence select="$topic/*[not(contains(@class, ' topic/topic '))]"/>
           </xsl:otherwise>
         </xsl:choose>
