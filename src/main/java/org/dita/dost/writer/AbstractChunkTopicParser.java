@@ -85,8 +85,8 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     TempFileNameScheme tempFileNameScheme;
     private ChunkFilenameGenerator chunkFilenameGenerator;
 
-    NamespaceSupport namespaces = new NamespaceSupport();
-    HashMap<String, Integer> namespaceMap = new HashMap<>();
+    final NamespaceSupport namespaces = new NamespaceSupport();
+    final HashMap<String, Integer> namespaceMap = new HashMap<>();
 
     @Override
     public void setJob(final Job job) {

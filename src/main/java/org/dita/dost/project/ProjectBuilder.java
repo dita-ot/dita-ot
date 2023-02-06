@@ -40,11 +40,11 @@ public class ProjectBuilder {
     }
 
     public static class Deliverable {
-        public String name;
-        public String id;
-        public Context context;
-        public URI output;
-        public Publication publication;
+        public final String name;
+        public final String id;
+        public final Context context;
+        public final URI output;
+        public final Publication publication;
 
         @JsonCreator
         public Deliverable(@JsonProperty("name") String name,
@@ -60,7 +60,7 @@ public class ProjectBuilder {
         }
 
         public static class Profile {
-            public List<URI> ditavals;
+            public final List<URI> ditavals;
 
             @JsonCreator
             public Profile(@JsonProperty("ditavals") List<URI> ditavals) {
@@ -71,11 +71,11 @@ public class ProjectBuilder {
     }
 
     public static class Context {
-        public String name;
-        public String id;
-        public String idref;
-        public List<URI> input;
-        public Deliverable.Profile profiles;
+        public final String name;
+        public final String id;
+        public final String idref;
+        public final List<URI> input;
+        public final Deliverable.Profile profiles;
 
         @JsonCreator
         public Context(@JsonProperty("name") String name,
@@ -92,12 +92,12 @@ public class ProjectBuilder {
     }
 
     public static class Publication {
-        public String name;
-        public String id;
-        public String idref;
-        public String transtype;
-        public List<Param> params;
-        public Deliverable.Profile profiles;
+        public final String name;
+        public final String id;
+        public final String idref;
+        public final String transtype;
+        public final List<Param> params;
+        public final Deliverable.Profile profiles;
 
         @JsonCreator
         public Publication(@JsonProperty("name") String name,
@@ -115,10 +115,10 @@ public class ProjectBuilder {
         }
 
         public static class Param {
-            public String name;
-            public String value;
-            public URI href;
-            public URI path;
+            public final String name;
+            public final String value;
+            public final URI href;
+            public final URI path;
 
             @JsonCreator
             public Param(

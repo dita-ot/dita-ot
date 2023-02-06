@@ -34,12 +34,12 @@ public class Util {
   }
 
     // which ASCII characters need to be escaped
-    private static boolean[] gNeedEscaping = new boolean[128];
+    private static final boolean[] gNeedEscaping = new boolean[128];
     // the first hex character if a character needs to be escaped
-    private static char[] gAfterEscaping1 = new char[128];
+    private static final char[] gAfterEscaping1 = new char[128];
     // the second hex character if a character needs to be escaped
-    private static char[] gAfterEscaping2 = new char[128];
-  private static char[] gHexChs = { '0', '1', '2', '3', '4', '5', '6', '7',
+    private static final char[] gAfterEscaping2 = new char[128];
+  private static final char[] gHexChs = { '0', '1', '2', '3', '4', '5', '6', '7',
       '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
   // initialize the above 3 arrays
   static {

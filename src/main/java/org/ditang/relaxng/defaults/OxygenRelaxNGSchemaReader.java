@@ -53,7 +53,7 @@ public abstract class OxygenRelaxNGSchemaReader extends SchemaReaderImpl {
 	    /**
 	     * The wrapped schema.
 	     */
-	    private Schema schema;
+	    private final Schema schema;
 	    
 	    /**
 	     * The start pattern.

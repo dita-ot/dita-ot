@@ -29,7 +29,7 @@ import static org.dita.dost.util.URLUtils.toFile;
  */
 public final class InitializeProjectTask extends Task {
 
-    private static ServiceLoader<StoreBuilder> storeBuilderLoader = ServiceLoader.load(StoreBuilder.class);
+    private static final ServiceLoader<StoreBuilder> storeBuilderLoader = ServiceLoader.load(StoreBuilder.class);
 
     private String storeType = "file";
 

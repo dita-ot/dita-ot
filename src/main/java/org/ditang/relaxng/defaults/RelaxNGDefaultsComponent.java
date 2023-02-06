@@ -97,7 +97,7 @@ XMLComponent, XMLDocumentSource {
     /**
      * Debug this clas
      */
-    public static boolean DEBUG = false;
+    public static final boolean DEBUG = false;
 
     /**
      * The resolver
@@ -107,7 +107,7 @@ XMLComponent, XMLDocumentSource {
     /**
      * The grammar pool
      */
-    private XMLGrammarPool grammarPool;
+    private final XMLGrammarPool grammarPool;
 
     /**
      * <code>true</code> if we should also validate the content.

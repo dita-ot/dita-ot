@@ -28,8 +28,8 @@ public class StoreResource extends Resource
     private static final FileUtils FILE_UTILS = FileUtils.getFileUtils();
     private static final int NULL_FILE = Resource.getMagicNumber("null file".getBytes());
 
-    private URI file;
-    private Job job;
+    private final URI file;
+    private final Job job;
 
     public StoreResource(Job job, URI file) {
         this.job = job;

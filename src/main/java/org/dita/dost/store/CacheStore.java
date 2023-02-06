@@ -614,7 +614,7 @@ public class CacheStore extends AbstractStore implements Store {
         private final Document doc;
         private final XdmNode node;
         private final byte[] bytes;
-        private long lastModified;
+        private final long lastModified;
 
         private Entry(final Document doc, final XdmNode node, final byte[] bytes) {
             this(doc, node, bytes, System.currentTimeMillis());
