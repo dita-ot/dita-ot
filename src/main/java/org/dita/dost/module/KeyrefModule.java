@@ -297,7 +297,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                  final List<ResolveTask> res,
                  final Receiver receiver) throws XPathException {
         switch (node.getNodeKind()) {
-            case ELEMENT:
+            case ELEMENT -> {
                 if (MAP_MAP.matches(node) || MAP_TOPICREF.matches(node)) {
                     final List<KeyScope> ss = node.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null
                             ? Stream.of(node.attribute(ATTRIBUTE_NAME_KEYSCOPE).trim().split("\\s+"))
@@ -379,17 +379,15 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
                     receiver.endElement();
                 }
-                break;
-            case DOCUMENT:
+            }
+            case DOCUMENT -> {
                 receiver.startDocument(0);
                 for (final XdmNode c : node.children()) {
                     walkMap(map, c, scope, res, receiver);
                 }
                 receiver.endDocument();
-                break;
-            default:
-                receiver.append(node.getUnderlyingNode());
-                break;
+            }
+            default -> receiver.append(node.getUnderlyingNode());
         }
     }
 
