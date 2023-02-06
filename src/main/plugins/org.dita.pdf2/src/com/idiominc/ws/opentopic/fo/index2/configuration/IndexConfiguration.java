@@ -51,7 +51,7 @@ public class IndexConfiguration {
 
 
     public ConfigEntry[] getEntries() {
-        return (ConfigEntry[]) entries.toArray(new ConfigEntry[entries.size()]);
+        return entries.toArray(new ConfigEntry[entries.size()]);
     }
 
 
@@ -127,11 +127,11 @@ public class IndexConfiguration {
                             }
                         }
                     }
-                    groupMembers = (String[])nodeValues.toArray(new String[nodeValues.size()]);
+                    groupMembers = nodeValues.toArray(new String[nodeValues.size()]);
                 }
                 final ConfigEntryImpl configEntry = new ConfigEntryImpl(labelValue, keyValue, groupMembers);
                 for (CharRange charRange : rangeList) {
-                    configEntry.addRange((CharRange) charRange);
+                    configEntry.addRange(charRange);
                 }
                 indexConfiguration.addEntry(configEntry);
             }

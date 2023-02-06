@@ -59,7 +59,7 @@ class ConfigEntryImpl implements ConfigEntry {
              rangeList.add(range2);
          }
          rangeList.add(range);
-         ranges = (CharRange[]) rangeList.toArray(new CharRange[rangeList.size()]);
+         ranges = rangeList.toArray(new CharRange[rangeList.size()]);
      }
 
 

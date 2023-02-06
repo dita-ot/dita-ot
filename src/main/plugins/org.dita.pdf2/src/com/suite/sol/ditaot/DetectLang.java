@@ -95,7 +95,7 @@ public class DetectLang extends Task {
         final String locale = getProject().getProperty("document.locale");
         if (locale != null && getProject().getProperty("document.language") == null) {
             setActiveProjectProperty("document.language",
-                    locale.substring(0, locale.length() < 2 ? locale.length(): 2));
+                    locale.substring(0, Math.min(locale.length(), 2)));
         }
     }
 
