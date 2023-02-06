@@ -102,7 +102,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final URI mapFile = in.uri;
             final XdmNode doc = readMap(in);
-            logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
+            logger.info("Reading " + job.tempDirURI.resolve(mapFile));
             reader.read(job.tempDirURI.resolve(mapFile), doc);
 
             final KeyScope startScope = reader.getKeyDefinition();
@@ -113,7 +113,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                     .map(fi -> {
                         try {
                             final XdmNode d = readMap(fi);
-                            logger.info("Reading " + job.tempDirURI.resolve(fi.uri).toString());
+                            logger.info("Reading " + job.tempDirURI.resolve(fi.uri));
                             final KeyrefReader r = new KeyrefReader();
                             r.setLogger(logger);
                             r.read(job.tempDirURI.resolve(fi.uri), d);
