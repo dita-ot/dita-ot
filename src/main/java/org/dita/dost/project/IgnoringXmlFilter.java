@@ -76,13 +76,13 @@ public class IgnoringXmlFilter extends XMLFilterImpl {
         }
     }
 
-    public void characters(final char ch[], final int start, final int length) throws SAXException {
+    public void characters(final char[] ch, final int start, final int length) throws SAXException {
         if (include.peek()) {
             super.characters(ch, start, length);
         }
     }
 
-    public void ignorableWhitespace(final char ch[], final int start, final int length) throws SAXException {
+    public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
         if (include.peek()) {
             super.characters(ch, start, length);
         }
