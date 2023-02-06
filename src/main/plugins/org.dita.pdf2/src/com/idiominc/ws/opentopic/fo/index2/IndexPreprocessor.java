@@ -320,7 +320,7 @@ public final class IndexPreprocessor {
             final String[] refIDs = indexEntry.getRefIDs();
             for (final String refID : refIDs) {
                 final Element referenceIDElement = createElement(theTargetDocument, "refID");
-                referenceIDElement.setAttribute("indexid", hashPrefix + Integer.toString(refID.hashCode()));
+                referenceIDElement.setAttribute("indexid", hashPrefix + refID.hashCode());
                 referenceIDElement.setAttribute("value", refID);
                 indexEntryNode.appendChild(referenceIDElement);
             }
