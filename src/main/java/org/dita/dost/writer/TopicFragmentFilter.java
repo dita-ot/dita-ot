@@ -81,12 +81,13 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
 
     private boolean isLocalDitaReference(final Attributes atts, final String attr) {
         switch (attr) {
-            case ATTRIBUTE_NAME_CONREF:
-            case ATTRIBUTE_NAME_CONREFEND:
+            case ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND -> {
                 return true;
-            default:
+            }
+            default -> {
                 final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
                 return format == null || format.equals(ATTR_FORMAT_VALUE_DITA);
+            }
         }
     }
 
