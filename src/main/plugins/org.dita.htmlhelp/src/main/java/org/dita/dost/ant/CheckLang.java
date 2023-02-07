@@ -11,9 +11,6 @@ import static org.dita.dost.ant.ExtensibleAntInvoker.getJob;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.util.Properties;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -22,7 +19,6 @@ import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.XMLUtils;
 
 /**
  * This class is for get the first xml:lang value set in ditamap/topic files

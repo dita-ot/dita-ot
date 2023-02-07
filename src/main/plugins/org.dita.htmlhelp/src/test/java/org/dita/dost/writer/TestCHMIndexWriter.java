@@ -30,7 +30,7 @@ public class TestCHMIndexWriter {
     private static final File expDir = new File(resourceDir, "exp");
 
     @BeforeClass
-    public static void setUp() throws IOException, DITAOTException {
+    public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestCHMIndexWriter.class);
     }
 
@@ -44,7 +44,7 @@ public class TestCHMIndexWriter {
         indexterm2.setTermName("name2");
         indexterm2.setTermKey("indexkey2");
         indexterm1.addSubTerm(indexterm2);
-        final List<IndexTerm> collection = new ArrayList<IndexTerm>();
+        final List<IndexTerm> collection = new ArrayList<>();
         collection.add(indexterm1);
 //        content.setCollection(collection);
 
