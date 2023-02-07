@@ -88,8 +88,6 @@ public final class VariableFileTask extends Task {
             }
 
             new XMLUtils().writeDocument(d, file);
-        } catch (final RuntimeException e) {
-            throw e;
         } catch (final SAXException | IOException e) {
             throw new BuildException("Failed to write output file: " + e.getMessage(), e);
         } finally {

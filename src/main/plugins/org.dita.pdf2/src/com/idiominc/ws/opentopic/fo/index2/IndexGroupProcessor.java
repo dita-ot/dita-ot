@@ -1,6 +1,5 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
-import com.ibm.icu.text.Collator;
 import com.idiominc.ws.opentopic.fo.index2.configuration.ConfigEntry;
 import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 
@@ -8,8 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
@@ -82,7 +79,7 @@ public final class IndexGroupProcessor {
             final MyIndexGroup group = new MyIndexGroup(label,configEntry);
             result.add(group);
         }
-        final MyIndexGroup[] IndexGroups = result.toArray(new MyIndexGroup[result.size()]);
+        final MyIndexGroup[] IndexGroups = result.toArray(new MyIndexGroup[0]);
 
         //Adding dependecies to group array
         for (int i = 0; i < IndexGroups.length; i++) {
@@ -183,8 +180,7 @@ public final class IndexGroupProcessor {
                 cleanResult.add(indexGroup);
             }
         }
-        final MyIndexGroup[] cleanIndexGroups = cleanResult.toArray(new MyIndexGroup[cleanResult.size()]);
-        return cleanIndexGroups;
+        return cleanResult.toArray(new MyIndexGroup[0]);
     }
 
 
@@ -214,7 +210,7 @@ public final class IndexGroupProcessor {
                 }
             }
         }
-        return res.toArray(new String[res.size()]);
+        return res.toArray(new String[0]);
     }
 
 
@@ -229,9 +225,8 @@ public final class IndexGroupProcessor {
 
     private static boolean doesStart(final String[] sourceStrings, final String[] compStrings) {
         for (final String sourceString2 : sourceStrings) {
-            final String sourceString = sourceString2;
             for (String compString : compStrings) {
-                if (sourceString.startsWith(compString) && !sourceString.equals(compString)) {
+                if (sourceString2.startsWith(compString) && !sourceString2.equals(compString)) {
                     return true;
                 }
             }
@@ -243,39 +238,38 @@ public final class IndexGroupProcessor {
     private static HashMap<String, IndexEntry> createMap(final IndexEntry[] theIndexEntries) {
         final HashMap<String, IndexEntry> map = new HashMap<>();
         for (final IndexEntry theIndexEntrie : theIndexEntries) {
-            final IndexEntry indexEntry = theIndexEntrie;
-            final String value = indexEntry.getValue();
+            final String value = theIndexEntrie.getValue();
 
             if (!map.containsKey(value)) {
-                map.put(value, indexEntry);
+                map.put(value, theIndexEntrie);
             } else {
                 final IndexEntry existingEntry = map.get(value);
-                final IndexEntry[] childIndexEntries = indexEntry.getChildIndexEntries();
+                final IndexEntry[] childIndexEntries = theIndexEntrie.getChildIndexEntries();
                 for (final IndexEntry childIndexEntry : childIndexEntries) {
                     existingEntry.addChild(childIndexEntry);
                 }
-                final IndexEntry[] seeChildIndexEntries = indexEntry.getSeeChildIndexEntries();
+                final IndexEntry[] seeChildIndexEntries = theIndexEntrie.getSeeChildIndexEntries();
                 for (int j = 0;seeChildIndexEntries != null && j < seeChildIndexEntries.length; j++) {
                     final IndexEntry seeChildIndexEntry = seeChildIndexEntries[j];
                     existingEntry.addSeeChild(seeChildIndexEntry);
                 }
-                final IndexEntry[] seeAlsoChildIndexEntries = indexEntry.getSeeAlsoChildIndexEntries();
+                final IndexEntry[] seeAlsoChildIndexEntries = theIndexEntrie.getSeeAlsoChildIndexEntries();
                 for (int j = 0;seeAlsoChildIndexEntries != null && j < seeAlsoChildIndexEntries.length; j++) {
                     final IndexEntry seeAlsoChildIndexEntry = seeAlsoChildIndexEntries[j];
                     existingEntry.addSeeAlsoChild(seeAlsoChildIndexEntry);
                 }
                 //supress some attributes of given entry to the existing one
-                if (indexEntry.isRestoresPageNumber()) {
+                if (theIndexEntrie.isRestoresPageNumber()) {
                     existingEntry.setRestoresPageNumber(true);
                 }
-                final String[] refIDs = indexEntry.getRefIDs();
+                final String[] refIDs = theIndexEntrie.getRefIDs();
                 for (final String refID : refIDs) {
                     existingEntry.addRefID(refID);
                 }
-                if (!indexEntry.isSuppressesThePageNumber()) {
+                if (!theIndexEntrie.isSuppressesThePageNumber()) {
                     existingEntry.setSuppressesThePageNumber(false);
                 }
-                if (indexEntry.isStartingRange()) {
+                if (theIndexEntrie.isStartingRange()) {
                     existingEntry.setStartRange(true);
                 }
             }
@@ -302,7 +296,7 @@ public final class IndexGroupProcessor {
 
 
         public IndexEntry[] getEntries() {
-            return entries.toArray(new IndexEntry[entries.size()]);
+            return entries.toArray(new IndexEntry[0]);
         }
 
         public ConfigEntry getConfigEntry() {

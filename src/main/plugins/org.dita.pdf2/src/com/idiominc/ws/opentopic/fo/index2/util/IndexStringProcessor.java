@@ -4,11 +4,8 @@ import static com.idiominc.ws.opentopic.fo.index2.IndexPreprocessor.*;
 
 import com.idiominc.ws.opentopic.fo.index2.IndexEntry;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
-import org.dita.dost.util.Configuration;
 import org.w3c.dom.Node;
 
 /*
@@ -56,10 +53,9 @@ public abstract class IndexStringProcessor {
      */
     public static IndexEntry[] processIndexString(final String theIndexMarkerString, final List<Node> contents) {
         final IndexEntryImpl indexEntry = createIndexEntry(theIndexMarkerString, contents, null, false);
-        final StringBuffer referenceIDBuf = new StringBuffer();
-        referenceIDBuf.append(indexEntry.getValue());
-        referenceIDBuf.append(VALUE_SEPARATOR);
-        indexEntry.addRefID(referenceIDBuf.toString());
+        String referenceIDBuf = indexEntry.getValue() +
+                VALUE_SEPARATOR;
+        indexEntry.addRefID(referenceIDBuf);
 
         return new IndexEntry[] { indexEntry };
     }
@@ -80,14 +76,12 @@ public abstract class IndexStringProcessor {
 
 
     private static IndexEntryImpl createIndexEntry(String theValue, final List<Node> contents, final String theSortString, final boolean theIsParentNoPage) {
-        final boolean suppressesThePageNumber = theIsParentNoPage;
         final boolean restoresPageNumber = false;
         final boolean startsRange = false;
         final boolean endsRange = false;
-        final String strippedFormatting = theValue;
 
-        final IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, theSortString, theValue, contents);
-        indexEntry.setSuppressesThePageNumber(suppressesThePageNumber);
+        final IndexEntryImpl indexEntry = new IndexEntryImpl(theValue, theSortString, theValue, contents);
+        indexEntry.setSuppressesThePageNumber(theIsParentNoPage);
         indexEntry.setRestoresPageNumber(restoresPageNumber);
         indexEntry.setStartRange(startsRange);
         indexEntry.setEndsRange(endsRange);

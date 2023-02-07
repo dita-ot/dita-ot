@@ -75,7 +75,7 @@ public class Configuration {
 
     private Alphabet[] initAlphabets(final Document theConfigurationFile)
             throws ConfigurationException {
-        final List<Alphabet> alphabetList = new ArrayList<Alphabet>();
+        final List<Alphabet> alphabetList = new ArrayList<>();
 
         final Node firstChild = theConfigurationFile.getDocumentElement();
         if (!"configuration".equals(firstChild.getNodeName())) {
@@ -106,13 +106,13 @@ public class Configuration {
                 }
             }
         }
-        return (Alphabet[]) alphabetList.toArray(new Alphabet[alphabetList.size()]);
+        return alphabetList.toArray(new Alphabet[0]);
     }
 
 
     private Character[] processCharacterSetNode(final Node theNode)
             throws ConfigurationException {
-        final List<Character> characterList = new ArrayList<Character>();
+        final List<Character> characterList = new ArrayList<>();
 
         final NodeList ranges = theNode.getChildNodes();
         for (int i = 0; i < ranges.getLength(); i++) {
@@ -123,7 +123,7 @@ public class Configuration {
                 if (aChars.length != 1) {
                     throw new ConfigurationException(BAD_CONF_MESSAGE);
                 }
-                characterList.add(new Character(aChars[0]));
+                characterList.add(aChars[0]);
             } else if ("character-range".equals(node.getNodeName())) {
                 Node start = null;
                 Node end = null;
@@ -154,13 +154,13 @@ public class Configuration {
                 final char endChar = endChars[0];
 
                 for (char ch = startChar; ch <= endChar; ch++) {
-                    characterList.add(new Character(ch));
+                    characterList.add(ch);
                 }
             } else {
                 //                System.out.println("Unprocessed element [" + node + "]");
             }
         }
 
-        return (Character[]) characterList.toArray(new Character[characterList.size()]);
+        return characterList.toArray(new Character[0]);
     }
 }

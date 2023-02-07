@@ -50,16 +50,16 @@ class IndexEntryImpl implements IndexEntry {
     private final List<Node> contents;
     private String sortString;
 
-    private final HashMap<String, IndexEntry> childs = new HashMap<String, IndexEntry>();
-    private final HashMap<String, IndexEntry> seeChilds = new HashMap<String, IndexEntry>();
-    private final HashMap<String, IndexEntry> seeAlsoChilds = new HashMap<String, IndexEntry>();
+    private final HashMap<String, IndexEntry> childs = new HashMap<>();
+    private final HashMap<String, IndexEntry> seeChilds = new HashMap<>();
+    private final HashMap<String, IndexEntry> seeAlsoChilds = new HashMap<>();
 
     private boolean startRange = false;
     private boolean endsRange = false;
     private boolean suppressesThePageNumber = false;
     private boolean restoresPageNumber = false;
 
-    private final ArrayList<String> refIDs = new ArrayList<String>();
+    private final ArrayList<String> refIDs = new ArrayList<>();
 
     /**
      * Index entry constructor.
@@ -79,7 +79,7 @@ class IndexEntryImpl implements IndexEntry {
 
 
     public String[] getRefIDs() {
-        return (String[]) refIDs.toArray(new String[refIDs.size()]);
+        return refIDs.toArray(new String[0]);
     }
 
 
@@ -104,7 +104,7 @@ class IndexEntryImpl implements IndexEntry {
 
     public IndexEntry[] getChildIndexEntries() {
         final Collection<IndexEntry> collection = childs.values();
-        return (IndexEntry[]) collection.toArray(new IndexEntry[collection.size()]);
+        return collection.toArray(new IndexEntry[0]);
     }
 
 
@@ -143,7 +143,7 @@ class IndexEntryImpl implements IndexEntry {
         }
         //The index with same value already exists
         //Add seeChilds of given entry to existing entry
-        final IndexEntry existingEntry = (IndexEntry) this.seeChilds.get(entryValue);
+        final IndexEntry existingEntry = this.seeChilds.get(entryValue);
 
         final IndexEntry[] childIndexEntries = theEntry.getChildIndexEntries();
         for (final IndexEntry childIndexEntry : childIndexEntries) {
@@ -172,7 +172,7 @@ class IndexEntryImpl implements IndexEntry {
         }
         //The index with same value already exists
         //Add seeAlsoChilds of given entry to existing entry
-        final IndexEntry existingEntry = (IndexEntry) this.seeAlsoChilds.get(entryValue);
+        final IndexEntry existingEntry = this.seeAlsoChilds.get(entryValue);
 
         final IndexEntry[] childIndexEntries = theEntry.getChildIndexEntries();
         for (final IndexEntry childIndexEntry : childIndexEntries) {
@@ -201,7 +201,7 @@ class IndexEntryImpl implements IndexEntry {
         }
         //The index with same value already exists
         //Add childs of given entry to existing entry
-        final IndexEntry existingEntry = (IndexEntry) this.childs.get(entryValue);
+        final IndexEntry existingEntry = this.childs.get(entryValue);
 
         final IndexEntry[] childIndexEntries = theEntry.getChildIndexEntries();
         for (final IndexEntry childIndexEntry : childIndexEntries) {
@@ -261,7 +261,7 @@ class IndexEntryImpl implements IndexEntry {
     public IndexEntry[] getSeeChildIndexEntries() {
         if (!seeChilds.isEmpty()) {
             final Collection<IndexEntry> collection = seeChilds.values();
-            return (IndexEntry[]) collection.toArray(new IndexEntry[collection.size()]);
+            return collection.toArray(new IndexEntry[0]);
         } else {
             return null;
         }
@@ -270,7 +270,7 @@ class IndexEntryImpl implements IndexEntry {
     public IndexEntry[] getSeeAlsoChildIndexEntries() {
         if (!seeAlsoChilds.isEmpty()) {
             final Collection<IndexEntry> collection = seeAlsoChilds.values();
-            return (IndexEntry[]) collection.toArray(new IndexEntry[collection.size()]);
+            return collection.toArray(new IndexEntry[0]);
         } else {
             return null;
         }

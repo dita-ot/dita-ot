@@ -43,7 +43,6 @@ See the accompanying LICENSE file for applicable license.
 @Deprecated
 public class IndexConfiguration {
     private final List<ConfigEntry> entries = new ArrayList<>();
-    private static String message;
 
 
     public IndexConfiguration() {
@@ -51,7 +50,7 @@ public class IndexConfiguration {
 
 
     public ConfigEntry[] getEntries() {
-        return entries.toArray(new ConfigEntry[entries.size()]);
+        return entries.toArray(new ConfigEntry[0]);
     }
 
 
@@ -62,7 +61,7 @@ public class IndexConfiguration {
 
     public static IndexConfiguration parse(final Document theDocument)
             throws ParseException {
-        message = "Invalid configuration format";
+        String message = "Invalid configuration format";
 
         final IndexConfiguration indexConfiguration = new IndexConfiguration();
 
@@ -127,7 +126,7 @@ public class IndexConfiguration {
                             }
                         }
                     }
-                    groupMembers = nodeValues.toArray(new String[nodeValues.size()]);
+                    groupMembers = nodeValues.toArray(new String[0]);
                 }
                 final ConfigEntryImpl configEntry = new ConfigEntryImpl(labelValue, keyValue, groupMembers);
                 for (CharRange charRange : rangeList) {
