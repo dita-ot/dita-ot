@@ -27,7 +27,7 @@ public final class DITAOTException extends Exception {
     /** message bean. */
     private MessageBean messageBean = null;
     /** capture flag. */
-    private boolean captured = false;
+    private final boolean captured = false;
 
     /**
      * Constructs a new DITAOTException with {@code null}

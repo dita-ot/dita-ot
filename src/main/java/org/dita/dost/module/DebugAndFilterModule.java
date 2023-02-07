@@ -530,7 +530,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     /**
      * Lexical handler to forward DTD declaration into processing instructions.
      */
-    private final class DTDForwardHandler implements LexicalHandler {
+    private static final class DTDForwardHandler implements LexicalHandler {
 
         private final XMLReader parser;
 

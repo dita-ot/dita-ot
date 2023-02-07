@@ -194,7 +194,7 @@ public final class ConrefPushParser extends AbstractDomFilter {
     private void walk(final Element elem, final String parentTopicId) {
         String topicId = parentTopicId;
         final String idValue = elem.getAttribute(ATTRIBUTE_NAME_ID);
-        if (idValue != null) {
+        if (!idValue.isEmpty()) {
             final DitaClass cls = DitaClass.getInstance(elem);
             if (TOPIC_TOPIC.matches(cls)) {
                 topicId = idValue;

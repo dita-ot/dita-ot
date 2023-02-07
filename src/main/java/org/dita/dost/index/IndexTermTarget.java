@@ -72,10 +72,8 @@ public final class IndexTermTarget {
     public boolean equals(final Object obj) {
         if (obj instanceof final IndexTermTarget target) {
 
-            if (targetName.equals(target.getTargetName())
-                    && targetURI.equals(target.getTargetURI())) {
-                return true;
-            }
+            return targetName.equals(target.getTargetName())
+                    && targetURI.equals(target.getTargetURI());
         }
 
         return false;

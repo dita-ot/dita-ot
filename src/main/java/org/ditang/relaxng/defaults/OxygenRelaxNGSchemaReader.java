@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import javax.xml.transform.sax.SAXSource;
 
-import org.ditang.relaxng.defaults.RelaxNGDefaultValues.DefaultValuesCollector;
 import org.relaxng.datatype.DatatypeLibraryFactory;
 import org.relaxng.datatype.helpers.DatatypeLibraryLoader;
 import org.xml.sax.ErrorHandler;

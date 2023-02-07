@@ -7,7 +7,6 @@
  */
 package org.dita.dost.util;
 
-import static net.sf.saxon.s9api.streams.Predicates.hasAttribute;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.Map;

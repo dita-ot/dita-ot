@@ -110,13 +110,13 @@ public class UsageBuilder {
 
     private List<Map.Entry<Key, String>> sort(Map<Key, String> arguments) {
         final List<Map.Entry<Key, String>> entries = new ArrayList<>(arguments.entrySet());
-        entries.sort(Comparator.comparing(Map.Entry::getKey));
+        entries.sort(Map.Entry.comparingByKey());
         return entries;
     }
 
     private List<Map.Entry<String, String>> sortSubCommands(Map<String, String> arguments) {
         final List<Map.Entry<String, String>> entries = new ArrayList<>(arguments.entrySet());
-        entries.sort(Comparator.comparing(Map.Entry::getKey));
+        entries.sort(Map.Entry.comparingByKey());
         return entries;
     }
 
@@ -131,9 +131,7 @@ public class UsageBuilder {
         for (Key key : arguments.keySet()) {
             max = Math.max(max, key.toString().length());
         }
-        StringBuilder padding = new StringBuilder();
-        padding.append(" ".repeat(Math.max(0, max + 2)));
-        return padding.toString();
+        return " ".repeat(Math.max(0, max + 2));
     }
 
     public void print() {

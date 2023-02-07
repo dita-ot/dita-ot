@@ -8,15 +8,11 @@
  */
 package org.dita.dost.platform;
 
-import java.util.Hashtable;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.dita.dost.log.DITAOTLogger;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
+
+import java.util.*;
 
 /**
  * ImportAction implements IAction and import the resource
@@ -29,7 +25,7 @@ abstract class ImportAction implements IAction {
     final Set<Value> valueSet;
     /** Action parameters. */
     final Hashtable<String, String> paramTable;
-    private DITAOTLogger logger;
+    DITAOTLogger logger;
     /** Plug-in features. */
     Map<String, Features> featureTable = null;
 

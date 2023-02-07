@@ -7,17 +7,17 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.util.DitaClass;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Add debug attributes.
@@ -66,12 +66,12 @@ public final class DebugFilter extends AbstractXMLFilter {
                 nextValue = 1;
             }
             counterMap.put(qName, nextValue);
-            final StringBuilder xtrc = new StringBuilder(qName).append(COLON).append(nextValue.toString());
+            final StringBuilder xtrc = new StringBuilder(qName).append(COLON).append(nextValue);
             if (locator != null) {
                 xtrc.append(';')
-                    .append(Integer.toString(locator.getLineNumber()))
+                    .append(locator.getLineNumber())
                     .append(COLON)
-                    .append(Integer.toString(locator.getColumnNumber()));
+                    .append(locator.getColumnNumber());
             }
             XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRC, xtrc.toString());
         }
