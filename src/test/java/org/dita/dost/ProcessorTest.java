@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class ProcessorTest {
 
@@ -62,7 +61,7 @@ public class ProcessorTest {
                     .createDebugLog(false)
                     .run();
         } catch (Exception e) {
-            assertEquals(0, tempDir.listFiles(f -> f.isDirectory()).length);
+            assertEquals(0, tempDir.listFiles(File::isDirectory).length);
             assertEquals(0, tempDir.listFiles(f -> f.isFile() && f.getName().endsWith(".log")).length);
             throw e;
         }
@@ -78,7 +77,7 @@ public class ProcessorTest {
                     .cleanOnFailure(false)
                     .run();
         } catch (BuildException e) {
-            assertEquals(1, tempDir.listFiles(f -> f.isDirectory()).length);
+            assertEquals(1, tempDir.listFiles(File::isDirectory).length);
             assertEquals(1, tempDir.listFiles(f -> f.isFile() && f.getName().endsWith(".log")).length);
             throw e;
         }

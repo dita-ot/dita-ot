@@ -161,9 +161,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
         );
         Collections.sort(filesExp);
         final List<String> filesAct = Arrays.stream(tempDir.listFiles((dir, name) -> name.endsWith(".dita")))
-                .map(f -> f.getName())
-                .collect(Collectors.toList());
-        Collections.sort(filesAct);
+                .map(File::getName).sorted().collect(Collectors.toList());
         assertEquals(filesExp, filesAct);
         assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
     }
@@ -231,7 +229,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
                     .format(ATTR_FORMAT_VALUE_DITAVAL)
                     .build());
         }
-        for (final String uri: Arrays.asList("t1.xml")) {
+        for (final String uri: List.of("t1.xml")) {
             res.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
                     .result(new File(tempDir, uri).toURI())

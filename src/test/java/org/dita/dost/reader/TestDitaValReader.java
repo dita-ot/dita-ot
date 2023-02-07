@@ -10,7 +10,6 @@ package org.dita.dost.reader;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.FilterUtils;
@@ -25,6 +24,7 @@ import javax.xml.namespace.QName;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -97,7 +97,7 @@ public class TestDitaValReader {
                 new FilterKey(QName.valueOf("default"), null), Action.INCLUDE
         );
         assertEquals(exp, act);
-        assertEquals(Arrays.asList(WARN), logger.getMessages().stream().map(msg -> msg.level).collect(Collectors.toList()));
+        assertEquals(List.of(WARN), logger.getMessages().stream().map(msg -> msg.level).collect(Collectors.toList()));
     }
 
     @Test

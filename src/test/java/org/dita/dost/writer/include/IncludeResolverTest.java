@@ -65,7 +65,7 @@ public class IncludeResolverTest {
         tempDir = TestUtils.createTempDir(IncludeResolverTest.class);
 
         Files.copy(new File(srcDir, test).toPath(), new File(tempDir, test).toPath());
-        Files.write(new File(tempDir, "topic.dita").toPath(),"dummy".getBytes(StandardCharsets.UTF_8));
+        Files.writeString(new File(tempDir, "topic.dita").toPath(), "dummy");
         for (final String file : new String[]{"code.xml", "utf-8.xml", "plain.txt", "range.txt", "schema.xml"}) {
             Files.copy(new File(srcDir, file).toPath(), new File(tempDir, file).toPath());
         }

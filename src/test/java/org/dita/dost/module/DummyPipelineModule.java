@@ -31,7 +31,7 @@ public class DummyPipelineModule implements AbstractPipelineModule {
     /**
      * @return always returns {@link #exp}
      */
-    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) {
         return exp;
     }
 

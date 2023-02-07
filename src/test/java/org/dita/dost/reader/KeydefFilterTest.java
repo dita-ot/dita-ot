@@ -8,8 +8,6 @@
 package org.dita.dost.reader;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
@@ -59,7 +57,7 @@ public class KeydefFilterTest {
     public void testParse() throws Exception{
         parser.parse(new File(rootFile.getPath()).toURI().toString());
         
-        final Map<String, KeyDef> expKeyDefMap = new HashMap<String, KeyDef>();
+        final Map<String, KeyDef> expKeyDefMap = new HashMap<>();
         expKeyDefMap.put("target_topic_1", new KeyDef("target_topic_1", new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null, null,null));
         expKeyDefMap.put("target_topic_2", new KeyDef("target_topic_2", new File(srcDir, "topics" + File.separator + "target-topic-c.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null, null,null));
         expKeyDefMap.put("target_topic_3", new KeyDef("target_topic_1", new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null, null,null));

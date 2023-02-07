@@ -99,8 +99,8 @@ public class IndexTermCollectionTest {
         second.setTermName("second");
         second.setTermKey("second");
         i.addTerm(second);
-        assertEquals(new HashSet<IndexTerm>(new ArrayList<IndexTerm>(Arrays.asList(first, second))),
-                new HashSet<IndexTerm>(i.getTermList()));
+        assertEquals(new HashSet<>(new ArrayList<>(Arrays.asList(first, second))),
+                new HashSet<>(i.getTermList()));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class IndexTermCollectionTest {
         i.addTerm(second);
         i.addTerm(first);
         i.sort();
-        assertEquals(new ArrayList<IndexTerm>(Arrays.asList(first, second)),
+        assertEquals(new ArrayList<>(Arrays.asList(first, second)),
                 i.getTermList());
     }
 

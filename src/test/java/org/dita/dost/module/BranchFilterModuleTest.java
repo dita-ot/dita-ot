@@ -7,8 +7,6 @@
  */
 package org.dita.dost.module;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.store.StreamStore;
@@ -176,9 +174,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         );
         Collections.sort(filesExp);
         final List<String> filesAct = Arrays.stream(tempDir.listFiles((dir, name) -> name.endsWith(".dita")))
-                .map(f -> f.getName())
-                .collect(Collectors.toList());
-        Collections.sort(filesAct);
+                .map(File::getName).sorted().collect(Collectors.toList());
         assertEquals(filesExp, filesAct);
         assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
     }

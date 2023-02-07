@@ -47,7 +47,7 @@ public class ImageMetadataFilterTest {
     }
 
     @Test
-    public void testWrite() throws DITAOTException, SAXException, IOException {
+    public void testWrite() throws SAXException, IOException {
         final File f = new File(tempDir, "test.dita");
         copyFile(new File(srcDir, "test.dita"), f);
 
@@ -68,7 +68,7 @@ public class ImageMetadataFilterTest {
     }
 
     @Test
-    public void testUplevelsWrite() throws DITAOTException, SAXException, IOException {
+    public void testUplevelsWrite() throws SAXException, IOException {
         final File f = new File(tempDir, "sub" + File.separator + "test.dita");
         f.getParentFile().mkdirs();
         copyFile(new File(srcDir, "test.dita"), f);

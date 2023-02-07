@@ -11,11 +11,8 @@ package org.dita.dost.util;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 
 public class LangUtilsTest {
@@ -37,7 +34,7 @@ public class LangUtilsTest {
     @Test
     public void zipWithIndex() {
         final List<String> src = asList("first", "second");
-        final List<Map.Entry<String, Integer>> act = LangUtils.zipWithIndex(src).collect(toList());
+        final List<Map.Entry<String, Integer>> act = LangUtils.zipWithIndex(src).toList();
         assertEquals("first", act.get(0).getKey());
         assertEquals(0, act.get(0).getValue().intValue());
         assertEquals("second", act.get(1).getKey());
@@ -48,7 +45,7 @@ public class LangUtilsTest {
     public void zipWithIndex_null() {
         final List<String> src = new ArrayList<>();
         src.add(null);
-        final List<Map.Entry<String, Integer>> act = LangUtils.zipWithIndex(src).collect(toList());
+        final List<Map.Entry<String, Integer>> act = LangUtils.zipWithIndex(src).toList();
         assertEquals(null, act.get(0).getKey());
         assertEquals(0, act.get(0).getValue().intValue());
     }
@@ -56,7 +53,7 @@ public class LangUtilsTest {
     @Test
     public void zipWithIndex_empty() {
         final List<String> src = Collections.emptyList();
-        final List<Map.Entry<String, Integer>> act = LangUtils.zipWithIndex(src).collect(toList());
+        final List<Map.Entry<String, Integer>> act = LangUtils.zipWithIndex(src).toList();
         assertTrue(act.isEmpty());
     }
 }

@@ -111,22 +111,16 @@ public class DebugAndFilterModuleTest {
                 // TODO test me somewhere else
 //                new File("topics", "copy-to.xml"),
         };
-        final Map<File, File> copyto = new HashMap<File, File>();
+        final Map<File, File> copyto = new HashMap<>();
         copyto.put(new File("topics", "copy-to.xml"), new File("topics", "xreffin-topic-1.xml"));
         final TestHandler handler = new TestHandler();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
         parser.setEntityResolver(CatalogUtils.getCatalogResolver());
         parser.setContentHandler(handler);
         for (final File f: files) {
-            InputStream in = null;
-            try {
-                in = new FileInputStream(new File(tmpDir, f.getPath()));
+            try (InputStream in = new FileInputStream(new File(tmpDir, f.getPath()))) {
                 handler.setSource(new File(inputDir, copyto.containsKey(f) ? copyto.get(f).getPath() : f.getPath()));
                 parser.parse(new InputSource(in));
-            } finally {
-                if (in != null) {
-                    in.close();
-                }
             }
         }
     }
@@ -139,8 +133,8 @@ public class DebugAndFilterModuleTest {
     private static class TestHandler implements ContentHandler {
 
         private File source;
-        private final Map<String, Integer> counter = new HashMap<String, Integer>();
-        private final Set<String> requiredProcessingInstructions = new HashSet<String>();
+        private final Map<String, Integer> counter = new HashMap<>();
+        private final Set<String> requiredProcessingInstructions = new HashSet<>();
 
         void setSource(final File source) {
             this.source = source;
@@ -174,9 +168,7 @@ public class DebugAndFilterModuleTest {
 
         public void processingInstruction(final String arg0, final String arg1)
                 throws SAXException {
-            if (requiredProcessingInstructions.contains(arg0)) {
-                requiredProcessingInstructions.remove(arg0);
-            }
+            requiredProcessingInstructions.remove(arg0);
         }
 
         public void setDocumentLocator(final Locator arg0) {

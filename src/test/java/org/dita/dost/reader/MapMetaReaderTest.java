@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
@@ -51,7 +50,7 @@ public class MapMetaReaderTest {
     }
 
     @Test
-    public void testRead() throws DITAOTException, SAXException, IOException, ParserConfigurationException{
+    public void testRead() throws SAXException, IOException, ParserConfigurationException{
         final DocumentBuilder db = XMLUtils.getDocumentBuilder();
         db.setEntityResolver(CatalogUtils.getCatalogResolver());
 

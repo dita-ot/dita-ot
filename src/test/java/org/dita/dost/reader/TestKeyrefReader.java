@@ -8,6 +8,7 @@
 package org.dita.dost.reader;
 
 import com.google.common.collect.ImmutableList;
+import junit.framework.Assert;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.s9api.DOMDestination;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -61,28 +62,28 @@ public class TestKeyrefReader {
     @Test
     public void cascadeChildKeys_none() {
         final KeyScope src = keyScope(null,
-                asList("key"));
+                List.of("key"));
 
         final KeyScope act = keyrefreader.cascadeChildKeys(src);
         final KeyScope exp = keyScope(null,
-                asList("key"));
+                List.of("key"));
         assertEquals(exp, act);
     }
 
     @Test
     public void cascadeChildKeys_singleDepth() {
         final KeyScope src = keyScope(null,
-                asList("rootKey"),
-                asList(keyScope("first",
-                        asList("firstKey"))
+                List.of("rootKey"),
+                List.of(keyScope("first",
+                        List.of("firstKey"))
                 ));
 
         final KeyScope act = keyrefreader.cascadeChildKeys(src);
         final KeyScope exp = keyScope(null,
                 asList("rootKey", "first.firstKey"),
-                asList(
+                List.of(
                         keyScope("first",
-                                asList("firstKey"))
+                                List.of("firstKey"))
                 ));
         assertEquals(exp, act);
     }
@@ -90,26 +91,26 @@ public class TestKeyrefReader {
     @Test
     public void cascadeChildKeys_secondDepth() {
         final KeyScope src = keyScope(null,
-                asList("rootKey"
+                List.of("rootKey"
                 ),
                 ImmutableList.of(
                         keyScope("first",
-                                asList("firstKey"),
-                                asList(
+                                List.of("firstKey"),
+                                List.of(
                                         keyScope("second",
-                                                asList("secondKey"))
+                                                List.of("secondKey"))
                                 ))
                 ));
 
         final KeyScope act = keyrefreader.cascadeChildKeys(src);
         final KeyScope exp = keyScope(null,
                 asList("rootKey", "first.firstKey", "first.second.secondKey"),
-                asList(
+                List.of(
                         keyScope("first",
                                 asList("firstKey", "second.secondKey"),
-                                asList(
+                                List.of(
                                         keyScope("second",
-                                                asList("secondKey"))
+                                                List.of("secondKey"))
                                 ))
                 ));
         assertEquals(exp, act);
@@ -133,7 +134,7 @@ public class TestKeyrefReader {
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope act = keyrefreader.getKeyDefinition();
 
-        final Map<String, String> exp = new HashMap<String, String>();
+        final Map<String, String> exp = new HashMap<>();
         exp.put("blatfeference", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
         exp.put("blatview", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
         exp.put("blatintro", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
@@ -157,7 +158,7 @@ public class TestKeyrefReader {
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope act = keyrefreader.getKeyDefinition();
 
-        final Map<String, String> exp = new HashMap<String, String>();
+        final Map<String, String> exp = new HashMap<>();
         exp.put("toner-specs", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-specs\" href=\"toner-type-a-specs.dita\"/>");
         exp.put("toner-handling", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-handling\" href=\"toner-type-b-handling.dita\"/>");
         exp.put("toner-disposal", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-disposal\" href=\"toner-type-c-disposal.dita\"/>");
@@ -179,7 +180,7 @@ public class TestKeyrefReader {
     // Oberon Technologies' tests
 
     @Test
-    public void testSimpleKeyscope() throws DITAOTException {
+    public void testSimpleKeyscope() {
         final File filename = new File(srcDir, "simpleKeyscope.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -245,7 +246,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testQualifiedKeyOverride() throws DITAOTException {
+    public void testQualifiedKeyOverride() {
         final File filename = new File(srcDir, "qualifiedKeyOverride.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -297,48 +298,48 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testMapWithKeyscopes() throws DITAOTException {
+    public void testMapWithKeyscopes() {
         final File filename = new File(srcDir, "map-with-keyscopes.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
         assertEquals(6, root.keySet().size());
-        assertEquals(null, root.get("dita-europe.conferenceName").href);
+        Assert.assertNull(root.get("dita-europe.conferenceName").href);
         assertEquals("http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail", root.get("dita-europe.hotel").href.toString());
         assertEquals("images/holidayInn.jpg", root.get("dita-europe.hotelImage").href.toString());
-        assertEquals(null, root.get("telematics.conferenceName").href);
+        Assert.assertNull(root.get("telematics.conferenceName").href);
         assertEquals("http://www.dolcemunich.com/", root.get("telematics.hotel").href.toString());
         assertEquals("images/dolce.jpg", root.get("telematics.hotelImage").href.toString());
 
         final KeyScope first = root.getChildScope("dita-europe");
         assertEquals(9, first.keySet().size());
-        assertEquals(null, first.get("conferenceName").href);
+        Assert.assertNull(first.get("conferenceName").href);
         assertEquals("http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail", first.get("hotel").href.toString());
         assertEquals("images/holidayInn.jpg", first.get("hotelImage").href.toString());
-        assertEquals(null, first.get("dita-europe.conferenceName").href);
+        Assert.assertNull(first.get("dita-europe.conferenceName").href);
         assertEquals("http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail", first.get("dita-europe.hotel").href.toString());
         assertEquals("images/holidayInn.jpg", first.get("dita-europe.hotelImage").href.toString());
-        assertEquals(null, first.get("telematics.conferenceName").href);
+        Assert.assertNull(first.get("telematics.conferenceName").href);
         assertEquals("http://www.dolcemunich.com/", first.get("telematics.hotel").href.toString());
         assertEquals("images/dolce.jpg", first.get("telematics.hotelImage").href.toString());
 
 
         final KeyScope second = root.getChildScope("telematics");
         assertEquals(9, second.keySet().size());
-        assertEquals(null, second.get("conferenceName").href);
+        Assert.assertNull(second.get("conferenceName").href);
         assertEquals("http://www.dolcemunich.com/", second.get("hotel").href.toString());
         assertEquals("images/dolce.jpg", second.get("hotelImage").href.toString());
-        assertEquals(null, second.get("dita-europe.conferenceName").href);
+        Assert.assertNull(second.get("dita-europe.conferenceName").href);
         assertEquals("http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail", second.get("dita-europe.hotel").href.toString());
         assertEquals("images/holidayInn.jpg", second.get("dita-europe.hotelImage").href.toString());
-        assertEquals(null, second.get("telematics.conferenceName").href);
+        Assert.assertNull(second.get("telematics.conferenceName").href);
         assertEquals("http://www.dolcemunich.com/", second.get("telematics.hotel").href.toString());
         assertEquals("images/dolce.jpg", second.get("telematics.hotelImage").href.toString());
     }
 
     @Test
-    public void testMaprefKeyscope() throws DITAOTException {
+    public void testMaprefKeyscope() {
         final File filename = new File(srcDir, "maprefKeyscope.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -405,7 +406,7 @@ public class TestKeyrefReader {
     // DITA 1.3 specification examples
 
     @Test
-    public void testExample7() throws DITAOTException {
+    public void testExample7() {
         final File filename = new File(srcDir, "example7.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -430,7 +431,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testExample8() throws DITAOTException {
+    public void testExample8() {
         final File filename = new File(srcDir, "example8.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -457,7 +458,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testKeysAndScope() throws DITAOTException {
+    public void testKeysAndScope() {
         final File filename = new File(srcDir, "keysAndScope.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -479,7 +480,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testMultipleValues() throws DITAOTException {
+    public void testMultipleValues() {
         final File filename = new File(srcDir, "multipleValues.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -501,7 +502,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testSingleCircular() throws DITAOTException {
+    public void testSingleCircular() {
         final File filename = new File(srcDir, "circularSingle.ditamap");
 
         final CachingLogger logger = new CachingLogger();
@@ -514,7 +515,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testCircular() throws DITAOTException {
+    public void testCircular() {
         final File filename = new File(srcDir, "circular.ditamap");
 
         final CachingLogger logger = new CachingLogger();
@@ -535,7 +536,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testRootScope() throws DITAOTException {
+    public void testRootScope() {
         final File filename = new File(srcDir, "rootScope.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -562,7 +563,7 @@ public class TestKeyrefReader {
     }
 
     @Test
-    public void testDuplicateScopeNames() throws DITAOTException {
+    public void testDuplicateScopeNames() {
         final File filename = new File(srcDir, "duplicate.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -584,7 +585,7 @@ public class TestKeyrefReader {
     }
     
     @Test
-    public void testCopyto() throws DITAOTException {
+    public void testCopyto() {
         final File filename = new File(srcDir, "copyto.ditamap");
 
         keyrefreader.read(filename.toURI(), readMap(filename));
@@ -595,7 +596,7 @@ public class TestKeyrefReader {
     }
     
     @Test
-    public void testIntermediaryKeyRefCopyMetadata() throws DITAOTException {
+    public void testIntermediaryKeyRefCopyMetadata() {
         final File filename = new File(srcDir, "intermediaryKeyref.ditamap");
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
@@ -629,7 +630,7 @@ public class TestKeyrefReader {
 
     private KeyScope keyScope(String name, List<String> keydefs, List<KeyScope> keyscopes) {
         return new KeyScope(null, name,
-                unmodifiableMap(keydefs.stream().collect(Collectors.toMap(key -> key, key -> keyDef(key)))),
+                unmodifiableMap(keydefs.stream().collect(Collectors.toMap(key -> key, this::keyDef))),
                 unmodifiableList(keyscopes));
     }
 

@@ -7,7 +7,6 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.util.XMLUtils;
@@ -90,7 +89,7 @@ public class NormalizeTableFilterTest {
         final CachingLogger logger = test("broken.dita");
         final List<Message> errors = logger.getMessages().stream()
                 .filter(m -> m.level == ERROR)
-                .collect(Collectors.toList());
+                .toList();
         assertEquals(8, errors.size());
     }
 

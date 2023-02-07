@@ -58,7 +58,7 @@ public class FileGeneratorTest {
                 new Value(null, "baz")
         ));
     }
-    private final static Map<String, Features> plugins = new HashMap<String, Features>();
+    private final static Map<String, Features> plugins = new HashMap<>();
     static {
         Document doc;
         try {
@@ -155,7 +155,7 @@ public class FileGeneratorTest {
             final Map<String, String> paramsExp = new HashMap<>();
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
             assertEquals(paramsExp, params);
-            final List<Value> inputExp = Arrays.asList(new Value[] {new Value(null, "attribute")});
+            final List<Value> inputExp = List.of(new Value(null, "attribute"));
             assertEquals(inputExp, inputs);
             assertEquals(FileGeneratorTest.plugins, features);
             return "bar";

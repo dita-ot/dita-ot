@@ -20,7 +20,6 @@ import org.junit.runners.Parameterized.Parameters;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
@@ -80,7 +79,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
         super.test();
         final List<Message> warnings = logger.getMessages().stream()
                 .filter(m -> m.level == WARN)
-                .collect(Collectors.toList());
+                .toList();
         warnings.forEach(m -> System.err.println(m.level + ": " + m.message));
         assertEquals(warningCount, warnings.size());
     }

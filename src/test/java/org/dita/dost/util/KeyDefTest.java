@@ -24,7 +24,7 @@ public class KeyDefTest {
         assertEquals(new URI("bar"), k.href);
         assertEquals("scope", k.scope);
         assertEquals(new URI("baz"), k.source);
-        final KeyDef n = new KeyDef("foo", (URI) null, null, null, (URI) null, null);
+        final KeyDef n = new KeyDef("foo", null, null, null, null, null);
         assertEquals("foo", n.keys);
         assertNull(n.href);
         assertEquals("local", n.scope);
@@ -35,7 +35,7 @@ public class KeyDefTest {
     public void testKeyDefToString() {
         final KeyDef k = new KeyDef("foo", toURI("bar"), "scope","dita", toURI("baz"), null);
         assertEquals("foo=bar(scope)(baz)", k.toString());
-        final KeyDef n = new KeyDef("foo", (URI) null, null, null, (URI) null, null);
+        final KeyDef n = new KeyDef("foo", null, null, null, null, null);
         assertEquals("foo=(local)", n.toString());
     }
 

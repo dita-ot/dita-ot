@@ -23,13 +23,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -61,7 +59,7 @@ public class StreamStoreTest {
     
     @Test
     public void exists_WhenFileExists_ShouldReturnTrue() throws IOException {
-        Files.write(tmpDir.toPath().resolve("dummy.xml"), "<dummy/>".getBytes(UTF_8));
+        Files.writeString(tmpDir.toPath().resolve("dummy.xml"), "<dummy/>");
         assertTrue(store.exists(tmpDir.toPath().resolve("dummy.xml").toUri()));
     }
 
@@ -77,7 +75,7 @@ public class StreamStoreTest {
 
     @Test
     public void copy_WhenFileExists_ShouldCreateCopy() throws IOException {
-        Files.write(tmpDir.toPath().resolve("src.xml"), "<dummy/>".getBytes(UTF_8));
+        Files.writeString(tmpDir.toPath().resolve("src.xml"), "<dummy/>");
 
         store.copy(tmpDir.toPath().resolve("src.xml").toUri(), tmpDir.toPath().resolve("dst.xml").toUri());
 
@@ -102,7 +100,7 @@ public class StreamStoreTest {
 
     @Test
     public void move_WhenFileExists_ShouldCreateCopy() throws IOException {
-        Files.write(tmpDir.toPath().resolve("src.xml"), "<dummy/>".getBytes(UTF_8));
+        Files.writeString(tmpDir.toPath().resolve("src.xml"), "<dummy/>");
 
         store.move(tmpDir.toPath().resolve("src.xml").toUri(), tmpDir.toPath().resolve("dst.xml").toUri());
 
@@ -128,8 +126,8 @@ public class StreamStoreTest {
     @Test
     public void transformWithAnchorInURIPath() throws IOException, DITAOTException, URISyntaxException {
     	final Path target = Paths.get(tmpDir.getAbsolutePath(), "source.xml");
-        Files.write(target, "<root/>".getBytes(StandardCharsets.UTF_8));
-        final URI uri = new URI(target.toUri().toString() + "#abc");
+        Files.writeString(target, "<root/>");
+        final URI uri = new URI(target.toUri() + "#abc");
     	store.transform(uri, Collections.emptyList());
     }
 }

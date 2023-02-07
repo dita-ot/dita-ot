@@ -8,10 +8,8 @@
 package org.dita.dost.index;
 
 import static org.dita.dost.index.IndexTerm.IndexTermPrefix.*;
-import static org.dita.dost.index.IndexTerm.IndexTermPrefix.SEE;
 import static org.junit.Assert.*;
 
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 
 import java.util.ArrayList;
@@ -179,7 +177,7 @@ public class IndexTermTest {
     @Test
     public void testAddSubTerms() {
         new IndexTerm().addSubTerms(null);
-        new IndexTerm().addSubTerms(Collections.<IndexTerm>emptyList());
+        new IndexTerm().addSubTerms(Collections.emptyList());
     }
 
     @Test
@@ -207,7 +205,7 @@ public class IndexTermTest {
         }
         root.sortSubTerms();
 
-        final List<String> act = new ArrayList<String>();
+        final List<String> act = new ArrayList<>();
         for (final IndexTerm i: root.getSubTerms()) {
             act.add(i.getTermKey());
         }
@@ -242,7 +240,7 @@ public class IndexTermTest {
     @Test
     public void testAddTargets() {
         new IndexTerm().addTargets(null);
-        new IndexTerm().addTargets(Collections.<IndexTermTarget>emptyList());
+        new IndexTerm().addTargets(Collections.emptyList());
     }
 
     @Test
@@ -317,7 +315,7 @@ public class IndexTermTest {
     }
 
     private List<IndexTerm> construct(final String base, final int count, final int depth) {
-        final List<IndexTerm> res = new ArrayList<IndexTerm>();
+        final List<IndexTerm> res = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             final IndexTerm it = new IndexTerm();
             final String n = base + " " + i;
