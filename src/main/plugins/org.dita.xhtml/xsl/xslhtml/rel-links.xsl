@@ -66,6 +66,9 @@ See the accompanying LICENSE file for applicable license.
                     <xsl:apply-templates select="*[not(contains(@class, ' topic/desc '))] | text()"/>
                     <!--use xref content-->
                   </xsl:when>
+                  <xsl:when test="@scope = 'external' and starts-with(@href, 'mailto:')">
+                    <xsl:value-of select="replace(@href, '^mailto:', '')"/><!--remove mailto: prefix from href text-->
+                  </xsl:when>
                   <xsl:otherwise>
                     <xsl:call-template name="href"/><!--use href text-->
                   </xsl:otherwise>
@@ -323,7 +326,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     </xsl:call-template>
   </xsl:template>
 
-  <!--calculate href-->
+  <!--calculate href - used for both @href attribute values and target text -->
   <xsl:template name="href">
     <xsl:apply-templates select="." mode="determine-final-href"/>
   </xsl:template>
@@ -579,6 +582,9 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
       <xsl:choose>
         <xsl:when test="*[contains(@class, ' topic/linktext ')]">
           <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
+        </xsl:when>
+        <xsl:when test="@scope = 'external' and starts-with(@href, 'mailto:')">
+          <xsl:value-of select="replace(@href, '^mailto:', '')"/><!--remove mailto: prefix from href text-->
         </xsl:when>
         <xsl:otherwise>
           <!--use href-->

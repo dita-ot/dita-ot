@@ -295,6 +295,9 @@ See the accompanying LICENSE file for applicable license.
             <xsl:when test="*[not(contains(@class,' topic/desc '))] | text()">
               <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))] | text()" />
             </xsl:when>
+            <xsl:when test="@scope = 'external' and starts-with(@href, 'mailto:')">
+              <xsl:value-of select="replace(@href, '^mailto:', '')"/><!--remove mailto: prefix from href text-->
+            </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="@href"/>
             </xsl:otherwise>
@@ -536,6 +539,9 @@ See the accompanying LICENSE file for applicable license.
                   </xsl:when>
                   <xsl:when test="*[contains(@class, ' topic/linktext ')]">
                     <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
+                  </xsl:when>
+                  <xsl:when test="@scope = 'external' and starts-with(@href, 'mailto:')">
+                    <xsl:value-of select="replace(@href, '^mailto:', '')"/><!--remove mailto: prefix from href text-->
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:value-of select="@href"/>
