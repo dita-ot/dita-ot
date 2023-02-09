@@ -176,8 +176,6 @@ See the accompanying LICENSE file for applicable license.
        conref straight to conref, then just save the first one (in source-attributes) -->
 
     <!--get element local name, parent topic's domains, and then file name, topic id, element id from conref value-->
-    <xsl:variable name="element" select="local-name(.)"/>
-    <!--xsl:variable name="domains"><xsl:value-of select="ancestor-or-self::*[@domains][1]/@domains"/></xsl:variable-->
 
     <xsl:variable name="file-prefix" select="concat($WORKDIR, $current-relative-path)" as="xs:string"/>
 
@@ -215,9 +213,6 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- conref file name with relative path -->
     <xsl:variable name="filename" select="substring-after($file-origin, $file-prefix)"/>
-
-    <!-- replace the extension name -->
-    <xsl:variable name="FILENAME" select="concat(substring-before($filename, '.'), '.dita')"/>
 
     <xsl:variable name="topicid" select="dita-ot:get-topic-id(@conref)" as="xs:string?"/>
     <xsl:variable name="elemid" select="dita-ot:get-element-id(@conref)" as="xs:string?"/>
@@ -285,7 +280,6 @@ See the accompanying LICENSE file for applicable license.
               </xsl:variable>
               <xsl:choose>
                 <xsl:when test="$target">
-                  <xsl:variable name="firstTopicId" select="if (exists($topicid)) then $topicid else $target/@id"/>
                   <xsl:apply-templates select="$target[1]" mode="conref-target">
                     <xsl:with-param name="source-attributes" as="xs:string*">
                       <xsl:choose>

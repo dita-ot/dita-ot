@@ -172,9 +172,6 @@ See the accompanying LICENSE file for applicable license.
          <xsl:apply-templates select="*[contains(@class,' reference/propdeschd ')]"/>
        </xsl:when>
        <xsl:when test="$hasDesc">
-         <xsl:variable name="propdeschd" as="element()">
-           <xsl:call-template name="gen-propdeschd"/>
-         </xsl:variable>
          <th>
            <xsl:call-template name="style">
              <xsl:with-param name="contents">
