@@ -368,4 +368,30 @@ public class TestGenMapAndTopicListModule {
         TestUtils.forceDelete(tempDir);
     }
 
+    @Test
+    public void testResourcesUplevels() throws Exception{
+        final File inputDir = new File(".");
+        final File inputMap = new File(inputDir, "image-keydef/svg.ditamap");
+        final File outerMap = new File(srcDir, "root-map.ditamap");
+        final File outDirAbove = new File(tempDir, "out");
+        final PipelineHashIO pipelineInput = new PipelineHashIO();
+        pipelineInput.setAttribute(ANT_INVOKER_PARAM_INPUTMAP, inputMap.getPath());
+        pipelineInput.setAttribute(ANT_INVOKER_PARAM_BASEDIR, srcDir.getAbsolutePath());
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, inputDir.getPath());
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR, outDirAbove.getPath());
+        pipelineInput.setAttribute(ANT_INVOKER_PARAM_TEMPDIR, tempDir.getPath());
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, new File("src" + File.separator + "main").getAbsolutePath());
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, Integer.toString(NOT_GENERATEOUTTER.type));
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL, "warn");
+        pipelineInput.setAttribute(ANT_INVOKER_PARAM_RESOURCES, outerMap.getCanonicalPath());
+
+        final GenMapAndTopicListModule module = new GenMapAndTopicListModule();
+        module.setLogger(new TestUtils.TestLogger());
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+        module.setJob(job);
+        module.setXmlUtils(new XMLUtils());
+        module.execute(pipelineInput);
+        assertEquals(srcDir.toURI().toString(), job.getInputDir().toString());
+    }
+
 }

@@ -118,6 +118,9 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         if (f.src == null || !exists(f.src) || !f.src.equals(f.result)) {
             logger.warn("Ignoring a copy-to file " + f.result);
             return;
+        } else if (f.uri.isAbsolute() && ! f.uri.toString().startsWith(job.tempDirURI.toString())) {
+            //The file is outside the temp dir, we cannot write to itself
+            throw new RuntimeException("Cannot write outside of the temporary files folder: " + f.uri);
         }
         outputFile = new File(job.tempDirURI.resolve(f.uri));
         logger.info("Processing " + f.src + " to " + outputFile.toURI());

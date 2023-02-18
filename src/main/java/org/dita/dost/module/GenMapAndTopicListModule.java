@@ -501,6 +501,9 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
             updateUplevels(target);
 
         }
+        for(final URI reference: resources) {
+            updateUplevels(reference);
+        }
         final Set<URI> nonTopicrefReferenceSet = new HashSet<>();
         nonTopicrefReferenceSet.addAll(listFilter.getNonTopicrefReferenceSet());
         nonTopicrefReferenceSet.removeAll(listFilter.getNormalProcessingRoleSet());

@@ -23,6 +23,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -101,6 +102,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         ki.add(new KeyrefInfo(TOPIC_INDEX_BASE, ATTRIBUTE_NAME_HREF, false, false));
         ki.add(new KeyrefInfo(TOPIC_INDEXTERMREF, ATTRIBUTE_NAME_HREF, false, false));
         ki.add(new KeyrefInfo(TOPIC_LONGQUOTEREF, ATTRIBUTE_NAME_HREF, false, false));
+        ki.add(new KeyrefInfo(TOPIC_LONGDESCREF, ATTRIBUTE_NAME_HREF, false, false));
         final Map<String, String> objectAttrs = new HashMap<>();
         objectAttrs.put(ATTRIBUTE_NAME_ARCHIVEKEYREFS, ATTRIBUTE_NAME_ARCHIVE);
         objectAttrs.put(ATTRIBUTE_NAME_CLASSIDKEYREF, ATTRIBUTE_NAME_CLASSID);
@@ -532,6 +534,19 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 String topicId = null;
                                 if (relativeTarget.getFragment() == null && !"".equals(elementId)) {
                                     topicId = getFirstTopicId(topicFile);
+                                    if (topicId == null) {
+                                        String directHref = keyDef.element.attribute(ATTRIBUTE_NAME_HREF);
+                                        if (directHref != null && !directHref.equals(href.toString())) {
+                                            //Try to also resolve the topic ID using the direct href
+                                            try {
+                                                URI directTarget = keyDef.source.resolve(new URI(directHref));
+                                                URI directTopicFile = currentFile.resolve(stripFragment(directTarget));
+                                                topicId = getFirstTopicId(directTopicFile);
+                                            } catch (URISyntaxException e) {
+                                                //Ignore
+                                            }
+                                        }
+                                    }
                                 }
                                 final URI targetOutput = normalizeHrefValue(relativeTarget, elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
