@@ -12,43 +12,25 @@ import static org.dita.dost.TestUtils.createTempDir;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamSource;
+
+import org.dita.dost.TestUtils;
+import org.dita.dost.reader.KeyrefReader;
+import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyScope;
+import org.dita.dost.util.XMLUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.xml.sax.InputSource;
 
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
-import org.apache.commons.io.IOUtils;
-import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.store.StreamStore;
-import org.dita.dost.util.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-import org.dita.dost.TestUtils;
 
 public class KeyrefPaserTest {
 
@@ -183,5 +165,19 @@ public class KeyrefPaserTest {
         } catch (SaxonApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void testTopicWriteCopyTo() throws Exception {
+        final KeyrefPaser parser = new KeyrefPaser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
+        KeyScope kd = readKeyMap(Paths.get("copy-to-keys.ditamap"));
+        parser.setKeyDefinition(kd);
+        parser.setCurrentFile(new File(tempDir, "copy-to-keys.dita").toURI());
+        parser.write(new File(tempDir, "copy-to-keys.dita"));
+        
+        assertXMLEqual(new InputSource(new File(expDir, "copy-to-keys.dita").toURI().toString()),
+                new InputSource(new File(tempDir, "copy-to-keys.dita").toURI().toString()));
     }
 }
