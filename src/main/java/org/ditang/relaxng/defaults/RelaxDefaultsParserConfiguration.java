@@ -47,7 +47,7 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
     /**
      * The special RNG resolver 
      */
-    protected Resolver resolver;
+    protected final Resolver resolver;
 
     /**
      * <code>true</code> to validate the file while parsing with the RNG defaults component

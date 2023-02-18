@@ -29,7 +29,7 @@ public class RelaxNGDefaultParserConfigurationWrapper implements XMLParserConfig
   /**
    * The wrapped configuration
    */
-  private XMLParserConfiguration config;
+  private final XMLParserConfiguration config;
 
   /**
    * Default constructor

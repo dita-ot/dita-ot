@@ -81,7 +81,7 @@ extends Task {
             documentBuilder.setEntityResolver(xmlcatalog);
 
             final Document doc = documentBuilder.parse(input);
-            final IndexPreprocessor preprocessor = new IndexPreprocessor(this.prefix, this.namespace_url, this.draft);
+            final IndexPreprocessor preprocessor = new IndexPreprocessor(prefix, namespace_url, this.draft);
             preprocessor.setLogger(new DITAOTAntLogger(getProject()));
 
             // Walks through source document and builds an array of IndexEntry and builds
@@ -164,7 +164,7 @@ extends Task {
     }
 
     public void setFailOnError(final String theFailOnErro) {
-        this.failOnError = theFailOnErro.equals("true");
+        failOnError = theFailOnErro.equals("true");
     }
     
     public void setDraft(final String draftValue) {

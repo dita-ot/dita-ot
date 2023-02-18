@@ -25,6 +25,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -33,7 +34,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static junit.framework.Assert.assertEquals;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
@@ -96,7 +96,7 @@ public abstract class AbstractIntegrationTest {
     private Transtype transtype;
     private String[] targets;
     private Path input;
-    private Map<String, Object> args = new HashMap<>();
+    private final Map<String, Object> args = new HashMap<>();
     private int warnCount = 0;
     private int errorCount = 0;
 
@@ -215,7 +215,7 @@ public abstract class AbstractIntegrationTest {
         final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
         final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
 
-        final ImmutableMap.Builder<String, String> builder = ImmutableMap.<String, String>builder();
+        final ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
         args.forEach((k, v) -> {
             if (v instanceof Path) {
                 builder.put(k, new File(srcDir, v.toString()).getAbsolutePath());
@@ -359,7 +359,7 @@ public abstract class AbstractIntegrationTest {
             project.setUserProperty("output.dir", resDir.getAbsolutePath());
             project.setUserProperty("dita.temp.dir", tempDir.getAbsolutePath());
             project.setUserProperty("clean.temp", "no");
-            args.entrySet().forEach(e -> project.setUserProperty(e.getKey(), e.getValue()));
+            args.forEach(project::setUserProperty);
 
             project.setKeepGoingMode(false);
             ProjectHelper.configureProject(project, buildFile);
@@ -373,7 +373,7 @@ public abstract class AbstractIntegrationTest {
 
             final Store store = project.getReference(ANT_REFERENCE_STORE);
 
-            if (store != null && store instanceof CacheStore) {
+            if (store instanceof CacheStore) {
                 final Job job = new Job(tempDir.getAbsoluteFile(), store);
                 for (Job.FileInfo fileInfo : job.getFileInfo()) {
                     if (fileInfo.uri != null) {
@@ -448,11 +448,11 @@ public abstract class AbstractIntegrationTest {
         final Set<String> buf = new HashSet<>();
         final File[] exp = expDir.listFiles(filter);
         if (exp != null) {
-            buf.addAll(Arrays.asList(exp).stream().map(File::getName).collect(Collectors.toList()));
+            buf.addAll(Arrays.stream(exp).map(File::getName).toList());
         }
         final File[] act = actDir.listFiles(filter);
         if (act != null) {
-            buf.addAll(Arrays.asList(act).stream().map(File::getName).collect(Collectors.toList()));
+            buf.addAll(Arrays.stream(act).map(File::getName).toList());
         }
         return buf;
     }
@@ -466,7 +466,7 @@ public abstract class AbstractIntegrationTest {
      */
     private String[] readTextFile(final File f) throws IOException {
         final List<String> buf = new ArrayList<>();
-        try (final BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"))) {
+        try (final BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))) {
             String l;
             while ((l = r.readLine()) != null) {
                 buf.add(l);
@@ -474,7 +474,7 @@ public abstract class AbstractIntegrationTest {
         } catch (final IOException e) {
             throw new IOException("Unable to read " + f.getAbsolutePath() + ": " + e.getMessage());
         }
-        return buf.toArray(new String[buf.size()]);
+        return buf.toArray(new String[0]);
     }
 
     private Document parseHtml(final File f) throws SAXException, IOException {
@@ -550,7 +550,7 @@ public abstract class AbstractIntegrationTest {
                             rewriteId(v, idMap, counter, p.getValue());
                             res.add(idMap.getOrDefault(v, v));
                         }
-                        id.setNodeValue(res.stream().collect(Collectors.joining(" ")));
+                        id.setNodeValue(String.join(" ", res));
 
                     } else {
                         final String v = id.getValue();
@@ -576,7 +576,7 @@ public abstract class AbstractIntegrationTest {
         if (m.matches()) {
             if (!idMap.containsKey(id)) {
                 final int i = counter.addAndGet(1);
-                idMap.put(id, "gen-id-" + Integer.toString(i));
+                idMap.put(id, "gen-id-" + i);
             }
         }
     }
@@ -660,15 +660,7 @@ public abstract class AbstractIntegrationTest {
             messages.add(new TestListener.Message(level, message));
         }
 
-        static class Message {
-
-            public final int level;
-            public final String message;
-
-            public Message(final int level, final String message) {
-                this.level = level;
-                this.message = message;
-            }
+        record Message(int level, String message) {
 
         }
 

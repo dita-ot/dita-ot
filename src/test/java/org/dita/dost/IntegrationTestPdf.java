@@ -10,13 +10,9 @@ package org.dita.dost;
 
 import org.junit.Test;
 
-import java.io.File;
 import java.nio.file.Paths;
 
-import static org.dita.dost.AbstractIntegrationTest.Transtype.HTML5;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.PDF;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class IntegrationTestPdf extends AbstractIntegrationTest {
 

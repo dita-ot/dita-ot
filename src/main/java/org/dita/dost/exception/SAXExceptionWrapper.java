@@ -13,6 +13,8 @@ import static org.dita.dost.util.Constants.*;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXParseException;
 
+import java.io.Serial;
+
 /**
  * SAXExceptionWrapper which wrapper the SAXParseException.
  *
@@ -21,6 +23,7 @@ import org.xml.sax.SAXParseException;
 public final class SAXExceptionWrapper extends SAXParseException {
 
     /** Generated serial id. */
+    @Serial
     private static final long serialVersionUID = -8266265000662519966L;
     /** Message &amp; location. */
     String messageWithLocation;

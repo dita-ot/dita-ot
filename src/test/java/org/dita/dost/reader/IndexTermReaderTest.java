@@ -71,14 +71,14 @@ public class IndexTermReaderTest {
         }
         final List<IndexTerm> act = indexTermCollection.getTermList();
 
-        final List<IndexTerm> exp = new ArrayList<IndexTerm>();
+        final List<IndexTerm> exp = new ArrayList<>();
         exp.add(generateIndexTerms(target, "Primary", "Secondary", "Tertiary"));
         exp.add(generateIndexTerms(target, "Primary normalized", "Secondary normalized", "Tertiary normalized"));
         exp.add(generateIndexTerms(target, " Primary unnormalized ", " Secondary unnormalized ", " Tertiary unnormalized "));
         exp.add(generateIndexTermErrorCondition(target, "Test empty title"));
 
-        assertEquals(new HashSet<IndexTerm>(exp),
-                new HashSet<IndexTerm>(act));
+        assertEquals(new HashSet<>(exp),
+                new HashSet<>(act));
     }
 
     @After
@@ -87,7 +87,7 @@ public class IndexTermReaderTest {
     }
 
     private IndexTerm generateIndexTerms(final File target, final String... texts) {
-        final LinkedList<IndexTerm> stack = new LinkedList<IndexTerm>();
+        final LinkedList<IndexTerm> stack = new LinkedList<>();
         for (final String text: texts) {
             final IndexTerm primary = generateIndexTerm(target, text);
             if (!stack.isEmpty()) {

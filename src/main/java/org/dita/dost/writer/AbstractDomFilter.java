@@ -11,7 +11,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.reader.AbstractReader;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
 import java.io.File;

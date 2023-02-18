@@ -85,19 +85,19 @@ public abstract class AbstractModuleTest {
 
     private void normalizeSpace(final Node node) {
         switch (node.getNodeType()) {
-            case Node.ELEMENT_NODE:
+            case Node.ELEMENT_NODE -> {
                 for (final Node n : getChildren(node)) {
                     normalizeSpace(n);
                 }
-                break;
-            case Node.TEXT_NODE:
+            }
+            case Node.TEXT_NODE -> {
                 final String v = node.getNodeValue().replaceAll("\\s+", " ").trim();
                 if (v.isEmpty()) {
                     node.getParentNode().removeChild(node);
                 } else {
                     node.setNodeValue(v);
                 }
-                break;
+            }
         }
     }
 
@@ -164,7 +164,7 @@ public abstract class AbstractModuleTest {
             final File srcDir = new File(resourceDir, "src" + File.separator + testCase);
             try {
                 Files.walk(srcDir.toPath())
-                        .filter(src -> Files.isRegularFile(src))
+                        .filter(Files::isRegularFile)
                         .forEach(src -> {
                     final URI dst = tempDir.toPath().resolve(srcDir.toPath().relativize(src)).toUri();
                     try (OutputStream out = cache.getOutputStream(dst)) {
@@ -238,8 +238,8 @@ public abstract class AbstractModuleTest {
         if (new File(expDir, ".job.xml").exists()) {
             final Job expJob = new Job(expDir, new StreamStore(expDir, xmlUtils));
 //            final Job actJob = new Job(actDir, new StreamStore(actDir, xmlUtils));
-            final Collection<FileInfo> expFileInfo = new HashSet(expJob.getFileInfo());
-            final Collection<FileInfo> actFileInfo = new HashSet(job.getFileInfo());
+            final Collection<FileInfo> expFileInfo = new HashSet<>(expJob.getFileInfo());
+            final Collection<FileInfo> actFileInfo = new HashSet<>(job.getFileInfo());
             try {
                 assertEquals(expFileInfo, actFileInfo);
             } catch (Throwable e) {

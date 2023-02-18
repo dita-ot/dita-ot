@@ -19,7 +19,7 @@ public class PluginRequirementTest {
 
     @Test
     public void testPluginRequirement() {
-        assertNotNull(new PluginRequirement());
+        new PluginRequirement();
     }
 
     @Test
@@ -44,7 +44,7 @@ public class PluginRequirementTest {
         final PluginRequirement pr = new PluginRequirement();
         pr.addPlugins("foo | bar | baz");
 
-        final List<String> act = new ArrayList<String>();
+        final List<String> act = new ArrayList<>();
         for (final Iterator<String> i = pr.getPlugins(); i.hasNext();) {
             act.add(i.next());
         }

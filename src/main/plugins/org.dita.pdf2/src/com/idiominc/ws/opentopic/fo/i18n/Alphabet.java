@@ -1,5 +1,6 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,14 +38,12 @@ See the accompanying LICENSE file for applicable license.
 public class Alphabet {
     private final String name;
 
-    private final Set<Character> charset = new HashSet<Character>();
+    private final Set<Character> charset = new HashSet<>();
 
 
     public Alphabet(final String theName, final Character[] theChars) {
         this.name = theName;
-        for (final Character aChar : theChars) {
-            this.charset.add(aChar);
-        }
+        this.charset.addAll(Arrays.asList(theChars));
     }
 
 
@@ -54,12 +53,11 @@ public class Alphabet {
 
 
     public boolean isContain(final char theChar) {
-        return this.charset.contains(new Character(theChar));
+        return this.charset.contains(theChar);
     }
 
 
     public Character[] getAllChars() {
-        final Character[] characters = (Character[]) charset.toArray(new Character[charset.size()]);
-        return characters;
+        return charset.toArray(new Character[0]);
     }
 }

@@ -78,7 +78,7 @@ public class FeaturesTest {
         f.addFeature("foo", getElement("baz", null));
         f.addFeature("bar", getElement("qux", null));
 
-        final Map<String, List<String>> exp = new HashMap<String, List<String>>();
+        final Map<String, List<String>> exp = new HashMap<>();
         exp.put("foo", asList("bar", "baz"));
         exp.put("bar", asList("qux"));
 
@@ -126,11 +126,11 @@ public class FeaturesTest {
         f.addRequire("baz", "unrequired");
         f.addRequire("qux", "required");
 
-        final Map<List<String>, Boolean> act = new HashMap<List<String>, Boolean>();
+        final Map<List<String>, Boolean> act = new HashMap<>();
         final Iterator<PluginRequirement> requirements = f.getRequireListIter();
         while (requirements.hasNext()) {
             final PluginRequirement requirement = requirements.next();
-            final List<String> plugins = new ArrayList<String>();
+            final List<String> plugins = new ArrayList<>();
             for (final Iterator<String> ps = requirement.getPlugins(); ps.hasNext();) {
                 plugins.add(ps.next());
             }
@@ -138,10 +138,10 @@ public class FeaturesTest {
             act.put(plugins, requirement.getRequired());
         }
 
-        final Map<List<String>, Boolean> exp = new HashMap<List<String>, Boolean>();
-        exp.put(Arrays.asList(new String[] {" bar ", "foo "}), Boolean.TRUE);
-        exp.put(Arrays.asList(new String[] {"baz"}), Boolean.FALSE);
-        exp.put(Arrays.asList(new String[] {"qux"}), Boolean.TRUE);
+        final Map<List<String>, Boolean> exp = new HashMap<>();
+        exp.put(Arrays.asList(" bar ", "foo "), Boolean.TRUE);
+        exp.put(Arrays.asList("baz"), Boolean.FALSE);
+        exp.put(Arrays.asList("qux"), Boolean.TRUE);
 
         assertEquals(exp, act);
     }
@@ -188,7 +188,7 @@ public class FeaturesTest {
         f.addTemplate(null);
 
         final List<Value> act = f.getAllTemplates();
-        Collections.sort(act, (a0, a1) -> {
+        act.sort((a0, a1) -> {
             if (a0 == null || a1 == null) {
                 return -1;
             }

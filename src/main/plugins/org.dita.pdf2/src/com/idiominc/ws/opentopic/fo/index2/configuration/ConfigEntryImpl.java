@@ -3,6 +3,7 @@ package com.idiominc.ws.opentopic.fo.index2.configuration;
 import com.idiominc.ws.opentopic.fo.index2.IndexCollator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /*
@@ -54,12 +55,9 @@ class ConfigEntryImpl implements ConfigEntry {
      }
 
      public void addRange(final CharRange range) {
-         final ArrayList<CharRange> rangeList = new ArrayList<CharRange>();
-         for (final CharRange range2 : ranges) {
-             rangeList.add(range2);
-         }
+         final ArrayList<CharRange> rangeList = new ArrayList<>(Arrays.asList(ranges));
          rangeList.add(range);
-         ranges = (CharRange[]) rangeList.toArray(new CharRange[rangeList.size()]);
+         ranges = rangeList.toArray(new CharRange[0]);
      }
 
 

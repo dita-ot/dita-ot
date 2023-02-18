@@ -34,7 +34,7 @@ public class IntegratorTest {
     private File tempDir;
 
     @Before
-    public void setUp() throws IOException, DITAOTException {
+    public void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(getClass());
         TestUtils.copy(new File(resourceDir, "src"), tempDir);
     }
@@ -95,8 +95,8 @@ public class IntegratorTest {
         expProperties.setProperty("plugin.dummy.dir", "plugins/dummy");
         final Properties actProperties = getProperties(new File(tempDir, "config" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));
         // supported_image_extensions needs to be tested separately
-        assertEquals(new HashSet(Arrays.asList(expProperties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS).split(";"))),
-                     new HashSet(Arrays.asList(expProperties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS).split(";"))));
+        assertEquals(new HashSet<>(Arrays.asList(expProperties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS).split(";"))),
+                     new HashSet<>(Arrays.asList(expProperties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS).split(";"))));
         expProperties.remove(CONF_SUPPORTED_IMAGE_EXTENSIONS);
         actProperties.remove(CONF_SUPPORTED_IMAGE_EXTENSIONS);
         assertEquals(expProperties, actProperties);
@@ -132,14 +132,8 @@ public class IntegratorTest {
 
     private Properties getProperties(final File f) throws IOException {
         final Properties p = new Properties();
-        InputStream in = null;
-        try {
-            in = new FileInputStream(f);
+        try (InputStream in = new FileInputStream(f)) {
             p.load(in);
-        } finally {
-            if (in != null) {
-                in.close();
-            }
         }
         return p;
     }

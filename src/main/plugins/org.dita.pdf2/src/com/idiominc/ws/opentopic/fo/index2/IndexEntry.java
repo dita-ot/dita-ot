@@ -50,67 +50,67 @@ public interface IndexEntry {
     /**
      * @return index reference ids
      */
-    public String[] getRefIDs();
+    String[] getRefIDs();
 
 
     /**
      * @return index entry value
      */
-    public String getValue();
+    String getValue();
 
     /**
      * @return The string with formatting<br>
      *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
      */
-    public String getFormattedString();
+    String getFormattedString();
     
     /**
      * Get index term markup content.
      * 
      * @return DITA markup content, {@code null} if not available
      */
-    public List<Node> getContents();
+    List<Node> getContents();
 
 
     /**
      * @return the sort string for the entry<br>
      *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
      */
-    public String getSortString();
+    String getSortString();
 
 
     /**
      * @return child entries of this entry
      */
-    public IndexEntry[] getChildIndexEntries();
+    IndexEntry[] getChildIndexEntries();
 
 
     /**
      * @return if this entry starts range<br>
      *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
      */
-    public boolean isStartingRange();
+    boolean isStartingRange();
 
 
     /**
      * @return if this entry ends range<br>
      *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
      */
-    public boolean isEndingRange();
+    boolean isEndingRange();
 
 
     /**
      * @return if this entry suppresses page number<br>
      *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
      */
-    public boolean isSuppressesThePageNumber();
+    boolean isSuppressesThePageNumber();
 
 
     /**
      * @return if this entry restores page number<br>
      *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
      */
-    public boolean isRestoresPageNumber();
+    boolean isRestoresPageNumber();
 
 
     /**
@@ -177,7 +177,7 @@ public interface IndexEntry {
 
     void addSeeAlsoChild(IndexEntry theEntry);
 
-    public IndexEntry[] getSeeChildIndexEntries();
+    IndexEntry[] getSeeChildIndexEntries();
 
-    public IndexEntry[] getSeeAlsoChildIndexEntries();
+    IndexEntry[] getSeeAlsoChildIndexEntries();
 }

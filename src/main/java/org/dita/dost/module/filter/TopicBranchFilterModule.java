@@ -96,7 +96,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         try {
             job.getStore().writeDocument(doc, currentFile);
         } catch (final IOException e) {
-            logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
+            logger.error("Failed to serialize " + map + ": " + e.getMessage(), e);
         }
     }
 

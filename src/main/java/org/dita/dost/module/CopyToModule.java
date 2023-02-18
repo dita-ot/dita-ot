@@ -260,7 +260,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         public void processingInstruction(final String target, final String data) throws SAXException {
             String d = data;
             switch (target) {
-                case PI_WORKDIR_TARGET:
+                case PI_WORKDIR_TARGET -> {
                     try {
                         if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
                             d = workdir.getCanonicalPath();
@@ -270,18 +270,16 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                     } catch (final IOException e) {
                         throw new RuntimeException("Failed to get canonical path for working directory: " + e.getMessage(), e);
                     }
-                    break;
-                case PI_WORKDIR_TARGET_URI:
-                    d = toDirURI(workdir).toString();
-                    break;
-                case PI_PATH2PROJ_TARGET:
+                }
+                case PI_WORKDIR_TARGET_URI -> d = toDirURI(workdir).toString();
+                case PI_PATH2PROJ_TARGET -> {
                     if (path2project != null) {
                         d = path2project.getPath();
                     } else {
                         d = "";
                     }
-                    break;
-                case PI_PATH2PROJ_TARGET_URI:
+                }
+                case PI_PATH2PROJ_TARGET_URI -> {
                     if (path2project != null) {
                         d = toURI(path2project).toString();
                         if (!d.endsWith(URI_SEPARATOR)) {
@@ -290,8 +288,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                     } else {
                         d = "";
                     }
-                    break;
-                case PI_PATH2ROOTMAP_TARGET_URI:
+                }
+                case PI_PATH2ROOTMAP_TARGET_URI -> {
                     if (path2rootmap != null) {
                         d = toURI(path2rootmap).toString();
                         if (!d.endsWith(URI_SEPARATOR)) {
@@ -300,7 +298,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                     } else {
                         d = "";
                     }
-                    break;
+                }
             }
             getContentHandler().processingInstruction(target, d);
         }

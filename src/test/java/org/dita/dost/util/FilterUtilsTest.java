@@ -351,42 +351,42 @@ public class FilterUtilsTest {
         final FilterUtils f = new FilterUtils(false);
         
         {
-            final Map<QName, List<String>> exp = new HashMap<QName, List<String>>();
+            final Map<QName, List<String>> exp = new HashMap<>();
             exp.put(null, Arrays.asList("foo", "bar", "bax"));
             assertEquals(exp, f.getGroups("foo bar bax"));
         }
         {
-            final Map<QName, List<String>> exp = new HashMap<QName, List<String>>();
+            final Map<QName, List<String>> exp = new HashMap<>();
             exp.put(null, Arrays.asList("foo", "bar"));
             exp.put(QName.valueOf("group"), Arrays.asList("a", "b", "c"));
             assertEquals(exp, f.getGroups("foo group(a b c) bar"));
         }
         {
-            final Map<QName, List<String>> exp = new HashMap<QName, List<String>>();
+            final Map<QName, List<String>> exp = new HashMap<>();
             exp.put(null, Arrays.asList("foo"));
             exp.put(QName.valueOf("group"), Arrays.asList("a", "b", "c"));
             assertEquals(exp, f.getGroups("foo group(a b c)"));
         }
         {
-            final Map<QName, List<String>> exp = new HashMap<QName, List<String>>();
+            final Map<QName, List<String>> exp = new HashMap<>();
             exp.put(null, Arrays.asList("bar"));
             exp.put(QName.valueOf("group"), Arrays.asList("a", "b", "c"));
             assertEquals(exp, f.getGroups("group(a b c) bar"));
         }
         {
-            final Map<QName, List<String>> exp = new HashMap<QName, List<String>>();
+            final Map<QName, List<String>> exp = new HashMap<>();
             exp.put(null, Arrays.asList("foo", "bar", "baz"));
             exp.put(QName.valueOf("group1"), Arrays.asList("a", "b", "c"));
             exp.put(QName.valueOf("group2"), Arrays.asList("d", "e", "f"));
             assertEquals(exp, f.getGroups("foo group1(a b c) bar group2(d e f) baz"));
         }
         {
-            final Map<QName, List<String>> exp = new HashMap<QName, List<String>>();
+            final Map<QName, List<String>> exp = new HashMap<>();
             exp.put(QName.valueOf("group"), Arrays.asList("a", "b", "c"));
             assertEquals(exp, f.getGroups("group(a b) group(c)"));
         }
         {
-            final Map<QName, List<String>> exp = new HashMap<QName, List<String>>();
+            final Map<QName, List<String>> exp = new HashMap<>();
             exp.put(QName.valueOf("group2"), Arrays.asList("a"));
             assertEquals(exp, f.getGroups("group1() group2(a)"));
         }
@@ -411,13 +411,13 @@ public class FilterUtilsTest {
         f.setLogger(new TestUtils.TestLogger());
 
         assertEquals(
-                new HashSet(asList(flagRed, flagBlue)),
+                new HashSet<>(asList(flagRed, flagBlue)),
                 f.getFlags(attr(PROPS, "os(amiga unix windows)"), new QName[][] {{PROPS, OS}}));
         assertEquals(
-                new HashSet(asList(flagRed, flagBlue)),
+                new HashSet<>(asList(flagRed, flagBlue)),
                 f.getFlags(attr(PROPS, "os(amiga windows)"), new QName[][] {{PROPS, OS, GUI}}));
         assertEquals(
-                new HashSet(asList(flagRed, flagBlue)),
+                new HashSet<>(asList(flagRed, flagBlue)),
                 f.getFlags(attr(PROPS, "gui(amiga windows)"), new QName[][] {{PROPS, OS, GUI}}));
         assertEquals(
                 singleton(flagBlue),

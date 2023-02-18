@@ -25,9 +25,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.Constants.UTF8;
 
 public class MergeMapParserTest {
 
@@ -45,10 +45,10 @@ public class MergeMapParserTest {
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        output.write("<wrapper>".getBytes(UTF8));
+        output.write("<wrapper>".getBytes(StandardCharsets.UTF_8));
         parser.setOutputStream(output);
         parser.read(new File(srcDir, "test.ditamap").getAbsoluteFile(), srcDir.getAbsoluteFile());
-        output.write("</wrapper>".getBytes(UTF8));
+        output.write("</wrapper>".getBytes(StandardCharsets.UTF_8));
         assertXMLEqual(new InputSource(new File(expDir, "merged.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
     }
@@ -59,10 +59,10 @@ public class MergeMapParserTest {
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        output.write("<wrapper>".getBytes(UTF8));
+        output.write("<wrapper>".getBytes(StandardCharsets.UTF_8));
         parser.setOutputStream(output);
         parser.read(new File(srcDir, "space in map name.ditamap").getAbsoluteFile(), srcDir.getAbsoluteFile());
-        output.write("</wrapper>".getBytes(UTF8));
+        output.write("</wrapper>".getBytes(StandardCharsets.UTF_8));
         assertXMLEqual(new InputSource(new File(expDir, "merged.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
     }
@@ -73,10 +73,10 @@ public class MergeMapParserTest {
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        output.write("<wrapper>".getBytes(UTF8));
+        output.write("<wrapper>".getBytes(StandardCharsets.UTF_8));
         parser.setOutputStream(output);
         parser.read(new File(srcDir, "testcomposite.ditamap").getAbsoluteFile(), srcDir.getAbsoluteFile());
-        output.write("</wrapper>".getBytes(UTF8));
+        output.write("</wrapper>".getBytes(StandardCharsets.UTF_8));
 
         assertXMLEqual(new InputSource(new File(expDir, "mergedwithditasub.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
@@ -88,10 +88,10 @@ public class MergeMapParserTest {
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        output.write("<wrapper>".getBytes(UTF8));
+        output.write("<wrapper>".getBytes(StandardCharsets.UTF_8));
         parser.setOutputStream(output);
         parser.read(new File(srcDir, "testsubtopic.ditamap").getAbsoluteFile(), srcDir.getAbsoluteFile());
-        output.write("</wrapper>".getBytes(UTF8));
+        output.write("</wrapper>".getBytes(StandardCharsets.UTF_8));
 
         assertXMLEqual(new InputSource(new File(expDir, "mergedsub.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
@@ -111,10 +111,10 @@ public class MergeMapParserTest {
         }
         parser.setJob(job);
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        output.write("<wrapper>".getBytes(UTF8));
+        output.write("<wrapper>".getBytes(StandardCharsets.UTF_8));
         parser.setOutputStream(output);
         parser.read(new File(tmpDir, "test.ditamap").getAbsoluteFile(), srcDir.getAbsoluteFile());
-        output.write("</wrapper>".getBytes(UTF8));
+        output.write("</wrapper>".getBytes(StandardCharsets.UTF_8));
         assertXMLEqual(new InputSource(new File(expDir, "merged.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
     }

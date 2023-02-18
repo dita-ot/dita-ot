@@ -37,7 +37,7 @@ See the accompanying LICENSE file for applicable license.
 public class CompareStrings {
     public static Integer compare(final String theS1, final String theS2, final String theLanguage, final String theCountry) {
         final Collator collator = Collator.getInstance(new Locale(theLanguage, theCountry));
-        return new Integer(collator.compare(theS1, theS2));
+        return collator.compare(theS1, theS2);
     }
 
 

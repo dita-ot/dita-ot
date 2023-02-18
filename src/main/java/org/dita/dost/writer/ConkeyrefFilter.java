@@ -11,7 +11,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import org.dita.dost.log.MessageUtils;

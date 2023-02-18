@@ -418,11 +418,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
                 throw (DITAOTException) inner;
             }
             if (currentFile.equals(rootFile)) {
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage(), sax);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params) + ": " + sax.getMessage(), sax);
             } else if (processingMode == Mode.STRICT) {
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params) + ": " + sax.getMessage(), sax);
             } else {
-                logger.error(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
+                logger.error(MessageUtils.getMessage("DOTJ013E", params) + ": " + sax.getMessage(), sax);
             }
             failureList.add(currentFile);
         } catch (final FileNotFoundException e) {
@@ -435,20 +435,20 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
                     logger.error(MessageUtils.getMessage("DOTX008E", params).toString());
                 }
             } else if (currentFile.equals(rootFile)) {
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ078F", params).toString() + " Cannot load file: " + e.getMessage(), e);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ078F", params) + " Cannot load file: " + e.getMessage(), e);
             } else if (processingMode == Mode.STRICT) {
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ079E", params).toString() + " Cannot load file: " + e.getMessage(), e);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ079E", params) + " Cannot load file: " + e.getMessage(), e);
             } else {
-                logger.error(MessageUtils.getMessage("DOTJ079E", params).toString() + " Cannot load file: " + e.getMessage());
+                logger.error(MessageUtils.getMessage("DOTJ079E", params) + " Cannot load file: " + e.getMessage());
             }
             failureList.add(currentFile);
         } catch (final Exception e) {
             if (currentFile.equals(rootFile)) {
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(),  e);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params) + ": " + e.getMessage(),  e);
             } else if (processingMode == Mode.STRICT) {
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
+                throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params) + ": " + e.getMessage(), e);
             } else {
-                logger.error(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
+                logger.error(MessageUtils.getMessage("DOTJ013E", params) + ": " + e.getMessage(), e);
             }
             failureList.add(currentFile);
         }
@@ -603,7 +603,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         if (isFormatDita(file.format) && listFilter.isDitaTopic() &&
                 !job.crawlTopics() &&
                 !listFilter.getConrefTargets().contains(file.filename)) {
-            return;  // Do not process topics linked from within topics
+            // Do not process topics linked from within topics
         } else if ((isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format))) {
             addToWaitList(file);
         } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
@@ -924,7 +924,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         String res;
         final File p = relativeRootFile.getParentFile();
         if (p != null) {
-            res = p.toString() + File.separator;
+            res = p + File.separator;
         } else {
             res = "";
         }

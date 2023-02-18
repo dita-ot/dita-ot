@@ -42,8 +42,7 @@ See the accompanying LICENSE file for applicable license.
  */
 @Deprecated
 public class IndexConfiguration {
-    private final List<ConfigEntry> entries = new ArrayList<ConfigEntry>();
-    private static String message;
+    private final List<ConfigEntry> entries = new ArrayList<>();
 
 
     public IndexConfiguration() {
@@ -51,7 +50,7 @@ public class IndexConfiguration {
 
 
     public ConfigEntry[] getEntries() {
-        return (ConfigEntry[]) entries.toArray(new ConfigEntry[entries.size()]);
+        return entries.toArray(new ConfigEntry[0]);
     }
 
 
@@ -62,7 +61,7 @@ public class IndexConfiguration {
 
     public static IndexConfiguration parse(final Document theDocument)
             throws ParseException {
-        message = "Invalid configuration format";
+        String message = "Invalid configuration format";
 
         final IndexConfiguration indexConfiguration = new IndexConfiguration();
 
@@ -100,10 +99,10 @@ public class IndexConfiguration {
                 final String keyValue = getNodeValue(key);
                 final String labelValue = getNodeValue(label);
                 String[] groupMembers = new String[0];
-                final ArrayList<CharRange> rangeList = new ArrayList<CharRange>();
+                final ArrayList<CharRange> rangeList = new ArrayList<>();
 
                 if (null != members && members.getChildNodes().getLength() > 0) {
-                    final ArrayList<String> nodeValues = new ArrayList<String>();
+                    final ArrayList<String> nodeValues = new ArrayList<>();
 
                     final NodeList membersChilds = members.getChildNodes();
                     for (int j = 0; j < membersChilds.getLength(); j++) {
@@ -127,11 +126,11 @@ public class IndexConfiguration {
                             }
                         }
                     }
-                    groupMembers = (String[])nodeValues.toArray(new String[nodeValues.size()]);
+                    groupMembers = nodeValues.toArray(new String[0]);
                 }
                 final ConfigEntryImpl configEntry = new ConfigEntryImpl(labelValue, keyValue, groupMembers);
-                for(int j = 0; j<rangeList.size();j++) {
-                    configEntry.addRange((CharRange)rangeList.get(j));
+                for (CharRange charRange : rangeList) {
+                    configEntry.addRange(charRange);
                 }
                 indexConfiguration.addEntry(configEntry);
             }
@@ -145,7 +144,7 @@ public class IndexConfiguration {
         if (theNode.getNodeType() == Node.TEXT_NODE) {
             return theNode.getNodeValue().trim();
         } else {
-            final StringBuffer res = new StringBuffer();
+            final StringBuilder res = new StringBuilder();
             final NodeList childNodes = theNode.getChildNodes();
             for (int i = 0; i < childNodes.getLength(); i++) {
                 final String nodeValue = getNodeValue(childNodes.item(i));

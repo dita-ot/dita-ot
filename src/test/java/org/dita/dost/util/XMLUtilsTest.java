@@ -118,7 +118,7 @@ public class XMLUtilsTest {
         final Document doc = dom.createDocument(null, "foo", null);
         
         doc.getDocumentElement().setAttribute("foo", "foo");
-        final Attr att = (Attr) doc.getDocumentElement().getAttributeNode("foo");
+        final Attr att = doc.getDocumentElement().getAttributeNode("foo");
         XMLUtils.addOrSetAttribute(atts, att);
 
         final int i = atts.getIndex(NULL_NS_URI, "foo");
@@ -128,7 +128,7 @@ public class XMLUtilsTest {
         assertEquals("foo", atts.getValue(i));
         
         doc.getDocumentElement().setAttributeNS(XML_NS_URI, "xml:lang", "en");
-        final Attr lang = (Attr) doc.getDocumentElement().getAttributeNodeNS(XML_NS_URI, "lang");
+        final Attr lang = doc.getDocumentElement().getAttributeNodeNS(XML_NS_URI, "lang");
         XMLUtils.addOrSetAttribute(atts, lang);
         
         final int l = atts.getIndex(XML_NS_URI, "lang");
@@ -386,9 +386,10 @@ public class XMLUtilsTest {
 
         final List<Message> act = logger.getMessages();
         assertEquals(1, act.size());
-        assertEquals("abc <def>\n" + 
-                "   <hij/>\n" + 
-                "</def>", act.get(0).message);
+        assertEquals("""
+                abc <def>
+                   <hij/>
+                </def>""", act.get(0).message);
     }
 
     @Test

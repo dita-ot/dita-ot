@@ -1,21 +1,17 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
-import static org.dita.dost.util.Constants.*;
-import static javax.xml.XMLConstants.*;
-
 import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
-import com.idiominc.ws.opentopic.fo.index2.util.IndexStringProcessor;
 import com.idiominc.ws.opentopic.fo.index2.util.IndexDitaProcessor;
+import com.idiominc.ws.opentopic.fo.index2.util.IndexStringProcessor;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.util.*;
 
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.XMLUtils;
+import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
+import static org.dita.dost.util.Constants.*;
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -104,13 +100,9 @@ public final class IndexPreprocessor {
         final Node rootElement = theInput.getDocumentElement();
 
 
-        final ArrayList<IndexEntry> indexes = new ArrayList<IndexEntry>();
+        final ArrayList<IndexEntry> indexes = new ArrayList<>();
 
-        final IndexEntryFoundListener listener = new IndexEntryFoundListener() {
-            public void foundEntry(final IndexEntry theEntry) {
-                indexes.add(theEntry);
-            }
-        };
+        final IndexEntryFoundListener listener = indexes::add;
 
         final Node node = processCurrNode(rootElement, doc, listener)[0];
 
@@ -118,7 +110,7 @@ public final class IndexPreprocessor {
 
         doc.getDocumentElement().setAttribute(XMLNS_ATTRIBUTE + ":" + this.prefix, this.namespace_url);
 
-        return new IndexPreprocessResult(doc, (IndexEntry[]) indexes.toArray(new IndexEntry[0]));
+        return new IndexPreprocessResult(doc, indexes.toArray(new IndexEntry[0]));
     }
 
     public void createAndAddIndexGroups(final IndexEntry[] theIndexEntries, final IndexConfiguration theConfiguration, final Document theDocument, final Locale theLocale) {
@@ -193,7 +185,7 @@ public final class IndexPreprocessor {
 
         final NodeList childNodes = theNode.getChildNodes();
         final StringBuilder textBuf = new StringBuilder();
-        final List<Node> contents = new ArrayList<Node>();
+        final List<Node> contents = new ArrayList<>();
         for (int i = 0; i < childNodes.getLength(); i++) {
             final Node child = childNodes.item(i);
             if (checkElementName(child)) {
@@ -217,7 +209,7 @@ public final class IndexPreprocessor {
             ditastyle = true;
         }
 
-        final ArrayList<Node> res = new ArrayList<Node>();
+        final ArrayList<Node> res = new ArrayList<>();
         if ((ditastyle)) {
             final IndexEntry[] indexEntries = indexDitaProcessor.processIndexDitaNode(theNode,"");
 
@@ -226,20 +218,16 @@ public final class IndexPreprocessor {
             }
 
             final Node[] nodes = transformToNodes(indexEntries, theTargetDocument, null);
-            for (final Node node : nodes) {
-                res.add(node);
-            }
+            res.addAll(Arrays.asList(nodes));
 
         } else if (textNode != null) {
             final Node[] nodes = processIndexString(textNode, contents, theTargetDocument, theIndexEntryFoundListener);
-            for (final Node node : nodes) {
-                res.add(node);
-            }
+            res.addAll(Arrays.asList(nodes));
         } else {
             return new Node[0];
         }
 
-        return (Node[]) res.toArray(new Node[res.size()]);
+        return res.toArray(new Node[0]);
 
     }
 
@@ -295,7 +283,7 @@ public final class IndexPreprocessor {
             Arrays.sort(theIndexEntries, theIndexEntryComparator);
         }
 
-        final List<Element> result = new ArrayList<Element>();
+        final List<Element> result = new ArrayList<>();
         for (final IndexEntry indexEntry : theIndexEntries) {
             final Element indexEntryNode = createElement(theTargetDocument, "index.entry");
 
@@ -320,7 +308,7 @@ public final class IndexPreprocessor {
             final String[] refIDs = indexEntry.getRefIDs();
             for (final String refID : refIDs) {
                 final Element referenceIDElement = createElement(theTargetDocument, "refID");
-                referenceIDElement.setAttribute("indexid", hashPrefix + Integer.toString(refID.hashCode()));
+                referenceIDElement.setAttribute("indexid", hashPrefix + refID.hashCode());
                 referenceIDElement.setAttribute("value", refID);
                 indexEntryNode.appendChild(referenceIDElement);
             }
@@ -378,7 +366,7 @@ public final class IndexPreprocessor {
 
             result.add(indexEntryNode);
         }
-        return (Node[]) result.toArray(new Node[result.size()]);
+        return result.toArray(new Node[0]);
     }
 
 

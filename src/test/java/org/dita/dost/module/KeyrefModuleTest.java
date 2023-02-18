@@ -238,8 +238,8 @@ public class KeyrefModuleTest {
 	    		EMPTY_LIST
 	    		);
 	    final KeyScope keyScope =
-	            new KeyScope("#root", null, new HashMap<String, KeyDef>(), 
-	                        Arrays.asList(new KeyScope[] {childScope1, childScope2})
+	            new KeyScope("#root", null, new HashMap<>(),
+	                        Arrays.asList(childScope1, childScope2)
 	    );
 	    final List<ResolveTask> res = new ArrayList<>();
         final XdmDestination destination = new XdmDestination();
@@ -341,8 +341,8 @@ public class KeyrefModuleTest {
 	    		EMPTY_LIST
 	    		);
 	    final KeyScope keyScope =
-	            new KeyScope("#root", null, new HashMap<String, KeyDef>(), 
-	                        Arrays.asList(new KeyScope[] {childScope1, childScope2})
+	            new KeyScope("#root", null, new HashMap<>(),
+	                        Arrays.asList(childScope1, childScope2)
 	    );
 	    final List<ResolveTask> res = new ArrayList<>();
 	    final XdmDestination destination = new XdmDestination();
@@ -379,12 +379,12 @@ public class KeyrefModuleTest {
         Map<String, KeyDef> defsMap = new HashMap<>();
         defsMap.put("Tool", new KeyDef("Tool", null, "local", "dita", inputMapFileInfo.src, null));
         
-        KeyScope submap1 = new KeyScope("submap", "mapref[6]map[6].submap", defsMap, Arrays.asList(new KeyScope[] {}));
-        KeyScope submap2 = new KeyScope("submap", "submap[8]map[6].submap", defsMap, Arrays.asList(new KeyScope[] {}));
+        KeyScope submap1 = new KeyScope("submap", "mapref[6]map[6].submap", defsMap, List.of());
+        KeyScope submap2 = new KeyScope("submap", "submap[8]map[6].submap", defsMap, List.of());
         
         final KeyScope keyScope =
                 new KeyScope("#root", null, defsMap, 
-                            Arrays.asList(new KeyScope[] {submap1, submap2})
+                            Arrays.asList(submap1, submap2)
         );
         final List<ResolveTask> res = new ArrayList<>();
         final XdmDestination destination = new XdmDestination();

@@ -40,6 +40,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +60,7 @@ public class TestUtils {
     public static final File testStub = new File("src" + File.separator + "test" + File.separator + "resources");
 
     private static final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-    private static Processor processor = new Processor(new Configuration());
+    private static final Processor processor = new Processor(new Configuration());
 
     static {
         builderFactory.setNamespaceAware(true);
@@ -125,9 +126,7 @@ public class TestUtils {
      */
     public static String readFileToString(final File file, final boolean ignoreHead) throws IOException {
         final StringBuilder std = new StringBuilder();
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new FileReader(file));
+        try (BufferedReader in = new BufferedReader(new FileReader(file))) {
             boolean firstLine = true;
             if (ignoreHead) {
                 in.readLine();
@@ -140,10 +139,6 @@ public class TestUtils {
                     firstLine = false;
                 }
                 std.append(str);
-            }
-        } finally {
-            if (in != null) {
-                in.close();
             }
         }
         return std.toString();
@@ -160,9 +155,7 @@ public class TestUtils {
     public static String readXmlToString(final File file, final boolean normalize, final boolean clean)
             throws Exception {
         final Writer std = new CharArrayWriter();
-        InputStream in = null;
-        try {
-            in = new BufferedInputStream(new FileInputStream(file));
+        try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
             final Transformer serializer = TransformerFactory.newInstance().newTransformer();
             XMLReader p = XMLReaderFactory.createXMLReader();
             p.setEntityResolver(CatalogUtils.getCatalogResolver());
@@ -175,10 +168,6 @@ public class TestUtils {
             }
             serializer.transform(new SAXSource(p, new InputSource(in)),
                     new StreamResult(std));
-        } finally {
-            if (in != null) {
-                in.close();
-            }
         }
         return std.toString();
     }
@@ -279,20 +268,9 @@ public class TestUtils {
         final Transformer serializer = TransformerFactory.newInstance().newTransformer();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
         parser.setEntityResolver(CatalogUtils.getCatalogResolver());
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            in = new BufferedInputStream(new FileInputStream(src));
-            out = new BufferedOutputStream(new FileOutputStream(dst));
+        try (InputStream in = new BufferedInputStream(new FileInputStream(src)); OutputStream out = new BufferedOutputStream(new FileOutputStream(dst))) {
             serializer.transform(new SAXSource(parser, new InputSource(in)),
                     new StreamResult(out));
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-            if (out != null) {
-                out.close();
-            }
         }
     }
 
@@ -332,12 +310,8 @@ public class TestUtils {
         final List<Node> nodes = asList(childNodes);
         for (final Node child : nodes) {
             switch (child.getNodeType()) {
-                case Node.COMMENT_NODE:
-                    child.getParentNode().removeChild(child);
-                    break;
-                case Node.ELEMENT_NODE:
-                    stripComments((Element) child);
-                    break;
+                case Node.COMMENT_NODE -> child.getParentNode().removeChild(child);
+                case Node.ELEMENT_NODE -> stripComments((Element) child);
             }
         }
     }
@@ -407,7 +381,7 @@ public class TestUtils {
     public static Document buildControlDocument(String content) {
         try {
             return DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                    .parse(new ByteArrayInputStream(content.getBytes("UTF-8")));
+                    .parse(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
         } catch (SAXException | IOException | ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
@@ -418,7 +392,7 @@ public class TestUtils {
      */
     public static class TestLogger extends MarkerIgnoringBase implements DITAOTLogger {
 
-        private boolean failOnError;
+        private final boolean failOnError;
 
         public TestLogger() {
             this.failOnError = true;
@@ -584,7 +558,7 @@ public class TestUtils {
             this.strict = strict;
         }
 
-        private List<Message> buf = new ArrayList<Message>();
+        private final List<Message> buf = new ArrayList<>();
 
         public void info(final String msg) {
             buf.add(new Message(Message.Level.INFO, msg, null));

@@ -31,9 +31,7 @@ final class ListTranstypeAction extends ImportAction {
         final String separator = paramTable.getOrDefault("separator", "|");
         final List<String> v = valueSet.stream()
                 .map(Value::value)
-                .distinct()
-                .collect(Collectors.toList());
-        Collections.sort(v);
+                .distinct().sorted().collect(Collectors.toList());
         final StringBuilder retBuf = new StringBuilder();
         for (final Iterator<String> i = v.iterator(); i.hasNext();) {
             retBuf.append(i.next());

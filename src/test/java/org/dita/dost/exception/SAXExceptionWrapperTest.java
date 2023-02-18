@@ -58,13 +58,12 @@ public class SAXExceptionWrapperTest {
     public void testGetMessage() {
         final SAXExceptionWrapper e = new SAXExceptionWrapper("message", new SAXParseException("msg", l));
         final String act = e.getMessage();
-        final String exp = new StringBuilder()
-        .append("message")
-        .append(" Line ")
-        .append(l.getLineNumber())
-        .append(":")
-        .append("msg")
-        .append(System.getProperty("line.separator")).toString();
+        final String exp = "message" +
+                " Line " +
+                l.getLineNumber() +
+                ":" +
+                "msg" +
+                System.getProperty("line.separator");
         assertEquals(exp, act);
     }
 

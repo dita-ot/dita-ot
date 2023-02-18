@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 public class TestIDitaTranstypeIndexWriter {
 
-    public static IDitaTranstypeIndexWriter idita1 = new CHMIndexWriter();
+    public static final IDitaTranstypeIndexWriter idita1 = new CHMIndexWriter();
 
     @Test
     public void testiditatranstypeindexwriter() {

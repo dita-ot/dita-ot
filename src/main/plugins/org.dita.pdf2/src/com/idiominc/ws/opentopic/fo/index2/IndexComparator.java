@@ -1,7 +1,5 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
-import com.ibm.icu.text.Collator;
-
 import java.util.Comparator;
 import java.util.Locale;
 

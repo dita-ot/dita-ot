@@ -38,9 +38,9 @@ import static org.dita.dost.util.URLUtils.toFile;
  */
 public class JobSourceSet extends AbstractFileSet implements ResourceCollection {
 
-    private SelectorElem include;
-    private List<SelectorElem> includes;
-    private List<SelectorElem> excludes;
+    private final SelectorElem include;
+    private final List<SelectorElem> includes;
+    private final List<SelectorElem> excludes;
     private Collection<Resource> res;
     private boolean isFilesystemOnly = true;
 

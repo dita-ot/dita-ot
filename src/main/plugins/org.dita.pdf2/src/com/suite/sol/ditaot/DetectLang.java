@@ -95,7 +95,7 @@ public class DetectLang extends Task {
         final String locale = getProject().getProperty("document.locale");
         if (locale != null && getProject().getProperty("document.language") == null) {
             setActiveProjectProperty("document.language",
-                    locale.substring(0, locale.length() < 2 ? locale.length(): 2));
+                    locale.substring(0, Math.min(locale.length(), 2)));
         }
     }
 
@@ -109,8 +109,8 @@ public class DetectLang extends Task {
             final String langAttr = attributes.getValue("xml:lang");
 
             if(classAttr != null && langAttr != null) {
-                if ((classAttr.indexOf(" map/map ") > -1) ||
-                        (classAttr.indexOf(" topic/topic ") > -1)) {
+                if ((classAttr.contains(" map/map ")) ||
+                        (classAttr.contains(" topic/topic "))) {
                     final String partProcessedString = langAttr.replace('-','_');
                     int length = partProcessedString.length();
                     if (length == 5) {

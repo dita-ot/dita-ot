@@ -41,7 +41,7 @@ public class ValidationFilterTest {
 
     @Test
     public void testXMLLang() throws SAXException {
-        final List<String> res = new ArrayList<String>();
+        final List<String> res = new ArrayList<>();
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -66,7 +66,7 @@ public class ValidationFilterTest {
 
     @Test
     public void testHref() throws SAXException, URISyntaxException {
-        final List<String> res = new ArrayList<String>();
+        final List<String> res = new ArrayList<>();
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -93,7 +93,7 @@ public class ValidationFilterTest {
     
     @Test
     public void testConref() throws SAXException, URISyntaxException {
-        final List<String> res = new ArrayList<String>();
+        final List<String> res = new ArrayList<>();
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -118,7 +118,7 @@ public class ValidationFilterTest {
 
     @Test
     public void testScope() throws SAXException, URISyntaxException {
-        final List<String> res = new ArrayList<String>();
+        final List<String> res = new ArrayList<>();
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {

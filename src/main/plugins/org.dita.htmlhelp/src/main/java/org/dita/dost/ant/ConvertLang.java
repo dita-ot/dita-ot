@@ -14,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +21,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -117,18 +117,10 @@ public final class ConvertLang extends Task {
     private void createLangMap() {
 
         final Properties entities = new Properties();
-        InputStream in = null;
-        try {
-            in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/util/languages.properties");
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/util/languages.properties")) {
             entities.load(in);
         } catch (final IOException e) {
             throw new RuntimeException("Failed to read language property file: " + e.getMessage(), e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {}
-            }
         }
         for (final Entry<Object, Object> e: entities.entrySet()) {
             langMap.put((String) e.getKey(), (String) e.getValue());
@@ -139,18 +131,10 @@ public final class ConvertLang extends Task {
     private void createEntityMap() {
 
         final Properties entities = new Properties();
-        InputStream in = null;
-        try {
-            in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/util/entities.properties");
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/util/entities.properties")) {
             entities.load(in);
         } catch (final IOException e) {
             throw new RuntimeException("Failed to read entities property file: " + e.getMessage(), e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {}
-            }
         }
         for (final Entry<Object, Object> e: entities.entrySet()) {
             entityMap.put((String) e.getKey(), (String) e.getValue());
@@ -159,9 +143,7 @@ public final class ConvertLang extends Task {
     }
 
     private void createCharsetMap() {
-        InputStream in = null;
-        try {
-            in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/util/codepages.xml");
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/util/codepages.xml")) {
             final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             final Document doc = builder.parse(in);
             final Element root = doc.getDocumentElement();
@@ -171,10 +153,10 @@ public final class ConvertLang extends Task {
                 final Node node = childNodes.item(i);
                 //only for element node
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    final Element e = (Element)node;
+                    final Element e = (Element) node;
                     final String lang = e.getAttribute(ATTRIBUTE_NAME_LANG);
                     //node found
-                    if (langcode.equalsIgnoreCase(lang)||
+                    if (langcode.equalsIgnoreCase(lang) ||
                             lang.startsWith(langcode)) {
                         //store the value into a map
                         //charsetMap = new HashMap<String, String>();
@@ -183,7 +165,7 @@ public final class ConvertLang extends Task {
                         for (int j = 0; j < subChild.getLength(); j++) {
                             final Node subNode = subChild.item(j);
                             if (subNode.getNodeType() == Node.ELEMENT_NODE) {
-                                final Element elem = (Element)subNode;
+                                final Element elem = (Element) subNode;
                                 final String format = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
                                 final String charset = elem.getAttribute(ATTRIBUTE_NAME_CHARSET);
                                 //store charset into map
@@ -202,12 +184,6 @@ public final class ConvertLang extends Task {
             }
         } catch (final Exception e) {
             throw new RuntimeException("Failed to read charset configuration file: " + e.getMessage(), e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {}
-            }
         }
     }
 
@@ -248,11 +224,11 @@ public final class ConvertLang extends Task {
             try {
                 //prepare for the input and output
                 final FileInputStream inputStream = new FileInputStream(inputFile);
-                final InputStreamReader streamReader = new InputStreamReader(inputStream, UTF8);
+                final InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
                 reader = new BufferedReader(streamReader);
 
                 final FileOutputStream outputStream = new FileOutputStream(outputFile);
-                final OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, UTF8);
+                final OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
                 writer = new BufferedWriter(streamWriter);
 
                 String value = reader.readLine();
@@ -286,8 +262,6 @@ public final class ConvertLang extends Task {
                     }
                     value = reader.readLine();
                 }
-            } catch (final FileNotFoundException e) {
-                logger.error(e.getMessage(), e) ;
             } catch (final UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             } catch (final IOException e) {
@@ -401,8 +375,6 @@ public final class ConvertLang extends Task {
                     }
                     value = reader.readLine();
                 }
-            } catch (final FileNotFoundException e) {
-                logger.error(e.getMessage(), e) ;
             } catch (final UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             } catch (final IOException e) {
@@ -460,52 +432,98 @@ public final class ConvertLang extends Task {
             entityExceptionSet.add(223); //Szlig
             entityExceptionSet.add(215); //&times;
         }
-        if (charset.equals(CODEPAGE_ISO_8859_1) || charset.equals(CODEPAGE_1252)) {
-            entityExceptionSet.add(192); entityExceptionSet.add(224);//A-grave
-            entityExceptionSet.add(195); entityExceptionSet.add(227);//A-tilde
-            entityExceptionSet.add(197); entityExceptionSet.add(229);//A-ring
-            entityExceptionSet.add(198); entityExceptionSet.add(230);//AElig
-            entityExceptionSet.add(200); entityExceptionSet.add(232);//E-grave
-            entityExceptionSet.add(202); entityExceptionSet.add(234);//E-circumflex
-            entityExceptionSet.add(204); entityExceptionSet.add(236);//I-grave
-            entityExceptionSet.add(207); entityExceptionSet.add(239);//I-uml
-            entityExceptionSet.add(208); entityExceptionSet.add(240);//ETH
-            entityExceptionSet.add(209); entityExceptionSet.add(241);//N-tilde
-            entityExceptionSet.add(210); entityExceptionSet.add(242);//O-grave
-            entityExceptionSet.add(213); entityExceptionSet.add(245);//O-tilde
-            entityExceptionSet.add(216); entityExceptionSet.add(248);//O-slash
-            entityExceptionSet.add(217); entityExceptionSet.add(249);//U-grave
-            entityExceptionSet.add(219); entityExceptionSet.add(251);//O-circumflex
-            entityExceptionSet.add(222); entityExceptionSet.add(254);//Thorn
-            entityExceptionSet.add(255);//y-umlaut
-        } else if (charset.equals(CODEPAGE_ISO_8859_2) || charset.equals(CODEPAGE_1250)) {
-            entityExceptionSet.add(352); entityExceptionSet.add(353);//S-caron
-        } else if (charset.equals(CODEPAGE_ISO_8859_7) || charset.equals(CODEPAGE_1253)) {
-            entityExceptionSet.add(913); entityExceptionSet.add(945);//Alpha
-            entityExceptionSet.add(914); entityExceptionSet.add(946);
-            entityExceptionSet.add(915); entityExceptionSet.add(947);
-            entityExceptionSet.add(916); entityExceptionSet.add(948);
-            entityExceptionSet.add(917); entityExceptionSet.add(949);
-            entityExceptionSet.add(918); entityExceptionSet.add(950);
-            entityExceptionSet.add(919); entityExceptionSet.add(951);
-            entityExceptionSet.add(920); entityExceptionSet.add(952);
-            entityExceptionSet.add(921); entityExceptionSet.add(953);
-            entityExceptionSet.add(922); entityExceptionSet.add(954);
-            entityExceptionSet.add(923); entityExceptionSet.add(955);
-            entityExceptionSet.add(924); entityExceptionSet.add(956);
-            entityExceptionSet.add(925); entityExceptionSet.add(957);
-            entityExceptionSet.add(926); entityExceptionSet.add(958);
-            entityExceptionSet.add(927); entityExceptionSet.add(959);
-            entityExceptionSet.add(928); entityExceptionSet.add(960);
-            entityExceptionSet.add(929); entityExceptionSet.add(961);
-            entityExceptionSet.add(930); entityExceptionSet.add(962);
-            entityExceptionSet.add(931); entityExceptionSet.add(963);
-            entityExceptionSet.add(932); entityExceptionSet.add(964);
-            entityExceptionSet.add(933); entityExceptionSet.add(965);
-            entityExceptionSet.add(934); entityExceptionSet.add(966);
-            entityExceptionSet.add(935); entityExceptionSet.add(967);
-            entityExceptionSet.add(936); entityExceptionSet.add(968);
-            entityExceptionSet.add(937); entityExceptionSet.add(969);//Omega
+        switch (charset) {
+            case CODEPAGE_ISO_8859_1, CODEPAGE_1252 -> {
+                entityExceptionSet.add(192);
+                entityExceptionSet.add(224);//A-grave
+                entityExceptionSet.add(195);
+                entityExceptionSet.add(227);//A-tilde
+                entityExceptionSet.add(197);
+                entityExceptionSet.add(229);//A-ring
+                entityExceptionSet.add(198);
+                entityExceptionSet.add(230);//AElig
+                entityExceptionSet.add(200);
+                entityExceptionSet.add(232);//E-grave
+                entityExceptionSet.add(202);
+                entityExceptionSet.add(234);//E-circumflex
+                entityExceptionSet.add(204);
+                entityExceptionSet.add(236);//I-grave
+                entityExceptionSet.add(207);
+                entityExceptionSet.add(239);//I-uml
+                entityExceptionSet.add(208);
+                entityExceptionSet.add(240);//ETH
+                entityExceptionSet.add(209);
+                entityExceptionSet.add(241);//N-tilde
+                entityExceptionSet.add(210);
+                entityExceptionSet.add(242);//O-grave
+                entityExceptionSet.add(213);
+                entityExceptionSet.add(245);//O-tilde
+                entityExceptionSet.add(216);
+                entityExceptionSet.add(248);//O-slash
+                entityExceptionSet.add(217);
+                entityExceptionSet.add(249);//U-grave
+                entityExceptionSet.add(219);
+                entityExceptionSet.add(251);//O-circumflex
+                entityExceptionSet.add(222);
+                entityExceptionSet.add(254);//Thorn
+                entityExceptionSet.add(255);//y-umlaut
+            }
+            case CODEPAGE_ISO_8859_2, CODEPAGE_1250 -> {
+                entityExceptionSet.add(352);
+                entityExceptionSet.add(353);//S-caron
+            }
+            case CODEPAGE_ISO_8859_7, CODEPAGE_1253 -> {
+                entityExceptionSet.add(913);
+                entityExceptionSet.add(945);//Alpha
+                entityExceptionSet.add(914);
+                entityExceptionSet.add(946);
+                entityExceptionSet.add(915);
+                entityExceptionSet.add(947);
+                entityExceptionSet.add(916);
+                entityExceptionSet.add(948);
+                entityExceptionSet.add(917);
+                entityExceptionSet.add(949);
+                entityExceptionSet.add(918);
+                entityExceptionSet.add(950);
+                entityExceptionSet.add(919);
+                entityExceptionSet.add(951);
+                entityExceptionSet.add(920);
+                entityExceptionSet.add(952);
+                entityExceptionSet.add(921);
+                entityExceptionSet.add(953);
+                entityExceptionSet.add(922);
+                entityExceptionSet.add(954);
+                entityExceptionSet.add(923);
+                entityExceptionSet.add(955);
+                entityExceptionSet.add(924);
+                entityExceptionSet.add(956);
+                entityExceptionSet.add(925);
+                entityExceptionSet.add(957);
+                entityExceptionSet.add(926);
+                entityExceptionSet.add(958);
+                entityExceptionSet.add(927);
+                entityExceptionSet.add(959);
+                entityExceptionSet.add(928);
+                entityExceptionSet.add(960);
+                entityExceptionSet.add(929);
+                entityExceptionSet.add(961);
+                entityExceptionSet.add(930);
+                entityExceptionSet.add(962);
+                entityExceptionSet.add(931);
+                entityExceptionSet.add(963);
+                entityExceptionSet.add(932);
+                entityExceptionSet.add(964);
+                entityExceptionSet.add(933);
+                entityExceptionSet.add(965);
+                entityExceptionSet.add(934);
+                entityExceptionSet.add(966);
+                entityExceptionSet.add(935);
+                entityExceptionSet.add(967);
+                entityExceptionSet.add(936);
+                entityExceptionSet.add(968);
+                entityExceptionSet.add(937);
+                entityExceptionSet.add(969);//Omega
+            }
         }
     }
 
@@ -517,7 +535,7 @@ public final class ConvertLang extends Task {
         try {
             //prepare for the input and output
             final FileInputStream inputStream = new FileInputStream(inputFile);
-            final InputStreamReader streamReader = new InputStreamReader(inputStream, UTF8);
+            final InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             //wrapped into reader
             reader = new BufferedReader(streamReader);
 

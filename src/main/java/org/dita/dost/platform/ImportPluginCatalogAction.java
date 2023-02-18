@@ -49,7 +49,7 @@ final class ImportPluginCatalogAction extends ImportAction {
                                 new File(basePluginDir, "plugin.xml").toURI().toString(),
                                 f.getPluginDir().toURI().toString()));
             } else {
-                location.append(f.getPluginDir().toURI().toString());
+                location.append(f.getPluginDir().toURI());
             }
             if (location.length() > 0 && !location.substring(location.length() - 1).equals(UNIX_SEPARATOR)) {
                 location.append(UNIX_SEPARATOR);

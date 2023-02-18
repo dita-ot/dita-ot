@@ -20,10 +20,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.reader.ChunkMapReader.*;
@@ -367,7 +364,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
 
         //pop the namespace level
-        if (uri != NULL_NS_URI) {
+        if (!Objects.equals(uri, NULL_NS_URI)) {
             if (namespaceMap.containsKey(uri)){
                 decreaseNamespaceLevel(uri);
             }
@@ -412,7 +409,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         AttributesImpl resAtts = null;
 
         //This part is to handle namespace declaration in the content.
-        if (uri != NULL_NS_URI) {
+        if (!Objects.equals(uri, NULL_NS_URI)) {
             if (namespaceMap.containsKey(uri)){
                 increaseNamespaceLevel(uri);
             }else {

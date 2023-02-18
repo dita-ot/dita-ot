@@ -8,7 +8,6 @@
 package org.dita.dost.reader;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
-import org.dita.dost.util.XMLGrammarPoolImplUtils;
 import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl;
 
 /**

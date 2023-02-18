@@ -102,7 +102,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
             final URI mapFile = in.uri;
             final XdmNode doc = readMap(in);
-            logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
+            logger.info("Reading " + job.tempDirURI.resolve(mapFile));
             reader.read(job.tempDirURI.resolve(mapFile), doc);
 
             final KeyScope startScope = reader.getKeyDefinition();
@@ -113,7 +113,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                     .map(fi -> {
                         try {
                             final XdmNode d = readMap(fi);
-                            logger.info("Reading " + job.tempDirURI.resolve(fi.uri).toString());
+                            logger.info("Reading " + job.tempDirURI.resolve(fi.uri));
                             final KeyrefReader r = new KeyrefReader();
                             r.setLogger(logger);
                             r.read(job.tempDirURI.resolve(fi.uri), d);
@@ -297,7 +297,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                  final List<ResolveTask> res,
                  final Receiver receiver) throws XPathException {
         switch (node.getNodeKind()) {
-            case ELEMENT:
+            case ELEMENT -> {
                 if (MAP_MAP.matches(node) || MAP_TOPICREF.matches(node)) {
                     final List<KeyScope> ss = node.attribute(ATTRIBUTE_NAME_KEYSCOPE) != null
                             ? Stream.of(node.attribute(ATTRIBUTE_NAME_KEYSCOPE).trim().split("\\s+"))
@@ -379,17 +379,15 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
                     receiver.endElement();
                 }
-                break;
-            case DOCUMENT:
+            }
+            case DOCUMENT -> {
                 receiver.startDocument(0);
                 for (final XdmNode c : node.children()) {
                     walkMap(map, c, scope, res, receiver);
                 }
                 receiver.endDocument();
-                break;
-            default:
-                receiver.append(node.getUnderlyingNode());
-                break;
+            }
+            default -> receiver.append(node.getUnderlyingNode());
         }
     }
 

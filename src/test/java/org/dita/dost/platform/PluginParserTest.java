@@ -45,7 +45,7 @@ public class PluginParserTest {
     @Test
     public void testRequirements() {
         final Features f = p.getFeatures();
-        final Map<String, Boolean> exp = new HashMap<String, Boolean>();
+        final Map<String, Boolean> exp = new HashMap<>();
         exp.put("foo", true);
         exp.put("bar", true);
         exp.put("baz", false);

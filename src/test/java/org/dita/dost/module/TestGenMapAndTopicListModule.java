@@ -12,7 +12,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -38,7 +37,7 @@ public class TestGenMapAndTopicListModule {
     private File tempDir;
 
     @Before
-    public void setUp() throws IOException, DITAOTException {
+    public void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestGenMapAndTopicListModule.class);
     }
 
@@ -81,10 +80,10 @@ public class TestGenMapAndTopicListModule {
 
         final File e = new File(expDir, "parallel");
         
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/target-topic-c.xml",
-                    "topics/target-topic a.xml",
-                    "topics/xreffin-topic-1.xml")),
+        assertEquals(new HashSet<>(Arrays.asList(
+                        "topics/target-topic-c.xml",
+                        "topics/target-topic a.xml",
+                        "topics/xreffin-topic-1.xml")),
                 readLines(new File(e, "canditopics.list")));
         assertEquals(Collections.emptySet(), 
                 readLines(new File(e, "coderef.list")));
@@ -100,39 +99,39 @@ public class TestGenMapAndTopicListModule {
                 readLines(new File(e, "copytotarget2sourcemap.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "flagimage.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "maps/root-map-01.ditamap")),
+        assertEquals(new HashSet<>(List.of(
+                        "maps/root-map-01.ditamap")),
                 readLines(new File(e, "fullditamap.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/target-topic-c.xml",
-                    "topics/target-topic a.xml",
-                    "maps/root-map-01.ditamap",
-                    "topics/xreffin-topic-1.xml")),
+        assertEquals(new HashSet<>(Arrays.asList(
+                        "topics/target-topic-c.xml",
+                        "topics/target-topic a.xml",
+                        "maps/root-map-01.ditamap",
+                        "topics/xreffin-topic-1.xml")),
                 readLines(new File(e, "fullditamapandtopic.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/target-topic-c.xml",
-                    "topics/target-topic a.xml",
-                    "topics/xreffin-topic-1.xml")),
+        assertEquals(new HashSet<>(Arrays.asList(
+                        "topics/target-topic-c.xml",
+                        "topics/target-topic a.xml",
+                        "topics/xreffin-topic-1.xml")),
                 readLines(new File(e, "fullditatopic.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/xreffin-topic-1.xml")),
+        assertEquals(new HashSet<>(List.of(
+                        "topics/xreffin-topic-1.xml")),
                 readLines(new File(e, "hrefditatopic.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/target-topic-c.xml",
-                    "topics/target-topic a.xml",
-                    "topics/xreffin-topic-1.xml")),
+        assertEquals(new HashSet<>(Arrays.asList(
+                        "topics/target-topic-c.xml",
+                        "topics/target-topic a.xml",
+                        "topics/xreffin-topic-1.xml")),
                 readLines(new File(e, "hreftargets.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "html.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "image.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/xreffin-topic-1.xml")),
+        assertEquals(new HashSet<>(List.of(
+                        "topics/xreffin-topic-1.xml")),
                 readLines(new File(e, "keyref.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/target-topic-c.xml",
-                    "topics/target-topic a.xml",
-                    "topics/xreffin-topic-1.xml")),
+        assertEquals(new HashSet<>(Arrays.asList(
+                        "topics/target-topic-c.xml",
+                        "topics/target-topic a.xml",
+                        "topics/xreffin-topic-1.xml")),
                 readLines(new File(e, "outditafiles.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "relflagimage.list")));
@@ -144,8 +143,8 @@ public class TestGenMapAndTopicListModule {
                 readLines(new File(e, "subjectscheme.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "subtargets.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "maps/root-map-01.ditamap")),
+        assertEquals(new HashSet<>(List.of(
+                        "maps/root-map-01.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
         
         final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
@@ -185,10 +184,10 @@ public class TestGenMapAndTopicListModule {
 
         final File e = new File(expDir, "above");
                 
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/xreffin-topic-1.xml",
-                    "topics/target-topic-c.xml",
-                    "topics/target-topic a.xml")),
+        assertEquals(new HashSet<>(Arrays.asList(
+                        "topics/xreffin-topic-1.xml",
+                        "topics/target-topic-c.xml",
+                        "topics/target-topic a.xml")),
                 readLines(new File(e, "canditopics.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "coderef.list")));
@@ -204,34 +203,34 @@ public class TestGenMapAndTopicListModule {
                 readLines(new File(e, "copytotarget2sourcemap.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "flagimage.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "root-map-02.ditamap")),
+        assertEquals(new HashSet<>(List.of(
+                        "root-map-02.ditamap")),
                 readLines(new File(e, "fullditamap.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/xreffin-topic-1.xml",
-                    "topics/target-topic-c.xml",
-                    "topics/target-topic a.xml",
-                    "root-map-02.ditamap")),
+        assertEquals(new HashSet<>(Arrays.asList(
+                        "topics/xreffin-topic-1.xml",
+                        "topics/target-topic-c.xml",
+                        "topics/target-topic a.xml",
+                        "root-map-02.ditamap")),
                 readLines(new File(e, "fullditamapandtopic.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/xreffin-topic-1.xml",
-                    "topics/target-topic-c.xml",
-                    "topics/target-topic a.xml")),
+        assertEquals(new HashSet<>(Arrays.asList(
+                        "topics/xreffin-topic-1.xml",
+                        "topics/target-topic-c.xml",
+                        "topics/target-topic a.xml")),
                 readLines(new File(e, "fullditatopic.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/xreffin-topic-1.xml")),
+        assertEquals(new HashSet<>(List.of(
+                        "topics/xreffin-topic-1.xml")),
                 readLines(new File(e, "hrefditatopic.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/xreffin-topic-1.xml",
-                    "topics/target-topic-c.xml",
-                    "topics/target-topic a.xml")),
+        assertEquals(new HashSet<>(Arrays.asList(
+                        "topics/xreffin-topic-1.xml",
+                        "topics/target-topic-c.xml",
+                        "topics/target-topic a.xml")),
                 readLines(new File(e, "hreftargets.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "html.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "image.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "topics/xreffin-topic-1.xml")),
+        assertEquals(new HashSet<>(List.of(
+                        "topics/xreffin-topic-1.xml")),
                 readLines(new File(e, "keyref.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "outditafiles.list")));
@@ -245,8 +244,8 @@ public class TestGenMapAndTopicListModule {
                 readLines(new File(e, "subjectscheme.list")));
         assertEquals(Collections.emptySet(),
                 readLines(new File(e, "subtargets.list")));
-        assertEquals(new HashSet<String>(Arrays.asList(
-                    "root-map-02.ditamap")),
+        assertEquals(new HashSet<>(List.of(
+                        "root-map-02.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
                 
         final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
@@ -277,7 +276,7 @@ public class TestGenMapAndTopicListModule {
         final File outDirParallel = new File(tempDir, "out");
         final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
 
-        assertEquals(new HashSet(Arrays.asList(
+        assertEquals(new HashSet<>(Arrays.asList(
                 "link-from-normal-ALSORESOURCEONLY.dita",
                 "conref-from-resource-only-ALSORESOURCEONLY.dita",
                 "resourceonly.dita",
@@ -289,7 +288,7 @@ public class TestGenMapAndTopicListModule {
                         .filter(f -> f.isResourceOnly)
                         .map(fi -> fi.uri.toString())
                         .collect(Collectors.toSet()));
-        assertEquals(new HashSet(Arrays.asList(
+        assertEquals(new HashSet<>(Arrays.asList(
                 "main.ditamap",
                 "link-from-normal.dita",
                 "link-from-resource-only.dita",
@@ -307,7 +306,7 @@ public class TestGenMapAndTopicListModule {
         final File outDirParallel = new File(tempDir, "out");
         final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
 
-        assertEquals(new HashSet(Arrays.asList(
+        assertEquals(new HashSet<>(Arrays.asList(
                 "conref-from-resource-only-ALSORESOURCEONLY.dita",
                 "resourceonly.dita",
                 "conref-from-normal.dita",
@@ -317,7 +316,7 @@ public class TestGenMapAndTopicListModule {
                         .filter(f -> f.isResourceOnly)
                         .map(fi -> fi.uri.toString())
                         .collect(Collectors.toSet()));
-        assertEquals(new HashSet(Arrays.asList(
+        assertEquals(new HashSet<>(Arrays.asList(
                 "link-from-normal-ALSORESOURCEONLY.dita",
                 "link.ditamap",
                 "link-from-normal.dita",
@@ -354,17 +353,11 @@ public class TestGenMapAndTopicListModule {
     }
 
     private Set<String> readLines(final File f) throws IOException {
-        final Set<String> lines = new HashSet<String>();
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new FileReader(f));
+        final Set<String> lines = new HashSet<>();
+        try (BufferedReader in = new BufferedReader(new FileReader(f))) {
             String line = null;
             while ((line = in.readLine()) != null) {
                 lines.add(line);
-            }
-        } finally {
-            if (in != null) {
-                in.close();
             }
         }
         return lines;

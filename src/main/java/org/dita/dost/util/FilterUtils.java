@@ -738,7 +738,7 @@ public final class FilterUtils {
                     propAtts.add("backcolor", backcolor);
                 }
                 if (style != null) {
-                    propAtts.add("style", Stream.of(style).collect(Collectors.joining(" ")));
+                    propAtts.add("style", String.join(" ", style));
                 }
                 if (outputClass != null) {
                     propAtts.add("outputclass", outputClass);

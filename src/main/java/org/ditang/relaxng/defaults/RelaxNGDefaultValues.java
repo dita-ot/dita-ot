@@ -34,7 +34,7 @@ public abstract class RelaxNGDefaultValues {
     /**
      * Error handler
      */
-    private ErrorHandler eh;
+    private final ErrorHandler eh;
     /**
      * Resolver
      */
@@ -91,7 +91,7 @@ public abstract class RelaxNGDefaultValues {
         /**
          * Stores the default attributes as a hash map with the element info as key.
          */
-        private HashMap<String, List<Attribute>> defaults = new HashMap<>();
+        private final HashMap<String, List<Attribute>> defaults = new HashMap<>();
 
         /**
          * Constructor.
@@ -148,11 +148,11 @@ public abstract class RelaxNGDefaultValues {
      */
     class Attribute {
         /** The attribute local name */
-        String localName;
+        final String localName;
         /** The attribute namespace */
-        String namespace;
+        final String namespace;
         /** The attribute default value */
-        String value;
+        final String value;
 
         public Attribute(String localName, String namespace, String value) {
             this.localName = localName;

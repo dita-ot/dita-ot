@@ -598,7 +598,7 @@ public final class ExtensibleAntInvoker extends Task {
 
     public static class StyleElem extends ConfElem {
         // XXX This should be List<ResourceCollection>
-        private List<FileSet> filesets = new ArrayList<>();
+        private final List<FileSet> filesets = new ArrayList<>();
 
         public void addFileset(final FileSet fileset) {
             filesets.add(fileset);
@@ -757,7 +757,7 @@ public final class ExtensibleAntInvoker extends Task {
 
         private String name;
         private String value;
-        private List<ResourceCollection> rcs = new ArrayList<>();
+        private final List<ResourceCollection> rcs = new ArrayList<>();
 
         /**
          * Get parameter name.

@@ -82,7 +82,7 @@ public class ProjectFactoryTest {
                                         null,
                                         "id",
                                         null,
-                                        Arrays.asList(new Publication.Param("different", "override", null, null)),
+                                        List.of(new Publication.Param("different", "override", null, null)),
                                         null)
                         )
                 ),
@@ -104,7 +104,7 @@ public class ProjectFactoryTest {
         final Project act = ProjectFactory.resolveReferences(src);
 
         final List<Publication.Param> params = new ArrayList<>(act.deliverables().get(0).publication().params());
-        params.sort(Comparator.comparing(p -> p.name()));
+        params.sort(Comparator.comparing(Publication.Param::name));
         assertEquals(2, params.size());
         assertEquals("different", params.get(0).name());
         assertEquals("override", params.get(0).value());
@@ -188,7 +188,7 @@ public class ProjectFactoryTest {
             assertTrue(project.deliverables().get(0).context().inputs().inputs().get(0).href().isAbsolute());
             assertEquals(3, project.deliverables().get(0).publication().params().size());
             final Map<String, Project.Publication.Param> params = project.deliverables().get(0).publication().params().stream()
-                    .collect(Collectors.toMap(p -> p.name(), Function.identity()));
+                    .collect(Collectors.toMap(Publication.Param::name, Function.identity()));
             assertEquals("NO", params.get("args.gen.task.lbl").value());
         }
     }

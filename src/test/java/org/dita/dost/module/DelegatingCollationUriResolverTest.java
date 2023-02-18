@@ -22,7 +22,7 @@ public class DelegatingCollationUriResolverTest implements DelegatingCollationUr
     }
 
     @Override
-    public StringCollator resolve(String collationURI, Configuration config) throws XPathException {
+    public StringCollator resolve(String collationURI, Configuration config) {
         return null;
     }
 }

@@ -14,8 +14,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static java.util.Arrays.asList;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML;
 
@@ -379,11 +379,10 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
     @Test
     public void testfilterlist() throws Throwable {
         final Path testDir = Paths.get("src", "test", "resources", "filterlist", "src");
-        final String filters = asList(
+        final String filters = Stream.of(
                 Paths.get("filter1.ditaval"),
                 Paths.get("subdir", "filter2.ditaval"),
                 Paths.get("missing.ditaval"))
-                .stream()
                 .map(path -> testDir.resolve(path).toAbsolutePath().toString())
                 .collect(Collectors.joining(File.pathSeparator));
         builder().name("filterlist")

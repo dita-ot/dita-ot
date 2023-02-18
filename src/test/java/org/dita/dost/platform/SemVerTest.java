@@ -11,6 +11,7 @@ package org.dita.dost.platform;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -39,7 +40,7 @@ public class SemVerTest {
         assertEquals(1, act.major);
         assertEquals(0, act.minor);
         assertEquals(0, act.patch);
-        assertEquals(Arrays.asList("beta"), act.preRelease);
+        assertEquals(List.of("beta"), act.preRelease);
     }
 
     @Test
