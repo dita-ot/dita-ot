@@ -23,13 +23,24 @@ You can download the OpenJDK from [AdoptOpenJDK][adoptopenjdk].
 1.  Download the distribution package from [dita-ot.org/download][dist].
 2.  Extract the contents of the package to the directory where you want to install DITA-OT.
 
-### Installing on macOS via Homebrew
+<details>
+<summary>Installing via Homebrew</summary>
 
-On macOS, you can also install DITA-OT using the [Homebrew] package manager:
+On macOS and Linux, you can also install DITA-OT using the [Homebrew] package manager:
 
     brew install dita-ot
 
-Homebrew will automatically download the latest version of the toolkit, install it in a subfolder of the local package Cellar and symlink the `dita` command to `/usr/local/bin/dita`.
+Homebrew will automatically download the latest version of the toolkit, install it in a subfolder of the local package Cellar and symlink the `dita` command to the `bin` subfolder of the Homebrew installation directory.
+
+> **Note**
+>
+> Homebrew’s default installation location depends on the operating system architecture:
+>
+> - `/usr/local` on macOS Intel
+> - `/opt/homebrew` on macOS ARM
+> - `/home/linuxbrew/.linuxbrew` on Linux
+
+</details>
 
 ## Building output
 
