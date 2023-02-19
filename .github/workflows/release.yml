@@ -107,3 +107,15 @@ jobs:
             Created via GitHub Action
         env:
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_COMMITTER_TOKEN }}
+  update-website:
+    if: github.repository == 'dita-ot/dita-ot'
+    needs: dist
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.REPOSITORY_DISPATCH }}
+          repository: dita-ot/docs
+          event-type: release
+          client-payload: '{"dita_ot_version": "${{ env.tag }}", "docs_tag": "${{ env.tag }}"}'
