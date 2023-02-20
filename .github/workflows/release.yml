@@ -86,3 +86,36 @@ jobs:
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
           GPG_ASC: ${{ secrets.GPG_ASC }}
+  homebrew:
+    if: github.repository == 'dita-ot/dita-ot'
+    needs: dist
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set tag name
+        run: |
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Create pull-request
+        uses: mislav/bump-homebrew-formula-action@v2
+        with:
+          formula-name: dita-ot
+          tag-name: ${{ env.tag }}
+          base-branch: master
+          download-url: https://github.com/dita-ot/dita-ot/releases/download/${{ env.tag }}/dita-ot-${{ env.tag }}.zip
+          commit-message: |
+            {{formulaName}} {{version}}
+
+            Created via GitHub Action
+        env:
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_COMMITTER_TOKEN }}
+  update-website:
+    if: github.repository == 'dita-ot/dita-ot'
+    needs: dist
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.REPOSITORY_DISPATCH }}
+          repository: dita-ot/docs
+          event-type: release
+          client-payload: '{"dita_ot_version": "${{ env.tag }}", "docs_tag": "${{ env.tag }}"}'
