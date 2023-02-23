@@ -501,14 +501,26 @@ public abstract class AbstractIntegrationTest {
             e.removeAttributeNS(DITA_OT_NS, "submap-specializations");
             // remove workdir processing instructions
             removeWorkdirProcessingInstruction(e);
+            cleanXslFo(e);
         }
-        final NodeList images = d.getElementsByTagNameNS("http://www.w3.org/1999/XSL/Format", "external-graphic");
-        for (int i = 0; i < images.getLength(); i++) {
-            final Element e = (Element) images.item(i);
-            e.removeAttribute("src");
-        }
+
         // rewrite IDs
         return rewriteIds(d, ditaIdPattern);
+    }
+
+    private void cleanXslFo(Element e) {
+        if (Objects.equals(e.getNamespaceURI(), "http://www.w3.org/1999/XSL/Format")) {
+            if (Objects.equals(e.getLocalName(), "external-graphic")) {
+                e.removeAttribute("src");
+            }
+            for (final String attrName : new String[]{"id", "internal-destination"}) {
+                final String attrValue = e.getAttribute(attrName);
+                if (attrValue != null && (attrValue.startsWith("_OPENTOPIC_TOC_PROCESSING")
+                        || attrValue.startsWith("fn"))) {
+                    e.removeAttribute(attrName);
+                }
+            }
+        }
     }
 
     private void removeWorkdirProcessingInstruction(final Element e) {

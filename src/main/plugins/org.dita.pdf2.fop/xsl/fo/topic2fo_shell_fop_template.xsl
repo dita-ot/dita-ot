@@ -20,7 +20,4 @@ See the accompanying LICENSE file for applicable license.
 
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
-  <xsl:import href="cfg:fo/attrs/custom.xsl"/>
-  <xsl:import href="cfg:fo/xsl/custom.xsl"/>
-  
 </xsl:stylesheet>
