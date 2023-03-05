@@ -547,9 +547,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Handle the --plugins argument
      */
     private void printPlugins() {
-        final List<String> installedPlugins = Plugins.getInstalledPlugins();
-        for (final String plugin : installedPlugins) {
-            System.out.println(plugin);
+        final List<Map.Entry<String, String>> installedPlugins = Plugins.getInstalledPlugins();
+        for (final Map.Entry<String, String> entry : installedPlugins) {
+            System.out.print(entry.getKey());
+            if (entry.getValue() != null) {
+                System.out.print('@');
+                System.out.print(entry.getValue());
+            }
+            System.out.println();
         }
     }
 
