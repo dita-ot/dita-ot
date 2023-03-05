@@ -68,7 +68,7 @@ public final class PluginInstallTask extends Task {
         } catch (IOException e) {
             throw new BuildException("Failed to create temporary directory: " + e.getMessage(), e);
         }
-        installedPlugins = Plugins.getInstalledPlugins();
+        installedPlugins = Plugins.getInstalledPlugins().stream().map(Map.Entry::getKey).toList();
 
         final DITAOTAntLogger logger;
         logger = new DITAOTAntLogger(getProject());

@@ -17,8 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.PLUGIN_CONF;
@@ -29,13 +28,15 @@ public class Plugins {
     /**
      * Read the list of installed plugins
      */
-    public static List<String> getInstalledPlugins() {
+    public static List<Map.Entry<String, String>> getInstalledPlugins() {
         final List<Element> plugins = toList(getPluginConfiguration().getElementsByTagName("plugin"));
         return plugins.stream()
-                .map((Element elem) -> elem.getAttributeNode("id"))
-                .filter(Objects::nonNull)
-                .map(Attr::getValue)
-                .sorted()
+                .map((Element elem) -> new AbstractMap.SimpleImmutableEntry<>(
+                        Optional.ofNullable(elem.getAttributeNode("id")).map(Attr::getValue).orElse(null),
+                        Optional.ofNullable(elem.getAttributeNode("version")).map(Attr::getValue).orElse(null))
+                )
+                .filter(entry -> Objects.nonNull(entry.getKey()))
+                .sorted(Map.Entry.comparingByKey())
                 .collect(Collectors.toList());
     }
 
