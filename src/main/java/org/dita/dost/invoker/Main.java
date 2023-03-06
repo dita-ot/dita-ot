@@ -84,6 +84,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             "args.input", "input",
             "args.filter", "profiles"
     );
+    private static final String DELIVERABLE_DESC = "deliverable.desc";
 
     /**
      * File that we are using for configuration.
@@ -213,7 +214,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             for (int i = 0; i < this.args.repeat; i++) {
                 final long start = System.currentTimeMillis();
                 try {
-                    for (Map<String, Object> props : projectProps) {
+                    int nuOfProject = projectProps.size();
+                    for (int j = 0; j < nuOfProject; j++) {
+                        Map<String, Object> props = projectProps.get(j);
+                        if(props.containsKey(DELIVERABLE_DESC)) {
+                          props.put(DELIVERABLE_DESC,
+                              (j + 1) + " of " + nuOfProject + ": " + props.get(DELIVERABLE_DESC));
+                        }
                         runBuild(coreLoader, props);
                     }
                     exitCode = 0;
@@ -445,6 +452,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     props.put(ANT_PROJECT_DELIVERABLE, deliverable.id() != null
                             ? deliverable.id()
                             : String.format("deliverable-%d", entry.getValue() + 1));
+                    
+                    StringBuilder deliverableDesc = new StringBuilder();
+                    if (deliverable.name() != null) {
+                      deliverableDesc.append(deliverable.name());
+                    }
+                    if(deliverable.id() != null) {
+                      deliverableDesc.append(" [").append(deliverable.id()).append("]");
+                    } 
+                    props.put(DELIVERABLE_DESC, deliverableDesc.toString());
+                    
                     final Context context = deliverable.context();
                     final URI input = base.resolve(context.inputs().inputs().get(0).href());
                     props.put(ANT_ARGS_INPUT, input.toString());
@@ -694,6 +711,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     }
                 }
 
+                if(definedProps.containsKey(DELIVERABLE_DESC)) {
+                  project.log("\nPublishing deliverable " + definedProps.get(DELIVERABLE_DESC));
+                }
+                
                 project.init();
 
                 // resolve properties
