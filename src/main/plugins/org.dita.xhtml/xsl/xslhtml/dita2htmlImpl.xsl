@@ -645,7 +645,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:choose>
     <xsl:when test="@othertype">
       <xsl:apply-templates select="." mode="process.note.common-processing">
-        <xsl:with-param name="type" select="'note'"/>
+        <xsl:with-param name="type" select="replace(normalize-space(@othertype), ' ', '_')"/>
         <xsl:with-param name="title" select="string(@othertype)"/>
       </xsl:apply-templates>
     </xsl:when>
