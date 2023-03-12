@@ -102,11 +102,11 @@ public final class MapReaderModule extends AbstractReaderModule {
         pipe.add(normalizeFilter);
 
         keydefFilter.setCurrentDir(fileToParse.resolve("."));
-        keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+        keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger, processingMode));
         pipe.add(keydefFilter);
 
         listFilter.setCurrentFile(fileToParse);
-        listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+        listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger, processingMode));
         pipe.add(listFilter);
 
         ditaWriterFilter.setDefaultValueMap(defaultValueMap);
