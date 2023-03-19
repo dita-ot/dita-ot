@@ -82,6 +82,12 @@ See the [documentation][docs] for arguments and [options].
 
         ./gradlew
 
+5.  For potential contributions to the project, test the changes:
+
+        ./gradlew test             # run module unit tests
+        ./gradlew integrationtest  # run module integration tests
+        ./gradlew e2etest          # run end-to-end tests
+
 ### Distribution builds
 
 1.  In the root directory, set up the build environment:
