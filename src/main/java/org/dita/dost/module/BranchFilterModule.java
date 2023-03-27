@@ -11,11 +11,9 @@ import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
-import static org.dita.dost.util.URLUtils.stripFragment;
-import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -419,7 +417,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
     final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
-    final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
+    final URI srcAbsUri = setFragment(job.tempDirURI.resolve(map.resolve(href)), null);
     if (
       !fs.isEmpty() &&
       skipFilter == null &&
