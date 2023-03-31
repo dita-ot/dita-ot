@@ -13,7 +13,6 @@ import static org.dita.dost.util.XMLUtils.*;
 
 import java.net.URI;
 import java.util.*;
-
 import org.dita.dost.util.DitaClass;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -53,10 +52,7 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
     }
 
     @Override
-    public void startElement(final String uri,
-            final String localName,
-            final String qName,
-            final Attributes atts)
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
         Attributes res = atts;
         final DitaClass cls = DitaClass.getInstance(atts);
@@ -64,7 +60,7 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
         if (TOPIC_TOPIC.matches(cls)) {
             topics.addFirst(atts.getValue(ATTRIBUTE_NAME_ID));
         } else {
-            for (final String attrName: attrNames) {
+            for (final String attrName : attrNames) {
                 URI href = toURI(atts.getValue(attrName));
                 if (href != null && isLocalDitaReference(atts, attrName)) {
                     final String fragment = href.getFragment();
@@ -92,15 +88,11 @@ public final class TopicFragmentFilter extends AbstractXMLFilter {
     }
 
     @Override
-    public void endElement(final String uri,
-            final String localName,
-            final String qName)
-            throws SAXException {
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         final DitaClass cls = classes.removeFirst();
         if (TOPIC_TOPIC.matches(cls)) {
             topics.removeFirst();
         }
         super.endElement(uri, localName, qName);
     }
-
 }

@@ -8,6 +8,7 @@
 package org.dita.dost.exception;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXParseException;
@@ -18,12 +19,15 @@ public class SAXExceptionWrapperTest {
         public int getColumnNumber() {
             return 1;
         }
+
         public int getLineNumber() {
             return 3;
         }
+
         public String getPublicId() {
             return "publicId";
         }
+
         public String getSystemId() {
             return "systemId";
         }
@@ -58,13 +62,8 @@ public class SAXExceptionWrapperTest {
     public void testGetMessage() {
         final SAXExceptionWrapper e = new SAXExceptionWrapper("message", new SAXParseException("msg", l));
         final String act = e.getMessage();
-        final String exp = "message" +
-                " Line " +
-                l.getLineNumber() +
-                ":" +
-                "msg" +
-                System.getProperty("line.separator");
+        final String exp =
+                "message" + " Line " + l.getLineNumber() + ":" + "msg" + System.getProperty("line.separator");
         assertEquals(exp, act);
     }
-
 }

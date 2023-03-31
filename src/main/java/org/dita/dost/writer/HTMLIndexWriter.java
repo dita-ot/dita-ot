@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.writer;
 
 import static javax.xml.transform.OutputKeys.*;
@@ -15,14 +15,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-
 import javax.xml.transform.Transformer;
-
-import org.xml.sax.SAXException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.util.XMLSerializer;
+import org.xml.sax.SAXException;
 
 /**
  * This class extends AbstractWriter, used to output IndexTerm list to CHM index
@@ -61,7 +59,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
             final int termNum = termList.size();
             for (int i = 0; i < termNum; i++) {
                 final IndexTerm term = termList.get(i);
-                //Add alphabetical headings:
+                // Add alphabetical headings:
                 if (i == 0) {
                     printLetter = term.getTermFullName().substring(0, 1);
                     serializer.writeCharacters(printLetter);
@@ -71,7 +69,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
                     printLetter = firstLetter;
                     serializer.writeCharacters(printLetter);
                 }
-                //End alphabetical heading.
+                // End alphabetical heading.
                 outputIndexTerm(term, serializer);
             }
             serializer.writeEndElement(); // ul
@@ -85,7 +83,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
                 try {
                     out.close();
                 } catch (final IOException e) {
-                    logger.error(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e);
                 }
             }
         }
@@ -103,8 +101,8 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
 
         serializer.writeStartElement("li");
 
-        //if term doesn't have target to link to, it won't appear in the index tab
-        //we need to create links for such terms
+        // if term doesn't have target to link to, it won't appear in the index tab
+        // we need to create links for such terms
         if (targets.isEmpty()) {
             findTargets(term);
             targets = term.getTargetList();
@@ -137,7 +135,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
     private void findTargets(final IndexTerm term) {
         final List<IndexTerm> subTerms = term.getSubTerms();
         List<IndexTermTarget> subTargets;
-        if (subTerms != null && ! subTerms.isEmpty()) {
+        if (subTerms != null && !subTerms.isEmpty()) {
             for (final IndexTerm subTerm : subTerms) {
                 subTargets = subTerm.getTargetList();
                 if (subTargets != null && !subTargets.isEmpty()) {
@@ -157,5 +155,4 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
     public String getIndexFileName(final String outputFileRoot) {
         return outputFileRoot + ".hhk";
     }
-
 }

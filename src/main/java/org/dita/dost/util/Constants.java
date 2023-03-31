@@ -59,7 +59,8 @@ public final class Constants {
 
     public static final String RESOURCES_DIR = "resources";
 
-    public static final DitaClass ABBREV_D_ABBREVIATED_FORM = DitaClass.getInstance("+ topic/term abbrev-d/abbreviated-form ");
+    public static final DitaClass ABBREV_D_ABBREVIATED_FORM =
+            DitaClass.getInstance("+ topic/term abbrev-d/abbreviated-form ");
     public static final DitaClass BOOKMAP_ABBREVLIST = DitaClass.getInstance("- map/topicref bookmap/abbrevlist ");
     public static final DitaClass BOOKMAP_AMENDMENTS = DitaClass.getInstance("- map/topicref bookmap/amendments ");
     public static final DitaClass BOOKMAP_APPENDICES = DitaClass.getInstance("- map/topicref bookmap/appendices ");
@@ -68,7 +69,8 @@ public final class Constants {
     public static final DitaClass BOOKMAP_BACKMATTER = DitaClass.getInstance("- map/topicref bookmap/backmatter ");
     public static final DitaClass BOOKMAP_BIBLIOLIST = DitaClass.getInstance("- map/topicref bookmap/bibliolist ");
     public static final DitaClass BOOKMAP_BOOKABSTRACT = DitaClass.getInstance("- map/topicref bookmap/bookabstract ");
-    public static final DitaClass BOOKMAP_BOOKCHANGEHISTORY = DitaClass.getInstance("- topic/data bookmap/bookchangehistory ");
+    public static final DitaClass BOOKMAP_BOOKCHANGEHISTORY =
+            DitaClass.getInstance("- topic/data bookmap/bookchangehistory ");
     public static final DitaClass BOOKMAP_BOOKEVENT = DitaClass.getInstance("- topic/data bookmap/bookevent ");
     public static final DitaClass BOOKMAP_BOOKEVENTTYPE = DitaClass.getInstance("- topic/data bookmap/bookeventtype ");
     public static final DitaClass BOOKMAP_BOOKID = DitaClass.getInstance("- topic/data bookmap/bookid ");
@@ -80,7 +82,8 @@ public final class Constants {
     public static final DitaClass BOOKMAP_BOOKNUMBER = DitaClass.getInstance("- topic/data bookmap/booknumber ");
     public static final DitaClass BOOKMAP_BOOKOWNER = DitaClass.getInstance("- topic/data bookmap/bookowner ");
     public static final DitaClass BOOKMAP_BOOKPARTNO = DitaClass.getInstance("- topic/data bookmap/bookpartno ");
-    public static final DitaClass BOOKMAP_BOOKRESTRICTION = DitaClass.getInstance("- topic/data bookmap/bookrestriction ");
+    public static final DitaClass BOOKMAP_BOOKRESTRICTION =
+            DitaClass.getInstance("- topic/data bookmap/bookrestriction ");
     public static final DitaClass BOOKMAP_BOOKRIGHTS = DitaClass.getInstance("- topic/data bookmap/bookrights ");
     public static final DitaClass BOOKMAP_BOOKTITLE = DitaClass.getInstance("- topic/title bookmap/booktitle ");
     public static final DitaClass BOOKMAP_BOOKTITLEALT = DitaClass.getInstance("- topic/ph bookmap/booktitlealt ");
@@ -109,7 +112,8 @@ public final class Constants {
     public static final DitaClass BOOKMAP_PREFACE = DitaClass.getInstance("- map/topicref bookmap/preface ");
     public static final DitaClass BOOKMAP_PRINTLOCATION = DitaClass.getInstance("- topic/data bookmap/printlocation ");
     public static final DitaClass BOOKMAP_PUBLISHED = DitaClass.getInstance("- topic/data bookmap/published ");
-    public static final DitaClass BOOKMAP_PUBLISHERINFORMATION = DitaClass.getInstance("- topic/publisher bookmap/publisherinformation ");
+    public static final DitaClass BOOKMAP_PUBLISHERINFORMATION =
+            DitaClass.getInstance("- topic/publisher bookmap/publisherinformation ");
     public static final DitaClass BOOKMAP_PUBLISHTYPE = DitaClass.getInstance("- topic/data bookmap/publishtype ");
     public static final DitaClass BOOKMAP_REVIEWED = DitaClass.getInstance("- topic/data bookmap/reviewed ");
     public static final DitaClass BOOKMAP_REVISIONID = DitaClass.getInstance("- topic/ph bookmap/revisionid ");
@@ -118,51 +122,88 @@ public final class Constants {
     public static final DitaClass BOOKMAP_TABLELIST = DitaClass.getInstance("- map/topicref bookmap/tablelist ");
     public static final DitaClass BOOKMAP_TESTED = DitaClass.getInstance("- topic/data bookmap/tested ");
     public static final DitaClass BOOKMAP_TOC = DitaClass.getInstance("- map/topicref bookmap/toc ");
-    public static final DitaClass BOOKMAP_TRADEMARKLIST = DitaClass.getInstance("- map/topicref bookmap/trademarklist ");
+    public static final DitaClass BOOKMAP_TRADEMARKLIST =
+            DitaClass.getInstance("- map/topicref bookmap/trademarklist ");
     public static final DitaClass BOOKMAP_VOLUME = DitaClass.getInstance("- topic/data bookmap/volume ");
     public static final DitaClass BOOKMAP_YEAR = DitaClass.getInstance("- topic/ph bookmap/year ");
-    public static final DitaClass CLASSIFY_D_SUBJECTCELL = DitaClass.getInstance("+ map/relcell classify-d/subjectCell ");
-    public static final DitaClass CLASSIFY_D_SUBJECTREF = DitaClass.getInstance("+ map/topicref classify-d/subjectref ");
-    public static final DitaClass CLASSIFY_D_TOPICAPPLY = DitaClass.getInstance("+ map/topicref classify-d/topicapply ");
+    public static final DitaClass CLASSIFY_D_SUBJECTCELL =
+            DitaClass.getInstance("+ map/relcell classify-d/subjectCell ");
+    public static final DitaClass CLASSIFY_D_SUBJECTREF =
+            DitaClass.getInstance("+ map/topicref classify-d/subjectref ");
+    public static final DitaClass CLASSIFY_D_TOPICAPPLY =
+            DitaClass.getInstance("+ map/topicref classify-d/topicapply ");
     public static final DitaClass CLASSIFY_D_TOPICCELL = DitaClass.getInstance("+ map/relcell classify-d/topicCell ");
-    public static final DitaClass CLASSIFY_D_TOPICSUBJECT = DitaClass.getInstance("+ map/topicref classify-d/topicsubject ");
-    public static final DitaClass CLASSIFY_D_TOPICSUBJECTHEADER = DitaClass.getInstance("+ map/relrow classify-d/topicSubjectHeader ");
-    public static final DitaClass CLASSIFY_D_TOPICSUBJECTROW = DitaClass.getInstance("+ map/relrow classify-d/topicSubjectRow ");
-    public static final DitaClass CLASSIFY_D_TOPICSUBJECTTABLE = DitaClass.getInstance("+ map/reltable classify-d/topicSubjectTable ");
+    public static final DitaClass CLASSIFY_D_TOPICSUBJECT =
+            DitaClass.getInstance("+ map/topicref classify-d/topicsubject ");
+    public static final DitaClass CLASSIFY_D_TOPICSUBJECTHEADER =
+            DitaClass.getInstance("+ map/relrow classify-d/topicSubjectHeader ");
+    public static final DitaClass CLASSIFY_D_TOPICSUBJECTROW =
+            DitaClass.getInstance("+ map/relrow classify-d/topicSubjectRow ");
+    public static final DitaClass CLASSIFY_D_TOPICSUBJECTTABLE =
+            DitaClass.getInstance("+ map/reltable classify-d/topicSubjectTable ");
     public static final DitaClass CONCEPT_CONBODY = DitaClass.getInstance("- topic/body concept/conbody ");
     public static final DitaClass CONCEPT_CONBODYDIV = DitaClass.getInstance("- topic/bodydiv concept/conbodydiv ");
     public static final DitaClass CONCEPT_CONCEPT = DitaClass.getInstance("- topic/topic concept/concept ");
-    public static final DitaClass DITAVAREF_D_DITAVALMETA = DitaClass.getInstance("+ map/topicmeta ditavalref-d/ditavalmeta ");
-    public static final DitaClass DITAVAREF_D_DITAVALREF = DitaClass.getInstance("+ map/topicref ditavalref-d/ditavalref ");
-    public static final DitaClass DITAVAREF_D_DVR_KEYSCOPEPREFIX = DitaClass.getInstance("+ topic/data ditavalref-d/dvrKeyscopePrefix ");
-    public static final DitaClass DITAVAREF_D_DVR_KEYSCOPESUFFIX = DitaClass.getInstance("+ topic/data ditavalref-d/dvrKeyscopeSuffix ");
-    public static final DitaClass DITAVAREF_D_DVR_RESOURCEPREFIX = DitaClass.getInstance("+ topic/data ditavalref-d/dvrResourcePrefix ");
-    public static final DitaClass DITAVAREF_D_DVR_RESOURCESUFFIX = DitaClass.getInstance("+ topic/data ditavalref-d/dvrResourceSuffix ");
-    public static final DitaClass EQUATION_D_EQUATION_BLOCK = DitaClass.getInstance("+ topic/div equation-d/equation-block ");
-    public static final DitaClass EQUATION_D_EQUATION_FIGURE = DitaClass.getInstance("+ topic/fig equation-d/equation-figure ");
-    public static final DitaClass EQUATION_D_EQUATION_INLINE = DitaClass.getInstance("+ topic/ph equation-d/equation-inline ");
-    public static final DitaClass EQUATION_D_EQUATION_NUMBER = DitaClass.getInstance("+ topic/ph equation-d/equation-number ");
-    public static final DitaClass GLOSSENTRY_GLOSSABBREVIATION = DitaClass.getInstance("- topic/title concept/title glossentry/glossAbbreviation ");
-    public static final DitaClass GLOSSENTRY_GLOSSACRONYM = DitaClass.getInstance("- topic/title concept/title glossentry/glossAcronym ");
-    public static final DitaClass GLOSSENTRY_GLOSSALT = DitaClass.getInstance("- topic/section concept/section glossentry/glossAlt ");
-    public static final DitaClass GLOSSENTRY_GLOSSALTERNATEFOR = DitaClass.getInstance("- topic/xref concept/xref glossentry/glossAlternateFor ");
-    public static final DitaClass GLOSSENTRY_GLOSSBODY = DitaClass.getInstance("- topic/body concept/conbody glossentry/glossBody ");
-    public static final DitaClass GLOSSENTRY_GLOSSDEF = DitaClass.getInstance("- topic/abstract concept/abstract glossentry/glossdef ");
-    public static final DitaClass GLOSSENTRY_GLOSSENTRY = DitaClass.getInstance("- topic/topic concept/concept glossentry/glossentry ");
-    public static final DitaClass GLOSSENTRY_GLOSSPARTOFSPEECH = DitaClass.getInstance("- topic/data concept/data glossentry/glossPartOfSpeech ");
-    public static final DitaClass GLOSSENTRY_GLOSSPROPERTY = DitaClass.getInstance("- topic/data concept/data glossentry/glossProperty ");
-    public static final DitaClass GLOSSENTRY_GLOSSSCOPENOTE = DitaClass.getInstance("- topic/note concept/note glossentry/glossScopeNote ");
-    public static final DitaClass GLOSSENTRY_GLOSSSHORTFORM = DitaClass.getInstance("- topic/title concept/title glossentry/glossShortForm ");
-    public static final DitaClass GLOSSENTRY_GLOSSSTATUS = DitaClass.getInstance("- topic/data concept/data glossentry/glossStatus ");
-    public static final DitaClass GLOSSENTRY_GLOSSSURFACEFORM = DitaClass.getInstance("- topic/p concept/p glossentry/glossSurfaceForm ");
-    public static final DitaClass GLOSSENTRY_GLOSSSYMBOL = DitaClass.getInstance("- topic/image concept/image glossentry/glossSymbol ");
-    public static final DitaClass GLOSSENTRY_GLOSSSYNONYM = DitaClass.getInstance("- topic/title concept/title glossentry/glossSynonym ");
-    public static final DitaClass GLOSSENTRY_GLOSSTERM = DitaClass.getInstance("- topic/title concept/title glossentry/glossterm ");
-    public static final DitaClass GLOSSENTRY_GLOSSUSAGE = DitaClass.getInstance("- topic/note concept/note glossentry/glossUsage ");
-    public static final DitaClass GLOSSGROUP_GLOSSGROUP = DitaClass.getInstance("- topic/topic concept/concept glossgroup/glossgroup ");
+    public static final DitaClass DITAVAREF_D_DITAVALMETA =
+            DitaClass.getInstance("+ map/topicmeta ditavalref-d/ditavalmeta ");
+    public static final DitaClass DITAVAREF_D_DITAVALREF =
+            DitaClass.getInstance("+ map/topicref ditavalref-d/ditavalref ");
+    public static final DitaClass DITAVAREF_D_DVR_KEYSCOPEPREFIX =
+            DitaClass.getInstance("+ topic/data ditavalref-d/dvrKeyscopePrefix ");
+    public static final DitaClass DITAVAREF_D_DVR_KEYSCOPESUFFIX =
+            DitaClass.getInstance("+ topic/data ditavalref-d/dvrKeyscopeSuffix ");
+    public static final DitaClass DITAVAREF_D_DVR_RESOURCEPREFIX =
+            DitaClass.getInstance("+ topic/data ditavalref-d/dvrResourcePrefix ");
+    public static final DitaClass DITAVAREF_D_DVR_RESOURCESUFFIX =
+            DitaClass.getInstance("+ topic/data ditavalref-d/dvrResourceSuffix ");
+    public static final DitaClass EQUATION_D_EQUATION_BLOCK =
+            DitaClass.getInstance("+ topic/div equation-d/equation-block ");
+    public static final DitaClass EQUATION_D_EQUATION_FIGURE =
+            DitaClass.getInstance("+ topic/fig equation-d/equation-figure ");
+    public static final DitaClass EQUATION_D_EQUATION_INLINE =
+            DitaClass.getInstance("+ topic/ph equation-d/equation-inline ");
+    public static final DitaClass EQUATION_D_EQUATION_NUMBER =
+            DitaClass.getInstance("+ topic/ph equation-d/equation-number ");
+    public static final DitaClass GLOSSENTRY_GLOSSABBREVIATION =
+            DitaClass.getInstance("- topic/title concept/title glossentry/glossAbbreviation ");
+    public static final DitaClass GLOSSENTRY_GLOSSACRONYM =
+            DitaClass.getInstance("- topic/title concept/title glossentry/glossAcronym ");
+    public static final DitaClass GLOSSENTRY_GLOSSALT =
+            DitaClass.getInstance("- topic/section concept/section glossentry/glossAlt ");
+    public static final DitaClass GLOSSENTRY_GLOSSALTERNATEFOR =
+            DitaClass.getInstance("- topic/xref concept/xref glossentry/glossAlternateFor ");
+    public static final DitaClass GLOSSENTRY_GLOSSBODY =
+            DitaClass.getInstance("- topic/body concept/conbody glossentry/glossBody ");
+    public static final DitaClass GLOSSENTRY_GLOSSDEF =
+            DitaClass.getInstance("- topic/abstract concept/abstract glossentry/glossdef ");
+    public static final DitaClass GLOSSENTRY_GLOSSENTRY =
+            DitaClass.getInstance("- topic/topic concept/concept glossentry/glossentry ");
+    public static final DitaClass GLOSSENTRY_GLOSSPARTOFSPEECH =
+            DitaClass.getInstance("- topic/data concept/data glossentry/glossPartOfSpeech ");
+    public static final DitaClass GLOSSENTRY_GLOSSPROPERTY =
+            DitaClass.getInstance("- topic/data concept/data glossentry/glossProperty ");
+    public static final DitaClass GLOSSENTRY_GLOSSSCOPENOTE =
+            DitaClass.getInstance("- topic/note concept/note glossentry/glossScopeNote ");
+    public static final DitaClass GLOSSENTRY_GLOSSSHORTFORM =
+            DitaClass.getInstance("- topic/title concept/title glossentry/glossShortForm ");
+    public static final DitaClass GLOSSENTRY_GLOSSSTATUS =
+            DitaClass.getInstance("- topic/data concept/data glossentry/glossStatus ");
+    public static final DitaClass GLOSSENTRY_GLOSSSURFACEFORM =
+            DitaClass.getInstance("- topic/p concept/p glossentry/glossSurfaceForm ");
+    public static final DitaClass GLOSSENTRY_GLOSSSYMBOL =
+            DitaClass.getInstance("- topic/image concept/image glossentry/glossSymbol ");
+    public static final DitaClass GLOSSENTRY_GLOSSSYNONYM =
+            DitaClass.getInstance("- topic/title concept/title glossentry/glossSynonym ");
+    public static final DitaClass GLOSSENTRY_GLOSSTERM =
+            DitaClass.getInstance("- topic/title concept/title glossentry/glossterm ");
+    public static final DitaClass GLOSSENTRY_GLOSSUSAGE =
+            DitaClass.getInstance("- topic/note concept/note glossentry/glossUsage ");
+    public static final DitaClass GLOSSGROUP_GLOSSGROUP =
+            DitaClass.getInstance("- topic/topic concept/concept glossgroup/glossgroup ");
     public static final DitaClass GLOSSREF_D_GLOSSREF = DitaClass.getInstance("+ map/topicref glossref-d/glossref ");
     public static final DitaClass HAZARD_D_CONSEQUENCE = DitaClass.getInstance("+ topic/li hazard-d/consequence ");
-    public static final DitaClass HAZARD_D_HAZARDSTATEMENT = DitaClass.getInstance("+ topic/note hazard-d/hazardstatement ");
+    public static final DitaClass HAZARD_D_HAZARDSTATEMENT =
+            DitaClass.getInstance("+ topic/note hazard-d/hazardstatement ");
     public static final DitaClass HAZARD_D_HAZARDSYMBOL = DitaClass.getInstance("+ topic/image hazard-d/hazardsymbol ");
     public static final DitaClass HAZARD_D_HOWTOAVOID = DitaClass.getInstance("+ topic/li hazard-d/howtoavoid ");
     public static final DitaClass HAZARD_D_MESSAGEPANEL = DitaClass.getInstance("+ topic/ul hazard-d/messagepanel ");
@@ -175,189 +216,370 @@ public final class Constants {
     public static final DitaClass HI_D_SUP = DitaClass.getInstance("+ topic/ph hi-d/sup ");
     public static final DitaClass HI_D_TT = DitaClass.getInstance("+ topic/ph hi-d/tt ");
     public static final DitaClass HI_D_U = DitaClass.getInstance("+ topic/ph hi-d/u ");
-    public static final DitaClass INDEXING_D_INDEX_SEE = DitaClass.getInstance("+ topic/index-base indexing-d/index-see ");
-    public static final DitaClass INDEXING_D_INDEX_SEE_ALSO = DitaClass.getInstance("+ topic/index-base indexing-d/index-see-also ");
-    public static final DitaClass INDEXING_D_INDEX_SORT_AS = DitaClass.getInstance("+ topic/index-base indexing-d/index-sort-as ");
-    public static final DitaClass LEARNING_D_LCANSWERCONTENT = DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcAnswerContent ");
-    public static final DitaClass LEARNING_D_LCANSWEROPTION = DitaClass.getInstance("+ topic/li learningInteractionBase-d/li learning-d/lcAnswerOption ");
-    public static final DitaClass LEARNING_D_LCANSWEROPTIONGROUP = DitaClass.getInstance("+ topic/ul learningInteractionBase-d/ul learning-d/lcAnswerOptionGroup ");
-    public static final DitaClass LEARNING_D_LCAREA = DitaClass.getInstance("+ topic/figgroup learningInteractionBase-d/figgroup learning-d/lcArea ");
-    public static final DitaClass LEARNING_D_LCAREACOORDS = DitaClass.getInstance("+ topic/ph learningInteractionBase-d/ph learning-d/lcAreaCoords ");
-    public static final DitaClass LEARNING_D_LCAREASHAPE = DitaClass.getInstance("+ topic/keyword learningInteractionBase-d/keyword learning-d/lcAreaShape ");
-    public static final DitaClass LEARNING_D_LCASSET = DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcAsset ");
-    public static final DitaClass LEARNING_D_LCCORRECTRESPONSE = DitaClass.getInstance("+ topic/data learningInteractionBase-d/data learning-d/lcCorrectResponse ");
-    public static final DitaClass LEARNING_D_LCFEEDBACK = DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcFeedback ");
-    public static final DitaClass LEARNING_D_LCFEEDBACKCORRECT = DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcFeedbackCorrect ");
-    public static final DitaClass LEARNING_D_LCFEEDBACKINCORRECT = DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcFeedbackIncorrect ");
-    public static final DitaClass LEARNING_D_LCHOTSPOT = DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcHotspot ");
-    public static final DitaClass LEARNING_D_LCHOTSPOTMAP = DitaClass.getInstance("+ topic/fig learningInteractionBase-d/figgroup learning-d/lcHotspotMap ");
-    public static final DitaClass LEARNING_D_LCINSTRUCTORNOTE = DitaClass.getInstance("+ topic/note learningInteractionBase-d/note learning-d/lcInstructornote ");
-    public static final DitaClass LEARNING_D_LCITEM = DitaClass.getInstance("+ topic/stentry learningInteractionBase-d/stentry learning-d/lcItem ");
-    public static final DitaClass LEARNING_D_LCMATCHING = DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcMatching ");
-    public static final DitaClass LEARNING_D_LCMATCHINGHEADER = DitaClass.getInstance("+ topic/sthead learningInteractionBase-d/sthead learning-d/lcMatchingHeader ");
-    public static final DitaClass LEARNING_D_LCMATCHINGITEM = DitaClass.getInstance("+ topic/stentry learningInteractionBase-d/stentry learning-d/lcMatchingItem ");
-    public static final DitaClass LEARNING_D_LCMATCHINGITEMFEEDBACK = DitaClass.getInstance("+ topic/stentry learningInteractionBase-d/stentry learning-d/lcMatchingItemFeedback ");
-    public static final DitaClass LEARNING_D_LCMATCHINGPAIR = DitaClass.getInstance("+ topic/strow learningInteractionBase-d/strow learning-d/lcMatchingPair ");
-    public static final DitaClass LEARNING_D_LCMATCHTABLE = DitaClass.getInstance("+ topic/simpletable learningInteractionBase-d/simpletable learning-d/lcMatchTable ");
-    public static final DitaClass LEARNING_D_LCMULTIPLESELECT = DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcMultipleSelect ");
-    public static final DitaClass LEARNING_D_LCOPENANSWER = DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcOpenAnswer ");
-    public static final DitaClass LEARNING_D_LCOPENQUESTION = DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcOpenQuestion ");
-    public static final DitaClass LEARNING_D_LCQUESTION = DitaClass.getInstance("+ topic/p learningInteractionBase-d/lcQuestionBase learning-d/lcQuestion ");
-    public static final DitaClass LEARNING_D_LCSEQUENCE = DitaClass.getInstance("+ topic/data learningInteractionBase-d/data learning-d/lcSequence ");
-    public static final DitaClass LEARNING_D_LCSEQUENCEOPTION = DitaClass.getInstance("+ topic/li learningInteractionBase-d/li learning-d/lcSequenceOption ");
-    public static final DitaClass LEARNING_D_LCSEQUENCEOPTIONGROUP = DitaClass.getInstance("+ topic/ol learningInteractionBase-d/ol learning-d/lcSequenceOptionGroup ");
-    public static final DitaClass LEARNING_D_LCSEQUENCING = DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcSequencing ");
-    public static final DitaClass LEARNING_D_LCSINGLESELECT = DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcSingleSelect ");
-    public static final DitaClass LEARNING_D_LCTRUEFALSE = DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcTrueFalse ");
-    public static final DitaClass LEARNING2_D_LCANSWERCONTENT2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcAnswerContent2 ");
-    public static final DitaClass LEARNING2_D_LCANSWEROPTION2 = DitaClass.getInstance("+ topic/li learningInteractionBase2-d/li learning2-d/lcAnswerOption2 ");
-    public static final DitaClass LEARNING2_D_LCANSWEROPTIONGROUP2 = DitaClass.getInstance("+ topic/ul learningInteractionBase2-d/ul learning2-d/lcAnswerOptionGroup2 ");
-    public static final DitaClass LEARNING2_D_LCAREA2 = DitaClass.getInstance("+ topic/figgroup learningInteractionBase2-d/figgroup learning2-d/lcArea2 ");
-    public static final DitaClass LEARNING2_D_LCAREACOORDS2 = DitaClass.getInstance("+ topic/ph learningInteractionBase2-d/ph learning2-d/lcAreaCoords2 ");
-    public static final DitaClass LEARNING2_D_LCAREASHAPE2 = DitaClass.getInstance("+ topic/keyword learningInteractionBase2-d/keyword learning2-d/lcAreaShape2 ");
-    public static final DitaClass LEARNING2_D_LCASSET2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcAsset2 ");
-    public static final DitaClass LEARNING2_D_LCCORRECTRESPONSE2 = DitaClass.getInstance("+ topic/data learningInteractionBase2-d/data learning2-d/lcCorrectResponse2 ");
-    public static final DitaClass LEARNING2_D_LCFEEDBACK2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcFeedback2 ");
-    public static final DitaClass LEARNING2_D_LCFEEDBACKCORRECT2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcFeedbackCorrect2 ");
-    public static final DitaClass LEARNING2_D_LCFEEDBACKINCORRECT2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcFeedbackIncorrect2 ");
-    public static final DitaClass LEARNING2_D_LCHOTSPOT2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcHotspot2 ");
-    public static final DitaClass LEARNING2_D_LCHOTSPOTMAP2 = DitaClass.getInstance("+ topic/fig learningInteractionBase2-d/figgroup learning2-d/lcHotspotMap2 ");
-    public static final DitaClass LEARNING2_D_LCINSTRUCTORNOTE2 = DitaClass.getInstance("+ topic/note learningInteractionBase2-d/note learning2-d/lcInstructornote2 ");
-    public static final DitaClass LEARNING2_D_LCITEM2 = DitaClass.getInstance("+ topic/stentry learningInteractionBase2-d/stentry learning2-d/lcItem2 ");
-    public static final DitaClass LEARNING2_D_LCMATCHING2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcMatching2 ");
-    public static final DitaClass LEARNING2_D_LCMATCHINGHEADER2 = DitaClass.getInstance("+ topic/sthead learningInteractionBase2-d/sthead learning2-d/lcMatchingHeader2 ");
-    public static final DitaClass LEARNING2_D_LCMATCHINGITEM2 = DitaClass.getInstance("+ topic/stentry learningInteractionBase2-d/stentry learning2-d/lcMatchingItem2 ");
-    public static final DitaClass LEARNING2_D_LCMATCHINGITEMFEEDBACK2 = DitaClass.getInstance("+ topic/stentry learningInteractionBase2-d/stentry learning2-d/lcMatchingItemFeedback2 ");
-    public static final DitaClass LEARNING2_D_LCMATCHINGPAIR2 = DitaClass.getInstance("+ topic/strow learningInteractionBase2-d/strow learning2-d/lcMatchingPair2 ");
-    public static final DitaClass LEARNING2_D_LCMATCHTABLE2 = DitaClass.getInstance("+ topic/simpletable learningInteractionBase2-d/simpletable learning2-d/lcMatchTable2 ");
-    public static final DitaClass LEARNING2_D_LCMULTIPLESELECT2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcMultipleSelect2 ");
-    public static final DitaClass LEARNING2_D_LCOPENANSWER2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcOpenAnswer2 ");
-    public static final DitaClass LEARNING2_D_LCOPENQUESTION2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcOpenQuestion2 ");
-    public static final DitaClass LEARNING2_D_LCQUESTION2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcQuestionBase2 learning2-d/lcQuestion2 ");
-    public static final DitaClass LEARNING2_D_LCSEQUENCE2 = DitaClass.getInstance("+ topic/data learningInteractionBase2-d/data learning2-d/lcSequence2 ");
-    public static final DitaClass LEARNING2_D_LCSEQUENCEOPTION2 = DitaClass.getInstance("+ topic/li learningInteractionBase2-d/li learning2-d/lcSequenceOption2 ");
-    public static final DitaClass LEARNING2_D_LCSEQUENCEOPTIONGROUP2 = DitaClass.getInstance("+ topic/ol learningInteractionBase2-d/ol learning2-d/lcSequenceOptionGroup2 ");
-    public static final DitaClass LEARNING2_D_LCSEQUENCING2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcSequencing2 ");
-    public static final DitaClass LEARNING2_D_LCSINGLESELECT2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcSingleSelect2 ");
-    public static final DitaClass LEARNING2_D_LCTRUEFALSE2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcTrueFalse2 ");
-    public static final DitaClass LEARNINGASSESSMENT_LEARNINGASSESSMENT = DitaClass.getInstance("- topic/topic learningBase/learningBase learningAssessment/learningAssessment ");
-    public static final DitaClass LEARNINGASSESSMENT_LEARNINGASSESSMENTBODY = DitaClass.getInstance("- topic/body learningBase/learningBasebody learningAssessment/learningAssessmentbody ");
-    public static final DitaClass LEARNINGBASE_LCAUDIENCE = DitaClass.getInstance("- topic/section learningBase/lcAudience ");
-    public static final DitaClass LEARNINGBASE_LCCHALLENGE = DitaClass.getInstance("- topic/section learningBase/lcChallenge ");
-    public static final DitaClass LEARNINGBASE_LCDURATION = DitaClass.getInstance("- topic/section learningBase/lcDuration ");
-    public static final DitaClass LEARNINGBASE_LCINSTRUCTION = DitaClass.getInstance("- topic/section learningBase/lcInstruction ");
-    public static final DitaClass LEARNINGBASE_LCINTERACTION = DitaClass.getInstance("- topic/section learningBase/lcInteraction ");
+    public static final DitaClass INDEXING_D_INDEX_SEE =
+            DitaClass.getInstance("+ topic/index-base indexing-d/index-see ");
+    public static final DitaClass INDEXING_D_INDEX_SEE_ALSO =
+            DitaClass.getInstance("+ topic/index-base indexing-d/index-see-also ");
+    public static final DitaClass INDEXING_D_INDEX_SORT_AS =
+            DitaClass.getInstance("+ topic/index-base indexing-d/index-sort-as ");
+    public static final DitaClass LEARNING_D_LCANSWERCONTENT =
+            DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcAnswerContent ");
+    public static final DitaClass LEARNING_D_LCANSWEROPTION =
+            DitaClass.getInstance("+ topic/li learningInteractionBase-d/li learning-d/lcAnswerOption ");
+    public static final DitaClass LEARNING_D_LCANSWEROPTIONGROUP =
+            DitaClass.getInstance("+ topic/ul learningInteractionBase-d/ul learning-d/lcAnswerOptionGroup ");
+    public static final DitaClass LEARNING_D_LCAREA =
+            DitaClass.getInstance("+ topic/figgroup learningInteractionBase-d/figgroup learning-d/lcArea ");
+    public static final DitaClass LEARNING_D_LCAREACOORDS =
+            DitaClass.getInstance("+ topic/ph learningInteractionBase-d/ph learning-d/lcAreaCoords ");
+    public static final DitaClass LEARNING_D_LCAREASHAPE =
+            DitaClass.getInstance("+ topic/keyword learningInteractionBase-d/keyword learning-d/lcAreaShape ");
+    public static final DitaClass LEARNING_D_LCASSET =
+            DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcAsset ");
+    public static final DitaClass LEARNING_D_LCCORRECTRESPONSE =
+            DitaClass.getInstance("+ topic/data learningInteractionBase-d/data learning-d/lcCorrectResponse ");
+    public static final DitaClass LEARNING_D_LCFEEDBACK =
+            DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcFeedback ");
+    public static final DitaClass LEARNING_D_LCFEEDBACKCORRECT =
+            DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcFeedbackCorrect ");
+    public static final DitaClass LEARNING_D_LCFEEDBACKINCORRECT =
+            DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcFeedbackIncorrect ");
+    public static final DitaClass LEARNING_D_LCHOTSPOT =
+            DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcHotspot ");
+    public static final DitaClass LEARNING_D_LCHOTSPOTMAP =
+            DitaClass.getInstance("+ topic/fig learningInteractionBase-d/figgroup learning-d/lcHotspotMap ");
+    public static final DitaClass LEARNING_D_LCINSTRUCTORNOTE =
+            DitaClass.getInstance("+ topic/note learningInteractionBase-d/note learning-d/lcInstructornote ");
+    public static final DitaClass LEARNING_D_LCITEM =
+            DitaClass.getInstance("+ topic/stentry learningInteractionBase-d/stentry learning-d/lcItem ");
+    public static final DitaClass LEARNING_D_LCMATCHING =
+            DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcMatching ");
+    public static final DitaClass LEARNING_D_LCMATCHINGHEADER =
+            DitaClass.getInstance("+ topic/sthead learningInteractionBase-d/sthead learning-d/lcMatchingHeader ");
+    public static final DitaClass LEARNING_D_LCMATCHINGITEM =
+            DitaClass.getInstance("+ topic/stentry learningInteractionBase-d/stentry learning-d/lcMatchingItem ");
+    public static final DitaClass LEARNING_D_LCMATCHINGITEMFEEDBACK = DitaClass.getInstance(
+            "+ topic/stentry learningInteractionBase-d/stentry learning-d/lcMatchingItemFeedback ");
+    public static final DitaClass LEARNING_D_LCMATCHINGPAIR =
+            DitaClass.getInstance("+ topic/strow learningInteractionBase-d/strow learning-d/lcMatchingPair ");
+    public static final DitaClass LEARNING_D_LCMATCHTABLE =
+            DitaClass.getInstance("+ topic/simpletable learningInteractionBase-d/simpletable learning-d/lcMatchTable ");
+    public static final DitaClass LEARNING_D_LCMULTIPLESELECT = DitaClass.getInstance(
+            "+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcMultipleSelect ");
+    public static final DitaClass LEARNING_D_LCOPENANSWER =
+            DitaClass.getInstance("+ topic/p learningInteractionBase-d/p learning-d/lcOpenAnswer ");
+    public static final DitaClass LEARNING_D_LCOPENQUESTION =
+            DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcOpenQuestion ");
+    public static final DitaClass LEARNING_D_LCQUESTION =
+            DitaClass.getInstance("+ topic/p learningInteractionBase-d/lcQuestionBase learning-d/lcQuestion ");
+    public static final DitaClass LEARNING_D_LCSEQUENCE =
+            DitaClass.getInstance("+ topic/data learningInteractionBase-d/data learning-d/lcSequence ");
+    public static final DitaClass LEARNING_D_LCSEQUENCEOPTION =
+            DitaClass.getInstance("+ topic/li learningInteractionBase-d/li learning-d/lcSequenceOption ");
+    public static final DitaClass LEARNING_D_LCSEQUENCEOPTIONGROUP =
+            DitaClass.getInstance("+ topic/ol learningInteractionBase-d/ol learning-d/lcSequenceOptionGroup ");
+    public static final DitaClass LEARNING_D_LCSEQUENCING =
+            DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcSequencing ");
+    public static final DitaClass LEARNING_D_LCSINGLESELECT =
+            DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcSingleSelect ");
+    public static final DitaClass LEARNING_D_LCTRUEFALSE =
+            DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcTrueFalse ");
+    public static final DitaClass LEARNING2_D_LCANSWERCONTENT2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcAnswerContent2 ");
+    public static final DitaClass LEARNING2_D_LCANSWEROPTION2 =
+            DitaClass.getInstance("+ topic/li learningInteractionBase2-d/li learning2-d/lcAnswerOption2 ");
+    public static final DitaClass LEARNING2_D_LCANSWEROPTIONGROUP2 =
+            DitaClass.getInstance("+ topic/ul learningInteractionBase2-d/ul learning2-d/lcAnswerOptionGroup2 ");
+    public static final DitaClass LEARNING2_D_LCAREA2 =
+            DitaClass.getInstance("+ topic/figgroup learningInteractionBase2-d/figgroup learning2-d/lcArea2 ");
+    public static final DitaClass LEARNING2_D_LCAREACOORDS2 =
+            DitaClass.getInstance("+ topic/ph learningInteractionBase2-d/ph learning2-d/lcAreaCoords2 ");
+    public static final DitaClass LEARNING2_D_LCAREASHAPE2 =
+            DitaClass.getInstance("+ topic/keyword learningInteractionBase2-d/keyword learning2-d/lcAreaShape2 ");
+    public static final DitaClass LEARNING2_D_LCASSET2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcAsset2 ");
+    public static final DitaClass LEARNING2_D_LCCORRECTRESPONSE2 =
+            DitaClass.getInstance("+ topic/data learningInteractionBase2-d/data learning2-d/lcCorrectResponse2 ");
+    public static final DitaClass LEARNING2_D_LCFEEDBACK2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcFeedback2 ");
+    public static final DitaClass LEARNING2_D_LCFEEDBACKCORRECT2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcFeedbackCorrect2 ");
+    public static final DitaClass LEARNING2_D_LCFEEDBACKINCORRECT2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcFeedbackIncorrect2 ");
+    public static final DitaClass LEARNING2_D_LCHOTSPOT2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcHotspot2 ");
+    public static final DitaClass LEARNING2_D_LCHOTSPOTMAP2 =
+            DitaClass.getInstance("+ topic/fig learningInteractionBase2-d/figgroup learning2-d/lcHotspotMap2 ");
+    public static final DitaClass LEARNING2_D_LCINSTRUCTORNOTE2 =
+            DitaClass.getInstance("+ topic/note learningInteractionBase2-d/note learning2-d/lcInstructornote2 ");
+    public static final DitaClass LEARNING2_D_LCITEM2 =
+            DitaClass.getInstance("+ topic/stentry learningInteractionBase2-d/stentry learning2-d/lcItem2 ");
+    public static final DitaClass LEARNING2_D_LCMATCHING2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcMatching2 ");
+    public static final DitaClass LEARNING2_D_LCMATCHINGHEADER2 =
+            DitaClass.getInstance("+ topic/sthead learningInteractionBase2-d/sthead learning2-d/lcMatchingHeader2 ");
+    public static final DitaClass LEARNING2_D_LCMATCHINGITEM2 =
+            DitaClass.getInstance("+ topic/stentry learningInteractionBase2-d/stentry learning2-d/lcMatchingItem2 ");
+    public static final DitaClass LEARNING2_D_LCMATCHINGITEMFEEDBACK2 = DitaClass.getInstance(
+            "+ topic/stentry learningInteractionBase2-d/stentry learning2-d/lcMatchingItemFeedback2 ");
+    public static final DitaClass LEARNING2_D_LCMATCHINGPAIR2 =
+            DitaClass.getInstance("+ topic/strow learningInteractionBase2-d/strow learning2-d/lcMatchingPair2 ");
+    public static final DitaClass LEARNING2_D_LCMATCHTABLE2 = DitaClass.getInstance(
+            "+ topic/simpletable learningInteractionBase2-d/simpletable learning2-d/lcMatchTable2 ");
+    public static final DitaClass LEARNING2_D_LCMULTIPLESELECT2 = DitaClass.getInstance(
+            "+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcMultipleSelect2 ");
+    public static final DitaClass LEARNING2_D_LCOPENANSWER2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/div learning2-d/lcOpenAnswer2 ");
+    public static final DitaClass LEARNING2_D_LCOPENQUESTION2 = DitaClass.getInstance(
+            "+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcOpenQuestion2 ");
+    public static final DitaClass LEARNING2_D_LCQUESTION2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcQuestionBase2 learning2-d/lcQuestion2 ");
+    public static final DitaClass LEARNING2_D_LCSEQUENCE2 =
+            DitaClass.getInstance("+ topic/data learningInteractionBase2-d/data learning2-d/lcSequence2 ");
+    public static final DitaClass LEARNING2_D_LCSEQUENCEOPTION2 =
+            DitaClass.getInstance("+ topic/li learningInteractionBase2-d/li learning2-d/lcSequenceOption2 ");
+    public static final DitaClass LEARNING2_D_LCSEQUENCEOPTIONGROUP2 =
+            DitaClass.getInstance("+ topic/ol learningInteractionBase2-d/ol learning2-d/lcSequenceOptionGroup2 ");
+    public static final DitaClass LEARNING2_D_LCSEQUENCING2 = DitaClass.getInstance(
+            "+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcSequencing2 ");
+    public static final DitaClass LEARNING2_D_LCSINGLESELECT2 = DitaClass.getInstance(
+            "+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcSingleSelect2 ");
+    public static final DitaClass LEARNING2_D_LCTRUEFALSE2 = DitaClass.getInstance(
+            "+ topic/div learningInteractionBase2-d/lcInteractionBase2 learning2-d/lcTrueFalse2 ");
+    public static final DitaClass LEARNINGASSESSMENT_LEARNINGASSESSMENT =
+            DitaClass.getInstance("- topic/topic learningBase/learningBase learningAssessment/learningAssessment ");
+    public static final DitaClass LEARNINGASSESSMENT_LEARNINGASSESSMENTBODY = DitaClass.getInstance(
+            "- topic/body learningBase/learningBasebody learningAssessment/learningAssessmentbody ");
+    public static final DitaClass LEARNINGBASE_LCAUDIENCE =
+            DitaClass.getInstance("- topic/section learningBase/lcAudience ");
+    public static final DitaClass LEARNINGBASE_LCCHALLENGE =
+            DitaClass.getInstance("- topic/section learningBase/lcChallenge ");
+    public static final DitaClass LEARNINGBASE_LCDURATION =
+            DitaClass.getInstance("- topic/section learningBase/lcDuration ");
+    public static final DitaClass LEARNINGBASE_LCINSTRUCTION =
+            DitaClass.getInstance("- topic/section learningBase/lcInstruction ");
+    public static final DitaClass LEARNINGBASE_LCINTERACTION =
+            DitaClass.getInstance("- topic/section learningBase/lcInteraction ");
     public static final DitaClass LEARNINGBASE_LCINTRO = DitaClass.getInstance("- topic/section learningBase/lcIntro ");
-    public static final DitaClass LEARNINGBASE_LCNEXTSTEPS = DitaClass.getInstance("- topic/section learningBase/lcNextSteps ");
-    public static final DitaClass LEARNINGBASE_LCOBJECTIVE = DitaClass.getInstance("- topic/li learningBase/lcObjective ");
-    public static final DitaClass LEARNINGBASE_LCOBJECTIVES = DitaClass.getInstance("- topic/section learningBase/lcObjectives ");
-    public static final DitaClass LEARNINGBASE_LCOBJECTIVESGROUP = DitaClass.getInstance("- topic/ul learningBase/lcObjectivesGroup ");
-    public static final DitaClass LEARNINGBASE_LCOBJECTIVESSTEM = DitaClass.getInstance("- topic/ph learningBase/lcObjectivesStem ");
-    public static final DitaClass LEARNINGBASE_LCPREREQS = DitaClass.getInstance("- topic/section learningBase/lcPrereqs ");
-    public static final DitaClass LEARNINGBASE_LCRESOURCES = DitaClass.getInstance("- topic/section learningBase/lcResources ");
-    public static final DitaClass LEARNINGBASE_LCREVIEW = DitaClass.getInstance("- topic/section learningBase/lcReview ");
-    public static final DitaClass LEARNINGBASE_LCSUMMARY = DitaClass.getInstance("- topic/section learningBase/lcSummary ");
+    public static final DitaClass LEARNINGBASE_LCNEXTSTEPS =
+            DitaClass.getInstance("- topic/section learningBase/lcNextSteps ");
+    public static final DitaClass LEARNINGBASE_LCOBJECTIVE =
+            DitaClass.getInstance("- topic/li learningBase/lcObjective ");
+    public static final DitaClass LEARNINGBASE_LCOBJECTIVES =
+            DitaClass.getInstance("- topic/section learningBase/lcObjectives ");
+    public static final DitaClass LEARNINGBASE_LCOBJECTIVESGROUP =
+            DitaClass.getInstance("- topic/ul learningBase/lcObjectivesGroup ");
+    public static final DitaClass LEARNINGBASE_LCOBJECTIVESSTEM =
+            DitaClass.getInstance("- topic/ph learningBase/lcObjectivesStem ");
+    public static final DitaClass LEARNINGBASE_LCPREREQS =
+            DitaClass.getInstance("- topic/section learningBase/lcPrereqs ");
+    public static final DitaClass LEARNINGBASE_LCRESOURCES =
+            DitaClass.getInstance("- topic/section learningBase/lcResources ");
+    public static final DitaClass LEARNINGBASE_LCREVIEW =
+            DitaClass.getInstance("- topic/section learningBase/lcReview ");
+    public static final DitaClass LEARNINGBASE_LCSUMMARY =
+            DitaClass.getInstance("- topic/section learningBase/lcSummary ");
     public static final DitaClass LEARNINGBASE_LCTIME = DitaClass.getInstance("- topic/data learningBase/lcTime ");
-    public static final DitaClass LEARNINGBASE_LEARNINGBASE = DitaClass.getInstance("- topic/topic learningBase/learningBase ");
-    public static final DitaClass LEARNINGBASE_LEARNINGBASEBODY = DitaClass.getInstance("- topic/body learningBase/learningBasebody ");
-    public static final DitaClass LEARNINGCONTENT_LEARNINGCONTENT = DitaClass.getInstance("- topic/topic learningBase/learningBase learningContent/learningContent ");
-    public static final DitaClass LEARNINGCONTENT_LEARNINGCONTENTBODY = DitaClass.getInstance("- topic/body learningBase/learningBasebody learningContent/learningContentbody ");
-    public static final DitaClass LEARNINGGROUPMAP_LEARNINGGROUPMAP = DitaClass.getInstance("- map/map learningGroupMap/learningGroupMap ");
-    public static final DitaClass LEARNINGINTERACTIONBASE_D_LCINTERACTIONBASE = DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase ");
-    public static final DitaClass LEARNINGINTERACTIONBASE_D_LCQUESTIONBASE = DitaClass.getInstance("+ topic/p learningInteractionBase-d/lcQuestionBase ");
-    public static final DitaClass LEARNINGINTERACTIONBASE2_D_LCINTERACTIONBASE2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 ");
-    public static final DitaClass LEARNINGINTERACTIONBASE2_D_LCINTERACTIONLABEL2 = DitaClass.getInstance("+ topic/p learningInteractionBase2-d/lcInteractionLabel2 ");
-    public static final DitaClass LEARNINGINTERACTIONBASE2_D_LCQUESTIONBASE2 = DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcQuestionBase2 ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGCONTENTCOMPONENTREF = DitaClass.getInstance("+ map/topicref learningmap-d/learningContentComponentRef ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGCONTENTREF = DitaClass.getInstance("+ map/topicref learningmap-d/learningContentRef ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGGROUP = DitaClass.getInstance("+ map/topicref learningmap-d/learningGroup ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGGROUPMAPREF = DitaClass.getInstance("+ map/topicref learningmap-d/learningGroupMapRef ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGOBJECT = DitaClass.getInstance("+ map/topicref learningmap-d/learningObject ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGOBJECTMAPREF = DitaClass.getInstance("+ map/topicref learningmap-d/learningObjectMapRef ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGOVERVIEWREF = DitaClass.getInstance("+ map/topicref learningmap-d/learningOverviewRef ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGPLANREF = DitaClass.getInstance("+ map/topicref learningmap-d/learningPlanRef ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGPOSTASSESSMENTREF = DitaClass.getInstance("+ map/topicref learningmap-d/learningPostAssessmentRef ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGPREASSESSMENTREF = DitaClass.getInstance("+ map/topicref learningmap-d/learningPreAssessmentRef ");
-    public static final DitaClass LEARNINGMAP_D_LEARNINGSUMMARYREF = DitaClass.getInstance("+ map/topicref learningmap-d/learningSummaryRef ");
-    public static final DitaClass LEARNINGMETA_D_LCLOM = DitaClass.getInstance("+ topic/metadata learningmeta-d/lcLom ");
-    public static final DitaClass LEARNINGMETA_D_LOMAGGREGATIONLEVEL = DitaClass.getInstance("+ topic/data learningmeta-d/lomAggregationLevel ");
-    public static final DitaClass LEARNINGMETA_D_LOMCONTEXT = DitaClass.getInstance("+ topic/data learningmeta-d/lomContext ");
-    public static final DitaClass LEARNINGMETA_D_LOMCOVERAGE = DitaClass.getInstance("+ topic/data learningmeta-d/lomCoverage ");
-    public static final DitaClass LEARNINGMETA_D_LOMDIFFICULTY = DitaClass.getInstance("+ topic/data learningmeta-d/lomDifficulty ");
-    public static final DitaClass LEARNINGMETA_D_LOMINSTALLATIONREMARKS = DitaClass.getInstance("+ topic/data learningmeta-d/lomInstallationRemarks ");
-    public static final DitaClass LEARNINGMETA_D_LOMINTENDEDUSERROLE = DitaClass.getInstance("+ topic/data learningmeta-d/lomIntendedUserRole ");
-    public static final DitaClass LEARNINGMETA_D_LOMINTERACTIVITYLEVEL = DitaClass.getInstance("+ topic/data learningmeta-d/lomInteractivityLevel ");
-    public static final DitaClass LEARNINGMETA_D_LOMINTERACTIVITYTYPE = DitaClass.getInstance("+ topic/data learningmeta-d/lomInteractivityType ");
-    public static final DitaClass LEARNINGMETA_D_LOMLEARNINGRESOURCETYPE = DitaClass.getInstance("+ topic/data learningmeta-d/lomLearningResourceType ");
-    public static final DitaClass LEARNINGMETA_D_LOMOTHERPLATFORMREQUIREMENTS = DitaClass.getInstance("+ topic/data learningmeta-d/lomOtherPlatformRequirements ");
-    public static final DitaClass LEARNINGMETA_D_LOMSEMANTICDENSITY = DitaClass.getInstance("+ topic/data learningmeta-d/lomSemanticDensity ");
-    public static final DitaClass LEARNINGMETA_D_LOMSTRUCTURE = DitaClass.getInstance("+ topic/data learningmeta-d/lomStructure ");
-    public static final DitaClass LEARNINGMETA_D_LOMTECHREQUIREMENT = DitaClass.getInstance("+ topic/data learningmeta-d/lomTechRequirement ");
-    public static final DitaClass LEARNINGMETA_D_LOMTYPICALAGERANGE = DitaClass.getInstance("+ topic/data learningmeta-d/lomTypicalAgeRange ");
-    public static final DitaClass LEARNINGMETA_D_LOMTYPICALLEARNINGTIME = DitaClass.getInstance("+ topic/data learningmeta-d/lomTypicalLearningTime ");
-    public static final DitaClass LEARNINGOBJECTMAP_LEARNINGOBJECTMAP = DitaClass.getInstance("- map/map learningObjectMap/learningObjectMap ");
-    public static final DitaClass LEARNINGOVERVIEW_LEARNINGOVERVIEW = DitaClass.getInstance("- topic/topic learningBase/learningBase learningOverview/learningOverview ");
-    public static final DitaClass LEARNINGOVERVIEW_LEARNINGOVERVIEWBODY = DitaClass.getInstance("- topic/body learningBase/learningBasebody learningOverview/learningOverviewbody ");
-    public static final DitaClass LEARNINGPLAN_LCAGE = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcAge ");
-    public static final DitaClass LEARNINGPLAN_LCASSESSMENT = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcAssessment ");
-    public static final DitaClass LEARNINGPLAN_LCATTITUDE = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcAttitude ");
-    public static final DitaClass LEARNINGPLAN_LCBACKGROUND = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcBackground ");
-    public static final DitaClass LEARNINGPLAN_LCCIN = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcCIN ");
-    public static final DitaClass LEARNINGPLAN_LCCLASSROOM = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcClassroom ");
-    public static final DitaClass LEARNINGPLAN_LCCLIENT = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcClient ");
-    public static final DitaClass LEARNINGPLAN_LCCONSTRAINTS = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcConstraints ");
-    public static final DitaClass LEARNINGPLAN_LCDELIVDATE = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcDelivDate ");
-    public static final DitaClass LEARNINGPLAN_LCDELIVERY = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcDelivery ");
-    public static final DitaClass LEARNINGPLAN_LCDOWNLOADTIME = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcDownloadTime ");
-    public static final DitaClass LEARNINGPLAN_LCEDLEVEL = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcEdLevel ");
-    public static final DitaClass LEARNINGPLAN_LCFILESIZELIMITATIONS = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcFileSizeLimitations ");
-    public static final DitaClass LEARNINGPLAN_LCGAPANALYSIS = DitaClass.getInstance("- topic/section learningBase/section learningPlan/lcGapAnalysis ");
-    public static final DitaClass LEARNINGPLAN_LCGAPITEM = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcGapItem ");
-    public static final DitaClass LEARNINGPLAN_LCGAPITEMDELTA = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcGapItemDelta ");
-    public static final DitaClass LEARNINGPLAN_LCGENERALDESCRIPTION = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcGeneralDescription ");
-    public static final DitaClass LEARNINGPLAN_LCGOALS = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcGoals ");
-    public static final DitaClass LEARNINGPLAN_LCGRAPHICS = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcGraphics ");
-    public static final DitaClass LEARNINGPLAN_LCHANDOUTS = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcHandouts ");
-    public static final DitaClass LEARNINGPLAN_LCINTERVENTION = DitaClass.getInstance("- topic/section learningBase/section learningPlan/lcIntervention ");
-    public static final DitaClass LEARNINGPLAN_LCINTERVENTIONITEM = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcInterventionItem ");
-    public static final DitaClass LEARNINGPLAN_LCJTAITEM = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcJtaItem ");
-    public static final DitaClass LEARNINGPLAN_LCKNOWLEDGE = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcKnowledge ");
-    public static final DitaClass LEARNINGPLAN_LCLEARNSTRAT = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcLearnStrat ");
-    public static final DitaClass LEARNINGPLAN_LCLMS = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcLMS ");
-    public static final DitaClass LEARNINGPLAN_LCMODDATE = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcModDate ");
-    public static final DitaClass LEARNINGPLAN_LCMOTIVATION = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcMotivation ");
-    public static final DitaClass LEARNINGPLAN_LCNEEDS = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcNeeds ");
-    public static final DitaClass LEARNINGPLAN_LCNEEDSANALYSIS = DitaClass.getInstance("- topic/section learningBase/section learningPlan/lcNeedsAnalysis ");
-    public static final DitaClass LEARNINGPLAN_LCNOLMS = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcNoLMS ");
-    public static final DitaClass LEARNINGPLAN_LCOJT = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcOJT ");
-    public static final DitaClass LEARNINGPLAN_LCORGANIZATIONAL = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcOrganizational ");
-    public static final DitaClass LEARNINGPLAN_LCORGCONSTRAINTS = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcOrgConstraints ");
-    public static final DitaClass LEARNINGPLAN_LCPLANAUDIENCE = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlanAudience ");
-    public static final DitaClass LEARNINGPLAN_LCPLANDESCRIP = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlanDescrip ");
-    public static final DitaClass LEARNINGPLAN_LCPLANOBJECTIVE = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcPlanObjective ");
-    public static final DitaClass LEARNINGPLAN_LCPLANPREREQS = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlanPrereqs ");
-    public static final DitaClass LEARNINGPLAN_LCPLANRESOURCES = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcPlanResources ");
-    public static final DitaClass LEARNINGPLAN_LCPLANSUBJECT = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlanSubject ");
-    public static final DitaClass LEARNINGPLAN_LCPLANTITLE = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlanTitle ");
-    public static final DitaClass LEARNINGPLAN_LCPLAYERS = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlayers ");
-    public static final DitaClass LEARNINGPLAN_LCPROCESSES = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcProcesses ");
-    public static final DitaClass LEARNINGPLAN_LCPROJECT = DitaClass.getInstance("- topic/section learningBase/section learningPlan/lcProject ");
-    public static final DitaClass LEARNINGPLAN_LCRESOLUTION = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcResolution ");
-    public static final DitaClass LEARNINGPLAN_LCSECURITY = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcSecurity ");
-    public static final DitaClass LEARNINGPLAN_LCSKILLS = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcSkills ");
-    public static final DitaClass LEARNINGPLAN_LCSPECCHARS = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcSpecChars ");
-    public static final DitaClass LEARNINGPLAN_LCTASK = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcTask ");
-    public static final DitaClass LEARNINGPLAN_LCTASKITEM = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcTaskItem ");
-    public static final DitaClass LEARNINGPLAN_LCTECHNICAL = DitaClass.getInstance("- topic/section learningBase/section learningPlan/lcTechnical ");
-    public static final DitaClass LEARNINGPLAN_LCVALUES = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcValues ");
-    public static final DitaClass LEARNINGPLAN_LCVIEWERS = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcViewers ");
-    public static final DitaClass LEARNINGPLAN_LCW3C = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcW3C ");
-    public static final DitaClass LEARNINGPLAN_LCWORKENV = DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcWorkEnv ");
-    public static final DitaClass LEARNINGPLAN_LCWORKENVDESCRIPTION = DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcWorkEnvDescription ");
-    public static final DitaClass LEARNINGPLAN_LEARNINGPLAN = DitaClass.getInstance("- topic/topic learningBase/learningBase learningPlan/learningPlan ");
-    public static final DitaClass LEARNINGPLAN_LEARNINGPLANBODY = DitaClass.getInstance("- topic/body learningBase/learningBasebody learningPlan/learningPlanbody ");
-    public static final DitaClass LEARNINGSUMMARY_LEARNINGSUMMARY = DitaClass.getInstance("- topic/topic learningBase/learningBase learningSummary/learningSummary ");
-    public static final DitaClass LEARNINGSUMMARY_LEARNINGSUMMARYBODY = DitaClass.getInstance("- topic/body learningBase/learningBasebody learningSummary/learningSummarybody ");
+    public static final DitaClass LEARNINGBASE_LEARNINGBASE =
+            DitaClass.getInstance("- topic/topic learningBase/learningBase ");
+    public static final DitaClass LEARNINGBASE_LEARNINGBASEBODY =
+            DitaClass.getInstance("- topic/body learningBase/learningBasebody ");
+    public static final DitaClass LEARNINGCONTENT_LEARNINGCONTENT =
+            DitaClass.getInstance("- topic/topic learningBase/learningBase learningContent/learningContent ");
+    public static final DitaClass LEARNINGCONTENT_LEARNINGCONTENTBODY =
+            DitaClass.getInstance("- topic/body learningBase/learningBasebody learningContent/learningContentbody ");
+    public static final DitaClass LEARNINGGROUPMAP_LEARNINGGROUPMAP =
+            DitaClass.getInstance("- map/map learningGroupMap/learningGroupMap ");
+    public static final DitaClass LEARNINGINTERACTIONBASE_D_LCINTERACTIONBASE =
+            DitaClass.getInstance("+ topic/fig learningInteractionBase-d/lcInteractionBase ");
+    public static final DitaClass LEARNINGINTERACTIONBASE_D_LCQUESTIONBASE =
+            DitaClass.getInstance("+ topic/p learningInteractionBase-d/lcQuestionBase ");
+    public static final DitaClass LEARNINGINTERACTIONBASE2_D_LCINTERACTIONBASE2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcInteractionBase2 ");
+    public static final DitaClass LEARNINGINTERACTIONBASE2_D_LCINTERACTIONLABEL2 =
+            DitaClass.getInstance("+ topic/p learningInteractionBase2-d/lcInteractionLabel2 ");
+    public static final DitaClass LEARNINGINTERACTIONBASE2_D_LCQUESTIONBASE2 =
+            DitaClass.getInstance("+ topic/div learningInteractionBase2-d/lcQuestionBase2 ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGCONTENTCOMPONENTREF =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningContentComponentRef ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGCONTENTREF =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningContentRef ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGGROUP =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningGroup ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGGROUPMAPREF =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningGroupMapRef ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGOBJECT =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningObject ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGOBJECTMAPREF =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningObjectMapRef ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGOVERVIEWREF =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningOverviewRef ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGPLANREF =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningPlanRef ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGPOSTASSESSMENTREF =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningPostAssessmentRef ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGPREASSESSMENTREF =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningPreAssessmentRef ");
+    public static final DitaClass LEARNINGMAP_D_LEARNINGSUMMARYREF =
+            DitaClass.getInstance("+ map/topicref learningmap-d/learningSummaryRef ");
+    public static final DitaClass LEARNINGMETA_D_LCLOM =
+            DitaClass.getInstance("+ topic/metadata learningmeta-d/lcLom ");
+    public static final DitaClass LEARNINGMETA_D_LOMAGGREGATIONLEVEL =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomAggregationLevel ");
+    public static final DitaClass LEARNINGMETA_D_LOMCONTEXT =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomContext ");
+    public static final DitaClass LEARNINGMETA_D_LOMCOVERAGE =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomCoverage ");
+    public static final DitaClass LEARNINGMETA_D_LOMDIFFICULTY =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomDifficulty ");
+    public static final DitaClass LEARNINGMETA_D_LOMINSTALLATIONREMARKS =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomInstallationRemarks ");
+    public static final DitaClass LEARNINGMETA_D_LOMINTENDEDUSERROLE =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomIntendedUserRole ");
+    public static final DitaClass LEARNINGMETA_D_LOMINTERACTIVITYLEVEL =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomInteractivityLevel ");
+    public static final DitaClass LEARNINGMETA_D_LOMINTERACTIVITYTYPE =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomInteractivityType ");
+    public static final DitaClass LEARNINGMETA_D_LOMLEARNINGRESOURCETYPE =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomLearningResourceType ");
+    public static final DitaClass LEARNINGMETA_D_LOMOTHERPLATFORMREQUIREMENTS =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomOtherPlatformRequirements ");
+    public static final DitaClass LEARNINGMETA_D_LOMSEMANTICDENSITY =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomSemanticDensity ");
+    public static final DitaClass LEARNINGMETA_D_LOMSTRUCTURE =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomStructure ");
+    public static final DitaClass LEARNINGMETA_D_LOMTECHREQUIREMENT =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomTechRequirement ");
+    public static final DitaClass LEARNINGMETA_D_LOMTYPICALAGERANGE =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomTypicalAgeRange ");
+    public static final DitaClass LEARNINGMETA_D_LOMTYPICALLEARNINGTIME =
+            DitaClass.getInstance("+ topic/data learningmeta-d/lomTypicalLearningTime ");
+    public static final DitaClass LEARNINGOBJECTMAP_LEARNINGOBJECTMAP =
+            DitaClass.getInstance("- map/map learningObjectMap/learningObjectMap ");
+    public static final DitaClass LEARNINGOVERVIEW_LEARNINGOVERVIEW =
+            DitaClass.getInstance("- topic/topic learningBase/learningBase learningOverview/learningOverview ");
+    public static final DitaClass LEARNINGOVERVIEW_LEARNINGOVERVIEWBODY =
+            DitaClass.getInstance("- topic/body learningBase/learningBasebody learningOverview/learningOverviewbody ");
+    public static final DitaClass LEARNINGPLAN_LCAGE =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcAge ");
+    public static final DitaClass LEARNINGPLAN_LCASSESSMENT =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcAssessment ");
+    public static final DitaClass LEARNINGPLAN_LCATTITUDE =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcAttitude ");
+    public static final DitaClass LEARNINGPLAN_LCBACKGROUND =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcBackground ");
+    public static final DitaClass LEARNINGPLAN_LCCIN =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcCIN ");
+    public static final DitaClass LEARNINGPLAN_LCCLASSROOM =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcClassroom ");
+    public static final DitaClass LEARNINGPLAN_LCCLIENT =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcClient ");
+    public static final DitaClass LEARNINGPLAN_LCCONSTRAINTS =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcConstraints ");
+    public static final DitaClass LEARNINGPLAN_LCDELIVDATE =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcDelivDate ");
+    public static final DitaClass LEARNINGPLAN_LCDELIVERY =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcDelivery ");
+    public static final DitaClass LEARNINGPLAN_LCDOWNLOADTIME =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcDownloadTime ");
+    public static final DitaClass LEARNINGPLAN_LCEDLEVEL =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcEdLevel ");
+    public static final DitaClass LEARNINGPLAN_LCFILESIZELIMITATIONS =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcFileSizeLimitations ");
+    public static final DitaClass LEARNINGPLAN_LCGAPANALYSIS =
+            DitaClass.getInstance("- topic/section learningBase/section learningPlan/lcGapAnalysis ");
+    public static final DitaClass LEARNINGPLAN_LCGAPITEM =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcGapItem ");
+    public static final DitaClass LEARNINGPLAN_LCGAPITEMDELTA =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcGapItemDelta ");
+    public static final DitaClass LEARNINGPLAN_LCGENERALDESCRIPTION =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcGeneralDescription ");
+    public static final DitaClass LEARNINGPLAN_LCGOALS =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcGoals ");
+    public static final DitaClass LEARNINGPLAN_LCGRAPHICS =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcGraphics ");
+    public static final DitaClass LEARNINGPLAN_LCHANDOUTS =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcHandouts ");
+    public static final DitaClass LEARNINGPLAN_LCINTERVENTION =
+            DitaClass.getInstance("- topic/section learningBase/section learningPlan/lcIntervention ");
+    public static final DitaClass LEARNINGPLAN_LCINTERVENTIONITEM =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcInterventionItem ");
+    public static final DitaClass LEARNINGPLAN_LCJTAITEM =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcJtaItem ");
+    public static final DitaClass LEARNINGPLAN_LCKNOWLEDGE =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcKnowledge ");
+    public static final DitaClass LEARNINGPLAN_LCLEARNSTRAT =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcLearnStrat ");
+    public static final DitaClass LEARNINGPLAN_LCLMS =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcLMS ");
+    public static final DitaClass LEARNINGPLAN_LCMODDATE =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcModDate ");
+    public static final DitaClass LEARNINGPLAN_LCMOTIVATION =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcMotivation ");
+    public static final DitaClass LEARNINGPLAN_LCNEEDS =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcNeeds ");
+    public static final DitaClass LEARNINGPLAN_LCNEEDSANALYSIS =
+            DitaClass.getInstance("- topic/section learningBase/section learningPlan/lcNeedsAnalysis ");
+    public static final DitaClass LEARNINGPLAN_LCNOLMS =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcNoLMS ");
+    public static final DitaClass LEARNINGPLAN_LCOJT =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcOJT ");
+    public static final DitaClass LEARNINGPLAN_LCORGANIZATIONAL =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcOrganizational ");
+    public static final DitaClass LEARNINGPLAN_LCORGCONSTRAINTS =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcOrgConstraints ");
+    public static final DitaClass LEARNINGPLAN_LCPLANAUDIENCE =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlanAudience ");
+    public static final DitaClass LEARNINGPLAN_LCPLANDESCRIP =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlanDescrip ");
+    public static final DitaClass LEARNINGPLAN_LCPLANOBJECTIVE =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcPlanObjective ");
+    public static final DitaClass LEARNINGPLAN_LCPLANPREREQS =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlanPrereqs ");
+    public static final DitaClass LEARNINGPLAN_LCPLANRESOURCES =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcPlanResources ");
+    public static final DitaClass LEARNINGPLAN_LCPLANSUBJECT =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlanSubject ");
+    public static final DitaClass LEARNINGPLAN_LCPLANTITLE =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlanTitle ");
+    public static final DitaClass LEARNINGPLAN_LCPLAYERS =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcPlayers ");
+    public static final DitaClass LEARNINGPLAN_LCPROCESSES =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcProcesses ");
+    public static final DitaClass LEARNINGPLAN_LCPROJECT =
+            DitaClass.getInstance("- topic/section learningBase/section learningPlan/lcProject ");
+    public static final DitaClass LEARNINGPLAN_LCRESOLUTION =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcResolution ");
+    public static final DitaClass LEARNINGPLAN_LCSECURITY =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcSecurity ");
+    public static final DitaClass LEARNINGPLAN_LCSKILLS =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcSkills ");
+    public static final DitaClass LEARNINGPLAN_LCSPECCHARS =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcSpecChars ");
+    public static final DitaClass LEARNINGPLAN_LCTASK =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcTask ");
+    public static final DitaClass LEARNINGPLAN_LCTASKITEM =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcTaskItem ");
+    public static final DitaClass LEARNINGPLAN_LCTECHNICAL =
+            DitaClass.getInstance("- topic/section learningBase/section learningPlan/lcTechnical ");
+    public static final DitaClass LEARNINGPLAN_LCVALUES =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcValues ");
+    public static final DitaClass LEARNINGPLAN_LCVIEWERS =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcViewers ");
+    public static final DitaClass LEARNINGPLAN_LCW3C =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcW3C ");
+    public static final DitaClass LEARNINGPLAN_LCWORKENV =
+            DitaClass.getInstance("- topic/fig learningBase/fig learningPlan/lcWorkEnv ");
+    public static final DitaClass LEARNINGPLAN_LCWORKENVDESCRIPTION =
+            DitaClass.getInstance("- topic/p learningBase/p learningPlan/lcWorkEnvDescription ");
+    public static final DitaClass LEARNINGPLAN_LEARNINGPLAN =
+            DitaClass.getInstance("- topic/topic learningBase/learningBase learningPlan/learningPlan ");
+    public static final DitaClass LEARNINGPLAN_LEARNINGPLANBODY =
+            DitaClass.getInstance("- topic/body learningBase/learningBasebody learningPlan/learningPlanbody ");
+    public static final DitaClass LEARNINGSUMMARY_LEARNINGSUMMARY =
+            DitaClass.getInstance("- topic/topic learningBase/learningBase learningSummary/learningSummary ");
+    public static final DitaClass LEARNINGSUMMARY_LEARNINGSUMMARYBODY =
+            DitaClass.getInstance("- topic/body learningBase/learningBasebody learningSummary/learningSummarybody ");
     public static final DitaClass MAP_ANCHOR = DitaClass.getInstance("- map/anchor ");
     public static final DitaClass MAP_LINKTEXT = DitaClass.getInstance("- map/linktext ");
     public static final DitaClass MAP_MAP = DitaClass.getInstance("- map/map ");
@@ -375,10 +597,12 @@ public final class Constants {
     public static final DitaClass MAPGROUP_D_ANCHORREF = DitaClass.getInstance("+ map/topicref mapgroup-d/anchorref ");
     public static final DitaClass MAPGROUP_D_KEYDEF = DitaClass.getInstance("+ map/topicref mapgroup-d/keydef ");
     public static final DitaClass MAPGROUP_D_MAPREF = DitaClass.getInstance("+ map/topicref mapgroup-d/mapref ");
-    public static final DitaClass MAPGROUP_D_TOPICGROUP = DitaClass.getInstance("+ map/topicref mapgroup-d/topicgroup ");
+    public static final DitaClass MAPGROUP_D_TOPICGROUP =
+            DitaClass.getInstance("+ map/topicref mapgroup-d/topicgroup ");
     public static final DitaClass MAPGROUP_D_TOPICHEAD = DitaClass.getInstance("+ map/topicref mapgroup-d/topichead ");
     public static final DitaClass MAPGROUP_D_TOPICSET = DitaClass.getInstance("+ map/topicref mapgroup-d/topicset ");
-    public static final DitaClass MAPGROUP_D_TOPICSETREF = DitaClass.getInstance("+ map/topicref mapgroup-d/topicsetref ");
+    public static final DitaClass MAPGROUP_D_TOPICSETREF =
+            DitaClass.getInstance("+ map/topicref mapgroup-d/topicsetref ");
     public static final DitaClass MARKUP_D_MARKUPNAME = DitaClass.getInstance("+ topic/keyword markup-d/markupname ");
     public static final DitaClass MATHML_D_MATHML = DitaClass.getInstance("+ topic/foreign mathml-d/mathml ");
     public static final DitaClass MATHML_D_MATHMLREF = DitaClass.getInstance("+ topic/xref mathml-d/mathmlref ");
@@ -410,47 +634,78 @@ public final class Constants {
     public static final DitaClass PR_D_VAR = DitaClass.getInstance("+ topic/ph pr-d/var ");
     public static final DitaClass REFERENCE_PROPDESC = DitaClass.getInstance("- topic/stentry reference/propdesc ");
     public static final DitaClass REFERENCE_PROPDESCHD = DitaClass.getInstance("- topic/stentry reference/propdeschd ");
-    public static final DitaClass REFERENCE_PROPERTIES = DitaClass.getInstance("- topic/simpletable reference/properties ");
+    public static final DitaClass REFERENCE_PROPERTIES =
+            DitaClass.getInstance("- topic/simpletable reference/properties ");
     public static final DitaClass REFERENCE_PROPERTY = DitaClass.getInstance("- topic/strow reference/property ");
     public static final DitaClass REFERENCE_PROPHEAD = DitaClass.getInstance("- topic/sthead reference/prophead ");
     public static final DitaClass REFERENCE_PROPTYPE = DitaClass.getInstance("- topic/stentry reference/proptype ");
     public static final DitaClass REFERENCE_PROPTYPEHD = DitaClass.getInstance("- topic/stentry reference/proptypehd ");
     public static final DitaClass REFERENCE_PROPVALUE = DitaClass.getInstance("- topic/stentry reference/propvalue ");
-    public static final DitaClass REFERENCE_PROPVALUEHD = DitaClass.getInstance("- topic/stentry reference/propvaluehd ");
+    public static final DitaClass REFERENCE_PROPVALUEHD =
+            DitaClass.getInstance("- topic/stentry reference/propvaluehd ");
     public static final DitaClass REFERENCE_REFBODY = DitaClass.getInstance("- topic/body reference/refbody ");
     public static final DitaClass REFERENCE_REFBODYDIV = DitaClass.getInstance("- topic/bodydiv reference/refbodydiv ");
     public static final DitaClass REFERENCE_REFERENCE = DitaClass.getInstance("- topic/topic reference/reference ");
     public static final DitaClass REFERENCE_REFSYN = DitaClass.getInstance("- topic/section reference/refsyn ");
-    public static final DitaClass RELMGMT_D_CHANGE_COMPLETED = DitaClass.getInstance("+ topic/data relmgmt-d/change-completed ");
-    public static final DitaClass RELMGMT_D_CHANGE_HISTORYLIST = DitaClass.getInstance("+ topic/metadata relmgmt-d/change-historylist ");
+    public static final DitaClass RELMGMT_D_CHANGE_COMPLETED =
+            DitaClass.getInstance("+ topic/data relmgmt-d/change-completed ");
+    public static final DitaClass RELMGMT_D_CHANGE_HISTORYLIST =
+            DitaClass.getInstance("+ topic/metadata relmgmt-d/change-historylist ");
     public static final DitaClass RELMGMT_D_CHANGE_ITEM = DitaClass.getInstance("+ topic/data relmgmt-d/change-item ");
-    public static final DitaClass RELMGMT_D_CHANGE_ORGANIZATION = DitaClass.getInstance("+ topic/data relmgmt-d/change-organization ");
-    public static final DitaClass RELMGMT_D_CHANGE_PERSON = DitaClass.getInstance("+ topic/data relmgmt-d/change-person ");
-    public static final DitaClass RELMGMT_D_CHANGE_REQUEST_ID = DitaClass.getInstance("+ topic/data relmgmt-d/change-request-id ");
-    public static final DitaClass RELMGMT_D_CHANGE_REQUEST_REFERENCE = DitaClass.getInstance("+ topic/data relmgmt-d/change-request-reference ");
-    public static final DitaClass RELMGMT_D_CHANGE_REQUEST_SYSTEM = DitaClass.getInstance("+ topic/data relmgmt-d/change-request-system ");
-    public static final DitaClass RELMGMT_D_CHANGE_REVISIONID = DitaClass.getInstance("+ topic/data relmgmt-d/change-revisionid ");
-    public static final DitaClass RELMGMT_D_CHANGE_STARTED = DitaClass.getInstance("+ topic/data relmgmt-d/change-started ");
-    public static final DitaClass RELMGMT_D_CHANGE_SUMMARY = DitaClass.getInstance("+ topic/data relmgmt-d/change-summary ");
-    public static final DitaClass SUBJECTSCHEME_ATTRIBUTEDEF = DitaClass.getInstance("- topic/data subjectScheme/attributedef ");
-    public static final DitaClass SUBJECTSCHEME_DEFAULTSUBJECT = DitaClass.getInstance("- map/topicref subjectScheme/defaultSubject ");
-    public static final DitaClass SUBJECTSCHEME_ELEMENTDEF = DitaClass.getInstance("- topic/data subjectScheme/elementdef ");
-    public static final DitaClass SUBJECTSCHEME_ENUMERATIONDEF = DitaClass.getInstance("- map/topicref subjectScheme/enumerationdef ");
-    public static final DitaClass SUBJECTSCHEME_HASINSTANCE = DitaClass.getInstance("- map/topicref subjectScheme/hasInstance ");
-    public static final DitaClass SUBJECTSCHEME_HASKIND = DitaClass.getInstance("- map/topicref subjectScheme/hasKind ");
-    public static final DitaClass SUBJECTSCHEME_HASNARROWER = DitaClass.getInstance("- map/topicref subjectScheme/hasNarrower ");
-    public static final DitaClass SUBJECTSCHEME_HASPART = DitaClass.getInstance("- map/topicref subjectScheme/hasPart ");
-    public static final DitaClass SUBJECTSCHEME_HASRELATED = DitaClass.getInstance("- map/topicref subjectScheme/hasRelated ");
-    public static final DitaClass SUBJECTSCHEME_RELATEDSUBJECTS = DitaClass.getInstance("- map/topicref subjectScheme/relatedSubjects ");
-    public static final DitaClass SUBJECTSCHEME_SCHEMEREF = DitaClass.getInstance("- map/topicref subjectScheme/schemeref ");
-    public static final DitaClass SUBJECTSCHEME_SUBJECTDEF = DitaClass.getInstance("- map/topicref subjectScheme/subjectdef ");
-    public static final DitaClass SUBJECTSCHEME_SUBJECTHEAD = DitaClass.getInstance("- map/topicref subjectScheme/subjectHead ");
-    public static final DitaClass SUBJECTSCHEME_SUBJECTHEADMETA = DitaClass.getInstance("- map/topicmeta subjectScheme/subjectHeadMeta ");
-    public static final DitaClass SUBJECTSCHEME_SUBJECTREL = DitaClass.getInstance("- map/relrow subjectScheme/subjectRel ");
-    public static final DitaClass SUBJECTSCHEME_SUBJECTRELHEADER = DitaClass.getInstance("- map/relrow subjectScheme/subjectRelHeader ");
-    public static final DitaClass SUBJECTSCHEME_SUBJECTRELTABLE = DitaClass.getInstance("- map/reltable subjectScheme/subjectRelTable ");
-    public static final DitaClass SUBJECTSCHEME_SUBJECTROLE = DitaClass.getInstance("- map/relcell subjectScheme/subjectRole ");
-    public static final DitaClass SUBJECTSCHEME_SUBJECTSCHEME = DitaClass.getInstance("- map/map subjectScheme/subjectScheme ");
+    public static final DitaClass RELMGMT_D_CHANGE_ORGANIZATION =
+            DitaClass.getInstance("+ topic/data relmgmt-d/change-organization ");
+    public static final DitaClass RELMGMT_D_CHANGE_PERSON =
+            DitaClass.getInstance("+ topic/data relmgmt-d/change-person ");
+    public static final DitaClass RELMGMT_D_CHANGE_REQUEST_ID =
+            DitaClass.getInstance("+ topic/data relmgmt-d/change-request-id ");
+    public static final DitaClass RELMGMT_D_CHANGE_REQUEST_REFERENCE =
+            DitaClass.getInstance("+ topic/data relmgmt-d/change-request-reference ");
+    public static final DitaClass RELMGMT_D_CHANGE_REQUEST_SYSTEM =
+            DitaClass.getInstance("+ topic/data relmgmt-d/change-request-system ");
+    public static final DitaClass RELMGMT_D_CHANGE_REVISIONID =
+            DitaClass.getInstance("+ topic/data relmgmt-d/change-revisionid ");
+    public static final DitaClass RELMGMT_D_CHANGE_STARTED =
+            DitaClass.getInstance("+ topic/data relmgmt-d/change-started ");
+    public static final DitaClass RELMGMT_D_CHANGE_SUMMARY =
+            DitaClass.getInstance("+ topic/data relmgmt-d/change-summary ");
+    public static final DitaClass SUBJECTSCHEME_ATTRIBUTEDEF =
+            DitaClass.getInstance("- topic/data subjectScheme/attributedef ");
+    public static final DitaClass SUBJECTSCHEME_DEFAULTSUBJECT =
+            DitaClass.getInstance("- map/topicref subjectScheme/defaultSubject ");
+    public static final DitaClass SUBJECTSCHEME_ELEMENTDEF =
+            DitaClass.getInstance("- topic/data subjectScheme/elementdef ");
+    public static final DitaClass SUBJECTSCHEME_ENUMERATIONDEF =
+            DitaClass.getInstance("- map/topicref subjectScheme/enumerationdef ");
+    public static final DitaClass SUBJECTSCHEME_HASINSTANCE =
+            DitaClass.getInstance("- map/topicref subjectScheme/hasInstance ");
+    public static final DitaClass SUBJECTSCHEME_HASKIND =
+            DitaClass.getInstance("- map/topicref subjectScheme/hasKind ");
+    public static final DitaClass SUBJECTSCHEME_HASNARROWER =
+            DitaClass.getInstance("- map/topicref subjectScheme/hasNarrower ");
+    public static final DitaClass SUBJECTSCHEME_HASPART =
+            DitaClass.getInstance("- map/topicref subjectScheme/hasPart ");
+    public static final DitaClass SUBJECTSCHEME_HASRELATED =
+            DitaClass.getInstance("- map/topicref subjectScheme/hasRelated ");
+    public static final DitaClass SUBJECTSCHEME_RELATEDSUBJECTS =
+            DitaClass.getInstance("- map/topicref subjectScheme/relatedSubjects ");
+    public static final DitaClass SUBJECTSCHEME_SCHEMEREF =
+            DitaClass.getInstance("- map/topicref subjectScheme/schemeref ");
+    public static final DitaClass SUBJECTSCHEME_SUBJECTDEF =
+            DitaClass.getInstance("- map/topicref subjectScheme/subjectdef ");
+    public static final DitaClass SUBJECTSCHEME_SUBJECTHEAD =
+            DitaClass.getInstance("- map/topicref subjectScheme/subjectHead ");
+    public static final DitaClass SUBJECTSCHEME_SUBJECTHEADMETA =
+            DitaClass.getInstance("- map/topicmeta subjectScheme/subjectHeadMeta ");
+    public static final DitaClass SUBJECTSCHEME_SUBJECTREL =
+            DitaClass.getInstance("- map/relrow subjectScheme/subjectRel ");
+    public static final DitaClass SUBJECTSCHEME_SUBJECTRELHEADER =
+            DitaClass.getInstance("- map/relrow subjectScheme/subjectRelHeader ");
+    public static final DitaClass SUBJECTSCHEME_SUBJECTRELTABLE =
+            DitaClass.getInstance("- map/reltable subjectScheme/subjectRelTable ");
+    public static final DitaClass SUBJECTSCHEME_SUBJECTROLE =
+            DitaClass.getInstance("- map/relcell subjectScheme/subjectRole ");
+    public static final DitaClass SUBJECTSCHEME_SUBJECTSCHEME =
+            DitaClass.getInstance("- map/map subjectScheme/subjectScheme ");
     public static final DitaClass SVG_D_SVG_CONTAINER = DitaClass.getInstance("+ topic/foreign svg-d/svg-container ");
     public static final DitaClass SVG_D_SVGREF = DitaClass.getInstance("+ topic/xref svg-d/svgref ");
     public static final DitaClass SW_D_CMDNAME = DitaClass.getInstance("+ topic/keyword sw-d/cmdname ");
@@ -462,20 +717,26 @@ public final class Constants {
     public static final DitaClass SW_D_USERINPUT = DitaClass.getInstance("+ topic/ph sw-d/userinput ");
     public static final DitaClass SW_D_VARNAME = DitaClass.getInstance("+ topic/keyword sw-d/varname ");
     public static final DitaClass SYNTAX_D_DELIM = DitaClass.getInstance("+ topic/ph syntaxdiagram-d/delim ");
-    public static final DitaClass SYNTAX_D_FRAGMENT = DitaClass.getInstance("+ topic/figgroup syntaxdiagram-d/fragment ");
+    public static final DitaClass SYNTAX_D_FRAGMENT =
+            DitaClass.getInstance("+ topic/figgroup syntaxdiagram-d/fragment ");
     public static final DitaClass SYNTAX_D_FRAGREF = DitaClass.getInstance("+ topic/xref syntaxdiagram-d/fragref ");
-    public static final DitaClass SYNTAX_D_GROUPCHOICE = DitaClass.getInstance("+ topic/figgroup syntaxdiagram-d/groupchoice ");
-    public static final DitaClass SYNTAX_D_GROUPCOMP = DitaClass.getInstance("+ topic/figgroup syntaxdiagram-d/groupcomp ");
-    public static final DitaClass SYNTAX_D_GROUPSEQ = DitaClass.getInstance("+ topic/figgroup syntaxdiagram-d/groupseq ");
+    public static final DitaClass SYNTAX_D_GROUPCHOICE =
+            DitaClass.getInstance("+ topic/figgroup syntaxdiagram-d/groupchoice ");
+    public static final DitaClass SYNTAX_D_GROUPCOMP =
+            DitaClass.getInstance("+ topic/figgroup syntaxdiagram-d/groupcomp ");
+    public static final DitaClass SYNTAX_D_GROUPSEQ =
+            DitaClass.getInstance("+ topic/figgroup syntaxdiagram-d/groupseq ");
     public static final DitaClass SYNTAX_D_KWD = DitaClass.getInstance("+ topic/keyword syntaxdiagram-d/kwd ");
     public static final DitaClass SYNTAX_D_OPER = DitaClass.getInstance("+ topic/ph syntaxdiagram-d/oper ");
     public static final DitaClass SYNTAX_D_REPSEP = DitaClass.getInstance("+ topic/ph syntaxdiagram-d/repsep ");
     public static final DitaClass SYNTAX_D_SEP = DitaClass.getInstance("+ topic/ph syntaxdiagram-d/sep ");
     public static final DitaClass SYNTAX_D_SYNBLK = DitaClass.getInstance("+ topic/figgroup syntaxdiagram-d/synblk ");
     public static final DitaClass SYNTAX_D_SYNNOTE = DitaClass.getInstance("+ topic/fn syntaxdiagram-d/synnote ");
-    public static final DitaClass SYNTAX_D_SYNNOTEREF = DitaClass.getInstance("+ topic/xref syntaxdiagram-d/synnoteref ");
+    public static final DitaClass SYNTAX_D_SYNNOTEREF =
+            DitaClass.getInstance("+ topic/xref syntaxdiagram-d/synnoteref ");
     public static final DitaClass SYNTAX_D_SYNPH = DitaClass.getInstance("+ topic/ph syntaxdiagram-d/synph ");
-    public static final DitaClass SYNTAX_D_SYNTAXDIAGRAM = DitaClass.getInstance("+ topic/fig syntaxdiagram-d/syntaxdiagram ");
+    public static final DitaClass SYNTAX_D_SYNTAXDIAGRAM =
+            DitaClass.getInstance("+ topic/fig syntaxdiagram-d/syntaxdiagram ");
     public static final DitaClass SYNTAX_D_VAR = DitaClass.getInstance("+ topic/ph syntaxdiagram-d/var ");
     public static final DitaClass TASK_CHDESC = DitaClass.getInstance("- topic/stentry task/chdesc ");
     public static final DitaClass TASK_CHDESCHD = DitaClass.getInstance("- topic/stentry task/chdeschd ");
@@ -498,25 +759,33 @@ public final class Constants {
     public static final DitaClass TASK_STEPS_INFORMAL = DitaClass.getInstance("- topic/section task/steps-informal ");
     public static final DitaClass TASK_STEPS_UNORDERED = DitaClass.getInstance("- topic/ul task/steps-unordered ");
     public static final DitaClass TASK_STEPSECTION = DitaClass.getInstance("- topic/li task/stepsection ");
-    public static final DitaClass TASK_STEPTROUBLESHOOTING = DitaClass.getInstance("- topic/itemgroup task/steptroubleshooting ");
+    public static final DitaClass TASK_STEPTROUBLESHOOTING =
+            DitaClass.getInstance("- topic/itemgroup task/steptroubleshooting ");
     public static final DitaClass TASK_STEPXMP = DitaClass.getInstance("- topic/itemgroup task/stepxmp ");
     public static final DitaClass TASK_SUBSTEP = DitaClass.getInstance("- topic/li task/substep ");
     public static final DitaClass TASK_SUBSTEPS = DitaClass.getInstance("- topic/ol task/substeps ");
     public static final DitaClass TASK_TASK = DitaClass.getInstance("- topic/topic task/task ");
     public static final DitaClass TASK_TASKBODY = DitaClass.getInstance("- topic/body task/taskbody ");
-    public static final DitaClass TASK_TASKTROUBLESHOOTING = DitaClass.getInstance("- topic/section task/tasktroubleshooting ");
+    public static final DitaClass TASK_TASKTROUBLESHOOTING =
+            DitaClass.getInstance("- topic/section task/tasktroubleshooting ");
     public static final DitaClass TASK_TUTORIALINFO = DitaClass.getInstance("- topic/itemgroup task/tutorialinfo ");
-    public static final DitaClass TASKREQ_D_CLOSEREQS = DitaClass.getInstance("+ topic/section task/postreq taskreq-d/closereqs ");
+    public static final DitaClass TASKREQ_D_CLOSEREQS =
+            DitaClass.getInstance("+ topic/section task/postreq taskreq-d/closereqs ");
     public static final DitaClass TASKREQ_D_ESTTIME = DitaClass.getInstance("+ topic/li task/li taskreq-d/esttime ");
     public static final DitaClass TASKREQ_D_NOCONDS = DitaClass.getInstance("+ topic/li task/li taskreq-d/noconds ");
     public static final DitaClass TASKREQ_D_NOSAFETY = DitaClass.getInstance("+ topic/li task/li taskreq-d/nosafety ");
-    public static final DitaClass TASKREQ_D_NOSPARES = DitaClass.getInstance("+ topic/data task/data taskreq-d/nospares ");
-    public static final DitaClass TASKREQ_D_NOSUPEQ = DitaClass.getInstance("+ topic/data task/data taskreq-d/nosupeq ");
-    public static final DitaClass TASKREQ_D_NOSUPPLY = DitaClass.getInstance("+ topic/data task/data taskreq-d/nosupply ");
+    public static final DitaClass TASKREQ_D_NOSPARES =
+            DitaClass.getInstance("+ topic/data task/data taskreq-d/nospares ");
+    public static final DitaClass TASKREQ_D_NOSUPEQ =
+            DitaClass.getInstance("+ topic/data task/data taskreq-d/nosupeq ");
+    public static final DitaClass TASKREQ_D_NOSUPPLY =
+            DitaClass.getInstance("+ topic/data task/data taskreq-d/nosupply ");
     public static final DitaClass TASKREQ_D_PERSCAT = DitaClass.getInstance("+ topic/li task/li taskreq-d/perscat ");
     public static final DitaClass TASKREQ_D_PERSKILL = DitaClass.getInstance("+ topic/li task/li taskreq-d/perskill ");
-    public static final DitaClass TASKREQ_D_PERSONNEL = DitaClass.getInstance("+ topic/li task/li taskreq-d/personnel ");
-    public static final DitaClass TASKREQ_D_PRELREQS = DitaClass.getInstance("+ topic/section task/prereq taskreq-d/prelreqs ");
+    public static final DitaClass TASKREQ_D_PERSONNEL =
+            DitaClass.getInstance("+ topic/li task/li taskreq-d/personnel ");
+    public static final DitaClass TASKREQ_D_PRELREQS =
+            DitaClass.getInstance("+ topic/section task/prereq taskreq-d/prelreqs ");
     public static final DitaClass TASKREQ_D_REQCOND = DitaClass.getInstance("+ topic/li task/li taskreq-d/reqcond ");
     public static final DitaClass TASKREQ_D_REQCONDS = DitaClass.getInstance("+ topic/ul task/ul taskreq-d/reqconds ");
     public static final DitaClass TASKREQ_D_REQCONTP = DitaClass.getInstance("+ topic/li task/li taskreq-d/reqcontp ");
@@ -639,13 +908,20 @@ public final class Constants {
     public static final DitaClass TOPIC_VRM = DitaClass.getInstance("- topic/vrm ");
     public static final DitaClass TOPIC_VRMLIST = DitaClass.getInstance("- topic/vrmlist ");
     public static final DitaClass TOPIC_XREF = DitaClass.getInstance("- topic/xref ");
-    public static final DitaClass TROUBLESHOOTING_CAUSE = DitaClass.getInstance("- topic/section troubleshooting/cause ");
-    public static final DitaClass TROUBLESHOOTING_CONDITION = DitaClass.getInstance("- topic/section troubleshooting/condition ");
-    public static final DitaClass TROUBLESHOOTING_REMEDY = DitaClass.getInstance("- topic/section troubleshooting/remedy ");
-    public static final DitaClass TROUBLESHOOTING_RESPONSIBLEPARTY = DitaClass.getInstance("- topic/p troubleshooting/responsibleParty ");
-    public static final DitaClass TROUBLESHOOTING_TROUBLEBODY = DitaClass.getInstance("- topic/body troubleshooting/troublebody ");
-    public static final DitaClass TROUBLESHOOTING_TROUBLESHOOTING = DitaClass.getInstance("- topic/topic troubleshooting/troubleshooting ");
-    public static final DitaClass TROUBLESHOOTING_TROUBLESOLUTION = DitaClass.getInstance("- topic/bodydiv troubleshooting/troubleSolution ");
+    public static final DitaClass TROUBLESHOOTING_CAUSE =
+            DitaClass.getInstance("- topic/section troubleshooting/cause ");
+    public static final DitaClass TROUBLESHOOTING_CONDITION =
+            DitaClass.getInstance("- topic/section troubleshooting/condition ");
+    public static final DitaClass TROUBLESHOOTING_REMEDY =
+            DitaClass.getInstance("- topic/section troubleshooting/remedy ");
+    public static final DitaClass TROUBLESHOOTING_RESPONSIBLEPARTY =
+            DitaClass.getInstance("- topic/p troubleshooting/responsibleParty ");
+    public static final DitaClass TROUBLESHOOTING_TROUBLEBODY =
+            DitaClass.getInstance("- topic/body troubleshooting/troublebody ");
+    public static final DitaClass TROUBLESHOOTING_TROUBLESHOOTING =
+            DitaClass.getInstance("- topic/topic troubleshooting/troubleshooting ");
+    public static final DitaClass TROUBLESHOOTING_TROUBLESOLUTION =
+            DitaClass.getInstance("- topic/bodydiv troubleshooting/troubleSolution ");
     public static final DitaClass UI_D_MENUCASCADE = DitaClass.getInstance("+ topic/ph ui-d/menucascade ");
     public static final DitaClass UI_D_SCREEN = DitaClass.getInstance("+ topic/pre ui-d/screen ");
     public static final DitaClass UI_D_SHORTCUT = DitaClass.getInstance("+ topic/keyword ui-d/shortcut ");
@@ -656,32 +932,45 @@ public final class Constants {
     public static final DitaClass UT_D_IMAGEMAP = DitaClass.getInstance("+ topic/fig ut-d/imagemap ");
     public static final DitaClass UT_D_SHAPE = DitaClass.getInstance("+ topic/keyword ut-d/shape ");
     public static final DitaClass UT_D_SORT_AS = DitaClass.getInstance("+ topic/data ut-d/sort-as ");
-    public static final DitaClass XML_D_NUMCHARREF = DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/numcharref ");
-    public static final DitaClass XML_D_PARAMETERENTITY = DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/parameterentity ");
-    public static final DitaClass XML_D_TEXTENTITY = DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/textentity ");
-    public static final DitaClass XML_D_XMLATT = DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/xmlatt ");
-    public static final DitaClass XML_D_XMLELEMENT = DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/xmlelement ");
-    public static final DitaClass XML_D_XMLNSNAME = DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/xmlnsname ");
-    public static final DitaClass XML_D_XMLPI = DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/xmlpi ");
+    public static final DitaClass XML_D_NUMCHARREF =
+            DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/numcharref ");
+    public static final DitaClass XML_D_PARAMETERENTITY =
+            DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/parameterentity ");
+    public static final DitaClass XML_D_TEXTENTITY =
+            DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/textentity ");
+    public static final DitaClass XML_D_XMLATT =
+            DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/xmlatt ");
+    public static final DitaClass XML_D_XMLELEMENT =
+            DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/xmlelement ");
+    public static final DitaClass XML_D_XMLNSNAME =
+            DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/xmlnsname ");
+    public static final DitaClass XML_D_XMLPI =
+            DitaClass.getInstance("+ topic/keyword markup-d/markupname xml-d/xmlpi ");
     public static final DitaClass XNAL_D_ADDRESSDETAILS = DitaClass.getInstance("+ topic/ph xnal-d/addressdetails ");
-    public static final DitaClass XNAL_D_ADMINISTRATIVEAREA = DitaClass.getInstance("+ topic/ph xnal-d/administrativearea ");
-    public static final DitaClass XNAL_D_AUTHORINFORMATION = DitaClass.getInstance("+ topic/author xnal-d/authorinformation ");
+    public static final DitaClass XNAL_D_ADMINISTRATIVEAREA =
+            DitaClass.getInstance("+ topic/ph xnal-d/administrativearea ");
+    public static final DitaClass XNAL_D_AUTHORINFORMATION =
+            DitaClass.getInstance("+ topic/author xnal-d/authorinformation ");
     public static final DitaClass XNAL_D_CONTACTNUMBER = DitaClass.getInstance("+ topic/data xnal-d/contactnumber ");
     public static final DitaClass XNAL_D_CONTACTNUMBERS = DitaClass.getInstance("+ topic/data xnal-d/contactnumbers ");
     public static final DitaClass XNAL_D_COUNTRY = DitaClass.getInstance("+ topic/ph xnal-d/country ");
     public static final DitaClass XNAL_D_EMAILADDRESS = DitaClass.getInstance("+ topic/data xnal-d/emailaddress ");
     public static final DitaClass XNAL_D_EMAILADDRESSES = DitaClass.getInstance("+ topic/data xnal-d/emailaddresses ");
     public static final DitaClass XNAL_D_FIRSTNAME = DitaClass.getInstance("+ topic/data xnal-d/firstname ");
-    public static final DitaClass XNAL_D_GENERATIONIDENTIFIER = DitaClass.getInstance("+ topic/data xnal-d/generationidentifier ");
+    public static final DitaClass XNAL_D_GENERATIONIDENTIFIER =
+            DitaClass.getInstance("+ topic/data xnal-d/generationidentifier ");
     public static final DitaClass XNAL_D_HONORIFIC = DitaClass.getInstance("+ topic/data xnal-d/honorific ");
     public static final DitaClass XNAL_D_LASTNAME = DitaClass.getInstance("+ topic/data xnal-d/lastname ");
     public static final DitaClass XNAL_D_LOCALITY = DitaClass.getInstance("+ topic/ph xnal-d/locality ");
     public static final DitaClass XNAL_D_LOCALITYNAME = DitaClass.getInstance("+ topic/ph xnal-d/localityname ");
     public static final DitaClass XNAL_D_MIDDLENAME = DitaClass.getInstance("+ topic/data xnal-d/middlename ");
     public static final DitaClass XNAL_D_NAMEDETAILS = DitaClass.getInstance("+ topic/data xnal-d/namedetails ");
-    public static final DitaClass XNAL_D_ORGANIZATIONINFO = DitaClass.getInstance("+ topic/data xnal-d/organizationinfo ");
-    public static final DitaClass XNAL_D_ORGANIZATIONNAME = DitaClass.getInstance("+ topic/ph xnal-d/organizationname ");
-    public static final DitaClass XNAL_D_ORGANIZATIONNAMEDETAILS = DitaClass.getInstance("+ topic/ph xnal-d/organizationnamedetails ");
+    public static final DitaClass XNAL_D_ORGANIZATIONINFO =
+            DitaClass.getInstance("+ topic/data xnal-d/organizationinfo ");
+    public static final DitaClass XNAL_D_ORGANIZATIONNAME =
+            DitaClass.getInstance("+ topic/ph xnal-d/organizationname ");
+    public static final DitaClass XNAL_D_ORGANIZATIONNAMEDETAILS =
+            DitaClass.getInstance("+ topic/ph xnal-d/organizationnamedetails ");
     public static final DitaClass XNAL_D_OTHERINFO = DitaClass.getInstance("+ topic/data xnal-d/otherinfo ");
     public static final DitaClass XNAL_D_PERSONINFO = DitaClass.getInstance("+ topic/data xnal-d/personinfo ");
     public static final DitaClass XNAL_D_PERSONNAME = DitaClass.getInstance("+ topic/data xnal-d/personname ");
@@ -690,15 +979,20 @@ public final class Constants {
     public static final DitaClass XNAL_D_URL = DitaClass.getInstance("+ topic/data xnal-d/url ");
     public static final DitaClass XNAL_D_URLS = DitaClass.getInstance("+ topic/data xnal-d/urls ");
 
-    public static final DitaClass SUBMAP = DitaClass.getInstance("+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ");
-    public static final DitaClass DITA_OT_D_KEYDEF = DitaClass.getInstance("+ map/topicref mapgroup-d/keydef ditaot-d/keydef ");
-    public static final DitaClass DITA_OT_D_DITAVAL_STARTPROP = DitaClass.getInstance("+ topic/foreign ditaot-d/ditaval-startprop ");
-    public static final DitaClass DITA_OT_D_DITAVAL_ENDPROP = DitaClass.getInstance("+ topic/foreign ditaot-d/ditaval-endprop ");
+    public static final DitaClass SUBMAP =
+            DitaClass.getInstance("+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ");
+    public static final DitaClass DITA_OT_D_KEYDEF =
+            DitaClass.getInstance("+ map/topicref mapgroup-d/keydef ditaot-d/keydef ");
+    public static final DitaClass DITA_OT_D_DITAVAL_STARTPROP =
+            DitaClass.getInstance("+ topic/foreign ditaot-d/ditaval-startprop ");
+    public static final DitaClass DITA_OT_D_DITAVAL_ENDPROP =
+            DitaClass.getInstance("+ topic/foreign ditaot-d/ditaval-endprop ");
 
     /**maplinks element.*/
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
     /**prop element.*/
     public static final String ELEMENT_NAME_PROP = "prop";
+
     public static final String ELEMENT_NAME_REVPROP = "revprop";
     /**map element.*/
     public static final String ELEMENT_NAME_ACTION = "action";
@@ -708,6 +1002,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_ALIGN = "align";
     /**conref attribute.*/
     public static final String ATTRIBUTE_NAME_CONREF = "conref";
+
     public static final String ATTRIBUTE_NAME_CONREFEND = "conrefend";
     /**href attribute.*/
     public static final String ATTRIBUTE_NAME_HREF = "href";
@@ -721,6 +1016,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_LOCKTITLE_VALUE_YES = "yes";
     /**format attribute.*/
     public static final String ATTRIBUTE_NAME_FORMAT = "format";
+
     public static final String ATTRIBUTE_NAME_ENCODING = "encoding";
     public static final String ATTRIBUTE_NAME_PARSE = "parse";
     /**charset attribute.*/
@@ -747,6 +1043,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_XML_LANG = "xml:lang";
     /**domains attribute.*/
     public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
+
     public static final String ATTRIBUTE_NAME_SPECIALIZATIONS = "specializations";
     /**props attribute.*/
     public static final String ATTRIBUTE_NAME_PROPS = "props";
@@ -758,9 +1055,11 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_PRODUCT = "product";
     /**otherprops attribute.*/
     public static final String ATTRIBUTE_NAME_OTHERPROPS = "otherprops";
+
     public static final String ATTRIBUTE_NAME_OUTPUTCLASS = "outputclass";
     /**scope attribute.*/
     public static final String ATTRIBUTE_NAME_REV = "rev";
+
     public static final String ATTRIBUTE_NAME_SCOPE = "scope";
     /**type attribute.*/
     public static final String ATTRIBUTE_NAME_TYPE = "type";
@@ -772,6 +1071,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_DATA = "data";
     /**codebase attribute.*/
     public static final String ATTRIBUTE_NAME_CODEBASE = "codebase";
+
     public static final String ATTRIBUTE_NAME_ARCHIVE = "archive";
     public static final String ATTRIBUTE_NAME_CLASSID = "classid";
     /**imageref attribute.*/
@@ -787,7 +1087,8 @@ public final class Constants {
     /**keyref attribute.*/
     public static final String ATTRIBUTE_NAME_KEYREF = "keyref";
     /**conkeyref attribute.*/
-    public static final String ATTRIBUTE_NAME_CONKEYREF ="conkeyref";
+    public static final String ATTRIBUTE_NAME_CONKEYREF = "conkeyref";
+
     public static final String ATTRIBUTE_NAME_ARCHIVEKEYREFS = "archivekeyrefs";
     public static final String ATTRIBUTE_NAME_CLASSIDKEYREF = "classidkeyref";
     public static final String ATTRIBUTE_NAME_CODEBASEKEYREF = "codebasekeyref";
@@ -806,9 +1107,11 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_TOC = "toc";
     /**print attribute.*/
     public static final String ATTRIBUTE_NAME_PRINT = "print";
+
     public static final String ATTRIBUTE_NAME_DELIVERYTARGET = "deliveryTarget";
     /**cascade attribute.*/
     public static final String ATTRIBUTE_NAME_CASCADE = "cascade";
+
     public static final String ATTRIBUTE_NAME_COLS = "cols";
     public static final String ATTRIBUTE_NAME_VALUE = "value";
     public static final String ATTRIBUTE_NAME_VALUETYPE = "valuetype";
@@ -853,7 +1156,7 @@ public final class Constants {
 
     /** Constant for generated property file name(catalog-dita.xml).*/
     public static final String FILE_NAME_CATALOG = "catalog-dita.xml";
-    //store the scheme files refered by a scheme file in the form of Map<String Set<String>>
+    // store the scheme files refered by a scheme file in the form of Map<String Set<String>>
     /** Constant for generated property file name(subrelation.xml).*/
     public static final String FILE_NAME_SUBJECT_RELATION = "subrelation.xml";
     /** Constant for generated DITAVAL file name(ditaot.generated.ditaval).*/
@@ -862,12 +1165,14 @@ public final class Constants {
     /** Property name for input file system path. Deprecated since 2.2 */
     @Deprecated
     public static final String INPUT_DITAMAP = "user.input.file";
+
     public static final String INPUT_DITAMAP_URI = "user.input.file.uri";
     /** Property name for input file list file list file, i.e. file which points to a file which points to the input file */
     public static final String INPUT_DITAMAP_LIST_FILE_LIST = "user.input.file.listfile";
     /** Property name for input directory system path. Deprecated since 2.2 */
     @Deprecated
     public static final String INPUT_DIR = "user.input.dir";
+
     public static final String INPUT_DIR_URI = "user.input.dir.uri";
     /** Property name for copy-to target2sourcemap list file. Deprecated since 2.3 */
     @Deprecated
@@ -881,6 +1186,7 @@ public final class Constants {
     public static final String ANT_INVOKER_PARAM_BASEDIR = "basedir";
     /**Constants for common params used in ant invoker(inputmap).*/
     public static final String ANT_INVOKER_PARAM_INPUTMAP = "inputmap";
+
     public static final String ANT_INVOKER_PARAM_RESOURCES = "resources";
     /**Constants for common params used in ant invoker(ditaval).*/
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";
@@ -919,6 +1225,7 @@ public final class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP = "onlytopicinmap";
     /**Constants for extensive params used in ant invoker(crawl).*/
     public static final String ANT_INVOKER_EXT_PARAM_CRAWL = "crawl";
+
     public static final String ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_MAP = "map";
     public static final String ANT_INVOKER_EXT_PARAM_CRAWL_VALUE_TOPIC = "topic";
     /**Constants for extensive params used in ant invoker(validate).*/
@@ -927,6 +1234,7 @@ public final class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_OUTPUTDIR = "outputdir";
     /**Constants for extensive params used in ant invoker(gramcache).*/
     public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE = "gramcache";
+
     public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID = "setsystemid";
     public static final String ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE = "force-unique";
     public static final String ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR = "generate-debug-attributes";
@@ -939,7 +1247,7 @@ public final class Constants {
     /**OS relevant constants(windows).*/
     public static final String OS_NAME_WINDOWS = "windows";
 
-    //Misc string constants used in this toolkit.
+    // Misc string constants used in this toolkit.
 
     /**STRING_EMPTY. Deprecated since 3.0 */
     @Deprecated
@@ -972,7 +1280,7 @@ public final class Constants {
     /**COLON.*/
     public static final String COLON = ":";
     /**DOT.*/
-    public static final String DOT= ".";
+    public static final String DOT = ".";
     /**DOUBLE_BACK_SLASH. Deprecated since 3.0 */
     @Deprecated
     public static final String DOUBLE_BACK_SLASH = "\\\\";
@@ -1020,6 +1328,7 @@ public final class Constants {
     public static final String ATTR_FORMAT_VALUE_DITA = "dita";
     /**ATTR_FORMAT_VALUE_DITAMAP.*/
     public static final String ATTR_FORMAT_VALUE_DITAMAP = "ditamap";
+
     public static final String ATTR_FORMAT_VALUE_DITAVAL = "ditaval";
     public static final String ATTR_FORMAT_VALUE_IMAGE = "image";
     public static final String ATTR_FORMAT_VALUE_HTML = "html";
@@ -1030,7 +1339,9 @@ public final class Constants {
     /**ATTRIBUTE_PREFIX_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_PREFIX_DITAARCHVERSION = "ditaarch";
     /**ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION.*/
-    public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = XMLNS_ATTRIBUTE + ":" + ATTRIBUTE_PREFIX_DITAARCHVERSION;
+    public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION =
+            XMLNS_ATTRIBUTE + ":" + ATTRIBUTE_PREFIX_DITAARCHVERSION;
+
     public static final String DITA_NAMESPACE = "http://dita.oasis-open.org/architecture/2005/";
     public static final String DITA_OT_NS_PREFIX = "dita-ot";
     public static final String DITA_OT_NAMESPACE = "http://dita-ot.sourceforge.net";
@@ -1040,7 +1351,6 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_NONAMESPACESCHEMALOCATION = XSI_NS_PREFIX + ":noNamespaceSchemaLocation";
     /**dita-ot:orig-href.*/
     public static final String ATTRIBUTE_NAME_DITA_OT_ORIG_HREF = DITA_OT_NS_PREFIX + ":" + "orig-href";
-
 
     /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE. Deprecated since 3.0 */
     @Deprecated
@@ -1065,7 +1375,7 @@ public final class Constants {
     public static final String ATTR_CONACTION_VALUE_PUSHBEFORE = "pushbefore";
     /** Conaction push replace value */
     public static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
-    
+
     /** Standard token for attribute to be ignored due to conref */
     public static final String ATTR_VALUE_DITA_USE_CONREF_TARGET = "-dita-use-conref-target";
 
@@ -1073,9 +1383,10 @@ public final class Constants {
     public static final String DEFAULT_ACTION = "default";
     /**chunk attribute.*/
     public static final String ATTRIBUTE_NAME_CHUNK = "chunk";
-    
+
     /** constants for args.draft argument value. **/
     public static final String ARGS_DRAFT_YES = "yes";
+
     public static final String ARGS_DRAFT_NO = "no";
 
     /**constants for indexterm prefix(See).
@@ -1117,6 +1428,7 @@ public final class Constants {
     public static final String CONF_SUPPORTED_RESOURCE_EXTENSIONS = "supported_resource_extensions";
     /** Property name for print transtypes. */
     public static final String CONF_PRINT_TRANSTYPES = "print_transtypes";
+
     public static final String CONF_TRANSTYPES = "transtypes";
     /** Property name for template files. */
     public static final String CONF_TEMPLATES = "templates";
@@ -1127,26 +1439,28 @@ public final class Constants {
     public static final String ANT_REFERENCE_JOB = "job";
     /** Project reference name for XML utils object. */
     public static final String ANT_REFERENCE_XML_UTILS = "xmlutils";
+
     public static final String ANT_REFERENCE_STORE = "store";
     /** Temporary directory Ant property name. */
     public static final String ANT_TEMP_DIR = "dita.temp.dir";
 
     /** OASIS catalog file namespace. */
     public static final String OASIS_CATALOG_NAMESPACE = "urn:oasis:names:tc:entity:xmlns:xml:catalog";
-    
+
     /** Deprecated since 2.3 */
     @Deprecated
     public static final String PI_PATH2PROJ_TARGET = "path2project";
+
     public static final String PI_PATH2PROJ_TARGET_URI = "path2project-uri";
     public static final String PI_PATH2ROOTMAP_TARGET_URI = "path2rootmap-uri";
     /** Deprecated since 2.3 */
     @Deprecated
     public static final String PI_WORKDIR_TARGET = "workdir";
+
     public static final String PI_WORKDIR_TARGET_URI = "workdir-uri";
 
     /**
      * Instances should NOT be constructed in standard programming.
      */
-    private Constants() {
-    }
+    private Constants() {}
 }

@@ -8,6 +8,21 @@
 
 package org.dita.dost.module.reader;
 
+import static net.sf.saxon.s9api.streams.Steps.descendant;
+import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.ancestors;
+import static org.dita.dost.util.XMLUtils.toList;
+import static org.dita.dost.writer.DitaWriterFilter.ATTRIBUTE_NAME_ORIG_FORMAT;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
@@ -30,22 +45,6 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-
-import static net.sf.saxon.s9api.streams.Steps.descendant;
-import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.DitaUtils.isLocalScope;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.ancestors;
-import static org.dita.dost.util.XMLUtils.toList;
-import static org.dita.dost.writer.DitaWriterFilter.ATTRIBUTE_NAME_ORIG_FORMAT;
-
 /**
  * ModuleElem for reading and serializing topics into temporary directory.
  *
@@ -61,7 +60,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
     public TopicReaderModule() {
         super();
-        formatFilter = v -> !(Objects.equals(v, ATTR_FORMAT_VALUE_DITAMAP) || Objects.equals(v, ATTR_FORMAT_VALUE_DITAVAL));
+        formatFilter =
+                v -> !(Objects.equals(v, ATTR_FORMAT_VALUE_DITAMAP) || Objects.equals(v, ATTR_FORMAT_VALUE_DITAVAL));
     }
 
     @Override
@@ -98,7 +98,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
                 subjectSchemeReader.setLogger(logger);
                 subjectSchemeReader.setJob(job);
                 logger.debug("Loading subject schemes");
-                final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
+                final List<Element> subjectSchemes =
+                        toList(doc.getDocumentElement().getElementsByTagName("*"));
                 subjectSchemes.stream()
                         .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
                         .forEach(enumerationDef -> {
@@ -190,7 +191,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
         try {
             final XdmNode source = job.getStore().getImmutableNode(tmp);
             logger.info("Reading " + tmp);
-            final Predicate<? super XdmNode> isTopicref = xdmItem -> MAP_TOPICREF.matches(xdmItem.getAttributeValue(QNAME_CLASS));
+            final Predicate<? super XdmNode> isTopicref =
+                    xdmItem -> MAP_TOPICREF.matches(xdmItem.getAttributeValue(QNAME_CLASS));
             source.select(descendant(isTopicref)).forEach(xdmItem -> {
                 final URI href = getHref(xdmItem);
                 if (href != null) {
@@ -284,18 +286,23 @@ public final class TopicReaderModule extends AbstractReaderModule {
             return;
         }
         if (formatFilter.test(file.format)) {
-            if (isFormatDita(file.format) && !job.crawlTopics() &&
-                    !listFilter.getConrefTargets().contains(file.filename)) {
-                return;  // Do not process topics linked from within topics
-            } else if (isFormatDita(file.format) && (!job.getOnlyTopicInMap() || listFilter.getConrefTargets().contains(file.filename))) {
+            if (isFormatDita(file.format)
+                    && !job.crawlTopics()
+                    && !listFilter.getConrefTargets().contains(file.filename)) {
+                return; // Do not process topics linked from within topics
+            } else if (isFormatDita(file.format)
+                    && (!job.getOnlyTopicInMap()
+                            || listFilter.getConrefTargets().contains(file.filename))) {
                 addToWaitList(file);
             } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
                 formatSet.add(file);
                 if (!exists(file.filename)) {
                     if (processingMode == Configuration.Mode.STRICT) {
-                        throw new UncheckedDITAOTException(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toException());
+                        throw new UncheckedDITAOTException(MessageUtils.getMessage("DOTX008E", file.filename.toString())
+                                .toException());
                     } else {
-                        logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
+                        logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString())
+                                .toString());
                     }
                 }
             } else {

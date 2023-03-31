@@ -7,22 +7,20 @@
  */
 package org.dita.dost.reader;
 
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.DitaClass;
-import org.dita.dost.writer.AbstractXMLFilter;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
-
 import static org.dita.dost.reader.ChunkMapReader.CHUNK_TO_CONTENT;
 import static org.dita.dost.util.Configuration.ditaFormat;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
+
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.writer.AbstractXMLFilter;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 
 /**
  * Collect copy-to information from a map.
@@ -140,9 +138,11 @@ public final class CopyToReader extends AbstractXMLFilter {
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
 
         // external resource is filtered here.
-        if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
+        if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope)
+                || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
                 // FIXME: testing for :// here is incorrect, rely on source scope instead
-                || target.toString().contains(COLON_DOUBLE_SLASH) || target.toString().startsWith(SHARP)) {
+                || target.toString().contains(COLON_DOUBLE_SLASH)
+                || target.toString().startsWith(SHARP)) {
             return;
         }
 
@@ -163,10 +163,11 @@ public final class CopyToReader extends AbstractXMLFilter {
                     if (copyToSourceAbs != null) {
                         if (!sourceAbs.equals(copyToSourceAbs)) {
                             logger.warn(MessageUtils.getMessage("DOTX065W", source.toString(), targetAbs.toString())
-                                    .setLocation(atts).toString());
+                                    .setLocation(atts)
+                                    .toString());
                         }
-                    } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null &&
-                            atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)) {
+                    } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null
+                            && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)) {
                         // Ignore
                     } else {
                         copyToMap.put(targetAbs, sourceAbs);
@@ -182,7 +183,7 @@ public final class CopyToReader extends AbstractXMLFilter {
             return ATTR_FORMAT_VALUE_IMAGE;
         } else if (TOPIC_OBJECT.matches(attrClass)) {
             throw new IllegalArgumentException();
-            //return ATTR_FORMAT_VALUE_HTML;
+            // return ATTR_FORMAT_VALUE_HTML;
         } else {
             return atts.getValue(ATTRIBUTE_NAME_FORMAT);
         }
@@ -205,5 +206,4 @@ public final class CopyToReader extends AbstractXMLFilter {
         }
         return false;
     }
-
 }

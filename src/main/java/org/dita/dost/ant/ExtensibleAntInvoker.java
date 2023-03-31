@@ -7,7 +7,21 @@
  */
 package org.dita.dost.ant;
 
+import static java.util.Arrays.asList;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.supportedImageExtensions;
+import static org.dita.dost.util.URLUtils.toFile;
+
 import com.google.common.collect.ImmutableSet;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.types.*;
 import org.apache.tools.ant.types.resources.FileResource;
@@ -28,21 +42,6 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import static java.util.Arrays.asList;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.supportedImageExtensions;
-import static org.dita.dost.util.URLUtils.toFile;
 
 /**
  * Ant task for executing pipeline modules.
@@ -77,7 +76,6 @@ public final class ExtensibleAntInvoker extends Task {
         super();
         pipelineParams = new ArrayList<>();
         modules = new ArrayList<>();
-
     }
 
     /**
@@ -134,7 +132,7 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     public void addConfiguredSax(final SaxPipeElem filters) {
-//        filters.setProject(getProject());
+        //        filters.setProject(getProject());
         modules.add(filters);
     }
 
@@ -148,7 +146,8 @@ public final class ExtensibleAntInvoker extends Task {
         if (modules.isEmpty()) {
             throw new BuildException("ModuleElem must be specified");
         }
-        attrs.computeIfAbsent(ANT_INVOKER_PARAM_BASEDIR, k -> getProject().getBaseDir().getAbsolutePath());
+        attrs.computeIfAbsent(
+                ANT_INVOKER_PARAM_BASEDIR, k -> getProject().getBaseDir().getAbsolutePath());
         for (final ParamElem p : pipelineParams) {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
@@ -195,7 +194,8 @@ public final class ExtensibleAntInvoker extends Task {
         }
     }
 
-    private AbstractPipelineModule getPipelineModule(final ModuleElem m, final PipelineHashIO pipelineInput) throws DITAOTException {
+    private AbstractPipelineModule getPipelineModule(final ModuleElem m, final PipelineHashIO pipelineInput)
+            throws DITAOTException {
         if (m instanceof final XsltElem xm) {
             if (xm.reloadstylesheet && xm.parallel) {
                 throw new BuildException("Both reloadstylesheet and parallel cannot be true");
@@ -275,7 +275,8 @@ public final class ExtensibleAntInvoker extends Task {
         if (style instanceof FileResource) {
             return new StreamSource(((FileResource) style).getFile());
         } else {
-            throw new BuildException(String.format("%s not supported", style.getClass().toString()));
+            throw new BuildException(
+                    String.format("%s not supported", style.getClass().toString()));
         }
     }
 
@@ -283,9 +284,8 @@ public final class ExtensibleAntInvoker extends Task {
         if (filters.isEmpty()) {
             return f -> true;
         }
-        final List<Predicate<FileInfo>> res = filters.stream()
-                .map(FileInfoFilterElem::toFilter)
-                .collect(Collectors.toList());
+        final List<Predicate<FileInfo>> res =
+                filters.stream().map(FileInfoFilterElem::toFilter).collect(Collectors.toList());
         return f -> {
             for (final Predicate<FileInfo> filter : res) {
                 if (filter.test(f)) {
@@ -381,7 +381,8 @@ public final class ExtensibleAntInvoker extends Task {
         return inc;
     }
 
-    public static boolean isValid(final Project project, final Location location, final String ifProperty, final String unlessProperty) {
+    public static boolean isValid(
+            final Project project, final Location location, final String ifProperty, final String unlessProperty) {
         if (ifProperty != null) {
             final String msg = MessageUtils.getMessage("DOTA014W", "if", "if:set")
                     .setLocation(location)
@@ -442,8 +443,8 @@ public final class ExtensibleAntInvoker extends Task {
                                 })
                                 .collect(Collectors.toMap(ParamElem::getName, ParamElem::getValue));
                         final List<FileInfoFilterElem> predicates = new ArrayList<>(f.fileInfoFilters);
-//                            predicates.addAll(getFormat());
-//                            assert !predicates.isEmpty();
+                        //                            predicates.addAll(getFormat());
+                        //                            assert !predicates.isEmpty();
                         Predicate<FileInfo> fs = combine(predicates);
                         return new FilterPair(f.getImplementation(), fs, params);
                     })
@@ -473,7 +474,6 @@ public final class ExtensibleAntInvoker extends Task {
         public void setParallel(final boolean parallel) {
             this.parallel = parallel;
         }
-
     }
 
     /**
@@ -516,8 +516,7 @@ public final class ExtensibleAntInvoker extends Task {
             this.destDir = destDir;
         }
 
-        public void setTaskname(final String taskname) {
-        }
+        public void setTaskname(final String taskname) {}
 
         public void setClasspathref(final String classpath) {
             // Ignore classpathref attribute
@@ -638,12 +637,12 @@ public final class ExtensibleAntInvoker extends Task {
         private Boolean isResourceOnly;
 
         public void setFormat(final String format) {
-            final ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(format);
+            final ImmutableSet.Builder<String> builder =
+                    ImmutableSet.<String>builder().add(format);
             if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
                 supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
             }
             this.formats = builder.build();
-
         }
 
         public void setConref(final boolean conref) {
@@ -663,11 +662,11 @@ public final class ExtensibleAntInvoker extends Task {
         }
 
         public Predicate<FileInfo> toFilter() {
-            return f -> (formats.isEmpty() || formats.contains(f.format != null ? f.format : ATTR_FORMAT_VALUE_DITA)) &&
-                    (hasConref == null || f.hasConref == hasConref) &&
-                    (isInput == null || f.isInput == isInput) &&
-                    (isInputResource == null || f.isInputResource == isInputResource) &&
-                    (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
+            return f -> (formats.isEmpty() || formats.contains(f.format != null ? f.format : ATTR_FORMAT_VALUE_DITA))
+                    && (hasConref == null || f.hasConref == hasConref)
+                    && (isInput == null || f.isInput == isInput)
+                    && (isInputResource == null || f.isInputResource == isInputResource)
+                    && (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
         }
     }
 
@@ -709,14 +708,14 @@ public final class ExtensibleAntInvoker extends Task {
         }
 
         public List<FileInfoFilterElem> getFormat() {
-            return (format != null ? format : asList(ATTR_FORMAT_VALUE_DITA, ATTR_FORMAT_VALUE_DITAMAP)).stream()
-                    .map(f -> {
-                        final FileInfoFilterElem ff = new FileInfoFilterElem();
-                        ff.setFormat(f);
-                        return ff;
-                    })
-                    .collect(Collectors.toList());
-
+            return (format != null ? format : asList(ATTR_FORMAT_VALUE_DITA, ATTR_FORMAT_VALUE_DITAMAP))
+                    .stream()
+                            .map(f -> {
+                                final FileInfoFilterElem ff = new FileInfoFilterElem();
+                                ff.setFormat(f);
+                                return ff;
+                            })
+                            .collect(Collectors.toList());
         }
     }
 
@@ -747,7 +746,6 @@ public final class ExtensibleAntInvoker extends Task {
             }
             return cls;
         }
-
     }
 
     /**
@@ -851,7 +849,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @deprecated since 3.0
      */
     @Deprecated
-    public static abstract class ConfElem {
+    public abstract static class ConfElem {
 
         String ifProperty;
         String unlessProperty;
@@ -871,7 +869,5 @@ public final class ExtensibleAntInvoker extends Task {
         public void setUnless(final String p) {
             unlessProperty = p;
         }
-
     }
-
 }

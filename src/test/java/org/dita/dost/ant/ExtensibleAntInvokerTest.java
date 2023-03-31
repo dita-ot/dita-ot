@@ -8,6 +8,11 @@
 
 package org.dita.dost.ant;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+import java.io.IOException;
 import org.apache.tools.ant.Project;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
@@ -17,15 +22,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 public class ExtensibleAntInvokerTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
+
     private Project project;
     private File tempDir;
 

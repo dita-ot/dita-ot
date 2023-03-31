@@ -1,13 +1,25 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2007 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2007 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.module;
 
+import static net.sf.saxon.s9api.streams.Steps.attribute;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.getExtension;
+import static org.dita.dost.util.URLUtils.getRelativePath;
+import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.XMLUtils.rootElement;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -19,26 +31,13 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.TopicRefWriter;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static net.sf.saxon.s9api.streams.Steps.attribute;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.getExtension;
-import static org.dita.dost.util.URLUtils.getRelativePath;
-import static org.dita.dost.util.URLUtils.stripFragment;
-import static org.dita.dost.util.XMLUtils.rootElement;
-
 /**
  * The chunking module class.
  * <p>
  * Starting from map files, it parses and processes chunk attribute, writes out the chunked
  * results and finally updates reference pointing to chunked topics in other topics.
  */
-final public class ChunkModule extends AbstractPipelineModuleImpl {
+public final class ChunkModule extends AbstractPipelineModuleImpl {
 
     private static final DitaClass ECLIPSEMAP_PLUGIN = DitaClass.getInstance("- map/map eclipsemap/plugin ");
     public static final String ROOT_CHUNK_OVERRIDE = "root-chunk-override";
@@ -124,8 +123,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         } catch (final IOException e) {
             throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
         }
-        return doc
-                .select(rootElement().then(attribute(ATTRIBUTE_NAME_CLASS)))
+        return doc.select(rootElement().then(attribute(ATTRIBUTE_NAME_CLASS)))
                 .anyMatch(xdmItems -> ECLIPSEMAP_PLUGIN.matches(xdmItems.getStringValue()));
     }
 
@@ -149,13 +147,13 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         } catch (final DITAOTException ex) {
             logger.error(ex.getMessage(), ex);
         }
-
     }
 
     /**
      * Update Job configuration to include new generated files
      */
-    private void updateList(final Map<URI, URI> changeTable, final Map<URI, URI> conflictTable, final ChunkMapReader mapReader) {
+    private void updateList(
+            final Map<URI, URI> changeTable, final Map<URI, URI> conflictTable, final ChunkMapReader mapReader) {
         final URI xmlDitalist = job.tempDirURI.resolve("dummy.xml");
 
         final Set<URI> hrefTopics = new HashSet<>();
@@ -176,8 +174,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     // be fully chunked. Thus it should not produce any output.
                     // The entry in hrefTopics points to the same target
                     // as entry in chunkTopics, it should be removed.
-                    hrefTopics.removeIf(ent -> job.tempDirURI.resolve(ent).equals(
-                            job.tempDirURI.resolve(s)));
+                    hrefTopics.removeIf(ent -> job.tempDirURI.resolve(ent).equals(job.tempDirURI.resolve(s)));
                 } else {
                     hrefTopics.remove(s);
                 }
@@ -226,7 +223,6 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     }
                     chunkedDitamapSet.add(newChunkedFile);
                 }
-
             }
         }
         // removed extra topic files
@@ -259,8 +255,13 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         URI relativePath = getRelativePath(xmlDitalist, from);
                         final URI relativeTargetPath = getRelativePath(xmlDitalist, target);
                         if (relativeTargetPath.getPath().contains(URI_SEPARATOR)) {
-                            relativePath2fix.put(relativeTargetPath,
-                                    relativeTargetPath.getPath().substring(0, relativeTargetPath.getPath().lastIndexOf(URI_SEPARATOR) + 1));
+                            relativePath2fix.put(
+                                    relativeTargetPath,
+                                    relativeTargetPath
+                                            .getPath()
+                                            .substring(
+                                                    0,
+                                                    relativeTargetPath.getPath().lastIndexOf(URI_SEPARATOR) + 1));
                         }
                         // ensure the newly chunked file to the old one
                         try {
@@ -276,7 +277,6 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                             }
                         } catch (final IOException e) {
                             logger.error("Failed to replace chunk topic: " + e.getMessage(), e);
-
                         }
                         topicList.remove(relativePath);
                         chunkedTopicSet.remove(relativePath);
@@ -348,7 +348,6 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 return new RandomChunkFilenameGenerator();
             }
         }
-
     }
 
     /**
@@ -371,7 +370,6 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
          * @return generated ID
          */
         String generateID();
-
     }
 
     public static class RandomChunkFilenameGenerator implements ChunkFilenameGenerator {
@@ -401,5 +399,4 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             return "unique_" + counter.getAndIncrement();
         }
     }
-
 }

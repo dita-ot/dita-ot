@@ -7,21 +7,19 @@
  */
 package org.dita.dost.module;
 
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.XMLFilter;
-
-import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Map processes topics through XML filters. Filters are reused and should reset internal state on
@@ -36,8 +34,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
      * @return always returns {@code null}
      */
     @Override
-    public AbstractPipelineOutput execute(final AbstractPipelineInput input)
-            throws DITAOTException {
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         final Collection<FileInfo> fis = job.getFileInfo(fileInfoFilter);
         if (parallel) {
             fis.stream().parallel().forEach(f -> {
@@ -92,9 +89,10 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
         public final Predicate<FileInfo> predicate;
         public final Map<String, String> params;
 
-        public FilterPair(final Class<? extends AbstractXMLFilter> filterClass,
-                          final Predicate<FileInfo> fileInfoFilter,
-                          final Map<String, String> params) {
+        public FilterPair(
+                final Class<? extends AbstractXMLFilter> filterClass,
+                final Predicate<FileInfo> fileInfoFilter,
+                final Map<String, String> params) {
             this.filterClass = filterClass;
             this.predicate = fileInfoFilter;
             this.params = params;
@@ -105,10 +103,12 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
                 final AbstractXMLFilter f = filterClass.getDeclaredConstructor().newInstance();
                 params.forEach(f::setParam);
                 return f;
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            } catch (InstantiationException
+                    | IllegalAccessException
+                    | NoSuchMethodException
+                    | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
         }
     }
-
 }

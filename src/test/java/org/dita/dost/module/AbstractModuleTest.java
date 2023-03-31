@@ -7,7 +7,22 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.junit.Assert.assertEquals;
+
 import com.google.common.collect.ImmutableSet;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UncheckedIOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Stream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
@@ -27,22 +42,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UncheckedIOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Stream;
-
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractModuleTest {
 
@@ -163,10 +162,10 @@ public abstract class AbstractModuleTest {
         if (cache instanceof CacheStore) {
             final File srcDir = new File(resourceDir, "src" + File.separator + testCase);
             try {
-                Files.walk(srcDir.toPath())
-                        .filter(Files::isRegularFile)
-                        .forEach(src -> {
-                    final URI dst = tempDir.toPath().resolve(srcDir.toPath().relativize(src)).toUri();
+                Files.walk(srcDir.toPath()).filter(Files::isRegularFile).forEach(src -> {
+                    final URI dst = tempDir.toPath()
+                            .resolve(srcDir.toPath().relativize(src))
+                            .toUri();
                     try (OutputStream out = cache.getOutputStream(dst)) {
                         Files.copy(src, out);
                     } catch (IOException e) {
@@ -206,9 +205,7 @@ public abstract class AbstractModuleTest {
         final Set<String> names = new HashSet<>();
         final String[] actList = actDir.list();
         if (actList != null) {
-            Stream.of(actList)
-                    .filter(f -> store.exists(new File(f).toURI()))
-                    .forEach(names::add);
+            Stream.of(actList).filter(f -> store.exists(new File(f).toURI())).forEach(names::add);
         }
         final String[] expList = expDir.list();
         if (expList != null) {
@@ -224,8 +221,8 @@ public abstract class AbstractModuleTest {
             } else {
                 final Document expDoc = getDocument(exp);
                 final Document actDoc = store.getDocument(act.toURI());
-//                assertXMLEqual("Comparing " + exp + " to " + act + ":",
-//                        expDoc, actDoc);
+                //                assertXMLEqual("Comparing " + exp + " to " + act + ":",
+                //                        expDoc, actDoc);
                 try {
                     assertXMLEqual(expDoc, actDoc);
                 } catch (AssertionError e) {
@@ -237,7 +234,7 @@ public abstract class AbstractModuleTest {
         }
         if (new File(expDir, ".job.xml").exists()) {
             final Job expJob = new Job(expDir, new StreamStore(expDir, xmlUtils));
-//            final Job actJob = new Job(actDir, new StreamStore(actDir, xmlUtils));
+            //            final Job actJob = new Job(actDir, new StreamStore(actDir, xmlUtils));
             final Collection<FileInfo> expFileInfo = new HashSet<>(expJob.getFileInfo());
             final Collection<FileInfo> actFileInfo = new HashSet<>(job.getFileInfo());
             try {
@@ -249,5 +246,4 @@ public abstract class AbstractModuleTest {
             }
         }
     }
-
 }

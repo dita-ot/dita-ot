@@ -11,15 +11,12 @@ package org.dita.dost.module;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.lib.StringCollator;
-import net.sf.saxon.trans.XPathException;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
 
 public class DelegatingCollationUriResolverTest implements DelegatingCollationUriResolver {
 
     @Override
-    public void setBaseResolver(CollationURIResolver baseResolver) {
-
-    }
+    public void setBaseResolver(CollationURIResolver baseResolver) {}
 
     @Override
     public StringCollator resolve(String collationURI, Configuration config) {

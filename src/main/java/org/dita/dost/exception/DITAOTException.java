@@ -1,18 +1,17 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.exception;
 
+import java.io.Serial;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
 import org.dita.dost.log.MessageBean;
-
-import java.io.Serial;
 
 /**
  * Exception class for DITAOT, used to handle exceptions in Java modules.
@@ -98,5 +97,4 @@ public final class DITAOTException extends Exception {
         super(message, cause);
         messageBean = msgBean;
     }
-
 }

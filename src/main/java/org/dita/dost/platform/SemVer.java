@@ -50,14 +50,14 @@ public class SemVer implements Comparable<SemVer> {
         patch = tokens.length >= 3 ? Integer.parseInt(tokens[2]) : 0;
         preRelease = preRel != null
                 ? Stream.of(preRel.split("\\."))
-                .map(token -> {
-                    try {
-                        return Integer.valueOf(token);
-                    } catch (NumberFormatException e) {
-                        return token;
-                    }
-                })
-                .collect(Collectors.toList())
+                        .map(token -> {
+                            try {
+                                return Integer.valueOf(token);
+                            } catch (NumberFormatException e) {
+                                return token;
+                            }
+                        })
+                        .collect(Collectors.toList())
                 : Collections.emptyList();
     }
 
@@ -66,9 +66,7 @@ public class SemVer implements Comparable<SemVer> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SemVer semVer = (SemVer) o;
-        return major == semVer.major &&
-                minor == semVer.minor &&
-                patch == semVer.patch;
+        return major == semVer.major && minor == semVer.minor && patch == semVer.patch;
     }
 
     @Override

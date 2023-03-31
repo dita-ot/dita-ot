@@ -9,9 +9,7 @@
 /* Derived from Apache Ant. */
 package org.dita.dost.invoker;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.dita.dost.util.Configuration;
+import static org.dita.dost.util.LangUtils.pair;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -19,8 +17,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.dita.dost.util.LangUtils.pair;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.dita.dost.util.Configuration;
 
 /**
  * Command line arguments.
@@ -73,6 +72,7 @@ abstract class Arguments {
      * proxy flag: default is false
      */
     boolean proxy;
+
     boolean justPrintUsage;
     boolean justPrintVersion;
     boolean justPrintDiagnostics;
@@ -185,7 +185,7 @@ abstract class Arguments {
         }
     }
 
-    static abstract class Argument {
+    abstract static class Argument {
         final String property;
         final String desc;
 
@@ -294,5 +294,4 @@ abstract class Arguments {
             }
         }
     }
-
 }

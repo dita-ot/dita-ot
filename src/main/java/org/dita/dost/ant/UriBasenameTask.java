@@ -10,7 +10,6 @@ package org.dita.dost.ant;
 import static org.dita.dost.util.Constants.*;
 
 import java.net.URI;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -40,7 +39,6 @@ import org.apache.tools.ant.Task;
  * @since Ant 1.5
  *
  */
-
 public class UriBasenameTask extends Task {
 
     private URI file;
@@ -55,15 +53,15 @@ public class UriBasenameTask extends Task {
     }
 
     /**
-    * Property to set base name to.
-    */
+     * Property to set base name to.
+     */
     public void setProperty(final String property) {
-        this.property  = property;
+        this.property = property;
     }
 
     /**
-    * Suffix to remove from base name.
-    */
+     * Suffix to remove from base name.
+     */
     public void setSuffix(final String suffix) {
         this.suffix = suffix;
     }
@@ -82,8 +80,7 @@ public class UriBasenameTask extends Task {
             // char preceding the suffix is a '.', we assume the user
             // wants to remove the '.' as well (see docs)
             int pos = value.length() - suffix.length();
-            if (pos > 0 && suffix.charAt(0) != '.'
-                && value.charAt(pos - 1) == '.') {
+            if (pos > 0 && suffix.charAt(0) != '.' && value.charAt(pos - 1) == '.') {
                 pos--;
             }
             value = value.substring(0, pos);
@@ -101,6 +98,4 @@ public class UriBasenameTask extends Task {
             return path;
         }
     }
-
 }
-

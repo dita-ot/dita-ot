@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.pipeline;
 
 import java.util.Map;
@@ -41,5 +41,4 @@ public interface AbstractPipelineInput {
      * @return Map of attribute values, empty Map is no attributes have been defined.
      */
     Map<String, String> getAttributes();
-
 }

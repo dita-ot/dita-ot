@@ -8,21 +8,14 @@
 
 package org.dita.dost;
 
+import static junit.framework.Assert.assertEquals;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.Constants.*;
+import static org.junit.Assert.assertArrayEquals;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
-import org.apache.tools.ant.*;
-import org.dita.dost.store.CacheStore;
-import org.dita.dost.store.Store;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
-import org.junit.After;
-import org.junit.BeforeClass;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -34,48 +27,59 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static junit.framework.Assert.assertEquals;
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertArrayEquals;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
+import org.apache.tools.ant.*;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.store.Store;
+import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
+import org.junit.After;
+import org.junit.BeforeClass;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 public abstract class AbstractIntegrationTest {
 
     /**
      * Message codes where duplicates are ignored in message count.
      */
-    private static final String[] ignoreDuplicates = new String[]{"DOTJ037W"};
+    private static final String[] ignoreDuplicates = new String[] {"DOTJ037W"};
 
     enum Transtype {
-        PREPROCESS("xhtml", true, "preprocess",
-                "build-init", "preprocess"),
-        XHTML("xhtml", false, "xhtml",
-                "dita2xhtml"),
-        HTML5("html5", false, "html5",
-                "dita2html5"),
-        PDF("pdf", true,
-                ImmutableSet.of( "fo"),
-                "pdf",
-                "dita2pdf2"),
-        ECLIPSEHELP("eclipsehelp", false,"eclipsehelp",
-                "dita2eclipsehelp"),
-        HTMLHELP("htmlhelp", false, "htmlhelp",
-                "dita2htmlhelp"),
-        PREPROCESS2("xhtml", true, "preprocess",
-                "build-init", "preprocess2"),
-        XHTML_WITH_PREPROCESS2("xhtml", false, "xhtml",
-                "dita2xhtml.init", "build-init", "preprocess2", "xhtml.topics", "dita.map.xhtml");
+        PREPROCESS("xhtml", true, "preprocess", "build-init", "preprocess"),
+        XHTML("xhtml", false, "xhtml", "dita2xhtml"),
+        HTML5("html5", false, "html5", "dita2html5"),
+        PDF("pdf", true, ImmutableSet.of("fo"), "pdf", "dita2pdf2"),
+        ECLIPSEHELP("eclipsehelp", false, "eclipsehelp", "dita2eclipsehelp"),
+        HTMLHELP("htmlhelp", false, "htmlhelp", "dita2htmlhelp"),
+        PREPROCESS2("xhtml", true, "preprocess", "build-init", "preprocess2"),
+        XHTML_WITH_PREPROCESS2(
+                "xhtml",
+                false,
+                "xhtml",
+                "dita2xhtml.init",
+                "build-init",
+                "preprocess2",
+                "xhtml.topics",
+                "dita.map.xhtml");
 
         final String name;
         final boolean compareTemp;
         final Set<String> compareable;
         public final String exp;
         final String[] targets;
+
         Transtype(String name, boolean compareTemp, String exp, String... targets) {
-            this(name, compareTemp, ImmutableSet.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt"), exp, targets);
+            this(
+                    name,
+                    compareTemp,
+                    ImmutableSet.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt"),
+                    exp,
+                    targets);
         }
+
         Transtype(String name, boolean compareTemp, Set<String> compareable, String exp, String... targets) {
             this.name = name;
             this.compareTemp = compareTemp;
@@ -156,16 +160,16 @@ public abstract class AbstractIntegrationTest {
     private static final String TEST = "test";
     private static final String SRC_DIR = "src";
     private static final String EXP_DIR = "exp";
-    private static final Collection<String> canCompare = Arrays.asList("html5", "xhtml", "eclipsehelp", "htmlhelp", "preprocess", "pdf");
-    private static final File ditaDir = new File(System.getProperty(DITA_DIR) != null
-            ? System.getProperty(DITA_DIR)
-            : "src" + File.separator + "main");
-    private static final File baseDir = new File(System.getProperty(BASEDIR) != null
-            ? System.getProperty(BASEDIR)
-            : "src" + File.separator + "test");
-    private static final File baseTempDir = new File(System.getProperty(TEMP_DIR) != null
-            ? System.getProperty(TEMP_DIR)
-            : "build" + File.separator + "tmp" + File.separator + "integrationTest");
+    private static final Collection<String> canCompare =
+            Arrays.asList("html5", "xhtml", "eclipsehelp", "htmlhelp", "preprocess", "pdf");
+    private static final File ditaDir = new File(
+            System.getProperty(DITA_DIR) != null ? System.getProperty(DITA_DIR) : "src" + File.separator + "main");
+    private static final File baseDir = new File(
+            System.getProperty(BASEDIR) != null ? System.getProperty(BASEDIR) : "src" + File.separator + "test");
+    private static final File baseTempDir = new File(
+            System.getProperty(TEMP_DIR) != null
+                    ? System.getProperty(TEMP_DIR)
+                    : "build" + File.separator + "tmp" + File.separator + "integrationTest");
     static final File resourceDir = new File(baseDir, "resources");
     private static DocumentBuilder db;
     private static HtmlDocumentBuilder htmlb;
@@ -208,9 +212,7 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected File run() throws Throwable {
-        final File testDir = Paths.get("src", "test", "resources")
-                .resolve(name)
-                .toFile();
+        final File testDir = Paths.get("src", "test", "resources").resolve(name).toFile();
         final File srcDir = new File(testDir, SRC_DIR);
         final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
         final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
@@ -230,12 +232,9 @@ public abstract class AbstractIntegrationTest {
 
         try {
             this.log = runOt(testDir, transtype, tempDir, outDir, params, targets);
-            assertEquals("Warn message count does not match expected",
-                    warnCount,
-                    countMessages(log, Project.MSG_WARN));
-            assertEquals("Error message count does not match expected",
-                    errorCount,
-                    countMessages(log, Project.MSG_ERR));
+            assertEquals("Warn message count does not match expected", warnCount, countMessages(log, Project.MSG_WARN));
+            assertEquals(
+                    "Error message count does not match expected", errorCount, countMessages(log, Project.MSG_ERR));
 
             this.actDir = transtype.compareTemp ? tempDir : outDir;
         } catch (final RuntimeException e) {
@@ -327,9 +326,15 @@ public abstract class AbstractIntegrationTest {
      * @return list of log messages
      * @throws Exception if conversion failed
      */
-    private List<TestListener.Message> runOt(final File srcDir, final Transtype transtype, final File tempBaseDir, final File resBaseDir,
-                                             final Map<String, String> args, final String[] targets) throws Exception {
-//        System.out.println(transtype);
+    private List<TestListener.Message> runOt(
+            final File srcDir,
+            final Transtype transtype,
+            final File tempBaseDir,
+            final File resBaseDir,
+            final Map<String, String> args,
+            final String[] targets)
+            throws Exception {
+        //        System.out.println(transtype);
         final File tempDir = new File(tempBaseDir, transtype.toString());
         final File resDir = new File(resBaseDir, transtype.toString());
         deleteDirectory(resDir);
@@ -421,11 +426,9 @@ public abstract class AbstractIntegrationTest {
                 final String ext = FileUtils.getExtension(name);
                 try {
                     if (ext == null) {
-                    } else if (ext.equals("html") || ext.equals("htm") || ext.equals("xhtml")
-                            || ext.equals("hhk")) {
+                    } else if (ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")) {
                         assertXMLEqual(parseHtml(exp), parseHtml(act));
-                    } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap")
-                            || ext.equals("fo")) {
+                    } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
                         assertXMLEqual(parseXml(exp), parseXml(act));
                     } else if (ext.equals("txt")) {
                         assertArrayEquals(readTextFile(exp), readTextFile(act));
@@ -433,7 +436,10 @@ public abstract class AbstractIntegrationTest {
                 } catch (final RuntimeException ex) {
                     throw ex;
                 } catch (final Throwable ex) {
-                    throw new Throwable("Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": " + ex.getMessage(), ex);
+                    throw new Throwable(
+                            "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": "
+                                    + ex.getMessage(),
+                            ex);
                 }
             }
         }
@@ -444,7 +450,7 @@ public abstract class AbstractIntegrationTest {
     private Collection<String> getFiles(File expDir, File actDir) {
         final FileFilter filter = f -> f.isDirectory()
                 || (this.transtype.compareable.contains(FileUtils.getExtension(f.getName()))
-                    && !ignorable.contains(f.getName()));
+                        && !ignorable.contains(f.getName()));
         final Set<String> buf = new HashSet<>();
         final File[] exp = expDir.listFiles(filter);
         if (exp != null) {
@@ -466,7 +472,8 @@ public abstract class AbstractIntegrationTest {
      */
     private String[] readTextFile(final File f) throws IOException {
         final List<String> buf = new ArrayList<>();
-        try (final BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))) {
+        try (final BufferedReader r =
+                new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))) {
             String l;
             while ((l = r.readLine()) != null) {
                 buf.add(l);
@@ -515,8 +522,9 @@ public abstract class AbstractIntegrationTest {
         Node n = e.getFirstChild();
         while (n != null) {
             final Node next = n.getNextSibling();
-            if (n.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE &&
-                    (n.getNodeName().equals(PI_WORKDIR_TARGET) || n.getNodeName().equals(PI_WORKDIR_TARGET_URI))) {
+            if (n.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE
+                    && (n.getNodeName().equals(PI_WORKDIR_TARGET)
+                            || n.getNodeName().equals(PI_WORKDIR_TARGET_URI))) {
                 e.removeChild(n);
             }
             n = next;
@@ -544,7 +552,7 @@ public abstract class AbstractIntegrationTest {
             for (Map.Entry<String, Pattern> p : patterns.entrySet()) {
                 final Attr id = e.getAttributeNode(p.getKey());
                 if (id != null) {
-                    if (p.getKey().equals("headers")) {// split value
+                    if (p.getKey().equals("headers")) { // split value
                         final List<String> res = new ArrayList<>();
                         for (final String v : id.getValue().trim().split("\\s+")) {
                             rewriteId(v, idMap, counter, p.getValue());
@@ -571,7 +579,8 @@ public abstract class AbstractIntegrationTest {
      * @param counter counter
      * @param pattern pattern to test
      */
-    private void rewriteId(final String id, final Map<String, String> idMap, final AtomicInteger counter, final Pattern pattern) {
+    private void rewriteId(
+            final String id, final Map<String, String> idMap, final AtomicInteger counter, final Pattern pattern) {
         final Matcher m = pattern.matcher(id);
         if (m.matches()) {
             if (!idMap.containsKey(id)) {
@@ -598,37 +607,40 @@ public abstract class AbstractIntegrationTest {
             this.err = err;
         }
 
-        //@Override
+        // @Override
         public void buildStarted(BuildEvent event) {
             messages.add(new TestListener.Message(-1, "build started: " + event.getMessage()));
         }
 
-        //@Override
+        // @Override
         public void buildFinished(BuildEvent event) {
             messages.add(new TestListener.Message(-1, "build finished: " + event.getMessage()));
         }
 
-        //@Override
+        // @Override
         public void targetStarted(BuildEvent event) {
             messages.add(new TestListener.Message(-1, event.getTarget().getName() + ":"));
         }
 
-        //@Override
+        // @Override
         public void targetFinished(BuildEvent event) {
-            messages.add(new TestListener.Message(-1, "target finished: " + event.getTarget().getName()));
+            messages.add(new TestListener.Message(
+                    -1, "target finished: " + event.getTarget().getName()));
         }
 
-        //@Override
+        // @Override
         public void taskStarted(BuildEvent event) {
-            messages.add(new TestListener.Message(Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
+            messages.add(new TestListener.Message(
+                    Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
         }
 
-        //@Override
+        // @Override
         public void taskFinished(BuildEvent event) {
-            messages.add(new TestListener.Message(Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
+            messages.add(new TestListener.Message(
+                    Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
         }
 
-        //@Override
+        // @Override
         public void messageLogged(BuildEvent event) {
             final String message = event.getMessage();
             int level;
@@ -654,15 +666,12 @@ public abstract class AbstractIntegrationTest {
                     // out.println(event.getMessage());
                     break;
                 default:
-//                    err.println(message);
+                    //                    err.println(message);
             }
 
             messages.add(new TestListener.Message(level, message));
         }
 
-        record Message(int level, String message) {
-
-        }
-
+        record Message(int level, String message) {}
     }
 }

@@ -1,12 +1,14 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2010 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2010 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.util;
+
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.dita.dost.util.Constants.*;
 
 /**
  * Corrects the URLs.
@@ -29,8 +29,7 @@ public final class URLUtils {
     /**
      * Private default constructor to make class uninstantiable.
      */
-    private URLUtils() {
-    }
+    private URLUtils() {}
 
     /**
      * Corrects the file to URL.
@@ -109,22 +108,24 @@ public final class URLUtils {
             final char current = s.charAt(i);
             ch = current;
             switch (ch) {
-            case '%':
-                if (i + 2 < s.length()) {
-                    // Avoid java.lang.StringIndexOutOfBoundsException...
-                    ch = s.charAt(++i);
-                    final int hb = (Character.isDigit((char) ch) ? ch - '0'
-                            : 10 + Character.toLowerCase((char) ch) - 'a') & 0xF;
-                    ch = s.charAt(++i);
-                    final int lb = (Character.isDigit((char) ch) ? ch - '0'
-                            : 10 + Character.toLowerCase((char) ch) - 'a') & 0xF;
-                    b = (hb << 4) | lb;
-                    applyUTF8dec = true;
-                }
-                break;
-            default:
-                b = ch;
-                applyUTF8dec = false;
+                case '%':
+                    if (i + 2 < s.length()) {
+                        // Avoid java.lang.StringIndexOutOfBoundsException...
+                        ch = s.charAt(++i);
+                        final int hb =
+                                (Character.isDigit((char) ch) ? ch - '0' : 10 + Character.toLowerCase((char) ch) - 'a')
+                                        & 0xF;
+                        ch = s.charAt(++i);
+                        final int lb =
+                                (Character.isDigit((char) ch) ? ch - '0' : 10 + Character.toLowerCase((char) ch) - 'a')
+                                        & 0xF;
+                        b = (hb << 4) | lb;
+                        applyUTF8dec = true;
+                    }
+                    break;
+                default:
+                    b = ch;
+                    applyUTF8dec = false;
             }
             // Decode byte b as UTF-8, sumb collects incomplete chars
             if (applyUTF8dec) {
@@ -192,7 +193,6 @@ public final class URLUtils {
                 // Does not exist.
                 file = file.getAbsoluteFile();
             }
-
         }
         return file;
     }
@@ -287,7 +287,6 @@ public final class URLUtils {
             final File file = new File(fileName);
             return file.toURI().toString();
         }
-
     }
 
     // Which ASCII characters need to be escaped
@@ -296,8 +295,9 @@ public final class URLUtils {
     private static final char[] gAfterEscaping1 = new char[128];
     // The second hex character if a character needs to be escaped
     private static final char[] gAfterEscaping2 = new char[128];
-    private static final char[] gHexChs = {'0', '1', '2', '3', '4', '5', '6', '7',
-        '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    private static final char[] gHexChs = {
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+    };
     // Initialize the above 3 arrays
     static {
         for (int i = 0; i <= 0x1f; i++) {
@@ -308,17 +308,26 @@ public final class URLUtils {
         gNeedEscaping[0x7f] = true;
         gAfterEscaping1[0x7f] = '7';
         gAfterEscaping2[0x7f] = 'F';
-        final char[] escChs = {' ', '<', '>',
-                //'#',
-                //'%',
-                '"', '{', '}',
-                //'?',
-                '|', '\\', '^',
-                //'~',
-                '[', ']', '`',
-                //'\'',
-                //'&'
-                };
+        final char[] escChs = {
+            ' ',
+            '<',
+            '>',
+            // '#',
+            // '%',
+            '"',
+            '{',
+            '}',
+            // '?',
+            '|',
+            '\\',
+            '^',
+            // '~',
+            '[',
+            ']',
+            '`',
+            // '\'',
+            // '&'
+        };
         char ch;
         for (char escCh : escChs) {
             ch = escCh;
@@ -347,7 +356,7 @@ public final class URLUtils {
      */
     public static String clean(final String path, final boolean ascii) {
         int len = path.length(), ch;
-        final StringBuilder buffer = new StringBuilder(len*3);
+        final StringBuilder buffer = new StringBuilder(len * 3);
         // Change C:/something to /C:/something
         if (len >= 2 && path.charAt(1) == ':') {
             ch = Character.toUpperCase(path.charAt(0));
@@ -368,13 +377,13 @@ public final class URLUtils {
             if (ch >= 128 && ascii) {
                 break;
             }
-            if (ch <  gNeedEscaping.length && gNeedEscaping[ch]) {
+            if (ch < gNeedEscaping.length && gNeedEscaping[ch]) {
                 buffer.append('%');
                 buffer.append(gAfterEscaping1[ch]);
                 buffer.append(gAfterEscaping2[ch]);
                 // Record the fact that it's escaped
             } else {
-                buffer.append((char)ch);
+                buffer.append((char) ch);
             }
         }
 
@@ -400,7 +409,7 @@ public final class URLUtils {
                     buffer.append(gAfterEscaping1[b]);
                     buffer.append(gAfterEscaping2[b]);
                 } else {
-                    buffer.append((char)b);
+                    buffer.append((char) b);
                 }
             }
         }
@@ -416,9 +425,7 @@ public final class URLUtils {
             return false;
         }
         final char c2 = seq.charAt(1);
-        if (!(c2 >= '0' && c2 <= '9'
-                || c2 >= 'a' && c2 <= 'f'
-                || c2 >= 'A' && c2 <= 'F')) {
+        if (!(c2 >= '0' && c2 <= '9' || c2 >= 'a' && c2 <= 'f' || c2 >= 'A' && c2 <= 'F')) {
             return false;
         }
         return true;
@@ -486,7 +493,8 @@ public final class URLUtils {
             return file.toURI();
         } else {
             try {
-                return new URI(clean(file.getPath().replace(WINDOWS_SEPARATOR, URI_SEPARATOR).trim(), false));
+                return new URI(clean(
+                        file.getPath().replace(WINDOWS_SEPARATOR, URI_SEPARATOR).trim(), false));
             } catch (final URISyntaxException e) {
                 throw new IllegalArgumentException(e.getMessage(), e);
             }
@@ -510,7 +518,8 @@ public final class URLUtils {
             return new URI(file);
         } catch (final URISyntaxException e) {
             try {
-                return new URI(clean(file.replace(WINDOWS_SEPARATOR, URI_SEPARATOR).trim(), false));
+                return new URI(
+                        clean(file.replace(WINDOWS_SEPARATOR, URI_SEPARATOR).trim(), false));
             } catch (final URISyntaxException ex) {
                 throw new IllegalArgumentException(ex.getMessage(), ex);
             }
@@ -554,7 +563,14 @@ public final class URLUtils {
     public static URI setFragment(final URI path, final String fragment) {
         try {
             if (path.getPath() != null) {
-                return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), path.getQuery(), fragment);
+                return new URI(
+                        path.getScheme(),
+                        path.getUserInfo(),
+                        path.getHost(),
+                        path.getPort(),
+                        path.getPath(),
+                        path.getQuery(),
+                        fragment);
             } else {
                 return new URI(path.getScheme(), path.getSchemeSpecificPart(), fragment);
             }
@@ -573,7 +589,14 @@ public final class URLUtils {
     public static URI setQuery(final URI path, final String query) {
         try {
             if (path.getPath() != null) {
-                return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), query, path.getFragment());
+                return new URI(
+                        path.getScheme(),
+                        path.getUserInfo(),
+                        path.getHost(),
+                        path.getPort(),
+                        path.getPath(),
+                        query,
+                        path.getFragment());
             } else {
                 return new URI(path.getScheme(), path.getSchemeSpecificPart(), path.getFragment());
             }
@@ -601,7 +624,14 @@ public final class URLUtils {
      */
     public static URI setPath(final URI orig, final String path) {
         try {
-            return new URI(orig.getScheme(), orig.getUserInfo(), orig.getHost(), orig.getPort(), path, orig.getQuery(), orig.getFragment());
+            return new URI(
+                    orig.getScheme(),
+                    orig.getUserInfo(),
+                    orig.getHost(),
+                    orig.getPort(),
+                    path,
+                    orig.getQuery(),
+                    orig.getFragment());
         } catch (final URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -616,7 +646,14 @@ public final class URLUtils {
      */
     public static URI setScheme(final URI orig, final String scheme) {
         try {
-            return new URI(scheme, orig.getUserInfo(), orig.getHost(), orig.getPort(), orig.getPath(), orig.getQuery(), orig.getFragment());
+            return new URI(
+                    scheme,
+                    orig.getUserInfo(),
+                    orig.getHost(),
+                    orig.getPort(),
+                    orig.getPath(),
+                    orig.getQuery(),
+                    orig.getFragment());
         } catch (final URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -634,8 +671,10 @@ public final class URLUtils {
         final String refScheme = ref.getScheme();
         final String baseAuth = base.getAuthority();
         final String refAuth = ref.getAuthority();
-        if (!(((baseScheme == null && refScheme == null) || (baseScheme != null && refScheme != null && baseScheme.equals(refScheme))) &&
-                ((baseAuth == null && refAuth == null) || (baseAuth != null && refAuth != null && baseAuth.equals(refAuth))))) {
+        if (!(((baseScheme == null && refScheme == null)
+                        || (baseScheme != null && refScheme != null && baseScheme.equals(refScheme)))
+                && ((baseAuth == null && refAuth == null)
+                        || (baseAuth != null && refAuth != null && baseAuth.equals(refAuth))))) {
             return ref;
         }
 
@@ -656,13 +695,13 @@ public final class URLUtils {
             while (baseTokenizer.countTokens() > 1 && refTokenizer.countTokens() > 1) {
                 final String baseToken = baseTokenizer.nextToken();
                 final String refToken = refTokenizer.nextToken();
-                //if OS is Windows, we need to ignore case when comparing path names.
+                // if OS is Windows, we need to ignore case when comparing path names.
                 final boolean equals = OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)
-                                       ? baseToken.equalsIgnoreCase(refToken)
-                                       : baseToken.equals(refToken);
+                        ? baseToken.equalsIgnoreCase(refToken)
+                        : baseToken.equals(refToken);
                 if (!equals) {
                     if (baseToken.endsWith(COLON) || refToken.endsWith(COLON)) {
-                        //the two files are in different disks under Windows
+                        // the two files are in different disks under Windows
                         return ref;
                     }
                     upPathBuffer.append("..");
@@ -711,7 +750,7 @@ public final class URLUtils {
         if (tokenizer.countTokens() == 1) {
             return null;
         } else {
-            while(tokenizer.countTokens() > 1) {
+            while (tokenizer.countTokens() > 1) {
                 tokenizer.nextToken();
                 buffer.append("..");
                 buffer.append(URI_SEPARATOR);
@@ -789,9 +828,8 @@ public final class URLUtils {
     public static String getTopicID(final URI relativePath) {
         final String fragment = relativePath.getFragment();
         if (fragment != null) {
-            final String id = fragment.lastIndexOf(SLASH) != -1
-                              ? fragment.substring(0, fragment.lastIndexOf(SLASH))
-                              : fragment;
+            final String id =
+                    fragment.lastIndexOf(SLASH) != -1 ? fragment.substring(0, fragment.lastIndexOf(SLASH)) : fragment;
             return id.isEmpty() ? null : id;
         }
         return null;

@@ -7,33 +7,24 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+
+import java.util.*;
 import org.dita.dost.util.DitaClass;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import java.util.*;
-
-import static org.dita.dost.util.Constants.*;
 
 /**
  * Reads topic files and inserts the metadata.
  */
 public final class DitaMetaWriter extends AbstractDitaMetaWriter {
 
-    private static final List<DitaClass> titlealtsPosition = Collections.unmodifiableList(Collections.singletonList(
-            TOPIC_TITLE
-    ));
-    private static final List<DitaClass> titlealtsOrder = Collections.unmodifiableList(Arrays.asList(
-            TOPIC_NAVTITLE,
-            MAP_SEARCHTITLE,
-            TOPIC_SEARCHTITLE
-    ));
-    private static final List<DitaClass> prologPosition = Collections.unmodifiableList(Arrays.asList(
-            TOPIC_TITLE,
-            TOPIC_TITLEALTS,
-            TOPIC_SHORTDESC,
-            TOPIC_ABSTRACT
-    ));
+    private static final List<DitaClass> titlealtsPosition =
+            Collections.unmodifiableList(Collections.singletonList(TOPIC_TITLE));
+    private static final List<DitaClass> titlealtsOrder =
+            Collections.unmodifiableList(Arrays.asList(TOPIC_NAVTITLE, MAP_SEARCHTITLE, TOPIC_SEARCHTITLE));
+    private static final List<DitaClass> prologPosition =
+            Collections.unmodifiableList(Arrays.asList(TOPIC_TITLE, TOPIC_TITLEALTS, TOPIC_SHORTDESC, TOPIC_ABSTRACT));
     private static final List<DitaClass> prologOrder = Collections.unmodifiableList(Arrays.asList(
             TOPIC_AUTHOR,
             TOPIC_SOURCE,
@@ -46,23 +37,11 @@ public final class DitaMetaWriter extends AbstractDitaMetaWriter {
             TOPIC_DATA,
             TOPIC_DATA_ABOUT,
             TOPIC_FOREIGN,
-            TOPIC_UNKNOWN
-    ));
+            TOPIC_UNKNOWN));
     private static final List<DitaClass> metadataPosition = Collections.unmodifiableList(Arrays.asList(
-            TOPIC_AUTHOR,
-            TOPIC_SOURCE,
-            TOPIC_PUBLISHER,
-            TOPIC_COPYRIGHT,
-            TOPIC_CRITDATES,
-            TOPIC_PERMISSIONS
-    ));
-    private static final List<DitaClass> metadataOrder = Collections.unmodifiableList(Arrays.asList(
-            TOPIC_AUDIENCE,
-            TOPIC_CATEGORY,
-            TOPIC_KEYWORDS,
-            TOPIC_PRODINFO,
-            TOPIC_OTHERMETA
-    ));
+            TOPIC_AUTHOR, TOPIC_SOURCE, TOPIC_PUBLISHER, TOPIC_COPYRIGHT, TOPIC_CRITDATES, TOPIC_PERMISSIONS));
+    private static final List<DitaClass> metadataOrder = Collections.unmodifiableList(
+            Arrays.asList(TOPIC_AUDIENCE, TOPIC_CATEGORY, TOPIC_KEYWORDS, TOPIC_PRODINFO, TOPIC_OTHERMETA));
 
     public Document process(final Document doc) {
         final Element root = getMatchingTopicElement(doc.getDocumentElement());
@@ -83,5 +62,4 @@ public final class DitaMetaWriter extends AbstractDitaMetaWriter {
         }
         return doc;
     }
-
 }

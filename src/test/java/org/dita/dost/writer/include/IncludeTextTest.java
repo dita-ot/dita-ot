@@ -8,6 +8,19 @@
 
 package org.dita.dost.writer.include;
 
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.dita.dost.util.Constants.*;
+import static org.junit.Assert.assertEquals;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.UncheckedDITAOTException;
 import org.dita.dost.store.StreamStore;
@@ -20,20 +33,6 @@ import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertEquals;
 
 public class IncludeTextTest {
 
@@ -59,7 +58,6 @@ public class IncludeTextTest {
                 .src(tempDir.toURI().resolve("include.txt"))
                 .format(PR_D_CODEREF.localName)
                 .build());
-
     }
 
     @After
@@ -82,7 +80,7 @@ public class IncludeTextTest {
 
         // AllRange will normalize line feeds to '\n', so we cannot compare String directly
         try (BufferedReader act = new BufferedReader(new StringReader(characterBuffer.characters.toString()));
-             BufferedReader exp = new BufferedReader(new StringReader(DATA))) {
+                BufferedReader exp = new BufferedReader(new StringReader(DATA))) {
             String line;
             while ((line = exp.readLine()) != null) {
                 assertEquals(line, act.readLine());
@@ -116,6 +114,7 @@ public class IncludeTextTest {
 
     private static class CharacterBufferContentHandler extends DefaultHandler {
         StringBuilder characters = new StringBuilder();
+
         @Override
         public void characters(char[] ch, int start, int length) throws SAXException {
             characters.append(ch, start, length);

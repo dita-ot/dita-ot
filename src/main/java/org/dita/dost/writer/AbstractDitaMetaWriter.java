@@ -1,13 +1,16 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+
+import java.util.*;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -15,23 +18,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.*;
-
-import static org.dita.dost.util.Constants.*;
-
 /**
  * Base class for metadata filter that reads dita files and inserts metadata.
  */
 public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
 
     private static final Set<DitaClass> uniqueSet = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
-            TOPIC_CRITDATES,
-            TOPIC_PERMISSIONS,
-            TOPIC_PUBLISHER,
-            TOPIC_SOURCE,
-            MAP_SEARCHTITLE,
-            TOPIC_SEARCHTITLE
-    )));
+            TOPIC_CRITDATES, TOPIC_PERMISSIONS, TOPIC_PUBLISHER, TOPIC_SOURCE, MAP_SEARCHTITLE, TOPIC_SEARCHTITLE)));
 
     private Map<String, Element> metaTable;
     private String topicid = null;
@@ -39,7 +32,7 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
     public void setMetaTable(final Map<String, Element> metaTable) {
         this.metaTable = metaTable;
     }
-    
+
     public void setTopicId(final String topicid) {
         this.topicid = topicid;
     }
@@ -52,9 +45,9 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
             final List<Element> newChildren = getNewChildren(cls, metadataContainer.getOwnerDocument());
             if (!newChildren.isEmpty()) {
                 final Element insertPoint = getInsertionRef(metadataContainer, order.subList(i, order.size()));
-                for (final Element newChild: newChildren) {
+                for (final Element newChild : newChildren) {
                     if (skipUnlockedNavtitle(metadataContainer, newChild)) {
-                        //Navtitle element without locktitle="yes", do not push into topic
+                        // Navtitle element without locktitle="yes", do not push into topic
                     } else if (insertPoint != null) {
                         if (uniqueSet.contains(cls) && cls.matches(insertPoint)) {
                             metadataContainer.replaceChild(newChild, insertPoint);
@@ -70,14 +63,14 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
     }
 
     boolean hasMetadata(final List<DitaClass> order) {
-        for (final DitaClass cls: order) {
+        for (final DitaClass cls : order) {
             if (metaTable.containsKey(cls.matcher)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     /**
      * Check if an element is an unlocked navtitle, which should not be pushed into topics.
      *
@@ -85,12 +78,13 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
      * @param checkForNavtitle title element
      */
     boolean skipUnlockedNavtitle(final Element metadataContainer, final Element checkForNavtitle) {
-        if (!TOPIC_TITLEALTS.matches(metadataContainer) ||
-                !TOPIC_NAVTITLE.matches(checkForNavtitle)) {
+        if (!TOPIC_TITLEALTS.matches(metadataContainer) || !TOPIC_NAVTITLE.matches(checkForNavtitle)) {
             return false;
         } else if (checkForNavtitle.getAttributeNodeNS(DITA_OT_NS, ATTRIBUTE_NAME_LOCKTITLE) == null) {
             return false;
-        } else if (ATTRIBUTE_NAME_LOCKTITLE_VALUE_YES.matches(checkForNavtitle.getAttributeNodeNS(DITA_OT_NS, ATTRIBUTE_NAME_LOCKTITLE).getValue())) {
+        } else if (ATTRIBUTE_NAME_LOCKTITLE_VALUE_YES.matches(checkForNavtitle
+                .getAttributeNodeNS(DITA_OT_NS, ATTRIBUTE_NAME_LOCKTITLE)
+                .getValue())) {
             return false;
         }
         return true;
@@ -182,7 +176,7 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
         }
         return res;
     }
- 
+
     public Element getMatchingTopicElement(Element root) {
         if (this.topicid != null) {
             final Element res = matchTopicElementById(root);
@@ -200,7 +194,7 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
             return root;
         }
     }
- 
+
     private Element matchTopicElementById(Element topic) {
         if (topic.getAttribute(ATTRIBUTE_NAME_ID).equals(topicid)) {
             return topic;
@@ -224,5 +218,4 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
             parent.appendChild(newChild);
         }
     }
-
 }

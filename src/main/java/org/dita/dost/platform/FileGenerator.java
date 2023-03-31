@@ -1,13 +1,21 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005, 2006 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005, 2006 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.platform;
 
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.*;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
@@ -16,15 +24,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
-
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.*;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Generate outputfile with templates.
@@ -48,6 +47,7 @@ final class FileGenerator extends XMLFilterImpl {
     private DITAOTLogger logger;
     /** Plug-in features. */
     private final Map<String, List<Value>> featureTable;
+
     private final Map<String, Features> pluginTable;
     /** Template file. */
     private File templateFile;
@@ -82,7 +82,7 @@ final class FileGenerator extends XMLFilterImpl {
         templateFile = fileName;
 
         try (final InputStream in = new BufferedInputStream(new FileInputStream(fileName));
-             final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+                final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
             final Transformer serializer = TransformerFactory.newInstance().newTransformer();
             final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
             parserFactory.setNamespaceAware(true);
@@ -125,17 +125,19 @@ final class FileGenerator extends XMLFilterImpl {
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
+            throws SAXException {
         try {
             if (DITA_OT_NS.equals(uri) && EXTENSION_ELEM.equals(localName)) {
-                final IAction action = (IAction)Class.forName(attributes.getValue(BEHAVIOR_ATTR)).newInstance();
+                final IAction action = (IAction)
+                        Class.forName(attributes.getValue(BEHAVIOR_ATTR)).newInstance();
                 action.setLogger(logger);
                 action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
-                for (int i = 0; i <  attributes.getLength(); i++) {
+                for (int i = 0; i < attributes.getLength(); i++) {
                     action.addParam(attributes.getLocalName(i), attributes.getValue(i));
                 }
                 final String extension = attributes.getValue(EXTENSION_ID_ATTR);
-                //action.addParam("extension", extension);
+                // action.addParam("extension", extension);
                 if (featureTable.containsKey(extension)) {
                     action.setInput(featureTable.get(extension));
                 }
@@ -150,11 +152,13 @@ final class FileGenerator extends XMLFilterImpl {
                     if (DITA_OT_NS.equals(attributes.getURI(i))) {
                         if (!(EXTENSION_ATTR.equals(name))) {
                             if (extensions.containsKey(name)) {
-                                final IAction action = (IAction)Class.forName(extensions.get(name)).newInstance();
+                                final IAction action = (IAction)
+                                        Class.forName(extensions.get(name)).newInstance();
                                 action.setLogger(logger);
                                 action.setFeatures(pluginTable);
                                 action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
-                                final List<Value> value = Stream.of(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR))
+                                final List<Value> value = Stream.of(
+                                                attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR))
                                         .map(val -> new Value(null, val))
                                         .collect(Collectors.toList());
                                 action.setInput(value);
@@ -165,7 +169,12 @@ final class FileGenerator extends XMLFilterImpl {
                             }
                         }
                     } else {
-                        atts.add(attributes.getURI(i), name, attributes.getQName(i), attributes.getType(i), attributes.getValue(i));
+                        atts.add(
+                                attributes.getURI(i),
+                                name,
+                                attributes.getQName(i),
+                                attributes.getType(i),
+                                attributes.getValue(i));
                     }
                 }
                 getContentHandler().startElement(uri, localName, qName, atts.build());
@@ -190,5 +199,4 @@ final class FileGenerator extends XMLFilterImpl {
         }
         return res;
     }
-
 }

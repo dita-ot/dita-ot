@@ -7,6 +7,16 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.reader.GenListModuleReader.KEYREF_ATTRS;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
@@ -19,17 +29,6 @@ import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-
-import static org.dita.dost.reader.GenListModuleReader.KEYREF_ATTRS;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * Recursively inline map references in maps.
@@ -49,9 +48,9 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         try {
             templates = xsltCompiler.compile(new StreamSource(style));
         } catch (SaxonApiException e) {
-            throw new RuntimeException("Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(), e);
+            throw new RuntimeException(
+                    "Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(), e);
         }
-
     }
 
     /**
@@ -142,18 +141,17 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
                     .anyMatch(e -> e.hasAttribute(ATTRIBUTE_NAME_CONREF) || e.hasAttribute(ATTRIBUTE_NAME_CONKEYREF)));
         }
         if (!fileInfo.hasKeyref) {
-            builder.hasKeyref(elements.stream()
-                    .anyMatch(e -> {
-                        if (SUBJECTSCHEME_SUBJECTDEF.matches(e)) {
-                            return false;
-                        }
-                        for (final String attr : KEYREF_ATTRS) {
-                            if (e.hasAttribute(attr)) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    }));
+            builder.hasKeyref(elements.stream().anyMatch(e -> {
+                if (SUBJECTSCHEME_SUBJECTDEF.matches(e)) {
+                    return false;
+                }
+                for (final String attr : KEYREF_ATTRS) {
+                    if (e.hasAttribute(attr)) {
+                        return true;
+                    }
+                }
+                return false;
+            }));
         }
 
         return builder.build();
@@ -168,5 +166,4 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException("Failed to replace temporary file " + inputFile + ": " + e.getMessage(), e);
         }
     }
-
 }

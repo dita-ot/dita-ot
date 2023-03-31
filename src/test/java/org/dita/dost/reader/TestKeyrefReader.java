@@ -7,7 +7,23 @@
  */
 package org.dita.dost.reader;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.*;
+import static junit.framework.Assert.assertEquals;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import com.google.common.collect.ImmutableList;
+import java.io.File;
+import java.io.StringReader;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.stream.StreamSource;
 import junit.framework.Assert;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.s9api.DOMDestination;
@@ -18,7 +34,6 @@ import net.sf.saxon.trans.XPathException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
@@ -28,23 +43,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.StringReader;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Arrays.asList;
-import static java.util.Collections.*;
-import static junit.framework.Assert.assertEquals;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class TestKeyrefReader {
 
@@ -61,58 +59,39 @@ public class TestKeyrefReader {
 
     @Test
     public void cascadeChildKeys_none() {
-        final KeyScope src = keyScope(null,
-                List.of("key"));
+        final KeyScope src = keyScope(null, List.of("key"));
 
         final KeyScope act = keyrefreader.cascadeChildKeys(src);
-        final KeyScope exp = keyScope(null,
-                List.of("key"));
+        final KeyScope exp = keyScope(null, List.of("key"));
         assertEquals(exp, act);
     }
 
     @Test
     public void cascadeChildKeys_singleDepth() {
-        final KeyScope src = keyScope(null,
-                List.of("rootKey"),
-                List.of(keyScope("first",
-                        List.of("firstKey"))
-                ));
+        final KeyScope src = keyScope(null, List.of("rootKey"), List.of(keyScope("first", List.of("firstKey"))));
 
         final KeyScope act = keyrefreader.cascadeChildKeys(src);
-        final KeyScope exp = keyScope(null,
-                asList("rootKey", "first.firstKey"),
-                List.of(
-                        keyScope("first",
-                                List.of("firstKey"))
-                ));
+        final KeyScope exp =
+                keyScope(null, asList("rootKey", "first.firstKey"), List.of(keyScope("first", List.of("firstKey"))));
         assertEquals(exp, act);
     }
 
     @Test
     public void cascadeChildKeys_secondDepth() {
-        final KeyScope src = keyScope(null,
-                List.of("rootKey"
-                ),
+        final KeyScope src = keyScope(
+                null,
+                List.of("rootKey"),
                 ImmutableList.of(
-                        keyScope("first",
-                                List.of("firstKey"),
-                                List.of(
-                                        keyScope("second",
-                                                List.of("secondKey"))
-                                ))
-                ));
+                        keyScope("first", List.of("firstKey"), List.of(keyScope("second", List.of("secondKey"))))));
 
         final KeyScope act = keyrefreader.cascadeChildKeys(src);
-        final KeyScope exp = keyScope(null,
+        final KeyScope exp = keyScope(
+                null,
                 asList("rootKey", "first.firstKey", "first.second.secondKey"),
-                List.of(
-                        keyScope("first",
-                                asList("firstKey", "second.secondKey"),
-                                List.of(
-                                        keyScope("second",
-                                                List.of("secondKey"))
-                                ))
-                ));
+                List.of(keyScope(
+                        "first",
+                        asList("firstKey", "second.secondKey"),
+                        List.of(keyScope("second", List.of("secondKey"))))));
         assertEquals(exp, act);
     }
 
@@ -120,28 +99,42 @@ public class TestKeyrefReader {
     public void testKeyrefReader() throws Exception {
         final File filename = new File(srcDir, "keyrefreader.xml");
 
-//        final Set <String> set = new HashSet<String> ();
-//        set.add("blatview");
-//        set.add("blatfeference");
-//        set.add("blatintro");
-//        set.add("keyword");
-//        set.add("escape");
-//        set.add("top");
-//        set.add("nested");
+        //        final Set <String> set = new HashSet<String> ();
+        //        set.add("blatview");
+        //        set.add("blatfeference");
+        //        set.add("blatintro");
+        //        set.add("keyword");
+        //        set.add("escape");
+        //        set.add("top");
+        //        set.add("nested");
         keyrefreader.setLogger(new TestUtils.TestLogger());
         keyrefreader.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
-//        keyrefreader.setKeys(set);
+        //        keyrefreader.setKeys(set);
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope act = keyrefreader.getKeyDefinition();
 
         final Map<String, String> exp = new HashMap<>();
-        exp.put("blatfeference", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
-        exp.put("blatview", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
-        exp.put("blatintro", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
-        exp.put("keyword", "<topicref keys='keyword' class='- map/topicref '><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>keyword value</keyword></keywords></topicmeta></topicref>");
-        exp.put("escape", "<topicref keys='escape' class='- map/topicref ' navtitle='&amp;&lt;&gt;&quot;&apos;'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>&amp;&lt;&gt;&quot;&apos;</keyword></keywords></topicmeta></topicref>");
-        exp.put("top", "<topicref keys='top' class='- map/topicref ' navtitle='top'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>top keyword</keyword></keywords></topicmeta><topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref></topicref>");
-        exp.put("nested", "<topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref>");
+        exp.put(
+                "blatfeference",
+                "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
+        exp.put(
+                "blatview",
+                "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
+        exp.put(
+                "blatintro",
+                "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
+        exp.put(
+                "keyword",
+                "<topicref keys='keyword' class='- map/topicref '><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>keyword value</keyword></keywords></topicmeta></topicref>");
+        exp.put(
+                "escape",
+                "<topicref keys='escape' class='- map/topicref ' navtitle='&amp;&lt;&gt;&quot;&apos;'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>&amp;&lt;&gt;&quot;&apos;</keyword></keywords></topicmeta></topicref>");
+        exp.put(
+                "top",
+                "<topicref keys='top' class='- map/topicref ' navtitle='top'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>top keyword</keyword></keywords></topicmeta><topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref></topicref>");
+        exp.put(
+                "nested",
+                "<topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref>");
 
         assertEquals(exp.keySet(), act.keySet());
         for (Map.Entry<String, String> e : exp.entrySet()) {
@@ -159,9 +152,15 @@ public class TestKeyrefReader {
         final KeyScope act = keyrefreader.getKeyDefinition();
 
         final Map<String, String> exp = new HashMap<>();
-        exp.put("toner-specs", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-specs\" href=\"toner-type-a-specs.dita\"/>");
-        exp.put("toner-handling", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-handling\" href=\"toner-type-b-handling.dita\"/>");
-        exp.put("toner-disposal", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-disposal\" href=\"toner-type-c-disposal.dita\"/>");
+        exp.put(
+                "toner-specs",
+                "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-specs\" href=\"toner-type-a-specs.dita\"/>");
+        exp.put(
+                "toner-handling",
+                "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-handling\" href=\"toner-type-b-handling.dita\"/>");
+        exp.put(
+                "toner-disposal",
+                "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-disposal\" href=\"toner-type-c-disposal.dita\"/>");
 
         assertEquals(exp.keySet(), act.keySet());
         for (Map.Entry<String, String> e : exp.entrySet()) {
@@ -215,34 +214,34 @@ public class TestKeyrefReader {
         assertEquals("two.dita", scope2.get("scope2.test2").href.toString());
         assertEquals("three.dita", scope2.get("scope2.test3").href.toString());
 
-//        KeySpace keyspace = loadKeySpace("simpleKeyscope/simpleKeyscope.ditamap");
-//        testKeyAttr(keyspace, "test1", "id", "one");
-//        testKeyAttr(keyspace, "test2", "id", "four");
-//        testKeyAttr(keyspace, "test3", "id", null);
-//        testKeyAttr(keyspace, "scope1.test2", "id", "two");
-//        testKeyAttr(keyspace, "scope1.test3", "id", "three");
-//        testKeyAttr(keyspace, "scope2.test2", "id", "two");
-//        testKeyAttr(keyspace, "scope2.test3", "id", "three");
-//
-//        KeySpace scope1 = keyspace.findChildScope("scope1");
-//        assertNotNull(scope1);
-//        testKeyAttr(scope1, "test1", "id", "one");
-//        testKeyAttr(scope1, "test2", "id", "four");
-//        testKeyAttr(scope1, "test3", "id", "three");
-//        testKeyAttr(scope1, "scope1.test2", "id", "two");
-//        testKeyAttr(scope1, "scope1.test3", "id", "three");
-//        testKeyAttr(scope1, "scope2.test2", "id", "two");
-//        testKeyAttr(scope1, "scope2.test3", "id", "three");
-//
-//        KeySpace scope2 = keyspace.findChildScope("scope2");
-//        assertNotNull(scope2);
-//        testKeyAttr(scope2, "test1", "id", "one");
-//        testKeyAttr(scope2, "test2", "id", "four");
-//        testKeyAttr(scope2, "test3", "id", "three");
-//        testKeyAttr(scope2, "scope1.test2", "id", "two");
-//        testKeyAttr(scope2, "scope1.test3", "id", "three");
-//        testKeyAttr(scope2, "scope2.test2", "id", "two");
-//        testKeyAttr(scope2, "scope2.test3", "id", "three");
+        //        KeySpace keyspace = loadKeySpace("simpleKeyscope/simpleKeyscope.ditamap");
+        //        testKeyAttr(keyspace, "test1", "id", "one");
+        //        testKeyAttr(keyspace, "test2", "id", "four");
+        //        testKeyAttr(keyspace, "test3", "id", null);
+        //        testKeyAttr(keyspace, "scope1.test2", "id", "two");
+        //        testKeyAttr(keyspace, "scope1.test3", "id", "three");
+        //        testKeyAttr(keyspace, "scope2.test2", "id", "two");
+        //        testKeyAttr(keyspace, "scope2.test3", "id", "three");
+        //
+        //        KeySpace scope1 = keyspace.findChildScope("scope1");
+        //        assertNotNull(scope1);
+        //        testKeyAttr(scope1, "test1", "id", "one");
+        //        testKeyAttr(scope1, "test2", "id", "four");
+        //        testKeyAttr(scope1, "test3", "id", "three");
+        //        testKeyAttr(scope1, "scope1.test2", "id", "two");
+        //        testKeyAttr(scope1, "scope1.test3", "id", "three");
+        //        testKeyAttr(scope1, "scope2.test2", "id", "two");
+        //        testKeyAttr(scope1, "scope2.test3", "id", "three");
+        //
+        //        KeySpace scope2 = keyspace.findChildScope("scope2");
+        //        assertNotNull(scope2);
+        //        testKeyAttr(scope2, "test1", "id", "one");
+        //        testKeyAttr(scope2, "test2", "id", "four");
+        //        testKeyAttr(scope2, "test3", "id", "three");
+        //        testKeyAttr(scope2, "scope1.test2", "id", "two");
+        //        testKeyAttr(scope2, "scope1.test3", "id", "three");
+        //        testKeyAttr(scope2, "scope2.test2", "id", "two");
+        //        testKeyAttr(scope2, "scope2.test3", "id", "three");
     }
 
     @Test
@@ -270,31 +269,31 @@ public class TestKeyrefReader {
         assertEquals("two.dita", scope1.get("scope2.test1").href.toString());
         assertEquals("three.dita", scope1.get("scope2.test2").href.toString());
 
-//        final KeyScope scope2 = act.getChildScope("scope2");
-//        assertEquals(6, scope2.keySet().size());
-//        assertEquals("one.dita", scope2.get("test1").href.toString());
-//        assertEquals("four.dita", scope2.get("test2").href.toString());
-//        assertEquals("two.dita", scope2.get("scope1.test1").href.toString());
-//        assertEquals("three.dita", scope2.get("scope1.test2").href.toString());
-//        assertEquals("two.dita", scope2.get("scope2.test1").href.toString());
-//        assertEquals("three.dita", scope2.get("scope2.test2").href.toString());
+        //        final KeyScope scope2 = act.getChildScope("scope2");
+        //        assertEquals(6, scope2.keySet().size());
+        //        assertEquals("one.dita", scope2.get("test1").href.toString());
+        //        assertEquals("four.dita", scope2.get("test2").href.toString());
+        //        assertEquals("two.dita", scope2.get("scope1.test1").href.toString());
+        //        assertEquals("three.dita", scope2.get("scope1.test2").href.toString());
+        //        assertEquals("two.dita", scope2.get("scope2.test1").href.toString());
+        //        assertEquals("three.dita", scope2.get("scope2.test2").href.toString());
 
-//        KeySpace keyspace = loadKeySpace("qualifiedKeyOverride/map.ditamap");
-//        testKeyAttr(keyspace, "test1", "id", "one");
-//        testKeyAttr(keyspace, "test2", "id", "four");
-//        testKeyAttr(keyspace, "scope1.test1", "id", "one");
-//        testKeyAttr(keyspace, "scope1.test2", "id", "three");
-//        testKeyAttr(keyspace, "scope2.test1", "id", "two");
-//        testKeyAttr(keyspace, "scope2.test2", "id", "three");
-//
-//        KeySpace scope1 = keyspace.findChildScope("scope1");
-//        assertNotNull(scope1);
-//        testKeyAttr(scope1, "test1", "id", "one");
-//        testKeyAttr(scope1, "test2", "id", "four");
-//        testKeyAttr(scope1, "scope1.test1", "id", "one");
-//        testKeyAttr(scope1, "scope1.test2", "id", "three");
-//        testKeyAttr(scope1, "scope2.test1", "id", "two");
-//        testKeyAttr(scope1, "scope2.test2", "id", "three");
+        //        KeySpace keyspace = loadKeySpace("qualifiedKeyOverride/map.ditamap");
+        //        testKeyAttr(keyspace, "test1", "id", "one");
+        //        testKeyAttr(keyspace, "test2", "id", "four");
+        //        testKeyAttr(keyspace, "scope1.test1", "id", "one");
+        //        testKeyAttr(keyspace, "scope1.test2", "id", "three");
+        //        testKeyAttr(keyspace, "scope2.test1", "id", "two");
+        //        testKeyAttr(keyspace, "scope2.test2", "id", "three");
+        //
+        //        KeySpace scope1 = keyspace.findChildScope("scope1");
+        //        assertNotNull(scope1);
+        //        testKeyAttr(scope1, "test1", "id", "one");
+        //        testKeyAttr(scope1, "test2", "id", "four");
+        //        testKeyAttr(scope1, "scope1.test1", "id", "one");
+        //        testKeyAttr(scope1, "scope1.test2", "id", "three");
+        //        testKeyAttr(scope1, "scope2.test1", "id", "two");
+        //        testKeyAttr(scope1, "scope2.test2", "id", "three");
     }
 
     @Test
@@ -306,24 +305,35 @@ public class TestKeyrefReader {
 
         assertEquals(6, root.keySet().size());
         Assert.assertNull(root.get("dita-europe.conferenceName").href);
-        assertEquals("http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail", root.get("dita-europe.hotel").href.toString());
-        assertEquals("images/holidayInn.jpg", root.get("dita-europe.hotelImage").href.toString());
+        assertEquals(
+                "http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail",
+                root.get("dita-europe.hotel").href.toString());
+        assertEquals(
+                "images/holidayInn.jpg", root.get("dita-europe.hotelImage").href.toString());
         Assert.assertNull(root.get("telematics.conferenceName").href);
-        assertEquals("http://www.dolcemunich.com/", root.get("telematics.hotel").href.toString());
+        assertEquals(
+                "http://www.dolcemunich.com/", root.get("telematics.hotel").href.toString());
         assertEquals("images/dolce.jpg", root.get("telematics.hotelImage").href.toString());
 
         final KeyScope first = root.getChildScope("dita-europe");
         assertEquals(9, first.keySet().size());
         Assert.assertNull(first.get("conferenceName").href);
-        assertEquals("http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail", first.get("hotel").href.toString());
+        assertEquals(
+                "http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail",
+                first.get("hotel").href.toString());
         assertEquals("images/holidayInn.jpg", first.get("hotelImage").href.toString());
         Assert.assertNull(first.get("dita-europe.conferenceName").href);
-        assertEquals("http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail", first.get("dita-europe.hotel").href.toString());
-        assertEquals("images/holidayInn.jpg", first.get("dita-europe.hotelImage").href.toString());
+        assertEquals(
+                "http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail",
+                first.get("dita-europe.hotel").href.toString());
+        assertEquals(
+                "images/holidayInn.jpg",
+                first.get("dita-europe.hotelImage").href.toString());
         Assert.assertNull(first.get("telematics.conferenceName").href);
-        assertEquals("http://www.dolcemunich.com/", first.get("telematics.hotel").href.toString());
+        assertEquals(
+                "http://www.dolcemunich.com/",
+                first.get("telematics.hotel").href.toString());
         assertEquals("images/dolce.jpg", first.get("telematics.hotelImage").href.toString());
-
 
         final KeyScope second = root.getChildScope("telematics");
         assertEquals(9, second.keySet().size());
@@ -331,11 +341,18 @@ public class TestKeyrefReader {
         assertEquals("http://www.dolcemunich.com/", second.get("hotel").href.toString());
         assertEquals("images/dolce.jpg", second.get("hotelImage").href.toString());
         Assert.assertNull(second.get("dita-europe.conferenceName").href);
-        assertEquals("http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail", second.get("dita-europe.hotel").href.toString());
-        assertEquals("images/holidayInn.jpg", second.get("dita-europe.hotelImage").href.toString());
+        assertEquals(
+                "http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail",
+                second.get("dita-europe.hotel").href.toString());
+        assertEquals(
+                "images/holidayInn.jpg",
+                second.get("dita-europe.hotelImage").href.toString());
         Assert.assertNull(second.get("telematics.conferenceName").href);
-        assertEquals("http://www.dolcemunich.com/", second.get("telematics.hotel").href.toString());
-        assertEquals("images/dolce.jpg", second.get("telematics.hotelImage").href.toString());
+        assertEquals(
+                "http://www.dolcemunich.com/",
+                second.get("telematics.hotel").href.toString());
+        assertEquals(
+                "images/dolce.jpg", second.get("telematics.hotelImage").href.toString());
     }
 
     @Test
@@ -364,7 +381,6 @@ public class TestKeyrefReader {
         assertEquals("nested-one.dita", scope1.get("scope1.map.key1").href.toString());
         assertEquals("nested-three.dita", scope1.get("scope1.map.key3").href.toString());
 
-
         final KeyScope scope3 = scope1.getChildScope("mapref");
         assertEquals(16, scope3.keySet().size());
         assertEquals("one.dita", scope3.get("key1").href.toString());
@@ -388,7 +404,6 @@ public class TestKeyrefReader {
         assertEquals("nested-three.dita", scope4.get("scope1.mapref.key3").href.toString());
         assertEquals("nested-one.dita", scope4.get("scope1.map.key1").href.toString());
         assertEquals("nested-three.dita", scope4.get("scope1.map.key3").href.toString());
-
 
         final KeyScope scope2 = act.getChildScope("scope2");
         assertEquals(12, scope2.keySet().size());
@@ -437,7 +452,7 @@ public class TestKeyrefReader {
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
-//        log(root, "");
+        //        log(root, "");
 
         final KeyScope a2 = root.getChildScope("A").getChildScope("A-2");
         assertEquals(12, a2.keySet().size());
@@ -511,7 +526,9 @@ public class TestKeyrefReader {
         keyrefreader.read(filename.toURI(), readMap(filename));
 
         assertEquals(1, logger.getMessages().size());
-        assertEquals("[DOTJ069E][ERROR] Circular key definition same -> same.", logger.getMessages().get(0).message);
+        assertEquals(
+                "[DOTJ069E][ERROR] Circular key definition same -> same.",
+                logger.getMessages().get(0).message);
     }
 
     @Test
@@ -528,10 +545,11 @@ public class TestKeyrefReader {
         for (final Message msg : logger.getMessages()) {
             act.add(msg.message);
         }
-        assertEquals(new HashSet<>(asList(
-                "[DOTJ069E][ERROR] Circular key definition first -> second -> third -> first.",
-                "[DOTJ069E][ERROR] Circular key definition second -> third -> first -> second.",
-                "[DOTJ069E][ERROR] Circular key definition third -> first -> second -> third.")),
+        assertEquals(
+                new HashSet<>(asList(
+                        "[DOTJ069E][ERROR] Circular key definition first -> second -> third -> first.",
+                        "[DOTJ069E][ERROR] Circular key definition second -> third -> first -> second.",
+                        "[DOTJ069E][ERROR] Circular key definition third -> first -> second -> third.")),
                 act);
     }
 
@@ -583,7 +601,7 @@ public class TestKeyrefReader {
         assertEquals("def2", d.get("a").element.attribute("id"));
         assertEquals("def1", d.get("A.a").element.attribute("id"));
     }
-    
+
     @Test
     public void testCopyto() {
         final File filename = new File(srcDir, "copyto.ditamap");
@@ -594,7 +612,7 @@ public class TestKeyrefReader {
         assertEquals("topic-original.dita", root.get("original").href.toString());
         assertEquals("topic-copy.dita", root.get("copy").href.toString());
     }
-    
+
     @Test
     public void testIntermediaryKeyRefCopyMetadata() {
         final File filename = new File(srcDir, "intermediaryKeyref.ditamap");
@@ -629,7 +647,9 @@ public class TestKeyrefReader {
     }
 
     private KeyScope keyScope(String name, List<String> keydefs, List<KeyScope> keyscopes) {
-        return new KeyScope(null, name,
+        return new KeyScope(
+                null,
+                name,
                 unmodifiableMap(keydefs.stream().collect(Collectors.toMap(key -> key, this::keyDef))),
                 unmodifiableList(keyscopes));
     }
@@ -642,9 +662,12 @@ public class TestKeyrefReader {
         try {
             final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
-            final Document document = documentBuilderFactory.newDocumentBuilder().newDocument();
+            final Document document =
+                    documentBuilderFactory.newDocumentBuilder().newDocument();
             final DOMDestination destination = new DOMDestination(document);
-            final Receiver receiver = destination.getReceiver(xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(), new SerializationProperties());
+            final Receiver receiver = destination.getReceiver(
+                    xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
+                    new SerializationProperties());
             receiver.open();
             receiver.append(node.getUnderlyingNode());
             receiver.close();

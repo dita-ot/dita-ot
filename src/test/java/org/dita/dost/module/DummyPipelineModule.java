@@ -7,21 +7,18 @@
  */
 package org.dita.dost.module;
 
-import org.dita.dost.exception.DITAOTException;
+import java.util.List;
+import java.util.function.Predicate;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 
-import java.util.List;
-import java.util.function.Predicate;
-
 /**
  * Dummy pipeline module for testing.
- * 
+ *
  * @author Jarno Elovirta
  */
 public class DummyPipelineModule implements AbstractPipelineModule {

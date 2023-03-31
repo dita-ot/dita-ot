@@ -8,7 +8,12 @@
 
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
+
 import com.google.common.annotations.VisibleForTesting;
+import java.net.URI;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
@@ -16,18 +21,13 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import java.net.URI;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
-
 public class LinkFilter extends AbstractXMLFilter {
 
     /**
      * Destination temporary file
      */
     private URI destFile;
+
     private URI base;
 
     @Override
@@ -73,7 +73,8 @@ public class LinkFilter extends AbstractXMLFilter {
 
     @VisibleForTesting
     URI getHref(final URI target) {
-        if (target.getFragment() != null && (target.getPath() == null || target.getPath().equals(""))) {
+        if (target.getFragment() != null
+                && (target.getPath() == null || target.getPath().equals(""))) {
             return target;
         }
         final URI targetAbs = stripFragment(currentFile.resolve(target));

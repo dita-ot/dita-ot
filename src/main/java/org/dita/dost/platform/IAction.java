@@ -1,16 +1,15 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005, 2006 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005, 2006 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.platform;
 
 import java.util.List;
 import java.util.Map;
-
 import org.dita.dost.log.DITAOTLogger;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;

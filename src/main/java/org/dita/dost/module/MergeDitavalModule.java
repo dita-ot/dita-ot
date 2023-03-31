@@ -16,23 +16,20 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.*;
 
 /**
@@ -71,14 +68,16 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
     private void parseInputParameters(final AbstractPipelineInput input) {
         final File basedir = toFile(input.getAttribute(ANT_INVOKER_PARAM_BASEDIR));
         if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
-            final String[] allDitavalFiles = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL).split(File.pathSeparator);
+            final String[] allDitavalFiles =
+                    input.getAttribute(ANT_INVOKER_PARAM_DITAVAL).split(File.pathSeparator);
             for (final String oneDitavalFile : allDitavalFiles) {
                 logger.debug("Evaluating ditaval: " + oneDitavalFile);
                 final URI ditavalInput = toURI(oneDitavalFile);
                 URI usingDitavalInput;
                 if (ditavalInput.isAbsolute()) {
                     usingDitavalInput = ditavalInput;
-                } else if (ditavalInput.getPath() != null && ditavalInput.getPath().startsWith(URI_SEPARATOR)) {
+                } else if (ditavalInput.getPath() != null
+                        && ditavalInput.getPath().startsWith(URI_SEPARATOR)) {
                     usingDitavalInput = setScheme(ditavalInput, "file");
                 } else {
                     usingDitavalInput = basedir.toURI().resolve(ditavalInput);
@@ -86,8 +85,8 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
                 if (new File(usingDitavalInput).exists()) {
                     ditavalFiles.add(new File(usingDitavalInput));
                 } else {
-                    logger.error(
-                            MessageUtils.getMessage("DOTJ071E", usingDitavalInput.toString()).toString());
+                    logger.error(MessageUtils.getMessage("DOTJ071E", usingDitavalInput.toString())
+                            .toString());
                 }
             }
         }
@@ -104,7 +103,8 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
         final DocumentBuilder ditavalbuilder = XMLUtils.getDocumentBuilder();
         ditavalbuilder.setEntityResolver(CatalogUtils.getCatalogResolver());
         XMLStreamWriter export = null;
-        try (OutputStream exportStream = job.getStore().getOutputStream(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL).toURI())) {
+        try (OutputStream exportStream =
+                job.getStore().getOutputStream(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL).toURI())) {
             export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
             export.writeStartDocument();
             export.writeStartElement("val");
@@ -133,7 +133,6 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
                 }
             }
         }
-
     }
 
     private void writeConditions(XMLStreamWriter export, NodeList conditionElements, URI ditavalDirectory) {
@@ -155,19 +154,27 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
                                 }
                             }
                         }
-                        if (atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ||
-                                atts.getNamedItem(ATTRIBUTE_NAME_IMG) != null) {
-                            final String imagerefAtt = atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null ?
-                                    atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF).getNodeValue() :    // DITA 1.1 and later: use @imageref on <startflag>, <endflag>
-                                    atts.getNamedItem(ATTRIBUTE_NAME_IMG).getNodeValue();          // Pre-DITA 1.1: use @img on <prop>
+                        if (atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null
+                                || atts.getNamedItem(ATTRIBUTE_NAME_IMG) != null) {
+                            final String imagerefAtt = atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF) != null
+                                    ? atts.getNamedItem(ATTRIBUTE_NAME_IMAGEREF).getNodeValue()
+                                    : // DITA 1.1 and later: use @imageref on <startflag>, <endflag>
+                                    atts.getNamedItem(ATTRIBUTE_NAME_IMG)
+                                            .getNodeValue(); // Pre-DITA 1.1: use @img on <prop>
                             if (toURI(imagerefAtt).isAbsolute()) {
-                                export.writeAttribute(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI, imagerefAtt);
+                                export.writeAttribute(
+                                        DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI, imagerefAtt);
                             } else {
-                                export.writeAttribute(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI, ditavalDirectory.resolve(imagerefAtt).toString());
+                                export.writeAttribute(
+                                        DITA_OT_NS_PREFIX,
+                                        DITA_OT_NAMESPACE,
+                                        ATTRIBUTE_NAME_IMAGEREF_URI,
+                                        ditavalDirectory.resolve(imagerefAtt).toString());
                             }
                         }
                         for (int j = 0; j < atts.getLength(); j++) {
-                            export.writeAttribute(atts.item(j).getNodeName(), atts.item(j).getNodeValue());
+                            export.writeAttribute(
+                                    atts.item(j).getNodeName(), atts.item(j).getNodeValue());
                         }
                         writeConditions(export, node.getChildNodes(), ditavalDirectory);
                         export.writeEndElement();
@@ -179,5 +186,4 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
             logger.error("Failed to generate merged DITAVAL file: " + e.getMessage(), e);
         }
     }
-
 }

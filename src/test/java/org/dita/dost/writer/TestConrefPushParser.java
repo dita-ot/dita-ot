@@ -7,6 +7,12 @@
  */
 package org.dita.dost.writer;
 
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.dita.dost.TestUtils.buildControlDocument;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Hashtable;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.reader.ConrefPushReader.MoveKey;
@@ -20,13 +26,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Hashtable;
-
-import static org.apache.commons.io.FileUtils.copyFile;
-import static org.dita.dost.TestUtils.buildControlDocument;
 
 public class TestConrefPushParser {
 
@@ -46,12 +45,18 @@ public class TestConrefPushParser {
     @Test
     public void testWrite() throws DITAOTException, SAXException, IOException {
         final Hashtable<MoveKey, DocumentFragment> pushActions = new Hashtable<>();
-        pushActions.put(new MoveKey("#X/A", "pushbefore"),
-                getFragment("<step class='- topic/li task/step '><cmd class='- topic/ph task/cmd '>before</cmd></step>"));
-        pushActions.put(new MoveKey("#X/B", "pushafter"),
-                getFragment("<step class='- topic/li task/step '><cmd class='- topic/ph task/cmd '>after</cmd></step>"));
-        pushActions.put(new MoveKey("#X/C", "pushreplace"),
-                getFragment("<step class='- topic/li task/step ' id='C'><cmd class='- topic/ph task/cmd '>replace</cmd></step>"));
+        pushActions.put(
+                new MoveKey("#X/A", "pushbefore"),
+                getFragment(
+                        "<step class='- topic/li task/step '><cmd class='- topic/ph task/cmd '>before</cmd></step>"));
+        pushActions.put(
+                new MoveKey("#X/B", "pushafter"),
+                getFragment(
+                        "<step class='- topic/li task/step '><cmd class='- topic/ph task/cmd '>after</cmd></step>"));
+        pushActions.put(
+                new MoveKey("#X/C", "pushreplace"),
+                getFragment(
+                        "<step class='- topic/li task/step ' id='C'><cmd class='- topic/ph task/cmd '>replace</cmd></step>"));
 
         final ConrefPushParser parser = new ConrefPushParser();
         parser.setLogger(new TestUtils.TestLogger());
@@ -61,8 +66,7 @@ public class TestConrefPushParser {
 
         TestUtils.assertXMLEqual(
                 new InputSource(new File(expDir, "conrefpush_stub2.xml").toURI().toString()),
-                new InputSource(targetFile.toURI().toString())
-        );
+                new InputSource(targetFile.toURI().toString()));
     }
 
     private DocumentFragment getFragment(final String text) {

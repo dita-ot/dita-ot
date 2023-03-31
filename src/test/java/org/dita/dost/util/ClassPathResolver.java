@@ -7,13 +7,13 @@
  */
 package org.dita.dost.util;
 
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * URI resolver that support accessing classpath resources.

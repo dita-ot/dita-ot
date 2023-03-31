@@ -8,9 +8,8 @@
 
 package org.dita.dost.platform;
 
-import org.dita.dost.log.DITAOTLogger;
-
 import java.io.File;
+import org.dita.dost.log.DITAOTLogger;
 
 /**
  * Custom integration processor.

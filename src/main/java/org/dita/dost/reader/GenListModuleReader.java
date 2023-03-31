@@ -1,13 +1,22 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Configuration.ditaFormat;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.nonDitaContext;
+
+import java.net.URI;
+import java.util.*;
+import java.util.function.Predicate;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
@@ -17,16 +26,6 @@ import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
-import java.net.URI;
-import java.util.*;
-import java.util.function.Predicate;
-
-import static org.dita.dost.util.Configuration.ditaFormat;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.nonDitaContext;
-import static org.dita.dost.util.FileUtils.*;
 
 /**
  * Parse relevant DITA files and collect information.
@@ -137,6 +136,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps.
      */
     private final Map<URI, Set<URI>> schemeRelationGraph = new LinkedHashMap<>();
+
     private boolean isRootElement = true;
     private DitaClass rootClass = null;
     private Predicate<String> formatFilter;
@@ -410,10 +410,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 case "http", "https", "ftp", "ftps", "sftp", "mailto" -> scope = ATTR_SCOPE_VALUE_EXTERNAL;
             }
         }
-        if (href != null && href.getPath() != null && !href.getPath().isEmpty() &&
-                !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope) && !ATTR_SCOPE_VALUE_PEER.equals(scope)) {
-            if (isFormatDita(atts.getValue(ATTRIBUTE_NAME_FORMAT)) && !isDitaMap() &&
-                    !job.crawlTopics()) {
+        if (href != null
+                && href.getPath() != null
+                && !href.getPath().isEmpty()
+                && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)
+                && !ATTR_SCOPE_VALUE_PEER.equals(scope)) {
+            if (isFormatDita(atts.getValue(ATTRIBUTE_NAME_FORMAT)) && !isDitaMap() && !job.crawlTopics()) {
                 // Topic link within a topic, ignore if only crawling map
             } else if (!(MAP_TOPICREF.matches(cls))) {
                 nonTopicrefReferenceSet.add(stripFragment(currentDir.resolve(href)));
@@ -434,9 +436,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (nonDitaContext(classes)) {
                 // Normal case for bad class: in non DITA context, no message
             } else if (atts.getValue(ATTRIBUTE_NAME_CLASS) == null) { // Missing @class
-                logger.info(MessageUtils.getMessage("DOTJ030I", localName).setLocation(atts).toString());
+                logger.info(MessageUtils.getMessage("DOTJ030I", localName)
+                        .setLocation(atts)
+                        .toString());
             } else { // Invalid DITA @class
-                logger.info(MessageUtils.getMessage("DOTJ070I", atts.getValue(ATTRIBUTE_NAME_CLASS), localName).setLocation(atts).toString());
+                logger.info(MessageUtils.getMessage("DOTJ070I", atts.getValue(ATTRIBUTE_NAME_CLASS), localName)
+                        .setLocation(atts)
+                        .toString());
             }
         } else {
             if ((MAP_MAP.matches(cls)) || (TOPIC_TITLE.matches(cls))) {
@@ -468,7 +474,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             return;
         }
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
+        if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope)
+                || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
                 || href.toString().startsWith(SHARP)) {
             return;
         }
@@ -509,14 +516,16 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (SUBJECTSCHEME_SUBJECTSCHEME.matches(classValue)) {
             // Make it easy to do the BFS later.
             final URI key = ROOT_URI;
-            final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<>();
+            final Set<URI> children =
+                    schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<>();
             children.add(currentFile);
             schemeRelationGraph.put(key, children);
             schemeRefSet.add(currentFile);
         } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
             if (href != null) {
                 final URI key = currentFile;
-                final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<>();
+                final Set<URI> children =
+                        schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<>();
                 final URI child = currentFile.resolve(href);
                 children.add(child);
                 schemeRelationGraph.put(key, children);
@@ -565,9 +574,11 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             return;
         }
 
-        //Check if this attribute will be ignored due to conref
+        // Check if this attribute will be ignored due to conref
         final String attrConref = atts.getValue(ATTRIBUTE_NAME_CONREF);
-        if (attrConref != null && !attrConref.isEmpty() && ATTR_VALUE_DITA_USE_CONREF_TARGET.equals(attrValue.toString())) {
+        if (attrConref != null
+                && !attrConref.isEmpty()
+                && ATTR_VALUE_DITA_USE_CONREF_TARGET.equals(attrValue.toString())) {
             return;
         }
 
@@ -580,7 +591,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         // external resource is filtered here.
-        if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
+        if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope)
+                || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
                 || attrValue.toString().startsWith(SHARP)) {
             return;
         }
@@ -598,8 +610,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
             hasHref = true;
             // Collect non-conref and non-copyto targets
-            if (isFormatDita(attrFormat) && !isDitaMap() &&
-                    !job.crawlTopics()) {
+            if (isFormatDita(attrFormat) && !isDitaMap() && !job.crawlTopics()) {
                 // DITA link in a topic, but not crawling topics
             } else if ((followLinks() && canFollow(attrValue))
                     || TOPIC_IMAGE.matches(attrClass)
@@ -625,7 +636,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                         if (copytoMap.get(filename) != null) {
                             if (!value.equals(copytoMap.get(filename))) {
                                 logger.warn(MessageUtils.getMessage("DOTX065W", copyTo.toString(), filename.toString())
-                                        .setLocation(atts).toString());
+                                        .setLocation(atts)
+                                        .toString());
                             }
                             ignoredCopytoSourceSet.add(value);
                         } else {
@@ -653,7 +665,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             return ATTR_FORMAT_VALUE_IMAGE;
         } else if (TOPIC_OBJECT.matches(attrClass)) {
             throw new IllegalArgumentException();
-            //return ATTR_FORMAT_VALUE_HTML;
+            // return ATTR_FORMAT_VALUE_HTML;
         } else {
             String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
             if (format != null && isSupportedImageFile("." + format)) {
@@ -667,7 +679,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         String attrValue = atts.getValue(ATTRIBUTE_NAME_CONREF);
         if (attrValue != null) {
             if (attrValue.isEmpty()) {
-                logger.warn(MessageUtils.getMessage("DOTJ081W").setLocation(atts).toString());
+                logger.warn(
+                        MessageUtils.getMessage("DOTJ081W").setLocation(atts).toString());
             } else {
                 hasConRef = true;
 
@@ -696,13 +709,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
     }
 
-    public final static String[] KEYREF_ATTRS = new String[]{
-            ATTRIBUTE_NAME_KEYREF,
-            ATTRIBUTE_NAME_CONKEYREF,
-            ATTRIBUTE_NAME_ARCHIVEKEYREFS,
-            ATTRIBUTE_NAME_CLASSIDKEYREF,
-            ATTRIBUTE_NAME_CODEBASEKEYREF,
-            ATTRIBUTE_NAME_DATAKEYREF
+    public static final String[] KEYREF_ATTRS = new String[] {
+        ATTRIBUTE_NAME_KEYREF,
+        ATTRIBUTE_NAME_CONKEYREF,
+        ATTRIBUTE_NAME_ARCHIVEKEYREFS,
+        ATTRIBUTE_NAME_CLASSIDKEYREF,
+        ATTRIBUTE_NAME_CODEBASEKEYREF,
+        ATTRIBUTE_NAME_DATAKEYREF
     };
 
     private void parseKeyrefAttr(final Attributes atts) {
@@ -774,10 +787,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
             if (isOutFile(filename)) {
                 if (job.getOutterControl() == Job.OutterControl.FAIL) {
-                    final MessageBean msgBean = MessageUtils.getMessage("DOTJ035F", prop).setLocation(atts);
+                    final MessageBean msgBean =
+                            MessageUtils.getMessage("DOTJ035F", prop).setLocation(atts);
                     throw new SAXParseException(null, null, new DITAOTException(msgBean, null, msgBean.toString()));
                 } else if (job.getOutterControl() == Job.OutterControl.WARN) {
-                    final MessageBean msgBean = MessageUtils.getMessage("DOTJ036W", prop).setLocation(atts);
+                    final MessageBean msgBean =
+                            MessageUtils.getMessage("DOTJ036W", prop).setLocation(atts);
                     logger.warn(msgBean.toString());
                 }
                 addToOutFilesSet(filename);
@@ -817,7 +832,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             final int prime = 31;
             int result = 1;
             result = prime * result + ((filename == null) ? 0 : filename.hashCode());
-//            result = prime * result + ((format == null) ? 0 : format.hashCode());
+            //            result = prime * result + ((format == null) ? 0 : format.hashCode());
             return result;
         }
 
@@ -839,15 +854,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             } else if (!filename.equals(other.filename)) {
                 return false;
             }
-//            if (format == null) {
-//                if (other.format != null) {
-//                    return false;
-//                }
-//            } else if (!format.equals(other.format)) {
-//                return false;
-//            }
+            //            if (format == null) {
+            //                if (other.format != null) {
+            //                    return false;
+            //                }
+            //            } else if (!format.equals(other.format)) {
+            //                return false;
+            //            }
             return true;
         }
     }
-
 }

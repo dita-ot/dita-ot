@@ -8,14 +8,13 @@
 
 package org.dita.dost;
 
-import org.junit.Test;
-
-import java.io.File;
-import java.nio.file.Paths;
-
 import static org.dita.dost.AbstractIntegrationTest.Transtype.HTML5;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.nio.file.Paths;
+import org.junit.Test;
 
 public class IntegrationTestHtml5 extends AbstractIntegrationTest {
 
@@ -31,7 +30,8 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
     @Test
     public void html5_cssNoCopy() throws Throwable {
         final File srcDir = new File(resourceDir, "html5_css" + File.separator + "src");
-        final File actDir = builder().name("html5_css")
+        final File actDir = builder()
+                .name("html5_css")
                 .transtype(HTML5)
                 .input(Paths.get("topic.dita"))
                 .put("args.css", "custom.css")
@@ -45,7 +45,8 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
     @Test
     public void html5_css() throws Throwable {
         final File srcDir = new File(resourceDir, "html5_css" + File.separator + "src");
-        final File actDir = builder().name("html5_css")
+        final File actDir = builder()
+                .name("html5_css")
                 .transtype(HTML5)
                 .input(Paths.get("topic.dita"))
                 .put("args.css", "custom.css")
@@ -59,7 +60,8 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
     @Test
     public void html5_csspath() throws Throwable {
         final File srcDir = new File(resourceDir, "html5_csspath" + File.separator + "src");
-        final File actDir = builder().name("html5_csspath")
+        final File actDir = builder()
+                .name("html5_csspath")
                 .transtype(HTML5)
                 .input(Paths.get("topic.dita"))
                 .put("args.css", "custom.css")
@@ -74,7 +76,8 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
     @Test
     public void html5_csspathAbsolute() throws Throwable {
         final File srcDir = new File(resourceDir, "html5_csspath" + File.separator + "src");
-        final File actDir = builder().name("html5_csspath")
+        final File actDir = builder()
+                .name("html5_csspath")
                 .transtype(HTML5)
                 .input(Paths.get("topic.dita"))
                 .put("args.css", new File(srcDir, "custom.css").getAbsolutePath())
@@ -87,7 +90,8 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
 
     @Test
     public void html5_cssExternal() throws Throwable {
-        builder().name("html5_cssExternal")
+        builder()
+                .name("html5_cssExternal")
                 .transtype(HTML5)
                 .input(Paths.get("topic.dita"))
                 .put("args.css", "custom.css")
@@ -98,7 +102,8 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
     @Test
     public void html5_ditaval_passthrough_all() throws Throwable {
         final File srcDir = new File(resourceDir, "html5_ditaval" + File.separator + "src");
-        builder().name("html5_ditaval")
+        builder()
+                .name("html5_ditaval")
                 .transtype(HTML5)
                 .input(Paths.get("all.ditamap"))
                 .put("validate", "no")
@@ -106,5 +111,4 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
                 .warnCount(1)
                 .test();
     }
-
 }

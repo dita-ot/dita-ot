@@ -7,6 +7,20 @@
  */
 package org.dita.dost.reader;
 
+import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URI;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
 import org.dita.dost.TestUtils;
 import org.dita.dost.store.CacheStore;
 import org.dita.dost.store.StreamStore;
@@ -19,21 +33,6 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URI;
-
-import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.junit.Assert.assertEquals;
 
 public class MergeTopicParserTest {
 
@@ -139,7 +138,8 @@ public class MergeTopicParserTest {
         store.writeDocument(doc, uri);
 
         parser.setOutput(new File(tmpDir, "test.xml"));
-        final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalDita", URI.class, AttributesImpl.class);
+        final Method method =
+                MergeTopicParser.class.getDeclaredMethod("handleLocalDita", URI.class, AttributesImpl.class);
         method.setAccessible(true);
 
         parser.parse("test.xml", tmpDir.getAbsoluteFile());
@@ -150,5 +150,4 @@ public class MergeTopicParserTest {
         assertEquals("#unique_7", val.toString());
         assertEquals("unique_7", util.getIdValue(new File(tmpDir, "test.jpg").toURI()));
     }
-
 }

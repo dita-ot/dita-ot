@@ -8,6 +8,11 @@
 
 package org.dita.dost.module.reader;
 
+import static org.dita.dost.util.Constants.*;
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
+import java.net.URI;
 import org.dita.dost.TestUtils;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.GenListModuleReader;
@@ -19,12 +24,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.net.URI;
-
-import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertEquals;
 
 public class TopicReaderModuleTest {
 
@@ -68,30 +67,33 @@ public class TopicReaderModuleTest {
 
     @Test
     public void categorizeReferenceFileDitamap() throws Exception {
-        reader.categorizeReferenceFile(new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.ditamap"), ATTR_FORMAT_VALUE_DITAMAP));
+        reader.categorizeReferenceFile(new GenListModuleReader.Reference(
+                URI.create("file:///foo/bar/baz.ditamap"), ATTR_FORMAT_VALUE_DITAMAP));
         assertEquals(0, reader.htmlSet.size());
         assertEquals(0, reader.waitList.size());
     }
 
     @Test
     public void categorizeReferenceFileDitaval() throws Exception {
-        reader.categorizeReferenceFile(new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.ditaval"), ATTR_FORMAT_VALUE_DITAVAL));
+        reader.categorizeReferenceFile(new GenListModuleReader.Reference(
+                URI.create("file:///foo/bar/baz.ditaval"), ATTR_FORMAT_VALUE_DITAVAL));
         assertEquals(0, reader.htmlSet.size());
         assertEquals(0, reader.formatSet.size());
     }
 
     @Test
     public void categorizeReferenceFileHtml() throws Exception {
-        reader.categorizeReferenceFile(new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.html"), ATTR_FORMAT_VALUE_HTML));
+        reader.categorizeReferenceFile(
+                new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.html"), ATTR_FORMAT_VALUE_HTML));
         assertEquals(1, reader.htmlSet.size());
         assertEquals(0, reader.formatSet.size());
     }
 
     @Test
     public void categorizeReferenceFileImage() throws Exception {
-        reader.categorizeReferenceFile(new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.jpg"), ATTR_FORMAT_VALUE_IMAGE));
+        reader.categorizeReferenceFile(
+                new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.jpg"), ATTR_FORMAT_VALUE_IMAGE));
         assertEquals(0, reader.htmlSet.size());
         assertEquals(1, reader.formatSet.size());
     }
-
 }

@@ -36,6 +36,4 @@ public final class GrammarPoolManager {
         }
         return pool;
     }
-
 }
-

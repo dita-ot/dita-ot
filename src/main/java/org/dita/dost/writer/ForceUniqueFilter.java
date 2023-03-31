@@ -7,21 +7,20 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
+import static org.dita.dost.util.FileUtils.getExtension;
+import static org.dita.dost.util.FileUtils.replaceExtension;
+import static org.dita.dost.util.URLUtils.*;
+
+import java.net.URI;
+import java.util.*;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.net.URI;
-import java.util.*;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.DitaUtils.isLocalScope;
-import static org.dita.dost.util.FileUtils.getExtension;
-import static org.dita.dost.util.FileUtils.replaceExtension;
-import static org.dita.dost.util.URLUtils.*;
 
 /**
  * Create copy-to attributes for duplicate topicrefs.
@@ -34,23 +33,24 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
      * Generated copy-to mappings, key is target topic and value is source topic.
      */
     public final Map<FileInfo, FileInfo> copyToMap = new HashMap<>();
+
     private TempFileNameScheme tempFileNameScheme;
 
     /**
-     * Stack used to detect the current element type. 
+     * Stack used to detect the current element type.
      */
     private final Deque<Optional<String>> classElementStack = new ArrayDeque<>();
-    
+
     /**
      * Stack used to hold the current topicref parent.
      */
     private final Deque<ParentTopicref> topicrefParentsStack = new ArrayDeque<>();
-    
+
     // ContentHandler methods
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName,
-                             final Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+            throws SAXException {
         ignoreStack.push(MAP_RELTABLE.matches(atts) ? false : ignoreStack.isEmpty() || ignoreStack.peek());
 
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
@@ -67,18 +67,19 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
             String currentProcesingResource = res.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
             final String processingRole = getCascadingProcessingRole(currentProcesingResource);
             FileInfo dstFi = null;
-            if (source != null &&
-                    isLocalScope(scope) &&
-                    (format == null || format.equals(ATTR_FORMAT_VALUE_DITA)) &&
-                    (processingRole == null || processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_NORMAL))) {
+            if (source != null
+                    && isLocalScope(scope)
+                    && (format == null || format.equals(ATTR_FORMAT_VALUE_DITA))
+                    && (processingRole == null || processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_NORMAL))) {
                 final URI file = stripFragment(source);
                 Integer count = topicrefCount.getOrDefault(file, 0);
-                
+
                 final ParentTopicref parentTopicref = topicrefParentsStack.peek();
                 boolean parentTopicHasEmbededSubtopics = false;
                 if (parentTopicref != null && parentTopicref.href != null) {
                     final URI parentHref = stripFragment(parentTopicref.href);
-                    parentTopicHasEmbededSubtopics = href != null && parentHref.equals(file) && href.getFragment() != null;
+                    parentTopicHasEmbededSubtopics =
+                            href != null && parentHref.equals(file) && href.getFragment() != null;
                 }
                 if (parentTopicHasEmbededSubtopics) {
                     dstFi = parentTopicref.dstFi;
@@ -86,7 +87,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
                     count++;
                     topicrefCount.put(file, count);
                 }
-                
+
                 if (count > 1) { // not only reference to this topic
                     final FileInfo srcFi = job.getFileInfo(currentFile.resolve(stripFragment(source)));
                     if (srcFi != null) {
@@ -117,11 +118,11 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
      */
     private String getCascadingScope(String currentScope) {
         String scope = currentScope;
-        if(scope == null) {
+        if (scope == null) {
             Iterator<ParentTopicref> iter = topicrefParentsStack.descendingIterator();
-            while(iter.hasNext()) {
+            while (iter.hasNext()) {
                 ParentTopicref parentTopicref = iter.next();
-                if(parentTopicref.scope != null) {
+                if (parentTopicref.scope != null) {
                     scope = parentTopicref.scope;
                     break;
                 }
@@ -129,7 +130,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
         }
         return scope;
     }
-    
+
     /**
      * Get the processing role of the element, looking also at cascading values.
      * @param currentProcessingRole The current processing role.
@@ -137,11 +138,11 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
      */
     private String getCascadingProcessingRole(String currentProcessingRole) {
         String processingRole = currentProcessingRole;
-        if(processingRole == null) {
+        if (processingRole == null) {
             Iterator<ParentTopicref> iter = topicrefParentsStack.descendingIterator();
-            while(iter.hasNext()) {
+            while (iter.hasNext()) {
                 ParentTopicref parentTopicref = iter.next();
-                if(parentTopicref.processingRole != null) {
+                if (parentTopicref.processingRole != null) {
                     processingRole = parentTopicref.processingRole;
                     break;
                 }
@@ -196,7 +197,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
      * @param scope          Scope attribute on the topicref
      * @param processingRole processing-role attribute on the topicref
      */
-     private record ParentTopicref(URI href, FileInfo dstFi, String scope, String processingRole) {
+    private record ParentTopicref(URI href, FileInfo dstFi, String scope, String processingRole) {
         /**
          * Constructor.
          *
@@ -205,8 +206,6 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
          * @param scope          Value of scope attribute
          * @param processingRole Value of processing-role attribute.
          */
-        private ParentTopicref {
-        }
-
+        private ParentTopicref {}
     }
 }

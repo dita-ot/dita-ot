@@ -68,12 +68,10 @@ public class MessageBeanTest {
         assertNull(new MessageBean(null, (MessageBean.Type) null, null, null).getType());
     }
 
-
     @Test
     public void testToString() {
         assertEquals("[null][null] null", new MessageBean(null, (MessageBean.Type) null, null, null).toString());
         assertEquals("[foo][INFO] baz qux", new MessageBean("foo", INFO, "baz", "qux").toString());
         assertEquals("[foo][INFO] baz", new MessageBean("foo", INFO, "baz", null).toString());
     }
-
 }

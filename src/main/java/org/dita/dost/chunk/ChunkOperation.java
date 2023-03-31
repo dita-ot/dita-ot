@@ -8,21 +8,21 @@
 
 package org.dita.dost.chunk;
 
-import org.w3c.dom.Element;
+import static java.util.Collections.unmodifiableList;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.w3c.dom.Element;
 
-import static java.util.Collections.unmodifiableList;
-
-record ChunkOperation(org.dita.dost.chunk.ChunkOperation.Operation operation,
-                      URI src,
-                      URI dst,
-                      String id,
-                      Element topicref,
-                      List<ChunkOperation> children) {
+record ChunkOperation(
+        org.dita.dost.chunk.ChunkOperation.Operation operation,
+        URI src,
+        URI dst,
+        String id,
+        Element topicref,
+        List<ChunkOperation> children) {
 
     public enum Operation {
         COMBINE("combine"),
@@ -36,13 +36,12 @@ record ChunkOperation(org.dita.dost.chunk.ChunkOperation.Operation operation,
 
     @Override
     public String toString() {
-        return "ChunkOperation{" +
-                "operation=" + operation +
-                ", src=" + src +
-                ", dst=" + dst +
-                ", id=" + id +
-                ", children=" + children +
-                '}';
+        return "ChunkOperation{" + "operation="
+                + operation + ", src="
+                + src + ", dst="
+                + dst + ", id="
+                + id + ", children="
+                + children + '}';
     }
 
     public static ChunkBuilder builder(final Operation operation) {
@@ -71,13 +70,13 @@ record ChunkOperation(org.dita.dost.chunk.ChunkOperation.Operation operation,
         }
 
         public ChunkBuilder src(final URI src) {
-//            assert src.isAbsolute();
+            //            assert src.isAbsolute();
             this.src = src;
             return this;
         }
 
         public ChunkBuilder dst(final URI dst) {
-//            assert dst.isAbsolute();
+            //            assert dst.isAbsolute();
             this.dst = dst;
             return this;
         }
@@ -100,9 +99,8 @@ record ChunkOperation(org.dita.dost.chunk.ChunkOperation.Operation operation,
         public ChunkOperation build() {
             final URI src = this.src;
             final URI dst = this.dst;
-            final List<ChunkOperation> cos = children.stream()
-                    .map(ChunkBuilder::build)
-                    .collect(Collectors.toList());
+            final List<ChunkOperation> cos =
+                    children.stream().map(ChunkBuilder::build).collect(Collectors.toList());
             return new ChunkOperation(operation, src, dst, id, topicref, unmodifiableList(cos));
         }
     }

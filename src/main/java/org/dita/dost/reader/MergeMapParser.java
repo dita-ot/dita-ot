@@ -1,13 +1,27 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.reader;
 
+import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
+import static org.dita.dost.util.URLUtils.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.OutputStream;
+import java.net.URI;
+import java.util.Stack;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.*;
@@ -16,21 +30,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
-
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.OutputStream;
-import java.net.URI;
-import java.util.Stack;
-
-import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.DitaUtils.isLocalScope;
-import static org.dita.dost.util.URLUtils.*;
 
 /**
  * MergeMapParser reads the ditamap file after preprocessing and merges
@@ -72,7 +71,7 @@ public final class MergeMapParser extends XMLFilterImpl {
             }
             stf = (SAXTransformerFactory) tf;
             final TransformerHandler s = stf.newTransformerHandler();
-            s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION , "yes");
+            s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION, "yes");
             s.setResult(new StreamResult(topicBuffer));
             topicParser.setContentHandler(s);
         } catch (final RuntimeException e) {
@@ -136,7 +135,7 @@ public final class MergeMapParser extends XMLFilterImpl {
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
-            logger.error(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -163,7 +162,8 @@ public final class MergeMapParser extends XMLFilterImpl {
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
+            throws SAXException {
         final String attrValue = attributes.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
         if (attrValue != null) {
             processStack.push(attrValue);
@@ -186,8 +186,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                 atts = new AttributesImpl(attributes);
                 final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-                if (isLocalScope(scopeValue)
-                        && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equals(formatValue))) {
+                if (isLocalScope(scopeValue) && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equals(formatValue))) {
                     final URI ohref = attValue;
                     final URI copyToValue = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
                     if (copyToValue != null && !copyToValue.toString().isEmpty()) {
@@ -198,7 +197,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                     if (util.isVisited(absTarget)) {
                         attValue = toURI(SHARP + util.getIdValue(absTarget));
                     } else {
-                        //parse the topic
+                        // parse the topic
                         final URI p = stripFragment(attValue).normalize();
                         util.visit(absTarget);
                         final File f = new File(stripFragment(absTarget));
@@ -225,7 +224,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                                     .toString());
                         }
                     }
-                    }
+                }
                 XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, attValue.toString());
             }
         }
@@ -238,24 +237,29 @@ public final class MergeMapParser extends XMLFilterImpl {
         // compare visitedSet with the list
         // if list item not in visitedSet then call MergeTopicParser to parse it
         try {
-            for (final FileInfo f: job.getFileInfo()) {
+            for (final FileInfo f : job.getFileInfo()) {
                 if (f.isTarget) {
                     String element = f.file.getPath();
                     if (!dirPath.equals(tempdir)) {
-                        element = FileUtils.getRelativeUnixPath(new File(dirPath,"a.ditamap").getAbsolutePath(),
-                                                                   tempdir.toPath().resolve(element).toAbsolutePath().toString());
+                        element = FileUtils.getRelativeUnixPath(
+                                new File(dirPath, "a.ditamap").getAbsolutePath(),
+                                tempdir.toPath()
+                                        .resolve(element)
+                                        .toAbsolutePath()
+                                        .toString());
                     }
                     final URI abs = job.tempDirURI.resolve(f.uri);
                     if (!util.isVisited(abs)) {
                         util.visit(abs);
                         if (!f.isResourceOnly) {
-                            //ensure the file exists
+                            // ensure the file exists
                             final File file = dirPath.toPath().resolve(element).toFile();
                             if (job.getStore().exists(file.toURI())) {
                                 topicParser.parse(element, dirPath);
                             } else {
                                 final String fileName = file.getAbsolutePath();
-                                logger.debug(MessageUtils.getMessage("DOTX008E", fileName).toString());
+                                logger.debug(MessageUtils.getMessage("DOTX008E", fileName)
+                                        .toString());
                             }
                         }
                     }
@@ -264,10 +268,9 @@ public final class MergeMapParser extends XMLFilterImpl {
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
-            logger.error(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e);
         }
 
         getContentHandler().endDocument();
     }
-
 }

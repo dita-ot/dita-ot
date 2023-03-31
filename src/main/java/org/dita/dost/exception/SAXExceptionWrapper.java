@@ -1,19 +1,18 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2007 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2007 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.exception;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.Serial;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXParseException;
-
-import java.io.Serial;
 
 /**
  * SAXExceptionWrapper which wrapper the SAXParseException.
@@ -68,8 +67,12 @@ public final class SAXExceptionWrapper extends SAXParseException {
      * @deprecated since 2.3
      */
     @Deprecated
-    public SAXExceptionWrapper(final String message, final String publicId,
-            final String systemId, final int lineNumber, final int columnNumber) {
+    public SAXExceptionWrapper(
+            final String message,
+            final String publicId,
+            final String systemId,
+            final int lineNumber,
+            final int columnNumber) {
         super(message, publicId, systemId, lineNumber, columnNumber);
     }
 
@@ -85,8 +88,13 @@ public final class SAXExceptionWrapper extends SAXParseException {
      * @deprecated since 2.3
      */
     @Deprecated
-    public SAXExceptionWrapper(final String message, final String publicId,
-            final String systemId, final int lineNumber, final int columnNumber, final Exception e) {
+    public SAXExceptionWrapper(
+            final String message,
+            final String publicId,
+            final String systemId,
+            final int lineNumber,
+            final int columnNumber,
+            final Exception e) {
         super(message, publicId, systemId, lineNumber, columnNumber, e);
     }
 
@@ -97,7 +105,13 @@ public final class SAXExceptionWrapper extends SAXParseException {
      * @param inner SAXParseException
      */
     public SAXExceptionWrapper(final String file, final SAXParseException inner) {
-        super(inner.getMessage(), inner.getPublicId(), inner.getSystemId(), inner.getLineNumber(), inner.getColumnNumber(), inner.getException());
+        super(
+                inner.getMessage(),
+                inner.getPublicId(),
+                inner.getSystemId(),
+                inner.getLineNumber(),
+                inner.getColumnNumber(),
+                inner.getException());
         saxParseException = inner;
         sourceFile = file;
     }
@@ -110,7 +124,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
     @Override
     public String getMessage() {
 
-        return sourceFile + " Line " + saxParseException.getLineNumber() + ":" + saxParseException.getMessage() + LINE_SEPARATOR;
+        return sourceFile + " Line " + saxParseException.getLineNumber() + ":" + saxParseException.getMessage()
+                + LINE_SEPARATOR;
     }
-
 }

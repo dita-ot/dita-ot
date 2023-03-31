@@ -4,7 +4,7 @@
  * Copyright 2011 Jarno Elovirta
  *
  * See the accompanying LICENSE file for applicable license.
- */package org.dita.dost.platform;
+ */ package org.dita.dost.platform;
 
 /**
  * Extension point.
@@ -40,5 +40,4 @@ final class ExtensionPoint {
         this.name = name;
         this.plugin = plugin;
     }
-
 }

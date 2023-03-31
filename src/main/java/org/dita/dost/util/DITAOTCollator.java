@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2006 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2006 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.util;
 
 import java.lang.reflect.Method;
@@ -87,13 +87,11 @@ public final class DITAOTCollator implements Comparator<Object> {
         }
 
         try {
-            final Method m = c.getDeclaredMethod("getInstance",
-                    Locale.class);
+            final Method m = c.getDeclaredMethod("getInstance", Locale.class);
             collatorInstance = m.invoke(null, locale);
             compareMethod = c.getDeclaredMethod("compare", Object.class, Object.class);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize collator: " + e.getMessage(), e);
         }
     }
-
 }

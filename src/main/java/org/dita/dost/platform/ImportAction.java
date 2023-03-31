@@ -1,18 +1,17 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005, 2006 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005, 2006 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.platform;
 
+import java.util.*;
 import org.dita.dost.log.DITAOTLogger;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-
-import java.util.*;
 
 /**
  * ImportAction implements IAction and import the resource
@@ -25,6 +24,7 @@ abstract class ImportAction implements IAction {
     final Set<Value> valueSet;
     /** Action parameters. */
     final Hashtable<String, String> paramTable;
+
     DITAOTLogger logger;
     /** Plug-in features. */
     Map<String, Features> featureTable = null;
@@ -74,5 +74,4 @@ abstract class ImportAction implements IAction {
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-
 }

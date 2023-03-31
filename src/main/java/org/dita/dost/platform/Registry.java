@@ -8,15 +8,14 @@
 
 package org.dita.dost.platform;
 
+import static java.util.Collections.emptyList;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-
-import static java.util.Collections.emptyList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Registry {
@@ -28,11 +27,12 @@ public class Registry {
     public final String cksum;
 
     @JsonCreator
-    public Registry(@JsonProperty("name") String name,
-                    @JsonProperty("vers") String vers,
-                    @JsonProperty("deps") Dependency[] deps,
-                    @JsonProperty("url") String url,
-                    @JsonProperty("cksum") String cksum) {
+    public Registry(
+            @JsonProperty("name") String name,
+            @JsonProperty("vers") String vers,
+            @JsonProperty("deps") Dependency[] deps,
+            @JsonProperty("url") String url,
+            @JsonProperty("cksum") String cksum) {
         this.name = name;
         this.vers = new SemVer(vers);
         this.deps = deps == null ? emptyList() : List.of(deps);
@@ -50,11 +50,9 @@ public class Registry {
         public final SemVerMatch req;
 
         @JsonCreator
-        public Dependency(@JsonProperty("name") String name,
-                          @JsonProperty("req") String req) {
+        public Dependency(@JsonProperty("name") String name, @JsonProperty("req") String req) {
             this.name = name;
             this.req = new SemVerMatch(req);
         }
     }
-
 }

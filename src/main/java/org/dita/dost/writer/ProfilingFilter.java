@@ -7,19 +7,17 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.log.MessageUtils;
+import static org.dita.dost.util.Constants.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import javax.xml.namespace.QName;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-
-import javax.xml.namespace.QName;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.dita.dost.util.Constants.*;
 
 /**
  * Profiling filter strips out the content that is not necessary in the output.
@@ -40,6 +38,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     private final Map<String, String> prefixes = new HashMap<>();
     /** Flag that last element was excluded. */
     private boolean lastElementExcluded = false;
+
     private final Deque<Set<Flag>> flagStack = new LinkedList<>();
     private final boolean doFlag;
 
@@ -92,7 +91,8 @@ public final class ProfilingFilter extends AbstractXMLFilter {
             throws SAXException {
         Set<Flag> flags = null;
 
-        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? DitaClass.getInstance(atts) : DitaClass.getInstance("");
+        final DitaClass cls =
+                atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? DitaClass.getInstance(atts) : DitaClass.getInstance("");
         if (cls.isValid() && (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls))) {
             final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains != null) {
@@ -114,7 +114,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                 level = 0;
             } else {
                 elementOutput = true;
-                for (final Map.Entry<String, String> prefix: prefixes.entrySet()) {
+                for (final Map.Entry<String, String> prefix : prefixes.entrySet()) {
                     getContentHandler().startPrefixMapping(prefix.getKey(), prefix.getValue());
                 }
                 prefixes.clear();
@@ -124,7 +124,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
                             .flatMap(f -> f.getFlags(atts, props).stream())
                             .map(f -> f.adjustPath(currentFile, job))
                             .collect(Collectors.toSet());
-                    for (final Flag flag: flags) {
+                    for (final Flag flag : flags) {
                         flag.writeStartFlag(getContentHandler());
                     }
                 }
@@ -137,8 +137,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     }
 
     @Override
-    public void endElement(final String uri, final String localName, final String qName)
-            throws SAXException {
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         if (doFlag) {
             final Set<Flag> flags = flagStack.pop();
             if (flags != null) {
@@ -160,12 +159,10 @@ public final class ProfilingFilter extends AbstractXMLFilter {
         } else { // exclude shows whether it's excluded by filtering
             getContentHandler().endElement(uri, localName, qName);
         }
-
     }
 
     @Override
-    public void characters(final char[] ch, final int start, final int length)
-            throws SAXException {
+    public void characters(final char[] ch, final int start, final int length) throws SAXException {
         if (!exclude) {
             getContentHandler().characters(ch, start, length);
         }
@@ -186,16 +183,14 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     }
 
     @Override
-    public void ignorableWhitespace(final char[] ch, final int start, final int length)
-            throws SAXException {
+    public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
         if (!exclude) {
             getContentHandler().characters(ch, start, length);
         }
     }
 
     @Override
-    public void processingInstruction(final String target, final String data)
-            throws SAXException {
+    public void processingInstruction(final String target, final String data) throws SAXException {
         if (!exclude) {
             getContentHandler().processingInstruction(target, data);
         }
@@ -220,5 +215,4 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     public void startPrefixMapping(final String prefix, final String uri) throws SAXException {
         prefixes.put(prefix, uri);
     }
-
 }

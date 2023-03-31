@@ -1,25 +1,24 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.log;
 
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import net.sf.saxon.s9api.XdmNode;
 import org.apache.tools.ant.Location;
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * Class description goes here.
@@ -29,7 +28,11 @@ import static org.dita.dost.util.URLUtils.toURI;
 public final class MessageBean {
 
     public enum Type {
-        FATAL, ERROR, WARN, INFO, DEBUG
+        FATAL,
+        ERROR,
+        WARN,
+        INFO,
+        DEBUG
     }
 
     public static final String FATAL = Type.FATAL.name();
@@ -242,10 +245,7 @@ public final class MessageBean {
         if (srcFile != null) {
             buff.append(srcFile);
             if (srcLine != -1 && srcColumn != -1) {
-                buff.append(':')
-                    .append(Integer.valueOf(srcLine))
-                    .append(':')
-                    .append(Integer.valueOf(srcColumn));
+                buff.append(':').append(Integer.valueOf(srcLine)).append(':').append(Integer.valueOf(srcColumn));
             }
             buff.append(": ");
         }
@@ -265,5 +265,4 @@ public final class MessageBean {
     public DITAOTException toException() {
         return new DITAOTException(toString());
     }
-
 }

@@ -8,11 +8,10 @@
 
 package org.dita.dost.writer.include;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 public interface Range {
     /**

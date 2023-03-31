@@ -1,23 +1,19 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.util;
 
 import static org.dita.dost.util.URLUtils.*;
 
-import java.io.File;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.dita.dost.log.DITAOTLogger;
-
-import org.xml.sax.XMLReader;
 
 /**
  * Utility that topic merge utilize. An instance can be reused by calling
@@ -30,6 +26,7 @@ public final class MergeUtils {
     private int index;
     /** Set of visited topic files. */
     private final Set<URI> visitSet;
+
     private DITAOTLogger logger;
     private Job job;
 
@@ -79,7 +76,7 @@ public final class MergeUtils {
             return null;
         }
         final URI localId = id.normalize();
-        index ++;
+        index++;
         final String newId = PREFIX + Integer.toString(index);
         idMap.put(localId, newId);
         return newId;
@@ -148,9 +145,8 @@ public final class MergeUtils {
         try {
             job.getStore().transform(file, parser);
         } catch (final Exception e) {
-            logger.error(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e);
         }
         return firstTopicId.toString();
     }
-
 }

@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2010 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2010 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.util;
 
 import java.nio.charset.StandardCharsets;
@@ -18,8 +18,7 @@ final class FilePathToURI {
     /**
      * Private default constructor to make class uninstantiable.
      */
-    private FilePathToURI() {
-    }
+    private FilePathToURI() {}
 
     // Which ASCII characters need to be escaped
     private static final boolean[] gNeedEscaping = new boolean[128];
@@ -27,8 +26,9 @@ final class FilePathToURI {
     private static final char[] gAfterEscaping1 = new char[128];
     // The second hex character if a character needs to be escaped
     private static final char[] gAfterEscaping2 = new char[128];
-    private static final char[] gHexChs = {'0', '1', '2', '3', '4', '5', '6', '7',
-        '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    private static final char[] gHexChs = {
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+    };
     // Initialize the above 3 arrays
     static {
         for (int i = 0; i <= 0x1f; i++) {
@@ -39,8 +39,9 @@ final class FilePathToURI {
         gNeedEscaping[0x7f] = true;
         gAfterEscaping1[0x7f] = '7';
         gAfterEscaping2[0x7f] = 'F';
-        final char[] escChs = {' ', '<', '>', '#', '%', '"', '{', '}', '?',
-                '|', '\\', '^', '~', '[', ']', '`', '\'', '&'};
+        final char[] escChs = {
+            ' ', '<', '>', '#', '%', '"', '{', '}', '?', '|', '\\', '^', '~', '[', ']', '`', '\'', '&'
+        };
         char ch;
         for (char escCh : escChs) {
             ch = escCh;
@@ -79,7 +80,7 @@ final class FilePathToURI {
      */
     private static String escapeSpecialAsciiAndNonAscii(final String path) {
         int len = path.length(), ch;
-        final StringBuilder buffer = new StringBuilder(len*3);
+        final StringBuilder buffer = new StringBuilder(len * 3);
         // Change C:/something to /C:/something
         if (len >= 2 && path.charAt(1) == ':') {
             ch = Character.toUpperCase(path.charAt(0));
@@ -102,7 +103,7 @@ final class FilePathToURI {
                 buffer.append(gAfterEscaping2[ch]);
                 // Record the fact that it's escaped
             } else {
-                buffer.append((char)ch);
+                buffer.append((char) ch);
             }
         }
 
@@ -128,7 +129,7 @@ final class FilePathToURI {
                     buffer.append(gAfterEscaping1[b]);
                     buffer.append(gAfterEscaping2[b]);
                 } else {
-                    buffer.append((char)b);
+                    buffer.append((char) b);
                 }
             }
         }

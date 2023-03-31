@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
@@ -57,8 +57,7 @@ public final class TopicIdParser implements ContentHandler {
     }
 
     @Override
-    public void startPrefixMapping(final String prefix, final String uri)
-            throws SAXException {
+    public void startPrefixMapping(final String prefix, final String uri) throws SAXException {
         // NOOP
     }
 
@@ -68,8 +67,8 @@ public final class TopicIdParser implements ContentHandler {
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName,
-            final Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+            throws SAXException {
         if (isFirstId) {
             if (atts.getValue(ATTRIBUTE_NAME_ID) != null) {
                 isFirstId = false;
@@ -79,26 +78,22 @@ public final class TopicIdParser implements ContentHandler {
     }
 
     @Override
-    public void endElement(final String uri, final String localName, final String qName)
-            throws SAXException {
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         // NOOP
     }
 
     @Override
-    public void characters(final char[] ch, final int start, final int length)
-            throws SAXException {
+    public void characters(final char[] ch, final int start, final int length) throws SAXException {
         // NOOP
     }
 
     @Override
-    public void ignorableWhitespace(final char[] ch, final int start, final int length)
-            throws SAXException {
+    public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
         // NOOP
     }
 
     @Override
-    public void processingInstruction(final String target, final String data)
-            throws SAXException {
+    public void processingInstruction(final String target, final String data) throws SAXException {
         // NOOP
     }
 
@@ -106,5 +101,4 @@ public final class TopicIdParser implements ContentHandler {
     public void skippedEntity(final String name) throws SAXException {
         // NOOP
     }
-
 }

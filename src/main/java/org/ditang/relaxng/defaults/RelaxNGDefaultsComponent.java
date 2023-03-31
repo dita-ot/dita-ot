@@ -11,6 +11,12 @@ import com.thaiopensource.resolver.*;
 import com.thaiopensource.util.PropertyMapBuilder;
 import com.thaiopensource.validate.ValidateProperty;
 import com.thaiopensource.validate.Validator;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 import org.apache.xerces.impl.Constants;
 import org.apache.xerces.util.SymbolTable;
 import org.apache.xerces.util.XMLResourceIdentifierImpl;
@@ -21,64 +27,40 @@ import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledGrammarPool;
 import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
-
 /**
  * XNI component that adds Relax NG default values.
- * 
+ *
  * @author george@oxygenxml.com
  */
-public class RelaxNGDefaultsComponent implements XMLDocumentHandler,
-XMLComponent, XMLDocumentSource {
-
+public class RelaxNGDefaultsComponent implements XMLDocumentHandler, XMLComponent, XMLDocumentSource {
 
     /** Property identifier: entity resolver. */
-    public static final String ENTITY_RESOLVER = Constants.XERCES_PROPERTY_PREFIX
-            + Constants.ENTITY_RESOLVER_PROPERTY;
+    public static final String ENTITY_RESOLVER = Constants.XERCES_PROPERTY_PREFIX + Constants.ENTITY_RESOLVER_PROPERTY;
 
     /** Property identifier: error reporter. */
-    private static final String ERROR_REPORTER = Constants.XERCES_PROPERTY_PREFIX
-            + Constants.ERROR_REPORTER_PROPERTY;
+    private static final String ERROR_REPORTER = Constants.XERCES_PROPERTY_PREFIX + Constants.ERROR_REPORTER_PROPERTY;
 
     /** Property identifier: error reporter. */
-    private static final String ERROR_HANDLER = Constants.XERCES_PROPERTY_PREFIX
-            + Constants.ERROR_HANDLER_PROPERTY;
+    private static final String ERROR_HANDLER = Constants.XERCES_PROPERTY_PREFIX + Constants.ERROR_HANDLER_PROPERTY;
 
     /** Property identifier: symbol table. */
-    private static final String SYMBOL_TABLE = Constants.XERCES_PROPERTY_PREFIX
-            + Constants.SYMBOL_TABLE_PROPERTY;
-
+    private static final String SYMBOL_TABLE = Constants.XERCES_PROPERTY_PREFIX + Constants.SYMBOL_TABLE_PROPERTY;
 
     // recognized features and properties
 
     /** Recognized features. */
-    private static final String[] RECOGNIZED_FEATURES = {
-    };
+    private static final String[] RECOGNIZED_FEATURES = {};
 
     /** Feature defaults. */
-    private static final Boolean[] FEATURE_DEFAULTS = {
-    };
+    private static final Boolean[] FEATURE_DEFAULTS = {};
 
     /** Recognized properties. */
     private static final String[] RECOGNIZED_PROPERTIES = {
-            SYMBOL_TABLE,       
-            ERROR_REPORTER,
-            ERROR_HANDLER,
-            ENTITY_RESOLVER,
+        SYMBOL_TABLE, ERROR_REPORTER, ERROR_HANDLER, ENTITY_RESOLVER,
     };
 
     /** Property defaults. */
-    private static final Object[] PROPERTY_DEFAULTS = {
-            null,
-            null,
-            null,
-            null
-    };
+    private static final Object[] PROPERTY_DEFAULTS = {null, null, null, null};
 
     private XMLDocumentHandler documentHandler;
     private XMLDocumentSource documentSource;
@@ -142,36 +124,36 @@ XMLComponent, XMLDocumentSource {
     public RelaxNGDefaultsComponent(Resolver resolver, XMLGrammarPool grammarPool) {
         this.resolver = resolver;
         this.grammarPool = grammarPool;
-        if(this.resolver == null) {
-            //Wrap a resolver over an XMLEntityResolver
+        if (this.resolver == null) {
+            // Wrap a resolver over an XMLEntityResolver
             this.resolver = new Resolver() {
                 @Override
                 public void resolve(Identifier id, Input input) throws IOException, ResolverException {
-                    if(fResolver != null) {
+                    if (fResolver != null) {
                         String expanded = id.getUriReference();
-                        //Compute the expanded system ID
+                        // Compute the expanded system ID
                         try {
-                            expanded  = new URL(new URL(id.getBase()), id.getUriReference()).toString();
+                            expanded = new URL(new URL(id.getBase()), id.getUriReference()).toString();
                         } catch (Exception e) {
                         }
 
-                        XMLResourceIdentifier identifier = new XMLResourceIdentifierImpl(
-                                null, id.getUriReference(), id.getBase(), expanded);
+                        XMLResourceIdentifier identifier =
+                                new XMLResourceIdentifierImpl(null, id.getUriReference(), id.getBase(), expanded);
                         XMLInputSource resolved = fResolver.resolveEntity(identifier);
-                        if(resolved != null) {
+                        if (resolved != null) {
                             input.setUri(resolved.getSystemId());
                             input.setByteStream(resolved.getByteStream());
                             input.setCharacterStream(resolved.getCharacterStream());
                             input.setEncoding(resolved.getEncoding());
                         } else {
-                            //Just set the URI
-                            //input.setUri(expanded);
+                            // Just set the URI
+                            // input.setUri(expanded);
                         }
                     }
                 }
                 /**
                  * Delegate to usual open mechanism.
-                 * 
+                 *
                  * @see com.thaiopensource.resolver.Resolver#open(com.thaiopensource.resolver.Input)
                  */
                 @Override
@@ -182,12 +164,10 @@ XMLComponent, XMLDocumentSource {
         }
     }
 
-
     /**
      * @see org.apache.xerces.xni.parser.XMLComponent#reset(org.apache.xerces.xni.parser.XMLComponentManager)
      */
-    public void reset(XMLComponentManager componentManager)
-            throws XMLConfigurationException {
+    public void reset(XMLComponentManager componentManager) throws XMLConfigurationException {
         baseSystemId = null;
         detecting = false;
         schema = null;
@@ -206,8 +186,8 @@ XMLComponent, XMLDocumentSource {
      *      java.lang.String, org.apache.xerces.xni.NamespaceContext,
      *      org.apache.xerces.xni.Augmentations)
      */
-    public void startDocument(XMLLocator locator, String enc,
-            NamespaceContext nc, Augmentations aug) throws XNIException {
+    public void startDocument(XMLLocator locator, String enc, NamespaceContext nc, Augmentations aug)
+            throws XNIException {
         this.locator = locator;
         context = nc;
         baseSystemId = locator.getBaseSystemId();
@@ -225,16 +205,15 @@ XMLComponent, XMLDocumentSource {
      *      org.apache.xerces.xni.Augmentations)
      */
     @Override
-    public void startElement(QName name, XMLAttributes atts, Augmentations aug)
-            throws XNIException {
+    public void startElement(QName name, XMLAttributes atts, Augmentations aug) throws XNIException {
         boolean oldDetecting = detecting;
         onStartElement(name, atts);
         if (documentHandler != null) {
             documentHandler.startElement(name, atts, aug);
         }
-        if(validator != null) {
+        if (validator != null) {
             try {
-                if(detecting != oldDetecting) {
+                if (detecting != oldDetecting) {
                     triggerStartDocumentToValidator();
                 }
                 startElementToValidator(name, atts);
@@ -264,35 +243,41 @@ XMLComponent, XMLDocumentSource {
         int len = atts.getLength();
         for (int i = 0; i < len; i++) {
             String qName = atts.getQName(i);
-            if(qName.startsWith(NS_MAPPING_PREFIX) || qName.equals(NS_MAPPING_DEFAULT)) {
-                if(prefixes == null) {
+            if (qName.startsWith(NS_MAPPING_PREFIX) || qName.equals(NS_MAPPING_DEFAULT)) {
+                if (prefixes == null) {
                     prefixes = new HashSet<>();
                 }
                 String value = atts.getValue(i);
-                if(value == null) {
+                if (value == null) {
                     value = "";
                 }
                 String prefix = "";
-                if(qName.startsWith(NS_MAPPING_PREFIX)) {
+                if (qName.startsWith(NS_MAPPING_PREFIX)) {
                     prefix = qName.substring(NS_MAPPING_PREFIX.length());
                 }
                 validator.getContentHandler().startPrefixMapping(prefix, value);
                 prefixes.add(prefix);
             } else {
-                attrs.addAttribute(atts.getURI(i) != null ? atts.getURI(i) : "", atts.getLocalName(i), atts.getQName(i), atts.getType(i), atts.getValue(i));
+                attrs.addAttribute(
+                        atts.getURI(i) != null ? atts.getURI(i) : "",
+                        atts.getLocalName(i),
+                        atts.getQName(i),
+                        atts.getType(i),
+                        atts.getValue(i));
             }
         }
         prefixMappingStack.push(prefixes);
-        validator.getContentHandler().startElement(name.uri != null ? name.uri : "", name.localpart, name.rawname, attrs);
+        validator
+                .getContentHandler()
+                .startElement(name.uri != null ? name.uri : "", name.localpart, name.rawname, attrs);
     }
-
 
     /**
      * Trigger the start document method.
      */
     private void triggerStartDocumentToValidator() throws SAXException {
-        //Set the document locator and start document before handling the first element
-        if(locator != null) {
+        // Set the document locator and start document before handling the first element
+        if (locator != null) {
             validator.getContentHandler().setDocumentLocator(new Locator() {
                 @Override
                 public String getSystemId() {
@@ -320,14 +305,14 @@ XMLComponent, XMLDocumentSource {
 
     /**
      * On start element
-     * 
+     *
      * @param name The element name
      * @param atts The attributes
      */
     private void onStartElement(QName name, XMLAttributes atts) {
         if (detecting) {
-            if("http://relaxng.org/ns/structure/1.0".equals(name.uri)) {
-                //Avoid loading defaults when validating RNG schemas.
+            if ("http://relaxng.org/ns/structure/1.0".equals(name.uri)) {
+                // Avoid loading defaults when validating RNG schemas.
                 defaults = null;
             } else {
                 loadDefaults();
@@ -340,15 +325,15 @@ XMLComponent, XMLDocumentSource {
     }
 
     /**
-     * 
+     *
      */
     private void loadDefaults() {
         defaults = null;
         ErrorHandler eh = new ErrorHandler() {
             @Override
             public void warning(SAXParseException exception) throws SAXException {
-                if(validate) {
-                    if(errorHandler != null) {
+                if (validate) {
+                    if (errorHandler != null) {
                         errorHandler.warning("", "", new XMLParseException(locator, exception.getMessage(), exception));
                     } else {
                         throw exception;
@@ -361,8 +346,8 @@ XMLComponent, XMLDocumentSource {
 
             @Override
             public void error(SAXParseException exception) throws SAXException {
-                if(validate) {
-                    if(errorHandler != null) {
+                if (validate) {
+                    if (errorHandler != null) {
                         errorHandler.error("", "", new XMLParseException(locator, exception.getMessage(), exception));
                     } else {
                         throw exception;
@@ -375,9 +360,10 @@ XMLComponent, XMLDocumentSource {
 
             @Override
             public void fatalError(SAXParseException exception) throws SAXException {
-                if(validate) {
-                    if(errorHandler != null) {
-                        errorHandler.fatalError("", "", new XMLParseException(locator, exception.getMessage(), exception));
+                if (validate) {
+                    if (errorHandler != null) {
+                        errorHandler.fatalError(
+                                "", "", new XMLParseException(locator, exception.getMessage(), exception));
                     } else {
                         throw exception;
                     }
@@ -388,7 +374,7 @@ XMLComponent, XMLDocumentSource {
             }
         };
 
-        if(schema != null) {
+        if (schema != null) {
             if ("xml".equals(type) || "compact".equals(type)) {
                 Identifier id = new Identifier(schema, baseSystemId);
                 Input input = new Input();
@@ -400,9 +386,8 @@ XMLComponent, XMLDocumentSource {
                     }
                 }
 
-
                 InputSource in = null;
-                if(input.isResolved()) {
+                if (input.isResolved()) {
                     in = new InputSource(input.getUri());
                     in.setByteStream(input.getByteStream());
                     in.setCharacterStream(input.getCharacterStream());
@@ -410,24 +395,26 @@ XMLComponent, XMLDocumentSource {
                 } else {
                     String expanded = schema;
                     try {
-                        expanded  = new URL(new URL(baseSystemId), schema).toString();
+                        expanded = new URL(new URL(baseSystemId), schema).toString();
                     } catch (Exception e) {
-                    }        
+                    }
                     in = new InputSource(expanded);
                 }
                 try {
-                    //Use caching grammar pool
+                    // Use caching grammar pool
                     RNGDefaultsEnabledGrammarPool pool = null;
-                    if(grammarPool instanceof RNGDefaultsEnabledGrammarPool) {
+                    if (grammarPool instanceof RNGDefaultsEnabledGrammarPool) {
                         pool = (RNGDefaultsEnabledGrammarPool) grammarPool;
                     }
-                    RelaxNGDefaultValues cachedDefaults = pool != null ? pool.getRngDefaultValues(in.getSystemId()) : null;
-                    if(cachedDefaults != null && 
-                            //Either the cached defaults has a schema reference
+                    RelaxNGDefaultValues cachedDefaults =
+                            pool != null ? pool.getRngDefaultValues(in.getSystemId()) : null;
+                    if (cachedDefaults != null
+                            &&
+                            // Either the cached defaults has a schema reference
                             (cachedDefaults.isKeepSchema()
-                                    //Or we do not want to validate.
-                                    || ! validate)) {
-                        //Retrieve defaults from pool
+                                    // Or we do not want to validate.
+                                    || !validate)) {
+                        // Retrieve defaults from pool
                         defaults = cachedDefaults;
                     } else {
                         if ("xml".equals(type)) {
@@ -438,14 +425,14 @@ XMLComponent, XMLDocumentSource {
 
                         defaults.update(in);
 
-                        if(pool != null && ! defaults.hasUpdateErrors()){
+                        if (pool != null && !defaults.hasUpdateErrors()) {
                             pool.putRngDefaultValues(in.getSystemId(), defaults);
                         }
                     }
-                    if(validate && defaults != null) {
+                    if (validate && defaults != null) {
                         PropertyMapBuilder builder = new PropertyMapBuilder();
-                        //Set the resolver
-                        builder.put(ValidateProperty.RESOLVER, resolver);  
+                        // Set the resolver
+                        builder.put(ValidateProperty.RESOLVER, resolver);
                         builder.put(ValidateProperty.ERROR_HANDLER, eh);
                         validator = defaults.createValidator(builder.toPropertyMap());
                     }
@@ -460,27 +447,26 @@ XMLComponent, XMLDocumentSource {
 
     /**
      * Check and add defaults
-     * 
+     *
      * @param name The element name
      * @param atts The attributes
      */
     private void checkAndAddDefaults(QName name, XMLAttributes atts) {
-        List<RelaxNGDefaultValues.Attribute> def = defaults.getDefaultAttributes(
-                name.localpart, name.uri);
+        List<RelaxNGDefaultValues.Attribute> def = defaults.getDefaultAttributes(name.localpart, name.uri);
         if (def != null) {
             for (RelaxNGDefaultValues.Attribute a : def) {
-                //EXM-24143 it is possible that the namespace of the default attribute is empty
-                //and the namespace of the attribute declared in the XMLAttributes is NULL.
+                // EXM-24143 it is possible that the namespace of the default attribute is empty
+                // and the namespace of the attribute declared in the XMLAttributes is NULL.
                 boolean alreadyDeclared = false;
                 alreadyDeclared = atts.getIndex(a.namespace, a.localName) >= 0;
-                if(! alreadyDeclared) {
-                    if("".equals(a.namespace)) {
-                        //Extra check with NULL Namespace
-                        alreadyDeclared = atts.getIndex(null, a.localName) >= 0;    
+                if (!alreadyDeclared) {
+                    if ("".equals(a.namespace)) {
+                        // Extra check with NULL Namespace
+                        alreadyDeclared = atts.getIndex(null, a.localName) >= 0;
                     }
                 }
 
-                if (! alreadyDeclared) {
+                if (!alreadyDeclared) {
                     String prefix = null;
                     String rawname = a.localName;
                     if (a.namespace != null && a.namespace.length() > 0) {
@@ -502,8 +488,10 @@ XMLComponent, XMLDocumentSource {
                             // if we want to fully handle this case we may need further
                             // processing.
                             if (atts.getIndex(rawname) < 0) {
-                                QName attName = new QName(fSymbolTable.addSymbol(prefix),
-                                        fSymbolTable.addSymbol(a.localName), fSymbolTable.addSymbol(rawname),
+                                QName attName = new QName(
+                                        fSymbolTable.addSymbol(prefix),
+                                        fSymbolTable.addSymbol(a.localName),
+                                        fSymbolTable.addSymbol(rawname),
                                         fSymbolTable.addSymbol(a.namespace));
                                 atts.addAttribute(attName, "CDATA", a.value);
                                 int attrIndex = atts.getIndex(attName.uri, attName.localpart);
@@ -511,30 +499,34 @@ XMLComponent, XMLDocumentSource {
                             }
                         } else {
                             int k = 1;
-                            if(
-                                    //EXM-24494 Prefer this prefix
-                                    //See the implementation in: org.dita.dost.reader.MergeTopicParser.startElement(String, String, String, Attributes)
-                                    //If the file is a composite no attributes are copied from the root element.
-                                    "http://dita.oasis-open.org/architecture/2005/".equals(a.namespace)) {
+                            if (
+                            // EXM-24494 Prefer this prefix
+                            // See the implementation in: org.dita.dost.reader.MergeTopicParser.startElement(String,
+                            // String, String, Attributes)
+                            // If the file is a composite no attributes are copied from the root element.
+                            "http://dita.oasis-open.org/architecture/2005/".equals(a.namespace)) {
                                 prefix = "ditaarch";
                             } else {
                                 prefix = "ns" + k;
                             }
-                            while (context.getURI(prefix) != null
-                                    || atts.getValue("xmlns:" + prefix) != null) {
+                            while (context.getURI(prefix) != null || atts.getValue("xmlns:" + prefix) != null) {
                                 k++;
                                 prefix = "ns" + k;
                             }
                             rawname = prefix + ":" + a.localName;
 
-                            QName attNs = new QName(fSymbolTable.addSymbol("xmlns"),
-                                    fSymbolTable.addSymbol(prefix), fSymbolTable.addSymbol("xmlns:" + prefix),
+                            QName attNs = new QName(
+                                    fSymbolTable.addSymbol("xmlns"),
+                                    fSymbolTable.addSymbol(prefix),
+                                    fSymbolTable.addSymbol("xmlns:" + prefix),
                                     fSymbolTable.addSymbol("http://www.w3.org/2000/xmlns/"));
                             atts.addAttribute(attNs, "CDATA", a.namespace);
                             context.declarePrefix(prefix, a.namespace);
 
-                            QName attName = new QName(fSymbolTable.addSymbol(prefix),
-                                    fSymbolTable.addSymbol(a.localName), fSymbolTable.addSymbol(rawname),
+                            QName attName = new QName(
+                                    fSymbolTable.addSymbol(prefix),
+                                    fSymbolTable.addSymbol(a.localName),
+                                    fSymbolTable.addSymbol(rawname),
                                     fSymbolTable.addSymbol(a.namespace));
                             atts.addAttribute(attName, "CDATA", a.value);
                             int attrIndex = atts.getIndex(attName.uri, attName.localpart);
@@ -557,8 +549,7 @@ XMLComponent, XMLDocumentSource {
      *      java.lang.String, java.lang.String,
      *      org.apache.xerces.xni.Augmentations)
      */
-    public void xmlDecl(String arg0, String arg1, String arg2, Augmentations arg3)
-            throws XNIException {
+    public void xmlDecl(String arg0, String arg1, String arg2, Augmentations arg3) throws XNIException {
         if (documentHandler != null) {
             documentHandler.xmlDecl(arg0, arg1, arg2, arg3);
         }
@@ -569,8 +560,7 @@ XMLComponent, XMLDocumentSource {
      *      java.lang.String, java.lang.String,
      *      org.apache.xerces.xni.Augmentations)
      */
-    public void doctypeDecl(String arg0, String arg1, String arg2,
-            Augmentations arg3) throws XNIException {
+    public void doctypeDecl(String arg0, String arg1, String arg2, Augmentations arg3) throws XNIException {
         if (documentHandler != null) {
             documentHandler.doctypeDecl(arg0, arg1, arg2, arg3);
         }
@@ -590,8 +580,7 @@ XMLComponent, XMLDocumentSource {
      * @see org.apache.xerces.xni.XMLDocumentHandler#processingInstruction(java.lang.String,
      *      org.apache.xerces.xni.XMLString, org.apache.xerces.xni.Augmentations)
      */
-    public void processingInstruction(String name, XMLString content,
-            Augmentations arg2) throws XNIException {
+    public void processingInstruction(String name, XMLString content, Augmentations arg2) throws XNIException {
         boolean detectedSchema = false;
         if (detecting && schema == null && "oxygen".equals(name)) {
             String data = content.toString();
@@ -604,8 +593,7 @@ XMLComponent, XMLDocumentSource {
             String data = content.toString();
             schema = getFromPIDataPseudoAttribute(data, "href", true);
             type = getFromPIDataPseudoAttribute(data, "type", true);
-            String schemaTypeNs = getFromPIDataPseudoAttribute(data, "schematypens",
-                    true);
+            String schemaTypeNs = getFromPIDataPseudoAttribute(data, "schematypens", true);
             if (schema != null) {
                 if (schema.toLowerCase().endsWith(".rng")) {
                     if (nullOrValue(schemaTypeNs, "http://relaxng.org/ns/structure/1.0")
@@ -626,8 +614,7 @@ XMLComponent, XMLDocumentSource {
                             && nullOrValue(type, "application/xml")) {
                         type = "xml";
                     } else if ("application/relax-ng-compact-syntax".equals(type)
-                            && nullOrValue(schemaTypeNs,
-                                    "http://relaxng.org/ns/structure/1.0")) {
+                            && nullOrValue(schemaTypeNs, "http://relaxng.org/ns/structure/1.0")) {
                         type = "compact";
                     } else {
                         schema = null;
@@ -637,8 +624,7 @@ XMLComponent, XMLDocumentSource {
             detectedSchema = true;
         }
 
-        if (documentHandler != null
-                && ! detectedSchema) {
+        if (documentHandler != null && !detectedSchema) {
             documentHandler.processingInstruction(name, content, arg2);
         }
     }
@@ -646,14 +632,12 @@ XMLComponent, XMLDocumentSource {
     /**
      * Test if a string is either null or equal to a certain value
      * @param test The string to test
-     * @param value The value to compare to 
+     * @param value The value to compare to
      * @return <code>true</code> if a string is either null or equal to a certain value
      */
     private boolean nullOrValue(String test, String value) {
-        if (test == null)
-            return true;
-        if (test.equals(value))
-            return true;
+        if (test == null) return true;
+        if (test.equals(value)) return true;
         return false;
     }
 
@@ -665,7 +649,7 @@ XMLComponent, XMLDocumentSource {
      * data part uses pseudo-attribute syntax, which it does not have to. This
      * syntax is as described in the W3C Recommendation
      * "Associating Style Sheets with XML Documents".
-     * 
+     *
      * @param data
      *          The PI Data.
      * @param name
@@ -674,8 +658,7 @@ XMLComponent, XMLDocumentSource {
      *          True to unescape value before return
      * @return the value of the pseudo-attribute if present, or null if not
      */
-    private String getFromPIDataPseudoAttribute(String data, String name,
-            boolean unescapeValue) {
+    private String getFromPIDataPseudoAttribute(String data, String name, boolean unescapeValue) {
         int pos = 0;
         while (pos <= data.length() - 4) { // minimum length of x=""
             int nextQuote = -1;
@@ -796,13 +779,12 @@ XMLComponent, XMLDocumentSource {
      *      org.apache.xerces.xni.XMLAttributes,
      *      org.apache.xerces.xni.Augmentations)
      */
-    public void emptyElement(QName name, XMLAttributes atts, Augmentations arg2)
-            throws XNIException {
+    public void emptyElement(QName name, XMLAttributes atts, Augmentations arg2) throws XNIException {
         onStartElement(name, atts);
         if (documentHandler != null) {
             documentHandler.emptyElement(name, atts, arg2);
         }
-        if(validator != null) {
+        if (validator != null) {
             try {
                 startElementToValidator(name, atts);
                 endElementToValidator(name);
@@ -812,15 +794,14 @@ XMLComponent, XMLDocumentSource {
         }
     }
 
-
     /**
      * @param name The element name
      */
     private void endElementToValidator(QName name) throws SAXException {
         validator.getContentHandler().endElement(name.uri != null ? name.uri : "", name.localpart, name.rawname);
-        if(!prefixMappingStack.isEmpty()) {
+        if (!prefixMappingStack.isEmpty()) {
             Set<String> prefixes = prefixMappingStack.pop();
-            if(prefixes != null) {
+            if (prefixes != null) {
                 for (String prefix : prefixes) {
                     validator.getContentHandler().endPrefixMapping(prefix);
                 }
@@ -833,8 +814,8 @@ XMLComponent, XMLDocumentSource {
      *      org.apache.xerces.xni.XMLResourceIdentifier, java.lang.String,
      *      org.apache.xerces.xni.Augmentations)
      */
-    public void startGeneralEntity(String arg0, XMLResourceIdentifier arg1,
-            String arg2, Augmentations arg3) throws XNIException {
+    public void startGeneralEntity(String arg0, XMLResourceIdentifier arg1, String arg2, Augmentations arg3)
+            throws XNIException {
         if (documentHandler != null) {
             documentHandler.startGeneralEntity(arg0, arg1, arg2, arg3);
         }
@@ -844,8 +825,7 @@ XMLComponent, XMLDocumentSource {
      * @see org.apache.xerces.xni.XMLDocumentHandler#textDecl(java.lang.String,
      *      java.lang.String, org.apache.xerces.xni.Augmentations)
      */
-    public void textDecl(String arg0, String arg1, Augmentations arg2)
-            throws XNIException {
+    public void textDecl(String arg0, String arg1, Augmentations arg2) throws XNIException {
         if (documentHandler != null) {
             documentHandler.textDecl(arg0, arg1, arg2);
         }
@@ -855,8 +835,7 @@ XMLComponent, XMLDocumentSource {
      * @see org.apache.xerces.xni.XMLDocumentHandler#endGeneralEntity(java.lang.String,
      *      org.apache.xerces.xni.Augmentations)
      */
-    public void endGeneralEntity(String arg0, Augmentations arg1)
-            throws XNIException {
+    public void endGeneralEntity(String arg0, Augmentations arg1) throws XNIException {
         if (documentHandler != null) {
             documentHandler.endGeneralEntity(arg0, arg1);
         }
@@ -866,12 +845,11 @@ XMLComponent, XMLDocumentSource {
      * @see org.apache.xerces.xni.XMLDocumentHandler#characters(org.apache.xerces.xni.XMLString,
      *      org.apache.xerces.xni.Augmentations)
      */
-    public void characters(XMLString arg0, Augmentations arg1)
-            throws XNIException {
+    public void characters(XMLString arg0, Augmentations arg1) throws XNIException {
         if (documentHandler != null) {
             documentHandler.characters(arg0, arg1);
         }
-        if(validator != null) {
+        if (validator != null) {
             try {
                 validator.getContentHandler().characters(arg0.ch, arg0.offset, arg0.length);
             } catch (SAXException e) {
@@ -884,12 +862,11 @@ XMLComponent, XMLDocumentSource {
      * @see org.apache.xerces.xni.XMLDocumentHandler#ignorableWhitespace(org.apache.xerces.xni.XMLString,
      *      org.apache.xerces.xni.Augmentations)
      */
-    public void ignorableWhitespace(XMLString arg0, Augmentations arg1)
-            throws XNIException {
+    public void ignorableWhitespace(XMLString arg0, Augmentations arg1) throws XNIException {
         if (documentHandler != null) {
             documentHandler.ignorableWhitespace(arg0, arg1);
         }
-        if(validator != null) {
+        if (validator != null) {
             try {
                 validator.getContentHandler().ignorableWhitespace(arg0.ch, arg0.offset, arg0.length);
             } catch (SAXException e) {
@@ -906,7 +883,7 @@ XMLComponent, XMLDocumentSource {
         if (documentHandler != null) {
             documentHandler.endElement(arg0, arg1);
         }
-        if(validator != null) {
+        if (validator != null) {
             try {
                 endElementToValidator(arg0);
             } catch (SAXException e) {
@@ -940,7 +917,7 @@ XMLComponent, XMLDocumentSource {
         if (documentHandler != null) {
             documentHandler.endDocument(arg0);
         }
-        if(validator != null) {
+        if (validator != null) {
             try {
                 validator.getContentHandler().endDocument();
             } catch (SAXException e) {
@@ -973,8 +950,7 @@ XMLComponent, XMLDocumentSource {
     /**
      * @see org.apache.xerces.xni.parser.XMLComponent#setFeature(java.lang.String, boolean)
      */
-    public void setFeature(String feature, boolean value)
-            throws XMLConfigurationException {
+    public void setFeature(String feature, boolean value) throws XMLConfigurationException {
         // Do nothing
     }
 
@@ -987,17 +963,15 @@ XMLComponent, XMLDocumentSource {
 
     /**
      * Sets the value of a property during parsing.
-     * 
+     *
      * @param propertyId Property ID
      * @param value      Property value
      */
     @Override
-    public void setProperty(String propertyId, Object value)
-            throws XMLConfigurationException {
+    public void setProperty(String propertyId, Object value) throws XMLConfigurationException {
         // Xerces properties
         if (propertyId.startsWith(Constants.XERCES_PROPERTY_PREFIX)) {
-            final int suffixLength = propertyId.length()
-                    - Constants.XERCES_PROPERTY_PREFIX.length();
+            final int suffixLength = propertyId.length() - Constants.XERCES_PROPERTY_PREFIX.length();
 
             if (suffixLength == Constants.SYMBOL_TABLE_PROPERTY.length()
                     && propertyId.endsWith(Constants.SYMBOL_TABLE_PROPERTY)) {
@@ -1005,9 +979,9 @@ XMLComponent, XMLDocumentSource {
             } else if (suffixLength == Constants.ENTITY_RESOLVER_PROPERTY.length()
                     && propertyId.endsWith(Constants.ENTITY_RESOLVER_PROPERTY)) {
                 fResolver = (XMLEntityResolver) value;
-            } else if(suffixLength == Constants.ERROR_HANDLER_PROPERTY.length()
+            } else if (suffixLength == Constants.ERROR_HANDLER_PROPERTY.length()
                     && propertyId.endsWith(Constants.ERROR_HANDLER_PROPERTY)) {
-                errorHandler = (XMLErrorHandler)value;
+                errorHandler = (XMLErrorHandler) value;
             }
         }
     } // setProperty(String,Object)

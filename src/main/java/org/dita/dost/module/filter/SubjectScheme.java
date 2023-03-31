@@ -8,11 +8,10 @@
 
 package org.dita.dost.module.filter;
 
-import org.w3c.dom.Element;
-
-import javax.xml.namespace.QName;
 import java.util.Map;
 import java.util.Set;
+import javax.xml.namespace.QName;
+import org.w3c.dom.Element;
 
 /**
  * Subject scheme bindings

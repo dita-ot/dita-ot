@@ -8,11 +8,11 @@
 
 package org.dita.dost.invoker;
 
-import java.util.*;
-
 import static org.dita.dost.invoker.DefaultLogger.ANSI_BOLD;
 import static org.dita.dost.invoker.DefaultLogger.ANSI_RESET;
 import static org.dita.dost.invoker.Main.locale;
+
+import java.util.*;
 
 public class UsageBuilder {
 
@@ -69,7 +69,11 @@ public class UsageBuilder {
             buf.append("  ").append(usage).append("\n");
         }
         if (!subcommands.isEmpty()) {
-            buf.append("\n").append(ANSI_BOLD).append("Subcommands").append(ANSI_RESET).append(":\n");
+            buf.append("\n")
+                    .append(ANSI_BOLD)
+                    .append("Subcommands")
+                    .append(ANSI_RESET)
+                    .append(":\n");
             for (Map.Entry<String, String> subcommand : sortSubCommands(subcommands)) {
                 buf.append("  ")
                         .append(subcommand.getKey())
@@ -80,7 +84,11 @@ public class UsageBuilder {
             buf.append("\n  See 'dita <subcommand> --help' for details about a specific subcommand.\n");
         }
         if (!arguments.isEmpty()) {
-            buf.append("\n").append(ANSI_BOLD).append("Arguments").append(ANSI_RESET).append(":\n");
+            buf.append("\n")
+                    .append(ANSI_BOLD)
+                    .append("Arguments")
+                    .append(ANSI_RESET)
+                    .append(":\n");
             for (Map.Entry<Key, String> argument : arguments.entrySet()) {
                 buf.append("  ")
                         .append(argument.getKey())
@@ -90,7 +98,11 @@ public class UsageBuilder {
             }
         }
         if (!options.isEmpty()) {
-            buf.append("\n").append(ANSI_BOLD).append("Options").append(ANSI_RESET).append(":\n");
+            buf.append("\n")
+                    .append(ANSI_BOLD)
+                    .append("Options")
+                    .append(ANSI_RESET)
+                    .append(":\n");
             for (Map.Entry<Key, String> option : sort(options)) {
                 buf.append("  ")
                         .append(option.getKey())
@@ -175,9 +187,9 @@ public class UsageBuilder {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Key key = (Key) o;
-            return Objects.equals(shortKey, key.shortKey) &&
-                    Objects.equals(longKey, key.longKey) &&
-                    Objects.equals(value, key.value);
+            return Objects.equals(shortKey, key.shortKey)
+                    && Objects.equals(longKey, key.longKey)
+                    && Objects.equals(value, key.value);
         }
 
         @Override
@@ -188,7 +200,6 @@ public class UsageBuilder {
         @Override
         public String toString() {
             return string;
-
         }
 
         @Override

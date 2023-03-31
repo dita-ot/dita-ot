@@ -8,15 +8,14 @@
 
 package org.dita.dost.invoker;
 
-import org.apache.tools.ant.BuildException;
+import static org.dita.dost.invoker.Main.locale;
 
 import java.io.File;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.Map;
-
-import static org.dita.dost.invoker.Main.locale;
+import org.apache.tools.ant.BuildException;
 
 public class DeliverablesArguments extends Arguments {
 
@@ -72,5 +71,4 @@ public class DeliverablesArguments extends Arguments {
                 .arguments(null, null, "file", locale.getString("deliverables.argument.file"))
                 .print();
     }
-
 }

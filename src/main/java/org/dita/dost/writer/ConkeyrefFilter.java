@@ -12,7 +12,6 @@ import static org.dita.dost.util.URLUtils.*;
 
 import java.net.URI;
 import java.util.Optional;
-
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.*;
 import org.xml.sax.Attributes;
@@ -31,7 +30,6 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
         this.keys = keys;
     }
 
-
     // XML filter methods ------------------------------------------------------
 
     @Override
@@ -39,7 +37,8 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
             throws SAXException {
         AttributesImpl resAtts = null;
         final String conkeyref = atts.getValue(ATTRIBUTE_NAME_CONKEYREF);
-        conkeyref: if (conkeyref != null) {
+        conkeyref:
+        if (conkeyref != null) {
             final int keyIndex = conkeyref.indexOf(SLASH);
             final String key = keyIndex != -1 ? conkeyref.substring(0, keyIndex) : conkeyref;
             final KeyDef keyDef = keys.get(key);
@@ -60,10 +59,14 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
                     }
                     XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target.toString());
                 } else {
-                    logger.warn(MessageUtils.getMessage("DOTJ060W", key, conkeyref).setLocation(atts).toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ060W", key, conkeyref)
+                            .setLocation(atts)
+                            .toString());
                 }
             } else {
-                logger.error(MessageUtils.getMessage("DOTJ046E", conkeyref).setLocation(atts).toString());
+                logger.error(MessageUtils.getMessage("DOTJ046E", conkeyref)
+                        .setLocation(atts)
+                        .toString());
             }
         }
         getContentHandler().startElement(uri, localName, name, resAtts != null ? resAtts : atts);
@@ -77,9 +80,8 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
      * @return updated href URI
      */
     private URI getRelativePath(final URI keyMap, final URI href) {
-        final URI inputMap = Optional.ofNullable(job.getFileInfo(keyMap))
-                .map(fi -> fi.uri)
-                .orElse(null);
+        final URI inputMap =
+                Optional.ofNullable(job.getFileInfo(keyMap)).map(fi -> fi.uri).orElse(null);
         final URI keyValue;
         if (inputMap != null) {
             final URI tmpMap = job.tempDirURI.resolve(inputMap);
@@ -89,5 +91,4 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
         }
         return URLUtils.getRelativePath(currentFile, keyValue);
     }
-
 }

@@ -7,18 +7,17 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Configuration.configuration;
+import static org.dita.dost.util.Constants.*;
+
+import java.util.Arrays;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.Arrays;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import static org.dita.dost.util.Configuration.configuration;
-import static org.dita.dost.util.Constants.*;
 
 /**
  * Normalize content.
@@ -60,7 +59,9 @@ public final class NormalizeFilter extends AbstractXMLFilter {
                 if (res == null) {
                     res = new AttributesImpl(atts);
                 }
-                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CASCADE,
+                XMLUtils.addOrSetAttribute(
+                        res,
+                        ATTRIBUTE_NAME_CASCADE,
                         configuration.getOrDefault("default.cascade", ATTRIBUTE_CASCADE_VALUE_MERGE));
             }
         }
@@ -76,7 +77,8 @@ public final class NormalizeFilter extends AbstractXMLFilter {
             }
             final String specializations = atts.getValue(ATTRIBUTE_NAME_SPECIALIZATIONS);
             if (specializations != null) {
-                final String normalized = whitespace.matcher(specializations.trim()).replaceAll(" ");
+                final String normalized =
+                        whitespace.matcher(specializations.trim()).replaceAll(" ");
                 if (res == null) {
                     res = new AttributesImpl(atts);
                 }
@@ -89,7 +91,8 @@ public final class NormalizeFilter extends AbstractXMLFilter {
     }
 
     private String domainsToSpecializations(final String domains) {
-        return Arrays.stream(domains.trim().replaceAll("(\\))\\s+(a?\\()", "$1\n$2").split("\n"))
+        return Arrays.stream(
+                        domains.trim().replaceAll("(\\))\\s+(a?\\()", "$1\n$2").split("\n"))
                 .filter(token -> token.startsWith("a("))
                 .map(token -> "@" + token.substring(2, token.length() - 1).replace(' ', '/'))
                 .collect(Collectors.joining(" "));
@@ -110,5 +113,4 @@ public final class NormalizeFilter extends AbstractXMLFilter {
         }
         depth--;
     }
-
 }

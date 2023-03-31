@@ -1,15 +1,14 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.writer;
 
 import java.io.File;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
@@ -43,5 +42,4 @@ public interface AbstractWriter {
      * @param job Job configuration to use for processing
      */
     void setJob(Job job);
-
 }

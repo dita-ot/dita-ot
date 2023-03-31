@@ -1,15 +1,14 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.log;
 
 import com.google.common.annotations.VisibleForTesting;
-
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -34,7 +33,8 @@ public final class MessageUtils {
 
     // Variables
 
-    public static final ResourceBundle msgs = ResourceBundle.getBundle("messages", new Locale("en", "US"), MessageUtils.class.getClassLoader());
+    public static final ResourceBundle msgs =
+            ResourceBundle.getBundle("messages", new Locale("en", "US"), MessageUtils.class.getClassLoader());
 
     // Constructors
 
@@ -42,8 +42,7 @@ public final class MessageUtils {
      * Default construtor
      */
     @VisibleForTesting
-    MessageUtils() {
-    }
+    MessageUtils() {}
 
     /**
      * Get the message respond to the given id with all of the parameters
@@ -59,15 +58,15 @@ public final class MessageUtils {
             throw new IllegalArgumentException("Message for ID '" + id + "' not found");
         }
         final String msg = MessageFormat.format(msgs.getString(id), (Object[]) params);
-        MessageBean.Type type = switch (id.substring(id.length() - 1)) {
-            case "F" -> MessageBean.Type.FATAL;
-            case "E" -> MessageBean.Type.ERROR;
-            case "W" -> MessageBean.Type.WARN;
-            case "I" -> MessageBean.Type.INFO;
-            case "D" -> MessageBean.Type.DEBUG;
-            default -> null;
-        };
+        MessageBean.Type type =
+                switch (id.substring(id.length() - 1)) {
+                    case "F" -> MessageBean.Type.FATAL;
+                    case "E" -> MessageBean.Type.ERROR;
+                    case "W" -> MessageBean.Type.WARN;
+                    case "I" -> MessageBean.Type.INFO;
+                    case "D" -> MessageBean.Type.DEBUG;
+                    default -> null;
+                };
         return new MessageBean(id, type, msg, null);
     }
-
 }

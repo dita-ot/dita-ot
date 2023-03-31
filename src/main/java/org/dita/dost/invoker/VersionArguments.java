@@ -8,11 +8,11 @@
 
 package org.dita.dost.invoker;
 
+import static org.dita.dost.invoker.Main.locale;
+
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-
-import static org.dita.dost.invoker.Main.locale;
 
 class VersionArguments extends Arguments {
 
@@ -32,8 +32,6 @@ class VersionArguments extends Arguments {
 
     @Override
     void printUsage(final boolean compact) {
-        UsageBuilder.builder(compact)
-                .usage(locale.getString("version.usage"))
-                .print();
+        UsageBuilder.builder(compact).usage(locale.getString("version.usage")).print();
     }
 }

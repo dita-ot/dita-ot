@@ -7,22 +7,19 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+
+import java.util.*;
 import org.dita.dost.util.DitaClass;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import java.util.*;
-
-import static org.dita.dost.util.Constants.*;
 
 /**
  * Reads map files and inserts the metadata.
  */
 public final class DitaMapMetaWriter extends AbstractDitaMetaWriter {
 
-    private static final List<DitaClass> topicmetaPosition = Collections.singletonList(
-            TOPIC_TITLE
-    );
+    private static final List<DitaClass> topicmetaPosition = Collections.singletonList(TOPIC_TITLE);
     private static final List<DitaClass> topicmetaOrder = Collections.unmodifiableList(Arrays.asList(
             TOPIC_NAVTITLE,
             MAP_LINKTEXT,
@@ -47,8 +44,7 @@ public final class DitaMapMetaWriter extends AbstractDitaMetaWriter {
             TOPIC_DATA,
             TOPIC_DATA_ABOUT,
             TOPIC_FOREIGN,
-            TOPIC_UNKNOWN
-    ));
+            TOPIC_UNKNOWN));
 
     public Document process(final Document doc) {
         Element root = getMatchingTopicElement(doc.getDocumentElement());
@@ -58,5 +54,4 @@ public final class DitaMapMetaWriter extends AbstractDitaMetaWriter {
         }
         return doc;
     }
-
 }

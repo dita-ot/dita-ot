@@ -9,19 +9,18 @@
 /* Derived from Apache Ant. */
 package org.dita.dost.invoker;
 
+import static org.dita.dost.util.XMLUtils.getChildElements;
+import static org.dita.dost.util.XMLUtils.toList;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.dita.dost.platform.Plugins;
-import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Element;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static org.dita.dost.util.XMLUtils.getChildElements;
-import static org.dita.dost.util.XMLUtils.toList;
+import org.dita.dost.platform.Plugins;
+import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Element;
 
 /**
  * Command line argument parser.
@@ -64,9 +63,8 @@ final class ArgumentParser {
             case "file":
                 return new Arguments.FileArgument(name, desc);
             case "enum":
-                final Set<String> vals = getChildElements(param).stream()
-                        .map(XMLUtils::getText)
-                        .collect(Collectors.toSet());
+                final Set<String> vals =
+                        getChildElements(param).stream().map(XMLUtils::getText).collect(Collectors.toSet());
                 if (vals.size() == 2) {
                     for (Map.Entry<String, String> pair : TRUTHY_VALUES.entrySet()) {
                         if (vals.contains(pair.getKey()) && vals.contains(pair.getValue())) {
@@ -88,10 +86,8 @@ final class ArgumentParser {
             final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
             PLUGIN_ARGUMENTS = params.stream()
                     .map(ArgumentParser::getArgument)
-                    .collect(Collectors.toMap(
-                            arg -> ("--" + arg.property),
-                            arg -> arg,
-                            ArgumentParser::mergeArguments));
+                    .collect(
+                            Collectors.toMap(arg -> ("--" + arg.property), arg -> arg, ArgumentParser::mergeArguments));
         }
         return PLUGIN_ARGUMENTS;
     }
@@ -126,6 +122,6 @@ final class ArgumentParser {
     private String getName(final String subcommand) {
         final int start = subcommand.startsWith("--") ? 2 : (subcommand.startsWith("-") ? 1 : 0);
         final int end = subcommand.indexOf('=');
-        return subcommand.substring(start, end != -1 ? end :subcommand.length());
+        return subcommand.substring(start, end != -1 ? end : subcommand.length());
     }
 }

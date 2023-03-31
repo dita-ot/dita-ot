@@ -8,12 +8,11 @@
 
 package org.dita.dost.platform;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class SemVerTest {
 
@@ -61,5 +60,4 @@ public class SemVerTest {
         assertEquals(1, new SemVer("1.3.0").compareTo(new SemVer("1.2.3")));
         assertEquals(1, new SemVer("2.0.0").compareTo(new SemVer("1.2.3")));
     }
-
 }

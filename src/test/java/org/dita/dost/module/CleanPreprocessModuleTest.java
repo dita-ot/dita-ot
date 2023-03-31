@@ -8,6 +8,16 @@
 
 package org.dita.dost.module;
 
+import static java.net.URI.create;
+import static org.dita.dost.util.Constants.OS_NAME;
+import static org.dita.dost.util.Constants.OS_NAME_WINDOWS;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.store.StreamStore;
@@ -18,17 +28,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.net.URI.create;
-import static org.dita.dost.util.Constants.OS_NAME;
-import static org.dita.dost.util.Constants.OS_NAME_WINDOWS;
-import static org.junit.Assert.assertEquals;
 
 public class CleanPreprocessModuleTest {
 
@@ -51,10 +50,13 @@ public class CleanPreprocessModuleTest {
     @Test
     public void getCommonBase_unix() {
         if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
-            assertEquals(create("file:/foo/bar/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/bar/b")));
+            assertEquals(
+                    create("file:/foo/bar/"),
+                    module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/bar/b")));
             assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/a"), create("file:/foo/bar/b")));
             assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/b")));
-            assertEquals(create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/baz/b")));
+            assertEquals(
+                    create("file:/foo/"), module.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/baz/b")));
             assertEquals(create("file:/"), module.getCommonBase(create("file:/foo/a/b/c"), create("file:/bar/b/c/d")));
             assertEquals(null, module.getCommonBase(create("file:/foo/bar/a"), create("https://example.com/baz/b")));
         }
@@ -63,7 +65,8 @@ public class CleanPreprocessModuleTest {
     @Test
     public void getCommonBase_windows() {
         if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
-            assertEquals(create("file:/F:/bar/"), module.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/bar/b")));
+            assertEquals(
+                    create("file:/F:/bar/"), module.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/bar/b")));
             assertEquals(create("file:/F:/"), module.getCommonBase(create("file:/F:/a"), create("file:/F:/bar/b")));
             assertEquals(create("file:/F:/"), module.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/b")));
             assertEquals(create("file:/F:/"), module.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/baz/b")));
@@ -84,9 +87,7 @@ public class CleanPreprocessModuleTest {
                 .uri(create("topics/topic.dita"))
                 .result(create("file:/foo/bar/topics/topic.dita"))
                 .build());
-        job.add(new Builder()
-                .uri(create("topics/null.dita"))
-                .build());
+        job.add(new Builder().uri(create("topics/null.dita")).build());
         job.add(new Builder()
                 .uri(create("topics/task.dita"))
                 .result(create("file:/foo/bar/topics/task.dita"))

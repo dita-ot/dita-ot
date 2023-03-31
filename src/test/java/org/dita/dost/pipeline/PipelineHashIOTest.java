@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * Unit test for {@link PipelineHashIO}
- * 
+ *
  * @author Jarno Elovirta
  */
 public class PipelineHashIOTest {
@@ -36,5 +36,4 @@ public class PipelineHashIOTest {
         p.setAttribute("foo", "bar");
         assertEquals("bar", p.getAttribute("foo"));
     }
-
 }

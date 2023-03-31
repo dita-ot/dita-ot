@@ -8,12 +8,11 @@
 
 package org.dita.dost.writer.include;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import org.dita.dost.writer.CoderefResolver;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-
-import java.io.BufferedReader;
-import java.io.IOException;
 
 public class AllRange implements Range {
 

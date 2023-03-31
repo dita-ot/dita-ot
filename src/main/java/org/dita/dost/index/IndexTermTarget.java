@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.index;
 
 /**
@@ -25,8 +25,7 @@ public final class IndexTermTarget {
     /**
      * Create a empty target.
      */
-    public IndexTermTarget() {
-    }
+    public IndexTermTarget() {}
 
     /**
      * Get the target topic's name (title).
@@ -72,8 +71,7 @@ public final class IndexTermTarget {
     public boolean equals(final Object obj) {
         if (obj instanceof final IndexTermTarget target) {
 
-            return targetName.equals(target.getTargetName())
-                    && targetURI.equals(target.getTargetURI());
+            return targetName.equals(target.getTargetName()) && targetURI.equals(target.getTargetURI());
         }
 
         return false;

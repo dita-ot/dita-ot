@@ -7,18 +7,18 @@
  */
 package org.dita.dost.exception;
 
+import org.dita.dost.TestUtils.TestLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-import org.dita.dost.TestUtils.TestLogger;
-import org.dita.dost.log.DITAOTLogger;
 
 public class DITAOTXMLErrorHandlerTest {
 
     private final DITAOTLogger logger = new TestLogger();
     private final DITAOTXMLErrorHandler e = new DITAOTXMLErrorHandler("path", logger);
-    private final SAXParseException se = new SAXParseException("message", "publicId", "systemId", 3, 1,
-            new RuntimeException("msg"));
+    private final SAXParseException se =
+            new SAXParseException("message", "publicId", "systemId", 3, 1, new RuntimeException("msg"));
 
     @Test
     public void testDITAOTXMLErrorHandler() {
@@ -40,5 +40,4 @@ public class DITAOTXMLErrorHandlerTest {
     public void testWarning() throws SAXException {
         e.warning(se);
     }
-
 }

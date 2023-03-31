@@ -7,6 +7,15 @@
  */
 package org.dita.dost.module;
 
+import static java.util.Collections.emptyMap;
+import static org.dita.dost.util.Configuration.parserFeatures;
+import static org.dita.dost.util.Configuration.parserMap;
+import static org.dita.dost.util.Constants.*;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import net.sf.saxon.s9api.Processor;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -16,17 +25,6 @@ import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Collections.emptyMap;
-import static org.dita.dost.util.Configuration.parserFeatures;
-import static org.dita.dost.util.Configuration.parserMap;
-import static org.dita.dost.util.Constants.*;
-
 
 /**
  * Common functionality for modules that read source documents.
@@ -47,6 +45,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
      * Use grammar pool cache
      */
     boolean gramcache = true;
+
     Processor processor;
 
     /**

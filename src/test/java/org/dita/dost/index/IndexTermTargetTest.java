@@ -75,9 +75,9 @@ public class IndexTermTargetTest {
         assertFalse(simple.equals(""));
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     public void testToString() {
         fail("Not yet implemented");
     }
-
 }

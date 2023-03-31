@@ -8,6 +8,17 @@
 
 package org.dita.dost.store;
 
+import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
+import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.toURI;
+
+import java.io.*;
+import java.net.URI;
+import java.util.*;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.dom.NodeOverNodeInfo;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
@@ -30,18 +41,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.helpers.XMLFilterImpl;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-
-import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
-import static org.dita.dost.util.URLUtils.stripFragment;
-import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * DOM and memory based store, backed up by a disk store.
@@ -189,14 +188,16 @@ public class CacheStore extends AbstractStore implements Store {
                 if (entry.node != null) {
                     return entry.node;
                 } else if (entry.doc != null) {
-                    final XdmNode node = xmlUtils.getProcessor().newDocumentBuilder().wrap(entry.doc);
+                    final XdmNode node =
+                            xmlUtils.getProcessor().newDocumentBuilder().wrap(entry.doc);
                     put(f, new Entry(entry.doc, node, entry.bytes));
                     return node;
                 } else if (entry.bytes != null) {
                     try (InputStream in = new ByteArrayInputStream(entry.bytes)) {
                         final StreamSource source = new StreamSource(in);
                         source.setSystemId(f.toString());
-                        final XdmNode node = xmlUtils.getProcessor().newDocumentBuilder().build(source);
+                        final XdmNode node =
+                                xmlUtils.getProcessor().newDocumentBuilder().build(source);
                         put(f, new Entry(entry.doc, node, entry.bytes));
                     } catch (SaxonApiException e) {
                         throw new IOException(e);
@@ -260,10 +261,10 @@ public class CacheStore extends AbstractStore implements Store {
     public void writeDocument(final XdmNode node, final URI path) throws IOException {
         if (isTempFile(path)) {
             if (LOG) System.err.println("writeDocument: " + path);
-//            final NodeInfo nodeInfo = node.getUnderlyingNode();
-//            if (nodeInfo.getBaseURI() == null || nodeInfo.getBaseURI().isEmpty()) {
-//                nodeInfo.setSystemId(doc.getBaseURI());
-//            }
+            //            final NodeInfo nodeInfo = node.getUnderlyingNode();
+            //            if (nodeInfo.getBaseURI() == null || nodeInfo.getBaseURI().isEmpty()) {
+            //                nodeInfo.setSystemId(doc.getBaseURI());
+            //            }
             put(path, new Entry(null, node, null));
         } else {
             fallback.writeDocument(node, path);
@@ -377,9 +378,7 @@ public class CacheStore extends AbstractStore implements Store {
     @Override
     public void transform(final URI src, final XsltTransformer transformer) throws DITAOTException {
         final boolean useTmpBuf = !isTempFile(src.normalize());
-        final URI dst = useTmpBuf
-                ? toURI(src + FILE_EXTENSION_TEMP).normalize()
-                : src;
+        final URI dst = useTmpBuf ? toURI(src + FILE_EXTENSION_TEMP).normalize() : src;
         try {
             final Source source = getSource(src);
             transformer.setSource(source);
@@ -437,7 +436,8 @@ public class CacheStore extends AbstractStore implements Store {
                     }
                 } else if (entry.doc != null) {
                     try (ByteArrayOutputStream buf = new ByteArrayOutputStream()) {
-                        final XdmNode source = xmlUtils.getProcessor().newDocumentBuilder().wrap(entry.doc);
+                        final XdmNode source =
+                                xmlUtils.getProcessor().newDocumentBuilder().wrap(entry.doc);
                         final Serializer serializer = xmlUtils.getProcessor().newSerializer(buf);
                         serializer.serializeNode(source);
                         final byte[] bytes = buf.toByteArray();
@@ -489,7 +489,8 @@ public class CacheStore extends AbstractStore implements Store {
 
     private Receiver getReceiver(final ContentHandler dst) {
         final SAXDestination result = new SAXDestination(dst);
-        final PipelineConfiguration pipe = xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration();
+        final PipelineConfiguration pipe =
+                xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration();
         return result.getReceiver(pipe, new SerializationProperties());
     }
 
@@ -498,15 +499,16 @@ public class CacheStore extends AbstractStore implements Store {
     }
 
     private void cacheMiss(final URI f) {
-//        System.err.println("Cache miss: " + f);
-//        throw new IllegalStateException("Cache miss: " + f);
+        //        System.err.println("Cache miss: " + f);
+        //        throw new IllegalStateException("Cache miss: " + f);
     }
 
     private Entry put(URI path, Entry entry) {
         if (entry.node != null) {
             final XdmNode node = entry.node;
             assert node.getBaseURI() != null && !node.getBaseURI().toString().isEmpty();
-            assert node.getUnderlyingNode().getBaseURI() != null && !node.getUnderlyingNode().getBaseURI().isEmpty();
+            assert node.getUnderlyingNode().getBaseURI() != null
+                    && !node.getUnderlyingNode().getBaseURI().isEmpty();
         }
         if (entry.doc != null) {
             final Document doc = entry.doc;
@@ -520,7 +522,8 @@ public class CacheStore extends AbstractStore implements Store {
         if (entry.node != null) {
             final XdmNode node = entry.node;
             assert node.getBaseURI() != null && !node.getBaseURI().toString().isEmpty();
-            assert node.getUnderlyingNode().getBaseURI() != null && !node.getUnderlyingNode().getBaseURI().isEmpty();
+            assert node.getUnderlyingNode().getBaseURI() != null
+                    && !node.getUnderlyingNode().getBaseURI().isEmpty();
         } else if (entry.doc != null) {
             final Document node = entry.doc;
             assert node.getBaseURI() != null && !node.getBaseURI().isEmpty();
@@ -533,7 +536,8 @@ public class CacheStore extends AbstractStore implements Store {
         if (entry.node != null) {
             final XdmNode node = entry.node;
             assert node.getBaseURI() != null && !node.getBaseURI().toString().isEmpty();
-            assert node.getUnderlyingNode().getBaseURI() != null && !node.getUnderlyingNode().getBaseURI().isEmpty();
+            assert node.getUnderlyingNode().getBaseURI() != null
+                    && !node.getUnderlyingNode().getBaseURI().isEmpty();
         } else if (entry.doc != null) {
             final Document node = entry.doc;
             assert node.getBaseURI() != null && !node.getBaseURI().isEmpty();
@@ -546,22 +550,21 @@ public class CacheStore extends AbstractStore implements Store {
         Document doc = null;
         if (remove.node != null) {
             final TreeInfo treeInfo = remove.node.getUnderlyingNode().getTreeInfo();
-//            if (treeInfo instanceof DOMNodeWrapper) {
-//                Node n = ((DOMNodeWrapper) treeInfo).getUnderlyingNode();
-//                n.getOwnerDocument().setDocumentURI(d.toString());
-//                doc = (Document) n;
-//            } else if (treeInfo instanceof DocumentWrapper) {
-//                doc = (Document) ((DocumentWrapper) treeInfo).docNode;
-//                doc.setDocumentURI(d.toString());
-//            } else {
-                final TreeInfo rebasedDocument = new RebasedDocument(treeInfo,
-                        nodeInfo -> d.toString(),
-                        nodeInfo -> d.toString());
-                rebasedDocument.setSystemId(d.toString());
-                final DocumentBuilder builder = xmlUtils.getProcessor().newDocumentBuilder();
-                builder.setBaseURI(d);
-                node = builder.wrap(rebasedDocument.getRootNode());
-//            }
+            //            if (treeInfo instanceof DOMNodeWrapper) {
+            //                Node n = ((DOMNodeWrapper) treeInfo).getUnderlyingNode();
+            //                n.getOwnerDocument().setDocumentURI(d.toString());
+            //                doc = (Document) n;
+            //            } else if (treeInfo instanceof DocumentWrapper) {
+            //                doc = (Document) ((DocumentWrapper) treeInfo).docNode;
+            //                doc.setDocumentURI(d.toString());
+            //            } else {
+            final TreeInfo rebasedDocument =
+                    new RebasedDocument(treeInfo, nodeInfo -> d.toString(), nodeInfo -> d.toString());
+            rebasedDocument.setSystemId(d.toString());
+            final DocumentBuilder builder = xmlUtils.getProcessor().newDocumentBuilder();
+            builder.setBaseURI(d);
+            node = builder.wrap(rebasedDocument.getRootNode());
+            //            }
         }
         if (remove.doc != null) {
             remove.doc.setDocumentURI(d.toString());
@@ -580,11 +583,11 @@ public class CacheStore extends AbstractStore implements Store {
             } else {
                 final Entry rebase = rebase(entry, path);
                 return rebase.node.asSource();
-//                final TreeInfo rebasedDocument = new RebasedDocument(underlyingNode.getTreeInfo(),
-//                        nodeInfo -> path.toString(),
-//                        nodeInfo -> path.toString());
-//                rebasedDocument.setSystemId(path.toString());
-//                return rebasedDocument;
+                //                final TreeInfo rebasedDocument = new RebasedDocument(underlyingNode.getTreeInfo(),
+                //                        nodeInfo -> path.toString(),
+                //                        nodeInfo -> path.toString());
+                //                rebasedDocument.setSystemId(path.toString());
+                //                return rebasedDocument;
             }
         } else if (entry.bytes != null) {
             final StreamSource source = new StreamSource(new ByteArrayInputStream(entry.bytes));

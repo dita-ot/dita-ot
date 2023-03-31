@@ -16,12 +16,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
+import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -29,10 +28,6 @@ import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.util.Job;
 
 public class ImageMetadataFilterTest {
 
@@ -59,9 +54,11 @@ public class ImageMetadataFilterTest {
         filter.setJob(job);
         filter.write(f.getAbsoluteFile());
 
-        assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
+        assertXMLEqual(
+                new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
-        assertEquals(Arrays.asList("img.png", "img.gif", "img.jpg", "img.xxx").stream()
+        assertEquals(
+                Arrays.asList("img.png", "img.gif", "img.jpg", "img.xxx").stream()
                         .map(img -> new File(srcDir, img).toURI())
                         .collect(Collectors.toSet()),
                 cache.keySet());
@@ -81,9 +78,11 @@ public class ImageMetadataFilterTest {
         filter.setJob(job);
         filter.write(f.getAbsoluteFile());
 
-        assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
+        assertXMLEqual(
+                new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
-        assertEquals(Arrays.asList("img.png", "img.gif", "img.jpg", "img.xxx").stream()
+        assertEquals(
+                Arrays.asList("img.png", "img.gif", "img.jpg", "img.xxx").stream()
                         .map(img -> new File(srcDir, img).toURI())
                         .collect(Collectors.toSet()),
                 cache.keySet());
@@ -93,5 +92,4 @@ public class ImageMetadataFilterTest {
     public static void teardown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
-
 }

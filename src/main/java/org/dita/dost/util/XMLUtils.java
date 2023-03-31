@@ -7,7 +7,34 @@
  */
 package org.dita.dost.util;
 
+import static java.util.Collections.emptyMap;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static net.sf.saxon.s9api.streams.Predicates.*;
+import static net.sf.saxon.s9api.streams.Steps.child;
+import static net.sf.saxon.s9api.streams.Steps.descendant;
+import static org.apache.commons.io.FileUtils.deleteQuietly;
+import static org.apache.commons.io.FileUtils.moveFile;
+import static org.dita.dost.util.Configuration.parserFeatures;
+import static org.dita.dost.util.Configuration.parserMap;
+import static org.dita.dost.util.Constants.*;
+
 import com.google.common.annotations.VisibleForTesting;
+import java.io.*;
+import java.net.URI;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.expr.instruct.TerminationException;
 import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.lib.ErrorReporter;
@@ -22,34 +49,6 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
 
-import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.net.URI;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.Collections.emptyMap;
-import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
-import static javax.xml.XMLConstants.NULL_NS_URI;
-import static net.sf.saxon.s9api.streams.Predicates.*;
-import static net.sf.saxon.s9api.streams.Steps.child;
-import static net.sf.saxon.s9api.streams.Steps.descendant;
-import static org.apache.commons.io.FileUtils.deleteQuietly;
-import static org.apache.commons.io.FileUtils.moveFile;
-import static org.dita.dost.util.Configuration.parserFeatures;
-import static org.dita.dost.util.Configuration.parserMap;
-import static org.dita.dost.util.Constants.*;
-
 /**
  * XML utility methods.
  *
@@ -59,15 +58,19 @@ import static org.dita.dost.util.Constants.*;
 public final class XMLUtils {
 
     private static final DocumentBuilderFactory factory;
+
     static {
         factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
     }
+
     private static final SAXParserFactory saxParserFactory;
+
     static {
         saxParserFactory = SAXParserFactory.newInstance();
         saxParserFactory.setNamespaceAware(true);
     }
+
     private DITAOTLogger logger;
     private final CatalogResolver catalogResolver;
     private final Processor processor;
@@ -106,8 +109,10 @@ public final class XMLUtils {
             try {
                 conf.registerExtensionFunction(def.getClass().newInstance());
             } catch (InstantiationException e) {
-                throw new RuntimeException("Failed to register " + def.getFunctionQName().getDisplayName()
-                        + ". Cannot create instance of " + def.getClass().getName() + ": " + e.getMessage(), e);
+                throw new RuntimeException(
+                        "Failed to register " + def.getFunctionQName().getDisplayName() + ". Cannot create instance of "
+                                + def.getClass().getName() + ": " + e.getMessage(),
+                        e);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -121,15 +126,18 @@ public final class XMLUtils {
     static void configureSaxonCollationResolvers(final net.sf.saxon.Configuration conf) {
         for (DelegatingCollationUriResolver resolver : ServiceLoader.load(DelegatingCollationUriResolver.class)) {
             try {
-                final DelegatingCollationUriResolver newResolver = resolver.getClass().newInstance();
+                final DelegatingCollationUriResolver newResolver =
+                        resolver.getClass().newInstance();
                 final CollationURIResolver currentResolver = conf.getCollationURIResolver();
                 if (currentResolver != null) {
                     newResolver.setBaseResolver(currentResolver);
                 }
                 conf.setCollationURIResolver(newResolver);
             } catch (InstantiationException e) {
-                throw new RuntimeException("Failed to register " + resolver.getClass().getSimpleName()
-                        + ". Cannot create instance of " + resolver.getClass().getName() + ": " + e.getMessage(), e);
+                throw new RuntimeException(
+                        "Failed to register " + resolver.getClass().getSimpleName() + ". Cannot create instance of "
+                                + resolver.getClass().getName() + ": " + e.getMessage(),
+                        e);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -151,19 +159,19 @@ public final class XMLUtils {
 
     public static MessageListener2 toMessageListener(final DITAOTLogger logger) {
         return (content, code, terminate, locator) -> {
-            final Optional<String> errorCode = content.select(descendant(isProcessingInstruction()).where(hasLocalName("error-code")))
+            final Optional<String> errorCode = content.select(
+                            descendant(isProcessingInstruction()).where(hasLocalName("error-code")))
                     .findAny()
                     .map(XdmItem::getStringValue);
             final String level = terminate
                     ? "FATAL"
                     : content.select(descendant(isProcessingInstruction()).where(hasLocalName("level")))
-                        .findAny()
-                        .map(XdmItem::getStringValue)
-                        .orElse("INFO");
-            final String msg = content
-                    .select(child(
-                            hasLocalName("level").or(hasLocalName("error-code"))
-                                    .and(hasType(ItemType.PROCESSING_INSTRUCTION_NODE))
+                            .findAny()
+                            .map(XdmItem::getStringValue)
+                            .orElse("INFO");
+            final String msg = content.select(child(hasLocalName("level")
+                            .or(hasLocalName("error-code"))
+                            .and(hasType(ItemType.PROCESSING_INSTRUCTION_NODE))
                             .negate()))
                     .map(XdmNode::toString)
                     .collect(Collectors.joining());
@@ -287,7 +295,7 @@ public final class XMLUtils {
      * @return list of matching elements
      */
     public static List<Element> getChildElements(final Element elem, final String ns, final String name) {
-        final NodeList children =  elem.getChildNodes();
+        final NodeList children = elem.getChildNodes();
         final List<Element> res = new ArrayList<>(children.getLength());
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
@@ -351,8 +359,7 @@ public final class XMLUtils {
         it.next(); // Skip first, because we're checking if current element is inside non-DITA context
         while (it.hasNext()) {
             final DitaClass cls = it.next();
-            if (cls != null && cls.isValid() &&
-                    (TOPIC_FOREIGN.matches(cls) || TOPIC_UNKNOWN.matches(cls))) {
+            if (cls != null && cls.isValid() && (TOPIC_FOREIGN.matches(cls) || TOPIC_UNKNOWN.matches(cls))) {
                 return true;
             } else if (cls != null && cls.isValid()) {
                 return false;
@@ -383,6 +390,7 @@ public final class XMLUtils {
     }
 
     private static final List<String> excludeList;
+
     static {
         final List<String> el = new ArrayList<>();
         el.add(TOPIC_INDEXTERM.toString());
@@ -439,8 +447,8 @@ public final class XMLUtils {
      * @param classValue class value for search.
      * @return matching element, {@code null} if not found
      */
-    public static Element searchForNode(final Element root, final String searchKey, final String attrName,
-                                  final DitaClass classValue) {
+    public static Element searchForNode(
+            final Element root, final String searchKey, final String attrName, final DitaClass classValue) {
         if (root == null) {
             return null;
         }
@@ -479,8 +487,13 @@ public final class XMLUtils {
      * @param type attribute type
      * @param value attribute value
      */
-    public static void addOrSetAttribute(final AttributesImpl atts, final String uri, final String localName,
-            final String qName, final String type, final String value) {
+    public static void addOrSetAttribute(
+            final AttributesImpl atts,
+            final String uri,
+            final String localName,
+            final String qName,
+            final String type,
+            final String value) {
         final int i = atts.getIndex(qName);
         if (i != -1) {
             atts.setAttribute(i, uri, localName, qName, type, value);
@@ -497,9 +510,13 @@ public final class XMLUtils {
      * @param value attribute value
      */
     public static void addOrSetAttribute(final AttributesImpl atts, final QName name, final String value) {
-        addOrSetAttribute(atts, name.getNamespaceURI(), name.getLocalPart(),
-                name.getPrefix().isEmpty() ? name.getLocalPart() : (name.getPrefix()  + ":" + name.getLocalPart()),
-                "CDATA", value);
+        addOrSetAttribute(
+                atts,
+                name.getNamespaceURI(),
+                name.getLocalPart(),
+                name.getPrefix().isEmpty() ? name.getLocalPart() : (name.getPrefix() + ":" + name.getLocalPart()),
+                "CDATA",
+                value);
     }
 
     /**
@@ -510,9 +527,13 @@ public final class XMLUtils {
      */
     public static void addOrSetAttribute(final AttributesImpl atts, final XdmNode attr) {
         final net.sf.saxon.s9api.QName name = attr.getNodeName();
-        addOrSetAttribute(atts, name.getNamespaceURI(), name.getLocalName(),
-                name.getPrefix().isEmpty() ? name.getLocalName() : (name.getPrefix()  + ":" + name.getLocalName()),
-                "CDATA", attr.getStringValue());
+        addOrSetAttribute(
+                atts,
+                name.getNamespaceURI(),
+                name.getLocalName(),
+                name.getPrefix().isEmpty() ? name.getLocalName() : (name.getPrefix() + ":" + name.getLocalName()),
+                "CDATA",
+                attr.getStringValue());
     }
 
     /**
@@ -545,12 +566,13 @@ public final class XMLUtils {
                 localName = localName.substring(i + 1);
             }
         }
-        addOrSetAttribute(atts,
+        addOrSetAttribute(
+                atts,
                 a.getNamespaceURI() != null ? a.getNamespaceURI() : NULL_NS_URI,
-                        localName,
-                                a.getName() != null ? a.getName() : localName,
-                                        a.isId() ? "ID" : "CDATA",
-                                                a.getValue());
+                localName,
+                a.getName() != null ? a.getName() : localName,
+                a.isId() ? "ID" : "CDATA",
+                a.getValue());
     }
 
     /**
@@ -632,7 +654,8 @@ public final class XMLUtils {
      * @deprecated since 3.5
      */
     @Deprecated
-    public void transform(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
+    public void transform(final File inputFile, final File outputFile, final List<XMLFilter> filters)
+            throws DITAOTException {
         if (inputFile.equals(outputFile)) {
             transform(inputFile, filters);
         } else {
@@ -644,7 +667,8 @@ public final class XMLUtils {
      * @deprecated since 3.5
      */
     @Deprecated
-    private void transformFile(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
+    private void transformFile(final File inputFile, final File outputFile, final List<XMLFilter> filters)
+            throws DITAOTException {
         if (!outputFile.getParentFile().exists()) {
             try {
                 Files.createDirectories(outputFile.getParentFile().toPath());
@@ -656,7 +680,7 @@ public final class XMLUtils {
         }
 
         try (final InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
-             final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+                final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
@@ -979,8 +1003,8 @@ public final class XMLUtils {
          * @param value attribute value
          * @return this builder
          */
-        public AttributesBuilder add(final String uri, final String localName,
-                final String qName, final String type, final String value) {
+        public AttributesBuilder add(
+                final String uri, final String localName, final String qName, final String type, final String value) {
             final int i = atts.getIndex(uri, localName);
             if (i != -1) {
                 atts.setAttribute(i, uri, localName, qName, type, value);
@@ -1021,7 +1045,12 @@ public final class XMLUtils {
          * @return this builder
          */
         public AttributesBuilder add(final QName name, final String value) {
-            return add(name.getNamespaceURI(), name.getLocalPart(), name.getPrefix()  + ":" + name.getLocalPart(), "CDATA", value);
+            return add(
+                    name.getNamespaceURI(),
+                    name.getLocalPart(),
+                    name.getPrefix() + ":" + name.getLocalPart(),
+                    "CDATA",
+                    value);
         }
 
         /**
@@ -1031,11 +1060,12 @@ public final class XMLUtils {
          * @return this builder
          */
         public AttributesBuilder add(final Attr attr) {
-            return add(attr.getNamespaceURI() != null ? attr.getNamespaceURI() : "",
-                       attr.getLocalName() != null ? attr.getLocalName() : attr.getNodeName(),
-                       attr.getNodeName(),
-                       attr.isId() ? "ID" : "CDATA",
-                       attr.getNodeValue());
+            return add(
+                    attr.getNamespaceURI() != null ? attr.getNamespaceURI() : "",
+                    attr.getLocalName() != null ? attr.getLocalName() : attr.getNodeName(),
+                    attr.getNodeName(),
+                    attr.isId() ? "ID" : "CDATA",
+                    attr.getNodeValue());
         }
 
         /**
@@ -1056,7 +1086,6 @@ public final class XMLUtils {
         public Attributes build() {
             return new AttributesImpl(atts);
         }
-
     }
 
     /**
@@ -1064,6 +1093,7 @@ public final class XMLUtils {
      */
     public static final class DebugURIResolver implements URIResolver {
         private final URIResolver r;
+
         public DebugURIResolver(final URIResolver r) {
             this.r = r;
         }
@@ -1158,6 +1188,7 @@ public final class XMLUtils {
      */
     private static final class DebugDocumentBuilder extends DocumentBuilder {
         private final DocumentBuilder b;
+
         public DebugDocumentBuilder(final DocumentBuilder b) {
             this.b = b;
         }
@@ -1272,7 +1303,7 @@ public final class XMLUtils {
      * @param ref node to insert after
      * @param fragment content to insert
      */
-    public static  void insertAfter(final Node ref, final DocumentFragment fragment) {
+    public static void insertAfter(final Node ref, final DocumentFragment fragment) {
         final Document doc = ref.getOwnerDocument();
         final Node parent = ref.getParentNode();
         final List<Node> children = toList(fragment.getChildNodes());

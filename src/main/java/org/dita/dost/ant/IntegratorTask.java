@@ -8,10 +8,8 @@
 package org.dita.dost.ant;
 
 import java.io.File;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.platform.Integrator;
 
@@ -29,7 +27,8 @@ public final class IntegratorTask extends Task {
         final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
         logger.setTarget(getOwningTarget());
         logger.setTask(this);
-        final Integrator adaptee = new Integrator(ditaDir != null ? ditaDir : getProject().getBaseDir());
+        final Integrator adaptee =
+                new Integrator(ditaDir != null ? ditaDir : getProject().getBaseDir());
         adaptee.setLogger(logger);
         if (propertiesFile != null) {
             adaptee.setProperties(propertiesFile);
@@ -60,7 +59,5 @@ public final class IntegratorTask extends Task {
     @Deprecated
     public void setProperties(final File propertiesFile) {
         this.propertiesFile = propertiesFile;
-
     }
-
 }

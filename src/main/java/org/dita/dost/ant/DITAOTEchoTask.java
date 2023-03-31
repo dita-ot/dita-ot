@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Echo;
 import org.dita.dost.ant.ExtensibleAntInvoker.ParamElem;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 
@@ -29,14 +29,14 @@ public final class DITAOTEchoTask extends Echo {
 
     /** Nested params. */
     private final ArrayList<ParamElem> params = new ArrayList<>();
+
     private DITAOTLogger logger;
 
     /**
      * Default Construtor.
      *
      */
-    public DITAOTEchoTask() {
-    }
+    public DITAOTEchoTask() {}
     /**
      * Setter function for id.
      * @param identifier The id to set.
@@ -103,5 +103,4 @@ public final class DITAOTEchoTask extends Echo {
         }
         return prop.toArray(new String[0]);
     }
-
 }

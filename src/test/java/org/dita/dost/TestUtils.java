@@ -7,6 +7,26 @@
  */
 package org.dita.dost;
 
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.xmlunit.util.IterableNodeList.asList;
+
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -28,27 +48,6 @@ import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.diff.Diff;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
-import static org.apache.commons.io.FileUtils.copyFile;
-import static org.xmlunit.util.IterableNodeList.asList;
 
 /**
  * Test utilities.
@@ -85,7 +84,8 @@ public class TestUtils {
         try {
             return new File(dir.toURI());
         } catch (URISyntaxException e) {
-            throw new RuntimeException("Failed to find resource for " + testClass.getSimpleName() + ":" + e.getMessage(), e);
+            throw new RuntimeException(
+                    "Failed to find resource for " + testClass.getSimpleName() + ":" + e.getMessage(), e);
         }
     }
 
@@ -97,8 +97,7 @@ public class TestUtils {
      * @throws IOException if creating directory failed
      */
     public static File createTempDir(final Class<?> testClass) throws IOException {
-        final File tempDir = new File(System.getProperty("java.io.tmpdir"),
-                testClass.getName());
+        final File tempDir = new File(System.getProperty("java.io.tmpdir"), testClass.getName());
         if (!tempDir.exists() && !tempDir.mkdirs()) {
             throw new IOException("Unable to create temporary directory " + tempDir.getAbsolutePath());
         }
@@ -166,8 +165,7 @@ public class TestUtils {
             if (clean) {
                 p = new CleaningXMLFilterImpl(p);
             }
-            serializer.transform(new SAXSource(p, new InputSource(in)),
-                    new StreamResult(std));
+            serializer.transform(new SAXSource(p, new InputSource(in)), new StreamResult(std));
         }
         return std.toString();
     }
@@ -180,15 +178,15 @@ public class TestUtils {
 
         @Override
         public void characters(final char[] ch, final int start, final int length) throws SAXException {
-            final char[] res = new String(ch, start, length).replaceAll("\\s+", " ").trim().toCharArray();
+            final char[] res =
+                    new String(ch, start, length).replaceAll("\\s+", " ").trim().toCharArray();
             getContentHandler().characters(res, 0, res.length);
         }
 
         @Override
         public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
-            //NOOP
+            // NOOP
         }
-
     }
 
     private static class CleaningXMLFilterImpl extends XMLFilterImpl {
@@ -198,10 +196,10 @@ public class TestUtils {
         }
 
         @Override
-        public void startElement(final String uri, final String localName, final String qName,
-                                 final Attributes atts) throws SAXException {
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+                throws SAXException {
             final AttributesImpl attsBuf = new AttributesImpl(atts);
-            for (final String a : new String[]{"class", "domains", "xtrf", "xtrc"}) {
+            for (final String a : new String[] {"class", "domains", "xtrf", "xtrc"}) {
                 final int i = attsBuf.getIndex(a);
                 if (i != -1) {
                     attsBuf.removeAttribute(i);
@@ -214,7 +212,6 @@ public class TestUtils {
         public void processingInstruction(final String target, final String data) throws SAXException {
             // Ignore
         }
-
     }
 
     /**
@@ -268,15 +265,14 @@ public class TestUtils {
         final Transformer serializer = TransformerFactory.newInstance().newTransformer();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
         parser.setEntityResolver(CatalogUtils.getCatalogResolver());
-        try (InputStream in = new BufferedInputStream(new FileInputStream(src)); OutputStream out = new BufferedOutputStream(new FileOutputStream(dst))) {
-            serializer.transform(new SAXSource(parser, new InputSource(in)),
-                    new StreamResult(out));
+        try (InputStream in = new BufferedInputStream(new FileInputStream(src));
+                OutputStream out = new BufferedOutputStream(new FileOutputStream(dst))) {
+            serializer.transform(new SAXSource(parser, new InputSource(in)), new StreamResult(out));
         }
     }
 
     public static void assertXMLEqual(Document exp, Document act) {
-        final Diff d = DiffBuilder
-                .compare(ignoreComments(exp))
+        final Diff d = DiffBuilder.compare(ignoreComments(exp))
                 .withTest(ignoreComments(act))
                 .ignoreWhitespace()
                 .normalizeWhitespace()
@@ -319,8 +315,8 @@ public class TestUtils {
     public static void assertXMLEqual(InputSource exp, InputSource act) {
         try {
             final Diff d;
-            d = DiffBuilder
-                    .compare(ignoreComments(builderFactory.newDocumentBuilder().parse(exp)))
+            d = DiffBuilder.compare(
+                            ignoreComments(builderFactory.newDocumentBuilder().parse(exp)))
                     .withTest(ignoreComments(builderFactory.newDocumentBuilder().parse(act)))
                     .ignoreWhitespace()
                     .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
@@ -336,8 +332,8 @@ public class TestUtils {
     public static void assertHtmlEqual(InputSource exp, InputSource act) {
         final DocumentBuilderFactory builderFactory = new HTMLDocumentBuilderFactory();
         try {
-            final Diff d = DiffBuilder
-                    .compare(ignoreComments(builderFactory.newDocumentBuilder().parse(exp)))
+            final Diff d = DiffBuilder.compare(
+                            ignoreComments(builderFactory.newDocumentBuilder().parse(exp)))
                     .withTest(ignoreComments(builderFactory.newDocumentBuilder().parse(act)))
                     .ignoreWhitespace()
                     .normalizeWhitespace()
@@ -380,7 +376,8 @@ public class TestUtils {
 
     public static Document buildControlDocument(String content) {
         try {
-            return DocumentBuilderFactory.newInstance().newDocumentBuilder()
+            return DocumentBuilderFactory.newInstance()
+                    .newDocumentBuilder()
                     .parse(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
         } catch (SAXException | IOException | ParserConfigurationException e) {
             throw new RuntimeException(e);
@@ -403,24 +400,20 @@ public class TestUtils {
         }
 
         public void info(final String msg) {
-            //System.out.println(msg);
+            // System.out.println(msg);
         }
 
         @Override
-        public void info(String format, Object arg) {
-        }
+        public void info(String format, Object arg) {}
 
         @Override
-        public void info(String format, Object arg1, Object arg2) {
-        }
+        public void info(String format, Object arg1, Object arg2) {}
 
         @Override
-        public void info(String format, Object... arguments) {
-        }
+        public void info(String format, Object... arguments) {}
 
         @Override
-        public void info(String msg, Throwable t) {
-        }
+        public void info(String msg, Throwable t) {}
 
         @Override
         public boolean isWarnEnabled() {
@@ -428,24 +421,20 @@ public class TestUtils {
         }
 
         public void warn(final String msg) {
-            //System.err.println(msg);
+            // System.err.println(msg);
         }
 
         @Override
-        public void warn(String format, Object arg) {
-        }
+        public void warn(String format, Object arg) {}
 
         @Override
-        public void warn(String format, Object... arguments) {
-        }
+        public void warn(String format, Object... arguments) {}
 
         @Override
-        public void warn(String format, Object arg1, Object arg2) {
-        }
+        public void warn(String format, Object arg1, Object arg2) {}
 
         @Override
-        public void warn(String msg, Throwable t) {
-        }
+        public void warn(String msg, Throwable t) {}
 
         @Override
         public boolean isErrorEnabled() {
@@ -492,24 +481,19 @@ public class TestUtils {
         }
 
         @Override
-        public void trace(String msg) {
-        }
+        public void trace(String msg) {}
 
         @Override
-        public void trace(String format, Object arg) {
-        }
+        public void trace(String format, Object arg) {}
 
         @Override
-        public void trace(String format, Object arg1, Object arg2) {
-        }
+        public void trace(String format, Object arg1, Object arg2) {}
 
         @Override
-        public void trace(String format, Object... arguments) {
-        }
+        public void trace(String format, Object... arguments) {}
 
         @Override
-        public void trace(String msg, Throwable t) {
-        }
+        public void trace(String msg, Throwable t) {}
 
         @Override
         public boolean isDebugEnabled() {
@@ -517,30 +501,25 @@ public class TestUtils {
         }
 
         public void debug(final String msg) {
-            //System.out.println(msg);
+            // System.out.println(msg);
         }
 
         @Override
-        public void debug(String format, Object arg) {
-        }
+        public void debug(String format, Object arg) {}
 
         @Override
-        public void debug(String format, Object arg1, Object arg2) {
-        }
+        public void debug(String format, Object arg1, Object arg2) {}
 
         @Override
-        public void debug(String format, Object... arguments) {
-        }
+        public void debug(String format, Object... arguments) {}
 
         @Override
-        public void debug(String msg, Throwable t) {
-        }
+        public void debug(String msg, Throwable t) {}
 
         @Override
         public boolean isInfoEnabled() {
             return true;
         }
-
     }
 
     /**
@@ -667,24 +646,19 @@ public class TestUtils {
         }
 
         @Override
-        public void trace(String msg) {
-        }
+        public void trace(String msg) {}
 
         @Override
-        public void trace(String format, Object arg) {
-        }
+        public void trace(String format, Object arg) {}
 
         @Override
-        public void trace(String format, Object arg1, Object arg2) {
-        }
+        public void trace(String format, Object arg1, Object arg2) {}
 
         @Override
-        public void trace(String format, Object... arguments) {
-        }
+        public void trace(String format, Object... arguments) {}
 
         @Override
-        public void trace(String msg, Throwable t) {
-        }
+        public void trace(String msg, Throwable t) {}
 
         @Override
         public boolean isDebugEnabled() {
@@ -721,7 +695,13 @@ public class TestUtils {
         }
 
         public static final class Message {
-            public enum Level {DEBUG, INFO, WARN, ERROR, FATAL}
+            public enum Level {
+                DEBUG,
+                INFO,
+                WARN,
+                ERROR,
+                FATAL
+            }
 
             public final Level level;
             public final String message;
@@ -738,9 +718,9 @@ public class TestUtils {
                 if (this == o) return true;
                 if (o == null || getClass() != o.getClass()) return false;
                 Message message1 = (Message) o;
-                return level == message1.level &&
-                        Objects.equals(message, message1.message) &&
-                        Objects.equals(exception, message1.exception);
+                return level == message1.level
+                        && Objects.equals(message, message1.message)
+                        && Objects.equals(exception, message1.exception);
             }
 
             @Override
@@ -751,18 +731,16 @@ public class TestUtils {
 
             @Override
             public String toString() {
-                return "Message{" +
-                        "level=" + level +
-                        ", message='" + message + '\'' +
-                        ", exception=" + exception +
-                        '}';
+                return "Message{" + "level="
+                        + level + ", message='"
+                        + message + '\'' + ", exception="
+                        + exception + '}';
             }
         }
 
         public List<Message> getMessages() {
             return Collections.unmodifiableList(buf);
         }
-
     }
 
     public static XdmNode parse(File input) throws SaxonApiException {

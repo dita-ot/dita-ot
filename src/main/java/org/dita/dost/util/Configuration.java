@@ -16,9 +16,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-
 import org.dita.dost.platform.Integrator;
-
 
 /**
  * Global configuration object for static configurations.
@@ -37,15 +35,17 @@ public final class Configuration {
      * <p>If configuration file is not found e.g. during integration, the
      * configuration will be an empty.</p>
      */
-    public final static Map<String, String> configuration;
+    public static final Map<String, String> configuration;
+
     static {
         final Map<String, String> c = new HashMap<>();
 
         final Properties applicationProperties = new Properties();
-        try (InputStream applicationInputStream = Configuration.class.getClassLoader().getResourceAsStream(APP_CONF_PROPERTIES)) {
+        try (InputStream applicationInputStream =
+                Configuration.class.getClassLoader().getResourceAsStream(APP_CONF_PROPERTIES)) {
             if (applicationInputStream != null) {
                 applicationProperties.load(applicationInputStream);
-                for (final Map.Entry<Object, Object> e: applicationProperties.entrySet()) {
+                for (final Map.Entry<Object, Object> e : applicationProperties.entrySet()) {
                     c.put(e.getKey().toString(), e.getValue().toString());
                 }
             }
@@ -57,11 +57,13 @@ public final class Configuration {
         InputStream plugingConfigurationInputStream = null;
         try {
             final ClassLoader loader = FileUtils.class.getClassLoader();
-            plugingConfigurationInputStream = loader.getResourceAsStream(Integrator.class.getPackage().getName() + "/" + GEN_CONF_PROPERTIES);
+            plugingConfigurationInputStream =
+                    loader.getResourceAsStream(Integrator.class.getPackage().getName() + "/" + GEN_CONF_PROPERTIES);
             if (plugingConfigurationInputStream != null) {
                 pluginProperties.load(plugingConfigurationInputStream);
             } else {
-                final File configurationFile = new File("config", Integrator.class.getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
+                final File configurationFile = new File(
+                        "config", Integrator.class.getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
                 if (configurationFile.exists()) {
                     plugingConfigurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
                     pluginProperties.load(plugingConfigurationInputStream);
@@ -74,11 +76,11 @@ public final class Configuration {
                 try {
                     plugingConfigurationInputStream.close();
                 } catch (final IOException ex) {
-                    System.err.println(ex.getMessage()) ;
+                    System.err.println(ex.getMessage());
                 }
             }
         }
-        for (final Map.Entry<Object, Object> e: pluginProperties.entrySet()) {
+        for (final Map.Entry<Object, Object> e : pluginProperties.entrySet()) {
             c.put(e.getKey().toString(), e.getValue().toString());
         }
 
@@ -97,17 +99,17 @@ public final class Configuration {
                 }
             }
         } catch (final IOException e) {
-            System.err.println(e.getMessage()) ;
+            System.err.println(e.getMessage());
         } finally {
             if (configurationInputStream != null) {
                 try {
                     configurationInputStream.close();
                 } catch (final IOException ex) {
-                    System.err.println(ex.getMessage()) ;
+                    System.err.println(ex.getMessage());
                 }
             }
         }
-        for (final Map.Entry<Object, Object> e: properties.entrySet()) {
+        for (final Map.Entry<Object, Object> e : properties.entrySet()) {
             c.put(e.getKey().toString(), e.getValue().toString());
         }
 
@@ -125,17 +127,17 @@ public final class Configuration {
     }
 
     /** Private constructor to disallow instance creation. */
-    private Configuration() {
-    }
+    private Configuration() {}
 
     /** List of print-oriented transtypes. */
     public static final List<String> printTranstype;
+
     static {
         final List<String> types = new ArrayList<>();
         final String printTranstypes = Configuration.configuration.get(CONF_PRINT_TRANSTYPES);
         if (printTranstypes != null) {
             if (printTranstypes.trim().length() > 0) {
-                for (final String transtype: printTranstypes.split(CONF_LIST_SEPARATOR)) {
+                for (final String transtype : printTranstypes.split(CONF_LIST_SEPARATOR)) {
                     types.add(transtype.trim());
                 }
             }
@@ -148,12 +150,13 @@ public final class Configuration {
 
     /** List of transtypes. */
     public static final List<String> transtypes;
+
     static {
         final List<String> types = new ArrayList<>();
         final String printTranstypes = Configuration.configuration.get(CONF_TRANSTYPES);
         if (printTranstypes != null) {
             if (printTranstypes.trim().length() > 0) {
-                for (final String transtype: printTranstypes.split(CONF_LIST_SEPARATOR)) {
+                for (final String transtype : printTranstypes.split(CONF_LIST_SEPARATOR)) {
                     types.add(transtype.trim());
                 }
             }
@@ -165,9 +168,10 @@ public final class Configuration {
 
     /** Map of plug-in resource directories. */
     public static final Map<String, File> pluginResourceDirs;
+
     static {
         final Map<String, File> ps = new HashMap<>();
-        for (final Map.Entry<String, String> e: configuration.entrySet()) {
+        for (final Map.Entry<String, String> e : configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith("plugin.") && key.endsWith(".dir")) {
                 ps.put(key.substring(7, key.length() - 4), new File(e.getValue()));
@@ -178,10 +182,11 @@ public final class Configuration {
 
     public static final Map<String, String> parserMap;
     public static final Map<String, Map<String, Boolean>> parserFeatures;
+
     static {
         final Map<String, String> m = new HashMap<>();
         final Map<String, Map<String, Boolean>> f = new HashMap<>();
-        for (final Map.Entry<String, String> e: configuration.entrySet()) {
+        for (final Map.Entry<String, String> e : configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith(CONF_PARSER_FORMAT) && key.indexOf('.', CONF_PARSER_FORMAT.length()) == -1) {
                 final String format = key.substring(CONF_PARSER_FORMAT.length());
@@ -204,9 +209,10 @@ public final class Configuration {
     }
 
     public static final Set<String> ditaFormat;
+
     static {
         final Set<String> s = new HashSet<>();
-        for (final Map.Entry<String, String> e: configuration.entrySet()) {
+        for (final Map.Entry<String, String> e : configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith(CONF_PARSER_FORMAT) && key.indexOf('.', CONF_PARSER_FORMAT.length()) == -1) {
                 s.add(key.substring(CONF_PARSER_FORMAT.length()));
@@ -214,5 +220,4 @@ public final class Configuration {
         }
         ditaFormat = Collections.unmodifiableSet(s);
     }
-
 }

@@ -8,7 +8,23 @@
 
 package org.dita.dost.module;
 
+import static java.util.Collections.emptyMap;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.toErrorReporter;
+
 import com.google.common.annotations.VisibleForTesting;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.commons.io.FileUtils;
@@ -22,23 +38,6 @@ import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
 import org.w3c.dom.Document;
 import org.xml.sax.XMLFilter;
-
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static java.util.Collections.emptyMap;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.toErrorReporter;
 
 /**
  * Move temporary files not based on output URI to match output URI structure.
@@ -77,7 +76,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                         final XsltExecutable xsltExecutable = xsltCompiler.compile(f);
                         return xsltExecutable.load();
                     } catch (UncheckedXPathException e) {
-                        throw new RuntimeException("Failed to compile XSLT: " + e.getXPathException().getMessageAndLocation(), e);
+                        throw new RuntimeException(
+                                "Failed to compile XSLT: "
+                                        + e.getXPathException().getMessageAndLocation(),
+                                e);
                     } catch (SaxonApiException e) {
                         throw new RuntimeException("Failed to compile XSLT: " + e.getMessage(), e);
                     }
@@ -107,7 +109,9 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             // collect and relativize result
             final Collection<FileInfo> original = job.getFileInfo().stream()
                     .filter(fi -> fi.result != null)
-                    .map(fi -> FileInfo.builder(fi).result(base.relativize(fi.result)).build())
+                    .map(fi -> FileInfo.builder(fi)
+                            .result(base.relativize(fi.result))
+                            .build())
                     .collect(Collectors.toList());
             original.forEach(fi -> job.remove(fi));
             // rewrite results
@@ -200,14 +204,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         }
     }
 
-
     String getUplevels(final URI base) {
         final URI rel = base.relativize(job.getInputFile());
         final int count = rel.toString().split("/").length - 1;
-        return IntStream.range(0, count).boxed()
-                .map(i -> "../")
-                .collect(Collectors.joining(""));
-
+        return IntStream.range(0, count).boxed().map(i -> "../").collect(Collectors.joining(""));
     }
 
     /**
@@ -260,8 +260,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                 if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS) && commons.size() <= 1) {
                     return null;
                 } else {
-                    final String path = commons.stream()
-                            .collect(Collectors.joining("/")) + "/";
+                    final String path = commons.stream().collect(Collectors.joining("/")) + "/";
                     return URLUtils.setPath(left, path);
                 }
             }
@@ -280,7 +279,9 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     private List<XMLFilter> getProcessingPipe(final FileInfo fi, final File srcFile, final File destFile) {
         final List<XMLFilter> res = new ArrayList<>();
 
-        if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA) || fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+        if (fi.format == null
+                || fi.format.equals(ATTR_FORMAT_VALUE_DITA)
+                || fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
             filter.setCurrentFile(srcFile.toURI());
             filter.setDestFile(destFile.toURI());
             res.add(filter);
@@ -303,5 +304,4 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
         return res;
     }
-
 }

@@ -1,21 +1,20 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2010 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2010 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.writer;
 
 import java.util.List;
-
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Job;
 
-//RFE 2987769 Eclipse index-see
+// RFE 2987769 Eclipse index-see
 
 public abstract class AbstractExtendDitaWriter implements AbstractWriter, IExtendDitaWriter, IDitaTranstypeIndexWriter {
 
@@ -52,5 +51,4 @@ public abstract class AbstractExtendDitaWriter implements AbstractWriter, IExten
     public final void setPipelineHashIO(final PipelineHashIO hashIO) {
         pipelineHashMap = hashIO;
     }
-
 }

@@ -17,10 +17,8 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.FileUtils;
@@ -43,8 +41,7 @@ public final class DITAOTCopy extends Task {
      * Default Constructor.
      *
      */
-    public DITAOTCopy() {
-    }
+    public DITAOTCopy() {}
 
     /**
      * Set the copy files.
@@ -105,7 +102,7 @@ public final class DITAOTCopy extends Task {
             final FileUtils fileUtils = FileUtils.newFileUtils();
             final List<String> incs = getIncludes();
             if (relativePaths == null) {
-                for (final String inc: incs) {
+                for (final String inc : incs) {
                     final File srcFile = new File(inc);
                     if (srcFile.exists()) {
                         final File destFile = new File(destDir, srcFile.getName());
@@ -113,10 +110,10 @@ public final class DITAOTCopy extends Task {
                     }
                 }
             } else {
-                for (final String inc: incs) {
+                for (final String inc : incs) {
                     final File srcFile = new File(inc);
                     File destFile = null;
-                    for (final String rel: relativePaths.split(COMMA)) {
+                    for (final String rel : relativePaths.split(COMMA)) {
                         final File temp = new File(destDir, rel);
                         if (temp.getName().equalsIgnoreCase(srcFile.getName())) {
                             destFile = temp;
@@ -136,9 +133,7 @@ public final class DITAOTCopy extends Task {
     private List<String> getIncludes() throws IOException {
         if (includes == null && includesFile == null) {
             final Job job = getProject().getReference(ANT_REFERENCE_JOB);
-            return job
-                    .getFileInfo(fi -> fi.isFlagImage)
-                    .stream()
+            return job.getFileInfo(fi -> fi.isFlagImage).stream()
                     .map(fi -> fi.file.toString())
                     .collect(Collectors.toList());
         }
@@ -157,5 +152,4 @@ public final class DITAOTCopy extends Task {
             return Arrays.asList(includes.split(COMMA));
         }
     }
-
 }

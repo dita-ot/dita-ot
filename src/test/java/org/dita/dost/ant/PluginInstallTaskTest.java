@@ -8,12 +8,12 @@
 
 package org.dita.dost.ant;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.dita.dost.platform.Registry;
 import org.dita.dost.platform.Registry.Dependency;
 import org.junit.Test;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class PluginInstallTaskTest {
 
@@ -27,10 +27,6 @@ public class PluginInstallTaskTest {
     }
 
     private Registry createRegistry(String version) {
-        return new Registry(null, "1.0.0",
-                new Dependency[]{
-                        new Dependency("org.dita.base", version)
-                },
-                null, null);
+        return new Registry(null, "1.0.0", new Dependency[] {new Dependency("org.dita.base", version)}, null, null);
     }
 }

@@ -1,16 +1,16 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.log.MessageBean;
+import org.dita.dost.log.MessageUtils;
 
 /**
  * The factory to create instance for each module class.
@@ -24,9 +24,7 @@ public final class ModuleFactory {
     /**
      * Automatically generated constructor: ModuleFactory.
      */
-    private ModuleFactory() {
-
-    }
+    private ModuleFactory() {}
 
     /**
      * Method to get the only instance of ModuleFactory. ModuleFactory is a
@@ -57,7 +55,7 @@ public final class ModuleFactory {
             final MessageBean msgBean = MessageUtils.getMessage("DOTJ005F", moduleClass.getName());
             final String msg = msgBean.toString();
 
-            throw new DITAOTException(msgBean, e,msg);
+            throw new DITAOTException(msgBean, e, msg);
         }
     }
 }

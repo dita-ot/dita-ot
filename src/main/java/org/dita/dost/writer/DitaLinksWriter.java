@@ -1,13 +1,26 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.writer;
 
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.getRelativePath;
+import static org.dita.dost.util.XMLUtils.AttributesBuilder;
+import static org.dita.dost.util.XMLUtils.getChildElements;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Map;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
@@ -20,20 +33,6 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLFilterImpl;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Map;
-
-import static javax.xml.XMLConstants.NULL_NS_URI;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.getRelativePath;
-import static org.dita.dost.util.XMLUtils.AttributesBuilder;
-import static org.dita.dost.util.XMLUtils.getChildElements;
-
 /**
  * Read DITA topic file and insert map links information into it.
  */
@@ -45,6 +44,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
     private Map<String, Element> indexEntries;
     /** Stack of topic IDs. */
     private Deque<String> topicIdStack;
+
     private final ArrayList<String> topicSpecList;
     private static final Attributes relatedLinksAtts = new AttributesBuilder()
             .add(ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString())
@@ -106,9 +106,15 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
             topicIdStack.addFirst(atts.getValue(ATTRIBUTE_NAME_ID));
             if (curMatchTopic != null && !firstTopic) {
                 try {
-                    getContentHandler().startElement(NULL_NS_URI, TOPIC_RELATED_LINKS.localName, TOPIC_RELATED_LINKS.localName, relatedLinksAtts);
+                    getContentHandler()
+                            .startElement(
+                                    NULL_NS_URI,
+                                    TOPIC_RELATED_LINKS.localName,
+                                    TOPIC_RELATED_LINKS.localName,
+                                    relatedLinksAtts);
                     domToSax(indexEntries.get(curMatchTopic));
-                    getContentHandler().endElement(NULL_NS_URI, TOPIC_RELATED_LINKS.localName, TOPIC_RELATED_LINKS.localName);
+                    getContentHandler()
+                            .endElement(NULL_NS_URI, TOPIC_RELATED_LINKS.localName, TOPIC_RELATED_LINKS.localName);
                     curMatchTopic = null;
                 } catch (final RuntimeException e) {
                     throw e;
@@ -146,7 +152,12 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
         }
         if (curMatchTopic != null && topicSpecList.contains(localName)) {
             // if <TOPIC_RELATED_LINKS> doesn't exist
-            getContentHandler().startElement(NULL_NS_URI, TOPIC_RELATED_LINKS.localName, TOPIC_RELATED_LINKS.localName, relatedLinksAtts);
+            getContentHandler()
+                    .startElement(
+                            NULL_NS_URI,
+                            TOPIC_RELATED_LINKS.localName,
+                            TOPIC_RELATED_LINKS.localName,
+                            relatedLinksAtts);
             domToSax(indexEntries.get(curMatchTopic));
             getContentHandler().endElement(NULL_NS_URI, TOPIC_RELATED_LINKS.localName, TOPIC_RELATED_LINKS.localName);
             curMatchTopic = null;
@@ -172,8 +183,8 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
     /** Relativize links */
     private Element rewriteLinks(final Element src) {
         final Element dst = (Element) src.cloneNode(true);
-        for (final Element desc: getChildElements(dst, TOPIC_DESC, true)) {
-            for (final Element elem: getChildElements(desc, true)) {
+        for (final Element desc : getChildElements(dst, TOPIC_DESC, true)) {
+            for (final Element elem : getChildElements(desc, true)) {
                 final Attr href = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
                 final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
                 if (href != null && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
@@ -202,7 +213,5 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
         public void endDocument() throws SAXException {
             // ignore
         }
-
     }
-
 }

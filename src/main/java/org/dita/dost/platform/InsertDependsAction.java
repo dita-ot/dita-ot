@@ -1,21 +1,20 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2008 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2008 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.platform;
-
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.StringUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.StringUtils;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * InsertDependsAction implements IAction.
@@ -42,7 +41,7 @@ final class InsertDependsAction implements IAction {
     @Override
     public String getResult() {
         final List<String> result = new ArrayList<>();
-        for (final Value t: value) {
+        for (final Value t : value) {
             final String token = t.value().trim();
             // Pieces which are surrounded with braces are extension points.
             if (token.startsWith("{") && token.endsWith("}")) {
@@ -69,9 +68,9 @@ final class InsertDependsAction implements IAction {
     public void setInput(final List<Value> input) {
         value = input;
     }
+
     @Override
-    public void addParam(final String name, final String value) {
-    }
+    public void addParam(final String name, final String value) {}
     /**
      * Set the feature table.
      * @param h hastable
@@ -82,7 +81,5 @@ final class InsertDependsAction implements IAction {
     }
 
     @Override
-    public void setLogger(final DITAOTLogger logger) {
-    }
-
+    public void setLogger(final DITAOTLogger logger) {}
 }

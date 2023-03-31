@@ -7,15 +7,14 @@
  */
 package org.dita.dost.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import org.apache.xerces.impl.dtd.DTDGrammar;
 import org.apache.xerces.impl.dtd.XMLDTDDescription;
 import org.apache.xerces.xni.grammars.Grammar;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 
 public class XMLGrammarPoolImplUtilsTest {
 
@@ -77,5 +76,4 @@ public class XMLGrammarPoolImplUtilsTest {
     private XMLDTDDescription getXmldtdDescription(String base, String systemId, String publicId) {
         return new XMLDTDDescription(publicId, "topic.dtd", base, systemId, "topic");
     }
-
 }

@@ -7,12 +7,11 @@
  */
 package org.dita.dost.log;
 
+import java.text.MessageFormat;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Target;
 import org.apache.tools.ant.Task;
 import org.slf4j.helpers.MarkerIgnoringBase;
-
-import java.text.MessageFormat;
 
 /**
  * Logger proxy to Ant logger.
@@ -223,9 +222,8 @@ public final class DITAOTAntLogger extends MarkerIgnoringBase implements DITAOTL
             project.log(task, msg, level);
         } else if (target != null) {
             project.log(target, msg, level);
-        } else  {
+        } else {
             project.log(msg, level);
         }
     }
-
 }

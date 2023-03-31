@@ -7,14 +7,13 @@
  */
 package org.dita.dost.writer;
 
+import java.io.File;
+import java.io.IOException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.reader.AbstractReader;
 import org.dita.dost.util.Job;
 import org.w3c.dom.Document;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Reads XML into DOM, modifies it, and serializes back into XML.
@@ -45,7 +44,8 @@ public abstract class AbstractDomFilter implements AbstractReader {
                 resDoc.setDocumentURI(filename.toURI().toString());
                 job.getStore().writeDocument(resDoc, filename.toURI());
             } catch (final IOException e) {
-                throw new DITAOTException("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
+                throw new DITAOTException(
+                        "Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
             }
         }
     }
@@ -67,5 +67,4 @@ public abstract class AbstractDomFilter implements AbstractReader {
      * @return modified document, may be argument document; if {@code null}, document is not serialized
      */
     protected abstract Document process(final Document doc);
-
 }

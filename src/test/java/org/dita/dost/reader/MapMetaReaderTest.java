@@ -7,8 +7,13 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.TestUtils.assertXMLEqual;
+
+import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
@@ -17,13 +22,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-
-import static org.dita.dost.TestUtils.assertXMLEqual;
 
 public class MapMetaReaderTest {
 
@@ -34,10 +32,10 @@ public class MapMetaReaderTest {
     private static MapMetaReader reader;
 
     @BeforeClass
-    public static void setUp() throws Exception{
+    public static void setUp() throws Exception {
         CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
         tempDir = TestUtils.createTempDir(MapMetaReaderTest.class);
-        for (final File f: srcDir.listFiles()) {
+        for (final File f : srcDir.listFiles()) {
             TestUtils.normalize(f, new File(tempDir, f.getName()));
         }
 
@@ -50,17 +48,15 @@ public class MapMetaReaderTest {
     }
 
     @Test
-    public void testRead() throws SAXException, IOException, ParserConfigurationException{
+    public void testRead() throws SAXException, IOException, ParserConfigurationException {
         final DocumentBuilder db = XMLUtils.getDocumentBuilder();
         db.setEntityResolver(CatalogUtils.getCatalogResolver());
 
-        assertXMLEqual(db.parse(new File(expDir, "test.ditamap")),
-                db.parse(new File(tempDir, "test.ditamap")));
+        assertXMLEqual(db.parse(new File(expDir, "test.ditamap")), db.parse(new File(tempDir, "test.ditamap")));
     }
 
     @AfterClass
     public static void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
-
 }

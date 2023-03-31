@@ -7,6 +7,10 @@
  */
 package org.dita.dost.ant;
 
+import static org.dita.dost.ant.ExtensibleAntInvoker.isValid;
+import static org.dita.dost.log.MessageBean.*;
+
+import java.util.ArrayList;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Exit;
@@ -18,11 +22,6 @@ import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
-
-import java.util.ArrayList;
-
-import static org.dita.dost.ant.ExtensibleAntInvoker.isValid;
-import static org.dita.dost.log.MessageBean.*;
 
 /**
  * Ant echo task for custom error message.
@@ -37,8 +36,7 @@ public final class DITAOTFailTask extends Exit {
      * Default Construtor.
      *
      */
-    public DITAOTFailTask() {
-    }
+    public DITAOTFailTask() {}
 
     /**
      * Set the id.
@@ -79,9 +77,8 @@ public final class DITAOTFailTask extends Exit {
                     .toString();
             getProject().log(msg, Project.MSG_WARN);
         }
-        final boolean fail = nestedConditionPresent()
-                       ? testNestedCondition()
-                       : (testIfCondition() && testUnlessCondition());
+        final boolean fail =
+                nestedConditionPresent() ? testNestedCondition() : (testIfCondition() && testUnlessCondition());
         if (!fail) {
             return;
         }
@@ -99,7 +96,7 @@ public final class DITAOTFailTask extends Exit {
                 try {
                     super.execute();
                 } catch (final BuildException ex) {
-                    throw new BuildException(msgBean.toString(),new DITAOTException(msgBean, ex, msgBean.toString()));
+                    throw new BuildException(msgBean.toString(), new DITAOTException(msgBean, ex, msgBean.toString()));
                 }
             } else if (ERROR.equals(type)) {
                 logger.error(msgBean.toString());
@@ -111,8 +108,6 @@ public final class DITAOTFailTask extends Exit {
                 logger.debug(msgBean.toString());
             }
         }
-
-        
     }
 
     /**
@@ -146,8 +141,7 @@ public final class DITAOTFailTask extends Exit {
         @Override
         public boolean eval() {
             if (countConditions() != 1) {
-                throw new BuildException(
-                    "A single nested condition is required.");
+                throw new BuildException("A single nested condition is required.");
             }
             return getConditions().nextElement().eval();
         }
@@ -241,8 +235,7 @@ public final class DITAOTFailTask extends Exit {
         final boolean result = nestedConditionPresent();
 
         if (result && ifCondition != null || unlessCondition != null) {
-            throw new BuildException("Nested conditions "
-                + "not permitted in conjunction with if/unless attributes");
+            throw new BuildException("Nested conditions " + "not permitted in conjunction with if/unless attributes");
         }
 
         return result && nestedCondition.eval();
@@ -255,5 +248,4 @@ public final class DITAOTFailTask extends Exit {
     private boolean nestedConditionPresent() {
         return (nestedCondition != null);
     }
-
 }

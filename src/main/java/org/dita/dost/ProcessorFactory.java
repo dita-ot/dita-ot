@@ -1,11 +1,10 @@
 package org.dita.dost;
 
-import org.dita.dost.util.Configuration;
-
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.dita.dost.util.Configuration;
 
 /**
  * DITA-OT processer factory. Not thread-safe, but can be reused.
@@ -59,5 +58,4 @@ public final class ProcessorFactory {
         }
         return new Processor(ditaDir, transtype, Collections.unmodifiableMap(args));
     }
-
 }

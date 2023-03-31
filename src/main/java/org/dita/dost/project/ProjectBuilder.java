@@ -10,7 +10,6 @@ package org.dita.dost.project;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.net.URI;
 import java.util.List;
 
@@ -21,18 +20,22 @@ public class ProjectBuilder {
 
     @JsonProperty("deliverables")
     public List<Deliverable> deliverables;
+
     @JsonProperty("includes")
     public List<URI> includes;
+
     @JsonProperty("publications")
     public List<Publication> publications;
+
     @JsonProperty("contexts")
     public List<Context> contexts;
 
     @JsonCreator
-    public ProjectBuilder(@JsonProperty("deliverables") List<Deliverable> deliverables,
-                          @JsonProperty("includes") List<URI> includes,
-                          @JsonProperty("publications") List<Publication> publications,
-                          @JsonProperty("contexts") List<Context> contexts) {
+    public ProjectBuilder(
+            @JsonProperty("deliverables") List<Deliverable> deliverables,
+            @JsonProperty("includes") List<URI> includes,
+            @JsonProperty("publications") List<Publication> publications,
+            @JsonProperty("contexts") List<Context> contexts) {
         this.deliverables = deliverables;
         this.includes = includes;
         this.publications = publications;
@@ -47,11 +50,12 @@ public class ProjectBuilder {
         public final Publication publication;
 
         @JsonCreator
-        public Deliverable(@JsonProperty("name") String name,
-                           @JsonProperty("id") String id,
-                           @JsonProperty("context") Context context,
-                           @JsonProperty("output") URI output,
-                           @JsonProperty("publication") Publication publication) {
+        public Deliverable(
+                @JsonProperty("name") String name,
+                @JsonProperty("id") String id,
+                @JsonProperty("context") Context context,
+                @JsonProperty("output") URI output,
+                @JsonProperty("publication") Publication publication) {
             this.name = name;
             this.id = id;
             this.context = context;
@@ -67,7 +71,6 @@ public class ProjectBuilder {
                 this.ditavals = ditavals;
             }
         }
-
     }
 
     public static class Context {
@@ -78,11 +81,12 @@ public class ProjectBuilder {
         public final Deliverable.Profile profiles;
 
         @JsonCreator
-        public Context(@JsonProperty("name") String name,
-                       @JsonProperty("id") String id,
-                       @JsonProperty("idref") String idref,
-                       @JsonProperty("input") List<URI> input,
-                       @JsonProperty("profiles") Deliverable.Profile profiles) {
+        public Context(
+                @JsonProperty("name") String name,
+                @JsonProperty("id") String id,
+                @JsonProperty("idref") String idref,
+                @JsonProperty("input") List<URI> input,
+                @JsonProperty("profiles") Deliverable.Profile profiles) {
             this.name = name;
             this.id = id;
             this.idref = idref;
@@ -100,12 +104,13 @@ public class ProjectBuilder {
         public final Deliverable.Profile profiles;
 
         @JsonCreator
-        public Publication(@JsonProperty("name") String name,
-                           @JsonProperty("id") String id,
-                           @JsonProperty("idref") String idref,
-                           @JsonProperty("transtype") String transtype,
-                           @JsonProperty("params") List<Param> params,
-                           @JsonProperty("profiles") Deliverable.Profile profiles) {
+        public Publication(
+                @JsonProperty("name") String name,
+                @JsonProperty("id") String id,
+                @JsonProperty("idref") String idref,
+                @JsonProperty("transtype") String transtype,
+                @JsonProperty("params") List<Param> params,
+                @JsonProperty("profiles") Deliverable.Profile profiles) {
             this.name = name;
             this.id = id;
             this.idref = idref;

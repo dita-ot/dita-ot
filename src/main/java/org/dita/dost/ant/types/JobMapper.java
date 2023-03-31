@@ -7,21 +7,18 @@
  */
 package org.dita.dost.ant.types;
 
+import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.URLUtils.toURI;
+
+import java.net.URI;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.util.*;
 import org.dita.dost.ant.ExtensibleAntInvoker;
 import org.dita.dost.util.Job;
-
-import java.io.File;
-import java.net.URI;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
-import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
-import static org.dita.dost.util.URLUtils.toFile;
-import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * File mapper that uses job configuration's {@link org.dita.dost.util.Job.FileInfo#result result}
@@ -33,7 +30,8 @@ import static org.dita.dost.util.URLUtils.toURI;
 public class JobMapper implements FileNameMapper {
 
     private enum Type {
-        TEMP, RESULT
+        TEMP,
+        RESULT
     }
 
     private Type type = Type.RESULT;
@@ -87,7 +85,7 @@ public class JobMapper implements FileNameMapper {
             default:
                 throw new IllegalArgumentException();
         }
-        return new String[]{extension != null ? (FilenameUtils.removeExtension(res) + extension) : res};
+        return new String[] {extension != null ? (FilenameUtils.removeExtension(res) + extension) : res};
     }
 
     public static class TypeAttribute extends EnumeratedAttribute {

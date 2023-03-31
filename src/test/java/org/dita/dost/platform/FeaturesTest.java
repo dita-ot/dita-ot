@@ -7,18 +7,17 @@
  */
 package org.dita.dost.platform;
 
+import static java.util.Arrays.asList;
+import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.util.*;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.util.*;
-
-import static java.util.Arrays.asList;
-import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
-import static org.junit.Assert.*;
 
 public class FeaturesTest {
 
@@ -26,7 +25,7 @@ public class FeaturesTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-       doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
     }
 
     @Test
@@ -36,7 +35,9 @@ public class FeaturesTest {
 
     @Test
     public void testGetLocation() {
-        assertEquals(new File("base", "plugins"), new Features(new File("base", "plugins"), new File("base")).getPluginDir());
+        assertEquals(
+                new File("base", "plugins"),
+                new Features(new File("base", "plugins"), new File("base")).getPluginDir());
     }
 
     @Test
@@ -47,7 +48,8 @@ public class FeaturesTest {
         try {
             f.addExtensionPoint(null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ex) {
+        }
     }
 
     @Test
@@ -92,9 +94,12 @@ public class FeaturesTest {
         f.addFeature("foo", getElement(" bar, baz ", null));
         assertEquals(asList("bar", "baz"), f.getFeature("foo"));
         f.addFeature("foo", getElement("bar, baz", "file"));
-        assertEquals(asList("bar","baz",
-                "base" + File.separator + "plugins" + File.separator + "bar",
-                "base" + File.separator + "plugins" + File.separator + "baz"),
+        assertEquals(
+                asList(
+                        "bar",
+                        "baz",
+                        "base" + File.separator + "plugins" + File.separator + "bar",
+                        "base" + File.separator + "plugins" + File.separator + "baz"),
                 f.getFeature("foo"));
     }
 
@@ -105,7 +110,8 @@ public class FeaturesTest {
         try {
             f.addRequire(null);
             fail();
-        } catch (final NullPointerException e) {}
+        } catch (final NullPointerException e) {
+        }
     }
 
     @Test
@@ -116,7 +122,8 @@ public class FeaturesTest {
         try {
             f.addRequire(null, null);
             fail();
-        } catch (final NullPointerException e) {}
+        } catch (final NullPointerException e) {
+        }
     }
 
     @Test
@@ -131,7 +138,7 @@ public class FeaturesTest {
         while (requirements.hasNext()) {
             final PluginRequirement requirement = requirements.next();
             final List<String> plugins = new ArrayList<>();
-            for (final Iterator<String> ps = requirement.getPlugins(); ps.hasNext();) {
+            for (final Iterator<String> ps = requirement.getPlugins(); ps.hasNext(); ) {
                 plugins.add(ps.next());
             }
             Collections.sort(plugins);
@@ -155,7 +162,8 @@ public class FeaturesTest {
         try {
             f.addMeta("bar", null);
             fail();
-        } catch (final NullPointerException e) {}
+        } catch (final NullPointerException e) {
+        }
     }
 
     @Test
@@ -194,12 +202,8 @@ public class FeaturesTest {
             }
             return Objects.compare(a0.value(), a1.value(), String::compareTo);
         });
-        assertEquals(Arrays.asList(
-                null,
-                new Value("base", "bar"),
-                new Value("base", "foo"),
-                new Value("base", "foo")),
-                act);
+        assertEquals(
+                Arrays.asList(null, new Value("base", "bar"), new Value("base", "foo"), new Value("base", "foo")), act);
     }
 
     private static Element getElement(final String value, final String type) {
@@ -212,5 +216,4 @@ public class FeaturesTest {
         }
         return feature;
     }
-
 }

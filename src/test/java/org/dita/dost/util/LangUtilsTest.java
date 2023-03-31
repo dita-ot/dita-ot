@@ -8,12 +8,11 @@
 
 package org.dita.dost.util;
 
-import org.junit.Test;
-
-import java.util.*;
-
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
+
+import java.util.*;
+import org.junit.Test;
 
 public class LangUtilsTest {
 

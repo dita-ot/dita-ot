@@ -5,6 +5,12 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -13,13 +19,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.LoggerListener;
 import org.dita.dost.util.Configuration.Mode;
 import org.slf4j.Logger;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
 
 /**
  * DITA-OT processer. Not thread-safe, but can be reused.
@@ -161,7 +160,6 @@ public final class Processor {
         return this;
     }
 
-
     /**
      * Set error recovery mode.
      *
@@ -212,7 +210,7 @@ public final class Processor {
             }
             ProjectHelper.configureProject(project, buildFile);
             final Vector<String> targets = new Vector<>();
-//            targets.addElement(project.getDefaultTarget());
+            //            targets.addElement(project.getDefaultTarget());
             targets.addElement("dita2" + args.get("transtype"));
             project.executeTargets(targets);
         } catch (final BuildException e) {
@@ -251,7 +249,8 @@ public final class Processor {
         fileAppender.setEncoder(encoder);
         fileAppender.start();
 
-        final ch.qos.logback.classic.Logger debugLogger = loggerContext.getLogger(getClass().getCanonicalName() + "_"  + System.currentTimeMillis());
+        final ch.qos.logback.classic.Logger debugLogger =
+                loggerContext.getLogger(getClass().getCanonicalName() + "_" + System.currentTimeMillis());
         debugLogger.addAppender(fileAppender);
         debugLogger.setLevel(Level.DEBUG);
         return debugLogger;
@@ -282,5 +281,4 @@ public final class Processor {
         }
         throw new RuntimeException("Unable to create temporary directory");
     }
-
 }

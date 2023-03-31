@@ -17,7 +17,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-
+import org.dita.dost.TestUtils;
+import org.dita.dost.index.IndexTerm;
+import org.dita.dost.index.IndexTermCollection;
+import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -25,14 +28,10 @@ import org.junit.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.dita.dost.TestUtils;
-import org.dita.dost.index.IndexTerm;
-import org.dita.dost.index.IndexTermCollection;
-import org.dita.dost.index.IndexTermTarget;
 
 /**
  * IndexTermReader unit test.
- * 
+ *
  * @author Jarno Elovirta
  */
 public class IndexTermReaderTest {
@@ -74,11 +73,11 @@ public class IndexTermReaderTest {
         final List<IndexTerm> exp = new ArrayList<>();
         exp.add(generateIndexTerms(target, "Primary", "Secondary", "Tertiary"));
         exp.add(generateIndexTerms(target, "Primary normalized", "Secondary normalized", "Tertiary normalized"));
-        exp.add(generateIndexTerms(target, " Primary unnormalized ", " Secondary unnormalized ", " Tertiary unnormalized "));
+        exp.add(generateIndexTerms(
+                target, " Primary unnormalized ", " Secondary unnormalized ", " Tertiary unnormalized "));
         exp.add(generateIndexTermErrorCondition(target, "Test empty title"));
 
-        assertEquals(new HashSet<>(exp),
-                new HashSet<>(act));
+        assertEquals(new HashSet<>(exp), new HashSet<>(act));
     }
 
     @After
@@ -88,7 +87,7 @@ public class IndexTermReaderTest {
 
     private IndexTerm generateIndexTerms(final File target, final String... texts) {
         final LinkedList<IndexTerm> stack = new LinkedList<>();
-        for (final String text: texts) {
+        for (final String text : texts) {
             final IndexTerm primary = generateIndexTerm(target, text);
             if (!stack.isEmpty()) {
                 stack.getLast().addSubTerm(primary);
@@ -110,7 +109,7 @@ public class IndexTermReaderTest {
         }
         return primary;
     }
-    
+
     private IndexTerm generateIndexTermErrorCondition(final File target, final String text) {
         final IndexTerm primary = new IndexTerm();
         primary.setTermName(text);
@@ -123,5 +122,4 @@ public class IndexTermReaderTest {
         }
         return primary;
     }
-
 }

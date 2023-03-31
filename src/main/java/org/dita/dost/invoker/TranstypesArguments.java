@@ -8,11 +8,11 @@
 
 package org.dita.dost.invoker;
 
+import static org.dita.dost.invoker.Main.locale;
+
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-
-import static org.dita.dost.invoker.Main.locale;
 
 public class TranstypesArguments extends Arguments {
 
@@ -36,5 +36,4 @@ public class TranstypesArguments extends Arguments {
                 .usage(locale.getString("transtypes.usage"))
                 .print();
     }
-
 }

@@ -8,6 +8,13 @@
 
 package org.dita.dost.module.reader;
 
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.exists;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
@@ -20,14 +27,6 @@ import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
 import org.xml.sax.XMLFilter;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.exists;
-
 /**
  * ModuleElem for reading and serializing topics into temporary directory.
  *
@@ -37,7 +36,8 @@ public final class MapReaderModule extends AbstractReaderModule {
 
     public MapReaderModule() {
         super();
-        formatFilter = v -> Objects.equals(v, ATTR_FORMAT_VALUE_DITAMAP) || Objects.equals(v, ATTR_FORMAT_VALUE_DITAVAL);
+        formatFilter =
+                v -> Objects.equals(v, ATTR_FORMAT_VALUE_DITAMAP) || Objects.equals(v, ATTR_FORMAT_VALUE_DITAVAL);
     }
 
     @Override
@@ -123,19 +123,19 @@ public final class MapReaderModule extends AbstractReaderModule {
             return;
         }
         // Ignore topics
-//        if (formatFilter.test(file.format)) {
+        //        if (formatFilter.test(file.format)) {
         switch (file.format) {
             case ATTR_FORMAT_VALUE_DITAMAP -> addToWaitList(file);
             case ATTR_FORMAT_VALUE_IMAGE -> {
                 formatSet.add(file);
                 if (!exists(file.filename)) {
-                    logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
+                    logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString())
+                            .toString());
                 }
             }
             case ATTR_FORMAT_VALUE_DITAVAL -> formatSet.add(file);
             default -> htmlSet.put(file.format, file.filename);
         }
-//        }
+        //        }
     }
-
 }

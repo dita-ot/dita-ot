@@ -1,13 +1,23 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.*;
+
+import java.io.File;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
@@ -22,17 +32,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * MoveLinksModule implements move links step in preprocess. It reads the map links
@@ -60,14 +59,15 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         try {
             final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
 
-            final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(styleFile)).load();
+            final XsltTransformer transformer =
+                    xsltCompiler.compile(new StreamSource(styleFile)).load();
             transformer.setErrorReporter(toErrorReporter(logger));
             transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
             transformer.setMessageListener(toMessageListener(logger));
 
             if (input.getAttribute("include.rellinks") != null) {
-                transformer.setParameter(new QName("include.rellinks"),
-                        XdmItem.makeValue(input.getAttribute("include.rellinks")));
+                transformer.setParameter(
+                        new QName("include.rellinks"), XdmItem.makeValue(input.getAttribute("include.rellinks")));
             }
             transformer.setParameter(new QName("INPUTMAP"), XdmItem.makeValue(job.getInputMap()));
 
@@ -93,7 +93,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             final DitaLinksWriter linkInserter = new DitaLinksWriter();
             linkInserter.setLogger(logger);
             linkInserter.setJob(job);
-            for (final Map.Entry<File, Map<String, Element>> entry: mapSet.entrySet()) {
+            for (final Map.Entry<File, Map<String, Element>> entry : mapSet.entrySet()) {
                 final URI uri = inputFile.toURI().resolve(toURI(entry.getKey().getPath()));
                 logger.info("Processing " + uri);
                 linkInserter.setLinks(entry.getValue());
@@ -133,5 +133,4 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         }
         return map;
     }
-
 }

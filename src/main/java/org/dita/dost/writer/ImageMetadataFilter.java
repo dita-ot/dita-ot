@@ -7,8 +7,23 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.exists;
+import static org.dita.dost.util.URLUtils.toURI;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.BaseEncoding;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.reader.SvgMetadataReader;
 import org.dita.dost.util.Job;
@@ -18,23 +33,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.exists;
-import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * Image metadata filter.
@@ -111,8 +109,8 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     // XMLFilter methods -------------------------------------------------------
 
     @Override
-    public void startElement(final String uri, final String localName, final String name,
-            final Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String name, final Attributes atts)
+            throws SAXException {
         if (TOPIC_IMAGE.matches(atts) || SVG_D_SVGREF.matches(atts)) {
             final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder(atts);
             final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
@@ -164,7 +162,12 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
                 a.add(DITA_OT_NS, ATTR_IMAGE_HEIGHT, DITA_OT_NS_PREFIX + ":" + ATTR_IMAGE_HEIGHT, "CDATA", height);
             }
             if (horizontalDpi != null) {
-                a.add(DITA_OT_NS, ATTR_HORIZONTAL_DPI, DITA_OT_NS_PREFIX + ":" + ATTR_HORIZONTAL_DPI, "CDATA", horizontalDpi);
+                a.add(
+                        DITA_OT_NS,
+                        ATTR_HORIZONTAL_DPI,
+                        DITA_OT_NS_PREFIX + ":" + ATTR_HORIZONTAL_DPI,
+                        "CDATA",
+                        horizontalDpi);
             }
             if (verticalDpi != null) {
                 a.add(DITA_OT_NS, ATTR_VERTICAL_DPI, DITA_OT_NS_PREFIX + ":" + ATTR_VERTICAL_DPI, "CDATA", verticalDpi);
@@ -317,5 +320,4 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
 
         return null;
     }
-
 }

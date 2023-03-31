@@ -8,9 +8,9 @@
 
 package org.dita.dost.util;
 
-import org.w3c.dom.Element;
-
 import static org.dita.dost.util.Constants.*;
+
+import org.w3c.dom.Element;
 
 public class DitaUtils {
     public static boolean isDitaFormat(final Element elem) {

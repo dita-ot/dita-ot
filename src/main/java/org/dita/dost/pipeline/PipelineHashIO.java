@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.pipeline;
 
 import java.util.HashMap;
@@ -20,10 +20,8 @@ import java.util.Map;
  * @deprecated use {@link java.util.Map} instead. Deprecated since 2.3
  */
 @Deprecated
-public final class PipelineHashIO implements AbstractPipelineInput,
-AbstractPipelineOutput {
+public final class PipelineHashIO implements AbstractPipelineInput, AbstractPipelineOutput {
     private final Map<String, String> hash;
-
 
     /**
      * Default contructor of PipelineHashIO class.
@@ -40,7 +38,6 @@ AbstractPipelineOutput {
         super();
         this.hash = new HashMap<>(hash);
     }
-
 
     /**
      * Set the attribute vale with name into hash map.

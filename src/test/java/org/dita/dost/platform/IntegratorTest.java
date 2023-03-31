@@ -17,15 +17,12 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
-
-import org.xml.sax.InputSource;
-
 import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Constants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.InputSource;
 
 public class IntegratorTest {
 
@@ -41,14 +38,13 @@ public class IntegratorTest {
 
     @Test
     public void testConvertMessage() {
-        assertEquals("The index term ''{1}'' uses both an index-see element and {0} element. Convert the index-see element to ''index-see-also''.",
-                Integrator.convertMessage("The index term '%2' uses both an index-see element and %1 element. Convert the index-see element to 'index-see-also'."));
-        assertEquals("{0} foo {1} bar {2}",
-                Integrator.convertMessage("%1 foo %2 bar %3"));
-        assertEquals("'{0}",
-                Integrator.convertMessage("{0}"));
-        assertEquals("foo bar baz",
-                Integrator.convertMessage("  foo  bar\nbaz  "));
+        assertEquals(
+                "The index term ''{1}'' uses both an index-see element and {0} element. Convert the index-see element to ''index-see-also''.",
+                Integrator.convertMessage(
+                        "The index term '%2' uses both an index-see element and %1 element. Convert the index-see element to 'index-see-also'."));
+        assertEquals("{0} foo {1} bar {2}", Integrator.convertMessage("%1 foo %2 bar %3"));
+        assertEquals("'{0}", Integrator.convertMessage("{0}"));
+        assertEquals("foo bar baz", Integrator.convertMessage("  foo  bar\nbaz  "));
     }
 
     @Test
@@ -89,26 +85,55 @@ public class IntegratorTest {
         i.setLogger(new TestUtils.TestLogger());
         i.execute();
 
-        final Properties expProperties = getProperties(new File(expDir, "lib" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));
+        final Properties expProperties = getProperties(new File(
+                expDir,
+                "lib" + File.separator + Integrator.class.getPackage().getName() + File.separator
+                        + Constants.GEN_CONF_PROPERTIES));
         expProperties.setProperty("plugin.org.dita.base.dir", new File("plugins/org.dita.base").getPath());
         expProperties.setProperty("plugin.base.dir", "plugins/base");
         expProperties.setProperty("plugin.dummy.dir", "plugins/dummy");
-        final Properties actProperties = getProperties(new File(tempDir, "config" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));
+        final Properties actProperties = getProperties(new File(
+                tempDir,
+                "config" + File.separator + Integrator.class.getPackage().getName() + File.separator
+                        + Constants.GEN_CONF_PROPERTIES));
         // supported_image_extensions needs to be tested separately
-        assertEquals(new HashSet<>(Arrays.asList(expProperties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS).split(";"))),
-                     new HashSet<>(Arrays.asList(expProperties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS).split(";"))));
+        assertEquals(
+                new HashSet<>(Arrays.asList(expProperties
+                        .getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS)
+                        .split(";"))),
+                new HashSet<>(Arrays.asList(expProperties
+                        .getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS)
+                        .split(";"))));
         expProperties.remove(CONF_SUPPORTED_IMAGE_EXTENSIONS);
         actProperties.remove(CONF_SUPPORTED_IMAGE_EXTENSIONS);
         assertEquals(expProperties, actProperties);
 
-        assertXMLEqual(new InputSource(new File(expDir, "build.xml").toURI().toString()),
+        assertXMLEqual(
+                new InputSource(new File(expDir, "build.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "build.xml").toURI().toString()));
-        assertXMLEqual(new InputSource(new File(expDir, "catalog.xml").toURI().toString()),
+        assertXMLEqual(
+                new InputSource(new File(expDir, "catalog.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "catalog.xml").toURI().toString()));
-        assertXMLEqual(new InputSource(new File(expDir, "xsl" + File.separator + "shell.xsl").toURI().toString()),
-                new InputSource(new File(tempDir, "xsl" + File.separator + "shell.xsl").toURI().toString()));
-        assertXMLEqual(new InputSource(new File(expDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()),
-                new InputSource(new File(tempDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()));
+        assertXMLEqual(
+                new InputSource(new File(expDir, "xsl" + File.separator + "shell.xsl")
+                        .toURI()
+                        .toString()),
+                new InputSource(new File(tempDir, "xsl" + File.separator + "shell.xsl")
+                        .toURI()
+                        .toString()));
+        assertXMLEqual(
+                new InputSource(new File(
+                                expDir,
+                                "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator
+                                        + "shell.xsl")
+                        .toURI()
+                        .toString()),
+                new InputSource(new File(
+                                tempDir,
+                                "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator
+                                        + "shell.xsl")
+                        .toURI()
+                        .toString()));
     }
 
     @Test(expected = UncheckedIOException.class)
@@ -142,5 +167,4 @@ public class IntegratorTest {
     public void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
-
 }

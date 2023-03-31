@@ -8,12 +8,8 @@
 
 package org.dita.dost.invoker;
 
-import org.dita.dost.project.Project.Deliverable;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import static org.dita.dost.invoker.Main.ANT_OUTPUT_DIR;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.net.URI;
@@ -23,18 +19,21 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.dita.dost.invoker.Main.ANT_OUTPUT_DIR;
-import static org.junit.Assert.assertEquals;
+import org.dita.dost.project.Project.Deliverable;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class MainTest {
 
     @Parameters(name = "{1}")
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {"", "Without trailing slash"},
-                {"/", "With trailing slash"},
+        return Arrays.asList(new Object[][] {
+            {"", "Without trailing slash"},
+            {"/", "With trailing slash"},
         });
     }
 
@@ -99,11 +98,8 @@ public class MainTest {
     }
 
     private Path getOutputDir(final String output, final String arg) {
-        final Deliverable deliverable = new Deliverable(
-                null, null, null,
-                output != null ? URI.create(output + suffix) : null,
-                null
-        );
+        final Deliverable deliverable =
+                new Deliverable(null, null, null, output != null ? URI.create(output + suffix) : null, null);
         final Map<String, Object> props = new HashMap<>();
         if (arg != null) {
             props.put(ANT_OUTPUT_DIR, arg + suffix);

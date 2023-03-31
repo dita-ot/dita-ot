@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.pipeline;
 
 /**
@@ -15,6 +15,4 @@ package org.dita.dost.pipeline;
  * @deprecated Deprecated since 2.3
  */
 @Deprecated
-public interface AbstractPipelineOutput {
-
-}
+public interface AbstractPipelineOutput {}

@@ -7,27 +7,26 @@
  */
 package org.dita.dost.reader;
 
-import static org.junit.Assert.assertEquals;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
+import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.dita.dost.TestUtils;
 
 public class KeydefFilterTest {
 
     public static KeydefFilter reader;
     private static XMLReader parser;
-    
+
     private static final File baseDir = TestUtils.getResourceDir(KeydefFilterTest.class);
     private static final File srcDir = new File(baseDir, "src");
     private static final File inputDir = new File(srcDir, "maps");
@@ -35,7 +34,7 @@ public class KeydefFilterTest {
     private static File tempDir;
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(KeydefFilterTest.class);
         File ditaDir = new File("src" + File.separator + "main").getAbsoluteFile();
 
@@ -44,9 +43,9 @@ public class KeydefFilterTest {
         reader.setCurrentFile(rootFile.toURI());
         reader.setCurrentDir(inputDir.toURI());
         reader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
-        
+
         reader.setContentHandler(new DefaultHandler());
-        
+
         parser = XMLUtils.getXMLReader();
         CatalogUtils.setDitaDir(ditaDir);
         parser.setEntityResolver(CatalogUtils.getCatalogResolver());
@@ -54,18 +53,58 @@ public class KeydefFilterTest {
     }
 
     @Test
-    public void testParse() throws Exception{
+    public void testParse() throws Exception {
         parser.parse(new File(rootFile.getPath()).toURI().toString());
-        
+
         final Map<String, KeyDef> expKeyDefMap = new HashMap<>();
-        expKeyDefMap.put("target_topic_1", new KeyDef("target_topic_1", new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null, null,null));
-        expKeyDefMap.put("target_topic_2", new KeyDef("target_topic_2", new File(srcDir, "topics" + File.separator + "target-topic-c.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null, null,null));
-        expKeyDefMap.put("target_topic_3", new KeyDef("target_topic_1", new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null, null,null));
-        expKeyDefMap.put("target_topic_4", new KeyDef("target_topic_1", new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null, null,null));
-        expKeyDefMap.put("peer", new KeyDef("peer", toURI("../topics/peer.xml"), ATTR_SCOPE_VALUE_PEER, null,null, null));
-        expKeyDefMap.put("external", new KeyDef("external", toURI("http://www.example.com/external.xml"), ATTR_SCOPE_VALUE_EXTERNAL, null, null,null));
-        
-        assertEquals(expKeyDefMap, reader.getKeysDMap());                
+        expKeyDefMap.put(
+                "target_topic_1",
+                new KeyDef(
+                        "target_topic_1",
+                        new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(),
+                        ATTR_SCOPE_VALUE_LOCAL,
+                        null,
+                        null,
+                        null));
+        expKeyDefMap.put(
+                "target_topic_2",
+                new KeyDef(
+                        "target_topic_2",
+                        new File(srcDir, "topics" + File.separator + "target-topic-c.xml").toURI(),
+                        ATTR_SCOPE_VALUE_LOCAL,
+                        null,
+                        null,
+                        null));
+        expKeyDefMap.put(
+                "target_topic_3",
+                new KeyDef(
+                        "target_topic_1",
+                        new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(),
+                        ATTR_SCOPE_VALUE_LOCAL,
+                        null,
+                        null,
+                        null));
+        expKeyDefMap.put(
+                "target_topic_4",
+                new KeyDef(
+                        "target_topic_1",
+                        new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(),
+                        ATTR_SCOPE_VALUE_LOCAL,
+                        null,
+                        null,
+                        null));
+        expKeyDefMap.put(
+                "peer", new KeyDef("peer", toURI("../topics/peer.xml"), ATTR_SCOPE_VALUE_PEER, null, null, null));
+        expKeyDefMap.put(
+                "external",
+                new KeyDef(
+                        "external",
+                        toURI("http://www.example.com/external.xml"),
+                        ATTR_SCOPE_VALUE_EXTERNAL,
+                        null,
+                        null,
+                        null));
+
+        assertEquals(expKeyDefMap, reader.getKeysDMap());
     }
-    
 }

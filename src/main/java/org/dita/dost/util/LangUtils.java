@@ -25,8 +25,6 @@ public class LangUtils {
      * @return stream of value-index pairs
      */
     public static <T> Stream<Map.Entry<T, Integer>> zipWithIndex(List<T> src) {
-        return IntStream
-                .range(0, src.size())
-                .mapToObj(i -> pair(src.get(i), i));
+        return IntStream.range(0, src.size()).mapToObj(i -> pair(src.get(i), i));
     }
 }

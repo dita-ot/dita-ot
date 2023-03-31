@@ -17,10 +17,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public record Project(List<Deliverable> deliverables,
-                      List<ProjectRef> includes,
-                      List<Publication> publications,
-                      List<Context> contexts) {
+public record Project(
+        List<Deliverable> deliverables,
+        List<ProjectRef> includes,
+        List<Publication> publications,
+        List<Context> contexts) {
 
     public static Project build(final ProjectBuilder src, final URI base) {
         final Project project = new Project(
@@ -30,8 +31,7 @@ public record Project(List<Deliverable> deliverables,
                                 deliverable.id,
                                 build(deliverable.context, base),
                                 deliverable.output,
-                                build(deliverable.publication, base)
-                        ))
+                                build(deliverable.publication, base)))
                         .collect(Collectors.toList()),
                 toStream(src.includes)
                         .map(include -> new ProjectRef(resolveURI(include, base)))
@@ -39,10 +39,7 @@ public record Project(List<Deliverable> deliverables,
                 toStream(src.publications)
                         .map(publication -> build(publication, base))
                         .collect(Collectors.toList()),
-                toStream(src.contexts)
-                        .map(context -> build(context, base))
-                        .collect(Collectors.toList())
-        );
+                toStream(src.contexts).map(context -> build(context, base)).collect(Collectors.toList()));
         return project;
     }
 
@@ -75,20 +72,14 @@ public record Project(List<Deliverable> deliverables,
                 publication.transtype,
                 toStream(publication.params)
                         .map(param -> new Publication.Param(
-                                param.name,
-                                param.value,
-                                resolveURI(param.href, base),
-                                resolvePath(param.path, base))
-                        )
+                                param.name, param.value, resolveURI(param.href, base), resolvePath(param.path, base)))
                         .collect(Collectors.toList()),
                 new Deliverable.Profile(
                         publication.profiles != null
                                 ? publication.profiles.ditavals.stream()
-                                .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
-                                .collect(Collectors.toList())
-                                : Collections.emptyList()
-                )
-        );
+                                        .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
+                                        .collect(Collectors.toList())
+                                : Collections.emptyList()));
     }
 
     private static Context build(final ProjectBuilder.Context context, final URI base) {
@@ -100,58 +91,37 @@ public record Project(List<Deliverable> deliverables,
                 context.id,
                 context.idref,
                 context.input != null
-                        ? new Deliverable.Inputs(
-                        context.input.stream()
+                        ? new Deliverable.Inputs(context.input.stream()
                                 .map(input -> new Deliverable.Inputs.Input(resolveURI(input, base)))
-                                .collect(Collectors.toList())
-                )
+                                .collect(Collectors.toList()))
                         : new Deliverable.Inputs(Collections.emptyList()),
                 new Deliverable.Profile(
                         context.profiles != null
                                 ? context.profiles.ditavals.stream()
-                                .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
-                                .collect(Collectors.toList())
-                                : Collections.emptyList()
-                )
-        );
+                                        .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
+                                        .collect(Collectors.toList())
+                                : Collections.emptyList()));
     }
 
-    public record Deliverable(String name,
-                              String id,
-                              Context context,
-                              URI output,
-                              Publication publication) {
+    public record Deliverable(String name, String id, Context context, URI output, Publication publication) {
         public record Inputs(List<Input> inputs) {
-            public record Input(URI href) {
-            }
+            public record Input(URI href) {}
         }
+
         public record Profile(List<DitaVal> ditavals) {
-            public record DitaVal(URI href) {
-            }
+            public record DitaVal(URI href) {}
         }
     }
 
-    public record ProjectRef(URI href) {
-    }
+    public record ProjectRef(URI href) {}
 
-    public record Context(String name,
-                          String id,
-                          String idref,
-                          Deliverable.Inputs inputs,
-                          Deliverable.Profile profiles) {
-    }
+    public record Context(
+            String name, String id, String idref, Deliverable.Inputs inputs, Deliverable.Profile profiles) {}
 
-    public record Publication(String name,
-                              String id,
-                              String idref,
-                              String transtype,
-                              List<Param> params,
-                              Deliverable.Profile profiles) {
+    public record Publication(
+            String name, String id, String idref, String transtype, List<Param> params, Deliverable.Profile profiles) {
 
-        public record Param(String name,
-                            String value,
-                            URI href,
-                            Path path) {
+        public record Param(String name, String value, URI href, Path path) {
             public Param {
                 Objects.requireNonNull(name);
                 if (value == null && href == null && path == null) {

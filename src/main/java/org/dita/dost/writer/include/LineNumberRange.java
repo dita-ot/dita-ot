@@ -8,11 +8,10 @@
 
 package org.dita.dost.writer.include;
 
-import org.dita.dost.writer.CoderefResolver;
-import org.xml.sax.SAXException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
+import org.dita.dost.writer.CoderefResolver;
+import org.xml.sax.SAXException;
 
 public class LineNumberRange extends AllRange implements Range {
 

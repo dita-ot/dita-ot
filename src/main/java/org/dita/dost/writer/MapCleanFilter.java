@@ -8,18 +8,19 @@
 
 package org.dita.dost.writer;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+import static org.dita.dost.util.Constants.*;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-
-import static org.dita.dost.util.Constants.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 
 public class MapCleanFilter extends AbstractXMLFilter {
 
     private enum Keep {
-        RETAIN, DISCARD, DISCARD_BRANCH
+        RETAIN,
+        DISCARD,
+        DISCARD_BRANCH
     }
 
     private final Deque<Keep> stack = new ArrayDeque<>();
@@ -56,49 +57,45 @@ public class MapCleanFilter extends AbstractXMLFilter {
     }
 
     @Override
-    public void endElement(final String uri, final String localName, final String qName)
-            throws SAXException {
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         if (stack.removeFirst() == Keep.RETAIN) {
             getContentHandler().endElement(uri, localName, qName);
         }
     }
 
     @Override
-    public void characters(char[] ch, int start, int length)
-            throws SAXException {
+    public void characters(char[] ch, int start, int length) throws SAXException {
         if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
             getContentHandler().characters(ch, start, length);
         }
     }
 
     @Override
-    public void ignorableWhitespace(char[] ch, int start, int length)
-            throws SAXException {
+    public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
         if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
             getContentHandler().ignorableWhitespace(ch, start, length);
         }
     }
 
     @Override
-    public void processingInstruction(String target, String data)
-            throws SAXException {
+    public void processingInstruction(String target, String data) throws SAXException {
         if (stack.isEmpty() || stack.peekFirst() != Keep.DISCARD_BRANCH) {
             getContentHandler().processingInstruction(target, data);
         }
     }
 
     @Override
-    public void skippedEntity(String name)
-            throws SAXException {
+    public void skippedEntity(String name) throws SAXException {
         if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
             getContentHandler().skippedEntity(name);
         }
     }
 
-//    <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle ')]">
-//      <xsl:call-template name="output-message">
-//        <xsl:with-param name="id" select="'DOTX072I'"/>
-//      </xsl:call-template>
-//    </xsl:template>
+    //    <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle
+    // ')]">
+    //      <xsl:call-template name="output-message">
+    //        <xsl:with-param name="id" select="'DOTX072I'"/>
+    //      </xsl:call-template>
+    //    </xsl:template>
 
 }

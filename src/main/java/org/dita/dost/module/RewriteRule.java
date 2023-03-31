@@ -8,9 +8,8 @@
 
 package org.dita.dost.module;
 
-import org.dita.dost.util.Job;
-
 import java.util.Collection;
+import org.dita.dost.util.Job;
 
 public interface RewriteRule {
     /**

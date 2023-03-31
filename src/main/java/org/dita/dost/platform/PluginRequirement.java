@@ -1,17 +1,18 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005, 2008 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005, 2008 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 
 package org.dita.dost.platform;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+
 /**
  * PluginRequirement class.
  *

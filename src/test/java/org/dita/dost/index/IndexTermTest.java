@@ -10,13 +10,11 @@ package org.dita.dost.index;
 import static org.dita.dost.index.IndexTerm.IndexTermPrefix.*;
 import static org.junit.Assert.*;
 
-import org.dita.dost.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
+import org.dita.dost.util.StringUtils;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -79,7 +77,6 @@ public class IndexTermTest {
         assertNull(IndexTerm.getTermLocale());
         IndexTerm.setTermLocale(Locale.JAPAN);
         assertEquals(Locale.JAPAN, IndexTerm.getTermLocale());
-
     }
 
     @Test
@@ -196,8 +193,8 @@ public class IndexTermTest {
     public void testSortSubTerms() {
         IndexTerm.setTermLocale(DEFAULT_LOCALE);
         final IndexTerm root = new IndexTerm();
-        final String[] src = { "B", "b", "a", "A" };
-        for (final String key: src) {
+        final String[] src = {"B", "b", "a", "A"};
+        for (final String key : src) {
             final IndexTerm i = new IndexTerm();
             i.setTermName(key);
             i.setTermKey(key);
@@ -206,11 +203,11 @@ public class IndexTermTest {
         root.sortSubTerms();
 
         final List<String> act = new ArrayList<>();
-        for (final IndexTerm i: root.getSubTerms()) {
+        for (final IndexTerm i : root.getSubTerms()) {
             act.add(i.getTermKey());
         }
 
-        final String[] exp = { "a", "A", "b", "B" };
+        final String[] exp = {"a", "A", "b", "B"};
         assertArrayEquals(exp, act.toArray(new String[0]));
     }
 
@@ -224,7 +221,8 @@ public class IndexTermTest {
             IndexTerm.setTermLocale(null);
             new IndexTerm().compareTo(new IndexTerm());
             fail();
-        } catch (final NullPointerException e) {}
+        } catch (final NullPointerException e) {
+        }
     }
 
     @Test
@@ -249,7 +247,8 @@ public class IndexTermTest {
         assertFalse(simple.hasSubTerms());
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     public void testToString() {
         fail("Not yet implemented");
     }
@@ -293,7 +292,7 @@ public class IndexTermTest {
         singleSub.setTermPrefix(SEE);
         single.addSubTerm(singleSub);
         single.updateSubTerm();
-        for (final IndexTerm s: single.getSubTerms()) {
+        for (final IndexTerm s : single.getSubTerms()) {
             assertEquals(SEE_ALSO, s.getTermPrefix());
         }
 
@@ -303,7 +302,7 @@ public class IndexTermTest {
         more.addSubTerm(moreSub);
         more.addSubTerm(new IndexTerm());
         more.updateSubTerm();
-        for (final IndexTerm m: more.getSubTerms()) {
+        for (final IndexTerm m : more.getSubTerms()) {
             assertFalse(SEE_ALSO.equals(m));
         }
     }
@@ -334,5 +333,4 @@ public class IndexTermTest {
         }
         return res;
     }
-
 }

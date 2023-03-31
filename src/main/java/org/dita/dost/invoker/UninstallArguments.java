@@ -8,14 +8,13 @@
 
 package org.dita.dost.invoker;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
+import static org.dita.dost.invoker.Main.locale;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-
-import static org.dita.dost.invoker.Main.locale;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 
 public class UninstallArguments extends Arguments {
 
@@ -80,6 +79,4 @@ public class UninstallArguments extends Arguments {
                 .arguments(null, null, "id", locale.getString("uninstall.argument.id"))
                 .print();
     }
-
-
 }

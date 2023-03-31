@@ -1,26 +1,12 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2007 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2007 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.writer;
-
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Job.FileInfo;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
-import java.io.*;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.reader.ChunkMapReader.*;
@@ -30,6 +16,19 @@ import static org.dita.dost.util.FileUtils.getRelativeUnixPath;
 import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
+
+import java.io.*;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.Job.FileInfo;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Combine topic into a single file for {@code to-content} chunking.
@@ -42,13 +41,13 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
      */
     public ChunkTopicParser() {
         super();
-//        try {
-//            reader = getXMLReader();
-//            reader.setContentHandler(this);
-//            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-//        } catch (final Exception e) {
-//            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-//        }
+        //        try {
+        //            reader = getXMLReader();
+        //            reader.setContentHandler(this);
+        //            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+        //        } catch (final Exception e) {
+        //            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
+        //        }
     }
 
     @Override
@@ -120,14 +119,14 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                         outputFileName = currentFile.resolve(copytoValue);
                     } else if (hrefValue != null) {
                         // try to use href value as the new file name
-                        if (chunkValue.contains(CHUNK_SELECT_TOPIC)
-                                || chunkValue.contains(CHUNK_SELECT_BRANCH)) {
+                        if (chunkValue.contains(CHUNK_SELECT_TOPIC) || chunkValue.contains(CHUNK_SELECT_BRANCH)) {
                             if (hrefValue.getFragment() != null) {
                                 // if we have an ID here, use it.
                                 outputFileName = currentFile.resolve(hrefValue.getFragment() + FILE_EXTENSION_DITA);
                             } else {
                                 // Find the first topic id in target file if any.
-                                final String firstTopic = getFirstTopicId(new File(stripFragment(currentFile.resolve(hrefValue))));
+                                final String firstTopic =
+                                        getFirstTopicId(new File(stripFragment(currentFile.resolve(hrefValue))));
                                 if (firstTopic != null) {
                                     outputFileName = currentFile.resolve(firstTopic + FILE_EXTENSION_DITA);
                                 } else {
@@ -176,7 +175,10 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 // TopicRefWriter's updateHref method, very important!!!
                 changeTable.put(path, newpath);
                 // update current element's @href value
-                topicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), newpath).toString());
+                topicref.setAttribute(
+                        ATTRIBUTE_NAME_HREF,
+                        getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), newpath)
+                                .toString());
 
                 if (parseFilePath.getFragment() != null) {
                     targetTopicId = parseFilePath.getFragment();
@@ -199,19 +201,19 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     // TODO recursive point
                     logger.info("Processing " + currentParsingFile);
                     job.getStore().transform(currentParsingFile, this);
-//                    reader.parse(currentParsingFile.toString());
+                    //                    reader.parse(currentParsingFile.toString());
                     if (currentParsingFileTopicIDChangeTable.size() > 0) {
                         final URI href = toURI(topicref.getAttribute(ATTRIBUTE_NAME_HREF));
-                        final String pathtoElem = href.getFragment() != null
-                                ? href.getFragment()
-                                : "";
+                        final String pathtoElem = href.getFragment() != null ? href.getFragment() : "";
                         final String old_elementid = pathtoElem.contains(SLASH)
                                 ? pathtoElem.substring(0, pathtoElem.indexOf(SLASH))
                                 : pathtoElem;
                         if (!old_elementid.isEmpty()) {
                             final String new_elementid = currentParsingFileTopicIDChangeTable.get(old_elementid);
                             if (new_elementid != null && !new_elementid.isEmpty()) {
-                                topicref.setAttribute(ATTRIBUTE_NAME_HREF, setFragment(href, new_elementid).toString());
+                                topicref.setAttribute(
+                                        ATTRIBUTE_NAME_HREF,
+                                        setFragment(href, new_elementid).toString());
                             }
                         }
                     }
@@ -277,9 +279,11 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         final int end = parentResult.indexOf(">", insertpoint);
 
         if (insertpoint == -1 || end == -1) {
-            logger.error(MessageUtils.getMessage("DOTJ033E", hrefValue.toString()).toString());
+            logger.error(
+                    MessageUtils.getMessage("DOTJ033E", hrefValue.toString()).toString());
         } else {
-            if (ELEMENT_NAME_DITA.equals(parentResult.substring(insertpoint, end).trim())) {
+            if (ELEMENT_NAME_DITA.equals(
+                    parentResult.substring(insertpoint, end).trim())) {
                 insertpoint = parentResult.lastIndexOf("</", insertpoint - 1);
             }
             parentResult.insert(insertpoint, tmpContent);
@@ -287,10 +291,12 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     // flush the buffer to file after processing is finished
-    private void writeToContentChunk(final String tmpContent, final URI outputFileName, final boolean needWriteDitaTag) throws IOException {
+    private void writeToContentChunk(final String tmpContent, final URI outputFileName, final boolean needWriteDitaTag)
+            throws IOException {
         assert outputFileName.isAbsolute();
         logger.info("Writing " + outputFileName);
-        try (Writer ditaFileOutput = new OutputStreamWriter(job.getStore().getOutputStream(outputFileName), StandardCharsets.UTF_8)) {
+        try (Writer ditaFileOutput =
+                new OutputStreamWriter(job.getStore().getOutputStream(outputFileName), StandardCharsets.UTF_8)) {
             if (outputFileName.equals(changeTable.get(outputFileName))) {
                 // if the output file is newly generated file
                 // write the xml header and workdir PI into new file
@@ -299,28 +305,38 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
                     writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, new File(workDir).getAbsolutePath());
                 } else {
-                    writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, UNIX_SEPARATOR + new File(workDir).getAbsolutePath());
+                    writeProcessingInstruction(
+                            ditaFileOutput, PI_WORKDIR_TARGET, UNIX_SEPARATOR + new File(workDir).getAbsolutePath());
                 }
                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toString());
 
-                final File path2rootmap = toFile(getRelativePath(outputFileName, job.getInputMap())).getParentFile();
-                writeProcessingInstruction(ditaFileOutput, PI_PATH2ROOTMAP_TARGET_URI, path2rootmap == null ? "./" : toURI(path2rootmap).toString());
+                final File path2rootmap = toFile(getRelativePath(outputFileName, job.getInputMap()))
+                        .getParentFile();
+                writeProcessingInstruction(
+                        ditaFileOutput,
+                        PI_PATH2ROOTMAP_TARGET_URI,
+                        path2rootmap == null ? "./" : toURI(path2rootmap).toString());
 
                 if (conflictTable.get(outputFileName) != null) {
-                    final String relativePath = getRelativeUnixPath(new File(currentFile.resolve(".")) + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
+                    final String relativePath = getRelativeUnixPath(
+                            new File(currentFile.resolve(".")) + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
                             new File(conflictTable.get(outputFileName)).getAbsolutePath());
                     String path2project = getRelativeUnixPath(relativePath);
                     if (null == path2project) {
                         path2project = "";
                     }
                     writeProcessingInstruction(ditaFileOutput, PI_PATH2PROJ_TARGET, path2project);
-                    writeProcessingInstruction(ditaFileOutput, PI_PATH2PROJ_TARGET_URI, path2project.isEmpty() ? "./" : toURI(path2project).toString());
+                    writeProcessingInstruction(
+                            ditaFileOutput,
+                            PI_PATH2PROJ_TARGET_URI,
+                            path2project.isEmpty() ? "./" : toURI(path2project).toString());
                 }
             }
             if (needWriteDitaTag) {
                 final AttributesImpl atts = new AttributesImpl();
                 addOrSetAttribute(atts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, DITA_NAMESPACE);
-                addOrSetAttribute(atts, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
+                addOrSetAttribute(
+                        atts, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
                 writeStartElement(ditaFileOutput, ELEMENT_NAME_DITA, atts);
             }
             // write the final result to the output file
@@ -355,7 +371,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         if (include) {
             includelevel++;
 
-            AttributesImpl resAtts = new AttributesImpl(checkForNSDeclaration(atts,uri));
+            AttributesImpl resAtts = new AttributesImpl(checkForNSDeclaration(atts, uri));
             writeStartElement(output, qName, resAtts);
         }
     }
@@ -363,9 +379,9 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
 
-        //pop the namespace level
+        // pop the namespace level
         if (!Objects.equals(uri, NULL_NS_URI)) {
-            if (namespaceMap.containsKey(uri)){
+            if (namespaceMap.containsKey(uri)) {
                 decreaseNamespaceLevel(uri);
             }
         }
@@ -390,13 +406,11 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         }
     }
 
-
-    private void increaseNamespaceLevel (String uri){
+    private void increaseNamespaceLevel(String uri) {
         namespaceMap.put(uri, namespaceMap.get(uri) + 1);
-
     }
 
-    private void decreaseNamespaceLevel (String uri){
+    private void decreaseNamespaceLevel(String uri) {
         namespaceMap.put(uri, namespaceMap.get(uri) - 1);
     }
 
@@ -405,21 +419,21 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
      *
      * @return updated attributes
      */
-    private Attributes checkForNSDeclaration (Attributes atts, String uri){
+    private Attributes checkForNSDeclaration(Attributes atts, String uri) {
         AttributesImpl resAtts = null;
 
-        //This part is to handle namespace declaration in the content.
+        // This part is to handle namespace declaration in the content.
         if (!Objects.equals(uri, NULL_NS_URI)) {
-            if (namespaceMap.containsKey(uri)){
+            if (namespaceMap.containsKey(uri)) {
                 increaseNamespaceLevel(uri);
-            }else {
+            } else {
                 namespaceMap.put(uri, 1);
             }
-            resAtts =  new AttributesImpl(processAttributesNS(atts,uri));
-        }else {
-            resAtts = new AttributesImpl(processAttributes(atts));        }
+            resAtts = new AttributesImpl(processAttributesNS(atts, uri));
+        } else {
+            resAtts = new AttributesImpl(processAttributes(atts));
+        }
 
         return resAtts;
     }
-
 }

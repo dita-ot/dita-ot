@@ -1,14 +1,28 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2010 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2010 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.reader;
 
+import static net.sf.saxon.s9api.streams.Predicates.isElement;
+import static net.sf.saxon.s9api.streams.Steps.child;
+import static net.sf.saxon.s9api.streams.Steps.precedingSibling;
+import static net.sf.saxon.type.BuiltInAtomicType.STRING;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.KeyScope.ROOT_ID;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.rootElement;
+
 import com.google.common.annotations.VisibleForTesting;
+import java.io.File;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+import javax.xml.parsers.DocumentBuilder;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.expr.parser.Loc;
@@ -27,21 +41,6 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
-
-import javax.xml.parsers.DocumentBuilder;
-import java.io.File;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static net.sf.saxon.s9api.streams.Predicates.isElement;
-import static net.sf.saxon.s9api.streams.Steps.child;
-import static net.sf.saxon.s9api.streams.Steps.precedingSibling;
-import static net.sf.saxon.type.BuiltInAtomicType.STRING;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.KeyScope.ROOT_ID;
-import static org.dita.dost.util.URLUtils.toURI;
-import static org.dita.dost.util.XMLUtils.rootElement;
 
 /**
  * KeyrefReader class which reads DITA map file to collect key definitions. Instances are reusable but not thread-safe.
@@ -236,9 +235,10 @@ public final class KeyrefReader implements AbstractReader {
             for (final String key : keyName.trim().split("\\s+")) {
                 if (!keyDefs.containsKey(key)) {
                     final XdmNode copy = elem;
-                    final URI href = toURI(copy.attribute(ATTRIBUTE_NAME_COPY_TO) == null
-                            ? copy.attribute(ATTRIBUTE_NAME_HREF)
-                            : copy.attribute(ATTRIBUTE_NAME_COPY_TO));
+                    final URI href = toURI(
+                            copy.attribute(ATTRIBUTE_NAME_COPY_TO) == null
+                                    ? copy.attribute(ATTRIBUTE_NAME_HREF)
+                                    : copy.attribute(ATTRIBUTE_NAME_COPY_TO));
                     final String scope = copy.attribute(ATTRIBUTE_NAME_SCOPE);
                     final String format = copy.attribute(ATTRIBUTE_NAME_FORMAT);
                     final KeyDef keyDef = new KeyDef(key, href, scope, format, currentFile, copy);
@@ -253,26 +253,31 @@ public final class KeyrefReader implements AbstractReader {
     KeyScope cascadeChildKeys(final KeyScope rootScope) {
         final Map<String, KeyDef> res = new HashMap<>(rootScope.keyDefinition());
         cascadeChildKeys(rootScope, res, "");
-        return new KeyScope(rootScope.id(), rootScope.name(), res,
-                rootScope.childScopes().stream()
-                        .map(this::cascadeChildKeys)
-                        .collect(Collectors.toList())
-        );
+        return new KeyScope(
+                rootScope.id(),
+                rootScope.name(),
+                res,
+                rootScope.childScopes().stream().map(this::cascadeChildKeys).collect(Collectors.toList()));
     }
 
     private void cascadeChildKeys(final KeyScope scope, final Map<String, KeyDef> keys, final String prefix) {
-        for (final Map.Entry<String, KeyDef> e: scope.keyDefinition().entrySet()) {
+        for (final Map.Entry<String, KeyDef> e : scope.keyDefinition().entrySet()) {
             final KeyDef oldKeyDef = e.getValue();
-            final KeyDef newKeyDef = new KeyDef(prefix + oldKeyDef.keys, oldKeyDef.href, oldKeyDef.scope, oldKeyDef.format, oldKeyDef.source, oldKeyDef.element);
+            final KeyDef newKeyDef = new KeyDef(
+                    prefix + oldKeyDef.keys,
+                    oldKeyDef.href,
+                    oldKeyDef.scope,
+                    oldKeyDef.format,
+                    oldKeyDef.source,
+                    oldKeyDef.element);
             if (!keys.containsKey(newKeyDef.keys)) {
                 keys.put(newKeyDef.keys, newKeyDef);
             }
         }
-        for (final KeyScope child: scope.childScopes()) {
+        for (final KeyScope child : scope.childScopes()) {
             cascadeChildKeys(child, keys, prefix + child.name() + ".");
         }
     }
-
 
     /**
      * Inherit parent keys to child key scopes.
@@ -314,7 +319,8 @@ public final class KeyrefReader implements AbstractReader {
         return new KeyScope(scope.id(), scope.name(), keys, children);
     }
 
-    private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) {
+    private KeyDef resolveIntermediate(
+            final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) {
         final XdmNode elem = keyDef.element;
         final String keyref = elem.attribute(ATTRIBUTE_NAME_KEYREF);
         if (keyref != null && !keyref.trim().isEmpty() && scope.keyDefinition().containsKey(keyref)) {
@@ -346,9 +352,8 @@ public final class KeyrefReader implements AbstractReader {
             sb.append(keyDef.keys).append(" -> ");
         }
         sb.append(circularityTracker.get(0).keys);
-        final MessageBean ex = MessageUtils
-                .getMessage("DOTJ069E", sb.toString())
-                .setLocation(circularityTracker.get(0).element);
+        final MessageBean ex =
+                MessageUtils.getMessage("DOTJ069E", sb.toString()).setLocation(circularityTracker.get(0).element);
         logger.error(ex.toString(), ex.toException());
     }
 
@@ -357,7 +362,8 @@ public final class KeyrefReader implements AbstractReader {
             final XdmDestination dst = new XdmDestination();
             dst.setBaseURI(refElem.getBaseURI());
             dst.setDestinationBaseURI(refElem.getBaseURI());
-            final PipelineConfiguration pipe = refElem.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
+            final PipelineConfiguration pipe =
+                    refElem.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
             final Receiver receiver = dst.getReceiver(pipe, new SerializationProperties());
             receiver.open();
             receiver.startDocument(0);
@@ -371,23 +377,14 @@ public final class KeyrefReader implements AbstractReader {
                     .filter(attr -> refElem.attribute(attr.getNodeName().getLocalPart()) == null)
                     .collect(Collectors.toList()));
             receiver.startElement(
-                    NameOfNode.makeName(rni),
-                    rni.getSchemaType(),
-                    atts,
-                    rni.getAllNamespaces(),
-                    rni.saveLocation(),
-                    0);
+                    NameOfNode.makeName(rni), rni.getSchemaType(), atts, rni.getAllNamespaces(), rni.saveLocation(), 0);
 
             final XdmNode defMeta = getTopicmeta(defElem);
             if (defMeta != null) {
                 final XdmNode resMeta = getTopicmeta(refElem);
                 if (resMeta == null) {
                     final SingletonAttributeMap attrs = SingletonAttributeMap.of(new AttributeInfo(
-                            new NoNamespaceName(ATTRIBUTE_NAME_CLASS),
-                            STRING,
-                            MAP_TOPICMETA.toString(),
-                            Loc.NONE,
-                            0));
+                            new NoNamespaceName(ATTRIBUTE_NAME_CLASS), STRING, MAP_TOPICMETA.toString(), Loc.NONE, 0));
                     receiver.startElement(
                             new NoNamespaceName(MAP_TOPICMETA.localName),
                             Untyped.getInstance(),
@@ -401,8 +398,7 @@ public final class KeyrefReader implements AbstractReader {
                     receiver.startElement(
                             NameOfNode.makeName(ni),
                             ni.getSchemaType(),
-                            resMeta.getUnderlyingNode().attributes()
-                                    .remove(new NoNamespaceName(ATTRIBUTE_NAME_KEYREF)),
+                            resMeta.getUnderlyingNode().attributes().remove(new NoNamespaceName(ATTRIBUTE_NAME_KEYREF)),
                             resMeta.getUnderlyingNode().getAllNamespaces(),
                             ni.saveLocation(),
                             0);
@@ -429,10 +425,6 @@ public final class KeyrefReader implements AbstractReader {
     }
 
     private XdmNode getTopicmeta(final XdmNode topicref) {
-        return topicref
-                .select(child(MAP_TOPICMETA::matches).first())
-                .findAny()
-                .orElse(null);
+        return topicref.select(child(MAP_TOPICMETA::matches).first()).findAny().orElse(null);
     }
-
 }

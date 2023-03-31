@@ -8,14 +8,9 @@
 
 package org.dita.dost.writer;
 
-import org.dita.dost.TestUtils;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-import org.xmlunit.builder.DiffBuilder;
-import org.xmlunit.diff.Diff;
+import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -23,9 +18,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
-import java.io.File;
-
-import static org.junit.Assert.assertEquals;
+import org.dita.dost.TestUtils;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 public class NormalizeCodeblockTest {
 
@@ -104,10 +103,7 @@ public class NormalizeCodeblockTest {
     }
 
     private void assertXMLEqual(Document exp, Document act) {
-        final Diff d = DiffBuilder
-                .compare(exp)
-                .withTest(act)
-                .build();
+        final Diff d = DiffBuilder.compare(exp).withTest(act).build();
         if (d.hasDifferences()) {
             throw new AssertionError(d.toString());
         }
@@ -128,5 +124,4 @@ public class NormalizeCodeblockTest {
 
         return (Document) result.getNode();
     }
-
 }

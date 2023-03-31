@@ -32,14 +32,12 @@ final class LangParser extends DefaultHandler {
         return langCode;
     }
 
-    public LangParser() {
-
-    }
+    public LangParser() {}
 
     @Override
-    public void startElement(final String uri, final String localName, final String name,
-            final Attributes attributes) throws SAXException {
-        //String processedString;
+    public void startElement(final String uri, final String localName, final String name, final Attributes attributes)
+            throws SAXException {
+        // String processedString;
         final String classAttr = attributes.getValue(ATTRIBUTE_NAME_CLASS);
         final String langAttr = attributes.getValue(ATTRIBUTE_NAME_XML_LANG);
 
@@ -48,7 +46,6 @@ final class LangParser extends DefaultHandler {
                 langCode = langAttr.toLowerCase();
             }
         }
-
     }
 
     @Override

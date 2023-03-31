@@ -8,6 +8,13 @@
 
 package org.dita.dost.store;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.util.List;
+import javax.xml.transform.Source;
+import javax.xml.transform.URIResolver;
 import net.sf.saxon.s9api.Destination;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
@@ -17,14 +24,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLFilter;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.URIResolver;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.util.List;
 
 /**
  * Abstract XML I/O.

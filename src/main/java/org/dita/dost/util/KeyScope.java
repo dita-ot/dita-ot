@@ -7,26 +7,26 @@
  */
 package org.dita.dost.util;
 
-import com.google.common.collect.ImmutableList;
-
-import java.util.*;
-
 import static java.util.Collections.unmodifiableMap;
+
+import com.google.common.collect.ImmutableList;
+import java.util.*;
 
 /**
  * Immutable key store for keys and child key scopes.
  *
  * @since 2.2
  */
-public record KeyScope(String id,
-                       String name,
-                       Map<String, KeyDef> keyDefinition,
-                       List<KeyScope> childScopes) {
+public record KeyScope(String id, String name, Map<String, KeyDef> keyDefinition, List<KeyScope> childScopes) {
 
     public static final String ROOT_ID = "#root";
     public static final KeyScope EMPTY = new KeyScope(ROOT_ID, null, Collections.emptyMap(), Collections.emptyList());
 
-    public KeyScope(final String id, final String name, final Map<String, KeyDef> keyDefinition, final List<KeyScope> childScopes) {
+    public KeyScope(
+            final String id,
+            final String name,
+            final Map<String, KeyDef> keyDefinition,
+            final List<KeyScope> childScopes) {
         this.id = id;
         this.name = name;
         this.keyDefinition = unmodifiableMap(keyDefinition);
@@ -42,7 +42,10 @@ public record KeyScope(String id,
     }
 
     public KeyScope getChildScope(final String scope) {
-        return childScopes.stream().filter(s -> s.name.equals(scope)).findFirst().orElse(null);
+        return childScopes.stream()
+                .filter(s -> s.name.equals(scope))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -67,7 +70,8 @@ public record KeyScope(String id,
 
     public static KeyScope merge(final KeyScope scope1, final KeyScope scope2) {
         if (!Objects.equals(scope1.id, scope2.id)) {
-            throw new IllegalArgumentException(String.format("Scopes should have the same ID: %s != %s", scope1.id, scope2.id));
+            throw new IllegalArgumentException(
+                    String.format("Scopes should have the same ID: %s != %s", scope1.id, scope2.id));
         }
         final Map<String, KeyDef> keyDefinition = new HashMap<>();
         scope1.keyDefinition.forEach(keyDefinition::putIfAbsent);
@@ -79,7 +83,6 @@ public record KeyScope(String id,
                 ImmutableList.<KeyScope>builder()
                         .addAll(scope1.childScopes)
                         .addAll(scope2.childScopes)
-                        .build()
-        );
+                        .build());
     }
 }

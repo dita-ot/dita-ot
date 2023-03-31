@@ -12,7 +12,6 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
@@ -30,6 +29,7 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
     protected Job job;
     /** Absolute temporary directory URI to file being processed */
     protected URI currentFile;
+
     protected final Map<String, String> params = new HashMap<>();
 
     @Override

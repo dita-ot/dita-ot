@@ -1,13 +1,24 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2007 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2007 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.writer;
 
+import static javax.xml.XMLConstants.*;
+import static org.dita.dost.reader.ChunkMapReader.*;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
+import java.net.URI;
+import java.util.*;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -24,18 +35,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.NamespaceSupport;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.Writer;
-import java.net.URI;
-import java.util.*;
-
-import static javax.xml.XMLConstants.*;
-import static org.dita.dost.reader.ChunkMapReader.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * ChunkTopicParser class, writing chunking content into relative topic files
@@ -92,14 +91,15 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme)
+                    Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
-    abstract public void write(final URI filename);
+    public abstract void write(final URI filename);
 
     @Override
     public void write(final File fileDir) throws DITAOTException {
@@ -113,9 +113,11 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      * @param conflictTable conflictTable
      * @param rootTopicref  chunking topicref
      */
-    public void setup(final LinkedHashMap<URI, URI> changeTable, final Map<URI, URI> conflictTable,
-                      final Element rootTopicref,
-                      final ChunkFilenameGenerator chunkFilenameGenerator) {
+    public void setup(
+            final LinkedHashMap<URI, URI> changeTable,
+            final Map<URI, URI> conflictTable,
+            final Element rootTopicref,
+            final ChunkFilenameGenerator chunkFilenameGenerator) {
         this.changeTable = changeTable;
         this.rootTopicref = rootTopicref;
         this.conflictTable = conflictTable;
@@ -192,8 +194,8 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     }
 
     @Override
-    public abstract void startElement(final String uri, final String localName, final String qName, final Attributes atts)
-            throws SAXException;
+    public abstract void startElement(
+            final String uri, final String localName, final String qName, final Attributes atts) throws SAXException;
 
     void processSelect(String id) {
         if (include) {
@@ -234,14 +236,12 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         final URI t = job.tempDirURI.relativize(output);
         final URI result = job.getInputDir().resolve(t);
         final URI temp = tempFileNameScheme.generateTempFileName(result);
-        final FileInfo.Builder b = (currentParsingFile != null && job.getFileInfo(stripFragment(currentParsingFile)) != null)
-                ? new FileInfo.Builder(job.getFileInfo(stripFragment(currentParsingFile)))
-                : new FileInfo.Builder();
-        final FileInfo fi = b
-                .uri(temp)
-                .result(result)
-                .format(ATTR_FORMAT_VALUE_DITA)
-                .build();
+        final FileInfo.Builder b =
+                (currentParsingFile != null && job.getFileInfo(stripFragment(currentParsingFile)) != null)
+                        ? new FileInfo.Builder(job.getFileInfo(stripFragment(currentParsingFile)))
+                        : new FileInfo.Builder();
+        final FileInfo fi =
+                b.uri(temp).result(result).format(ATTR_FORMAT_VALUE_DITA).build();
         return fi;
     }
 
@@ -249,18 +249,15 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         final FileInfo cfi = job.getFileInfo(stripFragment(currentParsingFile));
         URI result = cfi.result.resolve(id + FILE_EXTENSION_DITA);
         URI temp = tempFileNameScheme.generateTempFileName(result);
-        if (id == null || job.getStore().exists(job.tempDirURI.resolve(temp))) { //job.getFileInfo(result) != null
+        if (id == null || job.getStore().exists(job.tempDirURI.resolve(temp))) { // job.getFileInfo(result) != null
             final URI t = temp;
 
             result = cfi.result.resolve(generateFilename());
             temp = tempFileNameScheme.generateTempFileName(result);
 
             final FileInfo.Builder b = new FileInfo.Builder(cfi);
-            final FileInfo fi = b
-                    .uri(temp)
-                    .result(result)
-                    .format(ATTR_FORMAT_VALUE_DITA)
-                    .build();
+            final FileInfo fi =
+                    b.uri(temp).result(result).format(ATTR_FORMAT_VALUE_DITA).build();
             job.add(fi);
 
             conflictTable.put(job.tempDirURI.resolve(temp), job.tempDirURI.resolve(t));
@@ -313,7 +310,8 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
             } else if (relative.toString().contains(SLASH)) {
                 // if new file is not under the same directory with current file
                 // add path information to the @href value
-                XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, relative.resolve(href).toString());
+                XMLUtils.addOrSetAttribute(
+                        resAtts, ATTRIBUTE_NAME_HREF, relative.resolve(href).toString());
             }
         }
         if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION) == null) {
@@ -322,7 +320,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX) == null) {
             addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX, DITA_OT_NS);
         }
-        //Need to add a check to see if root element of the topic uses schema validation or not.
+        // Need to add a check to see if root element of the topic uses schema validation or not.
         if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(ATTRIBUTE_NAME_NONAMESPACESCHEMALOCATION) != null) {
             addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_XSI, W3C_XML_SCHEMA_INSTANCE_NS_URI);
         }
@@ -341,13 +339,13 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     Attributes processAttributesNS(Attributes atts, String uri) {
         final AttributesImpl resAtts = new AttributesImpl(processAttributes(atts));
 
-        //Check to see we are at the root element to be processed is the start of the namespaced element
+        // Check to see we are at the root element to be processed is the start of the namespaced element
         if (namespaceMap.get(uri) == 1) {
             String prefix = namespaces.getPrefix(uri);
             if (prefix != null) {
-                if (!prefix.equals(DEFAULT_NS_PREFIX)){
+                if (!prefix.equals(DEFAULT_NS_PREFIX)) {
                     addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE + ":" + prefix, uri);
-                }else {
+                } else {
                     addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE, uri);
                 }
             }
@@ -376,10 +374,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         final URI tmp = tempFileNameScheme.generateTempFileName(newSrc);
 
         if (job.getFileInfo(tmp) == null) {
-            job.add(new FileInfo.Builder()
-                    .result(newSrc)
-                    .uri(tmp)
-                    .build());
+            job.add(new FileInfo.Builder().result(newSrc).uri(tmp).build());
         }
 
         return job.tempDirURI.resolve(tmp);
@@ -530,8 +525,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      * @param name  PI name
      * @param value PI value, may be {@code null}
      */
-    void writeProcessingInstruction(final Writer output, final String name, final String value)
-            throws SAXException {
+    void writeProcessingInstruction(final Writer output, final String name, final String value) throws SAXException {
         try {
             output.write(LESS_THAN);
             output.write(QUESTION);
@@ -551,7 +545,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      * start of namespace associated with Element
      */
     public void startPrefixMapping(String prefix, String uri) {
-    	namespaces.pushContext();        
+        namespaces.pushContext();
         namespaces.declarePrefix(prefix, uri);
     }
 
@@ -561,5 +555,4 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     public void endPrefixMapping(String prefix) {
         namespaces.popContext();
     }
-
 }

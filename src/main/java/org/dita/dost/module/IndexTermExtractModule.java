@@ -1,13 +1,19 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005, 2006 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005, 2006 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
@@ -21,13 +27,6 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.SAXException;
-
-import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.dita.dost.util.Constants.*;
 
 /**
  * This class extends AbstractPipelineModule, used to extract indexterm from
@@ -55,12 +54,10 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
     /**
      * Create a default instance.
      */
-    public IndexTermExtractModule() {
-    }
+    public IndexTermExtractModule() {}
 
     @Override
-    public AbstractPipelineOutput execute(final AbstractPipelineInput input)
-            throws DITAOTException {
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
@@ -74,7 +71,7 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
-            logger.error(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e);
         }
 
         return null;
@@ -97,26 +94,25 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
          * Parse topic list and ditamap list from the input dita.list file
          */
         topicList = new ArrayList<>();
-        for (final FileInfo f: job.getFileInfo()) {
+        for (final FileInfo f : job.getFileInfo()) {
             if (ATTR_FORMAT_VALUE_DITA.equals(f.format) && !f.isResourceOnly) {
                 topicList.add(job.tempDirURI.resolve(f.uri));
             }
         }
         ditamapList = new ArrayList<>();
-        for (final FileInfo f: job.getFileInfo()) {
+        for (final FileInfo f : job.getFileInfo()) {
             if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format) && !f.isResourceOnly) {
                 ditamapList.add(job.tempDirURI.resolve(f.uri));
             }
         }
 
         final int lastIndexOfDot = output.lastIndexOf(".");
-        final String outputRoot = (lastIndexOfDot == -1) ? output : output.substring(0,
-                lastIndexOfDot);
+        final String outputRoot = (lastIndexOfDot == -1) ? output : output.substring(0, lastIndexOfDot);
 
         indexTermCollection.setOutputFileRoot(outputRoot);
         indexTermCollection.setIndexType(indextype);
         indexTermCollection.setIndexClass(indexclass);
-        //RFE 2987769 Eclipse index-see
+        // RFE 2987769 Eclipse index-see
         indexTermCollection.setPipelineHashIO((PipelineHashIO) input);
 
         if (encoding != null && encoding.trim().length() > 0) {
@@ -138,11 +134,8 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
             String targetPathFromMapWithoutExt;
             handler.reset();
             target = aTopicList;
-            targetPathFromMap = FileUtils.getRelativeUnixPath(
-                    tempInputMap.toString(),
-                    target.toString());
-            targetPathFromMapWithoutExt = targetPathFromMap
-                    .substring(0, targetPathFromMap.lastIndexOf("."));
+            targetPathFromMap = FileUtils.getRelativeUnixPath(tempInputMap.toString(), target.toString());
+            targetPathFromMapWithoutExt = targetPathFromMap.substring(0, targetPathFromMap.lastIndexOf("."));
             handler.setTargetFile(targetPathFromMapWithoutExt + targetExt);
 
             try {
@@ -158,13 +151,12 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         }
 
         for (final URI ditamap : ditamapList) {
-            final String currentMapPathName = FileUtils.getRelativeUnixPath(
-                    tempInputMap.toString(), ditamap.toString());
+            final String currentMapPathName =
+                    FileUtils.getRelativeUnixPath(tempInputMap.toString(), ditamap.toString());
             String mapPathFromInputMap = "";
 
             if (currentMapPathName.lastIndexOf(SLASH) != -1) {
-                mapPathFromInputMap = currentMapPathName.substring(0,
-                        currentMapPathName.lastIndexOf(SLASH));
+                mapPathFromInputMap = currentMapPathName.substring(0, currentMapPathName.lastIndexOf(SLASH));
             }
 
             ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
@@ -179,5 +171,4 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
             }
         }
     }
-
 }

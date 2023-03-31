@@ -7,7 +7,20 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.FilterUtils.Action.EXCLUDE;
+import static org.dita.dost.util.FilterUtils.Action.INCLUDE;
+
 import com.google.common.collect.ImmutableMap;
+import java.io.InputStream;
+import java.util.Map;
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.SAXSource;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Action;
@@ -16,20 +29,6 @@ import org.dita.dost.util.XMLUtils;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-
-import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.sax.SAXSource;
-import java.io.InputStream;
-import java.util.Map;
-
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.FilterUtils.Action.EXCLUDE;
-import static org.dita.dost.util.FilterUtils.Action.INCLUDE;
 
 public class ProfilingFilterTest {
 
@@ -56,8 +55,7 @@ public class ProfilingFilterTest {
                 new FilterKey(QName.valueOf("default"), null), EXCLUDE,
                 new FilterKey(QName.valueOf("audience"), null), EXCLUDE,
                 new FilterKey(QName.valueOf("audience"), "novice"), INCLUDE,
-                new FilterKey(QName.valueOf("platform"), "windows"), EXCLUDE
-        );
+                new FilterKey(QName.valueOf("platform"), "windows"), EXCLUDE);
         final FilterUtils filterUtils = new FilterUtils(false, filterMap, null, null);
 
         test(filterUtils, "topic.dita", "topic1.dita");
@@ -75,13 +73,11 @@ public class ProfilingFilterTest {
                 new FilterKey(QName.valueOf("default"), null), EXCLUDE,
                 new FilterKey(QName.valueOf("audience"), null), EXCLUDE,
                 new FilterKey(QName.valueOf("audience"), "novice"), INCLUDE,
-                new FilterKey(QName.valueOf("platform"), "windows"), EXCLUDE
-        );
+                new FilterKey(QName.valueOf("platform"), "windows"), EXCLUDE);
         final FilterUtils filterUtils = new FilterUtils(false, filterMap, null, null);
 
         test(filterUtils, "topic_2.dita", "topic1_2.dita");
     }
-
 
     @Test
     public void testFilter_xhtml() throws Exception {
@@ -108,7 +104,8 @@ public class ProfilingFilterTest {
             transformerFactory.newTransformer().transform(s, d);
         }
 
-        try (final InputStream exp = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/exp/" + expFile)) {
+        try (final InputStream exp =
+                getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/exp/" + expFile)) {
             assertXMLEqual(documentBuilder.parse(exp), act);
         }
     }

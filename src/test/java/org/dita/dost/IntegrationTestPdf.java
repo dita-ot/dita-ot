@@ -8,11 +8,10 @@
 
 package org.dita.dost;
 
-import org.junit.Test;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.PDF;
 
 import java.nio.file.Paths;
-
-import static org.dita.dost.AbstractIntegrationTest.Transtype.PDF;
+import org.junit.Test;
 
 public class IntegrationTestPdf extends AbstractIntegrationTest {
 
@@ -27,7 +26,8 @@ public class IntegrationTestPdf extends AbstractIntegrationTest {
 
     @Test
     public void pdf() throws Throwable {
-        builder().name("pdf")
+        builder()
+                .name("pdf")
                 .transtype(PDF)
                 .input(Paths.get("bookmap.ditamap"))
                 .warnCount(1)

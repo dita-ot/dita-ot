@@ -7,19 +7,18 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.XMLUtils.toList;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import static org.dita.dost.util.XMLUtils.toList;
 
 /**
  * Parse plugin configuration file.
@@ -110,7 +109,8 @@ public class PluginParser {
                     features.addFeature(elem.getAttribute(FEATURE_ID_ATTR), elem);
                 } else if (REQUIRE_ELEM.equals(qName)) {
                     final String importance = elem.getAttribute(REQUIRE_IMPORTANCE_ATTR);
-                    features.addRequire(elem.getAttribute(REQUIRE_PLUGIN_ATTR), importance.isEmpty() ? null : importance);
+                    features.addRequire(
+                            elem.getAttribute(REQUIRE_PLUGIN_ATTR), importance.isEmpty() ? null : importance);
                 } else if (META_ELEM.equals(qName)) {
                     features.addMeta(elem.getAttribute(META_TYPE_ATTR), elem.getAttribute(META_VALUE_ATTR));
                 } else if (TEMPLATE_ELEM.equals(qName)) {
@@ -163,5 +163,4 @@ public class PluginParser {
         final String name = elem.getAttribute(EXTENSION_POINT_NAME_ATTR);
         features.addExtensionPoint(new ExtensionPoint(id, name, currentPlugin));
     }
-
 }

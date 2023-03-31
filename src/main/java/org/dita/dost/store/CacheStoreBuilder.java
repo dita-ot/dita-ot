@@ -8,9 +8,8 @@
 
 package org.dita.dost.store;
 
-import org.dita.dost.util.XMLUtils;
-
 import java.io.File;
+import org.dita.dost.util.XMLUtils;
 
 /**
  * Memory store builder

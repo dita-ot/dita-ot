@@ -7,7 +7,16 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
+import static org.junit.Assert.assertEquals;
+
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
+import java.net.URI;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
@@ -19,17 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-
-import java.io.File;
-import java.net.URI;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
-
-import static org.junit.Assert.assertEquals;
 
 public class CopyToReaderTest {
 
@@ -62,8 +60,7 @@ public class CopyToReaderTest {
                 inputFile.resolve("direct.dita"), inputFile.resolve("topic.dita"),
                 inputFile.resolve("keyref.dita"), inputFile.resolve("topic.dita"),
                 inputFile.resolve("b.dita"), inputFile.resolve("a.dita"),
-                inputFile.resolve("skip-b.dita"), inputFile.resolve("skip-a.dita")
-        );
+                inputFile.resolve("skip-b.dita"), inputFile.resolve("skip-a.dita"));
 
         assertEquals(exp, reader.getCopyToMap());
         assertEquals(0, logger.getMessages().size());
@@ -75,9 +72,8 @@ public class CopyToReaderTest {
         reader.setCurrentFile(inputFile);
         parser.parse(inputFile.toString());
 
-        final Map<URI, URI> exp = ImmutableMap.of(
-                inputFile.resolve("keyref-target.dita"), inputFile.resolve("keyref-source-a.dita")
-        );
+        final Map<URI, URI> exp =
+                ImmutableMap.of(inputFile.resolve("keyref-target.dita"), inputFile.resolve("keyref-source-a.dita"));
 
         assertEquals(exp, reader.getCopyToMap());
         assertEquals(0, logger.getMessages().size());
@@ -89,13 +85,16 @@ public class CopyToReaderTest {
         reader.setCurrentFile(inputFile);
         parser.parse(inputFile.toString());
 
-        final Map<URI, URI> exp = ImmutableMap.of(
-                inputFile.resolve("target.dita"), inputFile.resolve("source-a.dita")
-        );
+        final Map<URI, URI> exp = ImmutableMap.of(inputFile.resolve("target.dita"), inputFile.resolve("source-a.dita"));
 
         assertEquals(exp, reader.getCopyToMap());
-        final List<Message> expLog = Arrays.asList(
-                new Message(WARN, MessageFormat.format(MessageUtils.getMessage("DOTX065W").toString(), "source-b.dita", new File(srcDir, "target.dita").toURI()), null));
+        final List<Message> expLog = Arrays.asList(new Message(
+                WARN,
+                MessageFormat.format(
+                        MessageUtils.getMessage("DOTX065W").toString(),
+                        "source-b.dita",
+                        new File(srcDir, "target.dita").toURI()),
+                null));
         assertEquals(expLog, logger.getMessages());
     }
 }

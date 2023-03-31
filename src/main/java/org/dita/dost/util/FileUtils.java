@@ -1,19 +1,19 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.util;
+
+import static org.apache.commons.io.FilenameUtils.normalize;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.net.URI;
 import java.util.*;
-
-import static org.apache.commons.io.FilenameUtils.normalize;
-import static org.dita.dost.util.Constants.*;
 
 /**
  * Static file utilities.
@@ -25,18 +25,18 @@ public final class FileUtils {
     /**
      * Private default constructor to make class uninstantiable.
      */
-    private FileUtils() {
-    }
+    private FileUtils() {}
 
     /**
      * Supported image extensions. File extensions contain a leading dot.
      */
     @Deprecated
-    public final static List<String> supportedImageExtensions;
+    public static final List<String> supportedImageExtensions;
+
     static {
         final List<String> sie = new ArrayList<>();
         final String imageExtensions = Configuration.configuration.get(CONF_SUPPORTED_IMAGE_EXTENSIONS);
-        if (imageExtensions != null && imageExtensions.length()>0) {
+        if (imageExtensions != null && imageExtensions.length() > 0) {
             Collections.addAll(sie, imageExtensions.split(CONF_LIST_SEPARATOR));
         } else {
             System.err.println("Failed to read supported image extensions from configuration, using defaults.");
@@ -56,11 +56,12 @@ public final class FileUtils {
      * Supported HTML extensions. File extensions contain a leading dot.
      */
     @Deprecated
-    private final static List<String> supportedHTMLExtensions;
+    private static final List<String> supportedHTMLExtensions;
+
     static {
         final List<String> she = new ArrayList<>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_HTML_EXTENSIONS);
-        if (extensions != null && extensions.length()>0) {
+        if (extensions != null && extensions.length() > 0) {
             Collections.addAll(she, extensions.split(CONF_LIST_SEPARATOR));
         } else {
             System.err.println("Failed to read supported HTML extensions from configuration, using defaults.");
@@ -74,11 +75,12 @@ public final class FileUtils {
      * Supported resource file extensions. File extensions contain a leading dot.
      */
     @Deprecated
-    private final static List<String> supportedResourceExtensions;
+    private static final List<String> supportedResourceExtensions;
+
     static {
         final List<String> sre = new ArrayList<>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_RESOURCE_EXTENSIONS);
-        if (extensions != null && extensions.length()>0) {
+        if (extensions != null && extensions.length() > 0) {
             Collections.addAll(sre, extensions.split(CONF_LIST_SEPARATOR));
         } else {
             System.err.println("Failed to read supported resource file extensions from configuration, using defaults.");
@@ -95,7 +97,7 @@ public final class FileUtils {
      */
     @Deprecated
     public static boolean isHTMLFile(final String lcasefn) {
-        for (final String ext: supportedHTMLExtensions) {
+        for (final String ext : supportedHTMLExtensions) {
             if (lcasefn.endsWith(ext)) {
                 return true;
             }
@@ -135,7 +137,7 @@ public final class FileUtils {
      */
     @Deprecated
     public static boolean isResourceFile(final String lcasefn) {
-        for (final String ext: supportedResourceExtensions) {
+        for (final String ext : supportedResourceExtensions) {
             if (lcasefn.endsWith(ext)) {
                 return true;
             }
@@ -150,7 +152,7 @@ public final class FileUtils {
      */
     @Deprecated
     public static boolean isSupportedImageFile(final String lcasefn) {
-        for (final String ext: supportedImageExtensions) {
+        for (final String ext : supportedImageExtensions) {
             if (lcasefn.endsWith(ext)) {
                 return true;
             }
@@ -166,7 +168,8 @@ public final class FileUtils {
      * @return relative path, or refPath if different root means no relative path is possible
      */
     public static File getRelativePath(final File basePath, final File refPath) {
-        if (basePath.toPath().getRoot() == null || !basePath.toPath().getRoot().equals(refPath.toPath().getRoot())) {
+        if (basePath.toPath().getRoot() == null
+                || !basePath.toPath().getRoot().equals(refPath.toPath().getRoot())) {
             return refPath;
         }
         return basePath.toPath().getParent().relativize(refPath.toPath()).toFile();
@@ -195,25 +198,25 @@ public final class FileUtils {
     private static String getRelativePath(final String basePath, final String refPath, final String sep) {
         final StringBuilder upPathBuffer = new StringBuilder(128);
         final StringBuilder downPathBuffer = new StringBuilder(128);
-        final StringTokenizer mapTokenizer = new StringTokenizer(normalizePath(basePath, File.separator), File.separator);
-        final StringTokenizer topicTokenizer = new StringTokenizer(normalizePath(refPath, File.separator), File.separator);
+        final StringTokenizer mapTokenizer =
+                new StringTokenizer(normalizePath(basePath, File.separator), File.separator);
+        final StringTokenizer topicTokenizer =
+                new StringTokenizer(normalizePath(refPath, File.separator), File.separator);
 
-        while (mapTokenizer.countTokens() > 1
-                && topicTokenizer.countTokens() > 1) {
+        while (mapTokenizer.countTokens() > 1 && topicTokenizer.countTokens() > 1) {
             final String mapToken = mapTokenizer.nextToken();
             final String topicToken = topicTokenizer.nextToken();
             boolean equals;
             if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
-                //if OS is Windows, we need to ignore case when comparing path names.
+                // if OS is Windows, we need to ignore case when comparing path names.
                 equals = mapToken.equalsIgnoreCase(topicToken);
             } else {
                 equals = mapToken.equals(topicToken);
             }
 
             if (!equals) {
-                if (mapToken.endsWith(COLON) ||
-                        topicToken.endsWith(COLON)) {
-                    //the two files are in different disks under Windows
+                if (mapToken.endsWith(COLON) || topicToken.endsWith(COLON)) {
+                    // the two files are in different disks under Windows
                     return refPath;
                 }
                 upPathBuffer.append("..");
@@ -277,12 +280,13 @@ public final class FileUtils {
      * @return relative path to base path, {@code null} if reference path was a single file
      */
     private static String getRelativePathForPath(final String relativePath, final String sep) {
-        final StringTokenizer tokenizer = new StringTokenizer(relativePath.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR), UNIX_SEPARATOR);
+        final StringTokenizer tokenizer =
+                new StringTokenizer(relativePath.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR), UNIX_SEPARATOR);
         final StringBuilder buffer = new StringBuilder();
         if (tokenizer.countTokens() == 1) {
             return null;
         } else {
-            while(tokenizer.countTokens() > 1) {
+            while (tokenizer.countTokens() > 1) {
                 tokenizer.nextToken();
                 buffer.append("..");
                 buffer.append(sep);
@@ -412,22 +416,19 @@ public final class FileUtils {
         return buff.toString();
     }
 
-
     /**
      * Return if the path is absolute.
      * @param path test path
      * @return true if path is absolute and false otherwise.
      */
-    public static boolean isAbsolutePath (final String path) {
+    public static boolean isAbsolutePath(final String path) {
         if (path == null || path.trim().length() == 0) {
             return false;
         }
 
         if (File.separator.equals(UNIX_SEPARATOR)) {
             return path.startsWith(UNIX_SEPARATOR);
-        } else
-
-        if (File.separator.equals(WINDOWS_SEPARATOR) && path.length() > 2) {
+        } else if (File.separator.equals(WINDOWS_SEPARATOR) && path.length() > 2) {
             return path.matches("([a-zA-Z]:|\\\\)\\\\.*");
         }
 
@@ -454,12 +455,10 @@ public final class FileUtils {
             fileExtIndex = fileName.lastIndexOf(DOT);
             return (fileExtIndex != -1)
                     ? fileName.substring(0, fileExtIndex) + extName + attValue.substring(index)
-                            : attValue;
+                    : attValue;
         } else {
             fileExtIndex = attValue.lastIndexOf(DOT);
-            return (fileExtIndex != -1)
-                    ? (attValue.substring(0, fileExtIndex) + extName)
-                            : attValue;
+            return (fileExtIndex != -1) ? (attValue.substring(0, fileExtIndex) + extName) : attValue;
         }
     }
 
@@ -526,7 +525,6 @@ public final class FileUtils {
     private static boolean isWindows() {
         final String osName = System.getProperty("os.name");
         return osName.startsWith("Win");
-
     }
 
     /**
@@ -552,9 +550,9 @@ public final class FileUtils {
     public static String stripFragment(final String path) {
         final int i = path.indexOf(SHARP);
         if (i != -1) {
-           return path.substring(0, i);
+            return path.substring(0, i);
         } else {
-           return path;
+            return path;
         }
     }
 
@@ -593,9 +591,9 @@ public final class FileUtils {
     public static String getFragment(final String path, final String defaultValue) {
         final int i = path.indexOf(SHARP);
         if (i != -1) {
-           return path.substring(i + 1);
+            return path.substring(i + 1);
         } else {
-           return defaultValue;
+            return defaultValue;
         }
     }
 
@@ -615,5 +613,4 @@ public final class FileUtils {
             return c.getPath().startsWith(d.getPath());
         }
     }
-
 }

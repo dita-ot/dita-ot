@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005, 2006 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005, 2006 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.util;
 
 import org.apache.xerces.impl.xs.XSDDescription;
@@ -21,7 +21,6 @@ import org.apache.xerces.xni.grammars.XMLGrammarDescription;
 public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 
     private static final Grammar[] INITIAL_GRAMMAR_SET = new Grammar[0];
-
 
     /** Constructs a grammar pool with a default number of buckets. */
     public XMLGrammarPoolImplUtils() {
@@ -46,11 +45,11 @@ public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
      */
     @Override
     public void putGrammar(Grammar grammar) {
-     //Avoid caching any type of XSD grammar
-     if (grammar instanceof org.apache.xerces.impl.xs.SchemaGrammar) {
-      return;
-     }
-     super.putGrammar(grammar);
+        // Avoid caching any type of XSD grammar
+        if (grammar instanceof org.apache.xerces.impl.xs.SchemaGrammar) {
+            return;
+        }
+        super.putGrammar(grammar);
     }
 
     /**
@@ -63,8 +62,8 @@ public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
     @Override
     public int hashCode(final XMLGrammarDescription desc) {
         if (desc instanceof XSDDescription) {
-//            final String systemId = ((XSDDescription) desc).getLiteralSystemId();
-//            return systemId == null ? 0 : systemId.hashCode();
+            //            final String systemId = ((XSDDescription) desc).getLiteralSystemId();
+            //            return systemId == null ? 0 : systemId.hashCode();
             // return -1 for XSD grammar hashcode because we want to disable XSD grammar caching
             return -1;
         } else {
@@ -89,12 +88,10 @@ public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
      * @return True if the grammars are equal, otherwise false
      */
     @Override
-    public boolean equals(final XMLGrammarDescription desc1,
-            final XMLGrammarDescription desc2) {
-        if (desc1 instanceof XSDDescription
-                && desc2 instanceof XSDDescription) {
-//                return desc1.getLiteralSystemId().equals(
-//                        desc2.getLiteralSystemId());
+    public boolean equals(final XMLGrammarDescription desc1, final XMLGrammarDescription desc2) {
+        if (desc1 instanceof XSDDescription && desc2 instanceof XSDDescription) {
+            //                return desc1.getLiteralSystemId().equals(
+            //                        desc2.getLiteralSystemId());
             // always return false for XSD grammar to disable XSD grammar caching
             return false;
         } else {
@@ -105,5 +102,4 @@ public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
             }
         }
     }
-
 }

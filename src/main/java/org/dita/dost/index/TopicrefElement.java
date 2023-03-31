@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.index;
 
 /**
@@ -27,8 +27,7 @@ public final class TopicrefElement {
     /**
      * Default constructor.
      */
-    public TopicrefElement() {
-    }
+    public TopicrefElement() {}
 
     /**
      * Get the format attribute.
@@ -70,7 +69,7 @@ public final class TopicrefElement {
      * Set navtitle attribute with the given value.
      * @param aNavtitle The navtitle to set.
      */
-    public void setNavTitle (final String aNavtitle) {
+    public void setNavTitle(final String aNavtitle) {
         navtitle = aNavtitle;
     }
 
@@ -82,6 +81,4 @@ public final class TopicrefElement {
     public String getNavTitle() {
         return navtitle;
     }
-
-
 }

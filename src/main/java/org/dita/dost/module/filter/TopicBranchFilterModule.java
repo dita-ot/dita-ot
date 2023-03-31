@@ -7,16 +7,9 @@
  */
 package org.dita.dost.module.filter;
 
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.pipeline.AbstractPipelineInput;
-import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.writer.ProfilingFilter;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.XMLFilter;
+import static java.util.Collections.singletonList;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.getChildElements;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,10 +20,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static java.util.Collections.singletonList;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.getChildElements;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.writer.ProfilingFilter;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.XMLFilter;
 
 /**
  * Branch filter module for topics.
@@ -50,6 +49,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
     /** Current map being processed, relative to temporary directory */
     private URI map;
+
     private final Set<URI> filtered = new HashSet<>();
 
     @Override
@@ -101,8 +101,8 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     }
 
     /** Copy and filter topics for branches. These topics have a new name and will be added to job configuration. */
-    private void generateCopies(final Element topicref, final List<FilterUtils> filters,
-                                final SubjectScheme subjectSchemeMap) {
+    private void generateCopies(
+            final Element topicref, final List<FilterUtils> filters, final SubjectScheme subjectSchemeMap) {
         final List<FilterUtils> fs = combineFilterUtils(topicref, filters, subjectSchemeMap);
 
         final String copyTo = topicref.getAttribute(BRANCH_COPY_TO);
@@ -150,7 +150,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
                 topicref.setAttribute(SKIP_FILTER, Boolean.TRUE.toString());
             }
         }
-        for (final Element child: getChildElements(topicref, MAP_TOPICREF)) {
+        for (final Element child : getChildElements(topicref, MAP_TOPICREF)) {
             if (DITAVAREF_D_DITAVALREF.matches(child)) {
                 continue;
             }
@@ -159,14 +159,15 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     }
 
     /** Modify and filter topics for branches. These files use an existing file name. */
-    private void filterTopics(final Element topicref, final List<FilterUtils> filters,
-                              final SubjectScheme subjectSchemeMap) {
+    private void filterTopics(
+            final Element topicref, final List<FilterUtils> filters, final SubjectScheme subjectSchemeMap) {
         final List<FilterUtils> fs = combineFilterUtils(topicref, filters, subjectSchemeMap);
 
         final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
         final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
         final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
-        if (!fs.isEmpty() && skipFilter == null
+        if (!fs.isEmpty()
+                && skipFilter == null
                 && !filtered.contains(srcAbsUri)
                 && !href.isEmpty()
                 && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))) {
@@ -189,12 +190,11 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
             topicref.removeAttributeNode(skipFilter);
         }
 
-        for (final Element child: getChildElements(topicref, MAP_TOPICREF)) {
+        for (final Element child : getChildElements(topicref, MAP_TOPICREF)) {
             if (DITAVAREF_D_DITAVALREF.matches(child)) {
                 continue;
             }
             filterTopics(child, fs, subjectSchemeMap);
         }
     }
-
 }

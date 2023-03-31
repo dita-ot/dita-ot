@@ -25,7 +25,7 @@ public class DelegatingURIResolver implements URIResolver {
 
     @Override
     public Source resolve(String href, String base) throws TransformerException {
-//        System.out.println(" DelegatingURIResolver resolve: " + href);
+        //        System.out.println(" DelegatingURIResolver resolve: " + href);
         Source src = null;
         for (final URIResolver resolver : resolvers) {
             // XXX: This will create a redundant XMLReader for each call to resolve

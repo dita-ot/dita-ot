@@ -8,17 +8,16 @@
 
 package org.dita.dost.writer;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-
-import static org.junit.Assert.assertEquals;
 
 public class LinkFilterTest {
 
@@ -66,5 +65,4 @@ public class LinkFilterTest {
             throw new RuntimeException(e);
         }
     }
-
 }

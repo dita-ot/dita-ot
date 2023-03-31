@@ -76,8 +76,7 @@ public class SemVerMatch {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Range range = (Range) o;
-            return match == range.match &&
-                    Objects.equals(version, range.version);
+            return match == range.match && Objects.equals(version, range.version);
         }
 
         @Override
@@ -96,8 +95,7 @@ public class SemVerMatch {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SemVerMatch that = (SemVerMatch) o;
-        return Objects.equals(start, that.start) &&
-                Objects.equals(end, that.end);
+        return Objects.equals(start, that.start) && Objects.equals(end, that.end);
     }
 
     @Override
@@ -129,8 +127,7 @@ public class SemVerMatch {
                 case "<=" -> Match.LE;
                 case ">" -> Match.GT;
                 case ">=" -> Match.GE;
-                default -> throw new IllegalArgumentException();
-            };
+                default -> throw new IllegalArgumentException();};
         } else {
             match = Match.EQ;
         }
@@ -141,52 +138,38 @@ public class SemVerMatch {
 
         switch (match) {
             case TILDE -> {
-                start = new Range(Match.GE,
-                        major != null ? major : 0,
-                        minor != null ? minor : 0,
-                        patch != null ? patch : 0);
+                start = new Range(
+                        Match.GE, major != null ? major : 0, minor != null ? minor : 0, patch != null ? patch : 0);
                 end = tilde(Match.LT, major, minor);
             }
             case CARET -> {
-                start = new Range(Match.GE,
-                        major != null ? major : 0,
-                        minor != null ? minor : 0,
-                        patch != null ? patch : 0);
+                start = new Range(
+                        Match.GE, major != null ? major : 0, minor != null ? minor : 0, patch != null ? patch : 0);
                 end = caret(Match.LT, major, minor, patch);
             }
             case LT -> {
                 start = new Range(Match.GE, 0, 0, 0);
-                end = new Range(Match.LT,
-                        major != null ? major : 0,
-                        minor != null ? minor : 0,
-                        patch != null ? patch : 0);
+                end = new Range(
+                        Match.LT, major != null ? major : 0, minor != null ? minor : 0, patch != null ? patch : 0);
             }
             case LE -> {
                 start = new Range(Match.GE, 0, 0, 0);
-                end = new Range(Match.LE,
-                        major != null ? major : 0,
-                        minor != null ? minor : 0,
-                        patch != null ? patch : 0);
+                end = new Range(
+                        Match.LE, major != null ? major : 0, minor != null ? minor : 0, patch != null ? patch : 0);
             }
             case GT -> {
-                start = new Range(Match.GT,
-                        major != null ? major : 0,
-                        minor != null ? minor : 0,
-                        patch != null ? patch : 0);
+                start = new Range(
+                        Match.GT, major != null ? major : 0, minor != null ? minor : 0, patch != null ? patch : 0);
                 end = null;
             }
             case GE -> {
-                start = new Range(Match.GE,
-                        major != null ? major : 0,
-                        minor != null ? minor : 0,
-                        patch != null ? patch : 0);
+                start = new Range(
+                        Match.GE, major != null ? major : 0, minor != null ? minor : 0, patch != null ? patch : 0);
                 end = null;
             }
             case EQ -> {
-                start = new Range(Match.GE,
-                        major != null ? major : 0,
-                        minor != null ? minor : 0,
-                        patch != null ? patch : 0);
+                start = new Range(
+                        Match.GE, major != null ? major : 0, minor != null ? minor : 0, patch != null ? patch : 0);
                 end = inc(Match.LT, major, minor, patch);
             }
             default -> throw new IllegalArgumentException();
@@ -197,20 +180,14 @@ public class SemVerMatch {
         final Integer major1 = major != null && minor == null && patch == null ? Integer.valueOf(major + 1) : major;
         final Integer minor1 = null != minor && patch == null ? Integer.valueOf(minor + 1) : minor;
         final Integer patch1 = patch != null ? Integer.valueOf(patch + 1) : patch;
-        return new Range(match,
-                major1 != null ? major1 : 0,
-                minor1 != null ? minor1 : 0,
-                patch1 != null ? patch1 : 0);
+        return new Range(match, major1 != null ? major1 : 0, minor1 != null ? minor1 : 0, patch1 != null ? patch1 : 0);
     }
 
     private static Range tilde(Match match, Integer major, Integer minor) {
         final Integer major1 = major != null && minor == null ? Integer.valueOf(major + 1) : major;
         final Integer minor1 = minor != null ? minor + 1 : null;
         final Integer patch1 = null;
-        return new Range(match,
-                major1 != null ? major1 : 0,
-                minor1 != null ? minor1 : 0,
-                patch1 != null ? patch1 : 0);
+        return new Range(match, major1 != null ? major1 : 0, minor1 != null ? minor1 : 0, patch1 != null ? patch1 : 0);
     }
 
     private static Range caret(Match match, Integer major, Integer minor, Integer patch) {
@@ -242,7 +219,8 @@ public class SemVerMatch {
             tokens.set(i, 0);
         }
 
-        return new Range(match,
+        return new Range(
+                match,
                 tokens.size() > 0 && tokens.get(0) != null ? tokens.get(0) : 0,
                 tokens.size() > 1 && tokens.get(1) != null ? tokens.get(1) : 0,
                 tokens.size() > 2 && tokens.get(2) != null ? tokens.get(2) : 0);
@@ -291,5 +269,4 @@ public class SemVerMatch {
         }
         return buf.toString();
     }
-
 }

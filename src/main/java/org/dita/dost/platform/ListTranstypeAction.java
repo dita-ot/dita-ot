@@ -7,13 +7,11 @@
  */
 package org.dita.dost.platform;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * List transtypes integration action.
@@ -29,11 +27,10 @@ final class ListTranstypeAction extends ImportAction {
     @Override
     public void getResult(final ContentHandler buf) throws SAXException {
         final String separator = paramTable.getOrDefault("separator", "|");
-        final List<String> v = valueSet.stream()
-                .map(Value::value)
-                .distinct().sorted().collect(Collectors.toList());
+        final List<String> v =
+                valueSet.stream().map(Value::value).distinct().sorted().collect(Collectors.toList());
         final StringBuilder retBuf = new StringBuilder();
-        for (final Iterator<String> i = v.iterator(); i.hasNext();) {
+        for (final Iterator<String> i = v.iterator(); i.hasNext(); ) {
             retBuf.append(i.next());
             if (i.hasNext()) {
                 retBuf.append(separator);
@@ -47,5 +44,4 @@ final class ListTranstypeAction extends ImportAction {
     public String getResult() {
         throw new UnsupportedOperationException();
     }
-
 }

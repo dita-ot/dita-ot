@@ -8,7 +8,6 @@
 package org.dita.dost.ant;
 
 import java.io.File;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 
@@ -25,8 +24,7 @@ public final class IsAbsolute implements Condition {
      * Default Constructor.
      *
      */
-    public IsAbsolute() {
-    }
+    public IsAbsolute() {}
 
     /**
      * Set the path.
@@ -44,5 +42,4 @@ public final class IsAbsolute implements Condition {
     public boolean eval() throws BuildException {
         return new File(path).isAbsolute();
     }
-
 }

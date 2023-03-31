@@ -7,8 +7,20 @@
  */
 package org.dita.dost.reader;
 
+import static java.util.Collections.emptySet;
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.xml.namespace.QName;
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.store.StreamStore;
@@ -20,20 +32,6 @@ import org.dita.dost.util.XMLUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.xml.namespace.QName;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static java.util.Collections.emptySet;
-import static javax.xml.XMLConstants.XML_NS_URI;
-import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 public class TestDitaValReader {
 
     private static final QName PLATFORM = QName.valueOf("platform");
@@ -44,7 +42,6 @@ public class TestDitaValReader {
     private static final QName REV = QName.valueOf("rev");
     private static final QName LANG = new QName(XML_NS_URI, "lang", "xml");
     private static final QName CONFIDENTIALITY = new QName("http://www.cms.com/", "confidentiality");
-
 
     private final File resourceDir = TestUtils.getResourceDir(TestDitaValReader.class);
 
@@ -94,10 +91,11 @@ public class TestDitaValReader {
                 new FilterKey(PLATFORM, "windows"), Action.EXCLUDE,
                 new FilterKey(LANG, "fr"), Action.EXCLUDE,
                 new FilterKey(CONFIDENTIALITY, "confidential"), Action.EXCLUDE,
-                new FilterKey(QName.valueOf("default"), null), Action.INCLUDE
-        );
+                new FilterKey(QName.valueOf("default"), null), Action.INCLUDE);
         assertEquals(exp, act);
-        assertEquals(List.of(WARN), logger.getMessages().stream().map(msg -> msg.level).collect(Collectors.toList()));
+        assertEquals(
+                List.of(WARN),
+                logger.getMessages().stream().map(msg -> msg.level).collect(Collectors.toList()));
     }
 
     @Test
@@ -114,9 +112,7 @@ public class TestDitaValReader {
                 new FilterKey(LANG, "fr"), Action.EXCLUDE,
                 new FilterKey(CONFIDENTIALITY, "confidential"), Action.EXCLUDE,
                 new FilterKey(REV, "10"), Action.EXCLUDE,
-                new FilterKey(QName.valueOf("default"), null), Action.INCLUDE
-        );
+                new FilterKey(QName.valueOf("default"), null), Action.INCLUDE);
         assertEquals(exp, act);
     }
-
 }

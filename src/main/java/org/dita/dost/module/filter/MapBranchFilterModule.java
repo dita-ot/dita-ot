@@ -8,6 +8,20 @@
 
 package org.dita.dost.module.filter;
 
+import static java.util.Collections.singletonList;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.StringUtils.getExtProps;
+import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
+import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.getChildElements;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+import javax.xml.namespace.QName;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.BranchFilterModule.Branch;
@@ -17,21 +31,6 @@ import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.*;
-
-import javax.xml.namespace.QName;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Collections.singletonList;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.StringUtils.getExtProps;
-import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
-import static org.dita.dost.util.URLUtils.stripFragment;
-import static org.dita.dost.util.URLUtils.toURI;
-import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
  * Branch filter module for map processing.
@@ -112,7 +111,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     private void rewriteDuplicates(final Element root) {
         // collect href and copy-to
         final Map<URI, Map<Set<URI>, List<Attr>>> refs = new HashMap<>();
-        for (final Element e: getTopicrefs(root)) {
+        for (final Element e : getTopicrefs(root)) {
             Attr attr = e.getAttributeNode(BRANCH_COPY_TO);
             if (attr == null) {
                 attr = e.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
@@ -129,7 +128,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
             }
         }
         // check and rewrite
-        for (final Map.Entry<URI, Map<Set<URI>, List<Attr>>> ref: refs.entrySet()) {
+        for (final Map.Entry<URI, Map<Set<URI>, List<Attr>>> ref : refs.entrySet()) {
             final Map<Set<URI>, List<Attr>> attrsMaps = ref.getValue();
             if (attrsMaps.size() > 1) {
                 if (attrsMaps.containsKey(Collections.EMPTY_LIST)) {
@@ -139,13 +138,14 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
                     attrsMaps.remove(first);
                 }
                 int i = 1;
-                for (final Map.Entry<Set<URI>, List<Attr>> attrsMap: attrsMaps.entrySet()) {
+                for (final Map.Entry<Set<URI>, List<Attr>> attrsMap : attrsMaps.entrySet()) {
                     final String suffix = "-" + i;
                     final List<Attr> attrs = attrsMap.getValue();
-                    for (final Attr attr: attrs) {
+                    for (final Attr attr : attrs) {
                         final String gen = addSuffix(attr.getValue(), suffix);
                         logger.info(MessageUtils.getMessage("DOTJ065I", attr.getValue(), gen)
-                                .setLocation(attr.getOwnerElement()).toString());
+                                .setLocation(attr.getOwnerElement())
+                                .toString());
                         if (attr.getName().equals(BRANCH_COPY_TO)) {
                             attr.setValue(gen);
                         } else {
@@ -195,9 +195,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     /** Add suffix to file name */
     private static String addSuffix(final String href, final String suffix) {
         final int idx = href.lastIndexOf(".");
-        return idx != -1
-                ? (href.substring(0, idx) + suffix + href.substring(idx))
-                : (href + suffix);
+        return idx != -1 ? (href.substring(0, idx) + suffix + href.substring(idx)) : (href + suffix);
     }
 
     /** Add suffix to file name */
@@ -221,18 +219,17 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     }
 
     private boolean isDitaFormat(final Attr formatAttr) {
-        return formatAttr == null ||
-                ATTR_FORMAT_VALUE_DITA.equals(formatAttr.getNodeValue()) ||
-                ATTR_FORMAT_VALUE_DITAMAP.equals(formatAttr.getNodeValue());
+        return formatAttr == null
+                || ATTR_FORMAT_VALUE_DITA.equals(formatAttr.getNodeValue())
+                || ATTR_FORMAT_VALUE_DITAMAP.equals(formatAttr.getNodeValue());
     }
 
     /** Filter map and remove excluded content. */
     private void filterBranches(final Element root) {
         final String domains = root.getAttribute(ATTRIBUTE_NAME_DOMAINS);
         final String specializations = root.getAttribute(ATTRIBUTE_NAME_SPECIALIZATIONS);
-        final QName[][] props = !domains.isEmpty()
-                ? getExtProps(domains)
-                : getExtPropsFromSpecializations(specializations);
+        final QName[][] props =
+                !domains.isEmpty() ? getExtProps(domains) : getExtPropsFromSpecializations(specializations);
         final SubjectScheme subjectSchemeMap = getSubjectScheme(root);
         final List<FilterUtils> baseFilter = getBaseFilter(subjectSchemeMap);
         filterBranches(root, baseFilter, props, subjectSchemeMap);
@@ -246,12 +243,15 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         return Collections.emptyList();
     }
 
-    private void filterBranches(final Element elem, final List<FilterUtils> filters, final QName[][] props,
-                                final SubjectScheme subjectSchemeMap) {
+    private void filterBranches(
+            final Element elem,
+            final List<FilterUtils> filters,
+            final QName[][] props,
+            final SubjectScheme subjectSchemeMap) {
         final List<FilterUtils> fs = combineFilterUtils(elem, filters, subjectSchemeMap);
 
         boolean exclude = false;
-        for (final FilterUtils f: fs) {
+        for (final FilterUtils f : fs) {
             exclude = f.needExclude(elem, props);
             if (exclude) {
                 break;
@@ -290,7 +290,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
         if (ditavalRefs.size() > 0) {
             // remove ditavalrefs
-            for (final Element branch: ditavalRefs) {
+            for (final Element branch : ditavalRefs) {
                 elem.removeChild(branch);
             }
             // create additional branches after current element
@@ -313,9 +313,10 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
                 branch.insertBefore(ditavalref, branch.getFirstChild());
                 final Branch currentFilter = filter.merge(ditavalref);
                 processAttributes(branch, currentFilter);
-                final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, Optional.empty(), Optional.empty());
+                final Branch childFilter = new Branch(
+                        currentFilter.resourcePrefix, currentFilter.resourceSuffix, Optional.empty(), Optional.empty());
                 // process children of all branches
-                for (final Element child: getChildElements(branch, MAP_TOPICREF)) {
+                for (final Element child : getChildElements(branch, MAP_TOPICREF)) {
                     if (DITAVAREF_D_DITAVALREF.matches(child)) {
                         continue;
                     }
@@ -324,7 +325,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
             }
         } else {
             processAttributes(elem, filter);
-            for (final Element child: getChildElements(elem, MAP_TOPICREF)) {
+            for (final Element child : getChildElements(elem, MAP_TOPICREF)) {
                 splitBranches(child, filter);
             }
         }
@@ -343,9 +344,8 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
                 final URI dstSource;
                 dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
                 final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
-                final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
-                        .result(dstSource)
-                        .uri(dstTemp);
+                final FileInfo.Builder dstBuilder =
+                        new FileInfo.Builder(hrefFileInfo).result(dstSource).uri(dstTemp);
                 if (dstBuilder.build().format == null) {
                     dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
                 }
@@ -354,8 +354,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
                         dstBuilder.src(copyToFileInfo.src);
                     }
                 }
-                final FileInfo dstFileInfo = dstBuilder
-                        .build();
+                final FileInfo dstFileInfo = dstBuilder.build();
 
                 elem.setAttribute(BRANCH_COPY_TO, dstTemp.toString());
                 if (!copyTo.isEmpty()) {
@@ -407,5 +406,4 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         });
         return toURI(buf.toString());
     }
-
 }

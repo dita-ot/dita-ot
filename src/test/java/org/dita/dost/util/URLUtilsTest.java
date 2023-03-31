@@ -7,62 +7,61 @@
  */
 package org.dita.dost.util;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import static org.dita.dost.util.URLUtils.toDirURI;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import static org.dita.dost.util.URLUtils.toDirURI;
-import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class URLUtilsTest {
 
     @Test
     public void testCorrectFile() {
-        //fail("Not yet implemented");
+        // fail("Not yet implemented");
     }
 
     @Test
     public void testCorrectURL() {
-        //fail("Not yet implemented");
+        // fail("Not yet implemented");
     }
 
     @Test
     public void testDecode() {
         assertEquals("foo bar.dita", URLUtils.decode("foo%20bar.dita"));
         assertEquals("foo bar.dita", URLUtils.decode("foo+bar.dita"));
-        
+
         assertEquals("f\u00f6\u00e5.dita", URLUtils.decode("f%C3%B6%C3%A5.dita"));
-        
+
         assertEquals("foo/bar.dita", URLUtils.decode("foo/bar.dita"));
         assertEquals("foo\\bar.dita", URLUtils.decode("foo%5Cbar.dita"));
-        
+
         assertEquals("foo?bar=baz&qux=quxx", URLUtils.decode("foo?bar=baz&qux=quxx"));
     }
-    
+
     @Test
     public void testUncorrect() {
-        //fail("Not yet implemented");
+        // fail("Not yet implemented");
     }
 
     @Test
     public void testGetCanonicalFileFromFileUrl() {
-        //fail("Not yet implemented");
+        // fail("Not yet implemented");
     }
 
     @Test
     public void testCorrectStringBoolean() {
-        //fail("Not yet implemented");
+        // fail("Not yet implemented");
     }
 
     @Test
     public void testGetURL() {
-        //fail("Not yet implemented");
+        // fail("Not yet implemented");
     }
 
     @Test
@@ -74,15 +73,15 @@ public class URLUtilsTest {
         assertEquals("foobar.dita%25", URLUtils.clean("foobar.dita%"));
 
         assertEquals("f%C3%B6%C3%A5.dita", URLUtils.clean("f\u00f6\u00e5.dita"));
-        
+
         assertEquals("foo/bar.dita", URLUtils.clean("foo/bar.dita"));
         assertEquals("foo/bar.dita", URLUtils.clean("foo\\bar.dita"));
-        
+
         assertEquals("foo?bar=baz&qux=quxx", URLUtils.clean("foo?bar=baz&qux=quxx"));
 
         assertEquals("http://www.example.com/foo/bar", URLUtils.clean("http://www.example.com/foo/bar"));
     }
-    
+
     @Test
     public void testCleanASCII() {
         assertEquals("foo.dita", URLUtils.clean("foo.dita", true));
@@ -98,7 +97,7 @@ public class URLUtilsTest {
         assertFalse(URLUtils.directoryContains(new URI("file:/src/test/"), new URI("file:/src/")));
         assertFalse(URLUtils.directoryContains(new URI("file:/src/"), new URI("file:/src/../test.txt")));
     }
-    
+
     @Test
     public void testIsAbsolute() throws URISyntaxException {
         assertTrue(URLUtils.isAbsolute(new URI("file:/foo")));
@@ -106,16 +105,16 @@ public class URLUtilsTest {
         assertFalse(URLUtils.isAbsolute(new URI("file:foo")));
         assertFalse(URLUtils.isAbsolute(new URI("foo")));
     }
- 
+
     @Test
     public void testToFileString() throws Exception {
         final Method method = URLUtils.class.getDeclaredMethod("toFile", String.class);
-        method.setAccessible(true);        
+        method.setAccessible(true);
         assertEquals(new File("test.txt"), method.invoke(null, "test.txt"));
         assertEquals(new File("foo bar.txt"), method.invoke(null, "foo%20bar.txt"));
         assertEquals(new File("foo" + File.separator + "bar.txt"), method.invoke(null, "foo/bar.txt"));
     }
-    
+
     @Test
     public void testToFileUri() throws URISyntaxException {
         assertEquals(new File("test.txt"), URLUtils.toFile(new URI("test.txt")));
@@ -123,9 +122,11 @@ public class URLUtilsTest {
         assertEquals(new File("foo bar.txt"), URLUtils.toFile(new URI("foo%20bar.txt")));
         assertEquals(new File(File.separator + "foo bar.txt"), URLUtils.toFile(new URI("file:/foo%20bar.txt")));
         assertEquals(new File("foo" + File.separator + "bar.txt"), URLUtils.toFile(new URI("foo/bar.txt")));
-        assertEquals(new File(File.separator + "foo" + File.separator + "bar.txt"), URLUtils.toFile(new URI("file:/foo/bar.txt")));
+        assertEquals(
+                new File(File.separator + "foo" + File.separator + "bar.txt"),
+                URLUtils.toFile(new URI("file:/foo/bar.txt")));
     }
-    
+
     @Test
     public void testFileToUri() throws URISyntaxException {
         assertEquals(new URI("test.txt"), URLUtils.toURI(new File("test.txt")));
@@ -146,21 +147,43 @@ public class URLUtilsTest {
 
     @Test
     public void testGetRelativePathFromMap() throws URISyntaxException {
-        assertEquals(new URI("../a.dita"), URLUtils.getRelativePath(new URI("file:/map/map.ditamap"), new URI("file:/a.dita")));
+        assertEquals(
+                new URI("../a.dita"),
+                URLUtils.getRelativePath(new URI("file:/map/map.ditamap"), new URI("file:/a.dita")));
         assertEquals(new URI("../a.dita"), URLUtils.getRelativePath(new URI("file:/map/"), new URI("file:/a.dita")));
-        assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map.ditamap"), new URI("file:/a.dita")));
-        assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map2/map.ditamap"), new URI("file:/map1/map2/a.dita")));
-        assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map2/"), new URI("file:/map1/map2/a.dita")));
-        assertEquals(new URI("map2/a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map.ditamap"), new URI("file:/map1/map2/a.dita")));
-        assertEquals(new URI("map2/a.dita"), URLUtils.getRelativePath(new URI("file:/map1/"), new URI("file:/map1/map2/a.dita")));
-        assertEquals(new URI("../topic/a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map.ditamap"), new URI("file:/topic/a.dita")));
-        assertEquals(new URI("a.dita#bar"), URLUtils.getRelativePath(new URI("file:/map.ditamap#foo"), new URI("file:/a.dita#bar")));
+        assertEquals(
+                new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map.ditamap"), new URI("file:/a.dita")));
+        assertEquals(
+                new URI("a.dita"),
+                URLUtils.getRelativePath(new URI("file:/map1/map2/map.ditamap"), new URI("file:/map1/map2/a.dita")));
+        assertEquals(
+                new URI("a.dita"),
+                URLUtils.getRelativePath(new URI("file:/map1/map2/"), new URI("file:/map1/map2/a.dita")));
+        assertEquals(
+                new URI("map2/a.dita"),
+                URLUtils.getRelativePath(new URI("file:/map1/map.ditamap"), new URI("file:/map1/map2/a.dita")));
+        assertEquals(
+                new URI("map2/a.dita"),
+                URLUtils.getRelativePath(new URI("file:/map1/"), new URI("file:/map1/map2/a.dita")));
+        assertEquals(
+                new URI("../topic/a.dita"),
+                URLUtils.getRelativePath(new URI("file:/map1/map.ditamap"), new URI("file:/topic/a.dita")));
+        assertEquals(
+                new URI("a.dita#bar"),
+                URLUtils.getRelativePath(new URI("file:/map.ditamap#foo"), new URI("file:/a.dita#bar")));
         assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/a.dita"), new URI("file:/a.dita")));
-        assertEquals(new URI("#bar"), URLUtils.getRelativePath(new URI("file:/a.dita#foo"), new URI("file:/a.dita#bar")));
+        assertEquals(
+                new URI("#bar"), URLUtils.getRelativePath(new URI("file:/a.dita#foo"), new URI("file:/a.dita#bar")));
         assertEquals(new URI("#bar"), URLUtils.getRelativePath(new URI("file:/a.dita"), new URI("#bar")));
-        assertEquals(new URI("file://a.dita"), URLUtils.getRelativePath(new URI("/map.ditamap"), new URI("file://a.dita")));
-        assertEquals(new URI("https://localhost/map.ditamap") ,URLUtils.getRelativePath(new URI("http://localhost/map.ditamap"), new URI("https://localhost/map.ditamap")));
-        assertEquals(new URI("http:///map.ditamap"), URLUtils.getRelativePath(new URI("http://localhost/map.ditamap"), new URI("http:///map.ditamap")));
+        assertEquals(
+                new URI("file://a.dita"), URLUtils.getRelativePath(new URI("/map.ditamap"), new URI("file://a.dita")));
+        assertEquals(
+                new URI("https://localhost/map.ditamap"),
+                URLUtils.getRelativePath(
+                        new URI("http://localhost/map.ditamap"), new URI("https://localhost/map.ditamap")));
+        assertEquals(
+                new URI("http:///map.ditamap"),
+                URLUtils.getRelativePath(new URI("http://localhost/map.ditamap"), new URI("http:///map.ditamap")));
     }
 
     @Test
@@ -168,7 +191,7 @@ public class URLUtilsTest {
         assertEquals(new URI("../"), URLUtils.getRelativePath(new URI("map/map.ditamap")));
         assertEquals(null, URLUtils.getRelativePath(new URI("map.ditamap")));
         assertEquals(new URI("../../"), URLUtils.getRelativePath(new URI("map1/map2/map.ditamap")));
-    } 
+    }
 
     @Test
     public void testSetFragment() throws URISyntaxException {
@@ -182,15 +205,20 @@ public class URLUtilsTest {
         assertEquals(new URI(""), URLUtils.setFragment(new URI("#bar"), null));
         assertEquals(new URI("file:/foo/bar#baz"), URLUtils.setFragment(new URI("file:/foo/bar"), "baz"));
         assertEquals(new URI("file:/foo/bar"), URLUtils.setFragment(new URI("file:/foo/bar"), null));
-        assertEquals(new URI("file://localhost/foo/bar#baz"), URLUtils.setFragment(new URI("file://localhost/foo/bar"), "baz"));
-        assertEquals(new URI("file://localhost/foo/bar"), URLUtils.setFragment(new URI("file://localhost/foo/bar"), null));
+        assertEquals(
+                new URI("file://localhost/foo/bar#baz"),
+                URLUtils.setFragment(new URI("file://localhost/foo/bar"), "baz"));
+        assertEquals(
+                new URI("file://localhost/foo/bar"), URLUtils.setFragment(new URI("file://localhost/foo/bar"), null));
         assertEquals(new URI("urn:foo:bar#baz"), URLUtils.setFragment(new URI("urn:foo:bar"), "baz"));
         assertEquals(new URI("urn:foo:bar"), URLUtils.setFragment(new URI("urn:foo:bar"), null));
     }
 
     @Test
     public void setFragment_mailto() {
-        assertEquals(URI.create("mailto:email@example.com?subject=Email"), URLUtils.setFragment(URI.create("mailto:email@example.com?subject=Email"), null));
+        assertEquals(
+                URI.create("mailto:email@example.com?subject=Email"),
+                URLUtils.setFragment(URI.create("mailto:email@example.com?subject=Email"), null));
     }
 
     @Test
@@ -203,7 +231,7 @@ public class URLUtilsTest {
         assertEquals(new URI("file://localhost/foo/bar"), URLUtils.removeFragment(new URI("file://localhost/foo/bar")));
         assertEquals(new URI("urn:foo:bar"), URLUtils.removeFragment(new URI("urn:foo:bar")));
     }
-    
+
     @Test
     public void testStripFragment() throws URISyntaxException {
         assertEquals(new URI("foo"), URLUtils.stripFragment(new URI("foo#bar")));
@@ -230,7 +258,8 @@ public class URLUtilsTest {
         try {
             assertNull(URLUtils.getTopicID(null));
             fail();
-        } catch (final NullPointerException e) {}
+        } catch (final NullPointerException e) {
+        }
     }
 
     @Test
@@ -245,7 +274,8 @@ public class URLUtilsTest {
         try {
             assertNull(URLUtils.getElementID(null));
             fail();
-        } catch (final NullPointerException e) {}
+        } catch (final NullPointerException e) {
+        }
     }
 
     @Test
@@ -255,11 +285,13 @@ public class URLUtilsTest {
         try {
             URLUtils.setElementID(new URI("foo#"), "qux");
             fail();
-        } catch (final IllegalArgumentException e) {}
+        } catch (final IllegalArgumentException e) {
+        }
         try {
             URLUtils.setElementID(new URI("foo"), "qux");
             fail();
-        } catch (final IllegalArgumentException e) {}
+        } catch (final IllegalArgumentException e) {
+        }
 
         assertEquals(new URI("foo#bar"), URLUtils.setElementID(new URI("foo#bar/baz"), null));
         assertEquals(new URI("foo#bar"), URLUtils.setElementID(new URI("foo#bar"), null));
@@ -269,7 +301,8 @@ public class URLUtilsTest {
         try {
             URLUtils.setElementID(null, null);
             fail();
-        } catch (final NullPointerException e) {}
+        } catch (final NullPointerException e) {
+        }
     }
 
     @Rule
@@ -299,12 +332,15 @@ public class URLUtilsTest {
 
     @Test
     public void setQuery_mailto() {
-        assertEquals(URI.create("mailto:email@example.com?subject=Email"), URLUtils.setQuery(URI.create("mailto:email@example.com?subject=Email"), null));
+        assertEquals(
+                URI.create("mailto:email@example.com?subject=Email"),
+                URLUtils.setQuery(URI.create("mailto:email@example.com?subject=Email"), null));
     }
 
     @Test
     public void addSuffixToPath() {
-        assertEquals(URI.create("file:/foo/barquz.baz"), URLUtils.addSuffixToPath(URI.create("file:/foo/bar.baz"), "quz"));
+        assertEquals(
+                URI.create("file:/foo/barquz.baz"), URLUtils.addSuffixToPath(URI.create("file:/foo/bar.baz"), "quz"));
         assertEquals(URI.create("file:/foo/barquz"), URLUtils.addSuffixToPath(URI.create("file:/foo/bar"), "quz"));
     }
 }

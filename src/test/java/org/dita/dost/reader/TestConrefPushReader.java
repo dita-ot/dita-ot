@@ -7,6 +7,18 @@
  */
 package org.dita.dost.reader;
 
+import static junit.framework.TestCase.assertEquals;
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.TestUtils.buildControlDocument;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Map;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.ConrefPushReader.MoveKey;
 import org.dita.dost.store.StreamStore;
@@ -17,19 +29,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-import java.util.Hashtable;
-import java.util.Map;
-
-import static junit.framework.TestCase.assertEquals;
-import static org.apache.commons.io.FileUtils.copyFile;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.TestUtils.buildControlDocument;
 
 public class TestConrefPushReader {
 
@@ -57,16 +56,20 @@ public class TestConrefPushReader {
 
         final Map<File, Hashtable<MoveKey, DocumentFragment>> pushSet = pushReader.getPushMap();
         assertEquals(1, pushSet.entrySet().size());
-        final Hashtable<MoveKey, DocumentFragment> act = pushSet.values().iterator().next();
+        final Hashtable<MoveKey, DocumentFragment> act =
+                pushSet.values().iterator().next();
         assertXMLEqual(
                 toDocument(act.get(new MoveKey("#X/A", "pushbefore"))),
-                buildControlDocument("<step class='- topic/li task/step '><cmd class='- topic/ph task/cmd '>before</cmd></step>"));
+                buildControlDocument(
+                        "<step class='- topic/li task/step '><cmd class='- topic/ph task/cmd '>before</cmd></step>"));
         assertXMLEqual(
                 toDocument(act.get(new MoveKey("#X/B", "pushafter"))),
-                buildControlDocument("<step class='- topic/li task/step '><cmd class='- topic/ph task/cmd '>after</cmd></step>"));
+                buildControlDocument(
+                        "<step class='- topic/li task/step '><cmd class='- topic/ph task/cmd '>after</cmd></step>"));
         assertXMLEqual(
                 toDocument(act.get(new MoveKey("#X/C", "pushreplace"))),
-                buildControlDocument("<step class='- topic/li task/step ' id='C'><cmd class='- topic/ph task/cmd '>replace</cmd></step>"));
+                buildControlDocument(
+                        "<step class='- topic/li task/step ' id='C'><cmd class='- topic/ph task/cmd '>replace</cmd></step>"));
     }
 
     private Document toDocument(final DocumentFragment fragment) {
@@ -79,5 +82,4 @@ public class TestConrefPushReader {
     public void teardown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
-
 }

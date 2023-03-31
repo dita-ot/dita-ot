@@ -17,7 +17,6 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
 import org.apache.tools.ant.util.FileUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -49,8 +48,11 @@ final class FilterModule extends AbstractPipelineModuleImpl {
         final FilterUtils filterUtils;
         if (ditavalFile != null) {
             ditaValReader.read(ditavalFile.toURI());
-            filterUtils = new FilterUtils(printTranstype.contains(transtype), ditaValReader.getFilterMap(),
-                    ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
+            filterUtils = new FilterUtils(
+                    printTranstype.contains(transtype),
+                    ditaValReader.getFilterMap(),
+                    ditaValReader.getForegroundConflictColor(),
+                    ditaValReader.getBackgroundConflictColor());
         } else {
             filterUtils = new FilterUtils(printTranstype.contains(transtype));
         }
@@ -71,7 +73,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException(e);
         }
 
-        for (final FileInfo f: job.getFileInfo(fileInfoFilter)) {
+        for (final FileInfo f : job.getFileInfo(fileInfoFilter)) {
             final File file = new File(job.tempDir, f.file.getPath());
             logger.info("Processing " + file.getAbsolutePath());
 
@@ -110,5 +112,4 @@ final class FilterModule extends AbstractPipelineModuleImpl {
 
         return null;
     }
-
 }

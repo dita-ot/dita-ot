@@ -1,13 +1,23 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.reader;
 
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.reader.MergeMapParser.ATTRIBUTE_NAME_OHREF;
+import static org.dita.dost.reader.MergeMapParser.ATTRIBUTE_NAME_OID;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
+import static org.dita.dost.util.FileUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.*;
+
+import java.io.File;
+import java.net.URI;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.MergeUtils;
@@ -17,17 +27,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
-
-import java.io.File;
-import java.net.URI;
-
-import static javax.xml.XMLConstants.XML_NS_URI;
-import static org.dita.dost.reader.MergeMapParser.ATTRIBUTE_NAME_OHREF;
-import static org.dita.dost.reader.MergeMapParser.ATTRIBUTE_NAME_OID;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.DitaUtils.isLocalScope;
-import static org.dita.dost.util.FileUtils.stripFragment;
-import static org.dita.dost.util.URLUtils.*;
 
 /**
  * MergeTopicParser reads topic file and transform the references to other dita
@@ -43,6 +42,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     /** ID of the first topic */
     private String firstTopicId = null;
+
     private final MergeUtils util;
     private Job job;
     private DITAOTLogger logger;
@@ -62,7 +62,9 @@ public final class MergeTopicParser extends XMLFilterImpl {
         this.logger = logger;
     }
 
-    public final void setJob(final Job job) { this.job = job; }
+    public final void setJob(final Job job) {
+        this.job = job;
+    }
 
     /**
      * Set merge output file
@@ -127,14 +129,18 @@ public final class MergeTopicParser extends XMLFilterImpl {
             } else {
                 pathFromMap = toURI(filePath).resolve(attValue.toString().substring(0, sharpIndex));
             }
-            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, toURI(pathFromMap + attValue.toString().substring(sharpIndex)).toString());
+            XMLUtils.addOrSetAttribute(
+                    atts,
+                    ATTRIBUTE_NAME_OHREF,
+                    toURI(pathFromMap + attValue.toString().substring(sharpIndex))
+                            .toString());
             final String topicID = getTopicID(attValue.getFragment());
             final int index = attValue.toString().indexOf(SLASH, sharpIndex);
             final String elementId = index != -1 ? attValue.toString().substring(index) : "";
             final URI pathWithTopicID = setFragment(URLUtils.toDirURI(dirPath).resolve(pathFromMap), topicID);
-            if (util.findId(pathWithTopicID)) {// topicId found
+            if (util.findId(pathWithTopicID)) { // topicId found
                 retAttValue = toURI(SHARP + util.getIdValue(pathWithTopicID) + elementId);
-            } else {// topicId not found
+            } else { // topicId not found
                 retAttValue = toURI(SHARP + util.addId(pathWithTopicID) + elementId);
             }
         } else { // href value refer to a topic
@@ -153,7 +159,6 @@ public final class MergeTopicParser extends XMLFilterImpl {
                     retAttValue = toURI(SHARP + util.addId(absolutePath));
                     util.addId(key, util.getIdValue(absolutePath));
                 }
-
             }
         }
         return retAttValue;
@@ -174,7 +179,8 @@ public final class MergeTopicParser extends XMLFilterImpl {
         filePath = stripFragment(filename);
         dirPath = dir;
         try {
-            final URI f = dir.toPath().resolve(filePath).toAbsolutePath().toFile().toURI();
+            final URI f =
+                    dir.toPath().resolve(filePath).toAbsolutePath().toFile().toURI();
             logger.info("Processing " + f);
             job.getStore().transform(f, this);
         } catch (final RuntimeException e) {
@@ -223,22 +229,29 @@ public final class MergeTopicParser extends XMLFilterImpl {
         final URI attValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         if (attValue != null) {
             final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-            if (isLocalScope(scopeValue)
-                    && attValue.getScheme() == null) {
+            if (isLocalScope(scopeValue) && attValue.getScheme() == null) {
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
                 // The scope for @href is local
-                if ((TOPIC_XREF.matches(classValue) || TOPIC_LINK.matches(classValue) || TOPIC_LQ.matches(classValue)
-                // term, keyword, cite, ph, and dt are resolved as keyref can make them links
-                        || TOPIC_TERM.matches(classValue) || TOPIC_KEYWORD.matches(classValue)
-                        || TOPIC_CITE.matches(classValue) || TOPIC_PH.matches(classValue)
-                        || TOPIC_DT.matches(classValue))
+                if ((TOPIC_XREF.matches(classValue)
+                                || TOPIC_LINK.matches(classValue)
+                                || TOPIC_LQ.matches(classValue)
+                                // term, keyword, cite, ph, and dt are resolved as keyref can make them links
+                                || TOPIC_TERM.matches(classValue)
+                                || TOPIC_KEYWORD.matches(classValue)
+                                || TOPIC_CITE.matches(classValue)
+                                || TOPIC_PH.matches(classValue)
+                                || TOPIC_DT.matches(classValue))
                         && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equals(formatValue))) {
                     // local xref or link that refers to dita file
-                    XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, handleLocalDita(attValue, atts).toString());
+                    XMLUtils.addOrSetAttribute(
+                            atts,
+                            ATTRIBUTE_NAME_HREF,
+                            handleLocalDita(attValue, atts).toString());
                 } else {
                     // local @href other than local xref and link that refers to
                     // dita file
-                    XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, handleLocalHref(attValue).toString());
+                    XMLUtils.addOrSetAttribute(
+                            atts, ATTRIBUTE_NAME_HREF, handleLocalHref(attValue).toString());
                 }
             }
         }
@@ -256,5 +269,4 @@ public final class MergeTopicParser extends XMLFilterImpl {
         final URI merge = output.toURI();
         return getRelativePath(merge, reference);
     }
-
 }

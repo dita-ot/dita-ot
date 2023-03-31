@@ -11,5 +11,4 @@ package org.dita.dost.platform;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record Alias(String alias) {
-}
+public record Alias(String alias) {}

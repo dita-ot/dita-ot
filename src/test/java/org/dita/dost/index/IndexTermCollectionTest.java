@@ -10,16 +10,14 @@ package org.dita.dost.index;
 import static org.dita.dost.TestUtils.assertHtmlEqual;
 import static org.junit.Assert.*;
 
-import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-
+import org.dita.dost.TestUtils;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.writer.HTMLIndexWriter;
 import org.junit.After;
 import org.junit.Before;
@@ -99,8 +97,7 @@ public class IndexTermCollectionTest {
         second.setTermName("second");
         second.setTermKey("second");
         i.addTerm(second);
-        assertEquals(new HashSet<>(new ArrayList<>(Arrays.asList(first, second))),
-                new HashSet<>(i.getTermList()));
+        assertEquals(new HashSet<>(new ArrayList<>(Arrays.asList(first, second))), new HashSet<>(i.getTermList()));
     }
 
     @Test
@@ -115,8 +112,7 @@ public class IndexTermCollectionTest {
         i.addTerm(second);
         i.addTerm(first);
         i.sort();
-        assertEquals(new ArrayList<>(Arrays.asList(first, second)),
-                i.getTermList());
+        assertEquals(new ArrayList<>(Arrays.asList(first, second)), i.getTermList());
     }
 
     @Test
@@ -134,21 +130,25 @@ public class IndexTermCollectionTest {
         i.addTerm(first);
         i.outputTerms();
 
-        assertHtmlEqual(new InputSource(new File(expDir, "foo.hhk").toURI().toString()),
+        assertHtmlEqual(
+                new InputSource(new File(expDir, "foo.hhk").toURI().toString()),
                 new InputSource(new File(tempDir, "foo.hhk").toURI().toString()));
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     public void testSetOutputFileRoot() {
         fail("Not yet implemented");
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     public void testGetPipelineHashIO() {
         fail("Not yet implemented");
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     public void testSetPipelineHashIO() {
         fail("Not yet implemented");
     }
@@ -157,5 +157,4 @@ public class IndexTermCollectionTest {
     public void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
-
 }

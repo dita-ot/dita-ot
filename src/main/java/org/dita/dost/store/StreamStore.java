@@ -8,12 +8,27 @@
 
 package org.dita.dost.store;
 
+import static org.apache.commons.io.FileUtils.*;
+import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
+import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.URLUtils.toURI;
+
 import com.google.common.annotations.VisibleForTesting;
+import java.io.*;
+import java.net.URI;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.ReceivingContentHandler;
-import net.sf.saxon.s9api.*;
 import net.sf.saxon.lib.EmptySource;
+import net.sf.saxon.s9api.*;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
@@ -22,22 +37,6 @@ import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.*;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.net.URI;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-
-import static org.apache.commons.io.FileUtils.*;
-import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
-import static org.dita.dost.util.URLUtils.toFile;
-import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * Stream based XML I/O
@@ -52,7 +51,7 @@ public class StreamStore extends AbstractStore implements Store {
 
     @Override
     public Document getImmutableDocument(final URI path) throws IOException {
-//        return (Document) NodeOverNodeInfo.wrap(getImmutableNode(path).getUnderlyingNode());
+        //        return (Document) NodeOverNodeInfo.wrap(getImmutableNode(path).getUnderlyingNode());
         return getDocument(path);
     }
 
@@ -136,32 +135,33 @@ public class StreamStore extends AbstractStore implements Store {
         }
     }
 
-//    @Override
-//    public void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
-//        assert input.isAbsolute();
-//        if (!input.getScheme().equals("file")) {
-//            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
-//        }
-//
-//        final File inputFile = new File(input);
-//        final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
-//        transformURI(inputFile.toURI(), outputFile.toURI(), filters);
-//        try {
-//            deleteQuietly(inputFile);
-//            moveFile(outputFile, inputFile);
-//        } catch (final IOException e) {
-//            throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
-//        }
-//    }
-//
-//    @Override
-//    public void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
-//        if (input.equals(output)) {
-//            transform(input, filters);
-//        } else {
-//            transformURI(input, output, filters);
-//        }
-//    }
+    //    @Override
+    //    public void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
+    //        assert input.isAbsolute();
+    //        if (!input.getScheme().equals("file")) {
+    //            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
+    //        }
+    //
+    //        final File inputFile = new File(input);
+    //        final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
+    //        transformURI(inputFile.toURI(), outputFile.toURI(), filters);
+    //        try {
+    //            deleteQuietly(inputFile);
+    //            moveFile(outputFile, inputFile);
+    //        } catch (final IOException e) {
+    //            throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
+    //        }
+    //    }
+    //
+    //    @Override
+    //    public void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException
+    // {
+    //        if (input.equals(output)) {
+    //            transform(input, filters);
+    //        } else {
+    //            transformURI(input, output, filters);
+    //        }
+    //    }
 
     @Override
     void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
@@ -268,13 +268,13 @@ public class StreamStore extends AbstractStore implements Store {
     @Override
     public ContentHandler getContentHandler(final URI outputFile) throws SaxonApiException, IOException {
         final net.sf.saxon.Configuration configuration = xmlUtils.getProcessor().getUnderlyingConfiguration();
-//        final SerializerFactory sf = configuration.getSerializerFactory();
+        //        final SerializerFactory sf = configuration.getSerializerFactory();
         final PipelineConfiguration pipelineConfiguration = configuration.makePipelineConfiguration();
 
         final Destination dst = getDestination(outputFile);
         final Receiver receiver = dst.getReceiver(pipelineConfiguration, new SerializationProperties());
-//        final Result out = job.getStore().getResult(outputFile);
-//        final Receiver receiver = sf.getReceiver(out, new SerializationProperties());
+        //        final Result out = job.getStore().getResult(outputFile);
+        //        final Receiver receiver = sf.getReceiver(out, new SerializationProperties());
 
         final ReceivingContentHandler receivingContentHandler = new ReceivingContentHandler();
         receivingContentHandler.setPipelineConfiguration(pipelineConfiguration);
@@ -367,7 +367,7 @@ public class StreamStore extends AbstractStore implements Store {
         } else {
             if (LOG) System.err.println("  getOutputStream:" + f);
             throw new UnsupportedOperationException("Unable to write to " + f);
-//            return f.toURL().openStream();
+            //            return f.toURL().openStream();
         }
     }
 }

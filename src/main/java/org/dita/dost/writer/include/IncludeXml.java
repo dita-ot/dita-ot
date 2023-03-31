@@ -8,23 +8,21 @@
 
 package org.dita.dost.writer.include;
 
+import static net.sf.saxon.s9api.streams.Steps.id;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
+import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.toURI;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.stream.Stream;
 import net.sf.saxon.s9api.XdmAtomicValue;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.stream.Stream;
-
-import static net.sf.saxon.s9api.streams.Steps.id;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
-import static org.dita.dost.util.URLUtils.stripFragment;
-import static org.dita.dost.util.URLUtils.toURI;
 
 final class IncludeXml {
     private final Job job;

@@ -8,6 +8,13 @@
 
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
+
+import java.io.*;
+import java.net.URI;
+import java.util.*;
+import javax.xml.namespace.QName;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.util.Job;
@@ -17,14 +24,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.xml.namespace.QName;
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toURI;
 
 /**
  * Subject scheme reader.
@@ -115,11 +114,11 @@ public class SubjectSchemeReader {
             throw new IOException("Failed to read subject scheme graph: " + e.getMessage(), e);
         }
 
-        for (final Map.Entry<Object, Object> entry: prop.entrySet()) {
+        for (final Map.Entry<Object, Object> entry : prop.entrySet()) {
             final String key = (String) entry.getKey();
             final String value = (String) entry.getValue();
             final Set<URI> r = new HashSet<>();
-            for (final String v: StringUtils.restoreSet(value, COMMA)) {
+            for (final String v : StringUtils.restoreSet(value, COMMA)) {
                 r.add(toURI(v));
             }
             graph.put(toURI(key), r);
@@ -142,7 +141,7 @@ public class SubjectSchemeReader {
             return;
         }
         final Properties prop = new Properties();
-        for (final Map.Entry<URI, Set<URI>> entry: m.entrySet()) {
+        for (final Map.Entry<URI, Set<URI>> entry : m.entrySet()) {
             final URI key = entry.getKey();
             final String value = StringUtils.join(entry.getValue(), COMMA);
             prop.setProperty(key.getPath(), value);
@@ -176,7 +175,7 @@ public class SubjectSchemeReader {
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
-            logger.error(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -258,7 +257,7 @@ public class SubjectSchemeReader {
             final NodeList children = node.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    queue.add((Element)children.item(i));
+                    queue.add((Element) children.item(i));
                 }
             }
             if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
@@ -279,7 +278,8 @@ public class SubjectSchemeReader {
      * @param attName attribute name
      * @param category enumeration category name
      */
-    private void putValuePairsIntoMap(final Element subtree, final String elementName, final QName attName, final String category) {
+    private void putValuePairsIntoMap(
+            final Element subtree, final String elementName, final QName attName, final String category) {
         if (subtree == null || attName == null) {
             return;
         }
@@ -302,7 +302,7 @@ public class SubjectSchemeReader {
             final NodeList children = node.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    queue.offer((Element)children.item(i));
+                    queue.offer((Element) children.item(i));
                 }
             }
             if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
@@ -315,5 +315,4 @@ public class SubjectSchemeReader {
         valueMap.put(elementName, valueSet);
         validValuesMap.put(attName, valueMap);
     }
-
 }

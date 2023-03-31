@@ -1,13 +1,32 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2007 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2007 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.reader;
 
+import static java.util.Collections.unmodifiableSet;
+import static org.apache.commons.io.FilenameUtils.getBaseName;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.getDitaVersion;
+import static org.dita.dost.util.FileUtils.getFragment;
+import static org.dita.dost.util.FileUtils.replaceExtension;
+import static org.dita.dost.util.StringUtils.join;
+import static org.dita.dost.util.StringUtils.split;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamWriter;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
@@ -22,26 +41,6 @@ import org.dita.dost.writer.ChunkTopicParser;
 import org.dita.dost.writer.SeparateChunkTopicParser;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Collections.unmodifiableSet;
-import static org.apache.commons.io.FilenameUtils.getBaseName;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.DitaUtils.getDitaVersion;
-import static org.dita.dost.util.FileUtils.getFragment;
-import static org.dita.dost.util.FileUtils.replaceExtension;
-import static org.dita.dost.util.StringUtils.join;
-import static org.dita.dost.util.StringUtils.split;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * ChunkMapReader class, read and filter ditamap file for chunking.
@@ -85,7 +84,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme)
+                    Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -116,7 +116,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     @Override
     public Document process(final Document doc) {
         final Float ditaVersion = getDitaVersion(doc.getDocumentElement());
-        if (ditaVersion == null ||ditaVersion >= 2.0f) {
+        if (ditaVersion == null || ditaVersion >= 2.0f) {
             return doc;
         }
         final Element root = doc.getDocumentElement();
@@ -184,7 +184,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
     }
 
-    public static String getChunkByToken(final Collection<String> chunkValue, final String category, final String defaultToken) {
+    public static String getChunkByToken(
+            final Collection<String> chunkValue, final String category, final String defaultToken) {
         if (chunkValue.isEmpty()) {
             return defaultToken;
         }
@@ -239,8 +240,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
         try (final OutputStream newFileWriter = job.getStore().getOutputStream(newFile)) {
             final XMLStreamWriter o = XMLOutputFactory.newInstance().createXMLStreamWriter(newFileWriter, UTF8);
             o.writeStartDocument();
-            o.writeProcessingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + new File(newFile.resolve(".")).getAbsolutePath());
-            o.writeProcessingInstruction(PI_WORKDIR_TARGET_URI, newFile.resolve(".").toString());
+            o.writeProcessingInstruction(
+                    PI_WORKDIR_TARGET, UNIX_SEPARATOR + new File(newFile.resolve(".")).getAbsolutePath());
+            o.writeProcessingInstruction(
+                    PI_WORKDIR_TARGET_URI, newFile.resolve(".").toString());
             o.writeStartElement(ELEMENT_NAME_DITA);
             o.writeEndElement();
             o.writeEndDocument();
@@ -322,15 +325,16 @@ public final class ChunkMapReader extends AbstractDomFilter {
         } else if (chunk.contains(CHUNK_TO_CONTENT)) {
             if (href != null || copyTo != null || topicref.hasChildNodes()) {
                 if (chunk.contains(CHUNK_BY_TOPIC)) {
-                    logger.warn(MessageUtils.getMessage("DOTJ064W").setLocation(topicref).toString());
+                    logger.warn(MessageUtils.getMessage("DOTJ064W")
+                            .setLocation(topicref)
+                            .toString());
                 }
                 if (href == null) {
                     generateStumpTopic(topicref);
                 }
                 processCombineChunk(topicref);
             }
-        } else if (chunk.contains(CHUNK_TO_NAVIGATION)
-                && supportToNavigation) {
+        } else if (chunk.contains(CHUNK_TO_NAVIGATION) && supportToNavigation) {
             processChildTopicref(topicref);
             processNavitation(topicref);
         } else if (chunkByToken.equals(CHUNK_BY_TOPIC)) {
@@ -361,7 +365,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
      */
     private void processNavitation(final Element topicref) {
         // create new map's root element
-        final Element root = (Element) topicref.getOwnerDocument().getDocumentElement().cloneNode(false);
+        final Element root =
+                (Element) topicref.getOwnerDocument().getDocumentElement().cloneNode(false);
         // create navref element
         final Element navref = topicref.getOwnerDocument().createElement(MAP_NAVREF.localName);
         final String newMapFile = chunkFilenameGenerator.generateFilename("MAPCHUNK", FILE_EXTENSION_DITAMAP);
@@ -428,13 +433,15 @@ public final class ChunkMapReader extends AbstractDomFilter {
             final XMLSerializer serializer = XMLSerializer.newInstance(output);
             serializer.writeStartDocument();
             if (title == null && shortDesc == null) {
-                //topicgroup with no title, no shortdesc, just need a non titled stub
+                // topicgroup with no title, no shortdesc, just need a non titled stub
                 serializer.writeStartElement(ELEMENT_NAME_DITA);
-                serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
+                serializer.writeAttribute(
+                        DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
                 serializer.writeEndElement(); // dita
             } else {
                 serializer.writeStartElement(TOPIC_TOPIC.localName);
-                serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
+                serializer.writeAttribute(
+                        DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.3");
                 serializer.writeAttribute(ATTRIBUTE_NAME_ID, id);
                 serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString());
                 serializer.writeAttribute(ATTRIBUTE_NAME_DOMAINS, "");
@@ -471,7 +478,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
         } else if (id != null) {
             outputFileName = curr.result.resolve(id + FILE_EXTENSION_DITA);
         } else {
-            final Set<URI> results = job.getFileInfo().stream().map(fi -> fi.result).collect(Collectors.toSet());
+            final Set<URI> results =
+                    job.getFileInfo().stream().map(fi -> fi.result).collect(Collectors.toSet());
             do {
                 outputFileName = curr.result.resolve(generateFilename());
             } while (results.contains(outputFileName));
@@ -528,13 +536,13 @@ public final class ChunkMapReader extends AbstractDomFilter {
         chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
         chunkParser.write(currentFile);
     }
-    
+
     /** Before combining topics in a branch, ensure any descendant topicref with @chunk and no @href has a stub */
     private void createChildTopicrefStubs(final List<Element> topicrefs) {
         if (!topicrefs.isEmpty()) {
             for (final Element currentElem : topicrefs) {
                 final String href = getValue(currentElem, ATTRIBUTE_NAME_HREF);
-                final String chunk = getValue(currentElem,ATTRIBUTE_NAME_CHUNK);
+                final String chunk = getValue(currentElem, ATTRIBUTE_NAME_CHUNK);
                 if (href == null && chunk != null) {
                     generateStumpTopic(currentElem);
                 }
@@ -547,8 +555,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
         if (href.length() != 0) {
             if (changeTable.containsKey(currentFile.resolve(href))) {
-                URI res = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP),
-                        currentFile.resolve(href));
+                URI res = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), currentFile.resolve(href));
                 final String fragment = getFragment(href);
                 if (fragment != null) {
                     res = setFragment(res, fragment);
@@ -603,5 +610,4 @@ public final class ChunkMapReader extends AbstractDomFilter {
     public void supportToNavigation(final boolean supportToNavigation) {
         this.supportToNavigation = supportToNavigation;
     }
-
 }

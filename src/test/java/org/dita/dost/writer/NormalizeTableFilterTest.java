@@ -7,26 +7,24 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.TestUtils.CachingLogger;
-import org.dita.dost.TestUtils.CachingLogger.Message;
-import org.dita.dost.util.XMLUtils;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
+import static org.dita.dost.TestUtils.CachingLogger.Message.Level.*;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.junit.Assert.assertEquals;
 
+import java.io.InputStream;
+import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
-import java.io.InputStream;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.dita.dost.TestUtils.CachingLogger.Message.Level.*;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.junit.Assert.assertEquals;
+import org.dita.dost.TestUtils.CachingLogger;
+import org.dita.dost.TestUtils.CachingLogger.Message;
+import org.dita.dost.util.XMLUtils;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 public class NormalizeTableFilterTest {
 
@@ -63,7 +61,7 @@ public class NormalizeTableFilterTest {
     public void rowspan() throws Exception {
         test("rowspan.dita");
     }
-    
+
     @Test
     public void onlyrows() throws Exception {
         test("onlyRows.dita");
@@ -87,18 +85,19 @@ public class NormalizeTableFilterTest {
     @Test
     public void broken() throws Exception {
         final CachingLogger logger = test("broken.dita");
-        final List<Message> errors = logger.getMessages().stream()
-                .filter(m -> m.level == ERROR)
-                .toList();
+        final List<Message> errors =
+                logger.getMessages().stream().filter(m -> m.level == ERROR).toList();
         assertEquals(8, errors.size());
     }
 
     private CachingLogger test(final String file) throws Exception {
         final DocumentBuilder db = dbf.newDocumentBuilder();
-        final InputStream expStream = getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/exp/" + file);
+        final InputStream expStream =
+                getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/exp/" + file);
 
         final Transformer t = tf.newTransformer();
-        final InputStream src = getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/src/" + file);
+        final InputStream src =
+                getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/src/" + file);
         final NormalizeTableFilter f = new NormalizeTableFilter();
         f.setParent(XMLUtils.getXMLReader());
         final CachingLogger logger = new CachingLogger();
@@ -110,5 +109,4 @@ public class NormalizeTableFilterTest {
         assertXMLEqual(db.parse(expStream), act);
         return logger;
     }
-
 }

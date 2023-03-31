@@ -7,6 +7,16 @@
  */
 package org.dita.dost.module;
 
+import static java.net.URI.create;
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -21,17 +31,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.net.URI.create;
-import static org.apache.commons.io.FileUtils.copyFile;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR;
-import static org.junit.Assert.assertEquals;
 
 public class ImageMetadataModuleTest {
 
@@ -55,12 +54,12 @@ public class ImageMetadataModuleTest {
         job.setInputDir(srcDir.toURI());
         job.addAll(Stream.of("img.xxx", "img.png", "img.gif", "img.jpg")
                 .map(p -> new Builder()
-                        .uri(create(p)).src(new File(srcDir, p).toURI()).format("html")
+                        .uri(create(p))
+                        .src(new File(srcDir, p).toURI())
+                        .format("html")
                         .build())
                 .collect(Collectors.toList()));
-        job.add(new Builder()
-                .uri(create("test.dita")).format("dita")
-                .build());
+        job.add(new Builder().uri(create("test.dita")).format("dita").build());
 
         final ImageMetadataModule filter = new ImageMetadataModule();
         filter.setLogger(new TestUtils.TestLogger());
@@ -70,7 +69,8 @@ public class ImageMetadataModuleTest {
         input.setAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR, new File(tempDir, "out").getAbsolutePath());
         filter.execute(input);
 
-        assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
+        assertXMLEqual(
+                new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
         assertEquals("image", job.getFileInfo(create("img.png")).format);
         assertEquals("image", job.getFileInfo(create("img.gif")).format);
@@ -82,5 +82,4 @@ public class ImageMetadataModuleTest {
     public static void teardown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
-
 }

@@ -7,8 +7,8 @@
  */
 package org.dita.dost.reader;
 
-import static org.dita.dost.TestUtils.parse;
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
+import static org.dita.dost.TestUtils.parse;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.dita.dost.util.Constants.TOPIC_XREF;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -25,7 +26,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Predicates;
+import net.sf.saxon.s9api.streams.Steps;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.store.StreamStore;
@@ -34,12 +37,6 @@ import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.ImmutableMap;
-
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.streams.Predicates;
-import net.sf.saxon.s9api.streams.Steps;
 
 public class ChunkMapReaderTest {
 
@@ -97,7 +94,8 @@ public class ChunkMapReaderTest {
 
         mapReader.read(new File(tempDir, "missing.ditamap"));
 
-        assertEquals(ImmutableMap.<URI, URI>builder()
+        assertEquals(
+                ImmutableMap.<URI, URI>builder()
                         .put(prefixTemp("2.dita"), prefixTemp("2.dita"))
                         .build(),
                 mapReader.getChangeTable());
@@ -117,7 +115,8 @@ public class ChunkMapReaderTest {
 
         mapReader.read(new File(tempDir, "map.ditamap"));
 
-        assertEquals(ImmutableMap.<URI, URI>builder()
+        assertEquals(
+                ImmutableMap.<URI, URI>builder()
                         .put(prefixTemp("map.dita"), prefixTemp("map.dita"))
                         .put(prefixTemp("1.dita"), prefixTemp("map.dita#topic_qft_qwn_hv"))
                         .put(prefixTemp("1.dita#topic_qft_qwn_hv"), prefixTemp("map.dita#topic_qft_qwn_hv"))
@@ -128,9 +127,10 @@ public class ChunkMapReaderTest {
                         .build(),
                 mapReader.getChangeTable());
 
-        assertEquals(Collections.emptyMap(),
-                mapReader.getConflicTable());
-        assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+        assertEquals(Collections.emptyMap(), mapReader.getConflicTable());
+        assertEquals(
+                0,
+                logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
     }
 
     @Test
@@ -144,7 +144,8 @@ public class ChunkMapReaderTest {
 
         mapReader.read(new File(tempDir, "conflict.ditamap"));
 
-        assertEquals(ImmutableMap.<URI, URI>builder()
+        assertEquals(
+                ImmutableMap.<URI, URI>builder()
                         .put(prefixTemp("Chunk0.dita"), prefixTemp("Chunk0.dita"))
                         .put(prefixTemp("Chunk2.dita"), prefixTemp("Chunk2.dita"))
                         .put(prefixTemp("Chunk1.dita"), prefixTemp("Chunk2.dita"))
@@ -153,11 +154,14 @@ public class ChunkMapReaderTest {
                         .build(),
                 mapReader.getChangeTable());
 
-        assertEquals(ImmutableMap.<URI, URI>builder()
+        assertEquals(
+                ImmutableMap.<URI, URI>builder()
                         .put(prefixTemp("Chunk2.dita"), prefixTemp("Chunk1.dita"))
                         .build(),
                 mapReader.getConflicTable());
-        assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+        assertEquals(
+                0,
+                logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
     }
 
     private Job createJob(final String map, final String... topics) throws IOException {
@@ -788,24 +792,24 @@ public class ChunkMapReaderTest {
         TestUtils.forceDelete(tempDir);
     }
 
-	@Test
-	public void testReadSplitTopic() throws Exception {
-	    final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
-	    job.setInputDir(srcDir.toURI());
-	    job.setInputMap(URI.create("chunkedMap.ditamap"));
-	    TestUtils.copy(new File(srcDir, "chunkedMap.ditamap"), new File(tempDir, "chunkedMap.ditamap"));
-	    job.add(new Job.FileInfo.Builder()
-	            .src(new File(srcDir, "chunkedMap.ditamap").toURI())
-	            .uri(toURI("chunkedMap.ditamap"))
-	            .isInput(true)
-	            .build());
-	    String srcFile = "chunkedTopic.dita";
-	    final URI dst = tempDir.toURI().resolve(srcFile);
-	    TestUtils.copy(new File(srcDir, "chunkedTopic.dita"), new File(dst));
-	    job.add(new Job.FileInfo.Builder()
-	    		.src(new File(srcDir, srcFile).toURI())
-	    		.uri(toURI(srcFile))
-	    		.build());
+    @Test
+    public void testReadSplitTopic() throws Exception {
+        final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+        job.setInputDir(srcDir.toURI());
+        job.setInputMap(URI.create("chunkedMap.ditamap"));
+        TestUtils.copy(new File(srcDir, "chunkedMap.ditamap"), new File(tempDir, "chunkedMap.ditamap"));
+        job.add(new Job.FileInfo.Builder()
+                .src(new File(srcDir, "chunkedMap.ditamap").toURI())
+                .uri(toURI("chunkedMap.ditamap"))
+                .isInput(true)
+                .build());
+        String srcFile = "chunkedTopic.dita";
+        final URI dst = tempDir.toURI().resolve(srcFile);
+        TestUtils.copy(new File(srcDir, "chunkedTopic.dita"), new File(dst));
+        job.add(new Job.FileInfo.Builder()
+                .src(new File(srcDir, srcFile).toURI())
+                .uri(toURI(srcFile))
+                .build());
 
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(new TestUtils.TestLogger());
@@ -815,36 +819,37 @@ public class ChunkMapReaderTest {
 
         final XdmNode actWithFragment = parse(new File(tempDir, "subtopic2.dita"));
         assertTrue(actWithFragment
-                .select(Steps.descendant(TOPIC_XREF.matcher()
+                .select(Steps.descendant(TOPIC_XREF
+                        .matcher()
                         .and(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "chunkedTopic.dita#subtopic3"))))
                 .exists());
 
         final XdmNode actWithoutFragment = parse(new File(tempDir, "parentTopic.dita"));
         assertTrue(actWithoutFragment
-                .select(Steps.descendant(TOPIC_XREF.matcher()
+                .select(Steps.descendant(TOPIC_XREF
+                        .matcher()
                         .and(Predicates.attributeEq(ATTRIBUTE_NAME_HREF, "chunkedTopic.dita#subtopic3"))))
                 .exists());
-	}
+    }
 
     @Test
     public void testReadRootChunkOverride() throws Exception {
         final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
         job.setInputDir(srcDir.toURI());
         job.setInputMap(URI.create("mapNoChunk.ditamap"));
-    
+
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setRootChunkOverride("to-content");
         mapReader.setLogger(new TestUtils.TestLogger());
         mapReader.setJob(job);
-    
+
         TestUtils.copy(new File(srcDir, "mapNoChunk.ditamap"), new File(tempDir, "mapNoChunk.ditamap"));
         job.add(new Job.FileInfo.Builder()
                 .src(new File(srcDir, "mapNoChunk.ditamap").toURI())
                 .uri(toURI("mapNoChunk.ditamap"))
                 .isInput(true)
                 .build());
-        List<String> srcFiles = Arrays.asList(
-                "1.dita", "2.dita", "3.dita");
+        List<String> srcFiles = Arrays.asList("1.dita", "2.dita", "3.dita");
         for (final String srcFile : srcFiles) {
             final URI dst = tempDir.toURI().resolve(srcFile);
             TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
@@ -853,7 +858,7 @@ public class ChunkMapReaderTest {
                     .uri(toURI(srcFile))
                     .build());
         }
-    
+
         mapReader.read(new File(tempDir, "mapNoChunk.ditamap"));
         Set<URI> expected = new HashSet<>();
         expected.add(prefixTemp("1.dita"));

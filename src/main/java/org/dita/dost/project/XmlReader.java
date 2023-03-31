@@ -8,17 +8,17 @@
 
 package org.dita.dost.project;
 
-import com.thaiopensource.relaxng.jaxp.CompactSyntaxSchemaFactory;
-import org.dita.dost.util.XMLUtils;
-import org.slf4j.Logger;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
+import static org.dita.dost.util.XMLUtils.getValue;
 
+import com.thaiopensource.relaxng.jaxp.CompactSyntaxSchemaFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -33,16 +33,15 @@ import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.dita.dost.util.XMLUtils.getValue;
+import org.dita.dost.util.XMLUtils;
+import org.slf4j.Logger;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 public class XmlReader {
 
@@ -141,10 +140,7 @@ public class XmlReader {
                 getChildren(project, ELEM_PUBLICATION)
                         .map(this::readPublication)
                         .collect(Collectors.toList()),
-                getChildren(project, ELEM_CONTEXT)
-                        .map(this::readContext)
-                        .collect(Collectors.toList())
-        );
+                getChildren(project, ELEM_CONTEXT).map(this::readContext).collect(Collectors.toList()));
     }
 
     /**
@@ -194,16 +190,11 @@ public class XmlReader {
         return new ProjectBuilder.Deliverable(
                 getValue(deliverable, ATTR_NAME),
                 getValue(deliverable, ATTR_ID),
-                getChild(deliverable, ELEM_CONTEXT)
-                        .map(this::readContext)
-                        .orElse(null),
-                getChild(deliverable, ELEM_OUTPUT)
-                        .flatMap(this::getHref)
-                        .orElse(null),
+                getChild(deliverable, ELEM_CONTEXT).map(this::readContext).orElse(null),
+                getChild(deliverable, ELEM_OUTPUT).flatMap(this::getHref).orElse(null),
                 getChild(deliverable, ELEM_PUBLICATION)
                         .map(this::readPublication)
-                        .orElse(null)
-        );
+                        .orElse(null));
     }
 
     private ProjectBuilder.Publication readPublication(final Element publication) {
@@ -217,19 +208,16 @@ public class XmlReader {
                                 getValue(param, ATTR_NAME),
                                 param.getAttributeNode(ATTR_VALUE) != null ? param.getAttribute(ATTR_VALUE) : null,
                                 getHref(param).orElse(null),
-                                getFile(param).orElse(null)
-                        ))
+                                getFile(param).orElse(null)))
                         .collect(Collectors.toList()),
                 getChild(publication, ELEM_PROFILE)
                         .map(inputs -> getChildren(inputs, ELEM_DITAVAL)
                                 .map(this::getHref)
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)
-                                .collect(Collectors.toList())
-                        )
+                                .collect(Collectors.toList()))
                         .map(ProjectBuilder.Deliverable.Profile::new)
-                        .orElse(null)
-        );
+                        .orElse(null));
     }
 
     private ProjectBuilder.Context readContext(final Element context) {
@@ -247,11 +235,9 @@ public class XmlReader {
                                 .map(this::getHref)
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)
-                                .collect(Collectors.toList())
-                        )
+                                .collect(Collectors.toList()))
                         .map(ProjectBuilder.Deliverable.Profile::new)
-                        .orElse(null)
-        );
+                        .orElse(null));
     }
 
     private Optional<Element> getChild(final Element project, final String localName) {
@@ -285,5 +271,4 @@ public class XmlReader {
             throw new RuntimeException(e);
         }
     }
-
 }

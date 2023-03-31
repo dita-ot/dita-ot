@@ -1,16 +1,15 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.reader;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
 import org.xml.sax.Attributes;
@@ -28,8 +27,7 @@ import org.xml.sax.SAXException;
  *
  * @author Wu, Zhi Qiang
  */
-public abstract class AbstractXMLReader implements AbstractReader,
-ContentHandler, EntityResolver {
+public abstract class AbstractXMLReader implements AbstractReader, ContentHandler, EntityResolver {
 
     protected DITAOTLogger logger;
     protected Job job;
@@ -65,8 +63,7 @@ ContentHandler, EntityResolver {
     }
 
     @Override
-    public void startPrefixMapping(final String prefix, final String uri)
-            throws SAXException {
+    public void startPrefixMapping(final String prefix, final String uri) throws SAXException {
         // NOOP
     }
 
@@ -76,32 +73,28 @@ ContentHandler, EntityResolver {
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName,
-            final Attributes atts) throws SAXException {
-        // NOOP
-    }
-
-    @Override
-    public void endElement(final String uri, final String localName, final String qName)
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
         // NOOP
     }
 
     @Override
-    public void characters(final char[] ch, final int start, final int length)
-            throws SAXException {
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         // NOOP
     }
 
     @Override
-    public void ignorableWhitespace(final char[] ch, final int start, final int length)
-            throws SAXException {
+    public void characters(final char[] ch, final int start, final int length) throws SAXException {
         // NOOP
     }
 
     @Override
-    public void processingInstruction(final String target, final String data)
-            throws SAXException {
+    public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
+        // NOOP
+    }
+
+    @Override
+    public void processingInstruction(final String target, final String data) throws SAXException {
         // NOOP
     }
 
@@ -111,9 +104,7 @@ ContentHandler, EntityResolver {
     }
 
     @Override
-    public InputSource resolveEntity(final String publicId, final String systemId)
-            throws SAXException, IOException {
+    public InputSource resolveEntity(final String publicId, final String systemId) throws SAXException, IOException {
         return null;
     }
-
 }

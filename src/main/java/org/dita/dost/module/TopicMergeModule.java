@@ -1,13 +1,22 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.module;
 
+import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.*;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
@@ -18,16 +27,6 @@ import org.dita.dost.reader.MergeMapParser;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DelegatingURIResolver;
 import org.dita.dost.util.Job.FileInfo;
-
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-
-import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * The module handles topic merge in issues as PDF.
@@ -50,8 +49,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException exception
      */
     @Override
-    public AbstractPipelineOutput execute(final AbstractPipelineInput input)
-            throws DITAOTException {
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
@@ -75,7 +73,8 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         try {
             midBuffer.write(XML_HEAD.getBytes(StandardCharsets.UTF_8));
             midBuffer.write(("<dita-merge " + ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION + "='" + DITA_NAMESPACE + "' "
-                    + XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX + "='" + DITA_OT_NS + "'>").getBytes(StandardCharsets.UTF_8));
+                            + XMLNS_ATTRIBUTE + ":" + DITA_OT_NS_PREFIX + "='" + DITA_OT_NS + "'>")
+                    .getBytes(StandardCharsets.UTF_8));
             mapParser.setOutputStream(midBuffer);
             mapParser.read(ditaInput, job.tempDir);
             midBuffer.write("</dita-merge>".getBytes(StandardCharsets.UTF_8));
@@ -99,9 +98,11 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
             if (style != null) {
                 final Processor processor = xmlUtils.getProcessor();
                 final XsltCompiler xsltCompiler = processor.newXsltCompiler();
-                final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(style)).load();
+                final XsltTransformer transformer =
+                        xsltCompiler.compile(new StreamSource(style)).load();
                 transformer.setErrorReporter(toErrorReporter(logger));
-                transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
+                transformer.setURIResolver(
+                        new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
                 transformer.setMessageListener(toMessageListener(logger));
 
                 final StreamSource source = new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray()));
@@ -123,5 +124,4 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
 
         return null;
     }
-
 }

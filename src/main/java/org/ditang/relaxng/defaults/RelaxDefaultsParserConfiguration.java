@@ -7,8 +7,8 @@
  */
 package org.ditang.relaxng.defaults;
 
+import com.thaiopensource.resolver.Resolver;
 import java.io.IOException;
-
 import org.apache.xerces.impl.Constants;
 import org.apache.xerces.parsers.XIncludeAwareParserConfiguration;
 import org.apache.xerces.util.SymbolTable;
@@ -19,23 +19,19 @@ import org.apache.xerces.xni.parser.XMLComponentManager;
 import org.apache.xerces.xni.parser.XMLConfigurationException;
 import org.apache.xerces.xni.parser.XMLDocumentSource;
 
-import com.thaiopensource.resolver.Resolver;
-
 /**
  * @author george@oxygenxml.com
  * A parser configuration that adds in a module to add Relax NG specified default values.
  */
-public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfiguration  {
+public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfiguration {
 
     /** Feature identifier: dynamic validation. */
     protected static final String DYNAMIC_VALIDATION =
             Constants.XERCES_FEATURE_PREFIX + Constants.DYNAMIC_VALIDATION_FEATURE;
     /** Feature identifier: validation. */
-    protected static final String VALIDATION =
-            Constants.SAX_FEATURE_PREFIX + Constants.VALIDATION_FEATURE;
+    protected static final String VALIDATION = Constants.SAX_FEATURE_PREFIX + Constants.VALIDATION_FEATURE;
     /**Schema validation**/
-    protected static final String XERCES_SCHEMA_VALIDATION =
-            "http://apache.org/xml/features/validation/schema";
+    protected static final String XERCES_SCHEMA_VALIDATION = "http://apache.org/xml/features/validation/schema";
 
     /**
      * An XML component that adds default attribute values by looking into a Relax NG schema
@@ -45,7 +41,7 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
     protected RelaxNGDefaultsComponent fRelaxDefaults = null;
 
     /**
-     * The special RNG resolver 
+     * The special RNG resolver
      */
     protected final Resolver resolver;
 
@@ -61,8 +57,8 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
         this(null, null, null);
     }
 
-    /** 
-     * Constructs a parser configuration using the specified symbol table. 
+    /**
+     * Constructs a parser configuration using the specified symbol table.
      *
      * @param symbolTable The symbol table to use.
      */
@@ -79,9 +75,7 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
      * @param grammarPool The grammar pool to use.
      * @param resolver The JING resolver
      */
-    public RelaxDefaultsParserConfiguration(
-            SymbolTable symbolTable,
-            XMLGrammarPool grammarPool, Resolver resolver) {
+    public RelaxDefaultsParserConfiguration(SymbolTable symbolTable, XMLGrammarPool grammarPool, Resolver resolver) {
         this(symbolTable, grammarPool, null, resolver);
     }
 
@@ -98,7 +92,8 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
     public RelaxDefaultsParserConfiguration(
             SymbolTable symbolTable,
             XMLGrammarPool grammarPool,
-            XMLComponentManager parentSettings, Resolver resolver) {
+            XMLComponentManager parentSettings,
+            Resolver resolver) {
         super(symbolTable, grammarPool, parentSettings);
         this.resolver = resolver;
     }
@@ -107,18 +102,17 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
     public boolean parse(boolean complete) throws XNIException, IOException {
         if (fInputSource != null) {
             try {
-                setFeature(DYNAMIC_VALIDATION, getFeature(VALIDATION) 
-                        || getFeature(XERCES_SCHEMA_VALIDATION));
-            } catch(Exception ex) {
-                //Could happen if the parser is not Xerces, most probably not.
+                setFeature(DYNAMIC_VALIDATION, getFeature(VALIDATION) || getFeature(XERCES_SCHEMA_VALIDATION));
+            } catch (Exception ex) {
+                // Could happen if the parser is not Xerces, most probably not.
                 ex.printStackTrace();
             }
         }
         return super.parse(complete);
     }
 
-    /** 
-     * Configures the pipeline. 
+    /**
+     * Configures the pipeline.
      */
     @Override
     protected void configurePipeline() {
@@ -143,7 +137,8 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
             fRelaxDefaults = new RelaxNGDefaultsComponent(resolver, fGrammarPool);
             addCommonComponent(fRelaxDefaults);
             fRelaxDefaults.setValidate(relaxNGValidation);
-            fRelaxDefaults.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.ERROR_HANDLER_PROPERTY, 
+            fRelaxDefaults.setProperty(
+                    Constants.XERCES_PROPERTY_PREFIX + Constants.ERROR_HANDLER_PROPERTY,
                     getProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.ERROR_HANDLER_PROPERTY));
             fRelaxDefaults.reset(this);
         }
@@ -163,7 +158,7 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
      */
     @Override
     public void setFeature(String featureId, boolean state) throws XMLConfigurationException {
-        if(XERCES_SCHEMA_VALIDATION.equals(featureId)) {
+        if (XERCES_SCHEMA_VALIDATION.equals(featureId)) {
             relaxNGValidation = state;
         } else {
             super.setFeature(featureId, state);
@@ -172,7 +167,7 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
 
     @Override
     public void setProperty(String propertyId, Object value) throws XMLConfigurationException {
-        if("http://apache.org/xml/properties/internal/grammar-pool".equals(propertyId)) {
+        if ("http://apache.org/xml/properties/internal/grammar-pool".equals(propertyId)) {
             fGrammarPool = (XMLGrammarPool) value;
         }
         super.setProperty(propertyId, value);

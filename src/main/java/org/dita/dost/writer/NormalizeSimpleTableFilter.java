@@ -7,15 +7,14 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.dita.dost.util.Constants.*;
 
 /**
  * Normalize simpletable content.
@@ -33,6 +32,7 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
 
     /** DITA class stack */
     private final Deque<String> classStack = new LinkedList<>();
+
     private int depth;
     private final Map<String, String> ns = new HashMap<>();
 
@@ -100,9 +100,11 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
         final int rowspan = getRowSpan(res);
         Span prev;
         if (tableState.previousRow != null) {
-            for (prev = tableState.previousRow.get(tableState.currentColumn); prev != null && prev.y > 1; prev = tableState.previousRow.get(tableState.currentColumn)) {
+            for (prev = tableState.previousRow.get(tableState.currentColumn);
+                    prev != null && prev.y > 1;
+                    prev = tableState.previousRow.get(tableState.currentColumn)) {
                 for (int i = 0; i < prev.x; i++) {
-                    tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
+                    tableState.currentColumn = tableState.currentColumn + 1; // prev.x - 1;
                     grow(tableState.currentRow, tableState.currentColumn + 1);
                 }
             }
@@ -114,8 +116,20 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
 
         tableState.currentRow.set(tableState.currentColumn, span);
 
-        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(tableState.currentColumn + 1));
-        XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(tableState.rowNumber));
+        XMLUtils.addOrSetAttribute(
+                res,
+                DITA_OT_NS,
+                ATTR_X,
+                DITA_OT_NS_PREFIX + ":" + ATTR_X,
+                "CDATA",
+                Integer.toString(tableState.currentColumn + 1));
+        XMLUtils.addOrSetAttribute(
+                res,
+                DITA_OT_NS,
+                ATTR_Y,
+                DITA_OT_NS_PREFIX + ":" + ATTR_Y,
+                "CDATA",
+                Integer.toString(tableState.rowNumber));
 
         tableState.currentColumn = tableState.currentColumn + colspan;
     }
@@ -163,12 +177,12 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
         }
     }
 
-    private record Span(int x, int y) {
-    }
+    private record Span(int x, int y) {}
 
     private static class TableState {
         /** Store row number */
         public int rowNumber = 0;
+
         public ArrayList<Span> previousRow;
         public ArrayList<Span> currentRow;
         public int currentColumn;

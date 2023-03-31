@@ -11,13 +11,13 @@ import org.ditang.relaxng.defaults.RelaxNGDefaultValues;
 
 /**
  * Caches RNG default values
- * 
+ *
  * @author radu_coravu
  */
 public interface RNGDefaultsEnabledGrammarPool {
     /**
      * Get RNG default values for a certain system ID
-     * 
+     *
      * @param systemID The main schema system ID
      * @return Returns the rng Default Values mapped to the main schema system ID.
      */

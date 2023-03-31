@@ -15,12 +15,10 @@ import static org.junit.Assert.fail;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.helpers.AttributesImpl;
-
 
 public class DitaClassTest {
 
@@ -36,7 +34,8 @@ public class DitaClassTest {
         try {
             new DitaClass(null);
             fail();
-        } catch (final NullPointerException e) {}
+        } catch (final NullPointerException e) {
+        }
     }
 
     @Test
@@ -84,14 +83,15 @@ public class DitaClassTest {
 
     @Test
     public void testMatchesNode() throws ParserConfigurationException {
-        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        final Document doc =
+                DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
         final Element elem = doc.createElement("qux");
         elem.setAttribute(ATTRIBUTE_NAME_CLASS, "- foo/bar baz/qux ");
         assertTrue(new DitaClass("- foo/bar ").matches(elem));
         assertTrue(new DitaClass("- foo/bar baz/qux ").matches(elem));
         assertFalse(new DitaClass("- bar/baz ").matches(elem));
     }
-    
+
     @Test
     public void testValidDitaClass() {
         assertTrue(new DitaClass("- topic/p ").isValid());
@@ -118,5 +118,4 @@ public class DitaClassTest {
         final DitaClass second = DitaClass.getInstance("-  foo/bar  ");
         assertTrue(first == second);
     }
-
 }

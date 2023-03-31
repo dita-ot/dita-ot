@@ -1,24 +1,23 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005, 2006 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005, 2006 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.platform;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.*;
+import javax.xml.parsers.SAXParserFactory;
 import org.dita.dost.log.DITAOTLogger;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
-
-import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.*;
 
 /**
  * InsertAction implements IAction and insert the resource
@@ -83,8 +82,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
     }
 
     @Override
-    public void setFeatures(final Map<String, Features> h) {
-    }
+    public void setFeatures(final Map<String, Features> h) {}
 
     @Override
     public void setLogger(final DITAOTLogger logger) {
@@ -94,30 +92,31 @@ class InsertAction extends XMLFilterImpl implements IAction {
     // XMLFilter methods
 
     @Override
-    public void startPrefixMapping (String prefix, String uri) throws SAXException {
+    public void startPrefixMapping(String prefix, String uri) throws SAXException {
         if (elemLevel != 0) {
             getContentHandler().startPrefixMapping(prefix, uri);
         }
     }
 
     @Override
-    public void endPrefixMapping (String prefix) throws SAXException {
+    public void endPrefixMapping(String prefix) throws SAXException {
         if (elemLevel != 0) {
             getContentHandler().endPrefixMapping(prefix);
         }
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
+            throws SAXException {
         if (elemLevel != 0) {
             getContentHandler().startElement(uri, localName, qName, attributes);
         }
-        elemLevel ++;
+        elemLevel++;
     }
 
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-        elemLevel --;
+        elemLevel--;
         if (elemLevel != 0) {
             getContentHandler().endElement(uri, localName, qName);
         }
@@ -133,5 +132,4 @@ class InsertAction extends XMLFilterImpl implements IAction {
     public void endDocument() throws SAXException {
         // suppress
     }
-
 }

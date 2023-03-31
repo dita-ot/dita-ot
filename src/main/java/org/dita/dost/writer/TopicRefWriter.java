@@ -1,27 +1,26 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2007 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2007 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.writer;
-
-import org.dita.dost.exception.DITAOTException;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
-import java.io.File;
-import java.net.URI;
-import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.FileUtils.getFragment;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
+
+import java.io.File;
+import java.net.URI;
+import java.util.Map;
+import org.dita.dost.exception.DITAOTException;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * TopicRefWriter which updates the linking elements' value according to the
@@ -47,7 +46,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
      * @param conflictTable conflictTable
      */
     public void setup(final Map<URI, URI> conflictTable) {
-        for (final Map.Entry<URI, URI> e: conflictTable.entrySet()) {
+        for (final Map.Entry<URI, URI> e : conflictTable.entrySet()) {
             assert e.getKey().isAbsolute();
             assert e.getValue().isAbsolute();
         }
@@ -56,7 +55,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
 
     public void setChangeTable(final Map<URI, URI> changeTable) {
         assert changeTable != null && !changeTable.isEmpty();
-        for (final Map.Entry<URI, URI> e: changeTable.entrySet()) {
+        for (final Map.Entry<URI, URI> e : changeTable.entrySet()) {
             assert e.getKey().isAbsolute();
             assert e.getValue().isAbsolute();
         }
@@ -116,8 +115,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
      */
     private boolean isLocalDita(final Attributes atts) {
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        if (classValue == null
-                || (TOPIC_IMAGE.matches(classValue))) {
+        if (classValue == null || (TOPIC_IMAGE.matches(classValue))) {
             return false;
         }
 
@@ -128,7 +126,6 @@ public final class TopicRefWriter extends AbstractXMLFilter {
         }
 
         return isLocalScope(scopeValue) && formatValue.equals(ATTR_FORMAT_VALUE_DITA);
-
     }
 
     private String updateData(final String origValue) {
@@ -179,14 +176,15 @@ public final class TopicRefWriter extends AbstractXMLFilter {
             }
 
             if (changeTarget == null) {
-                return hrefValue;// no change
+                return hrefValue; // no change
             } else {
                 final URI conTarget = conflictTable.get(stripFragment(changeTarget));
                 logger.debug("Update " + changeTarget + " to " + conTarget);
                 if (conTarget != null && !conTarget.toString().isEmpty()) {
                     final URI p = getRelativePath(rootPathName, conTarget);
                     if (elementID == null) {
-                        return setFragment(p, getElementID(changeTarget.toString())).toString();
+                        return setFragment(p, getElementID(changeTarget.toString()))
+                                .toString();
                     } else {
                         if (conTarget.getFragment() != null) {
                             if (!pathtoElem.contains(SLASH)) {
@@ -234,5 +232,4 @@ public final class TopicRefWriter extends AbstractXMLFilter {
         }
         return null;
     }
-
 }

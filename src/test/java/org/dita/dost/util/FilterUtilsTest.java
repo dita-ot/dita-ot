@@ -7,20 +7,6 @@
  */
 package org.dita.dost.util;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import org.dita.dost.TestUtils;
-import org.dita.dost.util.FilterUtils.Action;
-import org.dita.dost.util.FilterUtils.FilterKey;
-import org.dita.dost.util.FilterUtils.Flag;
-import org.dita.dost.util.XMLUtils.AttributesBuilder;
-import org.junit.Test;
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.AttributesImpl;
-
-import javax.xml.namespace.QName;
-import java.util.*;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
@@ -29,6 +15,19 @@ import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PLATFORM;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_REV;
 import static org.junit.Assert.*;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import java.util.*;
+import javax.xml.namespace.QName;
+import org.dita.dost.TestUtils;
+import org.dita.dost.util.FilterUtils.Action;
+import org.dita.dost.util.FilterUtils.FilterKey;
+import org.dita.dost.util.FilterUtils.Flag;
+import org.dita.dost.util.XMLUtils.AttributesBuilder;
+import org.junit.Test;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.AttributesImpl;
 
 public class FilterUtilsTest {
 
@@ -79,17 +78,25 @@ public class FilterUtilsTest {
         fm.put(new FilterKey(QName.valueOf(ATTRIBUTE_NAME_REV), null), Action.EXCLUDE);
         fm.put(new FilterKey(lang, "fr"), Action.EXCLUDE);
         fm.put(new FilterKey(confidentiality, "confidential"), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(false, fm, null, null,
-            ImmutableSet.of(QName.valueOf(ATTRIBUTE_NAME_REV), lang, confidentiality), emptySet()
-        );
+        final FilterUtils f = new FilterUtils(
+                false,
+                fm,
+                null,
+                null,
+                ImmutableSet.of(QName.valueOf(ATTRIBUTE_NAME_REV), lang, confidentiality),
+                emptySet());
         f.setLogger(new TestUtils.TestLogger());
 
-        assertFalse(f.needExclude(new AttributesBuilder().add(ATTRIBUTE_NAME_PLATFORM, "unix").build(), new QName[0][0]));
-        assertTrue(f.needExclude(new AttributesBuilder().add(ATTRIBUTE_NAME_REV, "1").build(), new QName[0][0]));
+        assertFalse(f.needExclude(
+                new AttributesBuilder().add(ATTRIBUTE_NAME_PLATFORM, "unix").build(), new QName[0][0]));
+        assertTrue(f.needExclude(
+                new AttributesBuilder().add(ATTRIBUTE_NAME_REV, "1").build(), new QName[0][0]));
         assertFalse(f.needExclude(new AttributesBuilder().add(lang, "en").build(), new QName[0][0]));
         assertTrue(f.needExclude(new AttributesBuilder().add(lang, "fr").build(), new QName[0][0]));
-        assertTrue(f.needExclude(new AttributesBuilder().add(confidentiality, "confidential").build(), new QName[0][0]));
-        assertFalse(f.needExclude(new AttributesBuilder().add(confidentiality, "public").build(), new QName[0][0]));
+        assertTrue(f.needExclude(
+                new AttributesBuilder().add(confidentiality, "confidential").build(), new QName[0][0]));
+        assertFalse(f.needExclude(
+                new AttributesBuilder().add(confidentiality, "public").build(), new QName[0][0]));
     }
 
     @Test
@@ -101,12 +108,16 @@ public class FilterUtilsTest {
         final FilterUtils f = new FilterUtils(false, fm, null, null);
         f.setLogger(new TestUtils.TestLogger());
 
-        assertFalse(f.needExclude(new AttributesBuilder().add(ATTRIBUTE_NAME_PLATFORM, "unix").build(), new QName[0][0]));
-        assertFalse(f.needExclude(new AttributesBuilder().add(ATTRIBUTE_NAME_REV, "1").build(), new QName[0][0]));
+        assertFalse(f.needExclude(
+                new AttributesBuilder().add(ATTRIBUTE_NAME_PLATFORM, "unix").build(), new QName[0][0]));
+        assertFalse(f.needExclude(
+                new AttributesBuilder().add(ATTRIBUTE_NAME_REV, "1").build(), new QName[0][0]));
         assertFalse(f.needExclude(new AttributesBuilder().add(lang, "en").build(), new QName[0][0]));
         assertFalse(f.needExclude(new AttributesBuilder().add(lang, "fr").build(), new QName[0][0]));
-        assertFalse(f.needExclude(new AttributesBuilder().add(confidentiality, "confidential").build(), new QName[0][0]));
-        assertFalse(f.needExclude(new AttributesBuilder().add(confidentiality, "public").build(), new QName[0][0]));
+        assertFalse(f.needExclude(
+                new AttributesBuilder().add(confidentiality, "confidential").build(), new QName[0][0]));
+        assertFalse(f.needExclude(
+                new AttributesBuilder().add(confidentiality, "public").build(), new QName[0][0]));
     }
 
     @Test
@@ -163,10 +174,10 @@ public class FilterUtilsTest {
         assertFalse(f.needExclude(attr(OS, "amiga unix windows"), new QName[][] {{PROPS, OS}}));
         assertFalse(f.needExclude(attr(OS, "amiga windows"), new QName[][] {{PROPS, OS}}));
         assertFalse(f.needExclude(attr(OS, "amiga windows"), new QName[][] {{PROPS, OS, GUI}}));
-        assertFalse(f.needExclude(attr(GUI, "amiga windows"),new QName[][] {{PROPS, OS, GUI}}));
+        assertFalse(f.needExclude(attr(GUI, "amiga windows"), new QName[][] {{PROPS, OS, GUI}}));
         assertTrue(f.needExclude(attr(OS, "windows"), new QName[][] {{PROPS, OS}}));
     }
-    
+
     @Test
     public void testNeedExcludeLabel() {
         final Map<FilterKey, Action> fm = new HashMap<>();
@@ -181,7 +192,7 @@ public class FilterUtilsTest {
         assertTrue(f.needExclude(attr(PROPS, "os(windows)"), new QName[][] {{PROPS, OS}}));
         assertTrue(f.needExclude(attr(PROPS, "   os(   windows   )   "), new QName[][] {{PROPS, OS}}));
     }
-    
+
     @Test
     public void testNeedExcludeOtherpropsLabel() {
         final Map<FilterKey, Action> fm = new HashMap<>();
@@ -198,66 +209,65 @@ public class FilterUtilsTest {
     @Test
     public void testgetFlagsDefaultFlag() {
         final Flag flag = new Flag("prop", "red", null, null, null, null, null, null);
-        final FilterUtils f = new FilterUtils(false,
+        final FilterUtils f = new FilterUtils(
+                false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(PLATFORM, null), flag)
-                        .build(), null, null);
+                        .build(),
+                null,
+                null);
         f.setLogger(new TestUtils.TestLogger());
 
-        assertEquals(
-                emptySet(),
-                f.getFlags(new AttributesImpl(), new QName[0][0]));
-        assertEquals(
-                singleton(flag),
-                f.getFlags(attr(PLATFORM, "amiga unix windows"), new QName[0][0]));
+        assertEquals(emptySet(), f.getFlags(new AttributesImpl(), new QName[0][0]));
+        assertEquals(singleton(flag), f.getFlags(attr(PLATFORM, "amiga unix windows"), new QName[0][0]));
     }
 
     @Test
     public void testGetFlags() {
         final Flag flag = new Flag("prop", "red", null, null, null, null, null, null);
         final Flag revflag = new Flag("revprop", null, null, null, "solid", null, null, null);
-        final FilterUtils f = new FilterUtils(false,
+        final FilterUtils f = new FilterUtils(
+                false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(PLATFORM, "unix"), flag)
                         .put(new FilterKey(PLATFORM, "osx"), flag)
                         .put(new FilterKey(PLATFORM, "linux"), flag)
                         .put(new FilterKey(AUDIENCE, "expert"), flag)
                         .put(new FilterKey(REV, "r1"), revflag)
-                        .build(), null, null);
+                        .build(),
+                null,
+                null);
         f.setLogger(new TestUtils.TestLogger());
 
-        assertEquals(
-                singleton(flag),
-                f.getFlags(attr(PLATFORM, "amiga unix windows"), new QName[0][0]));
-        assertEquals(
-                singleton(flag),
-                f.getFlags(attr(PLATFORM, "amiga unix"), new QName[0][0]));
-        assertEquals(
-                singleton(revflag),
-                f.getFlags(attr(REV, "r1 r2"), new QName[0][0]));
-        assertEquals(
-                emptySet(),
-                f.getFlags(attr(PLATFORM, "amiga"), new QName[0][0]));
-        assertEquals(
-                emptySet(),
-                f.getFlags(attr(PLATFORM, "windows"), new QName[0][0]));
+        assertEquals(singleton(flag), f.getFlags(attr(PLATFORM, "amiga unix windows"), new QName[0][0]));
+        assertEquals(singleton(flag), f.getFlags(attr(PLATFORM, "amiga unix"), new QName[0][0]));
+        assertEquals(singleton(revflag), f.getFlags(attr(REV, "r1 r2"), new QName[0][0]));
+        assertEquals(emptySet(), f.getFlags(attr(PLATFORM, "amiga"), new QName[0][0]));
+        assertEquals(emptySet(), f.getFlags(attr(PLATFORM, "windows"), new QName[0][0]));
     }
 
     @Test
     public void testGetFlagsForSpecialization() {
         final Flag flagBase = new Flag("prop", "red", null, null, null, null, null, null);
         final Flag flagSpecialization = new Flag("prop", "blue", null, null, null, null, null, null);
-        final FilterUtils f = new FilterUtils(false,
+        final FilterUtils f = new FilterUtils(
+                false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(PLATFORM, "unix"), flagBase)
                         .put(new FilterKey(OS, "amiga"), flagSpecialization)
-                        .build(), null, null);
+                        .build(),
+                null,
+                null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertEquals(
                 Set.of(flagBase, flagSpecialization),
-                f.getFlags(new AttributesBuilder().add(OS, "amiga").add(PLATFORM, "unix").build(),
-                           new QName[][] {{PROPS, OS}}));
+                f.getFlags(
+                        new AttributesBuilder()
+                                .add(OS, "amiga")
+                                .add(PLATFORM, "unix")
+                                .build(),
+                        new QName[][] {{PROPS, OS}}));
     }
 
     // DITA 1.3
@@ -273,14 +283,14 @@ public class FilterUtilsTest {
 
         assertFalse(f.extCheckExclude(new QName[] {PLATFORM, OS}, Arrays.asList("amiga", "unix", "windows")));
         assertTrue(f.extCheckExclude(new QName[] {PLATFORM, OS}, Arrays.asList("osx")));
-        assertFalse(f.extCheckExclude(new QName[] {PLATFORM, OS}, Arrays.asList( "unix", "amiga", "windows")));
+        assertFalse(f.extCheckExclude(new QName[] {PLATFORM, OS}, Arrays.asList("unix", "amiga", "windows")));
     }
-    
+
     @Test
     public void testNoInfoMessageFilter() {
-        //Do not issue information messages that certain values
-        //were not specified in the ditaval filter if the filter has default exclude rules.
-        for (FilterKey filterKey: new FilterKey[]{ new FilterKey(OS, null), FilterUtils.DEFAULT }) {
+        // Do not issue information messages that certain values
+        // were not specified in the ditaval filter if the filter has default exclude rules.
+        for (FilterKey filterKey : new FilterKey[] {new FilterKey(OS, null), FilterUtils.DEFAULT}) {
             final Map<FilterKey, Action> fm = new HashMap<>();
             fm.put(filterKey, Action.EXCLUDE);
             fm.put(new FilterKey(OS, "amiga"), Action.INCLUDE);
@@ -289,15 +299,15 @@ public class FilterUtilsTest {
             f.setLogger(new TestUtils.TestLogger() {
                 @Override
                 public void info(String msg) {
-                   infoMsg.append(msg);
-               }
+                    infoMsg.append(msg);
+                }
             });
 
             assertTrue(f.extCheckExclude(new QName[] {OS}, Arrays.asList("osx")));
             assertEquals("Should not output info message " + infoMsg, "", infoMsg.toString());
         }
     }
-    
+
     @Test
     public void testNeedExcludeGroup() {
         final Map<FilterKey, Action> fm = new HashMap<>();
@@ -313,7 +323,6 @@ public class FilterUtilsTest {
         assertTrue(f.needExclude(attr(PLATFORM, "os(windows)"), new QName[0][0]));
         assertTrue(f.needExclude(attr(PLATFORM, "   os(   windows   )   "), new QName[0][0]));
     }
-    
 
     @Test
     public void testNeedExcludeGroupMultiple() {
@@ -331,7 +340,7 @@ public class FilterUtilsTest {
         assertTrue(f.needExclude(attr(PLATFORM, "os(windows) database(mongo)"), new QName[0][0]));
         assertTrue(f.needExclude(attr(PLATFORM, "   os(   windows   )   database(  mongo  )   "), new QName[0][0]));
     }
-    
+
     @Test
     public void testNeedExcludeMixedGroups() {
         final Map<FilterKey, Action> fm = new HashMap<>();
@@ -345,11 +354,11 @@ public class FilterUtilsTest {
         assertTrue(f.needExclude(attr(PLATFORM, "windows database(mongodb couchbase) unix"), new QName[0][0]));
         assertTrue(f.needExclude(attr(PLATFORM, "database(mongodb couchbase) unix"), new QName[0][0]));
     }
-    
+
     @Test
     public void testGetUngroupedValue() {
         final FilterUtils f = new FilterUtils(false);
-        
+
         {
             final Map<QName, List<String>> exp = new HashMap<>();
             exp.put(null, Arrays.asList("foo", "bar", "bax"));
@@ -391,7 +400,7 @@ public class FilterUtilsTest {
             assertEquals(exp, f.getGroups("group1() group2(a)"));
         }
     }
-    
+
     private Attributes attr(final QName name, final String value) {
         final AttributesImpl res = new AttributesImpl();
         XMLUtils.addOrSetAttribute(res, name, value);
@@ -402,12 +411,15 @@ public class FilterUtilsTest {
     public void testGetFlagLabel() {
         final Flag flagRed = new Flag("prop", "red", null, null, null, null, null, null);
         final Flag flagBlue = new Flag("prop", "blue", null, null, null, null, null, null);
-        
-        final FilterUtils f = new FilterUtils(false,
+
+        final FilterUtils f = new FilterUtils(
+                false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(OS, "amiga"), flagRed)
                         .put(new FilterKey(OS, null), flagBlue)
-                        .build(), null, null);
+                        .build(),
+                null,
+                null);
         f.setLogger(new TestUtils.TestLogger());
 
         assertEquals(
@@ -419,41 +431,35 @@ public class FilterUtilsTest {
         assertEquals(
                 new HashSet<>(asList(flagRed, flagBlue)),
                 f.getFlags(attr(PROPS, "gui(amiga windows)"), new QName[][] {{PROPS, OS, GUI}}));
+        assertEquals(singleton(flagBlue), f.getFlags(attr(PROPS, "os(windows)"), new QName[][] {{PROPS, OS}}));
         assertEquals(
-                singleton(flagBlue),
-                f.getFlags(attr(PROPS, "os(windows)"), new QName[][] {{PROPS, OS}}));
-        assertEquals(
-                singleton(flagBlue),
-                f.getFlags(attr(PROPS, "   os(   windows   )   "), new QName[][] {{PROPS, OS}}));
+                singleton(flagBlue), f.getFlags(attr(PROPS, "   os(   windows   )   "), new QName[][] {{PROPS, OS}}));
     }
 
     @Test
     public void testConflict() {
         final Flag flagRed = new Flag("prop", "red", null, null, null, null, null, null);
         final Flag flagBlue = new Flag("prop", "blue", null, null, null, null, null, null);
-        final FilterUtils f = new FilterUtils(false,
+        final FilterUtils f = new FilterUtils(
+                false,
                 ImmutableMap.<FilterKey, Action>builder()
                         .put(new FilterKey(OS, "amiga"), flagRed)
                         .put(new FilterKey(OS, null), flagBlue)
-                        .build(), "yellow", "green");
+                        .build(),
+                "yellow",
+                "green");
         f.setLogger(new TestUtils.TestLogger());
 
         final Flag flagYellow = new Flag("prop", "yellow", null, null, null, null, null, null);
         assertEquals(
-                singleton(flagYellow),
-                f.getFlags(attr(PROPS, "os(amiga unix windows)"), new QName[][] {{PROPS, OS}}));
+                singleton(flagYellow), f.getFlags(attr(PROPS, "os(amiga unix windows)"), new QName[][] {{PROPS, OS}}));
         assertEquals(
-                singleton(flagYellow),
-                f.getFlags(attr(PROPS, "os(amiga windows)"), new QName[][] {{PROPS, OS, GUI}}));
+                singleton(flagYellow), f.getFlags(attr(PROPS, "os(amiga windows)"), new QName[][] {{PROPS, OS, GUI}}));
         assertEquals(
-                singleton(flagYellow),
-                f.getFlags(attr(PROPS, "gui(amiga windows)"), new QName[][] {{PROPS, OS, GUI}}));
+                singleton(flagYellow), f.getFlags(attr(PROPS, "gui(amiga windows)"), new QName[][] {{PROPS, OS, GUI}}));
+        assertEquals(singleton(flagBlue), f.getFlags(attr(PROPS, "os(windows)"), new QName[][] {{PROPS, OS}}));
         assertEquals(
-                singleton(flagBlue),
-                f.getFlags(attr(PROPS, "os(windows)"), new QName[][] {{PROPS, OS}}));
-        assertEquals(
-                singleton(flagBlue),
-                f.getFlags(attr(PROPS, "   os(   windows   )   "), new QName[][] {{PROPS, OS}}));
+                singleton(flagBlue), f.getFlags(attr(PROPS, "   os(   windows   )   "), new QName[][] {{PROPS, OS}}));
     }
 
     @Test

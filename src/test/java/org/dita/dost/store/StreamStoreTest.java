@@ -8,6 +8,17 @@
 
 package org.dita.dost.store;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
@@ -18,18 +29,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.w3c.dom.Document;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class StreamStoreTest {
 
@@ -56,7 +55,7 @@ public class StreamStoreTest {
         final Serializer serializer = store.getSerializer(tmpDir.toURI().resolve("foo/bar"));
         serializer.serializeNode(source);
     }
-    
+
     @Test
     public void exists_WhenFileExists_ShouldReturnTrue() throws IOException {
         Files.writeString(tmpDir.toPath().resolve("dummy.xml"), "<dummy/>");
@@ -77,7 +76,9 @@ public class StreamStoreTest {
     public void copy_WhenFileExists_ShouldCreateCopy() throws IOException {
         Files.writeString(tmpDir.toPath().resolve("src.xml"), "<dummy/>");
 
-        store.copy(tmpDir.toPath().resolve("src.xml").toUri(), tmpDir.toPath().resolve("dst.xml").toUri());
+        store.copy(
+                tmpDir.toPath().resolve("src.xml").toUri(),
+                tmpDir.toPath().resolve("dst.xml").toUri());
 
         assertTrue(Files.exists(tmpDir.toPath().resolve("src.xml")));
         assertTrue(Files.exists(tmpDir.toPath().resolve("dst.xml")));
@@ -85,12 +86,15 @@ public class StreamStoreTest {
 
     @Test(expected = IOException.class)
     public void copy_WhenFileIsMissing_ShouldThrowException() throws IOException {
-        store.copy(tmpDir.toPath().resolve("src.xml").toUri(), tmpDir.toPath().resolve("dst.xml").toUri());
+        store.copy(
+                tmpDir.toPath().resolve("src.xml").toUri(),
+                tmpDir.toPath().resolve("dst.xml").toUri());
     }
 
     @Test(expected = IOException.class)
     public void copy_WhenSrcIsHttp_ShouldThrowException() throws IOException {
-        store.copy(URI.create("http://src.xml"), tmpDir.toPath().resolve("dst.xml").toUri());
+        store.copy(
+                URI.create("http://src.xml"), tmpDir.toPath().resolve("dst.xml").toUri());
     }
 
     @Test(expected = IOException.class)
@@ -102,7 +106,9 @@ public class StreamStoreTest {
     public void move_WhenFileExists_ShouldCreateCopy() throws IOException {
         Files.writeString(tmpDir.toPath().resolve("src.xml"), "<dummy/>");
 
-        store.move(tmpDir.toPath().resolve("src.xml").toUri(), tmpDir.toPath().resolve("dst.xml").toUri());
+        store.move(
+                tmpDir.toPath().resolve("src.xml").toUri(),
+                tmpDir.toPath().resolve("dst.xml").toUri());
 
         assertFalse(Files.exists(tmpDir.toPath().resolve("src.xml")));
         assertTrue(Files.exists(tmpDir.toPath().resolve("dst.xml")));
@@ -110,12 +116,15 @@ public class StreamStoreTest {
 
     @Test(expected = IOException.class)
     public void move_WhenFileIsMissing_ShouldThrowException() throws IOException {
-        store.move(tmpDir.toPath().resolve("src.xml").toUri(), tmpDir.toPath().resolve("dst.xml").toUri());
+        store.move(
+                tmpDir.toPath().resolve("src.xml").toUri(),
+                tmpDir.toPath().resolve("dst.xml").toUri());
     }
 
     @Test(expected = IOException.class)
     public void move_WhenSrcIsHttp_ShouldThrowException() throws IOException {
-        store.move(URI.create("http://src.xml"), tmpDir.toPath().resolve("dst.xml").toUri());
+        store.move(
+                URI.create("http://src.xml"), tmpDir.toPath().resolve("dst.xml").toUri());
     }
 
     @Test(expected = IOException.class)
@@ -125,9 +134,9 @@ public class StreamStoreTest {
 
     @Test
     public void transformWithAnchorInURIPath() throws IOException, DITAOTException, URISyntaxException {
-    	final Path target = Paths.get(tmpDir.getAbsolutePath(), "source.xml");
+        final Path target = Paths.get(tmpDir.getAbsolutePath(), "source.xml");
         Files.writeString(target, "<root/>");
         final URI uri = new URI(target.toUri() + "#abc");
-    	store.transform(uri, Collections.emptyList());
+        store.transform(uri, Collections.emptyList());
     }
 }

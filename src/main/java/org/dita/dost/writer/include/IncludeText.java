@@ -8,14 +8,8 @@
 
 package org.dita.dost.writer.include;
 
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.exception.UncheckedDITAOTException;
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.Job;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,9 +19,14 @@ import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.UncheckedDITAOTException;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.util.Job;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
 
 final class IncludeText {
 
@@ -37,7 +36,12 @@ final class IncludeText {
     private final DITAOTLogger logger;
     private final Configuration.Mode processingMode;
 
-    IncludeText(Job job, URI currentFile, ContentHandler contentHandler, DITAOTLogger logger, Configuration.Mode processingMode) {
+    IncludeText(
+            Job job,
+            URI currentFile,
+            ContentHandler contentHandler,
+            DITAOTLogger logger,
+            Configuration.Mode processingMode) {
         this.job = job;
         this.currentFile = currentFile;
         this.contentHandler = contentHandler;
@@ -54,7 +58,8 @@ final class IncludeText {
             try (BufferedReader codeReader = Files.newBufferedReader(codeFile.toPath(), charset)) {
                 range.copyLines(codeReader);
             } catch (final MalformedInputException e) {
-                final String msg = MessageUtils.getMessage("DOTJ084E", codeFile.toURI().toString(), charset.toString())
+                final String msg = MessageUtils.getMessage(
+                                "DOTJ084E", codeFile.toURI().toString(), charset.toString())
                         .setLocation(atts)
                         .toString();
                 if (processingMode.equals(Configuration.Mode.STRICT)) {
@@ -71,13 +76,14 @@ final class IncludeText {
     }
 
     private File getFile(URI hrefValue) {
-        final File tempFile = toFile(stripFragment(currentFile.resolve(hrefValue))).getAbsoluteFile();
+        final File tempFile =
+                toFile(stripFragment(currentFile.resolve(hrefValue))).getAbsoluteFile();
         final URI rel = job.tempDirURI.relativize(tempFile.toURI());
         final Job.FileInfo fi = job.getFileInfo(rel);
 
-//        if (tempFile.exists() && fi != null && PR_D_CODEREF.localName.equals(fi.format)) {
-//            return tempFile;
-//        }
+        //        if (tempFile.exists() && fi != null && PR_D_CODEREF.localName.equals(fi.format)) {
+        //            return tempFile;
+        //        }
         if (fi != null && "file".equals(fi.src.getScheme())) {
             return new File(fi.src);
         }
@@ -96,7 +102,8 @@ final class IncludeText {
         final String fragment = uri.getFragment();
         if (fragment != null) {
             // RFC 5147
-            final Matcher m = Pattern.compile("^line=(?:(\\d+)|(\\d+)?,(\\d+)?)$").matcher(fragment);
+            final Matcher m =
+                    Pattern.compile("^line=(?:(\\d+)|(\\d+)?,(\\d+)?)$").matcher(fragment);
             if (m.matches()) {
                 if (m.group(1) != null) {
                     start = Integer.parseInt(m.group(1));
@@ -111,7 +118,8 @@ final class IncludeText {
                 }
                 return new LineNumberRange(start, end).handler(contentHandler);
             } else {
-                final Matcher mc = Pattern.compile("^line-range\\((\\d+)(?:,\\s*(\\d+))?\\)$").matcher(fragment);
+                final Matcher mc = Pattern.compile("^line-range\\((\\d+)(?:,\\s*(\\d+))?\\)$")
+                        .matcher(fragment);
                 if (mc.matches()) {
                     start = Integer.parseInt(mc.group(1)) - 1;
                     if (mc.group(2) != null) {
@@ -119,7 +127,8 @@ final class IncludeText {
                     }
                     return new LineNumberRange(start, end).handler(contentHandler);
                 } else {
-                    final Matcher mi = Pattern.compile("^token=([^,\\s)]*)(?:,\\s*([^,\\s)]+))?$").matcher(fragment);
+                    final Matcher mi = Pattern.compile("^token=([^,\\s)]*)(?:,\\s*([^,\\s)]+))?$")
+                            .matcher(fragment);
                     if (mi.matches()) {
                         if (mi.group(1) != null && mi.group(1).length() != 0) {
                             startId = mi.group(1);
@@ -141,7 +150,6 @@ final class IncludeText {
      *
      * @return charset if set, otherwise default charset
      */
-
     private Charset getCharset(Attributes atts) {
         final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         final String encoding = atts.getValue(ATTRIBUTE_NAME_ENCODING);
@@ -156,7 +164,9 @@ final class IncludeText {
                 }
             }
         } catch (final RuntimeException e) {
-            logger.error(MessageUtils.getMessage("DOTJ052E", encoding).setLocation(atts).toString());
+            logger.error(MessageUtils.getMessage("DOTJ052E", encoding)
+                    .setLocation(atts)
+                    .toString());
         }
         if (c == null) {
             final String defaultCharset = Configuration.configuration.get("default.coderef-charset");

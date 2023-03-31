@@ -9,7 +9,6 @@ package org.ditang.relaxng.defaults.pool;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.ditang.relaxng.defaults.RelaxNGDefaultValues;
 
 /**
@@ -17,8 +16,8 @@ import org.ditang.relaxng.defaults.RelaxNGDefaultValues;
  *
  * @author radu_coravu
  */
-public class RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl
-extends org.dita.dost.util.XMLGrammarPoolImplUtils implements RNGDefaultsEnabledGrammarPool {
+public class RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl extends org.dita.dost.util.XMLGrammarPoolImplUtils
+        implements RNGDefaultsEnabledGrammarPool {
 
     /**
      * Caches Relax NG default values based on the URL pointing to the RNG schemas.

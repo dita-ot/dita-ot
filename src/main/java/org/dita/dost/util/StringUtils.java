@@ -1,14 +1,12 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.util;
-
-import javax.xml.namespace.QName;
 
 import static java.util.Arrays.asList;
 import static org.dita.dost.util.Constants.*;
@@ -16,6 +14,7 @@ import static org.dita.dost.util.Constants.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.xml.namespace.QName;
 
 /**
  * String relevant utilities.
@@ -27,8 +26,7 @@ public final class StringUtils {
     /**
      * Private default constructor to make class uninstantiable.
      */
-    private StringUtils() {
-    }
+    private StringUtils() {}
 
     /**
      * Assemble all elements in collection to a string.
@@ -67,13 +65,13 @@ public final class StringUtils {
      * @param delim entry delimiter
      * @return concatenated map
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static String join(final Map value, final String delim) {
         if (value == null || value.isEmpty()) {
             return "";
         }
         final StringBuilder buf = new StringBuilder();
-        for (final Iterator<Map.Entry<String, String>> i = value.entrySet().iterator(); i.hasNext();) {
+        for (final Iterator<Map.Entry<String, String>> i = value.entrySet().iterator(); i.hasNext(); ) {
             final Map.Entry<String, String> e = i.next();
             buf.append(e.getKey()).append(EQUAL).append(e.getValue());
             if (i.hasNext()) {
@@ -95,8 +93,7 @@ public final class StringUtils {
      * @return replaced string
      *
      */
-    public static String replaceAll(final String input,
-            final String pattern, final String replacement) {
+    public static String replaceAll(final String input, final String pattern, final String replacement) {
         final StringBuilder result = new StringBuilder();
         int startIndex = 0;
         int newIndex;
@@ -122,15 +119,14 @@ public final class StringUtils {
         // FIXME Dont' mix arrays and collections
         final List<QName[]> propsBuffer = new ArrayList<>();
         int propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS);
-        int propsEnd = domains.indexOf(")",propsStart);
+        int propsEnd = domains.indexOf(")", propsStart);
         while (propsStart != -1 && propsEnd != -1) {
             final String propPath = domains.substring(propsStart + 2, propsEnd).trim();
-            final List<QName> propList = Stream.of(propPath.split("\\s+"))
-                    .map(QName::valueOf)
-                    .collect(Collectors.toList());
+            final List<QName> propList =
+                    Stream.of(propPath.split("\\s+")).map(QName::valueOf).collect(Collectors.toList());
             propsBuffer.add(propList.toArray(new QName[0]));
             propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS, propsEnd);
-            propsEnd = domains.indexOf(")",propsStart);
+            propsEnd = domains.indexOf(")", propsStart);
         }
         return propsBuffer.toArray(new QName[propsBuffer.size()][]);
     }
@@ -145,10 +141,9 @@ public final class StringUtils {
         // FIXME Dont' mix arrays and collections
         return Arrays.stream(specializations.trim().split("\\s+"))
                 .map(token -> Arrays.stream(token.substring(1).split("/"))
-                            .map(QName::valueOf)
-                            .collect(Collectors.toList())
-                            .toArray(new QName[0])
-                )
+                        .map(QName::valueOf)
+                        .collect(Collectors.toList())
+                        .toArray(new QName[0]))
                 .collect(Collectors.toList())
                 .toArray(new QName[0][]);
     }
@@ -197,7 +192,8 @@ public final class StringUtils {
     public static String setOrAppend(final String target, final String value, final boolean withSpace) {
         if (target == null) {
             return value;
-        }if(value == null) {
+        }
+        if (value == null) {
             return target;
         } else {
             if (withSpace && !target.endsWith(STRING_BLANK)) {
@@ -214,35 +210,34 @@ public final class StringUtils {
      * @return locale
      * @throws NullPointerException when anEncoding parameter is {@code null}
      */
-
     public static Locale getLocale(final String anEncoding) {
         Locale aLocale = null;
         String country = null;
         String language = null;
         String variant;
 
-        //Tokenize the string using "-" as the token string as per IETF RFC4646 (superceeds RFC3066).
+        // Tokenize the string using "-" as the token string as per IETF RFC4646 (superceeds RFC3066).
 
         final StringTokenizer tokenizer = new StringTokenizer(anEncoding, "-");
 
-        //We need to know how many tokens we have so we can create a Locale object with the proper constructor.
+        // We need to know how many tokens we have so we can create a Locale object with the proper constructor.
         final int numberOfTokens = tokenizer.countTokens();
 
         if (numberOfTokens == 1) {
             final String tempString = tokenizer.nextToken().toLowerCase();
 
-            //Note: Newer XML parsers should throw an error if the xml:lang value contains
-            //underscore. But this is not guaranteed.
+            // Note: Newer XML parsers should throw an error if the xml:lang value contains
+            // underscore. But this is not guaranteed.
 
-            //Check to see if some one used "en_US" instead of "en-US".
-            //If so, the first token will contain "en_US" or "xxx_YYYYYYYY". In this case,
-            //we will only grab the value for xxx.
+            // Check to see if some one used "en_US" instead of "en-US".
+            // If so, the first token will contain "en_US" or "xxx_YYYYYYYY". In this case,
+            // we will only grab the value for xxx.
             final int underscoreIndex = tempString.indexOf("_");
 
             if (underscoreIndex == -1) {
                 language = tempString;
             } else if (underscoreIndex == 2 || underscoreIndex == 3) {
-                //check is first subtag is two or three characters in length.
+                // check is first subtag is two or three characters in length.
                 language = tempString.substring(0, underscoreIndex);
             }
 
@@ -252,9 +247,9 @@ public final class StringUtils {
             language = tokenizer.nextToken().toLowerCase();
 
             final String subtag2 = tokenizer.nextToken();
-            //All country tags should be three characters or less.
-            //If the subtag is longer than three characters, it assumes that
-            //is a dialect or variant.
+            // All country tags should be three characters or less.
+            // If the subtag is longer than three characters, it assumes that
+            // is a dialect or variant.
             if (subtag2.length() <= 3) {
                 country = subtag2.toUpperCase();
                 aLocale = new Locale(language, country);
@@ -262,10 +257,8 @@ public final class StringUtils {
                 variant = subtag2;
                 aLocale = new Locale(language, "", variant);
             } else if (subtag2.length() > 8) {
-                //return an error!
+                // return an error!
             }
-
-
 
         } else if (numberOfTokens >= 3) {
 
@@ -275,18 +268,16 @@ public final class StringUtils {
                 country = subtag2.toUpperCase();
             } else if (subtag2.length() > 3 && subtag2.length() <= 8) {
             } else if (subtag2.length() > 8) {
-                //return an error!
+                // return an error!
             }
             variant = tokenizer.nextToken();
 
             aLocale = new Locale(language, country, variant);
 
         } else {
-            //return an warning or do nothing.
-            //The xml:lang attribute is empty.
-            aLocale = new Locale(LANGUAGE_EN,
-                    COUNTRY_US);
-
+            // return an warning or do nothing.
+            // The xml:lang attribute is empty.
+            aLocale = new Locale(LANGUAGE_EN, COUNTRY_US);
         }
 
         return aLocale;
@@ -310,8 +301,8 @@ public final class StringUtils {
             switch (current) {
                 case '.' -> buff.append("\\.");
 
-                // case '/':
-                // case '|':
+                    // case '/':
+                    // case '|':
                 case '\\' -> buff.append("[\\\\|/]");
                 case '(' -> buff.append("\\(");
                 case ')' -> buff.append("\\)");
@@ -330,7 +321,10 @@ public final class StringUtils {
     }
 
     /** Whitespace normalization state. */
-    private enum WhiteSpaceState { WORD, SPACE }
+    private enum WhiteSpaceState {
+        WORD,
+        SPACE
+    }
 
     /**
      * Normalize and collapse whitespaces from string buffer.
@@ -367,5 +361,4 @@ public final class StringUtils {
         final String[] tokens = value.trim().split("\\s+");
         return asList(tokens);
     }
-
 }

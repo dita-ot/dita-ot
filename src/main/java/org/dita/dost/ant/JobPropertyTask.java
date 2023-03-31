@@ -11,7 +11,6 @@ import static org.dita.dost.ant.ExtensibleAntInvoker.getJob;
 
 import java.io.File;
 import java.util.Map;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.dita.dost.util.Job;
@@ -24,7 +23,7 @@ public final class JobPropertyTask extends Task {
     @Override
     public void execute() throws BuildException {
         final Job job = getJob(getProject());
-        for (final Map.Entry<String, String> e: job.getProperties().entrySet()) {
+        for (final Map.Entry<String, String> e : job.getProperties().entrySet()) {
             getProject().setProperty(e.getKey(), e.getValue());
         }
     }
@@ -36,5 +35,4 @@ public final class JobPropertyTask extends Task {
     public void setDir(final File dir) {
         // NOOP
     }
-
 }

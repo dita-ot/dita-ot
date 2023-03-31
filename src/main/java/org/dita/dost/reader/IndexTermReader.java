@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005, 2006 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005, 2006 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.reader;
 
 import static org.dita.dost.index.IndexTerm.IndexTermPrefix.*;
@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
@@ -126,8 +125,7 @@ public final class IndexTermReader extends AbstractXMLReader {
     }
 
     @Override
-    public void characters(final char[] ch, final int start, final int length)
-            throws SAXException {
+    public void characters(final char[] ch, final int start, final int length) throws SAXException {
         final StringBuilder tempBuf = new StringBuilder(length);
         tempBuf.append(ch, start, length);
         normalizeAndCollapseWhitespace(tempBuf);
@@ -136,8 +134,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         /*
          * For title info
          */
-        if (processRoleStack.isEmpty() ||
-                !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleStack.peek())) {
+        if (processRoleStack.isEmpty() || !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleStack.peek())) {
             if (!insideSortingAs && !termStack.empty()) {
                 final IndexTerm indexTerm = termStack.peek();
                 temp = trimSpaceAtStart(temp, indexTerm.getTermName());
@@ -148,7 +145,7 @@ public final class IndexTermReader extends AbstractXMLReader {
                 indexTerm.setTermKey(setOrAppend(indexTerm.getTermKey(), temp, false));
             } else if (inTitleElement) {
                 temp = trimSpaceAtStart(temp, title);
-                //Always append space if: <title>abc<ph/>df</title>
+                // Always append space if: <title>abc<ph/>df</title>
                 title = setOrAppend(title, temp, false);
             }
         }
@@ -158,24 +155,22 @@ public final class IndexTermReader extends AbstractXMLReader {
     public void endDocument() throws SAXException {
         updateIndexTermTargetName();
         for (final IndexTerm indexterm : indexTermList) {
-            //IndexTermCollection.getInstantce().addTerm(indexterm);
+            // IndexTermCollection.getInstantce().addTerm(indexterm);
             result.addTerm(indexterm);
         }
     }
 
     @Override
-    public void endElement(final String uri, final String localName, final String qName)
-            throws SAXException {
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
 
-        //Skip the topic if @processing-role="resource-only"
+        // Skip the topic if @processing-role="resource-only"
         if (processRoleLevel > 0) {
             String role = processRoleStack.peek();
             if (processRoleLevel == processRoleStack.size()) {
                 role = processRoleStack.pop();
             }
             processRoleLevel--;
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
-                    .equals(role)) {
+            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(role)) {
                 return;
             }
         }
@@ -197,21 +192,21 @@ public final class IndexTermReader extends AbstractXMLReader {
                 term.setTermKey(term.getTermName());
             }
 
-            //if this term is the leaf term
-            //leaf means the current indexterm element doesn't contains any subterms
-            //or only has "index-see" or "index-see-also" subterms.
+            // if this term is the leaf term
+            // leaf means the current indexterm element doesn't contains any subterms
+            // or only has "index-see" or "index-see-also" subterms.
             if (term.isLeaf()) {
-                //generate a target which points to current topic and
-                //assign it to current term.
+                // generate a target which points to current topic and
+                // assign it to current term.
                 final IndexTermTarget target = genTarget();
                 term.addTarget(target);
             }
 
             if (termStack.empty()) {
-                //most parent indexterm
+                // most parent indexterm
                 indexTermList.add(term);
             } else {
-                //Assign parent indexterm to
+                // Assign parent indexterm to
                 final IndexTerm parentTerm = termStack.peek();
                 parentTerm.addSubTerm(term);
             }
@@ -219,15 +214,14 @@ public final class IndexTermReader extends AbstractXMLReader {
 
         // Check to see if the index-see or index-see-also or a specialized
         // version is in the list.
-        if (indexSeeSpecList.contains(localName)
-                || indexSeeAlsoSpecList.contains(localName)) {
+        if (indexSeeSpecList.contains(localName) || indexSeeAlsoSpecList.contains(localName)) {
             final IndexTerm term = termStack.pop();
             final IndexTerm parentTerm = termStack.peek();
             if (term.getTermKey() == null) {
                 term.setTermKey(term.getTermFullName());
             }
-            //term.addTargets(parentTerm.getTargetList());
-            term.addTarget(genTarget()); //assign current topic as the target of index-see or index-see-also term
+            // term.addTargets(parentTerm.getTargetList());
+            term.addTarget(genTarget()); // assign current topic as the target of index-see or index-see-also term
             parentTerm.addSubTerm(term);
         }
 
@@ -237,8 +231,8 @@ public final class IndexTermReader extends AbstractXMLReader {
         if (titleSpecList.contains(localName)) {
             inTitleElement = false;
             if (!topicIdStack.empty() && !titleMap.containsKey(topicIdStack.peek())) {
-                //If this is the first topic title
-                if (title == null) {  //Guard against zero-content titles
+                // If this is the first topic title
+                if (title == null) { // Guard against zero-content titles
                     title = "***";
                 }
                 if (titleMap.size() == 0) {
@@ -287,23 +281,20 @@ public final class IndexTermReader extends AbstractXMLReader {
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName,
-            final Attributes attributes) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
+            throws SAXException {
 
-        //Skip the topic if @processing-role="resource-only"
-        final String attrValue = attributes
-                .getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
+        // Skip the topic if @processing-role="resource-only"
+        final String attrValue = attributes.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
         if (attrValue != null) {
             processRoleStack.push(attrValue);
             processRoleLevel++;
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
-                    .equals(attrValue)) {
+            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(attrValue)) {
                 return;
             }
         } else if (processRoleLevel > 0) {
             processRoleLevel++;
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
-                    .equals(processRoleStack.peek())) {
+            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleStack.peek())) {
                 return;
             }
         }
@@ -312,14 +303,13 @@ public final class IndexTermReader extends AbstractXMLReader {
 
         handleSpecialization(localName, classAttr);
         parseTopic(localName, attributes.getValue(ATTRIBUTE_NAME_ID));
-        //change parseIndexTerm(localName) to parseIndexTerm(localName, attributes)
+        // change parseIndexTerm(localName) to parseIndexTerm(localName, attributes)
         parseIndexTerm(localName, attributes);
         parseIndexSee(localName);
         parseIndexSeeAlso(localName);
 
         if (IndexTerm.getTermLocale() == null) {
-            final String xmlLang = attributes
-                    .getValue(ATTRIBUTE_NAME_XML_LANG);
+            final String xmlLang = attributes.getValue(ATTRIBUTE_NAME_XML_LANG);
 
             if (xmlLang != null) {
                 IndexTerm.setTermLocale(getLocale(xmlLang));
@@ -329,8 +319,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         /*
          * For title info
          */
-        if (titleSpecList.contains(localName)
-                && !topicIdStack.empty() && !titleMap.containsKey(topicIdStack.peek())) {
+        if (titleSpecList.contains(localName) && !topicIdStack.empty() && !titleMap.containsKey(topicIdStack.peek())) {
             inTitleElement = true;
             title = null;
         }
@@ -434,13 +423,13 @@ public final class IndexTermReader extends AbstractXMLReader {
                 indexSortAsSpecList.add(localName);
             }
         } else if (TOPIC_TOPIC.matches(classAttr)) {
-            //add the element name to the topic specialization element
+            // add the element name to the topic specialization element
             // list if it does not already exist in that list.
             if (!topicSpecList.contains(localName)) {
                 topicSpecList.add(localName);
             }
         } else if (TOPIC_TITLE.matches(classAttr)) {
-            //add the element name to the title specailization element list
+            // add the element name to the title specailization element list
             // if it does not exist in that list.
             if (!titleSpecList.contains(localName)) {
                 titleSpecList.add(localName);
@@ -476,13 +465,12 @@ public final class IndexTermReader extends AbstractXMLReader {
         final int targetSize = indexterm.getTargetList().size();
         final int subtermSize = indexterm.getSubTerms().size();
 
-        for (int i = 0; i<targetSize; i++) {
+        for (int i = 0; i < targetSize; i++) {
             final IndexTermTarget target = indexterm.getTargetList().get(i);
             final String uri = target.getTargetURI();
             final int indexOfSharp = uri.lastIndexOf(SHARP);
-            final String fragment = (indexOfSharp == -1 || uri.endsWith(SHARP))?
-                    null:
-                        uri.substring(indexOfSharp + 1);
+            final String fragment =
+                    (indexOfSharp == -1 || uri.endsWith(SHARP)) ? null : uri.substring(indexOfSharp + 1);
             if (fragment != null && titleMap.containsKey(fragment)) {
                 target.setTargetName(titleMap.get(fragment));
             } else {
@@ -490,7 +478,7 @@ public final class IndexTermReader extends AbstractXMLReader {
             }
         }
 
-        for (int i = 0; i<subtermSize; i++) {
+        for (int i = 0; i < subtermSize; i++) {
             final IndexTerm subterm = indexterm.getSubTerms().get(i);
             updateIndexTermTargetName(subterm);
         }
@@ -510,5 +498,4 @@ public final class IndexTermReader extends AbstractXMLReader {
         }
         return temp;
     }
-
 }

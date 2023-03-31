@@ -7,7 +7,21 @@
  */
 package org.dita.dost.writer;
 
+import static org.junit.Assert.assertEquals;
+
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.SAXSource;
 import org.dita.dost.TestUtils;
 import org.dita.dost.module.reader.DefaultTempFileScheme;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -22,21 +36,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.sax.SAXSource;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-
-import static org.junit.Assert.assertEquals;
 
 public class ForceUniqueFilterTest {
 
@@ -57,7 +56,7 @@ public class ForceUniqueFilterTest {
                 .result(srcDir.toURI().resolve("test.ditamap"))
                 .format("ditamap")
                 .build());
-        for (String name : new String[]{"test.dita", "test3.dita", "test2.dita", "topic.dita"}) {
+        for (String name : new String[] {"test.dita", "test3.dita", "test2.dita", "topic.dita"}) {
             job.add(new Builder()
                     .src(srcDir.toURI().resolve(name))
                     .uri(URI.create(name))
@@ -85,16 +84,17 @@ public class ForceUniqueFilterTest {
 
         TestUtils.assertXMLEqual(exp, act);
 
-        assertEquals(new HashMap<>(ImmutableMap.of(
-                createFileInfo("test.dita", "test_3.dita"),
-                createFileInfo("test.dita", "test.dita"),
-                createFileInfo("test.dita", "test_2.dita"),
-                createFileInfo("test.dita", "test.dita"),
-                createFileInfo(null, "copy-to_2.dita"),
-                createFileInfo(null, "copy-to.dita"),
-                createFileInfo("topic.dita", "topic_2.dita"),
-                createFileInfo("topic.dita", "topic.dita")
-        )), f.copyToMap);
+        assertEquals(
+                new HashMap<>(ImmutableMap.of(
+                        createFileInfo("test.dita", "test_3.dita"),
+                        createFileInfo("test.dita", "test.dita"),
+                        createFileInfo("test.dita", "test_2.dita"),
+                        createFileInfo("test.dita", "test.dita"),
+                        createFileInfo(null, "copy-to_2.dita"),
+                        createFileInfo(null, "copy-to.dita"),
+                        createFileInfo("topic.dita", "topic_2.dita"),
+                        createFileInfo("topic.dita", "topic.dita"))),
+                f.copyToMap);
     }
 
     private FileInfo createFileInfo(final String src, final String tmp) {
@@ -102,16 +102,16 @@ public class ForceUniqueFilterTest {
         if (src != null) {
             builder.src(srcDir.toURI().resolve(src));
         }
-        return builder.uri(URI.create(tmp))
-                .result(srcDir.toURI().resolve(tmp))
-                .build();
+        return builder.uri(URI.create(tmp)).result(srcDir.toURI().resolve(tmp)).build();
     }
 
     private Document parse(File input) throws ParserConfigurationException, IOException, SAXException {
         final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         builderFactory.setIgnoringComments(true);
-        return builderFactory.newDocumentBuilder().parse(new InputSource(input.toURI().toString()));
+        return builderFactory
+                .newDocumentBuilder()
+                .parse(new InputSource(input.toURI().toString()));
     }
 
     private Document filter(File input, XMLReader f) throws TransformerException {

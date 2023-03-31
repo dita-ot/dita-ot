@@ -10,7 +10,6 @@ package org.dita.dost.ant;
 import static org.dita.dost.util.Constants.*;
 
 import java.net.URI;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -29,7 +28,6 @@ import org.apache.tools.ant.Task;
  * element. If file is a file, the directory will be the current
  * directory.
  */
-
 public class UriDirnameTask extends Task {
 
     private URI file;

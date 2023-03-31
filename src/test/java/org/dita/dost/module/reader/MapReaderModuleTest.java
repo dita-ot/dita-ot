@@ -8,16 +8,14 @@
 
 package org.dita.dost.module.reader;
 
-import org.dita.dost.TestUtils;
-import org.dita.dost.reader.GenListModuleReader;
 import static org.dita.dost.util.Constants.*;
-
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.net.URI;
-
-import static org.junit.Assert.*;
+import org.dita.dost.TestUtils;
+import org.dita.dost.reader.GenListModuleReader;
+import org.junit.Before;
+import org.junit.Test;
 
 public class MapReaderModuleTest {
 
@@ -37,20 +35,22 @@ public class MapReaderModuleTest {
 
     @Test
     public void categorizeReferenceFileDitamap() throws Exception {
-        reader.categorizeReferenceFile(new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.ditamap"), ATTR_FORMAT_VALUE_DITAMAP));
+        reader.categorizeReferenceFile(new GenListModuleReader.Reference(
+                URI.create("file:///foo/bar/baz.ditamap"), ATTR_FORMAT_VALUE_DITAMAP));
         assertEquals(1, reader.waitList.size());
     }
 
     @Test
     public void categorizeReferenceFileDitaval() throws Exception {
-        reader.categorizeReferenceFile(new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.ditaval"), ATTR_FORMAT_VALUE_DITAVAL));
+        reader.categorizeReferenceFile(new GenListModuleReader.Reference(
+                URI.create("file:///foo/bar/baz.ditaval"), ATTR_FORMAT_VALUE_DITAVAL));
         assertEquals(1, reader.formatSet.size());
     }
 
     @Test
     public void categorizeReferenceFileImage() throws Exception {
-        reader.categorizeReferenceFile(new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.jpg"), ATTR_FORMAT_VALUE_IMAGE));
+        reader.categorizeReferenceFile(
+                new GenListModuleReader.Reference(URI.create("file:///foo/bar/baz.jpg"), ATTR_FORMAT_VALUE_IMAGE));
         assertEquals(1, reader.formatSet.size());
     }
-
 }

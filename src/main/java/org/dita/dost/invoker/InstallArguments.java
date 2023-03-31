@@ -8,13 +8,12 @@
 
 package org.dita.dost.invoker;
 
-import org.apache.tools.ant.Project;
+import static org.dita.dost.invoker.Main.locale;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-
-import static org.dita.dost.invoker.Main.locale;
+import org.apache.tools.ant.Project;
 
 public class InstallArguments extends Arguments {
 
@@ -85,5 +84,4 @@ public class InstallArguments extends Arguments {
                 .options(null, "force", null, locale.getString("install.option.force"))
                 .print();
     }
-
 }

@@ -10,9 +10,7 @@ package org.dita.dost.log;
 import static org.junit.Assert.*;
 
 import java.io.File;
-
 import org.dita.dost.TestUtils;
-
 import org.junit.Test;
 
 public class MessageUtilsTest {
@@ -21,14 +19,17 @@ public class MessageUtilsTest {
 
     @Test
     public void testGetMessageString() {
-        final MessageBean exp = new MessageBean("XXX123F", "FATAL", "Fatal reason.","Fatal response.");
+        final MessageBean exp = new MessageBean("XXX123F", "FATAL", "Fatal reason.", "Fatal response.");
         assertEquals(exp.toString(), MessageUtils.getMessage("XXX123F").toString());
     }
 
     @Test
     public void testGetMessageStringProperties() {
-        final MessageBean exp = new MessageBean("XXX234E", "ERROR", "Error foo reason bar baz.", "Error foo response bar baz.");
-        assertEquals(exp.toString(), MessageUtils.getMessage("XXX234E", "foo", "bar baz").toString());
+        final MessageBean exp =
+                new MessageBean("XXX234E", "ERROR", "Error foo reason bar baz.", "Error foo response bar baz.");
+        assertEquals(
+                exp.toString(),
+                MessageUtils.getMessage("XXX234E", "foo", "bar baz").toString());
     }
 
     @Test
@@ -39,8 +40,10 @@ public class MessageUtilsTest {
 
     @Test
     public void testGetMessageStringExtra() {
-        final MessageBean exp = new MessageBean("XXX234E", "ERROR", "Error foo reason bar baz.", "Error foo response bar baz.");
-        assertEquals(exp.toString(), MessageUtils.getMessage("XXX234E", "foo", "bar baz", "qux").toString());
+        final MessageBean exp =
+                new MessageBean("XXX234E", "ERROR", "Error foo reason bar baz.", "Error foo response bar baz.");
+        assertEquals(
+                exp.toString(),
+                MessageUtils.getMessage("XXX234E", "foo", "bar baz", "qux").toString());
     }
-    
 }

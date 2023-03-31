@@ -1,11 +1,10 @@
 package org.dita.dost.log;
 
+import java.util.regex.Pattern;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildListener;
 import org.apache.tools.ant.Project;
 import org.slf4j.Logger;
-
-import java.util.regex.Pattern;
 
 /**
  * Logger adapter from Ant logger to SLF4J logger.
@@ -26,32 +25,32 @@ public final class LoggerListener implements BuildListener {
 
     @Override
     public void buildStarted(BuildEvent event) {
-        //System.out.println("build started: " + event.getMessage());
+        // System.out.println("build started: " + event.getMessage());
     }
 
     @Override
     public void buildFinished(BuildEvent event) {
-        //System.out.println("build finished: " + event.getMessage());
+        // System.out.println("build finished: " + event.getMessage());
     }
 
     @Override
     public void targetStarted(BuildEvent event) {
-        //System.out.println(event.getTarget().getName() + ":");
+        // System.out.println(event.getTarget().getName() + ":");
     }
 
     @Override
     public void targetFinished(BuildEvent event) {
-        //System.out.println("target finished: " + event.getTarget().getName());
+        // System.out.println("target finished: " + event.getTarget().getName());
     }
 
     @Override
     public void taskStarted(BuildEvent event) {
-        //System.out.println("task started: " + event.getTask().getTaskName());
+        // System.out.println("task started: " + event.getTask().getTaskName());
     }
 
     @Override
     public void taskFinished(BuildEvent event) {
-        //System.out.println("task finished: " + event.getTask().getTaskName());
+        // System.out.println("task finished: " + event.getTask().getTaskName());
     }
 
     @Override

@@ -8,16 +8,15 @@
 
 package org.dita.dost.project;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.xml.sax.SAXException;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.xml.sax.SAXException;
 
 public class XmlReaderTest {
 
@@ -61,7 +60,10 @@ public class XmlReaderTest {
 
     @Test
     public void deserializeXmlCommon() throws IOException, URISyntaxException, SAXException {
-        final ProjectBuilder project = xmlReader.read(getClass().getClassLoader().getResource("org/dita/dost/project/common.xml").toURI());
+        final ProjectBuilder project = xmlReader.read(getClass()
+                .getClassLoader()
+                .getResource("org/dita/dost/project/common.xml")
+                .toURI());
         assertTrue(project.deliverables.isEmpty());
         assertTrue(project.includes.isEmpty());
         assertEquals(1, project.contexts.size());

@@ -7,6 +7,19 @@
  */
 package org.dita.dost.util;
 
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.util.Constants.*;
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.expr.instruct.TerminationException;
 import net.sf.saxon.expr.parser.Loc;
@@ -36,27 +49,12 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.LocatorImpl;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-
-import static javax.xml.XMLConstants.NULL_NS_URI;
-import static javax.xml.XMLConstants.XML_NS_URI;
-import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.*;
-
 public class XMLUtilsTest {
 
     private static final File resourceDir = TestUtils.getResourceDir(XMLUtilsTest.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     private static File tempDir;
-
 
     @BeforeClass
     public static void setUp() throws IOException {
@@ -86,7 +84,8 @@ public class XMLUtilsTest {
         try {
             XMLUtils.getPrefix(null);
             fail();
-        } catch (final NullPointerException e) {}
+        } catch (final NullPointerException e) {
+        }
     }
 
     @Test
@@ -114,9 +113,10 @@ public class XMLUtilsTest {
     @Test
     public void testAddOrSetAttributeAttributesImplNode() throws ParserConfigurationException {
         final AttributesImpl atts = new AttributesImpl();
-        final DOMImplementation dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().getDOMImplementation();
+        final DOMImplementation dom =
+                DocumentBuilderFactory.newInstance().newDocumentBuilder().getDOMImplementation();
         final Document doc = dom.createDocument(null, "foo", null);
-        
+
         doc.getDocumentElement().setAttribute("foo", "foo");
         final Attr att = doc.getDocumentElement().getAttributeNode("foo");
         XMLUtils.addOrSetAttribute(atts, att);
@@ -126,11 +126,11 @@ public class XMLUtilsTest {
         assertEquals("foo", atts.getQName(i));
         assertEquals("foo", atts.getLocalName(i));
         assertEquals("foo", atts.getValue(i));
-        
+
         doc.getDocumentElement().setAttributeNS(XML_NS_URI, "xml:lang", "en");
         final Attr lang = doc.getDocumentElement().getAttributeNodeNS(XML_NS_URI, "lang");
         XMLUtils.addOrSetAttribute(atts, lang);
-        
+
         final int l = atts.getIndex(XML_NS_URI, "lang");
         assertEquals(XML_NS_URI, atts.getURI(l));
         assertEquals("xml:lang", atts.getQName(l));
@@ -149,9 +149,10 @@ public class XMLUtilsTest {
 
     @Test
     public void testGetStringValue() throws ParserConfigurationException {
-        final DOMImplementation dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().getDOMImplementation();
+        final DOMImplementation dom =
+                DocumentBuilderFactory.newInstance().newDocumentBuilder().getDOMImplementation();
         final Document doc = dom.createDocument(null, "foo", null);
-        
+
         final Element root = doc.getDocumentElement();
         root.appendChild(doc.createTextNode("foo"));
         assertEquals("foo", XMLUtils.getStringValue(root));
@@ -162,12 +163,12 @@ public class XMLUtilsTest {
         root.appendChild(doc.createTextNode(" bar"));
         assertEquals("foo nested bar", XMLUtils.getStringValue(root));
     }
-    
+
     @Test
     public void testAttributesBuilder() throws ParserConfigurationException {
-        final XMLUtils.AttributesBuilder b = new XMLUtils.AttributesBuilder(); 
+        final XMLUtils.AttributesBuilder b = new XMLUtils.AttributesBuilder();
         assertEquals(0, b.build().getLength());
-        
+
         b.add("foo", "bar");
         b.add("uri", "foo", "prefix:foo", "CDATA", "qux");
         final Attributes a = b.build();
@@ -183,12 +184,12 @@ public class XMLUtilsTest {
                 assertEquals("qux", a.getValue(i));
             }
         }
-        
+
         b.add("foo", "quxx");
         final Attributes aa = b.build();
         assertEquals("quxx", aa.getValue("foo"));
         assertEquals(2, aa.getLength());
-        
+
         final AttributesImpl ai = new AttributesImpl();
         ai.addAttribute(NULL_NS_URI, "baz", "baz", "CDATA", "all");
         b.addAll(ai);
@@ -196,7 +197,8 @@ public class XMLUtilsTest {
         assertEquals("all", aaa.getValue("baz"));
         assertEquals(3, aaa.getLength());
 
-        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        final Document doc =
+                DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
         final Attr domAttr = doc.createAttributeNS(XML_NS_URI, "xml:space");
         domAttr.setValue("preserve");
         b.add(domAttr);
@@ -211,12 +213,13 @@ public class XMLUtilsTest {
         }
     }
 
-
     @Test
     public void testEscapeXMLString() {
         String result = null;
-        final String input = "<this is test of char update for xml href=\" see link: http://www.ibm.com/download.php?abc=123&def=456\">'test' </test>";
-        final String expected = "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
+        final String input =
+                "<this is test of char update for xml href=\" see link: http://www.ibm.com/download.php?abc=123&def=456\">'test' </test>";
+        final String expected =
+                "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
         result = XMLUtils.escapeXML(input);
         assertEquals(expected, result);
     }
@@ -224,12 +227,15 @@ public class XMLUtilsTest {
     @Test
     public void testEscapeXMLCharArrayIntInt() {
         String result = null;
-        final char[] input = "<this is test of char update for xml href=\" see link: http://www.ibm.com/download.php?abc=123&def=456\">'test' </test>".toCharArray();
-        final String expected = "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
+        final char[] input =
+                "<this is test of char update for xml href=\" see link: http://www.ibm.com/download.php?abc=123&def=456\">'test' </test>"
+                        .toCharArray();
+        final String expected =
+                "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
         result = XMLUtils.escapeXML(input, 0, input.length);
         assertEquals(expected, result);
     }
-    
+
     @Test
     public void testNonDitaContext() {
         /* Queue assumes the following values:
@@ -277,10 +283,8 @@ public class XMLUtilsTest {
         final CachingLogger logger = new CachingLogger();
         final MessageListener2 listener = XMLUtils.toMessageListener(logger);
 
-        final XdmNode msg = Saplings.doc().withChild(
-                    Saplings.text("message "),
-                    Saplings.elem("debug")
-                )
+        final XdmNode msg = Saplings.doc()
+                .withChild(Saplings.text("message "), Saplings.elem("debug"))
                 .toXdmNode(new XMLUtils().getProcessor());
 
         listener.message(msg, null, false, null);
@@ -295,12 +299,12 @@ public class XMLUtilsTest {
         final CachingLogger logger = new CachingLogger();
         final MessageListener2 listener = XMLUtils.toMessageListener(logger);
 
-        final XdmNode msg = Saplings.doc().withChild(
-                    Saplings.pi("error-code", "DOTX037W"),
-                    Saplings.pi("level", "WARN"),
-                    Saplings.text("message "),
-                    Saplings.elem("debug")
-                )
+        final XdmNode msg = Saplings.doc()
+                .withChild(
+                        Saplings.pi("error-code", "DOTX037W"),
+                        Saplings.pi("level", "WARN"),
+                        Saplings.text("message "),
+                        Saplings.elem("debug"))
                 .toXdmNode(new XMLUtils().getProcessor());
 
         listener.message(msg, null, false, null);
@@ -315,11 +319,8 @@ public class XMLUtilsTest {
         final CachingLogger logger = new CachingLogger();
         final MessageListener2 listener = XMLUtils.toMessageListener(logger);
 
-        final XdmNode msg = Saplings.doc().withChild(
-                    Saplings.pi("error-code", "DOTX037W"),
-                    Saplings.text("message "),
-                    Saplings.elem("debug")
-                )
+        final XdmNode msg = Saplings.doc()
+                .withChild(Saplings.pi("error-code", "DOTX037W"), Saplings.text("message "), Saplings.elem("debug"))
                 .toXdmNode(new XMLUtils().getProcessor());
 
         listener.message(msg, null, false, null);
@@ -334,12 +335,12 @@ public class XMLUtilsTest {
         final CachingLogger logger = new CachingLogger();
         final MessageListener2 listener = XMLUtils.toMessageListener(logger);
 
-        final XdmNode msg = Saplings.doc().withChild(
-                    Saplings.pi("error-code", "DOTX037W"),
-                    Saplings.pi("level", "WARN"),
-                    Saplings.text("message "),
-                    Saplings.elem("debug")
-                )
+        final XdmNode msg = Saplings.doc()
+                .withChild(
+                        Saplings.pi("error-code", "DOTX037W"),
+                        Saplings.pi("level", "WARN"),
+                        Saplings.text("message "),
+                        Saplings.elem("debug"))
                 .toXdmNode(new XMLUtils().getProcessor());
 
         try {
@@ -357,11 +358,8 @@ public class XMLUtilsTest {
         final CachingLogger logger = new CachingLogger();
         final MessageListener2 listener = XMLUtils.toMessageListener(logger);
 
-        final XdmNode msg = Saplings.doc().withChild(
-                    Saplings.pi("level", "ERROR"),
-                    Saplings.text("message "),
-                    Saplings.elem("debug")
-                )
+        final XdmNode msg = Saplings.doc()
+                .withChild(Saplings.pi("level", "ERROR"), Saplings.text("message "), Saplings.elem("debug"))
                 .toXdmNode(new XMLUtils().getProcessor());
 
         listener.message(msg, null, false, null);
@@ -370,23 +368,22 @@ public class XMLUtilsTest {
         assertEquals(1, act.size());
         assertEquals(new Message(Message.Level.ERROR, "message <debug/>", null), act.get(0));
     }
-    
+
     @Test
     public void toMessageListenerProperElemsSerialization() throws SaxonApiException {
         final CachingLogger logger = new CachingLogger();
         final MessageListener2 listener = XMLUtils.toMessageListener(logger);
 
-        final XdmNode msg = Saplings.doc().withChild(
-                    Saplings.text("abc "),
-                    Saplings.elem("def").withChild(Saplings.elem("hij"))
-                )
+        final XdmNode msg = Saplings.doc()
+                .withChild(Saplings.text("abc "), Saplings.elem("def").withChild(Saplings.elem("hij")))
                 .toXdmNode(new XMLUtils().getProcessor());
 
         listener.message(msg, null, false, null);
 
         final List<Message> act = logger.getMessages();
         assertEquals(1, act.size());
-        assertEquals("""
+        assertEquals(
+                """
                 abc <def>
                    <hij/>
                 </def>""", act.get(0).message);
@@ -413,8 +410,7 @@ public class XMLUtilsTest {
         loc.setLineNumber(1);
         loc.setColumnNumber(2);
         loc.setSystemId("foo:///bar");
-        errorReporter.report(new XmlProcessingException(
-                new XPathException("msg", null, Loc.makeFromSax(loc))));
+        errorReporter.report(new XmlProcessingException(new XPathException("msg", null, Loc.makeFromSax(loc))));
 
         assertEquals(1, logger.getMessages().size());
         final Message message = logger.getMessages().get(0);
@@ -441,77 +437,82 @@ public class XMLUtilsTest {
         assertEquals(Message.Level.WARN, message.level);
     }
 
-//    @Test
-//    public void transform() throws Exception {
-//        copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));
-//        final Job job = new Job(tempDir);
-//        final URI src = new File(tempDir, "test.dita").toURI();
-//
-//        // two filters that assume processing order
-//        final URI act = new File(tempDir, "order.dita").toURI();
-//        job.transform(src, act, Arrays.asList(
-//            (XMLFilter) new XMLFilterImpl() {
-//                @Override
-//                public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-//                    getContentHandler().startElement(uri, localName + "_x", qName + "_x", atts);
-//                }
-//                @Override
-//                public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-//                    getContentHandler().endElement(uri, localName + "_x", qName + "_x");
-//                }
-//            },
-//            (XMLFilter) new XMLFilterImpl() {
-//                @Override
-//                public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-//                    getContentHandler().startElement(uri, localName + "_y", qName + "_y", atts);
-//                }
-//                @Override
-//                public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-//                    getContentHandler().endElement(uri, localName + "_y", qName + "_y");
-//                }
-//            }));
-//        TestUtils.assertXMLEqual(new InputSource(new File(expDir, "order.dita").toURI().toString()),
-//                new InputSource(new File(tempDir, "order.dita").toURI().toString()));
-//    }
-//
-//    @Test
-//    public void transform_single() throws Exception {
-//        copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));
-//        final Job job = new Job(tempDir);
-//        final URI src = new File(tempDir, "test.dita").toURI();
-//
-//        // single filter that prefixes each element name
-//        final URI act = new File(tempDir, "single.dita").toURI();
-//        job.transform(src, act, Arrays.asList((XMLFilter) new XMLFilterImpl() {
-//            @Override
-//            public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-//                getContentHandler().startElement(uri, localName + "_x", qName + "_x", atts);
-//            }
-//            @Override
-//            public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-//                getContentHandler().endElement(uri, localName + "_x", qName + "_x");
-//            }
-//        }));
-//        TestUtils.assertXMLEqual(new InputSource(new File(expDir, "single.dita").toURI().toString()),
-//                       new InputSource(new File(tempDir, "single.dita").toURI().toString()));
-//    }
-//
-//    @Test
-//    public void transform_empty() throws Exception {
-//        copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));
-//        final Job job = new Job(tempDir);
-//        final URI src = new File(tempDir, "test.dita").toURI();
-//
-//        // identity without a filter
-//        final URI act = new File(tempDir, "identity.dita").toURI();
-//        job.transform(src, act, Collections.EMPTY_LIST);
-//        TestUtils.assertXMLEqual(new InputSource(new File(expDir, "identity.dita").toURI().toString()),
-//                       new InputSource(new File(tempDir, "identity.dita").toURI().toString()));
-//    }
+    //    @Test
+    //    public void transform() throws Exception {
+    //        copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));
+    //        final Job job = new Job(tempDir);
+    //        final URI src = new File(tempDir, "test.dita").toURI();
+    //
+    //        // two filters that assume processing order
+    //        final URI act = new File(tempDir, "order.dita").toURI();
+    //        job.transform(src, act, Arrays.asList(
+    //            (XMLFilter) new XMLFilterImpl() {
+    //                @Override
+    //                public void startElement(final String uri, final String localName, final String qName, final
+    // Attributes atts) throws SAXException {
+    //                    getContentHandler().startElement(uri, localName + "_x", qName + "_x", atts);
+    //                }
+    //                @Override
+    //                public void endElement(final String uri, final String localName, final String qName) throws
+    // SAXException {
+    //                    getContentHandler().endElement(uri, localName + "_x", qName + "_x");
+    //                }
+    //            },
+    //            (XMLFilter) new XMLFilterImpl() {
+    //                @Override
+    //                public void startElement(final String uri, final String localName, final String qName, final
+    // Attributes atts) throws SAXException {
+    //                    getContentHandler().startElement(uri, localName + "_y", qName + "_y", atts);
+    //                }
+    //                @Override
+    //                public void endElement(final String uri, final String localName, final String qName) throws
+    // SAXException {
+    //                    getContentHandler().endElement(uri, localName + "_y", qName + "_y");
+    //                }
+    //            }));
+    //        TestUtils.assertXMLEqual(new InputSource(new File(expDir, "order.dita").toURI().toString()),
+    //                new InputSource(new File(tempDir, "order.dita").toURI().toString()));
+    //    }
+    //
+    //    @Test
+    //    public void transform_single() throws Exception {
+    //        copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));
+    //        final Job job = new Job(tempDir);
+    //        final URI src = new File(tempDir, "test.dita").toURI();
+    //
+    //        // single filter that prefixes each element name
+    //        final URI act = new File(tempDir, "single.dita").toURI();
+    //        job.transform(src, act, Arrays.asList((XMLFilter) new XMLFilterImpl() {
+    //            @Override
+    //            public void startElement(final String uri, final String localName, final String qName, final
+    // Attributes atts) throws SAXException {
+    //                getContentHandler().startElement(uri, localName + "_x", qName + "_x", atts);
+    //            }
+    //            @Override
+    //            public void endElement(final String uri, final String localName, final String qName) throws
+    // SAXException {
+    //                getContentHandler().endElement(uri, localName + "_x", qName + "_x");
+    //            }
+    //        }));
+    //        TestUtils.assertXMLEqual(new InputSource(new File(expDir, "single.dita").toURI().toString()),
+    //                       new InputSource(new File(tempDir, "single.dita").toURI().toString()));
+    //    }
+    //
+    //    @Test
+    //    public void transform_empty() throws Exception {
+    //        copyFile(new File(srcDir, "test.dita"), new File(tempDir, "test.dita"));
+    //        final Job job = new Job(tempDir);
+    //        final URI src = new File(tempDir, "test.dita").toURI();
+    //
+    //        // identity without a filter
+    //        final URI act = new File(tempDir, "identity.dita").toURI();
+    //        job.transform(src, act, Collections.EMPTY_LIST);
+    //        TestUtils.assertXMLEqual(new InputSource(new File(expDir, "identity.dita").toURI().toString()),
+    //                       new InputSource(new File(tempDir, "identity.dita").toURI().toString()));
+    //    }
 
     @AfterClass
     public static void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
-
 }

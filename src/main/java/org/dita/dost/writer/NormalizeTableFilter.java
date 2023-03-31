@@ -7,18 +7,17 @@
  */
 package org.dita.dost.writer;
 
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static javax.xml.XMLConstants.NULL_NS_URI;
-import static org.dita.dost.util.Constants.*;
 
 /**
  * Normalize table content.
@@ -41,11 +40,13 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
     private final Deque<String> classStack = new LinkedList<>();
     /** DITA class stack */
     private final Map<String, String> ns = new HashMap<>();
+
     private int depth;
 
     private final Deque<TableState> tableStack = new LinkedList<>();
     /** Cached table stack head */
     private TableState tableState;
+
     private Configuration.Mode processingMode;
 
     public NormalizeTableFilter() {
@@ -154,11 +155,13 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
             final int rowspan = getRowSpan(res);
             Span prev;
             if (tableState.previousRow != null) {
-                for (prev = tableState.previousRow.get(tableState.currentColumn); prev != null && prev.y > 1; prev = tableState.previousRow.get(tableState.currentColumn)) {
+                for (prev = tableState.previousRow.get(tableState.currentColumn);
+                        prev != null && prev.y > 1;
+                        prev = tableState.previousRow.get(tableState.currentColumn)) {
                     for (int i = 0; i < prev.x; i++) {
-                        tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;
+                        tableState.currentColumn = tableState.currentColumn + 1; // prev.x - 1;
                         grow(tableState.currentRow, tableState.currentColumn + 1);
-//                        tableState.currentRow.set(tableState.currentColumn, null);
+                        //                        tableState.currentRow.set(tableState.currentColumn, null);
                     }
                 }
             } else {
@@ -174,20 +177,41 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
                 XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + tableState.columnNumber);
             }
             if (res.getValue(ATTRIBUTE_NAME_NAMEEND) != null) {
-                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(res, tableState.columnNumber));
-                XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_MORECOLS, DITA_OT_NS_PREFIX + ":" + ATTR_MORECOLS, "CDATA", Integer.toString(span.x - 1));
+                XMLUtils.addOrSetAttribute(
+                        res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(res, tableState.columnNumber));
+                XMLUtils.addOrSetAttribute(
+                        res,
+                        DITA_OT_NS,
+                        ATTR_MORECOLS,
+                        DITA_OT_NS_PREFIX + ":" + ATTR_MORECOLS,
+                        "CDATA",
+                        Integer.toString(span.x - 1));
             }
             // Add extensions
-            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_NS_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(tableState.currentColumn + 1));
-            XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_NS_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(tableState.rowNumber));
+            XMLUtils.addOrSetAttribute(
+                    res,
+                    DITA_OT_NS,
+                    ATTR_X,
+                    DITA_OT_NS_PREFIX + ":" + ATTR_X,
+                    "CDATA",
+                    Integer.toString(tableState.currentColumn + 1));
+            XMLUtils.addOrSetAttribute(
+                    res,
+                    DITA_OT_NS,
+                    ATTR_Y,
+                    DITA_OT_NS_PREFIX + ":" + ATTR_Y,
+                    "CDATA",
+                    Integer.toString(tableState.rowNumber));
 
             tableState.currentColumn = tableState.currentColumn + colspan;
             tableState.columnNumberEnd = getEndNumber(res, tableState.columnNumber);
         } catch (IndexOutOfBoundsException e) {
             if (processingMode == Configuration.Mode.STRICT) {
-                throw new SAXException(MessageUtils.getMessage("DOTJ082E").setLocation(res).toString());
+                throw new SAXException(
+                        MessageUtils.getMessage("DOTJ082E").setLocation(res).toString());
             } else {
-                logger.error(MessageUtils.getMessage("DOTJ082E").setLocation(res).toString());
+                logger.error(
+                        MessageUtils.getMessage("DOTJ082E").setLocation(res).toString());
             }
         }
     }
@@ -246,9 +270,13 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
             return Integer.parseInt(c);
         } catch (final NumberFormatException e) {
             if (processingMode == Configuration.Mode.STRICT) {
-                throw new SAXException(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
+                throw new SAXException(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c)
+                        .setLocation(atts)
+                        .toString());
             } else {
-                logger.error(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(atts).toString());
+                logger.error(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c)
+                        .setLocation(atts)
+                        .toString());
             }
             return -1;
         }
@@ -256,7 +284,9 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
 
     private void processColspec(final AttributesImpl res) {
         tableState.columnNumber = tableState.columnNumberEnd + 1;
-        final String colName = res.getValue(ATTRIBUTE_NAME_COLNAME) != null ? res.getValue(ATTRIBUTE_NAME_COLNAME) : COLUMN_NAME_COL + tableState.columnNumber;
+        final String colName = res.getValue(ATTRIBUTE_NAME_COLNAME) != null
+                ? res.getValue(ATTRIBUTE_NAME_COLNAME)
+                : COLUMN_NAME_COL + tableState.columnNumber;
         grow(tableState.colSpec, tableState.columnNumber);
         tableState.colSpec.set(tableState.columnNumber - 1, colName);
 
@@ -273,7 +303,7 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
         final String colWidth = res.getValue(ATTRIBUTE_NAME_COLWIDTH);
         // OASIS Table Model defaults to 1*, but that will disables automatic column layout
         if (colWidth == null) {
-            //XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLWIDTH, "1*");
+            // XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLWIDTH, "1*");
         } else if (colWidth.isEmpty()) {
             XMLUtils.removeAttribute(res, ATTRIBUTE_NAME_COLWIDTH);
         } else if (colWidth.equals("*")) {
@@ -317,8 +347,7 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
         }
     }
 
-    private record Span(int x, int y) {
-    }
+    private record Span(int x, int y) {}
 
     private static class TableState {
         public List<String> colSpec;

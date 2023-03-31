@@ -1,28 +1,27 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2010 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2010 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.writer;
-
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.Job.FileInfo;
-import org.w3c.dom.*;
-
-import java.io.File;
-import java.net.URI;
-import java.util.Map;
 
 import static org.apache.commons.io.FilenameUtils.normalize;
 import static org.dita.dost.reader.ConrefPushReader.MoveKey;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.*;
+
+import java.io.File;
+import java.net.URI;
+import java.util.Map;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.DitaClass;
+import org.dita.dost.util.Job.FileInfo;
+import org.w3c.dom.*;
 
 /**
  * This class is for writing conref push contents into
@@ -51,7 +50,8 @@ public final class ConrefPushParser extends AbstractDomFilter {
         super.read(filename);
 
         for (final MoveKey key : movetable.keySet()) {
-            logger.warn(MessageUtils.getMessage("DOTJ043W", key.idPath(), filename.getPath()).toString());
+            logger.warn(MessageUtils.getMessage("DOTJ043W", key.idPath(), filename.getPath())
+                    .toString());
         }
         if (hasConref || hasKeyref) {
             updateList(filename);
@@ -71,7 +71,8 @@ public final class ConrefPushParser extends AbstractDomFilter {
      */
     private void updateList(final File filename) {
         try {
-            final URI relativePath = toURI(filename.getAbsolutePath().substring(new File(normalize(tempDir.toString())).getPath().length() + 1));
+            final URI relativePath = toURI(filename.getAbsolutePath()
+                    .substring(new File(normalize(tempDir.toString())).getPath().length() + 1));
             final FileInfo f = job.getOrCreateFileInfo(relativePath);
             if (hasConref) {
                 f.hasConref = true;
@@ -120,11 +121,17 @@ public final class ConrefPushParser extends AbstractDomFilter {
                     final Element elem = (Element) node;
                     final DitaClass cls = DitaClass.getInstance(elem);
                     // get type of the target element
-                    final String type = targetClassAttribute.toString().substring(1, targetClassAttribute.toString().indexOf("/")).trim();
+                    final String type = targetClassAttribute
+                            .toString()
+                            .substring(1, targetClassAttribute.toString().indexOf("/"))
+                            .trim();
                     if (!cls.equals(targetClassAttribute) && targetClassAttribute.matches(cls)) {
                         // Specializing the pushing content is not handled here
                         // but we can catch such a situation to emit a warning by comparing the class values.
-                        final String targetElementName = targetClassAttribute.toString().substring(targetClassAttribute.toString().indexOf("/") + 1).trim();
+                        final String targetElementName = targetClassAttribute
+                                .toString()
+                                .substring(targetClassAttribute.toString().indexOf("/") + 1)
+                                .trim();
                         if (elem.getAttributeNode(ATTRIBUTE_NAME_CONREF) != null) {
                             hasConref = true;
                         }
@@ -137,7 +144,7 @@ public final class ConrefPushParser extends AbstractDomFilter {
                         for (int j = 0; j < nList.getLength(); j++) {
                             final Node subNode = nList.item(j);
                             if (subNode.getNodeType() == Node.ELEMENT_NODE) {
-                                //replace the subElement Name
+                                // replace the subElement Name
                                 replaceSubElementName(type, (Element) subNode);
                             }
                         }
@@ -162,7 +169,9 @@ public final class ConrefPushParser extends AbstractDomFilter {
         if (cls != null) {
             if (cls.toString().contains(type) && !type.equals(STRING_BLANK)) {
                 final int index = cls.toString().indexOf("/");
-                generalizedElemName = cls.toString().substring(index + 1, cls.toString().indexOf(STRING_BLANK, index)).trim();
+                generalizedElemName = cls.toString()
+                        .substring(index + 1, cls.toString().indexOf(STRING_BLANK, index))
+                        .trim();
             }
         }
         elem.getOwnerDocument().renameNode(elem, elem.getNamespaceURI(), generalizedElemName);
@@ -175,8 +184,8 @@ public final class ConrefPushParser extends AbstractDomFilter {
         }
     }
 
-    private MoveKey hasAction(final DitaClass classValue, final String idPath, final String defaultIdPath,
-                              final String action) {
+    private MoveKey hasAction(
+            final DitaClass classValue, final String idPath, final String defaultIdPath, final String action) {
         if (movetable.containsKey(new MoveKey(idPath, action))) {
             final MoveKey containkey = new MoveKey(idPath, action);
             if (isPushedTypeMatch(classValue, movetable.get(containkey))) {

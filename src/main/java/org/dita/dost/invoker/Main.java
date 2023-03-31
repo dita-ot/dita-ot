@@ -26,9 +26,24 @@
 
 package org.dita.dost.invoker;
 
+import static org.dita.dost.invoker.Arguments.*;
+import static org.dita.dost.util.Configuration.transtypes;
+import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
+import static org.dita.dost.util.LangUtils.pair;
+import static org.dita.dost.util.LangUtils.zipWithIndex;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+import java.io.*;
+import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.input.DefaultInputHandler;
 import org.apache.tools.ant.input.InputHandler;
@@ -44,22 +59,6 @@ import org.dita.dost.project.Project.Publication;
 import org.dita.dost.project.ProjectFactory;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.URLUtils;
-
-import java.io.*;
-import java.net.URI;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.dita.dost.invoker.Arguments.*;
-import static org.dita.dost.util.Configuration.transtypes;
-import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
-import static org.dita.dost.util.LangUtils.pair;
-import static org.dita.dost.util.LangUtils.zipWithIndex;
 
 /**
  * Command line entry point into DITA-OT. This class is entered via the canonical
@@ -82,8 +81,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             "output.dir", "output",
             "transtype", "transtype",
             "args.input", "input",
-            "args.filter", "profiles"
-    );
+            "args.filter", "profiles");
 
     /**
      * File that we are using for configuration.
@@ -156,8 +154,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      *                                 <code>null</code> in which case the system classloader is
      *                                 used.
      */
-    public static void start(final String[] args, final Properties additionalUserProperties,
-                             final ClassLoader coreLoader) {
+    public static void start(
+            final String[] args, final Properties additionalUserProperties, final ClassLoader coreLoader) {
         final Main m = new Main();
         m.startAnt(args, additionalUserProperties, coreLoader);
     }
@@ -228,8 +226,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
             if (this.args.repeat > 1) {
                 for (int i = 0; i < durations.length; i++) {
-                    System.out.println(String.format(locale.getString("conversion.repeatDuration"),
-                            i + 1, durations[i]));
+                    System.out.println(
+                            String.format(locale.getString("conversion.repeatDuration"), i + 1, durations[i]));
                 }
             }
         } catch (final BuildException be) {
@@ -282,8 +280,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /**
      * Constructor used when creating Main for later arg processing and startup
      */
-    public Main() {
-    }
+    public Main() {}
 
     /**
      * Process command line arguments. When ant is started from Launcher,
@@ -374,16 +371,18 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());
                 }
                 if (!projectProp.containsKey(ANT_BASE_TEMP_DIR)) {
-                    projectProp.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
+                    projectProp.put(
+                            ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
                 }
                 if (projectProp.containsKey(ANT_PROJECT_DELIVERABLE)) {
                     if (projectProp.containsKey(ANT_TEMP_DIR)) {
-                        final Path tempDir = Paths.get(projectProp.get(ANT_TEMP_DIR).toString(),
+                        final Path tempDir = Paths.get(
+                                projectProp.get(ANT_TEMP_DIR).toString(),
                                 projectProp.get(ANT_PROJECT_DELIVERABLE).toString());
-                        projectProp.put(ANT_TEMP_DIR, tempDir
-                                .toAbsolutePath().toString());
+                        projectProp.put(ANT_TEMP_DIR, tempDir.toAbsolutePath().toString());
                     } else {
-                        final Path tempDir =  Paths.get(projectProp.get(ANT_BASE_TEMP_DIR).toString(),
+                        final Path tempDir = Paths.get(
+                                projectProp.get(ANT_BASE_TEMP_DIR).toString(),
                                 tempDirToken,
                                 projectProp.get(ANT_PROJECT_DELIVERABLE).toString());
                         projectProp.put(ANT_TEMP_DIR, tempDir.toAbsolutePath().toString());
@@ -391,7 +390,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 }
             }
         } else {
-            throw new RuntimeException("Command or subcommand not supported: " + args.getClass().getCanonicalName());
+            throw new RuntimeException(
+                    "Command or subcommand not supported: " + args.getClass().getCanonicalName());
         }
 
         // make sure buildfile exists
@@ -423,7 +423,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         readyToRun = true;
     }
 
-    private List<Map<String, Object>> collectProperties(final File projectFile, final Map<String, Object> definedProps) {
+    private List<Map<String, Object>> collectProperties(
+            final File projectFile, final Map<String, Object> definedProps) {
         final URI base = projectFile.toURI();
         final org.dita.dost.project.Project project = readProjectFile(projectFile);
 
@@ -431,22 +432,25 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
 
     @VisibleForTesting
-    List<Map<String, Object>> collectProperties(final org.dita.dost.project.Project project,
-                                                final URI base,
-                                                final Map<String, Object> definedProps) {
+    List<Map<String, Object>> collectProperties(
+            final org.dita.dost.project.Project project, final URI base, final Map<String, Object> definedProps) {
         final String runDeliverable = (String) definedProps.get(ANT_PROJECT_DELIVERABLE);
 
         final List<Map<String, Object>> projectProps = zipWithIndex(project.deliverables())
-                .filter(entry -> runDeliverable == null || Objects.equals(entry.getKey().id(), runDeliverable))
+                .filter(entry ->
+                        runDeliverable == null || Objects.equals(entry.getKey().id(), runDeliverable))
                 .map(entry -> {
                     final org.dita.dost.project.Project.Deliverable deliverable = entry.getKey();
                     final Map<String, Object> props = new HashMap<>(definedProps);
 
-                    props.put(ANT_PROJECT_DELIVERABLE, deliverable.id() != null
-                            ? deliverable.id()
-                            : String.format("deliverable-%d", entry.getValue() + 1));
+                    props.put(
+                            ANT_PROJECT_DELIVERABLE,
+                            deliverable.id() != null
+                                    ? deliverable.id()
+                                    : String.format("deliverable-%d", entry.getValue() + 1));
                     final Context context = deliverable.context();
-                    final URI input = base.resolve(context.inputs().inputs().get(0).href());
+                    final URI input =
+                            base.resolve(context.inputs().inputs().get(0).href());
                     props.put(ANT_ARGS_INPUT, input.toString());
                     final Path output = getOutputDir(deliverable, props);
                     props.put(ANT_OUTPUT_DIR, output.toString());
@@ -463,31 +467,36 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                             props.put(param.name(), value);
                         } else {
                             final String value;
-                            final Argument argument = ArgumentParser.getPluginArguments().get("--" + param.name());
-                            if (argument != null && (argument instanceof FileArgument || argument instanceof AbsoluteFileArgument)) {
+                            final Argument argument =
+                                    ArgumentParser.getPluginArguments().get("--" + param.name());
+                            if (argument != null
+                                    && (argument instanceof FileArgument || argument instanceof AbsoluteFileArgument)) {
                                 if (param.href() != null) {
-                                    value = Paths.get(base.resolve(param.href())).toString();
+                                    value = Paths.get(base.resolve(param.href()))
+                                            .toString();
                                 } else {
-                                    value = Paths.get(base).resolve(param.path()).toString();
+                                    value = Paths.get(base)
+                                            .resolve(param.path())
+                                            .toString();
                                 }
                             } else {
                                 if (param.href() != null) {
                                     value = param.href().toString();
                                 } else {
-                                    value = URLUtils.toFile(param.path().toString()).toString();
+                                    value = URLUtils.toFile(param.path().toString())
+                                            .toString();
                                 }
                             }
                             props.put(param.name(), value);
                         }
                     });
                     final List<org.dita.dost.project.Project.Deliverable.Profile.DitaVal> ditavals = Stream.concat(
-                                    publications.profiles().ditavals().stream(),
-                                    context.profiles().ditavals().stream()
-                            )
+                                    publications.profiles().ditavals().stream(), context.profiles().ditavals().stream())
                             .collect(Collectors.toList());
                     if (!ditavals.isEmpty()) {
                         final String filters = ditavals.stream()
-                                .map(ditaVal -> Paths.get(base.resolve(ditaVal.href())).toString())
+                                .map(ditaVal ->
+                                        Paths.get(base.resolve(ditaVal.href())).toString())
                                 .collect(Collectors.joining(File.pathSeparator));
                         props.put("args.filter", filters);
                     }
@@ -504,16 +513,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
 
     @VisibleForTesting
-    protected Path getOutputDir(final org.dita.dost.project.Project.Deliverable deliverable,
-                                final Map<String, Object> props) {
+    protected Path getOutputDir(
+            final org.dita.dost.project.Project.Deliverable deliverable, final Map<String, Object> props) {
         URI outputDir = new File(props.getOrDefault(ANT_OUTPUT_DIR, "out").toString())
-                .getAbsoluteFile().toURI();
-        outputDir = outputDir.getPath().endsWith("/")
-                ? outputDir
-                : URLUtils.setPath(outputDir, outputDir.getPath() + "/");
-        return Paths.get(deliverable.output() != null
-                ? outputDir.resolve(deliverable.output())
-                : outputDir);
+                .getAbsoluteFile()
+                .toURI();
+        outputDir =
+                outputDir.getPath().endsWith("/") ? outputDir : URLUtils.setPath(outputDir, outputDir.getPath() + "/");
+        return Paths.get(deliverable.output() != null ? outputDir.resolve(deliverable.output()) : outputDir);
     }
 
     private org.dita.dost.project.Project readProjectFile(final File projectFile) throws BuildException {
@@ -537,7 +544,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         for (org.dita.dost.project.Project.Deliverable deliverable : project.deliverables()) {
             for (Publication.Param param : deliverable.publication().params()) {
                 if (RESERVED_PARAMS.containsKey(param.name())) {
-                    printErrorMessage(MessageUtils.getMessage("DOTJ085E", param.name(), RESERVED_PARAMS.get(param.name())).toString());
+                    printErrorMessage(
+                            MessageUtils.getMessage("DOTJ085E", param.name(), RESERVED_PARAMS.get(param.name()))
+                                    .toString());
                 }
             }
         }
@@ -699,8 +708,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 // resolve properties
                 final PropertyHelper propertyHelper = PropertyHelper.getPropertyHelper(project);
                 final HashMap<String, Object> props = new HashMap<>(definedProps);
-                new ResolvePropertyMap(project, propertyHelper, propertyHelper.getExpanders()).resolveAllProperties(
-                        props, null, false);
+                new ResolvePropertyMap(project, propertyHelper, propertyHelper.getExpanders())
+                        .resolveAllProperties(props, null, false);
 
                 // set user-define properties
                 for (final Map.Entry<String, Object> ent : props.entrySet()) {
@@ -768,8 +777,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
         if (args.listeners != null) {
             for (String className : args.listeners) {
-                final BuildListener listener = ClasspathUtils.newInstance(className,
-                        Main.class.getClassLoader(), BuildListener.class);
+                final BuildListener listener =
+                        ClasspathUtils.newInstance(className, Main.class.getClassLoader(), BuildListener.class);
                 project.setProjectReference(listener);
                 project.addBuildListener(listener);
             }
@@ -788,8 +797,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         if (args.inputHandlerClassname == null) {
             handler = new DefaultInputHandler();
         } else {
-            handler = ClasspathUtils.newInstance(args.inputHandlerClassname, Main.class.getClassLoader(),
-                    InputHandler.class);
+            handler = ClasspathUtils.newInstance(
+                    args.inputHandlerClassname, Main.class.getClassLoader(), InputHandler.class);
             project.setProjectReference(handler);
         }
         project.setInputHandler(handler);
@@ -809,8 +818,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         BuildLogger logger;
         if (args.loggerClassname != null) {
             try {
-                logger = ClasspathUtils.newInstance(args.loggerClassname, Main.class.getClassLoader(),
-                        BuildLogger.class);
+                logger = ClasspathUtils.newInstance(
+                        args.loggerClassname, Main.class.getClassLoader(), BuildLogger.class);
             } catch (final BuildException e) {
                 printErrorMessage("The specified logger class " + args.loggerClassname + " could not be used because "
                         + e.getMessage());

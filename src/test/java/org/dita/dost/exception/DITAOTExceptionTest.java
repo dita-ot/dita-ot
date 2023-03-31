@@ -40,5 +40,4 @@ public class DITAOTExceptionTest {
         new DITAOTException(null, null, null);
         new DITAOTException(new MessageBean(null, (MessageBean.Type) null, null, null), new RuntimeException(), "test");
     }
-
 }

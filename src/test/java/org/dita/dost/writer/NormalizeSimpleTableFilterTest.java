@@ -7,21 +7,20 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.TestUtils;
-import org.dita.dost.util.XMLUtils;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
+import static org.dita.dost.TestUtils.assertXMLEqual;
 
+import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
-import java.io.InputStream;
-
-import static org.dita.dost.TestUtils.assertXMLEqual;
+import org.dita.dost.TestUtils;
+import org.dita.dost.util.XMLUtils;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 public class NormalizeSimpleTableFilterTest {
 
@@ -61,10 +60,12 @@ public class NormalizeSimpleTableFilterTest {
 
     private void test(final String file) throws Exception {
         final DocumentBuilder db = dbf.newDocumentBuilder();
-        final InputStream expStream = getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/exp/" + file);
+        final InputStream expStream =
+                getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/exp/" + file);
 
         final Transformer t = tf.newTransformer();
-        final InputStream src = getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/src/" + file);
+        final InputStream src =
+                getClass().getClassLoader().getResourceAsStream(this.getClass().getSimpleName() + "/src/" + file);
         final NormalizeSimpleTableFilter f = new NormalizeSimpleTableFilter();
         f.setParent(XMLUtils.getXMLReader());
         f.setLogger(new TestUtils.TestLogger());
@@ -74,5 +75,4 @@ public class NormalizeSimpleTableFilterTest {
         t.transform(s, new DOMResult(act));
         assertXMLEqual(db.parse(expStream), act);
     }
-
 }

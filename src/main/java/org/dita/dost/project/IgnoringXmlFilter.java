@@ -8,16 +8,15 @@
 
 package org.dita.dost.project;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Objects;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Objects;
 
 public class IgnoringXmlFilter extends XMLFilterImpl {
 
@@ -27,8 +26,8 @@ public class IgnoringXmlFilter extends XMLFilterImpl {
         super(parent);
     }
 
-    public void startElement(final String uri, final String localName,
-                             final String qName, final Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+            throws SAXException {
         if (Objects.equals(uri, XmlReader.NS)) {
             include.push(true);
             super.startElement(uri, localName, qName, filterAttributes(atts));
@@ -69,8 +68,7 @@ public class IgnoringXmlFilter extends XMLFilterImpl {
         return res;
     }
 
-    public void endElement(final String uri, final String localName,
-                           final String qName) throws SAXException {
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         if (include.pop()) {
             super.endElement(uri, localName, qName);
         }

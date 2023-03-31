@@ -12,23 +12,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.NullOutputStream;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-import org.apache.tools.ant.taskdefs.Expand;
-import org.apache.tools.ant.taskdefs.Get;
-import org.dita.dost.log.DITAOTAntLogger;
-import org.dita.dost.platform.*;
-import org.dita.dost.platform.Registry.Dependency;
-import org.dita.dost.util.Configuration;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -43,6 +26,22 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+import org.apache.tools.ant.taskdefs.Expand;
+import org.apache.tools.ant.taskdefs.Get;
+import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.platform.*;
+import org.dita.dost.platform.Registry.Dependency;
+import org.dita.dost.util.Configuration;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 public final class PluginInstallTask extends Task {
 
@@ -60,7 +59,8 @@ public final class PluginInstallTask extends Task {
 
     @Override
     public void init() {
-        registries = Arrays.stream(Configuration.configuration.get("registry").trim().split("\\s+"))
+        registries = Arrays.stream(
+                        Configuration.configuration.get("registry").trim().split("\\s+"))
                 .map(registry -> registry.endsWith("/") ? registry : (registry + "/"))
                 .collect(Collectors.toList());
         try {
@@ -68,7 +68,8 @@ public final class PluginInstallTask extends Task {
         } catch (IOException e) {
             throw new BuildException("Failed to create temporary directory: " + e.getMessage(), e);
         }
-        installedPlugins = Plugins.getInstalledPlugins().stream().map(Map.Entry::getKey).toList();
+        installedPlugins =
+                Plugins.getInstalledPlugins().stream().map(Map.Entry::getKey).toList();
 
         final DITAOTAntLogger logger;
         logger = new DITAOTAntLogger(getProject());
@@ -125,7 +126,8 @@ public final class PluginInstallTask extends Task {
                         integrator.addRemoved(name);
                         FileUtils.deleteDirectory(pluginDir);
                     } else {
-                        throw new BuildException(new IllegalStateException(String.format("Plug-in %s already installed: %s", name, pluginDir)));
+                        throw new BuildException(new IllegalStateException(
+                                String.format("Plug-in %s already installed: %s", name, pluginDir)));
                     }
                 }
                 FileUtils.copyDirectory(tempPluginDir, pluginDir);
@@ -143,8 +145,8 @@ public final class PluginInstallTask extends Task {
     }
 
     private String getFileHash(final File file) {
-        try (DigestInputStream digestInputStream = new DigestInputStream(new BufferedInputStream(
-                new FileInputStream(file)), MessageDigest.getInstance("SHA-256"))) {
+        try (DigestInputStream digestInputStream = new DigestInputStream(
+                new BufferedInputStream(new FileInputStream(file)), MessageDigest.getInstance("SHA-256"))) {
             IOUtils.copy(digestInputStream, new NullOutputStream());
             final MessageDigest digest = digestInputStream.getMessageDigest();
             final byte[] sha256 = digest.digest();
@@ -167,7 +169,8 @@ public final class PluginInstallTask extends Task {
     private String getPluginName(final File pluginDir) {
         final File config = new File(pluginDir, "plugin.xml");
         try {
-            final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(config);
+            final Document doc =
+                    DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(config);
             return doc.getDocumentElement().getAttribute("id");
         } catch (SAXException | IOException | ParserConfigurationException e) {
             throw new BuildException("Failed to read plugin name: " + e.getMessage(), e);
@@ -184,7 +187,8 @@ public final class PluginInstallTask extends Task {
         for (final String registry : registries) {
             final URI registryUrl = URI.create(registry + name + ".json");
             log(String.format("Read registry %s", registry), Project.MSG_INFO);
-            try (BufferedInputStream in = new BufferedInputStream(registryUrl.toURL().openStream())) {
+            try (BufferedInputStream in =
+                    new BufferedInputStream(registryUrl.toURL().openStream())) {
                 log("Parse registry", Project.MSG_INFO);
                 final JsonFactory factory = mapper.getFactory();
                 final JsonParser parser = factory.createParser(in);
@@ -207,7 +211,10 @@ public final class PluginInstallTask extends Task {
             } catch (FileNotFoundException e) {
                 log(String.format("Registry configuration %s not found", registryUrl), e, Project.MSG_INFO);
             } catch (IOException e) {
-                log(String.format("Failed to read registry configuration %s: %s", registryUrl, e.getMessage()), e, Project.MSG_ERR);
+                log(
+                        String.format("Failed to read registry configuration %s: %s", registryUrl, e.getMessage()),
+                        e,
+                        Project.MSG_ERR);
             }
         }
         if (res == null) {
@@ -243,7 +250,9 @@ public final class PluginInstallTask extends Task {
         if (expectedChecksum != null) {
             final String checksum = getFileHash(tempPluginFile);
             if (!checksum.equalsIgnoreCase(expectedChecksum)) {
-                throw new BuildException(new IllegalArgumentException(String.format("Downloaded plugin file checksum %s does not match expected value %s", checksum, expectedChecksum)));
+                throw new BuildException(new IllegalArgumentException(String.format(
+                        "Downloaded plugin file checksum %s does not match expected value %s",
+                        checksum, expectedChecksum)));
             }
         }
 
@@ -280,9 +289,7 @@ public final class PluginInstallTask extends Task {
 
     private Optional<Registry> findPlugin(final Collection<Registry> regs, final SemVerMatch version) {
         if (version == null) {
-            return regs.stream()
-                    .filter(this::matchingPlatformVersion)
-                    .max(Comparator.comparing(o -> o.vers));
+            return regs.stream().filter(this::matchingPlatformVersion).max(Comparator.comparing(o -> o.vers));
         } else {
             return regs.stream()
                     .filter(this::matchingPlatformVersion)

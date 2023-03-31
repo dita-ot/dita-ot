@@ -1,11 +1,11 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.index;
 
 import static org.dita.dost.util.Constants.*;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -47,12 +46,11 @@ public final class IndexTermCollection {
     /** The logger. */
     private DITAOTLogger javaLogger;
 
-    //RFE 2987769 Eclipse index-see
+    // RFE 2987769 Eclipse index-see
     /* Parameters passed in from ANT module */
     private PipelineHashIO pipelineHashIO = null;
 
-    public IndexTermCollection() {
-    }
+    public IndexTermCollection() {}
 
     public void setLogger(final DITAOTLogger logger) {
         this.javaLogger = logger;
@@ -89,7 +87,6 @@ public final class IndexTermCollection {
     public void setIndexClass(final String indexClass) {
         this.indexClass = indexClass;
     }
-
 
     /**
      * All a new term into the collection.
@@ -133,10 +130,9 @@ public final class IndexTermCollection {
      * Sort term list extracted from dita files base on Locale.
      */
     public void sort() {
-        if (IndexTerm.getTermLocale() == null ||
-                IndexTerm.getTermLocale().getLanguage().trim().length() == 0) {
-            IndexTerm.setTermLocale(new Locale(LANGUAGE_EN,
-                    COUNTRY_US));
+        if (IndexTerm.getTermLocale() == null
+                || IndexTerm.getTermLocale().getLanguage().trim().length() == 0) {
+            IndexTerm.setTermLocale(new Locale(LANGUAGE_EN, COUNTRY_US));
         }
 
         /*
@@ -159,14 +155,14 @@ public final class IndexTermCollection {
         AbstractWriter abstractWriter = null;
 
         if (indexClass != null && indexClass.length() > 0) {
-            //Instantiate the class value
+            // Instantiate the class value
             Class<?> anIndexClass;
             try {
-                anIndexClass = Class.forName( indexClass );
+                anIndexClass = Class.forName(indexClass);
                 abstractWriter = (AbstractWriter) anIndexClass.newInstance();
                 final IDitaTranstypeIndexWriter indexWriter = (IDitaTranstypeIndexWriter) anIndexClass.newInstance();
 
-                //RFE 2987769 Eclipse index-see
+                // RFE 2987769 Eclipse index-see
                 try {
 
                     ((AbstractExtendDitaWriter) abstractWriter).setPipelineHashIO(this.getPipelineHashIO());
@@ -175,24 +171,20 @@ public final class IndexTermCollection {
                     javaLogger.info(e.getMessage());
                     javaLogger.info(e.toString());
                     e.printStackTrace();
-
                 }
 
-
                 buff = new StringBuilder(indexWriter.getIndexFileName(outputFileRoot));
-
 
             } catch (final ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
 
-
         } else {
             throw new IllegalArgumentException("Index writer class not defined");
         }
 
-        //Even if there is no term in the list create an empty index file
-        //otherwise the compiler will report error.
+        // Even if there is no term in the list create an empty index file
+        // otherwise the compiler will report error.
         abstractWriter.setLogger(javaLogger);
         ((IDitaTranstypeIndexWriter) abstractWriter).setTermList(this.getTermList());
         abstractWriter.write(new File(buff.toString()));
@@ -206,7 +198,7 @@ public final class IndexTermCollection {
         outputFileRoot = fileRoot;
     }
 
-    //RFE 2987769 Eclipse index-see
+    // RFE 2987769 Eclipse index-see
     /**
      *  Get input parameters from ANT pipeline module.
      *  @return PipelineHashIO The hashmap containing some module parameters.
@@ -222,7 +214,4 @@ public final class IndexTermCollection {
     public void setPipelineHashIO(final PipelineHashIO hashIO) {
         pipelineHashIO = hashIO;
     }
-
-
-
 }

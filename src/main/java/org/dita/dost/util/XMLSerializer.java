@@ -7,25 +7,24 @@
  */
 package org.dita.dost.util;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
+import static javax.xml.XMLConstants.NULL_NS_URI;
 
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
-import static javax.xml.XMLConstants.NULL_NS_URI;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * XML serializer. Users a {@link javax.xml.transform.sax.TransformerHandler
@@ -187,7 +186,7 @@ public class XMLSerializer {
             throw new IllegalStateException("Current state does not allow Namespace writing");
         }
         final QName qName = elementStack.getFirst(); // peek
-        for (final NamespaceMapping p: qName.mappings) {
+        for (final NamespaceMapping p : qName.mappings) {
             if (p.prefix.equals(prefix) && p.uri.equals(uri)) {
                 return;
             } else if (p.prefix.equals(prefix)) {
@@ -237,7 +236,7 @@ public class XMLSerializer {
         processStartElement();
         final QName qName = elementStack.remove(); // pop
         transformer.endElement(qName.uri, qName.localName, qName.qName);
-        for (final NamespaceMapping p: qName.mappings) {
+        for (final NamespaceMapping p : qName.mappings) {
             if (p.newMapping) {
                 transformer.endPrefixMapping(p.prefix);
             }
@@ -300,13 +299,12 @@ public class XMLSerializer {
         transformer.comment(ch, 0, ch.length);
     }
 
-
     // Private methods ---------------------------------------------------------
 
     private void processStartElement() throws SAXException {
         if (openStartElement) {
             final QName qName = elementStack.getFirst(); // peek
-            for (final NamespaceMapping p: qName.mappings) {
+            for (final NamespaceMapping p : qName.mappings) {
                 if (p.newMapping) {
                     transformer.startPrefixMapping(p.prefix, p.uri);
                 }
@@ -325,8 +323,9 @@ public class XMLSerializer {
         if (uri != null) {
             // attempt to find apping in stack
             boolean found = false;
-            stack: for (final QName e: elementStack) {
-                for (final NamespaceMapping m: e.mappings) {
+            stack:
+            for (final QName e : elementStack) {
+                for (final NamespaceMapping m : e.mappings) {
                     if (m.uri.equals(uri) && m.prefix.equals(prefix)) {
                         found = true;
                         break stack;
@@ -361,10 +360,7 @@ public class XMLSerializer {
             this.qName = qName;
             mappings = new ArrayList<>(5);
         }
-
     }
 
-    private record NamespaceMapping(String prefix, String uri, boolean newMapping) {
-    }
-
+    private record NamespaceMapping(String prefix, String uri, boolean newMapping) {}
 }

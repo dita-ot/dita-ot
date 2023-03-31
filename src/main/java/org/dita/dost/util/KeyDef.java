@@ -7,11 +7,10 @@
  */
 package org.dita.dost.util;
 
-import net.sf.saxon.s9api.XdmNode;
+import static org.dita.dost.util.Constants.*;
 
 import java.net.URI;
-
-import static org.dita.dost.util.Constants.*;
+import net.sf.saxon.s9api.XdmNode;
 
 /**
  * Key definition.
@@ -20,6 +19,7 @@ public class KeyDef {
 
     /** Space delimited list of key names */
     public final String keys;
+
     public URI href;
     public final String scope;
     public final URI source;
@@ -34,8 +34,14 @@ public class KeyDef {
      * @param scope link scope, may be {@code null}
      * @param source key definition source, may be {@code null}
      */
-    public KeyDef(final String keys, final URI href, final String scope, final String format, final URI source, final XdmNode element) {
-        //assert href.isAbsolute();
+    public KeyDef(
+            final String keys,
+            final URI href,
+            final String scope,
+            final String format,
+            final URI source,
+            final XdmNode element) {
+        // assert href.isAbsolute();
         this.keys = keys;
         this.href = href == null || href.toString().isEmpty() ? null : href;
         this.scope = scope == null ? ATTR_SCOPE_VALUE_LOCAL : scope;
@@ -119,5 +125,4 @@ public class KeyDef {
         }
         return true;
     }
-
 }

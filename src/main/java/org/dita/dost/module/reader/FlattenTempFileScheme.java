@@ -8,16 +8,14 @@
 
 package org.dita.dost.module.reader;
 
-import java.net.URI;
-
 import static org.dita.dost.util.URLUtils.toURI;
+
+import java.net.URI;
 
 public class FlattenTempFileScheme implements TempFileNameScheme {
     @Override
     public URI generateTempFileName(final URI src) {
         assert src.isAbsolute();
-        return toURI(src.getPath().substring(1)
-                .replaceAll("[/\\\\]", "__")
-                .replaceAll("\\s+", "-"));
+        return toURI(src.getPath().substring(1).replaceAll("[/\\\\]", "__").replaceAll("\\s+", "-"));
     }
 }

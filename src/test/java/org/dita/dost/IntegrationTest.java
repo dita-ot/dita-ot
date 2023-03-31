@@ -8,47 +8,50 @@
 
 package org.dita.dost;
 
+import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
+import static org.junit.Assert.assertEquals;
+
+import java.nio.file.Paths;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl;
 import org.junit.Test;
 
-import java.nio.file.Paths;
-
-import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
-import static org.junit.Assert.assertEquals;
-
 public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     public abstract AbstractIntegrationTest builder();
-    
+
     @Test
     public void testreltableHeaders() throws Throwable {
-        builder().name("reltableHeaders")
+        builder()
+                .name("reltableHeaders")
                 .transtype(PREPROCESS)
                 .input(Paths.get("reltableheader.ditamap"))
                 .test();
-    }    
-    
+    }
+
     @Test
     public void testreltableTextlink() throws Throwable {
-        builder().name("reltableTextlink")
+        builder()
+                .name("reltableTextlink")
                 .transtype(PREPROCESS)
                 .input(Paths.get("1132.ditamap"))
                 .errorCount(1)
                 .test();
     }
-    
+
     @Test
     public void testlocktitle() throws Throwable {
-        builder().name("locktitle")
+        builder()
+                .name("locktitle")
                 .transtype(PREPROCESS)
                 .input(Paths.get("TestingLocktitle.ditamap"))
                 .test();
     }
-    
+
     @Test
     public void testchunk_uplevel() throws Throwable {
-        builder().name("chunk_uplevel")
+        builder()
+                .name("chunk_uplevel")
                 .transtype(PREPROCESS)
                 .input(Paths.get("main/chunkup.ditamap"))
                 .put("outer.control", "quiet")
@@ -57,7 +60,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcopyto_extensions_metadata() throws Throwable {
-        builder().name(Paths.get("copyto", "copyto_extensions_metadata"))
+        builder()
+                .name(Paths.get("copyto", "copyto_extensions_metadata"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC1.ditamap"))
                 .warnCount(3)
@@ -66,7 +70,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcopyto() throws Throwable {
-        builder().name(Paths.get("copyto", "basic"))
+        builder()
+                .name(Paths.get("copyto", "basic"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC2.ditamap"))
                 .warnCount(2)
@@ -75,7 +80,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcopyto_sametarget() throws Throwable {
-        builder().name(Paths.get("copyto", "copyto_sametarget"))
+        builder()
+                .name(Paths.get("copyto", "copyto_sametarget"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC3.ditamap"))
                 .warnCount(3)
@@ -84,15 +90,17 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcopyto_circulartarget() throws Throwable {
-        builder().name(Paths.get("copyto", "copyto_circulartarget"))
+        builder()
+                .name(Paths.get("copyto", "copyto_circulartarget"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC4.ditamap"))
                 .test();
     }
-    
+
     @Test
     public void testcopyto_linktarget() throws Throwable {
-        builder().name(Paths.get("copyto", "copyto_linktarget"))
+        builder()
+                .name(Paths.get("copyto", "copyto_linktarget"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("linktarget.ditamap"))
                 .errorCount(2)
@@ -102,7 +110,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcopyto_sametarget2() throws Throwable {
-        builder().name(Paths.get("copyto", "copyto_sametarget2"))
+        builder()
+                .name(Paths.get("copyto", "copyto_sametarget2"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("TC6.ditamap"))
                 .warnCount(4)
@@ -111,7 +120,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testconkeyref_push() throws Throwable {
-        builder().name(Paths.get("conref", "conkeyref_push"))
+        builder()
+                .name(Paths.get("conref", "conkeyref_push"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("conref-push-test.ditamap"))
                 .put("dita.ext", ".dita")
@@ -120,17 +130,19 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testlink_foreignshortdesc() throws Throwable {
-        builder().name("link_foreignshortdesc")
+        builder()
+                .name("link_foreignshortdesc")
                 .transtype(PREPROCESS)
                 .input(Paths.get("main.ditamap"))
                 .put("validate", "false")
                 .warnCount(1)
                 .test();
     }
-    
+
     @Test
     public void testconrefend() throws Throwable {
-        builder().name(Paths.get("conref", "conrefend"))
+        builder()
+                .name(Paths.get("conref", "conrefend"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("range.ditamap"))
                 .test();
@@ -138,15 +150,17 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testmapref_topicrefID() throws Throwable {
-        builder().name(Paths.get("mapref", "mapref_topicrefID"))
+        builder()
+                .name(Paths.get("mapref", "mapref_topicrefID"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("bookmap.ditamap"))
                 .test();
     }
-    
+
     @Test
     public void testmapref_to_conref() throws Throwable {
-        builder().name(Paths.get("mapref", "mapref_to_conref"))
+        builder()
+                .name(Paths.get("mapref", "mapref_to_conref"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("root.ditamap"))
                 .test();
@@ -154,7 +168,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testmapref_reltables() throws Throwable {
-        builder().name(Paths.get("mapref", "mapref_reltables"))
+        builder()
+                .name(Paths.get("mapref", "mapref_reltables"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("main.ditamap"))
                 .test();
@@ -162,7 +177,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcoderef_source() throws Throwable {
-        builder().name("coderef_source")
+        builder()
+                .name("coderef_source")
                 .transtype(PREPROCESS)
                 .input(Paths.get("mp.ditamap"))
                 .put("transtype", "preprocess")
@@ -174,7 +190,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testconref() throws Throwable {
-        builder().name(Paths.get("conref", "basic"))
+        builder()
+                .name(Paths.get("conref", "basic"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("lang-common1.dita"))
                 .put("validate", "false")
@@ -184,7 +201,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testconref_to_specialization() throws Throwable {
-        builder().name(Paths.get("conref", "conref_to_specialization"))
+        builder()
+                .name(Paths.get("conref", "conref_to_specialization"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("conref_to_specialization.dita"))
                 .put("validate", "false")
@@ -194,23 +212,26 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testconrefbreaksxref() throws Throwable {
-        builder().name(Paths.get("conref", "conrefbreaksxref"))
+        builder()
+                .name(Paths.get("conref", "conrefbreaksxref"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("conrefbreaksxref.dita"))
                 .test();
     }
-    
+
     @Test
     public void testconrefinsubmap() throws Throwable {
-        builder().name(Paths.get("conref", "conrefinsubmap"))
+        builder()
+                .name(Paths.get("conref", "conrefinsubmap"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("rootmap.ditamap"))
                 .test();
     }
-    
+
     @Test
     public void testconrefmissingfile() throws Throwable {
-        builder().name(Paths.get("conref", "conrefmissingfile"))
+        builder()
+                .name(Paths.get("conref", "conrefmissingfile"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("badconref.dita"))
                 .put("validate", "false")
@@ -221,7 +242,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile1() throws Throwable {
-        builder().name(Paths.get("filter", "map13_filter1"))
+        builder()
+                .name(Paths.get("filter", "map13_filter1"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("map13.ditamap"))
                 .put("args.filter", Paths.get("filter1.ditaval"))
@@ -230,7 +252,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile2() throws Throwable {
-        builder().name(Paths.get("filter", "map13_filter2"))
+        builder()
+                .name(Paths.get("filter", "map13_filter2"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("map13.ditamap"))
                 .put("args.filter", Paths.get("filter2.ditaval"))
@@ -239,7 +262,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile3() throws Throwable {
-        builder().name(Paths.get("filter", "map13_filter3"))
+        builder()
+                .name(Paths.get("filter", "map13_filter3"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("map13.ditamap"))
                 .put("args.filter", Paths.get("filter3.ditaval"))
@@ -248,7 +272,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile4() throws Throwable {
-        builder().name(Paths.get("filter", "map31_filter_multi"))
+        builder()
+                .name(Paths.get("filter", "map31_filter_multi"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("map31.ditamap"))
                 .put("args.filter", Paths.get("filter_multi.ditaval"))
@@ -258,7 +283,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile5() throws Throwable {
-        builder().name(Paths.get("filter", "map32_filter_multi"))
+        builder()
+                .name(Paths.get("filter", "map32_filter_multi"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("map32.ditamap"))
                 .put("args.filter", Paths.get("filter_multi.ditaval"))
@@ -268,7 +294,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile6() throws Throwable {
-        builder().name(Paths.get("filter", "map33_filter2"))
+        builder()
+                .name(Paths.get("filter", "map33_filter2"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("map33.ditamap"))
                 .put("args.filter", Paths.get("filter2.ditaval"))
@@ -277,7 +304,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testcontrolValueFile7() throws Throwable {
-        builder().name(Paths.get("filter", "map33_filter3"))
+        builder()
+                .name(Paths.get("filter", "map33_filter3"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("map33.ditamap"))
                 .put("args.filter", Paths.get("filter3.ditaval"))
@@ -286,7 +314,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testkeyref() throws Throwable {
-        builder().name(Paths.get("keyref", "basic"))
+        builder()
+                .name(Paths.get("keyref", "basic"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("test.ditamap"))
                 .test();
@@ -294,7 +323,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testmapref() throws Throwable {
-        builder().name(Paths.get("mapref", "basic"))
+        builder()
+                .name(Paths.get("mapref", "basic"))
                 .transtype(PREPROCESS)
                 .input(Paths.get("test.ditamap"))
                 .put("generate-debug-attributes", "false")
@@ -304,26 +334,29 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testuplevelslink() throws Throwable {
-        builder().name("uplevelslink")
+        builder()
+                .name("uplevelslink")
                 .transtype(PREPROCESS)
                 .input(Paths.get("main/uplevel-in-topic.ditamap"))
                 .put("outer.control", "quiet")
                 .test();
     }
-    
+
     @Test
     public void testuplevelslinkOnlytopic() throws Throwable {
-        builder().name("uplevelslink")
+        builder()
+                .name("uplevelslink")
                 .transtype(PREPROCESS)
                 .input(Paths.get("main/uplevel-in-topic.ditamap"))
                 .put("outer.control", "quiet")
                 .put("onlytopic.in.map", "true")
                 .test();
     }
-    
+
     @Test
     public void testmappull_topicid() throws Throwable {
-        builder().name("mappull-topicid")
+        builder()
+                .name("mappull-topicid")
                 .transtype(PREPROCESS)
                 .input(Paths.get("reftopicid.ditamap"))
                 .put("validate", "false")
@@ -333,7 +366,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testCrawlTopicPreprocess() throws Throwable {
-        builder().name("crawl_topic")
+        builder()
+                .name("crawl_topic")
                 .transtype(PREPROCESS)
                 .input(Paths.get("input.ditamap"))
                 .put("link-crawl", "topic")
@@ -342,7 +376,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testCrawlMapPreprocess() throws Throwable {
-        builder().name("crawl_map")
+        builder()
+                .name("crawl_map")
                 .transtype(PREPROCESS)
                 .input(Paths.get("input.ditamap"))
                 .put("link-crawl", "map")
@@ -353,7 +388,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testRng() throws Throwable {
-        builder().name("rng")
+        builder()
+                .name("rng")
                 .transtype(PREPROCESS)
                 .input(Paths.get("root.ditamap"))
                 .test();
@@ -361,7 +397,8 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void resource_map() throws Throwable {
-        builder().name("resource_map")
+        builder()
+                .name("resource_map")
                 .transtype(PREPROCESS)
                 .input(Paths.get("map.ditamap"))
                 .put("args.resources", Paths.get("keys.ditamap"))
@@ -370,28 +407,34 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void resource_topic() throws Throwable {
-        builder().name("resource_topic")
+        builder()
+                .name("resource_topic")
                 .transtype(PREPROCESS)
                 .input(Paths.get("topic.dita"))
                 .put("args.resources", Paths.get("keys.ditamap"))
                 .test();
     }
+
     @Test
     public void testRngGrammarPool() throws Throwable {
-        RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl grammarPool = (RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl) GrammarPoolManager.getGrammarPool();
+        RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl grammarPool =
+                (RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl) GrammarPoolManager.getGrammarPool();
         grammarPool.clear();
-        builder().name("bookmap-rng-based")
+        builder()
+                .name("bookmap-rng-based")
                 .transtype(PREPROCESS)
                 .input(Paths.get("main.ditamap"))
                 .test();
         assertEquals("One bookmap, one topic and one concept", 3, grammarPool.getCacheSize());
     }
-    
+
     @Test
     public void testRngNoGrammarPool() throws Throwable {
-        RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl grammarPool = (RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl) GrammarPoolManager.getGrammarPool();
+        RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl grammarPool =
+                (RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl) GrammarPoolManager.getGrammarPool();
         grammarPool.clear();
-        builder().name("bookmap-rng-based")
+        builder()
+                .name("bookmap-rng-based")
                 .transtype(PREPROCESS)
                 .input(Paths.get("main.ditamap"))
                 .put("args.grammar.cache", "no")

@@ -9,12 +9,11 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-
-import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
 import org.w3c.dom.Attr;
@@ -35,8 +34,8 @@ public final class DitaClass {
     // Variables
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-    private static final Pattern VALID_DITA_CLASS = Pattern.compile("(\\+|-)\\s+(topic|map)/\\S+\\s+" +
-                                                         "([\\S[^/]]+/\\S+\\s+)*");
+    private static final Pattern VALID_DITA_CLASS =
+            Pattern.compile("(\\+|-)\\s+(topic|map)/\\S+\\s+" + "([\\S[^/]]+/\\S+\\s+)*");
 
     private static final Map<String, DitaClass> cache = new ConcurrentHashMap<>();
 
@@ -63,7 +62,7 @@ public final class DitaClass {
         matcher = ' ' + last + ' ';
         localName = last.substring(last.indexOf('/') + 1);
         final StringBuilder sb = new StringBuilder();
-        for (final String s: tokens) {
+        for (final String s : tokens) {
             sb.append(s).append(' ');
         }
         stringValue = sb.toString();
@@ -208,8 +207,7 @@ public final class DitaClass {
      * otherwise {@code false}
      */
     public Predicate<XdmNode> matcher() {
-        return item -> item.getNodeKind() == XdmNodeKind.ELEMENT
-                && matches(item.attribute(ATTRIBUTE_NAME_CLASS));
+        return item -> item.getNodeKind() == XdmNodeKind.ELEMENT && matches(item.attribute(ATTRIBUTE_NAME_CLASS));
     }
 
     /**
@@ -220,5 +218,4 @@ public final class DitaClass {
     public boolean isValid() {
         return validDitaClass;
     }
-
 }

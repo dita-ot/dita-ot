@@ -29,15 +29,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
-import java.util.Date;
 import java.text.DateFormat;
-
+import java.util.Date;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.util.DateUtils;
-import org.apache.tools.ant.util.StringUtils;
 import org.apache.tools.ant.util.FileUtils;
+import org.apache.tools.ant.util.StringUtils;
 
 /**
  * Writes build events to a PrintStream. Currently, it only writes which targets
@@ -84,6 +83,7 @@ class DefaultLogger implements BuildLogger {
 
     /** Whether or not to use emacs-style output */
     private boolean emacsMode = false;
+
     private boolean useColor = false;
 
     // CheckStyle:VisibilityModifier ON
@@ -91,8 +91,7 @@ class DefaultLogger implements BuildLogger {
     /**
      * Sole constructor.
      */
-    public DefaultLogger() {
-    }
+    public DefaultLogger() {}
 
     /**
      * Sets the highest level of message this logger should respond to.
@@ -168,7 +167,7 @@ class DefaultLogger implements BuildLogger {
             msg = msg.substring(i + 1).trim();
         }
         m.append(msg);
-//        m.append(lSep);
+        //        m.append(lSep);
     }
 
     /**
@@ -188,7 +187,7 @@ class DefaultLogger implements BuildLogger {
         } else {
             // message.append(StringUtils.LINE_SEP);
             // message.append(getBuildFailedMessage());
-//            message.append(StringUtils.LINE_SEP);
+            //            message.append(StringUtils.LINE_SEP);
             message.append("Error: ");
             throwableMessage(message, error, Project.MSG_VERBOSE <= msgOutputLevel);
         }
@@ -247,8 +246,7 @@ class DefaultLogger implements BuildLogger {
      * @param event Ignored.
      */
     @Override
-    public void targetFinished(final BuildEvent event) {
-    }
+    public void targetFinished(final BuildEvent event) {}
 
     /**
      * No-op implementation.
@@ -256,8 +254,7 @@ class DefaultLogger implements BuildLogger {
      * @param event Ignored.
      */
     @Override
-    public void taskStarted(final BuildEvent event) {
-    }
+    public void taskStarted(final BuildEvent event) {}
 
     /**
      * No-op implementation.
@@ -265,8 +262,7 @@ class DefaultLogger implements BuildLogger {
      * @param event Ignored.
      */
     @Override
-    public void taskFinished(final BuildEvent event) {
-    }
+    public void taskFinished(final BuildEvent event) {}
 
     /**
      * Logs a message, if the priority is suitable. In non-emacs mode, task
@@ -376,8 +372,7 @@ class DefaultLogger implements BuildLogger {
      *
      * @param message Message being logged. Should not be <code>null</code>.
      */
-    private void log(final String message) {
-    }
+    private void log(final String message) {}
 
     /**
      * Get the current time.
@@ -402,5 +397,4 @@ class DefaultLogger implements BuildLogger {
         final Project project = event.getProject();
         return (project != null) ? project.getName() : null;
     }
-
 }

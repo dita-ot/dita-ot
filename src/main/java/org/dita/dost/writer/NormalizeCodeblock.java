@@ -7,14 +7,13 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_OUTPUTCLASS;
+import static org.dita.dost.util.Constants.PR_D_CODEBLOCK;
+
+import java.util.*;
 import org.dita.dost.util.SaxCache.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-
-import java.util.*;
-
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_OUTPUTCLASS;
-import static org.dita.dost.util.Constants.PR_D_CODEBLOCK;
 
 /**
  * Trim whitespace in codeblock elements.
@@ -28,8 +27,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     private final Collection<SaxEvent> buf = new ArrayList<>();
 
     @Override
-    public void startPrefixMapping(String prefix, String uri)
-            throws SAXException {
+    public void startPrefixMapping(String prefix, String uri) throws SAXException {
         if (depth > 0) {
             buf.add(new StartPrefixMappingEvent(prefix, uri));
         } else {
@@ -38,8 +36,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     @Override
-    public void endPrefixMapping(String prefix)
-            throws SAXException {
+    public void endPrefixMapping(String prefix) throws SAXException {
         if (depth > 0) {
             buf.add(new EndPrefixMappingEvent(prefix));
         } else {
@@ -48,9 +45,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName,
-                             Attributes atts)
-            throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         if (depth > 0) {
             depth++;
             buf.add(new StartElementEvent(uri, localName, qName, atts));
@@ -67,8 +62,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName)
-            throws SAXException {
+    public void endElement(String uri, String localName, String qName) throws SAXException {
         if (depth > 0) {
             depth--;
             if (depth == 0) {
@@ -159,12 +153,8 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     private char[] stripLeadingSpace(boolean first, int prefix, char[] ch, int start, int length) {
-        final String str = first
-                ? new String(ch, start + prefix, length - prefix)
-                : new String(ch, start, length);
-        return str
-                .replaceAll("\n {" + prefix + "}", "\n")
-                .toCharArray();
+        final String str = first ? new String(ch, start + prefix, length - prefix) : new String(ch, start, length);
+        return str.replaceAll("\n {" + prefix + "}", "\n").toCharArray();
     }
 
     int countLeadingSpace(String ch) {
@@ -177,8 +167,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     @Override
-    public void characters(char[] ch, int start, int length)
-            throws SAXException {
+    public void characters(char[] ch, int start, int length) throws SAXException {
         if (depth > 0) {
             buf.add(new CharactersEvent(ch, start, length));
         } else {
@@ -187,8 +176,7 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     @Override
-    public void ignorableWhitespace(char[] ch, int start, int length)
-            throws SAXException {
+    public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
         if (depth > 0) {
             buf.add(new CharactersEvent(ch, start, length));
         } else {
@@ -197,13 +185,11 @@ public final class NormalizeCodeblock extends AbstractXMLFilter {
     }
 
     @Override
-    public void processingInstruction(String target, String data)
-            throws SAXException {
+    public void processingInstruction(String target, String data) throws SAXException {
         if (depth > 0) {
             buf.add(new ProcessingInstructionEvent(target, data));
         } else {
             super.processingInstruction(target, data);
         }
     }
-
 }

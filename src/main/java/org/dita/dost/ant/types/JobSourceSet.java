@@ -7,8 +7,17 @@
  */
 package org.dita.dost.ant.types;
 
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_IMAGE;
+import static org.dita.dost.util.FileUtils.supportedImageExtensions;
+import static org.dita.dost.util.URLUtils.toFile;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.AbstractFileSet;
 import org.apache.tools.ant.types.Resource;
@@ -22,16 +31,6 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
-
-import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
-import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_IMAGE;
-import static org.dita.dost.util.FileUtils.supportedImageExtensions;
-import static org.dita.dost.util.URLUtils.toFile;
 
 /**
  * Resource collection that finds matching resources from job configuration.
@@ -68,7 +67,8 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
                     final File srcFile = new File(URLUtils.setQuery(f.src, null));
                     if (srcFile.exists()) {
                         log("Found source directory file " + srcFile, Project.MSG_VERBOSE);
-                        final File rel = FileUtils.getRelativePath(new File(new File(job.getInputDir()), "dummy"), srcFile);
+                        final File rel =
+                                FileUtils.getRelativePath(new File(new File(job.getInputDir()), "dummy"), srcFile);
                         res.add(new FileResource(toFile(job.getInputDir()), rel.getPath()));
                     } else {
                         log("File " + f.src + " not found", Project.MSG_ERR);
@@ -145,7 +145,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
     @VisibleForTesting
     public boolean filter(final FileInfo f) {
-        for (final SelectorElem excl: excludes) {
+        for (final SelectorElem excl : excludes) {
             if (filter(f, excl)) {
                 return false;
             }
@@ -153,7 +153,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         if (includes.isEmpty()) {
             return true;
         } else {
-            for (final SelectorElem incl: includes) {
+            for (final SelectorElem incl : includes) {
                 if (filter(f, incl)) {
                     return true;
                 }
@@ -164,15 +164,16 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
     private boolean filter(final FileInfo f, final SelectorElem incl) {
         final String format = f.format != null ? f.format : ATTR_FORMAT_VALUE_DITA;
-        return (incl.formats.isEmpty() || (incl.formats.contains(format))) &&
-                (incl.hasConref == null || f.hasConref == incl.hasConref) &&
-                (incl.isInput == null || f.isInput == incl.isInput) &&
-                (incl.isInputResource == null || f.isInputResource == incl.isInputResource) &&
-                (incl.isResourceOnly == null || f.isResourceOnly == incl.isResourceOnly);
+        return (incl.formats.isEmpty() || (incl.formats.contains(format)))
+                && (incl.hasConref == null || f.hasConref == incl.hasConref)
+                && (incl.isInput == null || f.isInput == incl.isInput)
+                && (incl.isInputResource == null || f.isInputResource == incl.isInputResource)
+                && (incl.isResourceOnly == null || f.isResourceOnly == incl.isResourceOnly);
     }
 
     private static class JobResource extends URLResource {
         private final String relPath;
+
         public JobResource(final URL baseURL, final String relPath) {
             super();
             setBaseURL(baseURL);
@@ -187,7 +188,8 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         @Override
         public synchronized String getName() {
             if (isReference()) {
-                return getCheckedRef(getClass(), getDataTypeName(), getProject()).getName();
+                return getCheckedRef(getClass(), getDataTypeName(), getProject())
+                        .getName();
             }
             return relPath;
         }
@@ -200,11 +202,14 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         private Boolean isInputResource;
         private Boolean isResourceOnly;
 
-        public SelectorElem() {
-        }
+        public SelectorElem() {}
 
-        public SelectorElem(Set<String> formats, Boolean hasConref, Boolean isInput,
-                            Boolean isInputResource, Boolean isResourceOnly) {
+        public SelectorElem(
+                Set<String> formats,
+                Boolean hasConref,
+                Boolean isInput,
+                Boolean isInputResource,
+                Boolean isResourceOnly) {
             this.formats = formats != null ? formats : Collections.emptySet();
             this.hasConref = hasConref;
             this.isInput = isInput;
@@ -213,7 +218,8 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         }
 
         public void setFormat(final String format) {
-            final ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(format);
+            final ImmutableSet.Builder<String> builder =
+                    ImmutableSet.<String>builder().add(format);
             if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
                 supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
             }
@@ -237,11 +243,11 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
         }
 
         public boolean isEmpty() {
-            return formats.isEmpty() &&
-                    hasConref == null &&
-                    isInput == null &&
-                    isInputResource == null &&
-                    isResourceOnly == null;
+            return formats.isEmpty()
+                    && hasConref == null
+                    && isInput == null
+                    && isInputResource == null
+                    && isResourceOnly == null;
         }
     }
 }

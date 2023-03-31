@@ -11,13 +11,11 @@ import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 
 import java.io.File;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
-
 import org.dita.dost.TestUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +30,6 @@ public class TopicFragmentFilterTest {
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
 
-    
     @Before
     public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(TopicFragmentFilterTest.class);
@@ -47,9 +44,16 @@ public class TopicFragmentFilterTest {
     public void test() throws Exception {
         final TopicFragmentFilter f = new TopicFragmentFilter(ATTRIBUTE_NAME_HREF);
         f.setParent(SAXParserFactory.newInstance().newSAXParser().getXMLReader());
-                
+
         final DOMResult dst = new DOMResult();
-        TransformerFactory.newInstance().newTransformer().transform(new SAXSource(f, new InputSource(new File(srcDir, "topic.dita").toURI().toString())), dst);
+        TransformerFactory.newInstance()
+                .newTransformer()
+                .transform(
+                        new SAXSource(
+                                f,
+                                new InputSource(
+                                        new File(srcDir, "topic.dita").toURI().toString())),
+                        dst);
 
         final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
@@ -57,5 +61,4 @@ public class TopicFragmentFilterTest {
         final Document exp = builderFactory.newDocumentBuilder().parse(new File(expDir, "topic.dita"));
         assertXMLEqual(exp, (Document) dst.getNode());
     }
-
 }

@@ -1,15 +1,29 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.reader;
+
+import static javax.xml.XMLConstants.XML_NS_PREFIX;
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FilterUtils.DEFAULT;
+import static org.dita.dost.util.URLUtils.getRelativePath;
+import static org.dita.dost.util.XMLUtils.*;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.xml.namespace.QName;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -24,21 +38,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.xml.namespace.QName;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static javax.xml.XMLConstants.XML_NS_PREFIX;
-import static javax.xml.XMLConstants.XML_NS_URI;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FilterUtils.DEFAULT;
-import static org.dita.dost.util.URLUtils.getRelativePath;
-import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * DitaValReader reads and parses the information from ditaval file which
@@ -77,12 +76,16 @@ public final class DitaValReader implements AbstractReader {
         imageList = new ArrayList<>(256);
         relFlagImageList = new ArrayList<>(256);
 
-        filterAttributes = Stream.of(Configuration.configuration.getOrDefault("filter-attributes", "")
-                .trim().split("\\s*,\\s*"))
+        filterAttributes = Stream.of(Configuration.configuration
+                        .getOrDefault("filter-attributes", "")
+                        .trim()
+                        .split("\\s*,\\s*"))
                 .map(QName::valueOf)
                 .collect(Collectors.toSet());
-        flagAttributes = Stream.of(Configuration.configuration.getOrDefault("flag-attributes", "")
-                .trim().split("\\s*,\\s*"))
+        flagAttributes = Stream.of(Configuration.configuration
+                        .getOrDefault("flag-attributes", "")
+                        .trim()
+                        .split("\\s*,\\s*"))
                 .map(QName::valueOf)
                 .collect(Collectors.toSet());
     }
@@ -140,7 +143,7 @@ public final class DitaValReader implements AbstractReader {
 
         if (bindingMap != null && !bindingMap.isEmpty()) {
             final Map<FilterKey, Action> buf = new HashMap<>(filterMap);
-            for (final Map.Entry<FilterKey, Action> e: buf.entrySet()) {
+            for (final Map.Entry<FilterKey, Action> e : buf.entrySet()) {
                 refineAction(e.getValue(), e.getKey());
             }
         }
@@ -162,16 +165,18 @@ public final class DitaValReader implements AbstractReader {
         }
     }
 
-    public void readProp(final Element elem)  {
+    public void readProp(final Element elem) {
         final String attAction = elem.getAttribute(ELEMENT_NAME_ACTION);
-        Action action = switch (attAction) {
-            case "include" -> Action.INCLUDE;
-            case "exclude" -> Action.EXCLUDE;
-            case "passthrough" -> Action.PASSTHROUGH;
-            case "flag" -> readFlag(elem);
-            default ->
-                    throw new IllegalArgumentException(MessageUtils.getMessage("DOTJ077F", attAction).setLocation(elem).toString());
-        };
+        Action action =
+                switch (attAction) {
+                    case "include" -> Action.INCLUDE;
+                    case "exclude" -> Action.EXCLUDE;
+                    case "passthrough" -> Action.PASSTHROUGH;
+                    case "flag" -> readFlag(elem);
+                    default -> throw new IllegalArgumentException(MessageUtils.getMessage("DOTJ077F", attAction)
+                            .setLocation(elem)
+                            .toString());
+                };
         if (action != null) {
             final QName attName;
             if (elem.getTagName().equals(ELEMENT_NAME_REVPROP)) {
@@ -194,9 +199,13 @@ public final class DitaValReader implements AbstractReader {
                 } else {
                     attName = null;
                 }
-                if (attName != null && attName.equals(REV)
-                        && !filterAttributes.isEmpty() && !filterAttributes.contains(REV)) {
-                    logger.warn(MessageUtils.getMessage("DOTJ074W").setLocation((elem)).toString());
+                if (attName != null
+                        && attName.equals(REV)
+                        && !filterAttributes.isEmpty()
+                        && !filterAttributes.contains(REV)) {
+                    logger.warn(MessageUtils.getMessage("DOTJ074W")
+                            .setLocation((elem))
+                            .toString());
                     return;
                 }
             }
@@ -229,7 +238,8 @@ public final class DitaValReader implements AbstractReader {
                 URI relative;
                 if (absolute.isAbsolute()) {
                     relative = getRelativePath(ditaVal, absolute);
-                } else if (!img.getAttributeNS(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI).isEmpty()) {
+                } else if (!img.getAttributeNS(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI)
+                        .isEmpty()) {
                     absolute = URI.create(img.getAttributeNS(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI));
                     relative = absolute;
                 } else {
@@ -274,8 +284,8 @@ public final class DitaValReader implements AbstractReader {
         if (key.value() != null && bindingMap != null && !bindingMap.isEmpty()) {
             final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute());
             if (schemeMap != null && !schemeMap.isEmpty()) {
-                for (final Set<Element> submap: schemeMap.values()) {
-                    for (final Element e: submap) {
+                for (final Set<Element> submap : schemeMap.values()) {
+                    for (final Element e : submap) {
                         final Element subRoot = searchForKey(e, key.value());
                         if (subRoot != null) {
                             insertAction(subRoot, key.attribute(), action);
@@ -304,7 +314,7 @@ public final class DitaValReader implements AbstractReader {
         NodeList children = subTree.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                queue.offer((Element)children.item(i));
+                queue.offer((Element) children.item(i));
             }
         }
 
@@ -313,7 +323,7 @@ public final class DitaValReader implements AbstractReader {
             children = node.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    queue.offer((Element)children.item(i));
+                    queue.offer((Element) children.item(i));
                 }
             }
             if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
@@ -345,7 +355,7 @@ public final class DitaValReader implements AbstractReader {
             final NodeList children = node.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    queue.add((Element)children.item(i));
+                    queue.add((Element) children.item(i));
                 }
             }
             if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
@@ -357,7 +367,6 @@ public final class DitaValReader implements AbstractReader {
         }
         return null;
     }
-
 
     /**
      * Insert action into filetermap if key not present in the map

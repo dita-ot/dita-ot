@@ -8,10 +8,10 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.Generate.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.dita.dost.util.Job.Generate.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,8 +19,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.*;
-
+import org.dita.dost.TestUtils;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Constants;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -33,13 +38,6 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.Job.FileInfo;
 
 public class DebugAndFilterModuleTest {
 
@@ -53,7 +51,7 @@ public class DebugAndFilterModuleTest {
     public static void setUpClass() {
         CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
     }
-    
+
     @Before
     public void setUp() throws IOException, DITAOTException {
         tempDir = TestUtils.createTempDir(getClass());
@@ -64,8 +62,10 @@ public class DebugAndFilterModuleTest {
         tmpDir = new File(tempDir, "temp");
         TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
         final Job job = new Job(tmpDir, new StreamStore(tmpDir, new XMLUtils()));
-        for (final Job.FileInfo fi: job.getFileInfo()) {
-            job.add(new Job.FileInfo.Builder(fi).src(inputDir.toURI().resolve(fi.uri)).build());
+        for (final Job.FileInfo fi : job.getFileInfo()) {
+            job.add(new Job.FileInfo.Builder(fi)
+                    .src(inputDir.toURI().resolve(fi.uri))
+                    .build());
         }
         job.setInputFile(inputMap.getAbsoluteFile().toURI());
         job.setGeneratecopyouter(NOT_GENERATEOUTTER);
@@ -99,19 +99,19 @@ public class DebugAndFilterModuleTest {
         module.setJob(job);
         module.setXmlUtils(new XMLUtils());
         module.setProcessingPipe(Collections.emptyList());
-        
+
         module.execute(pipelineInput);
     }
 
     @Test
     public void testGeneratedFiles() throws SAXException, IOException {
         final File[] files = {
-                new File("maps", "root-map-01.ditamap"),
-                new File("topics", "target-topic-a.xml"),
-                new File("topics", "target-topic-c.xml"),
-                new File("topics", "xreffin-topic-1.xml"),
-                // TODO test me somewhere else
-//                new File("topics", "copy-to.xml"),
+            new File("maps", "root-map-01.ditamap"),
+            new File("topics", "target-topic-a.xml"),
+            new File("topics", "target-topic-c.xml"),
+            new File("topics", "xreffin-topic-1.xml"),
+            // TODO test me somewhere else
+            //                new File("topics", "copy-to.xml"),
         };
         final Map<File, File> copyto = new HashMap<>();
         copyto.put(new File("topics", "copy-to.xml"), new File("topics", "xreffin-topic-1.xml"));
@@ -119,9 +119,10 @@ public class DebugAndFilterModuleTest {
         final XMLReader parser = XMLReaderFactory.createXMLReader();
         parser.setEntityResolver(CatalogUtils.getCatalogResolver());
         parser.setContentHandler(handler);
-        for (final File f: files) {
+        for (final File f : files) {
             try (InputStream in = new FileInputStream(new File(tmpDir, f.getPath()))) {
-                handler.setSource(new File(inputDir, copyto.containsKey(f) ? copyto.get(f).getPath() : f.getPath()));
+                handler.setSource(
+                        new File(inputDir, copyto.containsKey(f) ? copyto.get(f).getPath() : f.getPath()));
                 parser.parse(new InputSource(in));
             }
         }
@@ -165,12 +166,12 @@ public class DebugAndFilterModuleTest {
         module.setJob(job);
         module.setXmlUtils(new XMLUtils());
         module.setProcessingPipe(Collections.emptyList());
-        
+
         try {
             module.execute(pipelineInput);
             assertTrue("Should break, a file needs to be written outside of the temp files folder.", false);
-        } catch(Exception ex) {
-            assertEquals("Cannot write outside of the temporary files folder: file:/etc/passwd", ex.getMessage()); 
+        } catch (Exception ex) {
+            assertEquals("Cannot write outside of the temporary files folder: file:/etc/passwd", ex.getMessage());
         }
     }
 
@@ -190,7 +191,7 @@ public class DebugAndFilterModuleTest {
 
         public void endDocument() throws SAXException {
             if (!requiredProcessingInstructions.isEmpty()) {
-                for (final String pi: requiredProcessingInstructions) {
+                for (final String pi : requiredProcessingInstructions) {
                     throw new AssertionError("Processing instruction " + pi + " not defined");
                 }
             }
@@ -210,8 +211,7 @@ public class DebugAndFilterModuleTest {
             // NOOP
         }
 
-        public void processingInstruction(final String arg0, final String arg1)
-                throws SAXException {
+        public void processingInstruction(final String arg0, final String arg1) throws SAXException {
             requiredProcessingInstructions.remove(arg0);
         }
 
@@ -227,13 +227,13 @@ public class DebugAndFilterModuleTest {
             requiredProcessingInstructions.add("path2project");
             requiredProcessingInstructions.add("workdir");
             requiredProcessingInstructions.add("workdir-uri");
-
         }
 
-        public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+                throws SAXException {
             final String xtrf = atts.getValue("xtrf");
             assertNotNull(xtrf);
-            //assertEquals(source.getAbsoluteFile().toURI().toString(), xtrf);
+            // assertEquals(source.getAbsoluteFile().toURI().toString(), xtrf);
             assertEquals(source.getAbsoluteFile().toURI().toString(), xtrf);
             final String xtrc = atts.getValue("xtrc");
             assertNotNull(xtrc);
@@ -246,7 +246,5 @@ public class DebugAndFilterModuleTest {
         public void startPrefixMapping(final String arg0, final String arg1) throws SAXException {
             // NOOP
         }
-
     }
-
 }

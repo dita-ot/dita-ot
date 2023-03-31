@@ -7,6 +7,11 @@
  */
 package org.dita.dost.ant;
 
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toFile;
+
+import java.io.File;
+import java.util.ServiceLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -15,12 +20,6 @@ import org.dita.dost.store.Store;
 import org.dita.dost.store.StoreBuilder;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.XMLUtils;
-
-import java.io.File;
-import java.util.ServiceLoader;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toFile;
 
 /**
  * Initialize Ant references.

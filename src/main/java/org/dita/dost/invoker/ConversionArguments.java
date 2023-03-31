@@ -8,24 +8,23 @@
 
 package org.dita.dost.invoker;
 
+import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
+import static org.dita.dost.invoker.Main.locale;
+import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
+import static org.dita.dost.util.XMLUtils.toList;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.util.FileUtils;
-import org.dita.dost.platform.Plugins;
-import org.w3c.dom.Element;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
-import static org.dita.dost.invoker.Main.locale;
-import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
-import static org.dita.dost.util.XMLUtils.toList;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.util.FileUtils;
+import org.dita.dost.platform.Plugins;
+import org.w3c.dom.Element;
 
 public class ConversionArguments extends Arguments {
 
@@ -33,14 +32,8 @@ public class ConversionArguments extends Arguments {
      * A Set of args are are handled by the launcher and should not be seen by
      * Main.
      */
-    private static final Set<String> LAUNCH_COMMANDS = ImmutableSet.of(
-            "-lib",
-            "-cp",
-            "-noclasspath",
-            "-nouserlib",
-            "-main"
-    );
-
+    private static final Set<String> LAUNCH_COMMANDS =
+            ImmutableSet.of("-lib", "-cp", "-noclasspath", "-nouserlib", "-main");
 
     private static final Map<String, Argument> ARGUMENTS = new HashMap<>();
 
@@ -68,12 +61,7 @@ public class ConversionArguments extends Arguments {
     }
 
     private static final Map<String, String> RESERVED_PROPERTIES = ImmutableMap.of(
-            "transtype", "-f",
-            "args.input", "-i",
-            "output.dir", "-o",
-            "args.filter", "--filter",
-            ANT_TEMP_DIR, "-t"
-    );
+            "transtype", "-f", "args.input", "-i", "output.dir", "-o", "args.filter", "--filter", ANT_TEMP_DIR, "-t");
 
     /**
      * Project file
@@ -118,7 +106,7 @@ public class ConversionArguments extends Arguments {
                 allowInput = false;
             } else if (isLongForm(arg, "-logfile") || arg.equals("-l")) {
                 handleArgLogFile(arg, args);
-            } else if (isLongForm(arg, "-buildfile") || isLongForm(arg, "-file")) { //|| arg.equals("-f")
+            } else if (isLongForm(arg, "-buildfile") || isLongForm(arg, "-file")) { // || arg.equals("-f")
                 handleArgBuildFile(args);
             } else if (isLongForm(arg, "-listener")) {
                 handleArgListener(args);
@@ -147,7 +135,8 @@ public class ConversionArguments extends Arguments {
             } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
                 definedProps.putAll(handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg))));
             } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
-                definedProps.putAll(handleParameterArg(arg, args, getPluginArguments().get(getArgumentName(arg))));
+                definedProps.putAll(
+                        handleParameterArg(arg, args, getPluginArguments().get(getArgumentName(arg))));
             } else if (LAUNCH_COMMANDS.contains(arg)) {
                 // catch script/ant mismatch with a meaningful message
                 // we could ignore it, but there are likely to be other
@@ -207,7 +196,8 @@ public class ConversionArguments extends Arguments {
         }
 
         if (RESERVED_PROPERTIES.containsKey(entry.getKey())) {
-            throw new BuildException("Property " + entry.getKey() + " cannot be set with -D, use " + RESERVED_PROPERTIES.get(entry.getKey()) + " instead");
+            throw new BuildException("Property " + entry.getKey() + " cannot be set with -D, use "
+                    + RESERVED_PROPERTIES.get(entry.getKey()) + " instead");
         }
         return ImmutableMap.of(entry.getKey(), entry.getValue());
     }
@@ -246,7 +236,8 @@ public class ConversionArguments extends Arguments {
     /**
      * Handler parameter argument
      */
-    private Map<String, Object> handleParameterArg(final String arg, final Deque<String> args, final Argument argument) {
+    private Map<String, Object> handleParameterArg(
+            final String arg, final Deque<String> args, final Argument argument) {
         final Map.Entry<String, String> entry = parse(arg, args);
         if (entry.getValue() == null) {
             throw new BuildException("Missing value for property " + entry.getKey());
@@ -370,7 +361,7 @@ public class ConversionArguments extends Arguments {
         final UsageBuilder buf = UsageBuilder.builder(compact)
                 .usage(locale.getString("conversion.usage.input"))
                 .usage(locale.getString("conversion.usage.project"))
-//                .usage("dita --propertyfile=<file> [options]")
+                //                .usage("dita --propertyfile=<file> [options]")
                 .subcommands("deliverables", locale.getString("conversion.subcommand.deliverables"))
                 .subcommands("install", locale.getString("conversion.subcommand.install"))
                 .subcommands("plugins", locale.getString("conversion.subcommand.plugins"))
@@ -384,20 +375,17 @@ public class ConversionArguments extends Arguments {
                 .options(null, "filter", "files", locale.getString("conversion.option.filter"))
                 .options("o", "output", "dir", locale.getString("conversion.option.output"));
         if (!compact) {
-            buf
-                    .options("l", "logfile", "file", locale.getString("conversion.option.logfile"))
+            buf.options("l", "logfile", "file", locale.getString("conversion.option.logfile"))
                     .options(null, "propertyfile", "file", locale.getString("conversion.option.propertyfile"))
                     .options(null, "repeat", "num", locale.getString("conversion.option.repeat"))
                     .options("t", "temp", "dir", locale.getString("conversion.option.temp"));
-            final Set<String> builtin = ARGUMENTS.values().stream().map(arg -> arg.property).collect(Collectors.toSet());
+            final Set<String> builtin =
+                    ARGUMENTS.values().stream().map(arg -> arg.property).collect(Collectors.toSet());
             final List<Element> params = toList(Plugins.getPluginConfiguration().getElementsByTagName("param"));
             params.stream()
                     .map(ArgumentParser::getArgument)
                     .filter(a -> !builtin.contains(a.property))
-                    .collect(Collectors.toMap(
-                            arg -> arg.property,
-                            arg -> arg,
-                            ArgumentParser::mergeArguments))
+                    .collect(Collectors.toMap(arg -> arg.property, arg -> arg, ArgumentParser::mergeArguments))
                     .values()
                     .stream()
                     .sorted(Comparator.comparing(o -> o.property))

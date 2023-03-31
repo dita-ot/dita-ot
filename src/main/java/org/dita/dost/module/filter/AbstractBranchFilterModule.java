@@ -8,6 +8,14 @@
 
 package org.dita.dost.module.filter;
 
+import static org.dita.dost.util.Configuration.configuration;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.*;
+
+import java.io.*;
+import java.net.URI;
+import java.util.*;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -16,15 +24,6 @@ import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.Element;
-
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-
-import static org.dita.dost.util.Configuration.configuration;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toURI;
-import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * Abstract branch filter module.
@@ -49,8 +48,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
     public void setJob(final Job job) {
         super.setJob(job);
         try {
-            final String cls = Optional
-                    .ofNullable(job.getProperty("temp-file-name-scheme"))
+            final String cls = Optional.ofNullable(job.getProperty("temp-file-name-scheme"))
                     .orElse(configuration.get("temp-file-name-scheme"));
             tempFileNameScheme = (TempFileNameScheme) Class.forName(cls).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -74,23 +72,21 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         subjectSchemeReader.reset();
         logger.debug("Loading subject schemes");
         final List<Element> subjectSchemes = toList(root.getElementsByTagName("*"));
-        subjectSchemes.stream()
-                .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
-                .forEach(enumerationDef -> {
-                    final Element schemeRoot = ancestors(enumerationDef)
-                            .filter(SUBMAP::matches)
-                            .findFirst()
-                            .orElse(root);
-                    subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
-                });
+        subjectSchemes.stream().filter(SUBJECTSCHEME_ENUMERATIONDEF::matches).forEach(enumerationDef -> {
+            final Element schemeRoot = ancestors(enumerationDef)
+                    .filter(SUBMAP::matches)
+                    .findFirst()
+                    .orElse(root);
+            subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
+        });
         return subjectSchemeReader.getSubjectSchemeMap();
     }
 
     /**
      * Combine referenced DITAVAL to existing list and refine with subject scheme.
      */
-    List<FilterUtils> combineFilterUtils(final Element topicref, final List<FilterUtils> filters,
-                                         final SubjectScheme subjectSchemeMap) {
+    List<FilterUtils> combineFilterUtils(
+            final Element topicref, final List<FilterUtils> filters, final SubjectScheme subjectSchemeMap) {
         return getChildElement(topicref, DITAVAREF_D_DITAVALREF)
                 .map(ditavalRef -> getFilterUtils(ditavalRef).refine(subjectSchemeMap))
                 .map(f -> {
@@ -126,13 +122,14 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         flagImageSet.addAll(ditaValReader.getImageList());
         relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
         Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
-        final FilterUtils f = new FilterUtils(filterMap, ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
+        final FilterUtils f = new FilterUtils(
+                filterMap, ditaValReader.getForegroundConflictColor(), ditaValReader.getBackgroundConflictColor());
         f.setLogger(logger);
         return f;
     }
 
     void addFlagImagesSetToProperties(final Job prop, final Set<URI> set) {
-        for (final URI file: flagImageSet) {
+        for (final URI file : flagImageSet) {
             final FileInfo f = getOrCreateFileInfo(file);
             f.isFlagImage = true;
             f.format = ATTR_FORMAT_VALUE_IMAGE;
@@ -140,7 +137,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         }
 
         final Set<URI> newSet = new LinkedHashSet<>(128);
-        for (final URI file: set) {
+        for (final URI file : set) {
             if (file.isAbsolute()) {
                 // no need to append relative path before absolute paths
                 newSet.add(file.normalize());
@@ -154,15 +151,17 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
         // write list attribute to file
         final String fileKey = REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
         prop.setProperty(fileKey, REL_FLAGIMAGE_LIST.substring(0, REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
-        final File list = job.tempDir.toPath().resolve(prop.getProperty(fileKey)).toFile();
-        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(list.toURI())))) {
+        final File list =
+                job.tempDir.toPath().resolve(prop.getProperty(fileKey)).toFile();
+        try (Writer bufferedWriter =
+                new BufferedWriter(new OutputStreamWriter(job.getStore().getOutputStream(list.toURI())))) {
             for (URI aNewSet : newSet) {
                 bufferedWriter.write(aNewSet.getPath());
                 bufferedWriter.write('\n');
             }
             bufferedWriter.flush();
         } catch (final IOException e) {
-            logger.error(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e);
         }
 
         prop.setProperty(REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
@@ -178,5 +177,4 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
                 .uri(tempFileNameScheme.generateTempFileName(file))
                 .build();
     }
-
 }

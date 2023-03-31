@@ -8,12 +8,11 @@
 
 package org.dita.dost.invoker;
 
-import com.google.common.collect.ImmutableMap;
-import org.dita.dost.project.Project;
-import org.dita.dost.project.ProjectFactory;
-import org.junit.Before;
-import org.junit.Test;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
+import static org.junit.Assert.assertEquals;
 
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -23,10 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
+import org.dita.dost.project.Project;
+import org.dita.dost.project.ProjectFactory;
+import org.junit.Before;
+import org.junit.Test;
 
 public class MainProjectTest {
 
@@ -44,7 +43,10 @@ public class MainProjectTest {
 
     @Test
     public void collectProperties_simple() throws IOException, URISyntaxException {
-        projectFile = getClass().getClassLoader().getResource("org/dita/dost/project/simple.xml").toURI();
+        projectFile = getClass()
+                .getClassLoader()
+                .getResource("org/dita/dost/project/simple.xml")
+                .toURI();
         project = factory.load(projectFile);
         final URI baseDir = projectFile.resolve("");
 
@@ -57,8 +59,15 @@ public class MainProjectTest {
                 .put("transtype", "html5")
                 .put("args.empty", "")
                 .put("args.rellinks", "noparent")
-                .put("args.path", Paths.get(baseDir).resolve("baz qux").toAbsolutePath().toString())
-                .put("args.filter", Paths.get(baseDir).resolve("site.ditaval").toAbsolutePath().toString())
+                .put(
+                        "args.path",
+                        Paths.get(baseDir).resolve("baz qux").toAbsolutePath().toString())
+                .put(
+                        "args.filter",
+                        Paths.get(baseDir)
+                                .resolve("site.ditaval")
+                                .toAbsolutePath()
+                                .toString())
                 .put("args.gen.task.lbl", "YES")
                 .put("args.uri", baseDir.resolve("foo%20bar").toString())
                 .build();
@@ -67,7 +76,10 @@ public class MainProjectTest {
 
     @Test
     public void collectProperties_profiles() throws IOException, URISyntaxException {
-        projectFile = getClass().getClassLoader().getResource("org/dita/dost/project/profiles.xml").toURI();
+        projectFile = getClass()
+                .getClassLoader()
+                .getResource("org/dita/dost/project/profiles.xml")
+                .toURI();
         project = factory.load(projectFile);
         final URI baseDir = projectFile.resolve("");
 
@@ -78,9 +90,14 @@ public class MainProjectTest {
                 .put("output.dir", Paths.get("out", "site").toAbsolutePath().toString())
                 .put("args.input", baseDir.resolve("site.ditamap").toString())
                 .put("transtype", "html5")
-                .put("args.filter", Stream.of("site-html5.ditaval", "site.ditaval")
-                        .map(ditaval -> Paths.get(baseDir).resolve(ditaval).toAbsolutePath().toString())
-                        .collect(Collectors.joining(File.pathSeparator)))
+                .put(
+                        "args.filter",
+                        Stream.of("site-html5.ditaval", "site.ditaval")
+                                .map(ditaval -> Paths.get(baseDir)
+                                        .resolve(ditaval)
+                                        .toAbsolutePath()
+                                        .toString())
+                                .collect(Collectors.joining(File.pathSeparator)))
                 .build();
         assertEquals(singletonList(exp), act);
     }

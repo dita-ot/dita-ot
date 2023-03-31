@@ -7,6 +7,11 @@
  */
 package org.dita.dost.reader;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.io.IOException;
+import java.io.InputStream;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ImageMetadataFilter;
 import org.junit.Before;
@@ -14,12 +19,6 @@ import org.junit.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class SvgMetadataReaderTest {
 
@@ -40,7 +39,8 @@ public class SvgMetadataReaderTest {
 
     @Test
     public void testImageWithDoctype() throws IOException, SAXException {
-        try (final InputStream in = this.getClass().getResourceAsStream("/SvgMetadataReaderTest/SVG_example_markup_grid.svg")) {
+        try (final InputStream in =
+                this.getClass().getResourceAsStream("/SvgMetadataReaderTest/SVG_example_markup_grid.svg")) {
             reader.parse(new InputSource(in));
             final ImageMetadataFilter.Dimensions dimensions = svgMetadataReader.getDimensions();
             assertEquals("391", dimensions.width);
@@ -61,5 +61,4 @@ public class SvgMetadataReaderTest {
             assertNull(dimensions.horizontalDpi);
         }
     }
-
 }

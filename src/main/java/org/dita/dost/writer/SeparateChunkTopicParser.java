@@ -1,21 +1,19 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2007 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2007 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.writer;
 
-import org.dita.dost.util.Job.FileInfo;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
+import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
+import static org.dita.dost.reader.ChunkMapReader.*;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.StringUtils.split;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.*;
 import java.net.URI;
@@ -24,13 +22,14 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
-
-import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
-import static org.dita.dost.reader.ChunkMapReader.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.StringUtils.split;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.*;
+import org.dita.dost.util.Job.FileInfo;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Split topic into multiple files for {@code by-topic} chunking.
@@ -148,15 +147,15 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 final FileInfo fi = generateFileInfo(outputFile);
                 job.add(fi);
 
-                changeTable.put(currentFile.resolve(parseFilePath),
-                        setFragment(outputFileName, id));
+                changeTable.put(currentFile.resolve(parseFilePath), setFragment(outputFileName, id));
                 // new generated file
                 changeTable.put(outputFileName, outputFileName);
             }
 
             // change the href value
-            final URI newHref = setFragment(getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName),
-                                            firstTopicID != null ? firstTopicID : id);
+            final URI newHref = setFragment(
+                    getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName),
+                    firstTopicID != null ? firstTopicID : id);
             rootTopicref.setAttribute(ATTRIBUTE_NAME_HREF, newHref.toString());
 
             include = false;
@@ -262,12 +261,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         final URI tmp = tempFileNameScheme.generateTempFileName(dst);
 
         if (job.getFileInfo(tmp) == null) {
-            job.add(new FileInfo.Builder(srcFi)
-                    .result(dst)
-                    .uri(tmp)
-                    .build());
+            job.add(new FileInfo.Builder(srcFi).result(dst).uri(tmp).build());
         }
-
 
         return job.tempDirURI.resolve(tmp);
     }
@@ -282,7 +277,6 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         final AttributesImpl attsMod = new AttributesImpl(atts);
         final String xmlLang = atts.getValue(ATTRIBUTE_NAME_XML_LANG);
         final String currentLang;
-
 
         if (skip && skipLevel > 0) {
             skipLevel++;
@@ -311,10 +305,10 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     output = new OutputStreamWriter(out, StandardCharsets.UTF_8);
 
                     if (atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 && currentLang != null) {
-                        attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "CDATA", currentLang );
+                        attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "CDATA", currentLang);
                     }
-//                    final FileInfo fi = generateFileInfo(outputFile);
-//                    job.add(fi);
+                    //                    final FileInfo fi = generateFileInfo(outputFile);
+                    //                    job.add(fi);
 
                     changeTable.put(outputFile, outputFile);
                     if (id != null) {
@@ -326,18 +320,28 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     // write xml header and workdir PI to the new generated file
                     writeStartDocument(output);
                     if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
-                        writeProcessingInstruction(output, PI_WORKDIR_TARGET, new File(currentFile).getParentFile().getAbsolutePath());
+                        writeProcessingInstruction(
+                                output,
+                                PI_WORKDIR_TARGET,
+                                new File(currentFile).getParentFile().getAbsolutePath());
                     } else {
-                        writeProcessingInstruction(output, PI_WORKDIR_TARGET, UNIX_SEPARATOR + currentFile.resolve("."));
+                        writeProcessingInstruction(
+                                output, PI_WORKDIR_TARGET, UNIX_SEPARATOR + currentFile.resolve("."));
                     }
-                    writeProcessingInstruction(output, PI_WORKDIR_TARGET_URI, currentFile.resolve(".").toString());
+                    writeProcessingInstruction(
+                            output,
+                            PI_WORKDIR_TARGET_URI,
+                            currentFile.resolve(".").toString());
 
                     // create a new child element in separate case topicref is equals to parameter
                     // element in separateChunk(Element element)
                     final Element newTopicref = rootTopicref.getOwnerDocument().createElement(MAP_TOPICREF.localName);
                     newTopicref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
                     newTopicref.setAttribute(ATTRIBUTE_NAME_XTRF, ATTR_XTRF_VALUE_GENERATED);
-                    newTopicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFile).toString());
+                    newTopicref.setAttribute(
+                            ATTRIBUTE_NAME_HREF,
+                            getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFile)
+                                    .toString());
 
                     final Element topic = searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID, TOPIC_TOPIC);
                     final Element topicmeta = createTopicMeta(topic);
@@ -406,5 +410,4 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
 
         lang.pop();
     }
-
 }

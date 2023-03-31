@@ -8,19 +8,18 @@
 
 package org.dita.dost.writer.include;
 
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.writer.AbstractXMLFilter;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
 
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayDeque;
 import java.util.Deque;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toURI;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.writer.AbstractXMLFilter;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 
 /**
  * Include element resolver filter.
@@ -61,16 +60,14 @@ public class IncludeResolver extends AbstractXMLFilter {
     private final Deque<Deque<StackItem>> includeStack = new ArrayDeque<>();
     private Configuration.Mode processingMode;
 
-    private record StackItem(String cls, boolean include) {
-    }
+    private record StackItem(String cls, boolean include) {}
 
     // Constructors ------------------------------------------------------------
 
     /**
      * Constructor.
      */
-    public IncludeResolver() {
-    }
+    public IncludeResolver() {}
 
     // AbstractWriter methods --------------------------------------------------
 
@@ -84,8 +81,7 @@ public class IncludeResolver extends AbstractXMLFilter {
     // XMLFilter methods -------------------------------------------------------
 
     @Override
-    public void startDocument()
-            throws SAXException {
+    public void startDocument() throws SAXException {
         final String mode = params.get(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
         processingMode = mode != null ? Configuration.Mode.valueOf(mode.toUpperCase()) : Configuration.Mode.LAX;
         final ArrayDeque<StackItem> elementStack = new ArrayDeque<>();
@@ -94,31 +90,30 @@ public class IncludeResolver extends AbstractXMLFilter {
         super.startDocument();
     }
 
-    public void endDocument()
-            throws SAXException {
+    public void endDocument() throws SAXException {
         super.endDocument();
         final Deque<StackItem> elementStack = includeStack.pop();
         assert elementStack.size() == 1;
         assert includeStack.isEmpty();
     }
 
-//    public void startPrefixMapping(String prefix, String uri)
-//            throws SAXException {
-//        if (contentHandler != null) {
-//            contentHandler.startPrefixMapping(prefix, uri);
-//        }
-//    }
-//
-//    public void endPrefixMapping(String prefix)
-//            throws SAXException {
-//        if (contentHandler != null) {
-//            contentHandler.endPrefixMapping(prefix);
-//        }
-//    }
+    //    public void startPrefixMapping(String prefix, String uri)
+    //            throws SAXException {
+    //        if (contentHandler != null) {
+    //            contentHandler.startPrefixMapping(prefix, uri);
+    //        }
+    //    }
+    //
+    //    public void endPrefixMapping(String prefix)
+    //            throws SAXException {
+    //        if (contentHandler != null) {
+    //            contentHandler.endPrefixMapping(prefix);
+    //        }
+    //    }
 
     @Override
-    public void startElement(final String uri, final String localName, final String name,
-                             final Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String name, final Attributes atts)
+            throws SAXException {
         final Deque<StackItem> elementStack = includeStack.peek();
         final StackItem stackItem = elementStack.peek();
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
@@ -132,10 +127,11 @@ public class IncludeResolver extends AbstractXMLFilter {
                         logger.debug("Resolve " + localName + " " + currentFile.resolve(hrefValue));
                         final String parse = getParse(atts.getValue(ATTRIBUTE_NAME_PARSE));
                         switch (parse) {
-                            case "text" ->
-                                    include = new IncludeText(job, currentFile, getContentHandler(), logger, processingMode).include(atts);
-                            case "xml" ->
-                                    include = new IncludeXml(job, currentFile, getContentHandler(), logger).include(atts);
+                            case "text" -> include = new IncludeText(
+                                            job, currentFile, getContentHandler(), logger, processingMode)
+                                    .include(atts);
+                            case "xml" -> include =
+                                    new IncludeXml(job, currentFile, getContentHandler(), logger).include(atts);
                             default -> logger.error("Unsupported include parse " + parse);
                         }
                     }
@@ -217,9 +213,6 @@ public class IncludeResolver extends AbstractXMLFilter {
     }
 
     // Private methods ---------------------------------------------------------
-
-
-
 
     private String getParse(final String value) {
         if (value == null) {

@@ -1,13 +1,16 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2004, 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2004, 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.module;
 
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -16,10 +19,6 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
-
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
 
 /**
  * Abstract class for Modules which contains the method that every module class
@@ -68,8 +67,7 @@ public interface AbstractPipelineModule {
 
     void setFileInfoFilter(Predicate<FileInfo> fileInfoFilter);
 
-    default void setProcessingPipe(List<XmlFilterModule.FilterPair> pipe) {
-    }
+    default void setProcessingPipe(List<XmlFilterModule.FilterPair> pipe) {}
 
     void setParallel(boolean parallel);
 }

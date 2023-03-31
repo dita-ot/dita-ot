@@ -7,13 +7,7 @@
  */
 package org.dita.dost.module;
 
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.pipeline.AbstractPipelineInput;
-import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.Pool;
-import org.dita.dost.writer.ImageMetadataFilter;
-import org.xml.sax.Attributes;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,8 +16,13 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
-
-import static org.dita.dost.util.Constants.*;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Pool;
+import org.dita.dost.writer.ImageMetadataFilter;
+import org.xml.sax.Attributes;
 
 /**
  * Image metadata module.
@@ -45,12 +44,12 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException exception
      */
     @Override
-    public AbstractPipelineOutput execute(final AbstractPipelineInput input)
-            throws DITAOTException {
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        final Collection<FileInfo> images = job.getFileInfo(f -> ATTR_FORMAT_VALUE_IMAGE.equals(f.format) || ATTR_FORMAT_VALUE_HTML.equals(f.format));
+        final Collection<FileInfo> images = job.getFileInfo(
+                f -> ATTR_FORMAT_VALUE_IMAGE.equals(f.format) || ATTR_FORMAT_VALUE_HTML.equals(f.format));
         if (!images.isEmpty()) {
             final File outputDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
             final Predicate<FileInfo> filter = fileInfoFilter != null
@@ -113,5 +112,4 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
             }
         }
     }
-
 }

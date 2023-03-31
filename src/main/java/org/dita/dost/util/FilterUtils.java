@@ -1,29 +1,21 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2006 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2006 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.util;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.filter.SubjectScheme;
-import org.w3c.dom.*;
-import org.xml.sax.*;
-
-import javax.xml.namespace.QName;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.sax.SAXSource;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -32,11 +24,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.emptySet;
-import static javax.xml.XMLConstants.NULL_NS_URI;
-import static org.dita.dost.util.Constants.*;
+import javax.xml.namespace.QName;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.SAXSource;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.filter.SubjectScheme;
+import org.w3c.dom.*;
+import org.xml.sax.*;
 
 /**
  * Utility class used for flagging and filtering.
@@ -47,6 +46,7 @@ public final class FilterUtils {
 
     /** Subject scheme file extension */
     public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
+
     public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
     private static final String FLAG_STYLE_PREFIX = "flag__style--";
@@ -56,14 +56,15 @@ public final class FilterUtils {
     private final Map<FilterKey, Action> filterMap;
     /** Set of filter keys for which an error has already been thrown. */
     private final Set<FilterKey> notMappingRules = new HashSet<>();
+
     private boolean logMissingAction;
     private final String foregroundConflictColor;
     private final String backgroundConflictColor;
     private Set<QName> filterAttributes;
     private Set<QName> flagAttributes;
 
-    public FilterUtils(final Map<FilterKey, Action> filterMap, String foregroundConflictColor,
-                       String backgroundConflictColor) {
+    public FilterUtils(
+            final Map<FilterKey, Action> filterMap, String foregroundConflictColor, String backgroundConflictColor) {
         this.logMissingAction = !filterMap.isEmpty();
         this.filterMap = new HashMap<>(filterMap);
         this.foregroundConflictColor = foregroundConflictColor;
@@ -86,8 +87,11 @@ public final class FilterUtils {
      *
      * @param isPrintType transformation output is print-oriented
      */
-    public FilterUtils(final boolean isPrintType, final Map<FilterKey, Action> filterMap,
-                       String foregroundConflictColor, String backgroundConflictColor) {
+    public FilterUtils(
+            final boolean isPrintType,
+            final Map<FilterKey, Action> filterMap,
+            String foregroundConflictColor,
+            String backgroundConflictColor) {
         final Map<FilterKey, Action> dfm = new HashMap<>();
         dfm.put(new FilterKey(QName.valueOf(ATTRIBUTE_NAME_PRINT), ATTR_PRINT_VALUE_YES), Action.INCLUDE);
         if (isPrintType) {
@@ -108,9 +112,13 @@ public final class FilterUtils {
     }
 
     @VisibleForTesting
-    public FilterUtils(boolean isPrintType, Map<FilterKey, Action> filterMap,
-                       String foregroundConflictColor, String backgroundConflictColor,
-                       Set<QName> filterAttributes, Set<QName> flagAttributes) {
+    public FilterUtils(
+            boolean isPrintType,
+            Map<FilterKey, Action> filterMap,
+            String foregroundConflictColor,
+            String backgroundConflictColor,
+            Set<QName> filterAttributes,
+            Set<QName> flagAttributes) {
         this(isPrintType, filterMap, foregroundConflictColor, backgroundConflictColor);
         this.filterAttributes = Sets.union(this.filterAttributes, filterAttributes);
         this.flagAttributes = Sets.union(this.flagAttributes, flagAttributes);
@@ -127,7 +135,8 @@ public final class FilterUtils {
 
     private static Set<QName> getProfileAttributes(final String conf) {
         final ImmutableSet.Builder<QName> res = ImmutableSet.<QName>builder()
-                .add(QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
+                .add(
+                        QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
                         QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
                         QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
                         QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
@@ -135,28 +144,24 @@ public final class FilterUtils {
                         QName.valueOf(ATTRIBUTE_NAME_PRINT),
                         QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET));
         if (conf != null) {
-            Stream.of(conf.trim().split("\\s*,\\s*"))
-                    .map(QName::valueOf)
-                    .forEach(res::add);
+            Stream.of(conf.trim().split("\\s*,\\s*")).map(QName::valueOf).forEach(res::add);
         }
         return res.build();
     }
 
     private static Set<QName> getFlaggingAttributes(final String conf) {
         final ImmutableSet.Builder<QName> res = ImmutableSet.<QName>builder()
-                .add(QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
+                .add(
+                        QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
                         QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
                         QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
                         QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
                         QName.valueOf(ATTRIBUTE_NAME_PROPS),
                         QName.valueOf(ATTRIBUTE_NAME_PRINT),
                         QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET),
-                        QName.valueOf(ATTRIBUTE_NAME_REV)
-        );
+                        QName.valueOf(ATTRIBUTE_NAME_REV));
         if (conf != null) {
-            Stream.of(conf.trim().split("\\s*,\\s*"))
-                    .map(QName::valueOf)
-                    .forEach(res::add);
+            Stream.of(conf.trim().split("\\s*,\\s*")).map(QName::valueOf).forEach(res::add);
         }
         return res.build();
     }
@@ -167,15 +172,13 @@ public final class FilterUtils {
         }
 
         final Set<Flag> res = new HashSet<>();
-        for (final QName attr: flagAttributes) {
+        for (final QName attr : flagAttributes) {
             final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
             if (value != null) {
                 final Map<QName, List<String>> groups = getGroups(value);
-                for (Map.Entry<QName, List<String>> group: groups.entrySet()) {
+                for (Map.Entry<QName, List<String>> group : groups.entrySet()) {
                     final QName[] propList =
-                            group.getKey() != null
-                                    ? new QName[]{attr, group.getKey()}
-                                    : new QName[]{attr};
+                            group.getKey() != null ? new QName[] {attr, group.getKey()} : new QName[] {attr};
                     res.addAll(extCheckFlag(propList, group.getValue()));
                 }
             }
@@ -189,7 +192,8 @@ public final class FilterUtils {
                 while ((propValue == null || propValue.trim().isEmpty()) && propListIndex > 0) {
                     propListIndex--;
                     final QName current = propList[propListIndex];
-                    propValue = getLabelValue(propName, atts.getValue(current.getNamespaceURI(), current.getLocalPart()));
+                    propValue =
+                            getLabelValue(propName, atts.getValue(current.getNamespaceURI(), current.getLocalPart()));
                 }
                 if (propValue != null) {
                     res.addAll(extCheckFlag(propList, Arrays.asList(propValue.split("\\s+"))));
@@ -219,9 +223,15 @@ public final class FilterUtils {
         if ((conflictColor && foregroundConflictColor != null)
                 || (conflictBackcolor && backgroundConflictColor != null)) {
             return res.stream()
-                    .map(f -> new Flag(ELEMENT_NAME_PROP, conflictColor ? foregroundConflictColor : f.color,
+                    .map(f -> new Flag(
+                            ELEMENT_NAME_PROP,
+                            conflictColor ? foregroundConflictColor : f.color,
                             conflictBackcolor ? backgroundConflictColor : f.backcolor,
-                            f.style, f.changebar, f.startflag, f.endflag, f.outputClass))
+                            f.style,
+                            f.changebar,
+                            f.startflag,
+                            f.endflag,
+                            f.outputClass))
                     .collect(Collectors.toSet());
         } else {
             return res;
@@ -231,7 +241,7 @@ public final class FilterUtils {
     public Set<Flag> getFlags(final Element element, final QName[][] props) {
         final XMLUtils.AttributesBuilder buf = new XMLUtils.AttributesBuilder();
         final NamedNodeMap attrs = element.getAttributes();
-        for (int i = 0; i < attrs.getLength() ; i++) {
+        for (int i = 0; i < attrs.getLength(); i++) {
             final Node attr = attrs.item(i);
             if (attr.getNodeType() == Node.ATTRIBUTE_NODE) {
                 buf.add((Attr) attr);
@@ -268,7 +278,7 @@ public final class FilterUtils {
     public boolean needExclude(final Element element, final QName[][] props) {
         final XMLUtils.AttributesBuilder buf = new XMLUtils.AttributesBuilder();
         final NamedNodeMap attrs = element.getAttributes();
-        for (int i = 0; i < attrs.getLength() ; i++) {
+        for (int i = 0; i < attrs.getLength(); i++) {
             final Node attr = attrs.item(i);
             if (attr.getNodeType() == Node.ATTRIBUTE_NODE) {
                 buf.add((Attr) attr);
@@ -289,15 +299,13 @@ public final class FilterUtils {
             return false;
         }
 
-        for (final QName attr: filterAttributes) {
+        for (final QName attr : filterAttributes) {
             final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
             if (value != null) {
                 final Map<QName, List<String>> groups = getGroups(value);
-                for (Map.Entry<QName, List<String>> group: groups.entrySet()) {
+                for (Map.Entry<QName, List<String>> group : groups.entrySet()) {
                     final QName[] propList =
-                            group.getKey() != null
-                                    ? new QName[]{attr, group.getKey()}
-                                    : new QName[]{attr};
+                            group.getKey() != null ? new QName[] {attr, group.getKey()} : new QName[] {attr};
                     if (extCheckExclude(propList, group.getValue())) {
                         return true;
                     }
@@ -306,7 +314,7 @@ public final class FilterUtils {
         }
 
         if (extProps != null && extProps.length != 0) {
-            for (final QName[] propList: extProps) {
+            for (final QName[] propList : extProps) {
                 int propListIndex = propList.length - 1;
                 final QName propName = propList[propListIndex];
                 String propValue = atts.getValue(propName.getNamespaceURI(), propName.getLocalPart());
@@ -314,7 +322,8 @@ public final class FilterUtils {
                 while ((propValue == null || propValue.trim().isEmpty()) && propListIndex > 0) {
                     propListIndex--;
                     final QName current = propList[propListIndex];
-                    propValue = getLabelValue(propName, atts.getValue(current.getNamespaceURI(), current.getLocalPart()));
+                    propValue =
+                            getLabelValue(propName, atts.getValue(current.getNamespaceURI(), current.getLocalPart()));
                 }
                 if (propValue != null && extCheckExclude(propList, Arrays.asList(propValue.split("\\s+")))) {
                     return true;
@@ -339,7 +348,7 @@ public final class FilterUtils {
         final StringBuilder buf = new StringBuilder();
         int previousEnd = 0;
         final Matcher m = groupPattern.matcher(value);
-        while(m.find()) {
+        while (m.find()) {
             buf.append(value.subSequence(previousEnd, m.start()));
             final String v = m.group(2);
             if (!v.trim().isEmpty()) {
@@ -399,7 +408,7 @@ public final class FilterUtils {
             checkRuleMapping(attName, attValue);
             boolean hasNonExcludeAction = false;
             boolean hasExcludeAction = false;
-            for (final String attSubValue: attValue) {
+            for (final String attSubValue : attValue) {
                 final FilterKey filterKey = new FilterKey(attName, attSubValue);
                 final Action filterAction = filterMap.get(filterKey);
                 // no action will be considered as 'not exclude'
@@ -442,7 +451,7 @@ public final class FilterUtils {
                     // the ancient parent on the top level
                     return isDefaultExclude();
                 }
-            // if all of the value should be excluded
+                // if all of the value should be excluded
             } else if (hasExcludeAction) {
                 return true;
             }
@@ -466,15 +475,16 @@ public final class FilterUtils {
         if (attValue == null || attValue.isEmpty()) {
             return;
         }
-        for (final String attSubValue: attValue) {
+        for (final String attSubValue : attValue) {
             final FilterKey filterKey = new FilterKey(attName, attSubValue);
             final Action filterAction = filterMap.get(filterKey);
-            if (filterAction == null 
+            if (filterAction == null
                     && logMissingAction
                     && filterMap.get(DEFAULT) == null
                     && filterMap.get(new FilterKey(attName, null)) == null) {
                 if (!alreadyShowed(filterKey)) {
-                    logger.info(MessageUtils.getMessage("DOTJ031I", filterKey.toString()).toString());
+                    logger.info(MessageUtils.getMessage("DOTJ031I", filterKey.toString())
+                            .toString());
                 }
             }
         }
@@ -495,7 +505,7 @@ public final class FilterUtils {
      * @param value     Attribute value, may be {@code null}
      * @since 1.6
      */
-     public record FilterKey(QName attribute, String value) {
+    public record FilterKey(QName attribute, String value) {
         public FilterKey {
             Objects.requireNonNull(attribute, "Attribute may not be null");
         }
@@ -527,7 +537,7 @@ public final class FilterUtils {
     private FilterUtils refine(final Map<QName, Map<String, Set<Element>>> bindingMap) {
         if (bindingMap != null && !bindingMap.isEmpty()) {
             final Map<FilterKey, Action> buf = new HashMap<>(filterMap);
-            for (final Map.Entry<FilterKey, Action> e: filterMap.entrySet()) {
+            for (final Map.Entry<FilterKey, Action> e : filterMap.entrySet()) {
                 refineAction(e.getValue(), e.getKey(), bindingMap, buf);
             }
             final FilterUtils filterUtils = new FilterUtils(buf, foregroundConflictColor, backgroundConflictColor);
@@ -541,13 +551,16 @@ public final class FilterUtils {
     /**
      * Refine action key with information from subject schemes.
      */
-    private void refineAction(final Action action, final FilterKey key, final Map<QName, Map<String, Set<Element>>> bindingMap,
-                              final Map<FilterKey, Action> destFilterMap) {
+    private void refineAction(
+            final Action action,
+            final FilterKey key,
+            final Map<QName, Map<String, Set<Element>>> bindingMap,
+            final Map<FilterKey, Action> destFilterMap) {
         if (key.value != null) {
             final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
             if (schemeMap != null && !schemeMap.isEmpty()) {
-                for (final Set<Element> submap: schemeMap.values()) {
-                    for (final Element e: submap) {
+                for (final Set<Element> submap : schemeMap.values()) {
+                    for (final Element e : submap) {
                         final Element subRoot = searchForKey(e, key.value);
                         if (subRoot != null) {
                             insertAction(subRoot, key.attribute, action, destFilterMap);
@@ -574,7 +587,7 @@ public final class FilterUtils {
             final NodeList children = node.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    queue.add((Element)children.item(i));
+                    queue.add((Element) children.item(i));
                 }
             }
             if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
@@ -593,7 +606,11 @@ public final class FilterUtils {
      * @param attName attribute name
      * @param action action to insert
      */
-    private void insertAction(final Element subTree, final QName attName, final Action action, final Map<FilterKey, Action> destFilterMap) {
+    private void insertAction(
+            final Element subTree,
+            final QName attName,
+            final Action action,
+            final Map<FilterKey, Action> destFilterMap) {
         if (subTree == null || action == null) {
             return;
         }
@@ -604,7 +621,7 @@ public final class FilterUtils {
         NodeList children = subTree.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                queue.offer((Element)children.item(i));
+                queue.offer((Element) children.item(i));
             }
         }
 
@@ -613,7 +630,7 @@ public final class FilterUtils {
             children = node.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    queue.offer((Element)children.item(i));
+                    queue.offer((Element) children.item(i));
                 }
             }
             if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
@@ -627,7 +644,6 @@ public final class FilterUtils {
             }
         }
     }
-
 
     public interface Action {
         Action INCLUDE = new Include();
@@ -656,224 +672,300 @@ public final class FilterUtils {
         }
     }
 
-    public record Flag(String proptype,
-                       String color,
-                       String backcolor,
-                       String[] style, String changebar,
-                       FilterUtils.Flag.FlagImage startflag,
-                       FilterUtils.Flag.FlagImage endflag,
-                       String outputClass) implements Action {
+    public record Flag(
+            String proptype,
+            String color,
+            String backcolor,
+            String[] style,
+            String changebar,
+            FilterUtils.Flag.FlagImage startflag,
+            FilterUtils.Flag.FlagImage endflag,
+            String outputClass)
+            implements Action {
 
         public Flag adjustPath(final URI currentFile, final Job job) {
-                return new Flag(proptype, color, backcolor, style, changebar,
-                        adjustPath(startflag, currentFile, job),
-                        adjustPath(endflag, currentFile, job),
-                        outputClass);
+            return new Flag(
+                    proptype,
+                    color,
+                    backcolor,
+                    style,
+                    changebar,
+                    adjustPath(startflag, currentFile, job),
+                    adjustPath(endflag, currentFile, job),
+                    outputClass);
+        }
+
+        private FlagImage adjustPath(final FlagImage img, final URI currentFile, final Job job) {
+            if (img == null) {
+                return img;
+            }
+            final URI rel;
+            final Job.FileInfo flagFi = job.getFileInfo(img.href);
+            if (flagFi != null) {
+                final Job.FileInfo current = job.getFileInfo(currentFile);
+                final URI flag = job.tempDirURI.resolve(flagFi.uri);
+                final URI curr = job.tempDirURI.resolve(current.uri);
+                rel = URLUtils.getRelativePath(curr, flag);
+            } else {
+                rel = img.href;
+            }
+            return new FlagImage(rel, img.alt);
+        }
+
+        public void writeStartFlag(final ContentHandler contentHandler) throws SAXException {
+            final StringJoiner outputClassAttr = new StringJoiner(" ");
+            final StringBuilder styleAttr = new StringBuilder();
+            if (color != null) {
+                styleAttr.append("color:").append(color).append(";");
+            }
+            if (backcolor != null) {
+                styleAttr.append("background-color:").append(backcolor).append(";");
+            }
+            if (outputClass != null) {
+                outputClassAttr.add(outputClass);
+            }
+            if (style != null) {
+                for (final String style : style) {
+                    outputClassAttr.add(FLAG_STYLE_PREFIX + style);
+                }
             }
 
-            private FlagImage adjustPath(final FlagImage img, final URI currentFile, final Job job) {
-                if (img == null) {
-                    return img;
-                }
-                final URI rel;
-                final Job.FileInfo flagFi = job.getFileInfo(img.href);
-                if (flagFi != null) {
-                    final Job.FileInfo current = job.getFileInfo(currentFile);
-                    final URI flag = job.tempDirURI.resolve(flagFi.uri);
-                    final URI curr = job.tempDirURI.resolve(current.uri);
-                    rel = URLUtils.getRelativePath(curr, flag);
-                } else {
-                    rel = img.href;
-                }
-                return new FlagImage(rel, img.alt);
+            final XMLUtils.AttributesBuilder atts =
+                    new XMLUtils.AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_STARTPROP.toString());
+            if (outputClassAttr.length() != 0) {
+                atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputClassAttr.toString());
             }
-
-            public void writeStartFlag(final ContentHandler contentHandler) throws SAXException {
-                final StringJoiner outputClassAttr = new StringJoiner(" ");
-                final StringBuilder styleAttr = new StringBuilder();
-                if (color != null) {
-                    styleAttr.append("color:").append(color).append(";");
-                }
-                if (backcolor != null) {
-                    styleAttr.append("background-color:").append(backcolor).append(";");
-                }
-                if (outputClass != null) {
-                    outputClassAttr.add(outputClass);
-                }
-                if (style != null) {
-                    for (final String style : style) {
-                        outputClassAttr.add(FLAG_STYLE_PREFIX + style);
-                    }
-                }
-
-                final XMLUtils.AttributesBuilder atts = new XMLUtils.AttributesBuilder()
-                        .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_STARTPROP.toString());
-                if (outputClassAttr.length() != 0) {
-                    atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputClassAttr.toString());
-                }
-                if (styleAttr.length() != 0) {
-                    atts.add(ATTRIBUTE_NAME_STYLE, styleAttr.toString());
-                }
-                contentHandler.startElement(NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName,
-                        atts.build());
-                writeProp(contentHandler, true);
-                contentHandler.endElement(NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName);
+            if (styleAttr.length() != 0) {
+                atts.add(ATTRIBUTE_NAME_STYLE, styleAttr.toString());
             }
+            contentHandler.startElement(
+                    NULL_NS_URI,
+                    DITA_OT_D_DITAVAL_STARTPROP.localName,
+                    DITA_OT_D_DITAVAL_STARTPROP.localName,
+                    atts.build());
+            writeProp(contentHandler, true);
+            contentHandler.endElement(
+                    NULL_NS_URI, DITA_OT_D_DITAVAL_STARTPROP.localName, DITA_OT_D_DITAVAL_STARTPROP.localName);
+        }
 
-            public void writeEndFlag(final ContentHandler contentHandler) throws SAXException {
-                contentHandler.startElement(NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName,
-                        new XMLUtils.AttributesBuilder()
-                                .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_ENDPROP.toString())
-                                .build());
-                writeProp(contentHandler, false);
-                contentHandler.endElement(NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName);
+        public void writeEndFlag(final ContentHandler contentHandler) throws SAXException {
+            contentHandler.startElement(
+                    NULL_NS_URI,
+                    DITA_OT_D_DITAVAL_ENDPROP.localName,
+                    DITA_OT_D_DITAVAL_ENDPROP.localName,
+                    new XMLUtils.AttributesBuilder()
+                            .add(ATTRIBUTE_NAME_CLASS, DITA_OT_D_DITAVAL_ENDPROP.toString())
+                            .build());
+            writeProp(contentHandler, false);
+            contentHandler.endElement(
+                    NULL_NS_URI, DITA_OT_D_DITAVAL_ENDPROP.localName, DITA_OT_D_DITAVAL_ENDPROP.localName);
+        }
+
+        private void writeProp(final ContentHandler contentHandler, final boolean isStart) throws SAXException {
+            final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
+            if (color != null) {
+                propAtts.add("color", color);
             }
+            if (backcolor != null) {
+                propAtts.add("backcolor", backcolor);
+            }
+            if (style != null) {
+                propAtts.add("style", String.join(" ", style));
+            }
+            if (outputClass != null) {
+                propAtts.add("outputclass", outputClass);
+            }
+            if (changebar != null) {
+                propAtts.add("changebar", changebar);
+            }
+            contentHandler.startElement(NULL_NS_URI, proptype, proptype, propAtts.build());
+            if (isStart && startflag != null) {
+                startflag.writeFlag(contentHandler, "startflag");
+            }
+            if (!isStart && endflag != null) {
+                endflag.writeFlag(contentHandler, "endflag");
+            }
+            contentHandler.endElement(NULL_NS_URI, proptype, proptype);
+        }
 
-            private void writeProp(final ContentHandler contentHandler, final boolean isStart) throws SAXException {
+        public Element getStartFlag() {
+            return writeToElement((ContentHandler contentHandler) -> {
+                try {
+                    writeStartFlag(contentHandler);
+                } catch (SAXException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        public Element getEndFlag() {
+            return writeToElement((ContentHandler contentHandler) -> {
+                try {
+                    writeEndFlag(contentHandler);
+                } catch (SAXException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        private static Element writeToElement(final Consumer<ContentHandler> writer) {
+            final TransformerFactory factory = TransformerFactory.newInstance();
+            final Transformer transformer;
+            try {
+                transformer = factory.newTransformer();
+            } catch (TransformerConfigurationException e) {
+                throw new RuntimeException(e);
+            }
+            final SAXSource xmlSource = new SAXSource(
+                    new XMLReader() {
+                        @Override
+                        public boolean getFeature(String name)
+                                throws SAXNotRecognizedException, SAXNotSupportedException {
+                            return false;
+                        }
+
+                        @Override
+                        public void setFeature(String name, boolean value)
+                                throws SAXNotRecognizedException, SAXNotSupportedException {}
+
+                        @Override
+                        public Object getProperty(String name)
+                                throws SAXNotRecognizedException, SAXNotSupportedException {
+                            return null;
+                        }
+
+                        @Override
+                        public void setProperty(String name, Object value)
+                                throws SAXNotRecognizedException, SAXNotSupportedException {}
+
+                        @Override
+                        public void setEntityResolver(EntityResolver resolver) {}
+
+                        @Override
+                        public EntityResolver getEntityResolver() {
+                            return null;
+                        }
+
+                        @Override
+                        public void setDTDHandler(DTDHandler handler) {}
+
+                        @Override
+                        public DTDHandler getDTDHandler() {
+                            return null;
+                        }
+
+                        private ContentHandler contentHandler;
+
+                        @Override
+                        public void setContentHandler(ContentHandler handler) {
+                            this.contentHandler = handler;
+                        }
+
+                        @Override
+                        public ContentHandler getContentHandler() {
+                            return contentHandler;
+                        }
+
+                        @Override
+                        public void setErrorHandler(ErrorHandler handler) {}
+
+                        @Override
+                        public ErrorHandler getErrorHandler() {
+                            return null;
+                        }
+
+                        @Override
+                        public void parse(InputSource input) throws IOException, SAXException {
+                            parse((String) null);
+                        }
+
+                        @Override
+                        public void parse(String input) throws IOException, SAXException {
+                            getContentHandler().startDocument();
+                            writer.accept(getContentHandler());
+                            getContentHandler().endDocument();
+                        }
+                    },
+                    null);
+            final DOMResult outputTarget = new DOMResult();
+            try {
+                transformer.transform(xmlSource, outputTarget);
+            } catch (TransformerException e) {
+                throw new RuntimeException(e);
+            }
+            return ((Document) outputTarget.getNode()).getDocumentElement();
+        }
+
+        @Override
+        public String toString() {
+            return "Flag{" + "color='"
+                    + color + '\'' + ", backcolor='"
+                    + backcolor + '\'' + ", style="
+                    + Arrays.toString(style) + ", outputclass="
+                    + outputClass + ", changebar='"
+                    + changebar + '\'' + ", startflag="
+                    + startflag + ", endflag="
+                    + endflag + '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Flag flag = (Flag) o;
+
+            if (!Objects.equals(color, flag.color)) return false;
+            if (!Objects.equals(backcolor, flag.backcolor)) return false;
+            // Probably incorrect - comparing Object[] arrays with Arrays.equals
+            if (!Arrays.equals(style, flag.style)) return false;
+            if (!Objects.equals(outputClass, flag.outputClass)) return false;
+            if (!Objects.equals(changebar, flag.changebar)) return false;
+            if (!Objects.equals(startflag, flag.startflag)) return false;
+            return Objects.equals(endflag, flag.endflag);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = color != null ? color.hashCode() : 0;
+            result = 31 * result + (backcolor != null ? backcolor.hashCode() : 0);
+            result = 31 * result + Arrays.hashCode(style);
+            result = 31 * result + (changebar != null ? changebar.hashCode() : 0);
+            result = 31 * result + (outputClass != null ? outputClass.hashCode() : 0);
+            result = 31 * result + (startflag != null ? startflag.hashCode() : 0);
+            result = 31 * result + (endflag != null ? endflag.hashCode() : 0);
+            return result;
+        }
+
+        public record FlagImage(URI href, String alt) {
+
+            private void writeFlag(final ContentHandler contentHandler, final String tag) throws SAXException {
                 final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
-                if (color != null) {
-                    propAtts.add("color", color);
+                final URI abs = href;
+                if (abs != null) {
+                    propAtts.add(
+                            DITA_OT_NS,
+                            ATTRIBUTE_NAME_IMAGEREF_URI,
+                            "dita-ot:" + ATTRIBUTE_NAME_IMAGEREF_URI,
+                            "CDATA",
+                            abs.toString());
+                    final URI rel = abs;
+                    propAtts.add(
+                            DITA_OT_NS,
+                            "original-" + ATTRIBUTE_NAME_IMAGEREF,
+                            "dita-ot:original-" + ATTRIBUTE_NAME_IMAGEREF,
+                            "CDATA",
+                            rel.toString());
+                    propAtts.add(ATTRIBUTE_NAME_IMAGEREF, rel.toString());
                 }
-                if (backcolor != null) {
-                    propAtts.add("backcolor", backcolor);
+                contentHandler.startElement(NULL_NS_URI, tag, tag, propAtts.build());
+                if (alt != null) {
+                    contentHandler.startElement(NULL_NS_URI, "alt-text", "alt-text", XMLUtils.EMPTY_ATTRIBUTES);
+                    final char[] chars = alt.toCharArray();
+                    contentHandler.characters(chars, 0, chars.length);
+                    contentHandler.endElement(NULL_NS_URI, "alt-text", "alt-text");
                 }
-                if (style != null) {
-                    propAtts.add("style", String.join(" ", style));
-                }
-                if (outputClass != null) {
-                    propAtts.add("outputclass", outputClass);
-                }
-                if (changebar != null) {
-                    propAtts.add("changebar", changebar);
-                }
-                contentHandler.startElement(NULL_NS_URI, proptype, proptype, propAtts.build());
-                if (isStart && startflag != null) {
-                    startflag.writeFlag(contentHandler, "startflag");
-                }
-                if (!isStart && endflag != null) {
-                    endflag.writeFlag(contentHandler, "endflag");
-                }
-                contentHandler.endElement(NULL_NS_URI, proptype, proptype);
-            }
-
-            public Element getStartFlag() {
-                return writeToElement((ContentHandler contentHandler) -> {
-                    try {
-                        writeStartFlag(contentHandler);
-                    } catch (SAXException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            }
-
-            public Element getEndFlag() {
-                return writeToElement((ContentHandler contentHandler) -> {
-                    try {
-                        writeEndFlag(contentHandler);
-                    } catch (SAXException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            }
-
-            private static Element writeToElement(final Consumer<ContentHandler> writer) {
-                final TransformerFactory factory = TransformerFactory.newInstance();
-                final Transformer transformer;
-                try {
-                    transformer = factory.newTransformer();
-                } catch (TransformerConfigurationException e) {
-                    throw new RuntimeException(e);
-                }
-                final SAXSource xmlSource = new SAXSource(new XMLReader() {
-                    @Override
-                    public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
-                        return false;
-                    }
-
-                    @Override
-                    public void setFeature(String name, boolean value) throws SAXNotRecognizedException, SAXNotSupportedException {
-                    }
-
-                    @Override
-                    public Object getProperty(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
-                        return null;
-                    }
-
-                    @Override
-                    public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
-                    }
-
-                    @Override
-                    public void setEntityResolver(EntityResolver resolver) {
-                    }
-
-                    @Override
-                    public EntityResolver getEntityResolver() {
-                        return null;
-                    }
-
-                    @Override
-                    public void setDTDHandler(DTDHandler handler) {
-                    }
-
-                    @Override
-                    public DTDHandler getDTDHandler() {
-                        return null;
-                    }
-
-                    private ContentHandler contentHandler;
-
-                    @Override
-                    public void setContentHandler(ContentHandler handler) {
-                        this.contentHandler = handler;
-                    }
-
-                    @Override
-                    public ContentHandler getContentHandler() {
-                        return contentHandler;
-                    }
-
-                    @Override
-                    public void setErrorHandler(ErrorHandler handler) {
-                    }
-
-                    @Override
-                    public ErrorHandler getErrorHandler() {
-                        return null;
-                    }
-
-                    @Override
-                    public void parse(InputSource input) throws IOException, SAXException {
-                        parse((String) null);
-                    }
-
-                    @Override
-                    public void parse(String input) throws IOException, SAXException {
-                        getContentHandler().startDocument();
-                        writer.accept(getContentHandler());
-                        getContentHandler().endDocument();
-                    }
-                }, null);
-                final DOMResult outputTarget = new DOMResult();
-                try {
-                    transformer.transform(xmlSource, outputTarget);
-                } catch (TransformerException e) {
-                    throw new RuntimeException(e);
-                }
-                return ((Document) outputTarget.getNode()).getDocumentElement();
-            }
-
-            @Override
-            public String toString() {
-                return "Flag{" +
-                        "color='" + color + '\'' +
-                        ", backcolor='" + backcolor + '\'' +
-                        ", style=" + Arrays.toString(style) +
-                        ", outputclass=" + outputClass +
-                        ", changebar='" + changebar + '\'' +
-                        ", startflag=" + startflag +
-                        ", endflag=" + endflag +
-                        '}';
+                contentHandler.endElement(NULL_NS_URI, tag, tag);
             }
 
             @Override
@@ -881,70 +973,16 @@ public final class FilterUtils {
                 if (this == o) return true;
                 if (o == null || getClass() != o.getClass()) return false;
 
-                Flag flag = (Flag) o;
+                FlagImage flagImage = (FlagImage) o;
 
-                if (!Objects.equals(color, flag.color)) return false;
-                if (!Objects.equals(backcolor, flag.backcolor)) return false;
-                // Probably incorrect - comparing Object[] arrays with Arrays.equals
-                if (!Arrays.equals(style, flag.style)) return false;
-                if (!Objects.equals(outputClass, flag.outputClass)) return false;
-                if (!Objects.equals(changebar, flag.changebar)) return false;
-                if (!Objects.equals(startflag, flag.startflag)) return false;
-                return Objects.equals(endflag, flag.endflag);
+                if (!Objects.equals(href, flagImage.href)) return false;
+                return Objects.equals(alt, flagImage.alt);
             }
 
             @Override
-            public int hashCode() {
-                int result = color != null ? color.hashCode() : 0;
-                result = 31 * result + (backcolor != null ? backcolor.hashCode() : 0);
-                result = 31 * result + Arrays.hashCode(style);
-                result = 31 * result + (changebar != null ? changebar.hashCode() : 0);
-                result = 31 * result + (outputClass != null ? outputClass.hashCode() : 0);
-                result = 31 * result + (startflag != null ? startflag.hashCode() : 0);
-                result = 31 * result + (endflag != null ? endflag.hashCode() : 0);
-                return result;
-            }
-
-            public record FlagImage(URI href, String alt) {
-
-                private void writeFlag(final ContentHandler contentHandler, final String tag) throws SAXException {
-                    final XMLUtils.AttributesBuilder propAtts = new XMLUtils.AttributesBuilder().add("action", "flag");
-                    final URI abs = href;
-                    if (abs != null) {
-                        propAtts.add(DITA_OT_NS, ATTRIBUTE_NAME_IMAGEREF_URI, "dita-ot:" + ATTRIBUTE_NAME_IMAGEREF_URI, "CDATA", abs.toString());
-                        final URI rel = abs;
-                        propAtts.add(DITA_OT_NS, "original-" + ATTRIBUTE_NAME_IMAGEREF, "dita-ot:original-" + ATTRIBUTE_NAME_IMAGEREF, "CDATA", rel.toString());
-                        propAtts.add(ATTRIBUTE_NAME_IMAGEREF, rel.toString());
-                    }
-                    contentHandler.startElement(NULL_NS_URI, tag, tag, propAtts.build());
-                    if (alt != null) {
-                        contentHandler.startElement(NULL_NS_URI, "alt-text", "alt-text", XMLUtils.EMPTY_ATTRIBUTES);
-                        final char[] chars = alt.toCharArray();
-                        contentHandler.characters(chars, 0, chars.length);
-                        contentHandler.endElement(NULL_NS_URI, "alt-text", "alt-text");
-                    }
-                    contentHandler.endElement(NULL_NS_URI, tag, tag);
-                }
-
-                @Override
-                public boolean equals(Object o) {
-                    if (this == o) return true;
-                    if (o == null || getClass() != o.getClass()) return false;
-
-                    FlagImage flagImage = (FlagImage) o;
-
-                    if (!Objects.equals(href, flagImage.href)) return false;
-                    return Objects.equals(alt, flagImage.alt);
-                }
-
-                @Override
-                public String toString() {
-                    return "FlagImage{" +
-                            "href=" + href +
-                            ", alt='" + alt + '\'' +
-                            '}';
-                }
+            public String toString() {
+                return "FlagImage{" + "href=" + href + ", alt='" + alt + '\'' + '}';
             }
         }
-
+    }
 }

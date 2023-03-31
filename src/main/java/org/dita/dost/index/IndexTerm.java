@@ -1,17 +1,16 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005, 2006 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005, 2006 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.index;
 
 import static org.dita.dost.util.Constants.*;
 
 import java.util.*;
-
 import org.dita.dost.util.DITAOTCollator;
 
 /**
@@ -24,7 +23,8 @@ import org.dita.dost.util.DITAOTCollator;
 public final class IndexTerm implements Comparable<IndexTerm> {
 
     public enum IndexTermPrefix {
-        SEE("See"), SEE_ALSO("See also");
+        SEE("See"),
+        SEE_ALSO("See also");
 
         public final String message;
 
@@ -67,8 +67,8 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      */
     private boolean leaf = true;
 
-    //initialization for rtlLocaleList
-    static{
+    // initialization for rtlLocaleList
+    static {
         rtlLocaleList = new ArrayList<>(2);
         rtlLocaleList.add("ar_EG");
         rtlLocaleList.add("he_IL");
@@ -171,7 +171,6 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * Set the end attribute.
      * @param end attribute
      */
-
     public void setEndAttribute(final String end) {
         this.end = end;
     }
@@ -185,7 +184,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
         final int subTermNum = subTerms.size();
 
         if (IndexTermPrefix.SEE != term.getTermPrefix() && IndexTermPrefix.SEE_ALSO != term.getTermPrefix()) {
-            //if the term is not "index-see" or "index-see-also"
+            // if the term is not "index-see" or "index-see-also"
             leaf = false;
         }
 
@@ -246,11 +245,13 @@ public final class IndexTerm implements Comparable<IndexTerm> {
         boolean eqSubTerms;
         boolean eqTermPrefix;
 
-        eqTermName = Objects.equals(termName, it.getTermName()) || termName != null && termName.equals(it.getTermName());
-        eqTermPrefix = Objects.equals(termPrefix, it.getTermPrefix()) || termPrefix != null && termPrefix.equals(it.getTermPrefix());
+        eqTermName =
+                Objects.equals(termName, it.getTermName()) || termName != null && termName.equals(it.getTermName());
+        eqTermPrefix = Objects.equals(termPrefix, it.getTermPrefix())
+                || termPrefix != null && termPrefix.equals(it.getTermPrefix());
         eqTermKey = Objects.equals(termKey, it.getTermKey()) || termKey != null && termKey.equals(it.getTermKey());
         eqTargetList = targetList == it.getTargetList() || targetList != null && targetList.equals(it.getTargetList());
-        eqSubTerms =  subTerms == it.getSubTerms() || subTerms != null && subTerms.equals(it.getSubTerms());
+        eqSubTerms = subTerms == it.getSubTerms() || subTerms != null && subTerms.equals(it.getSubTerms());
 
         return eqTermName && eqTermKey && eqTargetList && eqSubTerms && eqTermPrefix;
     }
@@ -350,7 +351,8 @@ public final class IndexTerm implements Comparable<IndexTerm> {
     @Override
     public String toString() {
 
-        return "{Term name: " + termName + ", Term key: " + termKey + ", Target list: " + targetList.toString() + ", Sub-terms: " + subTerms.toString() + "}";
+        return "{Term name: " + termName + ", Term key: " + termKey + ", Target list: " + targetList.toString()
+                + ", Sub-terms: " + subTerms.toString() + "}";
     }
 
     /**
@@ -380,7 +382,8 @@ public final class IndexTerm implements Comparable<IndexTerm> {
             if (termLocale == null) {
                 return termPrefix.message + STRING_BLANK + termName;
             } else {
-                final String key = "IndexTerm." + termPrefix.message.toLowerCase().trim().replace(' ', '-');
+                final String key =
+                        "IndexTerm." + termPrefix.message.toLowerCase().trim().replace(' ', '-');
                 final String msg = Messages.getString(key, termLocale);
                 if (rtlLocaleList.contains(termLocale.toString())) {
                     return termName + STRING_BLANK + msg;
@@ -399,10 +402,10 @@ public final class IndexTerm implements Comparable<IndexTerm> {
             // if there is only one subterm, it is necessary to update
             final IndexTerm term = subTerms.get(0); // get the only subterm
             if (term.getTermPrefix() == IndexTermPrefix.SEE) {
-                //if the only subterm is index-see update it to index-see-also
+                // if the only subterm is index-see update it to index-see-also
                 term.setTermPrefix(IndexTermPrefix.SEE_ALSO);
             }
-//            subTerms.set(0, term);
+            //            subTerms.set(0, term);
         }
     }
 
