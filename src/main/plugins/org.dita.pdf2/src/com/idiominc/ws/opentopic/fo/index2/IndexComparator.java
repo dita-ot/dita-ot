@@ -39,29 +39,26 @@ See the accompanying LICENSE file for applicable license.
 @Deprecated
 class IndexComparator implements Comparator<IndexEntry> {
 
-    private final IndexCollator Collator;
+  private final IndexCollator Collator;
 
+  public IndexComparator(final Locale theLocale) {
+    this.Collator = new IndexCollator(theLocale);
+  }
 
-    public IndexComparator(final Locale theLocale) {
-        this.Collator = new IndexCollator(theLocale);
+  public int compare(final IndexEntry o1, final IndexEntry o2) {
+    final String value1 = getSortString(o1);
+    final String value2 = getSortString(o2);
+
+    return this.Collator.compare(value1, value2);
+  }
+
+  private String getSortString(final IndexEntry theEntry1) {
+    String result;
+    if (theEntry1.getSortString() != null) {
+      result = theEntry1.getSortString();
+    } else {
+      result = theEntry1.getValue();
     }
-
-
-    public int compare(final IndexEntry o1, final IndexEntry o2) {
-        final String value1 = getSortString(o1);
-        final String value2 = getSortString(o2);
-
-        return this.Collator.compare(value1,value2);
-    }
-
-
-    private String getSortString(final IndexEntry theEntry1) {
-        String result;
-        if (theEntry1.getSortString() != null) {
-            result = theEntry1.getSortString();
-        } else {
-            result = theEntry1.getValue();
-        }
-        return result;
-    }
+    return result;
+  }
 }

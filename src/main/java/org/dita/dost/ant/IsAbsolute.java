@@ -8,7 +8,6 @@
 package org.dita.dost.ant;
 
 import java.io.File;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 
@@ -19,30 +18,29 @@ import org.apache.tools.ant.taskdefs.condition.Condition;
  * @author Wu, Zhi Qiang
  */
 public final class IsAbsolute implements Condition {
-    private String path = null;
 
-    /**
-     * Default Constructor.
-     *
-     */
-    public IsAbsolute() {
-    }
+  private String path = null;
 
-    /**
-     * Set the path.
-     * @param pth The path to set.
-     */
-    public void setPath(final String pth) {
-        path = pth;
-    }
+  /**
+   * Default Constructor.
+   *
+   */
+  public IsAbsolute() {}
 
-    /**
-     *
-     * @see org.apache.tools.ant.taskdefs.condition.Condition#eval()
-     */
-    @Override
-    public boolean eval() throws BuildException {
-        return new File(path).isAbsolute();
-    }
+  /**
+   * Set the path.
+   * @param pth The path to set.
+   */
+  public void setPath(final String pth) {
+    path = pth;
+  }
 
+  /**
+   *
+   * @see org.apache.tools.ant.taskdefs.condition.Condition#eval()
+   */
+  @Override
+  public boolean eval() throws BuildException {
+    return new File(path).isAbsolute();
+  }
 }

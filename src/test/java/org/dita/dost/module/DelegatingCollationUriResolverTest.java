@@ -16,13 +16,11 @@ import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
 
 public class DelegatingCollationUriResolverTest implements DelegatingCollationUriResolver {
 
-    @Override
-    public void setBaseResolver(CollationURIResolver baseResolver) {
+  @Override
+  public void setBaseResolver(CollationURIResolver baseResolver) {}
 
-    }
-
-    @Override
-    public StringCollator resolve(String collationURI, Configuration config) {
-        return null;
-    }
+  @Override
+  public StringCollator resolve(String collationURI, Configuration config) {
+    return null;
+  }
 }

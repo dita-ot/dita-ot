@@ -40,23 +40,20 @@ See the accompanying LICENSE file for applicable license.
  */
 @Deprecated
 public interface IndexGroup {
+  /**
+   * @return group label
+   */
+  String getLabel();
 
-    /**
-     * @return group label
-     */
-    String getLabel();
+  /**
+   * @return group entries
+   */
+  IndexEntry[] getEntries();
 
-
-    /**
-     * @return group entries
-     */
-    IndexEntry[] getEntries();
-
-
-    /**
-     * Adds entry to the index group
-     *
-     * @param theEntry index entry
-     */
-    void addEntry(IndexEntry theEntry);
+  /**
+   * Adds entry to the index group
+   *
+   * @param theEntry index entry
+   */
+  void addEntry(IndexEntry theEntry);
 }

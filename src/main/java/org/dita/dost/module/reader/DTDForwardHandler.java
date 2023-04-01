@@ -17,37 +17,37 @@ import org.xml.sax.ext.LexicalHandler;
  */
 final class DTDForwardHandler implements LexicalHandler {
 
-    private final XMLReader parser;
+  private final XMLReader parser;
 
-    public DTDForwardHandler(XMLReader parser) {
-        this.parser = parser;
+  public DTDForwardHandler(XMLReader parser) {
+    this.parser = parser;
+  }
+
+  @Override
+  public void startDTD(final String name, final String publicId, final String systemId) throws SAXException {
+    if (publicId != null && !publicId.isEmpty()) {
+      parser.getContentHandler().processingInstruction("doctype-public", publicId);
     }
-
-    @Override
-    public void startDTD(final String name, final String publicId, final String systemId) throws SAXException {
-        if (publicId != null && !publicId.isEmpty()) {
-            parser.getContentHandler().processingInstruction("doctype-public", publicId);
-        }
-        if (systemId != null && !systemId.isEmpty()) {
-            parser.getContentHandler().processingInstruction("doctype-system", systemId);
-        }
+    if (systemId != null && !systemId.isEmpty()) {
+      parser.getContentHandler().processingInstruction("doctype-system", systemId);
     }
+  }
 
-    @Override
-    public void endDTD() throws SAXException {}
+  @Override
+  public void endDTD() throws SAXException {}
 
-    @Override
-    public void startEntity(String name) throws SAXException {}
+  @Override
+  public void startEntity(String name) throws SAXException {}
 
-    @Override
-    public void endEntity(String name) throws SAXException {}
+  @Override
+  public void endEntity(String name) throws SAXException {}
 
-    @Override
-    public void startCDATA() throws SAXException {}
+  @Override
+  public void startCDATA() throws SAXException {}
 
-    @Override
-    public void endCDATA() throws SAXException {}
+  @Override
+  public void endCDATA() throws SAXException {}
 
-    @Override
-    public void comment(char[] ch, int start, int length) throws SAXException {}
+  @Override
+  public void comment(char[] ch, int start, int length) throws SAXException {}
 }

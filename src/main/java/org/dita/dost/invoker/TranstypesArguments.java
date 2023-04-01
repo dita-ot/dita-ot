@@ -8,33 +8,30 @@
 
 package org.dita.dost.invoker;
 
+import static org.dita.dost.invoker.Main.locale;
+
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 
-import static org.dita.dost.invoker.Main.locale;
-
 public class TranstypesArguments extends Arguments {
 
-    @Override
-    TranstypesArguments parse(final String[] arguments) {
-        final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
-        while (!args.isEmpty()) {
-            final String arg = args.pop();
-            if (arg.equals("transtypes") || isLongForm(arg, "-transtypes")) {
-                // ignore
-            } else {
-                parseCommonOptions(arg, args);
-            }
-        }
-        return this;
+  @Override
+  TranstypesArguments parse(final String[] arguments) {
+    final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
+    while (!args.isEmpty()) {
+      final String arg = args.pop();
+      if (arg.equals("transtypes") || isLongForm(arg, "-transtypes")) {
+        // ignore
+      } else {
+        parseCommonOptions(arg, args);
+      }
     }
+    return this;
+  }
 
-    @Override
-    void printUsage(final boolean compact) {
-        UsageBuilder.builder(compact)
-                .usage(locale.getString("transtypes.usage"))
-                .print();
-    }
-
+  @Override
+  void printUsage(final boolean compact) {
+    UsageBuilder.builder(compact).usage(locale.getString("transtypes.usage")).print();
+  }
 }

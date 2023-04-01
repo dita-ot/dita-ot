@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
@@ -36,28 +35,25 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
  */
 public class Alphabet {
-    private final String name;
 
-    private final Set<Character> charset = new HashSet<>();
+  private final String name;
 
+  private final Set<Character> charset = new HashSet<>();
 
-    public Alphabet(final String theName, final Character[] theChars) {
-        this.name = theName;
-        this.charset.addAll(Arrays.asList(theChars));
-    }
+  public Alphabet(final String theName, final Character[] theChars) {
+    this.name = theName;
+    this.charset.addAll(Arrays.asList(theChars));
+  }
 
+  public String getName() {
+    return this.name;
+  }
 
-    public String getName() {
-        return this.name;
-    }
+  public boolean isContain(final char theChar) {
+    return this.charset.contains(theChar);
+  }
 
-
-    public boolean isContain(final char theChar) {
-        return this.charset.contains(theChar);
-    }
-
-
-    public Character[] getAllChars() {
-        return charset.toArray(new Character[0]);
-    }
+  public Character[] getAllChars() {
+    return charset.toArray(new Character[0]);
+  }
 }

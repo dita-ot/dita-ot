@@ -1,10 +1,8 @@
 package com.idiominc.ws.opentopic.fo.index2.configuration;
 
 import com.idiominc.ws.opentopic.fo.index2.IndexCollator;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -41,53 +39,49 @@ See the accompanying LICENSE file for applicable license.
  */
 @Deprecated
 class ConfigEntryImpl implements ConfigEntry {
-     private final String label;
-     private final String key;
-     private final String[] members;
-     private CharRange[] ranges = new CharRange[0];
 
+  private final String label;
+  private final String key;
+  private final String[] members;
+  private CharRange[] ranges = new CharRange[0];
 
+  public ConfigEntryImpl(final String theLabel, final String theKey, final String[] theMembers) {
+    this.label = theLabel;
+    this.key = theKey;
+    this.members = theMembers;
+  }
 
-     public ConfigEntryImpl(final String theLabel, final String theKey, final String[] theMembers) {
-         this.label = theLabel;
-         this.key = theKey;
-         this.members = theMembers;
-     }
+  public void addRange(final CharRange range) {
+    final ArrayList<CharRange> rangeList = new ArrayList<>(Arrays.asList(ranges));
+    rangeList.add(range);
+    ranges = rangeList.toArray(new CharRange[0]);
+  }
 
-     public void addRange(final CharRange range) {
-         final ArrayList<CharRange> rangeList = new ArrayList<>(Arrays.asList(ranges));
-         rangeList.add(range);
-         ranges = rangeList.toArray(new CharRange[0]);
-     }
+  public String getLabel() {
+    return this.label;
+  }
 
+  public String getKey() {
+    return this.key;
+  }
 
-     public String getLabel() {
-         return this.label;
-     }
+  public String[] getGroupMembers() {
+    return this.members;
+  }
 
-
-     public String getKey() {
-         return this.key;
-     }
-
-     public String[] getGroupMembers() {
-         return this.members;
-     }
-
-     public boolean isInRange(final String value, final IndexCollator collator) {
-         if (value.length() > 0) {
-             for (final String member : members) {
-                 if (value.startsWith(member) || member.startsWith(value)) {
-                     return true;
-                 }
-             }
-             for (final CharRange range : ranges) {
-                 if (range.isInRange(value, collator)) {
-                     return true;
-                 }
-             }
-         }
-         return false;  //To change body of implemented methods use File | Settings | File Templates.
-     }
-
- }
+  public boolean isInRange(final String value, final IndexCollator collator) {
+    if (value.length() > 0) {
+      for (final String member : members) {
+        if (value.startsWith(member) || member.startsWith(value)) {
+          return true;
+        }
+      }
+      for (final CharRange range : ranges) {
+        if (range.isInRange(value, collator)) {
+          return true;
+        }
+      }
+    }
+    return false; //To change body of implemented methods use File | Settings | File Templates.
+  }
+}

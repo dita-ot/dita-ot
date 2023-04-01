@@ -1,13 +1,12 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
-import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.*;
+import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 
-import javax.xml.parsers.DocumentBuilder;
 import java.util.ArrayList;
 import java.util.List;
-
-import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
+import javax.xml.parsers.DocumentBuilder;
+import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.*;
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -40,110 +39,112 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
  */
 public class MultilanguagePreprocessor {
-    private static final String NAMESPACE_URL = "http://www.idiominc.com/opentopic/i18n";
-    private static final String PREFIX = "opentopic-i18n";
-    private static final String TEXT_FRAGMENT = "text-fragment";
-    private static final String CHAR_SET = "char-set";
 
-    private final Configuration configuration;
+  private static final String NAMESPACE_URL = "http://www.idiominc.com/opentopic/i18n";
+  private static final String PREFIX = "opentopic-i18n";
+  private static final String TEXT_FRAGMENT = "text-fragment";
+  private static final String CHAR_SET = "char-set";
 
+  private final Configuration configuration;
 
-     public MultilanguagePreprocessor(final Configuration theTheConfiguration) {
-         if (null == theTheConfiguration) {
-             throw new IllegalArgumentException("Configuration argument may not be null");
-         }
-         this.configuration = theTheConfiguration;
-     }
+  public MultilanguagePreprocessor(final Configuration theTheConfiguration) {
+    if (null == theTheConfiguration) {
+      throw new IllegalArgumentException("Configuration argument may not be null");
+    }
+    this.configuration = theTheConfiguration;
+  }
 
+  public Document process(final Document theInput) throws ProcessException {
+    final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
 
-     public Document process(final Document theInput)
-             throws ProcessException {
-         final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+    final Document doc = documentBuilder.newDocument();
 
-         final Document doc = documentBuilder.newDocument();
+    final Node rootElement = theInput.getDocumentElement();
 
-         final Node rootElement = theInput.getDocumentElement();
+    final Node node = processCurrNode(rootElement, doc)[0];
 
+    doc.appendChild(node);
 
-         final Node node = processCurrNode(rootElement, doc)[0];
+    doc.getDocumentElement().setAttribute(XMLNS_ATTRIBUTE + ":" + PREFIX, NAMESPACE_URL);
 
-         doc.appendChild(node);
+    return doc;
+  }
 
-         doc.getDocumentElement().setAttribute(XMLNS_ATTRIBUTE + ":" + PREFIX, NAMESPACE_URL);
+  private Node[] processCurrNode(final Node theNode, final Document theTargetDocument) {
+    if (theNode.getNodeType() == Node.TEXT_NODE) {
+      return processTextNode((Text) theNode, theTargetDocument);
+    } else {
+      final Node result = theTargetDocument.importNode(theNode, false);
+      final NodeList childNodes = theNode.getChildNodes();
+      for (int i = 0; i < childNodes.getLength(); i++) {
+        final Node[] processedNodes = processCurrNode(childNodes.item(i), theTargetDocument);
+        for (final Node node : processedNodes) {
+          result.appendChild(node);
+        }
+      }
+      return new Node[] { result };
+    }
+  }
 
-         return doc;
-     }
+  private Node[] processTextNode(final Text theTextNode, final Document theTargetDocument) {
+    //        Element processedText = theTargetDocument.createElementNS(NAMESPACE_URL, "processed-text");
+    //        processedText.setPrefix(PREFIX);
+    final List<Node> resultNodeList = new ArrayList<>();
 
+    final String nodeValue = theTextNode.getNodeValue();
+    if (null != nodeValue) {
+      int processedPosition = 0;
 
-     private Node[] processCurrNode(final Node theNode, final Document theTargetDocument) {
-         if (theNode.getNodeType() == Node.TEXT_NODE) {
-             return processTextNode((Text) theNode, theTargetDocument);
-         } else {
-             final Node result = theTargetDocument.importNode(theNode, false);
-             final NodeList childNodes = theNode.getChildNodes();
-             for (int i = 0; i < childNodes.getLength(); i++) {
-                 final Node[] processedNodes = processCurrNode(childNodes.item(i), theTargetDocument);
-                 for (final Node node : processedNodes) {
-                     result.appendChild(node);
-                 }
-             }
-             return new Node[]{result};
-         }
-     }
+      Alphabet currentAlphabet = null;
 
+      final char[] chars = nodeValue.toCharArray();
+      for (int i = 0; i < chars.length; i++) {
+        final char aChar = chars[i];
+        final Alphabet alphabetForChar = configuration.getAlphabetForChar(aChar);
+        if (null != alphabetForChar && alphabetForChar.equals(currentAlphabet)) {
+          continue;
+        } else if (null == alphabetForChar && null == currentAlphabet) {
+          continue;
+        } else {
+          final String string = nodeValue.substring(processedPosition, i);
 
-     private Node[] processTextNode(final Text theTextNode, final Document theTargetDocument) {
-         //        Element processedText = theTargetDocument.createElementNS(NAMESPACE_URL, "processed-text");
-         //        processedText.setPrefix(PREFIX);
-         final List<Node> resultNodeList = new ArrayList<>();
+          final Node child = createChildNode(currentAlphabet, theTargetDocument, string);
 
-         final String nodeValue = theTextNode.getNodeValue();
-         if (null != nodeValue) {
-             int processedPosition = 0;
+          resultNodeList.add(child);
 
-             Alphabet currentAlphabet = null;
+          currentAlphabet = alphabetForChar;
 
-             final char[] chars = nodeValue.toCharArray();
-             for (int i = 0; i < chars.length; i++) {
-                 final char aChar = chars[i];
-                 final Alphabet alphabetForChar = configuration.getAlphabetForChar(aChar);
-                 if (null != alphabetForChar && alphabetForChar.equals(currentAlphabet)) {
-                     continue;
-                 } else if (null == alphabetForChar && null == currentAlphabet) {
-                     continue;
-                 } else {
-                     final String string = nodeValue.substring(processedPosition, i);
+          processedPosition = i;
+        }
+      }
+      final Node childNode = createChildNode(
+        currentAlphabet,
+        theTargetDocument,
+        nodeValue.substring(processedPosition)
+      );
+      resultNodeList.add(childNode);
+    }
+    return resultNodeList.toArray(new Node[resultNodeList.size()]);
+  }
 
-                     final Node child = createChildNode(currentAlphabet, theTargetDocument, string);
+  private Node createChildNode(
+    final Alphabet theCurrentAlphabet,
+    final Document theTargetDocument,
+    final String theString
+  ) {
+    Node child;
+    if (null != theCurrentAlphabet) {
+      final Element element = theTargetDocument.createElementNS(NAMESPACE_URL, TEXT_FRAGMENT);
+      element.setPrefix(PREFIX);
 
-                     resultNodeList.add(child);
-
-                     currentAlphabet = alphabetForChar;
-
-                     processedPosition = i;
-                 }
-             }
-             final Node childNode = createChildNode(currentAlphabet, theTargetDocument, nodeValue.substring(processedPosition));
-             resultNodeList.add(childNode);
-         }
-         return resultNodeList.toArray(new Node[resultNodeList.size()]);
-     }
-
-
-     private Node createChildNode(final Alphabet theCurrentAlphabet, final Document theTargetDocument, final String theString) {
-         Node child;
-         if (null != theCurrentAlphabet) {
-             final Element element = theTargetDocument.createElementNS(NAMESPACE_URL, TEXT_FRAGMENT);
-             element.setPrefix(PREFIX);
-
-             final String charSet = theCurrentAlphabet.getName();
-             element.setAttribute(CHAR_SET, charSet);
-             final Text textNode = theTargetDocument.createTextNode(theString);
-             element.appendChild(textNode);
-             child = element;
-         } else {
-             child = theTargetDocument.createTextNode(theString);
-         }
-         return child;
-     }
- }
+      final String charSet = theCurrentAlphabet.getName();
+      element.setAttribute(CHAR_SET, charSet);
+      final Text textNode = theTargetDocument.createTextNode(theString);
+      element.appendChild(textNode);
+      child = element;
+    } else {
+      child = theTargetDocument.createTextNode(theString);
+    }
+    return child;
+  }
+}
