@@ -8,78 +8,74 @@
 
 package org.dita.dost.invoker;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
+import static org.dita.dost.invoker.Main.locale;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-
-import static org.dita.dost.invoker.Main.locale;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 
 public class UninstallArguments extends Arguments {
 
-    String uninstallId;
+  String uninstallId;
 
-    @Override
-    UninstallArguments parse(final String[] arguments) {
-        final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
-        while (!args.isEmpty()) {
-            final String arg = args.pop();
-            if (arg.equals("uninstall")) {
-                handleSubcommandUninstall(arg, args);
-            } else if (isLongForm(arg, "-uninstall")) {
-                handleArgUninstall(arg, args);
-            } else {
-                parseCommonOptions(arg, args);
-            }
-        }
-        if (msgOutputLevel < Project.MSG_INFO) {
-            emacsMode = true;
-        }
-        return this;
+  @Override
+  UninstallArguments parse(final String[] arguments) {
+    final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
+    while (!args.isEmpty()) {
+      final String arg = args.pop();
+      if (arg.equals("uninstall")) {
+        handleSubcommandUninstall(arg, args);
+      } else if (isLongForm(arg, "-uninstall")) {
+        handleArgUninstall(arg, args);
+      } else {
+        parseCommonOptions(arg, args);
+      }
     }
-
-    /**
-     * Handle the --uninstall argument
-     */
-    private void handleArgUninstall(final String arg, final Deque<String> args) {
-        final int posEq = arg.indexOf("=");
-        String value;
-        if (posEq != -1) {
-            value = arg.substring(posEq + 1);
-        } else {
-            value = args.peek();
-            if (value != null && !value.startsWith("-")) {
-                value = args.pop();
-            } else {
-                value = null;
-            }
-        }
-        if (value == null) {
-            throw new BuildException("You must specify an installation package when using the --uninstall argument");
-        }
-        uninstallId = value;
+    if (msgOutputLevel < Project.MSG_INFO) {
+      emacsMode = true;
     }
+    return this;
+  }
 
-    private void handleSubcommandUninstall(final String arg, final Deque<String> args) {
-        String value;
-        value = args.peek();
-        if (value != null && !value.startsWith("-")) {
-            value = args.pop();
-        } else {
-            value = null;
-        }
-        uninstallId = value;
+  /** Handle the --uninstall argument */
+  private void handleArgUninstall(final String arg, final Deque<String> args) {
+    final int posEq = arg.indexOf("=");
+    String value;
+    if (posEq != -1) {
+      value = arg.substring(posEq + 1);
+    } else {
+      value = args.peek();
+      if (value != null && !value.startsWith("-")) {
+        value = args.pop();
+      } else {
+        value = null;
+      }
     }
-
-    @Override
-    void printUsage(final boolean compact) {
-        UsageBuilder.builder(compact)
-                .usage(locale.getString("uninstall.usage"))
-                .arguments(null, null, "id", locale.getString("uninstall.argument.id"))
-                .print();
+    if (value == null) {
+      throw new BuildException(
+          "You must specify an installation package when using the --uninstall argument");
     }
+    uninstallId = value;
+  }
 
+  private void handleSubcommandUninstall(final String arg, final Deque<String> args) {
+    String value;
+    value = args.peek();
+    if (value != null && !value.startsWith("-")) {
+      value = args.pop();
+    } else {
+      value = null;
+    }
+    uninstallId = value;
+  }
 
+  @Override
+  void printUsage(final boolean compact) {
+    UsageBuilder.builder(compact)
+        .usage(locale.getString("uninstall.usage"))
+        .arguments(null, null, "id", locale.getString("uninstall.argument.id"))
+        .print();
+  }
 }

@@ -1,15 +1,14 @@
 /*
- * This file is part of the DITA Open Toolkit project.
- *
- * Copyright 2005 IBM Corporation
- *
- * See the accompanying LICENSE file for applicable license.
+* This file is part of the DITA Open Toolkit project.
+*
+* Copyright 2005 IBM Corporation
+*
+* See the accompanying LICENSE file for applicable license.
 
- */
+*/
 package org.dita.dost.log;
 
 import com.google.common.annotations.VisibleForTesting;
-
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -22,52 +21,50 @@ import java.util.ResourceBundle;
  */
 public final class MessageUtils {
 
-    // Constants
+  // Constants
 
-    private static final String ELEMENT_MESSAGE = "message";
-    private static final String ELEMENT_REASON = "reason";
-    private static final String ELEMENT_RESPONSE = "response";
-    private static final String ATTRIBUTE_ID = "id";
-    private static final String ATTRIBUTE_TYPE = "type";
-    private static final String CLASSPATH_RESOURCE = "messages.xml";
-    private static final String RESOURCE = "config" + File.separator + CLASSPATH_RESOURCE;
+  private static final String ELEMENT_MESSAGE = "message";
+  private static final String ELEMENT_REASON = "reason";
+  private static final String ELEMENT_RESPONSE = "response";
+  private static final String ATTRIBUTE_ID = "id";
+  private static final String ATTRIBUTE_TYPE = "type";
+  private static final String CLASSPATH_RESOURCE = "messages.xml";
+  private static final String RESOURCE = "config" + File.separator + CLASSPATH_RESOURCE;
 
-    // Variables
+  // Variables
 
-    public static final ResourceBundle msgs = ResourceBundle.getBundle("messages", new Locale("en", "US"), MessageUtils.class.getClassLoader());
+  public static final ResourceBundle msgs =
+      ResourceBundle.getBundle(
+          "messages", new Locale("en", "US"), MessageUtils.class.getClassLoader());
 
-    // Constructors
+  // Constructors
 
-    /**
-     * Default construtor
-     */
-    @VisibleForTesting
-    MessageUtils() {
+  /** Default construtor */
+  @VisibleForTesting
+  MessageUtils() {}
+
+  /**
+   * Get the message respond to the given id with all of the parameters are replaced by those in the
+   * given 'prop', if no message found, an empty message with this id will be returned.
+   *
+   * @param id id
+   * @param params message parameters
+   * @return MessageBean
+   */
+  public static MessageBean getMessage(final String id, final String... params) {
+    if (!msgs.containsKey(id)) {
+      throw new IllegalArgumentException("Message for ID '" + id + "' not found");
     }
-
-    /**
-     * Get the message respond to the given id with all of the parameters
-     * are replaced by those in the given 'prop', if no message found,
-     * an empty message with this id will be returned.
-     *
-     * @param id id
-     * @param params message parameters
-     * @return MessageBean
-     */
-    public static MessageBean getMessage(final String id, final String... params) {
-        if (!msgs.containsKey(id)) {
-            throw new IllegalArgumentException("Message for ID '" + id + "' not found");
-        }
-        final String msg = MessageFormat.format(msgs.getString(id), (Object[]) params);
-        MessageBean.Type type = switch (id.substring(id.length() - 1)) {
-            case "F" -> MessageBean.Type.FATAL;
-            case "E" -> MessageBean.Type.ERROR;
-            case "W" -> MessageBean.Type.WARN;
-            case "I" -> MessageBean.Type.INFO;
-            case "D" -> MessageBean.Type.DEBUG;
-            default -> null;
+    final String msg = MessageFormat.format(msgs.getString(id), (Object[]) params);
+    MessageBean.Type type =
+        switch (id.substring(id.length() - 1)) {
+          case "F" -> MessageBean.Type.FATAL;
+          case "E" -> MessageBean.Type.ERROR;
+          case "W" -> MessageBean.Type.WARN;
+          case "I" -> MessageBean.Type.INFO;
+          case "D" -> MessageBean.Type.DEBUG;
+          default -> null;
         };
-        return new MessageBean(id, type, msg, null);
-    }
-
+    return new MessageBean(id, type, msg, null);
+  }
 }

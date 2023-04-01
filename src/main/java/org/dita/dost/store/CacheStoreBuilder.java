@@ -8,9 +8,8 @@
 
 package org.dita.dost.store;
 
-import org.dita.dost.util.XMLUtils;
-
 import java.io.File;
+import org.dita.dost.util.XMLUtils;
 
 /**
  * Memory store builder
@@ -19,28 +18,28 @@ import java.io.File;
  */
 public class CacheStoreBuilder implements StoreBuilder {
 
-    private File tempDir;
-    private XMLUtils xmlUtils;
+  private File tempDir;
+  private XMLUtils xmlUtils;
 
-    @Override
-    public String getType() {
-        return "memory";
-    }
+  @Override
+  public String getType() {
+    return "memory";
+  }
 
-    @Override
-    public StoreBuilder setTempDir(File tempDir) {
-        this.tempDir = tempDir;
-        return this;
-    }
+  @Override
+  public StoreBuilder setTempDir(File tempDir) {
+    this.tempDir = tempDir;
+    return this;
+  }
 
-    @Override
-    public StoreBuilder setXmlUtils(XMLUtils xmlUtils) {
-        this.xmlUtils = xmlUtils;
-        return this;
-    }
+  @Override
+  public StoreBuilder setXmlUtils(XMLUtils xmlUtils) {
+    this.xmlUtils = xmlUtils;
+    return this;
+  }
 
-    @Override
-    public Store build() {
-        return new CacheStore(tempDir, xmlUtils);
-    }
+  @Override
+  public Store build() {
+    return new CacheStore(tempDir, xmlUtils);
+  }
 }

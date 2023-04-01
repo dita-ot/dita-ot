@@ -13,16 +13,16 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 public class IncludeFilter extends XMLFilterImpl {
-    public IncludeFilter(final ContentHandler handler) {
-        super();
-        setContentHandler(handler);
-    }
+  public IncludeFilter(final ContentHandler handler) {
+    super();
+    setContentHandler(handler);
+  }
 
-    public void startDocument() throws SAXException {
-        // Ignore
-    }
+  public void startDocument() throws SAXException {
+    // Ignore
+  }
 
-    public void endDocument() throws SAXException {
-        // Ignore
-    }
+  public void endDocument() throws SAXException {
+    // Ignore
+  }
 }

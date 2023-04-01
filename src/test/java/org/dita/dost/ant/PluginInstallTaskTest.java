@@ -8,29 +8,26 @@
 
 package org.dita.dost.ant;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.dita.dost.platform.Registry;
 import org.dita.dost.platform.Registry.Dependency;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 public class PluginInstallTaskTest {
 
-    final PluginInstallTask registryTask = new PluginInstallTask();
+  final PluginInstallTask registryTask = new PluginInstallTask();
 
-    @Test
-    public void matchingPlatformVersion() {
-        assertFalse(registryTask.matchingPlatformVersion(createRegistry(">=2.5")));
-        assertTrue(registryTask.matchingPlatformVersion(createRegistry(">=1.2")));
-        assertTrue(registryTask.matchingPlatformVersion(createRegistry("1.2.3")));
-    }
+  @Test
+  public void matchingPlatformVersion() {
+    assertFalse(registryTask.matchingPlatformVersion(createRegistry(">=2.5")));
+    assertTrue(registryTask.matchingPlatformVersion(createRegistry(">=1.2")));
+    assertTrue(registryTask.matchingPlatformVersion(createRegistry("1.2.3")));
+  }
 
-    private Registry createRegistry(String version) {
-        return new Registry(null, "1.0.0",
-                new Dependency[]{
-                        new Dependency("org.dita.base", version)
-                },
-                null, null);
-    }
+  private Registry createRegistry(String version) {
+    return new Registry(
+        null, "1.0.0", new Dependency[] {new Dependency("org.dita.base", version)}, null, null);
+  }
 }

@@ -8,16 +8,15 @@
 
 package org.dita.dost.store;
 
+import java.io.File;
 import org.dita.dost.util.XMLUtils;
 
-import java.io.File;
-
 public interface StoreBuilder {
-    String getType();
+  String getType();
 
-    StoreBuilder setTempDir(File tempDir);
+  StoreBuilder setTempDir(File tempDir);
 
-    StoreBuilder setXmlUtils(XMLUtils xmlUtils);
+  StoreBuilder setXmlUtils(XMLUtils xmlUtils);
 
-    Store build();
+  Store build();
 }

@@ -8,22 +8,19 @@
 
 package org.dita.dost.writer.include;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-
 public interface Range {
-    /**
-     * Copy lines from reader to target handler
-     *
-     * @param codeReader line reader
-     */
-    void copyLines(final BufferedReader codeReader) throws IOException, SAXException;
+  /**
+   * Copy lines from reader to target handler
+   *
+   * @param codeReader line reader
+   */
+  void copyLines(final BufferedReader codeReader) throws IOException, SAXException;
 
-    /**
-     * Set target handler
-     */
-    Range handler(final ContentHandler contentHandler);
+  /** Set target handler */
+  Range handler(final ContentHandler contentHandler);
 }

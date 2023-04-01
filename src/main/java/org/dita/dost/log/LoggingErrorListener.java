@@ -13,24 +13,24 @@ import javax.xml.transform.TransformerException;
 
 public class LoggingErrorListener implements ErrorListener {
 
-    private final DITAOTLogger logger;
+  private final DITAOTLogger logger;
 
-    public LoggingErrorListener(final DITAOTLogger logger) {
-        this.logger = logger;
-    }
+  public LoggingErrorListener(final DITAOTLogger logger) {
+    this.logger = logger;
+  }
 
-    @Override
-    public void warning(TransformerException exception) throws TransformerException {
-        logger.warn(exception.getMessage());
-    }
+  @Override
+  public void warning(TransformerException exception) throws TransformerException {
+    logger.warn(exception.getMessage());
+  }
 
-    @Override
-    public void error(TransformerException exception) throws TransformerException {
-        logger.error(exception.getMessage());
-    }
+  @Override
+  public void error(TransformerException exception) throws TransformerException {
+    logger.error(exception.getMessage());
+  }
 
-    @Override
-    public void fatalError(TransformerException exception) throws TransformerException {
-        throw exception;
-    }
+  @Override
+  public void fatalError(TransformerException exception) throws TransformerException {
+    throw exception;
+  }
 }

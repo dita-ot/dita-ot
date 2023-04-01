@@ -15,6 +15,8 @@ jobs:
           cache: 'gradle'
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Check formatting
+        run: ./gradlew spotlessCheck
       - name: Build with Gradle
         run: ./gradlew
       - name: Run unit tests

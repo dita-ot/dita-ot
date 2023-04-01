@@ -7,12 +7,6 @@
  */
 package org.ditang.relaxng.defaults;
 
-import javax.xml.transform.sax.SAXSource;
-
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-
 import com.thaiopensource.relaxng.parse.Parseable;
 import com.thaiopensource.relaxng.parse.sax.SAXParseable;
 import com.thaiopensource.relaxng.pattern.AnnotationsImpl;
@@ -24,81 +18,75 @@ import com.thaiopensource.resolver.xml.sax.SAXResolver;
 import com.thaiopensource.util.PropertyMap;
 import com.thaiopensource.util.VoidValue;
 import com.thaiopensource.validate.SchemaReader;
+import javax.xml.transform.sax.SAXSource;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
 
 /**
  * @author george@oxygenxml.com
- * 
  */
 public class RNGDefaultValues extends RelaxNGDefaultValues {
-    /**
-     * Schema reader for RNG schemas.
-     */
-    public static class OxygenXMLSchemaReader extends OxygenRelaxNGSchemaReader {
-        /**
-         * The schema reader instance.
-         */
-        private static final SchemaReader theInstance = new OxygenXMLSchemaReader();
+  /** Schema reader for RNG schemas. */
+  public static class OxygenXMLSchemaReader extends OxygenRelaxNGSchemaReader {
+    /** The schema reader instance. */
+    private static final SchemaReader theInstance = new OxygenXMLSchemaReader();
 
-        /**
-         * Private constructor.
-         */
-        private OxygenXMLSchemaReader() {
-            super();
-        }
-
-        /**
-         * Get the singleton instance.
-         * 
-         * @return The instance.
-         */
-        public static SchemaReader getInstance() {
-            return theInstance;
-        }
-
-        /**
-         * Creates a parseable object from a catalog resolved input source
-         * associated to a RNG schema.
-         * 
-         * @return the parseable object
-         */
-        @Override
-        protected Parseable<Pattern, NameClass, Locator, VoidValue, CommentListImpl, AnnotationsImpl> createParseable(
-                SAXSource source, SAXResolver resolver, ErrorHandler eh,
-                PropertyMap properties) throws SAXException {
-            if (source.getXMLReader() == null) {
-                source = new SAXSource(resolver.createXMLReader(),
-                        source.getInputSource());
-            }
-            return new SAXParseable<>(
-                    source, resolver, eh);
-        }
-
+    /** Private constructor. */
+    private OxygenXMLSchemaReader() {
+      super();
     }
 
     /**
-     * Constructor
-     * @param resolver The resolver
-     * @param eh The error handler
+     * Get the singleton instance.
+     *
+     * @return The instance.
      */
-    public RNGDefaultValues(Resolver resolver, ErrorHandler eh) {
-        this(resolver, eh, false);
+    public static SchemaReader getInstance() {
+      return theInstance;
     }
 
     /**
-     * Constructor
-     * @param resolver The resolver
-     * @param eh The error handler
-     * @param keepSchema <code>true</code> to keep a reference to the schema.
-     */
-    public RNGDefaultValues(Resolver resolver, ErrorHandler eh, boolean keepSchema) {
-        super(resolver, eh, keepSchema);
-    }
-
-    /**
-     * Return the <code>OxygenXMLSchemaReader</code> instance.
+     * Creates a parseable object from a catalog resolved input source associated to a RNG schema.
+     *
+     * @return the parseable object
      */
     @Override
-    protected SchemaReader getSchemaReader() {
-        return OxygenXMLSchemaReader.getInstance();
+    protected Parseable<Pattern, NameClass, Locator, VoidValue, CommentListImpl, AnnotationsImpl>
+        createParseable(
+            SAXSource source, SAXResolver resolver, ErrorHandler eh, PropertyMap properties)
+            throws SAXException {
+      if (source.getXMLReader() == null) {
+        source = new SAXSource(resolver.createXMLReader(), source.getInputSource());
+      }
+      return new SAXParseable<>(source, resolver, eh);
     }
+  }
+
+  /**
+   * Constructor
+   *
+   * @param resolver The resolver
+   * @param eh The error handler
+   */
+  public RNGDefaultValues(Resolver resolver, ErrorHandler eh) {
+    this(resolver, eh, false);
+  }
+
+  /**
+   * Constructor
+   *
+   * @param resolver The resolver
+   * @param eh The error handler
+   * @param keepSchema <code>true</code> to keep a reference to the schema.
+   */
+  public RNGDefaultValues(Resolver resolver, ErrorHandler eh, boolean keepSchema) {
+    super(resolver, eh, keepSchema);
+  }
+
+  /** Return the <code>OxygenXMLSchemaReader</code> instance. */
+  @Override
+  protected SchemaReader getSchemaReader() {
+    return OxygenXMLSchemaReader.getInstance();
+  }
 }

@@ -8,21 +8,23 @@
 
 package org.dita.dost.module.reader;
 
-import java.net.URI;
-
 import static org.dita.dost.util.URLUtils.toURI;
 
+import java.net.URI;
+
 public class DefaultTempFileScheme implements TempFileNameScheme {
-    URI b;
-    @Override
-    public void setBaseDir(final URI b) {
-        this.b = b;
-    }
-    @Override
-    public URI generateTempFileName(final URI src) {
-        assert src.isAbsolute();
-        //final URI b = baseInputDir.toURI();
-        final URI rel = toURI(b.relativize(src).toString());
-        return rel;
-    }
+  URI b;
+
+  @Override
+  public void setBaseDir(final URI b) {
+    this.b = b;
+  }
+
+  @Override
+  public URI generateTempFileName(final URI src) {
+    assert src.isAbsolute();
+    // final URI b = baseInputDir.toURI();
+    final URI rel = toURI(b.relativize(src).toString());
+    return rel;
+  }
 }
