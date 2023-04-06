@@ -9,7 +9,6 @@ package org.ditang.relaxng.defaults;
 
 import java.io.IOException;
 import java.util.Locale;
-
 import org.apache.xerces.parsers.XIncludeAwareParserConfiguration;
 import org.apache.xerces.xni.XMLDTDContentModelHandler;
 import org.apache.xerces.xni.XMLDTDHandler;
@@ -26,6 +25,7 @@ import org.apache.xerces.xni.parser.XMLParserConfiguration;
  * RelaxNG schema
  */
 public class RelaxNGDefaultParserConfigurationWrapper implements XMLParserConfiguration {
+
   /**
    * The wrapped configuration
    */
@@ -38,7 +38,7 @@ public class RelaxNGDefaultParserConfigurationWrapper implements XMLParserConfig
     XIncludeAwareParserConfiguration c = new XIncludeAwareParserConfiguration();
     this.config = c;
   }
-  
+
   /**
    * Constructor
    * @param config The wrapped configuration.
@@ -46,13 +46,12 @@ public class RelaxNGDefaultParserConfigurationWrapper implements XMLParserConfig
   public RelaxNGDefaultParserConfigurationWrapper(XMLParserConfiguration config) {
     this.config = config;
   }
-  
+
   /**
    * @see org.apache.xerces.xni.parser.XMLParserConfiguration#parse(org.apache.xerces.xni.parser.XMLInputSource)
    */
   @Override
-  public void parse(XMLInputSource inputSource) throws XNIException,
-      IOException {
+  public void parse(XMLInputSource inputSource) throws XNIException, IOException {
     config.parse(inputSource);
   }
 
@@ -68,8 +67,7 @@ public class RelaxNGDefaultParserConfigurationWrapper implements XMLParserConfig
    * @see org.apache.xerces.xni.parser.XMLParserConfiguration#setFeature(java.lang.String, boolean)
    */
   @Override
-  public void setFeature(String featureId, boolean state)
-      throws XMLConfigurationException {
+  public void setFeature(String featureId, boolean state) throws XMLConfigurationException {
     config.setFeature(featureId, state);
   }
 
@@ -93,8 +91,7 @@ public class RelaxNGDefaultParserConfigurationWrapper implements XMLParserConfig
    * @see org.apache.xerces.xni.parser.XMLParserConfiguration#setProperty(java.lang.String, java.lang.Object)
    */
   @Override
-  public void setProperty(String propertyId, Object value)
-      throws XMLConfigurationException {
+  public void setProperty(String propertyId, Object value) throws XMLConfigurationException {
     config.setProperty(propertyId, value);
   }
 
@@ -158,10 +155,8 @@ public class RelaxNGDefaultParserConfigurationWrapper implements XMLParserConfig
    * @see org.apache.xerces.xni.parser.XMLParserConfiguration#setDTDContentModelHandler(org.apache.xerces.xni.XMLDTDContentModelHandler)
    */
   @Override
-  public void setDTDContentModelHandler(
-      XMLDTDContentModelHandler dtdContentModelHandler) {
+  public void setDTDContentModelHandler(XMLDTDContentModelHandler dtdContentModelHandler) {
     config.setDTDContentModelHandler(dtdContentModelHandler);
-    
   }
 
   /**

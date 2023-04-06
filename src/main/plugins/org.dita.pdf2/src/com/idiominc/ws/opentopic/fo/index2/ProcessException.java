@@ -34,13 +34,11 @@ See the accompanying LICENSE file for applicable license.
  * @deprecated since 3.4
  */
 @Deprecated
-public class ProcessException
-extends Exception {
-    public ProcessException() {
-    }
+public class ProcessException extends Exception {
 
+  public ProcessException() {}
 
-    public ProcessException(final String message) {
-        super(message);
-    }
+  public ProcessException(final String message) {
+    super(message);
+  }
 }

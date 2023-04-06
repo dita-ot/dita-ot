@@ -8,29 +8,24 @@
 
 package org.dita.dost;
 
-import org.junit.Test;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.PDF;
 
 import java.nio.file.Paths;
-
-import static org.dita.dost.AbstractIntegrationTest.Transtype.PDF;
+import org.junit.Test;
 
 public class IntegrationTestPdf extends AbstractIntegrationTest {
 
-    public AbstractIntegrationTest builder() {
-        return new IntegrationTestPdf();
-    }
+  public AbstractIntegrationTest builder() {
+    return new IntegrationTestPdf();
+  }
 
-    @Override
-    Transtype getTranstype(Transtype transtype) {
-        return transtype;
-    }
+  @Override
+  Transtype getTranstype(Transtype transtype) {
+    return transtype;
+  }
 
-    @Test
-    public void pdf() throws Throwable {
-        builder().name("pdf")
-                .transtype(PDF)
-                .input(Paths.get("bookmap.ditamap"))
-                .warnCount(1)
-                .test();
-    }
+  @Test
+  public void pdf() throws Throwable {
+    builder().name("pdf").transtype(PDF).input(Paths.get("bookmap.ditamap")).warnCount(1).test();
+  }
 }

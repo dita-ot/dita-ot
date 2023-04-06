@@ -7,6 +7,12 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.TestUtils.assertXMLEqual;
+
+import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.store.StreamStore;
@@ -18,49 +24,40 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-
-import static org.dita.dost.TestUtils.assertXMLEqual;
-
 public class MapMetaReaderTest {
 
-    private static final File resourceDir = TestUtils.getResourceDir(MapMetaReaderTest.class);
-    private static final File srcDir = new File(resourceDir, "src");
-    private static final File expDir = new File(resourceDir, "exp");
-    private static File tempDir;
-    private static MapMetaReader reader;
+  private static final File resourceDir = TestUtils.getResourceDir(MapMetaReaderTest.class);
+  private static final File srcDir = new File(resourceDir, "src");
+  private static final File expDir = new File(resourceDir, "exp");
+  private static File tempDir;
+  private static MapMetaReader reader;
 
-    @BeforeClass
-    public static void setUp() throws Exception{
-        CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
-        tempDir = TestUtils.createTempDir(MapMetaReaderTest.class);
-        for (final File f: srcDir.listFiles()) {
-            TestUtils.normalize(f, new File(tempDir, f.getName()));
-        }
-
-        reader = new MapMetaReader();
-        reader.setLogger(new TestUtils.TestLogger());
-        reader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
-
-        final File mapFile = new File(tempDir, "test.ditamap");
-        reader.read(mapFile.getAbsoluteFile());
+  @BeforeClass
+  public static void setUp() throws Exception {
+    CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
+    tempDir = TestUtils.createTempDir(MapMetaReaderTest.class);
+    for (final File f : srcDir.listFiles()) {
+      TestUtils.normalize(f, new File(tempDir, f.getName()));
     }
 
-    @Test
-    public void testRead() throws SAXException, IOException, ParserConfigurationException{
-        final DocumentBuilder db = XMLUtils.getDocumentBuilder();
-        db.setEntityResolver(CatalogUtils.getCatalogResolver());
+    reader = new MapMetaReader();
+    reader.setLogger(new TestUtils.TestLogger());
+    reader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
 
-        assertXMLEqual(db.parse(new File(expDir, "test.ditamap")),
-                db.parse(new File(tempDir, "test.ditamap")));
-    }
+    final File mapFile = new File(tempDir, "test.ditamap");
+    reader.read(mapFile.getAbsoluteFile());
+  }
 
-    @AfterClass
-    public static void tearDown() throws IOException {
-        TestUtils.forceDelete(tempDir);
-    }
+  @Test
+  public void testRead() throws SAXException, IOException, ParserConfigurationException {
+    final DocumentBuilder db = XMLUtils.getDocumentBuilder();
+    db.setEntityResolver(CatalogUtils.getCatalogResolver());
 
+    assertXMLEqual(db.parse(new File(expDir, "test.ditamap")), db.parse(new File(tempDir, "test.ditamap")));
+  }
+
+  @AfterClass
+  public static void tearDown() throws IOException {
+    TestUtils.forceDelete(tempDir);
+  }
 }

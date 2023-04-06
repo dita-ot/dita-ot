@@ -20,15 +20,15 @@ import com.idiominc.ws.opentopic.fo.index2.IndexCollator;
 @Deprecated
 public class CharRange {
 
-    private final String start;
-    private final String end;
+  private final String start;
+  private final String end;
 
-    public CharRange(final String theStart, final String theEnd) {
-        start = theStart;
-        end = theEnd;
-    }
+  public CharRange(final String theStart, final String theEnd) {
+    start = theStart;
+    end = theEnd;
+  }
 
-    public boolean isInRange(final String value, final IndexCollator collator){
-        return (collator.compare(value,start) > 0) && (collator.compare(value,end) < 0);
-    }
+  public boolean isInRange(final String value, final IndexCollator collator) {
+    return (collator.compare(value, start) > 0) && (collator.compare(value, end) < 0);
+  }
 }

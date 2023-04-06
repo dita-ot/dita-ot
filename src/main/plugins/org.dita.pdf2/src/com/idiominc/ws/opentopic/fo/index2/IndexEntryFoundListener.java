@@ -1,6 +1,5 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
-
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
@@ -36,10 +35,10 @@ See the accompanying LICENSE file for applicable license.
  */
 @Deprecated
 public interface IndexEntryFoundListener {
-    /**
-     * Notifies that the new index entry was found
-     *
-     * @param theEntry index entry
-     */
-    void foundEntry(IndexEntry theEntry);
+  /**
+   * Notifies that the new index entry was found
+   *
+   * @param theEntry index entry
+   */
+  void foundEntry(IndexEntry theEntry);
 }

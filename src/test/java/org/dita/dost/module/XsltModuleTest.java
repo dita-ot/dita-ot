@@ -8,7 +8,4 @@
 
 package org.dita.dost.module;
 
-public class XsltModuleTest {
-
-
-}
+public class XsltModuleTest {}

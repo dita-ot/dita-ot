@@ -1,5 +1,13 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
+import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
+import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
+
+import java.io.File;
+import java.net.URI;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.dom.DOMSource;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
@@ -12,15 +20,6 @@ import org.dita.dost.util.DelegatingURIResolver;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.dom.DOMSource;
-import java.io.File;
-import java.net.URI;
-
-import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
-import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -53,87 +52,81 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
  */
 public class PreprocessorTask extends Task {
-     private File config = null;
-     private URI input = null;
-     private URI output = null;
-     private URI style = null;
-     private XMLCatalog xmlcatalog;
 
-     @Override
-     public void execute()
-             throws BuildException {
-         final Job job = getProject().getReference(ANT_REFERENCE_JOB);
-         final XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
+  private File config = null;
+  private URI input = null;
+  private URI output = null;
+  private URI style = null;
+  private XMLCatalog xmlcatalog;
 
-         checkParameters();
+  @Override
+  public void execute() throws BuildException {
+    final Job job = getProject().getReference(ANT_REFERENCE_JOB);
+    final XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
 
-         log("Processing " + input + " to " + output, Project.MSG_INFO);
-         try {
-             final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
-             documentBuilder.setEntityResolver(xmlcatalog);
+    checkParameters();
 
-             final Document doc = job.getStore().getDocument(input);
-             final Document conf = documentBuilder.parse(config);
-             final MultilanguagePreprocessor preprocessor = new MultilanguagePreprocessor(new Configuration(conf));
-             final Document document = preprocessor.process(doc);
+    log("Processing " + input + " to " + output, Project.MSG_INFO);
+    try {
+      final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+      documentBuilder.setEntityResolver(xmlcatalog);
 
-             if (style != null) {
-                 log("Loading stylesheet " + style, Project.MSG_INFO);
-                 final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
-                 final URIResolver catalogResolver = xmlcatalog != null ? xmlcatalog : CatalogUtils.getCatalogResolver();
-                 final URIResolver resolver = new DelegatingURIResolver(catalogResolver, job.getStore());
-                 xsltCompiler.setURIResolver(resolver);
-                 final XsltExecutable compile = xsltCompiler.compile(job.getStore().getSource(style));
-                 final XsltTransformer t = compile.load();
-                 t.setURIResolver(resolver);
-                 t.setSource(new DOMSource(document));
-                 t.setDestination(job.getStore().getDestination(output));
-                 t.transform();
-             } else {
-                 job.getStore().writeDocument(document, output);
-             }
-         } catch (final RuntimeException e) {
-             throw e;
-         } catch (final Exception e) {
-             throw new BuildException(e);
-         }
-     }
+      final Document doc = job.getStore().getDocument(input);
+      final Document conf = documentBuilder.parse(config);
+      final MultilanguagePreprocessor preprocessor = new MultilanguagePreprocessor(new Configuration(conf));
+      final Document document = preprocessor.process(doc);
 
-
-     private void checkParameters()
-             throws BuildException {
-         if (null == config || null == input || null == output) {
-             throw new BuildException("config, input, output attributes is required");
-         }
-     }
-
-
-     public void setConfig(final File theConfig) {
-         this.config = theConfig;
-     }
-
-
-     public void setInput(final File theInput) {
-         this.input = theInput.toURI();
-     }
-
-
-     public void setOutput(final File theOutput) {
-         this.output = theOutput.toURI();
-     }
-
-     /** @deprecated since 2.3 */
-     @Deprecated
-     public void setCatalogs(final String catalogs) {
-         log("catalogs attribute has been deprecated, use xmlcatalog nested element", Project.MSG_WARN);
-     }
-
-    public void setStyle(final File style) {
-        this.style = style.toURI();
+      if (style != null) {
+        log("Loading stylesheet " + style, Project.MSG_INFO);
+        final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
+        final URIResolver catalogResolver = xmlcatalog != null ? xmlcatalog : CatalogUtils.getCatalogResolver();
+        final URIResolver resolver = new DelegatingURIResolver(catalogResolver, job.getStore());
+        xsltCompiler.setURIResolver(resolver);
+        final XsltExecutable compile = xsltCompiler.compile(job.getStore().getSource(style));
+        final XsltTransformer t = compile.load();
+        t.setURIResolver(resolver);
+        t.setSource(new DOMSource(document));
+        t.setDestination(job.getStore().getDestination(output));
+        t.transform();
+      } else {
+        job.getStore().writeDocument(document, output);
+      }
+    } catch (final RuntimeException e) {
+      throw e;
+    } catch (final Exception e) {
+      throw new BuildException(e);
     }
+  }
 
-    public void addConfiguredXmlcatalog(final XMLCatalog xmlcatalog) {
-        this.xmlcatalog = xmlcatalog;
+  private void checkParameters() throws BuildException {
+    if (null == config || null == input || null == output) {
+      throw new BuildException("config, input, output attributes is required");
     }
+  }
 
- }
+  public void setConfig(final File theConfig) {
+    this.config = theConfig;
+  }
+
+  public void setInput(final File theInput) {
+    this.input = theInput.toURI();
+  }
+
+  public void setOutput(final File theOutput) {
+    this.output = theOutput.toURI();
+  }
+
+  /** @deprecated since 2.3 */
+  @Deprecated
+  public void setCatalogs(final String catalogs) {
+    log("catalogs attribute has been deprecated, use xmlcatalog nested element", Project.MSG_WARN);
+  }
+
+  public void setStyle(final File style) {
+    this.style = style.toURI();
+  }
+
+  public void addConfiguredXmlcatalog(final XMLCatalog xmlcatalog) {
+    this.xmlcatalog = xmlcatalog;
+  }
+}

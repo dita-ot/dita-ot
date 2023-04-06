@@ -9,7 +9,6 @@
 package org.dita.dost.writer;
 
 import java.util.List;
-
 import org.dita.dost.index.IndexTerm;
 
 /**
@@ -17,14 +16,12 @@ import org.dita.dost.index.IndexTerm;
  *
  */
 public interface IDitaTranstypeIndexWriter {
+  /**
+   * Get index file name.
+   * @param outputFileRoot root
+   * @return index file name
+   */
+  String getIndexFileName(String outputFileRoot);
 
-    /**
-     * Get index file name.
-     * @param outputFileRoot root
-     * @return index file name
-     */
-    String getIndexFileName(String outputFileRoot);
-
-    void setTermList(final List<IndexTerm> termList);
-
+  void setTermList(final List<IndexTerm> termList);
 }

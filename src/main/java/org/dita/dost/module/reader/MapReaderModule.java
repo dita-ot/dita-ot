@@ -8,6 +8,13 @@
 
 package org.dita.dost.module.reader;
 
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.exists;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
@@ -20,14 +27,6 @@ import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
 import org.xml.sax.XMLFilter;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.exists;
-
 /**
  * ModuleElem for reading and serializing topics into temporary directory.
  *
@@ -35,107 +34,106 @@ import static org.dita.dost.util.URLUtils.exists;
  */
 public final class MapReaderModule extends AbstractReaderModule {
 
-    public MapReaderModule() {
-        super();
-        formatFilter = v -> Objects.equals(v, ATTR_FORMAT_VALUE_DITAMAP) || Objects.equals(v, ATTR_FORMAT_VALUE_DITAVAL);
+  public MapReaderModule() {
+    super();
+    formatFilter = v -> Objects.equals(v, ATTR_FORMAT_VALUE_DITAMAP) || Objects.equals(v, ATTR_FORMAT_VALUE_DITAVAL);
+  }
+
+  @Override
+  public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
+    try {
+      parseInputParameters(input);
+      init();
+
+      readResourceFiles();
+      readStartFile();
+      processWaitList();
+
+      handleConref();
+      outputResult();
+
+      job.write();
+    } catch (final RuntimeException | DITAOTException e) {
+      throw e;
+    } catch (final Exception e) {
+      throw new DITAOTException(e.getMessage(), e);
     }
 
-    @Override
-    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        try {
-            parseInputParameters(input);
-            init();
+    return null;
+  }
 
-            readResourceFiles();
-            readStartFile();
-            processWaitList();
+  @Override
+  public void readStartFile() throws DITAOTException {
+    addToWaitList(new Reference(rootFile));
+  }
 
-            handleConref();
-            outputResult();
+  @Override
+  List<XMLFilter> getProcessingPipe(final URI fileToParse) {
+    assert fileToParse.isAbsolute();
+    final List<XMLFilter> pipe = new ArrayList<>();
 
-            job.write();
-        } catch (final RuntimeException | DITAOTException e) {
-            throw e;
-        } catch (final Exception e) {
-            throw new DITAOTException(e.getMessage(), e);
-        }
-
-        return null;
+    if (genDebugInfo) {
+      final DebugFilter debugFilter = new DebugFilter();
+      debugFilter.setLogger(logger);
+      debugFilter.setCurrentFile(currentFile);
+      pipe.add(debugFilter);
     }
 
-    @Override
-    public void readStartFile() throws DITAOTException {
-        addToWaitList(new Reference(rootFile));
+    if (filterUtils != null) {
+      final ProfilingFilter profilingFilter = new ProfilingFilter();
+      profilingFilter.setLogger(logger);
+      profilingFilter.setJob(job);
+      profilingFilter.setFilterUtils(filterUtils);
+      profilingFilter.setCurrentFile(fileToParse);
+      pipe.add(profilingFilter);
     }
 
-    @Override
-    List<XMLFilter> getProcessingPipe(final URI fileToParse) {
-        assert fileToParse.isAbsolute();
-        final List<XMLFilter> pipe = new ArrayList<>();
+    final ValidationFilter validationFilter = new ValidationFilter();
+    validationFilter.setLogger(logger);
+    validationFilter.setValidateMap(validateMap);
+    validationFilter.setCurrentFile(fileToParse);
+    validationFilter.setJob(job);
+    validationFilter.setProcessingMode(processingMode);
+    pipe.add(validationFilter);
 
-        if (genDebugInfo) {
-            final DebugFilter debugFilter = new DebugFilter();
-            debugFilter.setLogger(logger);
-            debugFilter.setCurrentFile(currentFile);
-            pipe.add(debugFilter);
-        }
+    final NormalizeFilter normalizeFilter = new NormalizeFilter();
+    normalizeFilter.setLogger(logger);
+    pipe.add(normalizeFilter);
 
-        if (filterUtils != null) {
-            final ProfilingFilter profilingFilter = new ProfilingFilter();
-            profilingFilter.setLogger(logger);
-            profilingFilter.setJob(job);
-            profilingFilter.setFilterUtils(filterUtils);
-            profilingFilter.setCurrentFile(fileToParse);
-            pipe.add(profilingFilter);
-        }
+    keydefFilter.setCurrentDir(fileToParse.resolve("."));
+    keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+    pipe.add(keydefFilter);
 
-        final ValidationFilter validationFilter = new ValidationFilter();
-        validationFilter.setLogger(logger);
-        validationFilter.setValidateMap(validateMap);
-        validationFilter.setCurrentFile(fileToParse);
-        validationFilter.setJob(job);
-        validationFilter.setProcessingMode(processingMode);
-        pipe.add(validationFilter);
+    listFilter.setCurrentFile(fileToParse);
+    listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+    pipe.add(listFilter);
 
-        final NormalizeFilter normalizeFilter = new NormalizeFilter();
-        normalizeFilter.setLogger(logger);
-        pipe.add(normalizeFilter);
+    ditaWriterFilter.setDefaultValueMap(defaultValueMap);
+    ditaWriterFilter.setCurrentFile(currentFile);
+    ditaWriterFilter.setOutputFile(outputFile);
+    pipe.add(ditaWriterFilter);
 
-        keydefFilter.setCurrentDir(fileToParse.resolve("."));
-        keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
-        pipe.add(keydefFilter);
+    return pipe;
+  }
 
-        listFilter.setCurrentFile(fileToParse);
-        listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
-        pipe.add(listFilter);
-
-        ditaWriterFilter.setDefaultValueMap(defaultValueMap);
-        ditaWriterFilter.setCurrentFile(currentFile);
-        ditaWriterFilter.setOutputFile(outputFile);
-        pipe.add(ditaWriterFilter);
-
-        return pipe;
+  @Override
+  void categorizeReferenceFile(final Reference file) {
+    if (file.format == null || ATTR_FORMAT_VALUE_DITA.equals(file.format)) {
+      return;
     }
-
-    @Override
-    void categorizeReferenceFile(final Reference file) {
-        if (file.format == null || ATTR_FORMAT_VALUE_DITA.equals(file.format)) {
-            return;
+    // Ignore topics
+    //        if (formatFilter.test(file.format)) {
+    switch (file.format) {
+      case ATTR_FORMAT_VALUE_DITAMAP -> addToWaitList(file);
+      case ATTR_FORMAT_VALUE_IMAGE -> {
+        formatSet.add(file);
+        if (!exists(file.filename)) {
+          logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
         }
-        // Ignore topics
-//        if (formatFilter.test(file.format)) {
-        switch (file.format) {
-            case ATTR_FORMAT_VALUE_DITAMAP -> addToWaitList(file);
-            case ATTR_FORMAT_VALUE_IMAGE -> {
-                formatSet.add(file);
-                if (!exists(file.filename)) {
-                    logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
-                }
-            }
-            case ATTR_FORMAT_VALUE_DITAVAL -> formatSet.add(file);
-            default -> htmlSet.put(file.format, file.filename);
-        }
-//        }
+      }
+      case ATTR_FORMAT_VALUE_DITAVAL -> formatSet.add(file);
+      default -> htmlSet.put(file.format, file.filename);
     }
-
+    //        }
+  }
 }

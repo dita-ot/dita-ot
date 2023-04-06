@@ -12,9 +12,7 @@ import org.dita.dost.pipeline.PipelineHashIO;
 
 //RFE 2987769 Eclipse index-see
 interface IExtendDitaWriter {
+  PipelineHashIO getPipelineHashIO();
 
-    PipelineHashIO getPipelineHashIO();
-
-    void setPipelineHashIO(PipelineHashIO pipelineHashIO);
-
+  void setPipelineHashIO(PipelineHashIO pipelineHashIO);
 }

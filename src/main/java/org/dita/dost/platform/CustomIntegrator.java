@@ -8,9 +8,8 @@
 
 package org.dita.dost.platform;
 
-import org.dita.dost.log.DITAOTLogger;
-
 import java.io.File;
+import org.dita.dost.log.DITAOTLogger;
 
 /**
  * Custom integration processor.
@@ -18,24 +17,24 @@ import java.io.File;
  * @since 3.3
  */
 public interface CustomIntegrator {
-    /**
-     * Set logger
-     *
-     * @param logger integration log messages
-     */
-    void setLogger(final DITAOTLogger logger);
+  /**
+   * Set logger
+   *
+   * @param logger integration log messages
+   */
+  void setLogger(final DITAOTLogger logger);
 
-    /**
-     * Set DITA-OT installation base directory
-     *
-     * @param ditaDir absolute path to DITA-OT installation directory
-     */
-    void setDitaDir(final File ditaDir);
+  /**
+   * Set DITA-OT installation base directory
+   *
+   * @param ditaDir absolute path to DITA-OT installation directory
+   */
+  void setDitaDir(final File ditaDir);
 
-    /**
-     * Process custom integration process.
-     *
-     * @throws Exception if integration process fails
-     */
-    void process() throws Exception;
+  /**
+   * Process custom integration process.
+   *
+   * @throws Exception if integration process fails
+   */
+  void process() throws Exception;
 }

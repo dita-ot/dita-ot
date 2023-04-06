@@ -2,7 +2,6 @@ package com.idiominc.ws.opentopic.fo.index2.configuration;
 
 import com.idiominc.ws.opentopic.fo.index2.IndexCollator;
 
-
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
@@ -38,24 +37,22 @@ See the accompanying LICENSE file for applicable license.
  */
 @Deprecated
 public interface ConfigEntry {
+  /**
+   * @return group label
+   */
+  String getLabel();
 
-     /**
-      * @return group label
-      */
-     String getLabel();
+  /**
+   * @return group key. this key is being used to check if some string belongs to this group by comparing it with
+   *         two keys of near by config entries
+   */
+  String getKey();
 
-     /**
-      * @return group key. this key is being used to check if some string belongs to this group by comparing it with
-      *         two keys of near by config entries
-      */
-     String getKey();
+  /**
+   * @return specifies group member characters. The meaning of these characters is that if some string starts with the
+   *         character from this array then it(string) belongs to this group
+   */
+  String[] getGroupMembers();
 
-     /**
-      * @return specifies group member characters. The meaning of these characters is that if some string starts with the
-      *         character from this array then it(string) belongs to this group
-      */
-     String[] getGroupMembers();
-
-     boolean isInRange(String value, IndexCollator collator);
-
- }
+  boolean isInRange(String value, IndexCollator collator);
+}

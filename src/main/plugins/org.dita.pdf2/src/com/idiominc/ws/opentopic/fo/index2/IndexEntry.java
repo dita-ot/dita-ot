@@ -1,9 +1,7 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
 import java.util.List;
-
 import org.w3c.dom.Node;
-
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -46,138 +44,122 @@ See the accompanying LICENSE file for applicable license.
  */
 @Deprecated
 public interface IndexEntry {
+  /**
+   * @return index reference ids
+   */
+  String[] getRefIDs();
 
-    /**
-     * @return index reference ids
-     */
-    String[] getRefIDs();
+  /**
+   * @return index entry value
+   */
+  String getValue();
 
+  /**
+   * @return The string with formatting<br>
+   *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+   */
+  String getFormattedString();
 
-    /**
-     * @return index entry value
-     */
-    String getValue();
+  /**
+   * Get index term markup content.
+   *
+   * @return DITA markup content, {@code null} if not available
+   */
+  List<Node> getContents();
 
-    /**
-     * @return The string with formatting<br>
-     *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
-     */
-    String getFormattedString();
-    
-    /**
-     * Get index term markup content.
-     * 
-     * @return DITA markup content, {@code null} if not available
-     */
-    List<Node> getContents();
+  /**
+   * @return the sort string for the entry<br>
+   *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+   */
+  String getSortString();
 
+  /**
+   * @return child entries of this entry
+   */
+  IndexEntry[] getChildIndexEntries();
 
-    /**
-     * @return the sort string for the entry<br>
-     *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
-     */
-    String getSortString();
+  /**
+   * @return if this entry starts range<br>
+   *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+   */
+  boolean isStartingRange();
 
+  /**
+   * @return if this entry ends range<br>
+   *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+   */
+  boolean isEndingRange();
 
-    /**
-     * @return child entries of this entry
-     */
-    IndexEntry[] getChildIndexEntries();
+  /**
+   * @return if this entry suppresses page number<br>
+   *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+   */
+  boolean isSuppressesThePageNumber();
 
+  /**
+   * @return if this entry restores page number<br>
+   *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+   */
+  boolean isRestoresPageNumber();
 
-    /**
-     * @return if this entry starts range<br>
-     *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
-     */
-    boolean isStartingRange();
+  /**
+   * Adds reference id to the index entry
+   *
+   * @param theID reference id
+   */
+  void addRefID(String theID);
 
+  /**
+   * Adds child to the entry
+   *
+   * @param theEntry index entry
+   */
+  void addChild(IndexEntry theEntry);
 
-    /**
-     * @return if this entry ends range<br>
-     *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
-     */
-    boolean isEndingRange();
+  /**
+   * Sets if the index entry restores page number
+   * <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+   *
+   * @param theRestoresPageNumber
+   */
+  void setRestoresPageNumber(boolean theRestoresPageNumber);
 
+  /**
+   * Sets if the index entry suppresses page number
+   * <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+   *
+   * @param theSuppressesThePageNumber
+   */
+  void setSuppressesThePageNumber(boolean theSuppressesThePageNumber);
 
-    /**
-     * @return if this entry suppresses page number<br>
-     *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
-     */
-    boolean isSuppressesThePageNumber();
+  /**
+   * Sets if the index entry starts range
+   * <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+   *
+   * @param theStartRange
+   */
+  void setStartRange(boolean theStartRange);
 
+  /**
+   * Sets if the index entry ends range
+   * <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
+   *
+   * @param theEndsRange
+   */
+  void setEndsRange(boolean theEndsRange);
 
-    /**
-     * @return if this entry restores page number<br>
-     *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
-     */
-    boolean isRestoresPageNumber();
+  /**
+   * Sets sort string for the value
+   *
+   * @param theSortString
+   */
+  void setSortString(String theSortString);
 
+  void addSeeChild(IndexEntry theEntry);
 
-    /**
-     * Adds reference id to the index entry
-     *
-     * @param theID reference id
-     */
-    void addRefID(String theID);
+  void addSeeAlsoChild(IndexEntry theEntry);
 
+  IndexEntry[] getSeeChildIndexEntries();
 
-    /**
-     * Adds child to the entry
-     *
-     * @param theEntry index entry
-     */
-    void addChild(IndexEntry theEntry);
-
-
-    /**
-     * Sets if the index entry restores page number
-     * <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
-     *
-     * @param theRestoresPageNumber
-     */
-    void setRestoresPageNumber(boolean theRestoresPageNumber);
-
-
-    /**
-     * Sets if the index entry suppresses page number
-     * <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
-     *
-     * @param theSuppressesThePageNumber
-     */
-    void setSuppressesThePageNumber(boolean theSuppressesThePageNumber);
-
-
-    /**
-     * Sets if the index entry starts range
-     * <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
-     *
-     * @param theStartRange
-     */
-    void setStartRange(boolean theStartRange);
-
-
-    /**
-     * Sets if the index entry ends range
-     * <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
-     *
-     * @param theEndsRange
-     */
-    void setEndsRange(boolean theEndsRange);
-
-
-    /**
-     * Sets sort string for the value
-     *
-     * @param theSortString
-     */
-    void setSortString(String theSortString);
-
-
-    void addSeeChild(IndexEntry theEntry);
-
-    void addSeeAlsoChild(IndexEntry theEntry);
-
-    IndexEntry[] getSeeChildIndexEntries();
-
-    IndexEntry[] getSeeAlsoChildIndexEntries();
+  IndexEntry[] getSeeAlsoChildIndexEntries();
 }

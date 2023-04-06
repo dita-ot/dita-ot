@@ -15,6 +15,4 @@ package org.dita.dost.pipeline;
  * @deprecated Deprecated since 2.3
  */
 @Deprecated
-public interface AbstractPipelineOutput {
-
-}
+public interface AbstractPipelineOutput {}

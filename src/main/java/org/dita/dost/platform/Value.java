@@ -8,5 +8,4 @@
 
 package org.dita.dost.platform;
 
-public record Value(String id, String value) {
-}
+public record Value(String id, String value) {}

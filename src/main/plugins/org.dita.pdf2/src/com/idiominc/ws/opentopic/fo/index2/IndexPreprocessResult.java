@@ -37,22 +37,20 @@ See the accompanying LICENSE file for applicable license.
  */
 @Deprecated
 public class IndexPreprocessResult {
-    private final Document document;
-    private final IndexEntry[] indexEntries;
 
+  private final Document document;
+  private final IndexEntry[] indexEntries;
 
-    public IndexPreprocessResult(final Document theDocument, final IndexEntry[] theIndexEntries) {
-        document = theDocument;
-        indexEntries = theIndexEntries;
-    }
+  public IndexPreprocessResult(final Document theDocument, final IndexEntry[] theIndexEntries) {
+    document = theDocument;
+    indexEntries = theIndexEntries;
+  }
 
+  public Document getDocument() {
+    return document;
+  }
 
-    public Document getDocument() {
-        return document;
-    }
-
-
-    public IndexEntry[] getIndexEntries() {
-        return indexEntries;
-    }
+  public IndexEntry[] getIndexEntries() {
+    return indexEntries;
+  }
 }

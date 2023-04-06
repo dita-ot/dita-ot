@@ -2,7 +2,7 @@
 
 _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for content authored in the _Darwin Information Typing Architecture_.
 
-Visit the project website at [dita-ot.org][site] for documentation, information about releases, and [download packages][dist].  
+Visit the project website at [dita-ot.org][site] for documentation, information about releases, and [download packages][dist].
 
 For information on additional DITA and DITA-OT resources, see [SUPPORT]. To report a bug or suggest a feature, [create an issue][issue]. For more information on how you can help contribute to the project, see [CONTRIBUTING].
 
@@ -28,7 +28,9 @@ You can download the OpenJDK from [AdoptOpenJDK][adoptopenjdk].
 
 On macOS and Linux, you can also install DITA-OT using the [Homebrew] package manager:
 
-    brew install dita-ot
+```shell
+brew install dita-ot
+```
 
 Homebrew will automatically download the latest version of the toolkit, install it in a subfolder of the local package Cellar and symlink the `dita` command to the `bin` subfolder of the Homebrew installation directory.
 
@@ -47,12 +49,14 @@ Homebrew will automatically download the latest version of the toolkit, install 
 You can generate output using the `dita` command-line tool included with DITA Open Toolkit.
 
 1.  On the command line, change to the `bin` folder of the DITA-OT installation directory:
-
-        cd path/to/dita-ot-dir/bin
-
+    ```shell
+    cd path/to/dita-ot-dir/bin
+    ```
 2.  Run the `dita` command to generate output:
 
-        dita --input=input-file --format=format [options]
+    ```shell
+    dita --input=input-file --format=format [options]
+    ```
 
     where:
 
@@ -67,30 +71,46 @@ See the [documentation][docs] for arguments and [options].
 <summary>Building the toolkit from source code and compiling the distribution package</summary>
 
 1.  Clone the DITA-OT Git repository:
-
-        git clone git://github.com/dita-ot/dita-ot.git
-
+    ```shell
+    git clone git://github.com/dita-ot/dita-ot.git
+    ```
 2.  Change to the DITA-OT directory:
-
-        cd dita-ot
-
+    ```shell
+    cd dita-ot
+    ```
 3.  Fetch the submodules:
-
-        git submodule update --init --recursive
-
+    ```shell
+    git submodule update --init --recursive
+    ```
 4.  In the root directory, run Gradle to compile the Java code and install plugins:
+    ```shell
+    ./gradlew
+    ```
 
-        ./gradlew
+### Formatting code
+
+Requirements:
+
+- Node.js
+
+Prettier is used retain consistent Java formatting.
+
+1.  Run Prettier:
+    ```shell
+    npm run fmt
+    ```
 
 ### Distribution builds
 
 1.  In the root directory, set up the build environment:
-
-        ./gradlew
-
+    ```shell
+    ./gradlew
+    ```
 2.  Build the distribution packages:
 
-        ./gradlew dist
+    ```shell
+    ./gradlew dist
+    ```
 
     Distribution packages are built in the `build/distributions` directory.
 
