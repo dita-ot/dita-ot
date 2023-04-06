@@ -168,8 +168,9 @@ public final class TopicReaderModule extends AbstractReaderModule {
   @Override
   public void readStartFile() throws DITAOTException {
     final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
+    final URI rootFile = job.getInputFile();
     if (fi == null) {
-      addToWaitList(new Reference(job.getInputFile()));
+      addToWaitList(new Reference(rootFile, getFormatFromPath(rootFile)));
     } else {
       if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
         getStartDocuments(fi).forEach(this::addToWaitList);
@@ -178,7 +179,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
           fi.format = ATTR_FORMAT_VALUE_DITA;
           job.add(fi);
         }
-        addToWaitList(new Reference(job.getInputFile(), fi.format));
+        addToWaitList(new Reference(rootFile, fi.format));
       }
     }
   }

@@ -64,7 +64,7 @@ public final class MapReaderModule extends AbstractReaderModule {
 
   @Override
   public void readStartFile() throws DITAOTException {
-    addToWaitList(new Reference(rootFile));
+    addToWaitList(new Reference(rootFile, getFormatFromPath(rootFile)));
   }
 
   @Override

@@ -11,6 +11,7 @@ package org.dita.dost.module.reader;
 import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
@@ -135,6 +136,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   final Set<URI> additionalResourcesSet = ConcurrentHashMap.newKeySet();
 
   public abstract void readStartFile() throws DITAOTException;
+
+  String getFormatFromPath(URI file) {
+    final String ext = getExtension(file.getPath());
+    if (parserMap.containsKey(ext)) {
+      return ext;
+    }
+    return null;
+  }
 
   void readResourceFiles() throws DITAOTException {
     if (!resources.isEmpty()) {
