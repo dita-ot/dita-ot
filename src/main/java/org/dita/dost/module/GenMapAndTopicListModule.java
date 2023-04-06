@@ -9,9 +9,9 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.reader.GenListModuleReader.*;
-import static org.dita.dost.util.Configuration.Mode;
-import static org.dita.dost.util.Configuration.printTranstype;
+import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.URLUtils.*;
@@ -234,7 +234,15 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
   }
 
   private void readStartFile() throws DITAOTException {
-    addToWaitList(new Reference(rootFile));
+    addToWaitList(new Reference(rootFile, getFormatFromPath(rootFile)));
+  }
+
+  private String getFormatFromPath(URI file) {
+    final String ext = getExtension(file.getPath());
+    if (parserMap.containsKey(ext)) {
+      return ext;
+    }
+    return null;
   }
 
   /**
@@ -600,6 +608,12 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         hrefTopicSet.add(currentFile);
       }
     } else if (listFilter.isDitaMap()) {
+      if (ref.format != null && !ref.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+        assert currentFile.getFragment() == null;
+        if (!sourceFormat.containsKey(currentFile)) {
+          sourceFormat.put(currentFile, ref.format);
+        }
+      }
       fullMapSet.add(currentFile);
     }
   }
@@ -804,7 +818,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     for (final URI file : fullMapSet) {
       final FileInfo ff = getOrCreateFileInfo(fileinfos, file);
       if (ff.format == null) {
-        ff.format = ATTR_FORMAT_VALUE_DITAMAP;
+        ff.format = sourceFormat.getOrDefault(ff.src, ATTR_FORMAT_VALUE_DITAMAP);
       }
     }
     for (final URI file : hrefTopicSet) {
