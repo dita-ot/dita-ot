@@ -73,6 +73,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
   private SubjectSchemeReader subjectSchemeReader;
   private FilterUtils baseFilterUtils;
   private DitaWriterFilter ditaWriterFilter;
+  private TypeFilter typeFilter;
   private TopicFragmentFilter topicFragmentFilter;
   private TempFileNameScheme tempFileNameScheme;
 
@@ -183,7 +184,15 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     }
 
     if (isFormatDita(f.format)) {
-      f.format = ATTR_FORMAT_VALUE_DITA;
+      if (typeFilter.getDitaClass() == null) {
+        f.format = ATTR_FORMAT_VALUE_DITA;
+      } else {
+        if (MAP_MAP.matches(typeFilter.getDitaClass())) {
+          f.format = ATTR_FORMAT_VALUE_DITAMAP;
+        } else {
+          f.format = ATTR_FORMAT_VALUE_DITA;
+        }
+      }
     }
   }
 
@@ -229,6 +238,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     ditaWriterFilter.setEntityResolver(reader.getEntityResolver());
 
     topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
+
+    typeFilter = new TypeFilter();
 
     tempFileNameScheme.setBaseDir(job.getInputDir());
   }
@@ -283,6 +294,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     pipe.addAll(super.getProcessingPipe(fileToParse));
     //        linkRewriteFilter.setCurrentFile(currentFile);
     //        pipe.add(linkRewriteFilter);
+
+    pipe.add(typeFilter);
 
     ditaWriterFilter.setDefaultValueMap(defaultValueMap);
     ditaWriterFilter.setCurrentFile(currentFile);
@@ -582,5 +595,28 @@ public final class DebugAndFilterModule extends SourceReaderModule {
 
     @Override
     public void comment(char[] ch, int start, int length) throws SAXException {}
+  }
+
+  private static class TypeFilter extends AbstractXMLFilter {
+
+    private DitaClass cls;
+
+    private DitaClass getDitaClass() {
+      return cls;
+    }
+
+    @Override
+    public void startDocument() throws SAXException {
+      cls = null;
+      super.startDocument();
+    }
+
+    @Override
+    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+      if (cls == null) {
+        cls = DitaClass.getInstance(atts);
+      }
+      super.startElement(uri, localName, qName, atts);
+    }
   }
 }
