@@ -69,6 +69,7 @@ public class TestStringUtils {
       new QName[][] { { props, QName.valueOf("foo") } },
       StringUtils.getExtPropsFromSpecializations("  @props/foo   ")
     );
+    assertArrayEquals(new QName[][] {}, StringUtils.getExtPropsFromSpecializations(""));
   }
 
   @Test
