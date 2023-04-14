@@ -140,6 +140,7 @@ public final class StringUtils {
     // FIXME Dont' mix arrays and collections
     return Arrays
       .stream(specializations.trim().split("\\s+"))
+      .filter(s -> !s.isEmpty())
       .map(token ->
         Arrays
           .stream(token.substring(1).split("/"))
