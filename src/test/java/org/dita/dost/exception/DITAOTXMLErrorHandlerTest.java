@@ -7,9 +7,11 @@
  */
 package org.dita.dost.exception;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.log.DITAOTLogger;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -32,14 +34,14 @@ public class DITAOTXMLErrorHandlerTest {
     new DITAOTXMLErrorHandler(null, logger);
   }
 
-  @Test(expected = SAXExceptionWrapper.class)
-  public void testError() throws SAXException {
-    e.error(se);
+  @Test
+  public void testError() {
+    assertThrows(SAXExceptionWrapper.class, () -> e.error(se));
   }
 
-  @Test(expected = SAXExceptionWrapper.class)
-  public void testFatalError() throws SAXException {
-    e.fatalError(se);
+  @Test
+  public void testFatalError() {
+    assertThrows(SAXExceptionWrapper.class, () -> e.fatalError(se));
   }
 
   @Test

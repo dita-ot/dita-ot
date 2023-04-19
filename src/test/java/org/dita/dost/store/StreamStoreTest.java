@@ -8,8 +8,7 @@
 
 package org.dita.dost.store;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,25 +23,22 @@ import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.w3c.dom.Document;
 
 public class StreamStoreTest {
 
-  @Rule
-  public final TemporaryFolder temporaryFolder = new TemporaryFolder();
-
   private XMLUtils xmlUtils;
   private StreamStore store;
+
+  @TempDir
   private File tmpDir;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     xmlUtils = new XMLUtils();
-    tmpDir = temporaryFolder.newFolder();
     store = new StreamStore(tmpDir, xmlUtils);
   }
 
@@ -82,19 +78,28 @@ public class StreamStoreTest {
     assertTrue(Files.exists(tmpDir.toPath().resolve("dst.xml")));
   }
 
-  @Test(expected = IOException.class)
+  @Test
   public void copy_WhenFileIsMissing_ShouldThrowException() throws IOException {
-    store.copy(tmpDir.toPath().resolve("src.xml").toUri(), tmpDir.toPath().resolve("dst.xml").toUri());
+    assertThrows(
+      IOException.class,
+      () -> store.copy(tmpDir.toPath().resolve("src.xml").toUri(), tmpDir.toPath().resolve("dst.xml").toUri())
+    );
   }
 
-  @Test(expected = IOException.class)
+  @Test
   public void copy_WhenSrcIsHttp_ShouldThrowException() throws IOException {
-    store.copy(URI.create("http://src.xml"), tmpDir.toPath().resolve("dst.xml").toUri());
+    assertThrows(
+      IOException.class,
+      () -> store.copy(URI.create("http://src.xml"), tmpDir.toPath().resolve("dst.xml").toUri())
+    );
   }
 
-  @Test(expected = IOException.class)
+  @Test
   public void copy_WhenDstIsHttp_ShouldThrowException() throws IOException {
-    store.copy(tmpDir.toPath().resolve("src.xml").toUri(), URI.create("http://dst.xml"));
+    assertThrows(
+      IOException.class,
+      () -> store.copy(tmpDir.toPath().resolve("src.xml").toUri(), URI.create("http://dst.xml"))
+    );
   }
 
   @Test
@@ -107,19 +112,28 @@ public class StreamStoreTest {
     assertTrue(Files.exists(tmpDir.toPath().resolve("dst.xml")));
   }
 
-  @Test(expected = IOException.class)
+  @Test
   public void move_WhenFileIsMissing_ShouldThrowException() throws IOException {
-    store.move(tmpDir.toPath().resolve("src.xml").toUri(), tmpDir.toPath().resolve("dst.xml").toUri());
+    assertThrows(
+      IOException.class,
+      () -> store.move(tmpDir.toPath().resolve("src.xml").toUri(), tmpDir.toPath().resolve("dst.xml").toUri())
+    );
   }
 
-  @Test(expected = IOException.class)
+  @Test
   public void move_WhenSrcIsHttp_ShouldThrowException() throws IOException {
-    store.move(URI.create("http://src.xml"), tmpDir.toPath().resolve("dst.xml").toUri());
+    assertThrows(
+      IOException.class,
+      () -> store.move(URI.create("http://src.xml"), tmpDir.toPath().resolve("dst.xml").toUri())
+    );
   }
 
-  @Test(expected = IOException.class)
+  @Test
   public void move_WhenDstIsHttp_ShouldThrowException() throws IOException {
-    store.move(tmpDir.toPath().resolve("src.xml").toUri(), URI.create("http://dst.xml"));
+    assertThrows(
+      IOException.class,
+      () -> store.move(tmpDir.toPath().resolve("src.xml").toUri(), URI.create("http://dst.xml"))
+    );
   }
 
   @Test

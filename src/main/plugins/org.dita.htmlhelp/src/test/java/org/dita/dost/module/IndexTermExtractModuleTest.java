@@ -24,9 +24,9 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.CHMIndexWriter;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -37,7 +37,7 @@ public class IndexTermExtractModuleTest {
   private static final File expDir = new File(resourceDir, "exp");
   private static File tempDir;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws IOException {
     tempDir = TestUtils.createTempDir(IndexTermExtractModuleTest.class);
     copyFile(new File(srcDir, "bookmap.ditamap"), new File(tempDir, "bookmap.ditamap"));
@@ -79,7 +79,7 @@ public class IndexTermExtractModuleTest {
     );
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

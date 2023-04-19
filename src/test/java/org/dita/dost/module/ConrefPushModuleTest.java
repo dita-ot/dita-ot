@@ -12,45 +12,81 @@ import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.io.IOException;
+import java.util.stream.Stream;
+import org.dita.dost.TestUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.store.CacheStore;
 import org.dita.dost.util.Configuration.Mode;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.dita.dost.util.Job;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class ConrefPushModuleTest extends AbstractModuleTest {
 
-  @Parameterized.Parameters(name = "{0}")
-  public static Collection<Object[]> data() {
-    return Arrays.asList(
-      new Object[][] {
-        { "conref_push", Mode.STRICT },
-        { "pushAfter_between_Specialization", Mode.STRICT },
-        { "pushAfter_with_crossRef", Mode.STRICT },
-        { "pushAfter_with_InvalidTarget", Mode.STRICT },
-        { "pushAfter_without_conref", Mode.STRICT },
-        { "pushBefore_between_Specialization", Mode.STRICT },
-        { "pushBefore_with_crossRef", Mode.STRICT },
-        { "pushBefore_with_InvalidTarget", Mode.LAX },
-        { "pushBefore_without_conref", Mode.STRICT },
-        { "pushReplace_between_Specialization", Mode.STRICT },
-        { "pushReplace_with_crossRef", Mode.STRICT },
-        { "pushReplace_with_InvalidTarget", Mode.LAX },
-        { "pushReplace_without_conref", Mode.STRICT },
-        { "simple_pushAfter", Mode.STRICT },
-        { "simple_pushBefore", Mode.STRICT },
-        { "simple_pushReplace", Mode.STRICT },
-      }
+  public static Stream<Arguments> data() {
+    return Stream.of(
+      Arguments.of("conref_push", Mode.STRICT),
+      Arguments.of("pushAfter_between_Specialization", Mode.STRICT),
+      Arguments.of("pushAfter_with_crossRef", Mode.STRICT),
+      Arguments.of("pushAfter_with_InvalidTarget", Mode.STRICT),
+      Arguments.of("pushAfter_without_conref", Mode.STRICT),
+      Arguments.of("pushBefore_between_Specialization", Mode.STRICT),
+      Arguments.of("pushBefore_with_crossRef", Mode.STRICT),
+      Arguments.of("pushBefore_with_InvalidTarget", Mode.LAX),
+      Arguments.of("pushBefore_without_conref", Mode.STRICT),
+      Arguments.of("pushReplace_between_Specialization", Mode.STRICT),
+      Arguments.of("pushReplace_with_crossRef", Mode.STRICT),
+      Arguments.of("pushReplace_with_InvalidTarget", Mode.LAX),
+      Arguments.of("pushReplace_without_conref", Mode.STRICT),
+      Arguments.of("simple_pushAfter", Mode.STRICT),
+      Arguments.of("simple_pushBefore", Mode.STRICT),
+      Arguments.of("simple_pushReplace", Mode.STRICT)
     );
   }
 
-  public ConrefPushModuleTest(String testCase, Mode mode) {
-    super(testCase, Collections.emptyMap());
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialFile(String testCase, Mode mode) {
+    this.testCase = testCase;
     this.mode = mode;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Mode.STRICT));
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void parallelFile(String testCase, Mode mode) {
+    this.testCase = testCase;
+    this.mode = mode;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Mode.STRICT));
+    chunkModule.setParallel(true);
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialMemory(String testCase, Mode mode) throws IOException {
+    this.testCase = testCase;
+    this.mode = mode;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Mode.STRICT));
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    chunkModule.setJob(job);
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void parallelMemory(String testCase, Mode mode) throws IOException {
+    this.testCase = testCase;
+    this.mode = mode;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Mode.STRICT));
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    chunkModule.setJob(job);
+    chunkModule.setParallel(true);
+    test();
   }
 
   @Override

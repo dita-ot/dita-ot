@@ -7,20 +7,20 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.apache.tools.ant.Project;
 import org.dita.dost.ant.UriDirnameTask;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class UriDirnameTaskTest {
 
   private UriDirnameTask dirname;
 
-  @Before
+  @BeforeEach
   public void setUp() throws URISyntaxException {
     final Project project = new Project();
     dirname = new UriDirnameTask();

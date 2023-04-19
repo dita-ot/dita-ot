@@ -10,81 +10,108 @@ package org.dita.dost.module;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.io.IOException;
+import java.util.stream.Stream;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.util.Job;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class ChunkModuleTest extends AbstractModuleTest {
 
-  @Parameters(name = "{0}")
-  public static Collection<Object[]> data() {
-    return Arrays.asList(
-      new Object[][] {
-        { "case1" },
-        { "case2" },
-        { "case3" },
-        { "case4" },
-        { "case5" },
-        { "case6" },
-        { "case7" },
-        { "conflict_by_topic" },
-        { "copy_to1" },
-        { "copy_to2" },
-        { "conflict_same_id" },
-        { "conflict_to_content" },
-        { "external_chunk" },
-        { "link1" },
-        { "link2" },
-        { "anchor1" },
-        { "anchor2" },
-        //                {"Attribute_map1"},
-        { "Attribute_map2" },
-        { "Attribute_map3" },
-        { "Attribute_map4" },
-        { "Attribute_map5" },
-        { "Attribute_map6" },
-        { "Attribute_map7" },
-        { "Attribute_map8" },
-        { "Attribute_map9" },
-        { "Attribute_map10" },
-        { "Attribute_map11" },
-        { "ByTopic_map2" },
-        { "ByTopic_map3" },
-        { "ByTopic_map4" },
-        { "ByTopic_map5" },
-        { "ByTopic_map6" },
-        { "ByTopic_map7" },
-        { "ByTopic_batseparate0" },
-        { "FixChunk_map1" },
-        { "FixChunk_map2" },
-        { "FixChunk_map3" },
-        { "FixChunk_map4" },
-        { "FixChunk_map5" },
-        { "FixChunk_map6" },
-        { "FixChunk_map7" },
-        { "FixChunk_map8" },
-        { "chunk_duplicate_tocontent" },
-        { "chunk_hogs_memory" },
-        { "chunk_map_tocontent" },
-        { "chunk_rewrite_tocontent" },
-        { "topicgroup_chunk" },
-        { "unware_chunk_content" },
-        { "unware_chunk_content2" },
-        { "with_non_dita" },
-        { "to_content_with_namespace_mathml" },
-        { "to_content_with_namespace_xsi" },
-      }
+  public static Stream<Arguments> data() {
+    return Stream.of(
+      Arguments.of("case1"),
+      Arguments.of("case2"),
+      Arguments.of("case3"),
+      Arguments.of("case4"),
+      Arguments.of("case5"),
+      Arguments.of("case6"),
+      Arguments.of("case7"),
+      Arguments.of("conflict_by_topic"),
+      Arguments.of("copy_to1"),
+      Arguments.of("copy_to2"),
+      Arguments.of("conflict_same_id"),
+      Arguments.of("conflict_to_content"),
+      Arguments.of("external_chunk"),
+      Arguments.of("link1"),
+      Arguments.of("link2"),
+      Arguments.of("anchor1"),
+      Arguments.of("anchor2"),
+      //                {"Attribute_map1"},
+      Arguments.of("Attribute_map2"),
+      Arguments.of("Attribute_map3"),
+      Arguments.of("Attribute_map4"),
+      Arguments.of("Attribute_map5"),
+      Arguments.of("Attribute_map6"),
+      Arguments.of("Attribute_map7"),
+      Arguments.of("Attribute_map8"),
+      Arguments.of("Attribute_map9"),
+      Arguments.of("Attribute_map10"),
+      Arguments.of("Attribute_map11"),
+      Arguments.of("ByTopic_map2"),
+      Arguments.of("ByTopic_map3"),
+      Arguments.of("ByTopic_map4"),
+      Arguments.of("ByTopic_map5"),
+      Arguments.of("ByTopic_map6"),
+      Arguments.of("ByTopic_map7"),
+      Arguments.of("ByTopic_batseparate0"),
+      Arguments.of("FixChunk_map1"),
+      Arguments.of("FixChunk_map2"),
+      Arguments.of("FixChunk_map3"),
+      Arguments.of("FixChunk_map4"),
+      Arguments.of("FixChunk_map5"),
+      Arguments.of("FixChunk_map6"),
+      Arguments.of("FixChunk_map7"),
+      Arguments.of("FixChunk_map8"),
+      Arguments.of("chunk_duplicate_tocontent"),
+      Arguments.of("chunk_hogs_memory"),
+      Arguments.of("chunk_map_tocontent"),
+      Arguments.of("chunk_rewrite_tocontent"),
+      Arguments.of("topicgroup_chunk"),
+      Arguments.of("unware_chunk_content"),
+      Arguments.of("unware_chunk_content2"),
+      Arguments.of("with_non_dita"),
+      Arguments.of("to_content_with_namespace_mathml"),
+      Arguments.of("to_content_with_namespace_xsi")
     );
   }
 
-  public ChunkModuleTest(final String testCase) {
-    super(testCase, Collections.emptyMap());
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialFile(String testCase) {
+    this.testCase = testCase;
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void parallelFile(String testCase) {
+    this.testCase = testCase;
+    chunkModule.setParallel(true);
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialMemory(String testCase) throws IOException {
+    this.testCase = testCase;
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    chunkModule.setJob(job);
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void parallelMemory(String testCase) throws IOException {
+    this.testCase = testCase;
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    chunkModule.setJob(job);
+    chunkModule.setParallel(true);
+    test();
   }
 
   @Override

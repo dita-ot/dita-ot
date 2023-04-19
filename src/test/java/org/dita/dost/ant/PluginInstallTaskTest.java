@@ -8,12 +8,12 @@
 
 package org.dita.dost.ant;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.dita.dost.platform.Registry;
 import org.dita.dost.platform.Registry.Dependency;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PluginInstallTaskTest {
 

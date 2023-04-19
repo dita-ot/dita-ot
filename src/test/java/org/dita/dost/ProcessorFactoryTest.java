@@ -1,9 +1,10 @@
 package org.dita.dost;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ProcessorFactoryTest {
 
@@ -26,13 +27,18 @@ public class ProcessorFactoryTest {
     assertNotNull(pf.newProcessor("html5"));
   }
 
-  @Test(expected = java.lang.IllegalArgumentException.class)
+  @Test
   public void testUnsupportedTranstype() {
-    String ditaDir = System.getProperty("dita.dir");
-    if (ditaDir == null) {
-      ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
-    }
-    final ProcessorFactory pf = ProcessorFactory.newInstance(new File(ditaDir));
-    pf.newProcessor("xxx");
+    assertThrows(
+      IllegalArgumentException.class,
+      () -> {
+        String ditaDir = System.getProperty("dita.dir");
+        if (ditaDir == null) {
+          ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
+        }
+        final ProcessorFactory pf = ProcessorFactory.newInstance(new File(ditaDir));
+        pf.newProcessor("xxx");
+      }
+    );
   }
 }

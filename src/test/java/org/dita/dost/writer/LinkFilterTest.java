@@ -8,7 +8,7 @@
 
 package org.dita.dost.writer;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +16,8 @@ import java.net.URI;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class LinkFilterTest {
 
@@ -26,7 +26,7 @@ public class LinkFilterTest {
 
   final LinkFilter linkFilter = new LinkFilter();
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     tempDir = new File(System.getProperty("java.io.tmpdir")).toURI().resolve("./");
     srcDir = new File("").toURI().resolve("./");

@@ -14,10 +14,7 @@ import static org.dita.dost.util.Constants.PR_D_CODEREF;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.dita.dost.TestUtils;
@@ -27,45 +24,33 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.CoderefResolver;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.xml.sax.InputSource;
 
-@RunWith(Parameterized.class)
 public class IncludeResolverTest {
 
   private static final File resourceDir = TestUtils.getResourceDir(IncludeResolverTest.class);
   private static final File srcDir = new File(resourceDir, "src");
   private static final File expDir = new File(resourceDir, "exp");
 
-  @Parameters(name = "{0}")
-  public static Collection<Object[]> parameters() {
-    return Arrays.asList(
-      new Object[][] {
-        { "coderef.dita" },
-        { "include_text.dita" },
-        { "include_xml.dita" },
-        { "include_xml_schema.dita" },
-      }
+  public static Stream<Arguments> parameters() {
+    return Stream.of(
+      Arguments.of("coderef.dita"),
+      Arguments.of("include_text.dita"),
+      Arguments.of("include_xml.dita"),
+      Arguments.of("include_xml_schema.dita")
     );
   }
 
+  @TempDir
   private File tempDir;
+
   private CoderefResolver filter;
-  private final String test;
 
-  public IncludeResolverTest(final String test) {
-    this.test = test;
-  }
-
-  @Before
-  public void setup() throws IOException {
-    tempDir = TestUtils.createTempDir(IncludeResolverTest.class);
-
+  public void setup(String test) throws IOException {
     Files.copy(new File(srcDir, test).toPath(), new File(tempDir, test).toPath());
     Files.writeString(new File(tempDir, "topic.dita").toPath(), "dummy");
     for (final String file : new String[] { "code.xml", "utf-8.xml", "plain.txt", "range.txt", "schema.xml" }) {
@@ -90,8 +75,10 @@ public class IncludeResolverTest {
     filter.setJob(job);
   }
 
-  @Test
-  public void testWrite() throws DITAOTException, IOException {
+  @ParameterizedTest
+  @MethodSource("parameters")
+  public void testWrite(String test) throws DITAOTException, IOException {
+    setup(test);
     final File f = new File(tempDir, test);
 
     filter.write(f.getAbsoluteFile());
@@ -100,7 +87,6 @@ public class IncludeResolverTest {
     //                Files.readLines(f, StandardCharsets.UTF_8).stream().collect(Collectors.joining("\n")));
     assertXMLEqual(new InputSource(new File(expDir, test).toURI().toString()), new InputSource(f.toURI().toString()));
   }
-
   //
   //    @Test
   //    public void include_text() throws DITAOTException {
@@ -122,7 +108,7 @@ public class IncludeResolverTest {
   //                new InputSource(f.toURI().toString()));
   //    }
   //
-  //    @Ignore
+  //    @Disabled
   //    @Test
   //    public void include_dita() throws DITAOTException {
   //        final File f = new File(tempDir, "include_dita.dita");
@@ -132,9 +118,9 @@ public class IncludeResolverTest {
   //        assertXMLEqual(new InputSource(new File(expDir, "include_dita.dita").toURI().toString()),
   //                new InputSource(f.toURI().toString()));
   //    }
-
-  @After
-  public void teardown() throws IOException {
-    TestUtils.forceDelete(tempDir);
-  }
+  //
+  //  @AfterEach
+  //  public void teardown() throws IOException {
+  //    TestUtils.forceDelete(tempDir);
+  //  }
 }

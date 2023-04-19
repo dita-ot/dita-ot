@@ -8,7 +8,7 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.common.collect.ImmutableSet;
 import java.io.File;
@@ -35,9 +35,8 @@ import org.dita.dost.util.Configuration.Mode;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -47,21 +46,25 @@ public abstract class AbstractModuleTest {
 
   File resourceDir = TestUtils.getResourceDir(getClass());
   File expBaseDir = new File(resourceDir, "exp");
+
+  @TempDir
   File tempBaseDir;
+
   private final DocumentBuilder builder;
-  final String testCase;
-  private final Map<String, String> params;
+  protected String testCase;
+  protected Map<String, String> params = Collections.emptyMap();
   protected boolean parallel;
+
+  @TempDir
   protected File tempDir;
+
   protected XMLUtils xmlUtils;
   protected Job job;
   protected AbstractPipelineModule chunkModule;
   protected CachingLogger logger;
   protected Mode mode = Mode.STRICT;
 
-  public AbstractModuleTest(final String testCase, final Map<String, String> params) {
-    this.testCase = testCase;
-    this.params = params;
+  public AbstractModuleTest() {
     try {
       final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       factory.setNamespaceAware(true);
@@ -109,13 +112,11 @@ public abstract class AbstractModuleTest {
     return res;
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     CatalogUtils.setDitaDir(Paths.get("src", "main").toFile());
-    tempBaseDir = TestUtils.createTempDir(getClass());
     final File srcDir = new File(resourceDir, "src");
     TestUtils.copy(srcDir, tempBaseDir);
-    tempDir = new File(tempBaseDir, testCase);
     chunkModule = getModule(tempDir);
     xmlUtils = new XMLUtils();
     final Store store = new StreamStore(tempDir, xmlUtils);
@@ -124,39 +125,34 @@ public abstract class AbstractModuleTest {
     chunkModule.setJob(job);
     logger = new CachingLogger(mode.equals(Mode.STRICT));
     chunkModule.setLogger(logger);
-    chunkModule.setParallel(parallel);
   }
 
-  @After
-  public void tearDown() throws Exception {
-    TestUtils.forceDelete(tempBaseDir);
-  }
+  //  @AfterEach
+  //  public void tearDown() throws Exception {
+  ////    TestUtils.forceDelete(tempBaseDir);
+  //  }
 
-  @Test
-  public void serialFile() {
-    test();
-  }
-
-  @Test
-  public void parallelFile() {
-    chunkModule.setParallel(true);
-    test();
-  }
-
-  @Test
-  public void serialMemory() throws IOException {
-    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
-    chunkModule.setJob(job);
-    test();
-  }
-
-  @Test
-  public void parallelMemory() throws IOException {
-    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
-    chunkModule.setJob(job);
-    chunkModule.setParallel(true);
-    test();
-  }
+  //  public void serialFile() {
+  //    test();
+  //  }
+  //
+  //  public void parallelFile() {
+  //    chunkModule.setParallel(true);
+  //    test();
+  //  }
+  //
+  //  public void serialMemory() throws IOException {
+  //    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+  //    chunkModule.setJob(job);
+  //    test();
+  //  }
+  //
+  //  public void parallelMemory() throws IOException {
+  //    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+  //    chunkModule.setJob(job);
+  //    chunkModule.setParallel(true);
+  //    test();
+  //  }
 
   protected void initStore(Store cache) {
     if (cache instanceof CacheStore) {

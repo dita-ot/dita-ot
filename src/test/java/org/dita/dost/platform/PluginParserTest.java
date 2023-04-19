@@ -8,7 +8,7 @@
 package org.dita.dost.platform;
 
 import static java.util.Arrays.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.util.Arrays;
@@ -16,15 +16,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.dita.dost.TestUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class PluginParserTest {
 
   final File resourceDir = TestUtils.getResourceDir(PluginParserTest.class);
   final PluginParser p = new PluginParser(resourceDir);
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     p.setPluginDir(resourceDir);
     p.parse(new File(resourceDir, "plugin.xml"));

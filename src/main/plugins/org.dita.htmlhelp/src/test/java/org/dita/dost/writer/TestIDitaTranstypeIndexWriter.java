@@ -8,11 +8,11 @@
 
 package org.dita.dost.writer;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import org.dita.dost.TestUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestIDitaTranstypeIndexWriter {
 

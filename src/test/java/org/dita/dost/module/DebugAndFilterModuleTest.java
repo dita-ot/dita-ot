@@ -8,10 +8,8 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Job.Generate.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,18 +24,12 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 public class DebugAndFilterModuleTest {
@@ -48,12 +40,12 @@ public class DebugAndFilterModuleTest {
   private File tmpDir;
   private File inputDir;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpClass() {
     CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException, DITAOTException {
     tempDir = TestUtils.createTempDir(getClass());
 
@@ -126,7 +118,7 @@ public class DebugAndFilterModuleTest {
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }
@@ -167,7 +159,7 @@ public class DebugAndFilterModuleTest {
 
     try {
       module.execute(pipelineInput);
-      assertTrue("Should break, a file needs to be written outside of the temp files folder.", false);
+      assertTrue(false);
     } catch (Exception ex) {
       assertEquals("Cannot write outside of the temporary files folder: file:/etc/passwd", ex.getMessage());
     }

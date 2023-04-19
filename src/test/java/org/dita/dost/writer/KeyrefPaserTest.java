@@ -24,9 +24,9 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 
 public class KeyrefPaserTest {
@@ -39,7 +39,7 @@ public class KeyrefPaserTest {
   private KeyScope keyDefinition;
   private File tempDir;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     tempDir = createTempDir(KeyrefPaserTest.class);
     TestUtils.copy(srcDir, tempDir);
@@ -47,7 +47,7 @@ public class KeyrefPaserTest {
     keyDefinition = readKeyMap(Paths.get("keys.ditamap"));
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

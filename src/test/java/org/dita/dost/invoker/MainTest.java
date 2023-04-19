@@ -9,92 +9,91 @@
 package org.dita.dost.invoker;
 
 import static org.dita.dost.invoker.Main.ANT_OUTPUT_DIR;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 import org.dita.dost.project.Project.Deliverable;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class MainTest {
 
-  @Parameters(name = "{1}")
-  public static Collection<Object[]> data() {
-    return Arrays.asList(new Object[][] { { "", "Without trailing slash" }, { "/", "With trailing slash" } });
+  public static Stream<Arguments> data() {
+    return Stream.of(Arguments.of(""), Arguments.of("/"));
   }
-
-  private final String suffix;
 
   private Main main;
   private Path current;
 
-  public MainTest(final String suffix, final String _desc) {
-    this.suffix = suffix;
-  }
-
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     this.main = new Main();
     this.current = new File("").getAbsoluteFile().toPath();
   }
 
-  @Test
-  public void withoutEither() {
-    assertEquals(current.resolve("out"), getOutputDir(null, null));
+  @ParameterizedTest
+  @MethodSource("data")
+  public void withoutEither(String suffix) {
+    assertEquals(current.resolve("out"), getOutputDir(null, null, suffix));
   }
 
-  @Test
-  public void relativeArgument() {
-    assertEquals(current.resolve("baz/qux"), getOutputDir(null, "baz/qux"));
+  @ParameterizedTest
+  @MethodSource("data")
+  public void relativeArgument(String suffix) {
+    assertEquals(current.resolve("baz/qux"), getOutputDir(null, "baz/qux", suffix));
   }
 
-  @Test
-  public void absoluteArgument() {
-    assertEquals(Paths.get("/baz/qux"), getOutputDir(null, "/baz/qux"));
+  @ParameterizedTest
+  @MethodSource("data")
+  public void absoluteArgument(String suffix) {
+    assertEquals(Paths.get("/baz/qux"), getOutputDir(null, "/baz/qux", suffix));
   }
 
-  @Test
-  public void relativeProject() {
-    assertEquals(current.resolve("out/foo/bar"), getOutputDir("foo/bar", null));
+  @ParameterizedTest
+  @MethodSource("data")
+  public void relativeProject(String suffix) {
+    assertEquals(current.resolve("out/foo/bar"), getOutputDir("foo/bar", null, suffix));
   }
 
-  @Test
-  public void absoluteProject() {
-    assertEquals(Paths.get("/foo/bar"), getOutputDir("/foo/bar", null));
+  @ParameterizedTest
+  @MethodSource("data")
+  public void absoluteProject(String suffix) {
+    assertEquals(Paths.get("/foo/bar"), getOutputDir("/foo/bar", null, suffix));
   }
 
-  @Test
-  public void relativeArgument_relativeProject() {
-    assertEquals(current.resolve("baz/qux/foo/bar"), getOutputDir("foo/bar", "baz/qux"));
+  @ParameterizedTest
+  @MethodSource("data")
+  public void relativeArgument_relativeProject(String suffix) {
+    assertEquals(current.resolve("baz/qux/foo/bar"), getOutputDir("foo/bar", "baz/qux", suffix));
   }
 
-  @Test
-  public void absoluteArgument_relativeProject() {
-    assertEquals(Paths.get("/baz/qux/foo/bar"), getOutputDir("foo/bar", "/baz/qux"));
+  @ParameterizedTest
+  @MethodSource("data")
+  public void absoluteArgument_relativeProject(String suffix) {
+    assertEquals(Paths.get("/baz/qux/foo/bar"), getOutputDir("foo/bar", "/baz/qux", suffix));
   }
 
-  @Test
-  public void relativeArgument_absoluteProject() {
-    assertEquals(Paths.get("/foo/bar"), getOutputDir("/foo/bar", "baz/qux"));
+  @ParameterizedTest
+  @MethodSource("data")
+  public void relativeArgument_absoluteProject(String suffix) {
+    assertEquals(Paths.get("/foo/bar"), getOutputDir("/foo/bar", "baz/qux", suffix));
   }
 
-  @Test
-  public void absoluteArgument_absoluteProject() {
-    assertEquals(Paths.get("/foo/bar"), getOutputDir("/foo/bar", "/baz/qux"));
+  @ParameterizedTest
+  @MethodSource("data")
+  public void absoluteArgument_absoluteProject(String suffix) {
+    assertEquals(Paths.get("/foo/bar"), getOutputDir("/foo/bar", "/baz/qux", suffix));
   }
 
-  private Path getOutputDir(final String output, final String arg) {
+  private Path getOutputDir(final String output, final String arg, String suffix) {
     final Deliverable deliverable = new Deliverable(
       null,
       null,

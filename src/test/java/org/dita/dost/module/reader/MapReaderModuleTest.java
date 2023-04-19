@@ -9,19 +9,19 @@
 package org.dita.dost.module.reader;
 
 import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.GenListModuleReader;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class MapReaderModuleTest {
 
   private MapReaderModule reader;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     reader = new MapReaderModule();
     reader.setLogger(new TestUtils.TestLogger());

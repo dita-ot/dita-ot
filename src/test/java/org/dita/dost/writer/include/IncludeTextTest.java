@@ -11,7 +11,8 @@ package org.dita.dost.writer.include;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,9 +28,9 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -49,7 +50,7 @@ public class IncludeTextTest {
   private File tempDir;
   private Job job;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     tempDir = TestUtils.createTempDir(IncludeResolverTest.class);
     job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
@@ -62,7 +63,7 @@ public class IncludeTextTest {
     );
   }
 
-  @After
+  @AfterEach
   public void cleanUp() throws IOException {
     TestUtils.forceDelete(tempDir);
   }
@@ -93,18 +94,23 @@ public class IncludeTextTest {
     }
   }
 
-  @Test(expected = UncheckedDITAOTException.class)
+  @Test
   public void include_invalidEncoding() throws IOException {
-    final IncludeText includeText = new IncludeText(
-      job,
-      tempDir.toURI().resolve("topic.dita"),
-      new DefaultHandler(),
-      new TestUtils.TestLogger(),
-      Configuration.Mode.STRICT
-    );
-    createIncludeFile(ISO_8859_1);
+    assertThrows(
+      UncheckedDITAOTException.class,
+      () -> {
+        final IncludeText includeText = new IncludeText(
+          job,
+          tempDir.toURI().resolve("topic.dita"),
+          new DefaultHandler(),
+          new TestUtils.TestLogger(),
+          Configuration.Mode.STRICT
+        );
+        createIncludeFile(ISO_8859_1);
 
-    includeText.include(createAttributes(UTF_8));
+        includeText.include(createAttributes(UTF_8));
+      }
+    );
   }
 
   private Attributes createAttributes(Charset charset) {

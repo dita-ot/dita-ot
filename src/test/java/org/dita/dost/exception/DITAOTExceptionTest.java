@@ -8,7 +8,7 @@
 package org.dita.dost.exception;
 
 import org.dita.dost.log.MessageBean;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DITAOTExceptionTest {
 

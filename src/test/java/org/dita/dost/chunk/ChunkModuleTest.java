@@ -10,61 +10,106 @@ package org.dita.dost.chunk;
 
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
-import java.util.*;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.module.AbstractModuleTest;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.util.Job;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class ChunkModuleTest extends AbstractModuleTest {
 
-  private final int warningCount;
+  private int warningCount;
 
-  @Parameters(name = "{0} {1}")
-  public static Collection<Object[]> data() {
-    return Arrays.asList(
-      new Object[][] {
-        { "combine", Collections.emptyMap(), 2 },
-        { "duplicate", Collections.emptyMap(), 0 },
-        { "override", ImmutableMap.of("root-chunk-override", "combine"), 0 },
-        { "dita", Collections.emptyMap(), 0 },
-        { "combine-empty-ditabase", Collections.emptyMap(), 0 },
-        { "link", Collections.emptyMap(), 0 },
-        { "uplevels", Collections.emptyMap(), 0 },
-        { "uplevels-dir", Collections.emptyMap(), 0 },
-        { "uplevels-root", Collections.emptyMap(), 0 },
-        { "uplevels-parallel", Collections.emptyMap(), 0 },
-        { "format", Collections.emptyMap(), 0 },
-        { "nested", Collections.emptyMap(), 0 },
-        { "scope", Collections.emptyMap(), 0 },
-        { "topicgroup", Collections.emptyMap(), 1 },
-        { "topichead", Collections.emptyMap(), 1 },
-        { "multiple", Collections.emptyMap(), 0 },
-        { "map", Collections.emptyMap(), 0 },
-        { "split", Collections.emptyMap(), 0 },
-        { "split-dita", Collections.emptyMap(), 0 },
-        { "split-hierarchy", Collections.emptyMap(), 0 },
-        { "split-empty-ditabase", Collections.emptyMap(), 0 },
-        { "split-map", Collections.emptyMap(), 0 },
-        { "chunk-combine-within-split", Collections.emptyMap(), 0 },
-        { "managing-links", Collections.emptyMap(), 0 },
-        { "managing-links-duplicates", Collections.emptyMap(), 0 },
-      }
+  public static Stream<Arguments> data() {
+    return Stream.of(
+      Arguments.of("combine", Collections.emptyMap(), 2),
+      Arguments.of("duplicate", Collections.emptyMap(), 0),
+      Arguments.of("override", ImmutableMap.of("root-chunk-override", "combine"), 0),
+      Arguments.of("dita", Collections.emptyMap(), 0),
+      Arguments.of("combine-empty-ditabase", Collections.emptyMap(), 0),
+      Arguments.of("link", Collections.emptyMap(), 0),
+      Arguments.of("uplevels", Collections.emptyMap(), 0),
+      Arguments.of("uplevels-dir", Collections.emptyMap(), 0),
+      Arguments.of("uplevels-root", Collections.emptyMap(), 0),
+      Arguments.of("uplevels-parallel", Collections.emptyMap(), 0),
+      Arguments.of("format", Collections.emptyMap(), 0),
+      Arguments.of("nested", Collections.emptyMap(), 0),
+      Arguments.of("scope", Collections.emptyMap(), 0),
+      Arguments.of("topicgroup", Collections.emptyMap(), 1),
+      Arguments.of("topichead", Collections.emptyMap(), 1),
+      Arguments.of("multiple", Collections.emptyMap(), 0),
+      Arguments.of("map", Collections.emptyMap(), 0),
+      Arguments.of("split", Collections.emptyMap(), 0),
+      Arguments.of("split-dita", Collections.emptyMap(), 0),
+      Arguments.of("split-hierarchy", Collections.emptyMap(), 0),
+      Arguments.of("split-empty-ditabase", Collections.emptyMap(), 0),
+      Arguments.of("split-map", Collections.emptyMap(), 0),
+      Arguments.of("chunk-combine-within-split", Collections.emptyMap(), 0),
+      Arguments.of("managing-links", Collections.emptyMap(), 0),
+      Arguments.of("managing-links-duplicates", Collections.emptyMap(), 0)
     );
   }
 
-  public ChunkModuleTest(final String testCase, final Map<String, String> params, final int warningCount) {
-    super(testCase, params);
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialFile(String testCase, Map<String, String> params, int warningCount) {
+    this.testCase = testCase;
+    this.params = params;
     this.warningCount = warningCount;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void parallelFile(String testCase, Map<String, String> params, int warningCount) {
+    this.testCase = testCase;
+    this.params = params;
+    this.warningCount = warningCount;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+    chunkModule.setParallel(true);
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialMemory(String testCase, Map<String, String> params, int warningCount) throws IOException {
+    this.testCase = testCase;
+    this.params = params;
+    this.warningCount = warningCount;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    chunkModule.setJob(job);
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void parallelMemory(String testCase, Map<String, String> params, int warningCount) throws IOException {
+    this.testCase = testCase;
+    this.params = params;
+    this.warningCount = warningCount;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    chunkModule.setJob(job);
+    chunkModule.setParallel(true);
+    test();
   }
 
   @Override

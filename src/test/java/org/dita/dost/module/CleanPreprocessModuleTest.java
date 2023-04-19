@@ -11,7 +11,8 @@ package org.dita.dost.module;
 import static java.net.URI.create;
 import static org.dita.dost.util.Constants.OS_NAME;
 import static org.dita.dost.util.Constants.OS_NAME_WINDOWS;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,10 +25,9 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class CleanPreprocessModuleTest {
 
@@ -35,14 +35,13 @@ public class CleanPreprocessModuleTest {
   private XMLUtils xmlUtils;
   private Job job;
 
-  @Rule
-  public TemporaryFolder temporaryFolder = new TemporaryFolder();
+  @TempDir
+  public File tempDir;
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     module = new CleanPreprocessModule();
     xmlUtils = new XMLUtils();
-    final File tempDir = temporaryFolder.newFolder();
     job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     module.setJob(job);
   }
@@ -130,15 +129,20 @@ public class CleanPreprocessModuleTest {
     assertEquals(create("file:/foo/bar/"), module.getBaseDir());
   }
 
-  @Test(expected = RuntimeException.class)
+  @Test
   public void RewriteRule_WhenStylesheetNotFound_ShouldThrowException() throws Exception {
-    module.setJob(job);
-    module.setXmlUtils(xmlUtils);
-    final TestLogger logger = new TestUtils.TestLogger(false);
-    module.setLogger(logger);
-    final Map<String, String> input = new HashMap<>();
-    input.put("result.rewrite-rule.xsl", "abc.xsl");
+    assertThrows(
+      RuntimeException.class,
+      () -> {
+        module.setJob(job);
+        module.setXmlUtils(xmlUtils);
+        final TestLogger logger = new TestUtils.TestLogger(false);
+        module.setLogger(logger);
+        final Map<String, String> input = new HashMap<>();
+        input.put("result.rewrite-rule.xsl", "abc.xsl");
 
-    module.execute(input);
+        module.execute(input);
+      }
+    );
   }
 }

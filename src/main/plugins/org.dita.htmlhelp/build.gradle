@@ -22,7 +22,8 @@ dependencies {
     implementation group: 'org.apache.ant', name: 'ant', version:'1.10.12'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     testImplementation rootProject
-    testImplementation group: 'junit', name: 'junit', version:'4.13.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.2'
     testImplementation group: 'org.xmlunit', name: 'xmlunit-core', version: '2.3.0'
     testImplementation group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
     testImplementation rootProject.sourceSets.test.output

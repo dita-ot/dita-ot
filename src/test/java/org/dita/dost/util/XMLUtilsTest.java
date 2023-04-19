@@ -10,7 +10,7 @@ package org.dita.dost.util;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,9 +38,9 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.module.DelegatingCollationUriResolverTest;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -56,7 +56,7 @@ public class XMLUtilsTest {
   private static final File expDir = new File(resourceDir, "exp");
   private static File tempDir;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUp() throws IOException {
     tempDir = TestUtils.createTempDir(XMLUtilsTest.class);
   }
@@ -508,7 +508,7 @@ public class XMLUtilsTest {
   //                       new InputSource(new File(tempDir, "identity.dita").toURI().toString()));
   //    }
 
-  @AfterClass
+  @AfterAll
   public static void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

@@ -22,8 +22,8 @@ import org.dita.dost.store.CacheStore;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -34,7 +34,7 @@ public class MergeMapParserTest {
   private final File srcDir = new File(resourceDir, "src");
   private final File expDir = new File(resourceDir, "exp");
 
-  @Before
+  @BeforeEach
   public void setUp() {}
 
   @Test

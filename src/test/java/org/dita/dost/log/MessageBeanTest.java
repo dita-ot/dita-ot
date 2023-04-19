@@ -8,9 +8,9 @@
 package org.dita.dost.log;
 
 import static org.dita.dost.log.MessageBean.Type.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MessageBeanTest {
 

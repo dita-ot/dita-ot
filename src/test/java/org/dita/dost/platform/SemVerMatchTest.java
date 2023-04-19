@@ -8,11 +8,9 @@
 
 package org.dita.dost.platform;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SemVerMatchTest {
 
@@ -21,9 +19,9 @@ public class SemVerMatchTest {
     new SemVerMatch("1.2.3-4.z.5");
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testParseInvalid() {
-    new SemVerMatch("1.2.3+meta");
+    assertThrows(IllegalArgumentException.class, () -> new SemVerMatch("1.2.3+meta"));
   }
 
   @Test

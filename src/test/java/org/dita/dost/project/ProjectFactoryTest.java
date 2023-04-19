@@ -9,8 +9,7 @@
 package org.dita.dost.project;
 
 import static java.util.Collections.singletonList;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,15 +20,15 @@ import java.util.stream.Collectors;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Deliverable;
 import org.dita.dost.project.Project.Publication;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 public class ProjectFactoryTest {
 
   private ProjectFactory factory;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     factory = ProjectFactory.getInstance();
   }
@@ -102,16 +101,23 @@ public class ProjectFactoryTest {
     ProjectFactory.resolveReferences(src);
   }
 
-  @Test(expected = RuntimeException.class)
+  @Test
   public void resolveReferences_notFound() {
-    final Project src = new Project(
-      singletonList(new Deliverable(null, null, null, null, new Publication(null, null, "missing", null, null, null))),
-      null,
-      Collections.emptyList(),
-      null
+    assertThrows(
+      RuntimeException.class,
+      () -> {
+        final Project src = new Project(
+          singletonList(
+            new Deliverable(null, null, null, null, new Publication(null, null, "missing", null, null, null))
+          ),
+          null,
+          Collections.emptyList(),
+          null
+        );
+        final Project act = ProjectFactory.resolveReferences(src);
+        assertEquals("id", act.deliverables().get(0).publication().id());
+      }
     );
-    final Project act = ProjectFactory.resolveReferences(src);
-    assertEquals("id", act.deliverables().get(0).publication().id());
   }
 
   @Test
@@ -169,9 +175,14 @@ public class ProjectFactoryTest {
     assertEquals("common-sitePub2", project.deliverables().get(0).publication().id());
   }
 
-  @Test(expected = RuntimeException.class)
+  @Test
   public void deserializeJsonRecursive() throws IOException, URISyntaxException, SAXException {
-    final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/recursive.json").toURI();
-    factory.load(input);
+    assertThrows(
+      RuntimeException.class,
+      () -> {
+        final URI input = getClass().getClassLoader().getResource("org/dita/dost/project/recursive.json").toURI();
+        factory.load(input);
+      }
+    );
   }
 }

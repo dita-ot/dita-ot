@@ -14,24 +14,11 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collection;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-@RunWith(Parameterized.class)
 public class ProjectBuilderTest {
 
-  @Parameters(name = "{0}")
-  public static Collection<String[]> data() {
-    return Arrays.asList(
-      new String[][] { { "simple" }, { "common" }, { "product" }, { "root" }, { "minimal" }, { "multiple" } }
-    );
-  }
-
-  private final String name;
   private final ObjectReader jsonReader = new ObjectMapper()
     .readerFor(ProjectBuilder.class)
     .with(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
@@ -39,19 +26,17 @@ public class ProjectBuilderTest {
     .readerFor(ProjectBuilder.class)
     .with(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
-  public ProjectBuilderTest(final String name) {
-    this.name = name;
-  }
-
-  @Test
-  public void deserializeJson() throws IOException {
+  @ParameterizedTest
+  @ValueSource(strings = { "simple", "common", "product", "root", "minimal", "multiple" })
+  public void deserializeJson(final String name) throws IOException {
     try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/" + name + ".json")) {
       jsonReader.readValue(in);
     }
   }
 
-  @Test
-  public void deserializeYaml() throws IOException {
+  @ParameterizedTest
+  @ValueSource(strings = { "simple", "common", "product", "root", "minimal", "multiple" })
+  public void deserializeYaml(final String name) throws IOException {
     try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/" + name + ".yaml")) {
       yamlReader.readValue(in);
     }

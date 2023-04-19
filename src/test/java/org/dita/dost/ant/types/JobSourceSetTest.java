@@ -8,7 +8,7 @@
 
 package org.dita.dost.ant.types;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.common.io.Files;
 import java.io.File;
@@ -24,10 +24,10 @@ import org.dita.dost.ant.types.JobSourceSet.SelectorElem;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class JobSourceSetTest {
 
@@ -35,7 +35,7 @@ public class JobSourceSetTest {
   private static Job job;
   private JobSourceSet jobSourceSet;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpClass() throws Exception {
     tempDir = TestUtils.createTempDir(JobSourceSetTest.class);
     job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
@@ -46,7 +46,7 @@ public class JobSourceSetTest {
     }
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     jobSourceSet =
       new JobSourceSet() {
@@ -57,7 +57,7 @@ public class JobSourceSetTest {
       };
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

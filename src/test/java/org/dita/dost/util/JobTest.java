@@ -10,8 +10,8 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.INPUT_DIR;
 import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.dita.dost.util.URLUtils.toURI;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,10 +19,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public final class JobTest {
 
@@ -31,7 +31,7 @@ public final class JobTest {
   private static File tempDir;
   private static Job job;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUp() throws IOException {
     tempDir = TestUtils.createTempDir(JobTest.class);
     TestUtils.copy(srcDir, tempDir);
@@ -72,7 +72,7 @@ public final class JobTest {
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void write_performance_large() throws IOException {
     for (int i = 0; i < 60_000; i++) {
       job.add(
@@ -93,7 +93,7 @@ public final class JobTest {
     System.out.println(((end - start)) + " ms");
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

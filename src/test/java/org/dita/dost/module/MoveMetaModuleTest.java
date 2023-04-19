@@ -12,57 +12,49 @@ import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_STYLE;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.w3c.dom.Document;
 
-@RunWith(Parameterized.class)
 public class MoveMetaModuleTest extends AbstractModuleTest {
 
-  @Parameterized.Parameters(name = "{0}")
-  public static Collection<Object[]> data() {
-    return Arrays.asList(
-      new Object[][] {
-        { "MatadataInheritance_foreign" },
-        { "MatadataInheritance_keywords" },
-        { "MatadataInheritance_linktext" },
-        { "MatadataInheritance_othermeta" },
-        { "MatadataInheritance_pemissions" },
-        { "MatadataInheritance_pemissions_replace" },
-        { "MatadataInheritance_prodinfo" },
-        { "MatadataInheritance_publisher" },
-        { "MatadataInheritance_resourceid" },
-        { "MatadataInheritance_searchtitle" },
-        { "MatadataInheritance_shortdesc" },
-        { "MatadataInheritance_source" },
-        { "MatadataInheritance_source_replace" },
-        { "MatadataInheritance_unknown" },
-        { "MetadataInheritance_audience" },
-        { "MetadataInheritance_author" },
-        { "MetadataInheritance_category" },
-        { "MetadataInheritance_copyright" },
-        { "MetadataInheritance_critdates" },
-        { "MetadataInheritance_critdates_replace" },
-        { "MetadataInheritance_data" },
-        { "MetadataInheritance_dataabout" },
-      }
+  public static Stream<Arguments> data() {
+    return Stream.of(
+      Arguments.of("MatadataInheritance_foreign"),
+      Arguments.of("MatadataInheritance_keywords"),
+      Arguments.of("MatadataInheritance_linktext"),
+      Arguments.of("MatadataInheritance_othermeta"),
+      Arguments.of("MatadataInheritance_pemissions"),
+      Arguments.of("MatadataInheritance_pemissions_replace"),
+      Arguments.of("MatadataInheritance_prodinfo"),
+      Arguments.of("MatadataInheritance_publisher"),
+      Arguments.of("MatadataInheritance_resourceid"),
+      Arguments.of("MatadataInheritance_searchtitle"),
+      Arguments.of("MatadataInheritance_shortdesc"),
+      Arguments.of("MatadataInheritance_source"),
+      Arguments.of("MatadataInheritance_source_replace"),
+      Arguments.of("MatadataInheritance_unknown"),
+      Arguments.of("MetadataInheritance_audience"),
+      Arguments.of("MetadataInheritance_author"),
+      Arguments.of("MetadataInheritance_category"),
+      Arguments.of("MetadataInheritance_copyright"),
+      Arguments.of("MetadataInheritance_critdates"),
+      Arguments.of("MetadataInheritance_critdates_replace"),
+      Arguments.of("MetadataInheritance_data"),
+      Arguments.of("MetadataInheritance_dataabout")
     );
-  }
-
-  public MoveMetaModuleTest(String testCase) {
-    super(testCase, Collections.emptyMap());
   }
 
   @Override
@@ -81,7 +73,7 @@ public class MoveMetaModuleTest extends AbstractModuleTest {
     return new MoveMetaModule();
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     super.setUp();
     final XMLUtils xmlUtils = new XMLUtils();
@@ -95,15 +87,19 @@ public class MoveMetaModuleTest extends AbstractModuleTest {
     }
   }
 
-  @Test
-  @Ignore
-  public void parallelFile() {
-    // Ignore because MoveMetaModule doesn't use parallel features
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialFile(String testCase) {
+    this.testCase = testCase;
+    test();
   }
 
-  @Test
-  @Ignore
-  public void parallelMemory() {
-    // Ignore because MoveMetaModule doesn't use parallel features
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialMemory(String testCase) throws IOException {
+    this.testCase = testCase;
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    chunkModule.setJob(job);
+    test();
   }
 }

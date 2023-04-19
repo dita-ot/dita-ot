@@ -7,13 +7,13 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
@@ -21,16 +21,15 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.xml.resolver.tools.CatalogResolver;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-@RunWith(Parameterized.class)
 public class XSpecTest {
 
   public static final String XSPEC_NS = "http://www.jenitennison.com/xslt/xspec";
@@ -38,17 +37,10 @@ public class XSpecTest {
   private static Transformer compiler;
   private static URIResolver resolver;
 
-  @Parameterized.Parameters(name = "{0}")
-  public static Collection<Object[]> getFiles() {
+  public static Stream<Arguments> getFiles() {
     final List<File> cases = new ArrayList<>();
     findXSpec(new File("src/test").getAbsoluteFile(), cases);
-
-    final List<Object[]> params = new ArrayList<>(cases.size());
-    for (final File f : cases) {
-      final Object[] arr = new Object[] { f };
-      params.add(arr);
-    }
-    return params;
+    return cases.stream().map(Arguments::of);
   }
 
   private static void findXSpec(final File f, final List<File> res) {
@@ -63,13 +55,13 @@ public class XSpecTest {
     }
   }
 
-  private final File xspec;
+  //  private final File xspec;
 
-  public XSpecTest(final File xspec) {
-    this.xspec = xspec;
-  }
+  //  public XSpecTest(final File xspec) {
+  //    this.xspec = xspec;
+  //  }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpClass() throws TransformerException {
     transformerFactory = TransformerFactory.newInstance();
     final File ditaDir = new File(
@@ -85,8 +77,9 @@ public class XSpecTest {
     compiler.setURIResolver(resolver);
   }
 
-  @Test
-  public void testXSpec() throws TransformerException, ParserConfigurationException {
+  @ParameterizedTest
+  @MethodSource("getFiles")
+  public void testXSpec(File xspec) throws TransformerException, ParserConfigurationException {
     final DOMResult stylesheet = new DOMResult();
     compiler.transform(new StreamSource(xspec), stylesheet);
 
@@ -108,7 +101,7 @@ public class XSpecTest {
         final String act =
           ((Element) scenario.getElementsByTagNameNS(XSPEC_NS, "result").item(0)).getAttribute("select");
         final String exp = ((Element) test.getElementsByTagNameNS(XSPEC_NS, "expect").item(0)).getAttribute("select");
-        assertEquals(label != null ? label.getTextContent() : null, exp, act);
+        assertEquals(exp, act, label != null ? label.getTextContent() : null);
       }
     }
   }

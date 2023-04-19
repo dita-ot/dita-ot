@@ -8,12 +8,12 @@
 
 package org.dita.dost.invoker;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.util.Collections;
 import org.apache.tools.ant.Project;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ArgumentParserTest {
 

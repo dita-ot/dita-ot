@@ -9,17 +9,17 @@
 package org.dita.dost.invoker;
 
 import static java.io.File.pathSeparator;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ConversionArgumentsTest {
 
   private ConversionArguments arguments;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     arguments = new ConversionArguments();
   }
