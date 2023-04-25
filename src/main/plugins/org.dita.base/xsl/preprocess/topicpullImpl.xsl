@@ -61,11 +61,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!-- Set the format for generated text for links to tables and figures.   -->
   <!-- Recognized values are 'NUMBER' (Table 5) and 'TITLE' (Table Caption) -->
-  <xsl:param name="TABLELINK">NUMBER</xsl:param>
-  <xsl:param name="FIGURELINK">NUMBER</xsl:param>
-  <xsl:param name="remove-broken-links" as="xs:string?"/>
+  <xsl:param name="TABLELINK" as="xs:string" select="'NUMBER'"/>  <!-- DITA-OT parameter args.tablelink.style: 'NUMBER' or 'TITLE' -->
+  <xsl:param name="FIGURELINK" as="xs:string" select="'NUMBER'"/>  <!-- DITA-OT parameter args.figurelink.style: 'NUMBER' or 'TITLE' -->
+  <xsl:param name="remove-broken-links" as="xs:string" select="'false'"/>  <!-- DITA-OT parameter remove-broken-links: 'false' or 'true' -->
   <!-- Check whether the onlytopicinmap is turned on -->
-  <xsl:param name="ONLYTOPICINMAP" select="'false'"/>
+  <xsl:param name="ONLYTOPICINMAP" as="xs:string" select="'false'"/>  <!-- DITA-OT parameter onlytopic.in.map: 'false' or 'true' -->
   
   <!-- Establish keys for the counting of figures, tables, and anything else -->
   <!-- To remove something from the figure count, create the same key in an override.
@@ -943,18 +943,18 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:apply-templates select="." mode="ditamsg:cannot-retrieve-linktext"/>
   </xsl:template>
 
-  <!-- Determine the text for a link to a figure. Currently uses "Figure N". A node set
-       containing the figure's <title> element is also passed in, an override may choose
-       to use this in the figure's reference text. -->
+  <!-- Compute the text for a link to a figure:
+       * When $FIGURELINK = 'NUMBER', use "Figure N".
+       * When $FIGURELINK = 'TITLE', use "Figure Caption/Title". -->
   <xsl:template match="*" mode="topicpull:figure-linktext">
-    <xsl:param name="figtext"/>
-    <xsl:param name="figcount"/>
-    <xsl:param name="figtitle"/>
+    <xsl:param name="figtext"/>  <!-- for $FIGURELINK = 'NUMBER' -->
+    <xsl:param name="figcount"/>  <!-- for $FIGURELINK = 'NUMBER' -->
+    <xsl:param name="figtitle"/>  <!-- for $FIGURELINK = 'TITLE' -->
     <xsl:choose>
-      <xsl:when test="$FIGURELINK='TITLE'">
+      <xsl:when test="$FIGURELINK = 'TITLE'">
         <xsl:apply-templates select="$figtitle" mode="text-only"/>
       </xsl:when>
-      <xsl:otherwise> <!-- Default: FIGURELINK='NUMBER' -->
+      <xsl:otherwise>  <!-- $FIGURELINK = 'NUMBER' -->
         <xsl:value-of select="$figtext"/>
         <xsl:call-template name="getVariable">
           <xsl:with-param name="id" select="'figure-number-separator'"/>
@@ -1035,16 +1035,18 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:apply-templates>
   </xsl:template>
 
-  <!-- Determine the text for a link to a table. Currently uses table title. -->
+  <!-- Compute the text for a link to a table:
+       * When $TABLELINK = 'NUMBER', use "Table N".
+       * When $TABLELINK = 'TITLE', use "Table Caption/Title". -->
   <xsl:template match="*" mode="topicpull:table-linktext">
-    <xsl:param name="tbltext"/>
-    <xsl:param name="tblcount"/>
-    <xsl:param name="tbltitle"/> <!-- Currently unused, but may be picked up by an override -->
+    <xsl:param name="tbltext"/>  <!-- for $TABLELINK = 'NUMBER' -->
+    <xsl:param name="tblcount"/>  <!-- for $TABLELINK = 'NUMBER' -->
+    <xsl:param name="tbltitle"/>  <!-- for $TABLELINK = 'TITLE' -->
     <xsl:choose>
-      <xsl:when test="$TABLELINK='TITLE'">
+      <xsl:when test="$TABLELINK = 'TITLE'">
         <xsl:apply-templates select="$tbltitle" mode="text-only"/>
       </xsl:when>
-      <xsl:otherwise> <!-- Default: TABLELINK='NUMBER' -->
+      <xsl:otherwise>  <!-- $TABLELINK = 'NUMBER' -->
         <xsl:value-of select="$tbltext"/>
         <xsl:call-template name="getVariable">
           <xsl:with-param name="id" select="'figure-number-separator'"/>
