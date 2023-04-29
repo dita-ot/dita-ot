@@ -189,8 +189,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
     assert startFileInfo.src != null;
     final URI tmp = job.tempDirURI.resolve(startFileInfo.uri);
     try {
-      final XdmNode source = job.getStore().getImmutableNode(tmp);
       logger.info("Reading " + tmp);
+      final XdmNode source = job.getStore().getImmutableNode(tmp);
       final Predicate<? super XdmNode> isTopicref = xdmItem ->
         MAP_TOPICREF.matches(xdmItem.getAttributeValue(QNAME_CLASS));
       source
