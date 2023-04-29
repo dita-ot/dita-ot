@@ -7,10 +7,10 @@
  */
 package org.dita.dost.reader;
 
-import static junit.framework.TestCase.assertEquals;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.buildControlDocument;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,9 +24,9 @@ import org.dita.dost.reader.ConrefPushReader.MoveKey;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 
@@ -41,7 +41,7 @@ public class TestConrefPushReader {
     builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     tempDir = TestUtils.createTempDir(TestConrefPushReader.class);
     copyFile(new File(srcDir, "conrefpush_stub.xml"), new File(tempDir, "conrefpush_stub.xml"));
@@ -79,7 +79,7 @@ public class TestConrefPushReader {
     return doc;
   }
 
-  @After
+  @AfterEach
   public void teardown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

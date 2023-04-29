@@ -9,13 +9,13 @@ package org.dita.dost.platform;
 
 import static java.util.Arrays.asList;
 import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -23,7 +23,7 @@ public class FeaturesTest {
 
   private static Document doc;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUp() throws Exception {
     doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
   }

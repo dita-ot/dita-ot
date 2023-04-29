@@ -7,7 +7,7 @@
  */
 package org.dita.dost.module;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
@@ -20,22 +20,22 @@ import org.dita.dost.reader.ChunkMapReader;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ChunkMapReaderTest {
 
   private final File resourceDir = TestUtils.getResourceDir(ChunkModuleTest.class);
   private File tempBaseDir;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     tempBaseDir = TestUtils.createTempDir(getClass());
     TestUtils.copy(new File(resourceDir, "src"), tempBaseDir);
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     TestUtils.forceDelete(tempBaseDir);
   }

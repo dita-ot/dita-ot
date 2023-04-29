@@ -7,11 +7,11 @@
  */
 package org.dita.dost.module.filter;
 
-import static junit.framework.Assert.assertEquals;
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +28,9 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -41,7 +41,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
   private final File expDir = new File(resourceDir, "exp");
   private File tempDir;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     tempDir = TestUtils.createTempDir(getClass());
     TestUtils.copy(new File(resourceDir, "src"), tempDir);
@@ -84,7 +84,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
     return job;
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     TestUtils.forceDelete(tempDir);
   }

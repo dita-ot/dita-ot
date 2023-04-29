@@ -11,7 +11,7 @@ import static java.util.Collections.emptySet;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.stripFragment;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,10 +31,10 @@ import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.XMLReader;
@@ -50,12 +50,12 @@ public class TestGenListModuleReader {
 
   private GenListModuleReader reader;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpClass() throws Exception {
     tempDir = TestUtils.createTempDir(TestGenListModuleReader.class);
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     reader = new GenListModuleReader();
     reader.setLogger(new TestUtils.TestLogger());
@@ -66,7 +66,7 @@ public class TestGenListModuleReader {
     reader.setPrimaryDitamap(currentFile);
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDownClass() {
     FileUtils.deleteQuietly(tempDir);
   }

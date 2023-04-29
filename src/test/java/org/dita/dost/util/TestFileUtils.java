@@ -7,14 +7,14 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
 import org.dita.dost.TestUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class TestFileUtils {
 
@@ -25,7 +25,7 @@ public class TestFileUtils {
   private static final File srcDir = new File(resourceDir, "src");
   private static File tempDir;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUp() throws IOException {
     tempDir = TestUtils.createTempDir(TestFileUtils.class);
   }
@@ -306,7 +306,7 @@ public class TestFileUtils {
     assertFalse(FileUtils.directoryContains(srcDir, new File(srcDir, ".." + File.separator + "test.txt")));
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

@@ -8,11 +8,11 @@
 
 package org.dita.dost;
 
-import static junit.framework.Assert.assertEquals;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -35,8 +35,8 @@ import org.dita.dost.store.CacheStore;
 import org.dita.dost.store.Store;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
-import org.junit.After;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -196,7 +196,7 @@ public abstract class AbstractIntegrationTest {
     ditaIdPattern.put("href", Pattern.compile("#.+?/" + SAXON_ID + "|#(.+?__)?" + SAXON_ID + "(.*)"));
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws Exception {
     final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setNamespaceAware(true);
@@ -211,7 +211,7 @@ public abstract class AbstractIntegrationTest {
     return osName.startsWith("Windows");
   }
 
-  @After
+  @AfterEach
   public void cleanUp() {
     // remove temp & output
   }
@@ -243,8 +243,8 @@ public abstract class AbstractIntegrationTest {
 
     try {
       this.log = runOt(testDir, transtype, tempDir, outDir, params, targets);
-      assertEquals("Warn message count does not match expected", warnCount, countMessages(log, Project.MSG_WARN));
-      assertEquals("Error message count does not match expected", errorCount, countMessages(log, Project.MSG_ERR));
+      assertEquals(warnCount, countMessages(log, Project.MSG_WARN));
+      assertEquals(errorCount, countMessages(log, Project.MSG_ERR));
 
       this.actDir = transtype.compareTemp ? tempDir : outDir;
     } catch (final RuntimeException e) {

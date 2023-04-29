@@ -8,7 +8,7 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
@@ -24,8 +24,8 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -37,7 +37,7 @@ public class CopyToReaderTest {
   private XMLReader parser;
   private CachingLogger logger;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     logger = new CachingLogger();
 

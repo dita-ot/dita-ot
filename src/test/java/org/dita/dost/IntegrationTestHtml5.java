@@ -9,12 +9,12 @@
 package org.dita.dost;
 
 import static org.dita.dost.AbstractIntegrationTest.Transtype.HTML5;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.nio.file.Paths;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class IntegrationTestHtml5 extends AbstractIntegrationTest {
 

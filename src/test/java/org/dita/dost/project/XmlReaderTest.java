@@ -8,21 +8,21 @@
 
 package org.dita.dost.project;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 public class XmlReaderTest {
 
   private XmlReader xmlReader;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     xmlReader = new XmlReader();
   }
@@ -96,10 +96,15 @@ public class XmlReaderTest {
     }
   }
 
-  @Test(expected = SAXException.class)
+  @Test
   public void deserializeXmlForeignStrict() throws IOException, SAXException {
-    try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/foreign.xml")) {
-      xmlReader.read(input, null);
-    }
+    assertThrows(
+      SAXException.class,
+      () -> {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("org/dita/dost/project/foreign.xml")) {
+          xmlReader.read(input, null);
+        }
+      }
+    );
   }
 }

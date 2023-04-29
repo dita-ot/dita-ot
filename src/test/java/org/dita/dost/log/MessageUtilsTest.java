@@ -7,11 +7,11 @@
  */
 package org.dita.dost.log;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import org.dita.dost.TestUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MessageUtilsTest {
 

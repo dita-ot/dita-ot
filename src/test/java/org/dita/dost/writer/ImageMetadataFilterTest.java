@@ -9,7 +9,7 @@ package org.dita.dost.writer;
 
 import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,9 +25,9 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -39,7 +39,7 @@ public class ImageMetadataFilterTest {
   private static final File expDir = new File(resourceDir, "exp");
   private static File tempDir;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws IOException {
     tempDir = TestUtils.createTempDir(ImageMetadataFilterTest.class);
   }
@@ -99,7 +99,7 @@ public class ImageMetadataFilterTest {
     );
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

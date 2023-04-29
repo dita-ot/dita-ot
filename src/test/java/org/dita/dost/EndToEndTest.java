@@ -4,8 +4,8 @@ import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
 import java.io.File;
 import java.nio.file.Paths;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class EndToEndTest extends AbstractIntegrationTest {
 
@@ -38,7 +38,7 @@ public class EndToEndTest extends AbstractIntegrationTest {
       .run();
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void htmlhelp() throws Throwable {
     builder().name("e2e").transtype(HTMLHELP).input(Paths.get("root.ditamap")).run();

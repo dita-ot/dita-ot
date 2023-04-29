@@ -9,7 +9,7 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.InputStream;
 import java.util.List;
@@ -23,7 +23,7 @@ import javax.xml.transform.sax.SAXSource;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 

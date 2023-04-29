@@ -13,8 +13,8 @@ import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS2;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML_WITH_PREPROCESS2;
 
 import java.nio.file.Paths;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class IntegrationTestPreprocess2 extends IntegrationTest {
 
@@ -34,7 +34,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
     }
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void testcopyto() throws Throwable {
     builder()
@@ -69,7 +69,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void testcopyto_linktarget() throws Throwable {
     builder()
@@ -92,7 +92,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void testcopyto_extensions_metadata() throws Throwable {
     builder()
@@ -103,7 +103,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void testcopyto_circulartarget() throws Throwable {
     builder()
@@ -113,7 +113,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void testcopyto_sametarget2() throws Throwable {
     builder()
@@ -124,7 +124,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void testcopyto_sametarget() throws Throwable {
     builder()
@@ -146,7 +146,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void testuplevelslinkOnlytopic() throws Throwable {
     builder()
@@ -159,7 +159,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void testCrawlMapPreprocess() throws Throwable {
     builder()
@@ -172,7 +172,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void testuplevelslink() throws Throwable {
     builder()
@@ -183,7 +183,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Ignore
+  @Disabled
   @Test
   public void testchunk_uplevel() throws Throwable {
     builder()

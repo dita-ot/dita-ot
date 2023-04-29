@@ -9,7 +9,7 @@ package org.dita.dost.platform;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -18,11 +18,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
 import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Constants;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 
 public class IntegratorTest {
@@ -31,7 +30,7 @@ public class IntegratorTest {
   private final File expDir = new File(resourceDir, "exp");
   private File tempDir;
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     tempDir = TestUtils.createTempDir(getClass());
     TestUtils.copy(new File(resourceDir, "src"), tempDir);
@@ -146,23 +145,28 @@ public class IntegratorTest {
     );
   }
 
-  @Test(expected = UncheckedIOException.class)
+  @Test
   public void testExecute_missingFile() throws Exception {
-    Files.delete(tempDir.toPath().resolve(Paths.get("plugins", "dummy", "build.xml")));
+    assertThrows(
+      UncheckedIOException.class,
+      () -> {
+        Files.delete(tempDir.toPath().resolve(Paths.get("plugins", "dummy", "build.xml")));
 
-    final File libDir = new File(tempDir, "lib");
-    if (!libDir.exists() && !libDir.mkdirs()) {
-      throw new IOException("Failed to create directory " + libDir);
-    }
-    final File resourcesDir = new File(tempDir, "resources");
-    if (!resourcesDir.exists() && !resourcesDir.mkdirs()) {
-      throw new IOException("Failed to create directory " + resourcesDir);
-    }
+        final File libDir = new File(tempDir, "lib");
+        if (!libDir.exists() && !libDir.mkdirs()) {
+          throw new IOException("Failed to create directory " + libDir);
+        }
+        final File resourcesDir = new File(tempDir, "resources");
+        if (!resourcesDir.exists() && !resourcesDir.mkdirs()) {
+          throw new IOException("Failed to create directory " + resourcesDir);
+        }
 
-    final Integrator i = new Integrator(tempDir);
-    i.setProperties(new File(tempDir, "integrator.properties"));
-    i.setLogger(new TestUtils.TestLogger(false));
-    i.execute();
+        final Integrator i = new Integrator(tempDir);
+        i.setProperties(new File(tempDir, "integrator.properties"));
+        i.setLogger(new TestUtils.TestLogger(false));
+        i.execute();
+      }
+    );
   }
 
   private Properties getProperties(final File f) throws IOException {
@@ -173,7 +177,7 @@ public class IntegratorTest {
     return p;
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

@@ -9,10 +9,8 @@ package org.dita.dost.reader;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
-import static junit.framework.Assert.assertEquals;
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.common.collect.ImmutableList;
 import java.io.File;
@@ -24,7 +22,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
-import junit.framework.Assert;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.s9api.DOMDestination;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -34,14 +31,14 @@ import net.sf.saxon.trans.XPathException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -53,7 +50,7 @@ public class TestKeyrefReader {
 
   private KeyrefReader keyrefreader;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     keyrefreader = new KeyrefReader();
   }
@@ -316,46 +313,46 @@ public class TestKeyrefReader {
     final KeyScope root = keyrefreader.getKeyDefinition();
 
     assertEquals(6, root.keySet().size());
-    Assert.assertNull(root.get("dita-europe.conferenceName").href);
+    Assertions.assertNull(root.get("dita-europe.conferenceName").href);
     assertEquals(
       "http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail",
       root.get("dita-europe.hotel").href.toString()
     );
     assertEquals("images/holidayInn.jpg", root.get("dita-europe.hotelImage").href.toString());
-    Assert.assertNull(root.get("telematics.conferenceName").href);
+    Assertions.assertNull(root.get("telematics.conferenceName").href);
     assertEquals("http://www.dolcemunich.com/", root.get("telematics.hotel").href.toString());
     assertEquals("images/dolce.jpg", root.get("telematics.hotelImage").href.toString());
 
     final KeyScope first = root.getChildScope("dita-europe");
     assertEquals(9, first.keySet().size());
-    Assert.assertNull(first.get("conferenceName").href);
+    Assertions.assertNull(first.get("conferenceName").href);
     assertEquals(
       "http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail",
       first.get("hotel").href.toString()
     );
     assertEquals("images/holidayInn.jpg", first.get("hotelImage").href.toString());
-    Assert.assertNull(first.get("dita-europe.conferenceName").href);
+    Assertions.assertNull(first.get("dita-europe.conferenceName").href);
     assertEquals(
       "http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail",
       first.get("dita-europe.hotel").href.toString()
     );
     assertEquals("images/holidayInn.jpg", first.get("dita-europe.hotelImage").href.toString());
-    Assert.assertNull(first.get("telematics.conferenceName").href);
+    Assertions.assertNull(first.get("telematics.conferenceName").href);
     assertEquals("http://www.dolcemunich.com/", first.get("telematics.hotel").href.toString());
     assertEquals("images/dolce.jpg", first.get("telematics.hotelImage").href.toString());
 
     final KeyScope second = root.getChildScope("telematics");
     assertEquals(9, second.keySet().size());
-    Assert.assertNull(second.get("conferenceName").href);
+    Assertions.assertNull(second.get("conferenceName").href);
     assertEquals("http://www.dolcemunich.com/", second.get("hotel").href.toString());
     assertEquals("images/dolce.jpg", second.get("hotelImage").href.toString());
-    Assert.assertNull(second.get("dita-europe.conferenceName").href);
+    Assertions.assertNull(second.get("dita-europe.conferenceName").href);
     assertEquals(
       "http://www.ihg.com/holidayinn/hotels/us/en/munich/muchb/hoteldetail",
       second.get("dita-europe.hotel").href.toString()
     );
     assertEquals("images/holidayInn.jpg", second.get("dita-europe.hotelImage").href.toString());
-    Assert.assertNull(second.get("telematics.conferenceName").href);
+    Assertions.assertNull(second.get("telematics.conferenceName").href);
     assertEquals("http://www.dolcemunich.com/", second.get("telematics.hotel").href.toString());
     assertEquals("images/dolce.jpg", second.get("telematics.hotelImage").href.toString());
   }

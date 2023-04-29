@@ -11,7 +11,7 @@ package org.dita.dost;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
 
 import java.nio.file.Paths;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class IntegrationTestPreprocess1 extends IntegrationTest {
 

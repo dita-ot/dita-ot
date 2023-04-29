@@ -8,7 +8,7 @@
 package org.dita.dost.index;
 
 import static org.dita.dost.TestUtils.assertHtmlEqual;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,10 +19,10 @@ import java.util.HashSet;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.writer.HTMLIndexWriter;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 
 public class IndexTermCollectionTest {
@@ -31,7 +31,7 @@ public class IndexTermCollectionTest {
   private static final File expDir = new File(resourceDir, "exp");
   private File tempDir;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     tempDir = TestUtils.createTempDir(getClass());
   }
@@ -136,24 +136,24 @@ public class IndexTermCollectionTest {
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testSetOutputFileRoot() {
     fail("Not yet implemented");
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testGetPipelineHashIO() {
     fail("Not yet implemented");
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testSetPipelineHashIO() {
     fail("Not yet implemented");
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

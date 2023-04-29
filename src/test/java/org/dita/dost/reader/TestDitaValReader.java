@@ -10,8 +10,8 @@ package org.dita.dost.reader;
 import static java.util.Collections.emptySet;
 import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -30,8 +30,8 @@ import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestDitaValReader {
 
@@ -49,7 +49,7 @@ public class TestDitaValReader {
   private Job job;
   private DITAOTLogger logger;
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     logger = new TestUtils.TestLogger();
     final XMLUtils xmlUtils = new XMLUtils();

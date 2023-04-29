@@ -7,7 +7,7 @@
  */
 package org.dita.dost.writer;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
@@ -30,8 +30,8 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -46,7 +46,7 @@ public class ForceUniqueFilterTest {
   private Job job;
   private TempFileNameScheme tempFileNameScheme;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     job = new Job(srcDir, new StreamStore(srcDir, new XMLUtils()));
     job.setInputDir(srcDir.toURI());

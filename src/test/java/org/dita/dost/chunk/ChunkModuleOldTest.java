@@ -11,42 +11,70 @@ package org.dita.dost.chunk;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.io.IOException;
+import java.util.stream.Stream;
 import org.dita.dost.module.AbstractModuleTest;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.module.ChunkModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.util.Job;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class ChunkModuleOldTest extends AbstractModuleTest {
 
-  @Parameters(name = "{0}")
-  public static Collection<Object[]> data() {
-    return Arrays.asList(
-      new Object[][] {
-        { "combine" },
-        { "dita" },
-        { "link" },
-        { "uplevels" },
-        { "format" },
-        { "nested" },
-        { "scope" },
-        { "topicgroup" },
-        { "topichead" },
-        { "map" },
-      }
+  public static Stream<Arguments> data() {
+    return Stream.of(
+      Arguments.of("combine"),
+      Arguments.of("dita"),
+      Arguments.of("link"),
+      Arguments.of("uplevels"),
+      Arguments.of("format"),
+      Arguments.of("nested"),
+      Arguments.of("scope"),
+      Arguments.of("topicgroup"),
+      Arguments.of("topichead"),
+      Arguments.of("map")
     );
   }
 
-  public ChunkModuleOldTest(final String testCase) {
-    super(testCase, Collections.emptyMap());
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialFile(String testCase) {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void parallelFile(String testCase) {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    chunkModule.setParallel(true);
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialMemory(String testCase) throws IOException {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  public void parallelMemory(String testCase) throws IOException {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    chunkModule.setParallel(true);
+    test();
   }
 
   @Override
@@ -57,7 +85,7 @@ public class ChunkModuleOldTest extends AbstractModuleTest {
   }
 
   @Override
-  protected AbstractPipelineModule getModule(final File tempDir) {
+  protected AbstractPipelineModule getModule() {
     return new ChunkModule();
   }
 }

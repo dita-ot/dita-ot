@@ -19,9 +19,9 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 public class MapMetaReaderTest {
@@ -32,7 +32,7 @@ public class MapMetaReaderTest {
   private static File tempDir;
   private static MapMetaReader reader;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUp() throws Exception {
     CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
     tempDir = TestUtils.createTempDir(MapMetaReaderTest.class);
@@ -56,7 +56,7 @@ public class MapMetaReaderTest {
     assertXMLEqual(db.parse(new File(expDir, "test.ditamap")), db.parse(new File(tempDir, "test.ditamap")));
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

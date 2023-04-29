@@ -9,7 +9,7 @@ package org.dita.dost.reader;
 
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +27,9 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
@@ -43,7 +43,7 @@ public class MergeTopicParserTest {
   private static SAXTransformerFactory stf;
   private MergeTopicParser parser;
 
-  @BeforeClass
+  @BeforeAll
   public static void setupClass() {
     final TransformerFactory tf = TransformerFactory.newInstance();
     if (!tf.getFeature(SAXTransformerFactory.FEATURE)) {
@@ -52,7 +52,7 @@ public class MergeTopicParserTest {
     stf = (SAXTransformerFactory) tf;
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     final Job job = new Job(srcDir, new StreamStore(srcDir, new XMLUtils()));
     final TestUtils.TestLogger logger = new TestUtils.TestLogger();

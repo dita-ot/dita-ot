@@ -12,20 +12,13 @@ import static org.dita.dost.TestUtils.parse;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.dita.dost.util.Constants.TOPIC_XREF;
 import static org.dita.dost.util.URLUtils.toURI;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Predicates;
 import net.sf.saxon.s9api.streams.Steps;
@@ -34,9 +27,9 @@ import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ChunkMapReaderTest {
 
@@ -45,7 +38,7 @@ public class ChunkMapReaderTest {
 
   File tempDir = null;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     tempDir = TestUtils.createTempDir(getClass());
     new File(tempDir, "maps").mkdirs();
@@ -789,7 +782,7 @@ public class ChunkMapReaderTest {
     return tempDir.toURI().resolve(s);
   }
 
-  @After
+  @AfterEach
   public void teardown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

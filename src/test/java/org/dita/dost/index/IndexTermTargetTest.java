@@ -7,17 +7,17 @@
  */
 package org.dita.dost.index;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class IndexTermTargetTest {
 
   private final IndexTermTarget simple = new IndexTermTarget();
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     simple.setTargetName("name");
     simple.setTargetURI("base");
@@ -76,7 +76,7 @@ public class IndexTermTargetTest {
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testToString() {
     fail("Not yet implemented");
   }

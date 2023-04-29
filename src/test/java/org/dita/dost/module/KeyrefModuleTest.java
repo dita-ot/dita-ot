@@ -14,9 +14,9 @@ import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.createTempDir;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.dita.dost.util.Constants.MAP_TOPICREF;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
@@ -47,9 +47,9 @@ import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -71,7 +71,7 @@ public class KeyrefModuleTest {
     b = documentBuilderFactory.newDocumentBuilder();
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     tempDir = createTempDir(KeyrefModuleTest.class);
 
@@ -119,7 +119,7 @@ public class KeyrefModuleTest {
     module.setLogger(new TestLogger());
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

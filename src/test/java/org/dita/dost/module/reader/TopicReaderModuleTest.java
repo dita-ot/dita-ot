@@ -9,8 +9,9 @@
 package org.dita.dost.module.reader;
 
 import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import org.dita.dost.TestUtils;
@@ -19,24 +20,23 @@ import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.xml.sax.SAXException;
 
 public class TopicReaderModuleTest {
 
-  @Rule
-  public TemporaryFolder tempDir = new TemporaryFolder();
+  @TempDir
+  public File tempDir;
 
   private TopicReaderModule reader;
 
-  @Before
+  @BeforeEach
   public void setUp() throws SAXException, IOException {
     reader = new TopicReaderModule();
     reader.setLogger(new TestUtils.TestLogger());
-    final Job job = new Job(tempDir.getRoot(), new StreamStore(tempDir.getRoot(), new XMLUtils()));
+    final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
     job.setInputFile(URI.create("file:///foo/bar/baz.ditamap"));
     job.setInputMap(URI.create("baz.ditamap"));
     job.setInputDir(URI.create("file:///foo/bar/"));
@@ -49,11 +49,11 @@ public class TopicReaderModuleTest {
     );
     reader.setJob(job);
     final PipelineHashIO input = new PipelineHashIO();
-    input.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, tempDir.getRoot().getAbsolutePath());
+    input.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, tempDir.getAbsolutePath());
     input.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, "1");
     input.setAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL, Job.OutterControl.FAIL.toString());
     input.setAttribute(ANT_INVOKER_EXT_PARAM_CRAWL, "topic");
-    input.setAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR, tempDir.getRoot().getAbsolutePath());
+    input.setAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR, tempDir.getAbsolutePath());
     input.setAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED, Boolean.FALSE.toString());
     reader.parseInputParameters(input);
     reader.init();

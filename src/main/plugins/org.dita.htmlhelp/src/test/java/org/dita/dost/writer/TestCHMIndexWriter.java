@@ -16,9 +16,9 @@ import java.util.List;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -28,7 +28,7 @@ public class TestCHMIndexWriter {
   private static final File resourceDir = TestUtils.getResourceDir(TestCHMIndexWriter.class);
   private static final File expDir = new File(resourceDir, "exp");
 
-  @BeforeClass
+  @BeforeAll
   public static void setUp() throws IOException {
     tempDir = TestUtils.createTempDir(TestCHMIndexWriter.class);
   }
@@ -59,7 +59,7 @@ public class TestCHMIndexWriter {
     );
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

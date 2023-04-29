@@ -19,9 +19,9 @@ import org.dita.dost.reader.ConrefPushReader.MoveKey;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.xml.sax.InputSource;
@@ -35,7 +35,7 @@ public class TestConrefPushParser {
   private File tempDir;
   private File targetFile;
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     tempDir = TestUtils.createTempDir(TestConrefPushParser.class);
     targetFile = new File(tempDir, "conrefpush_stub2.xml");
@@ -77,7 +77,7 @@ public class TestConrefPushParser {
     return fragment;
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

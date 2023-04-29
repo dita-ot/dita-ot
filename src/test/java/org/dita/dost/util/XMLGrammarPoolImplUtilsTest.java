@@ -7,20 +7,20 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.xerces.impl.dtd.DTDGrammar;
 import org.apache.xerces.impl.dtd.XMLDTDDescription;
 import org.apache.xerces.xni.grammars.Grammar;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class XMLGrammarPoolImplUtilsTest {
 
   private XMLGrammarPoolImplUtils utils;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     utils = new XMLGrammarPoolImplUtils();
   }

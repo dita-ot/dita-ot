@@ -9,7 +9,7 @@
 package org.dita.dost.store;
 
 import static org.dita.dost.util.URLUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.net.URI;
@@ -17,8 +17,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class StoreTest {
 
@@ -28,7 +28,7 @@ public class StoreTest {
 
   private Store store;
 
-  @Before
+  @BeforeEach
   public void setup() {
     store = new StreamStore(srcDir, new XMLUtils());
   }

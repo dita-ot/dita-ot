@@ -7,15 +7,15 @@
  */
 package org.dita.dost.reader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ImageMetadataFilter;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -25,7 +25,7 @@ public class SvgMetadataReaderTest {
   private SvgMetadataReader svgMetadataReader;
   private XMLReader reader;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     svgMetadataReader = new SvgMetadataReader();
     try {

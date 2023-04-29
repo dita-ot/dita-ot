@@ -8,8 +8,8 @@
 
 package org.dita.dost.ant;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,22 +17,19 @@ import org.apache.tools.ant.Project;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class ExtensibleAntInvokerTest {
 
-  @Rule
-  public TemporaryFolder folder = new TemporaryFolder();
-
   private Project project;
+
+  @TempDir
   private File tempDir;
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
-    tempDir = folder.newFile();
     project = new Project();
     project.setUserProperty("dita.temp.dir", tempDir.getAbsolutePath());
   }

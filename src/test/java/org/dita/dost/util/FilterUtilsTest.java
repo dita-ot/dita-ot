@@ -14,7 +14,7 @@ import static javax.xml.XMLConstants.XML_NS_PREFIX;
 import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PLATFORM;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_REV;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -25,7 +25,7 @@ import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -301,7 +301,7 @@ public class FilterUtilsTest {
       );
 
       assertTrue(f.extCheckExclude(new QName[] { OS }, Arrays.asList("osx")));
-      assertEquals("Should not output info message " + infoMsg, "", infoMsg.toString());
+      assertEquals("", infoMsg.toString());
     }
   }
 
@@ -482,8 +482,8 @@ public class FilterUtilsTest {
     assertEquals("foo=bar", new FilterKey(QName.valueOf("foo"), "bar").toString());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void filterKey_arguments() {
-    new FilterKey(null, null);
+    assertThrows(NullPointerException.class, () -> new FilterKey(null, null));
   }
 }

@@ -7,17 +7,18 @@
  */
 package org.dita.dost.index;
 
-import static org.dita.dost.index.IndexTerm.IndexTermPrefix.*;
-import static org.junit.Assert.*;
+import static org.dita.dost.index.IndexTerm.IndexTermPrefix.SEE;
+import static org.dita.dost.index.IndexTerm.IndexTermPrefix.SEE_ALSO;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import org.dita.dost.util.StringUtils;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class IndexTermTest {
 
@@ -35,7 +36,7 @@ public class IndexTermTest {
   private final IndexTerm prefixed = new IndexTerm();
   private final IndexTerm nested = new IndexTerm();
 
-  @Before
+  @BeforeEach
   public void setUp() {
     empty.setTermName("");
     empty.setTermKey("");
@@ -166,9 +167,9 @@ public class IndexTermTest {
     new IndexTerm().setEndAttribute("");
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void testAddSubTerm() {
-    new IndexTerm().addSubTerm(null);
+    assertThrows(NullPointerException.class, () -> new IndexTerm().addSubTerm(null));
   }
 
   @Test
@@ -229,9 +230,9 @@ public class IndexTermTest {
     assertTrue(simple.getTargetList().isEmpty());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void testAddTarget() {
-    new IndexTerm().addSubTerm(null);
+    assertThrows(NullPointerException.class, () -> new IndexTerm().addSubTerm(null));
   }
 
   @Test
@@ -247,7 +248,7 @@ public class IndexTermTest {
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testToString() {
     fail("Not yet implemented");
   }

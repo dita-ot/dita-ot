@@ -8,21 +8,21 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.URLUtils.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.MergeUtils;
-import org.junit.After;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class TestMergeUtils {
 
@@ -31,13 +31,13 @@ public class TestMergeUtils {
 
   public static MergeUtils mergeUtils;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUp() throws IOException {
     mergeUtils = new MergeUtils();
     mergeUtils.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
   }
 
-  @After
+  @AfterEach
   public void reset() {
     mergeUtils.reset();
   }
@@ -61,7 +61,7 @@ public class TestMergeUtils {
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testAddIdStringString() {
     fail("Not yet implemented");
   }
@@ -91,7 +91,7 @@ public class TestMergeUtils {
   }
 
   @Test
-  @Ignore
+  @Disabled
   // This method has been tested in the previous method.
   public void testVisit() {
     fail("Not yet implemented");

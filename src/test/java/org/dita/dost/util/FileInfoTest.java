@@ -10,12 +10,12 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.FileInfo.Builder;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public final class FileInfoTest {
 

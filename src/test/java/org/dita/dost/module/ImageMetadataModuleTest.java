@@ -11,7 +11,7 @@ import static java.net.URI.create;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,9 +26,9 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ImageMetadataFilterTest;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -39,7 +39,7 @@ public class ImageMetadataModuleTest {
   private static final File expDir = new File(resourceDir, "exp");
   private static File tempDir;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws IOException {
     tempDir = TestUtils.createTempDir(ImageMetadataModuleTest.class);
   }
@@ -78,7 +78,7 @@ public class ImageMetadataModuleTest {
     assertEquals("image", job.getFileInfo(create("img.xxx")).format);
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

@@ -17,9 +17,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
 import org.dita.dost.TestUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -30,12 +30,12 @@ public class TopicFragmentFilterTest {
   private static final File srcDir = new File(resourceDir, "src");
   private static final File expDir = new File(resourceDir, "exp");
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     tempDir = TestUtils.createTempDir(TopicFragmentFilterTest.class);
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     TestUtils.forceDelete(tempDir);
   }

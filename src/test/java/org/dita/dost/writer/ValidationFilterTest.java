@@ -10,7 +10,7 @@ package org.dita.dost.writer;
 import static javax.xml.XMLConstants.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.AttributesBuilder;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,8 +20,8 @@ import java.util.List;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.util.Configuration;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -30,7 +30,7 @@ public class ValidationFilterTest {
 
   private ValidationFilter f;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     f = new ValidationFilter();
     f.setValidateMap(Collections.emptyMap());

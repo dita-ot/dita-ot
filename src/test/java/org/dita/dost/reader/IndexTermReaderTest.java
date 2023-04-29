@@ -7,8 +7,8 @@
  */
 package org.dita.dost.reader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,9 +22,9 @@ import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -39,7 +39,7 @@ public class IndexTermReaderTest {
   final File resourceDir = TestUtils.getResourceDir(IndexTermReaderTest.class);
   private File tempDir;
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     tempDir = TestUtils.createTempDir(getClass());
   }
@@ -81,7 +81,7 @@ public class IndexTermReaderTest {
     assertEquals(new HashSet<>(exp), new HashSet<>(act));
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

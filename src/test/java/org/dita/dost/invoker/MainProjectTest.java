@@ -10,7 +10,7 @@ package org.dita.dost.invoker;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.dita.dost.project.Project;
 import org.dita.dost.project.ProjectFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class MainProjectTest {
 
@@ -34,7 +34,7 @@ public class MainProjectTest {
   private URI projectFile;
   private Main main;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     main = new Main();
     factory = ProjectFactory.getInstance();

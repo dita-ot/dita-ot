@@ -20,7 +20,7 @@ import org.dita.dost.project.Project.Deliverable.Inputs.Input;
 import org.dita.dost.project.Project.Deliverable.Profile;
 import org.dita.dost.project.Project.Deliverable.Profile.DitaVal;
 import org.dita.dost.project.Project.Publication;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ProjectTest {
 

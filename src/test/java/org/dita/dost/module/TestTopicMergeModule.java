@@ -11,7 +11,7 @@ import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
 import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,9 +24,9 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -45,7 +45,7 @@ public class TestTopicMergeModule {
   private File temporaryDir;
   private Job job;
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     tempDir = TestUtils.createTempDir(getClass());
 
@@ -105,7 +105,7 @@ public class TestTopicMergeModule {
     );
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }

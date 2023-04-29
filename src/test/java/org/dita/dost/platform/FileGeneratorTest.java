@@ -13,7 +13,7 @@ import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
 import static org.dita.dost.util.XMLUtils.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +27,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.DITAOTLogger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.ContentHandler;
@@ -72,7 +72,7 @@ public class FileGeneratorTest {
     plugins.put("b", b);
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     tempDir = TestUtils.createTempDir(getClass());
     tempFile = new File(tempDir, "dummy_template.xml");
@@ -90,7 +90,7 @@ public class FileGeneratorTest {
     );
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws IOException {
     TestUtils.forceDelete(tempDir);
   }
