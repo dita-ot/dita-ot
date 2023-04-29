@@ -48,7 +48,7 @@ public abstract class AbstractModuleTest {
   File expBaseDir = new File(resourceDir, "exp");
 
   @TempDir
-  File tempBaseDir;
+  protected File tempBaseDir;
 
   private final DocumentBuilder builder;
   protected String testCase;
@@ -117,14 +117,9 @@ public abstract class AbstractModuleTest {
     CatalogUtils.setDitaDir(Paths.get("src", "main").toFile());
     final File srcDir = new File(resourceDir, "src");
     TestUtils.copy(srcDir, tempBaseDir);
-    chunkModule = getModule(tempDir);
+    chunkModule = getModule();
     xmlUtils = new XMLUtils();
-    final Store store = new StreamStore(tempDir, xmlUtils);
-    job = new Job(tempDir, store);
     chunkModule.setXmlUtils(xmlUtils);
-    chunkModule.setJob(job);
-    logger = new CachingLogger(mode.equals(Mode.STRICT));
-    chunkModule.setLogger(logger);
   }
 
   //  @AfterEach
@@ -176,6 +171,17 @@ public abstract class AbstractModuleTest {
   }
 
   public void test() {
+    if (job == null) {
+      final Store store = new StreamStore(tempDir, xmlUtils);
+      try {
+        job = new Job(tempDir, store);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    chunkModule.setJob(job);
+    logger = new CachingLogger(mode.equals(Mode.STRICT));
+    chunkModule.setLogger(logger);
     final File expDir = new File(expBaseDir, testCase);
     try {
       final AbstractPipelineInput input = getAbstractPipelineInput();
@@ -196,7 +202,7 @@ public abstract class AbstractModuleTest {
 
   protected abstract AbstractPipelineInput getAbstractPipelineInput();
 
-  protected abstract AbstractPipelineModule getModule(File tempDir);
+  protected abstract AbstractPipelineModule getModule();
 
   private static final Set<String> IGNORE = ImmutableSet.of(".job.xml", ".DS_Store");
 

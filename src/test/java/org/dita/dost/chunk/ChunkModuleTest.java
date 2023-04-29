@@ -26,6 +26,7 @@ import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.CacheStore;
+import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -68,21 +69,25 @@ public class ChunkModuleTest extends AbstractModuleTest {
 
   @ParameterizedTest
   @MethodSource("data")
-  public void serialFile(String testCase, Map<String, String> params, int warningCount) {
+  public void serialFile(String testCase, Map<String, String> params, int warningCount) throws IOException {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     this.params = params;
     this.warningCount = warningCount;
     this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+    job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     test();
   }
 
   @ParameterizedTest
   @MethodSource("data")
-  public void parallelFile(String testCase, Map<String, String> params, int warningCount) {
+  public void parallelFile(String testCase, Map<String, String> params, int warningCount) throws IOException {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     this.params = params;
     this.warningCount = warningCount;
     this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+    job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     chunkModule.setParallel(true);
     test();
   }
@@ -91,11 +96,11 @@ public class ChunkModuleTest extends AbstractModuleTest {
   @MethodSource("data")
   public void serialMemory(String testCase, Map<String, String> params, int warningCount) throws IOException {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     this.params = params;
     this.warningCount = warningCount;
     this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
     job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
-    chunkModule.setJob(job);
     test();
   }
 
@@ -103,11 +108,11 @@ public class ChunkModuleTest extends AbstractModuleTest {
   @MethodSource("data")
   public void parallelMemory(String testCase, Map<String, String> params, int warningCount) throws IOException {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     this.params = params;
     this.warningCount = warningCount;
     this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
     job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
-    chunkModule.setJob(job);
     chunkModule.setParallel(true);
     test();
   }
@@ -129,7 +134,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
   }
 
   @Override
-  protected AbstractPipelineModule getModule(final File tempDir) {
+  protected AbstractPipelineModule getModule() {
     return new ChunkModule();
   }
 }

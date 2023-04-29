@@ -9,7 +9,7 @@
 package org.dita.dost.module.reader;
 
 import static org.dita.dost.util.Constants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.URI;
 import org.dita.dost.TestUtils;

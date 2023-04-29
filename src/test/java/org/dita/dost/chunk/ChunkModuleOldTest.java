@@ -45,6 +45,7 @@ public class ChunkModuleOldTest extends AbstractModuleTest {
   @MethodSource("data")
   public void serialFile(String testCase) {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     test();
   }
 
@@ -52,6 +53,7 @@ public class ChunkModuleOldTest extends AbstractModuleTest {
   @MethodSource("data")
   public void parallelFile(String testCase) {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     chunkModule.setParallel(true);
     test();
   }
@@ -60,8 +62,8 @@ public class ChunkModuleOldTest extends AbstractModuleTest {
   @MethodSource("data")
   public void serialMemory(String testCase) throws IOException {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
-    chunkModule.setJob(job);
     test();
   }
 
@@ -69,8 +71,8 @@ public class ChunkModuleOldTest extends AbstractModuleTest {
   @MethodSource("data")
   public void parallelMemory(String testCase) throws IOException {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
-    chunkModule.setJob(job);
     chunkModule.setParallel(true);
     test();
   }
@@ -83,7 +85,7 @@ public class ChunkModuleOldTest extends AbstractModuleTest {
   }
 
   @Override
-  protected AbstractPipelineModule getModule(final File tempDir) {
+  protected AbstractPipelineModule getModule() {
     return new ChunkModule();
   }
 }

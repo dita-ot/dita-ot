@@ -17,16 +17,16 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.CacheStore;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 public class MoveMetaModuleTest extends AbstractModuleTest {
 
@@ -69,21 +69,22 @@ public class MoveMetaModuleTest extends AbstractModuleTest {
   }
 
   @Override
-  protected AbstractPipelineModule getModule(final File tempDir) {
+  protected AbstractPipelineModule getModule() {
     return new MoveMetaModule();
   }
 
-  @BeforeEach
-  public void setUp() throws Exception {
-    super.setUp();
-    final XMLUtils xmlUtils = new XMLUtils();
-    final DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-    f.setNamespaceAware(true);
-    final DocumentBuilder b = f.newDocumentBuilder();
-    for (File file : tempDir.listFiles((dir, name) -> name.endsWith("dita") || name.endsWith("ditamap"))) {
-      final Document d = b.parse(file);
-      d.appendChild(d.createProcessingInstruction("workdir-uri", tempDir.toURI().toString()));
-      xmlUtils.writeDocument(d, file);
+  public void initTest() {
+    try {
+      final DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+      f.setNamespaceAware(true);
+      final DocumentBuilder b = f.newDocumentBuilder();
+      for (File file : tempDir.listFiles((dir, name) -> name.endsWith("dita") || name.endsWith("ditamap"))) {
+        final Document d = b.parse(file);
+        d.appendChild(d.createProcessingInstruction("workdir-uri", tempDir.toURI().toString()));
+        xmlUtils.writeDocument(d, file);
+      }
+    } catch (ParserConfigurationException | IOException | SAXException e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -91,6 +92,8 @@ public class MoveMetaModuleTest extends AbstractModuleTest {
   @MethodSource("data")
   public void serialFile(String testCase) {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    initTest();
     test();
   }
 
@@ -98,6 +101,8 @@ public class MoveMetaModuleTest extends AbstractModuleTest {
   @MethodSource("data")
   public void serialMemory(String testCase) throws IOException {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    initTest();
     job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
     chunkModule.setJob(job);
     test();

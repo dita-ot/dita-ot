@@ -51,6 +51,7 @@ public class ConrefPushModuleTest extends AbstractModuleTest {
   @MethodSource("data")
   public void serialFile(String testCase, Mode mode) {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     this.mode = mode;
     this.logger = new TestUtils.CachingLogger(mode.equals(Mode.STRICT));
     test();
@@ -60,6 +61,7 @@ public class ConrefPushModuleTest extends AbstractModuleTest {
   @MethodSource("data")
   public void parallelFile(String testCase, Mode mode) {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     this.mode = mode;
     this.logger = new TestUtils.CachingLogger(mode.equals(Mode.STRICT));
     chunkModule.setParallel(true);
@@ -70,6 +72,7 @@ public class ConrefPushModuleTest extends AbstractModuleTest {
   @MethodSource("data")
   public void serialMemory(String testCase, Mode mode) throws IOException {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     this.mode = mode;
     this.logger = new TestUtils.CachingLogger(mode.equals(Mode.STRICT));
     job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
@@ -81,6 +84,7 @@ public class ConrefPushModuleTest extends AbstractModuleTest {
   @MethodSource("data")
   public void parallelMemory(String testCase, Mode mode) throws IOException {
     this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
     this.mode = mode;
     this.logger = new TestUtils.CachingLogger(mode.equals(Mode.STRICT));
     job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
@@ -95,7 +99,7 @@ public class ConrefPushModuleTest extends AbstractModuleTest {
   }
 
   @Override
-  protected AbstractPipelineModule getModule(final File tempDir) {
+  protected AbstractPipelineModule getModule() {
     final ConrefPushModule conrefPushModule = new ConrefPushModule();
     conrefPushModule.setFileInfoFilter(fileInfo ->
       fileInfo.format.equals(ATTR_FORMAT_VALUE_DITA) ||
