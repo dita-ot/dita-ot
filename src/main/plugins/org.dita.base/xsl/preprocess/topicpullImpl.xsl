@@ -691,8 +691,12 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Get the short description for a link or xref -->
   <xsl:template match="*" mode="topicpull:get-stuff_get-shortdesc">
     <xsl:param name="targetElement" as="element()?"/>
+    <xsl:param name="in-desc-content" as="xs:boolean" select="false()" tunnel="yes"/>
     
     <xsl:choose>
+      <!-- if already creating content inside a <desc>, do not create a lower-level <desc>
+           (see #4184 for details on how this can occur) -->
+      <xsl:when test="$in-desc-content"/>
       <!--if there's already a desc, copy it-->
       <xsl:when test="*[contains(@class, ' topic/desc ')]">
         <xsl:apply-templates select="." mode="topicpull:add-usershortdesc-PI"/>
@@ -712,6 +716,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <desc class="- topic/desc ">
             <xsl:apply-templates select="$shortdesc">
               <xsl:with-param name="baseContextElement" select="." tunnel="yes"/>
+              <!-- remember that we are now creating content inside a <desc> element -->
+              <xsl:with-param name="in-desc-content" as="xs:boolean" select="true()" tunnel="yes"/>
             </xsl:apply-templates>
           </desc>
         </xsl:if>
