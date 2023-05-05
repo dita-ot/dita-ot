@@ -694,8 +694,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="in-desc-content" as="xs:boolean" select="false()" tunnel="yes"/>
     
     <xsl:choose>
-      <!-- if already creating content inside a <desc>, do not create a lower-level <desc>
-           (see #4184 for details on how this can occur) -->
+      <!-- if already creating content inside a <desc>, do not create a lower-level <desc> -->
       <xsl:when test="$in-desc-content"/>
       <!--if there's already a desc, copy it-->
       <xsl:when test="*[contains(@class, ' topic/desc ')]">
@@ -716,7 +715,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <desc class="- topic/desc ">
             <xsl:apply-templates select="$shortdesc">
               <xsl:with-param name="baseContextElement" select="." tunnel="yes"/>
-              <!-- remember that we are now creating content inside a <desc> element -->
               <xsl:with-param name="in-desc-content" as="xs:boolean" select="true()" tunnel="yes"/>
             </xsl:apply-templates>
           </desc>
