@@ -16,6 +16,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.util.Configuration.Mode;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -69,4 +70,6 @@ public interface AbstractPipelineModule {
   default void setProcessingPipe(List<XmlFilterModule.FilterPair> pipe) {}
 
   void setParallel(boolean parallel);
+
+  void setProcessingMode(Mode processingMode);
 }

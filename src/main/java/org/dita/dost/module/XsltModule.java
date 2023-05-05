@@ -192,7 +192,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
       //                    : uriResolver;
       transformer.setErrorReporter(toErrorReporter(logger));
       transformer.setURIResolver(uriResolver);
-      transformer.setMessageListener(toMessageListener(logger));
+      transformer.setMessageListener(toMessageListener(logger, processingMode));
       return transformer;
     } catch (final Exception e) {
       throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);

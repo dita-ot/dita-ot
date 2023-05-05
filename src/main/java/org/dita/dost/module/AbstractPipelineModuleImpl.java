@@ -13,6 +13,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Configuration.Mode;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -26,6 +27,7 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
   protected Job job;
   protected XMLUtils xmlUtils;
   protected boolean parallel;
+  protected Mode processingMode;
   Predicate<FileInfo> fileInfoFilter;
   List<XmlFilterModule.FilterPair> filters;
 
@@ -61,5 +63,9 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
 
   public void setParallel(boolean parallel) {
     this.parallel = parallel;
+  }
+
+  public void setProcessingMode(Mode processingMode) {
+    this.processingMode = processingMode;
   }
 }

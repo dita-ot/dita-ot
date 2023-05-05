@@ -63,7 +63,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
       final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(styleFile)).load();
       transformer.setErrorReporter(toErrorReporter(logger));
       transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
-      transformer.setMessageListener(toMessageListener(logger));
+      transformer.setMessageListener(toMessageListener(logger, processingMode));
 
       if (input.getAttribute("include.rellinks") != null) {
         transformer.setParameter(

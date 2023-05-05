@@ -99,7 +99,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
       final XsltTransformer transformer = templates.load();
       transformer.setErrorReporter(toErrorReporter(logger));
       transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
-      transformer.setMessageListener(toMessageListener(logger));
+      transformer.setMessageListener(toMessageListener(logger, processingMode));
 
       transformer.setParameter(new QName("file-being-processed"), XdmItem.makeValue(inputFile.getName()));
 

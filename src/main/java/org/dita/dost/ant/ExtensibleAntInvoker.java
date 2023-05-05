@@ -22,7 +22,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import org.apache.tools.ant.*;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Location;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.*;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.Resources;
@@ -37,6 +40,7 @@ import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.Store;
 import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.Configuration.Mode;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -68,6 +72,7 @@ public final class ExtensibleAntInvoker extends Task {
    * Temporary directory.
    */
   private File tempDir;
+  private Mode processingMode;
 
   /**
    * Constructor.
@@ -157,6 +162,15 @@ public final class ExtensibleAntInvoker extends Task {
     }
     logger = new DITAOTAntLogger(getProject());
     logger.setTask(this);
+
+    String mode = getProject().getUserProperty(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
+    if (mode == null) {
+      mode = getProject().getProperty(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
+    }
+    if (mode == null) {
+      mode = Mode.LAX.name();
+    }
+    processingMode = Mode.valueOf(mode.toUpperCase());
   }
 
   /**
@@ -180,6 +194,15 @@ public final class ExtensibleAntInvoker extends Task {
           pipelineInput.setAttribute(e.getKey(), e.getValue());
         }
         AbstractPipelineModule mod = getPipelineModule(m, pipelineInput);
+        if (pipelineInput.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE) == null) {
+          String processingMode = Objects.requireNonNullElse(
+            getProject().getUserProperty(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE),
+            getProject().getProperty(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE)
+          );
+          if (processingMode != null) {
+            pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE, processingMode);
+          }
+        }
         long start = System.currentTimeMillis();
         mod.setLogger(logger);
         mod.setJob(job);
@@ -221,6 +244,7 @@ public final class ExtensibleAntInvoker extends Task {
       module.setFiledirParam(xm.filedirparameter);
       module.setReloadstylesheet(xm.reloadstylesheet);
       module.setParallel(xm.parallel);
+      module.setProcessingMode(processingMode);
       module.setXMLCatalog(xm.xmlcatalog);
       if (xm.mapper != null) {
         module.setMapper(xm.mapper.getImplementation());
@@ -246,6 +270,7 @@ public final class ExtensibleAntInvoker extends Task {
     } else if (m instanceof final SaxPipeElem fm) {
       final XmlFilterModule module = new XmlFilterModule();
       module.setParallel(fm.parallel);
+      module.setProcessingMode(processingMode);
       final List<FileInfoFilterElem> predicates = new ArrayList<>(fm.getFormat());
       predicates.addAll(m.fileInfoFilters);
       module.setFileInfoFilter(combine(predicates));
@@ -266,6 +291,7 @@ public final class ExtensibleAntInvoker extends Task {
         module.setFileInfoFilter(combine(m.fileInfoFilters));
       }
       module.setParallel(m.parallel);
+      module.setProcessingMode(processingMode);
       return module;
     }
   }

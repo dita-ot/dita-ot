@@ -92,7 +92,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         final XsltTransformer transformer = xsltExecutable.load();
         transformer.setErrorReporter(toErrorReporter(logger));
         transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
-        transformer.setMessageListener(toMessageListener(logger));
+        transformer.setMessageListener(toMessageListener(logger, processingMode));
 
         for (Entry<String, String> e : input.getAttributes().entrySet()) {
           logger.debug("Set parameter " + e.getKey() + " to '" + e.getValue() + "'");

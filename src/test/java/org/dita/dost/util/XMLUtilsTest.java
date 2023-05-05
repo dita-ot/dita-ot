@@ -32,12 +32,14 @@ import net.sf.saxon.s9api.SaxonApiUncheckedException;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.sapling.Saplings;
 import net.sf.saxon.trans.SymbolicName;
+import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.trans.XmlProcessingException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.module.DelegatingCollationUriResolverTest;
+import org.dita.dost.util.Configuration.Mode;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -276,7 +278,7 @@ public class XMLUtilsTest {
   @Test
   public void toMessageListener() throws SaxonApiException {
     final CachingLogger logger = new CachingLogger();
-    final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+    final MessageListener2 listener = XMLUtils.toMessageListener(logger, Mode.LAX);
 
     final XdmNode msg = Saplings
       .doc()
@@ -293,7 +295,7 @@ public class XMLUtilsTest {
   @Test
   public void toMessageListener_withLevelAndErrorCode() throws SaxonApiException {
     final CachingLogger logger = new CachingLogger();
-    final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+    final MessageListener2 listener = XMLUtils.toMessageListener(logger, Mode.LAX);
 
     final XdmNode msg = Saplings
       .doc()
@@ -315,7 +317,7 @@ public class XMLUtilsTest {
   @Test
   public void toMessageListener_withErrorCode() throws SaxonApiException {
     final CachingLogger logger = new CachingLogger();
-    final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+    final MessageListener2 listener = XMLUtils.toMessageListener(logger, Mode.LAX);
 
     final XdmNode msg = Saplings
       .doc()
@@ -332,7 +334,7 @@ public class XMLUtilsTest {
   @Test
   public void toMessageListener_withFatalErrorCode() throws SaxonApiException {
     final CachingLogger logger = new CachingLogger();
-    final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+    final MessageListener2 listener = XMLUtils.toMessageListener(logger, Mode.LAX);
 
     final XdmNode msg = Saplings
       .doc()
@@ -357,7 +359,7 @@ public class XMLUtilsTest {
   @Test
   public void toMessageListener_withLevel() throws SaxonApiException {
     final CachingLogger logger = new CachingLogger();
-    final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+    final MessageListener2 listener = XMLUtils.toMessageListener(logger, Mode.LAX);
 
     final XdmNode msg = Saplings
       .doc()
@@ -372,9 +374,29 @@ public class XMLUtilsTest {
   }
 
   @Test
+  public void toMessageListener_withLevel_strictMode() throws SaxonApiException {
+    final CachingLogger logger = new CachingLogger();
+    final MessageListener2 listener = XMLUtils.toMessageListener(logger, Mode.STRICT);
+
+    final XdmNode msg = Saplings
+      .doc()
+      .withChild(Saplings.pi("level", "ERROR"), Saplings.text("message "), Saplings.elem("debug"))
+      .toXdmNode(new XMLUtils().getProcessor());
+
+    try {
+      listener.message(msg, null, false, null);
+      fail();
+    } catch (UncheckedXPathException e) {
+      assertEquals("message <debug/>", e.getMessage());
+    } catch (Throwable e) {
+      fail();
+    }
+  }
+
+  @Test
   public void toMessageListenerProperElemsSerialization() throws SaxonApiException {
     final CachingLogger logger = new CachingLogger();
-    final MessageListener2 listener = XMLUtils.toMessageListener(logger);
+    final MessageListener2 listener = XMLUtils.toMessageListener(logger, Mode.LAX);
 
     final XdmNode msg = Saplings
       .doc()
