@@ -566,9 +566,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     }
 
     if (listFilter.isDitaTopic()) {
+      assert currentFile.getFragment() == null;
+      final URI f = currentFile.normalize();
       if (!isFormatDita(ref.format)) {
-        assert currentFile.getFragment() == null;
-        final URI f = currentFile.normalize();
         if (!fileinfos.containsKey(f)) {
           final FileInfo i = new FileInfo.Builder()
             .uri(tempFileNameScheme.generateTempFileName(currentFile))
@@ -576,6 +576,12 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             .format(ref.format)
             .build();
           fileinfos.put(i.src, Collections.singletonList(i));
+        }
+      } else {
+        final FileInfo fi = job.getFileInfo(f);
+        if (fi != null) {
+          final FileInfo i = new FileInfo.Builder(fi).format(ATTR_FORMAT_VALUE_DITA).build();
+          job.add(i);
         }
       }
       fullTopicSet.add(currentFile);
