@@ -340,7 +340,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
    * @throws DITAOTException if processing failed
    */
   void readFile(final Reference ref, final URI parseFile) throws DITAOTException {
-    currentFile = ref.filename;
+    currentFile = ref.filename.normalize();
     assert currentFile.isAbsolute();
     final URI src = parseFile != null ? parseFile : currentFile;
     assert src.isAbsolute();
@@ -584,6 +584,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         hrefTopicSet.add(currentFile);
       }
     } else if (listFilter.isDitaMap()) {
+      final FileInfo fi = job.getFileInfo(currentFile);
+      if (fi != null && !Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP)) {
+        final FileInfo i = new FileInfo.Builder(fi).format(ATTR_FORMAT_VALUE_DITAMAP).build();
+        job.add(i);
+      }
       fullMapSet.add(currentFile);
     }
   }
