@@ -10,7 +10,7 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Configuration.ditaFormat;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.FileUtils.isSupportedImageFile;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.nonDitaContext;
 
@@ -139,6 +139,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
   private boolean isRootElement = true;
   private DitaClass rootClass = null;
   private Predicate<String> formatFilter;
+  private DitaClass forceType;
 
   /**
    * Set output utilities.
@@ -147,6 +148,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
    */
   public void setJob(final Job job) {
     this.job = job;
+  }
+
+  /**
+   * Support only givens type.
+   *
+   * @param cls only supported type
+   */
+  public void setForceType(DitaClass cls) {
+    this.forceType = cls;
   }
 
   /**
@@ -401,6 +411,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     processRoleStack.push(processingRole);
 
     final DitaClass cls = DitaClass.getInstance(atts);
+    if (
+      forceType != null && cls != null && (MAP_MAP.matches(cls) || TOPIC_TOPIC.matches(cls)) && !forceType.matches(cls)
+    ) {
+      isValidInput = true;
+      throw new EarlyExitException();
+    }
 
     final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
     String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
@@ -447,7 +463,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         );
       }
     } else {
-      if ((MAP_MAP.matches(cls)) || (TOPIC_TITLE.matches(cls))) {
+      if (MAP_MAP.matches(cls) || TOPIC_TITLE.matches(cls)) {
         isValidInput = true;
       }
 
@@ -873,4 +889,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
       return true;
     }
   }
+
+  /**
+   * Exception to exit processing early.
+   */
+  public static class EarlyExitException extends RuntimeException {}
 }

@@ -365,11 +365,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     // Verify stub for current file is in Job
     final FileInfo fi = job.getFileInfo(currentFile);
     if (fi == null) {
+      final String extension = getExtension(currentFile.getPath());
       final FileInfo stub = new FileInfo.Builder()
         .src(currentFile)
         .uri(rel)
         .result(currentFile)
         .isInput(currentFile.equals(rootFile))
+        .format(isFormatDita(extension) ? extension : null)
         .build();
       job.add(stub);
     }
@@ -401,6 +403,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         logger.error(MessageUtils.getMessage("DOTJ021E", params).toString());
         failureList.add(currentFile);
       }
+    } catch (EarlyExitException e) {
+      failureList.add(currentFile);
     } catch (final RuntimeException e) {
       throw e;
     } catch (final SAXParseException sax) {
