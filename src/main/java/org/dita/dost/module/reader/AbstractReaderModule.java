@@ -489,7 +489,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     final Set<Reference> nonCopytoResult = new LinkedHashSet<>(128);
     nonCopytoResult.addAll(listFilter.getNonConrefCopytoTargets());
     for (final URI f : listFilter.getConrefTargets()) {
-      nonCopytoResult.add(new Reference(stripFragment(f), listFilter.currentFileFormat()));
+      nonCopytoResult.add(new Reference(stripFragment(f), getFormatFromPath(stripFragment(f))));
     }
     for (final URI f : listFilter.getCopytoMap().values()) {
       nonCopytoResult.add(new Reference(stripFragment(f)));
