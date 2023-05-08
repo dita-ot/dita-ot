@@ -378,31 +378,43 @@ public class CacheStore extends AbstractStore implements Store {
   public void transform(final URI src, final XsltTransformer transformer) throws DITAOTException {
     final boolean useTmpBuf = !isTempFile(src.normalize());
     final URI dst = useTmpBuf ? toURI(src + FILE_EXTENSION_TEMP).normalize() : src;
+    Destination result = null;
     try {
       final Source source = getSource(src);
       transformer.setSource(source);
-      final Destination result = getDestination(dst);
+      result = getDestination(dst);
       result.setDestinationBaseURI(src);
       transformer.setDestination(result);
       transformer.transform();
-      if (useTmpBuf) {
-        move(dst, src);
-      }
     } catch (final UncheckedXPathException e) {
       throw new DITAOTException("Failed to transform document", e);
     } catch (final SaxonApiException e) {
       throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
     } catch (final IOException e) {
       throw new DITAOTException("Failed to replace " + src + ": " + e.getMessage());
+    } finally {
+      try {
+        result.close();
+      } catch (SaxonApiException e) {
+        throw new DITAOTException("Failed to transform document", e);
+      }
+    }
+    if (useTmpBuf) {
+      try {
+        move(dst, src);
+      } catch (final IOException e) {
+        throw new DITAOTException("Failed to replace " + src + ": " + e.getMessage());
+      }
     }
   }
 
   @Override
   void transformUri(final URI src, final URI dst, final XsltTransformer transformer) throws DITAOTException {
+    Destination result = null;
     try {
       final Source source = getSource(src);
       transformer.setSource(source);
-      final Destination result = getDestination(dst);
+      result = getDestination(dst);
       transformer.setDestination(result);
       transformer.transform();
     } catch (final UncheckedXPathException e) {
@@ -411,6 +423,12 @@ public class CacheStore extends AbstractStore implements Store {
       throw e;
     } catch (final Exception e) {
       throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
+    } finally {
+      try {
+        result.close();
+      } catch (SaxonApiException e) {
+        throw new DITAOTException("Failed to transform document", e);
+      }
     }
   }
 

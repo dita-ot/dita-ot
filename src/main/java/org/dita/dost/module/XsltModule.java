@@ -250,10 +250,11 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     } else {
       logger.info("Processing " + in.toURI() + " to " + tmp.toURI());
     }
+    Destination destination = null;
     try {
       final Source source = job.getStore().getSource(in.toURI());
       t.setSource(source);
-      final Destination destination = job.getStore().getDestination(tmp.toURI());
+      destination = job.getStore().getDestination(tmp.toURI());
       if (same) {
         destination.setDestinationBaseURI(out.toURI());
       }
@@ -299,6 +300,12 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         job.getStore().delete(tmp.toURI());
       } catch (final IOException e1) {
         logger.error("Failed to clean up after failed transformation: " + e1, e1);
+      }
+    } finally {
+      try {
+        destination.close();
+      } catch (SaxonApiException e) {
+        throw new DITAOTException(e);
       }
     }
   }
