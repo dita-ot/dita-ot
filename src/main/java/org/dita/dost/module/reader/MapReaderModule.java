@@ -25,6 +25,7 @@ import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.NormalizeFilter;
 import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
 /**
@@ -60,6 +61,12 @@ public final class MapReaderModule extends AbstractReaderModule {
     }
 
     return null;
+  }
+
+  @Override
+  void init() throws SAXException {
+    super.init();
+    listFilter.setForceType(MAP_MAP);
   }
 
   @Override

@@ -340,7 +340,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
    * @throws DITAOTException if processing failed
    */
   void readFile(final Reference ref, final URI parseFile) throws DITAOTException {
-    currentFile = ref.filename;
+    currentFile = ref.filename.normalize();
     assert currentFile.isAbsolute();
     final URI src = parseFile != null ? parseFile : currentFile;
     assert src.isAbsolute();
@@ -365,11 +365,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     // Verify stub for current file is in Job
     final FileInfo fi = job.getFileInfo(currentFile);
     if (fi == null) {
+      final String extension = getExtension(currentFile.getPath());
       final FileInfo stub = new FileInfo.Builder()
         .src(currentFile)
         .uri(rel)
         .result(currentFile)
         .isInput(currentFile.equals(rootFile))
+        .format(isFormatDita(extension) ? extension : null)
         .build();
       job.add(stub);
     }
@@ -401,6 +403,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         logger.error(MessageUtils.getMessage("DOTJ021E", params).toString());
         failureList.add(currentFile);
       }
+    } catch (EarlyExitException e) {
+      failureList.add(currentFile);
     } catch (final RuntimeException e) {
       throw e;
     } catch (final SAXParseException sax) {
@@ -485,7 +489,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     final Set<Reference> nonCopytoResult = new LinkedHashSet<>(128);
     nonCopytoResult.addAll(listFilter.getNonConrefCopytoTargets());
     for (final URI f : listFilter.getConrefTargets()) {
-      nonCopytoResult.add(new Reference(stripFragment(f), listFilter.currentFileFormat()));
+      nonCopytoResult.add(new Reference(stripFragment(f), getFormatFromPath(stripFragment(f))));
     }
     for (final URI f : listFilter.getCopytoMap().values()) {
       nonCopytoResult.add(new Reference(stripFragment(f)));
@@ -562,9 +566,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     }
 
     if (listFilter.isDitaTopic()) {
+      assert currentFile.getFragment() == null;
+      final URI f = currentFile.normalize();
       if (!isFormatDita(ref.format)) {
-        assert currentFile.getFragment() == null;
-        final URI f = currentFile.normalize();
         if (!fileinfos.containsKey(f)) {
           final FileInfo i = new FileInfo.Builder()
             .uri(tempFileNameScheme.generateTempFileName(currentFile))
@@ -573,6 +577,12 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             .build();
           fileinfos.put(i.src, Collections.singletonList(i));
         }
+      } else {
+        final FileInfo fi = job.getFileInfo(f);
+        if (fi != null) {
+          final FileInfo i = new FileInfo.Builder(fi).format(ATTR_FORMAT_VALUE_DITA).build();
+          job.add(i);
+        }
       }
       fullTopicSet.add(currentFile);
       hrefTargetSet.add(currentFile);
@@ -580,6 +590,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         hrefTopicSet.add(currentFile);
       }
     } else if (listFilter.isDitaMap()) {
+      final FileInfo fi = job.getFileInfo(currentFile);
+      if (fi != null && !Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP)) {
+        final FileInfo i = new FileInfo.Builder(fi).format(ATTR_FORMAT_VALUE_DITAMAP).build();
+        job.add(i);
+      }
       fullMapSet.add(currentFile);
     }
   }

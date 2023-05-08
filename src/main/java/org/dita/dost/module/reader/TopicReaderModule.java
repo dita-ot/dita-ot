@@ -153,7 +153,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
   private Document getMapDocument() throws SAXException {
     final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
-    if (fi == null) {
+    if (fi == null || isFormatDita(fi.format)) {
       return null;
     }
     final URI currentFile = job.tempDirURI.resolve(fi.uri);
