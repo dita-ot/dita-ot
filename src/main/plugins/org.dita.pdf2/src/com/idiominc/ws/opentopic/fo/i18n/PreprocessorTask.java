@@ -17,7 +17,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.ant.XMLCatalogAdapter;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.DelegatingURIResolver;
+import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -83,7 +83,7 @@ public class PreprocessorTask extends Task {
         final URIResolver catalogResolver = xmlcatalog != null
           ? new XMLCatalogAdapter(xmlcatalog)
           : CatalogUtils.getCatalogResolver();
-        final URIResolver resolver = new DelegatingURIResolver(catalogResolver, job.getStore());
+        final URIResolver resolver = new ChainedURIResolver(job.getStore(), catalogResolver);
         xsltCompiler.setURIResolver(resolver);
         final XsltExecutable compile = xsltCompiler.compile(job.getStore().getSource(style));
         final XsltTransformer t = compile.load();

@@ -29,7 +29,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.DelegatingURIResolver;
+import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.DitaMapMetaWriter;
 import org.dita.dost.writer.DitaMetaWriter;
@@ -91,7 +91,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
       try {
         final XsltTransformer transformer = xsltExecutable.load();
         transformer.setErrorReporter(toErrorReporter(logger));
-        transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
+        transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
         transformer.setMessageListener(toMessageListener(logger));
 
         for (Entry<String, String> e : input.getAttributes().entrySet()) {

@@ -10,7 +10,8 @@ package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.toErrorReporter;
+import static org.dita.dost.util.XMLUtils.toMessageListener;
 
 import java.io.File;
 import java.net.URI;
@@ -24,7 +25,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.DelegatingURIResolver;
+import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DitaLinksWriter;
@@ -61,7 +62,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
 
       final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(styleFile)).load();
       transformer.setErrorReporter(toErrorReporter(logger));
-      transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
+      transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
       transformer.setMessageListener(toMessageListener(logger));
 
       if (input.getAttribute("include.rellinks") != null) {
