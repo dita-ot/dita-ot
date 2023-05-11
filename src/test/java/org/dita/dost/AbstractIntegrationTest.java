@@ -194,6 +194,10 @@ public abstract class AbstractIntegrationTest {
 
     ditaIdPattern.put("id", htmlIdPattern.get("id"));
     ditaIdPattern.put("href", Pattern.compile("#.+?/" + SAXON_ID + "|#(.+?__)?" + SAXON_ID + "(.*)"));
+    ditaIdPattern.put(
+      "internal-destination",
+      Pattern.compile("_OPENTOPIC_TOC_PROCESSING_" + SAXON_ID + "|" + "fn" + SAXON_ID)
+    );
   }
 
   @BeforeAll

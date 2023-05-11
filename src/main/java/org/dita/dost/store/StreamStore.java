@@ -95,11 +95,18 @@ public class StreamStore extends AbstractStore implements Store {
 
   @Override
   public void writeDocument(final XdmNode node, final URI dst) throws IOException {
+    Serializer serializer = null;
     try {
-      final Serializer serializer = getSerializer(dst);
+      serializer = getSerializer(dst);
       serializer.serializeNode(node);
     } catch (SaxonApiException e) {
       throw new IOException(e);
+    } finally {
+      try {
+        serializer.close();
+      } catch (SaxonApiException e) {
+        throw new IOException(e);
+      }
     }
   }
 
@@ -164,6 +171,7 @@ public class StreamStore extends AbstractStore implements Store {
 
   @Override
   void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+    Serializer result = null;
     try {
       XMLReader reader = xmlUtils.getXMLReader();
       for (final XMLFilter filter : filters) {
@@ -174,7 +182,7 @@ public class StreamStore extends AbstractStore implements Store {
         reader = filter;
       }
 
-      final Serializer result = getSerializer(output);
+      result = getSerializer(output);
       final ContentHandler serializer = result.getContentHandler();
       reader.setContentHandler(serializer);
 
@@ -185,6 +193,12 @@ public class StreamStore extends AbstractStore implements Store {
       throw e;
     } catch (final Exception e) {
       throw new DITAOTException("Failed to transform " + input + ": " + e.getMessage(), e);
+    } finally {
+      try {
+        result.close();
+      } catch (SaxonApiException e) {
+        throw new DITAOTException("Failed to transform " + input + ": " + e.getMessage(), e);
+      }
     }
   }
 
@@ -212,10 +226,11 @@ public class StreamStore extends AbstractStore implements Store {
 
   @Override
   void transformUri(final URI src, final URI dst, final XsltTransformer transformer) throws DITAOTException {
+    Destination result = null;
     try {
       final Source source = getSource(src);
       transformer.setSource(source);
-      final Destination result = getDestination(dst);
+      result = getDestination(dst);
       transformer.setDestination(result);
       transformer.transform();
     } catch (final UncheckedXPathException e) {
@@ -224,6 +239,12 @@ public class StreamStore extends AbstractStore implements Store {
       throw e;
     } catch (final Exception e) {
       throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
+    } finally {
+      try {
+        result.close();
+      } catch (SaxonApiException e) {
+        throw new DITAOTException("Failed to transform document", e);
+      }
     }
   }
 

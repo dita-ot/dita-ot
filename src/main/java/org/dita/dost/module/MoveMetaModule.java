@@ -11,7 +11,8 @@ package org.dita.dost.module;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toFile;
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.toErrorReporter;
+import static org.dita.dost.util.XMLUtils.toMessageListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +29,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.DelegatingURIResolver;
+import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.DitaMapMetaWriter;
 import org.dita.dost.writer.DitaMetaWriter;
@@ -86,10 +87,11 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
       logger.info("Processing " + inputFile.toURI());
       logger.debug("Processing " + inputFile.toURI() + " to " + tmp.toURI());
 
+      Destination result = null;
       try {
         final XsltTransformer transformer = xsltExecutable.load();
         transformer.setErrorReporter(toErrorReporter(logger));
-        transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
+        transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
         transformer.setMessageListener(toMessageListener(logger));
 
         for (Entry<String, String> e : input.getAttributes().entrySet()) {
@@ -99,7 +101,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
 
         final Source source = job.getStore().getSource(inputFile.toURI());
         transformer.setSource(source);
-        final Destination result = job.getStore().getDestination(tmp.toURI());
+        result = job.getStore().getDestination(tmp.toURI());
         result.setDestinationBaseURI(inputFile.toURI());
         transformer.setDestination(result);
         transformer.transform();
@@ -109,7 +111,14 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         throw e;
       } catch (final Exception e) {
         throw new DITAOTException("Failed to transform document: " + e.getMessage(), e);
+      } finally {
+        try {
+          result.close();
+        } catch (SaxonApiException e) {
+          throw new DITAOTException("Failed to transform document", e);
+        }
       }
+
       try {
         logger.debug("Moving " + tmp.toURI() + " to " + inputFile.toURI());
         job.getStore().move(tmp.toURI(), inputFile.toURI());

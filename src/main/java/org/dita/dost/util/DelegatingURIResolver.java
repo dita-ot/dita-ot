@@ -14,7 +14,10 @@ import javax.xml.transform.URIResolver;
 
 /**
  * URI resolver that folds over multiple resolvers and returns the final result.
+ *
+ * @deprecated since 4.1
  */
+@Deprecated
 public class DelegatingURIResolver implements URIResolver {
 
   private final URIResolver[] resolvers;

@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.Map;
 import net.sf.saxon.s9api.Processor;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
+import org.xmlresolver.Resolver;
 
 /**
  * Common functionality for modules that read source documents.
@@ -88,7 +88,7 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
       }
     }
 
-    final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
+    final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
     reader.setEntityResolver(catalogResolver);
 
     processor = xmlUtils.getProcessor();

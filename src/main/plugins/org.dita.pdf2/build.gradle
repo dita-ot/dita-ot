@@ -23,6 +23,7 @@ dependencies {
     implementation group: 'org.apache.ant', name: 'ant', version:'1.10.13'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     implementation group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
+    implementation group: 'net.sf.saxon', name: 'Saxon-HE', version: '12.2'
 }
 sourceSets {
     main {

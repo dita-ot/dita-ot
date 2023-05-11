@@ -166,9 +166,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final List<ResolveTask> res = new ArrayList<>();
     res.add(new ResolveTask(rootScope, map, null));
 
+    Destination destination = null;
     try {
       final URI file = job.tempDirURI.resolve(map.uri);
-      final Destination destination = job.getStore().getDestination(file);
+      destination = job.getStore().getDestination(file);
       final PipelineConfiguration pipe = doc.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
       final Receiver receiver = new NamespaceReducer(destination.getReceiver(pipe, new SerializationProperties()));
       receiver.open();
@@ -176,6 +177,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
       receiver.close();
     } catch (final IOException | SaxonApiException | XPathException e) {
       throw new DITAOTException("Failed to write map: " + e.getMessage(), e);
+    } finally {
+      try {
+        destination.close();
+      } catch (SaxonApiException e) {
+        throw new DITAOTException("Failed to write map: " + e.getMessage(), e);
+      }
     }
 
     // Collect topics not in map and map itself
@@ -372,7 +379,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         } else {
           final NodeInfo ni = node.getUnderlyingNode();
           receiver.startElement(
-            new FingerprintedQName(ni.getPrefix(), ni.getURI(), ni.getLocalPart()),
+            new FingerprintedQName(ni.getPrefix(), ni.getNamespaceUri(), ni.getLocalPart()),
             ni.getSchemaType(),
             ni.attributes(),
             ni.getAllNamespaces(),
@@ -402,7 +409,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final StructuredQName structuredQName = qName.getStructuredQName();
     return new FingerprintedQName(
       structuredQName.getPrefix(),
-      structuredQName.getURI(),
+      structuredQName.getNamespaceUri(),
       structuredQName.getLocalPart()
     );
   }

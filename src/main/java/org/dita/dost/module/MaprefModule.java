@@ -9,7 +9,8 @@ package org.dita.dost.module;
 
 import static org.dita.dost.reader.GenListModuleReader.KEYREF_ATTRS;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.toErrorReporter;
+import static org.dita.dost.util.XMLUtils.toMessageListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +25,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.DelegatingURIResolver;
+import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -97,7 +98,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
       doc = XMLUtils.getDocumentBuilder().newDocument();
       final XsltTransformer transformer = templates.load();
       transformer.setErrorReporter(toErrorReporter(logger));
-      transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
+      transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
       transformer.setMessageListener(toMessageListener(logger));
 
       transformer.setParameter(new QName("file-being-processed"), XdmItem.makeValue(inputFile.getName()));

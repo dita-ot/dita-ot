@@ -20,7 +20,6 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,6 +28,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xmlresolver.Resolver;
 
 public class XSpecTest {
 
@@ -69,7 +69,7 @@ public class XSpecTest {
     )
       .getAbsoluteFile();
     CatalogUtils.setDitaDir(ditaDir);
-    final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
+    final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
     resolver = new ClassPathResolver(catalogResolver);
     transformerFactory.setURIResolver(resolver);
     final Source stylesheet = resolver.resolve("classpath:///XSpec/generate-xspec-tests.xsl", "");

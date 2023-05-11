@@ -32,28 +32,32 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.expr.instruct.TerminationException;
+import net.sf.saxon.lib.CatalogResourceResolver;
 import net.sf.saxon.lib.CollationURIResolver;
 import net.sf.saxon.lib.ErrorReporter;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.s9api.streams.Step;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
+import org.xmlresolver.Resolver;
 
 /**
  * XML utility methods.
  *
- * @since 1.5.4
  * @author Jarno Elovirta
+ * @since 1.5.4
  */
 public final class XMLUtils {
 
@@ -72,7 +76,7 @@ public final class XMLUtils {
   }
 
   private DITAOTLogger logger;
-  private final CatalogResolver catalogResolver;
+  private final Resolver catalogResolver;
   private final Processor processor;
   private final XsltCompiler xsltCompiler;
 
@@ -88,7 +92,11 @@ public final class XMLUtils {
   public XMLUtils() {
     catalogResolver = CatalogUtils.getCatalogResolver();
     final net.sf.saxon.Configuration config = net.sf.saxon.Configuration.newConfiguration();
-    config.setURIResolver(catalogResolver);
+    //        config.setURIResolver(catalogResolver);
+    //        ResourceResolver rr = catalogResolver;
+    //        CatalogResourceResolver crr = new CatalogResourceResolver(catalogResolver);
+    //        final XMLCatalogAdapter xmlCatalogAdapter = new XMLCatalogAdapter(null);
+    config.setResourceResolver(new CatalogResourceResolver(catalogResolver));
     configureSaxonExtensions(config);
     configureSaxonCollationResolvers(config);
     processor = new Processor(config);
@@ -100,8 +108,9 @@ public final class XMLUtils {
    * Registers Saxon full integrated function definitions.
    * <p>
    * The intgrated function should be an instance of net.sf.saxon.lib.ExtensionFunctionDefinition abstract class.
+   *
    * @see <a href="https://www.saxonica.com/html/documentation/extensibility/integratedfunctions/ext-full-J.html">Saxon
-   *      Java extension functions: full interface</a>
+   * Java extension functions: full interface</a>
    */
   @VisibleForTesting
   static void configureSaxonExtensions(final net.sf.saxon.Configuration conf) {
@@ -157,7 +166,9 @@ public final class XMLUtils {
     this.logger = logger;
   }
 
-  /** Convert DOM NodeList to List. */
+  /**
+   * Convert DOM NodeList to List.
+   */
   public static <T> List<T> toList(final NodeList nodes) {
     final List<T> res = new ArrayList<>(nodes.getLength());
     for (int i = 0; i < nodes.getLength(); i++) {
@@ -247,7 +258,7 @@ public final class XMLUtils {
    * List descendant elements by DITA class.
    *
    * @param elem root element
-   * @param cls DITA class to match elements
+   * @param cls  DITA class to match elements
    * @param deep {@code true} to read descendants, {@code false} to read only direct children
    * @return list of matching elements
    */
@@ -267,7 +278,7 @@ public final class XMLUtils {
    * Get first child element by element name.
    *
    * @param elem root element
-   * @param ns namespace URI, {@code null} for empty namespace
+   * @param ns   namespace URI, {@code null} for empty namespace
    * @param name element name to match element
    * @return matching element
    */
@@ -288,7 +299,7 @@ public final class XMLUtils {
    * Get first child element by DITA class.
    *
    * @param elem root element
-   * @param cls DITA class to match element
+   * @param cls  DITA class to match element
    * @return matching element
    */
   public static Optional<Element> getChildElement(final Element elem, final DitaClass cls) {
@@ -305,7 +316,7 @@ public final class XMLUtils {
   /**
    * List child elements by element name.
    *
-   * @param ns namespace URL, {@code null} for empty namespace
+   * @param ns   namespace URL, {@code null} for empty namespace
    * @param elem root element
    * @param name element local name to match elements
    * @return list of matching elements
@@ -328,7 +339,7 @@ public final class XMLUtils {
    * List child elements by DITA class.
    *
    * @param elem root element
-   * @param cls DITA class to match elements
+   * @param cls  DITA class to match elements
    * @return list of matching elements
    */
   public static List<Element> getChildElements(final Element elem, final DitaClass cls) {
@@ -500,12 +511,12 @@ public final class XMLUtils {
   /**
    * Add or set attribute.
    *
-   * @param atts attributes
-   * @param uri namespace URI
+   * @param atts      attributes
+   * @param uri       namespace URI
    * @param localName local name
-   * @param qName qualified name
-   * @param type attribute type
-   * @param value attribute value
+   * @param qName     qualified name
+   * @param type      attribute type
+   * @param value     attribute value
    */
   public static void addOrSetAttribute(
     final AttributesImpl atts,
@@ -526,8 +537,8 @@ public final class XMLUtils {
   /**
    * Add or set attribute. Convenience method for {@link #addOrSetAttribute(AttributesImpl, String, String, String, String, String)}.
    *
-   * @param atts attributes
-   * @param name name
+   * @param atts  attributes
+   * @param name  name
    * @param value attribute value
    */
   public static void addOrSetAttribute(final AttributesImpl atts, final QName name, final String value) {
@@ -562,9 +573,9 @@ public final class XMLUtils {
   /**
    * Add or set attribute. Convenience method for {@link #addOrSetAttribute(AttributesImpl, String, String, String, String, String)}.
    *
-   * @param atts attributes
+   * @param atts      attributes
    * @param localName local name
-   * @param value attribute value
+   * @param value     attribute value
    */
   public static void addOrSetAttribute(final AttributesImpl atts, final String localName, final String value) {
     addOrSetAttribute(atts, NULL_NS_URI, localName, localName, "CDATA", value);
@@ -574,7 +585,7 @@ public final class XMLUtils {
    * Add or set attribute. Convenience method for {@link #addOrSetAttribute(AttributesImpl, String, String, String, String, String)}.
    *
    * @param atts attributes
-   * @param att attribute node
+   * @param att  attribute node
    */
   public static void addOrSetAttribute(final AttributesImpl atts, final Node att) {
     if (att.getNodeType() != Node.ATTRIBUTE_NODE) {
@@ -602,7 +613,7 @@ public final class XMLUtils {
   /**
    * Remove an attribute from the list. Do nothing if attribute does not exist.
    *
-   * @param atts attributes
+   * @param atts  attributes
    * @param qName QName of the attribute to remove
    */
   public static void removeAttribute(final AttributesImpl atts, final String qName) {
@@ -634,7 +645,7 @@ public final class XMLUtils {
   /**
    * Transform file with XML filters. Only file URIs are supported.
    *
-   * @param input absolute URI to transform and replace
+   * @param input   absolute URI to transform and replace
    * @param filters XML filters to transform file with, may be an empty list
    * @deprecated since 3.5
    */
@@ -652,7 +663,7 @@ public final class XMLUtils {
    * Transform file with XML filters.
    *
    * @param inputFile file to transform and replace
-   * @param filters XML filters to transform file with, may be an empty list
+   * @param filters   XML filters to transform file with, may be an empty list
    * @deprecated since 3.5
    */
   @Deprecated
@@ -672,9 +683,9 @@ public final class XMLUtils {
   /**
    * Transform file with XML filters.
    *
-   * @param inputFile input file
+   * @param inputFile  input file
    * @param outputFile output file
-   * @param filters XML filters to transform file with, may be an empty list
+   * @param filters    XML filters to transform file with, may be an empty list
    * @deprecated since 3.5
    */
   @Deprecated
@@ -734,8 +745,8 @@ public final class XMLUtils {
   /**
    * Transform file with XML filters.
    *
-   * @param input input file
-   * @param output output file
+   * @param input   input file
+   * @param output  output file
    * @param filters XML filters to transform file with, may be an empty list
    * @deprecated since 3.5
    */
@@ -788,7 +799,9 @@ public final class XMLUtils {
     }
   }
 
-  /** Close input source. */
+  /**
+   * Close input source.
+   */
   public static void close(final InputSource input) throws IOException {
     if (input != null) {
       final InputStream i = input.getByteStream();
@@ -803,7 +816,9 @@ public final class XMLUtils {
     }
   }
 
-  /** Close source. */
+  /**
+   * Close source.
+   */
   public static void close(final Source input) throws IOException {
     if (input != null && input instanceof final StreamSource s) {
       final InputStream i = s.getInputStream();
@@ -818,7 +833,9 @@ public final class XMLUtils {
     }
   }
 
-  /** Close result. */
+  /**
+   * Close result.
+   */
   public static void close(final Result result) throws IOException {
     if (result != null && result instanceof final StreamResult r) {
       final OutputStream o = r.getOutputStream();
@@ -847,7 +864,7 @@ public final class XMLUtils {
   /**
    * Escape XML characters.
    *
-   * @param chars char arrays
+   * @param chars  char arrays
    * @param offset start position
    * @param length arrays lenth
    * @return escaped value
@@ -889,6 +906,7 @@ public final class XMLUtils {
 
   /**
    * Get reader for input format
+   *
    * @param format input document format
    * @return reader for given forma
    * @throws SAXException if creating reader failed
@@ -971,7 +989,7 @@ public final class XMLUtils {
    * Write XdmNode to SAX pipe.
    *
    * @param source XdmNode to store
-   * @param dst SAX pipe
+   * @param dst    SAX pipe
    * @throws IOException if serializing file fails
    */
   public void writeDocument(final XdmNode source, final ContentHandler dst) throws IOException {
@@ -1022,11 +1040,11 @@ public final class XMLUtils {
     /**
      * Add or set attribute.
      *
-     * @param uri namespace URI
+     * @param uri       namespace URI
      * @param localName local name
-     * @param qName qualified name
-     * @param type attribute type
-     * @param value attribute value
+     * @param qName     qualified name
+     * @param type      attribute type
+     * @param value     attribute value
      * @return this builder
      */
     public AttributesBuilder add(
@@ -1049,7 +1067,7 @@ public final class XMLUtils {
      * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
      *
      * @param localName local name
-     * @param value attribute value
+     * @param value     attribute value
      * @return this builder
      */
     public AttributesBuilder add(final String localName, final String value) {
@@ -1059,9 +1077,9 @@ public final class XMLUtils {
     /**
      * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
      *
-     * @param uri namespace URI
+     * @param uri       namespace URI
      * @param localName local name
-     * @param value attribute value
+     * @param value     attribute value
      * @return this builder
      */
     public AttributesBuilder add(final String uri, final String localName, final String value) {
@@ -1071,7 +1089,7 @@ public final class XMLUtils {
     /**
      * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
      *
-     * @param name name
+     * @param name  name
      * @param value attribute value
      * @return this builder
      */
@@ -1114,6 +1132,7 @@ public final class XMLUtils {
 
     /**
      * Returns a newly-created Attributes based on the contents of the builder.
+     *
      * @return new attributes
      */
     public Attributes build() {
@@ -1267,7 +1286,7 @@ public final class XMLUtils {
   /**
    * Get attribute value.
    *
-   * @param elem attribute parent element
+   * @param elem     attribute parent element
    * @param attrName attribute name
    * @return attribute value, {@code null} if not set
    */
@@ -1282,7 +1301,7 @@ public final class XMLUtils {
   /**
    * Get cascaded attribute value.
    *
-   * @param elem attribute parent element
+   * @param elem     attribute parent element
    * @param attrName attribute name
    * @return attribute value, {@code null} if not set
    */
@@ -1305,6 +1324,7 @@ public final class XMLUtils {
 
   /**
    * Stream of element ancestor elements.
+   *
    * @param element start element
    * @return stream of ancestor elements
    */
@@ -1320,7 +1340,8 @@ public final class XMLUtils {
 
   /**
    * Insert fragment before reference element
-   * @param ref node to insert before
+   *
+   * @param ref      node to insert before
    * @param fragment content to insert
    */
   public static void insertBefore(final Node ref, final DocumentFragment fragment) {
@@ -1334,7 +1355,8 @@ public final class XMLUtils {
 
   /**
    * Insert fragment after reference element
-   * @param ref node to insert after
+   *
+   * @param ref      node to insert after
    * @param fragment content to insert
    */
   public static void insertAfter(final Node ref, final DocumentFragment fragment) {

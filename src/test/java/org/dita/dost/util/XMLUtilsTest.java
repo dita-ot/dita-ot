@@ -74,7 +74,7 @@ public class XMLUtilsTest {
     final net.sf.saxon.Configuration configuration = new Configuration();
     XMLUtils.configureSaxonExtensions(configuration);
     final SymbolicName.F functionName = new SymbolicName.F(new StructuredQName("x", "y", "z"), 0);
-    assertTrue(configuration.getIntegratedFunctionLibrary().isAvailable(functionName));
+    assertTrue(configuration.getIntegratedFunctionLibrary().isAvailable(functionName, 20));
   }
 
   @Test
@@ -349,7 +349,7 @@ public class XMLUtilsTest {
       fail();
     } catch (SaxonApiUncheckedException e) {
       final TerminationException cause = (TerminationException) e.getCause();
-      assertEquals("DOTX037W", cause.getErrorCodeLocalPart());
+      assertEquals("DOTX037W", cause.getErrorCodeQName().getLocalPart());
       assertEquals("message <debug/>", cause.getMessage());
     }
   }
@@ -429,9 +429,9 @@ public class XMLUtilsTest {
     loc.setLineNumber(1);
     loc.setColumnNumber(2);
     loc.setSystemId("foo:///bar");
-    errorReporter.report(
-      new XmlProcessingException(new XPathException("msg", Loc.makeFromSax(loc), new FileNotFoundException("cause")))
-    );
+    final XPathException exception = new XPathException("msg", new FileNotFoundException("cause"));
+    exception.setLocation(Loc.makeFromSax(loc));
+    errorReporter.report(new XmlProcessingException(exception));
 
     assertEquals(1, logger.getMessages().size());
     final Message message = logger.getMessages().get(0);

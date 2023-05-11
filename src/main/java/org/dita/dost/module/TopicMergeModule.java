@@ -10,7 +10,8 @@ package org.dita.dost.module;
 
 import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.toErrorReporter;
+import static org.dita.dost.util.XMLUtils.toMessageListener;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -25,7 +26,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MergeMapParser;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.DelegatingURIResolver;
+import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 
 /**
@@ -112,7 +113,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
         final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(style)).load();
         transformer.setErrorReporter(toErrorReporter(logger));
-        transformer.setURIResolver(new DelegatingURIResolver(CatalogUtils.getCatalogResolver(), job.getStore()));
+        transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
         transformer.setMessageListener(toMessageListener(logger));
 
         final StreamSource source = new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray()));
