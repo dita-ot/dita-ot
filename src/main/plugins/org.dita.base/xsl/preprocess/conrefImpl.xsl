@@ -64,9 +64,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
   </xsl:template>
 
-  <!-- Determine the relative path to a conref'ed file. Start with the path and
-     filename. Output each single directory, and chop it off. Keep going until
-     only the filename is left. -->
+  <!-- Returns the directory path of a file reference (typically a relative path)
+       * Given '/a/b/c.dita', returns '/a/b/'
+       * Given 'a/b/c.dita', returns 'a/b/'
+       * Given 'a/b/c.dita#fragment', returns 'a/b/'
+       * Given 'c.dita', returns '' -->
   <xsl:template name="find-relative-path" as="xs:string">
     <xsl:param name="remainingpath" as="xs:string">
       <xsl:choose>
