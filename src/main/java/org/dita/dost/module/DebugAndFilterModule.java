@@ -147,7 +147,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
 
     InputSource in = null;
     try {
-      reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger));
+      reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger, processingMode));
 
       XMLReader parser = XMLUtils.getXmlReader(f.format).orElse(reader);
       XMLReader xmlSource = parser;
@@ -190,9 +190,9 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         if (MAP_MAP.matches(typeFilter.getDitaClass())) {
           f.format = ATTR_FORMAT_VALUE_DITAMAP;
         } else {
-          f.format = ATTR_FORMAT_VALUE_DITA;
-        }
-      }
+      f.format = ATTR_FORMAT_VALUE_DITA;
+    }
+  }
     }
   }
 

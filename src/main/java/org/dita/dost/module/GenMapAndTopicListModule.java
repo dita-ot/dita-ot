@@ -383,11 +383,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
 
     keydefFilter.setCurrentDir(fileToParse.resolve("."));
-    keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+    keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger, processingMode));
     pipe.add(keydefFilter);
 
     listFilter.setCurrentFile(fileToParse);
-    listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+    listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger, processingMode));
     pipe.add(listFilter);
 
     return pipe;

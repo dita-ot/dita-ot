@@ -8,7 +8,8 @@
  */
 package org.dita.dost.writer;
 
-import static org.apache.commons.io.FileUtils.*;
+import static org.apache.commons.io.FileUtils.deleteQuietly;
+import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.*;
 
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.util.Configuration;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -312,7 +314,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
       output = new OutputStreamWriter(job.getStore().getOutputStream(outputFile.toURI()), StandardCharsets.UTF_8);
 
       topicIdList.clear();
-      reader.setErrorHandler(new DITAOTXMLErrorHandler(file, logger));
+      reader.setErrorHandler(new DITAOTXMLErrorHandler(file, logger, Configuration.Mode.STRICT));
       reader.parse(file);
     } catch (final RuntimeException e) {
       throw e;
