@@ -9,11 +9,10 @@ package org.dita.dost.module;
 
 import java.util.List;
 import java.util.function.Predicate;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Configuration.Mode;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -60,6 +59,11 @@ public class DummyPipelineModule implements AbstractPipelineModule {
 
   @Override
   public void setParallel(final boolean parallel) {
+    // Noop
+  }
+
+  @Override
+  public void setProcessingMode(final Mode processingMode) {
     // Noop
   }
 }

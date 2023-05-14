@@ -114,7 +114,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(style)).load();
         transformer.setErrorReporter(toErrorReporter(logger));
         transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
-        transformer.setMessageListener(toMessageListener(logger));
+        transformer.setMessageListener(toMessageListener(logger, processingMode));
 
         final StreamSource source = new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray()));
         final Destination result = processor.newSerializer(output);

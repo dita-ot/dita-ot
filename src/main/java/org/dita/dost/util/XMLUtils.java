@@ -45,6 +45,7 @@ import net.sf.saxon.lib.ErrorReporter;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.s9api.streams.Step;
+import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
@@ -177,7 +178,7 @@ public final class XMLUtils {
     return res;
   }
 
-  public static MessageListener2 toMessageListener(final DITAOTLogger logger) {
+  public static MessageListener2 toMessageListener(final DITAOTLogger logger, Configuration.Mode mode) {
     return (content, code, terminate, locator) -> {
       final Optional<String> errorCode = content
         .select(descendant(isProcessingInstruction()).where(hasLocalName("error-code")))
@@ -207,7 +208,12 @@ public final class XMLUtils {
           errorCode.ifPresent(err::setErrorCode);
           throw new SaxonApiUncheckedException(err);
         }
-        case "ERROR" -> logger.error(msg);
+        case "ERROR" -> {
+          if (mode == Configuration.Mode.STRICT) {
+            throw new UncheckedXPathException(msg);
+          }
+          logger.error(msg);
+        }
         case "WARN" -> logger.warn(msg);
         case "INFO" -> logger.info(msg);
         case "DEBUG" -> logger.debug(msg);
