@@ -190,9 +190,9 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         if (MAP_MAP.matches(typeFilter.getDitaClass())) {
           f.format = ATTR_FORMAT_VALUE_DITAMAP;
         } else {
-      f.format = ATTR_FORMAT_VALUE_DITA;
-    }
-  }
+          f.format = ATTR_FORMAT_VALUE_DITA;
+        }
+      }
     }
   }
 
