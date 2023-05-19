@@ -61,7 +61,7 @@ public class UsageBuilder {
     return this;
   }
 
-  private String build() {
+  public String build() {
     final String padding = getPadding();
 
     buf.append(ANSI_BOLD).append("Usage").append(ANSI_RESET).append(":\n");
@@ -135,10 +135,6 @@ public class UsageBuilder {
       max = Math.max(max, key.toString().length());
     }
     return " ".repeat(Math.max(0, max + 2));
-  }
-
-  public void print() {
-    System.out.println(build());
   }
 
   private static class Key implements Comparable<Key> {

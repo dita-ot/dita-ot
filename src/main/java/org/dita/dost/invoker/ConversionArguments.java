@@ -378,7 +378,7 @@ public class ConversionArguments extends Arguments {
   }
 
   @Override
-  void printUsage(final boolean compact) {
+  String getUsage(final boolean compact) {
     final UsageBuilder buf = UsageBuilder
       .builder(compact)
       .usage(locale.getString("conversion.usage.input"))
@@ -426,6 +426,6 @@ public class ConversionArguments extends Arguments {
     } else {
       buf.footer(locale.getString("conversion.footer"));
     }
-    buf.print();
+    return buf.build();
   }
 }

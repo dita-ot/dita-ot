@@ -131,7 +131,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private void printMessage(final Throwable t) {
     final String message = t.getMessage();
     if (message != null && !message.trim().isEmpty()) {
-      printErrorMessage("" + message);
+      printErrorMessage(message);
     }
   }
 
@@ -181,6 +181,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   public void startAnt(final String[] args, final Properties additionalUserProperties, final ClassLoader coreLoader) {
     try {
       processArgs(args);
+    } catch (final CliException exc) {
+      handleLogfile();
+      printMessage(exc);
+      if (exc.info != null) {
+        System.out.println(exc.info);
+      }
+      exit(1);
+      return;
     } catch (final BuildException exc) {
       handleLogfile();
       printMessage(exc);
@@ -303,7 +311,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     buildFile = args.buildFile;
 
     if (args.justPrintUsage) {
-      args.printUsage(false);
+      System.out.println(args.getUsage(false));
       return;
     } else if (args.justPrintDiagnostics) {
       Diagnostics.doReport(System.out, args.msgOutputLevel);
@@ -322,9 +330,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       return;
     } else if (args instanceof final DeliverablesArguments deliverablesArgs) {
       if (deliverablesArgs.projectFile == null) {
-        printErrorMessage(locale.getString("deliverables.error.project_not_defined"));
-        args.printUsage(true);
-        throw new BuildException("");
+        throw new CliException(locale.getString("deliverables.error.project_not_defined"), args.getUsage(true));
       }
       printDeliverables(deliverablesArgs.projectFile);
       return;
@@ -344,9 +350,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       }
     } else if (args instanceof final UninstallArguments installArgs) {
       if (installArgs.uninstallId == null) {
-        printErrorMessage(locale.getString("uninstall.error.identifier_not_defined"));
-        args.printUsage(true);
-        throw new BuildException("");
+        throw new CliException(locale.getString("uninstall.error.identifier_not_defined"), args.getUsage(true));
       }
       buildFile = integratorFile;
       targets.clear();
@@ -369,9 +373,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
           err = locale.getString("conversion.error.input_not_defined");
         }
         if (err != null) {
-          printErrorMessage(err);
-          args.printUsage(true);
-          throw new BuildException("");
+          throw new CliException(err, args.getUsage(true));
         }
         // default values
         if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
@@ -403,8 +405,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     // make sure buildfile exists
     if (!buildFile.exists() || buildFile.isDirectory()) {
-      System.out.println("Buildfile " + buildFile + " does not exist!");
-      throw new BuildException("Build failed");
+      throw new CliException("Buildfile " + buildFile + " does not exist!");
     }
 
     // Normalize buildFile for re-import detection
@@ -419,8 +420,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       try {
         logTo = new PrintStream(new FileOutputStream(args.logFile));
       } catch (final IOException ioe) {
-        throw new BuildException(
-          "Cannot write on the specified log file. " + "Make sure the path exists and you have write permissions."
+        throw new CliException(
+          "Cannot write on the specified log file. Make sure the path exists and you have write permissions."
         );
       }
       out = logTo;
@@ -509,8 +510,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       })
       .collect(Collectors.toList());
     if (runDeliverable != null && projectProps.isEmpty()) {
-      printErrorMessage(String.format(locale.getString("project.error.deliverable_not_found"), runDeliverable));
-      throw new BuildException("");
+      throw new CliException(String.format(locale.getString("project.error.deliverable_not_found"), runDeliverable));
     }
 
     return projectProps;
@@ -528,8 +528,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
   private org.dita.dost.project.Project readProjectFile(final File projectFile) throws BuildException {
     if (!projectFile.exists()) {
-      printErrorMessage(String.format(locale.getString("project.error.project_file_not_found"), projectFile));
-      throw new BuildException("");
+      throw new CliException(String.format(locale.getString("project.error.project_file_not_found"), projectFile));
     }
     try {
       final ProjectFactory factory = ProjectFactory.getInstance();
@@ -538,8 +537,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       validateProject(res);
       return res;
     } catch (Exception e) {
-      printErrorMessage(e.getMessage());
-      throw new BuildException("");
+      throw new CliException(e.getMessage());
     }
   }
 
@@ -754,10 +752,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       } catch (final Throwable t) {
         // yes, I know it is bad style to catch Throwable,
         // but if we don't, we lose valuable information
-        printErrorMessage("Caught an exception while logging the" + " end of the build.  Exception was:");
+        printErrorMessage("Caught an exception while logging the end of the build.  Exception was:");
         t.printStackTrace();
         if (error != null) {
-          printErrorMessage("There has been an error prior to" + " that:");
+          printErrorMessage("There has been an error prior to that:");
           error.printStackTrace();
         }
         throw new BuildException(t);

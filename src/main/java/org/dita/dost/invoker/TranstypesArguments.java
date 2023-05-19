@@ -31,7 +31,7 @@ public class TranstypesArguments extends Arguments {
   }
 
   @Override
-  void printUsage(final boolean compact) {
-    UsageBuilder.builder(compact).usage(locale.getString("transtypes.usage")).print();
+  String getUsage(final boolean compact) {
+    return UsageBuilder.builder(compact).usage(locale.getString("transtypes.usage")).build();
   }
 }
