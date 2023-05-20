@@ -138,10 +138,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private void printErrorMessage(final String msg) {
     if (args != null && args.useColor) {
       System.err.print(DefaultLogger.ANSI_RED);
-      System.err.print(String.format(locale.getString("error_msg"), msg));
+      System.err.print(locale.getString("error_msg").formatted(msg));
       System.err.println(DefaultLogger.ANSI_RESET);
     } else {
-      System.err.println(String.format(locale.getString("error_msg"), msg));
+      System.err.println(locale.getString("error_msg").formatted(msg));
     }
     System.err.println();
   }
@@ -242,7 +242,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       }
       if (this.args.repeat > 1) {
         for (int i = 0; i < durations.length; i++) {
-          System.out.println(String.format(locale.getString("conversion.repeatDuration"), i + 1, durations[i]));
+          System.out.println(locale.getString("conversion.repeatDuration").formatted(i + 1, durations[i]));
         }
       }
     } catch (final BuildException be) {
@@ -510,7 +510,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       })
       .collect(Collectors.toList());
     if (runDeliverable != null && projectProps.isEmpty()) {
-      throw new CliException(String.format(locale.getString("project.error.deliverable_not_found"), runDeliverable));
+      throw new CliException(locale.getString("project.error.deliverable_not_found").formatted(runDeliverable));
     }
 
     return projectProps;
@@ -528,7 +528,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
   private org.dita.dost.project.Project readProjectFile(final File projectFile) throws BuildException {
     if (!projectFile.exists()) {
-      throw new CliException(String.format(locale.getString("project.error.project_file_not_found"), projectFile));
+      throw new CliException(locale.getString("project.error.project_file_not_found").formatted(projectFile));
     }
     try {
       final ProjectFactory factory = ProjectFactory.getInstance();
@@ -846,6 +846,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * @throws BuildException if the version information is unavailable
    */
   private void printVersion() throws BuildException {
-    System.out.println(String.format(locale.getString("version"), Configuration.configuration.get("otversion")));
+    System.out.println(locale.getString("version").formatted(Configuration.configuration.get("otversion")));
   }
 }
